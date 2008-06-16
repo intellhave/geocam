@@ -221,7 +221,7 @@ void writeTriangulationFile(char* newFileName)
      ofstream output(newFileName);
      output << "\n";
      
-     for(int i = 0; i < Triangulation::vertexTable.size(); i++)
+     for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
      {
              output << "Vertex: " << i << "\n";
              
@@ -244,7 +244,7 @@ void writeTriangulationFile(char* newFileName)
              output << "\n";
      }
      
-     for(int i = 0; i < Triangulation::edgeTable.size(); i++)
+     for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
      {
              output << "Edge: " << i << "\n";
              
@@ -267,7 +267,7 @@ void writeTriangulationFile(char* newFileName)
              output << "\n";
      }
      
-     for(int i = 0; i < Triangulation::faceTable.size(); i++)
+     for(int i = 1; i <= Triangulation::faceTable.size(); i++)
      {
              output << "Face: " << i << "\n";
              
