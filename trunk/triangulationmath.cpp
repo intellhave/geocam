@@ -9,9 +9,9 @@ calculations on the triangulation.
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
-#include "edge.h"
-#include "vertex.h"
-#include "face.h"
+#include "simplex/edge.h"
+#include "simplex/vertex.h"
+#include "simplex/face.h"
 #include <algorithm>
 #include "triangulation.h"
 #include "triangulationmath.h"
