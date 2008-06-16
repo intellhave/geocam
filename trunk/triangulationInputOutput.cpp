@@ -1,11 +1,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
-#include "simplex.h"
+#include "simplex/simplex.h"
 #include <map>
 #include <fstream>
 #include <string>
-#include "vertex.h"
+#include "simplex/vertex.h"
 #include <sstream>
 #include "triangulation.h"
 #include "triangulationmath.h"
