@@ -11,9 +11,9 @@ Version: June 11, 2008
 #include <cstdlib>
 #include <vector>
 #include <map>
-#include "vertex.h"
-#include "edge.h"
-#include "face.h"
+#include "simplex/vertex.h"
+#include "simplex/edge.h"
+#include "simplex/face.h"
 
 /*
  * The Triangulation class stores the information about the running
