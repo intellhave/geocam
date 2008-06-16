@@ -5,7 +5,7 @@ Version: June 10, 2008
 **************************************************************/
 
 #include "vertex.h" // class's header file
-#include "triangulation.h"
+#include "C:/Documents and Settings/student/My Documents/geocam/triangulation.h"
 
 // class constructor
 Vertex::Vertex() : Simplex()
