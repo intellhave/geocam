@@ -31,7 +31,8 @@ int main(int argc, char *argv[])
    double curvatures[vertexSize];
    for(int i = 1; i <= vertexSize; i++)
    {
-           weights[i - 1] = i;
+           weights[i - 1] = 1;
+           // NEw Changes HERE
    }
    
 
