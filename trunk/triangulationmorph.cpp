@@ -1,7 +1,7 @@
 #include <cmath>
-#include "edge.h"
-#include "vertex.h"
-#include "face.h"
+#include "simplex/edge.h"
+#include "simplex/vertex.h"
+#include "simplex/face.h"
 #include <algorithm>
 #include "Triangulation.h"
 #include "Triangulationmath.h"
