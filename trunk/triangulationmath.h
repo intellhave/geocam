@@ -69,7 +69,6 @@ vector<int> listDifference(vector<int>*, vector<int>*);
  *
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
-
 void calcFlow(double, double*, int, bool, int fi = 1);
 
 /*
