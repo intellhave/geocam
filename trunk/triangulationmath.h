@@ -42,6 +42,10 @@ double curvature(Vertex);
  */
 vector<int> listIntersection(vector<int>*, vector<int>*);
 
+
+vector<int> listDifference(vector<int>*, vector<int>*);
+
+
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
  * Runge-Kutta method. Results from the steps are written into the file 
@@ -65,6 +69,7 @@ vector<int> listIntersection(vector<int>*, vector<int>*);
  *
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
+
 void calcFlow(double, double*, int, bool, int fi = 1);
 
 /*
