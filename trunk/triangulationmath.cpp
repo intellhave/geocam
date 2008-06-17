@@ -104,32 +104,37 @@ vector<int> listIntersection(vector<int>* list1, vector<int>* list2)
 
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
- * Runge-Kuttamethod. Results from the steps are written into the file 
+ * Runge-Kutta method. Results from the steps are written into the file 
  * "ODE Result" for viewing. calcFlow takes a number of paramters:
-        double ti -          The initial time
-        double tf -          The ending time
-        double* initWeights- Array of initial weights of the Vertices 
-                             in order.
-        int numSteps -       The number of steps to take. 
-                             (dt = (tf - ti)/numSteps)
-        bool adjF -          Boolean of whether or not to use adjusted
-                             differential equation. True to use adjusted.
-        int fi -             The finesse, or number of intermediary points.
-                             Default of 1.
-        
+ *      double dt -          The time step size. Initial and ending
+                             times not needed since diff. equations are
+                             independent of time.
+ *      double* initWeights- Array of initial weights of the Vertices 
+ *                           in order.
+ *      int numSteps -       The number of steps to take. 
+ *                           (dt = (tf - ti)/numSteps)
+ *      bool adjF -          Boolean of whether or not to use adjusted
+ *                           differential equation. True to use adjusted.
+ *      int fi -             The finesse, or number of intermediary points.
+ *                           Default of 1.
+ * 
+ * The information printed in the file are the weights and curvatures for
+ * each Vertex at each step point. The file is cleared at the beginning of
+ * every call to calcFlow.
+ *
+ *            ***Credit for the algorithm goes to J-P Moreau.***
  */
-void calcFlow(double ti,double tf,double *initWeights,int numSteps, bool adjF, int fi)  {
-  int p = Triangulation::vertexTable.size();
-  double h,t;
+void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
+  int p = Triangulation::vertexTable.size(); // The number of vertices / 
+                                             // number of variables in system.
+  double h = dt / fi; 
   double ta[p],tb[p],tc[p],td[p],y[p],z[p];
   int    i,j,k,ni;
   ofstream results("c:/Documents and Settings/student/Desktop/Triangulations/ODE Result.txt", ios_base::trunc);
   results << left << setprecision(4); 
   results.setf(ios_base::showpoint);
    if (fi<1) return;
-   h = (tf - ti) / fi / (numSteps-1);
-   p;
-   for (k=0; k<p+1; k++) { 
+   for (k=0; k<p; k++) { 
      z[k]=initWeights[k];
    }
    for (i=1; i<numSteps+1; i++) {
@@ -139,7 +144,6 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps, bool adjF, i
      
      ni=(i-1)*fi-1;
      for (j=1; j<fi+1; j++) {
-       t=ti+h*(ni+j);
        for (k=0; k<p; k++)  
        {
            Triangulation::vertexTable[k + 1].setWeight(z[k]);
@@ -151,8 +155,7 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps, bool adjF, i
            results << curv << "\n";
            if(adjF) ta[k]= (-1) * curv 
                            * Triangulation::vertexTable[k].getWeight() +
-                           Triangulation::netCurvature() /  
-                           Triangulation::vertexTable.size()
+                           Triangulation::netCurvature() /  p
                            * Triangulation::vertexTable[k].getWeight();
            else     ta[k] = (-1) * curv 
                            * Triangulation::vertexTable[k].getWeight();
@@ -161,11 +164,10 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps, bool adjF, i
        {
            Triangulation::vertexTable[k + 1].setWeight(z[k]+ta[k]/2);
        }
-       t=t+h/2;
        for (k=0; k<p; k++)  
        {
-            if(adjF) ta[k]=h*adjDiffEQ(k + 1,t);
-            else     ta[k]=h*stdDiffEQ(k + 1,t);
+            if(adjF) ta[k]=h*adjDiffEQ(k + 1);
+            else     ta[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)  
        {
@@ -173,18 +175,17 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps, bool adjF, i
        }
        for (k=0; k<p; k++)  
        {
-            if(adjF) ta[k]=h*adjDiffEQ(k + 1,t);
-            else     ta[k]=h*stdDiffEQ(k + 1,t);
+            if(adjF) ta[k]=h*adjDiffEQ(k + 1);
+            else     ta[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)  
        {
            Triangulation::vertexTable[k + 1].setWeight(z[k]+tc[k]/2);
        }
-       t=t+h/2;
        for (k=0; k<p; k++)  
        {
-            if(adjF) ta[k]=h*adjDiffEQ(k + 1,t);
-            else     ta[k]=h*stdDiffEQ(k + 1,t);
+            if(adjF) ta[k]=h*adjDiffEQ(k + 1);
+            else     ta[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)
        {
@@ -197,12 +198,12 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps, bool adjF, i
    results.close();
 }
 
-double stdDiffEQ(int vertex, double t) {
+double stdDiffEQ(int vertex) {
        return (-1) * curvature(Triangulation::vertexTable[vertex])
                    * Triangulation::vertexTable[vertex].getWeight();
 }
 
-double adjDiffEQ(int vertex, double t)
+double adjDiffEQ(int vertex)
 {
        return (-1) * curvature(Triangulation::vertexTable[vertex])
                    * Triangulation::vertexTable[vertex].getWeight() +
