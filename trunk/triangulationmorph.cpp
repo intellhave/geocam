@@ -108,6 +108,15 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::faceTable[f.getIndex()].addFace(newFaceInd1);
      Triangulation::faceTable[f.getIndex()].addFace(newFaceInd2);
      
+     //then deal with the other existing local faces
+     if(faceList[1] != faceList[0])
+     Triangulation::faceTable[faceList[1]].removeFace(f.getIndex());
+     Triangulation::faceTable[faceList[1]].addFace(newFaceInd1);
+     if(faceList[2] != faceList[0])
+     Triangulation::faceTable[faceList[2]].removeFace(f.getIndex());
+     Triangulation::faceTable[faceList[2]].addFace(newFaceInd2);
+     
+     
      //now that references from existing objects have been repaired
      //begin creating references from new objects
      //start with the new vertex
