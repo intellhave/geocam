@@ -98,7 +98,9 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::faceTable[f.getIndex()].removeVertex(vertexList[2]);
      Triangulation::faceTable[f.getIndex()].removeEdge(edgeList[1]);
      Triangulation::faceTable[f.getIndex()].removeEdge(edgeList[2]);
+     if(faceList[1] != faceList[0])
      Triangulation::faceTable[f.getIndex()].removeFace(faceList[1]);
+     if(faceList[2] != faceList[0])
      Triangulation::faceTable[f.getIndex()].removeFace(faceList[2]);
      Triangulation::faceTable[f.getIndex()].addEdge(newEdgeInd1);
      Triangulation::faceTable[f.getIndex()].addEdge(newEdgeInd2);
