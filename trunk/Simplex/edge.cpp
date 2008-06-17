@@ -5,7 +5,7 @@ Version: June 10, 2008
 **************************************************************/
 
 #include "edge.h" // class's header file
-#include "C:/Documents and Settings/student/My Documents/geocam/triangulation.h"
+#include "triangulation.h"
 
 
 // class constructor
