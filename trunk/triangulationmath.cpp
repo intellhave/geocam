@@ -102,27 +102,23 @@ vector<int> listIntersection(vector<int>* list1, vector<int>* list2)
 }
 
 
-/***************************************************************************
-*         SOLVING DIFFERENTIAL SYSTEMS WITH P VARIABLES OF ORDER 1         *
-*                 of type yi' = f(y1,y2,...,yn), i=1..n                    *
-* ------------------------------------------------------------------------ *
-*  INPUTS:                                                                 *
-*    m         number of points to display                                 *
-*    xi, xf    begin, end values of variable x                             *
-*    initWeights table of begin values of functions at xi                    *
-*    p         number of independant variables                             *
-*    fi        finesse (number of intermediary points)                     *
-*                                                                          *
-*  OUTPUTS:                                                                *
-*    t1,t2     real vectors storing the results for first two functions,   *
-*              y1 and y2.                                                  *
-* ------------------------------------------------------------------------ *      
-*  EXAMPLE:    y1'=y2+y3-3y1, y2'=y1+y3-3y2, y3'=y1+y2-3y3                 *
-*              Exact solution :  y1 = 1/3 (exp(-4x)  + 2 exp(-x))          *
-*                                y2 = 1/3 (4exp(-4x) + 2 exp(-x))          *
-*                                y3 = 1/3 (-5exp(-4x)+ 2 exp(-x))          *
-***************************************************************************/
-void calcFlow(double ti,double tf,double *initWeights,int numSteps,int fi, bool adjF)  {
+/*
+ * Calculates the Ricci flow of the current Triangulation using the 
+ * Runge-Kuttamethod. Results from the steps are written into the file 
+ * "ODE Result" for viewing. calcFlow takes a number of paramters:
+        double ti -          The initial time
+        double tf -          The ending time
+        double* initWeights- Array of initial weights of the Vertices 
+                             in order.
+        int numSteps -       The number of steps to take. 
+                             (dt = (tf - ti)/numSteps)
+        bool adjF -          Boolean of whether or not to use adjusted
+                             differential equation. True to use adjusted.
+        int fi -             The finesse, or number of intermediary points.
+                             Default of 1.
+        
+ */
+void calcFlow(double ti,double tf,double *initWeights,int numSteps, bool adjF, int fi)  {
   int p = Triangulation::vertexTable.size();
   double h,t;
   double ta[p],tb[p],tc[p],td[p],y[p],z[p];
@@ -137,7 +133,8 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps,int fi, bool 
      z[k]=initWeights[k];
    }
    for (i=1; i<numSteps+1; i++) {
-    results << "Step " << i << right << setw(9) << "Weight";
+    results << left << "Step " << left <<setw(4)  << i;
+    results << right << setw(7) << "Weight";
     results << right << setw(7) << "Curv" << "\n----------------------\n";
      
      ni=(i-1)*fi-1;
