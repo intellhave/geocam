@@ -16,6 +16,7 @@ calculations on the triangulation.
 #include "triangulation.h"
 #include "triangulationmath.h"
 #include <fstream>
+#include <iomanip>
 
 #define PI 	3.141592653589793238
 
@@ -127,7 +128,8 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps,int fi, bool 
   double ta[p],tb[p],tc[p],td[p],y[p],z[p];
   int    i,j,k,ni;
   ofstream results("c:/Documents and Settings/student/Desktop/Triangulations/ODE Result.txt", ios_base::trunc);
-  results << left; 
+  results << left << setprecision(4); 
+  results.setf(ios_base::showpoint);
    if (fi<1) return;
    h = (tf - ti) / fi / (numSteps-1);
    p;
@@ -135,20 +137,28 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps,int fi, bool 
      z[k]=initWeights[k];
    }
    for (i=1; i<numSteps+1; i++) {
-    results << "Step " << i << "\n------------\n";
+    results << "Step " << i << right << setw(9) << "Weight";
+    results << right << setw(7) << "Curv" << "\n----------------------\n";
      
      ni=(i-1)*fi-1;
      for (j=1; j<fi+1; j++) {
        t=ti+h*(ni+j);
        for (k=0; k<p; k++)  
        {
-           results << "Vertex " << k + 1<< ": " << z[k] << "\n";
            Triangulation::vertexTable[k + 1].setWeight(z[k]);
        }
        for (k=0; k<p; k++)  
        {
-           if(adjF) ta[k]=h*adjDiffEQ(k + 1,t);
-           else     ta[k]=h*stdDiffEQ(k + 1,t);
+           results << "Vertex " << k + 1<< ": " << z[k] << " / ";
+           double curv = curvature(Triangulation::vertexTable[k]);
+           results << curv << "\n";
+           if(adjF) ta[k]= (-1) * curv 
+                           * Triangulation::vertexTable[k].getWeight() +
+                           Triangulation::netCurvature() /  
+                           Triangulation::vertexTable.size()
+                           * Triangulation::vertexTable[k].getWeight();
+           else     ta[k] = (-1) * curv 
+                           * Triangulation::vertexTable[k].getWeight();
        }
        for (k=0; k<p; k++)  
        {
@@ -185,7 +195,7 @@ void calcFlow(double ti,double tf,double *initWeights,int numSteps,int fi, bool 
          
        }
      }
-     results << "\n";
+     results << "\n\n";
    }
    results.close();
 }
