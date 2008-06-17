@@ -38,7 +38,7 @@ double curvature(Vertex);
 
 vector<int> listIntersection(vector<int>*, vector<int>*);
 
-void calcFlow(double, double, double*, int, int, bool);
+void calcFlow(double, double, double*, int, bool, int fi = 1);
 
 double stdDiffEQ(int, double);
 
