@@ -101,6 +101,23 @@ vector<int> listIntersection(vector<int>* list1, vector<int>* list2)
              return sameAs;
 }
 
+vector<int> listDifference(vector<int>* list1, vector<int>* list2)
+{
+            vector<int> diff;
+            
+            for(int i = 0; i < (*list1).size(); i++)
+            {
+                    for(int j = 0; j < (*list2).size(); j++)
+                    {
+                            if((*list1)[i] == (*list2)[j])
+                            break;
+                            if(j == (*list2).size() - 1)
+                            diff.push_back((*list1)[i]);
+                    }
+            }
+            return diff;
+}
+
 
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
