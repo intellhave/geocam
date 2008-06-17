@@ -1,7 +1,7 @@
 /**************************************************************
 File: Triangulation Math
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 10, 2008
+Version: June 17, 2008
 ***************************************************************
 The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
@@ -140,7 +140,7 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
    for (i=1; i<numSteps+1; i++) {
     results << left << "Step " << left <<setw(4)  << i;
     results << right << setw(7) << "Weight";
-    results << right << setw(7) << "Curv" << "\n----------------------\n";
+    results << right << setw(7) << "Curv" << "\n-----------------------\n";
      
      ni=(i-1)*fi-1;
      for (j=1; j<fi+1; j++) {
@@ -151,14 +151,14 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
        for (k=0; k<p; k++)  
        {
            results << "Vertex " << k + 1<< ": " << z[k] << " / ";
-           double curv = curvature(Triangulation::vertexTable[k]);
+           double curv = curvature(Triangulation::vertexTable[k + 1]);
            results << curv << "\n";
            if(adjF) ta[k]= (-1) * curv 
-                           * Triangulation::vertexTable[k].getWeight() +
+                           * Triangulation::vertexTable[k + 1].getWeight() +
                            Triangulation::netCurvature() /  p
-                           * Triangulation::vertexTable[k].getWeight();
+                           * Triangulation::vertexTable[k+ 1].getWeight();
            else     ta[k] = (-1) * curv 
-                           * Triangulation::vertexTable[k].getWeight();
+                           * Triangulation::vertexTable[k + 1].getWeight();
        }
        for (k=0; k<p; k++)  
        {
