@@ -159,6 +159,7 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
                            * Triangulation::vertexTable[k+ 1].getWeight();
            else     ta[k] = (-1) * curv 
                            * Triangulation::vertexTable[k + 1].getWeight();
+           
        }
        for (k=0; k<p; k++)  
        {
@@ -166,8 +167,8 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
        }
        for (k=0; k<p; k++)  
        {
-            if(adjF) ta[k]=h*adjDiffEQ(k + 1);
-            else     ta[k]=h*stdDiffEQ(k + 1);
+            if(adjF) tb[k]=h*adjDiffEQ(k + 1);
+            else     tb[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)  
        {
@@ -175,8 +176,8 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
        }
        for (k=0; k<p; k++)  
        {
-            if(adjF) ta[k]=h*adjDiffEQ(k + 1);
-            else     ta[k]=h*stdDiffEQ(k + 1);
+            if(adjF) tc[k]=h*adjDiffEQ(k + 1);
+            else     tc[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)  
        {
@@ -184,8 +185,8 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
        }
        for (k=0; k<p; k++)  
        {
-            if(adjF) ta[k]=h*adjDiffEQ(k + 1);
-            else     ta[k]=h*stdDiffEQ(k + 1);
+            if(adjF) td[k]=h*adjDiffEQ(k + 1);
+            else     td[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)
        {
