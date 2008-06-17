@@ -148,7 +148,7 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
   double ta[p],tb[p],tc[p],td[p],y[p],z[p];
   int    i,j,k,ni;
   ofstream results("C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt", ios_base::trunc);
-  results << left << setprecision(8); 
+  results << left << setprecision(4); 
   results.setf(ios_base::showpoint);
    if (fi<1) return;
    for (k=0; k<p; k++) { 
@@ -170,11 +170,11 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
            results << "Vertex " << k + 1<< ": " << z[k] << " / ";
            double curv = curvature(Triangulation::vertexTable[k + 1]);
            results << curv << "\n";
-           if(adjF) ta[k]= (-1) * curv 
+           if(adjF) ta[k]= h * ((-1) * curv 
                            * Triangulation::vertexTable[k + 1].getWeight() +
                            Triangulation::netCurvature() /  p
-                           * Triangulation::vertexTable[k+ 1].getWeight();
-           else     ta[k] = (-1) * curv 
+                           * Triangulation::vertexTable[k+ 1].getWeight());
+           else     ta[k] = h * (-1) * curv 
                            * Triangulation::vertexTable[k + 1].getWeight();
            
        }
@@ -198,7 +198,7 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
        }
        for (k=0; k<p; k++)  
        {
-           Triangulation::vertexTable[k + 1].setWeight(z[k]+tc[k]/2);
+           Triangulation::vertexTable[k + 1].setWeight(z[k]+tc[k]);
        }
        for (k=0; k<p; k++)  
        {
