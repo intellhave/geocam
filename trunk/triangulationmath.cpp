@@ -130,7 +130,7 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
   double h = dt / fi; 
   double ta[p],tb[p],tc[p],td[p],y[p],z[p];
   int    i,j,k,ni;
-  ofstream results("c:/Documents and Settings/student/Desktop/Triangulations/ODE Result.txt", ios_base::trunc);
+  ofstream results("C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt", ios_base::trunc);
   results << left << setprecision(4); 
   results.setf(ios_base::showpoint);
    if (fi<1) return;
