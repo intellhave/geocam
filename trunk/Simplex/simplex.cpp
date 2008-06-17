@@ -39,9 +39,14 @@ void Simplex::removeVertex(int vertex)
      for(int i = 0; i < localVertices.size(); i++)
      {
              if(localVertices[i] == vertex)
+<<<<<<< .mine
+               localVertices.erase(localVertices.begin() + i);
+               break;
+=======
              {
              localVertices.erase(localVertices.begin() + i);
              break;
+>>>>>>> .r62
              }
      }
 }
