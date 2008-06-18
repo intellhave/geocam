@@ -5,6 +5,7 @@ Version: June 9, 2008
 **************************************************************/
 
 #include "simplex.h" // class's header file
+#include <algorithm>
 #include <vector>
 #include <cstdlib>
 
@@ -25,13 +26,20 @@ int Simplex::getIndex()
 }
 void Simplex::addVertex(int vertex)
 {
+     vector<int>::iterator it = find(localVertices.begin(), localVertices.end(), vertex);
+     if(it == localVertices.end())
      localVertices.push_back(vertex);
 }
-void Simplex::addEdge(int edge){
+void Simplex::addEdge(int edge)
+{
+     vector<int>::iterator it = find(localEdges.begin(), localEdges.end(), edge);
+     if(it == localEdges.end())
      localEdges.push_back(edge);
 }
 void Simplex::addFace(int face)
 {
+     vector<int>::iterator it = find(localFaces.begin(), localFaces.end(), face);
+     if(it == localFaces.end())
      localFaces.push_back(face);
 }
 void Simplex::removeVertex(int vertex)
