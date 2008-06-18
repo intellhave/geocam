@@ -16,6 +16,8 @@ Version: June 10, 2008
 #include "triangulationmath.h"
 #include "triangulationmorph.h"
 #include "triangulationInputOutput.h"
+#include <ctime>
+#include <iomanip>
 
 using namespace std;
 
@@ -23,22 +25,29 @@ using namespace std;
 int main(int argc, char *argv[])
 {   
     
-   readTriangulationFile("c:/Documents and Settings/student/Desktop/Triangulations/torus.txt");
-   int vertexSize = Triangulation::vertexTable.size();
-   int edgeSize = Triangulation::edgeTable.size();
-   double weights[vertexSize];
-   double weightsChange[vertexSize];
-   double curvatures[vertexSize];
-   for(int i = 1; i <= vertexSize; i++)
+   readTriangulationFile("C:/Dev-Cpp/geocam/Triangulations/Tetrahedron.txt");
+   
+   
+   int faceSize = Triangulation::faceTable.size();
+   
+   srand(time(NULL));
+   
+    
+    int vertexSize = Triangulation::vertexTable.size();
+    double weights[vertexSize];
+     for(int i = 1; i <= vertexSize; i++)
    {
-           weights[i - 1] = 1;
-           // NEw Changes HERE
+           //weights[i - 1] = i;
+         weights[i - 1] = rand() % 10 + 1;
    }
    
-
-
-      calcFlow(0, 10, weights,100, 1, true);
-     
+   char fileName[] = "C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt";
+   
+   time_t start, end;
+   time(&start);
+   calcFlow(fileName, 0.03, weights,200,true);
+   time(&end);
+   cout << difftime(end, start) << " seconds" << endl;
    system("PAUSE");
    return 0;
 }
