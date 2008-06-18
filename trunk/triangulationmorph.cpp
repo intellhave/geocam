@@ -5,7 +5,8 @@
 #include <algorithm>
 #include "Triangulation.h"
 #include "Triangulationmath.h"
-
+#include <cstdlib>
+#include <iostream>
 
 void addNewVertex(Face f, double newWeight)
 {
@@ -205,106 +206,102 @@ void flip(Edge e)
 {
      
      //start out by naming every object that is local to the flip
-     Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
-     Face f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[2]];
+     Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+     Face f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
      
      vector<int> sameAs;
      vector<int> diff;
      
-     Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
-     Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[2]];     
+     Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+     Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
+          
      diff = listDifference(f1.getLocalVertices(), f2.getLocalVertices());
-     Vertex vb1 = diff[0];
+     Vertex vb1 = Triangulation::vertexTable[diff[0]];
      diff = listDifference(f2.getLocalVertices(), f1.getLocalVertices());
-     Vertex vb2 = diff[0];
+     Vertex vb2 = Triangulation::vertexTable[diff[0]];
      
      sameAs = listIntersection(va1.getLocalEdges(), vb1.getLocalEdges());
-     sameAs = listIntersection(&sameAs, f1.getLocalEdges());
-     Edge ea1 = sameAs[0];
+     Edge ea1 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va2.getLocalEdges(), vb1.getLocalEdges());
-     sameAs = listIntersection(&sameAs, f1.getLocalEdges());
-     Edge eb1 = sameAs[0];
+     Edge eb1 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va1.getLocalEdges(), vb2.getLocalEdges());
-     sameAs = listIntersection(&sameAs, f2.getLocalEdges());
-     Edge ea2 = sameAs[0];
+     Edge ea2 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va2.getLocalEdges(), vb2.getLocalEdges());
-     sameAs = listIntersection(&sameAs, f2.getLocalEdges());
-     Edge eb2 = sameAs[0];
+     Edge eb2 = Triangulation::edgeTable[sameAs[0]];
      
      sameAs = listIntersection(f1.getLocalFaces(), ea1.getLocalFaces());
-     Face fa1 = sameAs[0];
+     Face fa1 = Triangulation::faceTable[sameAs[0]];
      sameAs = listIntersection(f1.getLocalFaces(), eb1.getLocalFaces());
-     Face fb1 = sameAs[0];
+     Face fb1 = Triangulation::faceTable[sameAs[0]];
      sameAs = listIntersection(f2.getLocalFaces(), ea2.getLocalFaces());
-     Face fa2 = sameAs[0];
+     Face fa2 = Triangulation::faceTable[sameAs[0]];
      sameAs = listIntersection(f2.getLocalFaces(), eb2.getLocalFaces());
-     Face fb2 = sameAs[0];
+     Face fb2 = Triangulation::faceTable[sameAs[0]];
      
-     //then clear the references from the hinge in order to rewrite them
-     for(int i = 0; i < e.getLocalVertices()->size(); i++)
-     {
-             e.removeVertex((*(e.getLocalVertices()))[i]);
-     }
+     //the next task is naturally to rearrange all the necessary references
+     //there are no new references added, so the task  is simply made up
+     //of working with the objects that already exist that have newly
+     //created references made for this method above
+     //the procedure follows a very methodical and categorical structure
+     //done first on paper and then transferred to code
+     Triangulation::vertexTable[(va1.getIndex())].removeVertex(va2.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::vertexTable[(va1.getIndex())].removeEdge(e.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeEdge(e.getIndex()); 
+     Triangulation::vertexTable[(va1.getIndex())].removeFace(f2.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].removeVertex(va2.getIndex()); 
      for(int i = 0; i < e.getLocalEdges()->size(); i++)
      {
-             e.removeEdge((*(e.getLocalEdges()))[i]);
+             Triangulation::edgeTable[(e.getIndex())].removeEdge((*(e.getLocalEdges()))[i]); 
      }
-     
-     //remove all references to the hinge
-     va1.removeEdge(e.getIndex());
-     va2.removeEdge(e.getIndex());
-     
      for(int i = 0; i < va1.getLocalEdges()->size(); i ++)
      {
-             Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].removeEdge(e.getIndex());
+             Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].removeEdge(e.getIndex()); 
      }
      for(int i = 0; i < va2.getLocalEdges()->size(); i ++)
      {
-             Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].removeEdge(e.getIndex());
+             Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].removeEdge(e.getIndex());  
      }
-     
-     //now add the new references to the newly placed hinge
-     e.addVertex(vb1.getIndex());
-     e.addVertex(vb2.getIndex());
-     
+     Triangulation::edgeTable[(eb1.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::edgeTable[(ea2.getIndex())].removeFace(f2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeVertex(va2.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeEdge(eb1.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeEdge(ea2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeFace(fb1.getIndex()); 
+     Triangulation::faceTable[(fb1.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeFace(fa2.getIndex()); 
+     Triangulation::faceTable[(fa2.getIndex())].removeFace(f2.getIndex()); 
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb2.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(vb1.getIndex()); 
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(e.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(e.getIndex()); 
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(f2.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(f1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].addVertex(vb1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].addVertex(vb2.getIndex()); 
      for(int i = 0; i < vb1.getLocalEdges()->size(); i ++)
      {
-             e.addEdge((*(vb1.getLocalEdges()))[i]);
+             Triangulation::edgeTable[(e.getIndex())].addEdge((*(vb1.getLocalEdges()))[i]); 
+             Triangulation::edgeTable[(*(vb1.getLocalEdges()))[i]].addEdge(e.getIndex()); 
      }
      for(int i = 0; i < vb2.getLocalEdges()->size(); i ++)
      {
-             e.addEdge((*(vb2.getLocalEdges()))[i]);
+             Triangulation::edgeTable[(e.getIndex())].addEdge((*(vb2.getLocalEdges()))[i]); 
+             Triangulation::edgeTable[(*(vb2.getLocalEdges()))[i]].addEdge(e.getIndex()); 
      }
-     
-     //after fixing the hinge, we have to fix the old faces
-     f1.removeVertex(va2.getIndex());
-     f1.addVertex(vb2.getIndex());
-     f1.removeEdge(eb1.getIndex());
-     f1.addEdge(ea2.getIndex());
-     f1.removeFace(fb1.getIndex());
-     f1.addFace(fa2.getIndex());
-     
-     va2.removeFace(f1.getIndex());
-     vb2.addFace(f1.getIndex());
-     eb1.removeFace(f1.getIndex());
-     ea2.addFace(f1.getIndex());
-     fb1.removeFace(f1.getIndex());
-     fa2.addFace(f1.getIndex());
-     
-     f2.removeVertex(va1.getIndex());
-     f2.addVertex(vb1.getIndex());
-     f2.removeEdge(ea2.getIndex());
-     f2.addEdge(eb1.getIndex());
-     f2.removeFace(fa2.getIndex());
-     f2.addFace(fb1.getIndex());
-     
-     va1.removeFace(f1.getIndex());
-     vb1.addFace(f1.getIndex());
-     ea2.removeFace(f1.getIndex());
-     eb1.addFace(f1.getIndex());
-     fa2.removeFace(f1.getIndex());
-     fb1.addFace(f1.getIndex());
-     
+     Triangulation::edgeTable[(ea2.getIndex())].addFace(f1.getIndex()); 
+     Triangulation::edgeTable[(eb1.getIndex())].addFace(f2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(f1.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addEdge(eb1.getIndex());
+     Triangulation::faceTable[(f1.getIndex())].addFace(fa2.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].addFace(f1.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addFace(fb1.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addFace(f2.getIndex());
      
 }
 
