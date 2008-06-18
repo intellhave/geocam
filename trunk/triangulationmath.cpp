@@ -122,18 +122,18 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
  * Runge-Kutta method. Results from the steps are written into the file 
- * "ODE Result" for viewing. calcFlow takes a number of paramters:
+ * given for viewing. calcFlow takes a number of parameters:
+ *      char* fileName-      The name of the file to write the results
+ *                           to. 
  *      double dt -          The time step size. Initial and ending
-                             times not needed since diff. equations are
-                             independent of time.
+ *                           times not needed since diff. equations are
+ *                           independent of time.
  *      double* initWeights- Array of initial weights of the Vertices 
  *                           in order.
  *      int numSteps -       The number of steps to take. 
  *                           (dt = (tf - ti)/numSteps)
  *      bool adjF -          Boolean of whether or not to use adjusted
  *                           differential equation. True to use adjusted.
- *      int fi -             The finesse, or number of intermediary points.
- *                           Default of 1.
  * 
  * The information printed in the file are the weights and curvatures for
  * each Vertex at each step point. The file is cleared at the beginning of
@@ -141,16 +141,17 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
  *
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
-void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
+void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool adjF)  
+{
   int p = Triangulation::vertexTable.size(); // The number of vertices / 
                                              // number of variables in system.
-  double h = dt / fi; 
+  double h = dt; 
   double ta[p],tb[p],tc[p],td[p],y[p],z[p];
-  int    i,j,k,ni;
-  ofstream results("C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt", ios_base::trunc);
+  int    i,j,k;
+  ofstream results(fileName, ios_base::trunc);
   results << left << setprecision(4); 
   results.setf(ios_base::showpoint);
-   if (fi<1) return;
+  
    for (k=0; k<p; k++) { 
      z[k]=initWeights[k];
    }
@@ -159,8 +160,7 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
     results << right << setw(7) << "Weight";
     results << right << setw(7) << "Curv" << "\n-----------------------\n";
      
-     ni=(i-1)*fi-1;
-     for (j=1; j<fi+1; j++) {
+    
        for (k=0; k<p; k++)  
        {
            Triangulation::vertexTable[k + 1].setWeight(z[k]);
@@ -210,7 +210,7 @@ void calcFlow(double dt ,double *initWeights,int numSteps, bool adjF, int fi)  {
          z[k]=z[k]+(ta[k]+2*tb[k]+2*tc[k]+td[k])/6;
          
        }
-     }
+     
      results << "\n\n";
    }
    results.close();
