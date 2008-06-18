@@ -49,8 +49,9 @@ vector<int> listDifference(vector<int>*, vector<int>*);
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
  * Runge-Kutta method. Results from the steps are written into the file 
- * "ODE Result" for viewing. calcFlow takes a number of paramters:
- *       
+ * given for viewing. calcFlow takes a number of parameters:
+ *      char* fileName-      The name of the file to write the results
+ *                           to. 
  *      double dt -          The time step size. Initial and ending
  *                           times not needed since diff. equations are
  *                           independent of time.
@@ -60,8 +61,6 @@ vector<int> listDifference(vector<int>*, vector<int>*);
  *                           (dt = (tf - ti)/numSteps)
  *      bool adjF -          Boolean of whether or not to use adjusted
  *                           differential equation. True to use adjusted.
- *      int fi -             The finesse, or number of intermediary points.
- *                           Default of 1.
  * 
  * The information printed in the file are the weights and curvatures for
  * each Vertex at each step point. The file is cleared at the beginning of
@@ -69,7 +68,7 @@ vector<int> listDifference(vector<int>*, vector<int>*);
  *
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
-void calcFlow(double, double*, int, bool, int fi = 1);
+void calcFlow(char*, double, double*, int, bool);
 
 /*
  * Calculates the dr/dt of the vertex given by its index according to the
