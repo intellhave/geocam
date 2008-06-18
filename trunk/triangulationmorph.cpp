@@ -216,6 +216,8 @@ void flip(Edge e)
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
           
      diff = listDifference(f1.getLocalVertices(), f2.getLocalVertices());
+     if(diff.size() == 0)
+     throw string("Invalid move, operation cancelled");
      Vertex vb1 = Triangulation::vertexTable[diff[0]];
      diff = listDifference(f2.getLocalVertices(), f1.getLocalVertices());
      Vertex vb2 = Triangulation::vertexTable[diff[0]];
@@ -244,6 +246,8 @@ void flip(Edge e)
      //created references made for this method above
      //the procedure follows a very methodical and categorical structure
      //done first on paper and then transferred to code
+     
+     //removals
      Triangulation::vertexTable[(va1.getIndex())].removeVertex(va2.getIndex()); 
      Triangulation::vertexTable[(va2.getIndex())].removeVertex(va1.getIndex()); 
      Triangulation::vertexTable[(va1.getIndex())].removeEdge(e.getIndex()); 
@@ -274,6 +278,8 @@ void flip(Edge e)
      Triangulation::faceTable[(fb1.getIndex())].removeFace(f1.getIndex()); 
      Triangulation::faceTable[(f2.getIndex())].removeFace(fa2.getIndex()); 
      Triangulation::faceTable[(fa2.getIndex())].removeFace(f2.getIndex()); 
+     
+     //additions
      Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb2.getIndex()); 
      Triangulation::vertexTable[(vb2.getIndex())].addVertex(vb1.getIndex()); 
      Triangulation::vertexTable[(vb1.getIndex())].addEdge(e.getIndex()); 
@@ -298,12 +304,17 @@ void flip(Edge e)
      Triangulation::faceTable[(f2.getIndex())].addVertex(vb1.getIndex());
      Triangulation::faceTable[(f1.getIndex())].addEdge(ea2.getIndex());
      Triangulation::faceTable[(f2.getIndex())].addEdge(eb1.getIndex());
+     //if(fa1.getIndex() != fa2.getIndex())
      Triangulation::faceTable[(f1.getIndex())].addFace(fa2.getIndex());
+     //if(fa1.getIndex() != fa2.getIndex())
      Triangulation::faceTable[(fa2.getIndex())].addFace(f1.getIndex());
+     //if(fb1.getIndex() != fb2.getIndex())
      Triangulation::faceTable[(f2.getIndex())].addFace(fb1.getIndex());
+     //if(fb1.getIndex() != fb2.getIndex())
      Triangulation::faceTable[(fb1.getIndex())].addFace(f2.getIndex());
      
 }
+
 
 
 
