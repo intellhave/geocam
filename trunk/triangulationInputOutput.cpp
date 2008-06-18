@@ -219,7 +219,6 @@ int readTriangulationFile(char* fileName)
 void writeTriangulationFile(char* newFileName)
 {
      ofstream output(newFileName);
-     output << "\n";
      
      for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
      {
