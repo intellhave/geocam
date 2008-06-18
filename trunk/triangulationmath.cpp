@@ -95,6 +95,7 @@ vector<int> listIntersection(vector<int>* list1, vector<int>* list2)
                              if((*list1)[i] == (*list2)[j])
                              {
                              sameAs.push_back((*list1)[i]);
+                             break;
                              }
                      }
              }
