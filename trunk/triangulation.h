@@ -54,6 +54,12 @@ class Triangulation
      * faceTable. Called statically.
 	 */
      static void putFace(int, Face);
+     
+     static void eraseVertex(int);
+     
+     static void eraseEdge(int);
+     
+     static void eraseFace(int);
 
      static double netCurvature();
 };
