@@ -36,6 +36,21 @@ void Triangulation::putFace(int key, Face v)
      (Triangulation::faceTable).insert(pair<int, Face>(key, v));
 }
 
+void Triangulation::eraseVertex(int key)
+{
+     (Triangulation::vertexTable).erase(key);
+}
+
+void Triangulation::eraseEdge(int key)
+{
+     (Triangulation::edgeTable).erase(key);
+}
+
+void Triangulation::eraseFace(int key)
+{
+     (Triangulation::faceTable).erase(key);
+}
+
 double Triangulation::netCurvature()
 {
        double net;
