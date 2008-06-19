@@ -82,4 +82,4 @@ double stdDiffEQ(int);
  * adjusted formula:
            dr_i/dt = -K_i * r_i + total K / # vertices * r_i.
  */
-double adjDiffEQ(int);
+double adjDiffEQ(int, double);
