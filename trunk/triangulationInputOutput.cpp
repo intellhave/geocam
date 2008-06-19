@@ -209,7 +209,11 @@ bool readTriangulationFile(char* fileName)
          Triangulation::putFace(indexMapping, f);    
        }
        
-       else return false; // File read unsuccessful.
+       else 
+       {
+            scanner.close();
+            return false; // File read unsuccessful.
+       }
     } 
     
     scanner.close();
