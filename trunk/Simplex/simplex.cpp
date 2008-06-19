@@ -5,6 +5,8 @@ Version: June 9, 2008
 **************************************************************/
 
 #include "simplex.h" // class's header file
+#include "triangulation.h"
+#include <iostream>
 #include <algorithm>
 #include <vector>
 #include <cstdlib>
