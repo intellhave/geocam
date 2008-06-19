@@ -226,6 +226,8 @@ void writeTriangulationFile(char* newFileName)
      
      for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
      {
+            
+             
              output << "Vertex: " << i << "\n";
              
              for(int j = 0; j < Triangulation::vertexTable[i].getLocalVertices()->size(); j++)
@@ -243,6 +245,7 @@ void writeTriangulationFile(char* newFileName)
              for(int j = 0; j < Triangulation::vertexTable[i].getLocalFaces()->size(); j++)
              {
                      output << ((*(Triangulation::vertexTable[i].getLocalFaces()))[j]) << " ";
+                   
              }
              output << "\n";
      }
