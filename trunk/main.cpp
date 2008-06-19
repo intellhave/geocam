@@ -18,6 +18,7 @@ Version: June 10, 2008
 #include "triangulationInputOutput.h"
 #include <ctime>
 #include <iomanip>
+#include "makeTriangulationFile.h"
 
 using namespace std;
 
@@ -25,7 +26,10 @@ using namespace std;
 int main(int argc, char *argv[])
 {   
     
-   readTriangulationFile("C:/Dev-Cpp/geocam/Triangulations/Tetrahedron.txt");
+char from[] = "C:/Dev-Cpp/geocam/Triangulations/manifold.txt";
+char to[] = "C:/Dev-Cpp/geocam/Triangulations/manifold converted.txt";
+makeTriangulationFile(from, to);
+   readTriangulationFile("C:/Dev-Cpp/geocam/Triangulations/manifold converted.txt");
    
    
    int faceSize = Triangulation::faceTable.size();
@@ -37,7 +41,7 @@ int main(int argc, char *argv[])
     double weights[vertexSize];
      for(int i = 1; i <= vertexSize; i++)
    {
-           //weights[i - 1] = i;
+          //weights[i - 1] = 1;
          weights[i - 1] = rand() % 10 + 1;
    }
    
@@ -45,9 +49,10 @@ int main(int argc, char *argv[])
    
    time_t start, end;
    time(&start);
-   calcFlow(fileName, 0.03, weights,200,true);
+   calcFlow(fileName, 0.04, weights,100,true);
    time(&end);
    cout << difftime(end, start) << " seconds" << endl;
+
    system("PAUSE");
    return 0;
 }
