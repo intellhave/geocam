@@ -152,28 +152,36 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
   ofstream results(fileName, ios_base::trunc);
   results << left << setprecision(4); 
   results.setf(ios_base::showpoint);
-  
+  double net = 0;
+  double prev;
    for (k=0; k<p; k++) { 
      z[k]=initWeights[k];
    }
-   for (i=1; i<numSteps+1; i++) {
+   for (i=1; i<numSteps+1; i++) 
+   {
     results << left << "Step " << left <<setw(4)  << i;
     results << right << setw(7) << "Weight";
     results << right << setw(7) << "Curv" << "\n-----------------------\n";
-     
+    prev = net;
+    net = 0; 
     
        for (k=0; k<p; k++)  
        {
            Triangulation::vertexTable[k + 1].setWeight(z[k]);
+       }
+       if(i == 1) 
+       {
+            prev = Triangulation::netCurvature();
        }
        for (k=0; k<p; k++)  
        {
            results << "Vertex " << k + 1<< ": " << z[k] << " / ";
            double curv = curvature(Triangulation::vertexTable[k + 1]);
            results << curv << "\n";
+           net += curv;
            if(adjF) ta[k]= h * ((-1) * curv 
                            * Triangulation::vertexTable[k + 1].getWeight() +
-                           Triangulation::netCurvature() /  p
+                           prev /  p
                            * Triangulation::vertexTable[k+ 1].getWeight());
            else     ta[k] = h * (-1) * curv 
                            * Triangulation::vertexTable[k + 1].getWeight();
@@ -185,7 +193,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0; k<p; k++)  
        {
-            if(adjF) tb[k]=h*adjDiffEQ(k + 1);
+            if(adjF) tb[k]=h*adjDiffEQ(k + 1, net);
             else     tb[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)  
@@ -194,7 +202,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0; k<p; k++)  
        {
-            if(adjF) tc[k]=h*adjDiffEQ(k + 1);
+            if(adjF) tc[k]=h*adjDiffEQ(k + 1, net);
             else     tc[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)  
@@ -203,7 +211,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0; k<p; k++)  
        {
-            if(adjF) td[k]=h*adjDiffEQ(k + 1);
+            if(adjF) td[k]=h*adjDiffEQ(k + 1, net);
             else     td[k]=h*stdDiffEQ(k + 1);
        }
        for (k=0; k<p; k++)
@@ -212,7 +220,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
          
        }
      
-     results << "\n\n";
+     results << "Net Curv: " << net << "\n\n";
    }
    results.close();
 }
@@ -222,10 +230,10 @@ double stdDiffEQ(int vertex) {
                    * Triangulation::vertexTable[vertex].getWeight();
 }
 
-double adjDiffEQ(int vertex)
+double adjDiffEQ(int vertex, double totalCurv)
 {
        return (-1) * curvature(Triangulation::vertexTable[vertex])
                    * Triangulation::vertexTable[vertex].getWeight() +
-                   Triangulation::netCurvature() /  Triangulation::vertexTable.size()
+                   totalCurv /  Triangulation::vertexTable.size()
                    * Triangulation::vertexTable[vertex].getWeight();
 }
