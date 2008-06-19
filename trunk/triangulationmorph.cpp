@@ -255,10 +255,47 @@ void flip(Edge e)
      
 }
 
-
-
-
-
-
-
-
+void removeVertex(Vertex v)
+{
+     
+     if(v.getLocalVertices()->size() != 3)
+     throw string("Invalid move, operation cancelled");
+     
+     Vertex va1 = (*(v.getLocalVertices()))[0];
+     Vertex va2 = (*(v.getLocalVertices()))[1];
+     Vertex va3 = (*(v.getLocalVertices()))[2];
+     
+     vector<int> sameAs;
+     
+     sameAs = listIntersection(v.getLocalEdges(), va1.getLocalEdges());
+     Edge eb1 = Triangulation::edgeTable[sameAs[0]];     
+     sameAs = listIntersection(v.getLocalEdges(), va2.getLocalEdges());
+     Edge eb2 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(v.getLocalEdges(), va3.getLocalEdges());
+     Edge eb3 = Triangulation::edgeTable[sameAs[0]];     
+     sameAs = listIntersection(va1.getLocalEdges(), va2.getLocalEdges());
+     Edge ea1 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va1.getLocalEdges(), va3.getLocalEdges());
+     Edge ea2 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va2.getLocalEdges(), va3.getLocalEdges());
+     Edge ea3 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(eb1.getLocalFaces(), eb2.getLocalFaces());
+     Face fb1 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(eb1.getLocalFaces(), eb3.getLocalFaces());
+     Face fb2 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(eb2.getLocalFaces(), eb3.getLocalFaces());
+     Face fb3 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(fb1.getLocalFaces(), ea1.getLocalFaces());
+     Face fa1 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(fb2.getLocalFaces(), ea2.getLocalFaces());
+     Face fa2 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(fb3.getLocalFaces(), ea3.getLocalFaces());
+     Face fa3 = Triangulation::faceTable[sameAs[0]];
+     
+     
+     
+     
+     
+     
+         
+}
