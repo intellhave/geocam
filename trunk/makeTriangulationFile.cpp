@@ -12,12 +12,14 @@
 #include <vector>
 #include <algorithm>
 #include <set>
+#include "triangulationmath.h"
 
 struct Pair
 {
        int v1, v2;
        int positionOf(vector<Pair>*);  
-       bool contains(int);  
+       bool contains(int);
+       bool isInTriple(vector<int>*);
 };
 
 int Pair::positionOf(vector<Pair>* list)
@@ -41,6 +43,23 @@ bool Pair::contains(int i)
      }
      else
          return false;
+}
+ 
+bool Pair::isInTriple(vector<int>* triple)
+{
+     int result = 0;
+     for(int i = 0; i < triple->size(); i++)
+     {
+          if(v1 == (*triple)[i])
+          {
+                result++;
+          }
+          if(v2 == (*triple)[i])
+          {
+                result++;
+          }
+     }
+     return result == 2;
 }
  
 void makeTriangulationFile (char* from, char* to) {
@@ -103,17 +122,20 @@ void makeTriangulationFile (char* from, char* to) {
   }
    
   ofstream outfile;
-  outfile.open(to);
+  outfile.open(to, ios_base::trunc);
   
+  // Vertices
   for (int i = 0; i < v.size(); i++)
   {
+      // name
       outfile << "Vertex: " << v[i] << "\n";
       set<int> localv; 
       vector<int> localf; 
+      
       for (int k = 0; k < f.size(); k++)
       {      
           it = find(f[k].begin(), f[k].end(), v[i]);
-          if (it != v.end())
+          if (it != f[k].end())
           {
                  localf.push_back(k+1);
                  for(int g = 0; g < 3; g++)
@@ -126,12 +148,13 @@ void makeTriangulationFile (char* from, char* to) {
       set<int>::iterator notit;
       set<int>::iterator end = localv.end();
       end--;
-      
+      // local vertices
       for (notit = localv.begin(); notit != end; notit++)
       {
           outfile << *notit << " ";
       }
       outfile << *notit << "\n";    
+      // local edges
       for (int j = 0; j < list.size(); j++)
       {
           if (list[j].contains(v[i]))
@@ -141,12 +164,76 @@ void makeTriangulationFile (char* from, char* to) {
              
       } 
       outfile << "\n";
+      // local faces
       for (int i = 0; i < localf.size(); i++)
       {
           outfile << localf[i] << " ";
-      } 
+      }
+      outfile << "\n";
   }
   
+  //Edges
+  for(int i = 0; i < list.size(); i++)
+  {
+          // name
+          outfile << "Edge: " << i + 1 << "\n";
+          Pair current = list[i];
+          // local vertices
+          outfile << current.v1 << " " << current.v2 << "\n";
+          // local edges
+          for(int j = 0; j < list.size(); j++)
+          {
+             if(j != i && 
+                (list[j].contains(current.v1) || list[j].contains(current.v2)))
+             {
+                 outfile << j + 1 << " "; 
+             }
+          }
+          outfile << "\n";
+          for(int j = 0; j < f.size(); j++)
+          {
+                  if(current.isInTriple(&(f[j])))
+                  {
+                      outfile << j + 1 << " ";
+                  }
+          }
+          outfile << "\n";
+  }
+  
+  //Faces
+  for(int i = 0; i < f.size(); i++)
+  {
+      // name
+      outfile << "Face: " << i + 1 << "\n";
+      vector<int> current = f[i];
+      // local vertices
+      for(int j = 0; j < current.size(); j++)
+      {
+              outfile << current[j] << " ";
+      }
+      outfile << "\n";
+      // local edges
+      for(int j = 0; j < list.size(); j++)
+      {
+              if((list[j]).isInTriple(&current))
+              {
+                 outfile << j + 1 << " ";
+              }
+      }
+      outfile << "\n";
+      for(int j = 0; j < f.size(); j++)
+      {
+         if( j != i)
+         {
+            vector<int> inter = listIntersection(&current, &(f[j]));
+            if(inter.size() == 2)
+            {
+               outfile << j + 1 << " ";
+            }
+         }
+      }
+      outfile << "\n";   
+  }
   
   infile.close(); }
   
