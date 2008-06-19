@@ -1,3 +1,3 @@
-int readTriangulationFile(char*);
+bool readTriangulationFile(char*);
 
 void writeTriangulationFile(char*);
