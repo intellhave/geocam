@@ -47,7 +47,7 @@
  * that they do not need to be in any sort of order or numbering scheme. 
  */
 
-int readTriangulationFile(char* fileName) 
+bool readTriangulationFile(char* fileName) 
 {
     // The three names of simplices.
     const string vertexString("Vertex");
@@ -209,11 +209,11 @@ int readTriangulationFile(char* fileName)
          Triangulation::putFace(indexMapping, f);    
        }
        
-       else return 1; // File read unsuccessful.
+       else return false; // File read unsuccessful.
     } 
     
     scanner.close();
-    return 0; // File read successfully!
+    return true; // File read successfully!
 }
 
 void writeTriangulationFile(char* newFileName)
