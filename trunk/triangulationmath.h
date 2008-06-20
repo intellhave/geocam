@@ -7,9 +7,10 @@ The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
 **************************************************************/
  
-#include "simplex/vertex.h"
 #include "simplex/edge.h"
+#include "simplex/vertex.h"
 #include "simplex/face.h"
+
 
 /*
  * Calculates the angle between two edges of a triangle, where the
