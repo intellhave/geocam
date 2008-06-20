@@ -149,6 +149,10 @@ void Triangulation::eraseFace(int key)
             faceTable.erase(key);
             return;
      }
+<<<<<<< .mine
+     cout << "hi\n";
+=======
+>>>>>>> .r110
      int switchKey = faceTable.size();
      map<int, Vertex>::iterator vit;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
@@ -188,6 +192,7 @@ void Triangulation::eraseFace(int key)
      }
      faceTable.erase(key);
      Face switchF = faceTable[switchKey];
+     switchF.setIndex(key);
      faceTable.erase(switchKey);
      faceTable.insert(pair<int, Face>(key, switchF));
      
