@@ -42,9 +42,7 @@ void addNewVertex(Face f, double newWeight)
      Face fb2(Triangulation::faceTable.size() + 2);
      
      //finally, add the new simplices to the triangulation and give the new vertex a weight
-     cout << Triangulation::vertexTable.size() << "\n";
      Triangulation::putVertex(vb.getIndex(), vb);
-     cout << Triangulation::vertexTable.size()  << "\n";
      Triangulation::putEdge(eb1.getIndex(), eb1);
      Triangulation::putEdge(eb2.getIndex(), eb2);
      Triangulation::putEdge(eb3.getIndex(), eb3);
@@ -141,7 +139,6 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::faceTable[(fb2.getIndex())].addFace(fa3.getIndex());
      Triangulation::faceTable[(fa2.getIndex())].addFace(fb1.getIndex());
      Triangulation::faceTable[(fa3.getIndex())].addFace(fb2.getIndex());
-     
      
      
      vb.setWeight(newWeight);
@@ -341,12 +338,54 @@ void removeVertex(Vertex v)
      Triangulation::faceTable[(fa2.getIndex())].addFace(fb1.getIndex());
      Triangulation::faceTable[(fa3.getIndex())].addFace(fb1.getIndex());
      
-     
+     vector<Edge> inOrder;
+     inOrder.push_back(eb1);
+     if(eb2.getIndex() > eb1.getIndex())
+     {
+        if(eb2.getIndex() < eb3.getIndex())
+        {
+            inOrder.push_back(eb2);
+            inOrder.push_back(eb3);
+        } else if(eb3.getIndex() < eb1.getIndex())
+        {
+            inOrder.insert(inOrder.begin(), eb3);
+            inOrder.push_back(eb2);
+        } else
+        {
+            inOrder.push_back(eb3);
+            inOrder.push_back(eb2);
+        }
+     }
+     else
+     {
+        if(eb2.getIndex() > eb3.getIndex())
+        {
+            inOrder.insert(inOrder.begin(), eb2);
+            inOrder.insert(inOrder.begin(), eb3);
+        } else if(eb3.getIndex() > eb1.getIndex())
+        {
+            inOrder.insert(inOrder.begin(), eb2);
+            inOrder.push_back(eb3);
+        } else
+        {
+            inOrder.insert(inOrder.begin(), eb3);
+            inOrder.insert(inOrder.begin(), eb2);
+        }
+     }
      Triangulation::eraseVertex(v.getIndex());
-     Triangulation::eraseEdge(eb3.getIndex());
-     Triangulation::eraseEdge(eb2.getIndex());
-     Triangulation::eraseEdge(eb1.getIndex());
-     Triangulation::eraseFace(fb3.getIndex());
-     Triangulation::eraseFace(fb2.getIndex());
+     for(int i = 2; i >= 0; i--)
+     {
+        Triangulation::eraseEdge(inOrder[i].getIndex());
+     }
+     if(fb3.getIndex() > fb2.getIndex())
+     {
+        Triangulation::eraseFace(fb3.getIndex());
+        Triangulation::eraseFace(fb2.getIndex());
+     }else
+     {
+        Triangulation::eraseFace(fb2.getIndex());
+        Triangulation::eraseFace(fb3.getIndex());
+     }
+     
          
 }
