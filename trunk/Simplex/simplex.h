@@ -41,6 +41,7 @@ class Simplex
      /* Adds a vertex represented by an integer to the list of local 
       * vertices.
 	  */
+     void setIndex(int);
 	  void addVertex(int);
      /* Adds an edge represented by an integer to the list of local 
       * edges.
