@@ -1,7 +1,7 @@
 /**************************************************************
 Class: Triangulation
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 11, 2008
+Version: June 20, 2008
 **************************************************************/
 
 #ifndef TRIANGULATION_H
