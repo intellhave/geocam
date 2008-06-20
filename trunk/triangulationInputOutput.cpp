@@ -252,7 +252,7 @@ void writeTriangulationFile(char* newFileName)
      
      for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
      {
-             output << "Edge: " << i << "\n";
+             output << "Edge: " << Triangulation::edgeTable[i].getIndex() << "\n";
              
              for(int j = 0; j < Triangulation::edgeTable[i].getLocalVertices()->size(); j++)
              {
