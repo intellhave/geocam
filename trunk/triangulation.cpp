@@ -6,6 +6,7 @@
 #include "triangulationmath.h"
 #include <algorithm>
 #include <vector>
+#include <iostream>
 
 map<int, Vertex> Triangulation::vertexTable;
 map<int, Edge> Triangulation::edgeTable;
@@ -45,7 +46,7 @@ void Triangulation::eraseVertex(int key)
             vertexTable.erase(key);
             return;
      }
-     
+     cout << "hi";
      int switchKey = vertexTable.size();
      map<int, Vertex>::iterator vit;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
@@ -97,7 +98,6 @@ void Triangulation::eraseEdge(int key)
             edgeTable.erase(key);
             return;
      }
-     
      int switchKey = edgeTable.size();
      map<int, Vertex>::iterator vit;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
@@ -149,7 +149,6 @@ void Triangulation::eraseFace(int key)
             faceTable.erase(key);
             return;
      }
-     
      int switchKey = faceTable.size();
      map<int, Vertex>::iterator vit;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
