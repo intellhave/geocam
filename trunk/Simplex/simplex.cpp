@@ -26,6 +26,10 @@ int Simplex::getIndex()
 {
     return index;
 }
+void Simplex::setIndex(int newIndex)
+{
+     index = newIndex;
+}
 void Simplex::addVertex(int vertex)
 {
      vector<int>::iterator it = find(localVertices.begin(), localVertices.end(), vertex);
