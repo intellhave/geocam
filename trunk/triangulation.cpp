@@ -23,32 +23,32 @@ Triangulation::~Triangulation()
 
 void Triangulation::putVertex(int key, Vertex v)
 {
-     (Triangulation::vertexTable).insert(pair<int, Vertex>(key, v));
+     vertexTable.insert(pair<int, Vertex>(key, v));
 }
 
 void Triangulation::putEdge(int key, Edge v)
 {
-     (Triangulation::edgeTable).insert(pair<int, Edge>(key, v));
+     edgeTable.insert(pair<int, Edge>(key, v));
 }
 
 void Triangulation::putFace(int key, Face v)
 {
-     (Triangulation::faceTable).insert(pair<int, Face>(key, v));
+     faceTable.insert(pair<int, Face>(key, v));
 }
 
 void Triangulation::eraseVertex(int key)
 {
-     (Triangulation::vertexTable).erase(key);
+     vertexTable.erase(key);
 }
 
 void Triangulation::eraseEdge(int key)
 {
-     (Triangulation::edgeTable).erase(key);
+     edgeTable.erase(key);
 }
 
 void Triangulation::eraseFace(int key)
 {
-     (Triangulation::faceTable).erase(key);
+     faceTable.erase(key);
 }
 
 double Triangulation::netCurvature()
