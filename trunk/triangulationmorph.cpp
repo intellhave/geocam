@@ -10,7 +10,6 @@
 
 void addNewVertex(Face f, double newWeight)
 {
-     
      //start giving names to the existing simplices that are involved in this procedure
      Vertex va1 = Triangulation::vertexTable[(*(f.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(f.getLocalVertices()))[1]];
@@ -33,12 +32,24 @@ void addNewVertex(Face f, double newWeight)
      Face fa3 = Triangulation::faceTable[sameAs[0]];
      
      //the create the new simplices needed, using new indices
-     Vertex vb(Triangulation::vertexTable.size() + 1);
+     Vertex vb;
+     vb.setIndex(Triangulation::vertexTable.size() + 1);
+     
      Edge eb1(Triangulation::edgeTable.size() + 1);
      Edge eb2(Triangulation::edgeTable.size() + 2);
      Edge eb3(Triangulation::edgeTable.size() + 3);
      Face fb1(Triangulation::faceTable.size() + 1);
      Face fb2(Triangulation::faceTable.size() + 2);
+     
+     //finally, add the new simplices to the triangulation and give the new vertex a weight
+     cout << Triangulation::vertexTable.size() << "\n";
+     Triangulation::putVertex(vb.getIndex(), vb);
+     cout << Triangulation::vertexTable.size()  << "\n";
+     Triangulation::putEdge(eb1.getIndex(), eb1);
+     Triangulation::putEdge(eb2.getIndex(), eb2);
+     Triangulation::putEdge(eb3.getIndex(), eb3);
+     Triangulation::putFace(fb1.getIndex(), fb1);
+     Triangulation::putFace(fb2.getIndex(), fb2);
      
      //then adjust all of the references
      Triangulation::vertexTable[(va3.getIndex())].removeFace(f.getIndex());
@@ -75,6 +86,7 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::edgeTable[(eb2.getIndex())].addVertex(vb.getIndex());
      Triangulation::edgeTable[(eb3.getIndex())].addVertex(va3.getIndex());
      Triangulation::edgeTable[(eb3.getIndex())].addVertex(vb.getIndex());
+     
      for(int i = 0; i < va1.getLocalEdges()->size(); i++)
      {
              Triangulation::edgeTable[(eb1.getIndex())].addEdge((*(va1.getLocalEdges()))[i]);
@@ -130,13 +142,7 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::faceTable[(fa2.getIndex())].addFace(fb1.getIndex());
      Triangulation::faceTable[(fa3.getIndex())].addFace(fb2.getIndex());
      
-     //finally, add the new simplices to the triangulation and give the new vertex a weight
-     Triangulation::putVertex(vb.getIndex(), vb);
-     Triangulation::putEdge(eb1.getIndex(), eb1);
-     Triangulation::putEdge(eb2.getIndex(), eb2);
-     Triangulation::putEdge(eb3.getIndex(), eb3);
-     Triangulation::putFace(fb1.getIndex(), fb1);
-     Triangulation::putFace(fb2.getIndex(), fb2);
+     
      
      vb.setWeight(newWeight);
      
@@ -334,6 +340,7 @@ void removeVertex(Vertex v)
      Triangulation::faceTable[(fb1.getIndex())].addFace(fa3.getIndex());
      Triangulation::faceTable[(fa2.getIndex())].addFace(fb1.getIndex());
      Triangulation::faceTable[(fa3.getIndex())].addFace(fb1.getIndex());
+     
      
      Triangulation::eraseVertex(v.getIndex());
      Triangulation::eraseEdge(eb1.getIndex());
