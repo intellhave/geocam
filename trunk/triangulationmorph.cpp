@@ -343,10 +343,10 @@ void removeVertex(Vertex v)
      
      
      Triangulation::eraseVertex(v.getIndex());
-     Triangulation::eraseEdge(eb1.getIndex());
-     Triangulation::eraseEdge(eb2.getIndex());
      Triangulation::eraseEdge(eb3.getIndex());
-     Triangulation::eraseFace(fb2.getIndex());
+     Triangulation::eraseEdge(eb2.getIndex());
+     Triangulation::eraseEdge(eb1.getIndex());
      Triangulation::eraseFace(fb3.getIndex());
+     Triangulation::eraseFace(fb2.getIndex());
          
 }
