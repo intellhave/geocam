@@ -74,13 +74,14 @@ void calcFlow(char*, double, double*, int, bool);
 /*
  * Calculates the dr/dt of the vertex given by its index according to the
  * formula:
-           dr_i/dt = -K_i * r_i
+ *         dr_i/dt = -K_i * r_i
  */
 double stdDiffEQ(int);
 
 /*
  * Calculates the dr/dt of the vertex given by its index according to the
  * adjusted formula:
-           dr_i/dt = -K_i * r_i + total K / # vertices * r_i.
+ *         dr_i/dt = -K_i * r_i + total K / (# vertices) * r_i.
+ * The double represents the net curvature (for faster processing time).
  */
 double adjDiffEQ(int, double);
