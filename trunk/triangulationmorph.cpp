@@ -66,6 +66,8 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::faceTable[(f.getIndex())].removeEdge(ea3.getIndex());
      Triangulation::faceTable[(f.getIndex())].removeFace(fa2.getIndex());
      Triangulation::faceTable[(f.getIndex())].removeFace(fa3.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].removeFace(f.getIndex());
+     Triangulation::faceTable[(fa3.getIndex())].removeFace(f.getIndex());
      
      Triangulation::vertexTable[(va1.getIndex())].addVertex(vb.getIndex());
      Triangulation::vertexTable[(va2.getIndex())].addVertex(vb.getIndex());
