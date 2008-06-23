@@ -174,9 +174,20 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0; k<p; k++)  
        {
+           if(z[k] < 0.00005 && z[k] > -0.00005)
+           {
+              z[k] = 0;
+           } 
+
            results << "Vertex " << k + 1<< ": " << z[k] << " / ";
            double curv = curvature(Triangulation::vertexTable[k + 1]);
-           results << curv << "\n";
+           if(curv < 0.00005 && curv > -0.00005)
+           {
+             results << 0. << "\n";
+   
+           }
+           else
+               results << curv << "\n";
            net += curv;
            if(adjF) ta[k]= h * ((-1) * curv 
                            * Triangulation::vertexTable[k + 1].getWeight() +
@@ -218,7 +229,12 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
          z[k]=z[k]+(ta[k]+2*tb[k]+2*tc[k]+td[k])/6;
          
        }
-     
+     if(net < 0.00005 && net > -0.00005)
+     {
+            net = 0;
+     }
+
+
      results << "Net Curv: " << net << "\n\n";
    }
    results.close();
