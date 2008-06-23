@@ -149,7 +149,7 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::faceTable[(fa3.getIndex())].addFace(fb2.getIndex());
      
      
-     vb.setWeight(newWeight);
+     Triangulation::vertexTable[vb.getIndex()].setWeight(newWeight);
      
 }
 
