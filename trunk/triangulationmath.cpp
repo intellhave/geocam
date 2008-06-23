@@ -143,45 +143,46 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
  */
 void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool adjF)  
 {
-  int p = Triangulation::vertexTable.size(); // The number of vertices / 
+  int p = Triangulation::vertexTable.size(); // The number of vertices or 
                                              // number of variables in system.
   double h = dt; 
-  double ta[p],tb[p],tc[p],td[p],y[p],z[p];
-  int    i,j,k;
+  double ta[p],tb[p],tc[p],td[p],y[p],z[p]; // Temporary arrays to hold data in.
+  int    i,j,k; // ints used for "for loops".
   ofstream results(fileName, ios_base::trunc);
   results << left << setprecision(4); 
   results.setf(ios_base::showpoint);
-  double net = 0;
-  double prev;
+  double net = 0; // Net and prev hold the current and previous
+  double prev;    //  net curvatures, repsectively.
    for (k=0; k<p; k++) { 
-     z[k]=initWeights[k];
+     z[k]=initWeights[k]; // z[k] holds the current weights.
    }
    for (i=1; i<numSteps+1; i++) 
    {
     results << left << "Step " << left <<setw(4)  << i;
     results << right << setw(7) << "Weight";
     results << right << setw(7) << "Curv" << "\n-----------------------\n";
-    prev = net;
-    net = 0; 
+    prev = net; // Set prev to net.
+    net = 0;    // Reset net.
     
        for (k=0; k<p; k++)  
        {
+           // Set the weights of the Triangulation.
            Triangulation::vertexTable[k + 1].setWeight(z[k]);
        }
-       if(i == 1) 
+       if(i == 1) // If first time through, use static method.
        {
             prev = Triangulation::netCurvature();
        }
-       for (k=0; k<p; k++)  
-       {
-           if(z[k] < 0.00005 && z[k] > -0.00005)
+       for (k=0; k<p; k++)  // First "for loop" in whole step calculates
+       {                    // everything manually, prints to file.
+           if(z[k] < 0.00005 && z[k] > -0.00005) // Adjusted for small errors.
            {
               z[k] = 0;
            } 
 
            results << "Vertex " << k + 1<< ": " << z[k] << " / ";
            double curv = curvature(Triangulation::vertexTable[k + 1]);
-           if(curv < 0.00005 && curv > -0.00005)
+           if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
            {
              results << 0. << "\n";
    
@@ -197,7 +198,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
                            * Triangulation::vertexTable[k + 1].getWeight();
            
        }
-       for (k=0; k<p; k++)  
+       for (k=0; k<p; k++)  // Set the new weights.
        {
            Triangulation::vertexTable[k + 1].setWeight(z[k]+ta[k]/2);
        }
@@ -206,7 +207,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
             if(adjF) tb[k]=h*adjDiffEQ(k + 1, net);
             else     tb[k]=h*stdDiffEQ(k + 1);
        }
-       for (k=0; k<p; k++)  
+       for (k=0; k<p; k++)  // Set the new weights.
        {
            Triangulation::vertexTable[k + 1].setWeight(z[k]+tb[k]/2);
        }
@@ -215,7 +216,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
             if(adjF) tc[k]=h*adjDiffEQ(k + 1, net);
             else     tc[k]=h*stdDiffEQ(k + 1);
        }
-       for (k=0; k<p; k++)  
+       for (k=0; k<p; k++)  // Set the new weights.
        {
            Triangulation::vertexTable[k + 1].setWeight(z[k]+tc[k]);
        }
@@ -224,12 +225,12 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
             if(adjF) td[k]=h*adjDiffEQ(k + 1, net);
             else     td[k]=h*stdDiffEQ(k + 1);
        }
-       for (k=0; k<p; k++)
+       for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
        {
          z[k]=z[k]+(ta[k]+2*tb[k]+2*tc[k]+td[k])/6;
          
        }
-     if(net < 0.00005 && net > -0.00005)
+     if(net < 0.00005 && net > -0.00005) // Adjusted for small errors.
      {
             net = 0;
      }
