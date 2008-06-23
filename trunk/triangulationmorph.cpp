@@ -399,3 +399,109 @@ void removeVertex(Vertex v)
      
          
 }
+
+void addLeaf(Edge e, double newWeight)
+{
+     Edge eb(Triangulation::edgeTable.size() + 1);
+     Edge ea1(Triangulation::edgeTable.size() + 2);
+     Edge ea2(Triangulation::edgeTable.size() + 3);
+     Vertex vb(Triangulation::vertexTable.size() + 1);
+     Face fb1(Triangulation::faceTable.size() + 1);
+     Face fb2(Triangulation::faceTable.size() + 2);
+     
+     Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+     Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
+     
+     vector<int> sameAs = listIntersection(va1.getLocalFaces(), e.getLocalFaces());
+     Face fa1 = Triangulation::faceTable[sameAs[0]];
+     Face fa2 = Triangulation::faceTable[sameAs[1]];
+     
+     Triangulation::putEdge(eb.getIndex(), eb);
+     Triangulation::putEdge(ea1.getIndex(), ea1);
+     Triangulation::putEdge(ea2.getIndex(), ea2);
+     Triangulation::putVertex(vb.getIndex(), vb);
+     Triangulation::putFace(fb1.getIndex(), fb1);
+     Triangulation::putFace(fb2.getIndex(), fb2);
+     
+     Triangulation::edgeTable[(e.getIndex())].removeFace(fa2.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].removeEdge(e.getIndex());
+     Triangulation::faceTable[(fa1.getIndex())].removeFace(fa2.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].removeFace(fa1.getIndex());
+     
+     Triangulation::vertexTable[(vb.getIndex())].addVertex(va1.getIndex());
+     Triangulation::vertexTable[(vb.getIndex())].addVertex(va2.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addVertex(vb.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addVertex(vb.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addEdge(eb.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addEdge(eb.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addEdge(ea1.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::vertexTable[(vb.getIndex())].addEdge(ea1.getIndex());
+     Triangulation::vertexTable[(vb.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::vertexTable[(vb.getIndex())].addFace(fb1.getIndex());
+     Triangulation::vertexTable[(vb.getIndex())].addFace(fb2.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addFace(fb1.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addFace(fb2.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addFace(fb1.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addFace(fb2.getIndex());
+     Triangulation::edgeTable[(eb.getIndex())].addVertex(va1.getIndex());
+     Triangulation::edgeTable[(eb.getIndex())].addVertex(va2.getIndex());
+     Triangulation::edgeTable[(ea1.getIndex())].addVertex(va1.getIndex());
+     Triangulation::edgeTable[(ea2.getIndex())].addVertex(va2.getIndex());
+     Triangulation::edgeTable[(ea1.getIndex())].addVertex(vb.getIndex());
+     Triangulation::edgeTable[(ea2.getIndex())].addVertex(vb.getIndex());
+     for(int i = 0; i < va1.getLocalEdges()->size(); i++)
+     {
+             Triangulation::edgeTable[(eb.getIndex())].addEdge((*(va1.getLocalEdges()))[i]);
+             Triangulation::edgeTable[(ea1.getIndex())].addEdge((*(va1.getLocalEdges()))[i]);
+             Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].addEdge(eb.getIndex());
+             Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].addEdge(ea1.getIndex());
+     }
+     for(int i = 0; i < va2.getLocalEdges()->size(); i++)
+     {
+             Triangulation::edgeTable[(eb.getIndex())].addEdge((*(va2.getLocalEdges()))[i]);
+             Triangulation::edgeTable[(ea2.getIndex())].addEdge((*(va2.getLocalEdges()))[i]);
+             Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].addEdge(eb.getIndex());
+             Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].addEdge(ea2.getIndex());
+     }
+     Triangulation::edgeTable[(eb.getIndex())].addEdge(e.getIndex());
+     Triangulation::edgeTable[(eb.getIndex())].addEdge(ea1.getIndex());
+     Triangulation::edgeTable[(eb.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::edgeTable[(ea1.getIndex())].addEdge(e.getIndex());
+     Triangulation::edgeTable[(ea1.getIndex())].addEdge(eb.getIndex());
+     Triangulation::edgeTable[(ea1.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::edgeTable[(ea2.getIndex())].addEdge(e.getIndex());
+     Triangulation::edgeTable[(ea2.getIndex())].addEdge(eb.getIndex());
+     Triangulation::edgeTable[(ea2.getIndex())].addEdge(ea1.getIndex());
+     Triangulation::edgeTable[(e.getIndex())].addFace(fb1.getIndex());
+     Triangulation::edgeTable[(eb.getIndex())].addFace(fb2.getIndex());
+     Triangulation::edgeTable[(eb.getIndex())].addFace(fa2.getIndex());
+     Triangulation::edgeTable[(ea1.getIndex())].addFace(fb1.getIndex());
+     Triangulation::edgeTable[(ea1.getIndex())].addFace(fb2.getIndex());
+     Triangulation::edgeTable[(ea2.getIndex())].addFace(fb1.getIndex());
+     Triangulation::edgeTable[(ea2.getIndex())].addFace(fb2.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addVertex(vb.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addVertex(va1.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addVertex(va2.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addVertex(vb.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addVertex(va1.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addVertex(va2.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].addEdge(eb.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addEdge(e.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addEdge(ea1.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addEdge(eb.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addEdge(ea1.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::faceTable[(fa1.getIndex())].addFace(fb1.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].addFace(fb2.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addFace(fa1.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addFace(fa2.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addFace(fb2.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addFace(fb1.getIndex());
+     
+     Triangulation::vertexTable[vb.getIndex()].setWeight(newWeight);
+     
+}
+
+
