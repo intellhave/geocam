@@ -85,3 +85,9 @@ double stdDiffEQ(int);
  * The double represents the net curvature (for faster processing time).
  */
 double adjDiffEQ(int, double);
+
+double inRadius(Face);
+
+double dualLength(Edge);
+
+double dualArea(Vertex);
