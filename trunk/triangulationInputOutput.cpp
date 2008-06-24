@@ -235,75 +235,73 @@ bool readTriangulationFile(char* fileName)
 void writeTriangulationFile(char* newFileName)
 {
      ofstream output(newFileName);
-     
-     for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
+     for(map<int, Vertex>::iterator vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
      {
             
              
-             output << "Vertex: " << i << "\n";
+             output << "Vertex: " << vit->first << "\n";
              
-             for(int j = 0; j < Triangulation::vertexTable[i].getLocalVertices()->size(); j++)
+             for(int j = 0; j < vit->second.getLocalVertices()->size(); j++)
              {
-                     output << ((*(Triangulation::vertexTable[i].getLocalVertices()))[j]) << " ";
+                     output << (*(vit->second.getLocalVertices()))[j] << " ";
              }
              output << "\n";
              
-             for(int j = 0; j < Triangulation::vertexTable[i].getLocalEdges()->size(); j++)
+             for(int j = 0; j < vit->second.getLocalEdges()->size(); j++)
              {
-                     output << ((*(Triangulation::vertexTable[i].getLocalEdges()))[j]) << " ";
+                     output << (*(vit->second.getLocalEdges()))[j] << " ";
              }
              output << "\n";
              
-             for(int j = 0; j < Triangulation::vertexTable[i].getLocalFaces()->size(); j++)
+             for(int j = 0; j < vit->second.getLocalFaces()->size(); j++)
              {
-                     output << ((*(Triangulation::vertexTable[i].getLocalFaces()))[j]) << " ";
+                     output << (*(vit->second.getLocalFaces()))[j] << " ";
                    
              }
              output << "\n";
      }
-     
-     for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+     for(map<int, Edge>::iterator eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
      {
-             output << "Edge: " << Triangulation::edgeTable[i].getIndex() << "\n";
+             output << "Edge: " << eit->first << "\n";
              
-             for(int j = 0; j < Triangulation::edgeTable[i].getLocalVertices()->size(); j++)
+             for(int j = 0; j < eit->second.getLocalVertices()->size(); j++)
              {
-                     output << ((*(Triangulation::edgeTable[i].getLocalVertices()))[j]) << " ";
+                     output << (*(eit->second.getLocalVertices()))[j] << " ";
              }
              output << "\n";
              
-             for(int j = 0; j < Triangulation::edgeTable[i].getLocalEdges()->size(); j++)
+             for(int j = 0; j < eit->second.getLocalEdges()->size(); j++)
              {
-                     output << ((*(Triangulation::edgeTable[i].getLocalEdges()))[j]) << " ";
+                     output << (*(eit->second.getLocalEdges()))[j] << " ";
              }
              output << "\n";
              
-             for(int j = 0; j < Triangulation::edgeTable[i].getLocalFaces()->size(); j++)
+             for(int j = 0; j < eit->second.getLocalFaces()->size(); j++)
              {
-                     output << ((*(Triangulation::edgeTable[i].getLocalFaces()))[j]) << " ";
+                     output << (*(eit->second.getLocalFaces()))[j] << " ";
              }
              output << "\n";
      }
      
-     for(int i = 1; i <= Triangulation::faceTable.size(); i++)
+     for(map<int, Face>::iterator fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
      {
-             output << "Face: " << i << "\n";
+             output << "Face: " << fit->first << "\n";
              
-             for(int j = 0; j < Triangulation::faceTable[i].getLocalVertices()->size(); j++)
+             for(int j = 0; j < fit->second.getLocalVertices()->size(); j++)
              {
-                     output << ((*(Triangulation::faceTable[i].getLocalVertices()))[j]) << " ";
+                     output << (*(fit->second.getLocalVertices()))[j] << " ";
              }
              output << "\n";
              
-             for(int j = 0; j < Triangulation::faceTable[i].getLocalEdges()->size(); j++)
+             for(int j = 0; j < fit->second.getLocalEdges()->size(); j++)
              {
-                     output << ((*(Triangulation::faceTable[i].getLocalEdges()))[j]) << " ";
+                     output << (*(fit->second.getLocalEdges()))[j] << " ";
              }
              output << "\n";
              
-             for(int j = 0; j < Triangulation::faceTable[i].getLocalFaces()->size(); j++)
+             for(int j = 0; j < fit->second.getLocalFaces()->size(); j++)
              {
-                     output << ((*(Triangulation::faceTable[i].getLocalFaces()))[j]) << " ";
+                     output << (*(fit->second.getLocalFaces()))[j] << " ";
              }
              output << "\n";
      }
