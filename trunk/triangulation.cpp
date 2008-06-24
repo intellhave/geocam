@@ -45,159 +45,62 @@ void Triangulation::putFace(int key, Face v)
 
 void Triangulation::eraseVertex(int key)
 {
-     if(key == vertexTable.size())
-     {
-            vertexTable.erase(key);
-            return;
-     }
-     int switchKey = vertexTable.size();
      map<int, Vertex>::iterator vit;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
      {
-             vector<int> localV = *((*vit).second.getLocalVertices());
-             vector<int>::iterator it;
-             it = find(localV.begin(), localV.end(), switchKey);
-             if(it != localV.end())
-             {
-                   (*vit).second.addVertex(key);
-                   (*vit).second.removeVertex(switchKey);
-             }
+         vit->second.removeVertex(key);
      }
      map<int, Edge>::iterator eit;
      for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++)
      {
-             vector<int> localV = *((*eit).second.getLocalVertices());
-             vector<int>::iterator it;
-             it = find(localV.begin(), localV.end(), switchKey);
-             if(it != localV.end())
-             {
-                   (*eit).second.addVertex(key);
-                   (*eit).second.removeVertex(switchKey);
-             }
+         eit->second.removeVertex(key);
      }
      map<int, Face>::iterator fit;
      for(fit = faceTable.begin(); fit != faceTable.end(); fit++)
      {
-             vector<int> localV = *((*fit).second.getLocalVertices());
-             vector<int>::iterator it;
-             it = find(localV.begin(), localV.end(), switchKey);
-             if(it != localV.end())
-             {
-                   (*fit).second.addVertex(key);
-                   (*fit).second.removeVertex(switchKey);
-             }
+         fit->second.removeVertex(key);
      }
      vertexTable.erase(key);
-     Vertex switchV = vertexTable[switchKey];
-     switchV.setIndex(key);
-     vertexTable.erase(switchKey);
-     vertexTable.insert(pair<int, Vertex>(key, switchV));
-     
 }
 
 void Triangulation::eraseEdge(int key)
 {
-      if(key == edgeTable.size())
-     {
-            edgeTable.erase(key);
-            return;
-     }
-     int switchKey = edgeTable.size();
      map<int, Vertex>::iterator vit;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
      {
-             vector<int> localE = *((*vit).second.getLocalEdges());
-             vector<int>::iterator it;
-             it = find(localE.begin(), localE.end(), switchKey);
-             if(it != localE.end())
-             {
-                   (*vit).second.addEdge(key);
-                   (*vit).second.removeEdge(switchKey);
-             }
+         vit->second.removeEdge(key);
      }
      map<int, Edge>::iterator eit;
      for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++)
      {
-             vector<int> localE = *((*eit).second.getLocalEdges());
-             vector<int>::iterator it;
-             it = find(localE.begin(), localE.end(), switchKey);
-             if(it != localE.end())
-             {
-                   (*eit).second.addEdge(key);
-                   (*eit).second.removeEdge(switchKey);
-             }
+         eit->second.removeEdge(key);
      }
      map<int, Face>::iterator fit;
      for(fit = faceTable.begin(); fit != faceTable.end(); fit++)
      {
-             vector<int> localE = *((*fit).second.getLocalEdges());
-             vector<int>::iterator it;
-             it = find(localE.begin(), localE.end(), switchKey);
-             if(it != localE.end())
-             {
-                   (*fit).second.addEdge(key);
-                   (*fit).second.removeEdge(switchKey);
-             }
+         fit->second.removeEdge(key);
      }
      edgeTable.erase(key);
-     Edge switchE = edgeTable[switchKey];
-     switchE.setIndex(key);
-     edgeTable.erase(switchKey);
-     edgeTable.insert(pair<int, Edge>(key, switchE));
-     
 }
 
 void Triangulation::eraseFace(int key)
 {
-         if(key == faceTable.size())
-     {
-            faceTable.erase(key);
-            return;
-     }
-
-     int switchKey = faceTable.size();
-     map<int, Vertex>::iterator vit;
+       map<int, Vertex>::iterator vit;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
      {
-             vector<int> localF = *((*vit).second.getLocalFaces());
-             vector<int>::iterator it;
-             it = find(localF.begin(), localF.end(), switchKey);
-             if(it != localF.end())
-             {
-                   (*vit).second.addFace(key);
-                   (*vit).second.removeFace(switchKey);
-             }
+         vit->second.removeFace(key);
      }
      map<int, Edge>::iterator eit;
      for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++)
      {
-             vector<int> localF = *((*eit).second.getLocalFaces());
-             vector<int>::iterator it;
-             it = find(localF.begin(), localF.end(), switchKey);
-             if(it != localF.end())
-             {
-                   (*eit).second.addFace(key);
-                   (*eit).second.removeFace(switchKey);
-             }
+         eit->second.removeFace(key);
      }
      map<int, Face>::iterator fit;
      for(fit = faceTable.begin(); fit != faceTable.end(); fit++)
      {
-             vector<int> localF = *((*fit).second.getLocalFaces());
-             vector<int>::iterator it;
-             it = find(localF.begin(), localF.end(), switchKey);
-             if(it != localF.end())
-             {
-                   (*fit).second.addFace(key);
-                   (*fit).second.removeFace(switchKey);
-             }
+         fit->second.removeFace(key);
      }
      faceTable.erase(key);
-     Face switchF = faceTable[switchKey];
-     switchF.setIndex(key);
-     faceTable.erase(switchKey);
-     faceTable.insert(pair<int, Face>(key, switchF));
-     
 }
 
 double Triangulation::netCurvature()
