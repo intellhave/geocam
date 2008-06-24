@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage[pdftex]{graphicx}
 \usepackage{multicol}
-\title{GEOMETRY!!!!! Computational Geometric Analysis on Surfaces}
+\title{Computational Geometric Analysis on Surfaces}
 \pagestyle{plain}
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
 Supervisor: Dr. David Glickenstein\\
@@ -33,7 +33,7 @@ Supervisor: Dr. David Glickenstein\\
   \newpage
   \section{Introduction}
   \maketitle
-  Over the course of this summer, we examined and learned about various topological and geometric manipulations across various dimensional objects. We use a lot of C++ to code our work, and have a lot of work to show for it. In section we will introduce the concepts behind our project, as well as discuss our plan of action. 
+  Over the course of this summer, we examined and learned about various topological and geometric manipulations across various dimensional objects. We use a lot of C++ to code our work, and have a lot of work to show for it. In this section we will introduce the concepts behind our project, as well as discuss our plan of action. 
   Things we ought to put here:
   \begin{itemize}
   \item Definitions, like triangulations and such
@@ -47,7 +47,7 @@ Supervisor: Dr. David Glickenstein\\
   \maketitle
   Suppose you are asked to make a sphere, but are only given a small number of edges, vertices, or faces to work with. What do you do? In geometry, a common question asked is how to make representations of complex shapes with as little stuff as possible. In fact, you are probably already familiar with the most basic representation of a sphere- a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us an approximation to a sphere. Similarly, three vertices (a triangle) can be used to approximate a circle in two dimesnions. Naturally, if we add more vertices, we are able to better illustrate our shapes. \newline
   
-   \noindent Of course, spheres aren't the only things geometers care about. Another shape of large interest is known as the torus. It looks like a donut. It turns out that you can make a visualization of this object using only 7 vertices \cite{lutzmanifold}. With more vertices the shape becomes better curved and reminiscent of breakfast. Mmm, torus. It is also possible to add $''handles''$ to any shape, resulting in the addition of another torus. There are also various other shapes which can be represented with varying numbers of vertices, like Klein bottles and cross-caps.\cite{WolfMath} has more information on these fascinating shapes.\newline
+   \noindent Of course, spheres aren't the only things geometers care about. Another shape of interest is known as the torus. It looks like a donut. It turns out that you can make a visualization of this object using only 7 vertices \cite{lutzmanifold}. With more vertices the shape becomes better curved and reminiscent of breakfast. Mmm, torus. It is also possible to add ''handles'' to any shape, resulting in the addition of another torus. There are also various other shapes which can be represented with varying numbers of vertices, like Klein bottles and cross-caps.\cite{WolfMath} has more information on these fascinating shapes.\newline
    
    \noindent Like in modern video games and Hollywood movies, we can generate various shapes of many different sizes using polygons that mold to form the special effect. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into smaller triangles, we can essentially represent any shape with enough vertices. We define a shape as $triangulizable$ if we can connect all triangles in a particular fashion such that they create a closed 3-dimenional shape.\newline
   
@@ -57,13 +57,9 @@ Supervisor: Dr. David Glickenstein\\
 \caption{An example of triangulation. A triangle can be folded up into a tetrahedron.}
 \end{figure}
 
-\noindent An issue arises regarding the uniqueness of these triangulations. There are over 28 $trillion$ ways to triangulate a sphere using only 23 vertices. It is currently unknown how many ways a single torus can be made using that number of vertices (to us, at least). However, all toruses do share something very peculiar, as do all sphere configurations. The Euler characteristic, $\chi$, is a value associated with three dimensional shapes. It is defined as $\displaystyle\chi = V - E + F$, where $V, E, $and $F$ are the number of vertices, edges, and faces a given manifold has. Certain shapes have the same $\chi$ value. For example, any torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. 
+\noindent An issue arises regarding the uniqueness of these triangulations. There are over 28 $trillion$ ways to triangulate a sphere using only 23 vertices. It is currently unknown how many ways a single torus can be made using that number of vertices (to us, at least). However, all toruses do share something very peculiar, as do all sphere configurations. The Euler characteristic, $\chi$, is a value associated with three dimensional shapes. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given manifold has. Certain shapes have the same $\chi$ value. For example, any torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
 
-\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of these edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a polygon; spheres can be used to make the edges of a polyhedron. These shapes are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices.
-  
-  \begin{eqnarray*}
-  l_{ij} = r_i + r_j
-  \end{eqnarray*}
+\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of these edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a polygon; spheres can be used to make the edges of a polyhedron. These shapes are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices $l_{ij} = r_i + r_j$.
   
 \begin{figure}
 \begin{center}
@@ -89,7 +85,7 @@ Double torus & 10 & 36 & 24 & -2
 \end{table}
 
 \begin{figure}
-\includegraphics{180px-Double_torus_illustration.png}
+\includegraphics[scale = 2.0]{180px-Double_torus_illustration.png}
 \caption{This is a double torus. It has $\chi$ = -2.}
 \end{figure}
 
@@ -98,12 +94,13 @@ Double torus & 10 & 36 & 24 & -2
 %  Our problem involves the adaptability of surfaces over time to reach an end shape. While our initial focus was on simple, closed surfaces that we would be able to visualize undegoing its transformation without the use of software, we also began investigating more complex triangulations in hopes of better grasping the whole subject. 
   \subsection{Combinatorial Ricci flow}
   \maketitle  
-Just because we have a triangulation and that it is circle packed does not mean that it is already compact and organized. Vertices can be too large or too small, and the end shape can be somewhat repulsive. We would like to have a way to make these radii as uniform as possible while keeping the original shape intact. We introduce the equation for combinatorial Ricci flow, which allows an individual radius to change over time. The differential equation can be written as 
+Just because we have a triangulation and that it is circle packed does not mean that it is already compact and organized. Vertices can be too large or too small, and the end shape can be somewhat repulsive. We would like to have a way to make these radii as uniform as possible while keeping the original shape intact. We introduce the equation for combinatorial Ricci flow, which allows an individual radius to change over time. In Euclidean space, the differential equation can be written as 
   \begin{equation}
+  \label{Riccif}
   \frac{dr_i}{{dt}} = -K_ir_i
   \end{equation}
   
-\noindent where $K_i$ is a characteristic called the curvature of a vertex, and $r_i$ is the radius or weight of the vertex in terms of dimensions. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths (or radii) we can determine the angle using the law of cosines. For a triangle with lengths $a, b$ and $c,$ the angle opposite side $c$ is:
+\noindent where $K_i$ is a characteristic called the curvature of a vertex, and $r_i$ is the radius or weight of a vertex $i$. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths (or radii) we can determine the angle using the law of cosines. For a triangle with lengths $a, b$ and $c,$ the angle opposite side $c$ is:
   
   \begin{eqnarray*}
   \angle C = \arccos\frac{a^2 + b^2 - c^2}{2ab}
@@ -117,7 +114,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
   
 \noindent So since the differential equation depends on a variable whose value changes over time, we cannot solve it so easily.\newline
    
-\noindent An issue we noted that would happen is that based on the equation, more often than not, the lengths of the radii would decrease. Take the example of a simple tetrahedron with all sides of equal length, we find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex by the same amount, but the curvature of each vertex would still remain $\pi$. The radii would continue to decrease until they approach zero length. We then have to address that issue since computers don't like working with numbers near zero, as in the denominator of the arccosine function. Weird, unwanted stuff might happen. Let us introduce the ability to resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$ and equate as
+\noindent A potential issue we noted is that based on the equation, more often than not, the lengths of the radii would decrease. Take the example of a simple tetrahedron with all sides of equal length, we find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex by the same amount, but the curvature of each vertex would still remain $\pi$. The radii would continue to decrease until they approach zero length. We then have to address that issue since computers don't like working with numbers near zero, as in the denominator of the arccosine function. Weird, unwanted stuff might happen. Let us introduce the ability to resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$ and equate as
  
  \begin{equation}
  \tilde{r_i} = \alpha r_i
@@ -137,7 +134,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
  
 \begin{equation}
 \label{eqprod}
-\prod{\tilde{r_i}(t)} = \prod{\tilde{r_i}(0)} = \prod{\alpha r_i(0)} = C\mbox{, a constant}
+\prod{\tilde{r_i}(t)} = \prod{\alpha r_i(t)} = C\mbox{, a constant}
 \end{equation}
 
 \noindent This can be used to prevent radii from decreasing to zero. It turns out if you take the derivative of ($\ref{eqprod}$) with respect to time you find that 
@@ -146,7 +143,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
 \frac{d(\mbox{log}~\alpha)}{dt} = \frac{\mbox{sum of all curvatures}}{\mbox{number of vertices}} = \overline{K}, \mbox{average curvature}
 \end{equation}
  
-\noindent It turns out that $\overline{K}$ is constant for any iteration of our triangulation and is equal to $\displaystyle\frac{2\pi\chi}{|V|}$, where $|V|$ is the number of vertices and $\chi$ is the Euler characteristic. Plugging this back into ($\ref{ref1}$) we determine that
+\noindent It turns out that $\overline{K}$ is constant for any iteration of our triangulation and is equal to $\displaystyle\frac{2\pi\chi}{|V|}$, where $|V|$ is the number of vertices and $\chi$ is the Euler characteristic. This is noted in \cite{chowluo}. Plugging this back into ($\ref{ref1}$) we determine that
 
 \begin{equation}
 \frac{d\tilde{r_i}}{dt} = -\tilde{K_i}\tilde{r_i} + \overline{K}\tilde{r_i} = (\overline{K} - K_i)\tilde{r_i}
@@ -155,27 +152,25 @@ Just because we have a triangulation and that it is circle packed does not mean 
 \noindent However, since everything is now a function of $\tilde{r_i}$ and not $\alpha$, we can treat $\alpha$ as a constant and thus $\displaystyle\frac{d\alpha}{dt} = 0$. Therefore, we can easily plug $\tilde{r_i} = \alpha r_i$ back in to the differential equation, so we end up with:
 
 \begin{eqnarray}
+\label{Riccin}
 \frac{d\tilde{r_i}}{dt} &=& (\overline{K} - K_i)\tilde{r_i} \nonumber \\
 \alpha\frac{dr_i}{dt} &=& (\overline{K} - K_i)\alpha r_i \nonumber \\
 \frac{dr_i}{dt} &=& (\overline{K} - K_i)r_i
 \end{eqnarray}
 
-\noindent This is known as normalized Ricci flow, as in \cite{chowluo}. In the case of the basic tetrahedron, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ for each vertex and thus $\displaystyle\frac{dr_i}{dt} = 0$. 
+\noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ for each vertex and thus $\displaystyle\frac{dr_i}{dt} = 0$. With its roots in differential geometry, Ricci flow has become a popular topic in mathematics, finding uses and applications in many different fields. It even helped solve one of the Millenium Puzzles, valued at \$1,000,000, in 2003. \cite{wikipoin}    
 
 \newpage
 \section{Analysis/Results}
 \maketitle
-  This might be where we can discuss what we've accomplished, maybe put in a couple pictures, or at least hypothetical illustrations. That'd be cool.\newline
-  
-  Here we will discuss some of the things that we have been working on, as well as document examples to show correctness.
+  Here we will discuss some of the things that we have been working on, as well as document examples to illustrate the benefits and correctness of our procedures. 
   
   \subsection{Geometric layout}
   \maketitle
   
-  We decided to use a set of arrays that would allow us to sort all the required data, mapping each element in one set to another in another array. While this may seem redundant, we felt that it made it easier to access data, as well as make sure that everything was conncted properly.\newline
-  
-  We structured our data into the following format\newline
-  
+When beginning the creation of the program, the structure design was critical. Not only would it help dictate the direction of the project over the course of its lifespan, but the design decisions would affect the speed and efficiency of all added functionality. It was agreed that system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that was quick and easy to move from one simplex to another. As seen in figu.\ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. So for the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces, as shown in Table \ref{geomat}.\newline
+
+  \begin{table}[b]
   \begin{center}
   \begin{tabular}{|c|c|c|}
   \hline
@@ -187,32 +182,65 @@ Just because we have a triangulation and that it is circle packed does not mean 
   \hline
   \end{tabular}
   \end{center}
+  \label{geomat}
+  \caption{A layout of how data is organized}
+  \end{table}
+  
+\noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static methods and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. Vertices also hold a weight, representing the radii from a circle packing on the triangulation. Edges then have a length based on the weights of its two vertices. When a vertex's weight is changed, the local edges to that vertex act as an observer and will update their lengths automatically.\newline
+
+\noindent The function $calcFlow$ runs a Ricci flow over the triangulation and records the data in a file. The algorithm for the ODE, provided by J-P Moreau, employs a Runge-Kutta method \cite{JPM}. First, the file name for the data to be written in is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculated and record. Lastly, a boolean is provided, where $true$ indicates that the adjusted differential equations that are scaled to a constant, equation (\ref{Riccin}) should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Printed to the file is each step with every vertex and its weight and curvature at that moment. At the end of each step, the net curvature is printed, as shown below.
+
+\begin{multicols}{2}
+\begin{verbatim}
+Step 1    Weight   Curv
+Vertex 1: 6.000 / 0.7442
+Vertex 2: 3.000 / -1.122
+Vertex 3: 3.000 / -1.373
+Vertex 4: 8.000 / 1.813
+Vertex 5: 6.000 / 1.227
+Vertex 6: 2.000 / -3.046
+Vertex 7: 4.000 / -0.3045
+Vertex 8: 8.000 / 1.989
+Vertex 9: 5.000 / 0.07239
+Net Curv: 0.0000
+Step 50   Weight   Curv
+Vertex 1: 4.557 / 0.008509
+Vertex 2: 4.530 / -0.01185
+Vertex 3: 4.534 / -0.009091
+Vertex 4: 4.563 / 0.01268
+Vertex 5: 4.550 / 0.002772
+Vertex 6: 4.527 / -0.01455
+Vertex 7: 4.541 / -0.003563
+Vertex 8: 4.559 / 0.01018
+Vertex 9: 4.553 / 0.004906
+Net Curv: 0.0000
+\end{verbatim}
+\end{multicols}
+
+\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of net curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. As expected, the net curvatures of our trials remained constant, ensuring that our program was running as we expected it to.\newline
   
 \begin{figure}
 \includegraphics[scale = 0.5]{triangulationUML.png}
-\caption{a list of some commands we have written so far}
+\caption{A layout of commands and how they are connected.}
+\label{triUML}
 \end{figure}
 
 \subsection{Solving the Ricci flow ODE}
 \maketitle
-After investigating various methods to run our differential equation, we opted to use a Runge-Kutta format, which has numerous benefits over the simpler but less efficient Euler method. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h$ being our step incremental. For initial runs, we are using a value of $h = 0.001$.\newline
-  
-  \begin{figure}
-  \includegraphics[scale = 0.4]{torus2.jpg}
-  \caption{A triangulation of the torus. Like-numbered vertices are connected together.}
-  \end{figure}
 
+After investigating various methods to run our differential equation, we opted to use a Runge-Kutta format, which has numerous benefits over the simpler but less efficient Euler method. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental. \newline
+  
 \subsection{Converting known triangulations}
 \maketitle
 
 \noindent While we are able to manually construct a few basic triangulations by hand, as we add more vertices that will become ever harder. \cite{lutzmanifold} has millions of known triangulations of varying size. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and be able to convert it into the form that we use. We were able to transform this
   
- \begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
- [2,3,5],[2,4,5], [3,4,5]]}
- \end{verbatim}
+\begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
+[2,3,5],[2,4,5],[3,4,5]]}
+\end{verbatim}
  
-into this:
-\begin{multicols}{3}{
+which solely documents the faces, into this:
+\begin{multicols}{4}{
 \begin{verbatim}
 Vertex: 1
 2 3 4
@@ -297,37 +325,63 @@ Face: 6
 \end{verbatim}
 }\end{multicols}
 
+which allows us to keep track of every vertex, edge, and face. 
 \subsection{Flips}
 \maketitle
 
 \subsection{Adding/removing vertices}
 \maketitle
+  
+\begin{figure}
+\label{torusaddv}
+\includegraphics[scale = 0.5]{torus2.png}
+\includegraphics[scale = 0.5]{torus2addvertex.png}
+\caption{A triangulation of the torus, and the addition of a new vertex.}
+\end{figure}
+  
+Example: Adding a vertex to a one-holed torus. See figure \ref{torusaddv}. 
+
+Result: The new vertex gets squeezed in between the other vertices and decreases in size. To counter this, the other vertices grow slightly to maintain (\ref{eqprod}). 
+
+\subsection{Duals}
+\maketitle
+
+Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimenter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex lengths, since we are using circle packing, a side length is simply the sum of two vertices. Thus, we can simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}.$ We can then do that for multiple triangles. As a plus, all these incircles are mutually tangent. We can define a dual edge $\star e$ as the sum of the radii of the incircles with that side in question. $\star e = r_{in1} + r_{in2}$.
+
+With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the dual area. 
+
+The dual length and dual area have some interesting properties that we hope to investigate. 
 
 \subsection{Adding toruses}
 \maketitle
 
 \subsection{Special cases}
 \maketitle
+
+Double Triangles.
+Connecting polyhedra by a vertex. 
+
+Example: two tetrahedra connected at a vertex. It turns out $\chi = 3$. 
+Result: The center vertex becomes very large, equilibrium achieved. Net curvature = $6\pi = 2\pi\chi$, as expected. 
+
+\newpage
+\section{Future Work}
+\maketitle
+  Things we could do:
+  \begin{itemize}
   
-  \newpage
-  \section{Future Work}
+ 
   
-  \maketitle
-  \cite{DrG}
-  \cite{chowluo}
+  \item Circle packing is a very special way to characterize our side lengths. If we relax this criterium and let the circles overlap, we can introduce a second weight $\Phi$ that . We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
   
-  Dual lengths, dual areas. The stuff inside the triangles, etc. 
-  
-  Not just circle packing, let the circles overlap and introduce a second weight $\phi$. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
-  
-  We would also like to start investigating 3-dimensional constructs. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. We can also try and investigate how our code applies (if it does) to hyperbolic and spherical coordinates.  
+  \item We would also like to start investigating 3-dimensional constructs. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. We can also try and investigate how our code applies (if it does) to hyperbolic and spherical coordinates. 
+  \end{itemize} 
   
   \newpage
   \section{Conclusions}
+  We learned a lot of things along the way. At the beginning, we all had varying familiarities with college geometry; some of us hadn't touched the stuff since high school. But we are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it\newline
   
-  We learned a lot of things along the way.\newline
-  
-  \noindent We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the VIGRE foundation for making this all possible. 
+  \noindent We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the VIGRE foundation for making this possible. 
   \maketitle
    
   \newpage
