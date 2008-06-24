@@ -175,11 +175,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0; k<p; k++)  // First "for loop" in whole step calculates
        {                    // everything manually, prints to file.
-           if(z[k] < 0.00005 && z[k] > -0.00005) // Adjusted for small errors.
-           {
-              z[k] = 0;
-           } 
-
+         
            results << "Vertex " << k + 1<< ": " << z[k] << " / ";
            double curv = curvature(Triangulation::vertexTable[k + 1]);
            if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
