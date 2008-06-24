@@ -253,3 +253,39 @@ double adjDiffEQ(int vertex, double totalCurv)
                    totalCurv /  Triangulation::vertexTable.size()
                    * Triangulation::vertexTable[vertex].getWeight();
 }
+
+
+double inRadius(Face f)
+{
+    if(f.getLocalVertices()->size() != 3)
+    {
+        return -1;
+    }
+    double sum = 0;
+    double product = 1;
+    for(int i = 0; i < 3; i++)
+    {     int index =(*(f.getLocalVertices()))[i];
+          double w = Triangulation::vertexTable[index].getWeight();
+          sum += w;
+          product *= w; 
+    }
+    return sqrt(product / sum);
+}
+
+double dualLength(Edge e)
+{
+       vector<int> localFaces = *(e.getLocalFaces());
+       return inRadius(Triangulation::faceTable[localFaces[0]])
+              + inRadius(Triangulation::faceTable[localFaces[1]]);
+}
+
+double dualArea(Vertex v)
+{
+       vector<int> localEdges = (*v.getLocalEdges());
+       double areaSum = 0;
+       for(int i = 0; i < localEdges.size(); i++)
+       {
+          areaSum += v.getWeight() * dualLength(Triangulation::edgeTable[localEdges[i]]) / 2;
+       }
+       return areaSum;
+}
