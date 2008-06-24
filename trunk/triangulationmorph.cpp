@@ -41,13 +41,13 @@ void addNewVertex(Face f, double newWeight)
      
      //the create the new simplices needed, using new indices
      Vertex vb;
-     vb.setIndex(Triangulation::vertexTable.size() + 1);
+     vb.setIndex(Triangulation::greatestVertex() + 1);
      
-     Edge eb1(Triangulation::edgeTable.size() + 1);
-     Edge eb2(Triangulation::edgeTable.size() + 2);
-     Edge eb3(Triangulation::edgeTable.size() + 3);
-     Face fb1(Triangulation::faceTable.size() + 1);
-     Face fb2(Triangulation::faceTable.size() + 2);
+     Edge eb1(Triangulation::greatestEdge() + 1);
+     Edge eb2(Triangulation::greatestEdge() + 2);
+     Edge eb3(Triangulation::greatestEdge() + 3);
+     Face fb1(Triangulation::greatestFace() + 1);
+     Face fb2(Triangulation::greatestFace() + 2);
      
      //finally, add the new simplices to the triangulation and give the new vertex a weight
      Triangulation::putVertex(vb.getIndex(), vb);
@@ -257,13 +257,9 @@ void flip(Edge e)
      Triangulation::faceTable[(f2.getIndex())].addVertex(vb1.getIndex());
      Triangulation::faceTable[(f1.getIndex())].addEdge(ea2.getIndex());
      Triangulation::faceTable[(f2.getIndex())].addEdge(eb1.getIndex());
-     //if(fa1.getIndex() != fa2.getIndex())
      Triangulation::faceTable[(f1.getIndex())].addFace(fa2.getIndex());
-     //if(fa1.getIndex() != fa2.getIndex())
      Triangulation::faceTable[(fa2.getIndex())].addFace(f1.getIndex());
-     //if(fb1.getIndex() != fb2.getIndex())
      Triangulation::faceTable[(f2.getIndex())].addFace(fb1.getIndex());
-     //if(fb1.getIndex() != fb2.getIndex())
      Triangulation::faceTable[(fb1.getIndex())].addFace(f2.getIndex());
      
 }
@@ -305,37 +301,37 @@ void removeVertex(Vertex v)
      sameAs = listIntersection(fb3.getLocalFaces(), ea3.getLocalFaces());
      Face fa3 = Triangulation::faceTable[sameAs[0]];
      
-     Triangulation::vertexTable[(va1.getIndex())].removeVertex(v.getIndex());
-     Triangulation::vertexTable[(va2.getIndex())].removeVertex(v.getIndex());
-     Triangulation::vertexTable[(va3.getIndex())].removeVertex(v.getIndex());
-     Triangulation::vertexTable[(va1.getIndex())].removeEdge(eb1.getIndex());
-     Triangulation::vertexTable[(va2.getIndex())].removeEdge(eb2.getIndex());
-     Triangulation::vertexTable[(va3.getIndex())].removeEdge(eb3.getIndex());
-     Triangulation::vertexTable[(va1.getIndex())].removeFace(fb2.getIndex());
-     Triangulation::vertexTable[(va2.getIndex())].removeFace(fb3.getIndex());
-     Triangulation::vertexTable[(va3.getIndex())].removeFace(fb2.getIndex());
-     Triangulation::vertexTable[(va3.getIndex())].removeFace(fb3.getIndex());
-     for(int i = 0; i < va1.getLocalEdges()->size(); i++)
-     {
-             Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].removeEdge(eb1.getIndex());
-     }
-     for(int i = 0; i < va2.getLocalEdges()->size(); i++)
-     {
-             Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].removeEdge(eb2.getIndex());
-     }
-     for(int i = 0; i < va3.getLocalEdges()->size(); i++)
-     {
-             Triangulation::edgeTable[(*(va3.getLocalEdges()))[i]].removeEdge(eb3.getIndex());
-     }
-     Triangulation::edgeTable[(ea2.getIndex())].removeFace(fb2.getIndex());
-     Triangulation::edgeTable[(ea3.getIndex())].removeFace(fb3.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].removeVertex(v.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].removeEdge(eb1.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].removeEdge(eb2.getIndex());
-     Triangulation::faceTable[(fa2.getIndex())].removeFace(fb2.getIndex());
-     Triangulation::faceTable[(fa3.getIndex())].removeFace(fb3.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].removeFace(fb2.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].removeFace(fb3.getIndex());
+     //Triangulation::vertexTable[(va1.getIndex())].removeVertex(v.getIndex());
+//     Triangulation::vertexTable[(va2.getIndex())].removeVertex(v.getIndex());
+//     Triangulation::vertexTable[(va3.getIndex())].removeVertex(v.getIndex());
+//     Triangulation::vertexTable[(va1.getIndex())].removeEdge(eb1.getIndex());
+//     Triangulation::vertexTable[(va2.getIndex())].removeEdge(eb2.getIndex());
+//     Triangulation::vertexTable[(va3.getIndex())].removeEdge(eb3.getIndex());
+//     Triangulation::vertexTable[(va1.getIndex())].removeFace(fb2.getIndex());
+//     Triangulation::vertexTable[(va2.getIndex())].removeFace(fb3.getIndex());
+//     Triangulation::vertexTable[(va3.getIndex())].removeFace(fb2.getIndex());
+//     Triangulation::vertexTable[(va3.getIndex())].removeFace(fb3.getIndex());
+//     for(int i = 0; i < va1.getLocalEdges()->size(); i++)
+//     {
+//             Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].removeEdge(eb1.getIndex());
+//     }
+//     for(int i = 0; i < va2.getLocalEdges()->size(); i++)
+//     {
+//             Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].removeEdge(eb2.getIndex());
+//     }
+//     for(int i = 0; i < va3.getLocalEdges()->size(); i++)
+//     {
+//             Triangulation::edgeTable[(*(va3.getLocalEdges()))[i]].removeEdge(eb3.getIndex());
+//     }
+//     Triangulation::edgeTable[(ea2.getIndex())].removeFace(fb2.getIndex());
+//     Triangulation::edgeTable[(ea3.getIndex())].removeFace(fb3.getIndex());
+//     Triangulation::faceTable[(fb1.getIndex())].removeVertex(v.getIndex());
+//     Triangulation::faceTable[(fb1.getIndex())].removeEdge(eb1.getIndex());
+//     Triangulation::faceTable[(fb1.getIndex())].removeEdge(eb2.getIndex());
+//     Triangulation::faceTable[(fa2.getIndex())].removeFace(fb2.getIndex());
+//     Triangulation::faceTable[(fa3.getIndex())].removeFace(fb3.getIndex());
+//     Triangulation::faceTable[(fb1.getIndex())].removeFace(fb2.getIndex());
+//     Triangulation::faceTable[(fb1.getIndex())].removeFace(fb3.getIndex());
      
      Triangulation::vertexTable[(va3.getIndex())].addFace(fb1.getIndex());
      Triangulation::edgeTable[(ea2.getIndex())].addFace(fb1.getIndex());
@@ -348,66 +344,24 @@ void removeVertex(Vertex v)
      Triangulation::faceTable[(fa2.getIndex())].addFace(fb1.getIndex());
      Triangulation::faceTable[(fa3.getIndex())].addFace(fb1.getIndex());
      
-     vector<Edge> inOrder;
-     inOrder.push_back(eb1);
-     if(eb2.getIndex() > eb1.getIndex())
-     {
-        if(eb2.getIndex() < eb3.getIndex())
-        {
-            inOrder.push_back(eb2);
-            inOrder.push_back(eb3);
-        } else if(eb3.getIndex() < eb1.getIndex())
-        {
-            inOrder.insert(inOrder.begin(), eb3);
-            inOrder.push_back(eb2);
-        } else
-        {
-            inOrder.push_back(eb3);
-            inOrder.push_back(eb2);
-        }
-     }
-     else
-     {
-        if(eb2.getIndex() > eb3.getIndex())
-        {
-            inOrder.insert(inOrder.begin(), eb2);
-            inOrder.insert(inOrder.begin(), eb3);
-        } else if(eb3.getIndex() > eb1.getIndex())
-        {
-            inOrder.insert(inOrder.begin(), eb2);
-            inOrder.push_back(eb3);
-        } else
-        {
-            inOrder.insert(inOrder.begin(), eb3);
-            inOrder.insert(inOrder.begin(), eb2);
-        }
-     }
      Triangulation::eraseVertex(v.getIndex());
-     for(int i = 2; i >= 0; i--)
-     {
-        Triangulation::eraseEdge(inOrder[i].getIndex());
-     }
-     if(fb3.getIndex() > fb2.getIndex())
-     {
-        Triangulation::eraseFace(fb3.getIndex());
-        Triangulation::eraseFace(fb2.getIndex());
-     }else
-     {
-        Triangulation::eraseFace(fb2.getIndex());
-        Triangulation::eraseFace(fb3.getIndex());
-     }
+     Triangulation::eraseEdge(eb1.getIndex());
+     Triangulation::eraseEdge(eb2.getIndex());
+     Triangulation::eraseEdge(eb3.getIndex());
+     Triangulation::eraseFace(fb2.getIndex());
+     Triangulation::eraseFace(fb3.getIndex());
      
          
 }
 
 void addLeaf(Edge e, double newWeight)
 {
-     Edge eb(Triangulation::edgeTable.size() + 1);
-     Edge ea1(Triangulation::edgeTable.size() + 2);
-     Edge ea2(Triangulation::edgeTable.size() + 3);
-     Vertex vb(Triangulation::vertexTable.size() + 1);
-     Face fb1(Triangulation::faceTable.size() + 1);
-     Face fb2(Triangulation::faceTable.size() + 2);
+     Edge eb(Triangulation::greatestEdge() + 1);
+     Edge ea1(Triangulation::greatestEdge() + 2);
+     Edge ea2(Triangulation::greatestEdge() + 3);
+     Vertex vb(Triangulation::greatestVertex() + 1);
+     Face fb1(Triangulation::greatestFace() + 1);
+     Face fb2(Triangulation::greatestFace() + 2);
      
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
@@ -503,5 +457,738 @@ void addLeaf(Edge e, double newWeight)
      Triangulation::vertexTable[vb.getIndex()].setWeight(newWeight);
      
 }
+
+void addHandle(Face f, double newWeight)
+{
+     
+     Vertex va1 = Triangulation::vertexTable[(*(f.getLocalVertices()))[0]];
+     Vertex va2 = Triangulation::vertexTable[(*(f.getLocalVertices()))[1]];
+     Vertex va3 = Triangulation::vertexTable[(*(f.getLocalVertices()))[2]];
+     
+     vector<int> sameAs;
+     
+     sameAs = listIntersection(va1.getLocalEdges(), va2.getLocalEdges());
+     Edge ea1 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va1.getLocalEdges(), va3.getLocalEdges());
+     Edge ea2 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va2.getLocalEdges(), va3.getLocalEdges());
+     Edge ea3 = Triangulation::edgeTable[sameAs[0]];
+     
+     sameAs = listIntersection(ea1.getLocalFaces(), f.getLocalFaces());
+     Face fa1 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(ea2.getLocalFaces(), f.getLocalFaces());
+     Face fa2 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(ea3.getLocalFaces(), f.getLocalFaces());
+     Face fa3 = Triangulation::faceTable[sameAs[0]];
+     
+     Triangulation::eraseFace(f.getIndex());
+     
+     Vertex vb1(Triangulation::greatestVertex() + 1);
+     Vertex vb2(Triangulation::greatestVertex() + 2);
+     Vertex vb3(Triangulation::greatestVertex() + 3);
+     Vertex vb4(Triangulation::greatestVertex() + 4);
+     Vertex vb5(Triangulation::greatestVertex() + 5);
+     Vertex vb6(Triangulation::greatestVertex() + 6);
+     
+     Edge eb1(Triangulation::greatestEdge() + 1);
+     Edge eb2(Triangulation::greatestEdge() + 2);
+     Edge eb3(Triangulation::greatestEdge() + 3);
+     Edge eb4(Triangulation::greatestEdge() + 4);
+     Edge eb5(Triangulation::greatestEdge() + 5);
+     Edge eb6(Triangulation::greatestEdge() + 6);
+     Edge eb7(Triangulation::greatestEdge() + 7);
+     Edge eb8(Triangulation::greatestEdge() + 8);
+     Edge eb9(Triangulation::greatestEdge() + 9);
+     Edge eb10(Triangulation::greatestEdge() + 10);
+     Edge eb11(Triangulation::greatestEdge() + 11);
+     Edge eb12(Triangulation::greatestEdge() + 12);
+     Edge eb13(Triangulation::greatestEdge() + 13);
+     Edge eb14(Triangulation::greatestEdge() + 14);
+     Edge eb15(Triangulation::greatestEdge() + 15);
+     Edge eb16(Triangulation::greatestEdge() + 16);
+     Edge eb17(Triangulation::greatestEdge() + 17);
+     Edge eb18(Triangulation::greatestEdge() + 18);
+     Edge eb19(Triangulation::greatestEdge() + 19);
+     Edge eb20(Triangulation::greatestEdge() + 20);
+     Edge eb21(Triangulation::greatestEdge() + 21);
+     Edge eb22(Triangulation::greatestEdge() + 22);
+     Edge eb23(Triangulation::greatestEdge() + 23);
+     Edge eb24(Triangulation::greatestEdge() + 24);
+     
+     Face fb1(Triangulation::greatestFace() + 1);
+     Face fb2(Triangulation::greatestFace() + 2);
+     Face fb3(Triangulation::greatestFace() + 3);
+     Face fb4(Triangulation::greatestFace() + 4);
+     Face fb5(Triangulation::greatestFace() + 5);
+     Face fb6(Triangulation::greatestFace() + 6);
+     Face fb7(Triangulation::greatestFace() + 7);
+     Face fb8(Triangulation::greatestFace() + 8);
+     Face fb9(Triangulation::greatestFace() + 9);
+     Face fb10(Triangulation::greatestFace() + 10);
+     Face fb11(Triangulation::greatestFace() + 11);
+     Face fb12(Triangulation::greatestFace() + 12);
+     Face fb13(Triangulation::greatestFace() + 13);
+     Face fb14(Triangulation::greatestFace() + 14);
+     Face fb15(Triangulation::greatestFace() + 15);
+     Face fb16(Triangulation::greatestFace() + 16);
+     Face fb17(Triangulation::greatestFace() + 17);
+     
+     Triangulation::putVertex(vb1.getIndex(), vb1);
+     Triangulation::putVertex(vb2.getIndex(), vb2);
+     Triangulation::putVertex(vb3.getIndex(), vb3);
+     Triangulation::putVertex(vb4.getIndex(), vb4);
+     Triangulation::putVertex(vb5.getIndex(), vb5);
+     Triangulation::putVertex(vb6.getIndex(), vb6);
+     
+     Triangulation::putEdge(eb1.getIndex(), eb1);
+     Triangulation::putEdge(eb2.getIndex(), eb2);
+     Triangulation::putEdge(eb3.getIndex(), eb3);
+     Triangulation::putEdge(eb4.getIndex(), eb4);
+     Triangulation::putEdge(eb5.getIndex(), eb5);
+     Triangulation::putEdge(eb6.getIndex(), eb6);
+     Triangulation::putEdge(eb7.getIndex(), eb7);
+     Triangulation::putEdge(eb8.getIndex(), eb8);
+     Triangulation::putEdge(eb9.getIndex(), eb9);
+     Triangulation::putEdge(eb10.getIndex(), eb10);
+     Triangulation::putEdge(eb11.getIndex(), eb11);
+     Triangulation::putEdge(eb12.getIndex(), eb12);
+     Triangulation::putEdge(eb13.getIndex(), eb13);
+     Triangulation::putEdge(eb14.getIndex(), eb14);
+     Triangulation::putEdge(eb15.getIndex(), eb15);
+     Triangulation::putEdge(eb16.getIndex(), eb16);
+     Triangulation::putEdge(eb17.getIndex(), eb17);
+     Triangulation::putEdge(eb18.getIndex(), eb18);
+     Triangulation::putEdge(eb19.getIndex(), eb19);
+     Triangulation::putEdge(eb20.getIndex(), eb20);
+     Triangulation::putEdge(eb21.getIndex(), eb21);
+     Triangulation::putEdge(eb22.getIndex(), eb22);
+     Triangulation::putEdge(eb23.getIndex(), eb23);
+     Triangulation::putEdge(eb24.getIndex(), eb24);
+     
+     Triangulation::putFace(fb1.getIndex(), fb1);
+     Triangulation::putFace(fb2.getIndex(), fb2);
+     Triangulation::putFace(fb3.getIndex(), fb3);
+     Triangulation::putFace(fb4.getIndex(), fb4);
+     Triangulation::putFace(fb5.getIndex(), fb5);
+     Triangulation::putFace(fb6.getIndex(), fb6);
+     Triangulation::putFace(fb7.getIndex(), fb7);
+     Triangulation::putFace(fb8.getIndex(), fb8);
+     Triangulation::putFace(fb9.getIndex(), fb9);
+     Triangulation::putFace(fb10.getIndex(), fb10);
+     Triangulation::putFace(fb11.getIndex(), fb11);
+     Triangulation::putFace(fb12.getIndex(), fb12);
+     Triangulation::putFace(fb13.getIndex(), fb13);
+     Triangulation::putFace(fb14.getIndex(), fb14);
+     Triangulation::putFace(fb15.getIndex(), fb15);
+     Triangulation::putFace(fb16.getIndex(), fb16);
+     Triangulation::putFace(fb17.getIndex(), fb17);
+     
+     //additions
+     //vertex-vertex
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(va1.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(va2.getIndex());
+     
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(va1.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::vertexTable[(vb3.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addVertex(va2.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::vertexTable[(vb4.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addVertex(va2.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::vertexTable[(vb5.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addVertex(va1.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::vertexTable[(vb6.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addVertex(va1.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addVertex(va2.getIndex());
+     
+     Triangulation::vertexTable[(va1.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addVertex(vb6.getIndex());
+     
+     Triangulation::vertexTable[(va2.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addVertex(vb6.getIndex());
+     
+     Triangulation::vertexTable[(va3.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addVertex(vb5.getIndex());
+     
+     //vertex-edge
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(eb1.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(eb3.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(eb4.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(eb6.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(eb19.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(eb22.getIndex());
+     
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(eb1.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(eb2.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(eb7.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(eb9.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(eb17.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(eb21.getIndex());
+     
+     Triangulation::vertexTable[(vb3.getIndex())].addEdge(eb2.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addEdge(eb3.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addEdge(eb10.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addEdge(eb11.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addEdge(eb20.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addEdge(eb24.getIndex());
+     
+     Triangulation::vertexTable[(vb4.getIndex())].addEdge(eb4.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addEdge(eb5.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addEdge(eb12.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addEdge(eb15.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addEdge(eb17.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addEdge(eb23.getIndex());
+     
+     Triangulation::vertexTable[(vb5.getIndex())].addEdge(eb5.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addEdge(eb6.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addEdge(eb13.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addEdge(eb16.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addEdge(eb18.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addEdge(eb24.getIndex());
+     
+     Triangulation::vertexTable[(vb6.getIndex())].addEdge(eb7.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addEdge(eb8.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addEdge(eb12.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addEdge(eb14.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addEdge(eb18.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addEdge(eb20.getIndex());
+     
+     Triangulation::vertexTable[(va1.getIndex())].addEdge(eb8.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addEdge(eb9.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addEdge(eb13.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addEdge(eb19.getIndex());
+     
+     Triangulation::vertexTable[(va2.getIndex())].addEdge(eb10.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addEdge(eb14.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addEdge(eb15.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addEdge(eb22.getIndex());
+     
+     Triangulation::vertexTable[(va3.getIndex())].addEdge(eb11.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addEdge(eb16.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addEdge(eb21.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addEdge(eb23.getIndex());
+     
+     //vertex-face
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(fb1.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(fb3.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(fb7.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(fb12.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(fb15.getIndex());
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(fb17.getIndex());
+     
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(fb1.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(fb2.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(fb8.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(fb10.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(fb15.getIndex());
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(fb16.getIndex());
+     
+     Triangulation::vertexTable[(vb3.getIndex())].addFace(fb2.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addFace(fb3.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addFace(fb9.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addFace(fb11.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addFace(fb16.getIndex());
+     Triangulation::vertexTable[(vb3.getIndex())].addFace(fb17.getIndex());
+     
+     Triangulation::vertexTable[(vb4.getIndex())].addFace(fb1.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addFace(fb4.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addFace(fb6.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addFace(fb10.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addFace(fb12.getIndex());
+     Triangulation::vertexTable[(vb4.getIndex())].addFace(fb14.getIndex());
+     
+     Triangulation::vertexTable[(vb5.getIndex())].addFace(fb4.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addFace(fb7.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addFace(fb9.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addFace(fb13.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addFace(fb14.getIndex());
+     Triangulation::vertexTable[(vb5.getIndex())].addFace(fb17.getIndex());
+     
+     Triangulation::vertexTable[(vb6.getIndex())].addFace(fb2.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addFace(fb4.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addFace(fb5.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addFace(fb10.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addFace(fb11.getIndex());
+     Triangulation::vertexTable[(vb6.getIndex())].addFace(fb13.getIndex());
+     
+     Triangulation::vertexTable[(va1.getIndex())].addFace(fb5.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addFace(fb7.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addFace(fb8.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addFace(fb13.getIndex());
+     Triangulation::vertexTable[(va1.getIndex())].addFace(fb15.getIndex());
+     
+     Triangulation::vertexTable[(va2.getIndex())].addFace(fb3.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addFace(fb5.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addFace(fb6.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addFace(fb11.getIndex());
+     Triangulation::vertexTable[(va2.getIndex())].addFace(fb12.getIndex());
+     
+     Triangulation::vertexTable[(va3.getIndex())].addFace(fb6.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addFace(fb8.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addFace(fb9.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addFace(fb14.getIndex());
+     Triangulation::vertexTable[(va3.getIndex())].addFace(fb16.getIndex());
+     
+     //edge-vertex
+     Triangulation::edgeTable[(eb1.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::edgeTable[(eb3.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::edgeTable[(eb4.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::edgeTable[(eb6.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::edgeTable[(eb19.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::edgeTable[(eb22.getIndex())].addVertex(vb1.getIndex());
+     
+     Triangulation::edgeTable[(eb1.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::edgeTable[(eb2.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::edgeTable[(eb7.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::edgeTable[(eb9.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::edgeTable[(eb17.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::edgeTable[(eb21.getIndex())].addVertex(vb2.getIndex());
+     
+     Triangulation::edgeTable[(eb2.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::edgeTable[(eb3.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::edgeTable[(eb10.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::edgeTable[(eb11.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::edgeTable[(eb20.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::edgeTable[(eb24.getIndex())].addVertex(vb3.getIndex());
+     
+     Triangulation::edgeTable[(eb4.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::edgeTable[(eb5.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::edgeTable[(eb12.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::edgeTable[(eb15.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::edgeTable[(eb17.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::edgeTable[(eb23.getIndex())].addVertex(vb4.getIndex());
+     
+     Triangulation::edgeTable[(eb5.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::edgeTable[(eb6.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::edgeTable[(eb13.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::edgeTable[(eb16.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::edgeTable[(eb18.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::edgeTable[(eb24.getIndex())].addVertex(vb5.getIndex());
+     
+     Triangulation::edgeTable[(eb7.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::edgeTable[(eb8.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::edgeTable[(eb12.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::edgeTable[(eb14.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::edgeTable[(eb18.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::edgeTable[(eb20.getIndex())].addVertex(vb6.getIndex());
+     
+     Triangulation::edgeTable[(eb8.getIndex())].addVertex(va1.getIndex());
+     Triangulation::edgeTable[(eb9.getIndex())].addVertex(va1.getIndex());
+     Triangulation::edgeTable[(eb13.getIndex())].addVertex(va1.getIndex());
+     Triangulation::edgeTable[(eb19.getIndex())].addVertex(va1.getIndex());
+     
+     Triangulation::edgeTable[(eb10.getIndex())].addVertex(va2.getIndex());
+     Triangulation::edgeTable[(eb14.getIndex())].addVertex(va2.getIndex());
+     Triangulation::edgeTable[(eb15.getIndex())].addVertex(va2.getIndex());
+     Triangulation::edgeTable[(eb22.getIndex())].addVertex(va2.getIndex());
+     
+     Triangulation::edgeTable[(eb11.getIndex())].addVertex(va3.getIndex());
+     Triangulation::edgeTable[(eb16.getIndex())].addVertex(va3.getIndex());
+     Triangulation::edgeTable[(eb21.getIndex())].addVertex(va3.getIndex());
+     Triangulation::edgeTable[(eb23.getIndex())].addVertex(va3.getIndex());
+     
+     //edge-edge
+     for(int i = 0; i < vb1.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < vb1.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(vb1.getLocalEdges()))[i]].addEdge((*(vb1.getLocalEdges()))[j]);
+             }
+     }
+     
+     for(int i = 0; i < vb2.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < vb2.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(vb2.getLocalEdges()))[i]].addEdge((*(vb2.getLocalEdges()))[j]);
+             }
+     }
+     
+     for(int i = 0; i < vb3.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < vb3.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(vb3.getLocalEdges()))[i]].addEdge((*(vb3.getLocalEdges()))[j]);
+             }
+     }
+     
+     for(int i = 0; i < vb4.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < vb4.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(vb4.getLocalEdges()))[i]].addEdge((*(vb4.getLocalEdges()))[j]);
+             }
+     }
+     
+     for(int i = 0; i < vb5.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < vb5.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(vb5.getLocalEdges()))[i]].addEdge((*(vb5.getLocalEdges()))[j]);
+             }
+     }
+     
+     for(int i = 0; i < vb6.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < vb6.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(vb6.getLocalEdges()))[i]].addEdge((*(vb6.getLocalEdges()))[j]);
+             }
+     }
+     
+     for(int i = 0; i < va1.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < va1.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].addEdge((*(va1.getLocalEdges()))[j]);
+             }
+     }
+     
+     for(int i = 0; i < va2.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < va2.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].addEdge((*(va2.getLocalEdges()))[j]);
+             }
+     }
+     
+     for(int i = 0; i < va3.getLocalEdges()->size(); i++)
+     {
+             for(int j = 0; j < va3.getLocalEdges()->size(); j++)
+             {
+                     if(i != j)
+                     Triangulation::edgeTable[(*(va3.getLocalEdges()))[i]].addEdge((*(va3.getLocalEdges()))[j]);
+             }
+     }
+     
+     //edge-face
+     Triangulation::edgeTable[(eb1.getIndex())].addFace(fb1.getIndex());
+     Triangulation::edgeTable[(eb4.getIndex())].addFace(fb1.getIndex());
+     Triangulation::edgeTable[(eb17.getIndex())].addFace(fb1.getIndex());
+     
+     Triangulation::edgeTable[(eb2.getIndex())].addFace(fb2.getIndex());
+     Triangulation::edgeTable[(eb7.getIndex())].addFace(fb2.getIndex());
+     Triangulation::edgeTable[(eb20.getIndex())].addFace(fb2.getIndex());
+     
+     Triangulation::edgeTable[(eb3.getIndex())].addFace(fb3.getIndex());
+     Triangulation::edgeTable[(eb10.getIndex())].addFace(fb3.getIndex());
+     Triangulation::edgeTable[(eb22.getIndex())].addFace(fb3.getIndex());
+     
+     Triangulation::edgeTable[(eb5.getIndex())].addFace(fb4.getIndex());
+     Triangulation::edgeTable[(eb12.getIndex())].addFace(fb4.getIndex());
+     Triangulation::edgeTable[(eb18.getIndex())].addFace(fb4.getIndex());
+     
+     Triangulation::edgeTable[(eb8.getIndex())].addFace(fb5.getIndex());
+     Triangulation::edgeTable[(eb14.getIndex())].addFace(fb5.getIndex());
+     Triangulation::edgeTable[(ea1.getIndex())].addFace(fb5.getIndex());
+     
+     Triangulation::edgeTable[(eb15.getIndex())].addFace(fb6.getIndex());
+     Triangulation::edgeTable[(eb23.getIndex())].addFace(fb6.getIndex());
+     Triangulation::edgeTable[(ea3.getIndex())].addFace(fb6.getIndex());
+     
+     Triangulation::edgeTable[(eb6.getIndex())].addFace(fb7.getIndex());
+     Triangulation::edgeTable[(eb13.getIndex())].addFace(fb7.getIndex());
+     Triangulation::edgeTable[(eb19.getIndex())].addFace(fb7.getIndex());
+     
+     Triangulation::edgeTable[(eb9.getIndex())].addFace(fb8.getIndex());
+     Triangulation::edgeTable[(eb21.getIndex())].addFace(fb8.getIndex());
+     Triangulation::edgeTable[(ea2.getIndex())].addFace(fb8.getIndex());
+     
+     Triangulation::edgeTable[(eb11.getIndex())].addFace(fb9.getIndex());
+     Triangulation::edgeTable[(eb16.getIndex())].addFace(fb9.getIndex());
+     Triangulation::edgeTable[(eb24.getIndex())].addFace(fb9.getIndex());
+     
+     Triangulation::edgeTable[(eb7.getIndex())].addFace(fb10.getIndex());
+     Triangulation::edgeTable[(eb12.getIndex())].addFace(fb10.getIndex());
+     Triangulation::edgeTable[(eb17.getIndex())].addFace(fb10.getIndex());
+     
+     Triangulation::edgeTable[(eb10.getIndex())].addFace(fb11.getIndex());
+     Triangulation::edgeTable[(eb14.getIndex())].addFace(fb11.getIndex());
+     Triangulation::edgeTable[(eb20.getIndex())].addFace(fb11.getIndex());
+     
+     Triangulation::edgeTable[(eb4.getIndex())].addFace(fb12.getIndex());
+     Triangulation::edgeTable[(eb15.getIndex())].addFace(fb12.getIndex());
+     Triangulation::edgeTable[(eb22.getIndex())].addFace(fb12.getIndex());
+     
+     Triangulation::edgeTable[(eb8.getIndex())].addFace(fb13.getIndex());
+     Triangulation::edgeTable[(eb13.getIndex())].addFace(fb13.getIndex());
+     Triangulation::edgeTable[(eb18.getIndex())].addFace(fb13.getIndex());
+     
+     Triangulation::edgeTable[(eb5.getIndex())].addFace(fb14.getIndex());
+     Triangulation::edgeTable[(eb16.getIndex())].addFace(fb14.getIndex());
+     Triangulation::edgeTable[(eb23.getIndex())].addFace(fb14.getIndex());
+     
+     Triangulation::edgeTable[(eb1.getIndex())].addFace(fb15.getIndex());
+     Triangulation::edgeTable[(eb9.getIndex())].addFace(fb15.getIndex());
+     Triangulation::edgeTable[(eb19.getIndex())].addFace(fb15.getIndex());
+     
+     Triangulation::edgeTable[(eb2.getIndex())].addFace(fb16.getIndex());
+     Triangulation::edgeTable[(eb11.getIndex())].addFace(fb16.getIndex());
+     Triangulation::edgeTable[(eb21.getIndex())].addFace(fb16.getIndex());
+     
+     Triangulation::edgeTable[(eb3.getIndex())].addFace(fb17.getIndex());
+     Triangulation::edgeTable[(eb6.getIndex())].addFace(fb17.getIndex());
+     Triangulation::edgeTable[(eb24.getIndex())].addFace(fb17.getIndex());
+     
+     //face-vertex
+     Triangulation::faceTable[(fb1.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addVertex(vb4.getIndex());
+     
+     Triangulation::faceTable[(fb2.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addVertex(vb6.getIndex());
+     
+     Triangulation::faceTable[(fb3.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(fb3.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::faceTable[(fb3.getIndex())].addVertex(va2.getIndex());
+     
+     Triangulation::faceTable[(fb4.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::faceTable[(fb4.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::faceTable[(fb4.getIndex())].addVertex(vb6.getIndex());
+     
+     Triangulation::faceTable[(fb5.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::faceTable[(fb5.getIndex())].addVertex(va1.getIndex());
+     Triangulation::faceTable[(fb5.getIndex())].addVertex(va2.getIndex());
+     
+     Triangulation::faceTable[(fb6.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::faceTable[(fb6.getIndex())].addVertex(va2.getIndex());
+     Triangulation::faceTable[(fb6.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::faceTable[(fb7.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(fb7.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::faceTable[(fb7.getIndex())].addVertex(va1.getIndex());
+     
+     Triangulation::faceTable[(fb8.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(fb8.getIndex())].addVertex(va1.getIndex());
+     Triangulation::faceTable[(fb8.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::faceTable[(fb9.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::faceTable[(fb9.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::faceTable[(fb9.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::faceTable[(fb10.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(fb10.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::faceTable[(fb10.getIndex())].addVertex(vb6.getIndex());
+     
+     Triangulation::faceTable[(fb11.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::faceTable[(fb11.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::faceTable[(fb11.getIndex())].addVertex(va2.getIndex());
+     
+     Triangulation::faceTable[(fb12.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(fb12.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::faceTable[(fb12.getIndex())].addVertex(va2.getIndex());
+     
+     Triangulation::faceTable[(fb13.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::faceTable[(fb13.getIndex())].addVertex(vb6.getIndex());
+     Triangulation::faceTable[(fb13.getIndex())].addVertex(va1.getIndex());
+     
+     Triangulation::faceTable[(fb14.getIndex())].addVertex(vb4.getIndex());
+     Triangulation::faceTable[(fb14.getIndex())].addVertex(vb5.getIndex());
+     Triangulation::faceTable[(fb14.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::faceTable[(fb15.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(fb15.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(fb15.getIndex())].addVertex(va1.getIndex());
+     
+     Triangulation::faceTable[(fb16.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(fb16.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::faceTable[(fb16.getIndex())].addVertex(va3.getIndex());
+     
+     Triangulation::faceTable[(fb17.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(fb17.getIndex())].addVertex(vb3.getIndex());
+     Triangulation::faceTable[(fb17.getIndex())].addVertex(vb5.getIndex());
+     
+     //face-edge
+     Triangulation::faceTable[(fb1.getIndex())].addEdge(eb1.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addEdge(eb4.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addEdge(eb17.getIndex());
+     
+     Triangulation::faceTable[(fb2.getIndex())].addEdge(eb2.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addEdge(eb7.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addEdge(eb20.getIndex());
+     
+     Triangulation::faceTable[(fb3.getIndex())].addEdge(eb3.getIndex());
+     Triangulation::faceTable[(fb3.getIndex())].addEdge(eb10.getIndex());
+     Triangulation::faceTable[(fb3.getIndex())].addEdge(eb22.getIndex());
+     
+     Triangulation::faceTable[(fb4.getIndex())].addEdge(eb5.getIndex());
+     Triangulation::faceTable[(fb4.getIndex())].addEdge(eb12.getIndex());
+     Triangulation::faceTable[(fb4.getIndex())].addEdge(eb18.getIndex());
+
+     Triangulation::faceTable[(fb5.getIndex())].addEdge(eb8.getIndex());
+     Triangulation::faceTable[(fb5.getIndex())].addEdge(eb14.getIndex());
+     Triangulation::faceTable[(fb5.getIndex())].addEdge(ea1.getIndex());
+     
+     Triangulation::faceTable[(fb6.getIndex())].addEdge(eb15.getIndex());
+     Triangulation::faceTable[(fb6.getIndex())].addEdge(eb23.getIndex());
+     Triangulation::faceTable[(fb6.getIndex())].addEdge(ea3.getIndex());
+     
+     Triangulation::faceTable[(fb7.getIndex())].addEdge(eb6.getIndex());
+     Triangulation::faceTable[(fb7.getIndex())].addEdge(eb13.getIndex());
+     Triangulation::faceTable[(fb7.getIndex())].addEdge(eb19.getIndex());
+     
+     Triangulation::faceTable[(fb8.getIndex())].addEdge(eb9.getIndex());
+     Triangulation::faceTable[(fb8.getIndex())].addEdge(eb21.getIndex());
+     Triangulation::faceTable[(fb8.getIndex())].addEdge(ea2.getIndex());
+     
+     Triangulation::faceTable[(fb9.getIndex())].addEdge(eb11.getIndex());
+     Triangulation::faceTable[(fb9.getIndex())].addEdge(eb16.getIndex());
+     Triangulation::faceTable[(fb9.getIndex())].addEdge(eb24.getIndex());
+     
+     Triangulation::faceTable[(fb10.getIndex())].addEdge(eb7.getIndex());
+     Triangulation::faceTable[(fb10.getIndex())].addEdge(eb12.getIndex());
+     Triangulation::faceTable[(fb10.getIndex())].addEdge(eb17.getIndex());
+     
+     Triangulation::faceTable[(fb11.getIndex())].addEdge(eb10.getIndex());
+     Triangulation::faceTable[(fb11.getIndex())].addEdge(eb14.getIndex());
+     Triangulation::faceTable[(fb11.getIndex())].addEdge(eb20.getIndex());
+     
+     Triangulation::faceTable[(fb12.getIndex())].addEdge(eb4.getIndex());
+     Triangulation::faceTable[(fb12.getIndex())].addEdge(eb15.getIndex());
+     Triangulation::faceTable[(fb12.getIndex())].addEdge(eb22.getIndex());
+     
+     Triangulation::faceTable[(fb13.getIndex())].addEdge(eb8.getIndex());
+     Triangulation::faceTable[(fb13.getIndex())].addEdge(eb13.getIndex());
+     Triangulation::faceTable[(fb13.getIndex())].addEdge(eb18.getIndex());
+     
+     Triangulation::faceTable[(fb14.getIndex())].addEdge(eb5.getIndex());
+     Triangulation::faceTable[(fb14.getIndex())].addEdge(eb16.getIndex());
+     Triangulation::faceTable[(fb14.getIndex())].addEdge(eb23.getIndex());
+     
+     Triangulation::faceTable[(fb15.getIndex())].addEdge(eb1.getIndex());
+     Triangulation::faceTable[(fb15.getIndex())].addEdge(eb9.getIndex());
+     Triangulation::faceTable[(fb15.getIndex())].addEdge(eb19.getIndex());
+     
+     Triangulation::faceTable[(fb16.getIndex())].addEdge(eb2.getIndex());
+     Triangulation::faceTable[(fb16.getIndex())].addEdge(eb11.getIndex());
+     Triangulation::faceTable[(fb16.getIndex())].addEdge(eb21.getIndex());
+     
+     Triangulation::faceTable[(fb17.getIndex())].addEdge(eb3.getIndex());
+     Triangulation::faceTable[(fb17.getIndex())].addEdge(eb6.getIndex());
+     Triangulation::faceTable[(fb17.getIndex())].addEdge(eb24.getIndex());
+          
+     //face-face
+     Triangulation::faceTable[(fb1.getIndex())].addFace(fb10.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addFace(fb12.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addFace(fb15.getIndex());
+     
+     Triangulation::faceTable[(fb2.getIndex())].addFace(fb10.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addFace(fb11.getIndex());
+     Triangulation::faceTable[(fb2.getIndex())].addFace(fb16.getIndex());
+
+     Triangulation::faceTable[(fb3.getIndex())].addFace(fb11.getIndex());
+     Triangulation::faceTable[(fb3.getIndex())].addFace(fb12.getIndex());
+     Triangulation::faceTable[(fb3.getIndex())].addFace(fb17.getIndex());
+     
+     Triangulation::faceTable[(fb4.getIndex())].addFace(fb10.getIndex());
+     Triangulation::faceTable[(fb4.getIndex())].addFace(fb13.getIndex());
+     Triangulation::faceTable[(fb4.getIndex())].addFace(fb14.getIndex());
+     
+     Triangulation::faceTable[(fb5.getIndex())].addFace(fb11.getIndex());
+     Triangulation::faceTable[(fb5.getIndex())].addFace(fb13.getIndex());
+     Triangulation::faceTable[(fb5.getIndex())].addFace(fa1.getIndex());
+     
+     Triangulation::faceTable[(fb6.getIndex())].addFace(fb12.getIndex());
+     Triangulation::faceTable[(fb6.getIndex())].addFace(fb14.getIndex());
+     Triangulation::faceTable[(fb6.getIndex())].addFace(fa3.getIndex());
+     
+     Triangulation::faceTable[(fb7.getIndex())].addFace(fb13.getIndex());
+     Triangulation::faceTable[(fb7.getIndex())].addFace(fb15.getIndex());
+     Triangulation::faceTable[(fb7.getIndex())].addFace(fb17.getIndex());
+     
+     Triangulation::faceTable[(fb8.getIndex())].addFace(fb15.getIndex());
+     Triangulation::faceTable[(fb8.getIndex())].addFace(fb16.getIndex());
+     Triangulation::faceTable[(fb8.getIndex())].addFace(fa2.getIndex());
+     
+     Triangulation::faceTable[(fb9.getIndex())].addFace(fb14.getIndex());
+     Triangulation::faceTable[(fb9.getIndex())].addFace(fb16.getIndex());
+     Triangulation::faceTable[(fb9.getIndex())].addFace(fb17.getIndex());
+     
+     Triangulation::faceTable[(fb10.getIndex())].addFace(fb1.getIndex());
+     Triangulation::faceTable[(fb10.getIndex())].addFace(fb2.getIndex());
+     Triangulation::faceTable[(fb10.getIndex())].addFace(fb4.getIndex());
+     
+     Triangulation::faceTable[(fb11.getIndex())].addFace(fb2.getIndex());
+     Triangulation::faceTable[(fb11.getIndex())].addFace(fb3.getIndex());
+     Triangulation::faceTable[(fb11.getIndex())].addFace(fb5.getIndex());
+     
+     Triangulation::faceTable[(fb12.getIndex())].addFace(fb1.getIndex());
+     Triangulation::faceTable[(fb12.getIndex())].addFace(fb3.getIndex());
+     Triangulation::faceTable[(fb12.getIndex())].addFace(fb6.getIndex());
+     
+     Triangulation::faceTable[(fb13.getIndex())].addFace(fb4.getIndex());
+     Triangulation::faceTable[(fb13.getIndex())].addFace(fb5.getIndex());
+     Triangulation::faceTable[(fb13.getIndex())].addFace(fb7.getIndex());
+     
+     Triangulation::faceTable[(fb14.getIndex())].addFace(fb4.getIndex());
+     Triangulation::faceTable[(fb14.getIndex())].addFace(fb6.getIndex());
+     Triangulation::faceTable[(fb14.getIndex())].addFace(fb9.getIndex());
+     
+     Triangulation::faceTable[(fb15.getIndex())].addFace(fb1.getIndex());
+     Triangulation::faceTable[(fb15.getIndex())].addFace(fb7.getIndex());
+     Triangulation::faceTable[(fb15.getIndex())].addFace(fb8.getIndex());
+     
+     Triangulation::faceTable[(fb16.getIndex())].addFace(fb2.getIndex());
+     Triangulation::faceTable[(fb16.getIndex())].addFace(fb8.getIndex());
+     Triangulation::faceTable[(fb16.getIndex())].addFace(fb9.getIndex());
+     
+     Triangulation::faceTable[(fb17.getIndex())].addFace(fb3.getIndex());
+     Triangulation::faceTable[(fb17.getIndex())].addFace(fb7.getIndex());
+     Triangulation::faceTable[(fb17.getIndex())].addFace(fb9.getIndex());
+     
+     Triangulation::faceTable[(fa1.getIndex())].addFace(fb5.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].addFace(fb8.getIndex());
+     Triangulation::faceTable[(fa3.getIndex())].addFace(fb6.getIndex());
+     
+     
+     
+}
+
+
+
+
+
+
 
 
