@@ -148,6 +148,10 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
   double h = dt; 
   double ta[p],tb[p],tc[p],td[p],y[p],z[p]; // Temporary arrays to hold data in.
   int    i,j,k; // ints used for "for loops".
+  map<int, Vertex>::iterator vit;
+  map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+  map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+  
   ofstream results(fileName, ios_base::trunc);
   results << left << setprecision(4); 
   results.setf(ios_base::showpoint);
@@ -164,20 +168,20 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
     prev = net; // Set prev to net.
     net = 0;    // Reset net.
     
-       for (k=0; k<p; k++)  
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
            // Set the weights of the Triangulation.
-           Triangulation::vertexTable[k + 1].setWeight(z[k]);
+           vit->second.setWeight(z[k]);
        }
        if(i == 1) // If first time through, use static method.
        {
             prev = Triangulation::netCurvature();
        }
-       for (k=0; k<p; k++)  // First "for loop" in whole step calculates
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // First "for loop" in whole step calculates
        {                    // everything manually, prints to file.
          
-           results << "Vertex " << k + 1<< ": " << z[k] << " / ";
-           double curv = curvature(Triangulation::vertexTable[k + 1]);
+           results << "Vertex " << vit->first << ": " << z[k] << " / ";
+           double curv = curvature(vit->second);
            if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
            {
              results << 0. << "\n";
@@ -187,39 +191,39 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
                results << curv << "\n";
            net += curv;
            if(adjF) ta[k]= h * ((-1) * curv 
-                           * Triangulation::vertexTable[k + 1].getWeight() +
+                           * vit->second.getWeight() +
                            prev /  p
-                           * Triangulation::vertexTable[k+ 1].getWeight());
+                           * vit->second.getWeight());
            else     ta[k] = h * (-1) * curv 
-                           * Triangulation::vertexTable[k + 1].getWeight();
+                           * vit->second.getWeight();
            
        }
-       for (k=0; k<p; k++)  // Set the new weights.
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
-           Triangulation::vertexTable[k + 1].setWeight(z[k]+ta[k]/2);
+           vit->second.setWeight(z[k]+ta[k]/2);
        }
-       for (k=0; k<p; k++)  
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) tb[k]=h*adjDiffEQ(k + 1, net);
-            else     tb[k]=h*stdDiffEQ(k + 1);
+            if(adjF) tb[k]=h*adjDiffEQ(vit->first, net);
+            else     tb[k]=h*stdDiffEQ(vit->first);
        }
-       for (k=0; k<p; k++)  // Set the new weights.
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
-           Triangulation::vertexTable[k + 1].setWeight(z[k]+tb[k]/2);
+           vit->second.setWeight(z[k]+tb[k]/2);
        }
-       for (k=0; k<p; k++)  
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) tc[k]=h*adjDiffEQ(k + 1, net);
-            else     tc[k]=h*stdDiffEQ(k + 1);
+            if(adjF) tc[k]=h*adjDiffEQ(vit->first, net);
+            else     tc[k]=h*stdDiffEQ(vit->first);
        }
-       for (k=0; k<p; k++)  // Set the new weights.
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
-           Triangulation::vertexTable[k + 1].setWeight(z[k]+tc[k]);
+           vit->second.setWeight(z[k]+tc[k]);
        }
-       for (k=0; k<p; k++)  
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) td[k]=h*adjDiffEQ(k + 1, net);
-            else     td[k]=h*stdDiffEQ(k + 1);
+            if(adjF) td[k]=h*adjDiffEQ(vit->first, net);
+            else     td[k]=h*stdDiffEQ(vit->first);
        }
        for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
        {
