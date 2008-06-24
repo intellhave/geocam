@@ -38,6 +38,10 @@ class Triangulation
       static map<int, Vertex> vertexTable;
       static map<int, Edge> edgeTable;
       static map<int, Face> faceTable;
+      
+      static int greatestVertex();
+      static int greatestEdge();
+      static int greatestFace();
 	
 	/*
 	 * Adds a mapping from the given integer to the given Vertex in
