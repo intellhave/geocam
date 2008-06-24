@@ -1,8 +1,5 @@
 \begin{thebibliography}{1}
 
-\bibitem{wiki}
-Euler characteristic, 2008.
-
 \bibitem{DiffEq}
 M.~Brown.
 \newblock {\em Ordinary Differential Equations and Their Applications}.
@@ -16,10 +13,20 @@ B.~Chow and F.~Luo.
 \bibitem{DrG}
 D.~Glickenstein.
 \newblock {\em A combnatorial Yamabe flow in three dimensions}.
-\newblock Topology 44 (2005), 791-808.
+\newblock Topology 44, 791-808, 2005.
 
 \bibitem{lutzmanifold}
-Frank~H. Lutz.
-\newblock The manifold page, 2008.
+F.~H. Lutz.
+\newblock The manifold page.
+\newblock http://www.math.tu-berlin.de/diskregeom/stellar/, 2008.
+
+\bibitem{WolfMath}
+Wolfram Mathworld.
+\newblock http://mathworld.wolfram.com/, 2008.
+
+\bibitem{wiki}
+Wikipedia.
+\newblock Euler characteristic.
+\newblock http://en.wikipedia.org/wiki/Euler\_characteristic, 2008.
 
 \end{thebibliography}
