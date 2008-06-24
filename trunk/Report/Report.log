@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.6) (preloaded format=pdflatex 2008.6.12)  24 JUN 2008 09:57
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.6) (preloaded format=pdflatex 2008.6.12)  24 JUN 2008 15:49
 entering extended mode
 **c:/Dev-Cpp/geocam/Report/Report.tex
 (c:\Dev-Cpp\geocam\Report\Report.tex
@@ -137,26 +137,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 48--49
 
  []
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 50.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 50.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 50.
 
 Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
  []
 
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 52.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 52.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 52.
 
 Underfull \hbox (badness 10000) in paragraph at lines 52--53
 
  []
 
-[2] <flattetrahedron.png, id=14, 418.66759pt x 314.00069pt>
+[2] <flattetrahedron.png, id=12, 418.66759pt x 314.00069pt>
 File: flattetrahedron.png Graphic file (type png)
 
-<use flattetrahedron.png> <tetrahedron.jpg, id=15, 674.52pt x 505.89pt>
+<use flattetrahedron.png> <tetrahedron.jpg, id=13, 674.52pt x 505.89pt>
 File: tetrahedron.jpg Graphic file (type jpg)
 
 <use tetrahedron.jpg>
@@ -164,80 +164,104 @@ Overfull \hbox (24.30193pt too wide) in paragraph at lines 55--57
 [][] [] 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
+
+ []
+
 [3 <flattetrahedron.png (PNG copy)> <tetrahedron.jpg>]
-<righttriangulation.jpg, id=19, 674.52pt x 505.89pt>
+<righttriangulation.jpg, id=18, 674.52pt x 505.89pt>
 File: righttriangulation.jpg Graphic file (type jpg)
 
 <use righttriangulation.jpg>
-<180px-Double_torus_illustration.png, id=20, 43.362pt x 45.771pt>
+<180px-Double_torus_illustration.png, id=19, 43.362pt x 45.771pt>
 File: 180px-Double_torus_illustration.png Graphic file (type png)
 
 <use 180px-Double_torus_illustration.png> [4 <righttriangulation.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 118--119
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
 
  []
 
 [5 <180px-Double_torus_illustration.png>] [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 168--169
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 175--176
+Underfull \hbox (badness 10000) in paragraph at lines 190--191
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 177--178
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 221--222
 
  []
 
-<triangulationUML.png, id=38, 747.79375pt x 577.15625pt>
+[9] <triangulationUML.png, id=45, 747.79375pt x 577.15625pt>
 File: triangulationUML.png Graphic file (type png)
 
-<use triangulationUML.png>
-Underfull \hbox (badness 10000) in paragraph at lines 198--199
+<use triangulationUML.png> [10 <triangulationUML.png (PNG copy)>]
+<torus2.png, id=49, 404.712pt x 303.534pt>
+File: torus2.png Graphic file (type png)
+ <use torus2.png>
+<torus2addvertex.png, id=50, 404.712pt x 303.534pt>
+File: torus2addvertex.png Graphic file (type png)
+ <use torus2addvertex.png>
+Overfull \hbox (17.32208pt too wide) in paragraph at lines 333--335
+[][] [] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 345--346
 
  []
 
-<torus2.jpg, id=39, 657.45625pt x 558.085pt>
-File: torus2.jpg Graphic file (type jpg)
- <use torus2.jpg> [8] [9 <triangulationUML.png (PNG copy)>] [10 <torus2.jpg>] [
-11] [12]
-Underfull \hbox (badness 10000) in paragraph at lines 328--329
+[11] <dual.jpg, id=54, 674.52pt x 505.89pt>
+File: dual.jpg Graphic file (type jpg)
+ <use dual.jpg>
+Underfull \hbox (badness 10000) in paragraph at lines 366--367
 
  []
 
-[13] (Report.bbl
-Underfull \hbox (badness 10000) in paragraph at lines 19--22
+[12 <torus2.png (PNG copy)> <torus2addvertex.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 368--369
+
+ []
+
+[13 <dual.jpg>] [14]
+Underfull \hbox (badness 10000) in paragraph at lines 386--387
+
+ []
+
+[15] (Report.bbl
+Underfull \hbox (badness 10000) in paragraph at lines 24--27
 []\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
  []
 
-
-Overfull \hbox (48.73195pt too wide) in paragraph at lines 28--31
-[]\OT1/cmr/m/n/12 Wikipedia.  Eu-ler char-ac-ter-is-tic.  http://en.wikipedia.o
-rg/wiki/Euler[]characteristic,
- []
-
-) [14]
-Underfull \hbox (badness 10000) in paragraph at lines 341--342
+) [16]
+Underfull \hbox (badness 10000) in paragraph at lines 405--406
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 343--344
+[17]
+Underfull \hbox (badness 10000) in paragraph at lines 411--412
 
  []
 
-[15] (Report.aux) ) 
+
+Underfull \hbox (badness 10000) in paragraph at lines 413--414
+
+ []
+
+[18] (Report.aux) ) 
 Here is how much of TeX's memory you used:
- 1080 strings out of 95295
- 13018 string characters out of 1184859
- 67193 words of memory out of 1063725
- 4253 multiletter control sequences out of 60000
+ 1103 strings out of 95295
+ 13285 string characters out of 1184859
+ 68802 words of memory out of 1063798
+ 4272 multiletter control sequences out of 60000
  9017 words of font info for 32 fonts, out of 1000000 for 2000
  14 hyphenation exceptions out of 8191
- 25i,12n,21p,877b,342s stack positions out of 5000i,500n,10000p,200000b,32768s
+ 25i,12n,21p,1113b,245s stack positions out of 5000i,500n,10000p,200000b,32768s
 <C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmbx12.p
 fb><C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmex10.pfb><C:/Program F
 iles/MiKTeX 2.6/fonts/type1/bluesky/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.6/
@@ -247,9 +271,9 @@ C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/M
 iKTeX 2.6/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.6/fonts/
 type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/
 cmti12.pfb><C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmtt12.pfb>
-Output written on Report.pdf (15 pages, 203769 bytes).
+Output written on Report.pdf (18 pages, 251700 bytes).
 PDF statistics:
- 102 PDF objects out of 300000 (max. 8388607)
+ 113 PDF objects out of 300000 (max. 8388607)
  0 named destinations out of 300000 (max. 131072)
- 31 words of extra memory for PDF output out of 65536 (max. 10000000)
+ 41 words of extra memory for PDF output out of 65536 (max. 10000000)
 

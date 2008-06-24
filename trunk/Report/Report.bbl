@@ -15,18 +15,33 @@ D.~Glickenstein.
 \newblock {\em A combnatorial Yamabe flow in three dimensions}.
 \newblock Topology 44, 791-808, 2005.
 
+\bibitem{Dave}
+D.~Glickenstein.
+\newblock Geometric triangulations and discrete laplacians on manifolds.
+\newblock Material given to us by David, 2008.
+
 \bibitem{lutzmanifold}
 F.~H. Lutz.
 \newblock The manifold page.
-\newblock http://www.math.tu-berlin.de/diskregeom/stellar/, 2008.
+\newblock http://www.math.tu-berlin.de/diskregeom/stellar/.
 
 \bibitem{WolfMath}
 Wolfram Mathworld.
-\newblock http://mathworld.wolfram.com/, 2008.
+\newblock http://mathworld.wolfram.com/.
+
+\bibitem{JPM}
+J-P Moreau.
+\newblock Differential equations in c++.
+\newblock http://pagesperso-orange.fr/\\jean-pierre.moreau/c$\_$eqdiff.html.
 
 \bibitem{wiki}
 Wikipedia.
 \newblock Euler characteristic.
-\newblock http://en.wikipedia.org/wiki/Euler\_characteristic, 2008.
+\newblock http://en.wikipedia.org/\\wiki/Euler$\_$characteristic.
+
+\bibitem{wikipoin}
+Wikipedia.
+\newblock Poincar\`{e} conjecture.
+\newblock http://en.wikipedia.org/wiki/\\Poincar$\%$C3$\%$A9$\_$conjecture.
 
 \end{thebibliography}

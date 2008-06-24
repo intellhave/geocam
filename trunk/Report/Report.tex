@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage[pdftex]{graphicx}
 \usepackage{multicol}
-\title{Computational Geometric Analysis on Surfaces}
+\title{Geometric Evolution on Computationally Abstract Manifolds}
 \pagestyle{plain}
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
 Supervisor: Dr. David Glickenstein\\
@@ -140,6 +140,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
 \noindent This can be used to prevent radii from decreasing to zero. It turns out if you take the derivative of ($\ref{eqprod}$) with respect to time you find that 
  
 \begin{equation}
+\label{proof1}
 \frac{d(\mbox{log}~\alpha)}{dt} = \frac{\mbox{sum of all curvatures}}{\mbox{number of vertices}} = \overline{K}, \mbox{average curvature}
 \end{equation}
  
@@ -224,11 +225,6 @@ Net Curv: 0.0000
 \caption{A layout of commands and how they are connected.}
 \label{triUML}
 \end{figure}
-
-\subsection{Solving the Ricci flow ODE}
-\maketitle
-
-After investigating various methods to run our differential equation, we opted to use a Runge-Kutta format, which has numerous benefits over the simpler but less efficient Euler method. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental. \newline
   
 \subsection{Converting known triangulations}
 \maketitle
@@ -346,20 +342,30 @@ Result: The new vertex gets squeezed in between the other vertices and decreases
 \subsection{Duals}
 \maketitle
 
-Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimenter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex lengths, since we are using circle packing, a side length is simply the sum of two vertices. Thus, we can simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}.$ We can then do that for multiple triangles. As a plus, all these incircles are mutually tangent. We can define a dual edge $\star e$ as the sum of the radii of the incircles with that side in question. $\star e = r_{in1} + r_{in2}$.
+Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimenter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex lengths, since we are using circle packing, a side length is simply the sum of two vertices. Thus, we can simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}.$ We can then do that for multiple triangles. As a plus, all these incircles are mutually tangent. We can define a dual edge $\star e$ as the sum of the radii of the incircles with that side in question. $\star e = r_{in1} + r_{in2}$.\newline
 
-With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the dual area. 
+\begin{figure}
+\centering
+\label{dual}
+\includegraphics[scale = 0.4]{dual.jpg}
+\caption{A dual to an edge}
+\end{figure}
 
-The dual length and dual area have some interesting properties that we hope to investigate. 
+\noindent With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the $dual area$, evaluated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}}$$
+
+\noindent The dual length and dual area have some interesting properties that we hope to investigate. David Glickenstein examines these and more in \cite{Dave}.  
 
 \subsection{Adding toruses}
 \maketitle
 
+We can add a torus handle to a triangulation. I think. Tom, let me know!
+
 \subsection{Special cases}
 \maketitle
 
-Double Triangles.
-Connecting polyhedra by a vertex. 
+Double Triangles. Doesn't work with our $makeTriangulationFile$ format, but has some interesting properties. Associated with flips.\newline
+
+Connecting polyhedra by a vertex. \newline
 
 Example: two tetrahedra connected at a vertex. It turns out $\chi = 3$. 
 Result: The center vertex becomes very large, equilibrium achieved. Net curvature = $6\pi = 2\pi\chi$, as expected. 
@@ -369,9 +375,7 @@ Result: The center vertex becomes very large, equilibrium achieved. Net curvatur
 \maketitle
   Things we could do:
   \begin{itemize}
-  
- 
-  
+
   \item Circle packing is a very special way to characterize our side lengths. If we relax this criterium and let the circles overlap, we can introduce a second weight $\Phi$ that . We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
   
   \item We would also like to start investigating 3-dimensional constructs. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. We can also try and investigate how our code applies (if it does) to hyperbolic and spherical coordinates. 
@@ -379,7 +383,7 @@ Result: The center vertex becomes very large, equilibrium achieved. Net curvatur
   
   \newpage
   \section{Conclusions}
-  We learned a lot of things along the way. At the beginning, we all had varying familiarities with college geometry; some of us hadn't touched the stuff since high school. But we are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it\newline
+  We learned a lot of things along the way. At the beginning, we all had varying familiarities with college geometry; some of us hadn't touched the stuff since high school. But we are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come.\newline
   
   \noindent We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the VIGRE foundation for making this possible. 
   \maketitle
@@ -387,6 +391,18 @@ Result: The center vertex becomes very large, equilibrium achieved. Net curvatur
   \newpage
   \bibliography{Test1}  
   \bibliographystyle{plain}
+  
+  \newpage
+  \section{Appendix}
+  \maketitle
+  
+  \subsection{Proof of Eq. (\ref{proof1})}
+	\maketitle
+  
+  \subsection{Remarks on Runge-Kutta method for solving \ref{Riccin}}
+	\maketitle
+
+The method used by Moreau in \cite{JPM} to solve a diffeential equation involves using a Runge-Kutta method. After investigating various methods to run our differential equation, agreed that a Runge-Kutta format would be most beneficial for this type of problem. Even though it is more computationally complex than the simpler Euler's method, it makes up in its ability to converge and in its accuracy. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental. \newline
   
   \newpage
   \subsection*{About the Authors}
