@@ -43,6 +43,41 @@ void Triangulation::putFace(int key, Face v)
      faceTable.insert(pair<int, Face>(key, v));
 }
 
+int Triangulation::greatestVertex()
+{
+    int greatest = 0;
+    map<int, Vertex>::iterator vit;
+    for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
+    {
+            if(vit->first > greatest)
+            greatest = vit->first;
+    }
+    return greatest;
+}
+
+int Triangulation::greatestEdge()
+{
+    int greatest = 0;
+    map<int, Edge>::iterator eit;
+    for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++)
+    {
+            if(eit->first > greatest)
+            greatest = eit->first;
+    }
+    return greatest;
+}
+int Triangulation::greatestFace()
+{
+    int greatest = 0;
+    map<int, Face>::iterator fit;
+    for(fit = faceTable.begin(); fit != faceTable.end(); fit++)
+    {
+            if(fit->first > greatest)
+            greatest = fit->first;
+    }
+    return greatest;
+}
+
 void Triangulation::eraseVertex(int key)
 {
      map<int, Vertex>::iterator vit;
