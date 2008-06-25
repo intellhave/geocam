@@ -1,7 +1,7 @@
 /**************************************************************
 File: Triangulation Math
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 17, 2008
+Version: June 25, 2008
 ***************************************************************
 The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
@@ -86,8 +86,18 @@ double stdDiffEQ(int);
  */
 double adjDiffEQ(int, double);
 
+/*
+ * Calculates the radius of the circle embedded in the face given.
+ */
 double inRadius(Face);
 
+/*
+ * Calculates the dual length between the two faces local to the given edge.
+ */
 double dualLength(Edge);
 
+/*
+ * Calculates the total area of the polygon whose sides are all the dual lengths
+ * of the edges local to the given vertex.
+ */
 double dualArea(Vertex);
