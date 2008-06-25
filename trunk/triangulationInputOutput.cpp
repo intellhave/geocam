@@ -55,8 +55,9 @@ the reading and writing of text files.
  * every simplex must have three lines of integers. The current
  * maximum size for a list of local simplices is 24. Finally, note that 
  * not all vertices must be listed before declaring edges or faces and 
- * that they do not need to be in any sort of order but should be from
- * 1 to n. 
+ * that they do not need to be in any sort of order and don't need to be
+ * numbered from 1 to n, though it is suggested for simplicity on the user's
+ * part. 
  */
 
 bool readTriangulationFile(char* fileName) 
