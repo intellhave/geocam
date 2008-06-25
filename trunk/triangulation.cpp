@@ -1,7 +1,7 @@
 /**************************************************************
 Class: Triangulation
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 20, 2008
+Version: June 25, 2008
 **************************************************************/
 
 #include "triangulation.h" // class's header file
@@ -19,13 +19,11 @@ map<int, Face> Triangulation::faceTable;
 // class constructor
 Triangulation::Triangulation()
 {
-	// insert your code here
 }
 
 // class destructor
 Triangulation::~Triangulation()
 {
-	// insert your code here
 }
 
 void Triangulation::putVertex(int key, Vertex v)

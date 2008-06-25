@@ -1,7 +1,7 @@
 /**************************************************************
 Class: Triangulation
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 20, 2008
+Version: June 25, 2008
 **************************************************************/
 
 #ifndef TRIANGULATION_H
@@ -39,8 +39,17 @@ class Triangulation
       static map<int, Edge> edgeTable;
       static map<int, Face> faceTable;
       
+      /*
+       * Returns the largest integer in the vertex table.
+       */
       static int greatestVertex();
+      /*
+       * Returns the largest integer in the edge table.
+       */
       static int greatestEdge();
+      /*
+       * Returns the largest integer in the face table.
+       */
       static int greatestFace();
 	
 	/*
@@ -53,18 +62,33 @@ class Triangulation
      * edgeTable. Called statically.
 	 */
      static void putEdge(int, Edge);
-      /*
+    /*
 	 * Adds a mapping from the given integer to the given Face in the
      * faceTable. Called statically.
 	 */
      static void putFace(int, Face);
      
+     /*
+      * Removes the mapping from the given integer to its referenced vertex.
+      * It also removes all local references to the integer in any simplices.
+      */
      static void eraseVertex(int);
      
+     /*
+      * Removes the mapping from the given integer to its referenced edge.
+      * It also removes all local references to the integer in any simplices.
+      */
      static void eraseEdge(int);
      
+     /*
+      * Removes the mapping from the given integer to its referenced face.
+      * It also removes all local references to the integer in any simplices.
+      */
      static void eraseFace(int);
 
+     /*
+      * Calculates the sum of the curvatures over all vertices.
+      */
      static double netCurvature();
 };
 
