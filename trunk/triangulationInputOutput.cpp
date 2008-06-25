@@ -59,7 +59,6 @@ the reading and writing of text files.
  * numbered from 1 to n, though it is suggested for simplicity on the user's
  * part. 
  */
-
 bool readTriangulationFile(char* fileName) 
 {
     // The three names of simplices.
