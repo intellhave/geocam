@@ -824,7 +824,7 @@ void addHandle(Face f, double newWeight)
      {
              for(int j = 0; j < vb1.getLocalEdges()->size(); j++)
              {
-                     if(i != j)
+                     //if(i != j)
                      Triangulation::edgeTable[(*(vb1.getLocalEdges()))[i]].addEdge((*(vb1.getLocalEdges()))[j]);
              }
      }
