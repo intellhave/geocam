@@ -12,3 +12,4 @@ void flip(Edge);
 void removeVertex(Vertex);
 void addLeaf(Edge, double);
 void addHandle(Face, double);
+void addCrossCap(Face, double);
