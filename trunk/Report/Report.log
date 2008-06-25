@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.6) (preloaded format=pdflatex 2008.6.12)  24 JUN 2008 15:49
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.6) (preloaded format=pdflatex 2008.6.12)  25 JUN 2008 14:16
 entering extended mode
-**c:/Dev-Cpp/geocam/Report/Report.tex
-(c:\Dev-Cpp\geocam\Report\Report.tex
+**C:/Dev-Cpp/geocam/Report/Report.tex
+(C:\Dev-Cpp\geocam\Report\Report.tex
 LaTeX2e <2005/12/01>
 Babel <v3.8g> and hyphenation patterns for english, dumylang, nohyphenation, ge
 rman, ngerman, french, loaded.
@@ -178,87 +178,108 @@ File: righttriangulation.jpg Graphic file (type jpg)
 File: 180px-Double_torus_illustration.png Graphic file (type png)
 
 <use 180px-Double_torus_illustration.png> [4 <righttriangulation.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 115--116
+Underfull \hbox (badness 10000) in paragraph at lines 117--118
 
  []
 
 [5 <180px-Double_torus_illustration.png>] [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 172--173
+Underfull \hbox (badness 10000) in paragraph at lines 174--175
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 190--191
+Underfull \hbox (badness 10000) in paragraph at lines 192--193
 
  []
 
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 221--222
+Underfull \hbox (badness 10000) in paragraph at lines 223--224
 
  []
 
 [9] <triangulationUML.png, id=45, 747.79375pt x 577.15625pt>
 File: triangulationUML.png Graphic file (type png)
 
-<use triangulationUML.png> [10 <triangulationUML.png (PNG copy)>]
-<torus2.png, id=49, 404.712pt x 303.534pt>
+<use triangulationUML.png> [10 <triangulationUML.png (PNG copy)>] [11]
+<Flip.png, id=52, 411.81439pt x 207.46474pt>
+File: Flip.png Graphic file (type png)
+ <use Flip.png>
+Overfull \hbox (21.81339pt too wide) in paragraph at lines 343--344
+ [][] 
+ []
+
+<torus2.png, id=53, 404.712pt x 303.534pt>
 File: torus2.png Graphic file (type png)
  <use torus2.png>
-<torus2addvertex.png, id=50, 404.712pt x 303.534pt>
+<torus2addvertex.png, id=54, 404.712pt x 303.534pt>
 File: torus2addvertex.png Graphic file (type png)
  <use torus2addvertex.png>
-Overfull \hbox (17.32208pt too wide) in paragraph at lines 333--335
+Overfull \hbox (17.32208pt too wide) in paragraph at lines 349--351
 [][] [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 345--346
+Underfull \hbox (badness 10000) in paragraph at lines 355--356
 
  []
 
-[11] <dual.jpg, id=54, 674.52pt x 505.89pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--363
+
+ []
+
+[12 <Flip.png (PNG copy)>] <dual.jpg, id=58, 674.52pt x 505.89pt>
 File: dual.jpg Graphic file (type jpg)
- <use dual.jpg>
-Underfull \hbox (badness 10000) in paragraph at lines 366--367
+
+<use dual.jpg> [13 <torus2.png (PNG copy)> <torus2addvertex.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 383--384
 
  []
 
-[12 <torus2.png (PNG copy)> <torus2addvertex.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 368--369
+
+Underfull \hbox (badness 10000) in paragraph at lines 387--388
 
  []
 
-[13 <dual.jpg>] [14]
-Underfull \hbox (badness 10000) in paragraph at lines 386--387
+[14 <dual.jpg>] <tetratouch.png, id=66, 442.34224pt x 211.82587pt>
+File: tetratouch.png Graphic file (type png)
+
+<use tetratouch.png>
+Overfull \hbox (52.34116pt too wide) in paragraph at lines 392--393
+[][] 
+ []
+
+[15 <tetratouch.png (PNG copy)>] [16]
+Underfull \hbox (badness 10000) in paragraph at lines 410--411
 
  []
 
-[15] (Report.bbl
+[17] (Report.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 24--27
 []\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
  []
 
-) [16]
-Underfull \hbox (badness 10000) in paragraph at lines 405--406
+) [18]
+Underfull \hbox (badness 10000) in paragraph at lines 429--430
 
  []
 
-[17]
-Underfull \hbox (badness 10000) in paragraph at lines 411--412
+[19]
+Underfull \hbox (badness 10000) in paragraph at lines 435--436
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 413--414
+Underfull \hbox (badness 10000) in paragraph at lines 437--438
 
  []
 
-[18] (Report.aux) ) 
+[20] (Report.aux) ) 
 Here is how much of TeX's memory you used:
- 1103 strings out of 95295
- 13285 string characters out of 1184859
- 68802 words of memory out of 1063798
- 4272 multiletter control sequences out of 60000
+ 1118 strings out of 95295
+ 13469 string characters out of 1184859
+ 68820 words of memory out of 1063816
+ 4283 multiletter control sequences out of 60000
  9017 words of font info for 32 fonts, out of 1000000 for 2000
  14 hyphenation exceptions out of 8191
  25i,12n,21p,1113b,245s stack positions out of 5000i,500n,10000p,200000b,32768s
@@ -271,9 +292,9 @@ C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/M
 iKTeX 2.6/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.6/fonts/
 type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/
 cmti12.pfb><C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmtt12.pfb>
-Output written on Report.pdf (18 pages, 251700 bytes).
+Output written on Report.pdf (20 pages, 258600 bytes).
 PDF statistics:
- 113 PDF objects out of 300000 (max. 8388607)
+ 122 PDF objects out of 300000 (max. 8388607)
  0 named destinations out of 300000 (max. 131072)
- 41 words of extra memory for PDF output out of 65536 (max. 10000000)
+ 51 words of extra memory for PDF output out of 65536 (max. 10000000)
 
