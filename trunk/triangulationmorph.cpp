@@ -820,15 +820,17 @@ void addHandle(Face f, double newWeight)
      Triangulation::edgeTable[(eb23.getIndex())].addVertex(va3.getIndex());
      
      //edge-edge
+     vb1 = Triangulation::vertexTable[vb1.getIndex()];
      for(int i = 0; i < vb1.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < vb1.getLocalEdges()->size(); j++)
              {
-                     //if(i != j)
+                     if(i != j)
                      Triangulation::edgeTable[(*(vb1.getLocalEdges()))[i]].addEdge((*(vb1.getLocalEdges()))[j]);
              }
      }
      
+     vb2 = Triangulation::vertexTable[vb2.getIndex()];
      for(int i = 0; i < vb2.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < vb2.getLocalEdges()->size(); j++)
@@ -838,6 +840,7 @@ void addHandle(Face f, double newWeight)
              }
      }
      
+     vb3 = Triangulation::vertexTable[vb3.getIndex()];
      for(int i = 0; i < vb3.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < vb3.getLocalEdges()->size(); j++)
@@ -847,6 +850,7 @@ void addHandle(Face f, double newWeight)
              }
      }
      
+     vb4 = Triangulation::vertexTable[vb4.getIndex()];
      for(int i = 0; i < vb4.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < vb4.getLocalEdges()->size(); j++)
@@ -856,6 +860,7 @@ void addHandle(Face f, double newWeight)
              }
      }
      
+     vb5 = Triangulation::vertexTable[vb5.getIndex()];
      for(int i = 0; i < vb5.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < vb5.getLocalEdges()->size(); j++)
@@ -865,6 +870,7 @@ void addHandle(Face f, double newWeight)
              }
      }
      
+     vb6 = Triangulation::vertexTable[vb6.getIndex()];
      for(int i = 0; i < vb6.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < vb6.getLocalEdges()->size(); j++)
@@ -874,6 +880,7 @@ void addHandle(Face f, double newWeight)
              }
      }
      
+     va1 = Triangulation::vertexTable[va1.getIndex()];
      for(int i = 0; i < va1.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < va1.getLocalEdges()->size(); j++)
@@ -883,6 +890,7 @@ void addHandle(Face f, double newWeight)
              }
      }
      
+     va2 = Triangulation::vertexTable[va2.getIndex()];
      for(int i = 0; i < va2.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < va2.getLocalEdges()->size(); j++)
@@ -892,6 +900,7 @@ void addHandle(Face f, double newWeight)
              }
      }
      
+     va3 = Triangulation::vertexTable[va3.getIndex()];
      for(int i = 0; i < va3.getLocalEdges()->size(); i++)
      {
              for(int j = 0; j < va3.getLocalEdges()->size(); j++)
