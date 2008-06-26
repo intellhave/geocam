@@ -187,7 +187,7 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
            if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
            {
             // results << 0. << "\n";
-             curvatures[k][i - 1] = curv;
+             curvatures[k][i - 1] = 0.;
            }
            else {
              //  results << curv << "\n";
@@ -247,13 +247,13 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
       results << setprecision(6); 
       results << left << "Vertex: " << left << setw(4)<< vit->first;
       results << right << setw(3) << "Weight";
-      results << right << setw(9) << "Curv";
+      results << right << setw(10) << "Curv";
       results << "\n------------------------------\n";
       for(int j = 0; j < numSteps; j++)
       {
               results << left <<  "Step " << setw(7) << (j + 1);
-              results << right << setw(7) << weights[k][j];
-              results << right << setw(11) << curvatures[k][j] << "\n";
+              results << left << setw(12) << weights[k][j];
+              results << left << setw(12) << curvatures[k][j] << "\n";
       }
       results << "\n";
    }
