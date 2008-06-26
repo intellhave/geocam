@@ -33,10 +33,9 @@ Supervisor: Dr. David Glickenstein\\
   \newpage
   \section{Introduction}
   \maketitle
-  Over the course of this summer, we examined and learned about various topological and geometric manipulations across various dimensional objects. We use a lot of C++ to code our work, and have a lot of work to show for it. In this section we will introduce the concepts behind our project, as well as discuss our plan of action. 
+  Over the course of this summer, we examined and learned about various topological and geometric manipulations across various dimensional objects. We use a lot of C++ to code our work, and have a lot of work to show for it. In this section we will introduce the initial concepts behind our project, as well as discuss our plan of action for current and potentially future work. 
   Things we ought to put here:
   \begin{itemize}
-  \item Definitions, like triangulations and such
   \item A basic verbal-type background of what we are doing, not too many equations
   \item Our aspect of what we are doing
   \item Our interpretation of the end goal
@@ -161,7 +160,18 @@ Just because we have a triangulation and that it is circle packed does not mean 
 \frac{dr_i}{dt} &=& (\overline{K} - K_i)r_i
 \end{eqnarray}
 
-\noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ for each vertex and thus $\displaystyle\frac{dr_i}{dt} = 0$. With its roots in differential geometry, Ricci flow has become a popular topic in mathematics, finding uses and applications in many different fields. It even helped solve one of the Millenium Puzzles, valued at \$1,000,000, in 2003. \cite{wikipoin}    
+\noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ for each vertex and thus $\displaystyle\frac{dr_i}{dt} = 0$. With its roots in differential geometry, Ricci flow has become a popular topic in mathematics, finding uses and applications in many different fields. It even helped solve one of the Millenium Puzzles, valued at \$1,000,000, in 2003. \cite{wikipoin}  
+
+\subsection{Our approach to this problem}
+\maketitle
+
+Over the course of the summer, we aim to develop code that will allow us to construct these triangulations and be able to perform Ricci flow on these manifolds. As we progress, we aim to dig deeper into the subject, investigating new ideas and applications as they arise. Our initial plan of action is to
+
+\begin{itemize}
+\item Develop a structured format to associate all faces, edges, and vertices
+\item Run the Ricci flow equation
+\item Investigate other things
+\end{itemize}  
 
 \newpage
 \section{Analysis/Results}
@@ -331,11 +341,11 @@ Face: 6
 There may be times where we want to change a given triangulation by a small amount. Rather than start from scratch, we can perform flips. $Flips$ are a technique which change the topology of a surface by a small degree. There are three basic types:
 
 \begin{itemize}
-\item{1-3 flip}
+\item 1-3 flip \newline
 Here we take a triangle and turn it into three triangles. In other words, we add a vertex to a triangulation and connect it to the three vertices of the triangle it is inside. If we performed this on each face of a tetrahedron, we would result in a dodecahedron, a solid with 12 faces, three from each original face of the tetrahedron. After running this through $calcFlow$, all the new vertices form 45-45-90 degree isosocles right triangles with the old vertices constructing the hypoteneuses. 
-\item{2-2 flip}
+\item 2-2 flip \newline
 In this flip we take an edge that is part of two faces, and switch the vertices. See figure~\ref{fig:flip}. 
-\item{3-1 flip}
+\item 3-1 flip \newline
 Here we do the opposiste of a 1-3 flip. We take a vertex that is connected to three other vertices and remove it entirely. This move is more restrictive than the others since not every vertex is connected to exactly three vertices. 
 \end{itemize}
 \begin{figure}
@@ -354,7 +364,11 @@ Here we do the opposiste of a 1-3 flip. We take a vertex that is connected to th
   
 \noindent Example: Adding a vertex to a one-holed torus. See figure~\ref{torusaddv}. \newline
 
-\noindent By inserting a vertex within a flat triangulation for a torus, we essentially place a sphere on top of three ofther spheres, and then observe what happens as we run it trough out $calcFlow$ program. We discover that the new vertex gets squeezed in between the other vertices and decreases in size, as if it were never there at all. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). The new vertex lies completely within the void not occupied by the other three triangles. We also ran this test with a 7-vertex torus and obtained similar results. The additional vertex tried to disappear altogether, and even with normalized Ricci flow its weight dropped down to zero, as if it weren't there at all. While this does break our code, we find it very interesting. I wonder if it matters which face you add the vertex to. 
+\noindent By inserting a vertex within a flat triangulation for a torus, we essentially place a sphere on top of three ofther spheres, and then observe what happens as we run it trough out $calcFlow$ program. We discover that the new vertex gets squeezed in between the other vertices and decreases in size, as if it were never there at all. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). The new vertex lies completely within the void not occupied by the other three triangles. We also ran this test with a 7-vertex torus and obtained similar results. The additional vertex tried to disappear altogether, and even with normalized Ricci flow its weight dropped down to zero, as if it weren't there at all. While this does break our code, we find it very interesting. I wonder if it matters which face you add the vertex to. \newline
+
+\noindent Example: Performing a 2-2 flip on a 12-vertex torus. \newline
+
+\noindent One interesting observation we found was that flips change the asymptotic behavior of some vertices. For Example, in a 12-vertex torus, performing a flip on one edge affected the end radii of many vertices. In fact, their radii was a function of time was not always monotonic! We would occasionally have a vertex change direction before ultimately approaching a limit. 
 
 \subsection{Duals}
 \maketitle
@@ -376,6 +390,24 @@ Every triangle that is capable of being circle-packed has a circle that is inter
 \maketitle
 
 We can add a torus handle to a triangulation. This instantly reduces the $\chi$ value of the surface by 2. 
+
+\subsection{Convergence of Ricci flow}
+\maketitle
+
+One experiment we performed was measuring convergence speeds of various triangulations. For each triangulation, five flows were run where the weights were random between one and twenty-five. Random weights, while not a perfect solution, was the only viable as it was unclear what set weights could be equal for all triangulations. The dt was held constant at 0.03. For each run, a step number was assigned for when all weights and curvatures had converged to four digits, (the precision shown in a file of the results).  The data collected at times seemed interesting and followed a pattern while other times were inexplicable.\newline
+
+\noindent Beginning with the basic case, the tetrahedron took on average 156.8 steps to converge to four digits and remained fairly consistent through all five trials. Strangely, the octahedron converged faster on all five flows, averaging 138.4 steps. This was made all the stranger by the fact that the icosahedron averaged 198.8 steps. The torus revealed several things about convergences. First, the standard nine vertex torus averaged only 110 steps, suggesting that a torus converges faster than a sphere. When a vertex was added to the torus, it greatly decreased the convergence speed, to 248.8 steps. Compared to the Tetrahedron with an added vertex, 164.2, this was a very large jump. When another vertex was added to the same face as the first, the convergence speed dropped yet again, to an average of 437.6 steps. Yet when this vertex was added to a face not connected to the first, the convergence speed was almost steady at 264.8. And adding a third in the same style caused little increase.\newline
+
+\noindent This seems to suggest that convergence speed is dependent on the number of unique vertices. By unique we mean the properties of the vertex (number of local vertices, convergence weight, etc.). When the vertices were added to separate faces, there remained only three unique vertices. Whereas, adding the two vertices to the same face created five unique vertices. This theory is further supported by a twelve vertex sphere designed so that all vertices are unique. The average convergence was 460 steps, more than twice as long as the icosahedron, which also is a twelve vertex sphere.\newline
+
+\noindent As a final note, the deviation of the initial weights did not have a clear impact on the convergence speed. At some times, it would appear that initial weights with a higher deviation would converge faster, yet at other times it was lower deviation that seemed to lead to faster convergence.
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.79]{ConvergenceTable.png}
+\caption{Summary of convergence data for varying criterium}
+\label{fig:conv}
+\end{figure}
 
 \subsection{Special cases}
 \maketitle
@@ -420,21 +452,48 @@ Double Triangles. Doesn't work with our $makeTriangulationFile$ format, but has 
   \section*{Appendix}
   \maketitle
   
-  \subsection*{Proof of Eq. (\ref{proof1})}
+  \subsection*{Derivation of Eq.~(\ref{proof1})}
 	\maketitle
+	
+	We used the criteria $$f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alpha r_i} = \alpha^n\prod{r_i}= C$$ to constrain the values of radii. We take the derivative of $f$ with respect to $t$ and obtain
+	\begin{eqnarray*}
+	\frac{df}{dt} & = & n\alpha^{n-1}\frac{d\alpha}{dt}r_1r_2\ldots r_n + \alpha^n\frac{dr_1}{dt}r_2r_3\ldots r_n\\
+								& + & \alpha^nr_1\frac{dr_2}{dt}r_3r_4\ldots r_n + \ldots + \alpha^nr_1r_2\ldots r_{n-1}\frac{dr_n}{dt}
+	\end{eqnarray*}
+	But since $\displaystyle \frac{dr_i}{dt} = -K_ir_i$ from Eq.~\ref{Riccif} we obtain
+	\begin{eqnarray*}
+	\frac{df}{dt} & = & \frac{n\alpha^{n}}{\alpha}\frac{d\alpha}{dt}r_1r_2\ldots r_n - K_1\alpha^nr_1r_2r_3\ldots r_n\\
+								& - & K_2\alpha^nr_1r_2r_3r_4\ldots r_n - \ldots - K_n\alpha^nr_1r_2\ldots r_{n-1}r_n
+	\end{eqnarray*}
+	from which we can group terms and obtain
+	\begin{eqnarray*}
+	\frac{df}{dt} & = & (\alpha^nr_1r_2\ldots r_n)(\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n)\\
+								& = & C(\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n)
+	\end{eqnarray*}
+	However, since the original product is a constant, we have $\displaystyle \frac{df}{dt} = 0.$ Thus we have $$\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n = 0$$
+	Rearranging we have
+$$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K_2 + \ldots + K_n}{n} = \overline{K}$$
+	which we refer to as Eq.~(\ref{proof1})
   
-  \subsection*{Remarks on Runge-Kutta method for solving (\ref{Riccin})}
+  \subsection*{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
 	\maketitle
 
 The method used by Moreau in \cite{JPM} to solve a diffeential equation involves using a Runge-Kutta method. After investigating various methods to run our differential equation, we agreed that a Runge-Kutta format would be most beneficial for this type of problem. Even though it is more computationally complex than the simpler Euler's method, it makes up in its ability to converge and in its accuracy. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental. \newline
+
+\noindent Based on our evaluations of radii and curvatures over time, it appears to converge exponentially for each vertex. However, as mentioned previously, performing flips on a triangulation may negate this and cause the system to go haywire. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 0.9]{torus7addvaddhweights.png}
+\end{figure}
   
-  \newpage
-  \subsection*{About the Authors}
-  \maketitle
+\newpage
+\subsection*{About the Authors}
+\maketitle
   
-  Alex Henniges is a junior double majoring in Math and Computer Science. Plus he's cool. \newline
+Alex Henniges is a junior double majoring in Math and Computer Science. Plus he's cool. He is the frontliner of the programming aspect of this research. \newline
   
-  \noindent Thomas Williams is a senior in Comprehensive Mathematics with a minor in Computer Science and a strong background in Math Education. He's cool, too. \newline
+\noindent Thomas Williams is a senior in Comprehensive Mathematics with a minor in Computer Science and a strong background in Math Education. He's cool, too. He made substantial contributions to the coding and development of this project.\newline
   
-  \noindent Mitch Wilson is a senior majoring in Applied Math and Mechanical Engineering. He's ok. 
+\noindent Mitch Wilson is a senior majoring in Applied Math and Mechanical Engineering. He's ok. He made the pretty pictures in this report. 
 \end{document}
