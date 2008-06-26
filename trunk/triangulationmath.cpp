@@ -147,13 +147,15 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
                                              // number of variables in system.
   double h = dt; 
   double ta[p],tb[p],tc[p],td[p],y[p],z[p]; // Temporary arrays to hold data in.
-  int    i,j,k; // ints used for "for loops".
+  int    i,k; // ints used for "for loops".
   map<int, Vertex>::iterator vit;
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+  double weights[p][numSteps];
+  double curvatures[p][numSteps];
   
   ofstream results(fileName, ios_base::trunc);
-  results << left << setprecision(4); 
+  //results << left << setprecision(4); 
   results.setf(ios_base::showpoint);
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
@@ -162,9 +164,9 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
    }
    for (i=1; i<numSteps+1; i++) 
    {
-    results << left << "Step " << left <<setw(4)  << i;
-    results << right << setw(7) << "Weight";
-    results << right << setw(7) << "Curv" << "\n-----------------------\n";
+   // results << left << "Step " << left <<setw(4)  << i;
+   // results << right << setw(7) << "Weight";
+   // results << right << setw(7) << "Curv" << "\n-----------------------\n";
     prev = net; // Set prev to net.
     net = 0;    // Reset net.
     
@@ -179,16 +181,18 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // First "for loop" in whole step calculates
        {                    // everything manually, prints to file.
-         
-           results << "Vertex " << vit->first << ": " << z[k] << " / ";
+           weights[k][i - 1] = z[k];
+           //results << "Vertex " << vit->first << ": " << z[k] << " / ";
            double curv = curvature(vit->second);
            if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
            {
-             results << 0. << "\n";
-   
+            // results << 0. << "\n";
+             curvatures[k][i - 1] = curv;
            }
-           else
-               results << curv << "\n";
+           else {
+             //  results << curv << "\n";
+               curvatures[k][i - 1] = curv;
+               }
            net += curv;
            if(adjF) ta[k]= h * ((-1) * curv 
                            * vit->second.getWeight() +
@@ -236,7 +240,22 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
      }
 
 
-     results << "Net Curv: " << net << "\n\n";
+     //results << "Net Curv: " << net << "\n\n";
+   }
+   for(k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
+   {
+      results << setprecision(6); 
+      results << left << "Vertex: " << left << setw(4)<< vit->first;
+      results << right << setw(3) << "Weight";
+      results << right << setw(9) << "Curv";
+      results << "\n------------------------------\n";
+      for(int j = 0; j < numSteps; j++)
+      {
+              results << left <<  "Step " << setw(7) << (j + 1);
+              results << right << setw(7) << weights[k][j];
+              results << right << setw(11) << curvatures[k][j] << "\n";
+      }
+      results << "\n";
    }
    results.close();
 }
