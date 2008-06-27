@@ -52,7 +52,7 @@ Suppose you are asked to make a sphere, but are only given a small number of edg
 \subsection{Circle packing}
 \maketitle
 
-\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of these edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a polygon; spheres can be used to make the edges of a polyhedron. These shapes are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices $l_{ij} = r_i + r_j$.
+\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of these edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce to the reader a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a triangle; spheres can be used to make the edges of a tetahedron. These circles are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices $l_{ij} = r_i + r_j$.
   
 \begin{figure}
 \begin{center}
@@ -475,13 +475,15 @@ One experiment we performed was measuring convergence speeds of various triangul
 \section{Future work}
 \subsection{3-D}
 
-We would also like to start investigating 3-dimensional constructs. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. We can also try and investigate how our code applies (if it does) to hyperbolic and spherical coordinates. 
+We would also like to start investigating 3-dimensional constructs built from tetradrons. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the internal angles associated with them. We can also try and investigate how our code applies (if it does) to hyperbolic and spherical coordinates. 
 
 \subsection{Circle packing expansions}
 
 Circle packing is a very special way to characterize our side lengths. If we relax this criterium and let the circles overlap, we can introduce a second weight $\Phi$ that . We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
 
 \subsection{Hyperbolic/ spherical triangulations}
+
+All this time we have focused on Euclidean coordinates. However, there are cased when triangulations may be better suited in other systems. In changing our format to hyperbolic and spherical coordinates, we would have to reevaluate each of our steps depending on the system. For example, in hyperbolic, the basic Ricci flow equation is $\displaystyle \frac{dr_i}{dt} = -K_i\sinh r_i$. Likewise, in spherical coordinates, $\displaystyle \sum{K_i} = 2\pi\chi - \mbox{Surface Area of surface}$, which can change over time. 
 
 \section{Conclusions}
   We learned a lot of things along the way. At the beginning, we all had varying familiarities with college geometry; some of us hadn't touched the stuff since high school. But we are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come.\newline
@@ -496,7 +498,7 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 \section*{Appendix}
 
 \subsection*{Derivation of Eq.~(\ref{proof1})}
-	\maketitle
+\maketitle
 	
 	We used the criteria $$f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alpha r_i} = \alpha^n\prod{r_i}= C$$ to constrain the values of radii. We take the derivative of $f$ with respect to $t$ and obtain
 	\begin{eqnarray*}
@@ -537,6 +539,6 @@ Alex Henniges is a junior double majoring in Math and Computer Science. Plus he'
   
 \noindent Thomas Williams is a senior in Comprehensive Mathematics with a minor in Computer Science and a strong background in Math Education. He's cool, too. He made substantial contributions to the coding and development of this project.\newline
   
-\noindent Mitch Wilson is a senior majoring in Applied Math and Mechanical Engineering. He's ok. He made the pretty pictures in this report. 
+\noindent Mitch Wilson is a senior majoring in Applied Math and Mechanical Engineering. He's ok. He made the pretty pictures in this report, mostly using MATLAB. 
 
 \end{document}
