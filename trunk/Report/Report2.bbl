@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{DiffEq}
 M.~Brown.
@@ -24,6 +24,11 @@ D.~Glickenstein.
 F.~H. Lutz.
 \newblock The manifold page.
 \newblock http://www.math.tu-berlin.de/diskregeom/stellar/.
+
+\bibitem{RicciBkgd}
+Dana Mackenzie.
+\newblock The poincar\'{e} conjecture -- proved.
+\newblock http://www.sciencemag.org.
 
 \bibitem{WolfMath}
 Wolfram Mathworld.
