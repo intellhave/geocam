@@ -109,7 +109,7 @@ Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio R
 \noindent But the biggest consequence of Ricci flow was not to become apparent until early after the turn of the millenium, when Grigori Perelman presented three papers providing the proof to the Poincar\'{e} Conjecture. The Poincar\'{e} Conjecture, proposed in 1904, proved to be particularly difficult to prove, and was given the honor of one of seven millenium puzzles by the Clay Matehmatics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. 
 
 
-\subsection{Introduction}
+\subsection{Definition}
 
 Just because we have a triangulation and that it is circle packed does not mean that it is already compact and organized. Vertices can be too large or too small, and the end shape can be somewhat repulsive. We would like to have a way to make these radii as uniform as possible while keeping the original shape intact. We introduce the equation for combinatorial Ricci flow, which allows an individual radius to change over time. In Euclidean space, the differential equation can be written as 
   \begin{equation}
@@ -177,6 +177,13 @@ Just because we have a triangulation and that it is circle packed does not mean 
 \end{eqnarray}
 
 \noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ for each vertex and thus $\displaystyle\frac{dr_i}{dt} = 0$. With its roots in differential geometry, Ricci flow has become a popular topic in mathematics, finding uses and applications in many different fields. It even helped solve one of the Millenium Puzzles, valued at \$1,000,000, in 2003. \cite{wikipoin}  
+
+\subsection{Expectations}
+
+With regards to our program, Ricci flow over 2-manifold Euclidean surfaces will be important as a good way to test the code. Cases like the tetrahedron can be calculated by hand so it will be useful to test our results against them. For example, we expect that the Tetrahedron under (\ref{Riccif}) will have all weights converge to zero. Whereas under (\ref{Riccin}) the weights are expected to converge to positive constants.\newline
+
+\noindent
+There are other expectations beyond those we can calculate by hand.
 
 \section{Program/Code}
 \subsection{Structure}
