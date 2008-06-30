@@ -21,9 +21,9 @@ Edge::~Edge()
 
 void Edge::setLength() {
      length = 0;
-    for(int i = 0; i < localVertices.size(); i++)
+    for(int i = 0; i < getLocalVertices()->size(); i++)
     {
-      length += Triangulation::vertexTable[localVertices[i]].getweight();
+      length += Triangulation::vertexTable[(*getLocalVertices())[i]].getWeight();
     }
 }
 void Edge::setLength(double newLength) {
