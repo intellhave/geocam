@@ -1,16 +1,15 @@
 \documentclass[12pt]{article}
 \usepackage[pdftex]{graphicx}
 \usepackage{multicol}
-\usepackage{amssymb}
 \title{Geometric Evolution on Computationally Abstract Manifolds}
 \pagestyle{plain}
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
 Supervisor: Dr. David Glickenstein\\
 }
-\date{June 30, 2008}
+%\date{July 7, 2008}
 \begin{document}
-\maketitle	
-
+\maketitle
+	
 \newpage
 \section{Introduction}
 \maketitle
@@ -38,7 +37,7 @@ The remainder of this paper is arranged as such:
 
 Suppose you are asked to make a sphere, but are only given a small number of edges, vertices, or faces to work with. What do you do? In geometry, a common question asked is how to make representations of complex shapes with as little stuff as possible. In fact, you are probably already familiar with the most basic representation of a sphere- a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us an approximation to a sphere. Similarly, three vertices (a triangle) can be used to approximate a circle in two dimesnions. Naturally, if we add more vertices, we are able to better illustrate our shapes. \newline
   
-   \noindent Of course, spheres aren't the only things geometers care about. Another shape of interest is known as the torus. It looks like a donut. It turns out that you can make a visualization of this object using only 7 vertices \cite{lutzmanifold}. With more vertices the shape becomes better curved and reminiscent of breakfast. Mmm, torus. It is also possible to add ''handles'' to any shape, resulting in the addition of another torus. There are also various other shapes which can be represented with varying numbers of vertices, like Klein bottles and cross-caps.\cite{WolfMath} has more information on these fascinating shapes.\newline
+   \noindent Of course, spheres aren't the only things geometers care about. Another shape of interest is known as the torus. It looks like a donut. It turns out that you can make a visualization of this object using only 7 vertices \cite{lutzmanifold}. With more vertices the shape becomes better curved and reminiscent of breakfast. It is also possible to add ``handles'' to any shape, resulting in the addition of another torus. There are also various other shapes which can be represented with varying numbers of vertices, like Klein bottles and cross-caps.\cite{WolfMath} has more information on these fascinating shapes.\newline
    
    \noindent Like in modern video games and Hollywood movies, we can generate various shapes of many different sizes using polygons that mold to form the special effect. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into smaller triangles, we can essentially represent any shape with enough vertices. We define a shape as $triangulizable$ if we can connect all triangles in a particular fashion such that they create a closed 3-dimenional shape.\newline
   
@@ -88,7 +87,7 @@ Double torus & 10 & 36 & 24 & -2
 \subsection{Duals}
 \maketitle
 
-Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimenter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j $and $k$ being the vertices of a triangle. This can be repated for multiple triangles. As a plus, all these incircles are mutually tangent. We can define a dual edge $\star e$ as the sum of the radii of the incircles with that side in question. $\star e = r_{in1} + r_{in2}$. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
+Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimenter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j $and $k$ being the vertices of a triangle. This can be repated for multiple triangles. All these incircles are known to be mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has its own dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
 
 \begin{figure}
 \centering
@@ -97,31 +96,26 @@ Every triangle that is capable of being circle-packed has a circle that is inter
 \label{fig:dual}
 \end{figure}
 
-\noindent With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the dual area, evaluated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$
+\noindent With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the dual area, evaluated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the original weight of the vertex.
 
 \noindent The dual length and dual area have some interesting properties that we hope to investigate. David Glickenstein examines these and more in \cite{Dave}.  
 
 \section{Ricci flow}
 \subsection{Background}
 
-Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since made large impacts in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.\newline
+\subsection{Introduction}
 
-\noindent But the biggest consequence of Ricci flow was not to become apparent until early after the turn of the millenium, when Grigori Perelman presented three papers providing the proof to the Poincar\'{e} Conjecture. The Poincar\'{e} Conjecture, proposed in 1904, proved to be particularly difficult to prove, and was given the honor of one of seven millenium puzzles by the Clay Matehmatics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. 
-
-
-\subsection{Definition}
-
-Just because we have a triangulation and that it is circle packed does not mean that it is already compact and organized. Vertices can be too large or too small, and the end shape can be somewhat repulsive. We would like to have a way to make these radii as uniform as possible while keeping the original shape intact. We introduce the equation for combinatorial Ricci flow, which allows an individual radius to change over time. In Euclidean space, the differential equation can be written as 
+Just because we have a triangulation and that it is circle packed does not mean that it is already compact and organized. Vertices can be too large or too small, and the end shape can be somewhat repulsive. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform looking. We introduce to the reader the equation for combinatorial Ricci flow, which allows an individual radius to change over time on a discrete surface. In Euclidean space, the differential equation can be written as 
   \begin{equation}
   \label{Riccif}
   \frac{dr_i}{{dt}} = -K_ir_i
   \end{equation}
   
-\noindent where $K_i$ is a characteristic called the curvature of a vertex, and $r_i$ is the radius or weight of a vertex $i$. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths (or radii) we can determine the angle using the law of cosines. For a triangle with lengths $a, b$ and $c,$ the angle opposite side $c$ is:
+\noindent where $K_i$ is a characteristic called the curvature of a vertex, and $r_i$ is the radius or weight of a vertex $i$. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths we can determine the angle using the law of cosines. For a triangle with lengths $a, b,\mbox{ and }c,$ the angle opposite side $c$ is:
   
-  \begin{eqnarray*}
+  $$
   \angle C = \arccos\frac{a^2 + b^2 - c^2}{2ab}
-  \end{eqnarray*} 
+  $$
   
 \noindent with similar formulas for the other angles. We take the sum of all angles associated with a vertex $i$ and define the curvature $K_i$ as:
 
@@ -146,12 +140,12 @@ Just because we have a triangulation and that it is circle packed does not mean 
  &=& -\tilde{K_i}\tilde{r_i} + \frac{\tilde{r_i}}{\alpha}\frac{d\alpha}{dt}
  \end{eqnarray}
  
-\noindent Since we are scaling all sides by the same factor, this does not effect the curvature of the surface, so $\tilde{K_i} = K_i$. It also turns out that $$\displaystyle \frac{1}{\alpha} \frac{d\alpha}{dt} = \frac{d(\mbox{log}~\alpha)}{dt}$$ 
+\noindent Since we are scaling all sides by the same factor, this does not effect the curvature of the surface, so $\tilde{K_i} = K_i$. It also turns out that $$\displaystyle \frac{1}{\alpha} \frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt}$$ 
  In order to find an appropriate value for $\alpha$ we decided to use the following criteria:
  
 \begin{equation}
 \label{eqprod}
-\prod{\tilde{r_i}(t)} = \prod{\alpha r_i(t)} = C\mbox{, a constant}
+f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alpha r_i} = C\mbox{, a constant}
 \end{equation}
 
 \noindent This can be used to prevent radii from decreasing to zero. It turns out if you take the derivative of ($\ref{eqprod}$) with respect to time you find that 
@@ -161,7 +155,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
 \frac{d(\mbox{log}~\alpha)}{dt} = \frac{\mbox{sum of all curvatures}}{\mbox{number of vertices}} = \overline{K}, \mbox{average curvature}
 \end{equation}
  
-\noindent It turns out that $\overline{K}$ is constant for any iteration of our triangulation and is equal to $\displaystyle\frac{2\pi\chi}{|V|}$, where $|V|$ is the number of vertices and $\chi$ is the Euler characteristic. This is noted in \cite{chowluo}. Plugging this back into ($\ref{ref1}$) we determine that
+\noindent An in-depth proof of this can be founf in the Appendix. It turns out that $\overline{K}$ is constant for any iteration of our triangulation and is equal to $\displaystyle\frac{2\pi\chi}{|V|}$, where $|V|$ is the number of vertices and $\chi$ is the Euler characteristic. This is noted in \cite{chowluo}. Plugging this back into ($\ref{ref1}$) we determine that
 
 \begin{equation}
 \frac{d\tilde{r_i}}{dt} = -\tilde{K_i}\tilde{r_i} + \overline{K}\tilde{r_i} = (\overline{K} - K_i)\tilde{r_i}
@@ -176,14 +170,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
 \frac{dr_i}{dt} &=& (\overline{K} - K_i)r_i
 \end{eqnarray}
 
-\noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ for each vertex and thus $\displaystyle\frac{dr_i}{dt} = 0$. With its roots in differential geometry, Ricci flow has become a popular topic in mathematics, finding uses and applications in many different fields. It even helped solve one of the Millenium Puzzles, valued at \$1,000,000, in 2003. \cite{wikipoin}  
-
-\subsection{Expectations}
-
-With regards to our program, Ricci flow over 2-manifold Euclidean surfaces will be important as a good way to test the code. Cases like the tetrahedron can be calculated by hand so it will be useful to test our results against them. For example, we expect that the Tetrahedron under (\ref{Riccif}) will have all weights converge to zero. Whereas under (\ref{Riccin}) the weights are expected to converge to positive constants.\newline
-
-\noindent
-There are other expectations beyond those we can calculate by hand.
+\noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ for each vertex and thus $\displaystyle\frac{dr_i}{dt} = 0$. With its roots in differential geometry, Ricci flow has become a popular topic in mathematics, finding uses and applications in many different fields. 
 
 \section{Program/Code}
 \subsection{Structure}
@@ -214,7 +201,7 @@ When beginning the creation of the program, the structure design was critical. N
 [2,3,5],[2,4,5],[3,4,5]]}
 \end{verbatim}
  
-which solely documents the faces, into this:
+which solely documents the faces, into our format, which can be seen in Table \ref{tab:format} which allows us to keep track of every vertex, edge, and face.
 
 % Table generated by Excel2LaTeX from sheet 'Sheet1'
 \begin{table}
@@ -250,9 +237,8 @@ which solely documents the faces, into this:
 \end{tabular}
 \end{center}
 \caption{Conversion of format from \cite{lutzmanifold} to ours.}
+\label{tab:format}
 \end{table}  
-
-\noindent which allows us to keep track of every vertex, edge, and face.
 
 \subsection{calcFlow}
 
@@ -333,9 +319,9 @@ Another shape we have been looking into is called the double triangle. In essenc
 
 \subsection{Flows}
 
-The program for the Ricci flow was tested by beginning with the most simple cases, and then explored as many different possibilities as we could conceive of to try to find any anomalies. The first test was the tetrahedron. In the standard equation, it is easily shown that all weights approach zero exponentially fast. In the normalized equation, and the equation that is used in the rest of the testing, the tetrahedron's weights approach a single positive number, the fourth root of the ``area'' of the tetrahedron, so that the area remains constant. In addition, all the curvatures converged to the same value, in this case ($\pi$) so that the net curvature is ($4\pi$). Results were similar for the other platonic solids.\newline
+The program for the Ricci flow was tested by beginning with the most simple cases, and then explored as many different possibilities as we could conceive of to try to find any anomalies. The first test was the tetrahedron. In the standard equation, it is easily shown that all weights approach zero exponentially fast. In the normalized equation, and the equation that is used in the rest of the testing, the tetrahedron's weights approach a single positive number, the fourth root of the ``area'' of the tetrahedron, so that the area remains constant. In addition, all the curvatures converged to the same value, in this case ($\pi$) so that the net curvature is $4\pi$. Results were similar for the other platonic solids.\newline
 
-\noindent The next test was the torus with the standard nine-vertex triangulation. Again all the weights approached the same positive number to maintain constant area. As expected, the curvatures all went to zero while the total curvature remained zero throughout. Further simple tests included triangulations of larger genus, and in all cases the total curvature remained at the constant multiple of ($\pi$) that was expected and the ``area'' was also constant. In addition, there does not appear to be any further affect from the initial weights then determining the area of the triangulation. It is not clear from any of the tests we ran that having extremes amongst the initial weights causes a different end result.\newline
+\noindent The next test was the torus with the standard nine-vertex triangulation. Again all the weights approached the same positive number to maintain constant area. As expected, the curvatures all went to zero while the total curvature remained zero throughout. Further simple tests included triangulations of larger genus, and in all cases the total curvature remained at the constant multiple of $\pi$ that was expected and the ``area'' was also constant. In addition, there does not appear to be any further effect from the initial weights than determining the area of the triangulation. It is not clear from any of the tests we ran that having extremes amongst the initial weights causes a different end result.\newline
 
 \noindent In each case all vertices converged to the same curvature. This was not always the situation for the weights, as in many triangulations there would be several final weights. It became clear that this would occur when vertices had different degrees. In fact, we feel fairly certain that there might be a formula relating the area of a weighted triangulation and the degree of a vertex to that vertex's final weight. In most of the examples we tried, when two vertices had the same degree, they had the same final weight, but this is not always the case. One such example is adding three vertices to one face of the tetrahedron. As seen in Table (\ref{tab:Vres}) vertices 4, 5, and 6 all have degree four. Yet vertex 5 has a greater final weight than the other two. The only explanation we could find with some merit is that the local vertices of 5 are different in degree from those of 4 and 6. That is, the degrees of the local vertices of 5 are never less than four, while vertices 4 and 6 each have a local vertex with degree 3.
 
@@ -379,7 +365,7 @@ The program for the Ricci flow was tested by beginning with the most simple case
 %\hline
 %\end{tabular}
 % Table generated by Excel2LaTeX from sheet 'Sheet1'
-\begin{minipage}[b]{0.5\linewidth}
+\begin{minipage}[ht]{0.5\linewidth}
 
 \begin{tabular}{|l|l|}
 \hline
@@ -450,6 +436,7 @@ Vertex 7: 6.18421 \\
 
 \subsubsection{Evaluating expectations}
 
+
 \subsection{Convergence speeds}
 
 One experiment we performed was measuring convergence speeds of various triangulations. For each triangulation, five flows were run where the weights were random between one and twenty-five. Random weights, while not a perfect solution, was the only viable as it was unclear what set weights could be equal for all triangulations. The dt was held constant at 0.03. For each run, a step number was assigned for when all weights and curvatures had converged to four digits, (the precision shown in a file of the results).  The data collected at times seemed interesting and followed a pattern while other times were inexplicable.\newline
@@ -477,7 +464,9 @@ One experiment we performed was measuring convergence speeds of various triangul
 
 \noindent One interesting observation we found was that flips change the asymptotic behavior of some vertices. For Example, in a 12-vertex torus, performing a flip on one edge affected the end radii of many vertices. In fact, their radii was a function of time was not always monotonic! We would occasionally have a vertex change direction before ultimately approaching a limit.\newline 
 
-\noindent Example: two tetrahedra connected at a vertex. It turns out $\chi = $7 Vertices - 12 Edges + 8 Faces = 3, which is not a case we had seen before. In previous cases $\chi$ was an even integer. Starting each vertex with equal weight, we obtained an unexpected result. The center weight becomes very large, and the others become smaller in comparison. We concluded that since the central vertex now had a much lower curvature than the other vertices, it reacted differently to $calcFlow$. One good thing we noted was that the net curvature = $6\pi = 2\pi\chi$, which was a relief.  
+\noindent Example: two tetrahedra connected at a vertex. \newline
+
+\noindent It turns out $\chi = $7 Vertices - 12 Edges + 8 Faces = 3, which is not a case we had seen before. In previous cases $\chi$ was an even integer. Starting each vertex with equal weight, we obtained an unexpected result. The center weight becomes very large, and the others become smaller in comparison. We concluded that since the central vertex now had a much lower curvature than the other vertices, it reacted differently to $calcFlow$. One good thing we noted was that the net curvature = $6\pi = 2\pi\chi$, which was a relief.  
 
 \begin{figure}
 \includegraphics{tetratouch.png}
@@ -492,11 +481,21 @@ We would also like to start investigating 3-dimensional constructs built from te
 
 \subsection{Circle packing expansions}
 
-Circle packing is a very special way to characterize our side lengths. If we relax this criterium and let the circles overlap, we can introduce a second weight $\Phi$ that . We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
+Circle packing is a very special way to characterize our side lengths. If we relax this criterium and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of how much they intersect by. See Figure \ref{fig:intcirc} . We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.6]{intcirc.png}
+\end{center}
+\caption{An example of relaxing circle packing and introducing $\Phi.$}
+\label{fig:intcirc}
+\end{figure}
 
 \subsection{Hyperbolic/ spherical triangulations}
 
-All this time we have focused on Euclidean coordinates. However, there are cased when triangulations may be better suited in other systems. In changing our format to hyperbolic and spherical coordinates, we would have to reevaluate each of our steps depending on the system. For example, in hyperbolic, the basic Ricci flow equation is $\displaystyle \frac{dr_i}{dt} = -K_i\sinh r_i$. Likewise, in spherical coordinates, $\displaystyle \sum{K_i} = 2\pi\chi - \mbox{Surface Area of surface}$, which can change over time. 
+All this time we have focused on Euclidean coordinates. However, there are cased when triangulations may be better suited in other systems. In changing our format to hyperbolic and spherical coordinates, we would have to reevaluate each of our steps depending on the system. For example, in hyperbolic, the basic Ricci flow equation is $\displaystyle \frac{dr_i}{dt} = -K_i\sinh r_i$. Likewise, in spherical coordinates, for a surface $X, \displaystyle \sum{K_i} = 2\pi\chi - \mbox{Surface Area of} X$, which can change over time. \newline
+
+\noindent Another thing of interest is that once we can run variations of our $calcFlow$ program
 
 \section{Conclusions}
   We learned a lot of things along the way. At the beginning, we all had varying familiarities with college geometry; some of us hadn't touched the stuff since high school. But we are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come.\newline
@@ -508,9 +507,9 @@ All this time we have focused on Euclidean coordinates. However, there are cased
 \bibliographystyle{plain}
 
 \newpage
-\section*{Appendix}
+\section{Appendix}
 
-\subsection*{Derivation of Eq.~(\ref{proof1})}
+\subsection{Derivation of Eq.~(\ref{proof1})}
 \maketitle
 	
 	We used the criteria $$f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alpha r_i} = \alpha^n\prod{r_i}= C$$ to constrain the values of radii. We take the derivative of $f$ with respect to $t$ and obtain
@@ -533,10 +532,10 @@ All this time we have focused on Euclidean coordinates. However, there are cased
 $$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K_2 + \ldots + K_n}{n} = \overline{K}$$
 	which we refer to as Eq.~(\ref{proof1})
   
-  \subsection*{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
+  \subsection{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
 	\maketitle
 
-The method used by Moreau in \cite{JPM} to solve a diffeential equation involves using a Runge-Kutta method. After investigating various methods to run our differential equation, we agreed that a Runge-Kutta format would be most beneficial for this type of problem. Even though it is more computationally complex than the simpler Euler's method, it makes up in its ability to converge and in its accuracy. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental. \newline
+The method used by Moreau in \cite{JPM} to solve a diffeential equation involves using a Runge-Kutta method. Prior to adapting the code from Moreau's website, we reached the conclusion that a Runge-Kutta format would be most beneficial for this type of differential equation problem. Even though it is more computationally complex than the simpler Euler's method, it makes up in its ability to converge and in its accuracy. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental.\newline
 
 \noindent Based on our evaluations of radii and curvatures over time, it appears to converge exponentially for each vertex. However, as mentioned previously, performing flips on a triangulation may negate this and cause the system to go haywire. 
 
@@ -546,7 +545,7 @@ The method used by Moreau in \cite{JPM} to solve a diffeential equation involves
 \end{figure}
 
 \newpage
-\subsection*{Code}
+\subsection{Code}
 \begin{verbatim}void calcFlow(char* fileName, double dt ,double *initWeights,
 				int numSteps, bool adjF)  
 {
