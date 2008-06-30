@@ -533,6 +533,205 @@ The method used by Moreau in \cite{JPM} to solve a diffeential equation involves
 \end{figure}
 
 \newpage
+\subsection*{Code}
+\begin{verbatim}void calcFlow(char* fileName, double dt ,double *initWeights,
+				int numSteps, bool adjF)  
+{
+  int p = Triangulation::vertexTable.size(); // The number of vertices.
+  double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data in.
+  int    i,k; // ints used for "for loops".
+  map<int, Vertex>::iterator vit;
+  map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+  map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+  double weights[p][numSteps];
+  double curvatures[p][numSteps];
+  
+  ofstream results(fileName, ios_base::trunc);
+  results.setf(ios_base::showpoint);
+  double net = 0; // Net and prev hold the current and previous
+  double prev;    //  net curvatures, repsectively.
+   for (k=0; k<p; k++)
+     z[k]=initWeights[k]; // z[k] holds the current weights.
+   for (i=1; i<numSteps+1; i++) 
+   {
+    prev = net; // Set prev to net.
+    net = 0;    // Reset net.
+    
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+           // Set the weights of the Triangulation.
+           vit->second.setWeight(z[k]);
+       if(i == 1) // If first time through, use static method.
+            prev = Triangulation::netCurvature();
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       // First "for loop" in whole step calculates
+       {                // everything manually, prints to file.
+           weights[k][i - 1] = z[k];
+           double curv = curvature(vit->second);
+           curvatures[k][i - 1] = curv;
+           net += curv;
+           if(adjF) ta[k]= dt * ((-1) * curv 
+                           * vit->second.getWeight() +
+                           prev /  p
+                           * vit->second.getWeight());
+           else     ta[k] = dt * (-1) * curv 
+                           * vit->second.getWeight();
+       }
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       // Set the new weights.
+           vit->second.setWeight(z[k]+ta[k]/2);
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       {
+            if(adjF) tb[k]=dt*adjDiffEQ(vit->first, net);
+            else     tb[k]=dt*stdDiffEQ(vit->first);
+       }
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       // Set the new weights.
+           vit->second.setWeight(z[k]+tb[k]/2);
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       {
+            if(adjF) tc[k]=dt*adjDiffEQ(vit->first, net);
+            else     tc[k]=dt*stdDiffEQ(vit->first);
+       }
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       // Set the new weights.
+           vit->second.setWeight(z[k]+tc[k]);
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       {
+            if(adjF) td[k]=dt*adjDiffEQ(vit->first, net);
+            else     td[k]=dt*stdDiffEQ(vit->first);
+       }
+       for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
+         z[k]=z[k]+(ta[k]+2*tb[k]+2*tc[k]+td[k])/6;
+   }
+   for(k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
+   {  //Print results
+      results << setprecision(6); 
+      results << left << "Vertex: " << left << setw(4)<< vit->first;
+      results << right << setw(3) << "Weight";
+      results << right << setw(10) << "Curv";
+      results << "\n------------------------------\n";
+      for(int j = 0; j < numSteps; j++)
+      {
+              results << left <<  "Step " << setw(7) << (j + 1);
+              results << left << setw(12) << weights[k][j];
+              results << left << setw(12) << curvatures[k][j] << "\n";
+      }
+      results << "\n";
+   }
+   results.close();
+}
+\end{verbatim}
+\begin{verbatim}
+void flip(Edge e)
+{
+     //start out by naming every object that is local to the flip
+     Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+     Face f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
+     
+     vector<int> sameAs;
+     vector<int> diff;
+     
+     Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+     Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
+          
+     diff = listDifference(f1.getLocalVertices(), f2.getLocalVertices());
+     if(diff.size() == 0)
+     throw string("Invalid move, operation cancelled");
+     Vertex vb1 = Triangulation::vertexTable[diff[0]];
+     diff = listDifference(f2.getLocalVertices(), f1.getLocalVertices());
+     Vertex vb2 = Triangulation::vertexTable[diff[0]];
+     
+     sameAs = listIntersection(va1.getLocalEdges(), vb1.getLocalEdges());
+     Edge ea1 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va2.getLocalEdges(), vb1.getLocalEdges());
+     Edge eb1 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va1.getLocalEdges(), vb2.getLocalEdges());
+     Edge ea2 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va2.getLocalEdges(), vb2.getLocalEdges());
+     Edge eb2 = Triangulation::edgeTable[sameAs[0]];
+     
+     sameAs = listIntersection(f1.getLocalFaces(), ea1.getLocalFaces());
+     Face fa1 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(f1.getLocalFaces(), eb1.getLocalFaces());
+     Face fb1 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(f2.getLocalFaces(), ea2.getLocalFaces());
+     Face fa2 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(f2.getLocalFaces(), eb2.getLocalFaces());
+     Face fb2 = Triangulation::faceTable[sameAs[0]];
+     
+     //removals
+     Triangulation::vertexTable[(va1.getIndex())].removeVertex(va2.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::vertexTable[(va1.getIndex())].removeEdge(e.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeEdge(e.getIndex()); 
+     Triangulation::vertexTable[(va1.getIndex())].removeFace(f2.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].removeVertex(va2.getIndex()); 
+     for(int i = 0; i < e.getLocalEdges()->size(); i++)
+     {
+        Triangulation::edgeTable[(e.getIndex())]
+        							.removeEdge((*(e.getLocalEdges()))[i]); 
+     }
+     for(int i = 0; i < va1.getLocalEdges()->size(); i ++)
+     {
+        Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]]
+        							.removeEdge(e.getIndex()); 
+     }
+     for(int i = 0; i < va2.getLocalEdges()->size(); i ++)
+     {
+        Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]]
+        							.removeEdge(e.getIndex());  
+     }
+     Triangulation::edgeTable[(eb1.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::edgeTable[(ea2.getIndex())].removeFace(f2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeVertex(va2.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeEdge(eb1.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeEdge(ea2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeFace(fb1.getIndex()); 
+     Triangulation::faceTable[(fb1.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeFace(fa2.getIndex()); 
+     Triangulation::faceTable[(fa2.getIndex())].removeFace(f2.getIndex()); 
+     
+     //additions
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb2.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(vb1.getIndex()); 
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(e.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(e.getIndex()); 
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(f2.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(f1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].addVertex(vb1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].addVertex(vb2.getIndex()); 
+     for(int i = 0; i < vb1.getLocalEdges()->size(); i ++)
+     {
+             Triangulation::edgeTable[(e.getIndex())]
+             						.addEdge((*(vb1.getLocalEdges()))[i]);
+             						
+             Triangulation::edgeTable[(*(vb1.getLocalEdges()))[i]]
+             						.addEdge(e.getIndex()); 
+     }
+     for(int i = 0; i < vb2.getLocalEdges()->size(); i ++)
+     {
+             Triangulation::edgeTable[(e.getIndex())]
+             						.addEdge((*(vb2.getLocalEdges()))[i]); 
+             						
+             Triangulation::edgeTable[(*(vb2.getLocalEdges()))[i]]
+             						.addEdge(e.getIndex()); 
+     }
+     Triangulation::edgeTable[(ea2.getIndex())].addFace(f1.getIndex()); 
+     Triangulation::edgeTable[(eb1.getIndex())].addFace(f2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(f1.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addEdge(eb1.getIndex());
+     Triangulation::faceTable[(f1.getIndex())].addFace(fa2.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].addFace(f1.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addFace(fb1.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addFace(f2.getIndex());
+     
+}
+\end{verbatim}
 \section*{About the authors}
 
 Alex Henniges is a junior double majoring in Math and Computer Science. Plus he's cool. He is the frontliner of the programming aspect of this research. \newline
