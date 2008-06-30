@@ -144,9 +144,8 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
 void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool adjF)  
 {
   int p = Triangulation::vertexTable.size(); // The number of vertices or 
-                                             // number of variables in system.
-  double h = dt; 
-  double ta[p],tb[p],tc[p],td[p],y[p],z[p]; // Temporary arrays to hold data in.
+                                             // number of variables in system. 
+  double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data in.
   int    i,k; // ints used for "for loops".
   map<int, Vertex>::iterator vit;
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
@@ -194,11 +193,11 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
                curvatures[k][i - 1] = curv;
                }
            net += curv;
-           if(adjF) ta[k]= h * ((-1) * curv 
+           if(adjF) ta[k]= dt * ((-1) * curv 
                            * vit->second.getWeight() +
                            prev /  p
                            * vit->second.getWeight());
-           else     ta[k] = h * (-1) * curv 
+           else     ta[k] = dt * (-1) * curv 
                            * vit->second.getWeight();
            
        }
@@ -208,8 +207,8 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) tb[k]=h*adjDiffEQ(vit->first, net);
-            else     tb[k]=h*stdDiffEQ(vit->first);
+            if(adjF) tb[k]=dt*adjDiffEQ(vit->first, net);
+            else     tb[k]=dt*stdDiffEQ(vit->first);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
@@ -217,8 +216,8 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) tc[k]=h*adjDiffEQ(vit->first, net);
-            else     tc[k]=h*stdDiffEQ(vit->first);
+            if(adjF) tc[k]=dt*adjDiffEQ(vit->first, net);
+            else     tc[k]=dt*stdDiffEQ(vit->first);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
@@ -226,8 +225,8 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) td[k]=h*adjDiffEQ(vit->first, net);
-            else     td[k]=h*stdDiffEQ(vit->first);
+            if(adjF) td[k]=dt*adjDiffEQ(vit->first, net);
+            else     td[k]=dt*stdDiffEQ(vit->first);
        }
        for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
        {
