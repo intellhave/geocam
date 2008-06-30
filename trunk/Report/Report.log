@@ -1,5 +1,19 @@
+<<<<<<< .mine
+This is e-TeX, Version 3.141592-2.2 (MiKTeX 2.4) (preloaded format=latex 2008.6.30)  30 JUN 2008 09:20
+=======
 This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.6) (preloaded format=pdflatex 2008.6.12)  25 JUN 2008 14:16
+>>>>>>> .r194
 entering extended mode
+<<<<<<< .mine
+**Report.tex
+(Report.tex
+LaTeX2e <2003/12/01>
+Babel <v3.8g> and hyphenation patterns for english, dumylang, nohyphenation, german, ngerman, french, loaded.
+(C:\texmf\tex\latex\base\article.cls
+Document Class: article 2004/02/16 v1.4f Standard LaTeX document class
+(C:\texmf\tex\latex\base\size12.clo
+File: size12.clo 2004/02/16 v1.4f Standard LaTeX file (size option)
+=======
 **C:/Dev-Cpp/geocam/Report/Report.tex
 (C:\Dev-Cpp\geocam\Report\Report.tex
 LaTeX2e <2005/12/01>
@@ -9,6 +23,7 @@ rman, ngerman, french, loaded.
 Document Class: article 2005/09/16 v1.4f Standard LaTeX document class
 ("C:\Program Files\MiKTeX 2.6\tex\latex\base\size12.clo"
 File: size12.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+>>>>>>> .r194
 )
 \c@part=\count79
 \c@section=\count80
@@ -21,34 +36,32 @@ File: size12.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-)
-("C:\Program Files\MiKTeX 2.6\tex\latex\graphics\graphicx.sty"
+) (C:\texmf\tex\latex\graphics\graphicx.sty
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
-
-("C:\Program Files\MiKTeX 2.6\tex\latex\graphics\keyval.sty"
+ (C:\texmf\tex\latex\graphics\keyval.sty
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
-)
-("C:\Program Files\MiKTeX 2.6\tex\latex\graphics\graphics.sty"
-Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
-
-("C:\Program Files\MiKTeX 2.6\tex\latex\graphics\trig.sty"
+) (C:\texmf\tex\latex\graphics\graphics.sty
+Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+ (C:\texmf\tex\latex\graphics\trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-("C:\Program Files\MiKTeX 2.6\tex\latex\00miktex\graphics.cfg"
-File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+(C:\texmf\tex\latex\00miktex\graphics.cfg
+File: graphics.cfg 2003/03/12 v1.1 MiKTeX 'graphics' configuration
 )
-Package graphics Info: Driver file: pdftex.def on input line 90.
-
-("C:\Program Files\MiKTeX 2.6\tex\latex\graphics\pdftex.def"
-File: pdftex.def 2007/06/12 v0.04h Graphics/color for pdfTeX
+Package graphics Info: Driver file: pdftex.def on input line 80.
+ (C:\texmf\tex\latex\graphics\pdftex.def
+File: pdftex.def 2005/06/20 v0.03m graphics/color for pdftex
 \Gread@gobject=\count87
+
+
+Package graphics Warning: pdftex option does not work with standard TeX.
+
 ))
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
-)
-("C:\Program Files\MiKTeX 2.6\tex\latex\tools\multicol.sty"
-Package: multicol 2006/05/18 v1.6g multicolumn formatting (FMi)
+) (C:\texmf\tex\latex\tools\multicol.sty
+Package: multicol 2004/02/14 v1.6e multicolumn formatting (FMi)
 \c@tracingmulticols=\count88
 \mult@box=\box26
 \multicol@leftmargin=\dimen105
@@ -106,18 +119,39 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
 LaTeX Font Info:    ... okay on input line 10.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
 LaTeX Font Info:    ... okay on input line 10.
-
-("C:\Program Files\MiKTeX 2.6\tex\context\base\supp-pdf.tex"
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count96
+ (C:\texmf\tex\context\base\supp-pdf.tex
+(C:\texmf\tex\context\base\supp-mis.tex
+loading : Context Support Macros / Miscellaneous (2004.10.26)
+\protectiondepth=\count96
+\scratchcounter=\count97
+\scratchtoks=\toks15
 \scratchdimen=\dimen113
+\scratchskip=\skip45
+\scratchmuskip=\muskip10
 \scratchbox=\box52
-\nofMPsegments=\count97
-\nofMParguments=\count98
-\MPscratchCnt=\count99
-\MPscratchDim=\dimen114
-\MPnumerator=\count100
-\everyMPtoPDFconversion=\toks15
+\scratchread=\read1
+\scratchwrite=\write3
+\zeropoint=\dimen114
+\onepoint=\dimen115
+\onebasepoint=\dimen116
+\minusone=\count98
+\thousandpoint=\dimen117
+\onerealpoint=\dimen118
+\emptytoks=\toks16
+\nextbox=\box53
+\nextdepth=\dimen119
+\everyline=\toks17
+\!!counta=\count99
+\!!countb=\count100
+\recursecounter=\count101
+)
+loading : Context Support Macros / PDF (2004.03.26)
+\nofMPsegments=\count102
+\nofMParguments=\count103
+\MPscratchCnt=\count104
+\MPscratchDim=\dimen120
+\MPnumerator=\count105
+\everyMPtoPDFconversion=\toks18
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 11.
@@ -125,81 +159,578 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 11.
  [1
 
-{psfonts.map}]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 39.
- ("C:\Program Files\MiKTeX 2.6\tex\latex\base\omscmr.fd"
+]
+Underfull \hbox (badness 10000) in paragraph at lines 36--37
+
+ []
+
+! Undefined control sequence.
+l.38 ...at the project may be taken in. \newindent
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 43.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 43.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 43.
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--44
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--46
+
+ []
+
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.49 ...graphics[scale = 0.5]{flattetrahedron.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+File: flattetrahedron.png Graphic file (type png)
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.49 ...graphics[scale = 0.5]{flattetrahedron.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.49 ...graphics[scale = 0.5]{flattetrahedron.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.49 ...graphics[scale = 0.5]{flattetrahedron.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.49 ...graphics[scale = 0.5]{flattetrahedron.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.49 ...graphics[scale = 0.5]{flattetrahedron.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.49 ...graphics[scale = 0.5]{flattetrahedron.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   f
+l.49 ...graphics[scale = 0.5]{flattetrahedron.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+
+! LaTeX Error: Unknown graphics extension: .jpg.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.50 ...ludegraphics[scale = 0.3]{tetrahedron.jpg}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+
+ []
+
+[2]
+
+! LaTeX Error: Unknown graphics extension: .jpg.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.60 ...phics[scale = 0.3]{righttriangulation.jpg}
+                                                  
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+\Gread@png ...oexpand \noexpand \@empty #1\relax }
+                                                  \def \Gin@llx {0}\let \Gin...
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+File: 180px-Double_torus_illustration.png Graphic file (type png)
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+<<<<<<< .mine
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+=======
+<use 180px-Double_torus_illustration.png> [4 <righttriangulation.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 117--118
+>>>>>>> .r194
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   1
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+! Extra }, or forgotten $.
+\Ginclude@png ...pand \noexpand \@empty #1\relax }
+                                                  
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Extra }, or forgotten $.
+\Gin@setfile ...csname Ginclude@#1\endcsname {#3}}
+                                                  \dp \z@ \z@ \ht \z@ \Gin@r...
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+! Missing } inserted.
+<inserted text> 
+                }
+l.83 ... 2.0]{180px-Double_torus_illustration.png}
+                                                  
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 111--112
+
+ []
+
+<<<<<<< .mine
+[4] [5]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 166.
+ (C:\texmf\tex\latex\base\omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 39.
-
-Underfull \hbox (badness 10000) in paragraph at lines 48--49
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 50--51
-
- []
-
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 52.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 52.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 52.
-
-Underfull \hbox (badness 10000) in paragraph at lines 52--53
-
- []
-
-[2] <flattetrahedron.png, id=12, 418.66759pt x 314.00069pt>
-File: flattetrahedron.png Graphic file (type png)
-
-<use flattetrahedron.png> <tetrahedron.jpg, id=13, 674.52pt x 505.89pt>
-File: tetrahedron.jpg Graphic file (type jpg)
-
-<use tetrahedron.jpg>
-Overfull \hbox (24.30193pt too wide) in paragraph at lines 55--57
-[][] [] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 60--61
-
- []
-
-[3 <flattetrahedron.png (PNG copy)> <tetrahedron.jpg>]
-<righttriangulation.jpg, id=18, 674.52pt x 505.89pt>
-File: righttriangulation.jpg Graphic file (type jpg)
-
-<use righttriangulation.jpg>
-<180px-Double_torus_illustration.png, id=19, 43.362pt x 45.771pt>
-File: 180px-Double_torus_illustration.png Graphic file (type png)
-
-<use 180px-Double_torus_illustration.png> [4 <righttriangulation.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 117--118
-
- []
-
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 166.
+ [6]
+Underfull \hbox (badness 10000) in paragraph at lines 179--180
+=======
 [5 <180px-Double_torus_illustration.png>] [6] [7]
 Underfull \hbox (badness 10000) in paragraph at lines 174--175
+>>>>>>> .r194
 
  []
 
 
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 197--198
+=======
 Underfull \hbox (badness 10000) in paragraph at lines 192--193
+>>>>>>> .r194
+
+ []
+
+<<<<<<< .mine
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 228--229
+=======
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 223--224
+>>>>>>> .r194
 
  []
 
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 223--224
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.231 ...aphics[scale = 0.5]{triangulationUML.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
- []
-
-[9] <triangulationUML.png, id=45, 747.79375pt x 577.15625pt>
 File: triangulationUML.png Graphic file (type png)
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.231 ...aphics[scale = 0.5]{triangulationUML.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
 
+<<<<<<< .mine
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.231 ...aphics[scale = 0.5]{triangulationUML.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.231 ...aphics[scale = 0.5]{triangulationUML.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.231 ...aphics[scale = 0.5]{triangulationUML.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.231 ...aphics[scale = 0.5]{triangulationUML.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.231 ...aphics[scale = 0.5]{triangulationUML.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   t
+l.231 ...aphics[scale = 0.5]{triangulationUML.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[9]
+
+LaTeX Warning: File `Flip.png' not found on input line 348.
+
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.348 \includegraphics[scale = 1.0]{Flip.png}
+                                             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+File: Flip.png Graphic file (type png)
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.348 \includegraphics[scale = 1.0]{Flip.png}
+                                             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.348 \includegraphics[scale = 1.0]{Flip.png}
+                                             
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.348 \includegraphics[scale = 1.0]{Flip.png}
+                                             
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.348 \includegraphics[scale = 1.0]{Flip.png}
+                                             
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.348 \includegraphics[scale = 1.0]{Flip.png}
+                                             
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.348 \includegraphics[scale = 1.0]{Flip.png}
+                                             
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   F
+l.348 \includegraphics[scale = 1.0]{Flip.png}
+                                             
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.354 \includegraphics[scale = 0.5]{torus2.png}
+                                               
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+=======
 <use triangulationUML.png> [10 <triangulationUML.png (PNG copy)>] [11]
 <Flip.png, id=52, 411.81439pt x 207.46474pt>
 File: Flip.png Graphic file (type png)
@@ -209,20 +740,197 @@ Overfull \hbox (21.81339pt too wide) in paragraph at lines 343--344
  []
 
 <torus2.png, id=53, 404.712pt x 303.534pt>
+>>>>>>> .r194
 File: torus2.png Graphic file (type png)
+<<<<<<< .mine
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.354 \includegraphics[scale = 0.5]{torus2.png}
+                                               
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.354 \includegraphics[scale = 0.5]{torus2.png}
+                                               
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.354 \includegraphics[scale = 0.5]{torus2.png}
+                                               
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.354 \includegraphics[scale = 0.5]{torus2.png}
+                                               
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.354 \includegraphics[scale = 0.5]{torus2.png}
+                                               
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.354 \includegraphics[scale = 0.5]{torus2.png}
+                                               
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   t
+l.354 \includegraphics[scale = 0.5]{torus2.png}
+                                               
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.355 ...raphics[scale = 0.5]{torus2addvertex.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+=======
  <use torus2.png>
 <torus2addvertex.png, id=54, 404.712pt x 303.534pt>
+>>>>>>> .r194
 File: torus2addvertex.png Graphic file (type png)
+<<<<<<< .mine
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.355 ...raphics[scale = 0.5]{torus2addvertex.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.355 ...raphics[scale = 0.5]{torus2addvertex.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.355 ...raphics[scale = 0.5]{torus2addvertex.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.355 ...raphics[scale = 0.5]{torus2addvertex.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.355 ...raphics[scale = 0.5]{torus2addvertex.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.355 ...raphics[scale = 0.5]{torus2addvertex.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   t
+l.355 ...raphics[scale = 0.5]{torus2addvertex.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 360--361
+
+=======
  <use torus2addvertex.png>
 Overfull \hbox (17.32208pt too wide) in paragraph at lines 349--351
 [][] [] 
+>>>>>>> .r194
  []
 
 
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 362--363
+=======
 Underfull \hbox (badness 10000) in paragraph at lines 355--356
+>>>>>>> .r194
 
  []
 
+<<<<<<< .mine
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 364--365
+=======
 
 Underfull \hbox (badness 10000) in paragraph at lines 362--363
 
@@ -230,6 +938,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 362--363
 
 [12 <Flip.png (PNG copy)>] <dual.jpg, id=58, 674.52pt x 505.89pt>
 File: dual.jpg Graphic file (type jpg)
+>>>>>>> .r194
 
 <use dual.jpg> [13 <torus2.png (PNG copy)> <torus2addvertex.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 383--384
@@ -237,50 +946,473 @@ Underfull \hbox (badness 10000) in paragraph at lines 383--384
  []
 
 
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 371--372
+
+=======
 Underfull \hbox (badness 10000) in paragraph at lines 387--388
 
+>>>>>>> .r194
  []
 
+<<<<<<< .mine
+[11]
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.375 \includegraphics[scale = 0.4]{dual.png}
+                                             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+=======
 [14 <dual.jpg>] <tetratouch.png, id=66, 442.34224pt x 211.82587pt>
 File: tetratouch.png Graphic file (type png)
+>>>>>>> .r194
 
+<<<<<<< .mine
+File: dual.png Graphic file (type png)
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.375 \includegraphics[scale = 0.4]{dual.png}
+                                             
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.375 \includegraphics[scale = 0.4]{dual.png}
+                                             
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.375 \includegraphics[scale = 0.4]{dual.png}
+                                             
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.375 \includegraphics[scale = 0.4]{dual.png}
+                                             
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.375 \includegraphics[scale = 0.4]{dual.png}
+                                             
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.375 \includegraphics[scale = 0.4]{dual.png}
+                                             
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.375 \includegraphics[scale = 0.4]{dual.png}
+                                             
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 392--393
+
+=======
 <use tetratouch.png>
 Overfull \hbox (52.34116pt too wide) in paragraph at lines 392--393
 [][] 
+>>>>>>> .r194
  []
 
+<<<<<<< .mine
+
+Underfull \hbox (badness 10000) in paragraph at lines 394--395
+
+ []
+
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 396--397
+
+ []
+
+
+LaTeX Warning: File `ConvergenceTable.png' not found on input line 402.
+
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.402 ...phics[scale = 0.79]{ConvergenceTable.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+File: ConvergenceTable.png Graphic file (type png)
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.402 ...phics[scale = 0.79]{ConvergenceTable.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.402 ...phics[scale = 0.79]{ConvergenceTable.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.402 ...phics[scale = 0.79]{ConvergenceTable.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.402 ...phics[scale = 0.79]{ConvergenceTable.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.402 ...phics[scale = 0.79]{ConvergenceTable.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.402 ...phics[scale = 0.79]{ConvergenceTable.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   C
+l.402 ...phics[scale = 0.79]{ConvergenceTable.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 410--411
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 414--415
+
+ []
+
+[13]
+
+LaTeX Warning: File `tetratouch.png' not found on input line 419.
+
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.419 \includegraphics{tetratouch.png}
+                                      
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+File: tetratouch.png Graphic file (type png)
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.419 \includegraphics{tetratouch.png}
+                                      
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.419 \includegraphics{tetratouch.png}
+                                      
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.419 \includegraphics{tetratouch.png}
+                                      
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.419 \includegraphics{tetratouch.png}
+                                      
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.419 \includegraphics{tetratouch.png}
+                                      
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.419 \includegraphics{tetratouch.png}
+                                      
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   t
+l.419 \includegraphics{tetratouch.png}
+                                      
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[14] [15]
+Underfull \hbox (badness 10000) in paragraph at lines 437--438
+
+ []
+
+[16] (Report.bbl
+=======
 [15 <tetratouch.png (PNG copy)>] [16]
 Underfull \hbox (badness 10000) in paragraph at lines 410--411
 
  []
 
 [17] (Report.bbl
+>>>>>>> .r194
 Underfull \hbox (badness 10000) in paragraph at lines 24--27
-[]\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
+[][]\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
  []
 
+<<<<<<< .mine
+) [17]
+Underfull \hbox (badness 10000) in paragraph at lines 476--477
+=======
 ) [18]
 Underfull \hbox (badness 10000) in paragraph at lines 429--430
+>>>>>>> .r194
 
  []
 
+<<<<<<< .mine
+[18]
+=======
 [19]
 Underfull \hbox (badness 10000) in paragraph at lines 435--436
+>>>>>>> .r194
+
+LaTeX Warning: File `torus7addvaddhweights.png' not found on input line 482.
+
+! Undefined control sequence.
+\Gread@png ...\setbox \@tempboxa \hbox {\pdfimage 
+                                                  \noexpand \noexpand \noexp...
+l.482 ...s[scale = 0.9]{torus7addvaddhweights.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+File: torus7addvaddhweights.png Graphic file (type png)
+! Undefined control sequence.
+\Ginclude@png #1->\hbox {\pdfimage 
+                                   \@height \Gin@req@height \@width \Gin@req...
+l.482 ...s[scale = 0.9]{torus7addvaddhweights.png}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   w
+l.482 ...s[scale = 0.9]{torus7addvaddhweights.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   w
+l.482 ...s[scale = 0.9]{torus7addvaddhweights.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   d
+l.482 ...s[scale = 0.9]{torus7addvaddhweights.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   d
+l.482 ...s[scale = 0.9]{torus7addvaddhweights.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \@empty 
+l.482 ...s[scale = 0.9]{torus7addvaddhweights.png}
+                                                  
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+! Illegal unit of measure (pt inserted).
+<to be read again> 
+                   t
+l.482 ...s[scale = 0.9]{torus7addvaddhweights.png}
+                                                  
+Dimensions can be in units of em, ex, in, pt, pc,
+cm, mm, dd, cc, bp, or sp; but yours is a new one!
+I'll assume that you meant to say pt, for printer's points.
+To recover gracefully from this error, it's best to
+delete the erroneous units; e.g., type `2' to delete
+two letters. (See Chapter 27 of The TeXbook.)
+
+[19]
+Underfull \hbox (badness 10000) in paragraph at lines 489--490
 
  []
 
 
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 491--492
+=======
 Underfull \hbox (badness 10000) in paragraph at lines 437--438
+>>>>>>> .r194
 
  []
 
 [20] (Report.aux) ) 
 Here is how much of TeX's memory you used:
+<<<<<<< .mine
+ 1119 strings out of 95901
+ 12623 string characters out of 1195329
+ 64626 words of memory out of 1063802
+ 4129 multiletter control sequences out of 60000
+=======
  1118 strings out of 95295
  13469 string characters out of 1184859
  68820 words of memory out of 1063816
  4283 multiletter control sequences out of 60000
+>>>>>>> .r194
  9017 words of font info for 32 fonts, out of 1000000 for 2000
+<<<<<<< .mine
+ 14 hyphenation exceptions out of 4999
+ 25i,12n,21p,1088b,344s stack positions out of 5000i,500n,10000p,200000b,32768s
+=======
  14 hyphenation exceptions out of 8191
  25i,12n,21p,1113b,245s stack positions out of 5000i,500n,10000p,200000b,32768s
 <C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmbx12.p
@@ -297,4 +1429,6 @@ PDF statistics:
  122 PDF objects out of 300000 (max. 8388607)
  0 named destinations out of 300000 (max. 131072)
  51 words of extra memory for PDF output out of 65536 (max. 10000000)
+>>>>>>> .r194
 
+Output written on Report.dvi (20 pages, 47800 bytes).

@@ -284,17 +284,19 @@ Net Curv: 0.0000
 
 \subsection{Morphs}
 
+Also included in the code are a number of different methods for manipulating and morphing these triangulation structrues in order to create different geometric shapes and, more importantly, different topologies over which to run the flow. These ''morphs'' are described below.
+
 \subsubsection{Flips}
 
-There may be times where we want to change a given triangulation by a small amount. Rather than start from scratch, we can perform flips. $Flips$ are a technique which change the topology of a surface by a small degree. There are three basic types:
+There may be times where we want to change a given triangulation by a small amount. $Flips$ are a technique that we can use to change the geometry of a triangulation in a particular location in a small and specific way. There are three basic types:
 
 \begin{itemize}
 \item 1-3 flip \newline
-Here we take a triangle and turn it into three triangles. In other words, we add a vertex to a triangulation and connect it to the three vertices of the triangle it is inside. If we performed this on each face of a tetrahedron, we would result in a dodecahedron, a solid with 12 faces, three from each original face of the tetrahedron. After running this through $calcFlow$, all the new vertices form 45-45-90 degree isosocles right triangles with the old vertices constructing the hypoteneuses. 
+In a 1-3 flip, a single face is replaced by three faces. One way to think of going about this procedure is to simply add a new vertex to an existing face. This requires creating three new edges that connect the new vertex to the three defining vertices of the existing face.
 \item 2-2 flip \newline
-In this flip we take an edge that is part of two faces, and switch the vertices. See figure~\ref{fig:flip}. 
+In this flip we a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. 
 \item 3-1 flip \newline
-Here we do the opposiste of a 1-3 flip. We take a vertex that is connected to three other vertices and remove it entirely. This move is more restrictive than the others since not every vertex is connected to exactly three vertices. 
+In what is essentially the inverse of the 1-3 flip, the 3-1 flip is one where we take a vertex that is connected to three other vertices and remove it entirely. This move is more restrictive than the others since not every vertex is connected to exactly three vertices. 
 \end{itemize}
 \begin{figure}
 \centering
@@ -310,8 +312,17 @@ Here we do the opposiste of a 1-3 flip. We take a vertex that is connected to th
 \label{torusaddv}
 \end{figure}
 
-\subsubsection{Adding handles and leaves}
-We can add a torus handle to a triangulation. This instantly reduces the $\chi$ value of the surface by 2.\newline
+\subsubsection{Other Transfigurations}
+
+In addition to the flips that were described above, there are other ''morphs'' that can be performed to change the actual topology of a triangulation in order to give us some more diverse and interesting shapes over which to run these flows and observe their results. In particular, there are only two such moves that we can perform.
+
+\begin{itemize}
+\item Adding Handles \newline
+By adding a handle to a surface, we are in essence adding a hole to it. One simple way of obtaining this result is to ''patch'' the surface of a torus to the surface that we are working with. With our code, this exactly what we have done. The method that we have written remove a face from the existing triangulation and replaces it with a 9-vertex triangulation of a torus, the standard flat model. By using the three existing vertices and edges, we are actually adding 6 new vertices, 24 new edges, and 17 new faces. This operation changes the topology of the triangulation that we are working with. It will reduce the Euler characteristic, $\chi$, by 2 and thus change the net curvature of the figure.
+\newline
+\item Adding Cross-Caps \newline
+A cross-cap is a surface or a piece of a surface that intersects itself.
+\end{itemize}
 
 Another shape we have been looking into is called the double triangle. In essence, a double triangle is made of two triangles with the same three vertices. It can though of as folding one triangle on top of another. We can add these, which can be called leaves, to a triangulation and see how things vary with their presence. However, upon adding a double triangle, we have uncertainty regarding our definiton of a triangulation. 
 
