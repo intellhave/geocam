@@ -6,7 +6,7 @@
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
 Supervisor: Dr. David Glickenstein\\
 }
-%\date{July 7, 2008}
+\date{July 7, 2008}
 \begin{document}
 \maketitle
 	
@@ -105,7 +105,8 @@ Every triangle that is capable of being circle-packed has a circle that is inter
 Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since made large impacts in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.\newline
 
 \noindent But the biggest consequence of Ricci flow was not to become apparent until early after the turn of the millenium, when Grigori Perelman presented three papers providing the proof to the Poincar\'{e} Conjecture. The Poincar\'{e} Conjecture, proposed in 1904, proved to be particularly difficult to prove, and was given the honor of one of seven millenium puzzles by the Clay Matehmatics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. 
-\subsection{Introduction}
+
+\subsection{Definition}
 
 Just because we have a triangulation and that it is circle packed does not mean that it is already compact and organized. Vertices can be too large or too small, and the end shape can be somewhat repulsive. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform looking. We introduce to the reader the equation for combinatorial Ricci flow, which allows an individual radius to change over time on a discrete surface. In Euclidean space, the differential equation can be written as 
   \begin{equation}
@@ -502,13 +503,13 @@ We would also like to start investigating 3-dimensional constructs built from te
 
 Circle packing is a very special way to characterize our side lengths. If we relax this criterium and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of how much they intersect by. See Figure \ref{fig:intcirc} . We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
 
-\begin{figure}
-\begin{center}
-\includegraphics[scale = 0.6]{intcirc.png}
-\end{center}
-\caption{An example of relaxing circle packing and introducing $\Phi.$}
-\label{fig:intcirc}
-\end{figure}
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale = 0.6]{intcirc.png}
+%\end{center}
+%\caption{An example of relaxing circle packing and introducing $\Phi.$}
+%label{fig:intcirc}
+%\end{figure}
 
 \subsection{Hyperbolic/ spherical triangulations}
 
