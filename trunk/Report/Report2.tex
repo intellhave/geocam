@@ -28,8 +28,8 @@ The purpose of this project is to provide a method for examining the effect of c
 
 Suppose you are asked to make a sphere, but are only given a small number of edges, vertices, or faces to work with. What do you do? In geometry, a common question asked is how to make representations of complex shapes with as little stuff as possible. In fact, you are probably already familiar with the most basic representation of a sphere- a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us an approximation to a sphere. Similarly, three vertices (a triangle) can be used to approximate a circle in two dimensions. Naturally, if we add more vertices, we are able to better illustrate our shapes. Like in modern video games and Hollywood movies, we can generate various shapes of many different sizes using polygons that mold to form the special effect. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into smaller triangles, we can essentially represent any shape with enough vertices. We define a shape as $triangulizable$ if we can connect all triangles in a particular fashion such that they create a closed 3-dimensional shape.\newline
   
- \noindent Of course, spheres are not the only things geometers care about. Another shape of interest is known as the torus. It looks like a donut. It turns out that you can make a visualization of this object using only 7 vertices \cite{lutzmanifold}. With more vertices the shape becomes better curved and reminiscent of breakfast. It is also possible to add ``handles'' to any shape, resulting in the addition of another torus. There are also various other shapes which can be represented with varying numbers of vertices, like Klein bottles and cross-caps. \cite{WolfMath} has more information on these fascinating shapes. While to the topologist a sphere \newline
-
+ \noindent Of course, spheres are not the only things geometers care about. Another shape of interest is known as the torus. It looks like a donut. It turns out that you can make a visualization of this object using only 7 vertices \cite{lutzmanifold}. With more vertices the shape becomes better curved and reminiscent of breakfast. It is also possible to add ``handles'' to any shape, resulting in the addition of another torus. There are also various other shapes which can be represented with varying numbers of vertices, like Klein bottles and cross-caps. \cite{WolfMath} has more information on these fascinating shapes.\newline
+ 
   
 \begin{figure}
 \includegraphics[scale = 0.5]{flattetrahedron.png}
@@ -37,7 +37,7 @@ Suppose you are asked to make a sphere, but are only given a small number of edg
 \caption{An example of triangulation. A triangle can be folded up into a tetrahedron.}
 \end{figure}
 
-\noindent An issue arises regarding the uniqueness of these triangulations. There are over 28 $trillion$ ways to triangulate a sphere using only 23 vertices. It is currently unknown how many ways a single torus can be made using that number of vertices (to us, at least). However, all toruses do share something very peculiar, as do all sphere configurations. The Euler characteristic, $\chi$, is a value associated with three dimensional shapes. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given manifold has. Certain shapes have the same $\chi$ value. For example, any torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
+\noindent An issue arises regarding the uniqueness of these triangulations. While to the topologist, a sphere and a football and even a hockey puck are considered the same, the torus is the first object that is fundamentally different from the sphere. The reason is that there is a hole in the torus. The number of holes is one of the few distinctions that can be made between two objects in the world of topology. The techincal term for this is the genus of an object. A sphere, or anything like a sphere, has genus 0. A torus, with its one hole, has genus 1, and a two-holed torus has genus 2. Also, the Euler characteristic, $\chi$, is a value associated with three dimensional shapes. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given manifold has. For two-dimensional manifolds, $\displaystyle\chi = 2 - 2g$, and $g$ is the genus of the object. For example, any torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
 
 \subsection{Circle packing}
 \maketitle
@@ -52,16 +52,16 @@ Suppose you are asked to make a sphere, but are only given a small number of edg
 \end{figure}
 
 \begin{table}
-\begin{tabular}{ccccc}
-Name  &	Vertices, V &	Edges, E & Faces, F &	$\chi, V - E + F$\\
+\begin{tabular}{cccccc}
+Name  &	Vertices, V &	Edges, E & Faces, F &	Genus, g & $\chi$\\
 \hline 
-Tetrahedron &	4 &	6 &	4 &	2\\
-Hexahedron or cube &	8 &	12 &	6 &	2\\
-Octahedron 	&	6 &	12 &	8 & 2\\
-Dodecahedron 	&	20 &	30 &	12 &	2\\
-Icosahedron &	12 & 30 & 20 &	2\\
-Torus & 9 & 27 & 18 & 0\\
-Double torus & 10 & 36 & 24 & -2
+Tetrahedron &	4 &	6 &	4 &	0 & 2\\
+Hexahedron or cube &	8 &	12 &	6 &	0 &	2\\
+Octahedron 	&	6 &	12 &	8 & 0 &	 2\\
+Dodecahedron 	&	20 &	30 &	12 &	0&	 2\\
+Icosahedron &	12 & 30 & 20 & 0	&	 2\\
+Torus & 9 & 27 & 18 &	1 & 0\\
+Two-holed torus & 10 & 36 & 24 &	2 & -2\\
 \end{tabular}
 \caption{Listings of vertices, edges, and faces for some common shapes \cite{wiki}}
 \label{EuChar}
@@ -286,11 +286,7 @@ Net Curv: 0.0000
 
 \subsection{Morphs}
 
-<<<<<<< .mine
 Another part of the code is file strictly made up of functions used to manipulate and alter the triangulation being run. These functions, known within the code as ''morphs'', allow us to change the triangulation in different ways, geometric as well as topological, in order to provide us with different kinds of discrete manifolds over which to run our flow.
-=======
-Another part of the code is a file made up of strictly functions used to manipulate and alter the triangulation being run. These functions, known within the code as ''morphs'', serve the purpose of allowing us to change our triangulations in different ways in
->>>>>>> .r217
 
 \subsubsection{Flips}
 
