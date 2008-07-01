@@ -286,17 +286,21 @@ Net Curv: 0.0000
 
 \subsection{Morphs}
 
+<<<<<<< .mine
+Another part of the code is file strictly made up of functions used to manipulate and alter the triangulation being run. These functions, known within the code as ''morphs'', allow us to change the triangulation in different ways, geometric as well as topological, in order to provide us with different kinds of discrete manifolds over which to run our flow.
+=======
 Another part of the code is a file made up of strictly functions used to manipulate and alter the triangulation being run. These functions, known within the code as ''morphs'', serve the purpose of allowing us to change our triangulations in different ways in
+>>>>>>> .r217
 
 \subsubsection{Flips}
 
-There may be times where we want to change a given triangulation by a small amount. $Flips$ are a technique that we can use to change the geometry of a triangulation in a particular location in a small and specific way. There are three basic types:
+One type of morph that we have available is known as a flip, called this because the transformation appears equivalent to the change in the planar projection of a tetrahedron when it is flipped over completely. Known also as ''Bistellar Moves'', these transformations can be used to change the degree of a particular vertex or many vertices, or coarsen or refine an entire triangulation as a whole. In higher dimensions, there are many different moves of this kind, but in two dimensions, we have only three unique types.
 
 \begin{itemize}
 \item 1-3 flip \newline
 In a 1-3 flip, a single face is replaced by three faces. One way to think of going about this procedure is to simply add a new vertex to an existing face. This requires creating three new edges that connect the new vertex to the three defining vertices of the existing face.
 \item 2-2 flip \newline
-In this flip we a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. 
+In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. 
 \item 3-1 flip \newline
 In what is essentially the inverse of the 1-3 flip, the 3-1 flip is one where we take a vertex that is connected to three other vertices and remove it entirely. This move is more restrictive than the others since not every vertex is connected to exactly three vertices. 
 \end{itemize}
