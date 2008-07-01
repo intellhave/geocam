@@ -1,8 +1,4 @@
-<<<<<<< .mine
-This is pdfeTeX, Version 3.141592-1.21a-2.2 (MiKTeX 2.4) (preloaded format=latex 2008.6.30)  1 JUL 2008 10:03
-=======
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  1 JUL 2008 10:19
->>>>>>> .r207
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (MiKTeX 2.4) (preloaded format=latex 2008.6.30)  1 JUL 2008 10:30
 entering extended mode
 **C:/Dev-Cpp/geocam/Report/Report2.tex
 (C:/Dev-Cpp/geocam/Report/Report2.tex
@@ -221,39 +217,37 @@ Underfull \hbox (badness 10000) in paragraph at lines 182--183
 
  []
 
-
+[9]
 Underfull \hbox (badness 10000) in paragraph at lines 189--190
 
  []
 
-[9]
+
 Underfull \hbox (badness 10000) in paragraph at lines 207--208
 
  []
 
-<triangulationUML.png, id=45, 747.79375pt x 577.15625pt>
+[10] <triangulationUML.png, id=65, 747.79375pt x 577.15625pt>
 File: triangulationUML.png Graphic file (type png)
-
-<use triangulationUML.png> [10]
+ <use triangulationUML.png> [11 <triangulationUML.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 263--265
 
  []
 
-[11 <triangulationUML.png (PNG copy)>]
+
 Underfull \hbox (badness 10000) in paragraph at lines 265--278
 [][]
  []
 
 
+Overfull \vbox (116.75797pt too high) has occurred while \output is active []
+
+ [12]
 Underfull \hbox (badness 10000) in paragraph at lines 279--293
 [][]
  []
 
 
-Overfull \vbox (67.4663pt too high) has occurred while \output is active []
-
-
-[12]
 Overfull \vbox (84.99983pt too high) has occurred while \output is active []
 
 
@@ -426,14 +420,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 295--296
 
  []
 
-<<<<<<< .mine
-<triangulationUML.png, id=71, 747.79375pt x 577.15625pt>
-File: triangulationUML.png Graphic file (type png)
- <use triangulationUML.png> [12] [13 <triangulationUML.png>]
-<Flip.png, id=79, 411.81439pt x 207.46474pt>
-=======
-[13] <Flip.png, id=60, 411.81439pt x 207.46474pt>
->>>>>>> .r207
+[13] <Flip.png, id=79, 411.81439pt x 207.46474pt>
 File: Flip.png Graphic file (type png)
  <use Flip.png>
 Overfull \hbox (21.81339pt too wide) in paragraph at lines 315--316
@@ -450,18 +437,13 @@ Overfull \hbox (17.32208pt too wide) in paragraph at lines 321--323
 [][] [] 
  []
 
-[14 <Flip.png (PNG copy)>]
+[14 <Flip.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 332--335
 
  []
 
-<<<<<<< .mine
-[14] [15 <Flip.png> <torus2.png> <torus2addvertex.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 344--345
-=======
-[15 <torus2.png (PNG copy)> <torus2addvertex.png (PNG copy)>]
+[15 <torus2.png> <torus2addvertex.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 345--346
->>>>>>> .r207
 
  []
 
@@ -500,11 +482,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 434--435
 
  []
 
-<<<<<<< .mine
-[18] <tetratouch.png, id=97, 442.34224pt x 211.82587pt>
-=======
-<tetratouch.png, id=75, 442.34224pt x 211.82587pt>
->>>>>>> .r207
+<tetratouch.png, id=94, 442.34224pt x 211.82587pt>
 File: tetratouch.png Graphic file (type png)
  <use tetratouch.png>
 Overfull \hbox (52.34116pt too wide) in paragraph at lines 439--440
@@ -516,11 +494,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 446--447
 
  []
 
-<<<<<<< .mine
-<ConvergenceTable.png, id=98, 395.67825pt x 686.565pt>
-=======
-<ConvergenceTable.png, id=76, 395.67825pt x 686.565pt>
->>>>>>> .r207
+<ConvergenceTable.png, id=95, 395.67825pt x 686.565pt>
 File: ConvergenceTable.png Graphic file (type png)
  <use ConvergenceTable.png>
 
@@ -531,17 +505,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 455--456
 
  []
 
-<<<<<<< .mine
-[19 <tetratouch.png>] [20 <ConvergenceTable.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 495--496
-=======
 [18]
 Underfull \hbox (badness 10000) in paragraph at lines 457--458
->>>>>>> .r207
 
  []
 
-[19 <tetratouch.png (PNG copy)>] [20 <ConvergenceTable.png (PNG copy)>]
+[19 <tetratouch.png>] [20 <ConvergenceTable.png>]
 
 LaTeX Warning: Reference `fig:intcirc' on page 21 undefined on input line 468.
 
@@ -903,33 +872,13 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
-<<<<<<< .mine
  1159 strings out of 95515
- 13694 string characters out of 1189489
- 67579 words of memory out of 1063682
+ 13699 string characters out of 1189489
+ 65017 words of memory out of 1063680
  4230 multiletter control sequences out of 60000
  9324 words of font info for 33 fonts, out of 1000000 for 2000
  14 hyphenation exceptions out of 4999
  25i,9n,21p,1140b,243s stack positions out of 5000i,500n,10000p,200000b,32768s
-=======
- 1084 strings out of 95340
- 13568 string characters out of 1184156
- 66143 words of memory out of 1500000
- 4297 multiletter control sequences out of 110000
- 9324 words of font info for 33 fonts, out of 1200000 for 2000
- 14 hyphenation exceptions out of 8191
- 25i,9n,21p,1140b,243s stack positions out of 5000i,500n,10000p,200000b,5000s
-<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx12.pfb><C:/Program Fi
-les/MiKTeX 2.7/fonts/type1/bluesky/cm/cmex10.pfb><C:/Program Files/MiKTeX 2.7/f
-onts/type1/bluesky/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/blues
-ky/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr12.pfb><
-C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr17.pfb><C:/Program Files/
-MiKTeX 2.7/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.7/fonts/t
-ype1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/
-cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti12.pfb><C:/Pr
-ogram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt12.pfb>
-Output written on Report2.pdf (31 pages, 829048 bytes).
->>>>>>> .r207
 PDF statistics:
  144 PDF objects out of 300000
  0 named destinations out of 300000
@@ -939,4 +888,4 @@ cm\cmsy8.pfb><C:\texmf\fonts\type1\bluesky\cm\cmr8.pfb><C:\texmf\fonts\type1\blu
 \bluesky\cm\cmmi8.pfb><C:\texmf\fonts\type1\bluesky\cm\cmmi12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmsy10.pfb><C:\texmf\
 fonts\type1\bluesky\cm\cmbx12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmr12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmr17.pfb>
 
-Output written on Report2.pdf (31 pages, 760896 bytes).
+Output written on Report2.pdf (31 pages, 761522 bytes).
