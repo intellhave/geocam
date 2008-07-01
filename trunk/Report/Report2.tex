@@ -26,9 +26,9 @@ The purpose of this project is to provide a method for examining the effect of c
 \subsection{Introduction}
 \maketitle
 
-Suppose you are asked to make a sphere, but are only given a small number of edges, vertices, or faces to work with. What do you do? In geometry, a common question asked is how to make representations of complex shapes with as little stuff as possible. In fact, you are probably already familiar with the most basic representation of a sphere- a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us an approximation to a sphere. Similarly, three vertices (a triangle) can be used to approximate a circle in two dimensions. Naturally, if we add more vertices, we are able to better illustrate our shapes. Like in modern video games and Hollywood movies, we can generate various shapes of many different sizes using polygons that mold to form the special effect. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into smaller triangles, we can essentially represent any shape with enough vertices. We define a shape as $triangulizable$ if we can connect all triangles in a particular fashion such that they create a closed 3-dimensional shape.\newline
+Suppose you are asked to make a sphere with as few pieces as possible. You could make a number of possible shapes, like a cube, or even a soccer ball. While both these shapes are discrete in nature, they can be used to represent a continuous sphere. In fact, you are probably already familiar with the most basic representation of a sphere- a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us an approximation to a sphere, like how three vertices- a triangle- can be used to approximate a circle in two dimensions. Naturally, if we add more vertices, we are able to better illustrate our shapes. A tetrahedron can look like a soccer ball; a triangle can look like an octagon. Like in modern video games and Hollywood movies, we can generate various shapes of many different sizes using polygons that mold to form the special effect. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into smaller triangles, we can essentially represent any shape with enough vertices. We define a shape as $triangulable$ if we can connect all triangles in a particular fashion such that they create a closed 3-dimensional shape.\newline
   
- \noindent Of course, spheres are not the only things geometers care about. Another shape of interest is known as the torus. It looks like a donut. It turns out that you can make a visualization of this object using only 7 vertices \cite{lutzmanifold}. With more vertices the shape becomes better curved and reminiscent of breakfast. It is also possible to add ``handles'' to any shape, resulting in the addition of another torus. There are also various other shapes which can be represented with varying numbers of vertices, like Klein bottles and cross-caps. \cite{WolfMath} has more information on these fascinating shapes.\newline
+\noindent Of course, not everything is made of spheres, and while to the topologist, a soccer ball and a football and even a hockey puck are considered the same, spheres are not the only possible configuration we care about. Another shape of interest is known as the torus. It is the first object that is fundamentally different from the sphere. The reason is that there is a hole in the torus, which looks like a donut, or a bagel. It turns out that a visualization of this object can be made using as few as 7 vertices \cite{lutzmanifold}. It is also possible to add ``handles'' to any shape, resulting in the addition of another hole, like adding a handle to a drinking cup. There are also various other shapes which can be represented with varying numbers of vertices, such as Klein bottles and cross-caps. \cite{WolfMath} has more information on these fascinating shapes, and we will examine some of these further on.\newline
  
   
 \begin{figure}
@@ -37,10 +37,10 @@ Suppose you are asked to make a sphere, but are only given a small number of edg
 \caption{An example of triangulation. A triangle can be folded up into a tetrahedron.}
 \end{figure}
 
-\noindent An issue arises regarding the uniqueness of these triangulations. While to the topologist, a sphere and a football and even a hockey puck are considered the same, the torus is the first object that is fundamentally different from the sphere. The reason is that there is a hole in the torus. The number of holes is one of the few distinctions that can be made between two objects in the world of topology. The techincal term for this is the genus of an object. A sphere, or anything like a sphere, has genus 0. A torus, with its one hole, has genus 1, and a two-holed torus has genus 2. Also, the Euler characteristic, $\chi$, is a value associated with three dimensional shapes. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given manifold has. For two-dimensional manifolds, $\displaystyle\chi = 2 - 2g$, and $g$ is the genus of the object. For example, any torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
+\noindent An issue arises regarding the uniqueness of these triangulations. It is known that there are millions of ways to triangulate even the most basic shapes using a fixed number of vertices, but what separates spheres from tori is not the number of vertices used, but the number of holes that are created- one of the few distinctions that can be made between two objects in the world of topology. The techincal term for this is the $genus$ of an object. A sphere, or anything like a sphere, has genus 0. A torus, with its one hole, has genus 1, and a two-holed torus has genus 2. Another value associated with these surface in known as the Euler characteristic, $\chi$. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given configuration has. For two-dimensional manifolds, it is also known that $\displaystyle\chi = 2 - 2g$, with $g$ being the genus of the object. For example, any one hole torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
 
 \begin{table}
-\begin{tabular}{cccccc}
+\begin{tabular}{lccccc}
 Name  &	Vertices, V &	Edges, E & Faces, F &	Genus, g & $\chi$\\
 \hline 
 Tetrahedron &	4 &	6 &	4 &	0 & 2\\
@@ -51,7 +51,7 @@ Icosahedron &	12 & 30 & 20 & 0	&	 2\\
 Torus & 9 & 27 & 18 &	1 & 0\\
 Two-holed torus & 10 & 36 & 24 &	2 & -2\\
 \end{tabular}
-\caption{Listings of vertices, edges, and faces for some common shapes \cite{wiki}}
+\caption{Listings of vertices, edges, faces, and genus for some common shapes \cite{wiki}}
 \label{EuChar}
 \end{table}
 
@@ -70,7 +70,7 @@ A triangulation of an $n$-dimensional manifold is a way of representing the mani
 
 \noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of these edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce to the reader a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a triangle; spheres can be used to make the edges of a tetrahedron. These circles are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices, $l_{ij} = r_i + r_j$.
   
-\begin{figure}[t]
+\begin{figure}
 \begin{center}
 \includegraphics[scale = 0.3]{righttriangulation.jpg}
 \end{center}
@@ -80,20 +80,18 @@ A triangulation of an $n$-dimensional manifold is a way of representing the mani
 \subsection{Duals}
 \maketitle
 
-
-
-\begin{figure}[t]
-\centering
-\includegraphics[scale = 0.4]{dual.png}
-\caption{A dual to an edge}
-\label{fig:dual}
-\end{figure}
-
 Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j $and $k$ being the vertices of a triangle. This can be repeated for multiple triangles. All these incircles are known to be mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has its own dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
 
 \noindent With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the dual area, evaluated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the original weight of the vertex.\newline
 
-\noindent The dual length and dual area have some interesting properties that we hope to investigate. David Glickenstein examines these and more in \cite{Dave}.  
+\noindent The dual length and dual area have some interesting properties that we hope to investigate. David Glickenstein examines these and more in \cite{Dave}. 
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.4]{dual.png}
+\caption{A dual to an edge}
+\label{fig:dual}
+\end{figure} 
 
 \section{Ricci flow}
 \subsection{Background}
@@ -301,33 +299,26 @@ One type of morph that we have available is known as a flip, called this because
 In a 1-3 flip, a single face is replaced by three faces. One way to think of going about this procedure is to simply add a new vertex to an existing face. This requires creating three new edges that connect the new vertex to the three defining vertices of the existing face.
 \item 2-2 flip \newline
 In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. 
-\item 3-1 flip \newline
-In what is essentially the inverse of the 1-3 flip, the 3-1 flip is one where we take a vertex that is connected to three other vertices and remove it entirely. This move is more restrictive than the others since not every vertex is connected to exactly three vertices. 
-\end{itemize}
-Flips have the special property that they do not change the Euler characteristic of the surface they are performed upon. For example, in performing a 1-3 flip, we add 3 edges, 2 faces, and 1 vertex. The value of $\chi$ does not change as $(V+1) - (E+3) + (F+2) = V - E + F = \chi$. This means we could do an infinite number of these flips without changing the topology of the surface. \newline
 
-\noindent Another thing of note is that any flip we could think of (2-5 flip, 1-4 flip) could be made using a combination of 1-3, 2-2, and 3-1 flips. Thus these three act as a basis for the span of any possible legal configurations, so we need not look into other types of flips. 
+
 \begin{figure}
 \centering
-\includegraphics[scale = 1.0]{Flip.png}
+\includegraphics[scale = 0.8]{Flip.png}
 \caption{An example of a 2-2 flip.}
 \label{fig:flip}
 \end{figure}
+
+\item 3-1 flip \newline
+In what is essentially the inverse of the 1-3 flip, the 3-1 flip is one where we take a vertex that is connected to three other vertices and remove it entirely. This move is more restrictive than the others since not every vertex is connected to exactly three vertices. 
+\end{itemize}
+Flips have the special property that they do not change the Euler characteristic of the surface they are performed upon. For example, in performing a 1-3 flip, we have a total of 3 new edges, 2 more faces, and 1 new vertex. The value of $\chi$ does not change as $(V+1) - (E+3) + (F+2) = V - E + F = \chi$. This means we could do an infinite number of these flips without changing the topology of the surface. \newline
+
+\noindent Another thing of note is that any flip we could think of (2-5 flip, 1-4 flip) could be made using a combination of 1-3, 2-2, and 3-1 flips. Thus these three act as a basis for the span of any possible legal configurations.
   
-\begin{figure}
-\includegraphics[scale = 0.5]{torus2.png}
-\includegraphics[scale = 0.5]{torus2addvertex.png}
-\caption{A triangulation of the torus, and the addition of a new vertex. This is a 1-3 flip.}
-\label{torusaddv}
-\end{figure}
 
 \subsubsection{Other Transfigurations}
 
-<<<<<<< .mine
-In addition to the flips that were described above, there are other morphs that can be performed to change the actual topology of a triangulation in order to give us some more diverse and interesting shapes over which to run these flows and observe their results. In particular, there are only two such moves that we can perform to change the topology, as well as one other move to alter the triangulation in a more obscure way.
-=======
 In addition to the flips that were described above, there are other ``morphs'' that can be performed to change the actual topology of a triangulation in order to give us some more diverse and interesting shapes over which to run these flows and observe their results. In particular, there are only two such moves that we can perform.
->>>>>>> .r224
 
 \begin{itemize}
 \item Adding Handles \newline
@@ -427,7 +418,14 @@ Vertex 7: 6.18421 \\
 
 \noindent Example: Adding a vertex to a one-holed torus. See figure~\ref{torusaddv}. \newline
 
-\noindent By inserting a vertex within a flat triangulation for a torus, we essentially place a sphere on top of three other spheres, and then observe what happens as we run it trough out $calcFlow$ program. We discover that the new vertex gets squeezed in between the other vertices and decreases in size, as if it were never there at all. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). The new vertex lies completely within the void not occupied by the other three triangles. We also ran this test with a 7-vertex torus and obtained similar results. The additional vertex tried to disappear altogether, and even with normalized Ricci flow its weight dropped down to zero, as if it were not there at all. While this does break our code, we find it very interesting. I wonder if it matters which face you add the vertex to. \newline
+\noindent By inserting a vertex within a flat triangulation for a torus, we essentially place a sphere on top of three other spheres, and then observe what happens as we run it trough out $calcFlow$ program. We discover that the new vertex gets squeezed in between the other vertices and decreases in size, as if it were never there at all. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). The new vertex lies completely within the void not occupied by the other three triangles. We also ran this test with a 7-vertex torus and obtained similar results. The additional vertex tried to disappear altogether, and even with normalized Ricci flow its weight dropped down to zero, as if it were not there at all. While this does break our code, we find it very interesting. \newline
+
+\begin{figure}
+\includegraphics[scale = 0.5]{torus2.png}
+\includegraphics[scale = 0.5]{torus2addvertex.png}
+\caption{A triangulation of the torus, and the addition of a new vertex. This is a 1-3 flip.}
+\label{torusaddv}
+\end{figure}
 
 \noindent Example: Performing a 2-2 flip on a 12-vertex torus. \newline
 
