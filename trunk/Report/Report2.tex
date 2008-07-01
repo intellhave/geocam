@@ -39,18 +39,6 @@ Suppose you are asked to make a sphere, but are only given a small number of edg
 
 \noindent An issue arises regarding the uniqueness of these triangulations. While to the topologist, a sphere and a football and even a hockey puck are considered the same, the torus is the first object that is fundamentally different from the sphere. The reason is that there is a hole in the torus. The number of holes is one of the few distinctions that can be made between two objects in the world of topology. The techincal term for this is the genus of an object. A sphere, or anything like a sphere, has genus 0. A torus, with its one hole, has genus 1, and a two-holed torus has genus 2. Also, the Euler characteristic, $\chi$, is a value associated with three dimensional shapes. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given manifold has. For two-dimensional manifolds, $\displaystyle\chi = 2 - 2g$, and $g$ is the genus of the object. For example, any torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
 
-\subsection{Circle packing}
-\maketitle
-
-\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of these edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce to the reader a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a triangle; spheres can be used to make the edges of a tetrahedron. These circles are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices, $l_{ij} = r_i + r_j$.
-  
-\begin{figure}
-\begin{center}
-\includegraphics[scale = 0.3]{righttriangulation.jpg}
-\end{center}
-\caption{An example of circle packing. Three mutually tangent circles forming the perimeter of a triangle.}
-\end{figure}
-
 \begin{table}
 \begin{tabular}{cccccc}
 Name  &	Vertices, V &	Edges, E & Faces, F &	Genus, g & $\chi$\\
@@ -67,24 +55,41 @@ Two-holed torus & 10 & 36 & 24 &	2 & -2\\
 \label{EuChar}
 \end{table}
 
-\begin{figure}
-\centering
-\includegraphics[scale = 2.0]{180px-Double_torus_illustration.png}
-\caption{This is a two-hole torus. It has $\chi$ = -2.} %\hrulefill
-\label{test}
+\subsection{Definitions}
+\maketitle
+
+A triangulation of an n-dimensional manifold is a way of representing the manifold as the composition of n-dimensional simplices. A simplex in n dimensions can be thought of as the simplest geometric representation of an object in n dimensions. For example, a 0-simplex would be a point, a 1-simplex is a line segment, a 2-simplex is a triangle, and a 3-simplex is a tetrahedron. For the purpose of this project, it will not be necessary to look at simplices of higher dimensions. However, concepts may remain to be represented in general terms.\newline
+
+\noindent By creating triangulations for these manifolds, we have created discrete structures to more easily run computations over. In a way, a triangulation can be thought of as a graph; an arrangement of points and the unique paths between them. In order to run a flow over a structure like this, we look at the characteristics of each individual point. The development of this structure began by looking exclusively at 2-dimensional manifolds, also knows as surfaces. This limits our structures to only three types of simplices, which are also known as vertices, edges, and faces. \newline
+
+\noindent As the triangulation of the manifold itself is defined by the composition of 2-dimensional simplices, these simplices are also defined by lower dimensional simplices. In order to create these structures, before giving any quantities to define things like edge length, we can define the structure by a series of lists of references. That is to say, every simplex is local to simplices of every other type. These lists of local simplices are what we use to define the triangulation itself. We say a vertex is local to any edge or face that it is in the definition of, as well as any vertex that it shares an edge and face with. Similarly, an edge is local to its defining vertices, and faces that it is in the definition of, and any edge that it shares a vertex with. We call this property adjacency. Thus, a vertex is adjacent to at least three other vertices, at least three edges, and at least three faces, an edge is adjacent to exactly two vertices and exactly two faces, and a face is adjacent to exactly three vertices, exactly three edges, and exactly three faces.
+
+
+\subsection{Circle packing}
+\maketitle
+
+\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of these edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce to the reader a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a triangle; spheres can be used to make the edges of a tetrahedron. These circles are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices, $l_{ij} = r_i + r_j$.
+  
+\begin{figure}[t]
+\begin{center}
+\includegraphics[scale = 0.3]{righttriangulation.jpg}
+\end{center}
+\caption{An example of circle packing. Three mutually tangent circles forming the perimeter of a triangle.}
 \end{figure}
 
 \subsection{Duals}
 \maketitle
 
-Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j $and $k$ being the vertices of a triangle. This can be repeated for multiple triangles. All these incircles are known to be mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has its own dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
 
-\begin{figure}
+
+\begin{figure}[t]
 \centering
 \includegraphics[scale = 0.4]{dual.png}
 \caption{A dual to an edge}
 \label{fig:dual}
 \end{figure}
+
+Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j $and $k$ being the vertices of a triangle. This can be repeated for multiple triangles. All these incircles are known to be mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has its own dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
 
 \noindent With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the dual area, evaluated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the original weight of the vertex.\newline
 
