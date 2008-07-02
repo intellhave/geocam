@@ -9,7 +9,9 @@ Supervisor: Dr. David Glickenstein\\
 %\date{July 7, 2008}
 \begin{document}
 \maketitle
+\thispagestyle{empty}
 \newpage
+\renewcommand\contentsname{Table of Contents}
 \tableofcontents
 %\setcounter{tocdepth}{10}
 
@@ -19,16 +21,16 @@ Supervisor: Dr. David Glickenstein\\
 
 The purpose of this project is to provide a method for examining the effect of combinatorial Ricci flow over various compact manifolds in two and three dimensions. The execution of this flow is made possible by the use of triangulations and the simulation of them inside a computational data structure. The design of this data structure will be integral in the development of this project. The program will be written in C++. Educationally, we hope to learn a number of things, including advanced topics in geometry and topology, programming in a new and unfamiliar language, and writing a professional report of our findings. \newline
 
-\noindent In this paper we will discuss the number of things we learned and worked on, beginning with an introduction to triangulations and their properties. Then we will establish the definition of Ricci flow and its use in our research. That will be followed by a discussion of how the program was structured as well as an explanation of several functions that were created. At this point we will be ready to reveal the results and analysis we have obtained up to this point. Lastly, we will provide areas of future work in this area and for this project.
+\noindent In this paper we will discuss the number of things we learned and worked on, beginning with an introduction to triangulations and their properties. Then we will establish the definition of Ricci flow and its use in our research. That will be followed by a discussion of how the program was structured as well as an explanation of several functions that were created. After this we will be ready to reveal the results and analysis we have obtained up to this point. Lastly, we will provide areas of future work in combinatorial Ricci flow and for this project.
 
 \section{Triangulations}
 \maketitle
 \subsection{Introduction}
 \maketitle
 
-Suppose you are asked to make a sphere with as few pieces as possible. You could make a number of possible shapes, like a cube, or even a soccer ball. While both these shapes are discrete in nature, they can be used to represent a continuous sphere. In fact, you are probably already familiar with the most basic representation of a sphere- a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us an approximation to a sphere, like how three vertices- a triangle- can be used to approximate a circle in two dimensions. Naturally, if we add more vertices, we are able to better illustrate our shapes. A tetrahedron can look like a soccer ball; a triangle can look like an octagon. Like in modern video games and Hollywood movies, we can generate various shapes of many different sizes using polygons that mold to form the special effect. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into smaller triangles, we can essentially represent any shape with enough vertices. We define a shape as $triangulable$ if we can connect all triangles in a particular fashion such that they create a closed 3-dimensional shape.\newline
+Suppose you are asked to make a sphere with as few pieces as possible. You could make a number of possible shapes, like a cube, or even a soccer ball. While both of these shapes are discrete in nature, they can be used to represent a continuous sphere. In fact, you are probably already familiar with the most basic representation of a sphere- the tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us an approximation to a sphere, like how three vertices- a triangle- can be used to approximate a circle in two dimensions. Naturally, if we add more vertices, we are able to better illustrate our shapes. A tetrahedron can look like a soccer ball; a triangle can look like an octagon. Like in modern video games and Hollywood movies, we can generate various shapes of many different sizes using polygons that mold to form the special effect. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into smaller triangles, we can essentially represent any shape with enough vertices. We define a shape as $triangulable$ if we can connect all triangles in a particular fashion such that they create a closed 3-dimensional shape.\newline
   
-\noindent Of course, not everything is made of spheres, and while to the topologist, a soccer ball and a football and even a hockey puck are considered the same, spheres are not the only possible configuration we care about. Another shape of interest is known as the torus. It is the first object that is fundamentally different from the sphere. The reason is that there is a hole in the torus, which looks like a donut, or a bagel. It turns out that a visualization of this object can be made using as few as 7 vertices \cite{lutzmanifold}. It is also possible to add ``handles'' to any shape, resulting in the addition of another hole, like adding a handle to a drinking cup. There are also various other shapes which can be represented with varying numbers of vertices, such as Klein bottles and cross-caps. \cite{WolfMath} has more information on these fascinating shapes, and we will examine some of these further on.\newline
+\noindent Of course, not everything is made of spheres, and while to the topologist, a soccer ball and a football and even a hockey puck are considered the same, spheres are not the only possible configuration we care about. Another shape of interest is known as the torus. It is the first object that is fundamentally different from the sphere. The reason is that there is a hole in the torus, which looks like a donut, or a bagel. It turns out that a visualization of this object can be made using as few as 7 vertices \cite{lutzmanifold}. It is also possible to add ``handles'' to any shape, resulting in the addition of another hole, like adding a handle to a coffee mug. There are also various other shapes which can be represented with varying numbers of vertices, such as Klein bottles and cross-caps. \cite{WolfMath} has more information on these fascinating shapes, and we will examine some of these further on.\newline
  
   
 \begin{figure}
@@ -37,7 +39,7 @@ Suppose you are asked to make a sphere with as few pieces as possible. You could
 \caption{An example of triangulation. A triangle can be folded up into a tetrahedron.}
 \end{figure}
 
-\noindent An issue arises regarding the uniqueness of these triangulations. It is known that there are millions of ways to triangulate even the most basic shapes using a fixed number of vertices, but what separates spheres from tori is not the number of vertices used, but the number of holes that are created- one of the few distinctions that can be made between two objects in the world of topology. The techincal term for this is the $genus$ of an object. A sphere, or anything like a sphere, has genus 0. A torus, with its one hole, has genus 1, and a two-holed torus has genus 2. Another value associated with these surface in known as the Euler characteristic, $\chi$. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given configuration has. For two-dimensional manifolds, it is also known that $\displaystyle\chi = 2 - 2g$, with $g$ being the genus of the object. For example, any one hole torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
+\noindent An issue arises regarding the uniqueness of these triangulations. It is known that there are millions of ways to triangulate even the most basic shapes using a fixed number of vertices, but what separates spheres from tori is not the number of vertices used, but the number of holes that are created- one of the few distinctions that can be made between two objects in the world of topology. The techincal term for this is the $genus$ of an object. A sphere, or anything like a sphere, has genus 0. A torus, with its one hole, has genus 1, and a two-holed torus has genus 2. Another value associated with these surface is known as the Euler characteristic, $\chi$. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given configuration has. For two-dimensional manifolds, it is also known that $\displaystyle\chi = 2 - 2g$, with $g$ being the genus of the object. For example, any one hole torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
 
 \begin{table}
 \begin{tabular}{lccccc}
@@ -68,7 +70,7 @@ A triangulation of an $n$-dimensional manifold is a way of representing the mani
 \subsection{Circle packing}
 \maketitle
 
-\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of these edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce to the reader a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a triangle; spheres can be used to make the edges of a tetrahedron. These circles are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices, $l_{ij} = r_i + r_j$.
+\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of the edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce to the reader a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a triangle; spheres can be used to make the edges of a tetrahedron. These circles are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices, $l_{ij} = r_i + r_j$.
   
 \begin{figure}
 \begin{center}
@@ -80,7 +82,7 @@ A triangulation of an $n$-dimensional manifold is a way of representing the mani
 \subsection{Duals}
 \maketitle
 
-Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j $and $k$ being the vertices of a triangle. This can be repeated for multiple triangles. All these incircles are known to be mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has its own dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
+Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j $and $k$ being the vertices of the triangle. This can be repeated for multiple triangles. All these incircles are known to be mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has its own dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
 
 \noindent With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the dual area, evaluated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the original weight of the vertex.\newline
 
@@ -101,7 +103,7 @@ Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio R
 
 \subsection{Definition}
 
-Just because we have a triangulation and that it is circle packed does not mean that it is already compact and organized. Vertices can be too large or too small, and the end shape can be somewhat repulsive. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform looking. We introduce to the reader the equation for combinatorial Ricci flow, which allows an individual radius to change over time on a discrete surface. In Euclidean space, the differential equation can be written as 
+Just because we have a triangulation and that it is circle packed does not mean that it is already compact and organized. Vertices can be too large or too small, and the end shape can be somewhat repulsive. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. We introduce to the reader the equation for combinatorial Ricci flow, which allows an individual radius to change over time on a discrete surface. In Euclidean space, the differential equation can be written as 
   \begin{equation}
   \label{Riccif}
   \frac{dr_i}{{dt}} = -K_ir_i
@@ -119,7 +121,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
   K_i = 2\pi - \sum{\angle i}
   \end{equation}
   
-\noindent So since the differential equation depends on a variable whose value changes over time, we cannot solve it so easily.\newline
+\noindent Since the differential equation depends on a variable whose value changes over time, we cannot solve it so easily.\newline
    
 \noindent A potential issue we noted is that based on the equation, more often than not, the lengths of the radii would decrease. Take the example of a simple tetrahedron with all sides of equal length, we find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex by the same amount, but the curvature of each vertex would still remain $\pi$. The radii would continue to decrease until they approach zero length. We then have to address that issue since computers don't like working with numbers near zero, as in the denominator of the arccosine function. Weird, unwanted stuff might happen. Let us introduce the ability to resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$ and equate as
  
@@ -179,7 +181,7 @@ With regards to our program, Ricci flow over 2-manifold Euclidean surfaces will 
 \section{Program/Code}
 \subsection{Structure}
 
-When beginning the creation of the program, the structure design was critical. Not only would it help dictate the direction of the project over the course of its lifespan, but the design decisions would affect the speed and efficiency of all added functionality. It was agreed that that system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that was quick and easy to move from one simplex to another. As seen in fig.\ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. So for the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces, as shown in Table~\ref{geomat}.\newline
+When beginning the creation of the program, the structure design was critical. Not only would it help dictate the direction of the project over the course of its lifespan, but the design decisions would affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that was quick and easy to move from one simplex to another. As seen in figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. So for the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces, as shown in Table~\ref{geomat}.\newline
 
   \begin{table}[b]
   \begin{center}
@@ -206,13 +208,13 @@ When beginning the creation of the program, the structure design was critical. N
 \label{triUML}
 \end{figure}
 
-\noindent While we are able to manually construct a few basic triangulations by hand, as we add more vertices that will become ever harder. \cite{lutzmanifold} has millions of known triangulations of varying size. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and be able to convert it into the form that we use. We were able to transform this
+\noindent While we are able to manually construct a few basic triangulations by hand, as we add more vertices doing so will become ever harder. \cite{lutzmanifold} has millions of known triangulations of varying size. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and be able to convert it into the form that we use. We were able to transform this
   
 \begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
 [2,3,5],[2,4,5],[3,4,5]]}
 \end{verbatim}
  
-\noindent which solely documents the faces, into our format, which can be seen in Table \ref{tab:format} which allows us to keep track of every vertex, edge, and face.
+\noindent which solely documents the faces, into our format, which can be seen in Table \ref{tab:format}.
 
 \begin{table}
 \begin{center}
@@ -252,8 +254,10 @@ When beginning the creation of the program, the structure design was critical. N
 
 \subsection{calcFlow}
 
-\noindent The function $calcFlow$ runs a Ricci flow over the triangulation and records the data in a file. The algorithm for the ODE, provided by J-P Moreau, employs a Runge-Kutta method \cite{JPM}. First, the file name for the data to be written in is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculated and record. Lastly, a boolean is provided, where $true$ indicates that the adjusted differential equations that are scaled to a constant, equation (\ref{Riccin}) should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Printed to the file is each step with every vertex and its weight and curvature at that moment. At the end of each step, the net curvature is printed, as shown below. \newline 
-\begin{multicols}{2}
+\noindent The function $calcFlow$ runs a Ricci flow over the triangulation and records the data in a file. The algorithm for the ODE, provided by J-P Moreau, employs a Runge-Kutta method \cite{JPM}. First, the file name for the data to be written in is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculate and record. Lastly, a boolean is provided, where $true$ indicates that the adjusted differential equation that is scaled to a constant, equation (\ref{Riccin}), should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Printed to the file is each step with every vertex and its weight and curvature at that moment. At the end of each step, the net curvature is printed, as shown in Table \ref{tab:ricciSteps}. \newline 
+\begin{table}
+\begin{minipage}{2.2in}
+%\begin{multicols}{2}
 \begin{tabular}{l|l|l}
 \hline
 Step 1   & Weight &  Curv\\
@@ -266,8 +270,10 @@ Vertex 6: &2.000 & -3.046\\
 Vertex 7: &4.000 & -0.3045\\
 Vertex 8: &8.000 & 1.989\\
 Vertex 9: &5.000 & 0.07239\\ \hline
-\end{tabular} Net Curv: 0.0000 
-
+\end{tabular} 
+Net Curv: 0.0000
+\end{minipage}
+\begin{minipage}{2.2in}
 \begin{tabular}{l|l|l}
 \hline
 Step 50 &  Weight &  Curv\\
@@ -282,9 +288,13 @@ Vertex 8: &4.559 & 0.01018\\
 Vertex 9: &4.553 & 0.004906\\ \hline
 \end{tabular}
 Net Curv: 0.0000
-\end{multicols}
+\end{minipage}
+%\end{multicols}
+\caption{Two steps of a Ricci flow}
+\label{tab:ricciSteps}
+\end{table}
 
-\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of net curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. As expected, the net curvatures of our trials remained constant, ensuring that our program was running as we expected it to.\newline
+\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of net curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. The code for the $calcFlow$ function can be found in \ref{calcFlowCode}\newline
 
 \subsection{Morphs}
 
@@ -298,7 +308,7 @@ One type of morph that we have available is known as a flip, called this because
 \item 1-3 flip \newline
 In a 1-3 flip, a single face is replaced by three faces. One way to think of going about this procedure is to simply add a new vertex to an existing face. This requires creating three new edges that connect the new vertex to the three defining vertices of the existing face.
 \item 2-2 flip \newline
-In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. 
+In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. The code for the 2-2 flip is located in \ref{calcFlowCode}.
 
 
 \begin{figure}
@@ -322,22 +332,22 @@ In addition to the flips that were described above, there are other ``morphs'' t
 
 \begin{itemize}
 \item Adding Handles \newline
-By adding a handle to a surface, we are in essence adding a hole to it. One simple way of obtaining this result is to ``patch'' the surface of a torus to the surface that we are working with. With our code, this exactly what we have done. The method that we have written removes a face from the existing triangulation and replaces it with a 9-vertex triangulation of a torus, the standard flat model. By using the three existing vertices and edges, we are actually adding 6 new vertices, 24 new edges, and 17 new faces. This operation changes the topology of the triangulation that we are working with. It will reduce the Euler characteristic, $\chi$, by 2 and thus change the net curvature of the figure.
+By adding a handle to a surface, we are in essence adding a hole to it. One simple way of obtaining this result is to ``patch'' the surface of a torus to the surface that we are working with. With our code, this is exactly what we have done. The method that we have written removes a face from the existing triangulation and replaces it with a 9-vertex triangulation of a torus, the standard flat model. By using the three existing vertices and edges, we are actually adding 6 new vertices, 24 new edges, and 17 new faces. This operation changes the topology of the triangulation that we are working with. It will reduce the Euler characteristic, $\chi$, by 2 and thus change the net curvature of the figure.
 \newline
 \item Adding Cross-Caps \newline
 A cross-cap is a piece of a surface with a self intersection. The purpose of adding a cross-cap to a manifold is to give us a property of non-orientability. A surface of this kind is characterized by the ability to move an object along it in such a way that it reaches its original location but in mirror-image form. Another way to describe this is to say that the surface has only one side. In this way, the portion of the surface known as the cross-cap is, itself, topologically equivalent to the mobius band. Since this property of non-orientability is one without any level or degree, it remains sufficient to add only a single cross-cap to any given surface, but in conjunction with the method of adding handles, this technique allows us to create any topology within two dimensions.
 \newline
 \item Adding Double Triangles \newline
-Another shape we have been looking into is called the double triangle. In essence, a double triangle is made of two triangles with the same three vertices. It can also be thought of as folding one triangle on top of another. We can add these to a triangulation and see how things vary with their presence. This is of interest because of their very peculiar effect on the definition of a triangulation. Without double triangles, there are certain restrictions on definitions and adjacency properties of simplices within a triangulation as outlined in the previous section on triangulations. However, with these double triangles, these restrictions are broken up somewhat by allowing double and even triple adjacency references, creating vertices with only one or two local vertices, faces with only two defining edges, and edges with only one defining vertex among other bizarre properties. Because of these inconsistencies in definition, different surfaces that have these double triangles attached to them will behave in unique and noteworthy ways. The function that adds these shapes takes an edge as an argument and ``opens'' it by creating another edge between the same two vertices, and then adds two more edges from these two vertices, meeting at a single new vertex and defining two new faces.
+Another shape we have been looking into is called the double triangle. In essence, a double triangle is made of two triangles with the same three vertices. It can also be thought of as folding one triangle on top of another. We can add these to a triangulation and see how things vary with their presence. This is of interest because of their very peculiar effect on the definition of a triangulation. Without double triangles, there are certain restrictions on definitions and adjacency properties of simplices within a triangulation as outlined in the previous section on triangulations. However, with these double triangles, the restrictions are broken up by allowing double and even triple adjacency references, creating vertices with only one or two local vertices, faces with only two defining edges, and edges with only one defining vertex, among other bizarre properties. Because of these inconsistencies in definition, different surfaces that have these double triangles attached to them will behave in unique and noteworthy ways. The function that adds these shapes takes an edge as an argument and ``opens'' it by creating another edge between the same two vertices, and then adds two more edges from these two vertices, meeting at a single new vertex and defining two new faces.
 \end{itemize}
 
 \section{Results}
 
 \subsection{Flows}
 
-The program for the Ricci flow was tested by beginning with the most simple cases, and then explored as many different possibilities as we could conceive of to try to find any anomalies. The first test was the tetrahedron. In the standard equation, it is easily shown that all weights approach zero exponentially fast. In the normalized equation, and the equation that is used in the rest of the testing, the tetrahedron's weights approach a single positive number, the fourth root of the ``area'' of the tetrahedron, so that the area remains constant. In addition, all the curvatures converged to the same value, in this case $\pi$, so that the net curvature is $4\pi$. Results were similar for the other platonic solids.\newline
+The program for the Ricci flow was tested by beginning with the most simple cases, and then explored with as many different possibilities as we could conceive of to try to find anomalies. The first test was the tetrahedron. In the standard equation, it is easily shown that all weights approach zero exponentially fast. In the normalized equation, and the equation that is used in the rest of the testing, the tetrahedron's weights approach a single positive number, the fourth root of the ``area'' of the tetrahedron, so that the area remains constant. In addition, all the curvatures converged to the same value, in this case $\pi$, so that the net curvature is $4\pi$. Results were similar for the other platonic solids.\newline
 
-\noindent The next test was the torus with the standard nine-vertex triangulation. Again all the weights approached the same positive number to maintain constant area. As expected, the curvatures all went to zero while the total curvature remained zero throughout. Further simple tests included triangulations of larger genus, and in all cases the total curvature remained at the constant multiple of $\pi$ that was expected and the ``area'' was also constant. In addition, there does not appear to be any further effect from the initial weights other than determining the area of the triangulation. It is not clear from any of the tests we ran that having extremes amongst the initial weights causes a different end result.\newline
+\noindent The next test was the torus with the standard nine-vertex triangulation. Again all the weights approached the same positive number to maintain constant area. As expected, the curvatures all went to zero while the total curvature remained zero throughout. Further simple tests included triangulations of larger genus, and in all cases the total curvature remained at a constant multiple of $\pi$ that was expected and the ``area'' was also constant. In addition, there does not appear to be any further effect from the initial weights other than determining the area of the triangulation. It is not clear from any of the tests we ran that having extremes amongst the initial weights causes a different end result.\newline
 
 \noindent In each case all vertices converged to the same curvature. This was not always the situation for the weights, as in many triangulations there would be several final weights. It became clear that this would occur when vertices had different degrees. In fact, we feel fairly certain that there might be a formula relating the area of a weighted triangulation and the degree of a vertex to that vertex's final weight. In most of the examples we tried, when two vertices had the same degree, they had the same final weight, but this is not always the case. One such example is adding three vertices to one face of the tetrahedron. As seen in Table \ref{tab:weightTab}, vertices 4, 5, and 6 all have degree four. Yet vertex 5 has a greater final weight than the other two. The only explanation we could find with some merit is that the local vertices of 5 are different in degree from those of 4 and 6. That is, the degrees of the local vertices of 5 are never less than four, while vertices 4 and 6 each have a local vertex with degree 3.
 
@@ -443,7 +453,7 @@ Vertex 7: 6.18421 \\
 
 \subsection{Convergence speeds}
 
-One experiment we performed was measuring convergence speeds of various triangulations. For each triangulation, five flows were run where the weights were random between one and twenty-five. Random weights, while not a perfect solution, was the only viable as it was unclear what set weights could be equal for all triangulations. The dt was held constant at 0.03. For each run, a step number was assigned for when all weights and curvatures had converged to four digits, (the precision shown in a file of the results).  The data collected at times seemed interesting and followed a pattern while other times were inexplicable.\newline
+One experiment we performed was measuring convergence speeds of various triangulations. For each triangulation, five flows were run where the weights were random between one and twenty-five. Random weights, while not a perfect solution, was the only viable as it was unclear what set weights could be equal for all triangulations. The $dt$ was held constant at 0.03. For each run, a step number was assigned for when all weights and curvatures had converged to four digits, (the precision shown in a file of the results).  The data collected at times seemed interesting and followed a pattern while other times were inexplicable.\newline
 
 \begin{figure}
 \centering
@@ -461,9 +471,9 @@ One experiment we performed was measuring convergence speeds of various triangul
 \section{Future work}
 \subsection{3-D}
 
-We would also like to start investigating 3-dimensional constructs built from tetrahedrons. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the internal angles associated with them. We can also try and investigate how our code applies (if it does) to hyperbolic and spherical coordinates.\newline
+We would also like to start investigating 3-dimensional constructs built from tetrahedrons. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the internal angles associated with them.\newline
 
-Ultimately, Dr. Glickenstein would like to be able to build 3-D representations of these surfaces and walk along them in any given path. We can look into how faces are connected to each other, and like a tesselation, be able to move from one triangle to another seemlessly. We can lay groundwork for that, and when this project is able to jump to 3-D modeling, we hope that this will help.  
+\noindent Ultimately, Dr. Glickenstein would like to be able to build 3-D representations of these surfaces and walk along them in any given path. We can look into how faces are connected to each other, and like a tesselation, be able to move from one triangle to another seemlessly. We can lay groundwork for that, and when this project is able to jump to 3-D modeling, we hope that this will help.  
 
 \subsection{Circle packing expansions}
 
@@ -481,7 +491,7 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 
 All this time we have focused on Euclidean coordinates. However, there are cases when triangulations may be better suited in other systems. In changing our format to hyperbolic and spherical coordinates, we would have to reevaluate each of our steps depending on the system. For example, in hyperbolic, the basic Ricci flow equation is $\displaystyle \frac{dr_i}{dt} = -K_i\sinh r_i$. Likewise, in spherical coordinates, for a surface $X, \displaystyle \sum{K_i} = 2\pi\chi - \mbox{Surface Area of} X$, which can change over time. \newline
 
-\noindent Another thing of interest is that once we can run variations of our $calcFlow$ program based on our different coordinate systems, and observe whether or not each triangulation converges in the same fashion, or if it matters depending on the formulas. If we do discover that all systems behave the same way, we would then like to focus on one system of coordinates, most likely Euclidean, as that would be easier to grasp and be more computational. 
+\noindent Another thing of interest is that once we run variations of our $calcFlow$ program based on our different coordinate systems, we can observe whether or not each triangulation converges in the same fashion, or if it matters depending on the formulas. If we do discover that all systems behave the same way, we would then like to focus on one system of coordinates, most likely Euclidean, as that would be easier to grasp and be more computational. 
 
 \section{Conclusions}
   We learned a lot of things along the way. At the beginning, we all had varying familiarities with college geometry; some of us had not touched the stuff since high school. But we are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come.\newline
@@ -534,7 +544,9 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 
 \newpage
 \subsection{Code}
-\begin{verbatim}void calcFlow(char* fileName, double dt ,double *initWeights,
+\label{calcFlowCode}
+\begin{verbatim}
+void calcFlow(char* fileName, double dt ,double *initWeights,
 				int numSteps, bool adjF)  
 {
   int p = Triangulation::vertexTable.size(); // The number of vertices.
