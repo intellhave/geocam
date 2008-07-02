@@ -261,7 +261,7 @@ void flip(Edge e)
      Triangulation::faceTable[(fa2.getIndex())].addFace(f1.getIndex());
      Triangulation::faceTable[(f2.getIndex())].addFace(fb1.getIndex());
      Triangulation::faceTable[(fb1.getIndex())].addFace(f2.getIndex());
-     
+
 }
 
 void removeVertex(Vertex v)
