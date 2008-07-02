@@ -27,3 +27,8 @@ void Vertex::setWeight(double newWeight)
            Triangulation::edgeTable[(*getLocalEdges())[i]].setLength();
      }
 }
+
+int Vertex::getDegree()
+{
+    return getLocalEdges()->size();
+}
