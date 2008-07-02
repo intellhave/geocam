@@ -65,3 +65,7 @@ void writeTriangulationFile(char*);
  * The '=' sign indicates the beginning of the Triangulation information.      
  */
 void makeTriangulationFile(char*, char*);
+
+void printResultsStep(char*, vector<double>*, vector<double>*, int);
+void printResultsVertex(char*, vector<double>*, vector<double>*, int);
+void printResultsNum(char*, vector<double>*, vector<double>*, int);

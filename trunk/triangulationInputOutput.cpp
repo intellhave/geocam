@@ -20,6 +20,7 @@ the reading and writing of text files.
 #include <sstream>
 #include "triangulation.h"
 #include "triangulationmath.h"
+#include <iomanip>
 
 
 /*
@@ -530,3 +531,74 @@ void makeTriangulationFile (char* from, char* to) {
   }
   
   infile.close(); }
+
+void printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs, int numSteps)
+{
+     ofstream results(fileName, ios_base::trunc);
+     results << left << setprecision(6); 
+     results.setf(ios_base::showpoint);
+     
+     map<int, Vertex>::iterator vit;
+     int vertSize = Triangulation::vertexTable.size();
+     
+     for(int i = 0; i < numSteps; i++)
+     {
+         results << left << "Step " << left <<setw(4)  << i + 1;
+         results << right << setw(7) << "Weight";
+         results << right << setw(10) << "Curv" << "\n----------------------------\n";
+         vit = Triangulation::vertexTable.begin();
+         for(int j = 0; j < vertSize; j++)
+         {
+             results << "Vertex " << vit->first << ": " ;
+             results << left << setw(12)<< (*weights)[i*vertSize + j];
+             results << left << setw(12) << (*curvs)[i*vertSize+j] << "\n";
+             vit++;
+         }
+         results << "\n";
+     }
+}
+
+void printResultsVertex(char* fileName, vector<double>* weights, vector<double>* curvs, int numSteps)
+{
+     ofstream results(fileName, ios_base::trunc);
+     results << left << setprecision(6); 
+     results.setf(ios_base::showpoint);
+     map<int, Vertex>::iterator vit;
+     int vertSize = Triangulation::vertexTable.size();
+    vit = Triangulation::vertexTable.begin(); 
+   for(int k=0; k < vertSize; k++) 
+   { 
+      results << left << "Vertex: " << left << setw(4)<< vit->first;
+      results << right << setw(3) << "Weight";
+      results << right << setw(10) << "Curv";
+      results << "\n------------------------------\n";
+      for(int j = 0; j < numSteps; j++)
+      {
+              results << left <<  "Step " << setw(7) << (j + 1);
+              results << left << setw(12) << (*weights)[j*vertSize + k];
+              results << left << setw(12) << (*curvs)[j*vertSize + k] << "\n";
+      }
+      results << "\n";
+      vit++;
+   }
+}
+
+void printResultsNum(char* fileName, vector<double>* weights, vector<double>* curvs, int numSteps)
+{
+     ofstream results(fileName, ios_base::trunc);
+     results << left << setprecision(6); 
+     results.setf(ios_base::showpoint);
+     map<int, Vertex>::iterator vit;
+     int vertSize = Triangulation::vertexTable.size();
+    vit = Triangulation::vertexTable.begin(); 
+   for(int k=0; k < vertSize; k++) 
+   {
+      for(int j = 0; j < numSteps; j++)
+      {
+              results << left << setw(14) << (*weights)[j*vertSize + k];
+              results << left << setw(12) << (*curvs)[j*vertSize + k] << "\n";
+      }
+      results << "\n";
+      vit++;
+   }
+}

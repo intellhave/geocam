@@ -141,25 +141,24 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
  *
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
-void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool adjF)  
+void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,double *initWeights,int numSteps, bool adjF)  
 {
   int p = Triangulation::vertexTable.size(); // The number of vertices or 
-                                             // number of variables in system. 
+                                             // number of variables in system.
+                                         
   double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data in.
   int    i,k; // ints used for "for loops".
   map<int, Vertex>::iterator vit;
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
-  double weights[p][numSteps];
-  double curvatures[p][numSteps];
   
-  ofstream results(fileName, ios_base::trunc);
+//  ofstream results(fileName, ios_base::trunc);
   //results << left << setprecision(4); 
-  results.setf(ios_base::showpoint);
+//  results.setf(ios_base::showpoint);
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
-   for (k=0; k<p; k++) { 
-     z[k]=initWeights[k]; // z[k] holds the current weights.
+   for (k=0; k<p; k++) {
+    z[k]=initWeights[k]; // z[k] holds the current weights.
    }
    for (i=1; i<numSteps+1; i++) 
    {
@@ -180,18 +179,18 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // First "for loop" in whole step calculates
        {                    // everything manually, prints to file.
-           weights[k][i - 1] = z[k];
+           (*weights).push_back( z[k]);
            //results << "Vertex " << vit->first << ": " << z[k] << " / ";
            double curv = curvature(vit->second);
            if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
            {
             // results << 0. << "\n";
-             curvatures[k][i - 1] = 0.;
+             (*curvatures).push_back(0.);
            }
            else {
              //  results << curv << "\n";
-               curvatures[k][i - 1] = curv;
-               }
+               (*curvatures).push_back(curv);
+             }
            net += curv;
            if(adjF) ta[k]= dt * ((-1) * curv 
                            * vit->second.getWeight() +
@@ -238,25 +237,25 @@ void calcFlow(char* fileName, double dt ,double *initWeights,int numSteps, bool 
             net = 0;
      }
 
-
+     
      //results << "Net Curv: " << net << "\n\n";
    }
-   for(k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
-   {
-      results << setprecision(6); 
-      results << left << "Vertex: " << left << setw(4)<< vit->first;
-      results << right << setw(3) << "Weight";
-      results << right << setw(10) << "Curv";
-      results << "\n------------------------------\n";
-      for(int j = 0; j < numSteps; j++)
-      {
-              results << left <<  "Step " << setw(7) << (j + 1);
-              results << left << setw(12) << weights[k][j];
-              results << left << setw(12) << curvatures[k][j] << "\n";
-      }
-      results << "\n";
-   }
-   results.close();
+//   for(k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
+//   {
+//      results << setprecision(6); 
+//      results << left << "Vertex: " << left << setw(4)<< vit->first;
+//      results << right << setw(3) << "Weight";
+//      results << right << setw(10) << "Curv";
+//      results << "\n------------------------------\n";
+//      for(int j = 0; j < numSteps; j++)
+//      {
+//              results << left <<  "Step " << setw(7) << (j + 1);
+//              results << left << setw(12) << weights[k][j];
+//              results << left << setw(12) << curvatures[k][j] << "\n";
+//      }
+//      results << "\n";
+//   }
+//   results.close();
 }
 
 double stdDiffEQ(int vertex) {

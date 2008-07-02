@@ -69,7 +69,7 @@ vector<int> listDifference(vector<int>*, vector<int>*);
  *
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
-void calcFlow(char*, double, double*, int, bool);
+void calcFlow(vector<double>*, vector<double>*, double, double*, int, bool);
 
 /*
  * Calculates the dr/dt of the vertex given by its index according to the
