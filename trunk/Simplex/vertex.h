@@ -43,6 +43,8 @@ class Vertex : public Simplex
 		 */
 		void setWeight(double);
 		
+		int getDegree();
+		
 };
 
 #endif // VERTEX_H
