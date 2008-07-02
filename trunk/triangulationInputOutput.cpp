@@ -558,6 +558,8 @@ void printResultsStep(char* fileName, vector<double>* weights, vector<double>* c
          }
          results << "\n";
      }
+     
+   results.close();
 }
 
 void printResultsVertex(char* fileName, vector<double>* weights, vector<double>* curvs)
@@ -584,6 +586,8 @@ void printResultsVertex(char* fileName, vector<double>* weights, vector<double>*
       results << "\n";
       vit++;
    }
+   
+   results.close();
 }
 
 void printResultsNum(char* fileName, vector<double>* weights, vector<double>* curvs)
@@ -605,4 +609,5 @@ void printResultsNum(char* fileName, vector<double>* weights, vector<double>* cu
       results << "\n";
       vit++;
    }
+   results.close();
 }
