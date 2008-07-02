@@ -70,16 +70,15 @@ A triangulation of an $n$-dimensional manifold is a way of representing the mani
 \subsection{Circle packing}
 \maketitle
 
-\noindent A triangulation exists outside of lengths, but in order to perform any measurements we need a way to quantify our system. This is known as adding a metric to the triangulation, creating a \textit{weighted triangulation}. This is done by a technique called circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in figure \ref{rightTri}. The radius of the circle at a vertex, $v_i$, is known as its weight, $r_i$. Beginning with triangles of pre-defined sizes, it can seem daunting and perhaps impossible to apply weights at each vertex to create a circle-packing. But working in the opposite order, applying weights to each vertex to define the size, is far easier. In this way, we provide lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$. The metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}. \newline
+\noindent A triangulation exists outside of lengths, but in order to perform any measurements we need a way to quantify our system. This is known as adding a metric to the triangulation, creating a \textit{weighted triangulation}. This is done by a technique called circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. The radius of the circle at a vertex, $v_i$, is known as its weight, $r_i$. Beginning with triangles of pre-defined sizes, it can seem daunting and perhaps impossible to apply weights at each vertex to create a circle-packing. But working in the opposite order, applying weights to each vertex to define the size, is far easier. In this way, we provide lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$. The metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}. \newline
 
-\noindent By applying weights first, we come across an interesting situation. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in figure , where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing more general circle-packings, as discussed in \ref{circExt}, we can broaden our range of possible weighted triangulations.
+\noindent By applying weights first, we come across an interesting situation. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing more general circle-packings, as discussed in \ref{circExt}, we can broaden our range of possible weighted triangulations.
 
   
 \begin{figure}
-\begin{center}
 \includegraphics[scale = 0.3]{righttriangulation.jpg}
-\end{center}
-\caption{An example of circle packing. Three mutually tangent circles forming the perimeter of a triangle.}
+\includegraphics[scale = 0.3]{badcase.jpg}
+\caption{An example of circle packing (left) and a triangulation that cannot be circle-packed.}
 \label{rightTri}
 \end{figure}
 
@@ -185,7 +184,7 @@ With regards to our program, Ricci flow over 2-manifold Euclidean surfaces will 
 \section{Program/Code}
 \subsection{Structure}
 
-When beginning the creation of the program, the structure design was critical. Not only would it help dictate the direction of the project over the course of its lifespan, but the design decisions would affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that was quick and easy to move from one simplex to another. As seen in figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. So for the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces, as shown in Table~\ref{geomat}.\newline
+When beginning the creation of the program, the structure design was critical. Not only would it help dictate the direction of the project over the course of its lifespan, but the design decisions would affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that was quick and easy to move from one simplex to another. As seen in Figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. So for the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces, as shown in Table~\ref{geomat}.\newline
 
   \begin{table}[b]
   \begin{center}
@@ -207,7 +206,7 @@ When beginning the creation of the program, the structure design was critical. N
 
 
 \begin{figure}
-\includegraphics[scale = 0.5]{triangulationUML.png}
+\includegraphics[scale = 0.48]{triangulationUML.png}
 \caption{A UML diagram of the program.}
 \label{triUML}
 \end{figure}
