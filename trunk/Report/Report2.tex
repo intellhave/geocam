@@ -70,13 +70,17 @@ A triangulation of an $n$-dimensional manifold is a way of representing the mani
 \subsection{Circle packing}
 \maketitle
 
-\noindent While we can indicate how these different vertices are connected to each other, there is still an issue regarding the lengths of the edges. There are an infinite number of possible edge length configurations just as there are an infinite number of possible triangles. We introduce to the reader a method known as circle packing to quantify edge lengths. In circle packing, the shapes in question can be constructed using circles of the same dimension on each of the vertices. Circles can be used to make the sides of a triangle; spheres can be used to make the edges of a tetrahedron. These circles are mutually tangent to each other, and two radii make up one edge. Thus, the length is simply the sum of the two radii of the adjacent vertices, $l_{ij} = r_i + r_j$.
+\noindent A triangulation exists outside of lengths, but in order to perform any measurements we need a way to quantify our system. This is known as adding a metric to the triangulation, creating a \textit{weighted triangulation}. This is done by a technique called circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in figure \ref{rightTri}. The radius of the circle at a vertex, $v_i$, is known as its weight, $r_i$. Beginning with triangles of pre-defined sizes, it can seem daunting and perhaps impossible to apply weights at each vertex to create a circle-packing. But working in the opposite order, applying weights to each vertex to define the size, is far easier. In this way, we provide lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$. The metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}. \newline
+
+\noindent By applying weights first, we come across an interesting situation. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in figure , where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing more general circle-packings, as discussed in \ref{circExt}, we can broaden our range of possible weighted triangulations.
+
   
 \begin{figure}
 \begin{center}
 \includegraphics[scale = 0.3]{righttriangulation.jpg}
 \end{center}
 \caption{An example of circle packing. Three mutually tangent circles forming the perimeter of a triangle.}
+\label{rightTri}
 \end{figure}
 
 \subsection{Duals}
@@ -478,7 +482,7 @@ We would also like to start investigating 3-dimensional constructs built from te
 \noindent Ultimately, Dr. Glickenstein would like to be able to build 3-D representations of these surfaces and walk along them in any given path. We can look into how faces are connected to each other, and like a tesselation, be able to move from one triangle to another seemlessly. We can lay groundwork for that, and when this project is able to jump to 3-D modeling, we hope that this will help.  
 
 \subsection{Circle packing expansions}
-
+\label{circExt}
 Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of how much they intersect by. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
 
 \begin{figure}
