@@ -146,3 +146,25 @@ double Triangulation::netCurvature()
        }
        return net;
 }
+
+void Triangulation::setWeights(double* weights)
+{
+     map<int, Vertex>::iterator vit;
+     int i = 0;
+     for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
+     {
+       vit->second.setWeight(weights[i]);
+       i++;
+     }
+}
+
+void Triangulation::getWeights(double* weights)
+{
+     map<int, Vertex>::iterator vit;
+     int i = 0;
+     for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
+     {
+       weights[i] = vit->second.getWeight();
+       i++;
+     }
+}

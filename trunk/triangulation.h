@@ -90,6 +90,8 @@ class Triangulation
       * Calculates the sum of the curvatures over all vertices.
       */
      static double netCurvature();
+     static void setWeights(double*);
+     static void getWeights(double*);
 };
 
 
