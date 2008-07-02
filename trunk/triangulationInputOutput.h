@@ -66,6 +66,6 @@ void writeTriangulationFile(char*);
  */
 void makeTriangulationFile(char*, char*);
 
-void printResultsStep(char*, vector<double>*, vector<double>*, int);
-void printResultsVertex(char*, vector<double>*, vector<double>*, int);
-void printResultsNum(char*, vector<double>*, vector<double>*, int);
+void printResultsStep(char*, vector<double>*, vector<double>*);
+void printResultsVertex(char*, vector<double>*, vector<double>*);
+void printResultsNum(char*, vector<double>*, vector<double>*);

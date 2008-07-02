@@ -532,14 +532,16 @@ void makeTriangulationFile (char* from, char* to) {
   
   infile.close(); }
 
-void printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs, int numSteps)
+void printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs)
 {
+     int vertSize = Triangulation::vertexTable.size();
+     int numSteps = weights->size() / vertSize;
      ofstream results(fileName, ios_base::trunc);
      results << left << setprecision(6); 
      results.setf(ios_base::showpoint);
      
      map<int, Vertex>::iterator vit;
-     int vertSize = Triangulation::vertexTable.size();
+     
      
      for(int i = 0; i < numSteps; i++)
      {
@@ -558,13 +560,14 @@ void printResultsStep(char* fileName, vector<double>* weights, vector<double>* c
      }
 }
 
-void printResultsVertex(char* fileName, vector<double>* weights, vector<double>* curvs, int numSteps)
+void printResultsVertex(char* fileName, vector<double>* weights, vector<double>* curvs)
 {
+     int vertSize = Triangulation::vertexTable.size();
+     int numSteps = weights->size() / vertSize;
      ofstream results(fileName, ios_base::trunc);
      results << left << setprecision(6); 
      results.setf(ios_base::showpoint);
      map<int, Vertex>::iterator vit;
-     int vertSize = Triangulation::vertexTable.size();
     vit = Triangulation::vertexTable.begin(); 
    for(int k=0; k < vertSize; k++) 
    { 
@@ -583,13 +586,14 @@ void printResultsVertex(char* fileName, vector<double>* weights, vector<double>*
    }
 }
 
-void printResultsNum(char* fileName, vector<double>* weights, vector<double>* curvs, int numSteps)
+void printResultsNum(char* fileName, vector<double>* weights, vector<double>* curvs)
 {
+     int vertSize = Triangulation::vertexTable.size();
+     int numSteps = weights->size() / vertSize;
      ofstream results(fileName, ios_base::trunc);
      results << left << setprecision(6); 
      results.setf(ios_base::showpoint);
      map<int, Vertex>::iterator vit;
-     int vertSize = Triangulation::vertexTable.size();
     vit = Triangulation::vertexTable.begin(); 
    for(int k=0; k < vertSize; k++) 
    {
