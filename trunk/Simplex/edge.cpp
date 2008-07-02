@@ -6,6 +6,7 @@ Version: June 10, 2008
 
 #include "edge.h" // class's header file
 #include "triangulation.h"
+#include <iostream>
 
 
 // class constructor

@@ -55,7 +55,7 @@ void Simplex::removeVertex(int vertex)
              if(localVertices[i] == vertex)
              {
                localVertices.erase(localVertices.begin() + i);
-               break;
+               return;
              }
      }
 }
@@ -66,7 +66,7 @@ void Simplex::removeEdge(int edge)
              if(localEdges[i] == edge)
              {
               localEdges.erase(localEdges.begin() + i);
-              break;
+              return;
              }
      }
      
@@ -78,7 +78,7 @@ void Simplex::removeFace(int face)
              if(localFaces[i] == face)
              {
               localFaces.erase(localFaces.begin() + i);
-              break;
+              return;
              }
      }
      

@@ -42,7 +42,6 @@ class Vertex : public Simplex
 		 * Sets the weight to the given weight.
 		 */
 		void setWeight(double);
-		
 		int getDegree();
 		
 };

@@ -57,7 +57,6 @@ class Simplex
 	  void removeEdge(int);
 	  
 	  void removeFace(int);
-	  
      /* Returns a pointer to the list of local vertices.
 	  */
 	  vector<int>* getLocalVertices();

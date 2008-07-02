@@ -6,6 +6,7 @@ Version: June 10, 2008
 
 #include "vertex.h" // class's header file
 #include "triangulation.h"
+#include <iostream>
 
 // class constructor
 Vertex::Vertex() : Simplex()
@@ -28,7 +29,9 @@ void Vertex::setWeight(double newWeight)
      }
 }
 
+
 int Vertex::getDegree()
 {
     return getLocalEdges()->size();
 }
+
