@@ -256,6 +256,7 @@ When beginning the creation of the program, the structure design was critical. N
 
 \noindent The function $calcFlow$ runs a Ricci flow over the triangulation and records the data in a file. The algorithm for the ODE, provided by J-P Moreau, employs a Runge-Kutta method \cite{JPM}. First, the file name for the data to be written in is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculate and record. Lastly, a boolean is provided, where $true$ indicates that the adjusted differential equation that is scaled to a constant, equation (\ref{Riccin}), should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Printed to the file is each step with every vertex and its weight and curvature at that moment. At the end of each step, the net curvature is printed, as shown in Table \ref{tab:ricciSteps}. \newline 
 \begin{table}
+\begin{center}
 \begin{minipage}{2.2in}
 %\begin{multicols}{2}
 \begin{tabular}{l|l|l}
@@ -290,6 +291,7 @@ Vertex 9: &4.553 & 0.004906\\ \hline
 Net Curv: 0.0000
 \end{minipage}
 %\end{multicols}
+\end{center}
 \caption{Two steps of a Ricci flow}
 \label{tab:ricciSteps}
 \end{table}
