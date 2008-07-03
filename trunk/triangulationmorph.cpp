@@ -176,12 +176,16 @@ void flip(Edge e)
      Vertex vb2 = Triangulation::vertexTable[diff[0]];
      
      sameAs = listIntersection(va1.getLocalEdges(), vb1.getLocalEdges());
+     sameAs = listIntersection(&sameAs, f1.getLocalEdges());
      Edge ea1 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va2.getLocalEdges(), vb1.getLocalEdges());
+     sameAs = listIntersection(&sameAs, f1.getLocalEdges());
      Edge eb1 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va1.getLocalEdges(), vb2.getLocalEdges());
+     sameAs = listIntersection(&sameAs, f2.getLocalEdges());
      Edge ea2 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va2.getLocalEdges(), vb2.getLocalEdges());
+     sameAs = listIntersection(&sameAs, f2.getLocalEdges());
      Edge eb2 = Triangulation::edgeTable[sameAs[0]];
      
      sameAs = listIntersection(f1.getLocalFaces(), ea1.getLocalFaces());
