@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  3 JUL 2008 15:17
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  3 JUL 2008 15:48
 entering extended mode
 **C:/Dev-Cpp/geocam/Report/Report2.tex
 (C:/Dev-Cpp/geocam/Report/Report2.tex
@@ -768,16 +768,6 @@ Overfull \hbox (48.42522pt too wide) in paragraph at lines 755--755
 etIndex());[] 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 758--759
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 760--761
-
- []
-
 [36] (Report2.aux) ) 
 Here is how much of TeX's memory you used:
  1096 strings out of 95340
@@ -796,7 +786,7 @@ sky/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr17.pfb>
 MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/fonts
 /type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm
 /cmti12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt12.pfb>
-Output written on Report2.pdf (36 pages, 834201 bytes).
+Output written on Report2.pdf (36 pages, 834154 bytes).
 PDF statistics:
  174 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
