@@ -1,7 +1,7 @@
 /**************************************************************
 File: Triangulation Input/Output
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 20, 2008
+Version: July 3, 2008
 ***************************************************************
 The Triangulation Input/Output file holds the functions that handle
 the reading and writing of text files.
@@ -66,6 +66,69 @@ void writeTriangulationFile(char*);
  */
 void makeTriangulationFile(char*, char*);
 
+/*
+ * Prints the results of a calcFlow into the file given. Requires two vectors
+ * of doubles, one representing the changing weights and the second the
+ * curvatures. The number of vertices is assumed to be the current number in
+ * the triangulation and the number of steps is then derived from the size of
+ * the vectors. The file is cleared before writing, and the format is grouping
+ * by size as shown below:
+ *            :
+ *          Vertex 6: 10.6390     -1.21810
+ *
+ *          Step 5    Weight      Curv
+ *          ----------------------------
+ *          Vertex 1: 15.2785     -5.90324    
+ *          Vertex 2: 12.3130     -1.03506    
+ *          Vertex 3: 12.7753     -0.856032   
+ *          Vertex 4: 24.1124     -2.15461    
+ *          Vertex 5: 10.8755     -1.19773    
+ *          Vertex 6: 10.3957     -1.41971 
+ *          
+ *          Step 7    Weight      Curv
+ *          ----------------------------
+ *            :  
+ */
 void printResultsStep(char*, vector<double>*, vector<double>*);
+
+/*
+ * Prints the results of a calcFlow into the file given. Requires two vectors
+ * of doubles, one representing the changing weights and the second the
+ * curvatures. The number of vertices is assumed to be the current number in
+ * the triangulation and the number of steps is then derived from the size of
+ * the vectors. The file is cleared before writing, and the format is grouping
+ * by vertex as shown below:
+ *            :
+ *           Step 99     20.8731     -2.09440    
+ *           Step 100    20.8731     -2.09440    
+ *
+ *           Vertex: 2   Weight      Curv
+ *           ------------------------------
+ *           Step 1      14.0000     1.92788     
+ *           Step 2      12.5241     1.29678     
+ *           Step 3      11.4253     0.638433    
+ *           Step 4      10.6237     0.0369037
+ *            :
+ */
 void printResultsVertex(char*, vector<double>*, vector<double>*);
+
+/*
+ * Prints the results of a calcFlow into the file given. Requires two vectors
+ * of doubles, one representing the changing weights and the second the
+ * curvatures. The number of vertices is assumed to be the current number in
+ * the triangulation and the number of steps is then derived from the size of
+ * the vectors. The file is cleared before writing, and the format is grouped
+ * by vertex but with no labels. It is designed for easy importing into an
+ * excel document. An example is hsown below:
+ *            :
+ *           27.9836       -2.09439    
+ *           27.9836       -2.09439    
+ *           27.9836       -2.09439    
+ *
+ *           3.00000       -6.69377    
+ *           3.42280       -6.28556    
+ *           3.85808       -5.88621    
+ *           4.29797       -5.50438
+ *            :
+ */
 void printResultsNum(char*, vector<double>*, vector<double>*);

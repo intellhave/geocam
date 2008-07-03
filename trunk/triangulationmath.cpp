@@ -1,7 +1,7 @@
 /**************************************************************
 File: Triangulation Math
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 25, 2008
+Version: July 3, 2008
 ***************************************************************
 The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
@@ -121,10 +121,16 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
 
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
- * Runge-Kutta method. Results from the steps are written into the file 
- * given for viewing. calcFlow takes a number of parameters:
- *      char* fileName-      The name of the file to write the results
- *                           to. 
+ * Runge-Kutta method. Results from the steps are written into vectors of
+ * doubles provided. The parameters are:
+ *      vector<double>* weights-
+ *                           A vector of doubles to append the results of
+ *                           weights, grouped by step, with a total size of
+ *                           numSteps * numVertices.
+ *      vector<double>* curvatures-
+ *                           A vector of doubles to append the results of
+ *                           curvatures, grouped by step, with a total size
+ *                           of numSteps * numVertices.
  *      double dt -          The time step size. Initial and ending
  *                           times not needed since diff. equations are
  *                           independent of time.
@@ -135,9 +141,12 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
  *      bool adjF -          Boolean of whether or not to use adjusted
  *                           differential equation. True to use adjusted.
  * 
- * The information printed in the file are the weights and curvatures for
- * each Vertex at each step point. The file is cleared at the beginning of
- * every call to calcFlow.
+ * The information placed in the vectors are the weights and curvatures for
+ * each Vertex at each step point. The data is grouped by steps, so the first
+ * vertex of the first step is the beginning element. After n doubles are
+ * placed, for an n-vertex triangulation, the first vertex of the next step
+ * follows. If the vectors passed in are not empty, the data is added to the
+ * end of the vector and the original information is not cleared.
  *
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
