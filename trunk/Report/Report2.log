@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  7 JUL 2008 09:39
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  7 JUL 2008 10:37
 entering extended mode
 **C:/Dev-Cpp/geocam/Report/Report2.tex
 (C:/Dev-Cpp/geocam/Report/Report2.tex
@@ -398,7 +398,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 24--27
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 29--32
-[]\OT1/cmr/m/n/12 Dana Macken-zie.  The poincare con-jec-ture -- proved.
+[]\OT1/cmr/m/n/12 Dana Macken-zie.  The Poincare con-jec-ture proved.
  []
 
 ) [29]
@@ -804,7 +804,7 @@ iles/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/
 fonts/type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/blues
 ky/cm/cmti12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt12.pfb
 >
-Output written on Report2.pdf (38 pages, 816709 bytes).
+Output written on Report2.pdf (38 pages, 816636 bytes).
 PDF statistics:
  183 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
