@@ -155,8 +155,17 @@ f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alph
 \label{proof1}
 \frac{d(\mbox{log}~\alpha)}{dt} = \frac{\mbox{sum of all curvatures}}{\mbox{number of vertices}} = \overline{K}, \mbox{average curvature.}
 \end{equation}
- 
-\noindent An in-depth derivation of this can be found in the Appendix. It turns out that $\overline{K}$ is constant for any given triangulation and is equal to $\displaystyle\frac{2\pi\chi}{|V|}$, where $|V|$ is the number of vertices and $\chi$ is the Euler characteristic. This is also noted in \cite{chowluo}. Plugging this back into ($\ref{ref1}$) we determine that
+
+\noindent We can also show that $\overline{K}$ is a constant and depends on the number of vertices and the Euler characteristic. We know that the sum of angles from each vertex is 360 $\deg,$ or $2\pi$. However, we also know that the sum of angles on each face is $\pi$, thus we determine that 
+
+$$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{F}{2}).$$
+\noindent Looking back at Table \ref{EuChar} we note that for most polyhedra listed, $E = \frac{3F}{2}$. Let us use this substitution and rewrite the above equation as
+
+$$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + F) = 2\pi \chi.$$
+
+\noindent Thus we find that $\overline{K}$ is just $\displaystyle\frac{\sum{K_i}}{|V|} = \frac{2\pi \chi}{|V|}$ where $|V|$ is the number of vertices. This is also noted in \cite{chowluo}. Plugging this information back into ($\ref{ref1}$) we determine that
+%
+%\noindent An in-depth derivation of this can be found in the Appendix. It turns out that $\overline{K}$ is constant for any given triangulation and is equal to $\displaystyle\frac{2\pi\chi}{|V|}$, where $|V|$ is the number of vertices and $\chi$ is the Euler characteristic. This is also noted in \cite{chowluo}. Plugging this back into ($\ref{ref1}$) we determine that
 
 \begin{equation}
 \frac{d\tilde{r_i}}{dt} = -\tilde{K_i}\tilde{r_i} + \overline{K}\tilde{r_i} = (\overline{K} - \tilde{K_i})\tilde{r_i}
