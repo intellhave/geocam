@@ -1,5 +1,3 @@
-<<<<<<< .mine
-=======
 \begin{thebibliography}{1}
 
 \bibitem{DiffEq}
@@ -32,19 +30,9 @@ Dana Mackenzie.
 \newblock The {P}oincar\'{e} conjecture proved.
 \newblock http://www.sciencemag.org.
 
-\bibitem{WolfMath}
-Wolfram Mathworld.
-\newblock http://mathworld.wolfram.com/.
-
 \bibitem{JPM}
 J-P Moreau.
 \newblock Differential equations in c++.
 \newblock http://pagesperso-orange.fr/\\jean-pierre.moreau/c$\_$eqdiff.html.
 
-\bibitem{wiki}
-Wikipedia.
-\newblock Euler characteristic.
-\newblock http://en.wikipedia.org/\\wiki/Euler$\_$characteristic.
-
 \end{thebibliography}
->>>>>>> .r258

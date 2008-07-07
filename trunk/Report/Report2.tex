@@ -31,14 +31,12 @@ The purpose of this project is to provide a method for examining the combinatori
 \maketitle
 
 Suppose you are asked to construct the surface of a sphere with as few pieces as possible. You could make a number of possible shapes, such as a cube or a soccer ball. While both of these shapes are discrete in nature, they can be used to approximate a round, continuous sphere. The most basic Euclidean approximation of the surface of a sphere is the boundary of a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us a surface that represents the surface of a sphere. Naturally, if we add more vertices, we are able to better illustrate our shapes through greater refinement. Similarly, in modern video games and Hollywood movies, various shapes are generated using polygons of many different sizes that mold to form a graphically rendered object. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into triangles, we can essentially represent any shape using this method. We define a shape as $triangulable$ if we can connect all triangles in a particular fashion such that they create a closed 3-dimensional shape.\newline
-  
-\noindent ***needs to be revised, perhaps omitted*** Of course, not everything is made of spheres, and while to the topologist, a soccer ball and a football and even a hockey puck are considered the same, spheres are not the only possible configuration we care about. Another shape of interest is known as the torus. It is the first object that is fundamentally different from the sphere. The reason is that there is a hole in the torus, which looks like a donut, or a bagel. It turns out that a visualization of this object can be made using as few as 7 vertices \cite{lutzmanifold}. It is also possible to add ``handles'' to any shape, resulting in the addition of another hole, like adding a handle to a coffee mug. There are also various other shapes which can be represented with varying numbers of vertices, such as Klein bottles and cross-caps. \cite{WolfMath} has more information on these fascinating shapes, and we will examine some of these further on.\newline
- 
+
   
 \begin{figure}
 \includegraphics[scale = 0.5]{flattetrahedron.png}
 \includegraphics[scale = 0.3]{tetrahedron.jpg}
-\caption{An example of triangulation. The triangles can be folded up into the boundary of a tetrahedron.}
+\caption{An example of a triangulation. The triangles can be folded up into the boundary of a tetrahedron.}
 \end{figure}
 
 \subsection{Definitions}
@@ -50,7 +48,7 @@ We begin by providing the definition of a manifold. A manifold is defined as any
 
 \noindent For the purpose of this project, it will not be necessary to look at simplices of higher dimensions. However, concepts may translate to all dimensions. Primarily, we will be working exclusively with 2-dimensional manifolds, or surfaces, and eventually we will address these problems in 3-dimensional manifolds. Additionally, we are only concerned with manifolds that are closed, or without boundary. \newline
 
-\noindent When talking about closed, triangulated surfaces an important characteristic comes up that should be defined known as the Euler characteristic, given by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important figure which is the \textit{genus} of a surface. The genus of a surface is a number that describes the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $X = 2 - 2g$, where \textit{g} is the genus of the surface. 
+\noindent When talking about closed, triangulated surfaces an important characteristic comes up that is known as the Euler characteristic, given by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property which is the \textit{genus} of a surface. The genus of a surface is a number that describes the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $X = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
 
 \begin{table}
 \begin{tabular}{lccccc}
@@ -64,7 +62,7 @@ Icosahedron &	12 & 30 & 20 & 0	&	 2\\
 Torus & 9 & 27 & 18 &	1 & 0\\
 Two-holed torus & 10 & 36 & 24 &	2 & -2\\
 \end{tabular}
-\caption{Listings of vertices, edges, faces, and genus for some common shapes \cite{wiki}}
+\caption{Listings of vertices, edges, faces, and genus for some common shapes}
 \label{EuChar}
 \end{table}
 
