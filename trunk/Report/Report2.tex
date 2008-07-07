@@ -21,7 +21,7 @@ Supervisor: Dr. David Glickenstein\\
 
 The purpose of this project is to provide a method for examining the combinatorial Ricci flow on various compact manifolds in two, and potentially three, dimensions. This is a flow that is run on triangulations that are endowed with a length structure. For computation purposes, this requires a data structure which will encode these triangulations. The design of this data structure will be fundamental in the development of this project. The program will be written in C++. Educationally, we hope to learn a number of things, including advanced topics in geometry and topology, programming in a new and unfamiliar language, and writing a professional report of our findings. \newline
 
-\noindent In this paper we will discuss a number of things we learned and worked on, beginning with an introduction to triangulations and their properties. Then we will establish the definition of combinatorial Ricci flow and its use in our research. That will be followed by a discussion of how the program is structured as well as an explanation of several functions that were created. After this we will be ready to reveal the results and analysis we have obtained up to this point. Lastly, we will provide areas of future work in combinatorial Ricci flow and for this project.
+\noindent In this paper we will discuss many topics we learned and worked on, beginning with an introduction to triangulations and their properties. Then we will establish the definition of combinatorial Ricci flow and its use in our research. That will be followed by a discussion of how the program is structured as well as an explanation of several functions that were created. After this we will be ready to reveal the results and analysis we have obtained up to this point. Lastly, we will provide areas of future work in combinatorial Ricci flow and for this project.
 
 \section{Triangulations}
 \maketitle
@@ -39,7 +39,7 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 \caption{An example of triangulation. The triangles can be folded up into the boundary of a tetrahedron.}
 \end{figure}
 
-\noindent ***needs to be revised, perhaps omitted*** An issue arises regarding the uniqueness of these triangulations. It is known that there are millions of ways to triangulate even the most basic shapes using a fixed number of vertices, but what separates spheres from tori is not the number of vertices used, but the number of holes that are created, one of the few distinctions that can be made between two objects in the world of topology. The techincal term for this is the $genus$ of an object. A sphere, or anything like a sphere, has genus 0. A torus, with its one hole, has genus 1, and a two-holed torus has genus 2. Another value associated with these surface is known as the Euler characteristic, $\chi$. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given configuration has. For two-dimensional manifolds, it is also known that $\displaystyle\chi = 2 - 2g$, with $g$ being the genus of the object. For example, any one hole torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
+\noindent ***needs to be revised, perhaps omitted*** An issue arises regarding the uniqueness of these triangulations. It is known that there are millions of ways to triangulate even the most basic shapes using a fixed number of vertices, but what separates spheres from tori is not the number of vertices used, but the number of holes that are created, one of the few distinctions that can be made between two objects in the world of topology. The technical term for this is the $genus$ of an object. A sphere, or anything like a sphere, has genus 0. A torus, with its one hole, has genus 1, and a two-holed torus has genus 2. Another value associated with these surface is known as the Euler characteristic, $\chi$. It is defined as $\displaystyle\chi = V - E + F$, where $V,$ $E,$ and $F$ are the number of vertices, edges, and faces a given configuration has. For two-dimensional manifolds, it is also known that $\displaystyle\chi = 2 - 2g$, with $g$ being the genus of the object. For example, any one hole torus has $\chi = 0$, and any representation of a sphere has $\chi = 2.$ Table \ref{EuChar} has listings for many common shapes. \newline
 
 \begin{table}
 \begin{tabular}{lccccc}
@@ -76,7 +76,7 @@ We begin by providing the definition of a manifold. A manifold is defined as any
 
 \noindent Given a triangulation, we wish to put lengths on edges. This is known as adding a metric to the triangulation. One way to do this is to create a \textit{weighted triangulation}. This is done by a technique called circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. The radius of the circle at a vertex, $v_i$, is known as its weight, $r_i$. For any lone triangle, this can be done. By applying weights to each vertex we provide lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the edge with vertices $v_i$ and $v_j$. The metric applied to the triangulation in this way, with Euclidean triangles (see \ref{HypSphere}), is known as the \textit{cone metric} \cite{chowluo}. \newline
 
-\noindent By applying weights first, we come across an interesting situation. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing genralizations of circle-packings, as discussed in \ref{circExt}, we can broaden our range of possible length assignments.
+\noindent By applying weights first, we come across an interesting situation. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing generalizations of circle-packings, as discussed in \ref{circExt}, we can broaden our range of possible length assignments.
 
   
 \begin{figure}
@@ -115,7 +115,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
   \frac{dr_i}{{dt}} = -K_ir_i
   \end{equation}
   
-\noindent where $K_i$ is a characteristic called the $curvature$ of a vertex, and $r_i$ is the $radius$ or $weight$ of the vertex $i$. We use the words ``radius'' and ``weight'' interchangably, denoting the length of the radius that surrounds a vertex $i$ in circle-packing. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths we can determine the angle using the law of cosines. For a triangle with lengths $a, b,\mbox{ and }c,$ the angle opposite side $c$ is
+\noindent where $K_i$ is a characteristic called the $curvature$ of a vertex, and $r_i$ is the $radius$ or $weight$ of the vertex $i$. We use the words ``radius'' and ``weight'' interchangeably, denoting the length of the radius that surrounds a vertex $i$ in circle-packing. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths we can determine the angle using the law of cosines. For a triangle with lengths $a, b,\mbox{ and }c,$ the angle opposite side $c$ is
   
   $$
   \angle C = \arccos\frac{a^2 + b^2 - c^2}{2ab}
@@ -145,7 +145,7 @@ Just because we have a triangulation and that it is circle packed does not mean 
  \end{eqnarray}
  
 \noindent It also turns out that $\displaystyle \frac{1}{\alpha} \frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt}.$ 
- In order to find an appropriate value for $\alpha$ we decided to use the following criterium:
+ In order to find an appropriate value for $\alpha$ we decided to use the following criteria:
  
 \begin{equation}
 \label{eqprod}
@@ -490,13 +490,13 @@ One experiment we performed was measuring convergence speeds of various triangul
 \section{Future work}
 \subsection{3-D}
 
-We would also like to start investigating 3-dimensional constructs built from tetrahedrons. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the internal angles associated with them.\newline
+We would also like to start investigating 3-dimensional constructs built from tetrahedrons. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the cone angles associated with tetrahedron vertices.\newline
 
-\noindent Ultimately, Dr. Glickenstein would like to be able to build 3-D representations of these surfaces and walk along them in any given path. We can look into how faces are connected to each other, and like a tesselation, be able to move from one triangle to another seemlessly. We can lay groundwork for that, and when this project is able to jump to 3-D modeling, we hope that this will help.  
+\noindent Ultimately, Dr. Glickenstein would like to be able to build 3-D representations of these surfaces and walk along them in any given path. We can look into how faces are connected to each other, and like a tesselation, be able to move from one triangle to another seamlessly. We can lay groundwork for that, and when this project is able to jump to 3-D modeling, we hope that this will help.  
 
 \subsection{Circle packing expansions}
 \label{circExt}
-Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of how much they intersect by. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
+Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of their angle of intersection. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
 
 \begin{figure}
 \begin{center}
@@ -508,9 +508,9 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 
 \subsection{Hyperbolic/ spherical triangulations}
 \label{HypSphere}
-All this time we have focused on Euclidean coordinates. However, there are cases when triangulations may be better suited in other systems. In changing our format to hyperbolic and spherical coordinates, we would have to reevaluate each of our steps depending on the system. For example, in hyperbolic, the basic Ricci flow equation is $\displaystyle \frac{dr_i}{dt} = -K_i\sinh r_i$. Likewise, in spherical coordinates, for a surface $X, \displaystyle \sum{K_i} = 2\pi\chi - \mbox{Surface Area of} X$, which can change over time. \newline
+Hence far, we have focused on Euclidean triangles. However, there are cases when triangulations may be better suited in other systems. In changing our format to hyperbolic and spherical coordinates, we would have to reevaluate each of our steps depending on the system. For example, in hyperbolic, the basic Ricci flow equation is $\displaystyle \frac{dr_i}{dt} = -K_i\sinh r_i$. Note that in, for instance, spherical geometry, for a surface $X, \displaystyle \sum{K_i} = 2\pi\chi - \mbox{Surface Area of } X$, which can change over time. \newline
 
-\noindent Another thing of interest is that once we run variations of our $calcFlow$ program based on our different coordinate systems, we can observe whether or not each triangulation converges in the same fashion, or if it matters depending on the formulas. If we do discover that all systems behave the same way, we would then like to focus on one system of coordinates, most likely Euclidean, as that would be easier to grasp and be more computational. 
+\noindent It is also of interest to run variations of our $calcFlow$ program based on our different geometries. We can observe whether or not each triangulation converges in the same fashion, or if it matters which geometry we choose. If we do discover that all systems behave the same way, we would then like to focus on one geometry, most likely Euclidean, as that would be easier to grasp and be more computational. 
 
 \section{Conclusion}
 
