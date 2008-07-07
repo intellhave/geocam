@@ -10,6 +10,7 @@ calculations on the triangulation.
 #include "simplex/edge.h"
 #include "simplex/vertex.h"
 #include "simplex/face.h"
+#include "triangulation.h"
 
 
 /*
