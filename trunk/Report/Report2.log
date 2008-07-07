@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  7 JUL 2008 10:51
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  7 JUL 2008 12:11
 entering extended mode
 **C:/Dev-Cpp/geocam/Report/Report2.tex
 (C:/Dev-Cpp/geocam/Report/Report2.tex
@@ -274,12 +274,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 324--325
 
  []
 
-[16] [17 <Flip.png (PNG copy)>] [18]
+[16] [17 <Flip.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 346--347
 
  []
 
-
+[18]
 Underfull \hbox (badness 10000) in paragraph at lines 348--349
 
  []
@@ -304,10 +304,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 429--430
 
  []
 
-[20] <torus22.png, id=83, 418.66759pt x 314.00069pt>
+<torus22.png, id=80, 418.66759pt x 314.00069pt>
 File: torus22.png Graphic file (type png)
  <use torus22.png>
-<torus2addvertex2.png, id=84, 418.66759pt x 314.00069pt>
+<torus2addvertex2.png, id=81, 418.66759pt x 314.00069pt>
 File: torus2addvertex2.png Graphic file (type png)
 
 <use torus2addvertex2.png>
@@ -320,7 +320,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 438--439
 
  []
 
-
+[20]
 Underfull \hbox (badness 10000) in paragraph at lines 440--441
 
  []
@@ -330,12 +330,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 442--443
 
  []
 
-[21 <torus22.png (PNG copy)> <torus2addvertex2.png (PNG copy)>]
+
 Underfull \hbox (badness 10000) in paragraph at lines 444--445
 
  []
 
-
+[21 <torus22.png (PNG copy)> <torus2addvertex2.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 446--447
 
  []
@@ -350,7 +350,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 450--451
 
  []
 
-[22] <tetratouch.png, id=91, 442.34224pt x 211.82587pt>
+<tetratouch.png, id=88, 442.34224pt x 211.82587pt>
 File: tetratouch.png Graphic file (type png)
  <use tetratouch.png>
 Overfull \hbox (52.34116pt too wide) in paragraph at lines 455--456
@@ -362,7 +362,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 462--463
 
  []
 
-<ConvergenceTable.png, id=92, 395.67825pt x 686.565pt>
+[22] <ConvergenceTable.png, id=92, 395.67825pt x 686.565pt>
 File: ConvergenceTable.png Graphic file (type png)
 
 <use ConvergenceTable.png>
@@ -817,7 +817,7 @@ sky/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr17.pfb>
 MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/fonts
 /type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm
 /cmti12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt12.pfb>
-Output written on Report2.pdf (38 pages, 849286 bytes).
+Output written on Report2.pdf (38 pages, 849300 bytes).
 PDF statistics:
  186 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)

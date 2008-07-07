@@ -21,7 +21,7 @@
 \contentsline {section}{\numberline {6}Future work}{25}
 \contentsline {subsection}{\numberline {6.1}3-D}{25}
 \contentsline {subsection}{\numberline {6.2}Circle packing expansions}{26}
-\contentsline {subsection}{\numberline {6.3}Hyperbolic/ spherical triangulations}{27}
+\contentsline {subsection}{\numberline {6.3}Hyperbolic/ spherical triangulations}{26}
 \contentsline {section}{\numberline {7}Conclusion}{27}
 \contentsline {section}{\numberline {8}Appendix}{29}
 \contentsline {subsection}{\numberline {8.1}Derivation of Eq.\nobreakspace {}(6\hbox {})}{29}
