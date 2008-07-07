@@ -2,28 +2,29 @@
 \contentsline {section}{\numberline {2}Triangulations}{3}
 \contentsline {subsection}{\numberline {2.1}Introduction}{3}
 \contentsline {subsection}{\numberline {2.2}Definitions}{5}
-\contentsline {subsection}{\numberline {2.3}Circle packing}{6}
+\contentsline {subsection}{\numberline {2.3}Circle packing}{7}
 \contentsline {subsection}{\numberline {2.4}Duals}{7}
 \contentsline {section}{\numberline {3}Ricci flow}{8}
 \contentsline {subsection}{\numberline {3.1}Background}{8}
 \contentsline {subsection}{\numberline {3.2}Definition}{9}
-\contentsline {subsection}{\numberline {3.3}Expectations}{11}
+\contentsline {subsection}{\numberline {3.3}Expectations}{12}
 \contentsline {section}{\numberline {4}Program/Code}{12}
 \contentsline {subsection}{\numberline {4.1}Structure}{12}
-\contentsline {subsection}{\numberline {4.2}calcFlow}{14}
-\contentsline {subsection}{\numberline {4.3}Morphs}{15}
+\contentsline {subsection}{\numberline {4.2}calcFlow}{15}
+\contentsline {subsection}{\numberline {4.3}Morphs}{16}
 \contentsline {subsubsection}{\numberline {4.3.1}Flips}{16}
-\contentsline {subsubsection}{\numberline {4.3.2}Other Transfigurations}{17}
-\contentsline {section}{\numberline {5}Results}{18}
-\contentsline {subsection}{\numberline {5.1}Flows}{18}
+\contentsline {subsubsection}{\numberline {4.3.2}Other Transfigurations}{18}
+\contentsline {section}{\numberline {5}Results}{19}
+\contentsline {subsection}{\numberline {5.1}Flows}{19}
 \contentsline {subsection}{\numberline {5.2}Specific cases}{20}
-\contentsline {subsection}{\numberline {5.3}Convergence speeds}{22}
-\contentsline {section}{\numberline {6}Future work}{25}
-\contentsline {subsection}{\numberline {6.1}3-D}{25}
+\contentsline {subsection}{\numberline {5.3}Convergence speeds}{23}
+\contentsline {section}{\numberline {6}Future work}{26}
+\contentsline {subsection}{\numberline {6.1}3-D}{26}
 \contentsline {subsection}{\numberline {6.2}Circle packing expansions}{26}
-\contentsline {subsection}{\numberline {6.3}Hyperbolic/ spherical triangulations}{26}
-\contentsline {section}{\numberline {7}Conclusion}{27}
-\contentsline {section}{\numberline {8}Appendix}{29}
-\contentsline {subsection}{\numberline {8.1}Derivation of Eq.\nobreakspace {}(6\hbox {})}{29}
-\contentsline {subsection}{\numberline {8.2}Remarks on Runge-Kutta method for solving Eq.\nobreakspace {}(8\hbox {})}{30}
-\contentsline {subsection}{\numberline {8.3}Code}{31}
+\contentsline {subsection}{\numberline {6.3}Hyperbolic/ spherical triangulations}{27}
+\contentsline {section}{\numberline {7}Conclusion}{28}
+\contentsline {section}{\numberline {8}Appendix}{30}
+\contentsline {subsection}{\numberline {8.1}Derivation of Eq.\nobreakspace {}(6\hbox {})}{30}
+\contentsline {subsection}{\numberline {8.2}Remarks on Runge-Kutta method for solving Eq.\nobreakspace {}(8\hbox {})}{31}
+\contentsline {subsection}{\numberline {8.3}Data Plots}{31}
+\contentsline {subsection}{\numberline {8.4}Code Examples}{32}

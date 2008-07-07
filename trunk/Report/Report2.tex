@@ -74,9 +74,9 @@ We begin by providing the definition of a manifold. A manifold is defined as any
 \subsection{Circle packing}
 \maketitle
 
-\noindent A triangulation exists outside of lengths, but in order to perform any measurements we need a way to quantify our system. This is known as adding a metric to the triangulation, creating a \textit{weighted triangulation}. This is done by a technique called circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. The radius of the circle at a vertex, $v_i$, is known as its weight, $r_i$. Beginning with triangles of pre-defined sizes, it can seem daunting and perhaps impossible to apply weights at each vertex to create a circle-packing. But working in the opposite order, applying weights to each vertex to define the size, is far easier. In this way, we provide lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$. The metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}. \newline
+\noindent Given a triangulation, we wish to put lengths on edges. This is known as adding a metric to the triangulation. One way to do this is to create a \textit{weighted triangulation}. This is done by a technique called circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. The radius of the circle at a vertex, $v_i$, is known as its weight, $r_i$. For any lone triangle, this can be done. By applying weights to each vertex we provide lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the edge with vertices $v_i$ and $v_j$. The metric applied to the triangulation in this way, with Euclidean triangles (see \ref{HypSphere}), is known as the \textit{cone metric} \cite{chowluo}. \newline
 
-\noindent By applying weights first, we come across an interesting situation. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing more general circle-packings, as discussed in \ref{circExt}, we can broaden our range of possible weighted triangulations.
+\noindent By applying weights first, we come across an interesting situation. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing genralizations of circle-packings, as discussed in \ref{circExt}, we can broaden our range of possible length assignments.
 
   
 \begin{figure}
@@ -89,9 +89,9 @@ We begin by providing the definition of a manifold. A manifold is defined as any
 \subsection{Duals}
 \maketitle
 
-Every triangle that is capable of being circle-packed has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each edge and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j $and $k$ being the vertices of the triangle. This can be repeated for multiple triangles. All these incircles are known to be mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has its own dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
+Every triangle has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each circle centered at one of its vertices, and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j$ and $k$ being the vertices of the triangle. This can be done on each triangle. All these incircles are mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has a dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
 
-\noindent With enough dual edges, we can obtain a polygon surrounding a vertex. The area of the region formed by these duals is called the dual area, evaluated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the original weight of the vertex.\newline
+\noindent With enough dual edges, we can obtain a polygon surrounding each vertex. The area of the region formed by these duals is called the dual area, calculated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the weight of the vertex. The sum is over all faces incident to vertex $i$.\newline
 
 \noindent The dual length and dual area have some interesting properties that we hope to investigate. David Glickenstein examines these and more in \cite{Dave}. 
 
@@ -108,7 +108,7 @@ Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio R
 
 \subsection{Definition}
 
-Just because we have a triangulation and that it is circle packed does not mean that it is in a desired configuration. Vertices can be too large or too small, and the resulting geometry can be somewhat repulsive. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. In their paper, Chow and Luo introduce an equation known as combinatorial Ricci flow. On a discrete surface, this equation allows the weights to change over time \ref{chowluo}. We introduce this equation to the reader which can be written as
+Just because we have a triangulation and that it is circle packed does not mean that it is in a desired configuration. Vertices can be too large or too small, and the resulting geometry can be somewhat repulsive. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. In their paper, Chow and Luo introduce an equation known as combinatorial Ricci flow. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We introduce this equation to the reader which can be written as
 
   \begin{equation}
   \label{Riccif}
@@ -176,11 +176,19 @@ f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alph
 
 \subsection{Expectations}
 
-With regards to our program, Ricci flow over 2-manifold Euclidean surfaces will be important since a lot is already known about them. Cases like the tetrahedron can be calculated by hand so it will be useful to test our results against these surfaces. For example, we expect that the Tetrahedron under (\ref{Riccif}) will have all weights converge to zero. Whereas under (\ref{Riccin}) the weights are expected to converge to positive constants.\newline
+We have some expectations for combinatorial Ricci flow over two-dimensional Euclidean surfaces. Cases like the boundary of the tetrahedron can be calculated by hand so it will be useful to test our results against these surfaces. For example, we expect that the tetrahedron under (\ref{Riccif}) will have all weights converge to zero. Whereas under (\ref{Riccin}) the weights are expected to converge to positive constants.\newline
 
-\noindent There are other expectations beyond the simple cases we can calculate by hand. According to \cite{chowluo}, using the normalized Ricci flow will create a constant \textit{product area}. This makes sense, as we fixed the product of the radii to be constant in (\ref{eqprod}). Thus, we expect that the product of the initial weights will be equal to the product of the weights at any intermediate step of the flow. Also, it is predicted that the total curvature of a 2-manifold surface should remain a constant determined by its genus.\newline
+\noindent There are other expected behaviors. We expect that the product of the initial weights will be equal to the product of the weights at any intermediate step of the flow, what we call the \textit{product area}. Also, it is predicted that the total curvature of a 2-manifold surface should remain a constant determined by its genus.\newline
 
-\noindent Out of our program we expect to create a system that allows for easy access of information while also providing that information in a time efficient way. Our goal is to create a program that can be built upon later to provide further functionality and options without requiring widespread and time consuming changes to the code. While we certainly expect a number of bugs, we plan to find them and fix them with proper testing.
+\noindent Out of our program we expect to create a system that allows for easy access of information while also providing that information in a time efficient way. Our goal is to create a program that can be built upon later to provide further functionality and options without requiring widespread and time consuming changes to the code. While we certainly expect a number of bugs, we plan to develop methods to test and find any errors in our code. \newline
+
+
+\noindent Initial checks for accuracy:
+\begin{enumerate}
+\item Boundary of tetrahedron will converge to equal weights.
+\item Constant \textit{product area}.
+\item Constant total curvature.
+\end{enumerate}
 
 \section{Program/Code}
 \subsection{Structure}
@@ -499,7 +507,7 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 \end{figure}
 
 \subsection{Hyperbolic/ spherical triangulations}
-
+\label{HypSphere}
 All this time we have focused on Euclidean coordinates. However, there are cases when triangulations may be better suited in other systems. In changing our format to hyperbolic and spherical coordinates, we would have to reevaluate each of our steps depending on the system. For example, in hyperbolic, the basic Ricci flow equation is $\displaystyle \frac{dr_i}{dt} = -K_i\sinh r_i$. Likewise, in spherical coordinates, for a surface $X, \displaystyle \sum{K_i} = 2\pi\chi - \mbox{Surface Area of} X$, which can change over time. \newline
 
 \noindent Another thing of interest is that once we run variations of our $calcFlow$ program based on our different coordinate systems, we can observe whether or not each triangulation converges in the same fashion, or if it matters depending on the formulas. If we do discover that all systems behave the same way, we would then like to focus on one system of coordinates, most likely Euclidean, as that would be easier to grasp and be more computational. 
@@ -533,7 +541,7 @@ We had a lot of goals for this project. For one, we are the first group to work 
 	\frac{df}{dt} & = & (\alpha^nr_1r_2\ldots r_n)(\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n)\\
 								& = & C(\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n)
 	\end{eqnarray*}
-	However, since the original product is a constant, we have $\displaystyle \frac{df}{dt} = 0.$ Thus we have $$\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n = 0$$
+	If we assume the product is a constant, we have $\displaystyle \frac{df}{dt} = 0.$ Thus we have $$\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n = 0$$
 	Rearranging we have
 $$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K_2 + \ldots + K_n}{n} = \overline{K}$$
 	which we refer to as Eq.~(\ref{proof1})
@@ -543,7 +551,9 @@ $$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K
 
 The method used by Moreau in \cite{JPM} to solve a differential equation involves using a Runge-Kutta method. Prior to adapting the code from Moreau's website, we reached the conclusion that a Runge-Kutta format would be most beneficial for this type of differential equation problem. Even though it is more computationally complex than the simpler Euler's method, it makes up in its ability to converge and in its accuracy. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental.\newline
 
-\noindent Based on our evaluations of radii and curvatures over time, it appears to converge exponentially for each vertex. However, as mentioned previously, performing flips on a triangulation may negate this and cause the system to go haywire. 
+\noindent Based on our evaluations of radii and curvatures over time, it appears to converge exponentially for each vertex. However, as mentioned previously, performing flips on a triangulation may create unusual behavior.
+
+\subsection{Data Plots}
 
 \begin{figure}[ht]
 \centering
@@ -553,9 +563,11 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 \end{figure}
 
 \newpage
-\subsection{Code}
+\subsection{Code Examples}
 \label{calcFlowCode}
-\noindent calcFlow
+\begin{itemize}
+\item \textbf{calcFlow}
+\end{itemize}
 \begin{verbatim}
 void calcFlow(char* fileName, double dt ,double *initWeights,
 				int numSteps, bool adjF)  
@@ -644,7 +656,9 @@ void calcFlow(char* fileName, double dt ,double *initWeights,
    results.close();
 }
 \end{verbatim}
-\noindent 2-2 Flip
+\begin{itemize}
+\item \textbf{2-2 Flip}
+\end{itemize}
 \begin{verbatim}
 void flip(Edge e)
 {
@@ -758,14 +772,6 @@ void flip(Edge e)
 \end{verbatim}
 \section*{About the authors}
 
-<<<<<<< .mine
-Alex Henniges is a junior double majoring in Math and Computer Science. Plus he's cool. He is the front liner of the programming aspect of this research. \newline
-  
-\noindent Thomas Williams is a senior in Comprehensive Mathematics with a minor in Computer Science and a strong background in Math Education. He's cool, too. He made substantial contributions to the coding and development of this project.\newline
-  
-\noindent Mitch Wilson is a senior majoring in Applied Math and Mechanical Engineering. He made contributions to the development and layout of the report, including producing many of the ilustrations using MATLAB. 
-=======
 Alex Henniges is a junior double majoring in Math and Computer Science. Thomas Williams is a senior in Comprehensive Mathematics with a minor in Computer Science and a background in Math Education. Mitch Wilson is a senior majoring in Applied Math and Mechanical Engineering.
->>>>>>> .r246
 
 \end{document}
