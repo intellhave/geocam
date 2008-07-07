@@ -603,7 +603,7 @@ void printResultsNum(char* fileName, vector<double>* weights, vector<double>* cu
    {
       for(int j = 0; j < numSteps; j++)
       {
-              results << left << setw(14) << (*weights)[j*vertSize + k];
+              results << left << setw(20) << (*weights)[j*vertSize + k];
               results << left << setw(12) << (*curvs)[j*vertSize + k] << "\n";
       }
       results << "\n";
