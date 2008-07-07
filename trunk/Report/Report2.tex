@@ -555,14 +555,30 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 
 \subsection{Data Plots}
 
-\begin{figure}[ht]
-\centering
-\includegraphics[scale = 0.8]{torus7addvaddhweights.png}
-\caption{An example of how morphs can change the asymptotic behavior of vertices.}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale = 0.65]{torus7addvaddhweights2.png}
+\caption{An example of how morphs can change the asymptotic behavior of vertices. In this case we saw the weights of some vertices change concavity.}
 \label{fig:t7vh}
+\end{center}
 \end{figure}
 
-\newpage
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.8]{curvcurves.png}
+\caption{An example of curvatures over time. While they do converge to the same curvature, the vertex with the maximum or minimum curvature may change. This is a separate trial than that producing the Fig.~\ref{fig:t7vh}}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.8]{Curvg6v12addv.png}
+\includegraphics[scale = 0.8]{Weightg6v12addv.png}
+\caption{An example of adding a vertex to a genus 6 surface. One of the curvatures in unable to drop below $-\pi$, and as a result, its weight is pushed to almost zero. Other vertices group together to compensate for this behavior.}
+\end{center}
+\end{figure}
+
+%\newpage
 \subsection{Code Examples}
 \label{calcFlowCode}
 \begin{itemize}
