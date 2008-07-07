@@ -1,6 +1,8 @@
 \documentclass[12pt]{article}
 \usepackage[pdftex]{graphicx}
 \usepackage{multicol}
+%\usepackage{epsfig}
+%\usepackage{epstopdf}
 \title{Combinatorial Ricci flows on abstract manifolds}
 \pagestyle{plain}
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
@@ -447,7 +449,7 @@ Vertex 7: 6.18421 \\
 
 \noindent While the previous two cases were quite interesting, there is some hesitation given that we were using double triangles and being less restrictive in what were allowable triangulations. But the theory behind why both situations reacted as they did left hope for a case that fit in a stricter setting. In the same sense that a two degree vertex could have a curvature no less than 0, a three degree vertex is bounded below by $-\pi$. It was also clear that the vertices of a triangulation all converge to $\displaystyle\frac{2\pi\chi}{|V|}$. Now it was a matter of finding a triangulation with a large enough genus and few vertices. The first we found, provided by \cite{lutzmanifold}, was an 11 vertex triangulation with genus 4. To create a vertex with degree 3, we chose to add a new vertex to a face with a 1-3 flip. This made all curvatures try to converge to $-\pi$. We then expected that the new vertex would react as in the previous example. This was in fact the case, and it presents the question of whether or not there is a limit on the degree that can create such a singularity. The issue being that for higher genus, more vertices are required. Unfortunately, \cite{lutzmanifold} does not provide large enough triangulations for fourth degree vertices.\newline
 
-\noindent Example: two tetrahedra connected at a vertex. See Figure \ref{fig:tt}\newline
+\noindent Example: Two tetrahedra connected at a vertex. See Figure \ref{fig:tt}\newline
 
 \noindent It turns out $\chi = $7 Vertices - 12 Edges + 8 Faces = 3, which is not a case we had seen before. In previous cases $\chi$ was an even integer. Starting each vertex with equal weight, we obtained an unexpected result. The center weight becomes very large, and the others become smaller in comparison. We concluded that since the central vertex has a much higher degree, its weight becomes large, creating elongated tetrahedra on either side, in order to have the same curvature as all other vertices. One good thing we noted was that the net curvature = $6\pi = 2\pi\chi$.  
 
@@ -484,7 +486,7 @@ We would also like to start investigating 3-dimensional constructs built from te
 \subsection{Circle packing expansions}
 \label{circExt}
 Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of their angle of intersection. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.  
-
+%
 \begin{figure}
 \begin{center}
 \includegraphics[scale = 0.6]{intcirc.png}
@@ -492,6 +494,14 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 \caption{An example of relaxing circle packing and introducing $\Phi.$}
 \label{fig:intcirc}
 \end{figure}
+
+%\begin{figure}
+%\begin{center}
+%\epsfig{file=intcirc.eps,width=0.9\linewidth,clip=}
+%\caption{An example of relaxing circle packing and introducing $\Phi.$}
+%\label{fig:intcirc}
+%\end{center}
+%\end{figure}
 
 \subsection{Hyperbolic/ spherical triangulations}
 \label{HypSphere}
@@ -553,7 +563,7 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 \begin{figure}
 \begin{center}
 \includegraphics[scale = 0.8]{curvcurves.png}
-\caption{An example of curvatures over time. While they do converge to the same curvature, the vertex with the maximum or minimum curvature may change. This is a separate trial than that producing the Fig.~\ref{fig:t7vh}}
+\caption{An example of curvatures over time. While they do converge to the same curvature, the vertex with the maximum or minimum curvature may change. This is a separate trial than that producing Fig.~\ref{fig:t7vh}}
 \end{center}
 \end{figure}
 
