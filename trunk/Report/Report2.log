@@ -1,4 +1,8 @@
+<<<<<<< .mine
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  7 JUL 2008 12:44
+=======
 This is pdfeTeX, Version 3.141592-1.21a-2.2 (MiKTeX 2.4) (preloaded format=latex 2008.6.30)  7 JUL 2008 12:43
+>>>>>>> .r263
 entering extended mode
 **C:/Dev-Cpp/geocam/Report/Report2.tex
 (C:/Dev-Cpp/geocam/Report/Report2.tex
@@ -237,47 +241,64 @@ Underfull \hbox (badness 10000) in paragraph at lines 180--181
  []
 
 [11]
-Underfull \hbox (badness 10000) in paragraph at lines 193--194
+Underfull \hbox (badness 10000) in paragraph at lines 194--195
 
  []
 
 <triangulationUML.png, id=71, 747.79375pt x 577.15625pt>
 File: triangulationUML.png Graphic file (type png)
  <use triangulationUML.png>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 204--205
 
  []
 
+<<<<<<< .mine
+[12]
+=======
 [12] [13 <triangulationUML.png>]
+>>>>>>> .r263
 Underfull \hbox (badness 10000) in paragraph at lines 253--254
 
  []
 
-[14]
+[13 <triangulationUML.png (PNG copy)>]
 Overfull \hbox (8.20491pt too wide) in paragraph at lines 274--287
 [][] 
  []
 
-[15]
+[14]
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 305.
  (C:\texmf\tex\latex\base\omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 305.
+<<<<<<< .mine
+ [15]
+<Flip.png, id=66, 411.81439pt x 207.46474pt>
+=======
  <Flip.png, id=88, 411.81439pt x 207.46474pt>
+>>>>>>> .r263
 File: Flip.png Graphic file (type png)
+<<<<<<< .mine
+ <use Flip.png>
+=======
  <use Flip.png> [16 <Flip.png>]
+>>>>>>> .r263
 Underfull \hbox (badness 10000) in paragraph at lines 321--322
 
  []
 
-[17]
+[16 <Flip.png (PNG copy)>] [17]
 Underfull \hbox (badness 10000) in paragraph at lines 343--344
 
  []
 
-[18]
+
 Underfull \hbox (badness 10000) in paragraph at lines 345--346
 
  []
@@ -287,7 +308,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 347--348
 
  []
 
-
+[18]
 Overfull \hbox (2.61108pt too wide) in paragraph at lines 352--417
 []$[]$ [] 
  []
@@ -302,7 +323,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 426--427
 
  []
 
+<<<<<<< .mine
+<torus22.png, id=80, 418.66759pt x 314.00069pt>
+=======
 <torus22.png, id=102, 418.66759pt x 314.00069pt>
+>>>>>>> .r263
 File: torus22.png Graphic file (type png)
  <use torus22.png>
 <torus2addvertex2.png, id=103, 418.66759pt x 314.00069pt>
@@ -322,7 +347,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 437--438
 
  []
 
-[20]
+[20 <torus22.png (PNG copy)> <torus2addvertex2.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 439--440
 
  []
@@ -342,7 +367,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 445--446
 
  []
 
+<<<<<<< .mine
+[21]
+=======
 
+>>>>>>> .r263
 Underfull \hbox (badness 10000) in paragraph at lines 447--448
 
  []
@@ -359,7 +388,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 459--460
 
  []
 
+<<<<<<< .mine
+[22 <tetratouch.png (PNG copy)>]
+<ConvergenceTable.png, id=92, 395.67825pt x 686.565pt>
+=======
 [22] <ConvergenceTable.png, id=114, 395.67825pt x 686.565pt>
+>>>>>>> .r263
 File: ConvergenceTable.png Graphic file (type png)
  <use ConvergenceTable.png>
 
@@ -380,14 +414,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 477--478
 
  []
 
+<<<<<<< .mine
+[23] [24 <ConvergenceTable.png (PNG copy)>]
+<intcirc.png, id=99, 418.66759pt x 314.00069pt>
+=======
 [25] <intcirc.png, id=125, 418.66759pt x 314.00069pt>
+>>>>>>> .r263
 File: intcirc.png Graphic file (type png)
  <use intcirc.png>
 Underfull \hbox (badness 10000) in paragraph at lines 503--504
 
  []
 
+<<<<<<< .mine
+[25] [26 <intcirc.png (PNG copy)>] [27] (Report2.bbl
+=======
 [26 <intcirc.png>] [27] (Report2.bbl
+>>>>>>> .r263
 Underfull \hbox (badness 10000) in paragraph at lines 24--27
 []\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
  []
@@ -733,6 +776,25 @@ Overfull \hbox (48.42522pt too wide) in paragraph at lines 780--780
 
 [38] (Report2.aux) ) 
 Here is how much of TeX's memory you used:
+<<<<<<< .mine
+ 1109 strings out of 95340
+ 13910 string characters out of 1184156
+ 67172 words of memory out of 1500000
+ 4315 multiletter control sequences out of 110000
+ 9324 words of font info for 33 fonts, out of 1200000 for 2000
+ 14 hyphenation exceptions out of 8191
+ 25i,9n,21p,1841b,283s stack positions out of 5000i,500n,10000p,200000b,5000s
+<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx12.
+pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmex10.pfb><C:/Program 
+Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.7
+/fonts/type1/bluesky/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/blue
+sky/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr17.pfb>
+<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/
+MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/fonts
+/type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm
+/cmti12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt12.pfb>
+Output written on Report2.pdf (38 pages, 848246 bytes).
+=======
  1193 strings out of 95515
  14086 string characters out of 1189489
  65558 words of memory out of 1063709
@@ -740,6 +802,7 @@ Here is how much of TeX's memory you used:
  9324 words of font info for 33 fonts, out of 1000000 for 2000
  14 hyphenation exceptions out of 4999
  25i,9n,21p,1841b,283s stack positions out of 5000i,500n,10000p,200000b,32768s
+>>>>>>> .r263
 PDF statistics:
  170 PDF objects out of 300000
  0 named destinations out of 300000
