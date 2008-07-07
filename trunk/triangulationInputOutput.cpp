@@ -545,18 +545,21 @@ void printResultsStep(char* fileName, vector<double>* weights, vector<double>* c
      
      for(int i = 0; i < numSteps; i++)
      {
-         results << left << "Step " << left <<setw(4)  << i + 1;
+         double netCurv = 0.;
+         results << left << "Step " << left <<setw(6)  << i + 1;
          results << right << setw(7) << "Weight";
-         results << right << setw(10) << "Curv" << "\n----------------------------\n";
+         results << right << setw(12) << "Curv";
+         results << "\n---------------------------------\n";
          vit = Triangulation::vertexTable.begin();
          for(int j = 0; j < vertSize; j++)
          {
-             results << "Vertex " << vit->first << ": " ;
-             results << left << setw(12)<< (*weights)[i*vertSize + j];
+             results << "Vertex " << left << setw(5) << vit->first;
+             results << left << setw(14)<< (*weights)[i*vertSize + j];
              results << left << setw(12) << (*curvs)[i*vertSize+j] << "\n";
+             netCurv += (*curvs)[i*vertSize+j];
              vit++;
          }
-         results << "\n";
+         results << "Total Curvature: " << netCurv << "\n\n";
      }
      
    results.close();
