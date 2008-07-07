@@ -1,3 +1,5 @@
+<<<<<<< .mine
+=======
 \contentsline {section}{\numberline {1}Introduction}{3}
 \contentsline {section}{\numberline {2}Triangulations}{3}
 \contentsline {subsection}{\numberline {2.1}Introduction}{3}
@@ -28,3 +30,4 @@
 \contentsline {subsection}{\numberline {8.2}Remarks on Runge-Kutta method for solving Eq.\nobreakspace {}(8\hbox {})}{30}
 \contentsline {subsection}{\numberline {8.3}Data Plots}{30}
 \contentsline {subsection}{\numberline {8.4}Code Examples}{33}
+>>>>>>> .r258

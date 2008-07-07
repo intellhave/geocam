@@ -1,3 +1,5 @@
+<<<<<<< .mine
+=======
 \begin{thebibliography}{1}
 
 \bibitem{DiffEq}
@@ -45,3 +47,4 @@ Wikipedia.
 \newblock http://en.wikipedia.org/\\wiki/Euler$\_$characteristic.
 
 \end{thebibliography}
+>>>>>>> .r258
