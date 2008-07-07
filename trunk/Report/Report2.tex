@@ -57,7 +57,6 @@ Name  &	Vertices, V &	Edges, E & Faces, F &	Genus, g & $\chi$\\
 Tetrahedron &	4 &	6 &	4 &	0 & 2\\
 Hexahedron or cube &	8 &	12 &	6 &	0 &	2\\
 Octahedron 	&	6 &	12 &	8 & 0 &	 2\\
-Dodecahedron 	&	20 &	30 &	12 &	0&	 2\\
 Icosahedron &	12 & 30 & 20 & 0	&	 2\\
 Torus & 9 & 27 & 18 &	1 & 0\\
 Two-holed torus & 10 & 36 & 24 &	2 & -2\\
@@ -159,7 +158,7 @@ f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alph
 \noindent We can also show that $\overline{K}$ is a constant and depends on the number of vertices and the Euler characteristic. We know that the sum of angles from each vertex is 360 $\deg,$ or $2\pi$. However, we also know that the sum of angles on each face is $\pi$, thus we determine that 
 
 $$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{F}{2}).$$
-\noindent Looking back at Table \ref{EuChar} we note that for most polyhedra listed, $E = \frac{3F}{2}$. Let us use this substitution and rewrite the above equation as
+\noindent Looking back at Table \ref{EuChar} we note that for all polyhedra listed, $E = \frac{3F}{2}$. Let us use this substitution and rewrite the above equation as
 
 $$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + F) = 2\pi \chi.$$
 
@@ -434,7 +433,7 @@ Vertex 7: 6.18421 \\
 
 \noindent By inserting a vertex within a triangulation for a torus, we are essentially creating a bump on the torus and then observing what happens as we run it through out $calcFlow$ program. We discovered that the new vertex shrinks in size to a weight much smaller than the other vertices, but to a positive constant. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). The weight that the new vertex converges to turned out to be in proportion to the other weights by $3+2\sqrt{3}$, the exact proportion necessary to maintain equality amongst all other weights. An oddity here is that the three vertices local to this added vertex converged to the same weight as all the vertices not near the flip, despite a difference in degree.\newline
 
-\begin{figure}
+\begin{figure}[ht]
 \includegraphics[scale = 0.5]{torus22.png}
 \includegraphics[scale = 0.5]{torus2addvertex2.png}
 \caption{A triangulation of the torus, and the addition of a new vertex. This is a 1-3 flip.}
