@@ -22,12 +22,12 @@ axis image; axis off;
 
 %figure 3. Basic 3D tetrahedron. 
 figure;
-k = sqrt(3)/2;
-plot([-.5,.5,1.5,1,.5,0,-.5,.5,1,0,.5],[k,k,k,0,-k,0,k,k,0,0,k],'k')
+k = sqrt(3)/2; h = sqrt(2/3);
+plot3([0,1,.5,0,.5,.5,1,.5],[0,0,k,0,k/3,k,0,k/3],[0,0,0,0,h,0,0,h],'k')
 axis image; axis off;
 
 %figure 4. Triangulation of 9 point torus.
-fiure; 
+figure; 
 plot([0,3,3,0,0,3,3,0,0,2,1,1,3,3,0,0,1,2,2,3],[0,0,3,3,0,3,2,2,1,3,3,0,2,1,1,2,3,3,0,1],'k')
 axis off; axis image;
 axis([-0.1,3.1,-0.1,3.1])
@@ -39,6 +39,7 @@ axis off; axis image;
 axis([-0.1,3.1,-0.1,3.1])
 
 %figure 6. Dual edge
+figure
 k = sqrt(3)/2; th = [0:.01:2*pi];
 plot([1 + k/3*cos(th)],[2*k/3 + k/3*sin(th)],'k','linewidth',2)
 hold on
@@ -49,19 +50,33 @@ axis image
 axis off
 
 %figure 7. Flip
+figure
 k = sqrt(3)/2;
 x1 = [0,1,1.5,0.5,0,1,0.5]; y1 =[0,0,k,k,0,0,k];
 x2 = [3,4,4.5,3.5,3,4.5]; y2 = [0,0,k,k,0,k];
-x3 = x2 - 1; 
+x3 = x2 - 1.5; 
 plot(x1,y1,'k','linewidth',2)
 hold on;
 plot(x3,y2,'k','linewidth',2)
 axis off; axis image;
 
 %figure 8. Adjoined tetrahedra at a vertex. 
+figure;
 k = sqrt(3)/2; h = sqrt(2/3);
 x = [0,.5,-.5,0,-.5,.5,0,0,.5,-.5,0,0,0,.5,-.5,0,0];
 y = [0,k,k,0,-k,-k,0,2*k/3,k,k,2*k/3,0,-2*k/3,-k,-k,-2*k/3,0];
 z = [0,0,0,0,0,0,0,h,0,0,h,0,h,0,0,h,0];
-plot3(x,y,z,'k'}
+plot3(x,y,z,'k')
+axis off
+
+%figure 9. Overlapping radii.
+figure;
+th = 0:.01:2*pi;
+x = 5*cos(th);
+y = 5*sin(th);
+x2 = 7 + 4*cos(th);
+y2 = 4*sin(th);
+plot(x,y,'k',x2,y2,'k')
+plot(x,y,'k',x2,y2,'k',[0 7],[0 0],'k')
+axis image
 axis off
