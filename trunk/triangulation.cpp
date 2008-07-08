@@ -11,6 +11,7 @@ Version: June 25, 2008
 #include <algorithm>
 #include <vector>
 #include <iostream>
+#include "spherical/sphericalmath.h"
 
 map<int, Vertex> Triangulation::vertexTable;
 map<int, Edge> Triangulation::edgeTable;
@@ -138,11 +139,22 @@ void Triangulation::eraseFace(int key)
 
 double Triangulation::netCurvature()
 {
-       double net;
+       double net = 0;
        map<int, Vertex>::iterator it;
        for(it = vertexTable.begin(); it != vertexTable.end(); it++)
        {
               net += curvature((*it).second);
+       }
+       return net;
+}
+
+double Triangulation::netSphericalCurvature()
+{
+       double net = 0;
+       map<int, Vertex>::iterator it;
+       for(it = vertexTable.begin(); it != vertexTable.end(); it++)
+       {
+              net += sphericalCurvature((*it).second);
        }
        return net;
 }
