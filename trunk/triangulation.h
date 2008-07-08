@@ -14,6 +14,7 @@ Version: June 25, 2008
 #include "simplex/vertex.h"
 #include "simplex/edge.h"
 #include "simplex/face.h"
+#include "hyperbolic/hyperbolicmath.h"
 
 /*
  * The Triangulation class stores the information about the running
@@ -91,6 +92,7 @@ class Triangulation
       */
      static double netCurvature();
      static double netSphericalCurvature();
+     static double netHyperbolicCurvature();
      static void setWeights(double*);
      static void getWeights(double*);
 };

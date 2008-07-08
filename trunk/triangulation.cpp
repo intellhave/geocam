@@ -13,6 +13,7 @@ Version: June 25, 2008
 #include <iostream>
 #include "spherical/sphericalmath.h"
 
+
 map<int, Vertex> Triangulation::vertexTable;
 map<int, Edge> Triangulation::edgeTable;
 map<int, Face> Triangulation::faceTable;
@@ -155,6 +156,17 @@ double Triangulation::netSphericalCurvature()
        for(it = vertexTable.begin(); it != vertexTable.end(); it++)
        {
               net += sphericalCurvature((*it).second);
+       }
+       return net;
+}
+
+double Triangulation::netHyperbolicCurvature()
+{
+       double net = 0;
+       map<int, Vertex>::iterator it;
+       for(it = vertexTable.begin(); it != vertexTable.end(); it++)
+       {
+              net += hyperbolicCurvature((*it).second);
        }
        return net;
 }
