@@ -20,15 +20,17 @@ Version: June 10, 2008
 #include <iomanip>
 #include <cmath>
 #include "spherical/sphericalmath.h"
+#include "hyperbolic/hyperbolicmath.h"
+#define PI 	3.141592653589793238
 
 using namespace std;
 
 void runFlow()
 {
-//char from[] = "Triangulations/manifold.txt";
-//char to[] = "Triangulations/manifold converted.txt";
-//makeTriangulationFile(from, to);
-char to[] = "Triangulations/torus-9.txt";
+char from[] = "Triangulations/manifold.txt";
+char to[] = "Triangulations/manifold converted.txt";
+makeTriangulationFile(from, to);
+//char to[] = "Triangulations/Tetrahedron.txt";
 readTriangulationFile(to);
 
 //flip(Triangulation::edgeTable[1]);  
@@ -55,9 +57,10 @@ readTriangulationFile(to);
     double product = 1;
     for(int i = 1; i <= vertexSize; i++)
    {
-       //weights[i - 1] = 3.141592653589793238/9;
-       weights[i - 1] = (rand() % 25 + 1)/25.0;
+      //weights[i - 1] = acos(-1/3.0)/2 - .01;
+       weights[i - 1] = (rand() % 10 + 1)/10.0;
    }
+ 
 //   while(Triangulation::vertexTable[1].getLocalEdges()->size() > 3)
 //   {
 //       Vertex v = Triangulation::vertexTable[1];
@@ -76,8 +79,8 @@ readTriangulationFile(to);
    time(&start);
    vector<double> weightsR;
    vector<double> curvatures;
-   sphericalCalcFlow(&weightsR, &curvatures, 0.03, weights,1000, true);
-   printResultsStep(fileName, &weightsR, &curvatures);
+  calcFlow(&weightsR, &curvatures, 0.03, weights,1000, false);
+  printResultsStep(fileName, &weightsR, &curvatures);
    time(&end);
    cout << difftime(end, start) << " seconds" << endl;
    
