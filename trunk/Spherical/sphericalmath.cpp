@@ -1,6 +1,7 @@
 #include "sphericalmath.h"
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 #define PI 	3.141592653589793238
 
 double sphericalAngle(double lengthA, double lengthB, double lengthC)
@@ -89,7 +90,7 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        }
        if(i == 1) // If first time through, use static method.
        {
-            prev = Triangulation::netCurvature();
+            prev = Triangulation::netSphericalCurvature();
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // First "for loop" in whole step calculates
        {                    // everything manually, prints to file.
@@ -103,50 +104,68 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
                (*curvatures).push_back(curv);
              }
            net += curv;
-           if(adjF) ta[k]= dt * ((-1) * curv 
-                           * vit->second.getWeight() +
-                           prev /  p
-                           * vit->second.getWeight());
+           if(adjF) ta[k]= dt * ((prev /  p - curv) 
+                           * sin(vit->second.getWeight()));
            else     ta[k] = dt * (-1) * curv 
-                           * vit->second.getWeight();
+                           * sin(vit->second.getWeight());
            
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
            vit->second.setWeight(z[k]+ta[k]/2);
        }
+       prev = net;
+       net = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) tb[k]=dt*spherAdjDiffEQ(vit->first, net);
-            else     tb[k]=dt*spherStdDiffEQ(vit->first);
+           double curv = sphericalCurvature(vit->second);
+           net += curv;
+           if(adjF) tb[k]= dt * ((prev /  p - curv) 
+                           * sin(vit->second.getWeight()));
+           else     tb[k] = dt * (-1) * curv 
+                           * sin(vit->second.getWeight());
+           // if(adjF) tb[k]=dt*spherAdjDiffEQ(vit->first, net);
+//            else     tb[k]=dt*spherStdDiffEQ(vit->first);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
            vit->second.setWeight(z[k]+tb[k]/2);
        }
+       prev = net;
+       net = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) tc[k]=dt*adjDiffEQ(vit->first, net);
-            else     tc[k]=dt*stdDiffEQ(vit->first);
+           double curv = sphericalCurvature(vit->second);
+           net += curv;
+           if(adjF) tc[k]= dt * ((prev /  p - curv) 
+                           * sin(vit->second.getWeight()));
+           else     tc[k] = dt * (-1) * curv 
+                           * sin(vit->second.getWeight());
+          //  if(adjF) tc[k]=dt*spherAdjDiffEQ(vit->first, net);
+//            else     tc[k]=dt*spherStdDiffEQ(vit->first);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
            vit->second.setWeight(z[k]+tc[k]);
        }
+       prev = net;
+       net = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) td[k]=dt*adjDiffEQ(vit->first, net);
-            else     td[k]=dt*stdDiffEQ(vit->first);
+           double curv = sphericalCurvature(vit->second);
+           net += curv;
+           if(adjF) td[k]= dt * ((prev /  p - curv) 
+                           * sin(vit->second.getWeight()));
+           else     td[k] = dt * (-1) * curv 
+                           * sin(vit->second.getWeight());
+         //   if(adjF) td[k]=dt*spherAdjDiffEQ(vit->first, net);
+//            else     td[k]=dt*spherStdDiffEQ(vit->first);
        }
        for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
        {
          z[k]=z[k]+(ta[k]+2*tb[k]+2*tc[k]+td[k])/6;
          
        }
-     if(net < 0.00005 && net > -0.00005) // Adjusted for small errors.
-     {
-            net = 0;
-     }
    }
 }
 
