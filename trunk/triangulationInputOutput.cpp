@@ -559,6 +559,10 @@ void printResultsStep(char* fileName, vector<double>* weights, vector<double>* c
              netCurv += (*curvs)[i*vertSize+j];
              vit++;
          }
+       if(netCurv < 0.0000001 && netCurv > -0.0000001)
+       {
+                    netCurv = 0.;
+       }
          results << "Total Curvature: " << netCurv << "\n\n";
      }
      
