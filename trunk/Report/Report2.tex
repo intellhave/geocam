@@ -21,11 +21,12 @@ Supervisor: Dr. David Glickenstein\\
 \section{Introduction}
 \maketitle
 
-The purpose of this project is to provide a method for examining the combinatorial Ricci flow on various compact manifolds in two, and potentially three, dimensions. This is a flow that is run on triangulations that are endowed with a length structure. For computation purposes, this requires a data structure which will encode these triangulations. The design of this data structure will be fundamental in the development of this project. The program will be written in C++. Educationally, we hope to learn a number of things, including advanced topics in geometry and topology, programming in a new and unfamiliar language, and writing a professional report of our findings. \newline
+The purpose of this project is to provide a method for examining the combinatorial Ricci flow on various compact manifolds in two, and potentially three, dimensions. This is a flow that is run on triangulations that are endowed with a length structure. For computation purposes, this requires a data structure which will encode these triangulations. The design of this data structure will be fundamental in the development of this project. The program will be written in C++.\newline
 
-\noindent In this paper we will discuss many topics we learned and worked on, beginning with an introduction to triangulations and their properties. Then we will establish the definition of combinatorial Ricci flow and its use in our research. That will be followed by a discussion of how the program is structured as well as an explanation of several functions that were created. After this we will be ready to reveal the results and analysis we have obtained up to this point. Lastly, we will provide areas of future work in combinatorial Ricci flow and for this project.
+\noindent In this paper we will discuss many topics we learned and worked on, beginning in $\oint\ref{Triangulationschap}$ with an introduction to triangulations and their properties. Then we will establish the definition of combinatorial Ricci flow and its use in our research. That will be followed by a discussion of how the program is structured as well as an explanation of several functions that were created in $\oint\ref{Programchap}$. After this we will be ready to present the results and analysis we have obtained up to this point. Lastly, we will provide areas of future work in combinatorial Ricci flow and for this project.
 
 \section{Triangulations}
+\label{Triangulationschap}
 \maketitle
 \subsection{Introduction}
 \maketitle
@@ -70,9 +71,9 @@ Two-holed torus & 10 & 36 & 24 &	2 & -2\\
 \subsection{Circle packing}
 \maketitle
 
-\noindent Given a triangulation, we wish to put lengths on edges. This is known as adding a metric to the triangulation. One way to do this is to create a \textit{weighted triangulation}. This is done by a technique called circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. The radius of the circle at a vertex, $v_i$, is known as its weight, $r_i$. For any lone triangle, this can be done. By applying weights to each vertex we provide lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the edge with vertices $v_i$ and $v_j$. The metric applied to the triangulation in this way, with Euclidean triangles (see \ref{HypSphere}), is known as the \textit{cone metric} \cite{chowluo}. \newline
+\noindent Given a triangulation, we wish to assign lengths to edges. This is known as adding a metric to the triangulation. One way to do this is to create a \textit{weighted triangulation}. This is done by a technique called circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. The radius of the circle at a vertex, $v_i$, is known as its weight, $r_i$. For any lone triangle, this can be done. By applying weights to each vertex we provide lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the edge with vertices $v_i$ and $v_j$. The metric applied to the triangulation in this way, with Euclidean triangles (see $\oint\ref{HypSphere}$), is known as the \textit{cone metric} \cite{chowluo}.\newline
 
-\noindent By applying weights first, we come across an interesting situation. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing generalizations of circle-packings, as discussed in \ref{circExt}, we can broaden our range of possible length assignments.
+\noindent Choosing to define the metric in this way, we guarantee the triangle inequality and ensure that we are creating triangles. It is also needed to run the Ricci flow, explained in $\oint\ref{ricciDef}$. But, there are restrictions to applying weights first. Not all combinations of edge lengths are possible under this system. Some triangles can simply not be circle-packed. The most common example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing generalizations of circle-packings, as discussed in $\oint\ref{circExt}$, we can broaden our range of possible length assignments.
 
   
 \begin{figure}
@@ -85,9 +86,9 @@ Two-holed torus & 10 & 36 & 24 &	2 & -2\\
 \subsection{Duals}
 \maketitle
 
-Every triangle has a circle that is internally tangent to all three edges. It is known that this $incircle$ is perpendicular to each circle centered at one of its vertices, and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j$ and $k$ being the vertices of the triangle. This can be done on each triangle. All these incircles are mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has a dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
+Every triangle has a circle that is internally tangent to all three edges. This $incircle$ is perpendicular to each circle centered at one of its vertices, and has a radius $\displaystyle r = \sqrt{\frac{(s-a)(s-b)(s-c)}{s}}$ where $s$ is the semi-perimeter of the triangle, and $a, b, $and $c$ are the side lengths. Let us rewrite this in terms of the vertex weights, since we are using circle packing. Thus, a side length is simply the sum of two vertex radii. We can then simplify this equation to $\displaystyle r = \sqrt{\frac{r_i r_j r_k}{r_i + r_j + r_k}}$, with $i, j$ and $k$ being the vertices of the triangle. This can be done on each triangle. All these incircles are mutually tangent to each other, and any line connecting two adjacent incircles is perpendicular to the common edge of the two triangles. We define the length of this dual edge $\star e$ as the sum of the radii of adjacent incircles. $\star e = r_{in1} + r_{in2}$. Every edge has a dual length. See Figure~\ref{fig:dual} for an illustration of a dual edge.\newline
 
-\noindent With enough dual edges, we can obtain a polygon surrounding each vertex. The area of the region formed by these duals is called the dual area, calculated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the weight of the vertex. The sum is over all faces incident to vertex $i$.\newline
+\noindent With the dual edges, we can obtain a polygon surrounding each vertex. The area of the region formed by these duals is called the dual area, calculated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the weight of the vertex. The sum is over all faces incident to vertex $i$.\newline
 
 \noindent The dual length and dual area have some interesting properties that we hope to investigate. David Glickenstein examines these and more in \cite{Dave}. 
 
@@ -100,9 +101,10 @@ Every triangle has a circle that is internally tangent to all three edges. It is
 
 \section{Ricci flow}
 \subsection{Background}
-Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since made large impacts in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting.
+Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting.
 
 \subsection{Definition}
+\label{ricciDef}
 
 Just because we have a triangulation and that it is circle packed does not mean that it is in a desired configuration. Vertices can be too large or too small, and the resulting geometry can be somewhat repulsive. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. In their paper, Chow and Luo introduce an equation known as combinatorial Ricci flow. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We introduce this equation to the reader which can be written as
 
@@ -155,7 +157,7 @@ f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alph
 \frac{d(\mbox{log}~\alpha)}{dt} = \frac{\mbox{sum of all curvatures}}{\mbox{number of vertices}} = \overline{K}, \mbox{average curvature.}
 \end{equation}
 
-\noindent We can also show that $\overline{K}$ is a constant and depends on the number of vertices and the Euler characteristic. We know that the sum of angles from each vertex is 360 $\deg,$ or $2\pi$. However, we also know that the sum of angles on each face is $\pi$, thus we determine that 
+\noindent In this paper, we may refer to the sum of all curvatures as the total curvature. We can also show that $\overline{K}$ is a constant and depends on the number of vertices and the Euler characteristic. We know that the sum of angles from each vertex is 360 $\deg,$ or $2\pi$. However, we also know that the sum of angles on each face is $\pi$, thus we determine that 
 
 $$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{F}{2}).$$
 \noindent Looking back at Table \ref{EuChar} we note that for all polyhedra listed, $E = \frac{3F}{2}$. Let us use this substitution and rewrite the above equation as
@@ -185,7 +187,7 @@ We have some expectations for combinatorial Ricci flow over two-dimensional Eucl
 
 \noindent There are other expected behaviors. We expect that the product of the initial weights will be equal to the product of the weights at any intermediate step of the flow, what we call the \textit{product area}. Also, it is predicted that the total curvature of a 2-manifold surface should remain a constant determined by its genus.\newline
 
-\noindent Out of our program we expect to create a system that allows for easy access of information while also providing that information in a time efficient way. Our goal is to create a program that can be built upon later to provide further functionality and options without requiring widespread and time consuming changes to the code. While we certainly expect a number of bugs, we plan to develop methods to test and find any errors in our code. \newline
+\noindent For the program we expect to create a system that allows for easy access of information while also providing that information in a time efficient way. Our goal is to create a program that can be built upon later to provide further functionality and options without requiring widespread and time consuming changes to the code. While we certainly expect a number of bugs, we plan to develop methods to test and find any errors in our code. \newline
 
 
 \noindent Initial checks for accuracy:
@@ -196,6 +198,7 @@ We have some expectations for combinatorial Ricci flow over two-dimensional Eucl
 \end{enumerate}
 
 \section{Program/Code}
+\label{Programchap}
 \subsection{Structure}
 
 
@@ -203,16 +206,16 @@ When creating the program, the data structure design was critical. The design no
   
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale = 0.45]{triangulationUML.png}
+\includegraphics[scale = 0.50]{triangulationUML.png}
 \end{center}
-\caption{A UML diagram of the program.}
+\caption{A UML diagram of the program. The UML shows how the various files interact as well as the functions and variables they hold.}
 \label{triUML}
 \end{figure}
 
-\noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. Vertices also hold a weight, representing the radius from a circle packing on the triangulation. Edges then have a length based on the weights of its two vertices. When a vertex's weight is changed, the local edges to that vertex act as an observer and will update their lengths automatically.\newline
+\noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. Vertices also hold a weight, representing the radius from a circle packing on the triangulation. Edges then have a length based on the weights of its two vertices. When a vertex's weight is changed, the local edges to that vertex update their lengths automatically.\newline
 
 
-\noindent While we are able to manually construct a few basic triangulations by hand, as we add more vertices doing so will become harder. \cite{lutzmanifold} has a little under two million known triangulations of varying sizes. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
+\noindent While we are able to manually construct a few basic triangulations by hand, as we add more vertices doing so will become harder. Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a little under two million known triangulations of varying sizes. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
   
 \begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
 [2,3,5],[2,4,5],[3,4,5]]}
@@ -258,7 +261,7 @@ When creating the program, the data structure design was critical. The design no
 
 \subsection{calcFlow}
 
-\noindent The function $calcFlow$ runs a combinatorial Ricci flow on a triangulation and records the data in a file. The algorithm for the ODE, provided by J-P Moreau, employs a Runge-Kutta method \cite{JPM}. First, the file name for the data is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculate and record. Lastly, a boolean is provided, where $true$ indicates that the normalized differential equation, (\ref{Riccin}), should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Each step, with every vertex's weight and curvature at that step, is printed to the file. An example is shown in Table~\ref{tab:ricciSteps}.\newline
+\noindent The function $calcFlow$ runs a combinatorial Ricci flow on a triangulation and records the data in a file. The algorithm for solving the ODE, provided by J-P Moreau, employs a Runge-Kutta method of order 4 \cite{JPM}. First, the file name for the data is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculate and record. Lastly, a boolean is provided, where $true$ indicates that the normalized differential equation, (\ref{Riccin}), should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Each step, with every vertex's weight and curvature at that step, is printed to the file. An example is shown in Table~\ref{tab:ricciSteps}.\newline
 
 \begin{table}
 \begin{center}
@@ -299,7 +302,7 @@ Vertex 9: &4.553 & 0.004906\\ \hline
 \label{tab:ricciSteps}
 \end{table}
 
-\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of net curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. The code for the $calcFlow$ function can be found in \ref{calcFlowCode}
+\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of total curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. The code for the $calcFlow$ function can be found in $\oint\ref{calcFlowCode}$.
 
 \subsection{Morphs}
 
@@ -313,7 +316,7 @@ One type of morph that we have available is known as a flip, called this because
 \item 1-3 flip \newline
 In a 1-3 flip, a single face is replaced by three faces. One way to think of going about this procedure is to simply add a new vertex to an existing face. This requires creating three new edges that connect the new vertex to the three vertices of the existing face.
 \item 2-2 flip \newline
-In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. The code for the 2-2 flip is located in \ref{calcFlowCode}.
+In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. The code for the 2-2 flip is located in $\oint\ref{calcFlowCode}$.
 
 
 \begin{figure}
@@ -450,7 +453,7 @@ Vertex 7: 6.18421 \\
 
 \noindent Example: Triangulation of genus 4.\newline
 
-\noindent While the previous two cases were quite interesting, there is some hesitation given that we were using double triangles and being less restrictive in what were allowable triangulations. But the theory behind why both situations reacted as they did left hope for a case that fit in a stricter setting. In the same sense that a two degree vertex could have a curvature no less than 0, a three degree vertex is bounded below by $-\pi$. It was also clear that the vertices of a triangulation all converge to $\displaystyle\frac{2\pi\chi}{|V|}$. Now it was a matter of finding a triangulation with a large enough genus and few vertices. The first we found, provided by \cite{lutzmanifold}, was an 11 vertex triangulation with genus 4. To create a vertex with degree 3, we chose to add a new vertex to a face with a 1-3 flip. This made all curvatures try to converge to $-\pi$. We then expected that the new vertex would react as in the previous example. This was in fact the case, and it presents the question of whether or not there is a limit on the degree that can create such a singularity. The issue being that for higher genus, more vertices are required. Unfortunately, \cite{lutzmanifold} does not provide large enough triangulations for fourth degree vertices.\newline
+\noindent While the previous two cases were quite interesting, there is some hesitation given that we were using double triangles and being less restrictive in what were allowable triangulations. But the theory behind why both situations reacted as they did left hope for a case that fit in a stricter setting. In the same sense that a two degree vertex could have a curvature no less than 0, a three degree vertex is bounded below by $-\pi$. It was observed that the vertices of a triangulation all converge to $\displaystyle\frac{2\pi\chi}{|V|}$ curvature. Now it was a matter of finding a triangulation with a large enough genus and few vertices. The first we found, provided by \cite{lutzmanifold}, was an 11 vertex triangulation with genus 4. To create a vertex with degree 3, we chose to add a new vertex to a face with a 1-3 flip. This made all curvatures try to converge to $-\pi$. We then expected that the new vertex would react as in the previous example. This was in fact the case, and it presents the question of whether or not there is a limit on the degree that can create such a singularity. The issue being that for higher genus, more vertices are required. Unfortunately, \cite{lutzmanifold} does not provide large enough triangulations for fourth degree vertices. A data plot of this situation with a genus 6 triangulation is provided in $\oint\ref{dataplots}$. \newline
 
 \noindent Example: Two tetrahedra connected at a vertex. See Figure \ref{fig:tt}\newline
 
@@ -464,7 +467,7 @@ Vertex 7: 6.18421 \\
 
 \subsection{Convergence speeds}
 
-One experiment we performed was measuring convergence speeds of various triangulations. For each triangulation, five flows were run where the weights were random between one and twenty-five. Random weights, while not a perfect solution, was the only viable as it was unclear what set weights could be equal for different triangulations. By performing five trials and using random weights, we hope to negate any effect the weights could have on the convergence speed of a triangulation. The $dt$ was held constant at 0.03. For each run, a step number was assigned for when all weights and curvatures had converged to four digits, (the precision shown in a file of the results).  The data collected at times seemed interesting and followed a pattern while other times were mysterious.\newline
+One experiment we performed was measuring convergence speeds of various triangulations. For each triangulation, five flows were run where the weights were random between one and twenty-five. Random weights, while not a perfect solution, was the most effective option and easiest to implement. It was unclear what set weights could have an equal effect for different triangulations. By performing five trials and using random weights, we hope to negate any effect the weights could have on the convergence speed of a triangulation. The $dt$ was held constant at 0.03 so that the number of steps needed to run was not large and time consumming and still provided accurate results. For each run, a step number was assigned for when all weights and curvatures had converged to four digits, (the precision shown in a file of the results).\newline
 
 \begin{figure}
 \centering
@@ -554,6 +557,7 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 \noindent Based on our evaluations of radii and curvatures over time, it appears to converge exponentially for each vertex. However, as mentioned previously, performing flips on a triangulation may create unusual behavior.
 
 \subsection{Data Plots}
+\label{dataplots}
 
 \begin{figure}[h]
 \begin{center}
