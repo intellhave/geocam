@@ -2,6 +2,8 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
 #define PI 	3.141592653589793238
 
 double sphericalAngle(double lengthA, double lengthB, double lengthC, double radius)
@@ -72,7 +74,9 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
   map<int, Vertex>::iterator vit;
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
-  
+  int chi = p - Triangulation::edgeTable.size() + Triangulation::faceTable.size();
+  ofstream data("Triangulations/spherical data.txt", ios_base::trunc);
+  data << setprecision(6);
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
    for (k=0; k<p; k++) {
@@ -82,10 +86,6 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
    {
     prev = net; // Set prev to net.
     net = 0;    // Reset net.
-    if(prev < 0.0000001 && prev > -0.0000001)
-            {
-                    prev = 0.;
-    }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
            // Set the weights of the Triangulation.
@@ -94,10 +94,6 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        if(i == 1) // If first time through, use static method.
        {
             prev = Triangulation::netSphericalCurvature();
-            if(prev < 0.0000001 && prev > -0.0000001)
-            {
-                    prev = 0.;
-            }
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // First "for loop" in whole step calculates
        {                    // everything manually, prints to file.
@@ -111,27 +107,41 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
                (*curvatures).push_back(curv);
              }
            net += curv;
-           if(adjF) ta[k]= dt * ((4*PI/p - dualArea(vit->second))* curv 
+           if(adjF) ta[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
            else     ta[k] = dt * (-1) * curv 
                            * sin(vit->second.getWeight());
            
        }
+        data << "Step " << i << "   Area        ";
+        data << "Delta\n------------------------\n";
+        map<int, Face>::iterator fit;
+        double totalArea = 0;
+        double totalDelta = 0;
+        for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+        {
+                double area = sphericalArea(fit->second);
+                double deltaF = delta(fit->second);
+                totalArea += area;
+                totalDelta += deltaF;
+                data << "Face " << fit->first << ": " << area;
+                data << "    " << deltaF << "\n";
+        }
+        data << "Total Area: " << totalArea << "\n";
+        data << "Total Delta: " << totalDelta << "\n";
+        data << "dA/dt = " << delArea() << "\n\n";
+        
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
            vit->second.setWeight(z[k]+ta[k]/2);
        }
        prev = net;
        net = 0;
-       if(prev < 0.0000001 && prev > -0.0000001)
-            {
-                    prev = 0.;
-            }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
            double curv = sphericalCurvature(vit->second);
            net += curv;
-           if(adjF) tb[k]= dt * ((4*PI/p - dualArea(vit->second))* curv
+           if(adjF) tb[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
            else     tb[k] = dt * (-1) * curv 
                            * sin(vit->second.getWeight());
@@ -144,15 +154,11 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        }
        prev = net;
        net = 0;
-       if(prev < 0.0000001 && prev >-0.0000001)
-            {
-                    prev = 0.;
-            }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
            double curv = sphericalCurvature(vit->second);
            net += curv;
-           if(adjF) tc[k]= dt * ((4*PI/p - dualArea(vit->second)) * curv
+           if(adjF) tc[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
            else     tc[k] = dt * (-1) * curv 
                            * sin(vit->second.getWeight());
@@ -165,15 +171,11 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        }
        prev = net;
        net = 0;
-       if(prev < 0.0000001 && prev > -0.0000001)
-       {
-                    prev = 0.;
-       }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
            double curv = sphericalCurvature(vit->second);
            net += curv;
-           if(adjF) td[k]= dt * ((4*PI/p - dualArea(vit->second)) * curv 
+           if(adjF) td[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
            else     td[k] = dt * (-1) * curv 
                            * sin(vit->second.getWeight());
@@ -230,4 +232,26 @@ double sphericalArea(Face f)
        }
        sum -= PI;
        return sum;
+}
+
+double delta(Face f)
+{
+       Vertex v = Triangulation::vertexTable[(*(f.getLocalVertices()))[0]];
+       vector<int> edges = listIntersection(f.getLocalEdges(), v.getLocalEdges());
+       if(edges.size() != 2)
+       {
+         return (-1) * 300.0;
+       }
+       return sin(edges[0])*sin(edges[1])*sin(sphericalAngle(v, f));
+}
+
+double sphericalTotalArea()
+{
+       map<int, Face>::iterator fit;
+       double total = 0;
+       for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+       {
+               total += sphericalArea(fit->second);
+       }
+       return total;
 }

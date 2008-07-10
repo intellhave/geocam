@@ -9,3 +9,5 @@ double spherStdDiffEQ(int);
 double spherAdjDiffEQ(int, double);
 double delArea();
 double sphericalArea(Face);
+double delta(Face);
+double sphericalTotalArea();
