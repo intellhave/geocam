@@ -4,16 +4,16 @@
 #include <iostream>
 #define PI 	3.141592653589793238
 
-double sphericalAngle(double lengthA, double lengthB, double lengthC, double radius = 1)
+double sphericalAngle(double lengthA, double lengthB, double lengthC, double radius)
 {
     return acos((cos(lengthC/radius)-cos(lengthA/radius)*cos(lengthB/radius))
                                / (sin(lengthA/radius)*sin(lengthB/radius)));
 }
-double sphericalAngle(Edge edgeA, Edge edgeB, Edge edgeC, double radius = 1)
+double sphericalAngle(Edge edgeA, Edge edgeB, Edge edgeC, double radius)
 {
        return sphericalAngle(edgeA.getLength(), edgeB.getLength(), edgeC.getLength(), radius);
 }
-double sphericalAngle(Vertex v, Face f, double radius = 1)
+double sphericalAngle(Vertex v, Face f, double radius)
 {
        vector<int>::iterator it;
        vector<int>* vEdges = v.getLocalEdges();
