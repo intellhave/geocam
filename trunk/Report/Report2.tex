@@ -9,7 +9,9 @@
 Supervisor: Dr. David Glickenstein\\
 }
 %\date{July 7, 2008}
+
 \begin{document}
+
 \maketitle
 \thispagestyle{empty}
 \newpage
@@ -56,7 +58,6 @@ We begin by providing the definition of a manifold. A manifold is defined as any
 Name  &	Vertices, V &	Edges, E & Faces, F &	Genus, g & $\chi$\\
 \hline 
 Tetrahedron &	4 &	6 &	4 &	0 & 2\\
-Hexahedron or cube &	8 &	12 &	6 &	0 &	2\\
 Octahedron 	&	6 &	12 &	8 & 0 &	 2\\
 Icosahedron &	12 & 30 & 20 & 0	&	 2\\
 Torus & 9 & 27 & 18 &	1 & 0\\
@@ -106,7 +107,7 @@ Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio R
 \subsection{Definition}
 \label{ricciDef}
 
-Just because we have a triangulation and that it is circle packed does not mean that it is in a desired configuration. Vertices can be too large or too small, and the resulting geometry can be somewhat repulsive. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. In their paper, Chow and Luo introduce an equation known as combinatorial Ricci flow. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We introduce this equation to the reader which can be written as
+Just because we have a triangulation and that it is circle packed does not mean that it is in a desired configuration. Vertices can be too large or too small, and the resulting geometry can be somewhat intractable. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. In their paper, Chow and Luo introduce an equation known as combinatorial Ricci flow. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We introduce this equation to the reader which can be written as
 
   \begin{equation}
   \label{Riccif}
@@ -116,18 +117,18 @@ Just because we have a triangulation and that it is circle packed does not mean 
 \noindent where $K_i$ is a characteristic called the $curvature$ of a vertex, and $r_i$ is the $radius$ or $weight$ of the vertex $i$. We use the words ``radius'' and ``weight'' interchangeably, denoting the length of the radius that surrounds a vertex $i$ in circle-packing. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths we can determine the angle using the law of cosines. For a triangle with lengths $a, b,\mbox{ and }c,$ the angle opposite side $c$ is
   
   $$
-  \angle C = \arccos\frac{a^2 + b^2 - c^2}{2ab}
+  \angle C = \arccos(\frac{a^2 + b^2 - c^2}{2ab})
   $$
   
 \noindent with similar formulas for the other angles. We take the sum of all angles associated with a vertex $i$ and define the curvature $K_i$ as
 
-  \begin{equation}
-  K_i = 2\pi - \sum{\angle i}.
-  \end{equation}
+\begin{equation}
+K_i = 2\pi - \sum{\angle i}.
+\end{equation}
   
-\noindent Since the differential equation depends on a variable whose value changes over time, we cannot solve it explicitly nor easily.\newline
+\noindent Since we are performing multiple non-linear differential equations as variables depend on the weights which change over time, we can probably not solve them explicitly.\newline
    
-\noindent A potential issue we noted is that, based on the equation, is it possible that the radii lengths could continually decrease. Take, for example, a simple tetrahedron with all sides of equal length. We find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex by the same amount, but the curvature of each vertex would still remain $\pi$ because the curvature is not affected by uniform scaling. The radii would continue to decrease until they approach zero length. We then have to address that issue since computers don't like working with numbers near zero, as in the denominator of the arccosine function. Numerical instability may occur. To avoid this issue, let us resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$ and equate as
+\noindent A potential issue we noted is that, based on the equation, is it possible that the radii could continually decrease. Take, for example, a simple tetrahedron with all sides of equal length. We find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex by the same amount, but the curvature of each vertex would still remain $\pi$ because the curvature is not affected by uniform scaling. The radii would continue to decrease until they approach zero length. We have to address that issue since computers don't like working with numbers near zero, as in the denominator of the arccosine function. Numerical instability may occur. To avoid this issue, let us resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$ and equate as
  
  \begin{equation}
  \tilde{r_i} = \alpha r_i.
@@ -142,31 +143,29 @@ Just because we have a triangulation and that it is circle packed does not mean 
  &=& -\tilde{K_i}\tilde{r_i} + \frac{\tilde{r_i}}{\alpha}\frac{d\alpha}{dt}.
  \end{eqnarray}
  
-\noindent It also turns out that $\displaystyle \frac{1}{\alpha} \frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt}.$ 
- In order to find an appropriate value for $\alpha$ we decided to use the following criteria:
+\noindent We also note that $\displaystyle \frac{1}{\alpha} \frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt}$ using a basic chain rule. In order to find an appropriate value for $\alpha$ we decided to use the following criterium:
  
 \begin{equation}
 \label{eqprod}
 f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alpha r_i} = C\mbox{, a constant.}
 \end{equation}
 
-\noindent We will call this value the \textit{product area} of the surface. This area prevents all radii from decreasing to zero at the same time. By taking the derivative of ($\ref{eqprod}$) with respect to time you find that 
+\noindent We will call this value the \textit{product area} of the surface. This area prevents all radii from decreasing to zero at the same time. By taking the derivative of Eq.~($\ref{eqprod}$) with respect to time we find that 
  
 \begin{equation}
 \label{proof1}
 \frac{d(\mbox{log}~\alpha)}{dt} = \frac{\mbox{sum of all curvatures}}{\mbox{number of vertices}} = \overline{K}, \mbox{average curvature.}
 \end{equation}
 
-\noindent In this paper, we may refer to the sum of all curvatures as the total curvature. We can also show that $\overline{K}$ is a constant and depends on the number of vertices and the Euler characteristic. We know that the sum of angles from each vertex is 360 $\deg,$ or $2\pi$. However, we also know that the sum of angles on each face is $\pi$, thus we determine that 
+\noindent In this paper, we may refer to the sum of all curvatures as the \textit{total curvature}. We can also show that $\overline{K}$ is a constant and depends on the number of vertices and the Euler characteristic. We know that the sum of angles from each vertex is 360 $\deg,$ or $2\pi$. However, we also know that the sum of angles on each face is $\pi$, thus we determine that 
 
-$$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{F}{2}).$$
-\noindent Looking back at Table \ref{EuChar} we note that for all polyhedra listed, $E = \frac{3F}{2}$. Let us use this substitution and rewrite the above equation as
+$$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{F}{2})$$
 
-$$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + F) = 2\pi \chi.$$
+\noindent We can simplify this by noting trends in basic triangulations. As every face is made up of three edges, and each edge belongs to two faces, we can see that $3F = 2E, \mbox{or } E = \frac{3F}{2}$. Looking back at Table \ref{EuChar} we note this true for all polyhedra listed. Let us use this substitution and rewrite the above equation as
 
-\noindent Thus we find that $\overline{K}$ is just $\displaystyle\frac{\sum{K_i}}{|V|} = \frac{2\pi \chi}{|V|}$ where $|V|$ is the number of vertices. This is also noted in \cite{chowluo}. Plugging this information back into ($\ref{ref1}$) we determine that
-%
-%\noindent An in-depth derivation of this can be found in the Appendix. It turns out that $\overline{K}$ is constant for any given triangulation and is equal to $\displaystyle\frac{2\pi\chi}{|V|}$, where $|V|$ is the number of vertices and $\chi$ is the Euler characteristic. This is also noted in \cite{chowluo}. Plugging this back into ($\ref{ref1}$) we determine that
+$$\sum{K_i} = 2\pi(V - \frac{F}{2}) = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + F) = 2\pi \chi.$$
+
+\noindent Thus we find that $\overline{K}$ is just $\displaystyle\frac{\sum{K_i}}{|V|} = \frac{2\pi \chi}{|V|}$ where $|V|$ is the number of vertices. This is also noted in \cite{chowluo}. Plugging this information back into Eq.~($\ref{ref1}$) we determine that
 
 \begin{equation}
 \frac{d\tilde{r_i}}{dt} = -\tilde{K_i}\tilde{r_i} + \overline{K}\tilde{r_i} = (\overline{K} - \tilde{K_i})\tilde{r_i}
@@ -179,7 +178,7 @@ $$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + F) = 2\
 \frac{dr_i}{dt} = (\overline{K} - K_i)r_i
 \end{equation}
 
-\noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ for each vertex and thus $\displaystyle\frac{dr_i}{dt} = 0$ for $i = 1,2,3,4$. 
+\noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ and thus $\displaystyle\frac{dr_i}{dt} = 0$ for $i = \{1,2,3,4\}$. 
 
 \subsection{Expectations}
 
@@ -204,7 +203,7 @@ We have some expectations for combinatorial Ricci flow over two-dimensional Eucl
 
 When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces..\newline
   
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale = 0.50]{triangulationUML.png}
 \end{center}
