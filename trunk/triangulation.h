@@ -40,6 +40,11 @@ class Triangulation
       static map<int, Edge> edgeTable;
       static map<int, Face> faceTable;
       
+      static bool containsVertex(int);
+      static bool containsEdge(int);
+      static bool containsFace(int);
+      
+      
       /*
        * Returns the largest integer in the vertex table.
        */
@@ -68,7 +73,6 @@ class Triangulation
      * faceTable. Called statically.
 	 */
      static void putFace(int, Face);
-     
      /*
       * Removes the mapping from the given integer to its referenced vertex.
       * It also removes all local references to the integer in any simplices.
