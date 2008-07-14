@@ -113,24 +113,29 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
                            * sin(vit->second.getWeight());
            
        }
-        data << "Step " << i << "   Area        ";
-        data << "Delta\n------------------------\n";
-        map<int, Face>::iterator fit;
-        double totalArea = 0;
-        double totalDelta = 0;
-        for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
-        {
-                double area = sphericalArea(fit->second);
-                double deltaF = delta(fit->second);
-                totalArea += area;
-                totalDelta += deltaF;
-                data << "Face " << fit->first << ": " << area;
-                data << "    " << deltaF << "\n";
-        }
-        data << "Total Area: " << totalArea << "\n";
-        data << "Total Delta: " << totalDelta << "\n";
-        data << "dA/dt = " << delArea() << "\n\n";
-        
+    //    data << "Step " << i << "   Area        ";
+//        data << "Delta\n------------------------\n";
+//        map<int, Face>::iterator fit;
+//        double totalArea = 0;
+//        double totalDelta = 0;
+//        for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+//        {
+//                double area = sphericalArea(fit->second);
+//                double deltaF = delta(fit->second);
+//                totalArea += area;
+//                totalDelta += deltaF;
+//                data << "Face " << fit->first << ": " << area;
+//                data << "    " << deltaF << "\n";
+//        }
+//        data << "Total Area: " << totalArea << "\n";
+//        data << "Total Delta: " << totalDelta << "\n";
+//        data << "dA/dt = " << delArea() << "\n\n";
+//        
+//       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
+//       {
+//           data << "Vertex " << vit->first << " dk/dt: " << delCurv(vit->second) << "\n";
+//       }
+//        data << "\n";
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
            vit->second.setWeight(z[k]+ta[k]/2);
@@ -254,4 +259,32 @@ double sphericalTotalArea()
                total += sphericalArea(fit->second);
        }
        return total;
+}
+
+double delCurv(Vertex v)
+{
+       map<int, Face>::iterator fit;
+       double sum = 0;
+       for(int i = 0; i < v.getLocalFaces()->size(); i++)
+       {
+          Face f = Triangulation::faceTable[(*(v.getLocalFaces()))[i]];
+          double vCurv = sphericalCurvature(v);
+          double inArea = sin(v.getWeight())*tan(sphericalAngle(v, f));
+          vector<int> edges = listIntersection(v.getLocalEdges(), f.getLocalEdges());
+          Edge e1 = Triangulation::edgeTable[edges[0]];
+          Edge e2 = Triangulation::edgeTable[edges[1]];
+          Vertex v2;
+          if((*(e1.getLocalVertices()))[0] == v.getIndex())
+              v2 = Triangulation::vertexTable[(*(e1.getLocalVertices()))[1]];
+          else
+              v2 = Triangulation::vertexTable[(*(e1.getLocalVertices()))[0]];
+          Vertex v3;
+          if((*(e2.getLocalVertices()))[0] == v.getIndex())
+              v3 = Triangulation::vertexTable[(*(e2.getLocalVertices()))[1]];
+          else
+              v3 = Triangulation::vertexTable[(*(e2.getLocalVertices()))[0]];
+          sum += inArea/tan(e1.getLength())*(sphericalCurvature(v2) - vCurv);
+          sum += inArea/tan(e2.getLength())*(sphericalCurvature(v3) - vCurv);
+       }
+      return sum;
 }

@@ -11,3 +11,4 @@ double delArea();
 double sphericalArea(Face);
 double delta(Face);
 double sphericalTotalArea();
+double delCurv(Vertex);
