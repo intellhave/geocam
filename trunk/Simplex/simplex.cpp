@@ -83,6 +83,37 @@ void Simplex::removeFace(int face)
      }
      
 }
+
+bool Simplex::isAdjVertex(int vIndex)
+{
+     for(int i = 0; i < localVertices.size(); i++)
+     {
+             if(localVertices[i] == vIndex)
+             return true;
+     }
+     return false;
+}
+
+bool Simplex::isAdjEdge(int eIndex)
+{
+     for(int i = 0; i < localEdges.size(); i++)
+     {
+             if(localEdges[i] == eIndex)
+             return true;
+     }
+     return false;
+}
+
+bool Simplex::isAdjFace(int fIndex)
+{
+     for(int i = 0; i < localFaces.size(); i++)
+     {
+             if(localFaces[i] == fIndex)
+             return true;
+     }
+     return false;
+}
+
 vector<int>* Simplex::getLocalVertices()
 {
      return &localVertices;

@@ -29,6 +29,21 @@ void Vertex::setWeight(double newWeight)
      }
 }
 
+void Vertex::setPosition(double xPos, double yPos)
+{
+     xCoord = xPos;
+     yCoord = yPos;
+}
+
+double Vertex::getXpos()
+{
+       return xCoord;
+}
+
+double Vertex::getYpos()
+{
+       return yCoord;
+}
 
 int Vertex::getDegree()
 {

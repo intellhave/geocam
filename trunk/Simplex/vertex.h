@@ -22,6 +22,8 @@ Version: June 10, 2008
 class Vertex : public Simplex
 {
         double weight;
+        double xCoord;
+        double yCoord;
 	public:
            
 		// default class constructor
@@ -42,6 +44,9 @@ class Vertex : public Simplex
 		 * Sets the weight to the given weight.
 		 */
 		void setWeight(double);
+		void setPosition(double, double);
+		double getXpos();
+		double getYpos();
 		int getDegree();
 		
 };

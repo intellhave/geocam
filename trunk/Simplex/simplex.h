@@ -57,6 +57,11 @@ class Simplex
 	  void removeEdge(int);
 	  
 	  void removeFace(int);
+	  
+	  bool isAdjVertex(int);
+	  bool isAdjEdge(int);
+	  bool isAdjFace(int);
+	  
      /* Returns a pointer to the list of local vertices.
 	  */
 	  vector<int>* getLocalVertices();

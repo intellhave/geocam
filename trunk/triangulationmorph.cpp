@@ -18,6 +18,7 @@ the Triangulation in some way.
 
 void addNewVertex(Face f, double newWeight)
 {
+     
      //start giving names to the existing simplices that are involved in this procedure
      Vertex va1 = Triangulation::vertexTable[(*(f.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(f.getLocalVertices()))[1]];

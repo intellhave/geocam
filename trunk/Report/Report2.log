@@ -1,4 +1,12 @@
+<<<<<<< .mine
+<<<<<<< .mine
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (MiKTeX 2.4) (preloaded format=latex 2008.6.30)  7 JUL 2008 13:06
+=======
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  7 JUL 2008 12:54
+=======
 This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  10 JUL 2008 10:19
+>>>>>>> .r292
+>>>>>>> .r269
 entering extended mode
 **C:/Dev-Cpp/geocam/Report/Report2.tex
 (C:/Dev-Cpp/geocam/Report/Report2.tex
@@ -238,13 +246,28 @@ Underfull \hbox (badness 10000) in paragraph at lines 214--215
 
  []
 
+<<<<<<< .mine
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 253--254
+=======
 [12] [13 <triangulationUML.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 263--264
+>>>>>>> .r269
 
  []
 
+<<<<<<< .mine
+<<<<<<< .mine
+[13 <triangulationUML.png>]
+Overfull \hbox (8.20491pt too wide) in paragraph at lines 274--287
+=======
+
+Overfull \hbox (8.20491pt too wide) in paragraph at lines 283--296
+=======
 [14]
 Overfull \hbox (8.20491pt too wide) in paragraph at lines 284--297
+>>>>>>> .r292
+>>>>>>> .r269
 [][] 
  []
 
@@ -255,17 +278,39 @@ LaTeX Font Info:    Try loading font information for OMS+cmr on input line 315.
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+<<<<<<< .mine
+<<<<<<< .mine
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 305.
+ [15] <Flip.png, id=88, 411.81439pt x 207.46474pt>
+=======
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 314.
+=======
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 315.
+>>>>>>> .r292
 
 <Flip.png, id=66, 459.16371pt x 133.32568pt>
+>>>>>>> .r269
 File: Flip.png Graphic file (type png)
  <use Flip.png>
+<<<<<<< .mine
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 321--322
+=======
+Underfull \hbox (badness 10000) in paragraph at lines 330--331
+=======
 Underfull \hbox (badness 10000) in paragraph at lines 331--332
+>>>>>>> .r292
+>>>>>>> .r269
 
  []
 
+<<<<<<< .mine
+[16 <Flip.png>] [17]
+Underfull \hbox (badness 10000) in paragraph at lines 352--353
+=======
 [16] [17 <Flip.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 353--354
+>>>>>>> .r292
 
  []
 
@@ -274,13 +319,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 355--356
 
  []
 
-
+[18]
 Underfull \hbox (badness 10000) in paragraph at lines 357--358
 
  []
 
+<<<<<<< .mine
 
+<<<<<<< .mine
+Overfull \hbox (2.61108pt too wide) in paragraph at lines 352--417
+=======
+
+Overfull \hbox (2.61108pt too wide) in paragraph at lines 361--426
+=======
 Overfull \hbox (2.61108pt too wide) in paragraph at lines 362--427
+>>>>>>> .r292
+>>>>>>> .r269
 []$[]$ [] 
  []
 
@@ -294,7 +348,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 436--437
 
  []
 
+<<<<<<< .mine
+<<<<<<< .mine
+<torus22.png, id=102, 418.66759pt x 314.00069pt>
+=======
+[19] <torus22.png, id=80, 418.66759pt x 314.00069pt>
+=======
 <torus22.png, id=80, 418.66759pt x 314.00069pt>
+>>>>>>> .r292
+>>>>>>> .r269
 File: torus22.png Graphic file (type png)
  <use torus22.png>
 <torus2addvertex2.png, id=81, 418.66759pt x 314.00069pt>
@@ -315,8 +377,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 447--448
 
  []
 
+<<<<<<< .mine
+[20 <torus22.png> <torus2addvertex2.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 439--440
+=======
 [20]
 Underfull \hbox (badness 10000) in paragraph at lines 449--450
+>>>>>>> .r269
 
  []
 
@@ -325,9 +392,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 451--452
 
  []
 
+<<<<<<< .mine
+<<<<<<< .mine
+=======
 [21 <torus22.png (PNG copy)> <torus2addvertex2.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 453--454
+>>>>>>> .r292
 
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 443--444
+=======
+>>>>>>> .r269
+
+Underfull \hbox (badness 10000) in paragraph at lines 452--453
+
+=======
+>>>>>>> .r292
  []
 
 
@@ -335,9 +415,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 455--456
 
  []
 
+<<<<<<< .mine
+<<<<<<< .mine
+[21]
+Underfull \hbox (badness 10000) in paragraph at lines 447--448
 
+=======
+[21 <torus22.png (PNG copy)> <torus2addvertex2.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 456--457
+=======
+>>>>>>> .r292
+
+<<<<<<< .mine
+>>>>>>> .r269
+=======
 Underfull \hbox (badness 10000) in paragraph at lines 457--458
 
+>>>>>>> .r292
  []
 
 <tetratouch.png, id=88, 442.34224pt x 211.82587pt>
@@ -352,7 +446,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 469--470
 
  []
 
+<<<<<<< .mine
+<<<<<<< .mine
+[22 <tetratouch.png>] <ConvergenceTable.png, id=114, 395.67825pt x 686.565pt>
+=======
+<ConvergenceTable.png, id=89, 395.67825pt x 686.565pt>
+=======
 [22] <ConvergenceTable.png, id=92, 395.67825pt x 686.565pt>
+>>>>>>> .r292
+>>>>>>> .r269
 File: ConvergenceTable.png Graphic file (type png)
 
 <use ConvergenceTable.png>
@@ -364,8 +466,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 478--479
 
  []
 
+<<<<<<< .mine
+<<<<<<< .mine
+
+Underfull \hbox (badness 10000) in paragraph at lines 470--471
+=======
+[22]
+Underfull \hbox (badness 10000) in paragraph at lines 479--480
+=======
 [23 <tetratouch.png (PNG copy)>] [24 <ConvergenceTable.png (PNG copy)>]
 Underfull \hbox (badness 10000) in paragraph at lines 480--481
+>>>>>>> .r292
+>>>>>>> .r269
 
  []
 
@@ -374,14 +486,30 @@ Underfull \hbox (badness 10000) in paragraph at lines 487--488
 
  []
 
+<<<<<<< .mine
+<<<<<<< .mine
+[23] [24 <ConvergenceTable.png>] <intcirc.png, id=121, 418.66759pt x 314.00069pt>
+=======
+<intcirc.png, id=99, 418.66759pt x 314.00069pt>
+=======
 [25] <intcirc.png, id=103, 418.66759pt x 314.00069pt>
+>>>>>>> .r292
+>>>>>>> .r269
 File: intcirc.png Graphic file (type png)
  <use intcirc.png>
 Underfull \hbox (badness 10000) in paragraph at lines 513--514
 
  []
 
+<<<<<<< .mine
+<<<<<<< .mine
+[25] [26 <intcirc.png>] [27] (Report2.bbl
+=======
+[25] [26 <intcirc.png (PNG copy)>] [27] (Report2.bbl
+=======
 [26 <intcirc.png (PNG copy)>] [27] (Report2.bbl
+>>>>>>> .r292
+>>>>>>> .r269
 Underfull \hbox (badness 10000) in paragraph at lines 24--27
 []\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
  []
@@ -791,10 +919,26 @@ etIndex());[]
 
 [38] (Report2.aux) ) 
 Here is how much of TeX's memory you used:
+<<<<<<< .mine
+<<<<<<< .mine
+ 1193 strings out of 95515
+ 14086 string characters out of 1189489
+ 67094 words of memory out of 1063709
+ 4248 multiletter control sequences out of 60000
+ 9324 words of font info for 33 fonts, out of 1000000 for 2000
+ 14 hyphenation exceptions out of 4999
+ 25i,9n,21p,1845b,283s stack positions out of 5000i,500n,10000p,200000b,32768s
+=======
+ 1109 strings out of 95340
+ 13910 string characters out of 1184156
+ 68172 words of memory out of 1500000
+ 4315 multiletter control sequences out of 110000
+=======
  1113 strings out of 95340
  13964 string characters out of 1184156
  66210 words of memory out of 1500000
  4319 multiletter control sequences out of 110000
+>>>>>>> .r292
  9324 words of font info for 33 fonts, out of 1200000 for 2000
  14 hyphenation exceptions out of 8191
  25i,9n,21p,1842b,283s stack positions out of 5000i,500n,10000p,200000b,5000s
@@ -808,8 +952,21 @@ MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/fonts
 /type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm
 /cmti12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt12.pfb>
 Output written on Report2.pdf (38 pages, 851107 bytes).
+>>>>>>> .r269
 PDF statistics:
+<<<<<<< .mine
+ 170 PDF objects out of 300000
+ 0 named destinations out of 300000
+ 81 words of extra memory for PDF output out of 65536
+<C:\texmf\fonts\type1\bluesky\cm\cmtt12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmsy8.pfb><C:\texmf\fon
+ts\type1\bluesky\cm\cmex10.pfb><C:\texmf\fonts\type1\bluesky\cm\cmsy10.pfb><C:\texmf\fonts\type1\bluesky\cm\cmmi8.pfb><C
+:\texmf\fonts\type1\bluesky\cm\cmr8.pfb><C:\texmf\fonts\type1\bluesky\cm\cmti12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmm
+i12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmbx12.pfb><C:\texmf\fonts\type1\bluesky\cm\cmr12.pfb><C:\texmf\fonts\type1\blu
+esky\cm\cmr17.pfb>
+Output written on Report2.pdf (38 pages, 793029 bytes).
+=======
  186 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
  81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
+>>>>>>> .r269
