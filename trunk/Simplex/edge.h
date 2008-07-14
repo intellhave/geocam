@@ -6,7 +6,7 @@ Version: June 10, 2008
 
 #ifndef EDGE_H
 #define EDGE_H
-
+#include "line.h"
 #include "simplex.h" // inheriting class's header file
 
 /*

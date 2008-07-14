@@ -32,8 +32,8 @@ void Edge::setLength(double newLength) {
 }
 Line Edge::convertToLine()
 {
-     Vertex v1 = Triangulation::vertexTable[*getLocalVertices()[0]];
-     Vertex v2 = Triangulation::vertexTable[*getLocalVertices()[1]];
+     Vertex v1 = Triangulation::vertexTable[(*getLocalVertices())[0]];
+     Vertex v2 = Triangulation::vertexTable[(*getLocalVertices())[1]];
      Line l(v1.getXpos(), v1.getYpos(), v2.getXpos(), v2.getYpos());
      return l;
 }
