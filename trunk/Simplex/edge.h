@@ -41,6 +41,7 @@ class Edge : public Simplex
         {
                return length;
         };
+        Line convertToLine();
 };
 
 #endif // EDGE_H
