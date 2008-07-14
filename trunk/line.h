@@ -1,3 +1,5 @@
+#ifndef LINE_H
+#define LINE_H
 class Line
 {
       double x1, y1, x2, y2;
@@ -17,3 +19,4 @@ class Line
       bool isBelow(double, double);
       bool isOnLine(double, double);
 };
+#endif // LINE_H
