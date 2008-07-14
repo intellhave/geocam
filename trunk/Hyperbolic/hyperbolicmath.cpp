@@ -107,7 +107,7 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
                (*curvatures).push_back(curv);
              }
            net += curv;
-           if(adjF) ta[k]= dt * ((prev /  p - curv) 
+           if(adjF) ta[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sinh(vit->second.getWeight()));
            else     ta[k] = dt * (-1) * curv 
                            * sinh(vit->second.getWeight());
@@ -123,7 +123,7 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
        {
            double curv = hyperbolicCurvature(vit->second);
            net += curv;
-           if(adjF) tb[k]= dt * ((prev /  p - curv) 
+           if(adjF) tb[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sinh(vit->second.getWeight()));
            else     tb[k] = dt * (-1) * curv 
                            * sinh(vit->second.getWeight());
@@ -140,7 +140,7 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
        {
            double curv = hyperbolicCurvature(vit->second);
            net += curv;
-           if(adjF) tc[k]= dt * ((prev /  p - curv) 
+           if(adjF) tc[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sinh(vit->second.getWeight()));
            else     tc[k] = dt * (-1) * curv 
                            * sinh(vit->second.getWeight());
@@ -157,7 +157,7 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
        {
            double curv = hyperbolicCurvature(vit->second);
            net += curv;
-           if(adjF) td[k]= dt * ((prev /  p - curv) 
+           if(adjF) td[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sinh(vit->second.getWeight()));
            else     td[k] = dt * (-1) * curv 
                            * sinh(vit->second.getWeight());
