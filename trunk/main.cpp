@@ -17,6 +17,7 @@ Version: June 10, 2008
 #include "triangulationmath.h"
 #include "triangulationmorph.h"
 #include "triangulationInputOutput.h"
+#include "triangulationPlane.h"
 #include <ctime>
 #include <iomanip>
 #include <cmath>
@@ -50,8 +51,13 @@ void runFlow()
 
 int main(int argc, char *argv[])
 {
-    readTriangulationFile("Triangulations/Tetrahedron.txt");
-    cout << endl;
+    firstTriangle(1.0, 1.0, 1.0);
+    cout << Triangulation::vertexTable[1].getXpos();
+    cout << ", " << Triangulation::vertexTable[1].getYpos() << endl;
+    cout << Triangulation::vertexTable[2].getXpos();
+    cout << ", " << Triangulation::vertexTable[2].getYpos() << endl;
+    cout << Triangulation::vertexTable[3].getXpos();
+    cout << ", " << Triangulation::vertexTable[3].getYpos() << endl;
     system("PAUSE");
     return 0;
 }

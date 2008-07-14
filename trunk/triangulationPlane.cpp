@@ -7,8 +7,10 @@
 #include <algorithm>
 #include "triangulation.h"
 #include "triangulationmath.h"
+#include "triangulationPlane.h"
 #include <fstream>
 #include <iomanip>
+#define PI 	3.141592653589793238
 
 void firstTriangle(double length1, double length2, double length3)
 {
@@ -145,6 +147,83 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::edgeTable[eb1.getIndex()].setLength(length1);
      Triangulation::edgeTable[eb2.getIndex()].setLength(length2);
      
+     
+}
+
+void addTriangle(Edge e1, Edge e2)
+{
+     if(!e1.isAdjEdge(e2.getIndex()))
+     throw string("");
+     if(!e2.isAdjEdge(e1.getIndex()))
+     throw string("");
+     if(!e1.isAdjFace(0) || !e2.isAdjFace(0))
+     throw string("");
+     
+     Vertex v1, v2, va;
+     vector<int> diff, sameAs;
+     
+     diff = listDifference(e1.getLocalVertices(), e2.getLocalVertices());
+     v1 = Triangulation::vertexTable[diff[0]];
+     diff = listDifference(e2.getLocalVertices(), e1.getLocalVertices());
+     v2 = Triangulation::vertexTable[diff[0]];
+     sameAs = listIntersection(e1.getLocalVertices(), e2.getLocalVertices());
+     va = Triangulation::vertexTable[sameAs[0]];
+     
+     Edge eb(Triangulation::greatestEdge() + 1);
+     Face fb(Triangulation::greatestFace() + 1);
+     Face fa1, fa2;
+     if((*(e1.getLocalFaces()))[0] == 0)
+          Face fa1 = Triangulation::faceTable[(*(e1.getLocalFaces()))[1]];
+     else
+          Face fa1 = Triangulation::faceTable[(*(e1.getLocalFaces()))[0]];
+     if((*(e2.getLocalFaces()))[0] == 0)
+          Face fa2 = Triangulation::faceTable[(*(e2.getLocalFaces()))[1]];
+     else
+          Face fa2 = Triangulation::faceTable[(*(e2.getLocalFaces()))[0]];
+     
+     if(getAngleSum(va) < PI)
+     throw string("");
+     
+     Triangulation::edgeTable[e1.getIndex()].removeFace(0);
+     Triangulation::edgeTable[e2.getIndex()].removeFace(0);
+     Triangulation::faceTable[fa1.getIndex()].removeFace(0);
+     Triangulation::faceTable[fa2.getIndex()].removeFace(0);
+     Triangulation::vertexTable[v1.getIndex()].addVertex(v2.getIndex());
+     Triangulation::vertexTable[v2.getIndex()].addVertex(v1.getIndex());
+     Triangulation::vertexTable[v1.getIndex()].addEdge(eb.getIndex());
+     Triangulation::vertexTable[v2.getIndex()].addEdge(eb.getIndex());
+     Triangulation::vertexTable[v1.getIndex()].addFace(fb.getIndex());
+     Triangulation::vertexTable[v2.getIndex()].addFace(fb.getIndex());
+     Triangulation::vertexTable[va.getIndex()].addFace(fb.getIndex());
+     Triangulation::edgeTable[eb.getIndex()].addVertex(v1.getIndex());
+     Triangulation::edgeTable[eb.getIndex()].addVertex(v2.getIndex());
+     for(int i = 0; i < v1.getLocalEdges()->size(); i++)
+     {
+             Triangulation::edgeTable[(*(v1.getLocalEdges()))[i]].addEdge(eb.getIndex());
+             Triangulation::edgeTable[eb.getIndex()].addEdge((*(v1.getLocalEdges()))[i]);
+     }
+     for(int i = 0; i < v2.getLocalEdges()->size(); i++)
+     {
+             Triangulation::edgeTable[(*(v2.getLocalEdges()))[i]].addEdge(eb.getIndex());
+             Triangulation::edgeTable[eb.getIndex()].addEdge((*(v2.getLocalEdges()))[i]);
+     }
+     Triangulation::edgeTable[e1.getIndex()].addFace(fb.getIndex());
+     Triangulation::edgeTable[e2.getIndex()].addFace(fb.getIndex());
+     Triangulation::edgeTable[eb.getIndex()].addFace(fb.getIndex());
+     Triangulation::edgeTable[eb.getIndex()].addFace(0);
+     Triangulation::faceTable[fb.getIndex()].addVertex(v1.getIndex());
+     Triangulation::faceTable[fb.getIndex()].addVertex(v2.getIndex());
+     Triangulation::faceTable[fb.getIndex()].addVertex(va.getIndex());
+     Triangulation::faceTable[fb.getIndex()].addEdge(e1.getIndex());
+     Triangulation::faceTable[fb.getIndex()].addEdge(e2.getIndex());
+     Triangulation::faceTable[fb.getIndex()].addEdge(eb.getIndex());
+     Triangulation::faceTable[fb.getIndex()].addFace(fa1.getIndex());
+     Triangulation::faceTable[fb.getIndex()].addFace(fa2.getIndex());
+     Triangulation::faceTable[fb.getIndex()].addFace(0);
+     Triangulation::faceTable[fa1.getIndex()].addFace(fb.getIndex());
+     Triangulation::faceTable[fa2.getIndex()].addFace(fb.getIndex());
+     
+     eb.setLength(getDistance(v1, v2));
      
 }
 

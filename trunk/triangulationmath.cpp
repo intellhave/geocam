@@ -118,6 +118,24 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
             return diff;
 }
 
+double getAngleSum(Vertex v)
+{
+       double angleSum;
+       for(int i = 0; i < v.getLocalFaces()->size(); i++)
+       {
+               angleSum += angle(v, Triangulation::faceTable[(*(v.getLocalFaces()))[i]]);
+       }
+       return angleSum;
+}
+
+double getSlope(Edge e)
+{
+       Vertex v1 = (*(e.getLocalVertices()))[0];
+       Vertex v2 = (*(e.getLocalVertices()))[1];
+       
+       return ((v2.getYpos() - v1.getYpos())/(v2.getXpos() - v1.getXpos()));
+}
+
 
 /*
  * Calculates the Ricci flow of the current Triangulation using the 

@@ -47,6 +47,10 @@ vector<int> listIntersection(vector<int>*, vector<int>*);
 
 vector<int> listDifference(vector<int>*, vector<int>*);
 
+double getAngleSum(Vertex);
+
+double getSlope(Edge);
+
 
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
