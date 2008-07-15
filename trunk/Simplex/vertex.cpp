@@ -50,3 +50,8 @@ int Vertex::getDegree()
     return getLocalEdges()->size();
 }
 
+Point Vertex::convertToPoint()
+{
+      Point p(xCoord, yCoord);
+      return p;
+}

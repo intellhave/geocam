@@ -11,6 +11,7 @@ Version: June 10, 2008
 #include <vector>
 #include "edge.h"
 #include "face.h"
+#include "line.h"
 
 /*
  * The Vertex class is derived from the Simplex class. It is the
@@ -48,7 +49,7 @@ class Vertex : public Simplex
 		double getXpos();
 		double getYpos();
 		int getDegree();
-		
+		Point convertToPoint();
 };
 
 #endif // VERTEX_H
