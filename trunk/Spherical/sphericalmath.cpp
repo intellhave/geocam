@@ -79,8 +79,8 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
   data << setprecision(6);
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
-  double area[p][numSteps];
-  double deltaArr[p][numSteps];
+  double area[Triangulation::faceTable.size()][numSteps];
+  double deltaArr[Triangulation::faceTable.size()][numSteps];
    for (k=0; k<p; k++) {
     z[k]=initWeights[k]; // z[k] holds the current weights.
    }
@@ -191,7 +191,7 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
          
        }
    }
-   for(i = 0; i < p; i++)
+   for(i = 0; i < Triangulation::faceTable.size(); i++)
    {
      for(int j = 0; j < numSteps; j++)
      {
