@@ -48,6 +48,10 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
        // No solutions
        return solutions;
     }
+    if(distancePoint(center1, center2) < fabs(r1 - r2))
+    {
+        return solutions;
+    }
     // (x-x1)^2 + (y-y1)^2 = r1^2
     // (x-x2)^2 + (y-y2)^2 = r2^2
     

@@ -277,6 +277,48 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+<<<<<<< .mine
+[Unit24]
+FileName=line.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit25]
+FileName=line.h
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit26]
+FileName=miscmath.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit27]
+FileName=miscmath.h
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+=======
 [Unit24]
 FileName=triangulationPlane.cpp
 CompileCpp=1
@@ -317,3 +359,4 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+>>>>>>> .r314

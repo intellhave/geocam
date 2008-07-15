@@ -29,6 +29,11 @@ void Vertex::setWeight(double newWeight)
      }
 }
 
+void Vertex::setWeight(double newWeight, char x)
+{
+     weight = newWeight;     
+}
+
 void Vertex::setPosition(double xPos, double yPos)
 {
      xCoord = xPos;

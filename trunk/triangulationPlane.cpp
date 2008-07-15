@@ -148,6 +148,8 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::edgeTable[eb2.getIndex()].setLength(length2);
      
      
+     
+     
 }
 
 void addTriangle(Edge e1, Edge e2)
@@ -232,3 +234,10 @@ double getDistance(Vertex v1, Vertex v2)
        return sqrt(pow(((v1.getXpos()) - (v2.getXpos())), 2) + pow(((v1.getYpos()) - (v2.getYpos())), 2));
 }
 
+<<<<<<< .mine
+
+
+
+
+=======
+>>>>>>> .r314
