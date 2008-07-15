@@ -17,6 +17,8 @@ Version: June 10, 2008
 #include "triangulationmath.h"
 #include "triangulationmorph.h"
 #include "triangulationInputOutput.h"
+#include "line.h"
+#include "miscmath.h"
 #include "triangulationPlane.h"
 #include <ctime>
 #include <iomanip>
@@ -27,37 +29,100 @@ Version: June 10, 2008
 
 using namespace std;
 
-
-
-
 void runFlow()
 {
-     readTriangulationFile("Triangulations/double triangle");
-     
-     addCrossCap(Triangulation::faceTable[1], 1);
-                            
-//     char fileName[] = "Triangulations/ODE Result.txt";
-//     time_t start, end;
-//     time(&start);
-//     vector<double> weightsR;
-//     vector<double> curvatures;
-//     sphericalCalcFlow(&weightsR, &curvatures, 0.03, weights,1000, false);
-//     printResultsStep(fileName, &weightsR, &curvatures);
-//     time(&end);
-//     cout << difftime(end, start) << " seconds" << endl;
-    
+//char from[] = "Triangulations/manifold.txt";
+//char to[] = "Triangulations/manifold converted.txt";
+//makeTriangulationFile(from, to);
+char to[] = "Triangulations/Tetrahedron.txt";
+readTriangulationFile(to);
+
+//flip(Triangulation::edgeTable[1]);  
+//addNewVertex(Triangulation::faceTable[1], 1);
+//removeVertex(Triangulation::vertexTable[3]);
+//addLeaf(Triangulation::edgeTable[1], 2);
+//addNewVertex(Triangulation::faceTable[1], 1);
+//map<int, Face>::iterator fit;
+//
+//for(int i = 1; i < 2; i++)
+//{
+//fit = Triangulation::faceTable.begin();
+//cout << fit->first << "\n";
+//addHandle(fit->second, 1);
+//}
+//addCrossCap(Triangulation::faceTable[1], 1);
+//writeTriangulationFile(to);
+   srand(time(NULL));
+//   
+   
+    int vertexSize = Triangulation::vertexTable.size();
+    double weights[] = {0.567459, 0.567459, 0.567459, 1.90457};
+    double product = 1;
+    for(int i = 1; i <= vertexSize; i++)
+   {
+       //weights[i - 1] = acos(-1/3.0)/2 - (rand() %10 + 0.0)/10.0;
+      //weights[i - 1] = 2;
+      //weights[i - 1] = (rand()%10 + 1)/10.0;
+   }
+//   while(Triangulation::vertexTable[1].getLocalEdges()->size() > 3)
+//   {
+//       Vertex v = Triangulation::vertexTable[1];
+//       cout << "Edge: " << (*(v.getLocalEdges()))[0] << "\n";
+//       int remove = 0;
+//      // if((*(v.getLocalEdges()))[0] == 1)
+////       {
+////        remove = 1 ;
+////       }
+//       flip(Triangulation::edgeTable[(*(v.getLocalEdges()))[remove]]);                                                    
+//   }
+   //flip(Triangulation::edgeTable[1]); 
+ // writeTriangulationFile(to);                                                    
+   char fileName[] = "Triangulations/ODE Result.txt";
+   time_t start, end;
+   time(&start);
+   vector<double> weightsR;
+   vector<double> curvatures;
+  sphericalCalcFlow(&weightsR, &curvatures, 0.05, weights,500, true);
+  printResultsStep(fileName, &weightsR, &curvatures);
+  //printResultsNum(fileName, &weightsR, &curvatures);
+   time(&end);
+   cout << difftime(end, start) << " seconds" << endl;
+
+   cout << sphericalAngle(Triangulation::vertexTable[1], Triangulation::faceTable[1]) << "\n";
+   cout << sphericalAngle(Triangulation::vertexTable[1], Triangulation::faceTable[2]) << "\n";
+   cout << sphericalAngle(Triangulation::vertexTable[1], Triangulation::faceTable[3]) << "\n";
+   
 }
 
 
 int main(int argc, char *argv[])
 {
-    firstTriangle(1.0, 1.0, 1.0);
-    cout << Triangulation::vertexTable[1].getXpos();
-    cout << ", " << Triangulation::vertexTable[1].getYpos() << endl;
-    cout << Triangulation::vertexTable[2].getXpos();
-    cout << ", " << Triangulation::vertexTable[2].getYpos() << endl;
-    cout << Triangulation::vertexTable[3].getXpos();
-    cout << ", " << Triangulation::vertexTable[3].getYpos() << endl;
+   // runFlow();
+  //  Line l(1, 1, 2, 3);
+//    cout << "Initial X: " << l.getInitialX() << endl;
+//    cout << "Initial Y: " << l.getInitialY() << endl;
+//    cout << "Ending X: " << l.getEndingX() << endl;
+//    cout << "Ending Y: " << l.getEndingY() << endl;
+//    cout << "Slope: " << l.getSlope() << endl;
+//    cout << "Intercept: " << l.getIntercept() << endl;
+//    cout << "Is Vertical? " << l.isVertical() << endl;
+//    cout << "(3,5) is on the line? " << l.isOnLine(3,5) << endl;
+//    cout << "(0,0) is below? " << l.isBelow(0,0) << endl;
+//    cout << "(2, -2) is below? " << l.isBelow(2,-2) << endl;
+Point p1(1, 2);
+Point p2(4, 6);
+vector<Point> solutions = circleIntersection(p1, 3, p2, 4);
+for(int i = 0; i < solutions.size(); i++)
+{
+  Point sol = solutions[i];
+  cout << "Solution " << i << ": (" << sol.x << ", " << sol.y << ")\n";
+}
+vector<double> quadSolutions = quadratic(1, -7, 12);
+for(int i = 0; i < quadSolutions.size(); i++)
+{
+  double sol = quadSolutions[i];
+  cout << "Solution " << i << ": " << sol << "\n";
+}
     system("PAUSE");
     return 0;
 }
