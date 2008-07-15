@@ -109,7 +109,7 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            net += curv;
            if(adjF) ta[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
-           else     ta[k] = dt * (-1) * curv 
+           else     ta[k] = dt * (4*PI/p - dualArea(vit->second)) *curv
                            * sin(vit->second.getWeight());
            
        }
@@ -148,7 +148,7 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            net += curv;
            if(adjF) tb[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
-           else     tb[k] = dt * (-1) * curv 
+           else     tb[k] = dt * (4*PI/p - dualArea(vit->second)) *curv
                            * sin(vit->second.getWeight());
            // if(adjF) tb[k]=dt*spherAdjDiffEQ(vit->first, net);
 //            else     tb[k]=dt*spherStdDiffEQ(vit->first);
@@ -165,7 +165,7 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            net += curv;
            if(adjF) tc[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
-           else     tc[k] = dt * (-1) * curv 
+           else     tc[k] = dt * (4*PI/p - dualArea(vit->second)) *curv
                            * sin(vit->second.getWeight());
           //  if(adjF) tc[k]=dt*spherAdjDiffEQ(vit->first, net);
 //            else     tc[k]=dt*spherStdDiffEQ(vit->first);
@@ -182,7 +182,7 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            net += curv;
            if(adjF) td[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
-           else     td[k] = dt * (-1) * curv 
+           else     td[k] = dt * (4*PI/p - dualArea(vit->second)) *curv
                            * sin(vit->second.getWeight());
          //   if(adjF) td[k]=dt*spherAdjDiffEQ(vit->first, net);
 //            else     td[k]=dt*spherStdDiffEQ(vit->first);
