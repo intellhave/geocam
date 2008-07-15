@@ -254,7 +254,9 @@ double delta(Face f)
        {
          return (-1) * 300.0;
        }
-       return sin(edges[0])*sin(edges[1])*sin(sphericalAngle(v, f));
+       Edge e1 = Triangulation::edgeTable[edges[0]];
+       Edge e2 = Triangulation::edgeTable[edges[1]];
+       return sin(e1.getLength())*sin(e2.getLength())*sin(sphericalAngle(v, f));
 }
 
 double sphericalTotalArea()
