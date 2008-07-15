@@ -122,8 +122,8 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
         int j = 0;
         for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
         {
-              area[j][i] = sphericalArea(fit->second);
-              deltaArr[j][i] = delta(fit->second);
+              area[j][i-1] = sphericalArea(fit->second);
+              deltaArr[j][i-1] = delta(fit->second);
               j++;
 //                totalArea += area;
 //                totalDelta += deltaF;
