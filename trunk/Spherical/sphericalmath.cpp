@@ -79,6 +79,8 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
   data << setprecision(6);
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
+  double area[p][numSteps];
+  double deltaArr[p][numSteps];
    for (k=0; k<p; k++) {
     z[k]=initWeights[k]; // z[k] holds the current weights.
    }
@@ -114,18 +116,18 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        }
     //    data << "Step " << i << "   Area        ";
 //        data << "Delta\n------------------------\n";
-//        map<int, Face>::iterator fit;
+        map<int, Face>::iterator fit;
 //        double totalArea = 0;
 //        double totalDelta = 0;
-//        for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
-//        {
-//                double area = sphericalArea(fit->second);
-//                double deltaF = delta(fit->second);
+        int j = 0;
+        for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+        {
+              area[j][i] = sphericalArea(fit->second);
+              deltaArr[j][i] = delta(fit->second);
+              j++;
 //                totalArea += area;
 //                totalDelta += deltaF;
-//                data << "Face " << fit->first << ": " << area;
-//                data << "    " << deltaF << "\n";
-//        }
+        }
 //        data << "Total Area: " << totalArea << "\n";
 //        data << "Total Delta: " << totalDelta << "\n";
 //        data << "dA/dt = " << delArea() << "\n\n";
@@ -189,6 +191,15 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
          
        }
    }
+   for(i = 0; i < p; i++)
+   {
+     for(int j = 0; j < numSteps; j++)
+     {
+         data << area[i][j] << "                    " << deltaArr[i][j] << "\n";
+     }
+     data << "\n";
+   } 
+   
 }
 
 double spherStdDiffEQ(int vertex) {
