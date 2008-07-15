@@ -15,6 +15,8 @@ calculations on the triangulation.
 #include <algorithm>
 #include "triangulation.h"
 #include "triangulationmath.h"
+#include "line.h"
+#include "miscmath.h"
 #include <fstream>
 #include <iomanip>
 #define PI 	3.141592653589793238
@@ -305,3 +307,4 @@ double dualArea(Vertex v)
        }
        return areaSum;
 }
+

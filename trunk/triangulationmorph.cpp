@@ -7,6 +7,7 @@ The Triangulation Morph file holds the functions that manipulates
 the Triangulation in some way.
 **************************************************************/
 #include <cmath>
+#include <vector>
 #include "simplex/edge.h"
 #include "simplex/vertex.h"
 #include "simplex/face.h"

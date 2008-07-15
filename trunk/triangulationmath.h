@@ -115,3 +115,4 @@ double dualLength(Edge);
  * of the edges local to the given vertex.
  */
 double dualArea(Vertex);
+
