@@ -1,4 +1,15 @@
 #include "line.h"
+#include<cmath>
+
+Point::Point(double xi, double yi)
+{
+   x = xi;
+   y = yi;
+}
+
+Point::~Point()
+{
+}
 
 Line::Line(double xi1, double yi1, double xi2, double yi2)
 {
@@ -15,7 +26,21 @@ Line::Line(double xi1, double yi1, double xi2, double yi2)
       intercept = y1 - slope * x1;
     }
 }
-
+Line::Line(Point init, Point end)
+{
+    x1 = init.x;
+    y1 = init.y;
+    x2 = end.x;
+    y2 = end.y;
+    slope = 0;
+    intercept = 0;
+    vertical = x1 == x2;
+    if(!vertical)
+    {
+      slope = (y2 - y1)/(x2 - x1);
+      intercept = y1 - slope * x1;
+    }            
+}
 Line::~Line()
 {
 }
@@ -62,6 +87,11 @@ bool Line::isBelow(double x, double y)
      return y < yVal;
 }
 
+bool Line::isBelow(Point p)
+{
+     return isBelow(p.x, p.y);
+}
+
 bool Line::isOnLine(double x, double y)
 {
       if(vertical)
@@ -71,3 +101,9 @@ bool Line::isOnLine(double x, double y)
      double yVal = slope * x + intercept;
      return y == yVal;
 }
+
+bool Line::isOnLine(Point p)
+{
+     return isOnLine(p.x, p.y);
+}
+
