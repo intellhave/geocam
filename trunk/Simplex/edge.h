@@ -4,10 +4,11 @@ Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: June 10, 2008
 **************************************************************/
 
+#include "line.h"
+#include "simplex.h"
+
 #ifndef EDGE_H
 #define EDGE_H
-#include "line.h"
-#include "simplex.h" // inheriting class's header file
 
 /*
  * The Edge class is derived from the Simplex class. It is the
