@@ -11,6 +11,7 @@
 #include "miscmath.h"
 #include <fstream>
 #include <iomanip>
+#include "miscmath.h"
 #define PI 	3.141592653589793238
 
 void firstTriangle(double length1, double length2, double length3)
@@ -105,9 +106,18 @@ void addTriangle(Edge e, double length1, double length2)
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
      Face fa;
      if((*(e.getLocalFaces()))[0] == 0)
-          Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
+          fa = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
      else
-          Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+          fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+     
+     vector<int> diff;
+     diff = listDifference(fa.getLocalVertices(), e.getLocalVertices());
+     Vertex va3 = Triangulation::vertexTable[diff[0]];
+     
+     if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
+     throw string("");
+     if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
+     throw string("");
      
      Triangulation::vertexTable[vb.getIndex()].addVertex(va1.getIndex());
      Triangulation::vertexTable[vb.getIndex()].addVertex(va2.getIndex());
@@ -148,8 +158,21 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::edgeTable[eb1.getIndex()].setLength(length1);
      Triangulation::edgeTable[eb2.getIndex()].setLength(length2);
      
+     Line l = e.convertToLine();
+     Point p1 = va1.convertToPoint();
+     Point p2 = va2.convertToPoint();
+     Point p3 = va3.convertToPoint();
+     bool isBelow = l.isBelow(p3);
      
-     
+     vector<Point> solutions = circleIntersection(p1, length1, p2, length2);
+     if(isBelow == l.isBelow(solutions[0]))
+     {
+            Triangulation::vertexTable[vb.getIndex()].setPosition(solutions[1].x, solutions[1].y);
+     }
+     else
+     {
+            Triangulation::vertexTable[vb.getIndex()].setPosition(solutions[0].x, solutions[0].y);
+     }
      
 }
 
@@ -235,3 +258,29 @@ double getDistance(Vertex v1, Vertex v2)
        return sqrt(pow(((v1.getXpos()) - (v2.getXpos())), 2) + pow(((v1.getYpos()) - (v2.getYpos())), 2));
 }
 
+<<<<<<< .mine
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======
+>>>>>>> .r321
