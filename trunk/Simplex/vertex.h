@@ -56,10 +56,6 @@ class Vertex : public Simplex
 		 * defined as the number of edges local to it.
 		 */
 		int getDegree();
-		/*
-		 * Converts the vertex to a point on the cartesian plane. Used
-		 * for forming an orientation of the triangulation.
-		 */
 };
 
 #endif // VERTEX_H
