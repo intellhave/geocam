@@ -190,14 +190,27 @@ void flip(Edge e)
      sameAs = listIntersection(&sameAs, f2.getLocalEdges());
      Edge eb2 = Triangulation::edgeTable[sameAs[0]];
      
+     vector<Face> fa1, fb1, fa2, fb2;
      sameAs = listIntersection(f1.getLocalFaces(), ea1.getLocalFaces());
-     Face fa1 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fa1.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      sameAs = listIntersection(f1.getLocalFaces(), eb1.getLocalFaces());
-     Face fb1 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fb1.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      sameAs = listIntersection(f2.getLocalFaces(), ea2.getLocalFaces());
-     Face fa2 = Triangulation::faceTable[sameAs[0]];
+       for(int i = 0; i < sameAs.size(); i++)
+     {
+        fa2.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      sameAs = listIntersection(f2.getLocalFaces(), eb2.getLocalFaces());
-     Face fb2 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fb2.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      
      //the next task is naturally to rearrange all the necessary references
      //there are no new references added, so the task  is simply made up
@@ -232,11 +245,17 @@ void flip(Edge e)
      Triangulation::faceTable[(f1.getIndex())].removeVertex(va2.getIndex()); 
      Triangulation::faceTable[(f2.getIndex())].removeVertex(va1.getIndex()); 
      Triangulation::faceTable[(f1.getIndex())].removeEdge(eb1.getIndex()); 
-     Triangulation::faceTable[(f2.getIndex())].removeEdge(ea2.getIndex()); 
-     Triangulation::faceTable[(f1.getIndex())].removeFace(fb1.getIndex()); 
-     Triangulation::faceTable[(fb1.getIndex())].removeFace(f1.getIndex()); 
-     Triangulation::faceTable[(f2.getIndex())].removeFace(fa2.getIndex()); 
-     Triangulation::faceTable[(fa2.getIndex())].removeFace(f2.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeEdge(ea2.getIndex());
+     for(int i = 0; i < fb1.size(); i++)
+     {
+       Triangulation::faceTable[(f1.getIndex())].removeFace(fb1[i].getIndex());
+       Triangulation::faceTable[(fb1[i].getIndex())].removeFace(f1.getIndex());      
+     }
+     for(int i = 0; i < fa2.size(); i++)
+     {
+       Triangulation::faceTable[(f2.getIndex())].removeFace(fa2[i].getIndex());
+       Triangulation::faceTable[(fa2[i].getIndex())].removeFace(f2.getIndex());      
+     }
      
      //additions
      Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb2.getIndex()); 
@@ -263,10 +282,16 @@ void flip(Edge e)
      Triangulation::faceTable[(f2.getIndex())].addVertex(vb1.getIndex());
      Triangulation::faceTable[(f1.getIndex())].addEdge(ea2.getIndex());
      Triangulation::faceTable[(f2.getIndex())].addEdge(eb1.getIndex());
-     Triangulation::faceTable[(f1.getIndex())].addFace(fa2.getIndex());
-     Triangulation::faceTable[(fa2.getIndex())].addFace(f1.getIndex());
-     Triangulation::faceTable[(f2.getIndex())].addFace(fb1.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].addFace(f2.getIndex());
+     for(int i = 0; i < fa2.size(); i++)
+     {
+         Triangulation::faceTable[(f1.getIndex())].addFace(fa2[i].getIndex());
+         Triangulation::faceTable[(fa2[i].getIndex())].addFace(f1.getIndex());
+     }
+      for(int i = 0; i < fb1.size(); i++)
+     {
+         Triangulation::faceTable[(f2.getIndex())].addFace(fb1[i].getIndex());
+         Triangulation::faceTable[(fb1[i].getIndex())].addFace(f2.getIndex());
+     }
 
 }
 
