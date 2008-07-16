@@ -15,11 +15,6 @@ calculations on the triangulation under a hyperbolic geometry.
  */
 double hyperbolicAngle(double, double, double);
 /*
- * Calculates an angle of a hyperbolic triangle given the edges, where 
- * the first two edges are incident on the angle.
- */
-double hyperbolicAngle(Edge, Edge, Edge);
-/*
  * Calculates an angle of a hyperbolic triangle given the vertex and 
  * face.
  */

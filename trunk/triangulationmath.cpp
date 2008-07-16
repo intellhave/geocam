@@ -28,11 +28,6 @@ double angle(double lengthA, double lengthB, double lengthC)
                                     / (2*lengthA*lengthB));
 }
 
-double angle(Edge a, Edge b, Edge c)
-{
-       return angle(a.getLength(), b.getLength(), c.getLength());
-}
-
 double angle(Vertex v, Face f)
 {      
        vector<int>::iterator it;
@@ -66,6 +61,9 @@ double angle(Vertex v, Face f)
        Edge e1 = Triangulation::edgeTable[fLocalEdges[edges[0]]];
        Edge e2 = Triangulation::edgeTable[fLocalEdges[edges[1]]];
        // Finds the index of the third and opposite edge.
+       /*
+        * 
+        */
        int eC = ((edges[0] + edges[1]) * 2) % 3;
        Edge e3 = Triangulation::edgeTable[fLocalEdges[eC]];
        return angle(e1.getLength(), e2.getLength(), e3.getLength());       
@@ -175,8 +173,8 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
                                          
   double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data for 
                                       // the intermediate steps in.
-  int    i,k; // ints used for "for loops".
-  
+  int    i,k; // ints used for "for loops". i is the step number,
+              // k is the kth vertex for the arrays.
   map<int, Vertex>::iterator vit; // Iterator to traverse through the vertices.
   // Beginning and Ending pointers. (Used for "for" loops)
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
@@ -229,6 +227,8 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
+            // Again calculates the differential equation, but we still need
+            // the data in ta[] so we use tb[] now.
             if(adjF) tb[k]=dt*adjDiffEQ(vit->first, net);
             else     tb[k]=dt*stdDiffEQ(vit->first);
        }
@@ -255,14 +255,11 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
          z[k]=z[k]+(ta[k]+2*tb[k]+2*tc[k]+td[k])/6;
          
        }
-     if(net < 0.00005 && net > -0.00005) // Adjusted for small errors.
-     {
-            net = 0;
-     }
    }
 }
 
-double stdDiffEQ(int vertex) {
+double stdDiffEQ(int vertex) 
+{
        return (-1) * curvature(Triangulation::vertexTable[vertex])
                    * Triangulation::vertexTable[vertex].getWeight();
 }
@@ -278,7 +275,7 @@ double adjDiffEQ(int vertex, double totalCurv)
 
 double inRadius(Face f)
 {
-    if(f.getLocalVertices()->size() != 3)
+    if(f.getLocalVertices()->size() != 3) // Make sure the face has 3 vertices.
     {
         return -1;
     }
@@ -306,6 +303,7 @@ double dualArea(Vertex v)
        double areaSum = 0;
        for(int i = 0; i < localEdges.size(); i++)
        {
+          // Area of one of the triangles in this polygon.
           areaSum += v.getWeight() * dualLength(Triangulation::edgeTable[localEdges[i]]) / 2;
        }
        return areaSum;

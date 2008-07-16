@@ -21,12 +21,6 @@ calculations on the triangulation.
 double angle(double, double, double);
 
 /*
- * Calculates the angle between two edges of a triangle, where the
- * last edge given is the edge opposite the angle.
- */
-double angle(Edge, Edge, Edge);
-
-/*
  * Calculates the angle between two edges of a triangle, given the
  * vertex where the two edges meet and the face of the triangle.
  */
@@ -111,18 +105,24 @@ double stdDiffEQ(int);
 double adjDiffEQ(int, double);
 
 /*
- * Calculates the radius of the circle embedded in the face given.
+ * Calculates the radius of the circle embedded in the face given. Uses the
+ * formula:
+ *               ________________________  
+ *           _  |  r_1 * r_2 * ... * r_n
+ *     R =    \ |  -----------------------
+ *             \|  r_1 + r_2 + ... + r_n
  */
 double inRadius(Face);
 
 /*
  * Calculates the dual length between the two faces local to the given edge.
+ * Adds the two in-Radii of the adjacent faces together.
  */
 double dualLength(Edge);
 
 /*
  * Calculates the total area of the polygon whose sides are all the dual lengths
- * of the edges local to the given vertex.
+ * of the edges local to the given vertex. 
  */
 double dualArea(Vertex);
 

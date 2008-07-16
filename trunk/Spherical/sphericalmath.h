@@ -15,11 +15,6 @@ calculations on the triangulation under a spherical geometry.
  */
 double sphericalAngle(double, double, double, double = 1);
 /*
- * Calculates an angle of a spherical triangle given the edges, where 
- * the first two edges are incident on the angle.
- */
-double sphericalAngle(Edge, Edge, Edge, double = 1);
-/*
  * Calculates an angle of a spherical triangle given the vertex and 
  * face.
  */

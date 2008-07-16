@@ -18,11 +18,6 @@ double hyperbolicAngle(double lengthA, double lengthB, double lengthC)
                             / (sinh(lengthA)*sinh(lengthB)));                                          
 }
 
-double hyperbolicAngle(Edge edgeA, Edge edgeB, Edge edgeC)
-{
-       return hyperbolicAngle(edgeA.getLength(), edgeB.getLength(), edgeC.getLength());
-}
-
 double hyperbolicAngle(Vertex v, Face f)
 {
        vector<int>::iterator it;

@@ -317,9 +317,9 @@ LeftChar=1
 Open=0
 Top=0
 <<<<<<< .mine
-CursorCol=1
-CursorRow=198
-TopLine=20
+CursorCol=2
+CursorRow=13
+TopLine=5
 =======
 <<<<<<< .mine
 CursorCol=45
@@ -337,13 +337,13 @@ LeftChar=1
 Open=0
 Top=0
 <<<<<<< .mine
-CursorCol=1
-CursorRow=33
+CursorCol=59
+CursorRow=16
 =======
 <<<<<<< .mine
 CursorCol=1
 CursorRow=12
-TopLine=32
+TopLine=11
 LeftChar=1
 =======
 CursorCol=73
@@ -354,15 +354,15 @@ LeftChar=1
 [Editor_19]
 Open=0
 Top=0
-CursorCol=7
-CursorRow=6
-TopLine=34
+CursorCol=1
+CursorRow=20
+TopLine=7
 LeftChar=1
 [Editor_20]
 Open=0
 Top=0
-CursorCol=4
-CursorRow=68
+CursorCol=48
+CursorRow=16
 TopLine=1
 LeftChar=1
 >>>>>>> .r285
