@@ -1,7 +1,7 @@
 /**************************************************************
 File: Triangulation Math
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: July 3, 2008
+Version: July 16, 2008
 ***************************************************************
 The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
@@ -48,11 +48,6 @@ vector<int> listDifference(vector<int>*, vector<int>*);
  * Calculates the sum of the angles at the given vertex.
  */ 
 double getAngleSum(Vertex);
-
-/*
- * Calculates the slope of an edge under an orientation.
- */
-
 
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
