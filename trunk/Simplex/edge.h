@@ -20,6 +20,7 @@ Version: July 16, 2008
 class Edge : public Simplex
 {
         double length;
+        double intersectAngle;
 	public:
 		// class constructor
 		Edge();
@@ -42,6 +43,8 @@ class Edge : public Simplex
         {
                return length;
         };
+        double getAngle();
+        void setAngle(double);
 
 };
 
