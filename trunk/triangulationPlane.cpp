@@ -8,6 +8,7 @@
 #include "triangulation.h"
 #include "triangulationmath.h"
 #include "triangulationPlane.h"
+#include "miscmath.h"
 #include <fstream>
 #include <iomanip>
 #define PI 	3.141592653589793238
@@ -234,10 +235,3 @@ double getDistance(Vertex v1, Vertex v2)
        return sqrt(pow(((v1.getXpos()) - (v2.getXpos())), 2) + pow(((v1.getYpos()) - (v2.getYpos())), 2));
 }
 
-<<<<<<< .mine
-
-
-
-
-=======
->>>>>>> .r314

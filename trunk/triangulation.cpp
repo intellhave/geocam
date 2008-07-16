@@ -1,7 +1,7 @@
 /**************************************************************
 Class: Triangulation
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 25, 2008
+Version: July 16, 2008
 **************************************************************/
 
 #include "triangulation.h" // class's header file

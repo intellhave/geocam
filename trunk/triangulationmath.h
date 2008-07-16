@@ -44,11 +44,20 @@ double curvature(Vertex);
  */
 vector<int> listIntersection(vector<int>*, vector<int>*);
 
-
+/*
+ * Returns a list of simplex indices that are in the first list and not in
+ * the second.
+ */
 vector<int> listDifference(vector<int>*, vector<int>*);
 
+/*
+ * Calculates the sum of the angles at the given vertex.
+ */ 
 double getAngleSum(Vertex);
 
+/*
+ * Calculates the slope of an edge under an orientation.
+ */
 double getSlope(Edge);
 
 
@@ -56,6 +65,7 @@ double getSlope(Edge);
  * Calculates the Ricci flow of the current Triangulation using the 
  * Runge-Kutta method. Results from the steps are written into vectors of
  * doubles provided. The parameters are:
+ *          
  *      vector<double>* weights-
  *                           A vector of doubles to append the results of
  *                           weights, grouped by step, with a total size of

@@ -1,7 +1,7 @@
 /**************************************************************
 Class: Vertex
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 10, 2008
+Version: July 16, 2008
 **************************************************************/
 
 #ifndef VERTEX_H
@@ -11,20 +11,22 @@ Version: June 10, 2008
 #include <vector>
 #include "edge.h"
 #include "face.h"
-#include "line.h"
+#include "pointline.h"
 
 /*
  * The Vertex class is derived from the Simplex class. It is the
  * zero-dimensional simplex. Every vertex also has a weight, which is
  * the basis for providing all measurements (length, curvature, etc).
  * Weights are initialized to zero and set by the user after building
- * the triangulation.
+ * the triangulation. For when orientation is a concern, a vertex has
+ * x- and y-coordinates.
  */
 class Vertex : public Simplex
 {
         double weight;
         double xCoord;
         double yCoord;
+        
 	public:
            
 		// default class constructor
@@ -41,15 +43,37 @@ class Vertex : public Simplex
             return weight;
         }
         
-        	/*
-		 * Sets the weight to the given weight.
+       	/*
+		 * Sets the weight to the given weight, then updates the lengths
+         * of all of the edges local to this vertex.
 		 */
 		void setWeight(double);
-		void setWeight(double, char);
+		/*
+		 * Sets the weight of this vertex to the given weight but does
+		 * not update the lengths of any edges.
+		 */
+		void setWeightIndependent(double);
+		/*
+		 * Sets the coordinates of this vertex to the given (x,y) point.
+		 */
 		void setPosition(double, double);
+		/*
+		 * Returns the x-coordinate of this vertex.
+		 */
 		double getXpos();
+		/*
+		 * Returns the y-coordinate of this vertex.
+		 */
 		double getYpos();
+		/*
+		 * Returns the degree of this vertex. The degree of a vertex is
+		 * defined as the number of edges local to it.
+		 */
 		int getDegree();
+		/*
+		 * Converts the vertex to a point on the cartesian plane. Used
+		 * for forming an orientation of the triangulation.
+		 */
 		Point convertToPoint();
 };
 

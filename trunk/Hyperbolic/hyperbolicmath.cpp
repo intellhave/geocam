@@ -1,3 +1,11 @@
+/**************************************************************
+File: Hyperbolic Math
+Author: Alex Henniges, Tom Williams, Mitch Wilson
+Version: July 16, 2008
+***************************************************************
+The Hyperbolic Math file holds the functions that perform
+calculations on the triangulation under a hyperbolic geometry.
+**************************************************************/
 #include "hyperbolicmath.h"
 #include <cmath>
 #include <algorithm>

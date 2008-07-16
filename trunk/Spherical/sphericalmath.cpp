@@ -150,8 +150,6 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            if(adjF) tb[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
            else     tb[k] = dt * (-1) * curv * sin(vit->second.getWeight());
-           // if(adjF) tb[k]=dt*spherAdjDiffEQ(vit->first, net);
-//            else     tb[k]=dt*spherStdDiffEQ(vit->first);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
@@ -166,8 +164,6 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            if(adjF) tc[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
            else     tc[k] = dt * (-1) * curv * sin(vit->second.getWeight());
-          //  if(adjF) tc[k]=dt*spherAdjDiffEQ(vit->first, net);
-//            else     tc[k]=dt*spherStdDiffEQ(vit->first);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
@@ -182,8 +178,6 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            if(adjF) td[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
            else     td[k] = dt * (-1) * curv * sin(vit->second.getWeight());
-         //   if(adjF) td[k]=dt*spherAdjDiffEQ(vit->first, net);
-//            else     td[k]=dt*spherStdDiffEQ(vit->first);
        }
        for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
        {
@@ -200,18 +194,6 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
      data << "\n";
    } 
    
-}
-
-double spherStdDiffEQ(int vertex) {
-       return (-1) * sphericalCurvature(Triangulation::vertexTable[vertex])
-                   * sin(Triangulation::vertexTable[vertex].getWeight());
-}
-
-double spherAdjDiffEQ(int vertex, double totalCurv)
-{
-       return (totalCurv /  Triangulation::vertexTable.size()
-                         - sphericalCurvature(Triangulation::vertexTable[vertex]))
-                         * sin(Triangulation::vertexTable[vertex].getWeight());
 }
 
 double delArea()

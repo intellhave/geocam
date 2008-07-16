@@ -1,11 +1,11 @@
 /**************************************************************
 Class: Edge
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 10, 2008
+Version: July 16, 2008
 **************************************************************/
 
-#include "line.h"
 #include "simplex.h"
+#include "pointline.h"
 
 #ifndef EDGE_H
 #define EDGE_H
@@ -42,6 +42,11 @@ class Edge : public Simplex
         {
                return length;
         };
+        /*
+         * Converts the Edge to a line with points given by the 
+         * coordinates of the vertices. Used for forming an orientation 
+         * of the triangulation.
+         */
         Line convertToLine();
 };
 

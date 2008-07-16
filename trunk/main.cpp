@@ -17,7 +17,6 @@ Version: June 10, 2008
 #include "triangulationmath.h"
 #include "triangulationmorph.h"
 #include "triangulationInputOutput.h"
-#include "line.h"
 #include "miscmath.h"
 #include "triangulationPlane.h"
 #include <ctime>
@@ -56,7 +55,7 @@ readTriangulationFile(to);
 //   
    
     int vertexSize = Triangulation::vertexTable.size();
-    double weights[] = {0.567459, 0.567459, 0.567459, 1.90457};
+    double weights[] = {0.1, 0.1, 0.1, 0.2};
     double product = 1;
     for(int i = 1; i <= vertexSize; i++)
    {
@@ -82,22 +81,18 @@ readTriangulationFile(to);
    time(&start);
    vector<double> weightsR;
    vector<double> curvatures;
-  sphericalCalcFlow(&weightsR, &curvatures, 0.05, weights,500, true);
+  sphericalCalcFlow(&weightsR, &curvatures, 0.05, weights,2000, true);
   printResultsStep(fileName, &weightsR, &curvatures);
   //printResultsNum(fileName, &weightsR, &curvatures);
    time(&end);
    cout << difftime(end, start) << " seconds" << endl;
 
-   cout << sphericalAngle(Triangulation::vertexTable[1], Triangulation::faceTable[1]) << "\n";
-   cout << sphericalAngle(Triangulation::vertexTable[1], Triangulation::faceTable[2]) << "\n";
-   cout << sphericalAngle(Triangulation::vertexTable[1], Triangulation::faceTable[3]) << "\n";
-   
 }
 
 
 int main(int argc, char *argv[])
 {
-   // runFlow();
+    runFlow();
   //  Line l(1, 1, 2, 3);
 //    cout << "Initial X: " << l.getInitialX() << endl;
 //    cout << "Initial Y: " << l.getInitialY() << endl;
@@ -109,20 +104,20 @@ int main(int argc, char *argv[])
 //    cout << "(3,5) is on the line? " << l.isOnLine(3,5) << endl;
 //    cout << "(0,0) is below? " << l.isBelow(0,0) << endl;
 //    cout << "(2, -2) is below? " << l.isBelow(2,-2) << endl;
-Point p1(1, 2);
-Point p2(4, 6);
-vector<Point> solutions = circleIntersection(p1, 3, p2, 4);
-for(int i = 0; i < solutions.size(); i++)
-{
-  Point sol = solutions[i];
-  cout << "Solution " << i << ": (" << sol.x << ", " << sol.y << ")\n";
-}
-vector<double> quadSolutions = quadratic(1, -7, 12);
-for(int i = 0; i < quadSolutions.size(); i++)
-{
-  double sol = quadSolutions[i];
-  cout << "Solution " << i << ": " << sol << "\n";
-}
+//Point p1(1, 2);
+//Point p2(4, 6);
+//vector<Point> solutions = circleIntersection(p1, 3, p2, 4);
+//for(int i = 0; i < solutions.size(); i++)
+//{
+//  Point sol = solutions[i];
+//  cout << "Solution " << i << ": (" << sol.x << ", " << sol.y << ")\n";
+//}
+//vector<double> quadSolutions = quadratic(1, -7, 12);
+//for(int i = 0; i < quadSolutions.size(); i++)
+//{
+//  double sol = quadSolutions[i];
+//  cout << "Solution " << i << ": " << sol << "\n";
+//}
     system("PAUSE");
     return 0;
 }

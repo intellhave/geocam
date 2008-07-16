@@ -1,7 +1,7 @@
 /**************************************************************
 Class: Vertex
 Author: Alex Henniges, Tom Williams, Mitch Wilson
-Version: June 10, 2008
+Version: July 16, 2008
 **************************************************************/
 
 #include "vertex.h" // class's header file
@@ -11,13 +11,12 @@ Version: June 10, 2008
 // class constructor
 Vertex::Vertex() : Simplex()
 {
-                 weight = 0;
+    weight = 0;
 }
 
 // class destructor
 Vertex::~Vertex()
 {
-	// insert your code here
 }
 
 void Vertex::setWeight(double newWeight)
@@ -29,7 +28,7 @@ void Vertex::setWeight(double newWeight)
      }
 }
 
-void Vertex::setWeight(double newWeight, char x)
+void Vertex::setWeightIndependent(double newWeight)
 {
      weight = newWeight;     
 }

@@ -1,18 +1,10 @@
 %graphs curvature and weight plots for evolutions
 
 %input file
-<<<<<<< .mine
-K = xlsread('c:\Dev-Cpp\geocam\Report\TetraSphere');
-=======
-K = xlsread('c:\Documents and Settings\Math\Desktop\Triangulations\ODE result G5 Non');
->>>>>>> .r286
+K = xlsread('c:\Dev-Cpp\geocam\Triangulations\ODE Result T3');
 
 %other inputs
-<<<<<<< .mine
-S = 1000; %# of steps, as in calcFlow
-=======
-S = 600; %# of steps, as in calcFlow
->>>>>>> .r286
+S = 2000; %# of steps, as in calcFlow
 M = 1; %default value
 N = size(K,1);  % = number of lines in Excel
 

@@ -15,8 +15,6 @@ calculations on the triangulation.
 #include <algorithm>
 #include "triangulation.h"
 #include "triangulationmath.h"
-#include "line.h"
-#include "miscmath.h"
 #include <fstream>
 #include <iomanip>
 #define PI 	3.141592653589793238
@@ -132,10 +130,9 @@ double getAngleSum(Vertex v)
 
 double getSlope(Edge e)
 {
-       Vertex v1 = (*(e.getLocalVertices()))[0];
-       Vertex v2 = (*(e.getLocalVertices()))[1];
+      Line l = e.convertToLine();
        
-       return ((v2.getYpos() - v1.getYpos())/(v2.getXpos() - v1.getXpos()));
+      return l.getSlope();
 }
 
 
@@ -143,6 +140,7 @@ double getSlope(Edge e)
  * Calculates the Ricci flow of the current Triangulation using the 
  * Runge-Kutta method. Results from the steps are written into vectors of
  * doubles provided. The parameters are:
+ *          
  *      vector<double>* weights-
  *                           A vector of doubles to append the results of
  *                           weights, grouped by step, with a total size of
@@ -175,9 +173,12 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
   int p = Triangulation::vertexTable.size(); // The number of vertices or 
                                              // number of variables in system.
                                          
-  double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data in.
+  double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data for 
+                                      // the intermediate steps in.
   int    i,k; // ints used for "for loops".
-  map<int, Vertex>::iterator vit;
+  
+  map<int, Vertex>::iterator vit; // Iterator to traverse through the vertices.
+  // Beginning and Ending pointers. (Used for "for" loops)
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
   
@@ -186,7 +187,7 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
    for (k=0; k<p; k++) {
     z[k]=initWeights[k]; // z[k] holds the current weights.
    }
-   for (i=1; i<numSteps+1; i++) 
+   for (i=1; i<numSteps+1; i++) // This is the main loop through each step.
    {
     prev = net; // Set prev to net.
     net = 0;    // Reset net.
@@ -196,22 +197,24 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
            // Set the weights of the Triangulation.
            vit->second.setWeight(z[k]);
        }
-       if(i == 1) // If first time through, use static method.
-       {
+       if(i == 1) // If first time through, use static method to calculate total
+       {           // cuvature.
             prev = Triangulation::netCurvature();
        }
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // First "for loop" in whole step calculates
-       {                    // everything manually, prints to file.
-           (*weights).push_back( z[k]);
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
+       {  // First "for loop"in whole step calculates everything manually.
+           (*weights).push_back( z[k]); // Adds the data to the vector.
            double curv = curvature(vit->second);
-           if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
-           {
-             (*curvatures).push_back(0.);
+           if(curv < 0.00005 && curv > -0.00005) // Adjusted for small numbers.
+           {                                     // We want it to print nicely.
+             (*curvatures).push_back(0.); // Adds the data to the vector.
            }
            else {
                (*curvatures).push_back(curv);
-             }
-           net += curv;
+           }
+           net += curv; // Calculating the net curvature.
+           // Calculates the differential equation, either normalized or
+           // standard.
            if(adjF) ta[k]= dt * ((-1) * curv 
                            * vit->second.getWeight() +
                            prev /  p
@@ -220,8 +223,8 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
                            * vit->second.getWeight();
            
        }
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
-       {
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       { // Set the new weights to our triangulation.
            vit->second.setWeight(z[k]+ta[k]/2);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  

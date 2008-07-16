@@ -1,6 +1,7 @@
-#include <vector>
 #include "miscmath.h"
 #include <iostream>
+#include<cmath>
+
 
 vector<double> quadratic(double a, double b, double c)
 {

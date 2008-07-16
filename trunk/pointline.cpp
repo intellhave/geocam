@@ -1,4 +1,4 @@
-#include "line.h"
+#include "pointline.h"
 #include<cmath>
 
 Point::Point(double xi, double yi)

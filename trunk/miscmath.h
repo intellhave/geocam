@@ -2,6 +2,7 @@
 #include "triangulationmath.h"
 #include <vector>
 
+
 vector<double> quadratic(double, double, double);
 
 double distancePoint(Point, Point);
