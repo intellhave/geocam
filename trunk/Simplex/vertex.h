@@ -24,8 +24,6 @@ Version: July 16, 2008
 class Vertex : public Simplex
 {
         double weight;
-        double xCoord;
-        double yCoord;
         
 	public:
            
@@ -54,18 +52,6 @@ class Vertex : public Simplex
 		 */
 		void setWeightIndependent(double);
 		/*
-		 * Sets the coordinates of this vertex to the given (x,y) point.
-		 */
-		void setPosition(double, double);
-		/*
-		 * Returns the x-coordinate of this vertex.
-		 */
-		double getXpos();
-		/*
-		 * Returns the y-coordinate of this vertex.
-		 */
-		double getYpos();
-		/*
 		 * Returns the degree of this vertex. The degree of a vertex is
 		 * defined as the number of edges local to it.
 		 */
@@ -74,7 +60,6 @@ class Vertex : public Simplex
 		 * Converts the vertex to a point on the cartesian plane. Used
 		 * for forming an orientation of the triangulation.
 		 */
-		Point convertToPoint();
 };
 
 #endif // VERTEX_H

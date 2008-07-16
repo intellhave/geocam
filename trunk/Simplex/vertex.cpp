@@ -33,29 +33,7 @@ void Vertex::setWeightIndependent(double newWeight)
      weight = newWeight;     
 }
 
-void Vertex::setPosition(double xPos, double yPos)
-{
-     xCoord = xPos;
-     yCoord = yPos;
-}
-
-double Vertex::getXpos()
-{
-       return xCoord;
-}
-
-double Vertex::getYpos()
-{
-       return yCoord;
-}
-
 int Vertex::getDegree()
 {
     return getLocalEdges()->size();
-}
-
-Point Vertex::convertToPoint()
-{
-      Point p(xCoord, yCoord);
-      return p;
 }

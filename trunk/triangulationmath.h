@@ -52,7 +52,6 @@ double getAngleSum(Vertex);
 /*
  * Calculates the slope of an edge under an orientation.
  */
-double getSlope(Edge);
 
 
 /*

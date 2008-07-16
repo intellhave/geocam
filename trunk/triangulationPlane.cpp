@@ -77,12 +77,7 @@ void firstTriangle(double length1, double length2, double length3)
     Triangulation::edgeTable[1].setLength(length1);
     Triangulation::edgeTable[2].setLength(length2);
     Triangulation::edgeTable[3].setLength(length3);
-    
-    Triangulation::vertexTable[1].setPosition(0.0, 0.0);
-    Triangulation::vertexTable[2].setPosition(length1, 0.0);
-    double angC = angle(length1, length2, length3);
-    Triangulation::vertexTable[3].setPosition((length2 * cos(angC)), (length2 * sin(angC)));
-    
+        
 }
 
 void addTriangle(Edge e, double length1, double length2)
@@ -158,21 +153,6 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::edgeTable[eb1.getIndex()].setLength(length1);
      Triangulation::edgeTable[eb2.getIndex()].setLength(length2);
      
-     Line l = e.convertToLine();
-     Point p1 = va1.convertToPoint();
-     Point p2 = va2.convertToPoint();
-     Point p3 = va3.convertToPoint();
-     bool isBelow = l.isBelow(p3);
-     
-     vector<Point> solutions = circleIntersection(p1, length1, p2, length2);
-     if(isBelow == l.isBelow(solutions[0]))
-     {
-            Triangulation::vertexTable[vb.getIndex()].setPosition(solutions[1].x, solutions[1].y);
-     }
-     else
-     {
-            Triangulation::vertexTable[vb.getIndex()].setPosition(solutions[0].x, solutions[0].y);
-     }
      
 }
 
@@ -207,7 +187,8 @@ void addTriangle(Edge e1, Edge e2)
      else
           Face fa2 = Triangulation::faceTable[(*(e2.getLocalFaces()))[0]];
      
-     if(getAngleSum(va) < PI)
+     double ang = 2 * PI - getAngleSum(va);
+     if(ang > PI)
      throw string("");
      
      Triangulation::edgeTable[e1.getIndex()].removeFace(0);
@@ -249,38 +230,9 @@ void addTriangle(Edge e1, Edge e2)
      Triangulation::faceTable[fa1.getIndex()].addFace(fb.getIndex());
      Triangulation::faceTable[fa2.getIndex()].addFace(fb.getIndex());
      
-     eb.setLength(getDistance(v1, v2));
+     double l1 = e1.getLength();
+     double l2 = e2.getLength();
+     
+     eb.setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
      
 }
-
-double getDistance(Vertex v1, Vertex v2)
-{
-       return sqrt(pow(((v1.getXpos()) - (v2.getXpos())), 2) + pow(((v1.getYpos()) - (v2.getYpos())), 2));
-}
-
-<<<<<<< .mine
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======
->>>>>>> .r321

@@ -257,17 +257,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit23]
-FileName=triangulationPlane.h
-CompileCpp=1
-Folder=Project1
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-<<<<<<< .mine
-
 [Unit24]
 FileName=line.cpp
 CompileCpp=1
@@ -352,6 +341,16 @@ BuildCmd=
 
 [Unit22]
 FileName=triangulationPlane.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit23]
+FileName=triangulationPlane.h
 CompileCpp=1
 Folder=Project1
 Compile=1

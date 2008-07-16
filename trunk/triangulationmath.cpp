@@ -126,12 +126,6 @@ double getAngleSum(Vertex v)
        return angleSum;
 }
 
-double getSlope(Edge e)
-{
-      Line l = e.convertToLine();
-       
-      return l.getSlope();
-}
 
 
 /*

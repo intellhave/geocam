@@ -47,7 +47,7 @@ class Edge : public Simplex
          * coordinates of the vertices. Used for forming an orientation 
          * of the triangulation.
          */
-        Line convertToLine();
+
 };
 
 #endif // EDGE_H
