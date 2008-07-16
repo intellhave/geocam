@@ -60,9 +60,10 @@ double angle(Vertex v, Face f)
        
        Edge e1 = Triangulation::edgeTable[fLocalEdges[edges[0]]];
        Edge e2 = Triangulation::edgeTable[fLocalEdges[edges[1]]];
-       // Finds the index of the third and opposite edge.
        /*
-        * 
+        * Finds the index of the third and opposite edge:
+        *    [(Index1 + Index2) * 2]  mod 3
+        *    ex: [(0 + 2) * 2] mod 3 = 1
         */
        int eC = ((edges[0] + edges[1]) * 2) % 3;
        Edge e3 = Triangulation::edgeTable[fLocalEdges[eC]];
