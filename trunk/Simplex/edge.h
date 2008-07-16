@@ -42,11 +42,6 @@ class Edge : public Simplex
         {
                return length;
         };
-        /*
-         * Converts the Edge to a line with points given by the 
-         * coordinates of the vertices. Used for forming an orientation 
-         * of the triangulation.
-         */
 
 };
 
