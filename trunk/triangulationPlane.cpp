@@ -82,6 +82,7 @@ void firstTriangle(double length1, double length2, double length3)
 
 void addTriangle(Edge e, double length1, double length2)
 {
+     
      if(e.getLocalFaces()->size() > 1)
      throw string("Invalid Edge");
      if(e.getLength() > length1 + length2)
@@ -98,6 +99,7 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::putVertex(vb.getIndex(), vb);
      Triangulation::putEdge(eb1.getIndex(), eb1);
      Triangulation::putEdge(eb2.getIndex(), eb2);
+     
      Triangulation::putFace(fb.getIndex(), fb);
      
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
@@ -107,7 +109,7 @@ void addTriangle(Edge e, double length1, double length2)
      vector<int> diff;
      diff = listDifference(fa.getLocalVertices(), e.getLocalVertices());
      Vertex va3 = Triangulation::vertexTable[diff[0]];
-
+     
      if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
      throw string("");
      if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
@@ -128,11 +130,18 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::edgeTable[eb1.getIndex()].addVertex(va1.getIndex());
      Triangulation::edgeTable[eb2.getIndex()].addVertex(vb.getIndex());
      Triangulation::edgeTable[eb2.getIndex()].addVertex(va2.getIndex());
-     for(int i = 0; i < e.getLocalEdges()->size(); i++)
+     for(int i = 0; i < va1.getLocalEdges()->size(); i++)
      {
-             Triangulation::edgeTable[eb1.getIndex()].addEdge((*(e.getLocalEdges()))[i]);
-             Triangulation::edgeTable[eb2.getIndex()].addEdge((*(e.getLocalEdges()))[i]);
+             Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].addEdge(eb1.getIndex());
+             Triangulation::edgeTable[eb1.getIndex()].addEdge((*(va1.getLocalEdges()))[i]);
      }
+     for(int i = 0; i < va2.getLocalEdges()->size(); i++)
+     {
+             Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].addEdge(eb2.getIndex());
+             Triangulation::edgeTable[eb2.getIndex()].addEdge((*(va2.getLocalEdges()))[i]);
+     }
+     Triangulation::edgeTable[eb1.getIndex()].addEdge(eb2.getIndex());
+     Triangulation::edgeTable[eb2.getIndex()].addEdge(eb1.getIndex());
      Triangulation::edgeTable[e.getIndex()].addEdge(eb1.getIndex());
      Triangulation::edgeTable[e.getIndex()].addEdge(eb2.getIndex());
      Triangulation::edgeTable[e.getIndex()].addFace(fb.getIndex());

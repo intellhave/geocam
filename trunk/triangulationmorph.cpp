@@ -234,24 +234,16 @@ void flip(Edge e)
      {
         fb2.push_back(Triangulation::faceTable[sameAs[i]]);
      }
-     cout << "fa1: " << fa1.size() << "\n";
-     cout << "fa2: " << fa2.size() << "\n";
-     cout << "fb1: " << fb1.size() << "\n";
-     cout << "fb2: " << fb2.size() << "\n";
+     
+     double ang1 = angle(va1, f1) + angle(va1, f2);
+     
      //the next task is naturally to rearrange all the necessary references
      //there are no new references added, so the task  is simply made up
      //of working with the objects that already exist that have newly
      //created references made for this method above
      //the procedure follows a very methodical and categorical structure
      //done first on paper and then transferred to code
-     
      //removals
-     cout << "va1: "<< va1.getIndex() << "\n";
-     cout << "va2: "<< va2.getIndex() << "\n";
-     cout << "eb1: "<< eb1.getIndex() << "\n";
-     cout << "ea1: "<< ea1.getIndex() << "\n";
-     cout << "ea2: "<< ea2.getIndex() << "\n";
-     cout << "eb2: "<< eb2.getIndex() << "\n";
      
      Triangulation::vertexTable[(va1.getIndex())].removeVertex(va2.getIndex()); 
      Triangulation::vertexTable[(va2.getIndex())].removeVertex(va1.getIndex()); 
@@ -325,6 +317,11 @@ void flip(Edge e)
          Triangulation::faceTable[(f2.getIndex())].addFace(fb1[i].getIndex());
          Triangulation::faceTable[(fb1[i].getIndex())].addFace(f2.getIndex());
      }
+     
+     double l1 = ea1.getLength();
+     double l2 = ea2.getLength();
+     
+     Triangulation::edgeTable[e.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang1)));
 
 }
 
