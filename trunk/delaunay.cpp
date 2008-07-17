@@ -25,6 +25,7 @@ bool isDelaunay(Edge e)
      diff = listDifference(fa2.getLocalVertices(), e.getLocalVertices());
      Vertex vb2 = Triangulation::vertexTable[diff[0]];
      
+     
      double ang1 = angle(vb1, fa1);
      double ang2 = angle(vb2, fa2);
      

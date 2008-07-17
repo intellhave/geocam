@@ -362,7 +362,7 @@ BuildCmd=
 [Unit28]
 FileName=delaunay.h
 CompileCpp=1
-Folder=
+Folder=Project1
 Compile=1
 Link=1
 Priority=1000
@@ -372,7 +372,7 @@ BuildCmd=
 [Unit29]
 FileName=delaunay.cpp
 CompileCpp=1
-Folder=
+Folder=Project1
 Compile=1
 Link=1
 Priority=1000

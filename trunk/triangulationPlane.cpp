@@ -23,7 +23,7 @@ void firstTriangle(double length1, double length2, double length3)
      if(length3 > length1 + length2)
      throw string("Invalid Edge Lengths");
      
-     Face f1(1);
+    Face f1(1);
     Edge e1(1);
     Edge e2(2);
     Edge e3(3);
@@ -82,7 +82,6 @@ void firstTriangle(double length1, double length2, double length3)
 
 void addTriangle(Edge e, double length1, double length2)
 {
-     
      if(e.getLocalFaces()->size() > 1)
      throw string("Invalid Edge");
      if(e.getLength() > length1 + length2)
@@ -96,7 +95,6 @@ void addTriangle(Edge e, double length1, double length2)
      Edge eb1(Triangulation::greatestEdge() + 1);
      Edge eb2(Triangulation::greatestEdge() + 2);
      Face fb(Triangulation::greatestFace() + 1);
-     
      Triangulation::putVertex(vb.getIndex(), vb);
      Triangulation::putEdge(eb1.getIndex(), eb1);
      Triangulation::putEdge(eb2.getIndex(), eb2);
@@ -109,7 +107,7 @@ void addTriangle(Edge e, double length1, double length2)
      vector<int> diff;
      diff = listDifference(fa.getLocalVertices(), e.getLocalVertices());
      Vertex va3 = Triangulation::vertexTable[diff[0]];
-     
+
      if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
      throw string("");
      if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)

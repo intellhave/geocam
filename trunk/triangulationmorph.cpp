@@ -234,7 +234,10 @@ void flip(Edge e)
      {
         fb2.push_back(Triangulation::faceTable[sameAs[i]]);
      }
-     
+     cout << "fa1: " << fa1.size() << "\n";
+     cout << "fa2: " << fa2.size() << "\n";
+     cout << "fb1: " << fb1.size() << "\n";
+     cout << "fb2: " << fb2.size() << "\n";
      //the next task is naturally to rearrange all the necessary references
      //there are no new references added, so the task  is simply made up
      //of working with the objects that already exist that have newly
@@ -243,6 +246,13 @@ void flip(Edge e)
      //done first on paper and then transferred to code
      
      //removals
+     cout << "va1: "<< va1.getIndex() << "\n";
+     cout << "va2: "<< va2.getIndex() << "\n";
+     cout << "eb1: "<< eb1.getIndex() << "\n";
+     cout << "ea1: "<< ea1.getIndex() << "\n";
+     cout << "ea2: "<< ea2.getIndex() << "\n";
+     cout << "eb2: "<< eb2.getIndex() << "\n";
+     
      Triangulation::vertexTable[(va1.getIndex())].removeVertex(va2.getIndex()); 
      Triangulation::vertexTable[(va2.getIndex())].removeVertex(va1.getIndex()); 
      Triangulation::vertexTable[(va1.getIndex())].removeEdge(e.getIndex()); 

@@ -120,7 +120,6 @@ int main(int argc, char *argv[])
 //  cout << "Solution " << i << ": " << sol << "\n";
 //}
     firstTriangle(1.0, 1.0, 1.0);
-    cout << Triangulation::edgeTable.size() << endl;
     addTriangle(Triangulation::edgeTable[1], 1.0, 1.0);
     char filename[] = "Triangulations/Plane Test.txt";
     writeTriangulationFile(filename);

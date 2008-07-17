@@ -3,12 +3,12 @@
 
 %input file
 
-K = xlsread('c:\Dev-Cpp\geocam\Triangulations\ODE Result VT 2 12 76 Test 1');
+K = xlsread('c:\Dev-Cpp\geocam\Triangulations\Long Tetrahedron Conv');
 %K = xlsread('c:\Dev-Cpp\geocam\Triangulations\spherical data');
 
 %other inputs
 
-S = 4000; %# of steps, as in calcFlow
+S = 14500; %# of steps, as in calcFlow
 
 M = 1; %default value
 N = size(K,1);  % = number of lines in Excel

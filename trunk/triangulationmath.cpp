@@ -37,9 +37,9 @@ double angle(Vertex v, Face f)
        int edges[2]; // Holds the indices of the edges that are
                      // in common between the face and vertex.
        int j = 0;
+       
        for(int i = 0; i < 3; i++) // Iterate through the three edges
        {                          // of the face.
-           
            int edgeToMatch = fLocalEdges[i];
            
            // Uses the find algortihm in C++ library to point to match
@@ -57,7 +57,6 @@ double angle(Vertex v, Face f)
                 break;
            }
        }
-       
        Edge e1 = Triangulation::edgeTable[fLocalEdges[edges[0]]];
        Edge e2 = Triangulation::edgeTable[fLocalEdges[edges[1]]];
        /*
@@ -66,6 +65,7 @@ double angle(Vertex v, Face f)
         *    ex: [(0 + 2) * 2] mod 3 = 1
         */
        int eC = ((edges[0] + edges[1]) * 2) % 3;
+       
        Edge e3 = Triangulation::edgeTable[fLocalEdges[eC]];
        return angle(e1.getLength(), e2.getLength(), e3.getLength());       
 }
