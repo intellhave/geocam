@@ -19,6 +19,7 @@ Version: June 10, 2008
 #include "triangulationInputOutput.h"
 #include "miscmath.h"
 #include "triangulationPlane.h"
+#include "delaunay.h"
 #include <ctime>
 #include <iomanip>
 #include <cmath>
@@ -92,7 +93,7 @@ readTriangulationFile(to);
 
 int main(int argc, char *argv[])
 {
-    runFlow();
+    //runFlow();
   //  Line l(1, 1, 2, 3);
 //    cout << "Initial X: " << l.getInitialX() << endl;
 //    cout << "Initial Y: " << l.getInitialY() << endl;
@@ -118,6 +119,11 @@ int main(int argc, char *argv[])
 //  double sol = quadSolutions[i];
 //  cout << "Solution " << i << ": " << sol << "\n";
 //}
+    firstTriangle(1.0, 1.0, 1.0);
+    addTriangle(Triangulation::edgeTable[1], 1.0, 1.0);
+    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
+    flip(Triangulation::edgeTable[1]);
+    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
     system("PAUSE");
     return 0;
 }
