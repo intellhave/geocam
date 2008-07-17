@@ -29,6 +29,8 @@ bool isDelaunay(Edge e)
      double ang1 = angle(vb1, fa1);
      double ang2 = angle(vb2, fa2);
      
+     cout << "Angles: " << ang1 << " " << ang2 << endl;
+     
      if((ang1 + ang2) > PI)
           return false;
      else
