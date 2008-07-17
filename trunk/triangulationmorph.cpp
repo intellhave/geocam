@@ -34,12 +34,22 @@ void addNewVertex(Face f, double newWeight)
      sameAs = listIntersection(va2.getLocalEdges(), va3.getLocalEdges());
      Edge ea3 = Triangulation::edgeTable[sameAs[0]];
      
+     vector<Face> fa1, fa2, fa3;
      sameAs = listIntersection(ea1.getLocalFaces(), f.getLocalFaces());
-     Face fa1 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fa1.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      sameAs = listIntersection(ea2.getLocalFaces(), f.getLocalFaces());
-     Face fa2 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fa2.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      sameAs = listIntersection(ea3.getLocalFaces(), f.getLocalFaces());
-     Face fa3 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fa3.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      
      //the create the new simplices needed, using new indices
      Vertex vb;
@@ -66,10 +76,16 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::faceTable[(f.getIndex())].removeVertex(va3.getIndex());
      Triangulation::faceTable[(f.getIndex())].removeEdge(ea2.getIndex());
      Triangulation::faceTable[(f.getIndex())].removeEdge(ea3.getIndex());
-     Triangulation::faceTable[(f.getIndex())].removeFace(fa2.getIndex());
-     Triangulation::faceTable[(f.getIndex())].removeFace(fa3.getIndex());
-     Triangulation::faceTable[(fa2.getIndex())].removeFace(f.getIndex());
-     Triangulation::faceTable[(fa3.getIndex())].removeFace(f.getIndex());
+     for(int i = 0; i < fa2.size(); i++)
+     {
+       Triangulation::faceTable[(f.getIndex())].removeFace(fa2[i].getIndex());
+       Triangulation::faceTable[(fa2[i].getIndex())].removeFace(f.getIndex());  
+     }
+     for(int i = 0; i < fa3.size(); i++)
+     {
+       Triangulation::faceTable[(f.getIndex())].removeFace(fa3[i].getIndex());
+       Triangulation::faceTable[(fa3[i].getIndex())].removeFace(f.getIndex());
+     }
      
      Triangulation::vertexTable[(va1.getIndex())].addVertex(vb.getIndex());
      Triangulation::vertexTable[(va2.getIndex())].addVertex(vb.getIndex());
@@ -144,13 +160,20 @@ void addNewVertex(Face f, double newWeight)
      Triangulation::faceTable[(f.getIndex())].addFace(fb1.getIndex());
      Triangulation::faceTable[(f.getIndex())].addFace(fb2.getIndex());
      Triangulation::faceTable[(fb1.getIndex())].addFace(f.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].addFace(fa2.getIndex());
+     for(int i = 0; i < fa2.size(); i++)
+     {
+       Triangulation::faceTable[(fb1.getIndex())].addFace(fa2[i].getIndex());
+       Triangulation::faceTable[(fa2[i].getIndex())].addFace(fb1.getIndex());
+     }
+     for(int i = 0; i < fa3.size(); i++)
+     {
+        Triangulation::faceTable[(fb2.getIndex())].addFace(fa3[i].getIndex());
+        Triangulation::faceTable[(fa3[i].getIndex())].addFace(fb2.getIndex());
+     }
      Triangulation::faceTable[(fb1.getIndex())].addFace(fb2.getIndex());
      Triangulation::faceTable[(fb2.getIndex())].addFace(f.getIndex());
      Triangulation::faceTable[(fb2.getIndex())].addFace(fb1.getIndex());
-     Triangulation::faceTable[(fb2.getIndex())].addFace(fa3.getIndex());
-     Triangulation::faceTable[(fa2.getIndex())].addFace(fb1.getIndex());
-     Triangulation::faceTable[(fa3.getIndex())].addFace(fb2.getIndex());
+     
      
      
      Triangulation::vertexTable[vb.getIndex()].setWeight(newWeight);
@@ -319,18 +342,31 @@ void removeVertex(Vertex v)
      Edge ea2 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va2.getLocalEdges(), va3.getLocalEdges());
      Edge ea3 = Triangulation::edgeTable[sameAs[0]];
+     
+     
      sameAs = listIntersection(eb1.getLocalFaces(), eb2.getLocalFaces());
      Face fb1 = Triangulation::faceTable[sameAs[0]];
      sameAs = listIntersection(eb1.getLocalFaces(), eb3.getLocalFaces());
      Face fb2 = Triangulation::faceTable[sameAs[0]];
      sameAs = listIntersection(eb2.getLocalFaces(), eb3.getLocalFaces());
      Face fb3 = Triangulation::faceTable[sameAs[0]];
+     
+     vector<Face> fa1, fa2, fa3;
      sameAs = listIntersection(fb1.getLocalFaces(), ea1.getLocalFaces());
-     Face fa1 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fa1.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      sameAs = listIntersection(fb2.getLocalFaces(), ea2.getLocalFaces());
-     Face fa2 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fa2.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      sameAs = listIntersection(fb3.getLocalFaces(), ea3.getLocalFaces());
-     Face fa3 = Triangulation::faceTable[sameAs[0]];
+     for(int i = 0; i < sameAs.size(); i++)
+     {
+        fa3.push_back(Triangulation::faceTable[sameAs[i]]);
+     }
      
      //Triangulation::vertexTable[(va1.getIndex())].removeVertex(v.getIndex());
 //     Triangulation::vertexTable[(va2.getIndex())].removeVertex(v.getIndex());
@@ -370,10 +406,17 @@ void removeVertex(Vertex v)
      Triangulation::faceTable[(fb1.getIndex())].addVertex(va3.getIndex());
      Triangulation::faceTable[(fb1.getIndex())].addEdge(ea2.getIndex());
      Triangulation::faceTable[(fb1.getIndex())].addEdge(ea3.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].addFace(fa2.getIndex());
-     Triangulation::faceTable[(fb1.getIndex())].addFace(fa3.getIndex());
-     Triangulation::faceTable[(fa2.getIndex())].addFace(fb1.getIndex());
-     Triangulation::faceTable[(fa3.getIndex())].addFace(fb1.getIndex());
+     for(int i = 0; i < fa2.size(); i++)
+     {
+        Triangulation::faceTable[(fb1.getIndex())].addFace(fa2[i].getIndex());
+        Triangulation::faceTable[(fa2[i].getIndex())].addFace(fb1.getIndex());  
+     }
+     for(int i = 0; i < fa3.size(); i++)
+     {
+        Triangulation::faceTable[(fb1.getIndex())].addFace(fa3[i].getIndex());
+        Triangulation::faceTable[(fa3[i].getIndex())].addFace(fb1.getIndex());
+     }
+     
      
      Triangulation::eraseVertex(v.getIndex());
      Triangulation::eraseEdge(eb1.getIndex());
