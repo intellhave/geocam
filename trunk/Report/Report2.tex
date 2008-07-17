@@ -49,7 +49,7 @@ We begin by providing the definition of a manifold. A manifold is defined as any
 
 \noindent One way to do this is to represent our manifold that we are observing using a topological triangulation. On an $n$-dimensional manifold, this triangulation, written $\tau = {\tau_0, \tau_1, ... , \tau_n}$ consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = {i_0, ... , i_k}$ \cite{Dave}. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, 2-dimensional simplices as triangles or faces, and 3-dimensional simplices as tetrahedra.\newline
 
-\noindent For the purpose of this project, it will not be necessary to look at simplices of higher dimension. However, concepts may translate to all dimensions. Primarliy, we will be working with 2-dimensional manifolds, or surfaces, and eventually we will address these problems in 3-dimensional manifolds. Additionally, we are only concerned with manifolds that are closed, or without boundary. \newline
+\noindent For the purpose of this project, it will not be necessary to look at simplices of higher dimension. However, concepts may translate to all dimensions. Primarily, we will be working with 2-dimensional manifolds, or surfaces, and eventually we will address these problems in 3-dimensional manifolds. Additionally, we are only concerned with manifolds that are closed, or without boundary. \newline
 
 \noindent When talking about closed, triangulated surfaces an important characteristic comes up that is known as the Euler characteristic, given by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property which is the \textit{genus} of a surface. The genus of a surface is a number that describes the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
 
@@ -157,7 +157,7 @@ f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alph
 \frac{d(\mbox{log}~\alpha)}{dt} = \frac{\mbox{sum of all curvatures}}{\mbox{number of vertices}} = \overline{K}, \mbox{average curvature.}
 \end{equation}
 
-\noindent In this paper, we may refer to the sum of all curvatures as the \textit{total curvature}. We can also show that $\overline{K}$ is a constant and depends on the number of vertices and the Euler characteristic. We know that the sum of angles from each vertex is 360 $\deg,$ or $2\pi$. However, we also know that the sum of angles on each face is $\pi$, thus we determine that 
+\noindent In this paper, we may refer to the sum of all curvatures as the \textit{total curvature}. We can also show that $\overline{K}$ is a constant and depends on the number of vertices and the Euler characteristic. We know that the sum of angles from each vertex is $360^\circ,$ or $2\pi$. However, we also know that the sum of angles on each face is $\pi$, thus we determine that 
 
 $$\sum{K_i} = 2\pi V - \pi F = 2\pi(V - \frac{F}{2})$$
 
@@ -433,7 +433,7 @@ Vertex 7: 6.18421 \\
 
 \noindent Example: Adding a vertex to a one-holed torus. See figure~\ref{torusaddv}. \newline
 
-\noindent By inserting a vertex within a triangulation for a torus, we are essentially creating a bump on the torus and then observing what happens as we run it through out $calcFlow$ program. We discovered that the new vertex shrinks in size to a weight much smaller than the other vertices, but to a positive constant. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). The weight that the new vertex converges to turned out to be in proportion to the other weights by $3+2\sqrt{3}$, the exact proportion necessary to maintain equality amongst all other weights. An oddity here is that the three vertices local to this added vertex converged to the same weight as all the vertices not near the flip, despite a difference in degree.\newline
+\noindent By inserting a vertex within a triangulation for a torus, we are essentially creating a bump on the torus and then observe what happens as we run it through out $calcFlow$ program. We discovered that the new vertex shrinks in size to a weight much smaller than the other vertices, but to a positive constant. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). The weight that the new vertex converges to turned out to be in proportion to the other weights by $3+2\sqrt{3}$, the exact proportion necessary to maintain equality amongst all other weights. An oddity here is that the three vertices local to this added vertex converged to the same weight as all the vertices not near the flip, despite a difference in degree.\newline
 
 \begin{figure}[ht]
 \includegraphics[scale = 0.5]{torus22.png}
@@ -481,6 +481,62 @@ One experiment we performed was measuring convergence speeds of various triangul
 
 \noindent As a final note, the deviation of the initial weights did not have a clear impact on the convergence speed. At some times, it would appear that initial weights with a higher deviation would converge faster, yet at other times it was lower deviation that seemed to lead to faster convergence.
 
+\section{Spherical and hyperbolic combinatorial Ricci flow}
+Up til now we have focused solely on triangulations using planar Euclidean geometry. While this is useful for most cases, there are others where we may need to change the background space. Two of these in particular are spherical and hyperbolic geometries. We will introduce the basics of each system to the reader as they may be unfamilar with these geometries. We will examine the adaptations of combinatorial Ricci flow for each case, and test over various triangulations.
+
+\subsection{Spherical flow}
+We can draw triangles on the surfaces of spheres. Most rules of planar geometry do not fully apply. To begin, we cannot (easily) have edges of arbitrary length, and even the sums angles in a triangle do not add to $180^\circ$.  While we can assume our circle packing metric still holds, we do have additional restrictions: 
+\begin{itemize}
+\item All triangles must (initially) be producable on a sphere of radius 1, the unit sphere. Triangulations can be thought of as a culmination of spherical triangles from many different spheres. 
+\item The sum of the weights of any triangle cannot exceed $\pi.$ This is due to the possibility of multiple triangles on a sphere using the same points, and also to inherent restrictions in formulae. 
+\end{itemize}
+
+\noindent In the spherical case, we also have different formulas for numerous things. There are two laws of cosines. One gives you an angle based on the edge lenghts, and the other gives you the side lengths based on the angles. For a triangle with sides $a, b$, and $c$, we have $\cos(\angle C) = \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)}$. Using Taylor polynomials to a couple of terms, we can see that this is analogous to the Euclidean version. With $\sin(x) \approx x$ and $\cos(x) \approx 1 - \frac{x^2}{2}$ for $x$ small, we get 
+\begin{eqnarray*}
+\cos(\angle C) &=& \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)} = \frac{(1 - \frac{c^2}{2}) - (1 - \frac{a^2}{2})(1 - \frac{b^2}{2})}{ab}\\
+							&=& \frac{\frac{a^2}{2} + \frac{b^2}{2} - \frac{c^2}{2} + \frac{a^2b^2}{4}}{ab}\\
+							&=& \frac{a^2 + b^2 - c^2}{2ab} + \frac{ab}{4} \approx \frac{a^2 + b^2 - c^2}{2ab} \mbox{ as } \frac{ab}{4} \approx 0 \mbox{ for } a,b \mbox{ small}
+\end{eqnarray*}
+
+\noindent More importantly, our equation for combintorial Ricci flow is altered slightly. The base equation is now 
+\begin{equation}
+\frac{dr_i}{dt} = -K_i\sin(r_i)
+\end{equation}
+
+\noindent Like in the Eulidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths, and we need make sure that the sum of weights remains below $\pi$,
+
+\noindent We tried a few equations to derive an equation for normalized spherical flow. Some ideas were:
+\begin{itemize}
+\item $\displaystyle \frac{dr_i}{dt} = (\overline{K} - K_i)\sin(r_i)$ \newline
+\noindent By maintaining the same construction as the normalized Euclidean Ricci flow, we hoped that replacing $r_i$ with $\sin(r_i)$ would work. However, in running even the simplest case of a tetrahdron, we found that the system was highly unstable. If more than one weight was initially different from the others, the program would fail. If the system was able to stabilize, we noted that the resultant surface area of the end product was $4\pi$, the same as a unit sphere. 
+
+\item $\displaystyle \frac{dr_i}{dt} = (\hat{K} - K_i)r_i$ \newline
+\noindent Following the criteria we used to obtain our normalized Euclidean flow, we began experimenting and used the cases $\tilde{r_i} = \alpha r_i$ and $\prod{\alpha \sin r_i} = C$ to obtain a result similar to our original. We defined $\hat{K}$ as the the dot product of the curvatures and the cosines of the weights, divided by the number of vertices, or $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
+\noindent The major problem we encountered with this formula was that we had to use a sine approximation in its derivation, which is not valid for larger weights. As angles are not conserved with scaling in the spherical case, we realized this formula would not work. We found that weights and curvatures displayed sinusoidal behavior, but were unable to converge to a finite value. As time went on, the weights became more unstable until the program reached failure, as seen in Fig.~\ref{kHat}.
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.65]{kHatResult.png}
+\caption{An example using our notion of $\hat{K}$. Weights and curvatures were unable to converge, and crashed the program shortly after.}
+\label{kHat}
+\end{figure}
+
+\item $\displaystyle \frac{dr_i}{dt} = \overline{K}r_i - K_i\sin(r_i)$ \newline
+This one works really well. We're not totally sure why, but it does. Spheres converge to zero curvature (as they should in the spherical case) and weights first group together and then approach optimal weights. In dealing with vertex transitive triangulations (ones in which each vertex has the same degree) we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number, but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. 
+\end{itemize}
+
+\subsection{Hyperbolic flow}
+
+In hyperbolic geometry, weird stuff happens. Things can shrink but have the same length. Triangles can have an area of $\pi$ but angles of 0. (These are known as ideal triangles.) A common way to interpret the hyperbolic plane is to use the Poincar\'{e} disk. (Yes, that Poincar\'{e}. Small world.) By using the disk, the center acts as the origin and the boundary is towards infinity. The equation for combinatorial Ricci flow is 
+\begin{equation}
+\frac{dr_i}{dt} = -K_i\sinh(r_i)
+\end{equation}
+\noindent where sinh (pronounced ``synch'') is the hyperbolic sine, defined as $$\sinh(x) = \frac{e^x - e^{-x}}{2}$$
+
+Hyperbolic Ricci flow is best suited for triangulations with a genus of at least 2. Moreover, it almost seems as if this equation already is normalized. Curvatures converge to zero, and the optimum weights are achieved in a relatively short time. 
+
+\section{Delaunay triangulations}
+In addition to our work on combinatioral Ricci flow, we also branched out into other areas where we felt our triangulation structure would be applicable. We'll talk about this a lot more in detail as we get the code solidified. 
 \section{Future work}
 \subsection{3-D}
 
@@ -525,7 +581,7 @@ We had a lot of goals for this project. For one, we are the first group to work 
 	\frac{df}{dt} & = & n\alpha^{n-1}\frac{d\alpha}{dt}r_1r_2\ldots r_n + \alpha^n\frac{dr_1}{dt}r_2r_3\ldots r_n\\
 								& + & \alpha^nr_1\frac{dr_2}{dt}r_3r_4\ldots r_n + \ldots + \alpha^nr_1r_2\ldots r_{n-1}\frac{dr_n}{dt}.
 	\end{eqnarray*}
-	But since $\displaystyle \frac{dr_i}{dt} = -K_ir_i$ from Eq.~\ref{Riccif} we obtain
+	But since $\displaystyle \frac{dr_i}{dt} = -K_ir_i$ from Eq.~(\ref{Riccif}) we obtain
 	\begin{eqnarray*}
 	\frac{df}{dt} & = & \frac{n\alpha^{n}}{\alpha}\frac{d\alpha}{dt}r_1r_2\ldots r_n - K_1\alpha^nr_1r_2r_3\ldots r_n\\
 								& - & K_2\alpha^nr_1r_2r_3r_4\ldots r_n - \ldots - K_n\alpha^nr_1r_2\ldots r_{n-1}r_n
