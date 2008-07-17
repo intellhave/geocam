@@ -23,9 +23,13 @@ void firstTriangle(double length1, double length2, double length3)
      if(length3 > length1 + length2)
      throw string("Invalid Edge Lengths");
      
-     Face f1;
-    Edge e1, e2, e3;
-    Vertex v1, v2, v3;
+     Face f1(1);
+    Edge e1(1);
+    Edge e2(2);
+    Edge e3(3);
+    Vertex v1(1);
+    Vertex v2(2);
+    Vertex v3(3);
     Triangulation::putFace(1, f1);
     Triangulation::putEdge(1, e1);
     Triangulation::putEdge(2, e2);
@@ -93,13 +97,14 @@ void addTriangle(Edge e, double length1, double length2)
      Edge eb2(Triangulation::greatestEdge() + 2);
      Face fb(Triangulation::greatestFace() + 1);
      
+     Triangulation::putVertex(vb.getIndex(), vb);
+     Triangulation::putEdge(eb1.getIndex(), eb1);
+     Triangulation::putEdge(eb2.getIndex(), eb2);
+     Triangulation::putFace(fb.getIndex(), fb);
+     
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
-     Face fa;
-     if((*(e.getLocalFaces()))[0] == 0)
-          fa = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
-     else
-          fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+     Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      
      vector<int> diff;
      diff = listDifference(fa.getLocalVertices(), e.getLocalVertices());
@@ -171,15 +176,8 @@ void addTriangle(Edge e1, Edge e2)
      
      Edge eb(Triangulation::greatestEdge() + 1);
      Face fb(Triangulation::greatestFace() + 1);
-     Face fa1, fa2;
-     if((*(e1.getLocalFaces()))[0] == 0)
-          Face fa1 = Triangulation::faceTable[(*(e1.getLocalFaces()))[1]];
-     else
-          Face fa1 = Triangulation::faceTable[(*(e1.getLocalFaces()))[0]];
-     if((*(e2.getLocalFaces()))[0] == 0)
-          Face fa2 = Triangulation::faceTable[(*(e2.getLocalFaces()))[1]];
-     else
-          Face fa2 = Triangulation::faceTable[(*(e2.getLocalFaces()))[0]];
+     Face fa1 = Triangulation::faceTable[(*(e1.getLocalFaces()))[0]];
+     Face fa2 = Triangulation::faceTable[(*(e2.getLocalFaces()))[0]];
      
      double ang = 2 * PI - getAngleSum(va);
      if(ang > PI)
