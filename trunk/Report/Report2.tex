@@ -178,7 +178,7 @@ $$\sum{K_i} = 2\pi(V - \frac{F}{2}) = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + 
 \frac{dr_i}{dt} = (\overline{K} - K_i)r_i
 \end{equation}
 
-\noindent This is known as normalized Ricci flow, as discussed in \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ and thus $\displaystyle\frac{dr_i}{dt} = 0$ for $i = \{1,2,3,4\}$. 
+\noindent This is known as normalized Ricci flow, as discussed by Chow and Luo in their paper \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ and thus $\displaystyle\frac{dr_i}{dt} = 0$ for $i = \{1,2,3,4\}$. 
 
 \subsection{Expectations}
 
@@ -485,13 +485,13 @@ One experiment we performed was measuring convergence speeds of various triangul
 Up til now we have focused solely on triangulations using planar Euclidean geometry. While this is useful for most cases, there are others where we may need to change the background space. Two of these in particular are spherical and hyperbolic geometries. We will introduce the basics of each system to the reader as they may be unfamilar with these geometries. We will examine the adaptations of combinatorial Ricci flow for each case, and test over various triangulations.
 
 \subsection{Spherical flow}
-We can draw triangles on the surfaces of spheres. Most rules of planar geometry do not fully apply. To begin, we cannot (easily) have edges of arbitrary length, and even the sums angles in a triangle do not add to $180^\circ$.  While we can assume our circle packing metric still holds, we do have additional restrictions: 
+If you were to draw a large triangle on the surface of the earth, you would see that the line segments are no longer linear, but curve around along a circular path. In dealing with spherical geometry, we learn that many rules of planar geometry, some of them fundamental, do not apply. To begin, the sums of angles in a triangle do not add to $180^\circ$. The sum changes depending on the edge lengths. For computational reasons, we cannot (easily) have edges of unbounded length. While we can assume our circle packing metric still holds, we do have additional restrictions: 
 \begin{itemize}
 \item All triangles must (initially) be producable on a sphere of radius 1, the unit sphere. Triangulations can be thought of as a culmination of spherical triangles from many different spheres. 
-\item The sum of the weights of any triangle cannot exceed $\pi.$ This is due to the possibility of multiple triangles on a sphere using the same points, and also to inherent restrictions in formulae. 
+\item The sum of the weights of any triangle cannot exceed $\pi.$ This is partially due to the possibility of multiple triangles on a sphere using the same points, and also to inherent domain bounds in formulae. By default, we imply the geodesic of a spherical triangle, using the shortest distance on the surface between any two vertices.
 \end{itemize}
 
-\noindent In the spherical case, we also have different formulas for numerous things. There are two laws of cosines. One gives you an angle based on the edge lenghts, and the other gives you the side lengths based on the angles. For a triangle with sides $a, b$, and $c$, we have $\cos(\angle C) = \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)}$. Using Taylor polynomials to a couple of terms, we can see that this is analogous to the Euclidean version. With $\sin(x) \approx x$ and $\cos(x) \approx 1 - \frac{x^2}{2}$ for $x$ small, we get 
+\noindent We also have different formulas for numerous things in the spherical case. There are now two laws of cosines. One gives you an angle based on the edge lengths, like in Euclidean space, and the other gives you the side lengths based on the angles. For the first law of cosines, given a triangle with edge lengths $a, b$, and $c$, we have $\cos(\angle C) = \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)}$. Using Taylor polynomials to a couple of terms, we can see that this is analogous to the Euclidean version. With $\sin(x) \approx x$ and $\cos(x) \approx 1 - \frac{x^2}{2}$ for $x$ small, we get 
 \begin{eqnarray*}
 \cos(\angle C) &=& \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)} = \frac{(1 - \frac{c^2}{2}) - (1 - \frac{a^2}{2})(1 - \frac{b^2}{2})}{ab}\\
 							&=& \frac{\frac{a^2}{2} + \frac{b^2}{2} - \frac{c^2}{2} + \frac{a^2b^2}{4}}{ab}\\
@@ -500,19 +500,27 @@ We can draw triangles on the surfaces of spheres. Most rules of planar geometry 
 
 \noindent More importantly, our equation for combintorial Ricci flow is altered slightly. The base equation is now 
 \begin{equation}
-\frac{dr_i}{dt} = -K_i\sin(r_i)
+\frac{dr_i}{dt} = -K_i\sin(r_i).
 \end{equation}
 
-\noindent Like in the Eulidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths, and we need make sure that the sum of weights remains below $\pi$,
+\noindent Like in the Eulidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths, and we need make sure that the sum of weights remains below $\pi$.\newline
 
-\noindent We tried a few equations to derive an equation for normalized spherical flow. Some ideas were:
+\noindent We tried a few techniques to derive an equation for normalized spherical flow. Some ideas were:
+
 \begin{itemize}
 \item $\displaystyle \frac{dr_i}{dt} = (\overline{K} - K_i)\sin(r_i)$ \newline
-\noindent By maintaining the same construction as the normalized Euclidean Ricci flow, we hoped that replacing $r_i$ with $\sin(r_i)$ would work. However, in running even the simplest case of a tetrahdron, we found that the system was highly unstable. If more than one weight was initially different from the others, the program would fail. If the system was able to stabilize, we noted that the resultant surface area of the end product was $4\pi$, the same as a unit sphere. 
+\noindent By maintaining the same construction as the normalized Euclidean Ricci flow, we hoped that replacing $r_i$ with $\sin(r_i)$ would work. However, in running even the simplest case of a tetrahdron, we found that the system was highly unstable. If more than one weight was initially different from the others, the program would fail. If the system was able to stabilize, we noted that the resultant surface area of the end product was $4\pi$, the same as a unit sphere. Another issue with this formula is that the value $\overline{K}$ is no longer constant. For a spherical contruction of a surface $X$, we have 
+
+$$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi - \mbox{Surface Area of }X}{|V|}.$$
+
+\noindent Since the surface area went to $4\pi$, then the average curvature went to zero. While we liked the end result of our triangulation trials, the system failed far too often to be reliable. 
 
 \item $\displaystyle \frac{dr_i}{dt} = (\hat{K} - K_i)r_i$ \newline
-\noindent Following the criteria we used to obtain our normalized Euclidean flow, we began experimenting and used the cases $\tilde{r_i} = \alpha r_i$ and $\prod{\alpha \sin r_i} = C$ to obtain a result similar to our original. We defined $\hat{K}$ as the the dot product of the curvatures and the cosines of the weights, divided by the number of vertices, or $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
-\noindent The major problem we encountered with this formula was that we had to use a sine approximation in its derivation, which is not valid for larger weights. As angles are not conserved with scaling in the spherical case, we realized this formula would not work. We found that weights and curvatures displayed sinusoidal behavior, but were unable to converge to a finite value. As time went on, the weights became more unstable until the program reached failure, as seen in Fig.~\ref{kHat}.
+\noindent Following the criteria we used to obtain our normalized Euclidean flow, we began experimenting and used the cases $\tilde{r_i} = \alpha r_i$ and $\prod{\alpha \sin r_i} = C$ to obtain a result similar to our original. We defined $\hat{K}$ as the the dot product of the curvatures and the cosines of the weights, divided by the number of vertices, or 
+
+$$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
+
+\noindent The major problem we encountered with this formula was that we had to use a sine approximation in its derivation, which is not valid for larger weights. As angles are not conserved with scaling in the spherical case, we realized this formula would not work. We also found that weights and curvatures displayed sinusoidal behavior, but were unable to converge to a finite value. As time went on, the weights became more unstable until the program reached failure, as seen in Fig.~\ref{kHat}.
 
 \begin{figure}
 \centering
@@ -521,9 +529,26 @@ We can draw triangles on the surfaces of spheres. Most rules of planar geometry 
 \label{kHat}
 \end{figure}
 
-\item $\displaystyle \frac{dr_i}{dt} = \overline{K}r_i - K_i\sin(r_i)$ \newline
-This one works really well. We're not totally sure why, but it does. Spheres converge to zero curvature (as they should in the spherical case) and weights first group together and then approach optimal weights. In dealing with vertex transitive triangulations (ones in which each vertex has the same degree) we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number, but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. 
 \end{itemize}
+
+\noindent In the end, we decided to make an equation that took the good aspects of our first trial while broadening its range of stability as we had hoped with the second one. We came up with the equation
+
+\begin{equation}
+\label{SRicciN}
+\frac{dr_i}{dt} = \overline{K}r_i - K_i\sin(r_i).
+\end{equation}
+
+\noindent In examining its behavior with various triangulations, we found that this one works really well. We're not completely sure why, but it does. Spheres converge to zero curvature- as they should in the spherical case- and weights first group together and then approach optimal weights. See Fig.~\ref{SphGood}. In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number, but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached or reached was equal to 
+
+$$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{, where } Z = \frac{\pi(4 + F)}{3F}$$
+
+\noindent and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ The only downsides we found with this equation was that it was still possible for the system to fail if some weights got too large, and the computation time required to reach a stable equilibrium. 
+
+\begin{figure}
+\includegraphics[scale = 0.8]{SphG0V10.png}
+\caption{An example of a solution using Eq.~\ref{SRicciN}. Starting off with equal initial weights of 0.1, vertices merge into one of four groups as they approach uniform curvature. As curvature drops to zero, the weight groups separate from each other to obtain their final weight. In this trial, $dt = 0.50$ to show the complete process.}
+\label{SphGood}  
+\end{figure}
 
 \subsection{Hyperbolic flow}
 
@@ -533,10 +558,18 @@ In hyperbolic geometry, weird stuff happens. Things can shrink but have the same
 \end{equation}
 \noindent where sinh (pronounced ``synch'') is the hyperbolic sine, defined as $$\sinh(x) = \frac{e^x - e^{-x}}{2}$$
 
-Hyperbolic Ricci flow is best suited for triangulations with a genus of at least 2. Moreover, it almost seems as if this equation already is normalized. Curvatures converge to zero, and the optimum weights are achieved in a relatively short time. 
+$$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of }X}{|V|}.$$
+
+Moreover, it almost seems as if this equation already is normalized. Curvatures converge to zero, and the optimum weights are achieved in a relatively short time. 
+
+\subsection{Comparison of Systems}
+
+When we began looking into these background geometries, we thought that it would be a good idea to run uniform tests on all three systems and observe how they behave. However, since our equation for normalized spherical Ricci flow is not firmly confirmed as the best method, we could not make any strong conclusions on the normalized flows. In running our equations through unnormalized flows, we did notice a few things. \newline
+
+\noindent Systems work best for triangulations whose total curvature goes to zero in that particular system. Euclidean is best for systems of genus 1, or one-holed tori. This is the case as we saw the total curvature for such a torus was $2\pi\chi = 2\pi(2 - 2g) = 2\pi(2 - 2(1)) = 0$. Spherical combinatorial Ricci flow is said to work best on manifolds of genus 0, or anything topologically equivalent to a sphere. This is because we have a positive $\chi$ value, so for total curvature to go to 0, the total surface area must go to $4\pi$. Hyperbolic Ricci flow is best suited for triangulations with a genus of 2 or more. We can see that these systems will be able to reach zero total curvature with a large enough surface area. 
 
 \section{Delaunay triangulations}
-In addition to our work on combinatioral Ricci flow, we also branched out into other areas where we felt our triangulation structure would be applicable. We'll talk about this a lot more in detail as we get the code solidified. 
+In addition to our work on combinatioral Ricci flow, we also branched out into other areas where we felt our triangulation structure would be applicable. We'll talk about this a lot more in detail as we get the code solidified. Tom 
 \section{Future work}
 \subsection{3-D}
 
@@ -558,7 +591,7 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 
 \subsection{Hyperbolic/ spherical triangulations}
 \label{HypSphere}
-Hence far, we have focused on Euclidean triangles. However, there are cases when triangulations may be better suited in other systems. In changing our format to hyperbolic and spherical coordinates, we would have to reevaluate each of our steps depending on the system. For example, in hyperbolic, the basic Ricci flow equation is $\displaystyle \frac{dr_i}{dt} = -K_i\sinh r_i$. Note that in, for instance, spherical geometry, for a surface $X, \displaystyle \sum{K_i} = 2\pi\chi - S(X)$, with $S(X)$ being the surface area of $X$, which can change over time. \newline
+Hence far, we have focused on Euclidean triangles. However, there are cases when triangulations may be better suited in other systems. 
 
 \noindent It is also of interest to run variations of our $calcFlow$ program based on our different geometries. We can observe whether or not each triangulation converges in the same fashion, or if it matters which geometry we choose. If we do discover that all systems behave the same way, we would then like to focus on one geometry, most likely Euclidean, as that would be easier to grasp and be more computational. 
 
