@@ -14,6 +14,10 @@
 
 bool isDelaunay(Edge e)
 {
+     if(e.getLocalFaces()->size() < 2)
+     {
+        return true;
+     }
      Face fa1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      Face fa2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
