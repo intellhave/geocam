@@ -102,6 +102,7 @@ Every triangle has a circle that is internally tangent to all three edges. This 
 
 \section{Ricci flow}
 \subsection{Background}
+\label{RBk}
 Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting.
 
 \subsection{Definition}
@@ -482,10 +483,11 @@ One experiment we performed was measuring convergence speeds of various triangul
 \noindent As a final note, the deviation of the initial weights did not have a clear impact on the convergence speed. At some times, it would appear that initial weights with a higher deviation would converge faster, yet at other times it was lower deviation that seemed to lead to faster convergence.
 
 \section{Spherical and hyperbolic combinatorial Ricci flow}
-Up til now we have focused solely on triangulations using planar Euclidean geometry. While this is useful for most cases, there are others where we may need to change the background space. Two of these in particular are spherical and hyperbolic geometries. We will introduce the basics of each system to the reader as they may be unfamilar with these geometries. We will examine the adaptations of combinatorial Ricci flow for each case, and test over various triangulations.
+Up til now we have focused solely on triangulations using planar Euclidean geometry. While this is useful for most cases, there are others where we may need to change the background space. Two of these in particular are spherical and hyperbolic geometries. We will introduce the basics of each system to the reader as they may be unfamilar with these geometries. We will examine the adaptations of combinatorial Ricci flow for each case, test over various triangulations, and attempt to reach conclusions on our findings. 
 
 \subsection{Spherical flow}
 If you were to draw a large triangle on the surface of the earth, you would see that the line segments are no longer linear, but curve around along a circular path. In dealing with spherical geometry, we learn that many rules of planar geometry, some of them fundamental, do not apply. To begin, the sums of angles in a triangle do not add to $180^\circ$. The sum changes depending on the edge lengths. For computational reasons, we cannot (easily) have edges of unbounded length. While we can assume our circle packing metric still holds, we do have additional restrictions: 
+
 \begin{itemize}
 \item All triangles must (initially) be producable on a sphere of radius 1, the unit sphere. Triangulations can be thought of as a culmination of spherical triangles from many different spheres. 
 \item The sum of the weights of any triangle cannot exceed $\pi.$ This is partially due to the possibility of multiple triangles on a sphere using the same points, and also to inherent domain bounds in formulae. By default, we imply the geodesic of a spherical triangle, using the shortest distance on the surface between any two vertices.
@@ -500,16 +502,24 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 
 \noindent More importantly, our equation for combintorial Ricci flow is altered slightly. The base equation is now 
 \begin{equation}
+\label{SRiccif}
 \frac{dr_i}{dt} = -K_i\sin(r_i).
 \end{equation}
 
-\noindent Like in the Eulidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths, and we need make sure that the sum of weights remains below $\pi$.\newline
+\begin{figure}
+\centering
+\includegraphics[scale = 0.6]{octosph.png}
+\label{OctoSph}
+\caption{An illustration of a spherical octahedron through the X-Y plane. Each octet of the sphere surface, outlined in black, is the face of one triangle.} 
+\end{figure}
+
+\noindent Like in the Eulidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths. Plus, we also need make sure that the sum of weights remains below $\pi$.\newline
 
 \noindent We tried a few techniques to derive an equation for normalized spherical flow. Some ideas were:
 
 \begin{itemize}
 \item $\displaystyle \frac{dr_i}{dt} = (\overline{K} - K_i)\sin(r_i)$ \newline
-\noindent By maintaining the same construction as the normalized Euclidean Ricci flow, we hoped that replacing $r_i$ with $\sin(r_i)$ would work. However, in running even the simplest case of a tetrahdron, we found that the system was highly unstable. If more than one weight was initially different from the others, the program would fail. If the system was able to stabilize, we noted that the resultant surface area of the end product was $4\pi$, the same as a unit sphere. Another issue with this formula is that the value $\overline{K}$ is no longer constant. For a spherical contruction of a surface $X$, we have 
+\noindent By maintaining the same construction as the normalized Euclidean Ricci flow, we hoped that replacing $r_i$ with $\sin(r_i)$ would work. However, in running even the simplest case of a tetrahdron, we found that the system was highly unstable. If more than one weight was initially different from the others, the program would fail. If the system was able to stabilize, we noted that the resultant surface area of the end product was $4\pi$, the same as a unit sphere. Another issue with this formula is that the value $\overline{K}$ is no longer constant. For a spherical construction of a surface $X$, we have 
 
 $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi - \mbox{Surface Area of }X}{|V|}.$$
 
@@ -538,33 +548,65 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 \frac{dr_i}{dt} = \overline{K}r_i - K_i\sin(r_i).
 \end{equation}
 
-\noindent In examining its behavior with various triangulations, we found that this one works really well. We're not completely sure why, but it does. Spheres converge to zero curvature- as they should in the spherical case- and weights first group together and then approach optimal weights. See Fig.~\ref{SphGood}. In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number, but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached or reached was equal to 
+\noindent In examining its behavior with various triangulations, we found that this one works very well. We're not completely sure why, but it does. Spheres converge to zero curvature and weights first group together and then approach optimal weights. See Fig.~\ref{SphGood}. In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number, but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached or reached was equal to 
 
-$$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{, where } Z = \frac{\pi(4 + F)}{3F}$$
+$$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac{\pi(4 + F)}{3F}$$
 
-\noindent and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ The only downsides we found with this equation was that it was still possible for the system to fail if some weights got too large, and the computation time required to reach a stable equilibrium. 
+\noindent and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ The only downsides we found with this equation were that it was still possible for the system to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that the $dt$ size given, it would take over 4 minutes for the system to reach equilibrium in real time.  
 
 \begin{figure}
 \includegraphics[scale = 0.8]{SphG0V10.png}
-\caption{An example of a solution using Eq.~\ref{SRicciN}. Starting off with equal initial weights of 0.1, vertices merge into one of four groups as they approach uniform curvature. As curvature drops to zero, the weight groups separate from each other to obtain their final weight. In this trial, $dt = 0.50$ to show the complete process.}
+\caption{An example of a solution using Eq.~(\ref{SRicciN}). Starting off with equal initial weights of 0.1, vertices merge into one of four groups as they approach uniform curvature relatively quickly. As curvature drops to zero, slowly at first but more forcefully as time passes, the weight groups separate from each other to obtain their final weight. In this trial, $dt = 0.50$ to show the complete process.}
 \label{SphGood}  
 \end{figure}
 
 \subsection{Hyperbolic flow}
 
-In hyperbolic geometry, weird stuff happens. Things can shrink but have the same length. Triangles can have an area of $\pi$ but angles of 0. (These are known as ideal triangles.) A common way to interpret the hyperbolic plane is to use the Poincar\'{e} disk. (Yes, that Poincar\'{e}. Small world.) By using the disk, the center acts as the origin and the boundary is towards infinity. The equation for combinatorial Ricci flow is 
+In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. Please see Fig.~\ref{PD} for an illustration of the hyperbolic plane. This notion of a hyperbolic plane can also be seen in popular art, particularly M.C. Escher's ``Circle Limit IV,'' commonly referred to as the ``Angels and Devils'' picture. \newline
+
+\noindent The major new difference with the hyperbolic plane is that our traditional notion of unique parallel lines no longer apply. We now have that for a point $P$ on a line $l$, there is a point $B$ on a line $m$ such that $B$ and $P$ create a line $n \perp l$, and there are an infinite number of possible $m$'s. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. \newline
+
+\noindent In terms of the formulas, they remain relatively similar in format to the spherical equations, except there are two main substitutions. The cosine and sine functions are often replaced with their hyperbolic counterparts $cosh$ and $sinh$ (pronounced ``synch''), defined as 
+
+\begin{eqnarray*}
+\sinh(x) &=& \frac{e^x - e^{-x}}{2}\\
+\cosh(x) &=& \frac{d\sinh(x)}{dt} = \frac{e^x + e^{-x}}{2}
+\end{eqnarray*}
+
+\noindent Most importantly, the equation for combinatorial Ricci flow is now
 \begin{equation}
+\label{HRiccif}
 \frac{dr_i}{dt} = -K_i\sinh(r_i)
 \end{equation}
-\noindent where sinh (pronounced ``synch'') is the hyperbolic sine, defined as $$\sinh(x) = \frac{e^x - e^{-x}}{2}$$
+\noindent 
 
+\noindent Like in the case of spherical flow, the average and total curvatures need not remain constant. The average curvature can be now found by
 $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of }X}{|V|}.$$
 
-Moreover, it almost seems as if this equation already is normalized. Curvatures converge to zero, and the optimum weights are achieved in a relatively short time. 
+\begin{figure}
+\centering
+\includegraphics[scale = 0.5]{pDisk.png}
+\caption{An illustration of the hyperbolic plane using the Poincar\'{e} disk. named after the same Poincar\'{e} as in $\oint$\ref{RBk}. All concentric circles are evenly spaced apart in a Euclidean background, but the outer edge of the disk approaches infinity, so the circles appear closer together. A similar way to think of it is to imagine looking at the contour graph of $z = x^2 + y^2$ from the point (0,0,-1).}
+\label{PD}
+\end{figure}
+
+\noindent After running the hyperbolic Ricci flow on a few samples, we noted that the weights did not always go to zero, as was the case with the previous unnormalized systems. So in some cases, it almost seems as if this equation is already normalized. Curvatures would converge to zero, and optimum, nonzero weights are achieved in a relatively short time. Other times it behaved exactly like both Euclidean and spherical. 
 
 \subsection{Comparison of Systems}
 
-When we began looking into these background geometries, we thought that it would be a good idea to run uniform tests on all three systems and observe how they behave. However, since our equation for normalized spherical Ricci flow is not firmly confirmed as the best method, we could not make any strong conclusions on the normalized flows. In running our equations through unnormalized flows, we did notice a few things. \newline
+When we began looking into these background geometries, we thought that it would be a good idea to run uniform tests on all three systems and observe how they behave. However, since our equation for normalized spherical Ricci flow is not firmly confirmed as the best method, and as the hyperbolic flow may or may not already be normalized, we can not make any strong conclusions on the normalized flows. We did decide, however, to take a look at the behaviors on various manifolds by using the non-normalized equations, (\ref{Riccif}), (\ref{SRiccif}), and (\ref{HRiccif}). We will look at three triangulations, each of a different genus, no morphs, and compare results between each system. \newline
+
+\noindent Example: 12 vertex sphere, vertex transitive of degree 5\newline
+
+Euclidean- As expected, we obtain a surface where all the vertices attain the same curvature of $\frac{2\pi}{5}$ after multiple trials of uniform and randomized weights. There are 20 faces in the resulting triangulation. The weights group together somewhat as in the normalized spherical case, and then continue decreasing towards zero. 
+
+Spherical- We found that the system was stable only if all initial weights were set exactly to $\approx$ 0.55357, its preferred weight. If the initial curvature was below zero, the weights would increase until the program crashed. If the initial curvature was above zero, the vertices would approach the same curvature as in the Euclidean case. As such, the weights would drop to zero. 
+
+Hyperbolic- We found that the vertices react in almost the exact same behavior as in the Euclidean case. They approach the same curvature of $\frac{2\pi}{5}$ and drop towards zero weights at the same rate. 
+
+\noindent Example: 9 vertex, one-holed torus\newline
+
+\noindent Example: 11 vertex, two-holed torus\newline
 
 \noindent Systems work best for triangulations whose total curvature goes to zero in that particular system. Euclidean is best for systems of genus 1, or one-holed tori. This is the case as we saw the total curvature for such a torus was $2\pi\chi = 2\pi(2 - 2g) = 2\pi(2 - 2(1)) = 0$. Spherical combinatorial Ricci flow is said to work best on manifolds of genus 0, or anything topologically equivalent to a sphere. This is because we have a positive $\chi$ value, so for total curvature to go to 0, the total surface area must go to $4\pi$. Hyperbolic Ricci flow is best suited for triangulations with a genus of 2 or more. We can see that these systems will be able to reach zero total curvature with a large enough surface area. 
 
