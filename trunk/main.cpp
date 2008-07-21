@@ -34,7 +34,7 @@ void runFlow()
 //char from[] = "Triangulations/manifold.txt";
 //char to[] = "Triangulations/manifold converted.txt";
 //makeTriangulationFile(from, to);
-char to[] = "Triangulations/Tetrahedron.txt";
+char to[] = "Triangulations/torus-9.txt";
 readTriangulationFile(to);
 
 //flip(Triangulation::edgeTable[1]);  
@@ -56,13 +56,18 @@ readTriangulationFile(to);
 //   
    
     int vertexSize = Triangulation::vertexTable.size();
-    double weights[] = {0.1, 0.1, 0.1, 0.2};
+    double weights[vertexSize];
     double product = 1;
     for(int i = 1; i <= vertexSize; i++)
    {
        //weights[i - 1] = acos(-1/3.0)/2 - (rand() %10 + 0.0)/10.0;
       //weights[i - 1] = 2;
-      //weights[i - 1] = (rand()%10 + 1)/10.0;
+      weights[i - 1] = (rand()%10 + 1);
+   }
+   map<int, Edge>::iterator eit;
+   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+   {
+           eit->second.setAngle(PI/(2*eit->first));
    }
 //   while(Triangulation::vertexTable[1].getLocalEdges()->size() > 3)
 //   {
@@ -82,7 +87,7 @@ readTriangulationFile(to);
    time(&start);
    vector<double> weightsR;
    vector<double> curvatures;
-  sphericalCalcFlow(&weightsR, &curvatures, 0.05, weights,2000, true);
+  calcFlow(&weightsR, &curvatures, 0.03, weights,1000, true);
   printResultsStep(fileName, &weightsR, &curvatures);
   //printResultsNum(fileName, &weightsR, &curvatures);
    time(&end);
@@ -90,7 +95,23 @@ readTriangulationFile(to);
 
 }
 
-
+void printLengths(Edge e)
+{
+     Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+     vector<int> edge;
+     edge.push_back(e.getIndex());
+     vector<int> edges;
+     edges = listDifference(f1.getLocalEdges(), &edge);
+     for(int i = 0; i < edges.size(); i++)
+             cout << Triangulation::edgeTable[edges[i]].getLength() << " ";
+     cout << e.getLength() << " ";
+     if(e.getLocalFaces()->size() <= 1)
+           return;
+     Face f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
+     edges = listDifference(f2.getLocalEdges(), &edge);
+     for(int i = 0; i < edges.size(); i++)
+             cout << Triangulation::edgeTable[edges[i]].getLength() << " ";
+}
 int main(int argc, char *argv[])
 {
     //runFlow();
@@ -119,9 +140,23 @@ int main(int argc, char *argv[])
 //  double sol = quadSolutions[i];
 //  cout << "Solution " << i << ": " << sol << "\n";
 //}
+//    firstTriangle(1.0, 1.0, 1.0);
+//    addTriangle(Triangulation::edgeTable[1], 1.0, 1.0);
+    char filename[] = "Triangulations/Plane Test.txt";
+//    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
+//    flip(Triangulation::edgeTable[1]);
+//    writeTriangulationFile(filename);
+//    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
+    generateTriangulation(50);
+    writeTriangulationFile(filename);
+    for(int i = 1; i < Triangulation::edgeTable.size(); i++)
+    {
+            cout << "Edge " << i << ": ";
+            cout << isDelaunay(Triangulation::edgeTable[i]) << "    ";
+            printLengths(Triangulation::edgeTable[i]);
+            cout << endl;
+    }
 
-    srand(time(NULL));
-    generateTriangulation(25);
     system("PAUSE");
     flipAlgorithm();
     system("PAUSE");

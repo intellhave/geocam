@@ -88,11 +88,11 @@ void addTriangle(Edge e, double length1, double length2)
      
      if(e.getLocalFaces()->size() > 1)
      throw string("Invalid Edge");
-     if(e.getLength() >= length1 + length2)
+     if(e.getLength() >= (length1 + length2))
      throw string("Invalid Edge Lengths");
-     if(length1 >= e.getLength() + length2)
+     if(length1 >= (e.getLength() + length2))
      throw string("Invalid Edge Lengths");
-     if(length2 >= e.getLength() + length1)
+     if(length2 >= (e.getLength() + length1))
      throw string("Invalid Edge Lengths");
      
      Vertex vb(Triangulation::greatestVertex() + 1);
@@ -249,11 +249,18 @@ void generateTriangulation(int numFaces)
 {
      map<int, Edge>::iterator eit;
      srand(time(NULL));
-     int length1, length2, length3, range;
-     length1 = rand()%10 + 1;
-     length2 = rand()%10 + 1;
+     
+     double randNum, length1, length2, length3, range, rDec;
+     randNum = (rand()%20000 + 1) / 20000.0;
+     length1 = randNum *10 + 1;
+     randNum = (rand()%20000 + 1) / 20000.0;
+     length2 = randNum*10 + 1;
      range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
-     length3 = rand()%(range + 1) + (abs(length1 - length2) + 1);
+     int rInt = (int) range;
+     rDec = range - rInt;
+     randNum = (rand()%20000 + 1) / 20000.0;
+     length3 = rand()%(rInt + 1) + (abs(length1 - length2) + 1) + randNum * rDec;
+
      firstTriangle(length1, length2, length3);
      while(Triangulation::faceTable.size() < numFaces)
      {
@@ -274,7 +281,6 @@ void generateTriangulation(int numFaces)
                         e2 = Triangulation::edgeTable[commonE[j]];
                         if(e2.isBorder())
                         {
-                            cout << "In HERE\n";
                             try{
                             addTriangle(e, e2);
                             }
@@ -289,11 +295,14 @@ void generateTriangulation(int numFaces)
                       }
                    }
                 }
-                length1 = (int) e.getLength();
-                length2 = rand()%(2*length1) + 1;
+                length1 = e.getLength();
+                randNum = (rand()%20000 + 1) / 20000.0;
+                length2 = randNum * (2*length1) + 0.5;
                 range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
-                length3 = rand()%(range + 1) + (abs(length1 - length2) + 1);
-                cout << Triangulation::faceTable.size() << "\n";
+                rInt = (int) range;
+                rDec = range - rInt;
+                randNum = (rand()%20000 + 1) / 20000.0;
+                length3 = rand()%(rInt + 1) + (abs(length1 - length2) + 1) + randNum * rDec;
                 try{
                     addTriangle(e, length2, length3);
                      if(Triangulation::faceTable.size() >= numFaces)
