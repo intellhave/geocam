@@ -45,6 +45,7 @@ class Edge : public Simplex
         };
         double getAngle();
         void setAngle(double);
+        bool isBorder();
 
 };
 
