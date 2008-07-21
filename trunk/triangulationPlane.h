@@ -23,3 +23,4 @@ void addTriangle(Edge, double, double);
  */
 void addTriangle(Edge, Edge);
 
+void generateTriangulation(int);

@@ -85,11 +85,11 @@ void addTriangle(Edge e, double length1, double length2)
      
      if(e.getLocalFaces()->size() > 1)
      throw string("Invalid Edge");
-     if(e.getLength() > length1 + length2)
+     if(e.getLength() > (length1 + length2))
      throw string("Invalid Edge Lengths");
-     if(length1 > e.getLength() + length2)
+     if(length1 > (e.getLength() + length2))
      throw string("Invalid Edge Lengths");
-     if(length2 > e.getLength() + length1)
+     if(length2 > (e.getLength() + length1))
      throw string("Invalid Edge Lengths");
      
      Vertex vb(Triangulation::greatestVertex() + 1);
@@ -111,9 +111,9 @@ void addTriangle(Edge e, double length1, double length2)
      Vertex va3 = Triangulation::vertexTable[diff[0]];
      
      if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
-     throw string("");
+     throw string("angle sum");
      if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
-     throw string("");
+     throw string("angle sum");
      
      Triangulation::vertexTable[vb.getIndex()].addVertex(va1.getIndex());
      Triangulation::vertexTable[vb.getIndex()].addVertex(va2.getIndex());
@@ -165,11 +165,11 @@ void addTriangle(Edge e, double length1, double length2)
 void addTriangle(Edge e1, Edge e2)
 {
      if(!e1.isAdjEdge(e2.getIndex()))
-     throw string("");
+     throw string("Error: Not adjacent");
      if(!e2.isAdjEdge(e1.getIndex()))
-     throw string("");
+     throw string("Error: Not adjacent");
      if(e1.getLocalFaces()->size() > 1 || e2.getLocalFaces()->size() > 1)
-     throw string("");
+     throw string("Error: Not valid edges");
      
      Vertex v1, v2, va;
      vector<int> diff, sameAs;
@@ -185,6 +185,8 @@ void addTriangle(Edge e1, Edge e2)
      Face fb(Triangulation::greatestFace() + 1);
      Face fa1 = Triangulation::faceTable[(*(e1.getLocalFaces()))[0]];
      Face fa2 = Triangulation::faceTable[(*(e2.getLocalFaces()))[0]];
+     Triangulation::putEdge(eb.getIndex(), eb);
+     Triangulation::putFace(fb.getIndex(), fb);
      
      double ang = 2 * PI - getAngleSum(va);
      if(ang > PI)
@@ -226,6 +228,70 @@ void addTriangle(Edge e1, Edge e2)
      double l1 = e1.getLength();
      double l2 = e2.getLength();
      
-     eb.setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
+     Triangulation::edgeTable[eb.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
      
+}
+
+void generateTriangulation(int numFaces)
+{
+     map<int, Edge>::iterator eit;
+     srand(time(NULL));
+     int length1, length2, length3, range;
+     length1 = rand()%10 + 1;
+     length2 = rand()%10 + 1;
+     range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
+     length3 = rand()%(range + 1) + (abs(length1 - length2) + 1);
+     firstTriangle(length1, length2, length3);
+     while(Triangulation::faceTable.size() < numFaces)
+     {
+         for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+         {
+            Edge e = eit->second;
+            if(e.isBorder())
+            {
+                for(int i = 0; i < e.getLocalVertices()->size(); i++)
+                {
+                   Vertex v = Triangulation::vertexTable[(*(e.getLocalVertices()))[i]];
+                   if(getAngleSum(v) > PI)
+                   {
+                      Edge e2;
+                      vector<int> commonE = listIntersection(e.getLocalEdges(), v.getLocalEdges());
+                      for(int j = 0; j < commonE.size(); j++)
+                      {
+                        e2 = Triangulation::edgeTable[commonE[j]];
+                        if(e2.isBorder())
+                        {
+                            cout << "In HERE\n";
+                            try{
+                            addTriangle(e, e2);
+                            }
+                            catch(string s)
+                            {
+                            cout << s;
+                            }
+                            if(Triangulation::faceTable.size() >= numFaces)
+                               return;
+                            goto EdgeLoop;
+                        }
+                      }
+                   }
+                }
+                length1 = (int) e.getLength();
+                length2 = rand()%(2*length1) + 1;
+                range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
+                length3 = rand()%(range + 1) + (abs(length1 - length2) + 1);
+                cout << Triangulation::faceTable.size() << "\n";
+                try{
+                    addTriangle(e, length2, length3);
+                     if(Triangulation::faceTable.size() >= numFaces)
+                               return;
+                    }
+                    catch(string s)
+                    {
+                      cout << s << " e1: " << length1 << " e2: " <<length2 << " e3: " << length3 << "\n";
+                    }
+            }
+            EdgeLoop: ;
+         }
+     }
 }
