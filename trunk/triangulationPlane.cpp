@@ -9,10 +9,12 @@
 #include "triangulationmath.h"
 #include "triangulationPlane.h"
 #include "triangulationInputOutput.h"
+#include "triangulationMorph.h"
 #include "miscmath.h"
 #include <fstream>
 #include <iomanip>
 #include "miscmath.h"
+#include "delaunay.h"
 #define PI 	3.141592653589793238
 
 void firstTriangle(double length1, double length2, double length3)
@@ -243,11 +245,6 @@ void setCoordinates()
      }
 }
 
-void flipAlgorithm()
-{
-     
-}
-
 void generateTriangulation(int numFaces)
 {
      map<int, Edge>::iterator eit;
@@ -311,4 +308,35 @@ void generateTriangulation(int numFaces)
          }
      }
 }
+
+void flipAlgorithm()
+{
+     int flipCount = 0;
+     while(flipCount = 0)
+     {
+          cout << "No" << endl;
+          flipCount = 0;
+          for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+          {
+               if(!(Triangulation::edgeTable[i].isBorder() || isDelaunay(Triangulation::edgeTable[i])))
+               {
+                    flip(Triangulation::edgeTable[i]);
+                    flipCount++;
+               }
+          }
+     }
+     cout << "Yes" << endl;
+     
+}
+
+
+
+
+
+
+
+
+
+
+
 

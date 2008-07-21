@@ -26,3 +26,5 @@ void addTriangle(Edge, Edge);
 void setCoordinates();
 
 void generateTriangulation(int);
+
+void flipAlgorithm();

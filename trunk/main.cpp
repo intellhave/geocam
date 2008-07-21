@@ -123,6 +123,8 @@ int main(int argc, char *argv[])
     srand(time(NULL));
     generateTriangulation(25);
     system("PAUSE");
+    flipAlgorithm();
+    system("PAUSE");
     return 0;
 }
 
