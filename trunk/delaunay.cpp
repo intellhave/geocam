@@ -14,7 +14,7 @@
 
 bool isDelaunay(Edge e)
 {
-     if(e.getLocalFaces()->size() < 2)
+     if(e.isBorder())
      {
         return true;
      }

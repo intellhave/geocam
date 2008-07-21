@@ -102,3 +102,12 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
     }
     return solutions;
 }
+
+vector<Point> circleIntersection(Circle circle1, Circle circle2)
+{
+    Point center1 = circle1.getCenter();
+    Point center2 = circle2.getCenter();
+    double r1 = circle1.getRadius();
+    double r2 = circle2.getRadius();              
+    return circleIntersection(center1, r1, center2, r2);
+}

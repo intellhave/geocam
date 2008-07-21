@@ -77,7 +77,7 @@ bool Line::isVertical()
      return vertical;
 }
 
-bool Line::isBelow(double x, double y)
+bool Line::isAbove(double x, double y)
 {
      if(vertical)
      {
@@ -87,12 +87,12 @@ bool Line::isBelow(double x, double y)
      return y < yVal;
 }
 
-bool Line::isBelow(Point p)
+bool Line::isAbove(Point p)
 {
-     return isBelow(p.x, p.y);
+     return isAbove(p.x, p.y);
 }
 
-bool Line::isOnLine(double x, double y)
+bool Line::hasPoint(double x, double y)
 {
       if(vertical)
      {
@@ -102,8 +102,47 @@ bool Line::isOnLine(double x, double y)
      return y == yVal;
 }
 
-bool Line::isOnLine(Point p)
+bool Line::hasPoint(Point p)
 {
-     return isOnLine(p.x, p.y);
+     return hasPoint(p.x, p.y);
 }
 
+Circle::Circle(Point c, double r): center(c.x, c.y)
+{
+    radius = r;
+}
+
+Circle::Circle(double x, double y, double r) : center(x, y)
+{
+    radius = r;
+}
+
+Circle::~Circle()
+{
+}
+
+double Circle::getRadius()
+{
+   return radius;
+}
+
+Point Circle::getCenter()
+{
+      return center;
+}
+
+void Circle::setRadius(double r)
+{
+     radius = r;
+}
+
+void Circle::setCenter(Point c)
+{
+     center = c;
+}
+
+void Circle::setCenter(double x, double y)
+{
+     center.x = x;
+     center.y = y;
+}

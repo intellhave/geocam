@@ -112,42 +112,69 @@ void printLengths(Edge e)
      for(int i = 0; i < edges.size(); i++)
              cout << Triangulation::edgeTable[edges[i]].getLength() << " ";
 }
-int main(int argc, char *argv[])
+void testPointLineCircle()
 {
-    //runFlow();
-  //  Line l(1, 1, 2, 3);
-//    cout << "Initial X: " << l.getInitialX() << endl;
-//    cout << "Initial Y: " << l.getInitialY() << endl;
-//    cout << "Ending X: " << l.getEndingX() << endl;
-//    cout << "Ending Y: " << l.getEndingY() << endl;
-//    cout << "Slope: " << l.getSlope() << endl;
-//    cout << "Intercept: " << l.getIntercept() << endl;
-//    cout << "Is Vertical? " << l.isVertical() << endl;
-//    cout << "(3,5) is on the line? " << l.isOnLine(3,5) << endl;
-//    cout << "(0,0) is below? " << l.isBelow(0,0) << endl;
-//    cout << "(2, -2) is below? " << l.isBelow(2,-2) << endl;
-//Point p1(1, 2);
-//Point p2(4, 6);
-//vector<Point> solutions = circleIntersection(p1, 3, p2, 4);
-//for(int i = 0; i < solutions.size(); i++)
-//{
-//  Point sol = solutions[i];
-//  cout << "Solution " << i << ": (" << sol.x << ", " << sol.y << ")\n";
-//}
-//vector<double> quadSolutions = quadratic(1, -7, 12);
-//for(int i = 0; i < quadSolutions.size(); i++)
-//{
-//  double sol = quadSolutions[i];
-//  cout << "Solution " << i << ": " << sol << "\n";
-//}
-//    firstTriangle(1.0, 1.0, 1.0);
-//    addTriangle(Triangulation::edgeTable[1], 1.0, 1.0);
+     Line l(1, 1, 2, 3);
+     cout << "Line l(1, 1, 2, 3)\n";
+     cout << "Initial X: " << l.getInitialX() << endl;
+     cout << "Initial Y: " << l.getInitialY() << endl;
+     cout << "Ending X: " << l.getEndingX() << endl;
+     cout << "Ending Y: " << l.getEndingY() << endl;
+     cout << "Slope: " << l.getSlope() << endl;
+     cout << "Intercept: " << l.getIntercept() << endl;
+     cout << "Is Vertical? " << l.isVertical() << endl;
+     cout << "(3,5) is on the line? " << l.hasPoint(3,5) << endl;
+     cout << "(0,0) is below? " << l.isAbove(0,0) << endl;
+     cout << "(2, -2) is below? " << l.isAbove(2,-2) << endl;
+     cout << "\n";
+     
+     cout << "Circle Intersection w/ centers (1,2) and (4,6) and radii 3 and 4:\n";
+     Point p1(1, 2);
+     Point p2(4, 6);
+     vector<Point> solutions = circleIntersection(p1, 3, p2, 4);
+     for(int i = 0; i < solutions.size(); i++)
+    {
+       Point sol = solutions[i];
+       cout << "Solution " << i << ": (" << sol.x << ", " << sol.y << ")\n";
+    }
+    cout << "\nQuadratic solutions to x^2 -7x + 12 = 0:\n";
+    vector<double> quadSolutions = quadratic(1, -7, 12);
+    for(int i = 0; i < quadSolutions.size(); i++)
+    {
+      double sol = quadSolutions[i];
+      cout << "Solution " << i << ": " << sol << "\n";
+    }
+    cout << "\nCircle with radius 5 and center (2, 4):\n";
+    Point p(2, 4);
+    Circle c(p, 5);
+    cout << "Center: (" << c.getCenter().x << ", " << c.getCenter().y << ")\n";
+    cout << "Radius: " << c.getRadius() << "\n";
+    cout << "Circle with radius 2 and center (1, 3):\n";
+    Circle c0(1, 3, 2);
+    cout << "Center: (" << c0.getCenter().x << ", " << c0.getCenter().y << ")\n";
+    cout << "Radius: " << c0.getRadius() << "\n";
+    Circle c1(p1, 3);
+    Circle c2(p2, 4);
+    
+    cout << "\nCircle Intersection using circles instead of points and doubles:\n";
+    solutions = circleIntersection(c1, c2);
+    for(int i = 0; i < solutions.size(); i++)
+    {
+       Point sol = solutions[i];
+       cout << "Solution " << i << ": (" << sol.x << ", " << sol.y << ")\n";
+    }
+}
+
+void testDelaunay()
+{
+    //firstTriangle(1.0, 1.0, 1.0);
+    //addTriangle(Triangulation::edgeTable[1], 1.0, 1.0);
     char filename[] = "Triangulations/Plane Test.txt";
-//    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
-//    flip(Triangulation::edgeTable[1]);
-//    writeTriangulationFile(filename);
-//    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
-    generateTriangulation(50);
+    //cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
+    //flip(Triangulation::edgeTable[1]);
+    writeTriangulationFile(filename);
+    //cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
+    generateTriangulation(100);
     writeTriangulationFile(filename);
     for(int i = 1; i < Triangulation::edgeTable.size(); i++)
     {
@@ -159,6 +186,23 @@ int main(int argc, char *argv[])
 
     system("PAUSE");
     flipAlgorithm();
+    writeTriangulationFile(filename);
+    system("PAUSE");
+    for(int i = 1; i < Triangulation::edgeTable.size(); i++)
+    {
+        cout << "Edge " << i << ": ";
+        cout << isDelaunay(Triangulation::edgeTable[i]) << "    ";
+        printLengths(Triangulation::edgeTable[i]);
+        cout << endl;
+    }
+}
+int main(int argc, char *argv[])
+{
+    //runFlow();
+    testPointLineCircle();
+    //testDelaunay();
+
+
     system("PAUSE");
     return 0;
 }

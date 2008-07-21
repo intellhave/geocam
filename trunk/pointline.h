@@ -12,6 +12,7 @@ class Point
 };
 #endif // POINT_H
 
+
 #ifndef LINE_H
 #define LINE_H
 class Line
@@ -31,10 +32,27 @@ class Line
       double getSlope();
       double getIntercept();
       bool isVertical();
-      bool isBelow(double, double);
-      bool isBelow(Point);
-      bool isOnLine(double, double);
-      bool isOnLine(Point);
+      bool isAbove(double, double);
+      bool isAbove(Point);
+      bool hasPoint(double, double);
+      bool hasPoint(Point);
 };
 #endif // LINE_H
 
+#ifndef CIRCLE_H
+#define CIRCLE_H
+class Circle
+{
+      Point center;
+      double radius;
+      public:
+      Circle(Point, double);
+      Circle(double, double, double);
+      ~Circle();
+      double getRadius();
+      void setRadius(double);
+      Point getCenter();
+      void setCenter(Point);
+      void setCenter(double, double);
+};
+#endif // CIRCLE_H

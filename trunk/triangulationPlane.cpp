@@ -297,7 +297,7 @@ void generateTriangulation(int numFaces)
                 }
                 length1 = e.getLength();
                 randNum = (rand()%20000 + 1) / 20000.0;
-                length2 = randNum * (2*length1) + 0.5;
+                length2 = randNum * (length1) + 0.5;
                 range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
                 rInt = (int) range;
                 rDec = range - rInt;
@@ -320,8 +320,8 @@ void generateTriangulation(int numFaces)
 
 void flipAlgorithm()
 {
-     int flipCount = 0;
-     while(flipCount = 0)
+     int flipCount = 1;
+     while(flipCount != 0)
      {
           cout << "No" << endl;
           flipCount = 0;
