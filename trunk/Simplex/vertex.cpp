@@ -37,3 +37,10 @@ int Vertex::getDegree()
 {
     return getLocalEdges()->size();
 }
+
+void Vertex::setPosition(double xPos, double yPos)
+{
+     pos.first = xPos;
+     pos.second = yPos;
+     
+}

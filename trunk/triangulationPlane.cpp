@@ -8,6 +8,7 @@
 #include "triangulation.h"
 #include "triangulationmath.h"
 #include "triangulationPlane.h"
+#include "triangulationInputOutput.h"
 #include "miscmath.h"
 #include <fstream>
 #include <iomanip>
@@ -16,11 +17,11 @@
 
 void firstTriangle(double length1, double length2, double length3)
 {
-     if(length1 > length2 + length3)
+     if(length1 >= length2 + length3)
      throw string("Invalid Edge Lengths");
-     if(length2 > length1 + length3)
+     if(length2 >= length1 + length3)
      throw string("Invalid Edge Lengths");
-     if(length3 > length1 + length2)
+     if(length3 >= length1 + length2)
      throw string("Invalid Edge Lengths");
      
     Face f1(1);
@@ -85,11 +86,11 @@ void addTriangle(Edge e, double length1, double length2)
      
      if(e.getLocalFaces()->size() > 1)
      throw string("Invalid Edge");
-     if(e.getLength() > (length1 + length2))
+     if(e.getLength() >= length1 + length2)
      throw string("Invalid Edge Lengths");
-     if(length1 > (e.getLength() + length2))
+     if(length1 >= e.getLength() + length2)
      throw string("Invalid Edge Lengths");
-     if(length2 > (e.getLength() + length1))
+     if(length2 >= e.getLength() + length1)
      throw string("Invalid Edge Lengths");
      
      Vertex vb(Triangulation::greatestVertex() + 1);
@@ -190,7 +191,7 @@ void addTriangle(Edge e1, Edge e2)
      
      double ang = 2 * PI - getAngleSum(va);
      if(ang > PI)
-     throw string("");
+     throw string("...");
      
      Triangulation::vertexTable[v1.getIndex()].addVertex(v2.getIndex());
      Triangulation::vertexTable[v2.getIndex()].addVertex(v1.getIndex());
@@ -229,6 +230,21 @@ void addTriangle(Edge e1, Edge e2)
      double l2 = e2.getLength();
      
      Triangulation::edgeTable[eb.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
+     
+}
+
+void setCoordinates()
+{
+     Triangulation::vertexTable[1].setPosition(0.0, 0.0);
+     
+     for(int i = 2; i <= Triangulation::vertexTable.size(); i++)
+     {
+          
+     }
+}
+
+void flipAlgorithm()
+{
      
 }
 
@@ -295,3 +311,4 @@ void generateTriangulation(int numFaces)
          }
      }
 }
+

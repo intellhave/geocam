@@ -23,4 +23,6 @@ void addTriangle(Edge, double, double);
  */
 void addTriangle(Edge, Edge);
 
+void setCoordinates();
+
 void generateTriangulation(int);

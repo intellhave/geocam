@@ -45,7 +45,8 @@ void Edge::setAngle(double angle)
 {
      intersectAngle = angle;
 }
+
 bool Edge::isBorder()
 {
-  return getLocalFaces()->size() == 1;
+     return getLocalFaces()->size() == 1;
 }
