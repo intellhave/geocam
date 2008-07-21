@@ -234,16 +234,6 @@ void addTriangle(Edge e1, Edge e2)
      
 }
 
-void setCoordinates()
-{
-     Triangulation::vertexTable[1].setPosition(0.0, 0.0);
-     
-     for(int i = 2; i <= Triangulation::vertexTable.size(); i++)
-     {
-          
-     }
-}
-
 void generateTriangulation(int numFaces)
 {
      map<int, Edge>::iterator eit;
@@ -317,6 +307,28 @@ void generateTriangulation(int numFaces)
      }
 }
 
+void generateWeights()
+{
+     srand(time(NULL));
+     map<int, Vertex>::iterator vit;
+     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
+     {
+          int index = (*(vit->second.getLocalEdges()))[0];
+          double smallest = Triangulation::edgeTable[index].getLength();
+          cout << index << " " << smallest << endl;
+          for(int i = 1; i < vit->second.getLocalEdges()->size(); i++)
+          {
+               index = (*(vit->second.getLocalEdges()))[i];
+               if(Triangulation::edgeTable[index].getLength() < smallest)
+               smallest = Triangulation::edgeTable[index].getLength();
+          }
+          double randNum = ((double) rand()) / RAND_MAX;
+          cout << smallest << endl;
+          Triangulation::vertexTable[vit->first].setWeightIndependent(randNum * smallest);
+          
+     }
+}
+
 void flipAlgorithm()
 {
      int flipCount = 1;
@@ -324,11 +336,13 @@ void flipAlgorithm()
      {
           cout << "No" << endl;
           flipCount = 0;
-          for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+          map<int, Edge>::iterator eit;
+          for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
           {
-               if(!(Triangulation::edgeTable[i].isBorder() || isDelaunay(Triangulation::edgeTable[i])))
+               Edge e = eit->second;
+               if(!(isDelaunay(Triangulation::edgeTable[e.getIndex()])))
                {
-                    flip(Triangulation::edgeTable[i]);
+                    flip(Triangulation::edgeTable[e.getIndex()]);
                     flipCount++;
                }
           }

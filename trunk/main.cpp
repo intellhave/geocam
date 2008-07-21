@@ -170,6 +170,15 @@ void testDelaunay()
     //firstTriangle(1.0, 1.0, 1.0);
     //addTriangle(Triangulation::edgeTable[1], 1.0, 1.0);
     char filename[] = "Triangulations/Plane Test.txt";
+<<<<<<< .mine
+//    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
+//    flip(Triangulation::edgeTable[1]);
+//    writeTriangulationFile(filename);
+//    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
+    generateTriangulation(100);
+    map<int, Edge>::iterator eit;
+    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+=======
     //cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
     //flip(Triangulation::edgeTable[1]);
     writeTriangulationFile(filename);
@@ -177,17 +186,31 @@ void testDelaunay()
     generateTriangulation(100);
     writeTriangulationFile(filename);
     for(int i = 1; i < Triangulation::edgeTable.size(); i++)
+>>>>>>> .r353
     {
-            cout << "Edge " << i << ": ";
-            cout << isDelaunay(Triangulation::edgeTable[i]) << "    ";
-            printLengths(Triangulation::edgeTable[i]);
-            cout << endl;
+         int index = eit->first;
+         cout << Triangulation::edgeTable[index].getLength() << endl;
+    }
+    system("PAUSE");
+    
+    generateWeights();
+    system("PAUSE");
+    
+    map<int, Vertex>::iterator vit;
+    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
+    {
+         int index = vit->first;
+         cout << Triangulation::vertexTable[index].getWeight() << endl;
     }
 
+      
     system("PAUSE");
+<<<<<<< .mine
+=======
     flipAlgorithm();
     writeTriangulationFile(filename);
     system("PAUSE");
+>>>>>>> .r353
     for(int i = 1; i < Triangulation::edgeTable.size(); i++)
     {
         cout << "Edge " << i << ": ";
