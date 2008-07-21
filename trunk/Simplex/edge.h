@@ -5,7 +5,7 @@ Version: July 16, 2008
 **************************************************************/
 
 #include "simplex.h"
-#include "pointline.h"
+#include "pointlinecircle.h"
 
 #ifndef EDGE_H
 #define EDGE_H

@@ -1,5 +1,5 @@
 #include <cmath>
-#include "pointline.h"
+#include "pointlinecircle.h"
 #include "triangulationmath.h"
 #include <vector>
 

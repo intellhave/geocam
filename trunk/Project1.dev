@@ -319,7 +319,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit26]
-FileName=pointline.cpp
+FileName=pointlinecircle.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -329,7 +329,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit27]
-FileName=pointline.h
+FileName=pointlinecircle.h
 CompileCpp=1
 Folder=Project1
 Compile=1

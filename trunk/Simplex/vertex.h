@@ -11,7 +11,7 @@ Version: July 16, 2008
 #include <vector>
 #include "edge.h"
 #include "face.h"
-#include "pointline.h"
+#include "pointlinecircle.h"
 
 /*
  * The Vertex class is derived from the Simplex class. It is the

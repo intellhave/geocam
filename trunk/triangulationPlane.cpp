@@ -13,7 +13,6 @@
 #include "miscmath.h"
 #include <fstream>
 #include <iomanip>
-#include "miscmath.h"
 #include "delaunay.h"
 #define PI 	3.141592653589793238
 
