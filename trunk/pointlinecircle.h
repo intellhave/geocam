@@ -36,6 +36,8 @@ class Line
       bool isAbove(Point);
       bool hasPoint(double, double);
       bool hasPoint(Point);
+      Point intersection(Line);
+      Line getPerpendicular(Point);
 };
 #endif // LINE_H
 

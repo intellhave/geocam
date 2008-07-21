@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "pointlinecircle.h"
 #include<cmath>
 
@@ -129,6 +130,83 @@ double Circle::getRadius()
 Point Circle::getCenter()
 {
       return center;
+}
+
+Point Line::intersection(Line l)
+{    
+     double xp, yp;
+     if(isVertical())
+     {
+          if(l.isVertical())
+          throw 0;
+          else
+          {
+               yp = l.getSlope() * x1 + l.getIntercept();
+               xp = x1;
+               Point p(xp, yp);
+               return p;
+          }
+     }
+     
+     if(l.isVertical())
+     {
+          yp = getSlope() * l.getInitialX() + getIntercept();
+          xp = l.getInitialX();
+          Point p(xp, yp);
+          return p;
+     }
+     
+     if(l.getSlope() == slope)
+     throw 0;
+     
+     xp = (getIntercept() - l.getIntercept()) / (l.getSlope() - getSlope());
+     yp = ((l.getSlope() * getIntercept()) - (getSlope() * l.getIntercept())) / (getSlope() - l.getSlope());
+     
+     Point p(xp, yp);
+     return p;
+}
+
+Line Line::getPerpendicular(Point p)
+{
+     if(isVertical())
+     {
+          if(p.x == 0)
+          {
+               Point q(1.0, p.y);
+               Line l(p, q);
+               return l;
+          }
+          else
+          {
+               Point q(0.0, p.y);
+               Line l(p, q);
+               return l;
+          }
+     }
+     else if(getSlope() == 0)
+     {
+          if(p.y == 0)
+          {
+               Point q(p.x, 1.0);
+               Line l(p, q);
+               return l;
+          }
+          else
+          {
+               Point q(p.x, 0.0);
+               Line l(p, q);
+               return l;
+          }
+     }
+     else
+     {
+          double newSlope = (-1) / getSlope();
+          double newY = p.y + newSlope;
+          double newX = p.x + 1;
+          Point q(newX, newY);
+          Line l(p, q);
+          return l;
+     }
 }
 
 void Circle::setRadius(double r)

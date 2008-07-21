@@ -315,7 +315,6 @@ void generateWeights()
      {
           int index = (*(vit->second.getLocalEdges()))[0];
           double smallest = Triangulation::edgeTable[index].getLength();
-          cout << index << " " << smallest << endl;
           for(int i = 1; i < vit->second.getLocalEdges()->size(); i++)
           {
                index = (*(vit->second.getLocalEdges()))[i];
@@ -323,8 +322,7 @@ void generateWeights()
                smallest = Triangulation::edgeTable[index].getLength();
           }
           double randNum = ((double) rand()) / RAND_MAX;
-          cout << smallest << endl;
-          Triangulation::vertexTable[vit->first].setWeightIndependent(randNum * smallest);
+          vit->second.setWeightIndependent(randNum * smallest);
           
      }
 }
