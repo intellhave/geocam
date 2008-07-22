@@ -82,6 +82,7 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
   data << setprecision(6);
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
+//  double kHat = 0;
   double area[Triangulation::faceTable.size()][numSteps];
   double deltaArr[Triangulation::faceTable.size()][numSteps];
    for (k=0; k<p; k++) {
@@ -95,6 +96,11 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        {
            vit->second.setWeight(z[k]);
        }
+//       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++){
+//           double curv = sphericalCurvature(vit->second);
+//           kHat += curv*(vit->second.getWeight())/p;
+//       }   
+    
        if(i == 1) // If first time through, use static method.
        {
             prev = Triangulation::netSphericalCurvature();
@@ -102,7 +108,8 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // First "for loop" in whole step calculates
        {                    // everything manually, prints to file.
            (*weights).push_back( z[k]);
-           double curv = sphericalCurvature(vit->second);
+           double curv = sphericalCurvature(vit->second);     
+           
            if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
            {
              (*curvatures).push_back(0.);
@@ -113,6 +120,8 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            net += curv;
            if(adjF) ta[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
+
+//           if(adjF) ta[k] = dt*(kHat - curv)*vit->second.getWeight();
            else     ta[k] = dt * (-1) * curv * sin(vit->second.getWeight());
            
        }
@@ -144,20 +153,33 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        {
            vit->second.setWeight(z[k]+ta[k]/2);
        }
+//       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++){
+//           double curv = sphericalCurvature(vit->second);
+//           kHat += curv*(vit->second.getWeight())/p;
+//       }  
+
+
        prev = net;
        net = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-           double curv = sphericalCurvature(vit->second);
+           double curv = sphericalCurvature(vit->second);         
            net += curv;
            if(adjF) tb[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
+//           if(adjF) tb[k] = dt*(kHat - curv)*vit->second.getWeight();
            else     tb[k] = dt * (-1) * curv * sin(vit->second.getWeight());
       }
       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
       {
           vit->second.setWeight(z[k]+tb[k]/2);
       }
+//       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++){
+//           double curv = sphericalCurvature(vit->second);
+//           kHat += curv*(vit->second.getWeight())/p;
+//       }   
+
+
       prev = net;
       net = 0;
       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
@@ -165,7 +187,8 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
           double curv = sphericalCurvature(vit->second);
           net += curv;
           if(adjF) tc[k]= dt * ((prev/p) * vit->second.getWeight() - curv
-                          * sin(vit->second.getWeight()));
+                         * sin(vit->second.getWeight()));
+//          if(adjF) tc[k] = dt*(kHat - curv)*(vit->second.getWeight());
           else     tc[k] = dt * (-1) * curv
                           * sin(vit->second.getWeight());
          //  if(adjF) tc[k]=dt*spherAdjDiffEQ(vit->first, net);
@@ -176,6 +199,13 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
        {
            vit->second.setWeight(z[k]+tb[k]/2);
        }
+       
+//       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++){
+//           double curv = sphericalCurvature(vit->second);
+//           kHat += curv*(vit->second.getWeight())/p;
+//       }  
+
+
        prev = net;
        net = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
@@ -183,13 +213,19 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            double curv = sphericalCurvature(vit->second);
            net += curv;
            if(adjF) tc[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
-                           * sin(vit->second.getWeight()));
+                         * sin(vit->second.getWeight()));
+//           if(adjF) tc[k] = dt*(kHat - curv)*vit->second.getWeight();
            else     tc[k] = dt * (-1) * curv * sin(vit->second.getWeight());
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
        {
            vit->second.setWeight(z[k]+tc[k]);
        }
+//       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++){
+//           double curv = sphericalCurvature(vit->second);
+//           kHat += curv*(vit->second.getWeight())/p;
+//       }   
+
        prev = net;
        net = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
@@ -198,6 +234,7 @@ void sphericalCalcFlow(vector<double>* weights, vector<double>* curvatures,doubl
            net += curv;
            if(adjF) td[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
                            * sin(vit->second.getWeight()));
+//           if(adjF) td[k] = dt*(kHat - curv)*vit->second.getWeight();
            else     td[k] = dt * (-1) * curv * sin(vit->second.getWeight());
 
 

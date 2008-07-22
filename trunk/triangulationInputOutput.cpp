@@ -540,7 +540,6 @@ void printResultsStep(char* fileName, vector<double>* weights, vector<double>* c
      results << left << setprecision(6); 
      results.setf(ios_base::showpoint);
      
-     
      map<int, Vertex>::iterator vit;
      
      

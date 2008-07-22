@@ -32,7 +32,7 @@ plot([0,3,3,0,0,3,3,0,0,2,1,1,3,3,0,0,1,2,2,3],[0,0,3,3,0,3,2,2,1,3,3,0,2,1,1,2,
 axis off; axis image;
 axis([-0.1,3.1,-0.1,3.1])
 
-%figure 5. 9 point torus w/ added vertex. 
+%figure 5. 9 point torus w/ added vertex (1-3 Flip). 
 figure; 
 plot([0,3,3,0,0,3,3,0,0,2,1,1,3,3,0,0,1,2,2,3,3,1,0.3,0,0,0.3],[0,0,3,3,0,3,2,2,1,3,3,0,2,1,1,2,3,3,0,1,3,3,2.7,3,2,2.7],'k')
 axis off; axis image;
@@ -49,7 +49,7 @@ plot([.5,1],[k/3,2*k/3],'k','linewidth',2)
 axis image
 axis off
 
-%figure 7. Flip
+%figure 7. 2-2 Flip
 figure
 k = sqrt(3)/2;
 x1 = [0,1,1.5,0.5,0,1,0.5]; y1 =[0,0,k,k,0,0,k];
@@ -76,7 +76,57 @@ x = 5*cos(th);
 y = 5*sin(th);
 x2 = 7 + 4*cos(th);
 y2 = 4*sin(th);
-plot(x,y,'k',x2,y2,'k')
 plot(x,y,'k',x2,y2,'k',[0 7],[0 0],'k')
 axis image
 axis off
+
+%figure 10. Bad case. 
+figure;
+gx = [0,3,3,0,0,3,3+sqrt(24.75),3,1.5,0,-sqrt(24.75),0,1.5,0];
+gy = [0,0,1,1,0,1,.5,0,-sqrt(18.75),0,.5,1,1+sqrt(18.75),1];
+gx(7) = 3 + sqrt(3.75);
+gx(11) = -sqrt(3.75);
+gy(9) = -sqrt(4-2.25);
+gy(13) = 1 + sqrt(4-2.25);
+gx(14) = 3;
+plot(gx,gy,'k')
+axis off
+
+%figure 11. Octahedron sphere
+figure;
+th = 0:.001:2*pi;
+x1 = zeros(size(th)); y1 = 1.01*cos(th); z1 = 1.01*sin(th);
+y2 = zeros(size(th)); z2 = 1.01*cos(th); x2 = 1.01*sin(th);
+z3 = zeros(size(th)); x3 = 1.01*cos(th); y3 = 1.01*sin(th);
+XT = -1:.1:1;
+YT1 = sqrt(1 - XT.^2);
+YT2 = -sqrt(1 - XT.^2);
+YT = [YT1 YT2];
+[XT, YT] = meshgrid(XT,YT);
+Z = real(sqrt(1 - XT.^2 - YT.^2));
+Z2 = -Z;
+figure;
+mesh(XT,YT,Z)
+hold on
+mesh(XT,YT,Z2)
+plot3(x1,y1,z1,'k','linewidth',3);
+plot3(x2,y2,z2,'k','linewidth',3);
+plot3(x3,y3,z3,'k','linewidth',3);
+axis image; axis off
+
+%figure 12. A Poincare disk of sorts, enclosed by circle of radius 1. 
+figure;
+maxr = 50;
+for r = 1:maxr
+    th = 0:.01:2*pi;
+    for j = 1:size(th,1)
+        x = (log10(r)/log10(maxr))*cos(th);
+        y = (log10(r)/log10(maxr))*sin(th);
+        plot(x,y,'k-'); hold on
+    end
+end
+axis image
+axis off
+
+
+    

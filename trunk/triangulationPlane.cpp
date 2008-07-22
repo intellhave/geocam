@@ -25,6 +25,7 @@ void firstTriangle(double length1, double length2, double length3)
      if(length3 >= length1 + length2)
      throw string("Invalid Edge Lengths");
      
+
     Face f1(1);
     Edge e1(1);
     Edge e2(2);
@@ -32,6 +33,7 @@ void firstTriangle(double length1, double length2, double length3)
     Vertex v1(1);
     Vertex v2(2);
     Vertex v3(3);
+
     Triangulation::putFace(1, f1);
     Triangulation::putEdge(1, e1);
     Triangulation::putEdge(2, e2);
@@ -234,6 +236,7 @@ void addTriangle(Edge e1, Edge e2)
      
 }
 
+
 void generateTriangulation(int numFaces)
 {
      map<int, Edge>::iterator eit;
@@ -249,6 +252,7 @@ void generateTriangulation(int numFaces)
      rDec = range - rInt;
      randNum = (rand()%20000 + 1) / 20000.0;
      length3 = rand()%(rInt + 1) + (abs(length1 - length2) + 1) + randNum * rDec;
+
 
      firstTriangle(length1, length2, length3);
      while(Triangulation::faceTable.size() < numFaces)

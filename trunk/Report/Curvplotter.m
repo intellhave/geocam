@@ -3,13 +3,22 @@
 
 %input file
 
+<<<<<<< .mine
+K = xlsread('c:\Dev-Cpp\geocam\Triangulations\ODE Result Sph False 9 Torus 1 Test');
+=======
 K = xlsread('c:\Dev-Cpp\geocam\Triangulations\Long Tetrahedron Conv');
+>>>>>>> .r358
 %K = xlsread('c:\Dev-Cpp\geocam\Triangulations\spherical data');
 
 %other inputs
+<<<<<<< .mine
+%S = (size(K,1)-(10-1))/10; %if number of vertices known
+S = 210; %if number of steps in calcFlow known
+=======
 
 S = 14500; %# of steps, as in calcFlow
 
+>>>>>>> .r358
 M = 1; %default value
 N = size(K,1);  % = number of lines in Excel
 
@@ -26,7 +35,7 @@ colors = rand(k,3);
 
 % %plot weights
 figure;
-subplot(1,2,1); %This lets us plot two or more graphs on one figure. 
+subplot(2,1,1); %This lets us plot two or more graphs on one figure. 
 i = 1;
 j = 1;
 plot(K(1:S,1),'color',colors(j,1:3),'linewidth',2)
@@ -36,12 +45,13 @@ while i < N-S-M
     j = j+1;
     plot(K(i:i+S-1,1),'color',colors(j,1:3),'linewidth',2);
 end
-% xlabel('Step #');
-% ylabel('Weight');
+xlabel('Step #');
+ylabel('Weight');
+%title('Spherical Weights and Curvatures, 10 vertex, genus 0, non vertex transitive');
 
 % %plot curvatures
 %figure;
-subplot(1,2,2);
+subplot(2,1,2);
 i = 1;
 j = 1;
 plot(K(1:S,2),'color',colors(j,1:3),'linewidth',2)
@@ -51,8 +61,9 @@ while i < N-S-M
     j = j + 1;
     plot(K(i:i+S-1,2),'color',colors(j,1:3),'linewidth',2);
 end
-% xlabel('Step #');
-% ylabel('Curvature');
+xlabel('Step #');
+ylabel('Curvature');
+
 
 % find max, min K for each step, plot, if desired
 
@@ -73,7 +84,7 @@ end
 % hold on;
 % plot(1:S,maxK,'k','linewidth',2)
 
-%plot average curvature
+%plot average curvature, average weight, if desired
 
 avgK = zeros(1,S);
 avgW = zeros(1,S);
@@ -91,6 +102,6 @@ end
 figure;
 plot(1:S, avgK, 'ko', 'linewidth', 2);
 hold on;
-%plot(1:S, avgW, 'r+', 'linewidth', 2);
+plot(1:S, avgW, 'r+', 'linewidth', 2);
 
 

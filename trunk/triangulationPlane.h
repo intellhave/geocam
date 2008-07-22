@@ -18,6 +18,7 @@ void firstTriangle(double, double, double);
  * in its two new edge lengths as arguments.
  */
 void addTriangle(Edge, double, double);
+
 /*
  * Adds a triangle by closing up a concavity in the disc,
  * joining two vertices.

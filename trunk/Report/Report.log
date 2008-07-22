@@ -1,7 +1,11 @@
 <<<<<<< .mine
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.6) (preloaded format=pdflatex 2008.6.12)  26 JUN 2008 14:38
+=======
+<<<<<<< .mine
 This is e-TeX, Version 3.141592-2.2 (MiKTeX 2.4) (preloaded format=latex 2008.6.30)  30 JUN 2008 09:20
 =======
 This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.6) (preloaded format=pdflatex 2008.6.12)  25 JUN 2008 14:16
+>>>>>>> .r235
 >>>>>>> .r194
 entering extended mode
 <<<<<<< .mine
@@ -162,6 +166,11 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 36--37
 
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 47--48
+
+=======
+>>>>>>> .r235
  []
 
 ! Undefined control sequence.
@@ -173,20 +182,49 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 43.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 43.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 43.
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 49--50
 
+ []
+
+=======
+>>>>>>> .r235
+LaTeX Font Info:    External font `cmex10' loaded for size
+<<<<<<< .mine
+(Font)              <12> on input line 51.
+=======
+(Font)              <12> on input line 43.
+>>>>>>> .r235
+LaTeX Font Info:    External font `cmex10' loaded for size
+<<<<<<< .mine
+(Font)              <8> on input line 51.
+=======
+(Font)              <8> on input line 43.
+>>>>>>> .r235
+LaTeX Font Info:    External font `cmex10' loaded for size
+<<<<<<< .mine
+(Font)              <6> on input line 51.
+=======
+(Font)              <6> on input line 43.
+>>>>>>> .r235
+
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
+=======
 Underfull \hbox (badness 10000) in paragraph at lines 43--44
+>>>>>>> .r235
 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 45--46
 
+<<<<<<< .mine
+<use tetrahedron.jpg>
+Overfull \hbox (24.30193pt too wide) in paragraph at lines 54--56
+[][] [] 
+=======
+>>>>>>> .r235
  []
 
 ! Undefined control sequence.
@@ -200,6 +238,9 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
+<<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 59--60
+=======
 File: flattetrahedron.png Graphic file (type png)
 ! Undefined control sequence.
 \Ginclude@png #1->\hbox {\pdfimage 
@@ -211,6 +252,7 @@ of your error message was never \def'ed. If you have
 misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
+>>>>>>> .r235
 
 ! Missing number, treated as zero.
 <to be read again> 
@@ -358,7 +400,7 @@ A number should have been here; I inserted `0'.
 look up `weird error' in the index to The TeXbook.)
 =======
 <use 180px-Double_torus_illustration.png> [4 <righttriangulation.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 117--118
+Underfull \hbox (badness 10000) in paragraph at lines 116--117
 >>>>>>> .r194
 
 ! Illegal unit of measure (pt inserted).
@@ -517,16 +559,20 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 Underfull \hbox (badness 10000) in paragraph at lines 179--180
 =======
 [5 <180px-Double_torus_illustration.png>] [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 174--175
+Underfull \hbox (badness 10000) in paragraph at lines 184--185
 >>>>>>> .r194
 
  []
 
 
 <<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 202--203
+=======
+<<<<<<< .mine
 Underfull \hbox (badness 10000) in paragraph at lines 197--198
 =======
 Underfull \hbox (badness 10000) in paragraph at lines 192--193
+>>>>>>> .r235
 >>>>>>> .r194
 
  []
@@ -536,7 +582,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 192--193
 Underfull \hbox (badness 10000) in paragraph at lines 228--229
 =======
 [8]
-Underfull \hbox (badness 10000) in paragraph at lines 223--224
+Underfull \hbox (badness 10000) in paragraph at lines 233--234
 >>>>>>> .r194
 
  []
@@ -735,7 +781,7 @@ and I'll forget about whatever was undefined.
 <Flip.png, id=52, 411.81439pt x 207.46474pt>
 File: Flip.png Graphic file (type png)
  <use Flip.png>
-Overfull \hbox (21.81339pt too wide) in paragraph at lines 343--344
+Overfull \hbox (21.81339pt too wide) in paragraph at lines 353--354
  [][] 
  []
 
@@ -913,16 +959,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 360--361
 
 =======
  <use torus2addvertex.png>
-Overfull \hbox (17.32208pt too wide) in paragraph at lines 349--351
+Overfull \hbox (17.32208pt too wide) in paragraph at lines 359--361
 [][] [] 
 >>>>>>> .r194
  []
 
 
 <<<<<<< .mine
+Underfull \hbox (badness 10000) in paragraph at lines 365--366
+=======
+<<<<<<< .mine
 Underfull \hbox (badness 10000) in paragraph at lines 362--363
 =======
 Underfull \hbox (badness 10000) in paragraph at lines 355--356
+>>>>>>> .r235
 >>>>>>> .r194
 
  []
@@ -932,29 +982,71 @@ Underfull \hbox (badness 10000) in paragraph at lines 355--356
 Underfull \hbox (badness 10000) in paragraph at lines 364--365
 =======
 
-Underfull \hbox (badness 10000) in paragraph at lines 362--363
+Underfull \hbox (badness 10000) in paragraph at lines 367--368
 
  []
 
-[12 <Flip.png (PNG copy)>] <dual.jpg, id=58, 674.52pt x 505.89pt>
-File: dual.jpg Graphic file (type jpg)
+[12 <Flip.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 369--370
 >>>>>>> .r194
 
-<use dual.jpg> [13 <torus2.png (PNG copy)> <torus2addvertex.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 383--384
-
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 376--377
+
+ []
+
+[13 <torus2.png (PNG copy)> <torus2addvertex.png (PNG copy)>]
+<dual.png, id=62, 418.66759pt x 314.00069pt>
+File: dual.png Graphic file (type png)
+ <use dual.png>
+Underfull \hbox (badness 10000) in paragraph at lines 397--398
+
+<<<<<<< .mine
+ []
+=======
 <<<<<<< .mine
 Underfull \hbox (badness 10000) in paragraph at lines 371--372
 
 =======
 Underfull \hbox (badness 10000) in paragraph at lines 387--388
+>>>>>>> .r235
 
+<<<<<<< .mine
+[14 <dual.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 399--400
+
+=======
 >>>>>>> .r194
+>>>>>>> .r235
  []
 
+<<<<<<< .mine
+
+Underfull \hbox (badness 10000) in paragraph at lines 401--402
+
+ []
+
+<ConvergenceTable.png, id=66, 395.67825pt x 686.565pt>
+File: ConvergenceTable.png Graphic file (type png)
+
+<use ConvergenceTable.png>
+
+LaTeX Warning: Float too large for page by 20.71371pt on input line 410.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 415--416
+
+ []
+
+[15] [16 <ConvergenceTable.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 419--420
+
+ []
+
+<tetratouch.png, id=73, 442.34224pt x 211.82587pt>
+=======
 <<<<<<< .mine
 [11]
 ! Undefined control sequence.
@@ -969,7 +1061,12 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 =======
 [14 <dual.jpg>] <tetratouch.png, id=66, 442.34224pt x 211.82587pt>
+>>>>>>> .r235
 File: tetratouch.png Graphic file (type png)
+<<<<<<< .mine
+ <use tetratouch.png>
+Overfull \hbox (52.34116pt too wide) in paragraph at lines 424--425
+=======
 >>>>>>> .r194
 
 <<<<<<< .mine
@@ -1054,10 +1151,15 @@ Underfull \hbox (badness 10000) in paragraph at lines 392--393
 =======
 <use tetratouch.png>
 Overfull \hbox (52.34116pt too wide) in paragraph at lines 392--393
+>>>>>>> .r235
 [][] 
 >>>>>>> .r194
  []
 
+<<<<<<< .mine
+[17 <tetratouch.png (PNG copy)>] [18]
+Underfull \hbox (badness 10000) in paragraph at lines 442--443
+=======
 <<<<<<< .mine
 
 Underfull \hbox (badness 10000) in paragraph at lines 394--395
@@ -1267,32 +1369,48 @@ Underfull \hbox (badness 10000) in paragraph at lines 437--438
 =======
 [15 <tetratouch.png (PNG copy)>] [16]
 Underfull \hbox (badness 10000) in paragraph at lines 410--411
+>>>>>>> .r235
 
  []
 
-[17] (Report.bbl
+[19] (Report.bbl
 >>>>>>> .r194
 Underfull \hbox (badness 10000) in paragraph at lines 24--27
 [][]\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
  []
 
 <<<<<<< .mine
+) [20]
+Underfull \hbox (badness 10000) in paragraph at lines 481--482
+=======
+<<<<<<< .mine
 ) [17]
 Underfull \hbox (badness 10000) in paragraph at lines 476--477
 =======
 ) [18]
 Underfull \hbox (badness 10000) in paragraph at lines 429--430
+>>>>>>> .r235
 >>>>>>> .r194
 
  []
 
 <<<<<<< .mine
+[21] <torus7addvaddhweights.png, id=91, 505.89pt x 334.24875pt>
+File: torus7addvaddhweights.png Graphic file (type png)
+=======
+<<<<<<< .mine
 [18]
 =======
 [19]
 Underfull \hbox (badness 10000) in paragraph at lines 435--436
+>>>>>>> .r235
 >>>>>>> .r194
 
+<<<<<<< .mine
+<use torus7addvaddhweights.png>
+Overfull \hbox (65.29678pt too wide) in paragraph at lines 487--488
+ [][] 
+=======
 LaTeX Warning: File `torus7addvaddhweights.png' not found on input line 482.
 
 ! Undefined control sequence.
@@ -1384,19 +1502,35 @@ two letters. (See Chapter 27 of The TeXbook.)
 [19]
 Underfull \hbox (badness 10000) in paragraph at lines 489--490
 
+>>>>>>> .r235
  []
 
+[22 <torus7addvaddhweights.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 494--495
 
+<<<<<<< .mine
+ []
+=======
 <<<<<<< .mine
 Underfull \hbox (badness 10000) in paragraph at lines 491--492
 =======
 Underfull \hbox (badness 10000) in paragraph at lines 437--438
+>>>>>>> .r235
 >>>>>>> .r194
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 496--497
 
  []
 
-[20] (Report.aux) ) 
+[23] (Report.aux) ) 
 Here is how much of TeX's memory you used:
+<<<<<<< .mine
+ 1131 strings out of 95295
+ 13750 string characters out of 1184859
+ 68829 words of memory out of 1063825
+ 4292 multiletter control sequences out of 60000
+=======
 <<<<<<< .mine
  1119 strings out of 95901
  12623 string characters out of 1195329
@@ -1407,6 +1541,7 @@ Here is how much of TeX's memory you used:
  13469 string characters out of 1184859
  68820 words of memory out of 1063816
  4283 multiletter control sequences out of 60000
+>>>>>>> .r235
 >>>>>>> .r194
  9017 words of font info for 32 fonts, out of 1000000 for 2000
 <<<<<<< .mine
@@ -1424,11 +1559,11 @@ C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/M
 iKTeX 2.6/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.6/fonts/
 type1/bluesky/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/
 cmti12.pfb><C:/Program Files/MiKTeX 2.6/fonts/type1/bluesky/cm/cmtt12.pfb>
-Output written on Report.pdf (20 pages, 258600 bytes).
+Output written on Report.pdf (23 pages, 809691 bytes).
 PDF statistics:
- 122 PDF objects out of 300000 (max. 8388607)
+ 133 PDF objects out of 300000 (max. 8388607)
  0 named destinations out of 300000 (max. 131072)
- 51 words of extra memory for PDF output out of 65536 (max. 10000000)
+ 61 words of extra memory for PDF output out of 65536 (max. 10000000)
 >>>>>>> .r194
 
 Output written on Report.dvi (20 pages, 47800 bytes).

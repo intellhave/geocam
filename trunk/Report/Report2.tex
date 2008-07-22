@@ -513,7 +513,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 \caption{An illustration of a spherical octahedron through the X-Y plane. Each octet of the sphere surface, outlined in black, is the face of one triangle.} 
 \end{figure}
 
-\noindent Like in the Eulidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths. Plus, we also need make sure that the sum of weights remains below $\pi$.\newline
+\noindent Like in the Euclidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths. Plus, we also need make sure that the weights remain within bounds.\newline
 
 \noindent We tried a few techniques to derive an equation for normalized spherical flow. Some ideas were:
 
@@ -541,7 +541,7 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 
 \end{itemize}
 
-\noindent In the end, we decided to make an equation that took the good aspects of our first trial while broadening its range of stability as we had hoped with the second one. We came up with the equation
+\noindent In the end, we decided to try an equation that took the good aspects of our first trial while broadening its range of stability as we had hoped with the second one. We came up with the equation
 
 \begin{equation}
 \label{SRicciN}
@@ -555,14 +555,14 @@ $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac
 \noindent and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ The only downsides we found with this equation were that it was still possible for the system to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that the $dt$ size given, it would take over 4 minutes for the system to reach equilibrium in real time.  
 
 \begin{figure}
-\includegraphics[scale = 0.8]{SphG0V10.png}
+\includegraphics[scale = 0.6]{SphG0V10.png}
 \caption{An example of a solution using Eq.~(\ref{SRicciN}). Starting off with equal initial weights of 0.1, vertices merge into one of four groups as they approach uniform curvature relatively quickly. As curvature drops to zero, slowly at first but more forcefully as time passes, the weight groups separate from each other to obtain their final weight. In this trial, $dt = 0.50$ to show the complete process.}
 \label{SphGood}  
 \end{figure}
 
 \subsection{Hyperbolic flow}
 
-In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. Please see Fig.~\ref{PD} for an illustration of the hyperbolic plane. This notion of a hyperbolic plane can also be seen in popular art, particularly M.C. Escher's ``Circle Limit IV,'' commonly referred to as the ``Angels and Devils'' picture. \newline
+In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. Please see Fig.~\ref{PD} for an illustration of the hyperbolic plane. This notion of a hyperbolic plane can also be seen in popular art, particularly M.C. Escher's ``Circle Limit'' series, which includes some of his most famous pieces including the ``Angels and Devils'' picture. \newline
 
 \noindent The major new difference with the hyperbolic plane is that our traditional notion of unique parallel lines no longer apply. We now have that for a point $P$ on a line $l$, there is a point $B$ on a line $m$ such that $B$ and $P$ create a line $n \perp l$, and there are an infinite number of possible $m$'s. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. \newline
 
@@ -594,21 +594,35 @@ $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of 
 
 \subsection{Comparison of Systems}
 
-When we began looking into these background geometries, we thought that it would be a good idea to run uniform tests on all three systems and observe how they behave. However, since our equation for normalized spherical Ricci flow is not firmly confirmed as the best method, and as the hyperbolic flow may or may not already be normalized, we can not make any strong conclusions on the normalized flows. We did decide, however, to take a look at the behaviors on various manifolds by using the non-normalized equations, (\ref{Riccif}), (\ref{SRiccif}), and (\ref{HRiccif}). We will look at three triangulations, each of a different genus, no morphs, and compare results between each system. \newline
+When we began looking into these background geometries, we thought that it would be a good idea to run uniform tests on all three systems and observe how they behave. However, since our equation for normalized spherical Ricci flow is not wholly confirmed as the best method, and as the hyperbolic flow may or may not already be normalized, we can not make any strong conclusions on the normalized flows. We did decide, however, to take a look at the behaviors on various manifolds by using the non-normalized equations, (\ref{Riccif}), (\ref{SRiccif}), and (\ref{HRiccif}). We will look at three triangulations, each of a different genus, without performing any morphs, and compare results between each system. \newline
+
+\noindent In terms of programming these new flows, we were able to adapt our calcFlow program into two new programs, sphericalCalcFlow and hyperbolicCalcFlow, to easily distinguish which background we were using. This way we could run the systems one at a time, or all at once and observe differences in their behaviors in cases with the same initial conditions. \newline
 
 \noindent Example: 12 vertex sphere, vertex transitive of degree 5\newline
 
-Euclidean- As expected, we obtain a surface where all the vertices attain the same curvature of $\frac{2\pi}{5}$ after multiple trials of uniform and randomized weights. There are 20 faces in the resulting triangulation. The weights group together somewhat as in the normalized spherical case, and then continue decreasing towards zero. 
+\noindent Euclidean- As expected, we obtain a surface where all the vertices attain the same curvature of $\frac{\pi}{3}$ after multiple trials of uniform and randomized weights. The weights group together somewhat as in the normalized spherical case, and then continue decreasing towards zero.\newline
 
-Spherical- We found that the system was stable only if all initial weights were set exactly to $\approx$ 0.55357, its preferred weight. If the initial curvature was below zero, the weights would increase until the program crashed. If the initial curvature was above zero, the vertices would approach the same curvature as in the Euclidean case. As such, the weights would drop to zero. 
+\noindent Spherical- We found that the system was truly stable with nonzero final weights if and only if all initial weights were set exactly to its preferred weight, which is $\approx$ 0.55357 based on the fact that this triangulation has 20 faces. If the initial curvature was below zero, the weights would increase rapidly until the program crashed. If the initial curvature was positive, the vertices would approach the same curvature as in the Euclidean case. In doing such, the weights would drop to zero.\newline
 
-Hyperbolic- We found that the vertices react in almost the exact same behavior as in the Euclidean case. They approach the same curvature of $\frac{2\pi}{5}$ and drop towards zero weights at the same rate. 
+\noindent Hyperbolic- We found that the vertices react in almost the exact same behavior as in the Euclidean case. They approach the same curvature of $\frac{\pi}{3}$ and drop towards zero weights at the same rate.\newline 
 
 \noindent Example: 9 vertex, one-holed torus\newline
 
+\noindent Euclidean- Since we know that $\chi = 0$ for a one-holed torus, we also know that $\overline{K} = 0$ and so each vertex obtains zero curvature. The weights do not drop to zero, but converge to positive values reflective of their degree. \newline
+
+\noindent Spherical- We found this system to be very unstable with the torus. If the initial weights were too large, we found that the total curvature would be well below zero, and the weights would continually increase until sphericalCalcFlow crashed. While we hoped that reducing the initial weights would bring stability to the system, we ended up with the same result. However, upon investigation we learned that all the curvatures are close to 0 at one time, but then deviate back towards more negative values as the sum of the weights continually increases. \newline
+
+\noindent Hyperbolic- Unlike the previous example, we saw the hyperbolic equations behave differently than the Euclidean version. While the total curvature of the system goes to zero, the weights do not converge to positive constants- they drop to zero, as well, but maintain roughly the same proportion as the final Euclidean weights. Another thing we noted was the time required for the weights and curvatures to go to zero. This system was extremely slow and took much longer than either the Euclidean or spherical trials. \newline
+
 \noindent Example: 11 vertex, two-holed torus\newline
 
-\noindent Systems work best for triangulations whose total curvature goes to zero in that particular system. Euclidean is best for systems of genus 1, or one-holed tori. This is the case as we saw the total curvature for such a torus was $2\pi\chi = 2\pi(2 - 2g) = 2\pi(2 - 2(1)) = 0$. Spherical combinatorial Ricci flow is said to work best on manifolds of genus 0, or anything topologically equivalent to a sphere. This is because we have a positive $\chi$ value, so for total curvature to go to 0, the total surface area must go to $4\pi$. Hyperbolic Ricci flow is best suited for triangulations with a genus of 2 or more. We can see that these systems will be able to reach zero total curvature with a large enough surface area. 
+\noindent Euclidean- As in previous cases, the vertices converge to a uniform curvature. However, as this value was negative (given $\chi - -2$) we saw the weights increase without bound. As there is no limit to the weights in the Euclidean case, calcFlow had no troubles calculating each iteration, but having unbounded weights is still an undesired result. \newline
+
+\noindent Spherical- Regardless of the initial weights, we found that the total curvature of the system would continually decrease, and as such the weights of each vertex would increase until sphericalCalcFlow crashed. \newline
+
+\noindent Hyperbolic- Here we found the hyperbolic system shining above the others. In a very short time, we saw the vertices reach zero curvature, and the weights converge to nonzero values. This is how we got our notion that the hyperbolic Ricci flow was already normalized. \newline
+
+\noindent To conlude, we generalize that certain flows work best for triangulations whose total curvature goes to zero in that particular system. Euclidean is best for systems of genus 1, or one-holed tori. Spherical combinatorial Ricci flow is said to work best on manifolds of genus 0, or anything topologically equivalent to a sphere. This is because we have a positive $\chi$ value, so for total curvature to go to 0, the total surface area must go to $4\pi$. Spherical was the only system that could have produced a nontrivial solution in our first example. Hyperbolic Ricci flow is best suited for triangulations with a genus of 2 or more. We can see that these systems will be able to reach zero total curvature with a large enough surface area. 
 
 \section{Delaunay triangulations}
 In addition to our work on combinatioral Ricci flow, we also branched out into other areas where we felt our triangulation structure would be applicable. We'll talk about this a lot more in detail as we get the code solidified. Tom 
