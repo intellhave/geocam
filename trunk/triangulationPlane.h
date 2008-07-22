@@ -6,7 +6,8 @@ Version: July 16, 2008
 The Triangulation Plane file holds the functions that perform
 calculations on the triangulation.
 **************************************************************/
-
+#include <map>
+#include "pointlinecircle.h"
 /*
  * Initializes the disc by creating the first triangle,
  * taking in its edge lengths as arguments.
@@ -28,3 +29,5 @@ void generateTriangulation(int);
 void generateWeights();
 
 void flipAlgorithm();
+
+

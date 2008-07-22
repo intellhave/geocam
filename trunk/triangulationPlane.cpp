@@ -355,8 +355,3 @@ void flipAlgorithm()
 
 
 
-
-
-
-
-

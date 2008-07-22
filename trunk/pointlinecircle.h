@@ -7,6 +7,7 @@ class Point
 {
       public:
       Point(double, double);
+      Point();
       ~Point();
       double x, y;
 };
@@ -24,9 +25,12 @@ class Line
       public:
       Line(double, double, double, double);
       Line(Point, Point);
+      Line();
       ~Line();
       double getInitialX();
       double getInitialY();
+      Point getInitial();
+      Point getEnding();
       double getEndingX();
       double getEndingY();
       double getSlope();

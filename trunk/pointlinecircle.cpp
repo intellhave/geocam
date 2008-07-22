@@ -1,13 +1,17 @@
 #include <cstdlib>
 #include "pointlinecircle.h"
-#include<cmath>
-
+#include <iostream>
+using namespace std;
 Point::Point(double xi, double yi)
 {
    x = xi;
    y = yi;
 }
-
+Point::Point()
+{
+   x = 0;
+   y = 0;
+}
 Point::~Point()
 {
 }
@@ -42,6 +46,16 @@ Line::Line(Point init, Point end)
       intercept = y1 - slope * x1;
     }            
 }
+Line::Line()
+{
+    x1 = 0;
+    y1 = 0;
+    x2 = 0;
+    y2 = 0;
+    slope = 0;
+    intercept = 0;
+    vertical = 0;
+}
 Line::~Line()
 {
 }
@@ -62,7 +76,16 @@ double Line::getEndingY()
 {
     return y2;
 }
-
+Point Line::getInitial()
+{
+      Point p(x1, y1);
+      return p;
+}
+Point Line::getEnding()
+{
+      Point p(x2, y2);
+      return p;
+}
 double Line::getSlope()
 {
     return slope;

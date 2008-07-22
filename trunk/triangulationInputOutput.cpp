@@ -534,8 +534,6 @@ void makeTriangulationFile (char* from, char* to) {
 
 void printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs)
 {
-     
-     
      int vertSize = Triangulation::vertexTable.size();
      int numSteps = weights->size() / vertSize;
      ofstream results(fileName, ios_base::trunc);

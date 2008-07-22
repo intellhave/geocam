@@ -34,23 +34,27 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
     vector<Point> solutions;
     if(distancePoint(center1 , center2) > (r1 + r2))
     {
+        cout << "No solutions\n";
         // No solutions
         return solutions;
     }
     if(center1.x == center2.x && center1.y == center2.y)
     {
        if(r1 == r2)
-       {
+       {     cout << "Infinite solutions\n";
              // Same circle, infinite options, return same point.
              solutions.push_back(center1);
              return solutions;
        }
-       else
+       else{
        // No solutions
-       return solutions;
+       cout << "No solutions2\n";
+          return solutions;
+       }
     }
     if(distancePoint(center1, center2) < fabs(r1 - r2))
     {
+       cout << "No solutions3\n";
         return solutions;
     }
     // (x-x1)^2 + (y-y1)^2 = r1^2
@@ -70,8 +74,8 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
     // xComp*x + yComp*y = rComp
     if(yComp == 0)
     {
-       double ySol1 = sqrt(r1*r1 - pow((xComp/rComp - center1.x), 2)) + center1.y;
-       double ySol2 = (-1)*sqrt(r1*r1 - pow((xComp/rComp - center1.x),2)) + center1.y;
+       double ySol1 = sqrt(r1*r1 - pow((rComp/xComp - center1.x), 2)) + center1.y;
+       double ySol2 = (-1)*sqrt(r1*r1 - pow((rComp/xComp - center1.x),2)) + center1.y;
        Point sol1(rComp/xComp, ySol1);
        Point sol2(rComp/xComp, ySol2);
        solutions.push_back(sol1);
@@ -88,16 +92,33 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
        solutions.push_back(sol2);
        return solutions;
     }
+
     double b = (-2)*center1.x - 2*(rComp/yComp - center1.y)*(xComp/yComp);
+
     double a = 1 + pow((xComp/yComp), 2);
+
     double c = center1.x*center1.x + pow((rComp/yComp - center1.y), 2) - r1*r1;
 
     vector<double> quadSol = quadratic(a, b, c);
     for(int i = 0; i < quadSol.size(); i++)
     {
+        
         double xSol = quadSol[i];
         double ySol = rComp/yComp - xComp/yComp*xSol;
+        if(!(ySol < 1000))
+        {
+            cout << "a: " << a << "\n";
+            cout << "b: " << b << "\n";
+            cout << "c: " << c << "\n";
+        }
         Point sol(xSol, ySol);
+//        printPoint(sol);
+//        cout << ":   ";
+//        printPoint(center1);
+//        cout << r1 << "    ";
+//        printPoint(center2);
+//        cout << r2 << "\n";
+//        system("PAUSE");
         solutions.push_back(sol);
     }
     return solutions;
@@ -110,4 +131,9 @@ vector<Point> circleIntersection(Circle circle1, Circle circle2)
     double r1 = circle1.getRadius();
     double r2 = circle2.getRadius();              
     return circleIntersection(center1, r1, center2, r2);
+}
+
+void printPoint(Point p)
+{
+     cout << "Point: (" << p.x << ", " << p.y << ") ";
 }
