@@ -105,12 +105,7 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
         
         double xSol = quadSol[i];
         double ySol = rComp/yComp - xComp/yComp*xSol;
-        if(!(ySol < 1000))
-        {
-            cout << "a: " << a << "\n";
-            cout << "b: " << b << "\n";
-            cout << "c: " << c << "\n";
-        }
+
         Point sol(xSol, ySol);
 //        printPoint(sol);
 //        cout << ":   ";
