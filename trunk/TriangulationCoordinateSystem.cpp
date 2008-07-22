@@ -140,6 +140,8 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          return edgesAdded;
      }
      Line l = lineTable[e.getIndex()];
+     cout << e.getIndex() << ": " << containsLine(e.getIndex()) << "  ";
+     cout << l.getLength() << "   " << e.getLength() << "\n";
      int va, vb, v1, v2, ea1, ea2, eb1, eb2;
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      vector<int> vertex = listDifference(fa.getLocalVertices(), e.getLocalVertices());
@@ -149,12 +151,26 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      ea2 = edges[1];
      v1 = (listIntersection(Triangulation::edgeTable[ea1].getLocalVertices(), e.getLocalVertices()))[0];
      v2 = (listIntersection(Triangulation::edgeTable[ea2].getLocalVertices(), e.getLocalVertices()))[0];
+     
      Face fb = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
      vertex = listDifference(fb.getLocalVertices(), e.getLocalVertices());
      vb = vertex[0];
      edges = listIntersection(fb.getLocalEdges(), e.getLocalEdges());
      eb1 = edges[0];
      eb2 = edges[1];
+
+     if(l.getInitialX() != pointTable[v1].x || l.getInitialY() != pointTable[v1].y)
+     {
+         int temp = v1;
+         v1 = v2;
+         v2 = temp;
+         temp = ea1;
+         ea1 = ea2;
+         ea2 = temp;
+         temp = eb1;
+         eb1 = eb2;
+         eb2 = temp;
+     }
      if(!Triangulation::edgeTable[eb1].isAdjVertex(v1))
      {
         int temp = eb1;
@@ -162,12 +178,21 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
         eb2 = temp;
      }
 
+
      if(!containsPoint(va))
      {
          Circle c1(pointTable[v1], Triangulation::edgeTable[ea1].getLength());
          Circle c2(pointTable[v2], Triangulation::edgeTable[ea2].getLength());
-         vector<Point> points = circleIntersection(c1, c2);
+         vector<Point> points;
+         Point p1 = findPoint(l, Triangulation::edgeTable[ea1].getLength(), 
+                              angle(Triangulation::vertexTable[v1], fa));
+         Point p2 = findPoint(l, Triangulation::edgeTable[ea1].getLength(), 
+                              (-1) * angle(Triangulation::vertexTable[v1], fa));
+         points.push_back(p1);
+         points.push_back(p2);
+
          bool otherPos = l.isAbove(pointTable[vb]);
+         bool foundOne = false;
          for(int i = 0; i < points.size(); i++)
          {
               if(l.isAbove(points[i]) != otherPos)
@@ -180,26 +205,47 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
                   {
                      putLine(ea1, l1);
                      edgesAdded++;
+                     edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea1], edgesAdded);
                   }
                   if(!containsLine(ea2))
                   {
                      putLine(ea2, l2);
                      edgesAdded++;
+                     edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea2], edgesAdded);
                   }
-                  edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea1], edgesAdded);
-                  edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea2], edgesAdded);
-              }
+                  foundOne = true;
+             }
          }
-
+         if(!foundOne)
+         {
+               cout << "Here\n";
+//             cout << l.getLength() << "   ";
+//             printPoint(l.getInitial());
+//             cout << "    ";
+//             printPoint(l.getEnding());
+//             cout << "\n";
+//             cout << e.getLength() << "   ";
+//             cout << Triangulation::edgeTable[ea1].getLength() << "   ";
+//             cout << Triangulation::edgeTable[ea2].getLength() << "\n";
+         }
      }
      if(!containsPoint(vb))
      {
          Circle c1(pointTable[v1], Triangulation::edgeTable[eb1].getLength());
          Circle c2(pointTable[v2], Triangulation::edgeTable[eb2].getLength());
-         vector<Point> points = circleIntersection(c1, c2);
+         vector<Point> points;
+         Point p1 = findPoint(l, Triangulation::edgeTable[eb1].getLength(), 
+                              angle(Triangulation::vertexTable[v1], fb));
+         Point p2 = findPoint(l, Triangulation::edgeTable[eb1].getLength(), 
+                              (-1) * angle(Triangulation::vertexTable[v1], fb));
+         points.push_back(p1);
+         points.push_back(p2);
+
          bool otherPos = l.isAbove(pointTable[va]);
+         bool foundOne = false;
          for(int i = 0; i < points.size(); i++)
          {
+              
               if(l.isAbove(points[i]) != otherPos)
               {
                   Point p = points[i];
@@ -210,16 +256,30 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
                   {
                     putLine(eb1, l1);
                     edgesAdded++;
+                    edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb1], edgesAdded);
                   }
                   if(!containsLine(eb2))
                   {
                     putLine(eb2, l2);
                     edgesAdded++;
+                    edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb2], edgesAdded);
                   }
-                  edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb1], edgesAdded);
-                  edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb2], edgesAdded);
-             }
+                  foundOne = true;
+             } 
          }
+         if(!foundOne)
+         {
+               cout << "Here\n";
+//             cout << l.getLength() << "   ";
+//             printPoint(l.getInitial());
+//             cout << "    ";
+//             printPoint(l.getEnding());
+//             cout << "\n";
+//             cout << e.getLength() << "   ";
+//             cout << Triangulation::edgeTable[eb1].getLength() << "   ";
+//             cout << Triangulation::edgeTable[eb2].getLength() << "\n";
+         }
+
      }
      if(!containsLine(ea1))
      {
