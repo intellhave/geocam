@@ -140,7 +140,7 @@ void testDelaunay()
 
 void testGeneratePlane()
 {
-     generateTriangulation(200);
+     generateTriangulation(500);
      char filename[] = "Triangulations/Plane Test.txt";
      writeTriangulationFile(filename);
      TriangulationCoordinateSystem tp;
@@ -148,14 +148,6 @@ void testGeneratePlane()
      int index;
      int edgeSize = Triangulation::edgeTable.size();
      int vertexSize = Triangulation::vertexTable.size();
-     for(int i = 1; i <= edgeSize; i++)
-     {
-             cout << i << ": " << tp.containsLine(i) << "   ";
-             if(i%2 == 0)
-             {
-                 cout << "\n";
-             }
-     }
      cout << "Pick a line index between 1 and " << edgeSize << ":  ";
      cin >> index;
      while(index != 0)
@@ -171,7 +163,8 @@ void testGeneratePlane()
              cout << "Initial X: " << l.getInitialX() << endl;
              cout << "Initial Y: " << l.getInitialY() << endl;
              cout << "Ending X: " << l.getEndingX() << endl;
-             cout << "Ending Y: " << l.getEndingY() << endl; 
+             cout << "Ending Y: " << l.getEndingY() << endl;
+             cout << "Length: " << l.getLength() << endl; 
         }
 //        cout << "\nPick a point index between 1 and " << vertexSize << ": ";
 //        cin >> index;
@@ -183,7 +176,19 @@ void testGeneratePlane()
         cout << "Pick a line index between 1 and " << edgeSize << ":  ";
         cin >> index;
      }
-     tp.printToFile(filename);
+     char fileN[] = "Triangulations/ODE Result.txt";
+     tp.printToFile(fileN);
+}
+void testMiscMath()
+{
+     Line l(4,5,1,1);
+     Point p = findPoint(l, 3, -acos(3/5.));
+     printPoint(p);
+     Line l2(l.getEnding(), p);
+     Line l1(l.getInitial(), p);
+     cout << l2.getLength() << " ";
+     cout << l1.getLength();
+     cout << endl;
 }
 int main(int argc, char *argv[])
 {
@@ -192,6 +197,7 @@ int main(int argc, char *argv[])
     //testPointLineCircle();
     //testDelaunay();
     testGeneratePlane();
+    //testMiscMath();
 
     system("PAUSE");
     return 0;

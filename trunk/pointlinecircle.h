@@ -40,6 +40,7 @@ class Line
       bool isAbove(Point);
       bool hasPoint(double, double);
       bool hasPoint(Point);
+      double getLength();
       Point intersection(Line);
       Line getPerpendicular(Point);
 };

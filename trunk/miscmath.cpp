@@ -55,7 +55,7 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
     if(distancePoint(center1, center2) < fabs(r1 - r2))
     {
        cout << "No solutions3\n";
-        return solutions;
+       return solutions;
     }
     // (x-x1)^2 + (y-y1)^2 = r1^2
     // (x-x2)^2 + (y-y2)^2 = r2^2
@@ -131,4 +131,26 @@ vector<Point> circleIntersection(Circle circle1, Circle circle2)
 void printPoint(Point p)
 {
      cout << "Point: (" << p.x << ", " << p.y << ") ";
+}
+
+Point rotateVector(Point vector, double angle)
+{
+      double x = vector.x*cos(angle) - vector.y*sin(angle);
+      double y = vector.x*sin(angle) + vector.y*cos(angle);
+      if(x < 0.00000001 && x > -0.00000001)
+           x = 0;
+      if(y < 0.00000001 && y > -0.00000001)
+           y = 0;
+      Point p(x,y);
+      return p;
+}
+
+Point findPoint(Line l, double length, double angle)
+{
+      Point vect(l.getEndingX()-l.getInitialX(), l.getEndingY() - l.getInitialY());
+      Point rotate = rotateVector(vect, angle);
+      Point vectResult(rotate.x/l.getLength()*length,
+                       rotate.y/l.getLength()*length);
+      Point p(l.getInitialX() + vectResult.x, l.getInitialY() + vectResult.y);
+      return p;
 }

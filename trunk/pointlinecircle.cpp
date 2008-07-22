@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <cmath>
 #include "pointlinecircle.h"
 #include <iostream>
 using namespace std;
@@ -129,6 +130,11 @@ bool Line::hasPoint(double x, double y)
 bool Line::hasPoint(Point p)
 {
      return hasPoint(p.x, p.y);
+}
+
+double Line::getLength()
+{
+     return sqrt(pow((x1-x2), 2) + pow((y1-y2), 2));
 }
 
 Circle::Circle(Point c, double r): center(c.x, c.y)

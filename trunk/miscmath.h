@@ -15,3 +15,7 @@ vector<Point> circleIntersection(Circle, Circle);
 vector<double> quadratic(double, double, double);
 
 void printPoint(Point);
+
+Point rotateVector(Point, double);
+
+Point findPoint(Line, double, double);
