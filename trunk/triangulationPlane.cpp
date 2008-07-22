@@ -290,7 +290,7 @@ void generateTriangulation(int numFaces)
                 }
                 length1 = e.getLength();
                 randNum = (rand()%20000 + 1) / 20000.0;
-                length2 = randNum * (length1) + 0.5;
+                length2 = randNum * (0.8 * length1) + 0.5;
                 range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
                 rInt = (int) range;
                 rDec = range - rInt;
