@@ -57,9 +57,9 @@ bool isWeightedDelaunay(Edge e)
      vector<int> sameAs;
      sameAs = listIntersection(va1.getLocalEdges(), vb1.getLocalEdges());
      Edge ea1 = Triangulation::edgeTable[sameAs[0]];
-     sameAs = listIntersection(va1.getLocalEdges(), vb2.getLocalEdges());
-     Edge ea2 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va2.getLocalEdges(), vb1.getLocalEdges());
+     Edge ea2 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va1.getLocalEdges(), vb2.getLocalEdges());
      Edge eb1 = Triangulation::edgeTable[sameAs[0]];
      sameAs = listIntersection(va2.getLocalEdges(), vb2.getLocalEdges());
      Edge eb2 = Triangulation::edgeTable[sameAs[0]];
@@ -91,7 +91,7 @@ bool isWeightedDelaunay(Edge e)
      double ha2 = (da1b2 - da1a2*cos(anga1a2)) / sin(anga1a2);
      
      Point oa1(da1a2, ha1);
-     Point oa2(da1a2, ha2);
+     Point oa2(da1a2, (-ha2));
      
      double ra1 = sqrt((((da1a2*da1a2) + (da1b1*da1b1) - 2*da1a2*da1b1*cos(anga1a1)) / (sin(anga1a1)*sin(anga1a1))) - pow(va1.getWeight(), 2));
      double ra2 = sqrt((((da1a2*da1a2) + (da1b2*da1b2) - 2*da1a2*da1b2*cos(anga1a2)) / (sin(anga1a2)*sin(anga1a2))) - pow(va1.getWeight(), 2));
@@ -99,5 +99,25 @@ bool isWeightedDelaunay(Edge e)
      Circle ca1(oa1, ra1);
      Circle ca2(oa2, ra2);
      
-     return distancePoint(pb1, oa2) > ra2;
+     cout << "A bunch of values" << endl;
+     cout << "da1a2: " << da1a2 << endl;
+     cout << "da2a1: " << da2a1 << endl;
+     cout << "da1b1: " << da1b1 << endl;
+     cout << "db1a1: " << db1a1 << endl;
+     cout << "anga1a1: " << anga1a1 << endl;
+     cout << "anga1a2: " << anga1a2 << endl;
+     cout << "ha1: " << ha1 << endl;
+     cout << "ra1: " << ra1 << endl;
+     cout << "distance from pb2 to oa1: " << distancePoint(pb2, oa1) << endl;
+     cout << "Vertex indices" << endl;
+     cout << "va1: " << va1.getIndex() << endl;
+     cout << "va2: " << va2.getIndex() << endl;
+     cout << "vb1: " << vb1.getIndex() << endl;
+     cout << "vb2: " << vb2.getIndex() << endl;
+     cout << "ea1: " << ea1.getIndex() << endl;
+     cout << "ea2: " << ea2.getIndex() << endl;
+     cout << "eb1: " << eb1.getIndex() << endl;
+     cout << "eb2: " << eb2.getIndex() << endl;
+     cout << "e: " << e.getIndex() << endl;
+     return distancePoint(pb2, oa1) > ra1;
 }
