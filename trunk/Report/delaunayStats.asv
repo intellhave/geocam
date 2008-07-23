@@ -1,0 +1,12 @@
+E = textread('c:\Dev-Cpp\geocam\Triangulations\EdgeLengths.txt');
+K = textread('c:\Dev-Cpp\geocam\Triangulations\Degrees.txt');
+
+subplot(2,2,1);
+bar(E);
+subplot(2,2,2)
+hist(E,max(E));
+disp('average edge length is: '
+subplot(2,2,3)
+bar(K);
+subplot(2,2,4)
+hist(K,2:max(K));
