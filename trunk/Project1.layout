@@ -115,9 +115,9 @@ Open=1
 <<<<<<< .mine
 <<<<<<< .mine
 Top=0
-CursorCol=31
-CursorRow=143
-TopLine=141
+CursorCol=12
+CursorRow=153
+TopLine=118
 =======
 <<<<<<< .mine
 Top=1
@@ -865,8 +865,8 @@ LeftChar=2
 <<<<<<< .mine
 <<<<<<< .mine
 CursorCol=6
-CursorRow=99
-TopLine=81
+CursorRow=102
+TopLine=95
 =======
 CursorCol=52
 CursorRow=293
@@ -959,7 +959,7 @@ CursorCol=39
 <<<<<<< .mine
 <<<<<<< .mine
 CursorRow=142
-TopLine=47
+TopLine=80
 =======
 CursorRow=106
 TopLine=62

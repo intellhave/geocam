@@ -96,6 +96,14 @@ void addTriangle(Edge e, double length1, double length2)
      if(length2 >= (e.getLength() + length1))
      throw string("Invalid Edge Lengths");
      
+     Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+     Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
+     Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+     
+     if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
+     throw string("angle sum 1");
+     if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
+     throw string("angle sum 2");
      
      Vertex vb(Triangulation::greatestVertex() + 1);
      Edge eb1(Triangulation::greatestEdge() + 1);
@@ -106,18 +114,12 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::putEdge(eb2.getIndex(), eb2);
      
      Triangulation::putFace(fb.getIndex(), fb);
-     Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
-     Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
-     Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      
      vector<int> diff;
      diff = listDifference(fa.getLocalVertices(), e.getLocalVertices());
      Vertex va3 = Triangulation::vertexTable[diff[0]];
      
-     if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
-     throw string("angle sum");
-     if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
-     throw string("angle sum");
+
      
      Triangulation::vertexTable[vb.getIndex()].addVertex(va1.getIndex());
      Triangulation::vertexTable[vb.getIndex()].addVertex(va2.getIndex());
@@ -252,7 +254,6 @@ void generateTriangulation(int numFaces)
      randNum = (rand()%20000 + 1) / 20000.0;
      length3 = rand()%(rInt + 1) + (abs(length1 - length2) + 1) + randNum * rDec;
 
-
      firstTriangle(length1, length2, length3);
      while(Triangulation::faceTable.size() < numFaces)
      {
@@ -261,52 +262,60 @@ void generateTriangulation(int numFaces)
             Edge e = eit->second;
             if(e.isBorder())
             {
-                for(int i = 0; i < e.getLocalVertices()->size(); i++)
-                {
-                   Vertex v = Triangulation::vertexTable[(*(e.getLocalVertices()))[i]];
-                   if(getAngleSum(v) > PI)
-                   {
-                      Edge e2;
-                      vector<int> commonE = listIntersection(e.getLocalEdges(), v.getLocalEdges());
-                      for(int j = 0; j < commonE.size(); j++)
-                      {
-                        e2 = Triangulation::edgeTable[commonE[j]];
-                        if(e2.isBorder())
-                        {
-                            try{
-                            addTriangle(e, e2);
-                            }
-                            catch(string s)
-                            {
-                            cout << s;
-                            }
-                            if(Triangulation::faceTable.size() >= numFaces)
-                               return;
-                            goto EdgeLoop;
-                        }
-                      }
-                   }
-                }
                 length1 = e.getLength();
                 randNum = (rand()%20000 + 1) / 20000.0;
-                length2 = randNum * 0.6 *length1 + 0.3;
+                if(randNum < 0.5)
+                   randNum = -randNum;
+                length2 = length1 + randNum;
                 range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
                 rInt = (int) range;
                 if(rInt < 0)
                         rInt = 0;
                 rDec = range - rInt;
                 randNum = (rand()%20000 + 1) / 20000.0;
-                length3 = rand()%(rInt + 1);
-                length3 += (abs(length1 - length2) + 1);
-                length3 += randNum * rDec;
+                length3 = rand()%(rInt + 1) + abs(length1 - length2) + 1
+                          + randNum * rDec;
                 try{
                     addTriangle(e, length2, length3);
                      if(Triangulation::faceTable.size() >= numFaces)
-                               return;
+                       return;
                     }
                     catch(string s)
                     {
-                      cout << s << " e1: " << length1 << " e2: " <<length2 << " e3: " << length3 << "\n";
+                      if(s.compare("angle sum 1") == 0)
+                      {
+                         Vertex v = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+                         vector<int> edges = listIntersection(v.getLocalEdges(), e.getLocalEdges());
+                         for(int i = 0; i < edges.size(); i++)
+                         {
+                            if(Triangulation::edgeTable[edges[i]].isBorder())
+                            {
+                               try{                                             
+                               addTriangle(e, Triangulation::edgeTable[edges[i]]);
+                               }
+                               catch(string s){}
+                            }
+                         }
+                         if(Triangulation::faceTable.size() >= numFaces)
+                               return;
+                      }
+                       else if(s.compare("angle sum 2") == 0)
+                      {
+                         Vertex v = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
+                         vector<int> edges = listIntersection(v.getLocalEdges(), e.getLocalEdges());
+                         for(int i = 0; i < edges.size(); i++)
+                         {
+                            if(Triangulation::edgeTable[edges[i]].isBorder())
+                            {
+                               try{                                             
+                               addTriangle(e, Triangulation::edgeTable[edges[i]]);
+                               }
+                               catch(string s){}
+                            }
+                         }
+                         if(Triangulation::faceTable.size() >= numFaces)
+                             return;
+                      }
                     }
             }
             EdgeLoop: ;

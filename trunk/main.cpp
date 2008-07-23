@@ -140,7 +140,7 @@ void testDelaunay()
 
 void testGeneratePlane()
 {
-     generateTriangulation(250);
+     generateTriangulation(25);
      char filename[] = "Triangulations/Plane Test.txt";
      writeTriangulationFile(filename);
      TriangulationCoordinateSystem tp;
