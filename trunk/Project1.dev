@@ -1,15 +1,7 @@
 [Project]
 FileName=Project1.dev
 Name=Project1
-<<<<<<< .mine
-<<<<<<< .mine
-UnitCount=19
-=======
-UnitCount=21
-=======
 UnitCount=31
->>>>>>> .r294
->>>>>>> .r279
 Type=1
 Ver=1
 ObjFiles=
@@ -75,18 +67,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit4]
-FileName=triangulationmath.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit5]
-FileName=triangulationmath.h
+FileName=triangulationInputOutput.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -96,9 +78,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=triangulationInputOutput.h
+FileName=triangulationmorph.cpp
 CompileCpp=1
-Folder=
+Folder=Project1
 Compile=1
 Link=1
 Priority=1000
@@ -116,7 +98,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit6]
-FileName=triangulationInputOutput.cpp
+FileName=triangulationInputOutput.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -126,16 +108,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit8]
-FileName=triangulationmorph.cpp
-CompileCpp=1
-Folder=Project1
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit9]
 FileName=triangulationmorph.h
 CompileCpp=1
 Folder=Project1
@@ -145,7 +117,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit10]
+[Unit9]
 FileName=Simplex\edge.cpp
 CompileCpp=1
 Folder=Project1
@@ -155,7 +127,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit11]
+[Unit10]
 FileName=Simplex\edge.h
 CompileCpp=1
 Folder=Project1
@@ -165,7 +137,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit12]
+[Unit11]
 FileName=Simplex\face.cpp
 CompileCpp=1
 Folder=Project1
@@ -175,7 +147,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit13]
+[Unit12]
 FileName=Simplex\face.h
 CompileCpp=1
 Folder=Project1
@@ -185,7 +157,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit14]
+[Unit13]
 FileName=Simplex\simplex.cpp
 CompileCpp=1
 Folder=Project1
@@ -195,7 +167,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit15]
+[Unit14]
 FileName=Simplex\simplex.h
 CompileCpp=1
 Folder=Project1
@@ -205,7 +177,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit16]
+[Unit15]
 FileName=Simplex\vertex.cpp
 CompileCpp=1
 Folder=Project1
@@ -215,7 +187,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit17]
+[Unit16]
 FileName=Simplex\vertex.h
 CompileCpp=1
 Folder=Project1
@@ -225,10 +197,30 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+[Unit17]
+FileName=triangulationmath.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
 [Unit19]
 FileName=Spherical\sphericalmath.h
 CompileCpp=1
-Folder=Project1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit4]
+FileName=triangulationmath.h
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -237,29 +229,6 @@ BuildCmd=
 
 [Unit18]
 FileName=Spherical\sphericalmath.cpp
-CompileCpp=1
-Folder=Project1
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit20]
-FileName=Hyperbolic\hyperbolicmath.cpp
-CompileCpp=1
-Folder=Project1
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-<<<<<<< .mine
-<<<<<<< .mine
-
-[Unit19]
-FileName=Spherical\sphericalmath.h
-=======
 CompileCpp=1
 Folder=
 Compile=1
@@ -270,7 +239,6 @@ BuildCmd=
 
 [Unit20]
 FileName=Hyperbolic\hyperbolicmath.cpp
-=======
 CompileCpp=1
 Folder=
 Compile=1
@@ -281,28 +249,6 @@ BuildCmd=
 
 [Unit21]
 FileName=Hyperbolic\hyperbolicmath.h
->>>>>>> .r294
->>>>>>> .r279
-CompileCpp=1
-Folder=Project1
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit22]
-FileName=triangulationPlane.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit23]
-FileName=triangulationPlane.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -312,7 +258,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit24]
-FileName=TriangulationCoordinateSystem.cpp
+FileName=line.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -322,7 +268,48 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit25]
-FileName=TriangulationCoordinateSystem.h
+FileName=line.h
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit26]
+FileName=miscmath.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit27]
+FileName=miscmath.h
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+=======
+
+[Unit24]
+FileName=miscmath.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit25]
+FileName=miscmath.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -350,9 +337,30 @@ Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
+>>>>>>> .r314
+
+[Unit22]
+FileName=triangulationPlane.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit23]
+FileName=triangulationPlane.h
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
 
 [Unit28]
-FileName=miscmath.cpp
+FileName=delaunay.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -362,16 +370,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit29]
-FileName=miscmath.h
-CompileCpp=1
-Folder=Project1
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit30]
 FileName=delaunay.cpp
 CompileCpp=1
 Folder=Project1
@@ -381,8 +379,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+[Unit30]
+FileName=TriangulationCoordinateSystem.h
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
 [Unit31]
-FileName=delaunay.h
+FileName=TriangulationCoordinateSystem.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1

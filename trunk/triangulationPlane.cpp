@@ -10,6 +10,7 @@
 #include "triangulationPlane.h"
 #include "triangulationInputOutput.h"
 #include "triangulationMorph.h"
+#include "TriangulationCoordinateSystem.h"
 #include "miscmath.h"
 #include <fstream>
 #include <iomanip>
@@ -365,7 +366,19 @@ void flipAlgorithm()
      
 }
 
-
+//void generateTriangulation(int numVertices)
+//{
+//     srand(time(NULL));
+//     for(int i = 1; i <= numVertices; i++)
+//     {
+//          Point p(rand() % 100, rand() % 100);
+//          TriangulationCoordinateSystem::putPoint(i, p);
+//     }
+//     for(int i = 1; i <= TriangulationCoordinateSystem::pointTable.size(); i++)
+//     {
+//          
+//     }
+//}
 
 
 

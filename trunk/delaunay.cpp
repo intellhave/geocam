@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "triangulation.h"
 #include "triangulationmath.h"
+#include "miscmath.h"
 #include <fstream>
 #include <iomanip>
 #include "delaunay.h"
@@ -63,45 +64,40 @@ bool isWeightedDelaunay(Edge e)
      sameAs = listIntersection(va2.getLocalEdges(), vb2.getLocalEdges());
      Edge eb2 = Triangulation::edgeTable[sameAs[0]];
      
-     double ang1 = angle(va1, fa1);
-     double ang2 = angle(va1, fa2);
-     double ang3 = angle(va2, fa1);
-     double ang4 = angle(va2, fa2);
+     double anga1a1 = angle(va1, fa1);
+     double anga1a2 = angle(va1, fa2);
+     double anga2a1 = angle(va2, fa1);
+     double anga2a2 = angle(va2, fa2);
+     double angb1a1 = angle(vb1, fa1);
+     double angb2a2 = angle(vb2, fa2);
      
      Point pa1(0.0, 0.0);
      Point pa2(e.getLength(), 0.0);
-     Point pb1((ea1.getLength() * cos(ang1)), (ea1.getLength() * sin(ang1)));
-     Point pb2((eb1.getLength() * cos(ang2)), (-(eb1.getLength() * sin(ang2))));
+     Point pb1((ea1.getLength() * cos(anga1a1)), (ea1.getLength() * sin(anga1a1)));
+     Point pb2((eb1.getLength() * cos(anga1a2)), (-(eb1.getLength() * sin(anga1a2))));
      
-     Circle ca1(pa1, va1.getWeight());
-     Circle ca2(pa2, va2.getWeight());
-     Circle cb1(pb1, vb1.getWeight());
-     Circle cb2(pb2, vb2.getWeight());
+     double da1b1 = (pow(ea1.getLength(), 2) + pow(va1.getWeight(), 2) - pow(vb1.getWeight(), 2)) / (2 * ea1.getLength());
+     double db1a1 = (pow(ea1.getLength(), 2) + pow(vb1.getWeight(), 2) - pow(va1.getWeight(), 2)) / (2 * ea1.getLength());
+     double da1b2 = (pow(ea2.getLength(), 2) + pow(va1.getWeight(), 2) - pow(vb2.getWeight(), 2)) / (2 * ea2.getLength());
+     double db2a1 = (pow(ea2.getLength(), 2) + pow(vb2.getWeight(), 2) - pow(va1.getWeight(), 2)) / (2 * ea2.getLength());
+     double db1a2 = (pow(eb1.getLength(), 2) + pow(vb1.getWeight(), 2) - pow(va2.getWeight(), 2)) / (2 * eb1.getLength());
+     double da2b1 = (pow(eb1.getLength(), 2) + pow(va2.getWeight(), 2) - pow(vb1.getWeight(), 2)) / (2 * eb1.getLength());
+     double da2b2 = (pow(eb2.getLength(), 2) + pow(va2.getWeight(), 2) - pow(vb2.getWeight(), 2)) / (2 * eb2.getLength());
+     double db2a2 = (pow(eb2.getLength(), 2) + pow(vb2.getWeight(), 2) - pow(va2.getWeight(), 2)) / (2 * eb2.getLength());
+     double da1a2 = (pow(e.getLength(), 2) + pow(va1.getWeight(), 2) - pow(va2.getWeight(), 2)) / (2 * e.getLength());
+     double da2a1 = (pow(e.getLength(), 2) + pow(va2.getWeight(), 2) - pow(va1.getWeight(), 2)) / (2 * e.getLength());
      
-//     double da1b1 = (pow(ea1.getLength(), 2) + va1.getWeight() - vb1.getWeight()) / (2 * ea1.getLength());
-//     double db1a1 = (pow(ea1.getLength(), 2) + vb1.getWeight() - va1.getWeight()) / (2 * ea1.getLength());
-//     double da1b2 = (pow(ea2.getLength(), 2) + va1.getWeight() - vb2.getWeight()) / (2 * ea2.getLength());
-//     double db2a1 = (pow(ea2.getLength(), 2) + vb2.getWeight() - va1.getWeight()) / (2 * ea2.getLength());
-//     double db1a2 = (pow(eb1.getLength(), 2) + vb1.getWeight() - va2.getWeight()) / (2 * eb1.getLength());
-//     double da2b1 = (pow(eb1.getLength(), 2) + va2.getWeight() - vb1.getWeight()) / (2 * eb1.getLength());
-//     double da2b2 = (pow(eb2.getLength(), 2) + va2.getWeight() - vb2.getWeight()) / (2 * eb2.getLength());
-//     double db2a2 = (pow(eb2.getLength(), 2) + vb2.getWeight() - va2.getWeight()) / (2 * eb2.getLength());
-//     double da1a2 = (pow(e.getLength(), 2) + va1.getWeight() - va2.getWeight()) / (2 * e.getLength());
-//     double da2a1 = (pow(e.getLength(), 2) + va2.getWeight() - va1.getWeight()) / (2 * e.getLength());
-//     
-//     Line l(pa1, pa2);
-//     Line la1(pa1, pb1);
-//     Line la2(pa1, pb2);
-//     Line lb1(pb1, pa2);
-//     Line lb2(pb2, pa2);
-//     
-//     Point pa1b1(da1b1 * cos(ang1), da1b1 * sin(ang1));
-//     Line f = la1.getPerpendicular(pa1b1);
-//     Point pa1a2(da1a2, 0.0);
-//     Line g = l.getPerpendicular(pa1a2);
-//     Point pa2b1(pa2.x - (da2b1 * cos(ang3)), da2b1 * sin(ang3));
-//     Line h = lb1.getPerpendicular(pa2b1);
-//     Point o = f.intersection(g);
+     double ha1 = (da1b1 - da1a2*cos(anga1a1)) / sin(anga1a1);
+     double ha2 = (da1b2 - da1a2*cos(anga1a2)) / sin(anga1a2);
      
-     return false;
+     Point oa1(da1a2, ha1);
+     Point oa2(da1a2, ha2);
+     
+     double ra1 = sqrt((((da1a2*da1a2) + (da1b1*da1b1) - 2*da1a2*da1b1*cos(anga1a1)) / (sin(anga1a1)*sin(anga1a1))) - pow(va1.getWeight(), 2));
+     double ra2 = sqrt((((da1a2*da1a2) + (da1b2*da1b2) - 2*da1a2*da1b2*cos(anga1a2)) / (sin(anga1a2)*sin(anga1a2))) - pow(va1.getWeight(), 2));
+     
+     Circle ca1(oa1, ra1);
+     Circle ca2(oa2, ra2);
+     
+     return distancePoint(pb1, oa2) > ra2;
 }

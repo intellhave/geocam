@@ -24,7 +24,6 @@ Version: July 16, 2008
 class Vertex : public Simplex
 {
         double weight;
-        pair<double, double> pos;
         
 	public:
            
@@ -58,7 +57,6 @@ class Vertex : public Simplex
 		 */
 		int getDegree();
 		
-		void setPosition(double, double);
 };
 
 #endif // VERTEX_H
