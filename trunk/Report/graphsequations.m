@@ -1,3 +1,8 @@
+% This m-file contains graphs for the miscellaneous pictures used in the
+% report. The program can be run all at once, or command lines can be
+% copied and pasted into the main MATLAB window. 3-D pictures can be
+% rotated to a preferred angle. 
+
 % figure 1. Right triangle made of circles. 
 figure;
 th = linspace(0,2*pi);
@@ -50,7 +55,7 @@ axis image
 axis off
 
 %figure 7. 2-2 Flip
-figure
+figure;
 k = sqrt(3)/2;
 x1 = [0,1,1.5,0.5,0,1,0.5]; y1 =[0,0,k,k,0,0,k];
 x2 = [3,4,4.5,3.5,3,4.5]; y2 = [0,0,k,k,0,k];
@@ -105,7 +110,6 @@ YT = [YT1 YT2];
 [XT, YT] = meshgrid(XT,YT);
 Z = real(sqrt(1 - XT.^2 - YT.^2));
 Z2 = -Z;
-figure;
 mesh(XT,YT,Z)
 hold on
 mesh(XT,YT,Z2)
