@@ -140,8 +140,6 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          return edgesAdded;
      }
      Line l = lineTable[e.getIndex()];
-     cout << e.getIndex() << ": " << containsLine(e.getIndex()) << "  ";
-     cout << l.getLength() << "   " << e.getLength() << "\n";
      int va, vb, v1, v2, ea1, ea2, eb1, eb2;
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      vector<int> vertex = listDifference(fa.getLocalVertices(), e.getLocalVertices());

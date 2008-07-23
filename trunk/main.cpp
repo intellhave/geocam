@@ -140,7 +140,7 @@ void testDelaunay()
 
 void testGeneratePlane()
 {
-     generateTriangulation(500);
+     generateTriangulation(250);
      char filename[] = "Triangulations/Plane Test.txt";
      writeTriangulationFile(filename);
      TriangulationCoordinateSystem tp;
@@ -148,6 +148,14 @@ void testGeneratePlane()
      int index;
      int edgeSize = Triangulation::edgeTable.size();
      int vertexSize = Triangulation::vertexTable.size();
+     for(int i = 1; i <= edgeSize; i++)
+     {
+        cout << i << ": " << Triangulation::edgeTable[i].getLength() << "     ";
+        if(i % 3 == 0)
+        {
+             cout << endl;
+        }
+     }
      cout << "Pick a line index between 1 and " << edgeSize << ":  ";
      cin >> index;
      while(index != 0)

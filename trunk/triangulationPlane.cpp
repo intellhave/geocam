@@ -96,6 +96,7 @@ void addTriangle(Edge e, double length1, double length2)
      if(length2 >= (e.getLength() + length1))
      throw string("Invalid Edge Lengths");
      
+     
      Vertex vb(Triangulation::greatestVertex() + 1);
      Edge eb1(Triangulation::greatestEdge() + 1);
      Edge eb2(Triangulation::greatestEdge() + 2);
@@ -105,7 +106,6 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::putEdge(eb2.getIndex(), eb2);
      
      Triangulation::putFace(fb.getIndex(), fb);
-     
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
@@ -162,7 +162,6 @@ void addTriangle(Edge e, double length1, double length2)
      
      Triangulation::edgeTable[eb1.getIndex()].setLength(length1);
      Triangulation::edgeTable[eb2.getIndex()].setLength(length2);
-     
      
 }
 
@@ -290,12 +289,16 @@ void generateTriangulation(int numFaces)
                 }
                 length1 = e.getLength();
                 randNum = (rand()%20000 + 1) / 20000.0;
-                length2 = randNum * (0.8 * length1) + 0.5;
+                length2 = randNum * 0.6 *length1 + 0.3;
                 range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
                 rInt = (int) range;
+                if(rInt < 0)
+                        rInt = 0;
                 rDec = range - rInt;
                 randNum = (rand()%20000 + 1) / 20000.0;
-                length3 = rand()%(rInt + 1) + (abs(length1 - length2) + 1) + randNum * rDec;
+                length3 = rand()%(rInt + 1);
+                length3 += (abs(length1 - length2) + 1);
+                length3 += randNum * rDec;
                 try{
                     addTriangle(e, length2, length3);
                      if(Triangulation::faceTable.size() >= numFaces)
