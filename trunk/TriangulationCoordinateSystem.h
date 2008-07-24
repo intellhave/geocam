@@ -15,6 +15,7 @@ class TriangulationCoordinateSystem
       void putPoint(int, Point);
       bool containsLine(int);
       bool containsPoint(int);
+      void clearSystem();
       void generatePlane();
       void printToFile(char*);
       Point getPoint(int);

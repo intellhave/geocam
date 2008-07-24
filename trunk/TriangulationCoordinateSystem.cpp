@@ -46,8 +46,35 @@ Line TriangulationCoordinateSystem::getLine(int index)
 {
       return lineTable[index];
 }
+void TriangulationCoordinateSystem::clearSystem()
+{
+     map<int, Point>::iterator pit;
+     map<int, Line>::iterator lit;
+     int pointSize = pointTable.size();
+     int lineSize = lineTable.size();
+     int pointArr[pointSize];
+     int lineArr[lineSize];
+     int i;
+     for(pit = pointTable.begin(), i = 0 ; pit != pointTable.end(); pit++, i++)
+     {
+             pointArr[i] = pit->first;
+     }
+     for(i = 0, lit = lineTable.begin(); lit != lineTable.end(); lit++, i++)
+     {
+             lineArr[i] = lit->first;
+     }
+     for(i = 0; i < pointSize; i++)
+     {
+             pointTable.erase(pointArr[i]);
+     }
+     for(i = 0; i < lineSize; i++)
+     {
+             lineTable.erase(lineArr[i]);
+     }
+}
 void TriangulationCoordinateSystem::generatePlane()
 {
+    clearSystem();
     int v1, v2, va, vb, ea1, ea2, eb1, eb2;
     map<int, Edge>::iterator eit;
     Edge e = Triangulation::edgeTable.begin()->second;
@@ -130,7 +157,6 @@ void TriangulationCoordinateSystem::generatePlane()
        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb1], edgesAdded);
        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb2], edgesAdded);
    }
-   cout << "EA: " << edgesAdded << "\n";
 }
 
 int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
