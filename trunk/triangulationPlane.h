@@ -31,4 +31,4 @@ void generateWeights();
 
 void flipAlgorithm();
 
-
+void weightedFlipAlgorithm();

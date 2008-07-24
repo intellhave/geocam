@@ -78,17 +78,19 @@ bool isWeightedDelaunay(Edge e)
      
      double da1b1 = (pow(ea1.getLength(), 2) + pow(va1.getWeight(), 2) - pow(vb1.getWeight(), 2)) / (2 * ea1.getLength());
      double db1a1 = (pow(ea1.getLength(), 2) + pow(vb1.getWeight(), 2) - pow(va1.getWeight(), 2)) / (2 * ea1.getLength());
-     double da1b2 = (pow(ea2.getLength(), 2) + pow(va1.getWeight(), 2) - pow(vb2.getWeight(), 2)) / (2 * ea2.getLength());
-     double db2a1 = (pow(ea2.getLength(), 2) + pow(vb2.getWeight(), 2) - pow(va1.getWeight(), 2)) / (2 * ea2.getLength());
-     double db1a2 = (pow(eb1.getLength(), 2) + pow(vb1.getWeight(), 2) - pow(va2.getWeight(), 2)) / (2 * eb1.getLength());
-     double da2b1 = (pow(eb1.getLength(), 2) + pow(va2.getWeight(), 2) - pow(vb1.getWeight(), 2)) / (2 * eb1.getLength());
+     double da1b2 = (pow(eb1.getLength(), 2) + pow(va1.getWeight(), 2) - pow(vb2.getWeight(), 2)) / (2 * eb1.getLength());
+     double db2a1 = (pow(eb1.getLength(), 2) + pow(vb2.getWeight(), 2) - pow(va1.getWeight(), 2)) / (2 * eb1.getLength());
+     double db1a2 = (pow(ea2.getLength(), 2) + pow(vb1.getWeight(), 2) - pow(va2.getWeight(), 2)) / (2 * ea2.getLength());
+     double da2b1 = (pow(ea2.getLength(), 2) + pow(va2.getWeight(), 2) - pow(vb1.getWeight(), 2)) / (2 * ea2.getLength());
      double da2b2 = (pow(eb2.getLength(), 2) + pow(va2.getWeight(), 2) - pow(vb2.getWeight(), 2)) / (2 * eb2.getLength());
      double db2a2 = (pow(eb2.getLength(), 2) + pow(vb2.getWeight(), 2) - pow(va2.getWeight(), 2)) / (2 * eb2.getLength());
      double da1a2 = (pow(e.getLength(), 2) + pow(va1.getWeight(), 2) - pow(va2.getWeight(), 2)) / (2 * e.getLength());
      double da2a1 = (pow(e.getLength(), 2) + pow(va2.getWeight(), 2) - pow(va1.getWeight(), 2)) / (2 * e.getLength());
      
      double ha1 = (da1b1 - da1a2*cos(anga1a1)) / sin(anga1a1);
-     double ha2 = (da1b2 - da1a2*cos(anga1a2)) / sin(anga1a2);
+     double thing1 = (da2b1 - da2a1*cos(anga2a1)) / sin(anga2a1);
+     double ha2 = (da2b2 - da2a1*cos(anga2a2)) / sin(anga2a2);
+     double thing2 = (da1b2 - da1a2*cos(anga1a2)) / sin(anga1a2);
      
      Point oa1(da1a2, ha1);
      Point oa2(da1a2, (-ha2));
@@ -98,26 +100,6 @@ bool isWeightedDelaunay(Edge e)
      
      Circle ca1(oa1, ra1);
      Circle ca2(oa2, ra2);
-     
-     cout << "A bunch of values" << endl;
-     cout << "da1a2: " << da1a2 << endl;
-     cout << "da2a1: " << da2a1 << endl;
-     cout << "da1b1: " << da1b1 << endl;
-     cout << "db1a1: " << db1a1 << endl;
-     cout << "anga1a1: " << anga1a1 << endl;
-     cout << "anga1a2: " << anga1a2 << endl;
-     cout << "ha1: " << ha1 << endl;
-     cout << "ra1: " << ra1 << endl;
-     cout << "distance from pb2 to oa1: " << distancePoint(pb2, oa1) << endl;
-     cout << "Vertex indices" << endl;
-     cout << "va1: " << va1.getIndex() << endl;
-     cout << "va2: " << va2.getIndex() << endl;
-     cout << "vb1: " << vb1.getIndex() << endl;
-     cout << "vb2: " << vb2.getIndex() << endl;
-     cout << "ea1: " << ea1.getIndex() << endl;
-     cout << "ea2: " << ea2.getIndex() << endl;
-     cout << "eb1: " << eb1.getIndex() << endl;
-     cout << "eb2: " << eb2.getIndex() << endl;
-     cout << "e: " << e.getIndex() << endl;
-     return distancePoint(pb2, oa1) > ra1;
+          
+     return ha1 + ha2 >= 0;
 }

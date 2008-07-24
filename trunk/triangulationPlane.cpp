@@ -366,6 +366,29 @@ void flipAlgorithm()
      
 }
 
+void weightedFlipAlgorithm()
+{
+     int flipCount = 1;
+     while(flipCount != 0)
+     {
+          cout << "No" << endl;
+          flipCount = 0;
+          map<int, Edge>::iterator eit;
+          for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+          {
+               cout << ".";
+               Edge e = eit->second;
+               if(!(isWeightedDelaunay(Triangulation::edgeTable[e.getIndex()])))
+               {
+                    flip(Triangulation::edgeTable[e.getIndex()]);
+                    flipCount++;
+               }
+          }
+     }
+     cout << "Yes" << endl;
+     
+}
+
 //void generateTriangulation(int numVertices)
 //{
 //     srand(time(NULL));

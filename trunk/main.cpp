@@ -201,34 +201,9 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
     
-    generateTriangulation(2);
+    generateTriangulation(20);
     generateWeights();
-    cout << "Vertex weights" << endl;
-    for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
-    {
-         cout << i << ": " << Triangulation::vertexTable[i].getWeight() << endl;
-    }
-    cout << "Edge lengths" << endl;
-    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
-    {
-         cout << i << ": " << Triangulation::edgeTable[i].getLength() << endl;
-    }
-    bool blah = isWeightedDelaunay(Triangulation::edgeTable[1]);
-    flip(Triangulation::edgeTable[1]);
-    
-    cout << "Vertex weights" << endl;
-    for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
-    {
-         cout << i << ": " << Triangulation::vertexTable[i].getWeight() << endl;
-    }
-    cout << "Edge lengths" << endl;
-    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
-    {
-         cout << i << ": " << Triangulation::edgeTable[i].getLength() << endl;
-    }
-
-    cout << blah << " " << isWeightedDelaunay(Triangulation::edgeTable[1]) << endl;
-    //testMiscMath();
+    weightedFlipAlgorithm();
 
     system("PAUSE");
     return 0;
