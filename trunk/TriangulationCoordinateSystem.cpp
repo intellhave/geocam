@@ -215,8 +215,10 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          points.push_back(p1);
          points.push_back(p2);
 
-         bool otherPos = l.isAbove(pointTable[vb]);
-         if(fa.isNegative())
+         bool otherPos = l.isAbove(pointTable[va]);
+         bool negA = fa.isNegative();
+         bool negB = fb.isNegative();
+         if((!(negA && negB)) && (negA || negB))
               otherPos = !otherPos;
          bool foundOne = false;
          for(int i = 0; i < points.size(); i++)
@@ -266,9 +268,11 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
                               (-1) * angle(Triangulation::vertexTable[v1], fb));
          points.push_back(p1);
          points.push_back(p2);
-
+         
          bool otherPos = l.isAbove(pointTable[va]);
-         if(fb.isNegative())
+         bool negA = fa.isNegative();
+         bool negB = fb.isNegative();
+         if((!(negA && negB)) && (negA || negB))
               otherPos = !otherPos;
          bool foundOne = false;
          for(int i = 0; i < points.size(); i++)
