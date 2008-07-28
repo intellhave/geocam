@@ -18,3 +18,14 @@ Face::~Face()
 {
 	// insert your code here
 }
+
+
+void Face::switchSide()
+{
+     negative = !negative;
+}
+
+bool Face::isNegative()
+{
+     return negative;
+}

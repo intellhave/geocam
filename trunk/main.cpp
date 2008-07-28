@@ -206,7 +206,6 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
     
-<<<<<<< .mine
 //    generateTriangulation(100);
 //    generateWeights();
 //    writeTriangulationFile("Triangulations/manifold converted.txt");
@@ -215,13 +214,9 @@ int main(int argc, char *argv[])
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 //    system("PAUSE");
 //    weightedFlipAlgorithm();
-=======
    // generateTriangulation(20);
    // generateWeights();
    // weightedFlipAlgorithm();
->>>>>>> .r374
-
-<<<<<<< .mine
 //    firstTriangle(1.0, 1.0, 1.8);
 //    addTriangle(Triangulation::edgeTable[1], 1.0, 1.8);
 //    addTriangle(Triangulation::edgeTable[2], 1.0, 0.6);
@@ -249,13 +244,11 @@ int main(int argc, char *argv[])
 
     
     
-=======
     //runFlow();
     //testPointLineCircle();
     //testDelaunay();
     //testGeneratePlane();
     //testMiscMath();
->>>>>>> .r374
     system("PAUSE");
     return 0;
 }

@@ -17,12 +17,18 @@ Version: June 9, 2008
  */
 class Face : public Simplex
 {
+      
+      bool negative;
 	public:
 		// class constructor
 		Face();
 		Face(int setIndex) : Simplex(setIndex) {};
 		// class destructor
 		~Face();
+		
+		bool isNegative();
+		
+		void switchSide();
 };
 
 #endif // FACE_H
