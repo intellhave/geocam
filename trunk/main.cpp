@@ -229,12 +229,15 @@ int main(int argc, char *argv[])
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 
-
+        
     firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
     addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
-    addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
+    //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
+    addTriangle(Triangulation::edgeTable[3], 7.0, 7.0);
+    addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[7]);
+    
     flip(Triangulation::edgeTable[2]);
-   // makeSpecialCase();
+    writeTriangulationFile("Triangulations/manifold converted.txt");
     
     TriangulationCoordinateSystem tcs;
     tcs.generatePlane();

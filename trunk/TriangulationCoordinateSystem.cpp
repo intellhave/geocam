@@ -219,7 +219,10 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          bool negA = fa.isNegative();
          bool negB = fb.isNegative();
          if((!(negA && negB)) && (negA || negB))
+         {
               otherPos = !otherPos;
+              cout << e.getIndex() << endl;
+         }  
          bool foundOne = false;
          for(int i = 0; i < points.size(); i++)
          {
@@ -273,7 +276,10 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          bool negA = fa.isNegative();
          bool negB = fb.isNegative();
          if((!(negA && negB)) && (negA || negB))
+         {
               otherPos = !otherPos;
+              cout << e.getIndex() << endl;
+         }
          bool foundOne = false;
          for(int i = 0; i < points.size(); i++)
          {

@@ -43,7 +43,7 @@ for i = 0:S-1
 % Leaving this command out displays only the end figure. If you need to
 % quit the program while it is running, hold Ctrl + C to %cancel. 
    
-    pause(0.1);
+    pause(0.5);
    
 end
 

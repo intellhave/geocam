@@ -106,6 +106,7 @@ void addTriangle(Edge e, double length1, double length2)
      
      if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
      throw string("angle sum 2");
+
      Vertex vb(Triangulation::greatestVertex() + 1);
      Edge eb1(Triangulation::greatestEdge() + 1);
      Edge eb2(Triangulation::greatestEdge() + 2);
