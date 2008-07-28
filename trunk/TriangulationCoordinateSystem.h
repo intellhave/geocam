@@ -17,12 +17,12 @@ Version: July 28, 2008
  */
 class TriangulationCoordinateSystem
 {
-      map<int, Line> lineTable;
-      map<int, Point> pointTable;
       int generatePlaneHelper(Edge, int);
       public:
       TriangulationCoordinateSystem();
       ~TriangulationCoordinateSystem();
+      map<int, Line> lineTable;
+      map<int, Point> pointTable;
       void putLine(int, Line);
       void putPoint(int, Point);
       bool containsLine(int);

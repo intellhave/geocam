@@ -235,12 +235,25 @@ int main(int argc, char *argv[])
     //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
     addTriangle(Triangulation::edgeTable[3], 7.0, 7.0);
     addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[7]);
-    
-    flip(Triangulation::edgeTable[2]);
-    writeTriangulationFile("Triangulations/manifold converted.txt");
-    
     TriangulationCoordinateSystem tcs;
     tcs.generatePlane();
+    map<int, Point>::iterator pit;
+    for(pit = tcs.pointTable.begin(); pit!= tcs.pointTable.end(); pit++)
+    {
+         cout << "(" << pit->second.x << ", " << pit->second.y << ")" << endl;
+    }
+    cout << "........................" << endl;
+    flip(Triangulation::edgeTable[2]);
+    tcs.generatePlane();
+
+    
+    for(pit = tcs.pointTable.begin(); pit!= tcs.pointTable.end(); pit++)
+    {
+         cout << "(" << pit->second.x << ", " << pit->second.y << ")" << endl;
+    }
+    
+    writeTriangulationFile("Triangulations/manifold converted.txt");
+    
     tcs.printToFile("Triangulations/ODE Result.txt");
     //runFlow();
     //testPointLineCircle();
