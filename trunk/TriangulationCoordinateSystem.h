@@ -33,20 +33,17 @@ class TriangulationCoordinateSystem
       void putPoint(int, Point);
       void clearSystem();
       int generatePlaneHelper(Edge, int);
+      map<int, Line> lineTable;
+      map<int, Point> pointTable;
       public:
       TriangulationCoordinateSystem();
       ~TriangulationCoordinateSystem();
-<<<<<<< .mine
       /*
        * Returns true if the coordinate system contains the Line
        * given by its index.
        */
-=======
-      map<int, Line> lineTable;
-      map<int, Point> pointTable;
       void putLine(int, Line);
       void putPoint(int, Point);
->>>>>>> .r386
       bool containsLine(int);
        /*
        * Returns true if the coordinate system contains the Point

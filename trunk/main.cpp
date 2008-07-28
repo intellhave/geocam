@@ -222,15 +222,14 @@ int main(int argc, char *argv[])
 //    addTriangle(Triangulation::edgeTable[2], 1.0, 0.6);
 //    addTriangle(Triangulation::edgeTable[4], 0.6, 1.0);
 //    addTriangle(Triangulation::edgeTable[6], Triangulation::edgeTable[9]);
-//    TriangulationCoordinateSystem tcs;
-//    tcs.generatePlane();
-//    tcs.printToFile("Triangulations/ODE Result.txt");
+    TriangulationCoordinateSystem tcs;
+    tcs.generatePlane();
+    tcs.printToFile("Triangulations/ODE Result.txt");
 //    system("PAUSE");
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 
 
-<<<<<<< .mine
 //    firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
 //    addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
 //    //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
@@ -240,33 +239,7 @@ int main(int argc, char *argv[])
 //    flip(Triangulation::edgeTable[2]);
 //    writeTriangulationFile("Triangulations/manifold converted.txt");
 //    
-=======
-    firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
-    addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
-    //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
-    addTriangle(Triangulation::edgeTable[3], 7.0, 7.0);
-    addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[7]);
-    TriangulationCoordinateSystem tcs;
-    tcs.generatePlane();
-    map<int, Point>::iterator pit;
-    for(pit = tcs.pointTable.begin(); pit!= tcs.pointTable.end(); pit++)
-    {
-         cout << "(" << pit->second.x << ", " << pit->second.y << ")" << endl;
-    }
-    cout << "........................" << endl;
-    flip(Triangulation::edgeTable[2]);
-    tcs.generatePlane();
 
-    
-    for(pit = tcs.pointTable.begin(); pit!= tcs.pointTable.end(); pit++)
-    {
-         cout << "(" << pit->second.x << ", " << pit->second.y << ")" << endl;
-    }
-    
-    writeTriangulationFile("Triangulations/manifold converted.txt");
-    
->>>>>>> .r386
-    tcs.printToFile("Triangulations/ODE Result.txt");
     //runFlow();
     //testPointLineCircle();
     //testDelaunay();
