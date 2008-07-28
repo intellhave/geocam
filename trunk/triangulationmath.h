@@ -45,11 +45,6 @@ vector<int> listIntersection(vector<int>*, vector<int>*);
 vector<int> listDifference(vector<int>*, vector<int>*);
 
 /*
- * Calculates the sum of the angles at the given vertex.
- */ 
-double getAngleSum(Vertex);
-
-/*
  * Calculates the Ricci flow of the current Triangulation using the 
  * Runge-Kutta method. Results from the steps are written into vectors of
  * doubles provided. The parameters are:

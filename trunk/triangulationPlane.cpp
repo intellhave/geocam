@@ -237,6 +237,18 @@ void addTriangle(Edge e1, Edge e2)
      
 }
 
+double getAngleSum(Vertex v)
+{
+       double angleSum;
+       for(int i = 0; i < v.getLocalFaces()->size(); i++)
+       {
+               if(!Triangulation::faceTable[(*(v.getLocalFaces()))[i]].isNegative())
+                    angleSum += angle(v, Triangulation::faceTable[(*(v.getLocalFaces()))[i]]);
+               else
+                    angleSum -= angle(v, Triangulation::faceTable[(*(v.getLocalFaces()))[i]]);
+       }
+       return angleSum;
+}
 
 void generateTriangulation(int numFaces)
 {

@@ -25,6 +25,8 @@ void addTriangle(Edge, double, double);
  */
 void addTriangle(Edge, Edge);
 
+double getAngleSum(Vertex);
+
 void generateTriangulation(int);
 
 void generateWeights();

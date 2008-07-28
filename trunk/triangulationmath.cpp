@@ -117,15 +117,6 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
             return diff;
 }
 
-double getAngleSum(Vertex v)
-{
-       double angleSum;
-       for(int i = 0; i < v.getLocalFaces()->size(); i++)
-       {
-               angleSum += angle(v, Triangulation::faceTable[(*(v.getLocalFaces()))[i]]);
-       }
-       return angleSum;
-}
 
 
 

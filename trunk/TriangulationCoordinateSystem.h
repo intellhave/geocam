@@ -42,8 +42,6 @@ class TriangulationCoordinateSystem
        * Returns true if the coordinate system contains the Line
        * given by its index.
        */
-      void putLine(int, Line);
-      void putPoint(int, Point);
       bool containsLine(int);
        /*
        * Returns true if the coordinate system contains the Point
