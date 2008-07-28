@@ -43,6 +43,9 @@ bool isDelaunay(Edge e)
 
 bool isWeightedDelaunay(Edge e)
 {
+     if(e.isBorder())
+     return true;
+     
      Face fa1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      Face fa2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];

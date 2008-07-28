@@ -105,6 +105,17 @@ void addTriangle(Edge e, double length1, double length2)
      throw string("angle sum 1");
      if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
      throw string("angle sum 2");
+//     try
+//     {
+//          checkTriangle(e, length1, length2);
+//     }
+//     catch(string s)
+//     {
+//          if(s.compare("angle sum 1") == 0)
+//          throw string("angle sum 1");
+//          if(s.compare("angle sum 2") == 0)
+//          throw string("angle sum 2");
+//     }
      
      Vertex vb(Triangulation::greatestVertex() + 1);
      Edge eb1(Triangulation::greatestEdge() + 1);
@@ -187,6 +198,10 @@ void addTriangle(Edge e1, Edge e2)
      sameAs = listIntersection(e1.getLocalVertices(), e2.getLocalVertices());
      va = Triangulation::vertexTable[sameAs[0]];
      
+     double ang = 2 * PI - getAngleSum(va);
+     if(ang > PI)
+     throw string("...");
+     
      Edge eb(Triangulation::greatestEdge() + 1);
      Face fb(Triangulation::greatestFace() + 1);
      Face fa1 = Triangulation::faceTable[(*(e1.getLocalFaces()))[0]];
@@ -194,9 +209,6 @@ void addTriangle(Edge e1, Edge e2)
      Triangulation::putEdge(eb.getIndex(), eb);
      Triangulation::putFace(fb.getIndex(), fb);
      
-     double ang = 2 * PI - getAngleSum(va);
-     if(ang > PI)
-     throw string("...");
      
      Triangulation::vertexTable[v1.getIndex()].addVertex(v2.getIndex());
      Triangulation::vertexTable[v2.getIndex()].addVertex(v1.getIndex());
@@ -294,7 +306,8 @@ void generateTriangulation(int numFaces)
                                try{                                             
                                addTriangle(e, Triangulation::edgeTable[edges[i]]);
                                }
-                               catch(string s){}
+                               catch(string s){ cout << "here\n";}
+                               break;
                             }
                          }
                          if(Triangulation::faceTable.size() >= numFaces)
@@ -311,7 +324,8 @@ void generateTriangulation(int numFaces)
                                try{                                             
                                addTriangle(e, Triangulation::edgeTable[edges[i]]);
                                }
-                               catch(string s){}
+                               catch(string s){cout << "here\n";}
+                               break;
                             }
                          }
                          if(Triangulation::faceTable.size() >= numFaces)
@@ -369,6 +383,7 @@ void flipAlgorithm()
 void weightedFlipAlgorithm()
 {
      int flipCount = 1;
+     TriangulationCoordinateSystem tcs;
      while(flipCount != 0)
      {
           cout << "No" << endl;
@@ -376,7 +391,7 @@ void weightedFlipAlgorithm()
           map<int, Edge>::iterator eit;
           for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
           {
-               cout << ".";
+               //cout << eit->first << "." << endl;
                Edge e = eit->second;
                if(!(isWeightedDelaunay(Triangulation::edgeTable[e.getIndex()])))
                {
@@ -384,26 +399,79 @@ void weightedFlipAlgorithm()
                     flipCount++;
                }
           }
+          tcs.generatePlane();
+          tcs.printToFile("Triangulations/ODE Result.txt");
+          system("PAUSE");
      }
      cout << "Yes" << endl;
      
 }
 
-//void generateTriangulation(int numVertices)
-//{
-//     srand(time(NULL));
-//     for(int i = 1; i <= numVertices; i++)
-//     {
-//          Point p(rand() % 100, rand() % 100);
-//          TriangulationCoordinateSystem::putPoint(i, p);
-//     }
-//     for(int i = 1; i <= TriangulationCoordinateSystem::pointTable.size(); i++)
-//     {
-//          
-//     }
-//}
+void checkTriangle(Edge e, double length1, double length2)
+{
+     Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+     Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
+     Vertex vb1, vb2;
+     Edge ea1, ea2;
+     
+     for(int i = 0; i < va1.getLocalEdges()->size(); i++)
+     {
+          if(Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].isBorder() && (*(va1.getLocalEdges()))[i] != e.getIndex())
+          {
+               ea1 = Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]];
+               break;
+          }
+     }
+     for(int i = 0; i < va2.getLocalEdges()->size(); i++)
+     {
+          if(Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]].isBorder() && (*(va2.getLocalEdges()))[i] != e.getIndex())
+          {
+               ea2 = Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]];
+               break;
+          }
+     }
+     
+     if((*(ea1.getLocalVertices()))[0] == va1.getIndex())
+          vb1 = Triangulation::vertexTable[(*(ea1.getLocalVertices()))[1]];
+     else
+          vb1 = Triangulation::vertexTable[(*(ea1.getLocalVertices()))[0]];
+          
+     if((*(ea2.getLocalVertices()))[0] == va2.getIndex())
+          vb2 = Triangulation::vertexTable[(*(ea2.getLocalVertices()))[1]];
+     else
+          vb2 = Triangulation::vertexTable[(*(ea2.getLocalVertices()))[0]];
 
+     
+     double ang1 = 2 * PI - getAngleSum(va1);
+     double ang2 = 2 * PI - getAngleSum(va2);
+     
+     double tempLength1 = sqrt(pow(length1, 2) + pow(ea1.getLength(), 2) - 2 * ea1.getLength() * length1 * cos(ang1));
+     double tempLength2 = sqrt(pow(length2, 2) + pow(ea2.getLength(), 2) - 2 * ea2.getLength() * length2 * cos(ang2));
+     
+     double tempAng1 = angle(ea1.getLength(), tempLength1, length1);
+     double tempAng2 = angle(ea2.getLength(), tempLength2, length2);
+     
+     if(getAngleSum(vb1) + tempAng1 > 2 * PI){
+                         cout << "ANgle\n";
+     throw string("angle sum 1");
+     }
+     if(getAngleSum(vb2) + tempAng2 > 2 * PI){
+                         cout << "ANgle\n";
+     throw string("angle sum 2");
+     }
 
+}
 
+void makeSpecialCase()
+{
+    firstTriangle(2.73205080757, 1.0, 1.93185165258);
+    addTriangle(Triangulation::edgeTable[3], 1.0, 1.0);
+    addTriangle(Triangulation::edgeTable[5], 1.0, 1.0);
+    addTriangle(Triangulation::edgeTable[2], Triangulation::edgeTable[7]);
+    addTriangle(Triangulation::edgeTable[8], 2.73205080757, 1.0);
+    addTriangle(Triangulation::edgeTable[6], Triangulation::edgeTable[10]);
+    addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[11]);
+
+}
 
 

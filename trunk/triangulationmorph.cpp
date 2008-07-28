@@ -235,7 +235,6 @@ void flip(Edge e)
         fb2.push_back(Triangulation::faceTable[sameAs[i]]);
      }
 
-     
      double ang1 = angle(va1, f1) + angle(va1, f2);
      
      //the next task is naturally to rearrange all the necessary references

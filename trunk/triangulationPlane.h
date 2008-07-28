@@ -32,3 +32,7 @@ void generateWeights();
 void flipAlgorithm();
 
 void weightedFlipAlgorithm();
+
+void checkTriangle(Edge, double, double);
+
+void makeSpecialCase();

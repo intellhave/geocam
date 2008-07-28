@@ -44,6 +44,7 @@ for i = 0:S-1
 % quit the program while it is running, hold Ctrl + C to %cancel. 
    
     pause(0.1);
+   
 end
 
 %convert from Excel to MATLAB
