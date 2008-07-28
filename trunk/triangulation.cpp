@@ -225,3 +225,14 @@ void Triangulation::getWeights(double* weights)
        i++;
      }
 }
+
+void Triangulation::setLengths(double* lengths)
+{
+     map<int, Edge>::iterator eit;
+     int i = 0;
+     for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++)
+     {
+       eit->second.setLength(lengths[i]);
+       i++;
+     }
+}

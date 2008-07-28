@@ -132,3 +132,5 @@ void printResultsVertex(char*, vector<double>*, vector<double>*);
  *            :
  */
 void printResultsNum(char*, vector<double>*, vector<double>*);
+
+void makeDelaunayTriangulationFile(char*, char*);

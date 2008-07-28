@@ -140,7 +140,7 @@ void testDelaunay()
 
 void testGeneratePlane()
 {
-     generateTriangulation(25);
+     generateTriangulation(30);
      char filename[] = "Triangulations/Plane Test.txt";
      writeTriangulationFile(filename);
      TriangulationCoordinateSystem tp;
@@ -156,24 +156,25 @@ void testGeneratePlane()
              cout << endl;
         }
      }
-     cout << "Pick a line index between 1 and " << edgeSize << ":  ";
-     cin >> index;
-     while(index != 0)
-     {
-        if(!tp.containsLine(index))
-        {
-           cout << "Line is not in system!\n";
-        }
-        if(index <= edgeSize && index >= 1)
-        {
-             Line l = tp.getLine(index);
-             cout << "Line " << index << "\n";
-             cout << "Initial X: " << l.getInitialX() << endl;
-             cout << "Initial Y: " << l.getInitialY() << endl;
-             cout << "Ending X: " << l.getEndingX() << endl;
-             cout << "Ending Y: " << l.getEndingY() << endl;
-             cout << "Length: " << l.getLength() << endl; 
-        }
+     cout << "\n";
+//     cout << "Pick a line index between 1 and " << edgeSize << ":  ";
+//     cin >> index;
+//     while(index != 0)
+//     {
+//        if(!tp.containsLine(index))
+//        {
+//           cout << "Line is not in system!\n";
+//        }
+//        if(index <= edgeSize && index >= 1)
+//        {
+//             Line l = tp.getLine(index);
+//             cout << "Line " << index << "\n";
+//             cout << "Initial X: " << l.getInitialX() << endl;
+//             cout << "Initial Y: " << l.getInitialY() << endl;
+//             cout << "Ending X: " << l.getEndingX() << endl;
+//             cout << "Ending Y: " << l.getEndingY() << endl;
+//             cout << "Length: " << l.getLength() << endl; 
+//        }
 //        cout << "\nPick a point index between 1 and " << vertexSize << ": ";
 //        cin >> index;
 //        if(index <= vertexSize && index >= 1)
@@ -181,11 +182,15 @@ void testGeneratePlane()
 //           Point p = tp.getPoint(index);
 //           cout << "Point " << index << " (" << p.x << ", " << p.y << ")\n";
 //        }
-        cout << "Pick a line index between 1 and " << edgeSize << ":  ";
-        cin >> index;
-     }
+//        cout << "Pick a line index between 1 and " << edgeSize << ":  ";
+//        cin >> index;
+//     }
      char fileN[] = "Triangulations/ODE Result.txt";
      tp.printToFile(fileN);
+     flipAlgorithm();
+     char fileN2[] = "Triangulations/ODE Result 2.txt";
+     tp.generatePlane();
+     tp.printToFile(fileN2);
 }
 void testMiscMath()
 {
@@ -201,10 +206,15 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
     
-    generateTriangulation(20);
-    generateWeights();
-    weightedFlipAlgorithm();
+   // generateTriangulation(20);
+   // generateWeights();
+   // weightedFlipAlgorithm();
 
+    //runFlow();
+    //testPointLineCircle();
+    //testDelaunay();
+    //testGeneratePlane();
+    //testMiscMath();
     system("PAUSE");
     return 0;
 }

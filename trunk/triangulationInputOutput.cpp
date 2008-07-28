@@ -381,7 +381,8 @@ void makeTriangulationFile (char* from, char* to) {
             f.push_back(face);
             infile >> ch;
         }
-        
+  
+  infile.close();      
   vector<Pair> list; 
   for(int i = 0; i < f.size(); i++)
   {
@@ -418,7 +419,6 @@ void makeTriangulationFile (char* from, char* to) {
    
   ofstream outfile;
   outfile.open(to, ios_base::trunc);
-  
   // Vertices
   for (int i = 0; i < v.size(); i++)
   {
@@ -529,8 +529,8 @@ void makeTriangulationFile (char* from, char* to) {
       }
       outfile << "\n";   
   }
-  
-  infile.close(); }
+  outfile.close();
+}
 
 void printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs)
 {
@@ -617,4 +617,24 @@ void printResultsNum(char* fileName, vector<double>* weights, vector<double>* cu
       vit++;
    }
    results.close();
+}
+
+void makeDelaunayTriangulationFile(char* triFile, char* lengthFile)
+{
+     makeTriangulationFile(triFile, triFile);
+     vector<double> lengths;
+     ifstream infile(lengthFile);
+     while(infile.good())
+     {
+        double length;
+        infile >> length;
+        lengths.push_back(length);
+     }
+     double lengthArr[lengths.size()];
+     for(int i = 0; i < lengths.size(); i++)
+     {
+         lengthArr[i] = lengths[i];
+     }
+     Triangulation::setLengths(lengthArr);
+     infile.close();
 }

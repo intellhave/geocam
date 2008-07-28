@@ -1,8 +1,21 @@
+/**************************************************************
+Class: Point, Line, and Circle
+Author: Alex Henniges, Tom Williams, Mitch Wilson
+Version: July 28, 2008
+***************************************************************
+This file holds the information for the three classes Point,
+Line, and Circle. These classes can be used independently of a
+triangulation, but are useful for providing coordinates to such
+a system. Currently implemented as a two-dimensional model.
+**************************************************************/
 #include <cstdlib>
 #include <cmath>
 #include "pointlinecircle.h"
 #include <iostream>
+
 using namespace std;
+
+
 Point::Point(double xi, double yi)
 {
    x = xi;
@@ -137,6 +150,40 @@ double Line::getLength()
      return sqrt(pow((x1-x2), 2) + pow((y1-y2), 2));
 }
 
+Point Line::intersection(Line l)
+{    
+     double xp, yp;
+     if(isVertical())
+     {
+          if(l.isVertical())
+              throw 0;
+          else
+          {
+               yp = l.getSlope() * x1 + l.getIntercept();
+               xp = x1;
+               Point p(xp, yp);
+               return p;
+          }
+     }
+     
+     if(l.isVertical())
+     {
+          yp = getSlope() * l.getInitialX() + getIntercept();
+          xp = l.getInitialX();
+          Point p(xp, yp);
+          return p;
+     }
+     
+     if(l.getSlope() == slope)
+         throw 0;
+     
+     xp = (getIntercept() - l.getIntercept()) / (l.getSlope() - getSlope());
+     yp = xp * slope + intercept;
+     
+     Point p(xp, yp);
+     return p;
+}
+
 Circle::Circle(Point c, double r): center(c.x, c.y)
 {
     radius = r;
@@ -159,40 +206,6 @@ double Circle::getRadius()
 Point Circle::getCenter()
 {
       return center;
-}
-
-Point Line::intersection(Line l)
-{    
-     double xp, yp;
-     if(isVertical())
-     {
-          if(l.isVertical())
-          throw 0;
-          else
-          {
-               yp = l.getSlope() * x1 + l.getIntercept();
-               xp = x1;
-               Point p(xp, yp);
-               return p;
-          }
-     }
-     
-     if(l.isVertical())
-     {
-          yp = getSlope() * l.getInitialX() + getIntercept();
-          xp = l.getInitialX();
-          Point p(xp, yp);
-          return p;
-     }
-     
-     if(l.getSlope() == slope)
-     throw 0;
-     
-     xp = (getIntercept() - l.getIntercept()) / (l.getSlope() - getSlope());
-     yp = ((l.getSlope() * getIntercept()) - (getSlope() * l.getIntercept())) / (getSlope() - l.getSlope());
-     
-     Point p(xp, yp);
-     return p;
 }
 
 Line Line::getPerpendicular(Point p)

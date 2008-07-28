@@ -19,14 +19,14 @@
     
 %convert from text to MATLAB
 
-    K = textread('c:\Dev-Cpp\geocam\Triangulations\ODE Result.txt');
+    K = textread('c:\Dev-Cpp\geocam\Triangulations\ODE Result 2.txt');
     S = (size(K,1))/4;
 
 %Create a 'for' loop that plots each triangle, one at a time, by accessing
 %the coordinates per triangle and plotting them in a connect-the-dots
 %fashion. The 'hold on' line allows for multiple graphs to be placed on one
 %figure. 
-
+figure
 for i = 0:S-1
     
     %X = [X1 X2 X3 X4] and Y = [Y1 Y2 Y3 Y4] by accessing the elements from

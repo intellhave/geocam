@@ -129,6 +129,8 @@ class Triangulation
      * necessarily by index. Can be used to easily conjoin flows.
      */
     static void getWeights(double*);
+    
+    static void setLengths(double*);
 };
 
 

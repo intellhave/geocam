@@ -1,3 +1,12 @@
+/**************************************************************
+File: Miscellaneous Math
+Author: Alex Henniges, Tom Williams, Mitch Wilson
+Version: July 28, 2008
+***************************************************************
+The Miscellaneous Math file holds the functions that perform
+calculations on Points, Lines, and Circles. All functions are
+done independently of any triangulation.
+**************************************************************/
 #include "miscmath.h"
 #include <iostream>
 #include<cmath>
@@ -5,14 +14,22 @@
 
 vector<double> quadratic(double a, double b, double c)
 {
+   /*                       _________
+                     +   _ | 2
+               -b    -    \|b  - 4*a*c
+         x =  -------------------------
+                         2*a
+   */ 
    vector<double> solutions;
-   double inside = b*b - 4*a*c;
+   double inside = b*b - 4*a*c; // The value inside the square root
    if(inside < 0)
    {
+     // No real solutions
      return solutions;
    }
    if(inside == 0)
    {
+     // Only one solution
      double sol = b * (-1) / (2*a);
      solutions.push_back(sol);
      return solutions;
@@ -26,6 +43,10 @@ vector<double> quadratic(double a, double b, double c)
 
 double distancePoint(Point a, Point b)
 {
+   /*         ____________________________             
+           _ |           2              2    
+     d =    \|(a_x - b_x)  + (a_y - b_y)
+   */
    return sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
 }
 
@@ -60,20 +81,26 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
     // (x-x1)^2 + (y-y1)^2 = r1^2
     // (x-x2)^2 + (y-y2)^2 = r2^2
     
-    // x^2 - 2*x1*x + x1^2 + y^2 - 2*y1*y + y1^2 = r1^2
-    // -
-    // x^2 - 2*x2*x + x2^2 + y^2 - 2*y2*y + y2^2 = r2^2
-    
-    // (2*x2 - 2*x1)x +(2*y2 - 2*y2)y = r1^2 - x1^2 - y1^2 - (r2^2 - x2^2 - y2^2)
+    /* x^2 - 2*x1*x + x1^2 + y^2 - 2*y1*y + y1^2 = r1^2
+       -
+       x^2 - 2*x2*x + x2^2 + y^2 - 2*y2*y + y2^2 = r2^2
+       ------------------------------------------------
+       (2*x2 - 2*x1)x +(2*y2 - 2*y2)y = r1^2 - x1^2 - y1^2 - (r2^2 - x2^2 - y2^2)
+       
+       xComp*x + yComp*y = rComp
+    */
     double xComp = 2 * center2.x - 2 * center1.x;
     double yComp = 2 * center2.y - 2 * center1.y;
     double r1Comp = r1*r1 - center1.x * center1.x - center1.y * center1.y;
     double r2Comp = r2*r2 - center2.x * center2.x - center2.y * center2.y;
     double rComp = r1Comp - r2Comp;
     
-    // xComp*x + yComp*y = rComp
     if(yComp == 0)
     {
+       /* x = rComp / xComp
+                         _________________
+          y = y1  +/-  \|r1^2 - (x - x1)^2  
+       */    
        double ySol1 = sqrt(r1*r1 - pow((rComp/xComp - center1.x), 2)) + center1.y;
        double ySol2 = (-1)*sqrt(r1*r1 - pow((rComp/xComp - center1.x),2)) + center1.y;
        Point sol1(rComp/xComp, ySol1);
@@ -84,6 +111,10 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
     }
     if(xComp == 0)
     {
+        /* y = rComp / yComp
+                          _________________
+           x = x1  +/-  \|r1^2 - (y - y1)^2  
+        */
        double xSol1 = sqrt(r1*r1 - pow((rComp/yComp - center1.y), 2)) + center1.x;
        double xSol2 = (-1)*sqrt(r1*r1 - pow((rComp/yComp - center1.y),2)) + center1.x;
        Point sol1(xSol1, rComp/yComp);
@@ -92,7 +123,10 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
        solutions.push_back(sol2);
        return solutions;
     }
-
+    
+    /*
+        y = (rComp - xComp*x) / yComp
+    */
     double b = (-2)*center1.x - 2*(rComp/yComp - center1.y)*(xComp/yComp);
 
     double a = 1 + pow((xComp/yComp), 2);
