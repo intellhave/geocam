@@ -206,14 +206,14 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
     
- //   generateTriangulation(15);
-//    generateWeights();
+    generateTriangulation(100);
+    generateWeights();
 //    writeTriangulationFile("Triangulations/manifold converted.txt");
 //    TriangulationCoordinateSystem tcs;
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 //    system("PAUSE");
-  //  weightedFlipAlgorithm();
+    weightedFlipAlgorithm();
    // generateTriangulation(20);
    // generateWeights();
    // weightedFlipAlgorithm();
@@ -230,6 +230,17 @@ int main(int argc, char *argv[])
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 
 
+<<<<<<< .mine
+//    firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
+//    addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
+//    //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
+//    addTriangle(Triangulation::edgeTable[3], 7.0, 7.0);
+//    addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[7]);
+//    
+//    flip(Triangulation::edgeTable[2]);
+//    writeTriangulationFile("Triangulations/manifold converted.txt");
+//    
+=======
     firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
     addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
     //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
@@ -254,6 +265,7 @@ int main(int argc, char *argv[])
     
     writeTriangulationFile("Triangulations/manifold converted.txt");
     
+>>>>>>> .r386
     tcs.printToFile("Triangulations/ODE Result.txt");
     //runFlow();
     //testPointLineCircle();

@@ -357,6 +357,10 @@ void TriangulationCoordinateSystem::printToFile(char* filename)
      map<int, Face>::iterator fit;
      for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
      {
+        if(fit->second.isNegative())
+           results << "-1\n";
+        else
+            results << "1\n";
         vector<int> vertices = *(fit->second.getLocalVertices());
         for(int i = 0; i < vertices.size(); i++)
         {
@@ -364,6 +368,6 @@ void TriangulationCoordinateSystem::printToFile(char* filename)
                 results << pointTable[vertices[i]].y << "\n";
         }
         results << setw(10) << pointTable[vertices[0]].x << "              ";
-        results<< pointTable[vertices[0]].y << "\n\n";
+        results<< pointTable[vertices[0]].y << "\n";
      }
 }
