@@ -10,6 +10,7 @@ Version: June 9, 2008
 // class constructor
 Face::Face() : Simplex()
 {
+             negative = false;
 	// insert your code here
 }
 
