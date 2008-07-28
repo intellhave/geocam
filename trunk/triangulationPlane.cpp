@@ -96,26 +96,16 @@ void addTriangle(Edge e, double length1, double length2)
      throw string("Invalid Edge Lengths");
      if(length2 >= (e.getLength() + length1))
      throw string("Invalid Edge Lengths");
-     
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+     
+     double anglesum = getAngleSum(va1);
      if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
      throw string("angle sum 1");
+     
      if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
      throw string("angle sum 2");
-//     try
-//     {
-//          checkTriangle(e, length1, length2);
-//     }
-//     catch(string s)
-//     {
-//          if(s.compare("angle sum 1") == 0)
-//          throw string("angle sum 1");
-//          if(s.compare("angle sum 2") == 0)
-//          throw string("angle sum 2");
-//     }
-     
      Vertex vb(Triangulation::greatestVertex() + 1);
      Edge eb1(Triangulation::greatestEdge() + 1);
      Edge eb2(Triangulation::greatestEdge() + 2);
@@ -129,8 +119,6 @@ void addTriangle(Edge e, double length1, double length2)
      vector<int> diff;
      diff = listDifference(fa.getLocalVertices(), e.getLocalVertices());
      Vertex va3 = Triangulation::vertexTable[diff[0]];
-     
-
      
      Triangulation::vertexTable[vb.getIndex()].addVertex(va1.getIndex());
      Triangulation::vertexTable[vb.getIndex()].addVertex(va2.getIndex());
@@ -175,7 +163,6 @@ void addTriangle(Edge e, double length1, double length2)
      
      Triangulation::edgeTable[eb1.getIndex()].setLength(length1);
      Triangulation::edgeTable[eb2.getIndex()].setLength(length2);
-     
 }
 
 void addTriangle(Edge e1, Edge e2)
@@ -462,7 +449,7 @@ void checkTriangle(Edge e, double length1, double length2)
 }
 
 void makeSpecialCase()
-{
+{   
     firstTriangle(2.73205080757, 1.0, 1.93185165258);
     addTriangle(Triangulation::edgeTable[3], 1.0, 1.0);
     addTriangle(Triangulation::edgeTable[5], 1.0, 1.0);

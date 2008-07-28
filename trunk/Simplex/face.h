@@ -22,7 +22,7 @@ class Face : public Simplex
 	public:
 		// class constructor
 		Face();
-		Face(int setIndex) : Simplex(setIndex) {};
+		Face(int setIndex) : Simplex(setIndex) {negative = false;};
 		// class destructor
 		~Face();
 		

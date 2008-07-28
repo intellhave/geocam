@@ -228,9 +228,8 @@ int main(int argc, char *argv[])
 //    system("PAUSE");
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
-//    system("PAUSE");
-    
-    
+
+
     //firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
     //addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
     //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[4]);
@@ -240,9 +239,6 @@ int main(int argc, char *argv[])
     TriangulationCoordinateSystem tcs;
     tcs.generatePlane();
     tcs.printToFile("Triangulations/ODE Result.txt");
-
-    
-    
     //runFlow();
     //testPointLineCircle();
     //testDelaunay();
