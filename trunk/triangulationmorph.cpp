@@ -17,6 +17,8 @@ the Triangulation in some way.
 #include <cstdlib>
 #include <iostream>
 
+#define PI 	3.141592653589793238
+
 void addNewVertex(Face f, double newWeight)
 {
      
@@ -213,6 +215,17 @@ void flip(Edge e)
      sameAs = listIntersection(&sameAs, f2.getLocalEdges());
      Edge eb2 = Triangulation::edgeTable[sameAs[0]];
      
+     double sum1 = angle(va1, f1) + angle(va1, f2);
+     double sum2 = angle(va2, f1) + angle(va2, f2);
+     if(sum1 > PI)
+     {
+         Triangulation::faceTable[f1.getIndex()].switchSide();
+     }
+     else if(sum2 > PI)
+     {
+         Triangulation::faceTable[f2.getIndex()].switchSide();
+         
+     }
      vector<Face> fa1, fb1, fa2, fb2;
      sameAs = listIntersection(f1.getLocalFaces(), ea1.getLocalFaces());
      for(int i = 0; i < sameAs.size(); i++)
@@ -322,7 +335,6 @@ void flip(Edge e)
      double l2 = ea2.getLength();
      
      Triangulation::edgeTable[e.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang1)));
-
 }
 
 void removeVertex(Vertex v)
