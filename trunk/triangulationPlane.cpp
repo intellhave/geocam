@@ -100,7 +100,6 @@ void addTriangle(Edge e, double length1, double length2)
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
-     
      if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
      throw string("angle sum 1");
      if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)

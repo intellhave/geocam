@@ -268,7 +268,7 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          points.push_back(p2);
 
          bool otherPos = l.isAbove(pointTable[va]);
-         if(fa.isNegative())
+         if(fb.isNegative())
               otherPos = !otherPos;
          bool foundOne = false;
          for(int i = 0; i < points.size(); i++)

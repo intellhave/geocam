@@ -230,13 +230,12 @@ int main(int argc, char *argv[])
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 //    system("PAUSE");
     
-    firstTriangle(2.73205080757, 1.0, 1.93185165258);
-    addTriangle(Triangulation::edgeTable[3], 1.0, 1.0);
-    addTriangle(Triangulation::edgeTable[5], 1.0, 1.0);
-    addTriangle(Triangulation::edgeTable[2], Triangulation::edgeTable[7]);
-    addTriangle(Triangulation::edgeTable[8], 2.73205080757, 1.0);
-    addTriangle(Triangulation::edgeTable[6], Triangulation::edgeTable[10]);
-    addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[11]);
+    
+    //firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
+    //addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
+    //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[4]);
+    
+    makeSpecialCase();
     
     TriangulationCoordinateSystem tcs;
     tcs.generatePlane();
