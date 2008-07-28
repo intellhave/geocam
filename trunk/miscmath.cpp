@@ -126,6 +126,11 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
     
     /*
         y = (rComp - xComp*x) / yComp
+        
+     => x^2 - 2*x1*x + x1^2 + ((rComp - xComp*x) / yComp - y1)^2 - r1^2 = 0
+        
+     => (1 + xComp/yComp)^2 * x^2 - 2*[x1 - (rComp/yComp - y1)*xComp/yComp] * x
+           + x1^2 + (rComp/yComp - y1)^2 - r1^2 = 0
     */
     double b = (-2)*center1.x - 2*(rComp/yComp - center1.y)*(xComp/yComp);
 
@@ -133,6 +138,7 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
 
     double c = center1.x*center1.x + pow((rComp/yComp - center1.y), 2) - r1*r1;
 
+    // Find x solutions using quadratic formula.
     vector<double> quadSol = quadratic(a, b, c);
     for(int i = 0; i < quadSol.size(); i++)
     {
@@ -141,13 +147,6 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
         double ySol = rComp/yComp - xComp/yComp*xSol;
 
         Point sol(xSol, ySol);
-//        printPoint(sol);
-//        cout << ":   ";
-//        printPoint(center1);
-//        cout << r1 << "    ";
-//        printPoint(center2);
-//        cout << r2 << "\n";
-//        system("PAUSE");
         solutions.push_back(sol);
     }
     return solutions;
@@ -171,9 +170,9 @@ Point rotateVector(Point vector, double angle)
 {
       double x = vector.x*cos(angle) - vector.y*sin(angle);
       double y = vector.x*sin(angle) + vector.y*cos(angle);
-      if(x < 0.00000001 && x > -0.00000001)
+      if(x < 0.00000001 && x > -0.00000001) // Error checking
            x = 0;
-      if(y < 0.00000001 && y > -0.00000001)
+      if(y < 0.00000001 && y > -0.00000001) // Error checking
            y = 0;
       Point p(x,y);
       return p;
