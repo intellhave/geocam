@@ -166,6 +166,7 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          return edgesAdded;
      }
      Line l = lineTable[e.getIndex()];
+
      int va, vb, v1, v2, ea1, ea2, eb1, eb2;
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      vector<int> vertex = listDifference(fa.getLocalVertices(), e.getLocalVertices());
@@ -202,7 +203,6 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
         eb2 = temp;
      }
 
-
      if(!containsPoint(va))
      {
          Circle c1(pointTable[v1], Triangulation::edgeTable[ea1].getLength());
@@ -214,15 +214,16 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
                               (-1) * angle(Triangulation::vertexTable[v1], fa));
          points.push_back(p1);
          points.push_back(p2);
+         
+         bool otherPos = l.isAbove(pointTable[vb]);
 
-         bool otherPos = l.isAbove(pointTable[va]);
          bool negA = fa.isNegative();
          bool negB = fb.isNegative();
          if((!(negA && negB)) && (negA || negB))
          {
               otherPos = !otherPos;
-              cout << e.getIndex() << endl;
          }  
+
          bool foundOne = false;
          for(int i = 0; i < points.size(); i++)
          {
@@ -271,14 +272,12 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
                               (-1) * angle(Triangulation::vertexTable[v1], fb));
          points.push_back(p1);
          points.push_back(p2);
-         
          bool otherPos = l.isAbove(pointTable[va]);
          bool negA = fa.isNegative();
          bool negB = fb.isNegative();
          if((!(negA && negB)) && (negA || negB))
          {
               otherPos = !otherPos;
-              cout << e.getIndex() << endl;
          }
          bool foundOne = false;
          for(int i = 0; i < points.size(); i++)

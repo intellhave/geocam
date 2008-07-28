@@ -206,14 +206,14 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
     
-//    generateTriangulation(100);
+ //   generateTriangulation(15);
 //    generateWeights();
 //    writeTriangulationFile("Triangulations/manifold converted.txt");
 //    TriangulationCoordinateSystem tcs;
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 //    system("PAUSE");
-//    weightedFlipAlgorithm();
+  //  weightedFlipAlgorithm();
    // generateTriangulation(20);
    // generateWeights();
    // weightedFlipAlgorithm();
@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 
-        
+
     firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
     addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
     //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);

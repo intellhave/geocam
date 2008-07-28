@@ -255,6 +255,7 @@ void generateTriangulation(int numFaces)
      length3 = rand()%(rInt + 1) + (abs(length1 - length2) + 1) + randNum * rDec;
 
      firstTriangle(length1, length2, length3);
+
      while(Triangulation::faceTable.size() < numFaces)
      {
          for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
@@ -370,7 +371,7 @@ void flipAlgorithm()
 void weightedFlipAlgorithm()
 {
      int flipCount = 1;
-     TriangulationCoordinateSystem tcs;
+    // TriangulationCoordinateSystem tcs;
      while(flipCount != 0)
      {
           cout << "No" << endl;
@@ -386,9 +387,9 @@ void weightedFlipAlgorithm()
                     flipCount++;
                }
           }
-          tcs.generatePlane();
-          tcs.printToFile("Triangulations/ODE Result.txt");
-          system("PAUSE");
+          //tcs.generatePlane();
+//          tcs.printToFile("Triangulations/ODE Result.txt");
+//          system("PAUSE");
      }
      cout << "Yes" << endl;
      

@@ -196,8 +196,9 @@ void flip(Edge e)
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
           
      diff = listDifference(f1.getLocalVertices(), f2.getLocalVertices());
-     if(diff.size() == 0)
+     if(diff.size() == 0){
      throw string("Invalid move, operation cancelled");
+     }
      Vertex vb1 = Triangulation::vertexTable[diff[0]];
      diff = listDifference(f2.getLocalVertices(), f1.getLocalVertices());
      Vertex vb2 = Triangulation::vertexTable[diff[0]];
