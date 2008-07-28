@@ -383,7 +383,7 @@ void flipAlgorithm()
 void weightedFlipAlgorithm()
 {
      int flipCount = 1;
-    // TriangulationCoordinateSystem tcs;
+     TriangulationCoordinateSystem tcs;
      while(flipCount != 0)
      {
           cout << "No" << endl;
@@ -399,9 +399,9 @@ void weightedFlipAlgorithm()
                     flipCount++;
                }
           }
-          //tcs.generatePlane();
-//          tcs.printToFile("Triangulations/ODE Result.txt");
-//          system("PAUSE");
+          tcs.generatePlane();
+          tcs.printToFile("Triangulations/ODE Result.txt");
+          system("PAUSE");
      }
      cout << "Yes" << endl;
      

@@ -74,70 +74,94 @@ void TriangulationCoordinateSystem::clearSystem()
 }
 void TriangulationCoordinateSystem::generatePlane()
 {
-    clearSystem();
-    int v1, v2, va, vb, ea1, ea2, eb1, eb2;
-    map<int, Edge>::iterator eit;
-    Edge e = Triangulation::edgeTable.begin()->second;
+    clearSystem(); // Clear the system first.
+    int v1, v2, va, vb, ea1, ea2, eb1, eb2; // Needed references
+    Edge e = Triangulation::edgeTable.begin()->second; // Get the first edge.
     Point p1(0, 0);
     Point p2(e.getLength(), 0);
-    Line l1(p1, p2);
+    Line l1(p1, p2); // Create the first line
     putLine(e.getIndex(), l1);
-    int edgesAdded = 1;
-    v1 = (*(e.getLocalVertices()))[0];
-    v2 = (*(e.getLocalVertices()))[1];
-    putPoint(v1, p1);
+    int edgesAdded = 1; // Edges added keeps track of all the lines added 
+                        // to the system.
+    v1 = (*(e.getLocalVertices()))[0]; // Get the first vertex.
+    v2 = (*(e.getLocalVertices()))[1]; // Get the second vertex.
+    putPoint(v1, p1); // Add the points to the system.
     putPoint(v2, p2);
     
-    Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+    // Get the first face.
+    Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]]; 
     vector<int> vertex = listDifference(fa.getLocalVertices(), e.getLocalVertices());
-    va = vertex[0];
+    va = vertex[0]; // Get vertex on fa and oposite edge
     vector<int> edges = listIntersection(fa.getLocalEdges(), e.getLocalEdges());
-    ea1 = edges[0];
+    ea1 = edges[0]; // Get the other two edges
     ea2 = edges[1];
-    if(!Triangulation::edgeTable[ea1].isAdjVertex(v1))
-    {
+    if(!Triangulation::edgeTable[ea1].isAdjVertex(v1)) // Make sure ea1 has v1
+    {                     // This is needed for finding proper solutions for va.
         int temp = ea1;
         ea1 = ea2;
         ea2 = temp;
     }
-    
-    Circle c1(p1, Triangulation::edgeTable[ea1].getLength());
-    Circle c2(p2, Triangulation::edgeTable[ea2].getLength());
-    vector<Point> points = circleIntersection(c1, c2);
+    vector<Point> points; // Set of solution points.
+    // Rotate line l1 by the proper angle counter-clockwise and scale by 
+    // length ea1 to find coordinate point for third vertex.
+    Point p3 = findPoint(l1, Triangulation::edgeTable[ea1].getLength(), 
+               angle(Triangulation::vertexTable[v1], fa));
+    // Rotate line l1 by the proper angle clockwise and scale by length ea1
+    // to find coordinate point for third vertex.
+    Point p4 = findPoint(l1, Triangulation::edgeTable[ea1].getLength(), 
+              (-1) * angle(Triangulation::vertexTable[v1], fa));
+    points.push_back(p3);
+    points.push_back(p4);
     for(int i = 0; i < points.size(); i++)
     {
-         if(!l1.isAbove(points[i]))
-         {
+         if(!l1.isAbove(points[i])) // Take the point that is above line l1.
+         {                          // That is, l1 is not above that point.
               Point p = points[i];
               putPoint(va, p);
-              Line l2(p1, p);
-              Line l3(p2, p);
+              Line l2(p1, p); // Construct the points and lines, place them in
+              Line l3(p2, p); // coordinate system.
               putLine(ea1, l2);
               putLine(ea2, l3);
-              edgesAdded += 2;
+              edgesAdded += 2; // Increment edges added by 2.
               break;       
          }
     }
-    if(!e.isBorder())
+    if(!e.isBorder()) // If the edge has another face...do the same for it.
     {
+        // Get the second face, the other vertex and the other edges.
         Face fb = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
         vertex = listDifference(fb.getLocalVertices(), e.getLocalVertices());
         vb = vertex[0];
         edges = listIntersection(fb.getLocalEdges(), e.getLocalEdges());
         eb1 = edges[0];
         eb2 = edges[1];
-        if(!Triangulation::edgeTable[eb1].isAdjVertex(v1))
-        {
+        if(!Triangulation::edgeTable[eb1].isAdjVertex(v1)) // Again, make sure 
+        {                                                  // eb1 has v1                     
            int temp = eb1;
            eb1 = eb2;
            eb2 = temp;
         }
-        Circle c3(p1, Triangulation::edgeTable[eb1].getLength());
-        Circle c4(p2, Triangulation::edgeTable[eb2].getLength());
-        vector<Point> points = circleIntersection(c3, c4);
+        vector<Point> points2; // New solution set.
+        p3 = findPoint(l1, Triangulation::edgeTable[ea1].getLength(), 
+               angle(Triangulation::vertexTable[v1], fa));
+        p4 = findPoint(l1, Triangulation::edgeTable[ea1].getLength(), 
+              (-1) * angle(Triangulation::vertexTable[v1], fa));
+        points2.push_back(p3);
+        points2.push_back(p4);
+        
+        bool otherPos = false; // The orientation of the other vertex. False
+                               // since va was above line l1.
+        
+        bool negA = fa.isNegative(); // Determine if either fa or fb is negative
+        bool negB = fb.isNegative(); // change otherPos accordingly.
+        if((!(negA && negB)) && (negA || negB))
+        { // If either fa or fb is negative, but not both ... switch otherPos.
+              otherPos = !otherPos; // Now the correct point is also above l1.
+        }  
+        
         for(int i = 0; i < points.size(); i++)
         {
-             if(l1.isAbove(points[i]))
+             if(l1.isAbove(points[i]) != otherPos)
              {
                     Point p = points[i];
                     putPoint(vb, p);
@@ -150,6 +174,8 @@ void TriangulationCoordinateSystem::generatePlane()
              }
         }
     }
+    // Call helper method on each edge, setting edgesAdded to the return value.
+    // It may be that by the time this call returns, many edges were added.
     edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea1], edgesAdded);
     edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea2], edgesAdded);
     if(!e.isBorder())
@@ -161,19 +187,25 @@ void TriangulationCoordinateSystem::generatePlane()
 
 int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
 {
+    // This is the exit condition: if all the edges have been added or this
+    // edge is a border (which means all of its info has been added already),
+    // then return.
      if(edgesAdded == Triangulation::edgeTable.size() || e.isBorder())
-     {
+     { 
          return edgesAdded;
      }
-     Line l = lineTable[e.getIndex()];
+     
+     // Get the line representing edge e. It should already exist.
+     Line l = lineTable[e.getIndex()]; 
 
-     int va, vb, v1, v2, ea1, ea2, eb1, eb2;
+     int va, vb, v1, v2, ea1, ea2, eb1, eb2; // Needed references
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      vector<int> vertex = listDifference(fa.getLocalVertices(), e.getLocalVertices());
      va = vertex[0];
      vector<int> edges = listIntersection(fa.getLocalEdges(), e.getLocalEdges());
      ea1 = edges[0];
      ea2 = edges[1];
+     // Make sure v1 and v2 are connected to ea1 and ea2, respectively.
      v1 = (listIntersection(Triangulation::edgeTable[ea1].getLocalVertices(), e.getLocalVertices()))[0];
      v2 = (listIntersection(Triangulation::edgeTable[ea2].getLocalVertices(), e.getLocalVertices()))[0];
      
@@ -183,7 +215,8 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      edges = listIntersection(fb.getLocalEdges(), e.getLocalEdges());
      eb1 = edges[0];
      eb2 = edges[1];
-
+     // Make sure that v1 is the intial point of line l. This is needed to
+     // properly rotate the and find the potential points.
      if(l.getInitialX() != pointTable[v1].x || l.getInitialY() != pointTable[v1].y)
      {
          int temp = v1;
@@ -196,17 +229,15 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          eb1 = eb2;
          eb2 = temp;
      }
-     if(!Triangulation::edgeTable[eb1].isAdjVertex(v1))
-     {
+     if(!Triangulation::edgeTable[eb1].isAdjVertex(v1)) // Since v1 and v2 are
+     {                          // already fixed, change eb1 and eb2 if needed.
         int temp = eb1;
         eb1 = eb2;
         eb2 = temp;
      }
 
-     if(!containsPoint(va))
+     if(!containsPoint(va)) // If point va has not already been added...add it.
      {
-         Circle c1(pointTable[v1], Triangulation::edgeTable[ea1].getLength());
-         Circle c2(pointTable[v2], Triangulation::edgeTable[ea2].getLength());
          vector<Point> points;
          Point p1 = findPoint(l, Triangulation::edgeTable[ea1].getLength(), 
                               angle(Triangulation::vertexTable[v1], fa));
@@ -215,19 +246,32 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          points.push_back(p1);
          points.push_back(p2);
          
-         bool otherPos = l.isAbove(pointTable[vb]);
+         /* vb must already be added, get its orientation. Most of time, we
+            want the point that is opposite the one already added. So if vb
+            is above the line, va should be below.
+                              . <- vb
+                             / \
+                            /   \
+                           / *   \
+                          /       \     
+                         /_________\
+                         
+                               (*) <- We want this one for va
+         */
+         bool otherPos = l.isAbove(pointTable[vb]); 
 
+         // Check for negative triangles on either face. 
+         // Switch otherPos if only one is negative.
          bool negA = fa.isNegative();
          bool negB = fb.isNegative();
          if((!(negA && negB)) && (negA || negB))
          {
               otherPos = !otherPos;
          }  
-
-         bool foundOne = false;
+         
          for(int i = 0; i < points.size(); i++)
          {
-              if(l.isAbove(points[i]) != otherPos)
+              if(l.isAbove(points[i]) != otherPos) // If it is not the same
               {
                   Point p = points[i];
                   Line l1(pointTable[v1], p);
@@ -245,20 +289,7 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
                      edgesAdded++;
                      edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea2], edgesAdded);
                   }
-                  foundOne = true;
              }
-         }
-         if(!foundOne)
-         {
-               cout << "Here\n";
-//             cout << l.getLength() << "   ";
-//             printPoint(l.getInitial());
-//             cout << "    ";
-//             printPoint(l.getEnding());
-//             cout << "\n";
-//             cout << e.getLength() << "   ";
-//             cout << Triangulation::edgeTable[ea1].getLength() << "   ";
-//             cout << Triangulation::edgeTable[ea2].getLength() << "\n";
          }
      }
      if(!containsPoint(vb))

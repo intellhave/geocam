@@ -35,7 +35,7 @@ for i = 0:S-1
     X = [K(i*5 + 2, 1) K(i*5 + 3, 1) K(i*5 + 4, 1) K(i*5 + 5, 1)];
     Y = [K(i*5 + 2, 2) K(i*5 + 3, 2) K(i*5 + 4, 2) K(i*5 + 5, 2)];
     
-    if (K(i*5,1) == -1)
+    if (K(i*5 + 1,1) == -1)
     h = fill(X,Y,rand(1,3));
     set(h,'EdgeAlpha',.2);
     end
@@ -64,7 +64,7 @@ for i = 0:S-1
 % the end figure. If you need to quit the program while it is running, hold
 % Ctrl + C to cancel. 
    
-    pause(0.1);
+    pause(0.05);
 
    
 end

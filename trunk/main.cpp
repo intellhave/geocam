@@ -206,11 +206,50 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
     
-    generateTriangulation(100);
+    generateTriangulation(50);
     generateWeights();
     TriangulationCoordinateSystem tcs;
     tcs.generatePlane();
     tcs.printToFile("Triangulations/ODE Result.txt");
+    system("PAUSE");
+//    writeTriangulationFile("Triangulations/manifold converted.txt");
+//    TriangulationCoordinateSystem tcs;
+//    tcs.generatePlane();
+//    tcs.printToFile("Triangulations/ODE Result.txt");
+//    system("PAUSE");
+    weightedFlipAlgorithm();
+   // generateTriangulation(20);
+   // generateWeights();
+   // weightedFlipAlgorithm();
+//    firstTriangle(1.0, 1.0, 1.8);
+//    addTriangle(Triangulation::edgeTable[1], 1.0, 1.8);
+//    addTriangle(Triangulation::edgeTable[2], 1.0, 0.6);
+//    addTriangle(Triangulation::edgeTable[4], 0.6, 1.0);
+//    addTriangle(Triangulation::edgeTable[6], Triangulation::edgeTable[9]);
+
+
+//    system("PAUSE");
+//    tcs.generatePlane();
+//    tcs.printToFile("Triangulations/ODE Result.txt");
+
+
+    //firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
+   // addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
+    //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
+   // addTriangle(Triangulation::edgeTable[3], 7.0, 7.0);
+   // addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[7]);
+//    
+    //flip(Triangulation::edgeTable[2]);
+//    writeTriangulationFile("Triangulations/manifold converted.txt");
+//    
+    tcs.generatePlane();
+    tcs.printToFile("Triangulations/ODE Result.txt");
+    //runFlow();
+    //testPointLineCircle();
+    //testDelaunay();
+    //testGeneratePlane();
+    //testMiscMath();
+
     system("PAUSE");
     
     weightedFlipAlgorithm();

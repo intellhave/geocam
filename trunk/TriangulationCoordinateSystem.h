@@ -28,10 +28,22 @@ Version: July 28, 2008
  * in the same way. 
  */
 class TriangulationCoordinateSystem
-{     
+{    
+     /*
+      * Adds a Line to the lineTable.
+      */
       void putLine(int, Line);
+      /*
+      * Adds a Point to the pointTable.
+      */
       void putPoint(int, Point);
+      /*
+       * Clears the point and line tables.
+       */
       void clearSystem();
+      /*
+       * Helper method for recursive generatePlane().
+       */
       int generatePlaneHelper(Edge, int);
       map<int, Line> lineTable;
       map<int, Point> pointTable;
@@ -48,9 +60,47 @@ class TriangulationCoordinateSystem
        * given by its index.
        */
       bool containsPoint(int);
+      /*
+       * Generates a coordinate system of the current triangulation
+       * on the cartesian plane. Used with TriangulationPlane to create
+       * a proper flat triangulation. Each time this method is called,
+       * the point and line tables are cleared and rebuilt. Every system
+       * places the first line (representing edge 1) onto the the x-axis
+       * with the first vertex on the origin. Therefore, flipping this
+       * edge can cause a visualization of the triangulation to rotate.
+       */
       void generatePlane();
+      /*
+       * Prints a set of coordinate points representing vertices of 
+       * triangles so that the result can be printed by MatLab. The
+       * information is printed as follows:
+       *              
+       *             1
+       *             0                       0
+       *             10.1365                 0
+       *             3.78181                 4.28942
+       *             0                       0
+       *             1
+       *             0                       0
+       *             10.1365                 0
+       *             6.97122                 -8.61989
+       *             0                       0
+       *
+       * A triangle is represented as four points connected in order
+       * where the first and last are the same. The first column is 
+       * the x-coordinates and the second column is the y-coordinates.
+       * Each triangle is separated by either a 1 or a -1 which tells 
+       * whether or not a triangle is a "negative" triangle. A "negative"
+       * triangle is filled with a color when visualizing.      
+       */
       void printToFile(char*);
+      /*
+       * Returns the Point in the pointTable with the given index.
+       */
       Point getPoint(int);
+      /*
+       * Returns the Line in the lineTable with the given index.
+       */
       Line getLine(int);
 };
 
