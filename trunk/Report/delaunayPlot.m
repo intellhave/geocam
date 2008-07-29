@@ -64,7 +64,7 @@ for i = 0:S-1
 % the end figure. If you need to quit the program while it is running, hold
 % Ctrl + C to cancel. 
    
-    pause(0.05);
+    pause();
 
    
 end

@@ -250,12 +250,15 @@ int main(int argc, char *argv[])
     //testDelaunay();
     //testGeneratePlane();
     //testMiscMath();
-
+    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+    {
+            cout << Triangulation::edgeTable[i].getLength() << "\n";
+    }
     system("PAUSE");
     
-    weightedFlipAlgorithm();
-    tcs.generatePlane();
-    tcs.printToFile("Triangulations/ODE Result.txt");
-    system("PAUSE");
+    //weightedFlipAlgorithm();
+//    tcs.generatePlane();
+//    tcs.printToFile("Triangulations/ODE Result.txt");
+//    system("PAUSE");
     return 0;
 }

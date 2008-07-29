@@ -12,7 +12,7 @@ TRI = delaunay(X,Y);
 for i = 1:size(TRI,1)
     TRI(i,1:3) = sort(TRI(i,1:3));
 end
-TRI = sortrows(TRI);
+TRI = sortrows(TRI)
 
 filename = 'c:\Dev-Cpp\geocam\Triangulations\MATLABTRI2.txt';
 filenamE = 'c:\Dev-Cpp\geocam\Triangulations\EdgeLengths.txt';
@@ -84,6 +84,7 @@ len = [];
 for k = 1:size(A,1)
     i = A(k,1); j = A(k,2);
     len = [len ; (sqrt((X(i) - X(j))^2 + (Y(i) - Y(j))^2))];
+    A(k,:)
 end
 
 fprintf(fid2, '%.6G ', len);
