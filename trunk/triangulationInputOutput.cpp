@@ -622,6 +622,7 @@ void printResultsNum(char* fileName, vector<double>* weights, vector<double>* cu
 void makeDelaunayTriangulationFile(char* triFile, char* lengthFile)
 {
      makeTriangulationFile(triFile, triFile);
+     readTriangulationFile(triFile);
      vector<double> lengths;
      ifstream infile(lengthFile);
      while(infile.good())

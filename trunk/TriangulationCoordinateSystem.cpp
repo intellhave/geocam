@@ -199,6 +199,20 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      Line l = lineTable[e.getIndex()]; 
 
      int va, vb, v1, v2, ea1, ea2, eb1, eb2; // Needed references
+     /* Reference Chart:
+                              . <- va    
+                             / \      
+                            /   \      
+                        ea1/[fa] \ea2    
+                          /       \      
+                   v1-> ./___ e ___\. <- v2   
+                         \         /      
+                          \  [fb] /      
+                        eb1\     /eb2   
+                            \   /      
+                             \ /      
+                              . <- vb   
+      */
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      vector<int> vertex = listDifference(fa.getLocalVertices(), e.getLocalVertices());
      va = vertex[0];
@@ -222,12 +236,9 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          int temp = v1;
          v1 = v2;
          v2 = temp;
-         temp = ea1;
+         temp = ea1; // We have to change ea1 as well.
          ea1 = ea2;
          ea2 = temp;
-         temp = eb1;
-         eb1 = eb2;
-         eb2 = temp;
      }
      if(!Triangulation::edgeTable[eb1].isAdjVertex(v1)) // Since v1 and v2 are
      {                          // already fixed, change eb1 and eb2 if needed.
@@ -239,8 +250,10 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      if(!containsPoint(va)) // If point va has not already been added...add it.
      {
          vector<Point> points;
+         // Rotate counter-clockwise along v1 from edge e to edge ea1.
          Point p1 = findPoint(l, Triangulation::edgeTable[ea1].getLength(), 
                               angle(Triangulation::vertexTable[v1], fa));
+         // Rotate clockwise along v1 from edge e to edge ea1.
          Point p2 = findPoint(l, Triangulation::edgeTable[ea1].getLength(), 
                               (-1) * angle(Triangulation::vertexTable[v1], fa));
          points.push_back(p1);
@@ -252,9 +265,9 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
                               . <- vb
                              / \
                             /   \
-                           / *   \
+                        eb1/ *   \eb2
                           /       \     
-                         /_________\
+                     v1  /_________\ v2
                          
                                (*) <- We want this one for va
          */
@@ -271,112 +284,120 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
          
          for(int i = 0; i < points.size(); i++)
          {
-              if(l.isAbove(points[i]) != otherPos) // If it is not the same
-              {
+              if(l.isAbove(points[i]) != otherPos) // If it is not the same ...
+              {                                    // we want this point.
                   Point p = points[i];
-                  Line l1(pointTable[v1], p);
-                  Line l2(pointTable[v2], p);
+                  Line l1(pointTable[v1], p); // Line for ea1
+                  Line l2(pointTable[v2], p); // Line for ea2
                   putPoint(va, p);
-                  if(!containsLine(ea1))
+                  if(!containsLine(ea1)) // If ea1 has not been added...add it
                   {
                      putLine(ea1, l1);
-                     edgesAdded++;
-                     edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea1], edgesAdded);
+                     edgesAdded++; // Increment edges added.
+                     edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea1], 
+                                edgesAdded); // Recursively go through edge ea1.
                   }
-                  if(!containsLine(ea2))
+                  if(!containsLine(ea2)) // If ea2 has not been added...add it
                   {
                      putLine(ea2, l2);
-                     edgesAdded++;
-                     edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea2], edgesAdded);
+                     edgesAdded++; // Increment edges added.
+                     edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea2], 
+                                edgesAdded); // Recursively go through edge ea2.
                   }
              }
          }
-     }
-     if(!containsPoint(vb))
+     } 
+    else if(!containsPoint(vb)) // If point vb has not been added...add it.
      {
-         Circle c1(pointTable[v1], Triangulation::edgeTable[eb1].getLength());
-         Circle c2(pointTable[v2], Triangulation::edgeTable[eb2].getLength());
          vector<Point> points;
+         // Rotate counter-clockwise along v1 from edge e to edge eb1.
          Point p1 = findPoint(l, Triangulation::edgeTable[eb1].getLength(), 
                               angle(Triangulation::vertexTable[v1], fb));
+         // Rotate clockwise along v1 from edge e to edge eb1.
          Point p2 = findPoint(l, Triangulation::edgeTable[eb1].getLength(), 
                               (-1) * angle(Triangulation::vertexTable[v1], fb));
          points.push_back(p1);
          points.push_back(p2);
+         
+         /* va must already be added, get its orientation. Most of time, we
+            want the point that is opposite the one already added. So if va
+            is above the line, vb should be below.
+                              . <- va
+                             / \
+                            /   \
+                        ea1/ *   \ea2
+                          /       \     
+                     v1  /_________\ v2
+                         
+                               (*) <- We want this one for vb
+         */
          bool otherPos = l.isAbove(pointTable[va]);
          bool negA = fa.isNegative();
          bool negB = fb.isNegative();
          if((!(negA && negB)) && (negA || negB))
-         {
+         { // Switch otherPos if only either fa or fb is a "negative" triangle.
               otherPos = !otherPos;
          }
-         bool foundOne = false;
          for(int i = 0; i < points.size(); i++)
          {
-              
-              if(l.isAbove(points[i]) != otherPos)
-              {
+              if(l.isAbove(points[i]) != otherPos) // If it is not the same ...
+              {                                    // we want this point.
                   Point p = points[i];
-                  Line l1(pointTable[v1], p);
-                  Line l2(pointTable[v2], p);
+                  Line l1(pointTable[v1], p); // Line for eb1
+                  Line l2(pointTable[v2], p); // Line for eb2
                   putPoint(vb, p);
-                  if(!containsLine(eb1))
+                  if(!containsLine(eb1)) // If eb1 has not been added... add it.
                   {
                     putLine(eb1, l1);
-                    edgesAdded++;
-                    edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb1], edgesAdded);
+                    edgesAdded++; // Increment edges added.
+                    edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb1], 
+                               edgesAdded); // Recursively go through edge eb1.
                   }
-                  if(!containsLine(eb2))
+                  if(!containsLine(eb2)) // If eb2 has not been added... add it.
                   {
                     putLine(eb2, l2);
-                    edgesAdded++;
-                    edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb2], edgesAdded);
+                    edgesAdded++; // Increment edges added.
+                    edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb2], 
+                               edgesAdded); // Recursively go through edge eb2.
                   }
-                  foundOne = true;
              } 
          }
-         if(!foundOne)
-         {
-               cout << "Here\n";
-//             cout << l.getLength() << "   ";
-//             printPoint(l.getInitial());
-//             cout << "    ";
-//             printPoint(l.getEnding());
-//             cout << "\n";
-//             cout << e.getLength() << "   ";
-//             cout << Triangulation::edgeTable[eb1].getLength() << "   ";
-//             cout << Triangulation::edgeTable[eb2].getLength() << "\n";
-         }
-
      }
-     if(!containsLine(ea1))
+   else // Both va and vb were already added, but that does not mean all of 
+   {   // the edges have been added.
+     if(!containsLine(ea1)) // If ea1 has not been added ... add it.
      {
-        Line l1(pointTable[v1], pointTable[va]);
+        Line l1(pointTable[v1], pointTable[va]); // Connect v1 to va. 
         putLine(ea1, l1);
-        edgesAdded++;
-        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea1], edgesAdded);
+        edgesAdded++; // Increment edges added.
+        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea1], 
+                   edgesAdded); // Recursively go through edge ea1.
      }
-     if(!containsLine(ea2))
+     if(!containsLine(ea2)) // If ea2 has not been added ... add it.
      {
-        Line l1(pointTable[v2], pointTable[va]);
+        Line l1(pointTable[v2], pointTable[va]); // Connect v2 to va.
         putLine(ea2, l1);
-        edgesAdded++;
-        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea2], edgesAdded);
+        edgesAdded++; // Increment edges added.
+        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[ea2], 
+                   edgesAdded); // Recursively go through edge ea2.
      }
-     if(!containsLine(eb1))
+     if(!containsLine(eb1)) // If eb1 has not been added ... add it.
      {
-        Line l1(pointTable[v1], pointTable[vb]);
+        Line l1(pointTable[v1], pointTable[vb]); // Connect v1 to vb.
         putLine(eb1, l1);
-        edgesAdded++;
-        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb1], edgesAdded);
+        edgesAdded++; // Increment edges added.
+        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb1], 
+                   edgesAdded); // Recursively go through edge eb1.
      }
-     if(!containsLine(eb2))
+     if(!containsLine(eb2)) // If eb2 has not been added ... add it.
      {
-        Line l1(pointTable[v2], pointTable[vb]);
+        Line l1(pointTable[v2], pointTable[vb]); // Connect v2 to vb.
         putLine(eb2, l1);
-        edgesAdded++;
-        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb2], edgesAdded);
+        edgesAdded++; // Increment edges added.
+        edgesAdded = generatePlaneHelper(Triangulation::edgeTable[eb2], 
+                   edgesAdded); // Recursively go through edge eb2.
      }
+   }
      return edgesAdded;
 }
 

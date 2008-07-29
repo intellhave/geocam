@@ -205,19 +205,20 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
-    
-    generateTriangulation(50);
-    generateWeights();
+    makeDelaunayTriangulationFile("Triangulations/MATLABTRI2.txt", 
+                                  "Triangulations/EdgeLengths.txt");
+    //generateTriangulation(50);
+//    generateWeights();
     TriangulationCoordinateSystem tcs;
-    tcs.generatePlane();
-    tcs.printToFile("Triangulations/ODE Result.txt");
-    system("PAUSE");
+//    tcs.generatePlane();
+//    tcs.printToFile("Triangulations/ODE Result.txt");
+//    system("PAUSE");
 //    writeTriangulationFile("Triangulations/manifold converted.txt");
 //    TriangulationCoordinateSystem tcs;
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 //    system("PAUSE");
-    weightedFlipAlgorithm();
+    //weightedFlipAlgorithm();
    // generateTriangulation(20);
    // generateWeights();
    // weightedFlipAlgorithm();
@@ -241,7 +242,7 @@ int main(int argc, char *argv[])
 //    
     //flip(Triangulation::edgeTable[2]);
 //    writeTriangulationFile("Triangulations/manifold converted.txt");
-//    
+//   
     tcs.generatePlane();
     tcs.printToFile("Triangulations/ODE Result.txt");
     //runFlow();
