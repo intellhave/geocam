@@ -12,7 +12,15 @@ TRI = delaunay(X,Y);
 for i = 1:size(TRI,1)
     TRI(i,1:3) = sort(TRI(i,1:3));
 end
+
 TRI = sortrows(TRI)
+
+%Draw initial triangulation
+for i = 1:size(TRI,1)
+    K = [TRI(i,1) TRI(i,2) TRI(i,3) TRI(i,1)];
+    plot(X(K),Y(K))
+    hold on;
+end
 
 filename = 'c:\Dev-Cpp\geocam\Triangulations\MATLABTRI2.txt';
 filenamE = 'c:\Dev-Cpp\geocam\Triangulations\EdgeLengths.txt';
