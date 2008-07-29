@@ -132,5 +132,47 @@ end
 axis image
 axis off
 
+%Figure 13. An example of an anti- triangle. The red line is the one that
+%is flipped. Dots are used to illustrate the negative area. 
 
-    
+figure;
+Y = [0 0 1 0];
+X = [0 1 2 0];
+plot(X,Y,'linewidth',2)
+hold on; 
+plot(X,-Y,'g','linewidth',2)
+hold on;
+plot([0 1],[0 0],'r','linewidth',2)
+axis off;
+
+figure;
+X2 = 1:.1:1.9;
+Y2 = -1:.1:1;
+[X2, Y2] = meshgrid(X2,Y2);
+for i = 1:size(X2,1)*size(X2,2)
+    if Y2(i) - X2(i) >= -1;
+        X2(i) = 1.1; Y2(i) = 0;
+    end
+    if X2(i) + Y2(i) <= 1
+        X2(i) = 1.1; Y2(i) = 0;
+    end  
+end
+plot(X2,Y2,'r.','linewidth',2);
+hold on;
+plot([2 2],[-1,1],'r','linewidth',2)
+plot([0 2 1],[0 1 0],'linewidth',2)
+plot([0 2 1], [0 -1 0],'g', 'linewidth', 2)
+X3 = 0.05:.1:1.95;
+Y3 = -.95:.1:.95;
+[X3, Y3] = meshgrid(X3,Y3);
+for i = 1:size(X3,1)*size(X3,2)
+    if Y3(i) - .5*X3(i) >= 0
+        X3(i) = 1.1; Y3(i) = 0;
+    end
+    if .5*X3(i) + Y3(i) <= 0
+        X3(i) = 1.1; Y3(i) = 0;
+    end  
+end
+plot(X3,Y3,'b.')
+axis off;
+
