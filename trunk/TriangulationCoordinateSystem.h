@@ -102,6 +102,8 @@ class TriangulationCoordinateSystem
        * Returns the Line in the lineTable with the given index.
        */
       Line getLine(int);
+      
+      void update();
 };
 
 #endif // TRIANGULATIONCOORDINATESYSTEM_H

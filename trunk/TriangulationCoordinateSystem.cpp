@@ -401,6 +401,38 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      return edgesAdded;
 }
 
+void TriangulationCoordinateSystem::update()
+{
+     map<int, Line>::iterator lit;
+     int lineSize = lineTable.size();
+     int lineArr[lineSize];
+     int i;
+     for(i = 0, lit = lineTable.begin(); lit != lineTable.end(); lit++, i++)
+     {
+             lineArr[i] = lit->first;
+     }
+     for(i = 0; i < lineSize; i++)
+     {
+             lineTable.erase(lineArr[i]);
+     }
+     map<int, Point>::iterator pit;
+     for(pit = pointTable.begin(); pit != pointTable.end(); pit++)
+     {
+         vector<int> edges = *(Triangulation::vertexTable[pit->first].getLocalVertices());
+         for(i = 0; i < edges.size(); i++)
+         {
+               if(!containsLine(edges[i]))
+               {
+                  vector<int> vertices = *(Triangulation::edgeTable[edges[i]].getLocalVertices());
+                  Point p1 = pointTable[vertices[0]];
+                  Point p2 = pointTable[vertices[1]];
+                  Line l(p1, p2);
+                  putLine(edges[i], l);
+               }
+         }
+     }
+}
+
 void TriangulationCoordinateSystem::printToFile(char* filename)
 {
      ofstream results(filename, ios_base::trunc);

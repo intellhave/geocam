@@ -205,10 +205,7 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
-    makeSpecialCase();
-    TriangulationCoordinateSystem tcs;
-    tcs.generatePlane();
-    tcs.printToFile("Triangulations/ODE Result.txt");
+    generateTriangulation(50);
     system("PAUSE");
     
     generateWeights();

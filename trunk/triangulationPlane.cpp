@@ -353,7 +353,7 @@ void generateWeights()
                smallest = Triangulation::edgeTable[index].getLength();
           }
           double randNum = ((double) rand()) / RAND_MAX;
-          vit->second.setWeightIndependent(randNum * smallest);
+          vit->second.setWeightIndependent(randNum * smallest * 2);
           
      }
 }
@@ -388,6 +388,9 @@ void weightedFlipAlgorithm()
      int flipCount = 1;
      int count = 0;
      TriangulationCoordinateSystem tcs;
+     tcs.generatePlane();
+     tcs.printToFile("Triangulations/flips/Step 0.txt");
+     writeTriangulationFile("Triangulations/flips/Figure 0.txt");
      while(flipCount != 0)
      {
           passCount++;
@@ -411,7 +414,7 @@ void weightedFlipAlgorithm()
                          sprintf(s, "Triangulations/flips/Step %d.txt", count);
                          sprintf(s2, "Triangulations/flips/Figure %d.txt", count);
                          char countCh = (char) count;
-                         tcs.generatePlane();
+                         tcs.update();
                          tcs.printToFile(s);
                          writeTriangulationFile(s2);
                     }
@@ -432,6 +435,7 @@ void weightedFlipAlgorithm()
                negFaceCount++;
           }
           cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
+
      }
      cout << "Finished" << endl;
      map<int, Face>::iterator fit;
@@ -443,6 +447,7 @@ void weightedFlipAlgorithm()
           negFaceCount++;
      }
      cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
+     cout << "Total num flips: " << count << "\n";
 }
 
 void checkTriangle(Edge e, double length1, double length2)
