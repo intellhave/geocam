@@ -142,10 +142,10 @@ void TriangulationCoordinateSystem::generatePlane()
            eb2 = temp;
         }
         vector<Point> points2; // New solution set.
-        p3 = findPoint(l1, Triangulation::edgeTable[ea1].getLength(), 
-               angle(Triangulation::vertexTable[v1], fa));
-        p4 = findPoint(l1, Triangulation::edgeTable[ea1].getLength(), 
-              (-1) * angle(Triangulation::vertexTable[v1], fa));
+        p3 = findPoint(l1, Triangulation::edgeTable[eb1].getLength(), 
+               angle(Triangulation::vertexTable[v1], fb));
+        p4 = findPoint(l1, Triangulation::edgeTable[eb1].getLength(), 
+              (-1) * angle(Triangulation::vertexTable[v1], fb));
         points2.push_back(p3);
         points2.push_back(p4);
         
@@ -423,3 +423,4 @@ void TriangulationCoordinateSystem::printToFile(char* filename)
         results << "\n";
      }
 }
+
