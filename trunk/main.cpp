@@ -207,10 +207,15 @@ int main(int argc, char *argv[])
 {
     generateTriangulation(12);
     generateWeights();
+
     writeTriangulationFile("Triangulations/bad case.txt");
+
     TriangulationCoordinateSystem tcs;
+
+
     tcs.generatePlane();
     tcs.printToFile("Triangulations/ODE Result.txt");
+
     system("PAUSE");    
     weightedFlipAlgorithm();
     tcs.generatePlane();

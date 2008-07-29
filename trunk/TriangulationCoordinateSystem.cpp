@@ -230,8 +230,8 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      eb1 = edges[0];
      eb2 = edges[1];
      // Make sure that v1 is the intial point of line l. This is needed to
-     // properly rotate the and find the potential points.
-     if(l.getInitialX() != pointTable[v1].x || l.getInitialY() != pointTable[v1].y)
+     // properly rotate the lines and find the potential points.
+     while(l.getInitialX() != pointTable[v1].x || l.getInitialY() != pointTable[v1].y)
      {
          int temp = v1;
          v1 = v2;
@@ -416,10 +416,10 @@ void TriangulationCoordinateSystem::printToFile(char* filename)
         vector<int> vertices = *(fit->second.getLocalVertices());
         for(int i = 0; i < vertices.size(); i++)
         {
+                results <<  left << setw(10) << vertices[i];
                 results << left << setw(10) << pointTable[vertices[i]].x << "              ";
                 results << pointTable[vertices[i]].y << "\n";
         }
-        results << setw(10) << pointTable[vertices[0]].x << "              ";
-        results<< pointTable[vertices[0]].y << "\n";
+        results << "\n";
      }
 }

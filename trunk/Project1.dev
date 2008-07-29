@@ -390,7 +390,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit31]
-FileName=TriangulationCoordinateSystem.cpp
+FileName=..\..\Documents and Settings\student\My Documents\TriangulationCoordinateSystem.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
