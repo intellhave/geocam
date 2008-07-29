@@ -205,21 +205,16 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
-    generateTriangulation(12);
-    generateWeights();
-
-    writeTriangulationFile("Triangulations/bad case.txt");
-
+    makeSpecialCase();
     TriangulationCoordinateSystem tcs;
-
-
     tcs.generatePlane();
     tcs.printToFile("Triangulations/ODE Result.txt");
-
-    system("PAUSE");    
+    system("PAUSE");
+    
+    generateWeights();
     weightedFlipAlgorithm();
-    tcs.generatePlane();
-    tcs.printToFile("Triangulations/ODE Result.txt");
+    
+    
     system("PAUSE");
     return 0;
 }

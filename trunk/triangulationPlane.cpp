@@ -353,7 +353,7 @@ void generateWeights()
                smallest = Triangulation::edgeTable[index].getLength();
           }
           double randNum = ((double) rand()) / RAND_MAX;
-          vit->second.setWeightIndependent(randNum * smallest * 2);
+          vit->second.setWeightIndependent(randNum * smallest);
           
      }
 }
@@ -396,10 +396,11 @@ void weightedFlipAlgorithm()
           map<int, Edge>::iterator eit;
           for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
           {
-               //cout << eit->first << "." << endl;
+               
                Edge e = eit->second;
                if(!(isWeightedDelaunay(Triangulation::edgeTable[e.getIndex()])))
                {
+                    cout << "Here\n";
                     try
                     {
                          flip(Triangulation::edgeTable[e.getIndex()]);
@@ -500,14 +501,14 @@ void checkTriangle(Edge e, double length1, double length2)
 }
 
 void makeSpecialCase()
-{   
-    firstTriangle(2.73205080757, 1.0, 1.93185165258);
-    addTriangle(Triangulation::edgeTable[3], 1.0, 1.0);
-    addTriangle(Triangulation::edgeTable[5], 1.0, 1.0);
-    addTriangle(Triangulation::edgeTable[2], Triangulation::edgeTable[7]);
-    addTriangle(Triangulation::edgeTable[8], 2.73205080757, 1.0);
-    addTriangle(Triangulation::edgeTable[6], Triangulation::edgeTable[10]);
-    addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[11]);
+{
+     firstTriangle(1.0, 1.0, 1.0);
+     addTriangle(Triangulation::edgeTable[1], 1.92923932482, 1.0);
+     addTriangle(Triangulation::edgeTable[2], 1.0, 1.92923932482);
+     addTriangle(Triangulation::edgeTable[3], 1.92923932482, 1.0);
+     addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
+     addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[8]);
+     addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
 
 }
 
