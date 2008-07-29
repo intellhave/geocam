@@ -95,14 +95,19 @@ bool isWeightedDelaunay(Edge e)
      double ha2 = (da2b2 - da2a1*cos(anga2a2)) / sin(anga2a2);
      double thing2 = (da1b2 - da1a2*cos(anga1a2)) / sin(anga1a2);
      
-     Point oa1(da1a2, ha1);
-     Point oa2(da1a2, (-ha2));
+     if(fa1.isNegative())
+     ha1 = -ha1;
+     if(fa2.isNegative())
+     ha2 = -ha2;
      
-     double ra1 = sqrt((((da1a2*da1a2) + (da1b1*da1b1) - 2*da1a2*da1b1*cos(anga1a1)) / (sin(anga1a1)*sin(anga1a1))) - pow(va1.getWeight(), 2));
-     double ra2 = sqrt((((da1a2*da1a2) + (da1b2*da1b2) - 2*da1a2*da1b2*cos(anga1a2)) / (sin(anga1a2)*sin(anga1a2))) - pow(va1.getWeight(), 2));
-     
-     Circle ca1(oa1, ra1);
-     Circle ca2(oa2, ra2);
+//     Point oa1(da1a2, ha1);
+//     Point oa2(da1a2, (-ha2));
+//     
+//     double ra1 = sqrt((((da1a2*da1a2) + (da1b1*da1b1) - 2*da1a2*da1b1*cos(anga1a1)) / (sin(anga1a1)*sin(anga1a1))) - pow(va1.getWeight(), 2));
+//     double ra2 = sqrt((((da1a2*da1a2) + (da1b2*da1b2) - 2*da1a2*da1b2*cos(anga1a2)) / (sin(anga1a2)*sin(anga1a2))) - pow(va1.getWeight(), 2));
+//     
+//     Circle ca1(oa1, ra1);
+//     Circle ca2(oa2, ra2);
           
-     return ha1 + ha2 >= 0;
+     return ha1 + ha2 >= -0.0001;
 }

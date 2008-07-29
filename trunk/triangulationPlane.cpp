@@ -360,10 +360,12 @@ void generateWeights()
 
 void flipAlgorithm()
 {
+     int passCount = 0;
      int flipCount = 1;
      while(flipCount != 0)
      {
-          cout << "No" << endl;
+          passCount++;
+          cout << "Attempt #" << passCount << endl;
           flipCount = 0;
           map<int, Edge>::iterator eit;
           for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
@@ -376,17 +378,19 @@ void flipAlgorithm()
                }
           }
      }
-     cout << "Yes" << endl;
+     cout << "Finished" << endl;
      
 }
 
 void weightedFlipAlgorithm()
 {
+     int passCount = 0;
      int flipCount = 1;
      TriangulationCoordinateSystem tcs;
      while(flipCount != 0)
      {
-          cout << "No" << endl;
+          passCount++;
+          cout << "Attempt #" << passCount << endl;
           flipCount = 0;
           map<int, Edge>::iterator eit;
           for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
@@ -395,16 +399,29 @@ void weightedFlipAlgorithm()
                Edge e = eit->second;
                if(!(isWeightedDelaunay(Triangulation::edgeTable[e.getIndex()])))
                {
-                    flip(Triangulation::edgeTable[e.getIndex()]);
-                    flipCount++;
+                    try
+                    {
+                         flip(Triangulation::edgeTable[e.getIndex()]);
+                         flipCount++;
+                    }
+                    catch(string s)
+                    {
+                         system("PAUSE");
+                         flipCount++;
+                    }
                }
           }
-          tcs.generatePlane();
-          tcs.printToFile("Triangulations/ODE Result.txt");
-          system("PAUSE");
      }
-     cout << "Yes" << endl;
-     
+     cout << "Finished" << endl;
+     map<int, Face>::iterator fit;
+     int negFaceCount = 0;
+     for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+     {
+          Face f = fit->second;
+          if(f.isNegative())
+          negFaceCount++;
+     }
+     cout << "There is/are " << negFaceCount << " negative face(s) leftover." << endl;
 }
 
 void checkTriangle(Edge e, double length1, double length2)

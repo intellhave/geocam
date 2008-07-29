@@ -205,20 +205,23 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
+<<<<<<< .mine
+    
+    generateTriangulation(1000);
+    generateWeights();
+=======
     makeDelaunayTriangulationFile("Triangulations/MATLABTRI2.txt", 
                                   "Triangulations/EdgeLengths.txt");
     //generateTriangulation(50);
 //    generateWeights();
+>>>>>>> .r394
     TriangulationCoordinateSystem tcs;
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 //    system("PAUSE");
-//    writeTriangulationFile("Triangulations/manifold converted.txt");
-//    TriangulationCoordinateSystem tcs;
-//    tcs.generatePlane();
-//    tcs.printToFile("Triangulations/ODE Result.txt");
-//    system("PAUSE");
     //weightedFlipAlgorithm();
+<<<<<<< .mine
+=======
    // generateTriangulation(20);
    // generateWeights();
    // weightedFlipAlgorithm();
@@ -243,8 +246,11 @@ int main(int argc, char *argv[])
     //flip(Triangulation::edgeTable[2]);
 //    writeTriangulationFile("Triangulations/manifold converted.txt");
 //   
+>>>>>>> .r394
     tcs.generatePlane();
     tcs.printToFile("Triangulations/ODE Result.txt");
+<<<<<<< .mine
+=======
     //runFlow();
     //testPointLineCircle();
     //testDelaunay();
@@ -254,11 +260,15 @@ int main(int argc, char *argv[])
     {
             cout << Triangulation::edgeTable[i].getLength() << "\n";
     }
+>>>>>>> .r394
     system("PAUSE");
+<<<<<<< .mine
+=======
     
     //weightedFlipAlgorithm();
 //    tcs.generatePlane();
 //    tcs.printToFile("Triangulations/ODE Result.txt");
 //    system("PAUSE");
+>>>>>>> .r394
     return 0;
 }
