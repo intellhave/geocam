@@ -405,23 +405,22 @@ void weightedFlipAlgorithm()
                          flip(Triangulation::edgeTable[e.getIndex()]);
                          flipCount++;
                          count++;
+                         char s[100];
+                         char s2[100];
+                         sprintf(s, "Triangulations/flips/Step %d.txt", count);
+                         sprintf(s2, "Triangulations/flips/Figure %d.txt", count);
+                         char countCh = (char) count;
+                         tcs.generatePlane();
+                         tcs.printToFile(s);
+                         writeTriangulationFile(s2);
                     }
-                    catch(string s)
+                    catch(string s1)
                     {
                          cout << "Edge #" << eit->first << endl;
                          system("PAUSE");
                          flipCount++;
-                         count++;
                     }
                }
-               char s[100];
-               char s2[100];
-               sprintf(s, "Triangulations/flips/Step %d.txt", count);
-               sprintf(s2, "Triangulations/flips/Figure %d.txt", count);
-               char countCh = (char) count;
-               tcs.generatePlane();
-               tcs.printToFile(s);
-               writeTriangulationFile(s2);
           }
           map<int, Face>::iterator fit;
           int negFaceCount = 0;

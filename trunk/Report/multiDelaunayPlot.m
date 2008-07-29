@@ -1,5 +1,5 @@
 function multiDelaunayPlot(k)
-for i = 0:k
+for i = 1:k
     h = num2str(i);
     j = ['c:\Dev-Cpp\geocam\Triangulations\flips\Step ' h '.txt'];
     delaunayPlot(j);
