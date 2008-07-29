@@ -353,7 +353,7 @@ void generateWeights()
                smallest = Triangulation::edgeTable[index].getLength();
           }
           double randNum = ((double) rand()) / RAND_MAX;
-          vit->second.setWeightIndependent(randNum * smallest);
+          vit->second.setWeightIndependent(randNum * smallest * 2);
           
      }
 }
@@ -386,6 +386,7 @@ void weightedFlipAlgorithm()
 {
      int passCount = 0;
      int flipCount = 1;
+     int count = 0;
      TriangulationCoordinateSystem tcs;
      while(flipCount != 0)
      {
@@ -403,14 +404,34 @@ void weightedFlipAlgorithm()
                     {
                          flip(Triangulation::edgeTable[e.getIndex()]);
                          flipCount++;
+                         count++;
                     }
                     catch(string s)
                     {
+                         cout << "Edge #" << eit->first << endl;
                          system("PAUSE");
                          flipCount++;
+                         count++;
                     }
                }
+               char s[100];
+               char s2[100];
+               sprintf(s, "Triangulations/flips/Step %d.txt", count);
+               sprintf(s2, "Triangulations/flips/Figure %d.txt", count);
+               char countCh = (char) count;
+               tcs.generatePlane();
+               tcs.printToFile(s);
+               writeTriangulationFile(s2);
           }
+          map<int, Face>::iterator fit;
+          int negFaceCount = 0;
+          for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+          {
+               Face f = fit->second;
+               if(f.isNegative())
+               negFaceCount++;
+          }
+          cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
      }
      cout << "Finished" << endl;
      map<int, Face>::iterator fit;
@@ -421,7 +442,7 @@ void weightedFlipAlgorithm()
           if(f.isNegative())
           negFaceCount++;
      }
-     cout << "There is/are " << negFaceCount << " negative face(s) leftover." << endl;
+     cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
 }
 
 void checkTriangle(Edge e, double length1, double length2)

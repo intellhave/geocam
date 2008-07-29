@@ -240,7 +240,7 @@ void writeTriangulationFile(char* newFileName)
      {
             
              
-             output << "Vertex: " << vit->first << "\n";
+             output << "Vertex: " << vit->first << "; (weight = " << vit->second.getWeight() <<")\n";
              
              for(int j = 0; j < vit->second.getLocalVertices()->size(); j++)
              {
@@ -263,7 +263,7 @@ void writeTriangulationFile(char* newFileName)
      }
      for(map<int, Edge>::iterator eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
      {
-             output << "Edge: " << eit->first << "\n";
+             output << "Edge: " << eit->first << "; (length = "<< eit->second.getLength() << ")\n";
              
              for(int j = 0; j < eit->second.getLocalVertices()->size(); j++)
              {
@@ -286,8 +286,12 @@ void writeTriangulationFile(char* newFileName)
      
      for(map<int, Face>::iterator fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
      {
-             output << "Face: " << fit->first << "\n";
-             
+             output << "Face: " << fit->first << "; ";
+             if(fit->second.isNegative())
+             output << "(negative)";
+             else
+             output << "(positive)";
+             output << "\n";
              for(int j = 0; j < fit->second.getLocalVertices()->size(); j++)
              {
                      output << (*(fit->second.getLocalVertices()))[j] << " ";

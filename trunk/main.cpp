@@ -205,70 +205,16 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
-<<<<<<< .mine
-    
-    generateTriangulation(1000);
+    generateTriangulation(12);
     generateWeights();
-=======
-    makeDelaunayTriangulationFile("Triangulations/MATLABTRI2.txt", 
-                                  "Triangulations/EdgeLengths.txt");
-    //generateTriangulation(50);
-//    generateWeights();
->>>>>>> .r394
+    writeTriangulationFile("Triangulations/bad case.txt");
     TriangulationCoordinateSystem tcs;
-//    tcs.generatePlane();
-//    tcs.printToFile("Triangulations/ODE Result.txt");
-//    system("PAUSE");
-    //weightedFlipAlgorithm();
-<<<<<<< .mine
-=======
-   // generateTriangulation(20);
-   // generateWeights();
-   // weightedFlipAlgorithm();
-//    firstTriangle(1.0, 1.0, 1.8);
-//    addTriangle(Triangulation::edgeTable[1], 1.0, 1.8);
-//    addTriangle(Triangulation::edgeTable[2], 1.0, 0.6);
-//    addTriangle(Triangulation::edgeTable[4], 0.6, 1.0);
-//    addTriangle(Triangulation::edgeTable[6], Triangulation::edgeTable[9]);
-
-
-//    system("PAUSE");
-//    tcs.generatePlane();
-//    tcs.printToFile("Triangulations/ODE Result.txt");
-
-
-    //firstTriangle(2.0, 2.0/sqrt(3.0), 2.0/sqrt(3.0));
-   // addTriangle(Triangulation::edgeTable[2], 2.0, 2.0/sqrt(3.0));
-    //addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
-   // addTriangle(Triangulation::edgeTable[3], 7.0, 7.0);
-   // addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[7]);
-//    
-    //flip(Triangulation::edgeTable[2]);
-//    writeTriangulationFile("Triangulations/manifold converted.txt");
-//   
->>>>>>> .r394
     tcs.generatePlane();
     tcs.printToFile("Triangulations/ODE Result.txt");
-<<<<<<< .mine
-=======
-    //runFlow();
-    //testPointLineCircle();
-    //testDelaunay();
-    //testGeneratePlane();
-    //testMiscMath();
-    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
-    {
-            cout << Triangulation::edgeTable[i].getLength() << "\n";
-    }
->>>>>>> .r394
+    system("PAUSE");    
+    weightedFlipAlgorithm();
+    tcs.generatePlane();
+    tcs.printToFile("Triangulations/ODE Result.txt");
     system("PAUSE");
-<<<<<<< .mine
-=======
-    
-    //weightedFlipAlgorithm();
-//    tcs.generatePlane();
-//    tcs.printToFile("Triangulations/ODE Result.txt");
-//    system("PAUSE");
->>>>>>> .r394
     return 0;
 }

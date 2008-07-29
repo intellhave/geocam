@@ -19,7 +19,7 @@
     
 %convert from text to MATLAB
 
-    K = textread('c:\Dev-Cpp\geocam\Triangulations\ODE Result.txt');
+    K = textread('c:\Dev-Cpp\geocam\Triangulations\flips\Step 5.txt');
     S = (size(K,1))/5;
 
 %Create a 'for' loop that plots each triangle, one at a time, by accessing
@@ -64,7 +64,6 @@ for i = 0:S-1
 % the end figure. If you need to quit the program while it is running, hold
 % Ctrl + C to cancel. 
    
-    pause();
 
    
 end
