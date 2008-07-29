@@ -5,8 +5,8 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o "../../Documents\ and\ Settings/student/My\ Documents/TriangulationCoordinateSystem.o" $(RES)
-LINKOBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o "../../Documents and Settings/student/My Documents/TriangulationCoordinateSystem.o" $(RES)
+OBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o TriangulationCoordinateSystem.o $(RES)
+LINKOBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o TriangulationCoordinateSystem.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib" -L"lib"  
 INCS =  -I"include" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam" 
@@ -71,5 +71,5 @@ pointlinecircle.o: pointlinecircle.cpp
 delaunay.o: delaunay.cpp
 	$(CPP) -c delaunay.cpp -o delaunay.o $(CXXFLAGS)
 
-"../../Documents\ and\ Settings/student/My\ Documents/TriangulationCoordinateSystem.o": ../../Documents\ and\ Settings/student/My\ Documents/TriangulationCoordinateSystem.cpp
-	$(CPP) -c "../../Documents and Settings/student/My Documents/TriangulationCoordinateSystem.cpp" -o "../../Documents and Settings/student/My Documents/TriangulationCoordinateSystem.o" $(CXXFLAGS)
+TriangulationCoordinateSystem.o: TriangulationCoordinateSystem.cpp
+	$(CPP) -c TriangulationCoordinateSystem.cpp -o TriangulationCoordinateSystem.o $(CXXFLAGS)

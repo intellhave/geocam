@@ -159,11 +159,11 @@ void TriangulationCoordinateSystem::generatePlane()
               otherPos = !otherPos; // Now the correct point is also above l1.
         }  
         
-        for(int i = 0; i < points.size(); i++)
+        for(int i = 0; i < points2.size(); i++)
         {
-             if(l1.isAbove(points[i]) != otherPos)
+             if(l1.isAbove(points2[i]) != otherPos)
              {
-                    Point p = points[i];
+                    Point p = points2[i];
                     putPoint(vb, p);
                     Line l2(p1, p);
                     Line l3(p2, p);
