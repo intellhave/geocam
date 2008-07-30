@@ -1,9 +1,9 @@
 function delaunayPlot(fileName, color)
 
 % This program takes the output of generateTriangulation, saved as a text
-% or Excel file, and plots it in MATLAB. The Excel file stores the 
-% coordinates of each triangle by four vertices so we can draw each 
-% complete face by itself. The format is as follows:
+% or Excel file, and plots it in MATLAB. The file stores the coordinates of
+% each triangle by vertices so we can draw each complete face by itself.
+% The format is as follows:
 
     % Face 1:   Delaunay? 1 for yes, -1 for no
     %           V1 X1 Y1
@@ -18,7 +18,7 @@ function delaunayPlot(fileName, color)
     % etc
 
 %The format can be read directly from the text file and later saved, even
-%as an Excel for future reference, or just store it in a special place as a
+%as an Excel for future reference, or just stored in a special place as a
 %text file. 
     
 %convert from text to MATLAB
@@ -33,7 +33,7 @@ S = (size(K,1))/4;
 %fashion. The 'hold on' line allows for multiple graphs to be placed on one
 %figure. 
 
-for i = 0:S-2
+for i = 0:S-1
     
     %X = [X1 X2 X3 X4] and Y = [Y1 Y2 Y3 Y4] by accessing the elements from
     %K. 
