@@ -353,7 +353,7 @@ void generateWeights()
                smallest = Triangulation::edgeTable[index].getLength();
           }
           double randNum = ((double) rand()) / RAND_MAX;
-          vit->second.setWeightIndependent(randNum * smallest);
+          vit->second.setWeightIndependent(randNum * smallest *3.0/2);
           
      }
 }
