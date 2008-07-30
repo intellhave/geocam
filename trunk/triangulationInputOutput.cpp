@@ -619,6 +619,31 @@ void printResultsNum(char* fileName, vector<double>* weights, vector<double>* cu
    results.close();
 }
 
+void printDegrees(char* fileName)
+{
+     int vertSize = Triangulation::vertexTable.size();
+     ofstream results(fileName, ios_base::trunc);
+     results << left << setprecision(6); 
+     results.setf(ios_base::showpoint);
+     for (int i = 1; i <= vertSize; i++)
+     {
+         results << Triangulation::vertexTable[i].getDegree() << "\n";
+     }
+}
+
+void printEdgeLengths(char* fileName)
+{
+     int edgeSize = Triangulation::edgeTable.size();
+     ofstream results(fileName, ios_base::trunc);
+     results << left << setprecision(6); 
+     results.setf(ios_base::showpoint);
+     for (int i = 1; i <= edgeSize; i++)
+     {
+         results << Triangulation::edgeTable[i].getLength() << "\n";
+     }
+}
+
+
 void makeDelaunayTriangulationFile(char* triFile, char* lengthFile)
 {
      makeTriangulationFile(triFile, triFile);
@@ -639,3 +664,4 @@ void makeDelaunayTriangulationFile(char* triFile, char* lengthFile)
      Triangulation::setLengths(lengthArr);
      infile.close();
 }
+
