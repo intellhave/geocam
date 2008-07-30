@@ -68,7 +68,7 @@ Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Focused=21
+Focused=0
 =======
 Focused=21
 >>>>>>> .r401
@@ -212,12 +212,12 @@ Open=1
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Top=0
+Top=1
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=29
+CursorCol=31
 CursorRow=208
 TopLine=190
 =======
@@ -1083,9 +1083,9 @@ LeftChar=2
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=66
+CursorCol=62
 CursorRow=356
-TopLine=337
+TopLine=349
 =======
 CursorCol=1
 CursorRow=392
@@ -1212,7 +1212,7 @@ Open=1
 =======
 <<<<<<< .mine
 Open=1
-Top=1
+Top=0
 =======
 Open=0
 >>>>>>> .r383

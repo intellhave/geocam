@@ -205,7 +205,7 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
-    generateTriangulation(50);
+    generateTriangulation(75);
     system("PAUSE");
     
     generateWeights();
