@@ -1,41 +1,39 @@
-function delaunayPlot(fileName)
+function delaunayPlot(fileName, color)
 
 % This program takes the output of generateTriangulation, saved as a text
 % or Excel file, and plots it in MATLAB. The Excel file stores the 
 % coordinates of each triangle by four vertices so we can draw each 
 % complete face by itself. The format is as follows:
 
-    % Face 1:   Delaunay?
-    %           X1 Y1
-    %           X2 Y2
-    %           X3 Y3
-    %           X1 Y1
+    % Face 1:   Delaunay? 1 for yes, -1 for no
+    %           V1 X1 Y1
+    %           V2 X2 Y2
+    %           V3 X3 Y3
+    %           -blank- 
     % Face 2:   Delaunay?
-    %           X1 Y1
-    %           X2 Y2
-    %           X3 Y3
-    %           X1 Y1
+    %           V1 X1 Y1
+    %           V2 X2 Y2
+    %           V3 X3 Y3
+    %           -blank-
     % etc
 
-%The format can be read directly from the text file and later saved as
-%an Excel for future reference. 
+%The format can be read directly from the text file and later saved, even
+%as an Excel for future reference, or just store it in a special place as a
+%text file. 
     
 %convert from text to MATLAB
 
+K = textread(fileName);
+S = (size(K,1))/4;
 
-%'c:\Dev-Cpp\geocam\Triangulations\ODE Result.txt'
-    K = textread(fileName);
 %    K = textread('c:\Dev-Cpp\geocam\Triangulations\flips\Step 5.txt');
-
-    S = (size(K,1))/4;
 
 %Create a 'for' loop that plots each triangle, one at a time, by accessing
 %the coordinates per triangle and plotting them in a connect-the-dots
 %fashion. The 'hold on' line allows for multiple graphs to be placed on one
 %figure. 
 
-
-for i = 0:S-1
+for i = 0:S-2
     
     %X = [X1 X2 X3 X4] and Y = [Y1 Y2 Y3 Y4] by accessing the elements from
     %K. 
@@ -45,14 +43,15 @@ for i = 0:S-1
     
 
     if (K(i*4+1,1) == -1) % for anti-triangles
-    h = fill(X,Y,rand(1,3));
+    h = fill(X,Y,[.8 .8 .8]);%Shades in the triangle 
     set(h,'EdgeAlpha',.2); %allows us to see the edges. 
     end
-    hold on;plot(X,Y,'g','linewidth',2);
-    text(K(i*4 + 2, 2), K(i*4 + 2, 3), num2str(K(i*4 + 2, 1)),'color','k','FontSize',15)
-    text(K(i*4 + 3, 2), K(i*4 + 3, 3), num2str(K(i*4 + 3, 1)),'color','k','FontSize',15)
-    text(K(i*4 + 4, 2), K(i*4 + 4, 3), num2str(K(i*4 + 4, 1)),'color','k','FontSize',15)
     
+    hold on;plot(X,Y,'color',color,'linewidth',2);
+    text(K(i*4 + 2, 2), K(i*4 + 2, 3), num2str(K(i*4 + 2, 1)),'color','b','FontSize',10)
+    text(K(i*4 + 3, 2), K(i*4 + 3, 3), num2str(K(i*4 + 3, 1)),'color','b','FontSize',10)
+    text(K(i*4 + 4, 2), K(i*4 + 4, 3), num2str(K(i*4 + 4, 1)),'color','b','FontSize',10)
+  
 % These lines generate the circumcircles around each triangle to see from a
 % visual standpoint if the resulting triangulation is Delanuay. This is for
 % the non-weighted case.  
@@ -76,10 +75,15 @@ for i = 0:S-1
 % the end figure. If you need to quit the program while it is running, hold
 % Ctrl + C to cancel. 
 
-    %pause(0.1);
+%pause(0.1);
 
-   
 end
+
+
+
+
+
+%OUTDATED, would require revision if desired 
 
 %convert from Excel to MATLAB
 
