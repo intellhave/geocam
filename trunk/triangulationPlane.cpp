@@ -426,27 +426,27 @@ void weightedFlipAlgorithm()
                     }
                }
           }
-          map<int, Face>::iterator fit;
-          int negFaceCount = 0;
-          for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
-          {
-               Face f = fit->second;
-               if(f.isNegative())
-               negFaceCount++;
-          }
-          cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
+//          map<int, Face>::iterator fit;
+//          int negFaceCount = 0;
+//          for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+//          {
+//               Face f = fit->second;
+//               if(f.isNegative())
+//               negFaceCount++;
+//          }
+//          cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
 
      }
      cout << "Finished" << endl;
-     map<int, Face>::iterator fit;
-     int negFaceCount = 0;
-     for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
-     {
-          Face f = fit->second;
-          if(f.isNegative())
-          negFaceCount++;
-     }
-     cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
+//     map<int, Face>::iterator fit;
+//     int negFaceCount = 0;
+//     for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+//     {
+//          Face f = fit->second;
+//          if(f.isNegative())
+//          negFaceCount++;
+//     }
+//     cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
      cout << "Total num flips: " << count << "\n";
 }
 
@@ -514,6 +514,13 @@ void makeSpecialCase()
      addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
      addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[8]);
      addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
+     Triangulation::vertexTable[1].setWeightIndependent(0.25);
+     Triangulation::vertexTable[2].setWeightIndependent(0.25);
+     Triangulation::vertexTable[3].setWeightIndependent(0.25);
+     Triangulation::vertexTable[4].setWeightIndependent(1.49);
+     Triangulation::vertexTable[5].setWeightIndependent(1.49);
+     Triangulation::vertexTable[6].setWeightIndependent(1.49);
+
 
 }
 

@@ -183,13 +183,78 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
-    runFlow();
-//    generateTriangulation(300);
-//    
-//    generateWeights();
-//    weightedFlipAlgorithm();
+    makeSpecialCase();
     
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[1]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[2]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[3]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[4]) << "*" << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[5]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[6]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[7]) << "*" << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[8]) << "*" << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[9]) << endl;
     
+    TriangulationCoordinateSystem tcs;
+    tcs.generatePlane();
+    tcs.printToFile("Triangulations/flips/Step 0.txt");
+    writeTriangulationFile("Triangulations/flips/Figure 0.txt");
+    
+    flip(Triangulation::edgeTable[5]);
+    tcs.update();
+    tcs.printToFile("Triangulations/flips/Step 1.txt");
+    writeTriangulationFile("Triangulations/flips/Figure 1.txt");
+
+    flip(Triangulation::edgeTable[6]);
+    tcs.update();
+    tcs.printToFile("Triangulations/flips/Step 2.txt");
+    writeTriangulationFile("Triangulations/flips/Figure 2.txt");
+    
+    flip(Triangulation::edgeTable[9]);
+    tcs.printToFile("Triangulations/flips/Step 3.txt");
+    writeTriangulationFile("Triangulations/flips/Figure 3.txt");
+
+    cout << "_______________________________________________________________" << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[1]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[2]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[3]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[4]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[5]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[6]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[7]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[8]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[9]) << endl;
+    
+    flip(Triangulation::edgeTable[1]);
+    tcs.update();
+    tcs.printToFile("Triangulations/flips/Step 4.txt");
+    writeTriangulationFile("Triangulations/flips/Figure 1.txt");
+
+    flip(Triangulation::edgeTable[2]);
+    tcs.update();
+    tcs.printToFile("Triangulations/flips/Step 5.txt");
+    writeTriangulationFile("Triangulations/flips/Figure 2.txt");
+    
+    flip(Triangulation::edgeTable[3]);
+    tcs.printToFile("Triangulations/flips/Step 6.txt");
+    writeTriangulationFile("Triangulations/flips/Figure 3.txt");
+    
+    cout << "_______________________________________________________________" << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[1]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[2]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[3]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[4]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[5]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[6]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[7]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[8]) << endl;
+    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[9]) << endl;
+
+    
+    //flip(Triangulation::edgeTable[1]);
+    
+    //weightedFlipAlgorithm();
+        
     system("PAUSE");
     return 0;
 }

@@ -17,13 +17,13 @@
 
 function multiDelaunayPlot(k)
 
-
 %This is for method 1.
 for i = 0:k
     h = num2str(i);
     j = ['c:\Dev-Cpp\geocam\Triangulations\flips\Step ' h '.txt'];
+  
     delaunayPlot(j,[0 1 0]);
-    pause(0.05);
+    pause();
     if i ~= k
         clf;
     end

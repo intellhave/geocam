@@ -108,7 +108,9 @@ bool isWeightedDelaunay(Edge e)
 //     
 //     Circle ca1(oa1, ra1);
 //     Circle ca2(oa2, ra2);
-
+     
+     cout << ha1 << " " << ha2;
+     
      if(fa1.isNegative() || fa2.isNegative())
           return -(ha1 + ha2) >= -0.0001;
      else
