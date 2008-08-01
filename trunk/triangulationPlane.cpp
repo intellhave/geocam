@@ -391,6 +391,13 @@ void weightedFlipAlgorithm()
      tcs.generatePlane();
      tcs.printToFile("Triangulations/flips/Step 0.txt");
      writeTriangulationFile("Triangulations/flips/Figure 0.txt");
+     for(int i = 1; i <= Triangulation::faceTable.size(); i++)
+     {
+          cout << "(" << (*(Triangulation::faceTable[i].getLocalVertices()))[0];
+          cout << ", " << (*(Triangulation::faceTable[i].getLocalVertices()))[1];
+          cout << ", " << (*(Triangulation::faceTable[i].getLocalVertices()))[2];
+          cout << ")  " << Triangulation::faceTable[i].isNegative() << endl;
+     }
      while(flipCount != 0)
      {
           passCount++;
@@ -417,6 +424,16 @@ void weightedFlipAlgorithm()
                          tcs.update();
                          tcs.printToFile(s);
                          writeTriangulationFile(s2);
+                         //...........
+                         for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+                         {
+                              cout << "Vertices: ";
+                              cout << "(" << (*(Triangulation::edgeTable[i].getLocalVertices()))[0];
+                              cout << ", " << (*(Triangulation::edgeTable[i].getLocalVertices()))[1];
+                              cout << ")" << endl;
+                         }
+                         //...........
+                         
                     }
                     catch(string s1)
                     {
@@ -512,16 +529,15 @@ void makeSpecialCase()
      addTriangle(Triangulation::edgeTable[2], 1.0, 1.92923932482);
      addTriangle(Triangulation::edgeTable[3], 1.92923932482, 1.0);
      addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
-     addTriangle(Triangulation::edgeTable[5], Triangulation::edgeTable[8]);
      addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
+     addTriangle(Triangulation::edgeTable[8], Triangulation::edgeTable[5]);
      Triangulation::vertexTable[1].setWeightIndependent(0.25);
      Triangulation::vertexTable[2].setWeightIndependent(0.25);
      Triangulation::vertexTable[3].setWeightIndependent(0.25);
      Triangulation::vertexTable[4].setWeightIndependent(1.49);
      Triangulation::vertexTable[5].setWeightIndependent(1.49);
      Triangulation::vertexTable[6].setWeightIndependent(1.49);
-
-
+     
 }
 
 
