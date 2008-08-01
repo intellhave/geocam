@@ -79,7 +79,7 @@ Two-holed torus & 10 & 36 & 24 &	2 & -2\\
   
 \begin{figure}
 \includegraphics[scale = 0.3]{righttriangulation.jpg}
-\includegraphics[scale = 0.3]{badcase.jpg}
+\includegraphics[scale = 0.5]{badcase2.png}
 \caption{An example of circle packing (left) and a triangulation that cannot be circle-packed.}
 \label{rightTri}
 \end{figure}
@@ -626,10 +626,11 @@ When we began looking into these background geometries, we thought that it would
 \section{Delaunay triangulations}
 In addition to our work on combinatioral Ricci flow, we also branched out into other areas where we felt our triangulation structure would be applicable. While we initially viewed the topic of Delaunay triangulations as a side project for us to work on, we found that it quickly became the cornerstone of the second half of our research. We will introduce basic concepts, illustrate our adaptations of code, as well as show unique examples in hopes of reaching profound conclusions. 
 
-\subsection{Introduction}
+\subsection{Background}
 Focusing back on planar  Euclidean geometry, one thing we had aimed to do is generate our own trianguations from scratch and not rely on the work of others. We also wanted to be able to adapt our data structure to make it more malleable for other criteria besides combinatorial Ricci flows. We felt that investigating Delaunay triangulations would allow us to see where there were limitations in our original code and let us make it more flexible.\newline 
 
-\noindent We define Delaunay triangulations as a set of faces on a plane such that the circumcircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, all vertices have the same emphasis on them, and the circumcircle about the face is made to intersect all three vertices. In a weighted Delaunay case, some vertices have a larger influence than others. The circumcircle surrounding a face uses the weight of each vertex. We use the term weights in a similar way as with our Ricci flows. In fact, our previous cases of circle packing \textit{are} weighted Delaunay triangulations. \newline
+\subsection{Definition}
+We define Delaunay triangulations as a set of faces on a plane such that the circumcircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, all vertices have face value, and the circumcircle about the face is made to intersect all three vertices. In a weighted Delaunay case, some vertices have a larger influence than others. The circumcircle surrounding a face uses the weight of each vertex. We use the term weight in a similar way as with our Ricci flows. In fact, our previous cases of circle packing \textit{are} weighted Delaunay triangulations. \newline
 
 \noindent We can easily produce a non-weighted Delaunay triangulation using mathematical software like MATLAB. However, less is known about weighted triangulations and their stability. For this project, we aim to develop an algorithm that can create a valid triangulation, add weights to vertices, and manipulate the field to produce a Delaunay triangulation. 
 
@@ -642,15 +643,15 @@ Focusing back on planar  Euclidean geometry, one thing we had aimed to do is gen
 
 \noindent 
 
-\subsection{Modifications to our data structure}
+\section{Modifications to our data structure}
 Alex and Tom will explain this part in much greater detail.\newline
 
 \noindent We perform 2-2 flips until the triangulation is Delaunay. 
 
-\subsection{Methods}
+\section{Methods}
 Alex and Tom will explain this part in much greater detail.\newline
 
-\noindent One issue we noted was that certain flips would change our notion of triangles. Flips sometimes produced triangles where they did not exist before. We call these anti-triangles, or \textit{negative triangles}. See Fig.~\ref{AntiTri}. We can check for cases when this may happen and adapt our flipping process as needed. \newline
+\noindent One issue we noted was that certain flips would change our notion of triangles. Flips sometimes produced triangles where they did not exist before. We call these anti-triangles, or \textit{negative triangles}. See Figure~\ref{AntiTri}. We can check for cases when this may happen and adapt our flipping process as needed. \newline
 
 \noindent We know that anti-triangles are related to the dual lengths associated with the faces (See $\oint$2.3). If the center of a triangle is outisde the triangle itself, we say that the dual has a negative length. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. 
 
@@ -662,7 +663,9 @@ Alex and Tom will explain this part in much greater detail.\newline
 \label{AntiTri}
 \end{figure}
 
-\subsection{Conclusions}
+\section{Examples}
+
+\section{Conclusions}
 Flips are awesome. We saw that by performing flips on our generated triangulations, we were able to make them Delaunay. Sometimes the vertices on the boundary of the triangulation would be inside other circumircles, but this does not violate our case for Delaunay as those vertices were of degree 2 and had little possibility of rearrangement. They very easily could have been positioned slightly different such that they were not in any path of a circumcircle.  
 
 \begin{figure}
@@ -685,7 +688,7 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = 0.6]{intcirc.png}
+\includegraphics[scale = 0.6]{intcirc2.png}
 \end{center}
 \caption{An example of relaxing circle packing and introducing $\Phi.$}
 \label{fig:intcirc}
@@ -699,7 +702,7 @@ Our generated triangulations can be akinned to our original notion of circle pac
  
 \section{Conclusion}
 
-We had a lot of goals for this project. For one, we are the first group to work with Dr. David Glickenstein and he has his own long-term goals. As the initial builders for these goals, we feel that we have laid a good foundation that can be easily built upon by future undergraduate students. We are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come. Another goal was to properly implement Ricci flow for 2-dimensional manifolds. While there are a number of extensions that still need to be implemented, we are pleased that the flow is functional and providing useful data. Our jump to weighted Delaunay triangulations enabled us to make our code more adaptable, as well as be able to generate our own systems with desired properties. We also feel we have learned an enormous amount over the course of only a few weeks. At the beginning, we all had varying familiarities with college geometry; some of us had not had a course in geometry since high school. Lastly, the experience from writing a research report, will undoubtedly help us in our future endeavors. We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the National Science Foundation VIGRE $\#\_\_\_\_\_\_\_$.
+We had a lot of goals for this project. For one, we are the first group to work with Dr. David Glickenstein and he has his own long-term goals. As the initial builders for these goals, we feel that we have laid a good foundation that can be easily built upon by future undergraduate students. We are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come. Another goal was to properly implement Ricci flow for 2-dimensional manifolds. While there are a number of extensions that still need to be implemented, we are pleased that the flow is functional and providing useful data. Our jump to weighted Delaunay triangulations enabled us to make our code more adaptable, as well as be able to generate our own systems with desired properties. We also feel we have learned an enormous amount over the course of only a few weeks. At the beginning, we all had varying familiarities with college geometry; some of us had not had a course in geometry since high school. Lastly, the experience from writing a research report will undoubtedly help us in our future endeavors. We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the National Science Foundation VIGRE $\#\_\_\_\_\_\_\_$.
   
 \newpage
 \bibliography{Test1}  

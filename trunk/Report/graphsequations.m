@@ -1,7 +1,8 @@
 % This m-file contains graphs for the miscellaneous pictures used in the
-% report. The program can be run all at once, or command lines can be
-% copied and pasted into the main MATLAB window. 3-D pictures can be
-% rotated to a preferred angle. 
+% report. The program can be run all at once, or individual figures can be
+% produced, either copied and pasted into the main MATLAB window, or
+% highlight, right click, and pick "Evaluate Selection". 3-D pictures can
+% be rotated to a preferred angle. 
 
 % figure 1. Right triangle made of circles. 
 figure;
@@ -82,8 +83,12 @@ y = 5*sin(th);
 x2 = 7 + 4*cos(th);
 y2 = 4*sin(th);
 plot(x,y,'k',x2,y2,'k',[0 7],[0 0],'k')
-axis image
 axis off
+hold on; z = 8*sqrt(6)/7;
+plot([0 29/7],[0 z],'k',[7 29/7],[0 z],'k')
+text(29/7 - .4, z + 1.6, '\Phi', 'FontSize', 20)
+plot([29/7 7.3 29/7 2],[z 5.5 z 6],'k');
+axis image
 
 %figure 10. Bad case. 
 figure;
@@ -95,7 +100,11 @@ gy(9) = -sqrt(4-2.25);
 gy(13) = 1 + sqrt(4-2.25);
 gx(14) = 3;
 plot(gx,gy,'k')
-axis off
+text(1.1,0.5,num2str(5),'FontSize',15)
+text(-.2,.5,num2str(2),'FontSize',15)
+text(1.5,1.1,num2str(4),'FontSize',15)
+text(2,2,num2str(5),'FontSize',15)
+axis off;
 
 %figure 11. Octahedron sphere
 figure;
@@ -175,4 +184,3 @@ for i = 1:size(X3,1)*size(X3,2)
 end
 plot(X3,Y3,'b.')
 axis off;
-

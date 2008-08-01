@@ -1,3 +1,26 @@
+%This program is intended to give a data analysis on the resulting
+%triangulations made from generateTriangulation. The functions printDegrees
+%and printEdgeLengths output the data into specified files which can be
+%accessed here in MATLAB. 
+% 
+% Console output:
+% 
+% Average degree
+% Standard Deviation of degree
+% Average Edge Length
+% Standard Deviation of EdgeLength
+% 
+% A 2*2 array of graphs is shown in a figure. These relate to:
+% 
+%     [The length of each]       [A histogram of edge]
+%     [edge as it is     ]       [lengths, grouped   ]
+%     [numbered.         ]       [by length          ]
+%
+%     [The degree of each]       [A histogram of     ]
+%     [vertex as it is   ]       [vertex degrees.    ]
+%     [numbered.         ]       [                   ]
+% 
+
 E = textread('c:\Dev-Cpp\geocam\Triangulations\EdgeLengths.txt');
 K = textread('c:\Dev-Cpp\geocam\Triangulations\Degrees.txt');
 
