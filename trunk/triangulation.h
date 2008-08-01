@@ -73,6 +73,7 @@ class Triangulation
      */
     static void eraseFace(int);
     
+    static void resetTriangulation();
     /*
      * Returns true if the current triangulation contains a vertex
      * represented by the given integer.

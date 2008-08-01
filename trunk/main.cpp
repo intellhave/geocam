@@ -36,7 +36,7 @@ void runFlow()
 //char from[] = "Triangulations/manifold.txt";
 //char to[] = "Triangulations/manifold converted.txt";
 //makeTriangulationFile(from, to);
-char to[] = "Triangulations/Tetrahedron.txt";
+char to[] = "Triangulations/icosahedron.txt";
 readTriangulationFile(to);
 
 
@@ -56,12 +56,12 @@ readTriangulationFile(to);
 
     for(int i = 1; i <= vertexSize; i++)
    {
-//       //weights[i - 1] = 3.141592653589793238/(rand() % 100 + 1.0);
-       weights[i - 1] = (i+0.0)/(2*vertexSize);
+      // weights[i - 1] = 3.141592653589793238/(rand() % 100 + 1.0);
+       //weights[i - 1] = (i+0.0)/(2*vertexSize);
     //  weights[i-1] = 0.6027;
       //weights[i - 1] = acos(1)/2 + (rand() % 5+1.0)/100.0;
-      //weights[i - 1] =   (rand() % 80 + 1)/100.0;
-
+      weights[i - 1] =   (rand() % 80 + 1)/100.0;
+      
    }
 //                                                   
    char fileName[] = "Triangulations/ODE Result.txt";
@@ -70,9 +70,9 @@ readTriangulationFile(to);
    vector<double> weightsR;
    vector<double> curvatures;
    double dt = 0.03;
-   int Steps = 400;
+   int Steps = 6000;
    
-   sphericalCalcFlow(&weightsR, &curvatures, dt, weights, Steps, false);
+   sphericalCalcFlow(&weightsR, &curvatures, dt, weights, Steps, true);
    printResultsStep(fileName, &weightsR, &curvatures);
    //printResultsNum(fileName, &weightsR, &curvatures);
 
@@ -184,35 +184,35 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
 
-     firstTriangle(1.0, 1.0, 1.0);
-     addTriangle(Triangulation::edgeTable[1], 1.0, 1.97387802015);
-     addTriangle(Triangulation::edgeTable[2], 1.97387802015, 1.0);
-     addTriangle(Triangulation::edgeTable[3], 1.0, 1.97387802015);
-     addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
-     addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
-     addTriangle(Triangulation::edgeTable[8], Triangulation::edgeTable[5]);
-     Triangulation::vertexTable[1].setWeightIndependent(0);
-     Triangulation::vertexTable[2].setWeightIndependent(0);
-     Triangulation::vertexTable[3].setWeightIndependent(0);
-     Triangulation::vertexTable[4].setWeightIndependent(1.466);
-     Triangulation::vertexTable[5].setWeightIndependent(1.466);
-     Triangulation::vertexTable[6].setWeightIndependent(1.466);
-
-    
-    for(int i = 1; i <= 9; i++)
-     {
-          cout << (*(Triangulation::edgeTable[i].getLocalVertices()))[0] << ", " << (*(Triangulation::edgeTable[i].getLocalVertices()))[1] << endl;
-          cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[i]) << endl;
-          cout << getHeight(Triangulation::faceTable[(*(Triangulation::edgeTable[i].getLocalFaces()))[0]], Triangulation::edgeTable[i]) << " ";
-          cout << getHeight(Triangulation::faceTable[(*(Triangulation::edgeTable[i].getLocalFaces()))[1]], Triangulation::edgeTable[i]) << endl;
-     }
-     
-    TriangulationCoordinateSystem tcs;
-    tcs.generatePlane();
-    tcs.printToFile("Triangulations/flips/Step 0.txt");
-    writeTriangulationFile("Triangulations/flips/Figure 0.txt");
-    
-    weightedFlipAlgorithm();
+//     firstTriangle(1.0, 1.0, 1.0);
+//     addTriangle(Triangulation::edgeTable[1], 1.0, 1.97387802015);
+//     addTriangle(Triangulation::edgeTable[2], 1.97387802015, 1.0);
+//     addTriangle(Triangulation::edgeTable[3], 1.0, 1.97387802015);
+//     addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
+//     addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
+//     addTriangle(Triangulation::edgeTable[8], Triangulation::edgeTable[5]);
+//     Triangulation::vertexTable[1].setWeightIndependent(0);
+//     Triangulation::vertexTable[2].setWeightIndependent(0);
+//     Triangulation::vertexTable[3].setWeightIndependent(0);
+//     Triangulation::vertexTable[4].setWeightIndependent(1.466);
+//     Triangulation::vertexTable[5].setWeightIndependent(1.466);
+//     Triangulation::vertexTable[6].setWeightIndependent(1.466);
+//
+//    
+//    for(int i = 1; i <= 9; i++)
+//     {
+//          cout << (*(Triangulation::edgeTable[i].getLocalVertices()))[0] << ", " << (*(Triangulation::edgeTable[i].getLocalVertices()))[1] << endl;
+//          cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[i]) << endl;
+//          cout << getHeight(Triangulation::faceTable[(*(Triangulation::edgeTable[i].getLocalFaces()))[0]], Triangulation::edgeTable[i]) << " ";
+//          cout << getHeight(Triangulation::faceTable[(*(Triangulation::edgeTable[i].getLocalFaces()))[1]], Triangulation::edgeTable[i]) << endl;
+//     }
+//     
+//    TriangulationCoordinateSystem tcs;
+//    tcs.generatePlane();
+//    tcs.printToFile("Triangulations/flips/Step 0.txt");
+//    writeTriangulationFile("Triangulations/flips/Figure 0.txt");
+//    
+//    weightedFlipAlgorithm();
 
 
      
@@ -411,7 +411,12 @@ int main(int argc, char *argv[])
     //flip(Triangulation::edgeTable[1]);
     
     //weightedFlipAlgorithm();
-        
+    generateTriangulation(25);
+    generateWeights();
+    TriangulationCoordinateSystem tcs;
+    tcs.generatePlane();
+    tcs.addDuals(Triangulation::vertexTable[1]);
+    tcs.printDuals("Triangulations/duals.txt");
     system("PAUSE");
     return 0;
 }

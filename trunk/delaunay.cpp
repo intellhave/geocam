@@ -91,6 +91,20 @@ double getDual(Edge e)
           return h1 + h2;
 }
 
+double getPartialEdge(Edge e, Vertex v1)
+{
+    int v2Index;
+    if((*(e.getLocalVertices()))[0] != v1.getIndex())
+    {
+       v2Index = (*(e.getLocalVertices()))[0];
+    } else
+    {
+       v2Index = (*(e.getLocalVertices()))[1];
+    }
+    Vertex v2 = Triangulation::vertexTable[v2Index];
+    double d12 = (pow(e.getLength(), 2) + pow(v1.getWeight(), 2) - pow(v2.getWeight(), 2)) / (2 * e.getLength());
+    return d12;
+}
 
 
 

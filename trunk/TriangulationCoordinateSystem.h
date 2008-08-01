@@ -5,7 +5,7 @@ Version: July 28, 2008
 **************************************************************/
 #include "pointlinecircle.h"
 #include "triangulation.h"
-
+#include "delaunay.h"
 #ifndef TRIANGULATIONCOORDINATESYSTEM_H
 #define TRIANGULATIONCOORDINATESYSTEM_H
 
@@ -47,6 +47,7 @@ class TriangulationCoordinateSystem
       int generatePlaneHelper(Edge, int);
       map<int, Line> lineTable;
       map<int, Point> pointTable;
+      vector<Line> dualList;
       public:
       TriangulationCoordinateSystem();
       ~TriangulationCoordinateSystem();
@@ -94,6 +95,7 @@ class TriangulationCoordinateSystem
        * triangle is filled with a color when visualizing.      
        */
       void printToFile(char*);
+      void printDuals(char*);
       /*
        * Returns the Point in the pointTable with the given index.
        */
@@ -104,6 +106,10 @@ class TriangulationCoordinateSystem
       Line getLine(int);
       
       void update();
+      
+      void addHalfDual(Edge, Face); 
+      void addDual(Edge);
+      void addDuals(Vertex);
 };
 
 #endif // TRIANGULATIONCOORDINATESYSTEM_H

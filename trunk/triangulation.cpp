@@ -171,6 +171,13 @@ void Triangulation::eraseFace(int key)
      faceTable.erase(key);
 }
 
+void Triangulation::resetTriangulation()
+{
+     vertexTable.clear();
+     edgeTable.clear();
+     faceTable.clear();
+}
+
 double Triangulation::netCurvature()
 {
        double net = 0;
