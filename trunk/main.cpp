@@ -417,6 +417,7 @@ int main(int argc, char *argv[])
     tcs.generatePlane();
     tcs.addDuals(Triangulation::vertexTable[1]);
     tcs.printDuals("Triangulations/duals.txt");
+    tcs.printToFile("Triangulation/ODE Result.txt");
     system("PAUSE");
     return 0;
 }
