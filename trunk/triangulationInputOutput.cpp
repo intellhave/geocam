@@ -532,7 +532,7 @@ void makeTriangulationFile (char* from, char* to) {
   outfile.close();
 }
 
-void printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs)
+bool printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs)
 {
      int vertSize = Triangulation::vertexTable.size();
      int numSteps = weights->size() / vertSize;
@@ -541,7 +541,7 @@ void printResultsStep(char* fileName, vector<double>* weights, vector<double>* c
      results.setf(ios_base::showpoint);
      
      map<int, Vertex>::iterator vit;
-     
+
      
      for(int i = 0; i < numSteps; i++)
      {

@@ -21,7 +21,6 @@ Version: June 10, 2008
 #include "triangulationPlane.h"
 #include "delaunay.h"
 #include "TriangulationCoordinateSystem.h"
-#include <ctime>
 #include <iomanip>
 #include <cmath>
 #include "spherical/sphericalmath.h"

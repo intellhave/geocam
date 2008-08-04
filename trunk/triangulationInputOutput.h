@@ -137,6 +137,5 @@ void printResultsNum(char*, vector<double>*, vector<double>*);
 void printDegrees(char*);
 void printEdgeLengths(char*);
 
-
 void makeDelaunayTriangulationFile(char*, char*);
 

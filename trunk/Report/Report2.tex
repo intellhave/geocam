@@ -197,14 +197,15 @@ We have some expectations for combinatorial Ricci flow over two-dimensional Eucl
 
 \section{Program/Code}
 \label{Programchap}
+\subsection{Definitions}
+Programming comes with its own definitions and terms and we will try to define some here in relation to our project. We define the term \textit{fail} as a result providing an unexpected or undesired outcome. For our project this will mean the data was unable to be calculated successfully not as a result of faulty code but as a result of a given situation. Terms like \textit{crash} or \textit{break} may be used in a similar meaning. The word \textit{method} is defined to be synonymous with a function or procedure, that is, a block of code that provides a certain service.
 \subsection{Structure}
-
 
 When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces..\newline
   
-\begin{figure}[ht]
+\begin{figure}
 \begin{center}
-\includegraphics[scale = 0.50]{triangulationUML.png}
+\includegraphics[scale = 0.50, angle = 90]{triangulationUML.png}
 \end{center}
 \caption{A UML diagram of the program. The UML shows how the various files interact as well as the functions and variables they hold.}
 \label{triUML}
@@ -345,8 +346,8 @@ A cross-cap is a piece of a surface with a self intersection. The purpose of add
 Another shape we have been looking into is called the double triangle. A double triangle is made of two triangles with the same three vertices. It can also be thought of as folding one triangle on top of another. We can add these to a triangulation and see how things vary with their presence. This is of interest because of their very peculiar effect on the definition of a triangulation. Without double triangles, there are certain restrictions on definitions and adjacency properties of simplices within a triangulation as outlined in the previous section on triangulations. However, with these double triangles, the restrictions are broken up by allowing double and even triple adjacency references, creating vertices with only one or two local vertices, faces with only two defining edges, and edges with only one defining vertex, among other bizarre properties. Because of these inconsistencies in definition, different surfaces that have these double triangles attached to them will behave in noteworthy ways. The function that adds these shapes takes an edge as an argument and adds another edge with the same two vertices. Then, a vertex is added and two edges are drawn from this vertex to the other two vertices mentioned. Two new faces are formed by these two new edges as well as the other two edges mentioned, one for each face. The process can be imagined as flattening a party hat and attaching it to an object along the open end.
 \end{itemize}
 
-\section{Results}
-
+\section{Initial Results}
+\label{InitialResults}
 \subsection{Flows}
 
 The program for the Ricci flow was tested by beginning with the simplest cases, and then explored with as many different possibilities as we could conceive of to try to find anomalies. The first test was the boundary of the tetrahedron. In the standard equation, it is easily shown that all weights approach zero exponentially fast. In the normalized equation, and the equation that is used in the rest of the testing, the tetrahedron's weights approach a single positive number, the fourth root of the \textit{product area} of the tetrahedron, so that the area remains constant. In addition, all the curvatures converged to the same value, in this case $\pi$, so that the total curvature is $4\pi$. Results were similar for the other platonic solids.\newline
@@ -482,14 +483,14 @@ One experiment we performed was measuring convergence speeds of various triangul
 
 \section{Spherical and hyperbolic combinatorial Ricci flow}
 \label{HypSphere}
-Up til now we have focused solely on triangulations using planar Euclidean geometry. While this is useful for most cases, there are others where a different background space may be better suited. Two of these in particular are spherical and hyperbolic geometries. We will introduce the basics of each system to the reader as they may be unfamilar with these geometries. We will examine the adaptations of combinatorial Ricci flow for each case, test over various triangulations, and attempt to reach conclusions on our findings. 
+So far we have focused exclusively on triangulations using Euclidean geometry. While this is useful for most cases, there are others where a different background space may be better suited. Two of these in particular are spherical and hyperbolic geometries. We will introduce the basics of each system to the reader as they may be unfamilar with these geometries. We will examine the adaptations of combinatorial Ricci flow for each case, test over various triangulations, and attempt to reach conclusions on our findings. 
 
 \subsection{Spherical flow}
-If you were to draw a large triangle on the surface of the earth, you would see that the line segments are no longer linear, but curve around along arced paths. In dealing with spherical geometry, we learn that many rules of planar geometry, some of them fundamental, do not apply. To begin, the sums of angles in a triangle do not add to $180^\circ$. The sum changes depending on the edge lengths. For computational reasons, we cannot (easily) have edges of unbounded length. While we can assume our circle packing metric still holds, we do have additional restrictions: 
+If you were to draw a large triangle on the surface of the earth, you would see that the line segments are no longer linear, but follow along an arc. In dealing with spherical geometry, we learn that many rules of planar geometry, some of them fundamental, do not apply. To begin, the sums of angles in a triangle do not add to $180^\circ$. The sum changes depending on the edge lengths. For computational reasons, we cannot (easily) have edges of unbounded length. While we can assume our circle packing metric still holds, we do have additional restrictions: 
 
 \begin{itemize}
-\item All triangles must (initially) be producable on a sphere of radius 1, the unit sphere. Triangulations can be thought of as a culmination of spherical triangles from many different spheres. 
-\item The sum of the weights of any triangle cannot exceed $\pi.$ This is partially due to the possibility of multiple triangles on a sphere using the same points, and also to inherent domain bounds in formulae. By default, we imply the geodesic of a spherical triangle, using the shortest distance on the surface between any two vertices.
+\item All triangles must be producable on a sphere of radius 1, the unit sphere. 
+\item By default, we imply the geodesic of a spherical triangle, using the shortest distance on the surface between any two vertices. As a result, the sum of the weights of any triangle cannot exceed $\pi.$ In addition to contradicting the previous definition, such a situation can lead to undefined calculations of our angles, the equation of which is provided below.
 \end{itemize}
 
 \noindent We also have different formulas for numerous things in the spherical case. There are now two laws of cosines. One gives you an angle based on the edge lengths, like in Euclidean space, and the other gives you the side lengths based on the angles. For the first law of cosines, given a triangle with edge lengths $a, b$, and $c$, we have $\cos(\angle C) = \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)}$. Using Taylor polynomials to a couple of terms, we can see that this is analogous to the Euclidean version. With $\sin(x) \approx x$ and $\cos(x) \approx 1 - \frac{x^2}{2}$ for $x$ small, we get 
@@ -499,7 +500,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 							&=& \frac{a^2 + b^2 - c^2}{2ab} + \frac{ab}{4} \approx \frac{a^2 + b^2 - c^2}{2ab} \mbox{ as } \frac{ab}{4} \approx 0 \mbox{ for } a,b \mbox{ small}
 \end{eqnarray*}
 
-\noindent More importantly, our equation for combintorial Ricci flow is altered slightly. The base equation is now 
+\noindent More importantly, our equation for combintorial Ricci flow is altered slightly. The base equation, as given by \cite{chowluo}, is now 
 \begin{equation}
 \label{SRiccif}
 \frac{dr_i}{dt} = -K_i\sin(r_i).
@@ -512,7 +513,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 \caption{An illustration of a spherical octahedron through the X-Y plane. Each octet of the sphere surface, outlined in black, is the face of one triangle.} 
 \end{figure}
 
-\noindent Like in the Euclidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths. Plus, we also need make sure that the weights remain within bounds.\newline
+\noindent Like in the Euclidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths. Plus, we also need to make sure that the weights remain within bounds.\newline
 
 \noindent We tried a few techniques to derive an equation for normalized spherical flow. Some ideas were:
 
@@ -551,7 +552,7 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 
 $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac{\pi(4 + F)}{3F}$$
 
-\noindent and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ The only downsides we found with this equation were that it was still possible for the system to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that with the $dt$ size given, it would take over 4 minutes for the system to reach equilibrium in real time.  
+\noindent and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ The only downsides we found with this equation were that it was still possible for the system to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that with the $dt$ size given of $0.5$, it would take over 500 steps for the system to reach equilibrium, and this would be much longer with the $dt$ used in $\oint\ref{InitialResults}$.  
 
 \begin{figure}[ht]
 \centering
@@ -562,11 +563,11 @@ $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac
 
 \subsection{Hyperbolic flow}
 
-In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. A common way to visualize the hyperbolic plane can be seen in Fig.~\ref{PD}. This representation is often called the Poincar\'{e} disk, named after the same Poincar\'{e} as in $\oint$\ref{RBk}. This notion of a hyperbolic plane can also be seen in popular art, particularly M.C. Escher's ``Circle Limit'' series, which includes some of his most famous pieces including the ``Angels and Devils'' picture. \newline
+In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. A common way to visualize the hyperbolic plane can be seen in Fig.~\ref{PD}. This representation is often called the Poincar\'{e} disk, named after the same Poincar\'{e} as in $\oint$\ref{RBk}.\newline
 
-\noindent The major new difference with the hyperbolic plane is that our traditional notion of unique parallel lines no longer apply. We now have that for a point $P$ on a line $l$, there is a point $B$ on a line $m$ such that $B$ and $P$ create a line $n \perp l$, there are now an infinite number of possible $m$'s. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. \newline
+\noindent There are several interesting properties with the hyperbolic plane. We now have that for a line $l$ and a point $P$ not on that line, there are an infinite number of lines throught $P$ that do not intersect $l$. In Euclidean geometry, such a line is unique. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. A more thorough explanation of hyperbolic geometry can be found in most college geometry textbooks.\newline
 
-\noindent In terms of the formulas, they remain relatively similar in format to the spherical equations, except there are two main substitutions. The cosine and sine functions are often replaced with their hyperbolic counterparts $cosh$ and $sinh$ (pronounced ``synch''), defined as
+\noindent In terms of the formulas, they remain relatively similar in format to the spherical equations, except there are two main substitutions. The cosine and sine functions are often replaced with their hyperbolic counterparts $cosh$ and $sinh$, defined as
 \begin{eqnarray*}
 \sinh(x) &=& \frac{e^x - e^{-x}}{2}\\
 \cosh(x) &=& \frac{d\sinh(x)}{dt} = \frac{e^x + e^{-x}}{2}
@@ -579,7 +580,7 @@ In hyperbolic geometry, we encounter a new background that has properties both s
 \end{equation}
 \noindent 
 
-\noindent Like in the case of spherical flow, the average and total curvatures need not remain constant. The average curvature can be now found by
+\noindent Like in the case of spherical flow, the average and total curvatures need not remain constant. The average curvature is now
 $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of }X}{|V|}.$$
 
 \begin{figure}
@@ -601,17 +602,17 @@ When we began looking into these background geometries, we thought that it would
 
 \noindent Euclidean- As expected, we obtain a surface where all the vertices attain the same curvature of $\frac{\pi}{3}$ after multiple trials of uniform and randomized weights. The weights group together somewhat as in the normalized spherical case, and then continue decreasing towards zero.\newline
 
-\noindent Spherical- We found that the system was truly stable with nonzero final weights if and only if all initial weights were set exactly to its preferred weight, which is $\approx$ 0.55357 based on the fact that this triangulation has 20 faces. If the initial curvature was below zero, the weights would increase rapidly until the program crashed. If the initial curvature was positive, the vertices would approach the same curvature as in the Euclidean case. In doing such, the weights would drop to zero.\newline
+\noindent Spherical- We found that the system was truly stable with nonzero final weights if and only if all initial weights were set exactly to its preferred weight, which is $\approx$ 0.55357 based on the fact that this triangulation has 20 faces. If the initial curvature was below zero, the weights would increase rapidly until the program crashed. If the initial curvature was positive, the vertices would approach the same curvature as in the Euclidean case. In doing so, the weights would drop to zero.\newline
 
-\noindent Hyperbolic- We found that the vertices react in almost the exact same behavior as in the Euclidean case. They approach the same curvature of $\frac{\pi}{3}$ and drop towards zero weights at the same rate.\newline 
+\noindent Hyperbolic- We found that the vertices react in a similar manner to the Euclidean case. They approach the same curvature of $\frac{\pi}{3}$ and drop towards zero weights at the same rate.\newline 
 
 \noindent \textit{Example:} 9 vertex, one-holed torus\newline
 
 \noindent Euclidean- Since we know that $\chi = 0$ for a one-holed torus, we also know that $\overline{K} = 0$ and so each vertex obtains zero curvature. The weights do not drop to zero, but converge to positive values reflective of their degree. \newline
 
-\noindent Spherical- We found this system to be very unstable with the torus. If the initial weights were too large, we found that the total curvature would be well below zero, and the weights would continually increase until sphericalCalcFlow crashed. While we hoped that reducing the initial weights would bring stability to the system, we ended up with the same result. However, upon investigation we learned that all the curvatures are close to 0 at one time, but then deviate back towards more negative values as the sum of the weights continually increases. \newline
+\noindent Spherical- We found this system to be very unstable with the torus. If the initial weights were too large, we found that the total curvature would be well below zero, and the weights would continually increase until sphericalCalcFlow crashed. While we hoped that reducing the initial weights would bring stability to the system, we ended up with the same result.
 
-\noindent Hyperbolic- Unlike the previous example, we saw the hyperbolic equations behave differently than the Euclidean version. While the total curvature of the system goes to zero, the weights do not converge to positive constants- they drop to zero, as well, but maintain roughly the same proportion as the final Euclidean weights. Another thing we noted was the time required for the weights and curvatures to go to zero. This system was extremely slow and took much longer than either the Euclidean or spherical trials. \newline
+\noindent Hyperbolic- While the total curvature of the system goes to zero, the weights also approach zero but maintain roughly the same proportion as the final Euclidean weights. Another thing we noted was the time required for the weights and curvatures to go to zero. This system was extremely slow and took much longer than either the Euclidean or spherical trials. \newline
 
 \noindent \textit{Example:} 11 vertex, two-holed torus\newline
 
@@ -619,18 +620,18 @@ When we began looking into these background geometries, we thought that it would
 
 \noindent Spherical- Regardless of the initial weights, we found that the total curvature of the system would continually decrease, and as such the weights of each vertex would increase until sphericalCalcFlow crashed. \newline
 
-\noindent Hyperbolic- Here we found the hyperbolic system shining above the others. In a very short time, we saw the vertices reach zero curvature, and the weights converge to nonzero values. This is how we got our notion that the hyperbolic Ricci flow was already normalized. \newline
+\noindent Hyperbolic- Here we found that hyperbolic geometry was very effective. In a very short time, we saw the vertices reach zero curvature, and the weights converge to nonzero values. This is how we got our notion that the hyperbolic Ricci flow was already normalized. This also coincides with the suggestion in \cite{chowluo}; when working with a negative euler characteristic manifold, one should use hyperbolic geometry.\newline
 
 \noindent To conlude, we generalize that certain flows work best for triangulations whose total curvature goes to zero in that particular system. Euclidean is best for systems of genus 1, or one-holed tori. Spherical combinatorial Ricci flow is said to work best on manifolds of genus 0, or anything topologically equivalent to a sphere. This is because we have a positive $\chi$ value, so for total curvature to go to 0, the total surface area must go to $4\pi$. Spherical was the only system that could have produced a nontrivial solution in our first example. Hyperbolic Ricci flow is best suited for triangulations with a genus of 2 or more. We can see that these systems will be able to reach zero total curvature with a large enough surface area. 
 
 \section{Delaunay triangulations}
-In addition to our work on combinatioral Ricci flow, we also branched out into other areas where we felt our triangulation structure would be applicable. While we initially viewed the topic of Delaunay triangulations as a side project for us to work on, we found that it quickly became the cornerstone of the second half of our research. We will introduce basic concepts, illustrate our adaptations of code, as well as show unique examples in hopes of reaching profound conclusions. 
+In addition to our work on combinatioral Ricci flow, we also branched out into other areas where we felt our triangulation structure would be applicable. While we initially viewed the topic of Delaunay triangulations as a side project for us to work on, we found that it quickly became the cornerstone of the second half of our research. We will introduce basic concepts, illustrate our adaptations of code, as well as show unique examples in hopes of reaching conclusions. 
 
 \subsection{Background}
-Focusing back on planar  Euclidean geometry, one thing we had aimed to do is generate our own trianguations from scratch and not rely on the work of others. We also wanted to be able to adapt our data structure to make it more malleable for other criteria besides combinatorial Ricci flows. We felt that investigating Delaunay triangulations would allow us to see where there were limitations in our original code and let us make it more flexible.\newline 
+Back when we were focusing on planar  Euclidean geometry, one thing we had aimed to do is generate our own trianguations. We also wanted to be able to adapt our data structure to make it more malleable for other criteria besides combinatorial Ricci flows. We felt that investigating Delaunay triangulations would allow us to see where there were limitations in our original code and let us make it more flexible.\newline 
 
 \subsection{Definition}
-We define Delaunay triangulations as a set of faces on a plane such that the circumcircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, all vertices have face value, and the circumcircle about the face is made to intersect all three vertices. In a weighted Delaunay case, some vertices have a larger influence than others. The circumcircle surrounding a face uses the weight of each vertex. We use the term weight in a similar way as with our Ricci flows. In fact, our previous cases of circle packing \textit{are} weighted Delaunay triangulations. \newline
+We define Delaunay triangulations as a set of faces on a plane such that the circumcircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, the circumcircle about the face is made to intersect all three vertices. In a weighted Delaunay case, some vertices have a larger influence than others. The circumcircle surrounding a face uses the weight of each vertex. We use the term weight in a similar way as with our Ricci flows. In fact, our previous cases of circle packing \textit{are} weighted Delaunay triangulations. \newline
 
 \noindent We can easily produce a non-weighted Delaunay triangulation using mathematical software like MATLAB. However, less is known about weighted triangulations and their stability. For this project, we aim to develop an algorithm that can create a valid triangulation, add weights to vertices, and manipulate the field to produce a Delaunay triangulation. 
 
@@ -643,17 +644,27 @@ We define Delaunay triangulations as a set of faces on a plane such that the cir
 
 \noindent 
 
-\section{Modifications to our data structure}
+\subsection{Modifications to our data structure}
 Alex and Tom will explain this part in much greater detail.\newline
 
 \noindent We perform 2-2 flips until the triangulation is Delaunay. 
 
-\section{Methods}
+\subsubsection{Negative Triangles}
+
+
+\subsection{Methods}
 Alex and Tom will explain this part in much greater detail.\newline
 
-\noindent One issue we noted was that certain flips would change our notion of triangles. Flips sometimes produced triangles where they did not exist before. We call these anti-triangles, or \textit{negative triangles}. See Figure~\ref{AntiTri}. We can check for cases when this may happen and adapt our flipping process as needed. \newline
+\subsubsection{Flip Algorithms}
+One issue we noted was that certain flips would change our notion of triangles. Flips sometimes produced triangles where they did not exist before. We call these anti-triangles, or \textit{negative triangles}. See Figure~\ref{AntiTri}. We can check for cases when this may happen and adapt our flipping process as needed. \newline
 
-\noindent We know that anti-triangles are related to the dual lengths associated with the faces (See $\oint$2.3). If the center of a triangle is outisde the triangle itself, we say that the dual has a negative length. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. 
+\noindent We know that anti-triangles are related to the dual lengths associated with the faces (See $\oint$2.3). If the center of a triangle is outisde the triangle itself, we say that the dual has a negative length. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}.
+
+\subsubsection{Random Generation}
+An important aspect to properly explore these triangulations is in their generation. To truly test our algorithms and to provide convincing results would require an unbiased way of constructing the triangulations. There are several properties to triangulations that we wish to be randomized, and they include the lengths of each edge, the degree of each vertex, and the weight at each vertex. It is unclear if there is a way to provide a truly random generation of triangulations or even if such a system would be desirable, but we feel that the algorithm we chose adequately meets our goals.\newline
+
+\noindent Our random triangulation generator begins with one triangle with edge lengths between zero and ten. This was chosen arbitrarily as all future weights will be based off of these. Triangles are then created from each edge along the border. When the creation of an edge would result in a vertex's angles summing to greater than $2\pi$, we instead close off the vertex by connecting its two outer edges. Once the desired number of faces have been created, the algorithm ends. Section [] in the appendix shows several results of this algorithm.\newline
+
 
 \begin{figure}
 \centering
@@ -663,9 +674,9 @@ Alex and Tom will explain this part in much greater detail.\newline
 \label{AntiTri}
 \end{figure}
 
-\section{Examples}
+\subsection{Examples}
 
-\section{Conclusions}
+\subsection{Conclusions}
 Flips are awesome. We saw that by performing flips on our generated triangulations, we were able to make them Delaunay. Sometimes the vertices on the boundary of the triangulation would be inside other circumircles, but this does not violate our case for Delaunay as those vertices were of degree 2 and had little possibility of rearrangement. They very easily could have been positioned slightly different such that they were not in any path of a circumcircle.  
 
 \begin{figure}
