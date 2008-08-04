@@ -38,3 +38,7 @@ void weightedFlipAlgorithm();
 void checkTriangle(Edge, double, double);
 
 void makeSpecialCase();
+
+void removeDoubleTriangle(Vertex);
+
+void writeYuliyaFile(char*);

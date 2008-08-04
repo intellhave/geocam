@@ -387,17 +387,11 @@ void weightedFlipAlgorithm()
      int passCount = 0;
      int flipCount = 1;
      int count = 0;
+     vector<int> remVerts;
      TriangulationCoordinateSystem tcs;
      tcs.generatePlane();
      tcs.printToFile("Triangulations/flips/Step 0.txt");
      writeTriangulationFile("Triangulations/flips/Figure 0.txt");
-     for(int i = 1; i <= Triangulation::faceTable.size(); i++)
-     {
-          cout << "(" << (*(Triangulation::faceTable[i].getLocalVertices()))[0];
-          cout << ", " << (*(Triangulation::faceTable[i].getLocalVertices()))[1];
-          cout << ", " << (*(Triangulation::faceTable[i].getLocalVertices()))[2];
-          cout << ")  " << Triangulation::faceTable[i].isNegative() << endl;
-     }
      while(flipCount != 0)
      {
           passCount++;
@@ -406,11 +400,9 @@ void weightedFlipAlgorithm()
           map<int, Edge>::iterator eit;
           for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
           {
-               
                Edge e = eit->second;
                if(!(isWeightedDelaunay(Triangulation::edgeTable[e.getIndex()])))
                {
-                    cout << "Here\n";
                     try
                     {
                          flip(Triangulation::edgeTable[e.getIndex()]);
@@ -424,16 +416,6 @@ void weightedFlipAlgorithm()
                          tcs.update();
                          tcs.printToFile(s);
                          writeTriangulationFile(s2);
-                         //...........
-                         for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
-                         {
-                              cout << "Vertices: ";
-                              cout << "(" << (*(Triangulation::edgeTable[i].getLocalVertices()))[0];
-                              cout << ", " << (*(Triangulation::edgeTable[i].getLocalVertices()))[1];
-                              cout << ")" << endl;
-                         }
-                         //...........
-                         
                     }
                     catch(string s1)
                     {
@@ -443,28 +425,37 @@ void weightedFlipAlgorithm()
                     }
                }
           }
-//          map<int, Face>::iterator fit;
-//          int negFaceCount = 0;
-//          for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
-//          {
-//               Face f = fit->second;
-//               if(f.isNegative())
-//               negFaceCount++;
-//          }
-//          cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
-
      }
+     
      cout << "Finished" << endl;
-//     map<int, Face>::iterator fit;
-//     int negFaceCount = 0;
-//     for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
-//     {
-//          Face f = fit->second;
-//          if(f.isNegative())
-//          negFaceCount++;
-//     }
-//     cout << "There is/are " << negFaceCount << " negative face(s)" << endl;
      cout << "Total num flips: " << count << "\n";
+     
+     int doubleTriangles = 0;
+     map<int, Vertex>::iterator vit;
+     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
+     {
+          Vertex v = vit->second;
+          if(getAngleSum(v) < 0.0001 && v.getLocalFaces()->size() == 2)
+          {
+               cout << "!" << endl;
+               removeDoubleTriangle(v);
+               doubleTriangles++;
+          }
+     }
+     
+     if(doubleTriangles > 0)
+     {
+          char s[100];     
+          char s2[100];
+          count++;
+          sprintf(s, "Triangulations/flips/Step %d.txt", count);
+          sprintf(s2, "Triangulations/flips/Figure %d.txt", count);
+          tcs.update();
+          tcs.printToFile(s);
+          writeTriangulationFile(s2);
+          cout << doubleTriangles << " vertices removed" << endl;
+     }
+     
 }
 
 void checkTriangle(Edge e, double length1, double length2)
@@ -525,19 +516,114 @@ void checkTriangle(Edge e, double length1, double length2)
 void makeSpecialCase()
 {
      firstTriangle(1.0, 1.0, 1.0);
-     addTriangle(Triangulation::edgeTable[1], 1.92923932482, 1.0);
-     addTriangle(Triangulation::edgeTable[2], 1.0, 1.92923932482);
-     addTriangle(Triangulation::edgeTable[3], 1.92923932482, 1.0);
+     addTriangle(Triangulation::edgeTable[1], 1.0, 1.97387802015);
+     addTriangle(Triangulation::edgeTable[2], 1.97387802015, 1.0);
+     addTriangle(Triangulation::edgeTable[3], 1.0, 1.97387802015);
      addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
      addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
      addTriangle(Triangulation::edgeTable[8], Triangulation::edgeTable[5]);
-     Triangulation::vertexTable[1].setWeightIndependent(0.25);
-     Triangulation::vertexTable[2].setWeightIndependent(0.25);
-     Triangulation::vertexTable[3].setWeightIndependent(0.25);
-     Triangulation::vertexTable[4].setWeightIndependent(1.49);
-     Triangulation::vertexTable[5].setWeightIndependent(1.49);
-     Triangulation::vertexTable[6].setWeightIndependent(1.49);
+     Triangulation::vertexTable[1].setWeightIndependent(0);
+     Triangulation::vertexTable[2].setWeightIndependent(0);
+     Triangulation::vertexTable[3].setWeightIndependent(0);
+     Triangulation::vertexTable[4].setWeightIndependent(1.466);
+     Triangulation::vertexTable[5].setWeightIndependent(1.466);
+     Triangulation::vertexTable[6].setWeightIndependent(1.466);
      
 }
 
+void removeDoubleTriangle(Vertex vb)
+{
+     if(vb.getLocalFaces()->size() != 2 || getAngleSum(vb) > 0.0001)
+     throw string("Invalid Operation");
+     
+     Face f1 = Triangulation::faceTable[(*(vb.getLocalFaces()))[0]];
+     Face f2 = Triangulation::faceTable[(*(vb.getLocalFaces()))[1]];
+     
+     vector<int> diff, sameAs;
+     diff = listDifference(f1.getLocalEdges(), f2.getLocalEdges());
+     Edge ea1 = Triangulation::edgeTable[diff[0]];
+     diff = listDifference(f2.getLocalEdges(), f1.getLocalEdges());
+     Edge ea2 = Triangulation::edgeTable[diff[0]];
+     
+     Vertex va1 = Triangulation::vertexTable[(*(ea1.getLocalVertices()))[0]];
+     Vertex va2 = Triangulation::vertexTable[(*(ea1.getLocalVertices()))[1]];
+     
+     sameAs = listIntersection(vb.getLocalEdges(), va1.getLocalEdges());
+     Edge eb1 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(vb.getLocalEdges(), va2.getLocalEdges());
+     Edge eb2 = Triangulation::edgeTable[sameAs[0]];
+     
+     Face fa1, fa2;
+     
+     if(!ea1.isBorder())
+     {
+          if((*(ea1.getLocalFaces()))[0] == f1.getIndex())
+               Face fa1 = Triangulation::faceTable[(*(ea1.getLocalFaces()))[1]];
+          else
+               Face fa1 = Triangulation::faceTable[(*(ea1.getLocalFaces()))[0]];
+     }
+     if(!ea2.isBorder())
+     {
+          if((*(ea2.getLocalFaces()))[0] == f2.getIndex())
+               Face fa2 = Triangulation::faceTable[(*(ea2.getLocalFaces()))[1]];
+          else
+               Face fa2 = Triangulation::faceTable[(*(ea2.getLocalFaces()))[0]];
+          
+          Triangulation::edgeTable[ea1.getIndex()].addFace(fa2.getIndex());
+          Triangulation::faceTable[fa2.getIndex()].addEdge(ea1.getIndex());
+     }
+     
+     if(!(ea1.isBorder() || ea2.isBorder())) 
+     {
+          Triangulation::faceTable[fa1.getIndex()].addFace(fa2.getIndex());
+          Triangulation::faceTable[fa2.getIndex()].addFace(fa1.getIndex());
+     }
+     
+     Triangulation::eraseVertex(vb.getIndex());
+     Triangulation::eraseEdge(eb1.getIndex());
+     Triangulation::eraseEdge(eb2.getIndex());
+     Triangulation::eraseEdge(ea2.getIndex());
+     Triangulation::eraseFace(f1.getIndex());
+     Triangulation::eraseFace(f2.getIndex());
+}
+
+void writeYuliyaFile(char* fileName)
+{
+     ofstream output(fileName);
+     map<int, Edge>::iterator eit;
+     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+     {
+          output << (*(eit->second.getLocalVertices()))[0] << " ";
+          output << (*(eit->second.getLocalVertices()))[1] << "; ";
+          
+          int f1, f2, v1, v2;
+          vector<int> diff;
+          
+          f1 = (*(eit->second.getLocalFaces()))[0];
+          diff = listDifference(Triangulation::faceTable[f1].getLocalVertices(), eit->second.getLocalVertices());
+          v1 = diff[0];
+          output << v1;
+          if(Triangulation::faceTable[f1].isNegative())
+               output << "*";
+          output << " ";
+          
+          if(!eit->second.isBorder())
+          {
+               f2 = (*(eit->second.getLocalFaces()))[1];
+               diff = listDifference(Triangulation::faceTable[f2].getLocalVertices(), eit->second.getLocalVertices());
+               v2 = diff[0];
+               output << v2;
+               if(Triangulation::faceTable[f2].isNegative())
+                    output << "*";
+          }
+          
+          output << endl;
+          
+     }
+     
+     
+     
+     
+     
+}
 

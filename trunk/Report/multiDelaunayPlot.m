@@ -20,21 +20,7 @@
 
 function multiDelaunayPlot(k, option)
 
-<<<<<<< .mine
-% %This is for method 1.
-% for i = 0:k
-%     h = num2str(i);
-%     j = ['c:\Dev-Cpp\geocam\Triangulations\flips\Step ' h '.txt'];
-%   
-%     delaunayPlot(j,[0 1 0]);
-%     pause();
-%     if i ~= k
-%         clf;
-%     end
 
-    %This is for method 2.
-    h = num2str(0);
-=======
 %This is for method 1.
 if option == 1
     for i = 0:k
@@ -61,24 +47,9 @@ end
 %This is for method 2. 
 if option == 2
     h = num2str(0);
->>>>>>> .r417
     j = ['c:\Dev-Cpp\geocam\Triangulations\flips\Step ' h '.txt'];
     delaunayPlot(j,[0 1 0]);
-<<<<<<< .mine
     pause();
-    for i = 1:k
-        h = num2str(i);
-        j = ['c:\Dev-Cpp\geocam\Triangulations\flips\Step ' h '.txt'];
-        h2 = num2str(i-1);
-        j2 = ['c:\Dev-Cpp\geocam\Triangulations\flips\Step ' h2 '.txt'];
-        delaunayPlot(j2,[1 0 0]);
-        delaunayPlot(j,'c');
-        pause();
-        if i ~= k
-            clf;
-        end
-=======
-    pause(.1);
     for i = 1:k
         h = num2str(i);
         j = ['c:\Dev-Cpp\geocam\Triangulations\flips\Step ' h '.txt'];
@@ -93,7 +64,6 @@ if option == 2
             clf;
         end
     end
->>>>>>> .r417
 end
 
 %This is for the third option. 
