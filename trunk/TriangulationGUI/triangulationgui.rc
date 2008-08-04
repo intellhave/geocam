@@ -1,0 +1,72 @@
+#include "resources.h"
+#include <windows.h>
+
+IDR_MAINMENU MENU DISCARDABLE
+BEGIN
+     POPUP "&File"
+     BEGIN
+          POPUP "&Load.."
+          BEGIN
+               MENUITEM "&Manifold",          ID_FILE_LOAD_MANIFOLD
+               MENUITEM "&Plane",             ID_FILE_LOAD_PLANE
+          END
+          POPUP "&Save As.."
+          BEGIN
+               MENUITEM "Triangulation",         ID_FILE_SAVE_TRIANGULATION
+               MENUITEM "Flow Results",          ID_FILE_SAVE_FLOW
+               MENUITEM "Plane Results",         ID_FILE_SAVE_PLANE
+          END
+          MENUITEM SEPARATOR
+          MENUITEM "E&xit",                      ID_FILE_EXIT
+     END
+     POPUP "&Run"
+     BEGIN
+          POPUP "Fl&ow"
+          BEGIN
+               MENUITEM "&Euclidean",            ID_RUN_FLOW_EUCLIDEAN
+               MENUITEM "&Spherical",            ID_RUN_FLOW_SPHERICAL
+               MENUITEM "&Hyperbolic",           ID_RUN_FLOW_HYPERBOLIC
+          END
+          MENUITEM "Flip &Algorithm",              ID_RUN_FLIPALGORITHM
+          MENUITEM "&Weighted Flip Algorithm",      ID_RUN_WEIGHTEDFLIPALGORITHM
+     END
+END
+          
+IDD_MAIN DIALOG DISCARDABLE   0, 0, 350, 200
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Triangulations Program"
+MENU    IDR_MAINMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+     LTEXT  "Console", IDC_STATIC, 7, 10, 30, 8
+     EDITTEXT IDC_CONSOLE, 7, 35, 150, 150, ES_AUTOVSCROLL | ES_READONLY
+     PUSHBUTTON "Show Results", IDC_RESULTSBUTTON, 180, 10, 75, 14
+     EDITTEXT IDC_RESULTSFIELD, 180, 35, 150, 150, WS_VSCROLL | WS_HSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL
+     
+END
+          
+IDD_CHOOSEFILETYPE DIALOG DISCARDABLE 0, 0, 150, 70
+STYLE  DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU                  
+CAPTION "Select Triangulation Format"
+FONT 8, "MS Sans Serif"
+BEGIN
+     DEFPUSHBUTTON   "&OK",IDOK,95,10,40,14
+     PUSHBUTTON      "&Cancel",IDCANCEL,95,30,40,14
+     LTEXT "Choose the format the file\n is in:", IDC_STATIC, 7, 10, 80, 20
+     COMBOBOX IDC_FORMATSELECTBOX, 7, 35, 50, 40, WS_BORDER|WS_VSCROLL|CBS_DROPDOWNLIST
+END     
+
+IDD_FLOWDIALOG DIALOG DISCARDABLE 0, 0, 150, 150
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Ricci Flow"
+FONT 8, "MS Sans Serif"
+BEGIN
+     DEFPUSHBUTTON   "&OK",IDOK,95,10,40,14
+     PUSHBUTTON      "&Cancel",IDCANCEL,95,30,40,14
+     LTEXT "Number of Steps:", IDC_STATIC, 7, 10, 40, 8
+     EDITTEXT IDC_STEPSTEXT, 50, 10, 10, 8
+     LTEXT "Step size:", IDC_STATIC, 7, 25, 40, 8
+     EDITTEXT IDC_DTTEXT, 50, 25, 10, 8
+     LTEXT "Weights:", IDC_STATIC, 7, 40, 40, 8
+     COMBOBOX IDC_WEIGHTSELECTBOX, 50, 40, 20, 40, WS_BORDER|WS_VSCROLL|CBS_DROPDOWNLIST
+END

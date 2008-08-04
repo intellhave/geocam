@@ -1,0 +1,78 @@
+# Project: TriangulationGUI
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
+WINDRES = windres.exe
+RES  = TriangulationGUI_private.res
+OBJ  = main.o ../miscmath.o ../pointlinecircle.o ../triangulation.o ../TriangulationCoordinateSystem.o ../triangulationInputOutput.o ../triangulationmath.o ../triangulationmorph.o ../triangulationPlane.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o $(RES)
+LINKOBJ  = main.o ../miscmath.o ../pointlinecircle.o ../triangulation.o ../TriangulationCoordinateSystem.o ../triangulationInputOutput.o ../triangulationmath.o ../triangulationmorph.o ../triangulationPlane.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam" -L"C:/Dev-Cpp/geocam" -mwindows  -lgmon -pg  -g3 
+INCS =  -I"include"  -I"C:/Dev-Cpp/geocam" 
+CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam" 
+BIN  = TriangulationGUI.exe
+CXXFLAGS = $(CXXINCS)   -pg -g3
+CFLAGS = $(INCS)   -pg -g3
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before TriangulationGUI.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "TriangulationGUI.exe" $(LIBS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+../miscmath.o: ../miscmath.cpp
+	$(CPP) -c ../miscmath.cpp -o ../miscmath.o $(CXXFLAGS)
+
+../pointlinecircle.o: ../pointlinecircle.cpp
+	$(CPP) -c ../pointlinecircle.cpp -o ../pointlinecircle.o $(CXXFLAGS)
+
+../triangulation.o: ../triangulation.cpp
+	$(CPP) -c ../triangulation.cpp -o ../triangulation.o $(CXXFLAGS)
+
+../TriangulationCoordinateSystem.o: ../TriangulationCoordinateSystem.cpp
+	$(CPP) -c ../TriangulationCoordinateSystem.cpp -o ../TriangulationCoordinateSystem.o $(CXXFLAGS)
+
+../triangulationInputOutput.o: ../triangulationInputOutput.cpp
+	$(CPP) -c ../triangulationInputOutput.cpp -o ../triangulationInputOutput.o $(CXXFLAGS)
+
+../triangulationmath.o: ../triangulationmath.cpp
+	$(CPP) -c ../triangulationmath.cpp -o ../triangulationmath.o $(CXXFLAGS)
+
+../triangulationmorph.o: ../triangulationmorph.cpp
+	$(CPP) -c ../triangulationmorph.cpp -o ../triangulationmorph.o $(CXXFLAGS)
+
+../triangulationPlane.o: ../triangulationPlane.cpp
+	$(CPP) -c ../triangulationPlane.cpp -o ../triangulationPlane.o $(CXXFLAGS)
+
+../Simplex/simplex.o: ../Simplex/simplex.cpp
+	$(CPP) -c ../Simplex/simplex.cpp -o ../Simplex/simplex.o $(CXXFLAGS)
+
+../Simplex/vertex.o: ../Simplex/vertex.cpp
+	$(CPP) -c ../Simplex/vertex.cpp -o ../Simplex/vertex.o $(CXXFLAGS)
+
+../Spherical/sphericalmath.o: ../Spherical/sphericalmath.cpp
+	$(CPP) -c ../Spherical/sphericalmath.cpp -o ../Spherical/sphericalmath.o $(CXXFLAGS)
+
+../delaunay.o: ../delaunay.cpp
+	$(CPP) -c ../delaunay.cpp -o ../delaunay.o $(CXXFLAGS)
+
+../Simplex/edge.o: ../Simplex/edge.cpp
+	$(CPP) -c ../Simplex/edge.cpp -o ../Simplex/edge.o $(CXXFLAGS)
+
+../Simplex/face.o: ../Simplex/face.cpp
+	$(CPP) -c ../Simplex/face.cpp -o ../Simplex/face.o $(CXXFLAGS)
+
+../Hyperbolic/hyperbolicmath.o: ../Hyperbolic/hyperbolicmath.cpp
+	$(CPP) -c ../Hyperbolic/hyperbolicmath.cpp -o ../Hyperbolic/hyperbolicmath.o $(CXXFLAGS)
+
+TriangulationGUI_private.res: TriangulationGUI_private.rc triangulationgui.rc 
+	$(WINDRES) -i TriangulationGUI_private.rc --input-format=rc -o TriangulationGUI_private.res -O coff 
