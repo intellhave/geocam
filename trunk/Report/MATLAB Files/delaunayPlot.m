@@ -31,6 +31,8 @@ function delaunayPlot(fileName, color)
 K = textread(fileName);
 S = (size(K,1))/4;
 
+%K = textread('c:\Dev-Cpp\geocam\Triangulations\flips\Step 5.txt');
+
 %Create a 'for' loop that plots each triangle, one at a time, by accessing
 %the coordinates per triangle and plotting them in a connect-the-dots
 %fashion. The 'hold on' line allows for multiple graphs to be placed on one
@@ -84,13 +86,7 @@ for i = 0:S-1
 % Ctrl + C to cancel from the main console. 
 
 %pause(0.1);
-
 end
-
-
-%This section determines if any negative triangles overlap, and if so,
-%makes the interesection a different color. This uses the commands 'fill',
-%'polybool', and 'poly2cw' to use polybool. 
 
 if size(N,2) > 0
      for j = 1:size(N,2)-1
@@ -108,6 +104,10 @@ if size(N,2) > 0
            end
      end
 end
+
+
+
+        
 end
 
 

@@ -6,8 +6,7 @@
 %column, and the curvatures in the second. All listings for The output is
 %in .txt format. MATLAB can read these results directly, but if we wished
 %to save these results for later reference, we can import them into an
-%Excel spreadsheet which MATLAB can also read in, or keep as a text file
-%renamed and stored separately. 
+%Excel spreadsheet which MATLAB can also read in. 
 
 %Use these lines for an output that is stored in Excel format. To date, they
 %are stored as the old Excel spreadsheets, up to 2003 version. 

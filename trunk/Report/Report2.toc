@@ -29,16 +29,16 @@
 \contentsline {subsection}{\numberline {7.3}Modifications to our data structure}{37}
 \contentsline {subsubsection}{\numberline {7.3.1}Negative Triangles}{37}
 \contentsline {subsection}{\numberline {7.4}Methods}{37}
-\contentsline {subsubsection}{\numberline {7.4.1}Flip Algorithms}{37}
+\contentsline {subsubsection}{\numberline {7.4.1}Flip Algorithms}{38}
 \contentsline {subsubsection}{\numberline {7.4.2}Random Generation}{38}
-\contentsline {subsection}{\numberline {7.5}Examples}{38}
-\contentsline {subsection}{\numberline {7.6}Conclusions}{38}
-\contentsline {section}{\numberline {8}Future work}{39}
-\contentsline {subsection}{\numberline {8.1}3-D}{39}
-\contentsline {subsection}{\numberline {8.2}Circle packing expansions}{40}
-\contentsline {subsection}{\numberline {8.3}Spherical and hyperbolic extensions}{40}
-\contentsline {subsection}{\numberline {8.4}Linking Delaunay to Ricci flow}{41}
-\contentsline {section}{\numberline {9}Conclusion}{41}
+\contentsline {subsection}{\numberline {7.5}Examples}{39}
+\contentsline {subsection}{\numberline {7.6}Conclusions}{39}
+\contentsline {section}{\numberline {8}Future work}{40}
+\contentsline {subsection}{\numberline {8.1}3-D}{40}
+\contentsline {subsection}{\numberline {8.2}Circle packing expansions}{41}
+\contentsline {subsection}{\numberline {8.3}Spherical and hyperbolic extensions}{41}
+\contentsline {subsection}{\numberline {8.4}Linking Delaunay to Ricci flow}{42}
+\contentsline {section}{\numberline {9}Conclusion}{42}
 \contentsline {section}{\numberline {10}Appendix}{44}
 \contentsline {subsection}{\numberline {10.1}Derivation of Eq.\nobreakspace {}(5\hbox {})}{44}
 \contentsline {subsection}{\numberline {10.2}Remarks on Runge-Kutta method for solving Eq.\nobreakspace {}(7\hbox {})}{45}

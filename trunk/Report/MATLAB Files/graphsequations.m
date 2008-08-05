@@ -142,7 +142,7 @@ axis image
 axis off
 
 %Figure 13. An example of an anti- triangle. The red line is the one that
-%is flipped. Red dots are used to illustrate the negative area. 
+%is flipped. Dots are used to illustrate the negative area. 
 
 figure;
 Y = [0 0 1 0];

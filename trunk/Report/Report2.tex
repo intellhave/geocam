@@ -37,8 +37,8 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 
   
 \begin{figure}
-\includegraphics[scale = 0.5]{flattetrahedron.png}
-\includegraphics[scale = 0.3]{tetrahedron.jpg}
+\includegraphics[scale = 0.5]{Pictures/flattetrahedron.png}
+\includegraphics[scale = 0.3]{Pictures/tetrahedron.jpg}
 \caption{An example of a triangulation. The triangles can be folded up into the boundary of a tetrahedron.}
 \end{figure}
 
@@ -78,8 +78,8 @@ Two-holed torus & 10 & 36 & 24 &	2 & -2\\
 
   
 \begin{figure}
-\includegraphics[scale = 0.3]{righttriangulation.jpg}
-\includegraphics[scale = 0.5]{badcase2.png}
+\includegraphics[scale = 0.3]{Pictures/righttriangulation.jpg}
+\includegraphics[scale = 0.5]{Pictures/badcase2.png}
 \caption{An example of circle packing (left) and a triangulation that cannot be circle-packed.}
 \label{rightTri}
 \end{figure}
@@ -91,11 +91,11 @@ Every triangle has a circle that is internally tangent to all three edges. This 
 
 \noindent With the dual edges, we can obtain a polygon surrounding each vertex. The area of the region formed by these duals is called the dual area, calculated by $$\star A_i = r_i\sum{\frac{\star e_i}{2}} = r_i\sum{r_{\mbox{inscribed}}}$$ where $r_i$ is the weight of the vertex. The sum is over all faces incident to vertex $i$.\newline
 
-\noindent The dual length and dual area have some interesting properties that we hope to investigate. David Glickenstein examines these and more in \cite{Dave}. 
+\noindent The dual length and dual area have some interesting properties that we hope to investigate. David Glickenstein examines these and more in \cite{Dave}. We will also examine these duals later in $\oint$\ref{DT}
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.4]{dual.png}
+\includegraphics[scale = 0.4]{Pictures/dual.png}
 \caption{A dual to an edge}
 \label{fig:dual}
 \end{figure} 
@@ -205,7 +205,11 @@ When creating the program, the data structure design was critical. The design no
   
 \begin{figure}
 \begin{center}
+<<<<<<< .mine
+\includegraphics[scale = 0.50]{Pictures/triangulationUML.png}
+=======
 \includegraphics[scale = 0.50, angle = 90]{triangulationUML.png}
+>>>>>>> .r427
 \end{center}
 \caption{A UML diagram of the program. The UML shows how the various files interact as well as the functions and variables they hold.}
 \label{triUML}
@@ -320,7 +324,7 @@ In this flip, we take a pair of adjacent faces and readjust the edge that they s
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.8]{Flip.png}
+\includegraphics[scale = 0.8]{Pictures/Flip.png}
 \caption{An example of a 2-2 flip.}
 \label{fig:flip}
 \end{figure}
@@ -436,8 +440,8 @@ Vertex 7: 6.18421 \\
 \noindent By inserting a vertex within a triangulation for a torus, we are essentially creating a bump on the torus and then observe what happens as we run it through out $calcFlow$ program. We discovered that the new vertex shrinks in size to a weight much smaller than the other vertices, but to a positive constant. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). The weight that the new vertex converges to turned out to be in proportion to the other weights by $3+2\sqrt{3}$, the exact proportion necessary to maintain equality amongst all other weights. An oddity here is that the three vertices local to this added vertex converged to the same weight as all the vertices not near the flip, despite a difference in degree.\newline
 
 \begin{figure}[ht]
-\includegraphics[scale = 0.5]{torus22.png}
-\includegraphics[scale = 0.5]{torus2addvertex2.png}
+\includegraphics[scale = 0.5]{Pictures/torus22.png}
+\includegraphics[scale = 0.5]{Pictures/torus2addvertex2.png}
 \caption{A triangulation of the torus, and the addition of a new vertex. This is a 1-3 flip.}
 \label{torusaddv}
 \end{figure}
@@ -459,7 +463,7 @@ Vertex 7: 6.18421 \\
 \noindent It turns out $\chi = $ 7 Vertices - 12 Edges + 8 Faces = 3, which is not a case we had seen before. In previous cases $\chi$ was an even integer. Starting each vertex with equal weight, we obtained an unexpected result. The center weight becomes very large, and the others become smaller in comparison. We concluded that since the central vertex has a much higher degree, its weight becomes large, creating elongated tetrahedra on either side, in order to have the same curvature as all other vertices. One good thing we noted was that the total curvature equaled $6\pi = 2\pi\chi$. Technically, this example contradicts our notion of a manifold, but we felt it useful in validating our program procedure.  
 
 \begin{figure}
-\includegraphics{tetratouch.png}
+\includegraphics{Pictures/tetratouch.png}
 \caption{Two tetrahedra conjoined at a vertex.}
 \label{fig:tt}
 \end{figure}
@@ -470,7 +474,7 @@ One experiment we performed was measuring convergence speeds of various triangul
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.79]{ConvergenceTable.png}
+\includegraphics[scale = 0.79]{Pictures/ConvergenceTable.png}
 \caption{Summary of convergence data for varying criteria}
 \label{fig:conv}
 \end{figure}
@@ -508,7 +512,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.6]{octosph.png}
+\includegraphics[scale = 0.6]{Pictures/octosph.png}
 \label{OctoSph}
 \caption{An illustration of a spherical octahedron through the X-Y plane. Each octet of the sphere surface, outlined in black, is the face of one triangle.} 
 \end{figure}
@@ -534,7 +538,7 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.65]{kHatResult.png}
+\includegraphics[scale = 0.65]{Pictures/kHatResult.png}
 \caption{An example using our notion of $\hat{K}$. Weights and curvatures were unable to converge, and crashed the program shortly after.}
 \label{kHat}
 \end{figure}
@@ -548,7 +552,7 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 \frac{dr_i}{dt} = \overline{K}r_i - K_i\sin(r_i).
 \end{equation}
 
-\noindent In examining its behavior with various triangulations, we found that this one works very well. We're not completely sure why, but it does. We would like to be able to mathematically determine the effectiveness of this equation. Spheres converge to zero curvature and weights first group together and then approach optimal weights. See Fig.~\ref{SphGood}. In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number, but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached or reached was equal to 
+\noindent In examining its behavior with various triangulations, we found that this one works very well. We're not completely sure why, but it does. We would like to be able to mathematically determine the effectiveness of this equation. We find that spheres converge to zero curvature and weights first group together and then approach optimal weights. See Figure~\ref{SphGood}. In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number, but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached or reached was equal to 
 
 $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac{\pi(4 + F)}{3F}$$
 
@@ -556,7 +560,7 @@ $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac
 
 \begin{figure}[ht]
 \centering
-\includegraphics[scale = 0.8]{SphG0V10.png}
+\includegraphics[scale = 0.8]{Pictures/SphG0V10.png}
 \caption{An example of a solution using Eq.~(\ref{SRicciN}). Starting off with equal initial weights of 0.1, vertices merge into one of four groups as they approach uniform curvature relatively quickly. As curvature drops to zero, slowly at first but more forcefully as time passes, the weight groups separate from each other to obtain their final weight. In this trial, $dt = 0.50$ to show the complete process.}
 \label{SphGood}  
 \end{figure}
@@ -565,7 +569,11 @@ $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac
 
 In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. A common way to visualize the hyperbolic plane can be seen in Fig.~\ref{PD}. This representation is often called the Poincar\'{e} disk, named after the same Poincar\'{e} as in $\oint$\ref{RBk}.\newline
 
+<<<<<<< .mine
+\noindent The major new difference with the hyperbolic plane is that our traditional notion of unique parallel lines no longer apply. We now have that for a point $P$ on a line $l$, there is a point $B$ not on $l$ such that there are an infinite number of possible line $m$'s that go through $B$ but do not intersect $l$. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. \newline
+=======
 \noindent There are several interesting properties with the hyperbolic plane. We now have that for a line $l$ and a point $P$ not on that line, there are an infinite number of lines throught $P$ that do not intersect $l$. In Euclidean geometry, such a line is unique. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. A more thorough explanation of hyperbolic geometry can be found in most college geometry textbooks.\newline
+>>>>>>> .r427
 
 \noindent In terms of the formulas, they remain relatively similar in format to the spherical equations, except there are two main substitutions. The cosine and sine functions are often replaced with their hyperbolic counterparts $cosh$ and $sinh$, defined as
 \begin{eqnarray*}
@@ -585,7 +593,7 @@ $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of 
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.5]{pDisk.png}
+\includegraphics[scale = 0.5]{Pictures/pDisk.png}
 \caption{An illustration of the hyperbolic plane using the Poincar\'{e} disk. All concentric circles are evenly spaced apart in a Euclidean background, but the outer edge of the disk approaches infinity, so the circles appear closer together. A similar way to think of it is to imagine looking at the contour graph of $z = x^2 + y^2$ from the point (0,0,-1).}
 \label{PD}
 \end{figure}
@@ -625,6 +633,7 @@ When we began looking into these background geometries, we thought that it would
 \noindent To conlude, we generalize that certain flows work best for triangulations whose total curvature goes to zero in that particular system. Euclidean is best for systems of genus 1, or one-holed tori. Spherical combinatorial Ricci flow is said to work best on manifolds of genus 0, or anything topologically equivalent to a sphere. This is because we have a positive $\chi$ value, so for total curvature to go to 0, the total surface area must go to $4\pi$. Spherical was the only system that could have produced a nontrivial solution in our first example. Hyperbolic Ricci flow is best suited for triangulations with a genus of 2 or more. We can see that these systems will be able to reach zero total curvature with a large enough surface area. 
 
 \section{Delaunay triangulations}
+\label{DT}
 In addition to our work on combinatioral Ricci flow, we also branched out into other areas where we felt our triangulation structure would be applicable. While we initially viewed the topic of Delaunay triangulations as a side project for us to work on, we found that it quickly became the cornerstone of the second half of our research. We will introduce basic concepts, illustrate our adaptations of code, as well as show unique examples in hopes of reaching conclusions. 
 
 \subsection{Background}
@@ -633,11 +642,18 @@ Back when we were focusing on planar  Euclidean geometry, one thing we had aimed
 \subsection{Definition}
 We define Delaunay triangulations as a set of faces on a plane such that the circumcircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, the circumcircle about the face is made to intersect all three vertices. In a weighted Delaunay case, some vertices have a larger influence than others. The circumcircle surrounding a face uses the weight of each vertex. We use the term weight in a similar way as with our Ricci flows. In fact, our previous cases of circle packing \textit{are} weighted Delaunay triangulations. \newline
 
-\noindent We can easily produce a non-weighted Delaunay triangulation using mathematical software like MATLAB. However, less is known about weighted triangulations and their stability. For this project, we aim to develop an algorithm that can create a valid triangulation, add weights to vertices, and manipulate the field to produce a Delaunay triangulation. 
+\noindent We can easily produce a non-weighted Delaunay triangulation using mathematical software like MATLAB. However, less is known about weighted triangulations and their stability. For this project, we aim to develop an algorithm that can create a valid triangulation, add weights to vertices, and manipulate the field to produce a Delaunay triangulation.\newline
 
+\noindent As each vertex now has an independent weight not related to the other vertices, we cannot simply add up our weights to find edge lengths as in our circle-packing cases. In fact, we must define the edge lengths ourselves. However, the center of an edge is still affected by the weights of the vertices. For an edge, $e_{12}$, we find that the distance from vertex 1 to the edge center is
+$$ d_{12} = \frac{l_{12}^2 + r_1^2 - r_2^2}{2l_{12}}. $$
+
+\noindent The length $d_{21}$ can be found the same way. If both vertices have the same weight, then the center is simply the midpoint of the edge. Furthermore, we obtain another useful equality. For a triangle with vertices $i, j,$ and $k,$ we see that
+$$ d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2. $$
+
+\noindent This is known as a duality triangulation as mentioned by David Glickenstein in \cite{Dave}. In fact, if we allow for the cases $d_{ij} = d_{ik}, d_{ji} = d_{jk},$ and $d_{ki} = d_{kj},$ we obtain our original notion of circle packing.  
 \begin{figure}
 \centering
-\includegraphics[scale = 0.6]{genTri4.png}
+\includegraphics[scale = 0.6]{Pictures/genTri4.png}
 \caption{A simple example of a non-weighted Delaunay triangulation. The circumcircles are drawn along with the edges to show their compatability.}
 \label{genTri}
 \end{figure}
@@ -668,8 +684,8 @@ An important aspect to properly explore these triangulations is in their generat
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.4]{antitri1.png}
-\includegraphics[scale = 0.4]{antitri2.png}
+\includegraphics[scale = 0.4]{Pictures/antitri1.png}
+\includegraphics[scale = 0.4]{Pictures/antitri2.png}
 \caption{If flips are performed on nonconvex triangles, we create an anti-triangle, shaded here in red, and a larger regular triangle, shaded in blue.}
 \label{AntiTri}
 \end{figure}
@@ -681,7 +697,7 @@ Flips are awesome. We saw that by performing flips on our generated triangulatio
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.7]{genTri5.png}
+\includegraphics[scale = 0.7]{Pictures/genTri5.png}
 \caption{An illustration of our own triangulation, with performed flips on some faces. Original edges that were flipped are shown in red.}
 \label{YAY}
 \end{figure}
@@ -699,7 +715,7 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = 0.6]{intcirc2.png}
+\includegraphics[scale = 0.6]{Pictures/intcirc2.png}
 \end{center}
 \caption{An example of relaxing circle packing and introducing $\Phi.$}
 \label{fig:intcirc}
@@ -757,7 +773,7 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale = 0.65]{torus7addvaddhweights2.png}
+\includegraphics[scale = 0.65]{Pictures/torus7addvaddhweights2.png}
 \caption{An example of how morphs can change the asymptotic behavior of vertices. In this case we saw the weights of some vertices change concavity.}
 \label{fig:t7vh}
 \end{center}
@@ -765,15 +781,15 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = 0.8]{curvcurves.png}
+\includegraphics[scale = 0.8]{Pictures/curvcurves.png}
 \caption{An example of curvatures over time. While they do converge to the same curvature, the vertex with the maximum or minimum curvature may change. This is a separate trial than that producing Fig.~\ref{fig:t7vh}}
 \end{center}
 \end{figure}
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = 0.8]{Curvg6v12addv.png}
-\includegraphics[scale = 0.8]{Weightg6v12addv.png}
+\includegraphics[scale = 0.8]{Pictures/Curvg6v12addv.png}
+\includegraphics[scale = 0.8]{Pictures/Weightg6v12addv.png}
 \caption{An example of adding a vertex to a genus 6 surface. One of the curvatures in unable to drop below $-\pi$, and as a result, its weight is pushed to almost zero. Other vertices group together to compensate for this behavior.}
 \end{center}
 \end{figure}
