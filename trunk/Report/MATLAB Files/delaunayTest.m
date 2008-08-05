@@ -1,10 +1,15 @@
-r = 5;
+%This file generates a non-weighted Delaunay triangulation for a given set
+%of points. The circumcircles are also drawn to show their Delaunayness.
+%Points may be randomly generated to explicitly set to draw the desired
+%figure. 
+
+%r = 5;
 % X = normrnd(0,20,r,1);
 % Y = normrnd(0,20,r,1);
-X = rand(r,1);
-Y = rand(r,1);
-% X = [0 0 1 1 .5];
-% Y = [0 1 1 0 .5];
+%X = rand(r,1);
+%Y = rand(r,1);
+X = [0 0 1 1 .5];
+Y = [0 1 1 0 .5];
 TRI = delaunay(X,Y);
 r;
 k = size(TRI,1);
