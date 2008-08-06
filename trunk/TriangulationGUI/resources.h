@@ -21,5 +21,13 @@
 #define IDC_STEPSTEXT                   1005
 #define IDC_DTTEXT                      1006
 #define IDC_WEIGHTSELECTBOX             1007
+#define IDC_RESULTSSELECTBOX            1008
+#define IDC_FLOWSELECTBOX               1009
+#define IDC_HIDDENTEXT                  1010
 #define IDSTANDARD                      5001
 #define IDLUTZ                          5002
+#define IDPRINTSTEP                     5003
+#define IDPRINTVERTEX                   5004
+#define IDPRINTNUM                      5005
+#define IDWEIGHTSRANDOM                 5006
+#define IDWEIGHTSFILE                   5007

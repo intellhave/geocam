@@ -5,8 +5,8 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = TriangulationGUI_private.res
-OBJ  = main.o ../miscmath.o ../pointlinecircle.o ../triangulation.o ../TriangulationCoordinateSystem.o ../triangulationInputOutput.o ../triangulationmath.o ../triangulationmorph.o ../triangulationPlane.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o $(RES)
-LINKOBJ  = main.o ../miscmath.o ../pointlinecircle.o ../triangulation.o ../TriangulationCoordinateSystem.o ../triangulationInputOutput.o ../triangulationmath.o ../triangulationmorph.o ../triangulationPlane.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o $(RES)
+OBJ  = main.o ../miscmath.o ../pointlinecircle.o ../triangulation.o ../TriangulationCoordinateSystem.o ../triangulationInputOutput.o ../triangulationmath.o ../triangulationmorph.o ../triangulationPlane.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o TriangulationModel.o $(RES)
+LINKOBJ  = main.o ../miscmath.o ../pointlinecircle.o ../triangulation.o ../TriangulationCoordinateSystem.o ../triangulationInputOutput.o ../triangulationmath.o ../triangulationmorph.o ../triangulationPlane.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o TriangulationModel.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam" -L"C:/Dev-Cpp/geocam" -mwindows  -lgmon -pg  -g3 
 INCS =  -I"include"  -I"C:/Dev-Cpp/geocam" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam" 
@@ -73,6 +73,9 @@ main.o: main.cpp
 
 ../Hyperbolic/hyperbolicmath.o: ../Hyperbolic/hyperbolicmath.cpp
 	$(CPP) -c ../Hyperbolic/hyperbolicmath.cpp -o ../Hyperbolic/hyperbolicmath.o $(CXXFLAGS)
+
+TriangulationModel.o: TriangulationModel.cpp
+	$(CPP) -c TriangulationModel.cpp -o TriangulationModel.o $(CXXFLAGS)
 
 TriangulationGUI_private.res: TriangulationGUI_private.rc triangulationgui.rc 
 	$(WINDRES) -i TriangulationGUI_private.rc --input-format=rc -o TriangulationGUI_private.res -O coff 

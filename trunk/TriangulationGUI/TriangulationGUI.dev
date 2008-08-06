@@ -1,7 +1,7 @@
 [Project]
 FileName=TriangulationGUI.dev
 Name=TriangulationGUI
-UnitCount=32
+UnitCount=34
 Type=0
 Ver=1
 ObjFiles=
@@ -327,9 +327,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit33]
-FileName=..\Spherical\sphericalmath.h
+FileName=TriangulationModel.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -337,9 +337,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit34]
-FileName=..\Spherical\sphericalmath.cpp
+FileName=TriangulationModel.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=
 Compile=1
 Link=1
 Priority=1000

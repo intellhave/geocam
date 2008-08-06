@@ -4,7 +4,7 @@
 %Currently, all duals are drawn, positive and negative. 
 
 function drawDuals
-h = 'C:\Dev-Cpp\geocam\Triangulations\duals2.txt';
+h = 'C:\Dev-Cpp\geocam\Triangulations\duals.txt';
 K = textread(h);
 S = size(K,1)/2;
 for i = 0:S-1

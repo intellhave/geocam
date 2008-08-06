@@ -1,11 +1,11 @@
 #include <windows.h>
 #include <ctime>
-#include "triangulation.h"
-#include "triangulationInputOutput.h"
-#include "triangulationmath.h"
-#include "resources.h" 
+#include <fstream>
+#include <vector>
+#include "resources.h"
+#include "TriangulationModel.h"
 
-void FileChooser(HWND hwnd, char* szFileName)
+void FileChooser(HWND hwnd, LPSTR szFileName)
 {
 	OPENFILENAME ofn;
 	ZeroMemory(&ofn, sizeof(ofn));
@@ -55,6 +55,57 @@ BOOL LoadTextFile(HWND hEdit, LPCTSTR pszFileName)
 	}
 	return bSuccess;
 }
+void UpdateConsole(HWND hwnd, LPSTR message)
+{
+    SetDlgItemText(hwnd, IDC_HIDDENTEXT, message);
+    int len = GetWindowTextLength(GetDlgItem(hwnd, IDC_CONSOLE));
+    int len2 = GetWindowTextLength(GetDlgItem(hwnd, IDC_HIDDENTEXT));
+    if(len > 0)
+    {
+        char* buf;
+        char* buf2;
+        buf = (char*)GlobalAlloc(GPTR, len + len2 + 1);
+        buf2 = (char*)GlobalAlloc(GPTR, len2 + 1);
+        GetDlgItemText(hwnd, IDC_CONSOLE, buf, len + 1);
+        GetDlgItemText(hwnd, IDC_HIDDENTEXT, buf2, len2 + 1);
+        for(int i = 0; i< len2 + 1; i++)
+        {
+            buf[len + i] = buf2[i];
+        }
+        int newlines = 0;;
+        vector<int> newlinePos;
+        for(int i = 0; i < len + len2 + 1 ; i++)
+        {
+           if(buf[i] == '\n')
+           {
+              newlines++;
+              newlinePos.push_back(i);
+           }
+        }
+        if(newlines > 17) {
+            newlines = 0;
+            for(int i = 0; i < len2 + 1; i++)
+            {
+               if(buf2[i] == '\n')
+               {
+                 newlines++;
+               }
+            }
+            int len3 = len + len2 - newlinePos[newlines - 1];
+            char buf3[len3];
+            for(int i = 0; i < len3; i++)
+            {
+               buf3[i] = buf[newlinePos[newlines - 1] + 1 + i];
+            }
+            SetDlgItemText(hwnd, IDC_CONSOLE, buf3);
+        } else
+        {
+          SetDlgItemText(hwnd, IDC_CONSOLE, buf);
+        }
+        GlobalFree((HANDLE)buf);
+        GlobalFree((HANDLE)buf2);
+    }
+}
 
 BOOL CALLBACK FormatDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
@@ -69,7 +120,7 @@ BOOL CALLBACK FormatDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
               MessageBox(NULL, "m_hCmbo is NULL", "Error", MB_OK | MB_ICONINFORMATION);
            }
            SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Standard");
-          SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Lutz");
+           SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Lutz");
            return TRUE;
         }
         case WM_COMMAND:
@@ -111,6 +162,14 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
            }
            SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Random");
            SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"From file");
+           hcombo = NULL;
+           hcombo = GetDlgItem(hwnd, IDC_FLOWSELECTBOX);
+           if(hcombo == NULL)
+           {
+              MessageBox(NULL, "hcombo is NULL", "Error", MB_OK | MB_ICONINFORMATION);
+           }
+           SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Normalized");
+           SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Standard");
            return TRUE;
         }
         case WM_COMMAND:
@@ -118,14 +177,31 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
             {
                 case IDOK: 
                 {
-                    char format[25];
-                    GetDlgItemText(hwnd, IDC_WEIGHTSELECTBOX, format, 25);
-                    if(format[0] == 'R')
-                       EndDialog(hwnd, IDSTANDARD);
-                    else if(format[0] == 'F')
-                       EndDialog(hwnd, IDLUTZ);
-                    else
-                       EndDialog(hwnd, IDCANCEL);
+                    BOOL ready = TRUE;
+                    char weight[25];
+                    GetDlgItemText(hwnd, IDC_WEIGHTSELECTBOX, weight, 25);
+                    char flow[25];
+                    GetDlgItemText(hwnd, IDC_FLOWSELECTBOX, flow, 25);
+                    TriangulationModel::setFlowFunction(flow[0] == 'N');
+                    BOOL numEntered;
+                    int steps = GetDlgItemInt(hwnd, IDC_STEPSTEXT, &numEntered, FALSE);
+                    ready = ready && numEntered;
+                    if(!numEntered)
+                       MessageBox(NULL, "Provide the number of steps", "Error", MB_OK | MB_ICONINFORMATION);           
+                    else 
+                       TriangulationModel::setNumSteps(steps);
+                    int stepsize = GetDlgItemInt(hwnd, IDC_DTTEXT, &numEntered, FALSE);
+                    ready = ready && numEntered;
+                    if(!numEntered)
+                       MessageBox(NULL, "Provide the step size", "Error", MB_OK | MB_ICONINFORMATION);           
+                    else 
+                       TriangulationModel::setStepSize(stepsize / 1000.0);
+                    if(ready && weight[0] == 'R')
+                       EndDialog(hwnd, IDWEIGHTSRANDOM);
+                    else if(ready && weight[0] == 'F')
+                       EndDialog(hwnd, IDWEIGHTSFILE);
+                    else if(ready)
+                       MessageBox(NULL, "Weights not chosen", "Error", MB_OK | MB_ICONINFORMATION);
                 }
                 break;
                 case IDCANCEL:
@@ -144,11 +220,21 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	{
         
 		case WM_INITDIALOG:
-			// This is where we set up the dialog box, and initialise any default values
-
-			SetDlgItemText(hwnd, IDC_CONSOLE, "Welcome to the Triangulation Program");
+        {
+           HWND hcombo = NULL;
+           hcombo = GetDlgItem(hwnd, IDC_RESULTSSELECTBOX);
+           if(hcombo == NULL)
+           {
+              MessageBox(NULL, "hcombo is NULL", "Error", MB_OK | MB_ICONINFORMATION);
+           }
+           SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Group by step");
+           SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Group by vertex");
+           SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Numbers only");
+           SetDlgItemText(hwnd, IDC_CONSOLE, "Welcome to the Triangulation Program\r\n");
+           HWND hHiddenEdit = GetDlgItem(hwnd, IDC_HIDDENTEXT);
+           ShowWindow(hHiddenEdit, SW_HIDE);
+        }
 		break;
-		
 		case WM_COMMAND:
 			switch(LOWORD(wParam))
 			{
@@ -158,63 +244,260 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                 case ID_FILE_LOAD_MANIFOLD:
                 {
                      char filename[MAX_PATH] ="";
-                     FileChooser((HWND)hwnd, filename);
-                     SetDlgItemText(hwnd, IDC_CONSOLE, "Loading file...");
+                     FileChooser((HWND)hwnd, (LPSTR) filename);
+                     UpdateConsole(hwnd, "Loading file...\r\n");
                      int ret = DialogBox(GetModuleHandle(NULL),
                         MAKEINTRESOURCE(IDD_CHOOSEFILETYPE), hwnd, FormatDlgProc);
                      if(ret == IDSTANDARD)
                      {
-                       Triangulation::resetTriangulation();
-                       readTriangulationFile(filename);
-                       SetDlgItemText(hwnd, IDC_CONSOLE, "Loading file...File loaded.");   
+                       TriangulationModel::clearSystem();
+                       bool success = TriangulationModel::loadFile(filename, IDSTANDARD);
+                       if(!success)
+                       {
+                         MessageBox(NULL, "Could not load file", "Error", MB_OK | MB_ICONINFORMATION);
+                         UpdateConsole(hwnd, "File load failed.\r\n");
+                       } 
+                       else{
+                         UpdateConsole(hwnd, "File loaded.\r\n");
+                       } 
                      } else if(ret == IDLUTZ)
                      {
-                        Triangulation::resetTriangulation();
-                        makeTriangulationFile(filename,"Triangulations/manifold converted.txt");
-                        readTriangulationFile("Triangulations/manifold converted.txt");   
-                        SetDlgItemText(hwnd, IDC_CONSOLE, "Loading file...File loaded.");   
+                       TriangulationModel::clearSystem();
+                       bool success = TriangulationModel::loadFile(filename, IDLUTZ);
+                       if(!success)
+                       {
+                         MessageBox(NULL, "Could not load file", "Error", MB_OK | MB_ICONINFORMATION);
+                         UpdateConsole(hwnd, "File load failed.\r\n");
+                       } 
+                       else{
+                         UpdateConsole(hwnd, "File loaded.\r\n");
+                       }    
                      } else if(ret == IDCANCEL)
                      {
-                         SetDlgItemText(hwnd, IDC_CONSOLE, "Loading file...Load canceled.");   
+                         UpdateConsole(hwnd, "Load canceled.\r\n");   
                      }
                 }
                 break;
+                
                 case ID_RUN_FLOW_EUCLIDEAN:
                 {
-                     int ret = DialogBox(GetModuleHandle(NULL),
-                        MAKEINTRESOURCE(IDD_FLOWDIALOG), hwnd, FlowDlgProc); 
-                     srand(time(NULL));
-                     int vertexSize = Triangulation::vertexTable.size();
-                     double weights[vertexSize];
-                     for(int i = 1; i <= vertexSize; i++)
-                     {
-                          weights[i - 1] =   (rand() % 80 + 1)/100.0;
+                     if(!TriangulationModel::isLoaded()) {
+                        MessageBox(NULL, "You must load a Triangulation first!", "Error", MB_OK | MB_ICONINFORMATION);
+                        break;
                      }
-                     vector<double> weightsR;
-                     vector<double> curvatures;
-                     double dt = 0.03;
-                     int Steps = 1000;
-                     SetDlgItemText(hwnd, IDC_CONSOLE, "Running flow....");
-                     calcFlow(&weightsR, &curvatures, dt, weights, Steps, true);
-                     printResultsStep("C:/Dev-Cpp/geocam/TriangulationGUI/Triangulations/ODE Result.txt", &weightsR, &curvatures);
-                     SetDlgItemText(hwnd, IDC_CONSOLE, "Flow complete");
-
                      
+                     UpdateConsole(hwnd, "Running flow....\r\n");
+                     TriangulationModel::clearData();
+                     int ret = DialogBox(GetModuleHandle(NULL),
+                        MAKEINTRESOURCE(IDD_FLOWDIALOG), hwnd, FlowDlgProc);
+                     switch(ret)
+                     {
+                        case IDWEIGHTSRANDOM:
+                        {
+                            srand(time(NULL));
+                            int vertexSize = Triangulation::vertexTable.size();
+                            double weights[vertexSize];
+                            for(int i = 1; i <= vertexSize; i++)
+                            {
+                               weights[i - 1] =   (rand() % 10 + 1);
+                            }
+                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_EUCLIDEAN);
+                            UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDWEIGHTSFILE:
+                        {
+                            UpdateConsole(hwnd, "Choose a file containing weights information.\r\n");
+                            char filename[MAX_PATH] ="";
+                            FileChooser((HWND)hwnd, (LPSTR) filename);
+                            ifstream infile(filename);
+                            vector<double> weightsVec;
+                            while(infile.good())
+                            {
+                               double weight;
+                               infile >> weight;
+                               weightsVec.push_back(weight);
+                            }
+                            if(weightsVec.size() != Triangulation::vertexTable.size()) 
+                            {
+                               MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
+                               break;
+                            }
+                            double weights[weightsVec.size()];
+                            for(int i = 0; i < weightsVec.size(); i++)
+                            {
+                               weights[i] = weightsVec[i];
+                            }
+                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_EUCLIDEAN);
+                            UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDCANCEL:
+                        {
+                            UpdateConsole(hwnd, "Flow canceled.\r\n"); 
+                        }
+                        break;
+                        default: break;
+                     }
                 }
                 break;
+                
+                case ID_RUN_FLOW_SPHERICAL:
+                {
+                     if(!TriangulationModel::isLoaded()) {
+                        MessageBox(NULL, "You must load a Triangulation first!", "Error", MB_OK | MB_ICONINFORMATION);
+                        break;
+                     }
+                     UpdateConsole(hwnd, "Running flow....\r\n");
+                     TriangulationModel::clearData();       
+                     int ret = DialogBox(GetModuleHandle(NULL),
+                        MAKEINTRESOURCE(IDD_FLOWDIALOG), hwnd, FlowDlgProc);
+                     switch(ret)
+                     {
+                        case IDWEIGHTSRANDOM:
+                        {
+                            srand(time(NULL));
+                            int vertexSize = Triangulation::vertexTable.size();
+                            double weights[vertexSize];
+                            for(int i = 1; i <= vertexSize; i++)
+                            {
+                               weights[i - 1] =   (rand() % 100 + 1)/ 125.0;
+                            }
+                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_SPHERICAL);
+                            UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDWEIGHTSFILE:
+                        {
+                            SetDlgItemText(hwnd, IDC_CONSOLE, "Choose a file containing weights information");
+                            char filename[MAX_PATH] ="";
+                            FileChooser((HWND)hwnd, (LPSTR) filename);
+                            ifstream infile(filename);
+                            vector<double> weightsVec;
+                            while(infile.good())
+                            {
+                               double weight;
+                               infile >> weight;
+                               weightsVec.push_back(weight);
+                            }
+                            if(weightsVec.size() != Triangulation::vertexTable.size()) 
+                            {
+                               MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
+                               break;
+                            }
+                            double weights[weightsVec.size()];
+                            for(int i = 0; i < weightsVec.size(); i++)
+                            {
+                               weights[i] = weightsVec[i];
+                            }
+                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_SPHERICAL);
+                            UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDCANCEL:
+                        {
+                            UpdateConsole(hwnd, "Flow canceled.\r\n"); 
+                        }
+                        break;
+                        default: break;
+                     }
+                }
+                break;
+                
+                case ID_RUN_FLOW_HYPERBOLIC:
+                {
+                     if(!TriangulationModel::isLoaded()) {
+                        MessageBox(NULL, "You must load a Triangulation first!", "Error", MB_OK | MB_ICONINFORMATION);
+                        break;
+                     }
+                     
+                     UpdateConsole(hwnd, "Running flow....\r\n");
+                     TriangulationModel::clearData();       
+                     int ret = DialogBox(GetModuleHandle(NULL),
+                        MAKEINTRESOURCE(IDD_FLOWDIALOG), hwnd, FlowDlgProc);
+                     switch(ret)
+                     {
+                        case IDWEIGHTSRANDOM:
+                        {
+                            srand(time(NULL));
+                            int vertexSize = Triangulation::vertexTable.size();
+                            double weights[vertexSize];
+                            for(int i = 1; i <= vertexSize; i++)
+                            {
+                               weights[i - 1] =   (rand() % 100 + 1)/ 125.0;
+                            }
+                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_HYPERBOLIC);
+                            UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDWEIGHTSFILE:
+                        {
+                            SetDlgItemText(hwnd, IDC_CONSOLE, "Choose a file containing weights information");
+                            char filename[MAX_PATH] ="";
+                            FileChooser((HWND)hwnd, (LPSTR) filename);
+                            ifstream infile(filename);
+                            vector<double> weightsVec;
+                            while(infile.good())
+                            {
+                               double weight;
+                               infile >> weight;
+                               weightsVec.push_back(weight);
+                            }
+                            if(weightsVec.size() != Triangulation::vertexTable.size()) 
+                            {
+                               MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
+                               break;
+                            }
+                            double weights[weightsVec.size()];
+                            for(int i = 0; i < weightsVec.size(); i++)
+                            {
+                               weights[i] = weightsVec[i];
+                            }
+                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_HYPERBOLIC);
+                            UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDCANCEL:
+                        {
+                            UpdateConsole(hwnd, "Flow canceled.\r\n"); 
+                        }
+                        break;
+                        default: break;
+                     }
+                }
+                break;
+                                                 
                 case IDC_RESULTSBUTTON:
                 {
-                     char filename[MAX_PATH] ="";
-                     FileChooser((HWND)hwnd, filename);
+                     char format[60];
+                     GetDlgItemText(hwnd, IDC_RESULTSSELECTBOX, format, 60);
                      HWND hedit = NULL;
                      hedit = GetDlgItem(hwnd, IDC_RESULTSFIELD);
                      if(hedit == NULL)
+                        MessageBox(NULL, "Edit box is null", "Error", MB_OK | MB_ICONINFORMATION);
+                     switch(format[9])
                      {
-                        SetDlgItemText(hwnd, IDC_CONSOLE, "NULL!");      
+                        case 's':
+                        {
+                             TriangulationModel::printResults(IDPRINTSTEP);
+                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt");
+                        }
+                        break;
+                        case 'v':
+                        {
+                             TriangulationModel::printResults(IDPRINTVERTEX);
+                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt");
+                        }
+                        break;
+                        case 'n':
+                        {
+                             TriangulationModel::printResults(IDPRINTNUM);
+                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt");
+                        }
+                        break;
+                        default:
+                             MessageBox(NULL, "Choose a print type", "Error", MB_OK | MB_ICONINFORMATION);   
                      }
-                     bool success = LoadTextFile(hedit, filename);
-                     if(success)
-                        SetDlgItemText(hwnd, IDC_CONSOLE, "Success!");
                 }
                 /*
 				case IDC_ADD:

@@ -182,12 +182,10 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
-    generateTriangulation(250);
+    generateTriangulation(30);
     generateWeights();
 
-<<<<<<< .mine
-    weightedFlipAlgorithm();
-=======
+  //  weightedFlipAlgorithm();
 //     firstTriangle(1.0, 1.0, 1.0);
 //     addTriangle(Triangulation::edgeTable[1], 1.0, 1.97387802015);
 //     addTriangle(Triangulation::edgeTable[2], 1.97387802015, 1.0);
@@ -218,10 +216,6 @@ int main(int argc, char *argv[])
 //    
 //    weightedFlipAlgorithm();
 
->>>>>>> .r424
-
-<<<<<<< .mine
-=======
      
 //    cout << "  " << isWeightedDelaunay(Triangulation::edgeTable[1]) << endl;
 //    cout << getHeight(Triangulation::faceTable[(*(Triangulation::edgeTable[1].getLocalFaces()))[0]], Triangulation::edgeTable[1]) << " ";
@@ -418,14 +412,16 @@ int main(int argc, char *argv[])
     //flip(Triangulation::edgeTable[1]);
     
     //weightedFlipAlgorithm();
-    generateTriangulation(25);
-    generateWeights();
+  //  generateTriangulation(25);
+  //  generateWeights();
     TriangulationCoordinateSystem tcs;
     tcs.generatePlane();
-    tcs.addDuals(Triangulation::vertexTable[1]);
+    for(int i = 0; i < Triangulation::vertexTable.size(); i++)
+    {
+       tcs.addDuals(Triangulation::vertexTable[i+1]);
+    }
     tcs.printDuals("Triangulations/duals.txt");
-    tcs.printToFile("Triangulation/ODE Result.txt");
->>>>>>> .r424
+    tcs.printToFile("Triangulations/ODE Result.txt");
     system("PAUSE");
     return 0;
 }
