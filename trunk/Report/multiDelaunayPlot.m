@@ -35,7 +35,7 @@ if option == 1
         delaunayPlot(j,[0 1 0]);
         titlename = ['Step # ' h];
         title(titlename);
-        pause();
+        pause(0.1);
 
         %Delete the old graph, except for the last iteration. 
         if i ~= k

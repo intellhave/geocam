@@ -353,7 +353,7 @@ void generateWeights()
                smallest = Triangulation::edgeTable[index].getLength();
           }
           double randNum = ((double) rand()) / RAND_MAX;
-          vit->second.setWeightIndependent(randNum * smallest);
+          vit->second.setWeightIndependent(randNum * smallest * 2);
           
      }
 }
@@ -419,7 +419,24 @@ void weightedFlipAlgorithm()
                     }
                     catch(string s1)
                     {
-                         cout << "Edge #" << eit->first << endl;
+                         cout << "#%#%#%#%#%#%#%#%#%#%#%#%%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%" << endl;
+                         Edge e = eit->second;
+                         Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+                         Face f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
+                         cout << "Edge #" << e.getIndex() << endl;
+                         cout << "Dual: " << getDual(e) << endl;
+                         cout << "Height 1: " << getHeight(f1, e) << endl;
+                         cout << "Height 2: " << getHeight(f2, e) << endl;
+                         cout << "Face 1: (";
+                         cout << (*(f1.getLocalVertices()))[0] << ", ";
+                         cout << (*(f1.getLocalVertices()))[1] << ", ";
+                         cout << (*(f1.getLocalVertices()))[2] << ") ";
+                         cout << f1.isNegative() << endl;
+                         cout << "Face 2: (";
+                         cout << (*(f2.getLocalVertices()))[0] << ", ";
+                         cout << (*(f2.getLocalVertices()))[1] << ", ";
+                         cout << (*(f2.getLocalVertices()))[2] << ") ";
+                         cout << f2.isNegative() << endl;
                          system("PAUSE");
                          flipCount++;
                     }

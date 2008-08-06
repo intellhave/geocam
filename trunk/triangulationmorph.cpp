@@ -248,8 +248,16 @@ void flip(Edge e)
      {
         fb2.push_back(Triangulation::faceTable[sameAs[i]]);
      }
+     
+     double ang1;
+     
+     if(f1.isNegative() && !f2.isNegative())
+          ang1 = -angle(va1, f1) + angle(va1, f2);
+     else if(f2.isNegative() && !f1.isNegative())
+          ang1 = -angle(va1, f2) + angle(va1, f1);
+     else
+          ang1 = angle(va1, f1) + angle(va1, f2);
 
-     double ang1 = angle(va1, f1) + angle(va1, f2);
      
      //the next task is naturally to rearrange all the necessary references
      //there are no new references added, so the task  is simply made up
