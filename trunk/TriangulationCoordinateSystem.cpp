@@ -413,7 +413,6 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
        v2 = temp;
      }
      Point p1 = pointTable[v1];
-     cout << e.getLength() <<"\n";
      double d12 = getPartialEdge(e, v1);
      double height = getHeight(f, e);
      double xComp = p1.x + d12*(pointTable[v2].x - p1.x) / e.getLength();
