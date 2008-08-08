@@ -81,8 +81,12 @@ CursorRow=92
 TopLine=88
 LeftChar=1
 [Editor_13]
-Open=0
+Open=1
 Top=0
+CursorCol=18
+CursorRow=148
+TopLine=125
+LeftChar=1
 [Editor_14]
 Open=0
 Top=0

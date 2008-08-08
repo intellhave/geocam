@@ -68,7 +68,7 @@ Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Focused=0
+Focused=-1
 =======
 Focused=21
 >>>>>>> .r401
@@ -102,7 +102,7 @@ Focused=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Order=26,24,0,30
+Order=26,24,0,30,-1
 =======
 <<<<<<< .mine
 Order=21,0,6,22,28,4,16,30,-1
@@ -232,7 +232,7 @@ Open=1
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Top=1
+Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine

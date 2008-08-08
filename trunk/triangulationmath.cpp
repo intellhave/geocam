@@ -161,6 +161,7 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2)
  *
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
+
 void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,double *initWeights,int numSteps, bool adjF)  
 {
   int p = Triangulation::vertexTable.size(); // The number of vertices or 
