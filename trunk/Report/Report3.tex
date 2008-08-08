@@ -35,13 +35,23 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 
 \noindent For an $n$-dimensional space, this triangulation, written $\tau = {\tau_0, \tau_1, ... , \tau_n}$ consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = {i_0, ... , i_k}$ \cite{Dave}. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, 2-dimensional simplices as triangles or faces, and 3-dimensional simplices as tetrahedra. For this project, we will only need to discuss triangulations of 2-dimensional spaces, or surfaces.\newline
 
-\noindent In order to describe our surfaces we must make a definition for each individual simplex. For our data structure, we decided on creating a list of references for each simplex to give it definition within the triangulation. These lists of references for each simplex are refences to other simplices in the triangulation with the property of being local. We define the term ``local'' slightly different for each simplex. To begin with, we say that an edge is defined by two vertices and a face is defined by three vertices and three edges. Then, we can say that a vertex is local to any edge that it is in the definition of and any face that it is in the definition of, as well as any vertex that it shares an edge in common with. An edge is local to any vertex that it is defined by and any face that it is in the definition of, as well as any edge that it shares a vertex in common with. A face is local to any vertex it is defined by, any edge that it is defined by, and any face that it shares an edge in common with. These are the definitions for locality of simplices that we decided upon, creating three different lists for each simplex. 
+\noindent In order to describe our surfaces we must make a definition for each individual simplex. For our data structure, we decided on creating a list of references for each simplex to give it definition within the triangulation. These lists of references for each simplex are refences to other simplices in the triangulation with the property of being local. We define the term ``local'' slightly different for each simplex. To begin with, we say that an edge is defined by two vertices and a face is defined by three vertices and three edges. Then, we can say that a vertex is local to any edge that it is in the definition of and any face that it is in the definition of, as well as any vertex that it shares an edge in common with. An edge is local to any vertex that it is defined by and any face that it is in the definition of, as well as any edge that it shares a vertex in common with. A face is local to any vertex it is defined by, any edge that it is defined by, and any face that it shares an edge in common with. These are the definitions for locality of simplices that we decided upon, creating three different lists for each simplex. \newline
 
-\noindent As well as lists of references to other simplices, each simplex also has other information important to the formation of a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge /{\textit{i, j}/} is given a length \textit{l_{i,j}} and each vertex /{\textit{i}/} is given what we call a \textit{weight}, denoted by \textit{w_i}. We think of the weight of a given vertex to be the square of the radius of a circle centered at that vertex. We are then able to state that for any \textit{n}-dimensional simplex, there exists an (\textit{n}-1)-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex. We use this particular sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle /{\textit{i, j, k}/}has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex. Additionally, each edge also has a center defined by the weights and the length of the edge. \newline
+\noindent As well as lists of references to other simplices, each simplex also has other information important to the formation of a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge $\{i,j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $w_i$. We think of the weight of a given vertex to be the square of the radius of a circle centered at that vertex. We are then able to state that for any $\textit{n}$-dimensional simplex, there exists an $(n-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex. We use this particular sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle $\{i, j, k\}$ has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex. Additionally, each edge also has a center defined by the weights and the length of the edge. \newline
 
-\noindent Based on these centers, we are able to define the \textit{local lengths} of an edge, as well as the \textit{dual} of a given simplex, a concept that will become more important later on. For an edge /{\textit{i, j}/}, it is true that $$l_{i,j} = d_{ij} + d_{ji}$$, where \textit{d_{ij}} is the local length of edge /{\textit{i, j}/} from vertex /{\textit{i}/}, or the length from vertex /{\textit{i}/} to C(/{\textit{i, j}/}), the center of /{\textit{i, j}/}. It also holds that $$d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2$$ for any face /{\textit{i, j, k}/}. Based on this condition
+\noindent Based on these centers, we are able to define the \textit{local lengths} of an edge, as well as the \textit{dual} of a given simplex, a concept that will become more important later on. For an edge $\{i, j\}$, it is true that 
 
-First we will define a dual for a given edge. Let us refer to any edge, along with the faces of which it forms an intersection, as a \textit{hinge}. We are able to embed any hinge in the plane. 
+$$l_{ij} = d_{ij} + d_{ji},$$
+
+\noindent where $d_{ij}$ is the local length of edge $\{i, j\}$ from vertex $i$, or the length from vertex $i$ to C($\{i, j\}$), the center of $\{i, j\}$. It also holds that 
+
+$$d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2$$ 
+
+\noindent for any face $\{i, j, k\}$. Based on this condition\newline
+
+\noindent First we will define a dual for a given edge. Let us refer to any edge, along with the faces of which it forms an intersection, as a \textit{hinge}. We are able to embed any hinge in the plane. 
+
+$$ h = \frac{d_{13} - d_{12}\cos(\theta)}{\sin(\theta)} $$
 
 When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces.\newline
 
@@ -50,8 +60,31 @@ When creating the program, the data structure design was critical. The design no
 
 \section{Delaunay triangulations}
 \label{DT}
+\begin{itemize}
+\item Definition of Delaunay triangulation
+\item Plane generation algorithm with necessary equations
+\item Math, flips, duals, negative triangles, equations, oh my!
+\item Verifications, duals
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.45]{Pictures/gentri.png}
+\includegraphics[scale = 0.45]{Pictures/gentri6.png}
+\caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right).}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[scale = .45]{Pictures/nonwduals.png}
+\includegraphics[scale = .45]{Pictures/Wduals.png}
+\caption{A non-weighted (left) and weighted (right) triangulation with dual lengths added.}
+\end{figure}
+
+
 
 \noindent One special type of triangulation is known as a Delaunay Triangulation.
+
 
 \section{Combinatorial Ricci flow}
 \label{RBk}
@@ -467,10 +500,315 @@ When we began looking into these background geometries, we thought that it would
 \section{Future work}
 \label{Future}
 
-\section{Conclusions}
+\subsection{3-D}
+We would also like to start investigating 3-dimensional constructs built from tetrahedrons. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by David Glickenstein in \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the cone angles associated with tetrahedron vertices.\newline
+
+\noindent Ultimately, Dr. Glickenstein would like to be able to build 3-D representations of these surfaces and walk along them in any given path. We can look into how faces are connected to each other, and be able to move from one triangle to another seamlessly. We can lay groundwork for that, and when this project is able to jump to 3-D modeling, we hope that this will help. We would also like to adapt our code into OpenGL, software that enables us to build 3-D surfaces using high-tech simulators here at the University of Arizona.   
+
+\subsection{Circle packing expansions}
+\label{circExt}
+Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of their angle of intersection. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.6]{Pictures/intcirc2.png}
+\end{center}
+\caption{An example of relaxing circle packing and introducing $\Phi.$}
+\label{fig:intcirc}
+\end{figure}
+
+\subsection{Spherical and hyperbolic extensions}
+While we investigated various tests to compare the three combinatorial Ricci flows, we would like to investigate spherical and hyperbolic even further. Primarliy, we would like to determine if our normalized equation, Eq.(~\ref{SRicciN}) is in fact the true equation, and be able to prove it through computation, or determine a true normalized flow if it exists. Likewise, we would like to investigate the existence of a normalized hyperbolic flow that behaves like the Euclidean version. We would also like to implement a scaling notion per vertex in the spherical case so that the weights could increase without necessarily crashing the program. 
+
+\subsection{Linking Delaunay to Ricci flow}
+Our generated triangulations can be akinned to our original notion of circle packing. We would like to close our triangulations and be able to properly run them through our Ricci flows. The major issue right now is that no vertices on the boundary connect to each other. We discovered that, for our triangulations, we always obtained a $\chi$ value of 1, so we would have to perform some additional manipulations on the end result to obtain a proper manifold.
+ 
+\section{Conclusion}
+
+We had a lot of goals for this project. For one, we are the first group to work with Dr. David Glickenstein and he has his own long-term goals. As the initial builders for these goals, we feel that we have laid a good foundation that can be easily built upon by future undergraduate students. We are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come. Another goal was to properly implement Ricci flow for 2-dimensional manifolds. While there are a number of extensions that still need to be implemented, we are pleased that the flow is functional and providing useful data. Our jump to weighted Delaunay triangulations enabled us to make our code more adaptable, as well as be able to generate our own systems with desired properties. We also feel we have learned an enormous amount over the course of only a few weeks. At the beginning, we all had varying familiarities with college geometry; some of us had not had a course in geometry since high school. Lastly, the experience from writing a research report will undoubtedly help us in our future endeavors. We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the National Science Foundation VIGRE $\#\_\_\_\_\_\_\_$.
 
 \newpage
 \bibliography{Test1}  
 \bibliographystyle{plain}
+
+\newpage
+\section{Appendix}
+
+\subsection{Derivation of Eq.~(\ref{proof1})}
+\maketitle
+	
+	We used the criteria $$f(\tilde{r_1},\tilde{r_2},\ldots,\tilde{r_n}) = \prod{\tilde{r_i}} = \prod{\alpha r_i} = \alpha^n\prod{r_i}= C$$ to constrain the values of radii. We take the derivative of $f$ with respect to $t$ and obtain
+	\begin{eqnarray*}
+	\frac{df}{dt} & = & n\alpha^{n-1}\frac{d\alpha}{dt}r_1r_2\ldots r_n + \alpha^n\frac{dr_1}{dt}r_2r_3\ldots r_n\\
+								& + & \alpha^nr_1\frac{dr_2}{dt}r_3r_4\ldots r_n + \ldots + \alpha^nr_1r_2\ldots r_{n-1}\frac{dr_n}{dt}.
+	\end{eqnarray*}
+	But since $\displaystyle \frac{dr_i}{dt} = -K_ir_i$ from Eq.~(\ref{Riccif}) we obtain
+	\begin{eqnarray*}
+	\frac{df}{dt} & = & \frac{n\alpha^{n}}{\alpha}\frac{d\alpha}{dt}r_1r_2\ldots r_n - K_1\alpha^nr_1r_2r_3\ldots r_n\\
+								& - & K_2\alpha^nr_1r_2r_3r_4\ldots r_n - \ldots - K_n\alpha^nr_1r_2\ldots r_{n-1}r_n
+	\end{eqnarray*}
+	from which we can group terms and obtain
+	\begin{eqnarray*}
+	\frac{df}{dt} & = & (\alpha^nr_1r_2\ldots r_n)(\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n)\\
+								& = & C(\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n).
+	\end{eqnarray*}
+	If we assume the product is a constant, we have $\displaystyle \frac{df}{dt} = 0.$ Thus we have $$\frac{n}{\alpha}\frac{d\alpha}{dt} - K_1 - K_2 - \ldots - K_n = 0.$$
+	Rearranging we have
+$$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K_2 + \ldots + K_n}{n} = \overline{K}$$
+	which we refer to as Eq.~(\ref{proof1})
+  
+  \subsection{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
+	\maketitle
+
+The method used by Moreau in \cite{JPM} to solve a differential equation involves using a Runge-Kutta method. Prior to adapting the code from Moreau's website, we reached the conclusion that a Runge-Kutta format would be most beneficial for this type of differential equation problem. Even though it is more computationally complex than the simpler Euler's method, it makes up in its ability to converge and in its accuracy. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental.\newline
+
+\noindent Based on our evaluations of radii and curvatures over time, it appears to converge exponentially for each vertex. However, as mentioned previously, performing flips on a triangulation may create unusual behavior.
+
+\subsection{Data Plots}
+\label{dataplots}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale = 0.65]{Pictures/torus7addvaddhweights2.png}
+\caption{An example of how morphs can change the asymptotic behavior of vertices. In this case we saw the weights of some vertices change concavity.}
+\label{fig:t7vh}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.8]{Pictures/curvcurves.png}
+\caption{An example of curvatures over time. While they do converge to the same curvature, the vertex with the maximum or minimum curvature may change. This is a separate trial than that producing Fig.~\ref{fig:t7vh}}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.8]{Pictures/Curvg6v12addv.png}
+\includegraphics[scale = 0.8]{Pictures/Weightg6v12addv.png}
+\caption{An example of adding a vertex to a genus 6 surface. One of the curvatures in unable to drop below $-\pi$, and as a result, its weight is pushed to almost zero. Other vertices group together to compensate for this behavior.}
+\end{center}
+\end{figure}
+
+%\newpage
+\subsection{Code Examples}
+\label{calcFlowCode}
+\begin{itemize}
+\item \textbf{calcFlow}
+\end{itemize}
+\begin{verbatim}
+void calcFlow(char* fileName, double dt ,double *initWeights,
+				int numSteps, bool adjF)  
+{
+  int p = Triangulation::vertexTable.size(); // The number of vertices.
+  double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data in.
+  int    i,k; // ints used for "for loops".
+  map<int, Vertex>::iterator vit;
+  map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+  map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+  double weights[p][numSteps];
+  double curvatures[p][numSteps];
+  
+  ofstream results(fileName, ios_base::trunc);
+  results.setf(ios_base::showpoint);
+  double net = 0; // Net and prev hold the current and previous
+  double prev;    //  net curvatures, repsectively.
+   for (k=0; k<p; k++)
+     z[k]=initWeights[k]; // z[k] holds the current weights.
+   for (i=1; i<numSteps+1; i++) 
+   {
+    prev = net; // Set prev to net.
+    net = 0;    // Reset net.
+    
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+           // Set the weights of the Triangulation.
+           vit->second.setWeight(z[k]);
+       if(i == 1) // If first time through, use static method.
+            prev = Triangulation::netCurvature();
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       // First "for loop" in whole step calculates
+       {                // everything manually, prints to file.
+           weights[k][i - 1] = z[k];
+           double curv = curvature(vit->second);
+           curvatures[k][i - 1] = curv;
+           net += curv;
+           if(adjF) ta[k]= dt * ((-1) * curv 
+                           * vit->second.getWeight() +
+                           prev /  p
+                           * vit->second.getWeight());
+           else     ta[k] = dt * (-1) * curv 
+                           * vit->second.getWeight();
+       }
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       // Set the new weights.
+           vit->second.setWeight(z[k]+ta[k]/2);
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       {
+            if(adjF) tb[k]=dt*adjDiffEQ(vit->first, net);
+            else     tb[k]=dt*stdDiffEQ(vit->first);
+       }
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       // Set the new weights.
+           vit->second.setWeight(z[k]+tb[k]/2);
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       {
+            if(adjF) tc[k]=dt*adjDiffEQ(vit->first, net);
+            else     tc[k]=dt*stdDiffEQ(vit->first);
+       }
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       // Set the new weights.
+           vit->second.setWeight(z[k]+tc[k]);
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       {
+            if(adjF) td[k]=dt*adjDiffEQ(vit->first, net);
+            else     td[k]=dt*stdDiffEQ(vit->first);
+       }
+       for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
+         z[k]=z[k]+(ta[k]+2*tb[k]+2*tc[k]+td[k])/6;
+   }
+   for(k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
+   {  //Print results
+      results << setprecision(6); 
+      results << left << "Vertex: " << left << setw(4)<< vit->first;
+      results << right << setw(3) << "Weight";
+      results << right << setw(10) << "Curv";
+      results << "\n------------------------------\n";
+      for(int j = 0; j < numSteps; j++)
+      {
+              results << left <<  "Step " << setw(7) << (j + 1);
+              results << left << setw(12) << weights[k][j];
+              results << left << setw(12) << curvatures[k][j] << "\n";
+      }
+      results << "\n";
+   }
+   results.close();
+}
+\end{verbatim}
+\begin{itemize}
+\item \textbf{2-2 Flip}
+\end{itemize}
+\begin{verbatim}
+void flip(Edge e)
+{
+     //start out by naming every object that is local to the flip
+     Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+     Face f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
+     
+     vector<int> sameAs;
+     vector<int> diff;
+     
+     Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+     Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
+          
+     diff = listDifference(f1.getLocalVertices(), f2.getLocalVertices());
+     if(diff.size() == 0)
+     throw string("Invalid move, operation canceled");
+     Vertex vb1 = Triangulation::vertexTable[diff[0]];
+     diff = listDifference(f2.getLocalVertices(), f1.getLocalVertices());
+     Vertex vb2 = Triangulation::vertexTable[diff[0]];
+     
+     sameAs = listIntersection(va1.getLocalEdges(), vb1.getLocalEdges());
+     Edge ea1 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va2.getLocalEdges(), vb1.getLocalEdges());
+     Edge eb1 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va1.getLocalEdges(), vb2.getLocalEdges());
+     Edge ea2 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(va2.getLocalEdges(), vb2.getLocalEdges());
+     Edge eb2 = Triangulation::edgeTable[sameAs[0]];
+     
+     sameAs = listIntersection(f1.getLocalFaces(), ea1.getLocalFaces());
+     Face fa1 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(f1.getLocalFaces(), eb1.getLocalFaces());
+     Face fb1 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(f2.getLocalFaces(), ea2.getLocalFaces());
+     Face fa2 = Triangulation::faceTable[sameAs[0]];
+     sameAs = listIntersection(f2.getLocalFaces(), eb2.getLocalFaces());
+     Face fb2 = Triangulation::faceTable[sameAs[0]];
+     
+     //removals
+     Triangulation::vertexTable[(va1.getIndex())].removeVertex(va2.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::vertexTable[(va1.getIndex())].removeEdge(e.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeEdge(e.getIndex()); 
+     Triangulation::vertexTable[(va1.getIndex())].removeFace(f2.getIndex()); 
+     Triangulation::vertexTable[(va2.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].removeVertex(va2.getIndex()); 
+     for(int i = 0; i < e.getLocalEdges()->size(); i++)
+     {
+        Triangulation::edgeTable[(e.getIndex())]
+        							.removeEdge((*(e.getLocalEdges()))[i]); 
+     }
+     for(int i = 0; i < va1.getLocalEdges()->size(); i ++)
+     {
+        Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]]
+        							.removeEdge(e.getIndex()); 
+     }
+     for(int i = 0; i < va2.getLocalEdges()->size(); i ++)
+     {
+        Triangulation::edgeTable[(*(va2.getLocalEdges()))[i]]
+        							.removeEdge(e.getIndex());  
+     }
+     Triangulation::edgeTable[(eb1.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::edgeTable[(ea2.getIndex())].removeFace(f2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeVertex(va2.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeVertex(va1.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeEdge(eb1.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeEdge(ea2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].removeFace(fb1.getIndex()); 
+     Triangulation::faceTable[(fb1.getIndex())].removeFace(f1.getIndex()); 
+     Triangulation::faceTable[(f2.getIndex())].removeFace(fa2.getIndex()); 
+     Triangulation::faceTable[(fa2.getIndex())].removeFace(f2.getIndex()); 
+     
+     //additions
+     Triangulation::vertexTable[(vb1.getIndex())].addVertex(vb2.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addVertex(vb1.getIndex()); 
+     Triangulation::vertexTable[(vb1.getIndex())].addEdge(e.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addEdge(e.getIndex()); 
+     Triangulation::vertexTable[(vb1.getIndex())].addFace(f2.getIndex()); 
+     Triangulation::vertexTable[(vb2.getIndex())].addFace(f1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].addVertex(vb1.getIndex()); 
+     Triangulation::edgeTable[(e.getIndex())].addVertex(vb2.getIndex()); 
+     for(int i = 0; i < vb1.getLocalEdges()->size(); i ++)
+     {
+             Triangulation::edgeTable[(e.getIndex())]
+             						.addEdge((*(vb1.getLocalEdges()))[i]);
+             						
+             Triangulation::edgeTable[(*(vb1.getLocalEdges()))[i]]
+             						.addEdge(e.getIndex()); 
+     }
+     for(int i = 0; i < vb2.getLocalEdges()->size(); i ++)
+     {
+             Triangulation::edgeTable[(e.getIndex())]
+             						.addEdge((*(vb2.getLocalEdges()))[i]); 
+             						
+             Triangulation::edgeTable[(*(vb2.getLocalEdges()))[i]]
+             						.addEdge(e.getIndex()); 
+     }
+     Triangulation::edgeTable[(ea2.getIndex())].addFace(f1.getIndex()); 
+     Triangulation::edgeTable[(eb1.getIndex())].addFace(f2.getIndex()); 
+     Triangulation::faceTable[(f1.getIndex())].addVertex(vb2.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addVertex(vb1.getIndex());
+     Triangulation::faceTable[(f1.getIndex())].addEdge(ea2.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addEdge(eb1.getIndex());
+     Triangulation::faceTable[(f1.getIndex())].addFace(fa2.getIndex());
+     Triangulation::faceTable[(fa2.getIndex())].addFace(f1.getIndex());
+     Triangulation::faceTable[(f2.getIndex())].addFace(fb1.getIndex());
+     Triangulation::faceTable[(fb1.getIndex())].addFace(f2.getIndex());
+     
+}
+\end{verbatim}
+\section*{About the authors}
+
+Alex Henniges is a junior double majoring in Math and Computer Science. Thomas Williams is a senior in Comprehensive Mathematics with a minor in Computer Science and a background in Math Education. Mitch Wilson is a senior double majoring in Applied Math and Mechanical Engineering.\newline
+
+\noindent Contact information:
+\begin{itemize}
+\item Dr. David Glickenstein- glickenstein@math.arizona.edu
+\item Alex Henniges-
+\item Thomas Williams-
+\item Mitch Wilson- mjw@email.arizona.edu
+\end{itemize}
+\noindent Project website: http://code.google.com/p/geocam
 
 \end{document}
