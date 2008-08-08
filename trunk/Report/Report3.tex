@@ -504,16 +504,11 @@ When we began looking into these background geometries, we thought that it would
 \label{Future}
 
 \subsection{Linking Delaunay to Ricci flow}
-Our generated triangulations can be akinned to our original notion of circle packing. We would like to close our triangulations and be able to properly run them through our Ricci flows. The major issue right now is that no vertices on the boundary connect to each other. We discovered that, for our triangulations, we always obtained a $\chi$ value of 1, so we would have to perform some additional manipulations on the end result to obtain a proper manifold.
-
-\subsection{3-D}
-We would also like to start investigating 3-dimensional constructs built from tetrahedrons. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by David Glickenstein in \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the cone angles associated with tetrahedron vertices.\newline
-
-\noindent Ultimately, Dr. Glickenstein would like to be able to build 3-D representations of these surfaces and walk along them in any given path. We can look into how faces are connected to each other, and be able to move from one triangle to another seamlessly. We can lay groundwork for that, and when this project is able to jump to 3-D modeling, we hope that this will help. We would also like to adapt our code into OpenGL, software that enables us to build 3-D surfaces using high-tech simulators here at the University of Arizona.   
+Delaunay surfaces and combinatorial Ricci flows can seem to be very separate concepts, and in many ways with our program structure, they are. Yet there is the possiblity of combining both of them to explore other mathematical inquiries. For instance, how does the idea of Delaunay triangles interact with triangulations on a manifold. We know that a circle packed triangulation is weighted Delaunay, but what if the triangulation is not circle packed (see below)? Will the Ricci flow lead to a weighted Delaunay triangulation?
 
 \subsection{Circle packing expansions}
 \label{circExt}
-Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of their angle of intersection. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.
+Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of the angle of their intersection. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.
 
 \begin{figure}
 \begin{center}
@@ -522,7 +517,10 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 \caption{An example of relaxing circle packing and introducing $\Phi.$}
 \label{fig:intcirc}
 \end{figure}
- 
+
+\subsection{3-Dimensional triangulations}
+Triangulations exist outside of two dimensions and one future goal is to perform flows in a three dimensional setting. The flow in this case is known as Yamabe flow, discussed in \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the cone angles associated with tetrahedron vertices. The structure is in place from this project to accomplish this goal. To help the understanding of both the two and three dimensional triangulations, we would like to create a way to visualize them and explore the surfaces locally.\newline
+
 \section{Conclusion}
 
 We had a lot of goals for this project. For one, we are the first group to work with Dr. David Glickenstein and he has his own long-term goals. As the initial builders for these goals, we feel that we have laid a good foundation that can be easily built upon by future undergraduate students. We are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come. Another goal was to properly implement Ricci flow for 2-dimensional manifolds. While there are a number of extensions that still need to be implemented, we are pleased that the flow is functional and providing useful data. Our jump to weighted Delaunay triangulations enabled us to make our code more adaptable, as well as be able to generate our own systems with desired properties. We also feel we have learned an enormous amount over the course of only a few weeks. At the beginning, we all had varying familiarities with college geometry; some of us had not had a course in geometry since high school. Lastly, the experience from writing a research report will undoubtedly help us in our future endeavors. We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the National Science Foundation VIGRE $\#\_\_\_\_\_\_\_$.
