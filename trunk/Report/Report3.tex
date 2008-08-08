@@ -34,27 +34,52 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 \caption{An example of a triangulation. In this case, the triangle, a 2-simplex, can be folded up into the boundary of a tetrahedron, a 3-simplex.}
 \end{figure}
 
-\noindent For an $n$-dimensional space, this triangulation, written $\tau = {\tau_0, \tau_1, ... , \tau_n}$ consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = {i_0, ... , i_k}$ \cite{Dave}. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, 2-dimensional simplices as triangles or faces, and 3-dimensional simplices as tetrahedra. For this project, we will only need to discuss triangulations of 2-dimensional spaces, or surfaces.\newline
+\subsection{Basics and Definitions}
+
+\noindent For an \textit{n}-dimensional space, this triangulation, written $\tau = \{\tau_0, \tau_1, ... , \tau_n\}$ consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = \{i_0, ... , i_k\}$ \cite{Dave}. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, 2-dimensional simplices as triangles or faces, and 3-dimensional simplices as tetrahedra. For this project, we will only need to discuss triangulations of 2-dimensional spaces, or surfaces.\newline
 
 \noindent In order to describe our surfaces we must make a definition for each individual simplex. For our data structure, we decided on creating a list of references for each simplex to give it definition within the triangulation. These lists of references for each simplex are refences to other simplices in the triangulation with the property of being local. We define the term ``local'' slightly different for each simplex. To begin with, we say that an edge is defined by two vertices and a face is defined by three vertices and three edges. Then, we can say that a vertex is local to any edge that it is in the definition of and any face that it is in the definition of, as well as any vertex that it shares an edge in common with. An edge is local to any vertex that it is defined by and any face that it is in the definition of, as well as any edge that it shares a vertex in common with. A face is local to any vertex it is defined by, any edge that it is defined by, and any face that it shares an edge in common with. These are the definitions for locality of simplices that we decided upon, creating three different lists for each simplex. \newline
 
-\noindent As well as lists of references to other simplices, each simplex also has other information important to the formation of a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge $\{i,j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $w_i$. We think of the weight of a given vertex to be the square of the radius of a circle centered at that vertex. We are then able to state that for any $\textit{n}$-dimensional simplex, there exists an $(n-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex. We use this particular sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle $\{i, j, k\}$ has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex. Additionally, each edge also has a center defined by the weights and the length of the edge. \newline
+\noindent As well as lists of references to other simplices, each simplex also has other information needed to form a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge $\{i, j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $r_i$. We think of the weight of a given vertex to be the radius of a circle centered at that vertex. We are then able to state that for any $\textit{n}$-dimensional simplex, there exists an $(n-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex. We use this particular sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle $\{i, j, k\}$ has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex. Additionally, each edge also has a center defined by the weights and the length of the edge. \newline
 
 \noindent Based on these centers, we are able to define the \textit{local lengths} of an edge, as well as the \textit{dual} of a given simplex, a concept that will become more important later on. For an edge $\{i, j\}$, it is true that 
 
 $$l_{ij} = d_{ij} + d_{ji},$$
 
-\noindent where $d_{ij}$ is the local length of edge $\{i, j\}$ from vertex $i$, or the length from vertex $i$ to C($\{i, j\}$), the center of $\{i, j\}$. It also holds that 
+\noindent where $d_{ij}$ is the local length of edge $\{i, j\}$ from vertex $i$, or the length from vertex $i$ to C($\{i, j\}$), the center of $\{i, j\}$. If we examine the edge lengths of a given triangle, it can be concluded that 
 
-$$d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2$$ 
+\begin{equation}
+d_{ij} = \frac{l_{ij}^2 + r_i^2 - r_j^2}{2l_{ij}}
+\label{eq2}
+\end{equation}
 
-\noindent for any face $\{i, j, k\}$. Based on this condition\newline
+\noindent It also holds that 
 
-\noindent First we will define a dual for a given edge. Let us refer to any edge, along with the faces of which it forms an intersection, as a \textit{hinge}. We are able to embed any hinge in the plane. 
+\begin{equation}
+\label{eq1}
+d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2
+\end{equation}
 
-$$ h = \frac{d_{13} - d_{12}\cos(\theta)}{\sin(\theta)} $$
+\noindent for any face $\{i, j, k\}$. Based on this condition, we are guaranteed that for every face $\{i, j, k\}$, the perpendiculars from each edge center meet at a single point, which is the center of the face $C(\{i, j, k\})$ as defined above\cite{Dave}.\newline
 
-When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces.\newline
+\noindent There are two notable examples of choices of weights and their corresponding face centers. The first is when all of the weights are zero. In this case, a triangle center $C(\{i, j, k\})$ is the center of the circumcircle of $\{i, j, k\}$. The second is when the weights are equal to the local lengths for \textit{i}, or for all vertices \textit{j} and \textit{k} that are local to \textit{i}, we have $d_{ij} = d_{ik}$. This case is known as a \textit{circle packing} and will be used in the material discussed in $\oint\ref{RBk}$. In this case, a triangle center $C(\{i, j, k\})$ is the center of the incircle of $\{i, j, k\}$.
+
+\noindent We will now make definitions for duals of our simplices. First, the dual of a face is simply its center $C(\{i, j, k\})$ as defined above. Now we will define a dual for a given edge. Let us refer to any edge, along with the faces of which it forms an intersection, as a \textit{hinge}. We are able to embed any hinge in the plane. Because of (\ref{eq1}), we know that on any hinge in the plane, the center of an edge along with the centers of its two local faces are colinear. The line connecting these three points is the dual for the given edge. We can determine the length of this dual if we can determine the length of the line segment connecting the center of an edge to the center of one of its local faces. On triangle $\{i, j, k\}$, we can write the distance between $C(\{i, j\})$ and $C(\{i, j, k\})$ as 
+
+\begin{equation}
+\label{eq3}
+d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
+\end{equation}
+
+\noindent where $\theta_i$ is the angle at \textit{i} on face $\{i, j, k\}$. In the case that $C(\{i, j, k\})$ lies outside of $\{i, j, k\}$, then this distance has a negative value. Otherwise, the distance is positive\cite{Dave}. Naturally, the dual of a given edge has a distance that is obained by adding the distances from the center of the edge to the centers of each face it is local to. The dual of a given vertex \textit{i} is the area enclosed by the duals of every edge local to \textit{i}. The duals of edges will be talked about again in \ref{DT}.\newline
+
+\subsection{Bistellar moves}
+
+\noindent On a given triangulation, we are able to perform a number of different modifcations to the structure. 
+
+\subsection{Programming Structure}
+
+\noindent When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces.\newline
 
 \noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. \newline
 
@@ -68,7 +93,10 @@ When creating the program, the data structure design was critical. The design no
 \item Verifications, duals
 \end{itemize}
 
+
+\subsection{Definitions}
 \noindent One special type of triangulation is known as a \textit{Delaunay Triangulation}, which we define as a set of faces on a plane such that the orthocircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, the orthocircle about the face is made to intersect all three vertices, and thus is the circumcircle. In a weighted Delaunay case, the orthocircle surrounding a face remains orthogonal to the radius of the circle of each vertex. Delaunay triangulations have particular interest in the fields of Computer Science and Physics.\newline
+
 
 \begin{figure}
 \centering
