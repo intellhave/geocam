@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage[pdftex]{graphicx}
 \usepackage{multicol}
-\title{Generation and application of triangulations on weighted Delaunay surfaces and combinatorial Ricci flow manifolds}
+\title{Generating and applying triangulations to Delaunay surfaces and combinatorial Ricci flows}
 \pagestyle{plain}
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
 Supervisor: Dr. David Glickenstein\\
@@ -89,14 +89,14 @@ When creating the program, the data structure design was critical. The design no
 \section{Combinatorial Ricci flow}
 \label{RBk}
 
-Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting.
+Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting. \newline
 
-We begin by providing the definition of a manifold. A manifold is defined as any topological space containing points whose neighborhoods are topologically equivalent to the open unit ball, or as we say resemble Euclidean space. The idea of manifolds is broad enough to encompass many different types of spaces that may exist in \textit{n} dimensions. We may classify different types of manifolds by topological equivalence. One term we can use to generally describe manifolds is "locally Euclidean". With this in mind, one may be able to examine the properties of a manifold, what may be a potentially large and complex space, by examining its behavior locally.\newline
+\subsection{Definitions and Equations}
+We define a manifold to be a topological space where every neighborhood is locally Euclidean. This means that around any point in the space it appears similar to the sphere locally. What this means for our triangulated surfaces is that there are no borders. We also refer to this as a closed triangulation.\newline
 
+\noindent When talking about closed, triangulated surfaces an important characteristic is known the Euler characteristic $\chi$, defined by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
 
-\noindent When talking about closed, triangulated surfaces an important characteristic comes up that is known as the Euler characteristic, given by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property which is the \textit{genus} of a surface. The genus of a surface is a number that describes the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
-
-Just because we have a triangulation and that it is circle packed does not mean that it is in a desired configuration. Vertices can be too large or too small, and the resulting geometry can be somewhat intractable. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. In their paper, Chow and Luo introduce an equation known as combinatorial Ricci flow. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We introduce this equation to the reader which can be written as
+Once we have a triangulation and it is circle packed, vertices can be too large or too small, and the resulting geometry can be somewhat intractable. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. We introduce combinatorial Ricci flow to the sytem. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We present the equation to the reader, which can be written as
 
   \begin{equation}
   \label{Riccif}
@@ -167,6 +167,7 @@ $$\sum{K_i} = 2\pi(V - \frac{F}{2}) = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + 
 
 \noindent This is known as normalized Ricci flow, as discussed by Chow and Luo in their paper \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ and thus $\displaystyle\frac{dr_i}{dt} = 0$ for $i = \{1,2,3,4\}$. 
 
+\subsection{Programming Ricci flow}
 \noindent The function $calcFlow$ runs a combinatorial Ricci flow on a triangulation and records the data in a file. The algorithm for solving the ODE, provided by J-P Moreau, employs a Runge-Kutta method of order 4 \cite{JPM}. First, the file name for the data is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculate and record. Lastly, a boolean is provided, where $true$ indicates that the normalized differential equation, (\ref{Riccin}), should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Each step, with every vertex's weight and curvature at that step, is printed to the file. An example is shown in Table~\ref{tab:ricciSteps}.\newline
 
 \begin{table}
@@ -210,6 +211,7 @@ Vertex 9: &4.553 & 0.004906\\ \hline
 
 \noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of total curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. The code for the $calcFlow$ function can be found in $\oint\ref{calcFlowCode}$.
 
+\subsection{Initial testing and results}
 We have some expectations for combinatorial Ricci flow over two-dimensional Euclidean surfaces. Cases like the boundary of the tetrahedron can be calculated by hand so it will be useful to test our results against these surfaces. For example, we expect that the tetrahedron under (\ref{Riccif}) will have all weights converge to zero. Whereas under (\ref{Riccin}) the weights are expected to converge to positive constants.\newline
 
 \noindent There are other expected behaviors. We expect that the product of the initial weights will be equal to the product of the weights at any intermediate step of the flow, what we call the \textit{product area}. Also, it is predicted that the total curvature of a 2-manifold surface should remain a constant determined by its genus.\newline
@@ -223,6 +225,7 @@ We have some expectations for combinatorial Ricci flow over two-dimensional Eucl
 \item Constant total curvature.
 \end{enumerate}
 
+\subsubsection{First tests}
 The program for the Ricci flow was tested by beginning with the simplest cases, and then explored with as many different possibilities as we could conceive of to try to find anomalies. The first test was the boundary of the tetrahedron. In the standard equation, it is easily shown that all weights approach zero exponentially fast. In the normalized equation, and the equation that is used in the rest of the testing, the tetrahedron's weights approach a single positive number, the fourth root of the \textit{product area} of the tetrahedron, so that the area remains constant. In addition, all the curvatures converged to the same value, in this case $\pi$, so that the total curvature is $4\pi$. Results were similar for the other platonic solids.\newline
 
 \noindent The next test was the torus with the standard nine-vertex triangulation. Again all the weights approached the same positive number to maintain constant area. As expected, the curvatures all went to zero while the total curvature remained zero throughout. Further simple tests included triangulations of larger genus, and in all cases the total curvature remained at a constant multiple of $\pi$ that was expected and the \textit{product area} was also constant. In addition, there does not appear to be any further effect from the initial weights other than determining the area of the triangulation. It is not clear from any of the tests we ran that having extremes amongst the initial weights causes a different end result.\newline
@@ -302,7 +305,7 @@ Vertex 7: 6.18421 \\
 \end{table}
 
 
-\subsection{Specific cases}
+\subsubsection{Specific cases}
 
 \noindent \textit{Example}: Adding a vertex to a one-holed torus. See figure~\ref{torusaddv}. \newline
 
@@ -337,7 +340,7 @@ Vertex 7: 6.18421 \\
 \label{fig:tt}
 \end{figure}
 
-\subsection{Convergence speeds}
+\subsubsection{Convergence speeds}
 
 One experiment we performed was measuring convergence speeds of various triangulations. For each triangulation, five flows were run where the weights were random between one and twenty-five. Random weights, while not a perfect solution, was the most effective option and easiest to implement. It was unclear what set weights could have an equal effect for different triangulations. By performing five trials and using random weights, we hope to negate any effect the weights could have on the convergence speed of a triangulation. The $dt$ was held constant at 0.03 so that the number of steps needed to run was not large and time consumming and still provided accurate results. For each run, a step number was assigned for when all weights and curvatures had converged to four digits, (the precision shown in a file of the results).\newline
 
@@ -354,7 +357,7 @@ One experiment we performed was measuring convergence speeds of various triangul
 
 \noindent As a final note, the deviation of the initial weights did not have a clear impact on the convergence speed. At some times, it would appear that initial weights with a higher deviation would converge faster, yet at other times it was lower deviation that seemed to lead to faster convergence.
 
-\section{Spherical and hyperbolic combinatorial Ricci flow}
+\section{Spherical and hyperbolic Ricci flow}
 \label{HypSphere}
 
 So far we have focused exclusively on triangulations using Euclidean geometry. While this is useful for most cases, there are others where a different background space may be better suited. Two of these in particular are spherical and hyperbolic geometries. We will introduce the basics of each system to the reader as they may be unfamilar with these geometries. We will examine the adaptations of combinatorial Ricci flow for each case, test over various triangulations, and attempt to reach conclusions on our findings. 
@@ -500,6 +503,9 @@ When we began looking into these background geometries, we thought that it would
 \section{Future work}
 \label{Future}
 
+\subsection{Linking Delaunay to Ricci flow}
+Our generated triangulations can be akinned to our original notion of circle packing. We would like to close our triangulations and be able to properly run them through our Ricci flows. The major issue right now is that no vertices on the boundary connect to each other. We discovered that, for our triangulations, we always obtained a $\chi$ value of 1, so we would have to perform some additional manipulations on the end result to obtain a proper manifold.
+
 \subsection{3-D}
 We would also like to start investigating 3-dimensional constructs built from tetrahedrons. We can adjust our current code as much as we need to, and ultimately be able to evaluate Yamabe flow, as discussed by David Glickenstein in \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the cone angles associated with tetrahedron vertices.\newline
 
@@ -516,12 +522,6 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 \caption{An example of relaxing circle packing and introducing $\Phi.$}
 \label{fig:intcirc}
 \end{figure}
-
-\subsection{Spherical and hyperbolic extensions}
-While we investigated various tests to compare the three combinatorial Ricci flows, we would like to investigate spherical and hyperbolic even further. Primarliy, we would like to determine if our normalized equation, Eq.(~\ref{SRicciN}) is in fact the true equation, and be able to prove it through computation, or determine a true normalized flow if it exists. Likewise, we would like to investigate the existence of a normalized hyperbolic flow that behaves like the Euclidean version. We would also like to implement a scaling notion per vertex in the spherical case so that the weights could increase without necessarily crashing the program. 
-
-\subsection{Linking Delaunay to Ricci flow}
-Our generated triangulations can be akinned to our original notion of circle packing. We would like to close our triangulations and be able to properly run them through our Ricci flows. The major issue right now is that no vertices on the boundary connect to each other. We discovered that, for our triangulations, we always obtained a $\chi$ value of 1, so we would have to perform some additional manipulations on the end result to obtain a proper manifold.
  
 \section{Conclusion}
 
@@ -805,7 +805,7 @@ Alex Henniges is a junior double majoring in Math and Computer Science. Thomas W
 \noindent Contact information:
 \begin{itemize}
 \item Dr. David Glickenstein- glickenstein@math.arizona.edu
-\item Alex Henniges-
+\item Alex Henniges- henniges@email.arizona.edu
 \item Thomas Williams-
 \item Mitch Wilson- mjw@email.arizona.edu
 \end{itemize}
