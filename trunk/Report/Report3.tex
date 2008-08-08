@@ -30,7 +30,7 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 \begin{figure}
 \includegraphics[scale = 0.5]{Pictures/flattetrahedron.png}
 \includegraphics[scale = 0.3]{Pictures/tetrahedron.jpg}
-\caption{An example of a triangulation. The triangles can be folded up into the boundary of a tetrahedron.}
+\caption{An example of a triangulation. In this case, the triangle, a 2-simplex, can be folded up into the boundary of a tetrahedron, a 3-simplex.}
 \end{figure}
 
 \noindent For an $n$-dimensional space, this triangulation, written $\tau = {\tau_0, \tau_1, ... , \tau_n}$ consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = {i_0, ... , i_k}$ \cite{Dave}. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, 2-dimensional simplices as triangles or faces, and 3-dimensional simplices as tetrahedra. For this project, we will only need to discuss triangulations of 2-dimensional spaces, or surfaces.\newline
@@ -67,6 +67,21 @@ When creating the program, the data structure design was critical. The design no
 \item Verifications, duals
 \end{itemize}
 
+\noindent One special type of triangulation is known as a \textit{Delaunay Triangulation}, which we define as a set of faces on a plane such that the orthocircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, the orthocircle about the face is made to intersect all three vertices, and thus is the circumcircle. In a weighted Delaunay case, the orthocircle surrounding a face remains orthogonal to the radius of the circle of each vertex. Delaunay triangulations have particular interest in the fields of Computer Science and Physics.\newline
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.6]{Pictures/genTri4.png}
+\caption{A simple example of a Delaunay triangulation. The circumcircles are drawn along with the edges to show their compatability. This is a non-weighted case.}
+\label{genTri}
+\end{figure}
+
+\noindent We can produce a non-weighted Delaunay triangulation using mathematical software like MATLAB. However, less is known about weighted triangulations in general. For this project, we aim to develop an algorithm that can create a valid triangulation, add weights to vertices, and manipulate the faces to produce a Delaunay triangulation.\newline
+
+\noindent An important aspect to properly explore these triangulations is in their generation. We developed a program $generateTriangulation$ which can generate a determined number of faces with a random configuration. To truly test our algorithms and to provide convincing results would require an unbiased way of constructing the triangulations. There are several properties to triangulations that we wish to be randomized, and they include the lengths of each edge, the degree of each vertex, and the weight at each vertex. It is unclear if there is a way to provide a truly random generation of triangulations or even if such a system would be desirable, but we feel that the algorithm we chose adequately meets our goals.\newline
+
+\noindent Our random triangulation generator begins with one triangle with edge lengths between zero and ten. This was chosen arbitrarily as all future weights will be based off of these. Triangles are then created from each edge along the border. When the creation of an edge would result in a vertex's angles summing to greater than $2\pi$, we instead close off the vertex by connecting its two outer edges. Once the desired number of faces have been created, the algorithm ends. Section [] in the appendix shows several results of this algorithm.\newline
+
 \begin{figure}
 \centering
 \includegraphics[scale = 0.45]{Pictures/gentri.png}
@@ -74,30 +89,101 @@ When creating the program, the data structure design was critical. The design no
 \caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right).}
 \end{figure}
 
+\noindent We can generate weights at random by restricting their maximum size with respect to the shortest edge length in the triangulation, so as not to make weights too large. We can also assign weights to individual vertices such that others remain unweighted. \newline
+
+\noindent In order for a triangulation that we have created to be Delaunay, we must be able to guarantee that all orthocircles behave as they should. However, in our gereration, we can create triangles in which the largest side length is barely smaller than the sum of the other two sides, or ``skinny triangles.'' We find that the orthocircles related to these triangles have a large tendency to make the triangulation not Delaunay as they like to contain other vertices. To remedy this issue, we aim to perform manipulations known as \textit{flips}. Also known as \textit{bistellar moves}, these slight alterations aim to make the triangulation Delaunay. \newline
+
+\noindent In particular, we will focus on one flip known as the 2-2 flip. In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. The code for the 2-2 flip is located in $\oint\ref{calcFlowCode}$. We will discuss other flips in []. \newline
+
+\noindent We feel that if a triangulation if not Delaunay, we can perform a series of 2-2 flips on various surfaces until it results in a Delauany configuration. We do not change the vertices in any fashion or the number of triangles, only how they are connected to each other. \newline
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.8]{Pictures/Flip.png}
+\caption{An example of a 2-2 flip.}
+\label{fig:flip}
+\end{figure}
+
+\noindent One issue we noted was that certain flips would change our notion of triangles. Flips sometimes produced triangles where they did not exist before. We call these anti-triangles, or \textit{negative triangles}. See Figure~\ref{AntiTri}. We can check for cases when this may happen and adapt our flipping process as needed. \newline
+
+\noindent We know that anti-triangles are related to the dual lengths associated with the faces (See $\oint$2.3). If the center of a triangle is outisde the triangle itself, we say that the dual has a negative length. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. \newline
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.4]{Pictures/antitri1.png}
+\includegraphics[scale = 0.4]{Pictures/antitri2.png}
+\caption{If flips are performed on nonconvex triangles, we create an anti-triangle, shaded here in red, and a larger regular triangle, shaded in blue.}
+\label{AntiTri}
+\end{figure}
+
+\noindent We created a program called $weightedFlipAlgorithm$ that scans each face to see if it was Delaunay, and if not, we would perform a flip with an adjacent face. We would repeat the process until (hopefully) each face was Delaunay, and thus the whole triangulation was now Delaunay. Unfortunately, the process did not always end. \newline
+
+\noindent To get a better grasp of the evolution of the flips, we made a MATLAB program named $delaunayPlot$ that would draw a triangulation so we could visually ensure that our triangulations were being built correctly and also if and where flips were being performed, as well as tracking negative triangles. We use MATLAB as it is able to read data from files, like in C++, as well as generate pictures relatively easily. We adapted this code to then make $multiDelaunayPlot$, which regraphs the triangulation after a flip is performed. \newline
+
+\noindent Often times, we did find that triangulations were able to become Delaunay after a series of flips. As we added more faces, and increased weights by scalars, we noted that it was more likely for the algorithm to have issues. In watching our $multiDelaunayPlot$ results, we found that certain edges would loop in a series of flips such that performing one flip would require the adjacent edge to need flipping. Occasionally, one edge would get stuck flipping back and forth between two faces. We also noted that final triangulations did permit the existence of negative triangles. Often they were found on the edge boundary and of little concern. We were able to check our results by drawing the dual edges on top of all the faces using equations from []. If all vertices had zero weight, then the duals are simply the perpendicular bisectors of each edge. See Figure~\ref{Duals}. \newline
+
 \begin{figure}
 \centering
 \includegraphics[scale = .45]{Pictures/nonwduals.png}
 \includegraphics[scale = .45]{Pictures/Wduals.png}
 \caption{A non-weighted (left) and weighted (right) triangulation with dual lengths added.}
+\label{Duals}
 \end{figure}
 
+\noindent We also observed a couple of interesting things from a statistical point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. This would lead to suggest that vertices try and form triangles with vertices close to itself, resulting in fewer skinny triangles. We also saw that the degrees of vertices tend to vary more after flips; more have a degree of 2, while others increase in degree. This indicates that the proximity of vertices to each other in its triangulation also has a great effect as well as the weights. See Figure~\ref{stats} for an example with a non-weighted case.\newline
+\begin{table}
+\begin{center}
+\begin{tabular}{|rrr|rrr|}
+ \hline
+ &Scalar = 1.0      &            &            &  Scalar = 1.5           &          \\ \hline
 
+   Faces & Avg. Flips & \% Finish &               Faces & Avg. Flips & \% Finish \\ \hline
 
-\noindent One special type of triangulation is known as a Delaunay Triangulation.
+        25 &        4.1 &        100 &                    25 &       13.5 &      83.33 \\
 
+        50 &       11.2 &        100 &                     50 &       19.6 &      71.29 \\
+
+       100 &       26.8 &        100 &                   100 &       41.7 &         40 \\ \hline
+
+\end{tabular} 
+\end{center}
+\caption{An anlysis of number of flips required to obtain Delaunay triangulation for a given number of faces and scaled weights. Each test was performed on $weightedFlipAlgorithm$ until each test had ten successful runs. Each trial had unique weights.} 
+\end{table} 
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.6]{Pictures/Stats.png}
+\caption{A statistical illustration of edge lengths and vertex degrees before and after flips are performed.}
+\label{stats}
+\end{figure}
+
+\noindent So to conclude, yeah, flips are awesome. 
 
 \section{Combinatorial Ricci flow}
 \label{RBk}
 
+<<<<<<< .mine
+Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting.\newline
+=======
 Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting. \newline
+>>>>>>> .r444
 
+<<<<<<< .mine
+\noindent We begin by providing the definition of a manifold. A manifold is defined as any topological space containing points whose neighborhoods are topologically equivalent to the open unit ball, or as we say resemble Euclidean space. The idea of manifolds is broad enough to encompass many different types of spaces that may exist in \textit{n} dimensions. We may classify different types of manifolds by topological equivalence. One term we can use to generally describe manifolds is "locally Euclidean". With this in mind, one may be able to examine the properties of a manifold, what may be a potentially large and complex space, by examining its behavior locally.\newline
+=======
 \subsection{Definitions and Equations}
 We define a manifold to be a topological space where every neighborhood is locally Euclidean. This means that around any point in the space it appears similar to the sphere locally. What this means for our triangulated surfaces is that there are no borders. We also refer to this as a closed triangulation.\newline
+>>>>>>> .r444
 
 \noindent When talking about closed, triangulated surfaces an important characteristic is known the Euler characteristic $\chi$, defined by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
 
 Once we have a triangulation and it is circle packed, vertices can be too large or too small, and the resulting geometry can be somewhat intractable. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. We introduce combinatorial Ricci flow to the sytem. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We present the equation to the reader, which can be written as
 
+<<<<<<< .mine
+\noindent Just because we have a triangulation and that it is circle packed does not mean that it is in a desired configuration. Vertices can be too large or too small, and the resulting geometry can be somewhat intractable. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. In their paper, Chow and Luo introduce an equation known as combinatorial Ricci flow. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We introduce this equation to the reader which can be written as
+
+=======
+>>>>>>> .r444
   \begin{equation}
   \label{Riccif}
   \frac{dr_i}{{dt}} = -K_ir_i
