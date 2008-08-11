@@ -27,7 +27,7 @@ class Face : public Simplex
 		~Face();
 		
 		bool isNegative();
-		
+		void setNegativity(bool);
 		void switchSide();
 };
 

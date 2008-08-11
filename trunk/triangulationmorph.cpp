@@ -216,16 +216,31 @@ void flip(Edge e)
      sameAs = listIntersection(&sameAs, f2.getLocalEdges());
      Edge eb2 = Triangulation::edgeTable[sameAs[0]];
      
-     double sum1 = angle(va1, f1) + angle(va1, f2);
-     double sum2 = angle(va2, f1) + angle(va2, f2);
-     if(sum1 > PI)
+     double ang1, ang2;
+     if(f1.isNegative() && !f2.isNegative()) 
+     {
+        ang1 = (-angle(va1, f1)) + angle(va1, f2);
+        ang2 = (-angle(va2, f1)) + angle(va2, f2);
+     } else if((!f1.isNegative()) && f2.isNegative())
+     {
+        ang1 = angle(va1, f1) - angle(va1, f2);
+        ang2 = angle(va2, f1) - angle(va2, f2);
+     } else
+     {
+        ang1 = angle(va1, f1) + angle(va1, f2);
+        ang2 = angle(va2, f1) + angle(va2, f2);   
+     }
+     if(ang1 > PI)
      {
          Triangulation::faceTable[f1.getIndex()].switchSide();
+         ang1 = 2 * PI - ang1;
      }
-     else if(sum2 > PI)
+     else if(ang2 > PI)
      {
-         Triangulation::faceTable[f2.getIndex()].switchSide();
-         
+         Triangulation::faceTable[f2.getIndex()].switchSide();   
+     } else if(ang1 <  0) 
+     {
+        ang1 = -ang1;
      }
      vector<Face> fa1, fb1, fa2, fb2;
      sameAs = listIntersection(f1.getLocalFaces(), ea1.getLocalFaces());
@@ -248,15 +263,6 @@ void flip(Edge e)
      {
         fb2.push_back(Triangulation::faceTable[sameAs[i]]);
      }
-     
-     double ang1;
-     
-     if(f1.isNegative() && !f2.isNegative())
-          ang1 = -angle(va1, f1) + angle(va1, f2);
-     else if(f2.isNegative() && !f1.isNegative())
-          ang1 = -angle(va1, f2) + angle(va1, f1);
-     else
-          ang1 = angle(va1, f1) + angle(va1, f2);
 
      
      //the next task is naturally to rearrange all the necessary references

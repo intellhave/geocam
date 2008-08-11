@@ -44,9 +44,11 @@ bool isDelaunay(Edge e)
 bool isWeightedDelaunay(Edge e)
 {
      if(e.isBorder())
-     return true;
+     {
+        return true;
+     }
      
-     return getDual(e) > -0.0001;
+     return getDual(e) > -0.00001;
 
 }
 
@@ -55,14 +57,11 @@ double getHeight(Face f, Edge e)
      Vertex v1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
      Vertex v2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
      
-     cout << "weight 1: " << v1.getWeight() << endl;
-     cout << "weight 2: " << v2.getWeight() << endl;
-     
      vector<int> diff;
      diff = listDifference(f.getLocalVertices(), e.getLocalVertices());
      Vertex v3 = Triangulation::vertexTable[diff[0]];
      
-     cout << "length: " << e.getLength() << endl;
+     
 
      vector<int> sameAs;
      sameAs = listIntersection(v1.getLocalEdges(), v3.getLocalEdges());
@@ -73,8 +72,6 @@ double getHeight(Face f, Edge e)
      Edge ea2 = Triangulation::edgeTable[sameAs[0]];
 
      double ang1 = angle(v1, f);
-     cout << "angle: " << ang1 << endl;
-     cout << "ea2: " << ea2.getLength() << endl;
      
      double d13 = (pow(ea1.getLength(), 2) + pow(v1.getWeight(), 2) - pow(v3.getWeight(), 2)) / (2 * ea1.getLength());
      double d12 = (pow(e.getLength(), 2) + pow(v1.getWeight(), 2) - pow(v2.getWeight(), 2)) / (2 * e.getLength());
@@ -96,29 +93,29 @@ double getDual(Edge e)
      double h1 = getHeight(f1, e);
      double h2 = getHeight(f2, e);
      
-     cout << "Edge #" << e.getIndex() << endl;
-     cout << "Face 1: (";
-     cout << (*(f1.getLocalVertices()))[0] << ", ";
-     cout << (*(f1.getLocalVertices()))[1] << ", ";
-     cout << (*(f1.getLocalVertices()))[2] << ") ";
-     cout << f1.isNegative() << endl;
-     cout << "Face 2: (";
-     cout << (*(f2.getLocalVertices()))[0] << ", ";
-     cout << (*(f2.getLocalVertices()))[1] << ", ";
-     cout << (*(f2.getLocalVertices()))[2] << ") ";
-     cout << f2.isNegative() << endl;
-     cout << "Height 1: " << h1 << endl;
-     cout << "Height 2: " << h2 << endl;
-     cout << "Dual: ";
+//     cout << "Edge #" << e.getIndex() << endl;
+//     cout << "Face 1: (";
+//     cout << (*(f1.getLocalVertices()))[0] << ", ";
+//     cout << (*(f1.getLocalVertices()))[1] << ", ";
+//     cout << (*(f1.getLocalVertices()))[2] << ") ";
+//     cout << f1.isNegative() << endl;
+//     cout << "Face 2: (";
+//     cout << (*(f2.getLocalVertices()))[0] << ", ";
+//     cout << (*(f2.getLocalVertices()))[1] << ", ";
+//     cout << (*(f2.getLocalVertices()))[2] << ") ";
+//     cout << f2.isNegative() << endl;
+//     cout << "Height 1: " << h1 << endl;
+//     cout << "Height 2: " << h2 << endl;
+//     cout << "Dual: ";
 
      if(f1.isNegative() || f2.isNegative())
      {
-          cout << -(h1 + h2) << endl;
+        //  cout << -(h1 + h2) << endl;
           return -(h1 + h2);
      }
      else
      {
-          cout << (h1 + h2) << endl;
+       //   cout << (h1 + h2) << endl;
           return h1 + h2;
      }
 }

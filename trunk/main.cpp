@@ -183,28 +183,33 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
 
-    generateTriangulation(30);
-    generateWeights();
+    generateTriangulation(50);
+//    firstTriangle(2, sqrt(10), sqrt(2));
+//    try{
+//    addTriangle(Triangulation::edgeTable[1], sqrt(8.84), sqrt(1.64));
+//    }catch(string s1) {
+//                  cout << s1 << "\n";
+//                  system("PAUSE");
+//    }
+//    try{
+//        addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
+//        }catch(string s1) {
+//                  cout << s1 << "\n";
+//                  system("PAUSE");
+//    }
 
+   generateWeights();
+   weightedFlipAlgorithm();
 
-    TriangulationCoordinateSystem tcs;
-    tcs.generatePlane();
-    for(int i = 0; i < Triangulation::vertexTable.size() / 4; i++)
-
-    tcs.printToFile("Triangulations/flips/Step 0.txt");
-    writeTriangulationFile("Triangulations/flips/Figure 0.txt");
+//    TriangulationCoordinateSystem tcs;
+//    tcs.generatePlane();
     
+//    tcs.printToFile("Triangulations/ODE Result.txt");
+//    flip(Triangulation::edgeTable[1]);
+//    tcs.update();
+//    tcs.printToFile("Triangulations/ODE Result 2.txt");
+//    cout << isWeightedDelaunay(Triangulation::edgeTable[3]) << "\n";
     
-    
-    
-    
-    
-    for(int i = 0; i < Triangulation::vertexTable.size(); i++)
-    {
-       tcs.addDuals(Triangulation::vertexTable[i+1]);
-    }
-    tcs.printDuals("Triangulations/duals.txt");
-    tcs.printToFile("Triangulations/ODE Result.txt");
     system("PAUSE");
     return 0;
 }

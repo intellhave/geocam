@@ -27,7 +27,10 @@ void Face::switchSide()
 {
      negative = !negative;
 }
-
+void Face::setNegativity(bool negativity)
+{
+     negative = negativity;
+}
 bool Face::isNegative()
 {
      return negative;
