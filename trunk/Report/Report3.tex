@@ -84,29 +84,27 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \noindent When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces.\newline
 
+\begin{figure}
+\begin{center}
+\includegraphics[scale = 0.30, angle = 90]{Pictures/triangulationUML.png}
+\end{center}
+\caption{A UML diagram of the program. The UML shows how the various files interact as well as the functions and variables they hold. We will refer to many of these programs later on.}
+\label{triUML}
+\end{figure}
+
 \noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. \newline
 
 
 \section{Delaunay triangulations}
 \label{DT}
-\begin{itemize}
-\item Definition of Delaunay triangulation
-\item Plane generation algorithm with necessary equations
-\item Math, flips, duals, negative triangles, equations, oh my!
-\item Verifications, duals
-\end{itemize}
 
 \subsection{Definitions}
-<<<<<<< .mine
-\noindent One special type of triangulation is known as a \textit{Delaunay Triangulation}, which we define as a set of faces on a plane such that the orthocircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, the orthocircle about the face is made to intersect all three vertices, and thus is the circumcircle. In a weighted Delaunay case, the orthocircle surrounding a face remains orthogonal to the circle at each vertex. Delaunay triangulations also have particular interest in the fields of Computer Science and Physics.\newline
-=======
->>>>>>> .r456
 
 \noindent One special type of triangulation is known as a \textit{Delaunay triangulation}, of which there are two different types. The first type is in the case of non-weighted triangulations, which we simply call ``Delaunay'', while the second type is reserved for weighted triangulations, which we refer to as ``weighted Delaunay''. Before we can define what it means for a triangulation to be Delaunay or weighted Delaunay in a global sense, we must define what it means for a triangulation to have either of these conditions in a local sense, and in order to do that, we must consider a single hinge.\newline
 
 \noindent To determine if a hinge is Delaunay, we must consider the orthocirle of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges \newline
 
-\noindent The condition of a hinge being weighted Delaunay is somewhat different. As stated before the dual of a hinge is found by connecting the centers of the two orthocircles. In the case of a weighted triangulation, a hinge is weighted Delaunay when the dual has positive length. 
+\noindent The condition of a hinge being weighted Delaunay is somewhat different. As stated before the dual of a hinge is found by connecting the centers of the two orthocircles. In the case of a weighted triangulation, a hinge is weighted Delaunay when the dual has positive length. \newline
 
 \begin{figure}
 \centering
@@ -125,12 +123,12 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \centering
 \includegraphics[scale = 0.45]{Pictures/gentri.png}
 \includegraphics[scale = 0.45]{Pictures/gentri6.png}
-\caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right).}
+\caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right). The early version wound up spiraling around itself, increasing edge lengths as it went. Our newer version keeps edge lengths more }
 \end{figure}
 
 \noindent We can generate weights at random by restricting their maximum size with respect to the shortest edge length in the triangulation, so as not to make weights too large. We can also assign weights to individual vertices such that others remain unweighted. \newline
 
-\noindent In order for a triangulation that we have created to be Delaunay, we must be able to guarantee that all orthocircles behave as they should. However, in our gereration, we can create triangles in which the largest side length is barely smaller than the sum of the other two sides, or ``skinny triangles.'' We find that the orthocircles related to these triangles have a large tendency to make the triangulation not Delaunay. To remedy this issue, we aim to perform manipulations known as \textit{flips}. Also known as \textit{bistellar moves}, these slight alterations aim to make the triangulation Delaunay. \newline
+\noindent In order for a triangulation that we have created to be Delaunay, we must be able to guarantee that all orthocircles behave as they should. However, in our gereration, we can create triangles that can make the end result hard to obtain. At times, we create triangles in which the largest side length is barely smaller than the sum of the other two sides, or ``skinny triangles.'' We find that the orthocircles related to these triangles have a large tendency to make the triangulation not Delaunay as the orthocircle is very large with respect to the dimensions of the triangle, and thus they like to contain other vertices. To remedy this issue, we aim to perform manipulations known as \textit{flips}. Also known as \textit{bistellar moves}, these slight alterations aim to make the triangulation Delaunay. \newline
 
 \noindent In particular, we will focus on one flip known as the 2-2 flip. In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. The code for the 2-2 flip is located in $\S\ref{calcFlowCode}$. We will discuss other flips in []. \newline
 
@@ -169,7 +167,7 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \label{Duals}
 \end{figure}
 
-\noindent We also observed a couple of interesting things from a statistical point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. This would lead to suggest that vertices try and form triangles with vertices close to itself, resulting in fewer skinny triangles. We also saw that the degrees of vertices tend to vary more after flips; more have a degree of 2, while others increase in degree. This indicates that the proximity of vertices to each other in its triangulation also has a great effect as well as the weights. See Figure~\ref{stats} for an example with a non-weighted case.\newline
+\noindent We also observed a couple of interesting things from a statistical point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. This would lead to suggest that vertices try and form triangles with vertices close to itself, resulting in fewer skinny triangles. We also saw that the degrees of vertices tend to vary more after flips; more have a degree of 2 or 3, while others increase in degree. This indicates that the proximity of vertices to each other in its triangulation also has a great effect as well as the weights. See Figure~\ref{stats} for an example with a non-weighted case.\newline
 \begin{table}
 \begin{center}
 \begin{tabular}{|rrr|rrr|}
@@ -203,12 +201,43 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting. \newline
 
+\subsection{Circle-packing}
+
+\noindent Looking back at our weighted Delaunay triangulations, we had the condition that the partial edge lengths were related by Eq.~\ref{eq1}. Let us take a subset of all possibile weight configurations and introduce a concept known as circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. Thus, we have the restrictions that $d_{ij} = d_{ik} = r_i, d_{ji} = d_{jk} = r_j,$ and $d_{ki} = d_{kj} = r_k$, ensuring that \ref{eq1} holds. For any lone triangle, this can be done. By applying weights to each vertex we determine the lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the The length of $\{i, j\}$. In Eulcidean space, the metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}.\newline
+
+\noindent From this point forward, we will use the terms ``weight'' and ``radius'' interchangably. Thus the weight is equal to the length of the radius and not its square.\newline
+
+\noindent Choosing to define the metric in this way, we guarantee the triangle inequality and ensure that we are creating triangles. It is also needed to run the combinatorial Ricci flow, explained in $\S\ref{ricciDef}$. But, there are restrictions to applying weights first. Not all combinations of edge lengths are possible under this system. Some triangulations can simply not be circle-packed. An example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing generalizations of circle-packings, as discussed in $\S\ref{circExt}$, we can broaden our range of possible length assignments.
+
+  
+\begin{figure}
+\includegraphics[scale = 0.3]{Pictures/righttriangulation.jpg}
+\includegraphics[scale = 0.5]{Pictures/badcase2.png}
+\caption{An example of circle packing (left) and a triangulation that cannot be circle-packed.}
+\label{rightTri}
+\end{figure}
+
 \subsection{Definitions and Equations}
+\label{ricciDef}
 We define a manifold to be a topological space where every neighborhood is locally Euclidean. This means that around any point in the space it appears similar to the sphere locally. What this means for our triangulated surfaces is that there are no borders. We also refer to this as a closed triangulation.\newline
 
 \noindent When talking about closed, triangulated surfaces an important characteristic is known the Euler characteristic $\chi$, defined by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
 
-\noindent Once we have a triangulation and it is circle packed, vertices can be too large or too small, and the resulting geometry can be somewhat intractable. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. We introduce combinatorial Ricci flow to the sytem. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We present the equation to the reader, which can be written as
+\begin{table}
+\begin{tabular}{lccccc}
+Name  &	Vertices, V &	Edges, E & Faces, F &	Genus, g & $\chi$\\
+\hline 
+Tetrahedron &	4 &	6 &	4 &	0 & 2\\
+Octahedron 	&	6 &	12 &	8 & 0 &	 2\\
+Icosahedron &	12 & 30 & 20 & 0	&	 2\\
+Torus & 9 & 27 & 18 &	1 & 0\\
+Two-holed torus & 10 & 36 & 24 &	2 & -2\\
+\end{tabular}
+\caption{Listings of vertices, edges, faces, and genus for some common shapes}
+\label{EuChar}
+\end{table}
+
+\noindent Once we have a triangulation and it is circle packed, our manifold may not be in its most compact form. We would like to have a way to determine the evolution of each shape to its final configuration, which may be more uniform. We introduce combinatorial Ricci flow to the sytem. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We present the equation to the reader, which can be written as
 
   \begin{equation}
   \label{Riccif}
@@ -586,7 +615,7 @@ $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of 
 
 When we began looking into these background geometries, we thought that it would be a good idea to run uniform tests on all three systems. We could observe whether or not each triangulation converges in the same fashion, or if it matters which geometry we choose. If we do discover that all systems behave the same way, we would then like to focus on one geometry, most likely Euclidean. However, since our equation for normalized spherical Ricci flow is not wholly confirmed as the best method, and as the hyperbolic flow may or may not already be normalized, we can not make any strong conclusions on the normalized flows. We did decide, however, to take a look at the behaviors on various manifolds by using the non-normalized equations, (\ref{Riccif}), (\ref{SRiccif}), and (\ref{HRiccif}). We will look at three triangulations, each of a different genus, without performing any morphs, and compare results between each system. \newline
 
-\noindent In terms of programming these new flows, we were able to adapt our calcFlow program into two new programs, sphericalCalcFlow and hyperbolicCalcFlow, to easily distinguish which background we were using. This way we could run the systems one at a time, or all at once and observe differences in their behaviors in cases with the same initial conditions. \newline
+\noindent In terms of programming these new flows, we were able to adapt our $calcFlow$ program into two new programs, $sphericalCalcFlow$ and $hyperbolicCalcFlow$, to easily distinguish which background we were using. This way we could run the systems one at a time, or all at once and observe differences in their behaviors in cases with the same initial conditions. \newline
 
 \noindent \textit{Example:} 12 vertex sphere, vertex transitive of degree 5\newline
 
@@ -687,8 +716,13 @@ since $ABCD$ is a quadrilateral. So $\angle BAC + \angle BDC = \pi$.\newline
 Hence the sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$. \qedhere
 \end{proof}
 
-  \subsection{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
-	\maketitle
+\begin{figure}
+\centering
+\includegraphics[scale = 0.5]{Pictures/geometry3.png}
+\caption{An illustration associated with our proof of Proposition 1.}
+\end{figure}
+
+\subsection{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
 
 The method used by Moreau in \cite{JPM} to solve a differential equation involves using a Runge-Kutta method. Prior to adapting the code from Moreau's website, we reached the conclusion that a Runge-Kutta format would be most beneficial for this type of differential equation problem. Even though it is more computationally complex than the simpler Euler's method, it makes up in its ability to converge and in its accuracy. According to $\cite{DiffEq}$ the error associated with using Runge-Kutta is on the order of $h^4$, whereas with a standard Euler approximation the error is simply of order $h$, with $h = dt$ being our step incremental.\newline
 
@@ -851,6 +885,5 @@ Alex Henniges is a junior double majoring in Math and Computer Science. Thomas W
 \item Thomas Williams-
 \item Mitch Wilson- mjw@email.arizona.edu
 \end{itemize}
-\noindent Project website: http://code.google.com/p/geocam
 
 \end{document}
