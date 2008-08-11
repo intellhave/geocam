@@ -2,6 +2,7 @@
 \usepackage[pdftex]{graphicx}
 \usepackage{multicol}
 \usepackage{html,makeidx}
+\usepackage{amsmath, amsthm}
 \title{Generating and applying triangulations to Delaunay surfaces and combinatorial Ricci flows}
 \pagestyle{plain}
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
@@ -62,7 +63,7 @@ d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2
 
 \noindent for any face $\{i, j, k\}$. Based on this condition, we are guaranteed that for every face $\{i, j, k\}$, the perpendiculars from each edge center meet at a single point, which is the center of the face $C(\{i, j, k\})$ as defined above\cite{Dave}.\newline
 
-\noindent There are two notable examples of choices of weights and their corresponding face centers. The first is when all of the weights are zero. In this case, a triangle center $C(\{i, j, k\})$ is the center of the circumcircle of $\{i, j, k\}$. The second is when the weights are equal to the local lengths for \textit{i}, or for all vertices \textit{j} and \textit{k} that are local to \textit{i}, we have $d_{ij} = d_{ik}$. This case is known as a \textit{circle packing} and will be used in the material discussed in $\oint\ref{RBk}$. In this case, a triangle center $C(\{i, j, k\})$ is the center of the incircle of $\{i, j, k\}$.
+\noindent There are two notable examples of choices of weights and their corresponding face centers. The first is when all of the weights are zero. In this case, a triangle center $C(\{i, j, k\})$ is the center of the circumcircle of $\{i, j, k\}$. The second is when the weights are equal to the local lengths for \textit{i}, or for all vertices \textit{j} and \textit{k} that are local to \textit{i}, we have $d_{ij} = d_{ik}$. This case is known as a \textit{circle packing} and will be used in the material discussed in $\S\ref{RBk}$. In this case, a triangle center $C(\{i, j, k\})$ is the center of the incircle of $\{i, j, k\}$.
 
 \noindent We will now make definitions for duals of our simplices. First, the dual of a face is simply its center $C(\{i, j, k\})$ as defined above. Now we will define a dual for a given edge. Let us refer to any edge, along with the faces of which it forms an intersection, as a \textit{hinge}. We are able to embed any hinge in the plane. Because of (\ref{eq1}), we know that on any hinge in the plane, the center of an edge along with the centers of its two local faces are colinear. The line connecting these three points is the dual for the given edge. We can determine the length of this dual if we can determine the length of the line segment connecting the center of an edge to the center of one of its local faces. On triangle $\{i, j, k\}$, we can write the distance between $C(\{i, j\})$ and $C(\{i, j, k\})$ as 
 
@@ -96,6 +97,10 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \end{itemize}
 
 \subsection{Definitions}
+<<<<<<< .mine
+\noindent One special type of triangulation is known as a \textit{Delaunay Triangulation}, which we define as a set of faces on a plane such that the orthocircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, the orthocircle about the face is made to intersect all three vertices, and thus is the circumcircle. In a weighted Delaunay case, the orthocircle surrounding a face remains orthogonal to the circle at each vertex. Delaunay triangulations also have particular interest in the fields of Computer Science and Physics.\newline
+=======
+>>>>>>> .r456
 
 \noindent One special type of triangulation is known as a \textit{Delaunay triangulation}, of which there are two different types. The first type is in the case of non-weighted triangulations, which we simply call ``Delaunay'', while the second type is reserved for weighted triangulations, which we refer to as ``weighted Delaunay''. Before we can define what it means for a triangulation to be Delaunay or weighted Delaunay in a global sense, we must define what it means for a triangulation to have either of these conditions in a local sense, and in order to do that, we must consider a single hinge.\newline
 
@@ -114,7 +119,7 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \noindent An important aspect to properly explore these triangulations is in their generation. We developed a program $generateTriangulation$ which can generate a determined number of faces with a random configuration. To truly test our algorithms and to provide convincing results would require an unbiased way of constructing the triangulations. There are several properties to triangulations that we wish to be randomized, and they include the lengths of each edge, the degree of each vertex, and the weight at each vertex. It is unclear if there is a way to provide a truly random generation of triangulations or even if such a system would be desirable, but we feel that the algorithm we chose adequately meets our goals.\newline
 
-\noindent Our random triangulation generator begins with one triangle with edge lengths between zero and ten. This was chosen arbitrarily as all future weights will be based off of these. Triangles are then created from each edge along the border. When the creation of an edge would result in a vertex's angles summing to greater than $2\pi$, we instead close off the vertex by connecting its two outer edges. Once the desired number of faces have been created, the algorithm ends. Section [] in the appendix shows several results of this algorithm.\newline
+\noindent Our random triangulation generator begins with one triangle with edge lengths between $0.0$ and $10.0$. This was chosen arbitrarily as all future weights will be based off of these. Triangles are then created from each edge along the border. When the creation of an edge would result in a vertex's angles summing to greater than $2\pi$, we instead close off the vertex by connecting its two outer edges. Once the desired number of faces have been created, the algorithm ends. Section [] in the appendix shows several results of this algorithm.\newline
 
 \begin{figure}
 \centering
@@ -125,9 +130,9 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \noindent We can generate weights at random by restricting their maximum size with respect to the shortest edge length in the triangulation, so as not to make weights too large. We can also assign weights to individual vertices such that others remain unweighted. \newline
 
-\noindent In order for a triangulation that we have created to be Delaunay, we must be able to guarantee that all orthocircles behave as they should. However, in our gereration, we can create triangles in which the largest side length is barely smaller than the sum of the other two sides, or ``skinny triangles.'' We find that the orthocircles related to these triangles have a large tendency to make the triangulation not Delaunay as they like to contain other vertices. To remedy this issue, we aim to perform manipulations known as \textit{flips}. Also known as \textit{bistellar moves}, these slight alterations aim to make the triangulation Delaunay. \newline
+\noindent In order for a triangulation that we have created to be Delaunay, we must be able to guarantee that all orthocircles behave as they should. However, in our gereration, we can create triangles in which the largest side length is barely smaller than the sum of the other two sides, or ``skinny triangles.'' We find that the orthocircles related to these triangles have a large tendency to make the triangulation not Delaunay. To remedy this issue, we aim to perform manipulations known as \textit{flips}. Also known as \textit{bistellar moves}, these slight alterations aim to make the triangulation Delaunay. \newline
 
-\noindent In particular, we will focus on one flip known as the 2-2 flip. In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. The code for the 2-2 flip is located in $\oint\ref{calcFlowCode}$. We will discuss other flips in []. \newline
+\noindent In particular, we will focus on one flip known as the 2-2 flip. In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. The code for the 2-2 flip is located in $\S\ref{calcFlowCode}$. We will discuss other flips in []. \newline
 
 \noindent We feel that if a triangulation if not Delaunay, we can perform a series of 2-2 flips on various surfaces until it results in a Delauany configuration. We do not change the vertices in any fashion or the number of triangles, only how they are connected to each other. \newline
 
@@ -140,7 +145,7 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \noindent One issue we noted was that certain flips would change our notion of triangles. Flips sometimes produced triangles where they did not exist before. We call these anti-triangles, or \textit{negative triangles}. See Figure~\ref{AntiTri}. We can check for cases when this may happen and adapt our flipping process as needed. \newline
 
-\noindent We know that anti-triangles are related to the dual lengths associated with the faces (See $\oint$2.3). If the center of a triangle is outisde the triangle itself, we say that the dual has a negative length. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. \newline
+\noindent We know that anti-triangles are related to the dual lengths associated with the faces (See $\S$2.3). If the center of a triangle is outisde the triangle itself, we say that the dual has a negative length. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. \newline
 
 \begin{figure}
 \centering
@@ -316,7 +321,7 @@ Vertex 9: &4.553 & 0.004906\\ \hline
 \label{tab:ricciSteps}
 \end{table}
 
-\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of total curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. The code for the $calcFlow$ function can be found in $\oint\ref{calcFlowCode}$.
+\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of total curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. The code for the $calcFlow$ function can be found in $\S\ref{calcFlowCode}$.
 
 \subsection{Initial testing and results}
 We have some expectations for combinatorial Ricci flow over two-dimensional Euclidean surfaces. Cases like the boundary of the tetrahedron can be calculated by hand so it will be useful to test our results against these surfaces. For example, we expect that the tetrahedron under (\ref{Riccif}) will have all weights converge to zero. Whereas under (\ref{Riccin}) the weights are expected to converge to positive constants.\newline
@@ -663,6 +668,25 @@ We had a lot of goals for this project. For one, we are the first group to work 
 $$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K_2 + \ldots + K_n}{n} = \overline{K}$$
 	which we refer to as Eq.~(\ref{proof1})
   
+\subsection{Proof of Proposition 1}
+The sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$.
+\begin{proof}
+Let $\Delta ABC$ and $\Delta BCD$ be triangles with common edge $\overline{BC}$. Let $r$ be the radius of the circumcircle of  $\Delta ABC$ and $E$ be the center of that circle. Then we wish to show that if $\overline{DE}$ is less than $r$, then $\angle BAC + \angle BDC > \pi$.\newline
+
+\noindent We know that $\overline{AB}=\overline{AE}=\overline{EC}=r$, so $\angle EBA = \angle BAE$ and $\angle EAC = \angle ACE$. Therefore, $\angle EBA + \angle ACE= \angle BAC$.\newline
+
+\noindent We first consider $\overline{DE}=r$. Then similar to above, $\angle EBD = \angle BDE$ and $\angle EDC = \angle DCE$, so $\angle EBD + \angle DCE= \angle BDC$. Thus, $\angle BAC + \angle EBA + \angle ACE + \angle BDC + \angle EBD + \angle DCE = 2\angle BAC + 2\angle BDC = 2\pi$
+since $ABCD$ is a quadrilateral. So $\angle BAC + \angle BDC = \pi$.\newline
+
+\noindent Now we suppose $\overline{DE}$ is less than $r$. So $\angle BDE > \angle EBD$ and $\angle DCE > \angle EDC$. Therefore we have
+
+\begin{align*}
+\angle BAC + \angle EBA + \angle ACE + \angle BDC + \angle EBD + \angle DCE = 2\pi \\
+\Rightarrow 2\angle BAC + 2\angle BDC > 2\pi \quad \Rightarrow \angle BAC + \angle BDC > \pi.
+\end{align*}
+Hence the sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$. \qedhere
+\end{proof}
+
   \subsection{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
 	\maketitle
 
