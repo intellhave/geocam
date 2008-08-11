@@ -21,7 +21,7 @@ Supervisor: Dr. David Glickenstein\\
 
 The purpose of this paper is to explore and entend upon the use of triangulaitions in Delaunay surfaces and combinatorial Ricci flow. These concepts will be addressed under an analytical structure by designing a system to represent the triangulations and provide meaningful data. A large collection of data has not yet been compiled on these concepts and our goal is for such data to solidify as well produce theories in this fairly unexplored area of mathematics. The program used for this purpose will be written in C++.\newline
 
-\noindent This paper will begin in $\oint\ref{Triangulationschap}$ with an introduction to triangulations and any related definitions. Also, it will explain how our program is structured to meet its function. We will then present our research on Delaunay surfaces. That will be followed by an explanation of combinatorial Ricci flow along with the results from our initial experiments. In $\oint\ref{HypSphere}$ we continue the exploration of Ricci flow under different geometries. Lastly, we will provide areas of future work on this subject.
+\noindent This paper will begin in $\S\ref{Triangulationschap}$ with an introduction to triangulations and any related definitions. Also, it will explain how our program is structured to meet its function. We will then present our research on Delaunay surfaces. That will be followed by an explanation of combinatorial Ricci flow along with the results from our initial experiments. In $\S\ref{HypSphere}$ we continue the exploration of Ricci flow under different geometries. Lastly, we will provide areas of future work on this subject.
 
 \section{Triangulations}
 \label{Triangulationschap}
@@ -196,7 +196,6 @@ Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio R
 \subsection{Definitions and Equations}
 We define a manifold to be a topological space where every neighborhood is locally Euclidean. This means that around any point in the space it appears similar to the sphere locally. What this means for our triangulated surfaces is that there are no borders. We also refer to this as a closed triangulation.\newline
 
-
 \noindent When talking about closed, triangulated surfaces an important characteristic is known the Euler characteristic $\chi$, defined by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
 
 \noindent Once we have a triangulation and it is circle packed, vertices can be too large or too small, and the resulting geometry can be somewhat intractable. We would like to have a way to determine the evolution of each shape to its final form, which may be more uniform. We introduce combinatorial Ricci flow to the sytem. On a discrete surface, this equation allows the weights to change over time \cite{chowluo}. We present the equation to the reader, which can be written as
@@ -329,6 +328,7 @@ We have some expectations for combinatorial Ricci flow over two-dimensional Eucl
 \end{enumerate}
 
 \subsubsection{First tests}
+\label{InitialResults}
 The program for the Ricci flow was tested by beginning with the simplest cases, and then explored with as many different possibilities as we could conceive of to try to find anomalies. The first test was the boundary of the tetrahedron. In the standard equation, it is easily shown that all weights approach zero exponentially fast. In the normalized equation, and the equation that is used in the rest of the testing, the tetrahedron's weights approach a single positive number, the fourth root of the \textit{product area} of the tetrahedron, so that the area remains constant. In addition, all the curvatures converged to the same value, in this case $\pi$, so that the total curvature is $4\pi$. Results were similar for the other platonic solids.\newline
 
 \noindent The next test was the torus with the standard nine-vertex triangulation. Again all the weights approached the same positive number to maintain constant area. As expected, the curvatures all went to zero while the total curvature remained zero throughout. Further simple tests included triangulations of larger genus, and in all cases the total curvature remained at a constant multiple of $\pi$ that was expected and the \textit{product area} was also constant. In addition, there does not appear to be any further effect from the initial weights other than determining the area of the triangulation. It is not clear from any of the tests we ran that having extremes amongst the initial weights causes a different end result.\newline
@@ -431,7 +431,7 @@ Vertex 7: 6.18421 \\
 
 \noindent \textit{Example}: Triangulation of genus 4.\newline
 
-\noindent While the previous two cases were quite interesting, there is some hesitation given that we were using double triangles and being less restrictive in what were allowable triangulations. But the theory behind why both situations reacted as they did left hope for a case that fit in a stricter setting. In the same sense that a two degree vertex could have a curvature no less than 0, a three degree vertex is bounded below by $-\pi$. It was observed that the vertices of a triangulation all converge to $\displaystyle\frac{2\pi\chi}{|V|}$ curvature. Now it was a matter of finding a triangulation with a large enough genus and few vertices. The first we found, provided by \cite{lutzmanifold}, was an 11 vertex triangulation with genus 4. To create a vertex with degree 3, we chose to add a new vertex to a face with a 1-3 flip. This made all curvatures try to converge to $-\pi$. We then expected that the new vertex would react as in the previous example. This was in fact the case, and it presents the question of whether or not there is a limit on the degree that can create such a singularity. The issue being that for higher genus, more vertices are required. Unfortunately, \cite{lutzmanifold} does not provide large enough triangulations for fourth degree vertices. A data plot of this similiar situation with a genus 6 triangulation is provided in $\oint\ref{dataplots}$. \newline
+\noindent While the previous two cases were quite interesting, there is some hesitation given that we were using double triangles and being less restrictive in what were allowable triangulations. But the theory behind why both situations reacted as they did left hope for a case that fit in a stricter setting. In the same sense that a two degree vertex could have a curvature no less than 0, a three degree vertex is bounded below by $-\pi$. It was observed that the vertices of a triangulation all converge to $\displaystyle\frac{2\pi\chi}{|V|}$ curvature. Now it was a matter of finding a triangulation with a large enough genus and few vertices. The first we found, provided by \cite{lutzmanifold}, was an 11 vertex triangulation with genus 4. To create a vertex with degree 3, we chose to add a new vertex to a face with a 1-3 flip. This made all curvatures try to converge to $-\pi$. We then expected that the new vertex would react as in the previous example. This was in fact the case, and it presents the question of whether or not there is a limit on the degree that can create such a singularity. The issue being that for higher genus, more vertices are required. Unfortunately, \cite{lutzmanifold} does not provide large enough triangulations for fourth degree vertices. A data plot of this similiar situation with a genus 6 triangulation is provided in $\S\ref{dataplots}$. \newline
 
 \noindent \textit{Example}: Two tetrahedra connected at a vertex. See Figure \ref{fig:tt}\newline
 
@@ -449,7 +449,7 @@ One experiment we performed was measuring convergence speeds of various triangul
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.79]{Pictures/ConvergenceTable.png}
+\includegraphics[scale = 0.7]{Pictures/ConvergenceTable.png}
 \caption{Summary of convergence data for varying criteria}
 \label{fig:conv}
 \end{figure}
@@ -532,7 +532,7 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 
 $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac{\pi(4 + F)}{3F}$$
 
-\noindent and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ The only downsides we found with this equation were that it was still possible for the system to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that with the $dt$ size given of $0.5$, it would take over 500 steps for the system to reach equilibrium, and this would be much longer with the $dt$ used in $\oint\ref{InitialResults}$.  
+\noindent and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ The only downsides we found with this equation were that it was still possible for the system to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that with the $dt$ size given of $0.5$, it would take over 500 steps for the system to reach equilibrium, and this would be much longer with the $dt$ used in $\S\ref{InitialResults}$.  
 
 \begin{figure}[ht]
 \centering
@@ -543,7 +543,7 @@ $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac
 
 \subsection{Hyperbolic flow}
 
-In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. A common way to visualize the hyperbolic plane can be seen in Fig.~\ref{PD}. This representation is often called the Poincar\'{e} disk, named after the same Poincar\'{e} as in $\oint$\ref{RBk}.\newline
+In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. A common way to visualize the hyperbolic plane can be seen in Fig.~\ref{PD}. This representation is often called the Poincar\'{e} disk, named after the same Poincar\'{e} as in $\S$\ref{RBk}.\newline
 
 \noindent There are several interesting properties with the hyperbolic plane. We now have that for a line $l$ and a point $P$ not on that line, there are an infinite number of lines throught $P$ that do not intersect $l$. In Euclidean geometry, such a line is unique. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. A more thorough explanation of hyperbolic geometry can be found in most college geometry textbooks.\newline
 
@@ -626,7 +626,7 @@ Triangulations exist outside of two dimensions and one future goal is to perform
 
 \section{Conclusion}
 
-We had a lot of goals for this project. For one, we are the first group to work with Dr. David Glickenstein and he has his own long-term goals. As the initial builders for these goals, we feel that we have laid a good foundation that can be easily built upon by future undergraduate students. We are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come. Another goal was to properly implement Ricci flow for 2-dimensional manifolds. While there are a number of extensions that still need to be implemented, we are pleased that the flow is functional and providing useful data. Our jump to weighted Delaunay triangulations enabled us to make our code more adaptable, as well as be able to generate our own systems with desired properties. We also feel we have learned an enormous amount over the course of only a few weeks. At the beginning, we all had varying familiarities with college geometry; some of us had not had a course in geometry since high school. Lastly, the experience from writing a research report will undoubtedly help us in our future endeavors. We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the National Science Foundation VIGRE $\#\_\_\_\_\_\_\_$.
+We had a lot of goals for this project. For one, we are the first group to work with Dr. David Glickenstein and he has his own long-term goals. As the initial builders for these goals, we feel that we have laid a good foundation that can be easily built upon by future undergraduate students. We are excited to see where Dr. Glickenstein's project is headed and we hope to remain a part of it in the months and years to come. Another goal was to properly implement Ricci flow for 2-dimensional manifolds. While there are a number of extensions that still need to be implemented, we are pleased that the flow is functional and providing useful data. Our jump to weighted Delaunay triangulations enabled us to make our code more adaptable, as well as be able to generate our own systems with desired properties. We also feel we have learned an enormous amount over the course of only a few weeks. At the beginning, we all had varying familiarities with college geometry; some of us had not had a course in geometry since high school. Lastly, the experience from writing a research report will undoubtedly help us in our future endeavors. We would like to thank Dr. David Glickenstein for having us on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the National Science Foundation VIGRE $\#$0602173.
 
 \newpage
 \bibliography{Test1}  
@@ -685,8 +685,8 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = 0.8]{Pictures/Curvg6v12addv.png}
-\includegraphics[scale = 0.8]{Pictures/Weightg6v12addv.png}
+\includegraphics[scale = 0.7]{Pictures/Curvg6v12addv.png}
+\includegraphics[scale = 0.7]{Pictures/Weightg6v12addv.png}
 \caption{An example of adding a vertex to a genus 6 surface. One of the curvatures in unable to drop below $-\pi$, and as a result, its weight is pushed to almost zero. Other vertices group together to compensate for this behavior.}
 \end{center}
 \end{figure}
@@ -694,7 +694,7 @@ The method used by Moreau in \cite{JPM} to solve a differential equation involve
 %\newpage
 \subsection{Code Examples}
 
-\noindent Code from the program can be found here: \htmladdnormallink{http://code.google.com/p/geocam}.\newline
+\noindent Code from the program can be found here: http://code.google.com/p/geocam. \newline
 
 \begin{figure}
 \begin{center}
