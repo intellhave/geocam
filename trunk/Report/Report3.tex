@@ -75,7 +75,9 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \subsection{Bistellar moves}
 
-\noindent On a given triangulation, we are able to perform different modifcations, which we will refer to as \textit{bistellar moves} or \textit{flips}. The are three possible bistellar moves that can be performed on a 2-dimensional triangulation: a 1-3 move, a 2-2 move, and a 3-1 move. One way to understand these moves, and where the term \textit{flip} comes from, is to imagine holding in your hand a tetrahedron. You can look at this tetrahedron three different way, at a face, at an edge, or at a vertex. If you were to ``flip over'' this object, you would see
+\noindent On a given triangulation, we are able to perform different modifcations, which we will refer to as \textit{bistellar moves} or \textit{flips}. The are three possible bistellar moves that can be performed on a 2-dimensional triangulation: a 1-3 move, a 2-2 move, and a 3-1 move. One way to understand these moves, and where the term \textit{flip} comes from, is to imagine holding in your hand a tetrahedron. You can look at this tetrahedron three different ways, at a face, at an edge, or at a vertex, and see a different image, as it would be embedded in the plane. If you were to ``flip over'' this object, you would see the reverse image which would describe the 2-dimensional image resulting from what we call a \textit{flip}. The image of a face would be replaced by the image of a face with an additional vertex in the middle of it. The image of an edge, a hinge as it were, would be replaced by the image of itself rotated $90^\circ$. The image of a vertex, as seen within a face, would be replaced with just a face. These moves respectively describe the 1-3, 2-2, and 3-1 moves.\newline
+
+\noindent We will now describe these moves in terms of a triangulation. For a 1-3 move, we take a single face and place a vertex in the middle of it. We then add three edges connecting this vertex to the existing vertices of the face. For a 2-2 move, we look at hinge. The move consists of removing the edge that describes the hinge and replacing it with an edge that connects the opposite two vertices of the hinge. For a 3-1 move, what is essentially the inverse of the 1-3 move, we look at a vertex of degree three in addition to the face defined by the three vertices it is connected to. We then remove this vertex along with the three edges local to it and we are left with just a single face.
 
 \subsection{Programming Structure}
 
@@ -93,10 +95,11 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \item Verifications, duals
 \end{itemize}
 
-
 \subsection{Definitions}
-\noindent One special type of triangulation is known as a \textit{Delaunay Triangulation}, which we define as a set of faces on a plane such that the orthocircle defined by the three vertices of any given face do not enclose any other vertices. See Fig.~\ref{genTri} for an example with only a few faces. There are two main Delaunay cases, weighted and non-weighted. In non-weighted, the orthocircle about the face is made to intersect all three vertices, and thus is the circumcircle. In a weighted Delaunay case, the orthocircle surrounding a face remains orthogonal to the radius of the circle of each vertex. Delaunay triangulations have particular interest in the fields of Computer Science and Physics.\newline
 
+\noindent One special type of triangulation is known as a \textit{Delaunay triangulation}, of which there are two different types. The first type is in the case of non-weighted triangulations, which we simply call ``Delaunay'', while the second type is reserved for weighted triangulations, which we refer to as ``weighted Delaunay''. Before we can define what it means for a triangulation to be Delaunay or weighted Delaunay in a global sense, we must define what it means for a triangulation to have either of these conditions in a local sense, and in order to do that, we must consider a single hinge.\newline
+
+\noindent To determine if a hinge is Delaunay, we must consider the orthocirle of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay.\newline
 
 \begin{figure}
 \centering

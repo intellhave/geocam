@@ -103,7 +103,7 @@ nn = unique(res)
 total
 for i = min(nn):max(nn)
         fprintf('number of %G''s is: ', i);
-        if i >= -3 && i <= 3
+        if i >= -3 && i <= 4
             if i == -3
                 fprintf('%G \n', resdatn3)
             end
