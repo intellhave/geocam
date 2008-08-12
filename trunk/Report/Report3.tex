@@ -46,6 +46,22 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 
 \noindent In order to describe our surfaces we must make a definition for each individual simplex. For our data structure, we decided on creating a list of references for each simplex to give it definition within the triangulation. These lists of references for each simplex are refences to other simplices in the triangulation with the property of being local. We define the term ``local'' slightly different for each simplex. To begin with, we say that an edge is defined by two vertices and a face is defined by three vertices and three edges. Then, we can say that a vertex is local to any edge that it is in the definition of and any face that it is in the definition of, as well as any vertex that it shares an edge in common with. We say that a vertex has a \textit{degree} equal to the number of its local edge. An edge is local to any vertex that it is defined by and any face that it is in the definition of, as well as any edge that it shares a vertex in common with. A face is local to any vertex it is defined by, any edge that it is defined by, and any face that it shares an edge in common with. These are the definitions for locality of simplices that we decided upon, creating three different lists for each simplex. \newline
 
+  \begin{table}%[ht]
+  \begin{center}
+  \begin{tabular}{|c|c|c|}
+  \hline
+  Vertices & Edges & Faces\\
+  \hline
+  adjacent vertices & component vertices & component vertices\\
+  constructed edges & adjacent edges & component edges\\
+  constructed faces & construced faces & adjacent faces\\
+  \hline
+  \end{tabular}
+  \end{center}
+  \caption{A layout of how data is organized}
+  \label{geomat}
+  \end{table}
+
 \noindent As well as lists of references to other simplices, each simplex also has other information needed to form a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge $\{i, j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $r_i$. We think of the weight of a given vertex to be the radius of a circle centered at that vertex. We are then able to state that for any $\textit{n}$-dimensional simplex, there exists an $(n-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex\cite{Dave}. We use this sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle $\{i, j, k\}$ has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex, also known as the orthocircle. Additionally, each edge also has a center defined by the weights and the length of the edge. \newline
 
 \noindent Based on these centers, we are able to define the \textit{local lengths} of an edge, as well as the \textit{dual} of a given simplex, a concept that will become more important later on. For an edge $\{i, j\}$, it is true that 
@@ -94,7 +110,7 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \subsection{Programming Structure}
 
-\noindent When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure \ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces.\newline
+\noindent When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure~\ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces.\newline
 
 \begin{figure}
 \begin{center}
@@ -106,22 +122,53 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. See Table~\ref{geomat} for an illustration of our triangulation setup.\newline
 
-  \begin{table}%[ht]
-  \begin{center}
-  \begin{tabular}{|c|c|c|}
-  \hline
-  Vertices & Edges & Faces\\
-  \hline
-  adjacent vertices & component vertices & component vertices\\
-  constructed edges & adjacent edges & component edges\\
-  constructed faces & construced faces & adjacent faces\\
-  \hline
-  \end{tabular}
-  \end{center}
-  \caption{A layout of how data is organized}
-  \label{geomat}
-  \end{table}
+\noindent In order to build the triangulations that we need for our tests, we decided upon a format that could be entered into a file and then read by our program. This format can be seen in Table~\ref{tab:format}. While this format works fine and we can create some basic triangulations by hand, it is not easy for creating a wide array of triangulations.\newline
 
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+ Vertex: 1 &    Edge: 1 &    Face: 1 \\ \hline 
+
+     2 3 4 &        1 2 &     1 2 3  \\
+
+    1 2 4  & 2 3 4 5 7  &     1 2 3  \\
+
+    1 2 3  &       1 2  &     2 3 4  \\ \hline 
+
+ Vertex: 2 &    Edge: 2 &    Face: 2 \\ \hline
+
+   1 3 4 5 &        1 3 &     1 2 4  \\
+
+  1 3 5 7  & 1 3 4 6 8  &     1 4 5  \\
+
+  1 2 4 5  &       1 3  &     1 3 5  \\ \hline 
+
+ 			\vdots & \vdots & \vdots \\ \hline 
+
+ Vertex: 5 &    Edge: 9 &    Face: 6 \\ \hline
+
+     2 3 4 &        4 5 &     3 4 5  \\
+
+    7 8 9  & 4 5 6 7 8  &     6 8 9  \\
+
+     4 5 6 &       5 6  &     3 4 5  \\
+\hline
+\end{tabular}
+\end{center}
+\caption{The format used to represent a triangulation in our program.}
+\label{tab:format}
+\end{table}
+
+\noindent Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a catalog of almost two million known manifold triangulations of varying sizes. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
+  
+\begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
+[2,3,5],[2,4,5],[3,4,5]]}
+\end{verbatim}
+ 
+\noindent which solely documents the faces, into our format. The result is shown in Table~\ref{tab:format}.\newline
+
+\noindent These functionalities of our code form the cornerstone for the rest of the program and have to be the most adaptable to future needs, both seen and unseen. Information on other important aspects, like caclculating angles, displaying triangulations, and useful objects like points and lines can again be found in Figure~\ref{triUML} or in later sections. 
 
 \section{Delaunay triangulations}
 \label{DT}
@@ -356,52 +403,6 @@ $$\sum{K_i} = 2\pi(V - \frac{F}{2}) = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + 
 \noindent This is known as normalized Ricci flow, as discussed by Chow and Luo in their paper \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ and thus $\displaystyle\frac{dr_i}{dt} = 0$ for $i = \{1,2,3,4\}$. 
 
 \subsection{Programming Ricci flow}
-
-\noindent While we are able to create our own triangulations from scratch, we noted an odd characteristic. The value of $\chi$ on our triangulations always equaled 1. However, for spheres and tori we know that $\chi = 2 - 2g,$ with $g$ being the number of ``holes.'' We noted that since our border edges contained unique vertices, we could not easily transform our triangulation into a common manifold.\newline
-
-\noindent Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a catalog of almost two million known manifold triangulations of varying sizes. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
-  
-\begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
-[2,3,5],[2,4,5],[3,4,5]]}
-\end{verbatim}
- 
-\noindent which solely documents the faces, into our format, which can be seen in Table~\ref{tab:format}.\newline
-
-\begin{table}
-\begin{center}
-\begin{tabular}{|l|l|l|}
-\hline
- Vertex: 1 &    Edge: 1 &    Face: 1 \\ \hline 
-
-     2 3 4 &        1 2 &     1 2 3  \\
-
-    1 2 4  & 2 3 4 5 7  &     1 2 3  \\
-
-    1 2 3  &       1 2  &     2 3 4  \\ \hline 
-
- Vertex: 2 &    Edge: 2 &    Face: 2 \\ \hline
-
-   1 3 4 5 &        1 3 &     1 2 4  \\
-
-  1 3 5 7  & 1 3 4 6 8  &     1 4 5  \\
-
-  1 2 4 5  &       1 3  &     1 3 5  \\ \hline 
-
- 			\vdots & \vdots & \vdots \\ \hline 
-
- Vertex: 5 &    Edge: 9 &    Face: 6 \\ \hline
-
-     2 3 4 &        4 5 &     3 4 5  \\
-
-    7 8 9  & 4 5 6 7 8  &     6 8 9  \\
-
-     4 5 6 &       5 6  &     3 4 5  \\
-\hline
-\end{tabular}
-\end{center}
-\caption{Conversion of format from \cite{lutzmanifold} to ours.}
-\label{tab:format}
-\end{table}  
 
 \noindent The function $calcFlow$ runs a combinatorial Ricci flow on a triangulation and records the data in a file. The algorithm for solving the ODE, provided by J-P Moreau, employs a Runge-Kutta method of order 4 \cite{JPM}. First, the file name for the data is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculate and record. Lastly, a boolean is provided, where $true$ indicates that the normalized differential equation, (\ref{Riccin}), should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Each step, with every vertex's weight and curvature at that step, is printed to the file. An example is shown in Table~\ref{tab:ricciSteps}.\newline
 
