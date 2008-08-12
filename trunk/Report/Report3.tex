@@ -133,7 +133,18 @@ Any non-Delaunay hinge will become Delaunay after a 2-2 flip is performed on it.
 
 \noindent One result of the variance in definition between Delaunay and weighted Delaunay is that a hinge that is nonconvex can also be not weighted Delaunay. This creates issues when one wishes to perform flips on hinges that are not weighted Delaunay. It is not entirely clear, at first, how one goes about performing a flip on a hinge that is nonconvex. The picture on the left in \ref{antitri} shows such a hinge before the flip is performed. The picture on the right shows the resulting image of a triangle with an ``anti-triangle'' lying over a portion of it. We consider this triangle to have negative area, its angle to have negative measure, and its half-duals to be of negative length.\newline
 
-\noindent There are a number of remarks to be made regarding negative triangles in our triangulations. First of all, we can give all of our triangles a score, based on their positive or negative orientation, of either 1 or -1. Using this, we can create a value for any point in the boundary of a given triangulation. Regardless of the number of flips performed, where, or how many negative triangles are created from them, if one were to pick any point within the pre-existing boundary, the value is guaranteed to be one. That is to say, for every negative triangle or set of negative triangles created, the is a positive or set of positive triangles created to completely cover them. Additionally, if there is a nonconvex hinge that lies on the border that is flipped
+\begin{figure}
+\label{antitri}
+\centering
+\includegraphics[scale = 0.4]{Pictures/antitri1.png}
+\includegraphics[scale = 0.4]{Pictures/antitri2.png}
+\caption{If flips are performed on nonconvex triangles, we create an anti-triangle, shaded here in red, and a larger regular triangle, shaded in blue.}
+\label{AntiTri}
+\end{figure}
+
+\noindent There are a number of remarks to be made regarding negative triangles in our triangulations. First of all, we can give all of our triangles a score, based on their positive or negative orientation, of either 1 or -1. Using this, we can create a value for any point in the boundary of a given triangulation. Regardless of the number of flips performed, where, or how many negative triangles are created from them, if one were to pick any point within the pre-existing boundary, the value is guaranteed to be one. That is to say, for every negative triangle or set of negative triangles created, the is a positive or set of positive triangles created to completely cover them. Additionally, if there is a nonconvex hinge that lies on the border that is flipped where the newly created edge lies outside of the origianl boundary, the value for every point in the area between this edge and the original boundary will remain 0. From this, we can conclude that the area of any triangulation is preserved under 2-2 flips.\newline
+
+\noindent One thing we would like to attempt to show is that any triangulation can be made Delaunay or weighte Delaunay under a series of 2-2 flips.\newline
 
 \begin{figure}
 \centering
@@ -142,8 +153,7 @@ Any non-Delaunay hinge will become Delaunay after a 2-2 flip is performed on it.
 \label{genTri}
 \end{figure}
 
-\noindent 
-
+\subsection{Programming Structure}
 \noindent We can produce a non-weighted Delaunay triangulation using mathematical software like MATLAB. However, less is known about weighted triangulations in general. For this project, we aim to develop an algorithm that can create a valid triangulation, add weights to vertices, and manipulate the faces to produce a Delaunay triangulation.\newline
 
 \noindent An important aspect to properly explore these triangulations is in their generation. We developed a program $generateTriangulation$ which can generate a determined number of faces with a random configuration. To truly test our algorithms and to provide convincing results would require an unbiased way of constructing the triangulations. There are several properties to triangulations that we wish to be randomized, and they include the lengths of each edge, the degree of each vertex, and the weight at each vertex. It is unclear if there is a way to provide a truly random generation of triangulations or even if such a system would be desirable, but we feel that the algorithm we chose adequately meets our goals.\newline
@@ -158,23 +168,6 @@ Any non-Delaunay hinge will become Delaunay after a 2-2 flip is performed on it.
 \end{figure}
 
 \noindent We can generate weights at random by restricting their maximum size with respect to the shortest edge length in the triangulation, so as not to make weights too large. We can also assign weights to individual vertices such that others remain unweighted. \newline
-
-\noindent In order for a triangulation that we have created to be Delaunay, we must be able to guarantee that all orthocircles behave as they should. However, in our gereration, we may create triangles that can make the end result hard to obtain. At times, we create triangles in which the largest side length is barely smaller than the sum of the other two sides, or ``skinny triangles.'' We find that the orthocircles related to these triangles have a large tendency to make the triangulation not Delaunay as the orthocircle is very large with respect to the dimensions of the triangle, and thus they like to contain other vertices. \newline
-
-\noindent We feel that if a triangulation if not Delaunay, we can perform a series of 2-2 flips on various surfaces until it results in a Delauany configuration. We do not change the vertices in any fashion or the number of triangles, only how they are connected to each other. \newline
-
-\noindent One issue we noted was that certain flips would change our notion of triangles. Flips sometimes produced triangles where they did not exist before. We call these anti-triangles, or \textit{negative triangles}. See Figure~\ref{AntiTri}. We can check for cases when this may happen and adapt our flipping process as needed. \newline
-
-\noindent The dual lengths of negative triangles are exactly opposite in length than of a congruent regular triangle. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. \newline
-
-\begin{figure}
-\label{antitri}
-\centering
-\includegraphics[scale = 0.4]{Pictures/antitri1.png}
-\includegraphics[scale = 0.4]{Pictures/antitri2.png}
-\caption{If flips are performed on nonconvex triangles, we create an anti-triangle, shaded here in red, and a larger regular triangle, shaded in blue.}
-\label{AntiTri}
-\end{figure}
 
 \noindent We created a program called $weightedFlipAlgorithm$ that scans each edge to see if it was Delaunay, and if not, we would perform a flip on the two faces of which the edge is connected. We would repeat the process until (hopefully) each face was Delaunay, and thus the whole triangulation was now Delaunay. Unfortunately, the process did not always end. \newline
 
