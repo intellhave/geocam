@@ -104,7 +104,23 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \label{triUML}
 \end{figure}
 
-\noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. \newline
+\noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. See Table~\ref{geomat} for an illustration of our triangulation setup.\newline
+
+  \begin{table}%[ht]
+  \begin{center}
+  \begin{tabular}{|c|c|c|}
+  \hline
+  Vertices & Edges & Faces\\
+  \hline
+  adjacent vertices & component vertices & component vertices\\
+  constructed edges & adjacent edges & component edges\\
+  constructed faces & construced faces & adjacent faces\\
+  \hline
+  \end{tabular}
+  \end{center}
+  \caption{A layout of how data is organized}
+  \label{geomat}
+  \end{table}
 
 
 \section{Delaunay triangulations}
@@ -227,7 +243,7 @@ Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio R
 
 \subsection{Circle-packing}
 
-\noindent Looking back at our weighted Delaunay triangulations, we had the condition that the partial edge lengths were related by Eq.~(\ref{eq1}). As mentioned in \S\ref{BaD}, let us take a subset of all possibile weight configurations and develop further the concept of circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. Thus, we have the restrictions that $d_{ij} = d_{ik} = r_i, d_{ji} = d_{jk} = r_j,$ and $d_{ki} = d_{kj} = r_k$, ensuring that \ref{eq1} holds. For any lone triangle, this can be done. By applying weights to each vertex we determine the lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the The length of $\{i, j\}$. In Eulcidean space, the metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}.\newline
+\noindent Looking back at our weighted Delaunay triangulations, we had the condition that the partial edge lengths were related by Eq.~(\ref{eq1}). As mentioned in \S\ref{BaD}, let us take a subset of all possibile weight configurations and develop further the concept of circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. Thus, we have the restrictions that $d_{ij} = d_{ik} = r_i, d_{ji} = d_{jk} = r_j,$ and $d_{ki} = d_{kj} = r_k$, ensuring that (\ref{eq1}) holds. For any lone triangle, this can be done. By applying weights to each vertex we determine the lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the The length of $\{i, j\}$. In Eulcidean space, the metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}.\newline
 
 \noindent Choosing to define the metric in this way, we guarantee the triangle inequality and ensure that we are creating triangles. It is also needed to run the combinatorial Ricci flow, explained in $\S\ref{ricciDef}$. But, there are restrictions to applying weights first. Not all combinations of edge lengths are possible under this system. Some triangulations can simply not be circle-packed. An example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing generalizations of circle-packings, as discussed in $\S\ref{circExt}$, we can broaden our range of possible length assignments.
 
@@ -520,9 +536,9 @@ Vertex 7: 6.18421 \\
 
 Another part of the code is a file strictly made up of functions used to manipulate and alter the triangulations being run. These functions, known within the code as \textit{morphs}, allow us to change the triangulation in different ways, geometric as well as topological, in order to provide us with different kinds of discrete manifolds over which to run our flow.\newline
 
-One such example of our morphs is the use of flips, as mentioned in \S\ref{BaD}. We can perform 1-3, 2-2, and 3-1 flips on given triangulations and observe how those alterations affect the end flow. Flips have the special property that they do not change the Euler characteristic of the surface they are performed upon. For example, in performing a 1-3 flip, we have a total of 3 new edges, 2 more faces, and 1 new vertex. The value of $\chi$ does not change as $(V+1) - (E+3) + (F+2) = V - E + F = \chi$. This means we could do any number of these flips without changing the topology of the surface.\newline
+\noindent One such example of our morphs is the use of flips, as mentioned in \S\ref{BaD}. We can perform 1-3, 2-2, and 3-1 flips on given triangulations and observe how those alterations affect the end flow. Flips have the special property that they do not change the Euler characteristic of the surface they are performed upon. For example, in performing a 1-3 flip, we have a total of 3 new edges, 2 more faces, and 1 new vertex. The value of $\chi$ does not change as $(V+1) - (E+3) + (F+2) = V - E + F = \chi$. This means we could do any number of these flips without changing the topology of the surface.\newline
 
-In addition, there are other ``morphs'' that can be performed to change the topology of a triangulation in order to give us some more diverse and interesting shapes over which to run these flows and observe their results. There are two such moves that we can perform.
+\noindent In addition, there are other ``morphs'' that can be performed to change the topology of a triangulation in order to give us some more diverse and interesting shapes over which to run these flows and observe their results. There are two such moves that we can perform.
 
 \begin{itemize}
 \item Adding Handles \newline
@@ -628,7 +644,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 
 $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi - \mbox{Surface Area of }X}{|V|}.$$
 
-\noindent This is known as the Gauss-Bonnet theorem and is noted in Chow and Luo's paper \cite{chowluo}. Since the surface area went to $4\pi$, then the average curvature went to zero. While we liked the end result of our triangulation trials, the system failed far too often to be reliable. 
+\noindent This is known as the Gauss-Bonnet theorem and is noted by Chow and Luo \cite{chowluo}. Since the surface area went to $4\pi$, then the average curvature went to zero. While we liked the end result of our triangulation trials, the system failed far too often to be reliable. 
 
 \item $\displaystyle \frac{dr_i}{dt} = (\hat{K} - K_i)r_i$ \newline
 \noindent Following the criteria we used to obtain our normalized Euclidean flow, we began experimenting and used the cases $\tilde{r_i} = \alpha r_i$ and $\prod{\alpha \sin r_i} = C$ to obtain a result similar to our original. We defined $\hat{K}$ as the the dot product of the curvatures and the cosines of the weights, divided by the number of vertices, or 
@@ -738,8 +754,8 @@ Delaunay surfaces and combinatorial Ricci flows can seem to be very separate con
 
 \subsection{Circle packing expansions}
 \label{circExt}
-Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of the angle of their intersection. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can exa
- questions asked by Chow and Luo in \cite{chowluo}.
+
+Circle packing is but a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of the angle of their intersection. See Figure \ref{fig:intcirc}. If we let $\Phi$ be constant, we can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.
 
 \begin{figure}
 \begin{center}
@@ -748,6 +764,9 @@ Circle packing is a very special way to characterize our side lengths. If we rel
 \caption{An example of relaxing circle packing and introducing $\Phi.$}
 \label{fig:intcirc}
 \end{figure}
+
+\subsection{Spherical and hyperbolic extensions}
+While we investigated various tests to compare the three combinatorial Ricci flows, we would like to investigate spherical and hyperbolic even further. Primarliy, we would like to determine if our normalized equation, Eq.(~\ref{SRicciN}) is in fact the true equation, and be able to prove it through computation, or determine a true normalized flow if it exists. Likewise, we would like to investigate the existence of a normalized hyperbolic flow that behaves like the Euclidean version. We would also like to implement a scaling notion per vertex in the spherical case so that the weights could increase without necessarily crashing the program. 
 
 \subsection{3-Dimensional triangulations}
 Triangulations exist outside of two dimensions and one future goal is to perform flows in a three dimensional setting. The flow in this case is known as Yamabe flow, discussed in \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the cone angles associated with tetrahedron vertices. The structure is in place from this project to accomplish this goal. To help the understanding of both the two and three dimensional triangulations, we would like to create a way to visualize them and explore the surfaces locally.\newline
