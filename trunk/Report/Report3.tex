@@ -3,6 +3,10 @@
 \usepackage{multicol}
 \usepackage{html,makeidx}
 \usepackage{amsmath, amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
 \title{Generating and applying triangulations to Delaunay surfaces and combinatorial Ricci flows}
 \pagestyle{plain}
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
@@ -111,11 +115,17 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \noindent One special type of triangulation is known as a \textit{Delaunay triangulation}, of which there are two different types. The first type is the case of non-weighted triangulations, which we simply call ``Delaunay'', while the second type is reserved for weighted triangulations, which we refer to as ``weighted Delaunay''. Before we can define what it means for a triangulation to be Delaunay or weighted Delaunay in a global sense, we must define what it means for a triangulation to have either of these conditions in a local sense, and in order to do that, we must consider a single hinge.\newline
 
-\noindent To determine if a hinge is Delaunay, we must consider the orthocirle of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than \pi, are Delaunay.\newline
+\noindent To determine if a hinge is Delaunay, we must consider the orthocirle of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.\newline
 
 \begin{proposition}
-Any non-Delaunay hinge will become Delaunay after a 2-2 flip is performed on it.
+\label{NonDelProp}
+The sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$.
 \end{proposition}
+
+\begin{corollary}
+\label{FlipProp}
+Any non-Delaunay hinge will become Delaunay after a 2-2 flip is performed on it.
+\end{corollary}
 
 \noindent This proof is given in \ref{prop1}. One thing that is important to note after the discovery of this property is what we refer to as the ``convergent case'', the case where the hinge forms a cyclic quadrilateral, one where all the vertices lie on the same circle. This occurs when the centers of the triangles, given by the centers of their orthocircles, lie on the same point. In such a case, the hinge is considered to be Delaunay, as well as its flipped image.\newline
 
@@ -650,7 +660,9 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 \frac{dr_i}{dt} = \overline{K}r_i - K_i\sin(r_i).
 \end{equation}
 
-\noindent In examining its behavior with various triangulations, we found that this one works very well. We're not completely sure why, but it does. We would like to be able to mathematically determine the effectiveness of this equation. We find that spheres converge to zero curvature and weights first group together and then approach optimal weights. See Figure~\ref{SphGood}. In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number, but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached or reached was equal to 
+\noindent The basing for this equation was applying (\ref{ref1}) to the standard Spherical equation and recognizing that the average curvature component should likely not be the sine of the weight, but just the product of the weight itself. Unfortunately, we have no proof that this equation is truly valid or that its design is backed in rigorous mathematics. However, in examining its behavior with various triangulations, we found that this one works very well. By this we mean that the results were consistently in a form that was expected or appeared to be reasonable, or otherwise acted similarly to that of the Euclidean normalized flow. We find that spheres converge to zero curvature and weights first group together and then approach optimal weights. See Figure~\ref{SphGood}.\newline
+
+\noindent In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependant on the number of vertices, and sometimes all the weights would be close to this number but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached or reached was equal to 
 
 $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac{\pi(4 + F)}{3F}$$
 
@@ -733,7 +745,8 @@ Delaunay surfaces and combinatorial Ricci flows can seem to be very separate con
 
 \subsection{Circle packing expansions}
 \label{circExt}
-Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of the angle of their intersection. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can examine questions asked by Chow and Luo in \cite{chowluo}.
+Circle packing is a very special way to characterize our side lengths. If we relax this criteria and let the circles overlap, we can introduce a second weight $\Phi$ that is representative of the angle of their intersection. See Figure \ref{fig:intcirc}. We can then evaluate our side lengths as $$l_{ij} = \sqrt{r_i^2 + r_j^2 + 2r_ir_j\cos(\Phi(e_{ij}))}$$ With this more general interpretation, we can exa
+ questions asked by Chow and Luo in \cite{chowluo}.
 
 \begin{figure}
 \begin{center}
@@ -784,7 +797,7 @@ There were many things we wanted to explore with triangulations, particularly to
 $$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K_2 + \ldots + K_n}{n} = \overline{K}$$
 	which we refer to as Eq.~(\ref{proof1})
   
-\subsection{Proof of Proposition 1}
+\subsection{Proof of Proposition \ref{NonDelProp}}
 The sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$.
 \begin{proof}
 \label{prop1}
