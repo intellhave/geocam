@@ -1,3 +1,14 @@
+%This program serves as an example of the program isInside.m which is in
+%this folder. A triangle is generated using random coordinates, and a mesh
+%of all possible points in the grid is run through the program. If a point
+%is inside the triangle, the resultant sum will be 2*pi, and less than that
+%if outside the triangle. 
+
+%The output is 2 graphs, one above the other. The first is a simple drawing
+%of the triangle, and the second is a surface plot of the resultant angle
+%sum for each point in the grid. This can be rotated to see how the region
+%inside the triangle is flat. 
+
 [X,Y] = meshgrid(-10:.2:10,-10:.2:10);
 Z = zeros(size(X));
 X1 = -10 + 20*rand();

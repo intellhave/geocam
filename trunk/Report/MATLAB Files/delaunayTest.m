@@ -3,16 +3,19 @@
 %Points may be randomly generated to explicitly set to draw the desired
 %figure. 
 
-%r = 5;
+%Generate coordinates from random or self-input. 
+r = 5;
 % X = normrnd(0,20,r,1);
 % Y = normrnd(0,20,r,1);
 %X = rand(r,1);
 %Y = rand(r,1);
 X = [0 0 1 1 .5];
 Y = [0 1 1 0 .5];
+
+%Using the function 'delaunay', create a triangulation using the given
+%points. The result is an Nx3 matrix of vertices. 
 TRI = delaunay(X,Y);
-r;
-k = size(TRI,1);
+
 for i = 1:size(TRI,1)
     v1 = TRI(i,1);
     v2 = TRI(i,2);

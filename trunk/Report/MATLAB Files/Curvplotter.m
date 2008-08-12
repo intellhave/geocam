@@ -1,35 +1,36 @@
+function Curvplotter(filename,index,steps)
+
 %This m-file generates plots for the curvatures and weights of a
-%triangulation over the number of iterations used in the calcFlow programs. 
+%triangulation over the number of iterations used in the calcFlow programs.
+%It takes three inputs, the first a filename read as a string, the second
+%an indicator whether the file is a text or Excel file (use 0 for text, 1
+%for Excel), and the last is the number of steps as run in calcFlow.  
 
 %The input file is generated using one of the calcFlow programs using the
 %printResultNum command. The listing is the weights of the vertices in one
 %column, and the curvatures in the second. All listings for The output is
 %in .txt format. MATLAB can read these results directly, but if we wished
 %to save these results for later reference, we can import them into an
-%Excel spreadsheet which MATLAB can also read in. 
+%Excel spreadsheet which MATLAB can also read in, or leave them as .txt
+%files. To date, Excel files are stored as the 2003 version. 
 
-%Use these lines for an output that is stored in Excel format. To date, they
-%are stored as the old Excel spreadsheets, up to 2003 version. 
 
-    %K = xlsread('c:\Dev-Cpp\geocam\Triangulations\ODE Result Sph False 9 Torus 1 Test');
-    %M = 1; %Default value. No need to change. 
+%Use these lines for an output that is stored in Excel format. 
 
 %Use these lines for an output that is in text format. 
+if index == 0
+    K = textread(filename);
+else if index == 1
+        K = xlsread(filename);
+    end
+end
 
-    K = textread('c:\Dev-Cpp\geocam\Triangulations\ODE Result.txt');
-    M = 0; %Default value. No need to change. 
-    
+M = index;
+S = steps;
+
 %other inputs:
 
 N = size(K,1);  % = number of lines in output
-
-%If number of vertices known, use this one
-    %V = 10;
-    %S = (N-(V-1))/V; % from Excel
-    %S = N/V; % from text
-
-%If number of steps in calcFlow known, plug it in directly. 
-    S = 1000; 
 
 %Figure out how many vertices
 i = 1;
@@ -82,40 +83,41 @@ ylabel('Curvature');
 
 % find max, min curvature for each step, plot, if desired
 
-% maxK = zeros(1,S);
-% minK = maxK;
-% for j = 1:S
-%     
-%     temp = zeros(1,k);
-%     for i = 1:k
-%         temp(i) = K((i-1)*(S+M) + j, 2);
-%     end
-% 
-% maxK(j) = max(temp);
-% minK(j) = min(temp);
-% end
-% 
-% plot(1:S,minK,'k','linewidth',2)
-% hold on;
-% plot(1:S,maxK,'k','linewidth',2)
+maxK = zeros(1,S);
+minK = maxK;
+for j = 1:S
+    
+    temp = zeros(1,k);
+    for i = 1:k
+        temp(i) = K((i-1)*(S+M) + j, 2);
+    end
+
+maxK(j) = max(temp);
+minK(j) = min(temp);
+end
+
+figure;
+plot(1:S,minK,'k','linewidth',2)
+hold on;
+plot(1:S,maxK,'k','linewidth',2)
 
 %plot average curvature, average weight, if desired
 
-% avgK = zeros(1,S);
-% avgW = zeros(1,S);
-% for j = 1:S
-%     sumK = 0;
-%     sumW = 0;
-%     for i = 1:k
-%         sumK = sumK + K((i-1)*(S+M) + j, 2);
-%         sumW = sumW + K((i-1)*(S+M) + j, 1);
-%     end
-%     avgK(j) = sumK/k;
-%     avgW(j) = sumW/k;
-% end
-% 
-% figure;
-% plot(1:S, avgK, 'ko', 'linewidth', 2);
-% hold on;
-% plot(1:S, avgW, 'r+', 'linewidth', 2);
+avgK = zeros(1,S);
+avgW = zeros(1,S);
+for j = 1:S
+    sumK = 0;
+    sumW = 0;
+    for i = 1:k
+        sumK = sumK + K((i-1)*(S+M) + j, 2);
+        sumW = sumW + K((i-1)*(S+M) + j, 1);
+    end
+    avgK(j) = sumK/k;
+    avgW(j) = sumW/k;
+end
+
+figure;
+plot(1:S, avgK, 'ko', 'linewidth', 2);
+hold on;
+plot(1:S, avgW, 'r+', 'linewidth', 2);
 

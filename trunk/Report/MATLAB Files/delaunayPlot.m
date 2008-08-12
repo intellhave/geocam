@@ -31,12 +31,13 @@ function delaunayPlot(fileName, color)
 K = textread(fileName);
 S = (size(K,1))/4;
 
+N = []; %Track list of negative triangles
+dnegs = 0; %Track number of intersecting negative triangles. 
+
 %Create a 'for' loop that plots each triangle, one at a time, by accessing
 %the coordinates per triangle and plotting them in a connect-the-dots
 %fashion. The 'hold on' line allows for multiple graphs to be placed on one
 %figure. 
-
-N = [];
 
 for i = 0:S-1
     
@@ -81,16 +82,22 @@ for i = 0:S-1
 % Not entering a time value will require you to press a key like spacebar
 % while on the figure to continue. Leaving this command out displays only
 % the end figure. If you need to quit the program while it is running, hold
-% Ctrl + C to cancel from the main console. 
+% Ctrl + C to cancel from the main console. This is useful when running a
+% single file, but not useful if running multiDelaunayPlot. 
 
-%pause(0.1);
+%pause(0.001);
 
 end
 
-
 %This section determines if any negative triangles overlap, and if so,
-%makes the interesection a different color. This uses the commands 'fill',
-%'polybool', and 'poly2cw' to use polybool. 
+%makes the interesection a different color. The 'poly2cw' command takes a
+%polygon (as defined by its coordinates) and rewrites the fiure in a
+%clockwise fashion. The 'polybool' command can determine if two polygons
+%share any regions of intersect, and store these coordinates. 'polybool'
+%requires that the polygons be oriented clockwise, and hence the 'poly2cw'
+%command is used prior. If there is an intersection, we change the color of
+%the region by using the 'fill' command. This tracks up to
+%two negative triangles overlapping. 
 
 if size(N,2) > 0
      for j = 1:size(N,2)-1
@@ -104,10 +111,53 @@ if size(N,2) > 0
                 [xc, yc] = polybool('and',X1,Y1,X2,Y2);
                 if size(xc,1) ~= 0;
                     fill(xc,yc,[204/255 0 0])
+                    dnegs = dnegs + 1;
                 end
            end
      end
 end
+
+%This section tries to see if any overlaps of negative triangles overlap
+%each other, indicating that more than two negative triangles inhabit a
+%specific region. We generate all the negative triangles again, rebuild
+%their overlaps, and then see if those overlaps overlap. We then color the
+%new intersection a third color, currently black. 
+
+if dnegs > 1
+    for j = 1:size(N,2)-1     
+           for m = j+1:size(N,2)
+                X1 = [K(N(j)*4 + 2,2) K(N(j)*4 + 3,2) K(N(j)*4 + 4,2) K(N(j)*4 + 2,2)];
+                Y1 = [K(N(j)*4 + 2,3) K(N(j)*4 + 3,3) K(N(j)*4 + 4,3) K(N(j)*4 + 2,3)];
+                X2 = [K(N(m)*4 + 2,2) K(N(m)*4 + 3,2) K(N(m)*4 + 4,2) K(N(m)*4 + 2,2)];
+                Y2 = [K(N(m)*4 + 2,3) K(N(m)*4 + 3,3) K(N(m)*4 + 4,3) K(N(m)*4 + 2,3)]; 
+                [X1,Y1] = poly2cw(X1,Y1);
+                [X2,Y2] = poly2cw(X2,Y2);
+                [xc, yc] = polybool('and',X1,Y1,X2,Y2);
+                if size(xc,1) ~= 0
+                    for k = 1:size(N,2)-1
+                        if k ~= j
+                            for l = k+1:size(N,2)
+                                if l ~= m
+                                    X3 = [K(N(k)*4 + 2,2) K(N(k)*4 + 3,2) K(N(k)*4 + 4,2) K(N(k)*4 + 2,2)];
+                                    Y3 = [K(N(k)*4 + 2,3) K(N(k)*4 + 3,3) K(N(k)*4 + 4,3) K(N(k)*4 + 2,3)];
+                                    X4 = [K(N(l)*4 + 2,2) K(N(l)*4 + 3,2) K(N(l)*4 + 4,2) K(N(l)*4 + 2,2)];
+                                    Y4 = [K(N(l)*4 + 2,3) K(N(l)*4 + 3,3) K(N(l)*4 + 4,3) K(N(l)*4 + 2,3)];
+                                    [X3,Y3] = poly2cw(X3,Y3);
+                                    [X4,Y4] = poly2cw(X4,Y4);
+                                    [xc2,yc2] = polybool('and',X3,Y3,X4,Y4);
+                                    [xd, yd] = polybool('and', xc, yc, xc2, yc2);
+                                    if size(xc2,1) ~= 0;
+                                        fill(xd,yd,'k');
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+           end
+     end    
+end
+
 end
 
 
