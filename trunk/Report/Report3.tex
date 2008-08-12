@@ -111,9 +111,19 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \noindent One special type of triangulation is known as a \textit{Delaunay triangulation}, of which there are two different types. The first type is the case of non-weighted triangulations, which we simply call ``Delaunay'', while the second type is reserved for weighted triangulations, which we refer to as ``weighted Delaunay''. Before we can define what it means for a triangulation to be Delaunay or weighted Delaunay in a global sense, we must define what it means for a triangulation to have either of these conditions in a local sense, and in order to do that, we must consider a single hinge.\newline
 
-\noindent To determine if a hinge is Delaunay, we must consider the orthocirle of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges \newline
+\noindent To determine if a hinge is Delaunay, we must consider the orthocirle of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than \pi, are Delaunay.\newline
 
-\noindent The condition of a hinge being weighted Delaunay is somewhat different. As stated before the dual of a hinge is found by connecting the centers of the two orthocircles. In the case of a weighted triangulation, a hinge is weighted Delaunay when the dual has positive length. \newline
+\begin{proposition}
+Any non-Delaunay hinge will become Delaunay after a 2-2 flip is performed on it.
+\end{proposition}
+
+\noindent This proof is given in \ref{prop1}. One thing that is important to note after the discovery of this property is what we refer to as the ``convergent case'', the case where the hinge forms a cyclic quadrilateral, one where all the vertices lie on the same circle. This occurs when the centers of the triangles, given by the centers of their orthocircles, lie on the same point. In such a case, the hinge is considered to be Delaunay, as well as its flipped image.\newline
+
+\noindent The condition of a hinge being weighted Delaunay is somewhat different. As stated before the dual of a hinge is found by connecting the centers of the two orthocircles. In the case of a weighted triangulation, a hinge is weighted Delaunay when the dual has positive length. Recall that the length from the center of an edge to the center of its local face, half of the length of a hinge's dual, is measured as negative if the center of the triangle lies outside of the triangle itself.\newline
+
+\noindent One result of the variance in definition between Delaunay and weighted Delaunay is that a hinge that is nonconvex can also be not weighted Delaunay. This creates issues when one wishes to perform flips on hinges that are not weighted Delaunay. It is not entirely clear, at first, how one goes about performing a flip on a hinge that is nonconvex. The picture on the left in \ref{antitri} shows such a hinge before the flip is performed. The picture on the right shows the resulting image of a triangle with an ``anti-triangle'' lying over a portion of it. We consider this triangle to have negative area, its angle to have negative measure, and its half-duals to be of negative length.\newline
+
+\noindent There are a number of remarks to be made regarding negative triangles in our triangulations. First of all, we can give all of our triangles a score, based on their positive or negative orientation, of either 1 or -1. Using this, we can create a value for any point in the boundary of a given triangulation. Regardless of the number of flips performed, where, or how many negative triangles are created from them, if one were to pick any point within the pre-existing boundary, the value is guaranteed to be one. That is to say, for every negative triangle or set of negative triangles created, the is a positive or set of positive triangles created to completely cover them. Additionally, if there is a nonconvex hinge that lies on the border that is flipped
 
 \begin{figure}
 \centering
@@ -121,6 +131,8 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \caption{A simple example of a Delaunay triangulation. The circumcircles are drawn along with the edges to show their compatability. This is a non-weighted case.}
 \label{genTri}
 \end{figure}
+
+\noindent 
 
 \noindent We can produce a non-weighted Delaunay triangulation using mathematical software like MATLAB. However, less is known about weighted triangulations in general. For this project, we aim to develop an algorithm that can create a valid triangulation, add weights to vertices, and manipulate the faces to produce a Delaunay triangulation.\newline
 
@@ -146,6 +158,7 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \noindent The dual lengths of negative triangles are exactly opposite in length than of a congruent regular triangle. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. \newline
 
 \begin{figure}
+\label{antitri}
 \centering
 \includegraphics[scale = 0.4]{Pictures/antitri1.png}
 \includegraphics[scale = 0.4]{Pictures/antitri2.png}
@@ -774,6 +787,7 @@ $$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K
 \subsection{Proof of Proposition 1}
 The sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$.
 \begin{proof}
+\label{prop1}
 Let $\Delta ABC$ and $\Delta BCD$ be triangles with common edge $\overline{BC}$. Let $r$ be the radius of the circumcircle of  $\Delta ABC$ and $E$ be the center of that circle. Then we wish to show that if $\overline{DE}$ is less than $r$, then $\angle BAC + \angle BDC > \pi$.\newline
 
 \noindent We know that $\overline{AB}=\overline{AE}=\overline{EC}=r$, so $\angle EBA = \angle BAE$ and $\angle EAC = \angle ACE$. Therefore, $\angle EBA + \angle ACE= \angle BAC$.\newline
