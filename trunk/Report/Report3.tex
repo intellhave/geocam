@@ -248,7 +248,19 @@ Any hinge that is not weighted Delaunay will become weighted Delaunay after a 2-
 \end{figure}
 
 \subsection{Results}
-\noindent Often times, we did find that triangulations were able to become Delaunay after a series of flips. As we added more faces, and increased weights by scalars, we noted that it was more likely for the algorithm to have issues. See Table~\ref{DAT}. In watching our $multiDelaunayPlot$ results, we found that certain edges would loop in a series of flips such that performing one flip would require the adjacent edge to need flipping. Occasionally, one edge would get stuck flipping back and forth between two faces. We also noted that final triangulations did permit the existence of negative triangles. Often they were found on the edge boundary and of little concern. We were able to check our results by drawing the dual edges on top of all the faces (Refer to our criteria in \S\ref{BaD} and \S\ref{DTD}. If all vertices had zero weight, then the duals are simply the perpendicular bisectors of each edge. See Figure~\ref{Duals}. \newline
+\noindent Often times, we did find that triangulations were able to become Delaunay after a series of flips. As we added more faces, and increased weights by scalars, we noted that it was more likely for the algorithm to have issues. See Table~\ref{DAT}. In watching our $multiDelaunayPlot$ results, we found that certain edges would loop in a series of flips such that performing one flip would require the adjacent edge to need flipping. Occasionally, one edge would get stuck flipping back and forth between two faces. We also noted that final triangulations did permit the existence of negative triangles. Often they were found on the edge boundary and of little concern. We were able to check our results by drawing the dual edges on top of all the faces (Refer to our criteria in \S\ref{BaD} and \S\ref{DTD}). If all vertices had zero weight, then the duals are simply the perpendicular bisectors of each edge. See Figure~\ref{Duals}. \newline
+
+\begin{figure}
+\includegraphics[scale = .45]{Pictures/triEx1.png}
+\includegraphics[scale = .45]{Pictures/triExD1.png}
+\includegraphics[scale = .45]{Pictures/triExD2.png}
+\includegraphics[scale = .45]{Pictures/triExD3.png}
+\includegraphics[scale = .45]{Pictures/triExD4.png}
+\includegraphics[scale = .45]{Pictures/triExD5.png}
+\caption{Evolution of our special triangulation. Edges that are flipped are shown in red. Negative triangles start off gray, with intersections a reddish brown. If multiple negative triangles intersect one region, we color it black.}
+\label{specialCase}
+\end{figure}
+
 
 \begin{figure}
 \centering
@@ -286,7 +298,7 @@ Any hinge that is not weighted Delaunay will become weighted Delaunay after a 2-
 \label{stats}
 \end{figure}
 
-\noindent In testing our code, there was one example that was used to examine a potential special case that may have occurred during the running of our algorithm. The special case, as shown in ... , is one where every convex hinge is weighted Delaunay and every nonconvex hinge is not. The results of running our algorithm on this triangulation were of great interest and helped us in further refining the algorithm. When we started, there were seven faces, all positive. When the flip algorithm concluded, we were left with four positive faces and three negative faces. All of the negative faces were paired with positive faces defined by the same three vertices. The remaining odd positive face was defined by the three original boundary edges. This meant that by ``flipping through'' all of the nonconvex hinges, we were left with three pairs of reversely oriented faces, what we also referred to as ``flaps'' or ``double triangles''.\newline
+\noindent In testing our code, there was one example that was used to examine a potential special case that may have occurred during the running of our algorithm. The special case, as shown in Figure~\ref{specialCase}, is one where every convex hinge is weighted Delaunay and every nonconvex hinge is not. The results of running our algorithm on this triangulation were of great interest and helped us in further refining the algorithm. When we started, there were seven faces, all positive. When the flip algorithm concluded, we were left with four positive faces and three negative faces. All of the negative faces were paired with positive faces defined by the same three vertices. The remaining odd positive face was defined by the three original boundary edges. This meant that by ``flipping through'' all of the nonconvex hinges, we were left with three pairs of reversely oriented faces, what we also referred to as ``flaps'' or ``double triangles''.\newline
  
 \noindent The hypothesis was that after any triangulation underwent the transformation of the flip algorithm there would remain only positive triangles or negative triangles that sat opposite of positive triangles lying in the exact same area. The algorithm was modified to simply remove these flaps as a last step to the flip algorithm. This process required removing all vertices that lied at the end of a flap, as well as the edges along these flaps. Finally, the two edges defined by the same two vertices from which these flaps were stemming would be joined into one.\newline
 
