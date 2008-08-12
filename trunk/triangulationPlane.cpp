@@ -420,7 +420,7 @@ void weightedFlipAlgorithm()
                     }
                     catch(string s1)
                     {
-                         cout << "#%#%#%#%#%#%#%#%#%#%#%#%%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%#%" << endl;
+                         cout << "####################################################################" << endl;
                          Edge e = eit->second;
                          Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
                          Face f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
@@ -465,20 +465,23 @@ void weightedFlipAlgorithm()
      cout << "Finished" << endl;
      cout << "Total num flips: " << count << "\n";
      
-     int doubleTriangles = 0;
+     vector<int> remverts;
      map<int, Vertex>::iterator vit;
      for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
      {
           Vertex v = vit->second;
           if(getAngleSum(v) < 0.0001 && v.getLocalFaces()->size() == 2)
           {
-               cout << "!" << endl;
-               removeDoubleTriangle(v);
-               doubleTriangles++;
+               remverts.push_back(vit->first);
           }
      }
      
-     if(doubleTriangles > 0)
+     for(int i = 0; i < remverts.size(); i++)
+     {
+          removeDoubleTriangle(Triangulation::vertexTable[remverts[i]]);
+     }
+     
+     if(remverts.size() > 0)
      {
           char s[100];     
           char s2[100];
@@ -488,7 +491,7 @@ void weightedFlipAlgorithm()
           tcs.update();
           tcs.printToFile(s);
           writeTriangulationFile(s2);
-          cout << doubleTriangles << " vertices removed" << endl;
+          cout << remverts.size() << " vertices removed" << endl;
      }
      
 }
@@ -597,6 +600,7 @@ void removeDoubleTriangle(Vertex vb)
           else
                Face fa1 = Triangulation::faceTable[(*(ea1.getLocalFaces()))[0]];
      }
+     
      if(!ea2.isBorder())
      {
           if((*(ea2.getLocalFaces()))[0] == f2.getIndex())
@@ -606,6 +610,7 @@ void removeDoubleTriangle(Vertex vb)
           
           Triangulation::edgeTable[ea1.getIndex()].addFace(fa2.getIndex());
           Triangulation::faceTable[fa2.getIndex()].addEdge(ea1.getIndex());
+          Triangulation::edgeTable[ea1.getIndex()].removeFace(f1.getIndex());
      }
      
      if(!(ea1.isBorder() || ea2.isBorder())) 
@@ -619,7 +624,8 @@ void removeDoubleTriangle(Vertex vb)
      Triangulation::eraseEdge(eb2.getIndex());
      Triangulation::eraseEdge(ea2.getIndex());
      Triangulation::eraseFace(f1.getIndex());
-     Triangulation::eraseFace(f2.getIndex());
+     Triangulation::eraseFace(f2.getIndex());     
+     
 }
 
 void writeYuliyaFile(char* fileName)

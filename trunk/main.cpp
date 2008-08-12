@@ -182,34 +182,18 @@ void testMiscMath()
 }
 int main(int argc, char *argv[])
 {
-
+    
     generateTriangulation(50);
-//    firstTriangle(2, sqrt(10), sqrt(2));
-//    try{
-//    addTriangle(Triangulation::edgeTable[1], sqrt(8.84), sqrt(1.64));
-//    }catch(string s1) {
-//                  cout << s1 << "\n";
-//                  system("PAUSE");
-//    }
-//    try{
-//        addTriangle(Triangulation::edgeTable[3], Triangulation::edgeTable[5]);
-//        }catch(string s1) {
-//                  cout << s1 << "\n";
-//                  system("PAUSE");
-//    }
-
-   generateWeights();
-   weightedFlipAlgorithm();
-
-//    TriangulationCoordinateSystem tcs;
-//    tcs.generatePlane();
-    
-//    tcs.printToFile("Triangulations/ODE Result.txt");
-//    flip(Triangulation::edgeTable[1]);
-//    tcs.update();
-//    tcs.printToFile("Triangulations/ODE Result 2.txt");
-//    cout << isWeightedDelaunay(Triangulation::edgeTable[3]) << "\n";
-    
+    generateWeights();
+//    makeSpecialCase();
+    TriangulationCoordinateSystem tcs;
+    tcs.generatePlane();
+    weightedFlipAlgorithm();
     system("PAUSE");
     return 0;
+    
+
 }
+
+
+
