@@ -27,7 +27,7 @@ The purpose of this paper is to explore and entend upon the use of triangulaitio
 \section{Triangulations}
 \label{Triangulationschap}
 
-Suppose you are asked to construct the surface of a sphere with as few pieces as possible. You could make a number of possible shapes, such as a cube or a soccer ball. While both of these shapes are discrete in nature, they can be used to approximate a round, continuous sphere. The most basic Euclidean approximation of the surface of a sphere is the boundary of a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us a surface that represents the surface of a sphere. Naturally, if we add more vertices, we are able to better illustrate our shapes through greater refinement. Similarly, in modern video games and Hollywood movies, various shapes are generated using polygons of many different sizes that mold to form a graphically rendered object. For these and all shapes, we will focus on building them solely out of triangles. Since any regular polygon can be broken up into triangles, we can essentially represent any surface using this method. \newline
+Suppose you are asked to construct the surface of a sphere with as few pieces as possible. You could make a number of possible shapes, such as a cube or a soccer ball. While both of these shapes are discrete in nature, they can be used to approximate a round, continuous sphere. The most basic Euclidean approximation of the surface of a sphere is the boundary of a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us a surface that represents the surface of a sphere. Naturally, if we add more vertices, we are able to better illustrate our shapes through greater refinement. Similarly, in modern video games and Hollywood movies, various shapes are generated using polygons of many different sizes that mold to form a graphically rendered object. For these and all shapes, we will focus on representing them solely out of triangles. Since any regular polygon can be broken up into triangles, we can essentially represent any surface using this method. \newline
 
 \begin{figure}
 \includegraphics[scale = 0.5]{Pictures/flattetrahedron.png}
@@ -36,6 +36,7 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 \end{figure}
 
 \subsection{Basics and Definitions}
+\label{BaD}
 
 \noindent For an \textit{n}-dimensional space, a triangulation, written $\tau = \{\tau_0, \tau_1, ... , \tau_n\}$, consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = \{i_0, ... , i_k\}$ \cite{Dave}. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, and 2-dimensional simplices as triangles or faces.\newline
 
@@ -63,7 +64,7 @@ d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2
 
 \noindent for any face $\{i, j, k\}$. Based on this condition, we are guaranteed that for every face $\{i, j, k\}$, the perpendiculars from each edge center meet at a single point, which is the center of the face $C(\{i, j, k\})$ as defined above\cite{Dave}.\newline
 
-\noindent There are two notable examples of choices of weights and their corresponding face centers. The first is when all of the weights are zero. In this case, a triangle center $C(\{i, j, k\})$ is the center of the circumcircle of $\{i, j, k\}$. The second is when the weights are equal to the local lengths for \textit{i}, or for all vertices \textit{j} and \textit{k} that are local to \textit{i}, we have $d_{ij} = d_{ik}$. This case is known as a \textit{circle packing} and will be used in the material discussed in $\S\ref{RBk}$. In this case, a triangle center $C(\{i, j, k\})$ is the center of the incircle of $\{i, j, k\}$.
+\noindent There are two notable examples of choices of weights and their corresponding face centers. The first is when all of the weights are zero. In this case, a triangle center $C(\{i, j, k\})$ is the center of the circumcircle of $\{i, j, k\}$. The second is when the weights are equal to the local lengths for \textit{i}, or for all vertices \textit{j} and \textit{k} that are local to \textit{i}, we have $d_{ij} = d_{ik}$. This case is known as a \textit{circle packing} and will be used in the material discussed in $\S\ref{RBk}$. In this case, a triangle center $C(\{i, j, k\})$ is the center of the incircle of $\{i, j, k\}$.\newline
 
 \noindent We will now make definitions for duals of our simplices. First, the dual of a face is simply its center $C(\{i, j, k\})$ as defined above. Now we will define a dual for a given edge. Let us refer to any edge, along with the faces of which it forms an intersection, as a \textit{hinge}. We are able to embed any hinge in the plane. Because of (\ref{eq1}), we know that on any hinge in the plane, the center of an edge along with the centers of its two local faces are colinear. The line connecting these three points is the dual for the given edge. We can determine the length of this dual if we can determine the length of the line segment connecting the center of an edge to the center of one of its local faces. On triangle $\{i, j, k\}$, we can write the distance between $C(\{i, j\})$ and $C(\{i, j, k\})$ as 
 
@@ -78,7 +79,14 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 
 \noindent On a given triangulation, we are able to perform different modifcations, which we will refer to as \textit{bistellar moves} or \textit{flips}. The are three possible bistellar moves that can be performed on a 2-dimensional triangulation: a 1-3 move, a 2-2 move, and a 3-1 move. One way to understand these moves, and where the term \textit{flip} comes from, is to imagine holding in your hand a tetrahedron. You can look at this tetrahedron three different ways, at a face, at an edge, or at a vertex, and see a different image, as it would be embedded in the plane. If you were to ``flip over'' this object, you would see the reverse image which would describe the 2-dimensional image resulting from what we call a \textit{flip}. The image of a face would be replaced by the image of a face with an additional vertex in the middle of it. The image of an edge, a hinge as it were, would be replaced by the image of itself rotated $90^\circ$. The image of a vertex, as seen within a face, would be replaced with just a face. These moves respectively describe the 1-3, 2-2, and 3-1 moves.\newline
 
-\noindent We will now describe these moves in terms of a triangulation. For a 1-3 move, we take a single face and place a vertex in the middle of it. We then add three edges connecting this vertex to the existing vertices of the face. For a 2-2 move, we look at hinge. The move consists of removing the edge that describes the hinge and replacing it with an edge that connects the opposite two vertices of the hinge. For a 3-1 move, what is essentially the inverse of the 1-3 move, we look at a vertex of degree three in addition to the face defined by the three vertices it is connected to. We then remove this vertex along with the three edges local to it and we are left with just a single face.
+\noindent We will now describe these moves in terms of a triangulation. For a 1-3 move, we take a single face and place a vertex in the middle of it. We then add three edges connecting this vertex to the existing vertices of the face. For a 2-2 move, we look at the hinge. The move consists of removing the edge that describes the hinge and replacing it with an edge that connects the opposite two vertices of the hinge. See Figure~\ref{fig:flip}. For a 3-1 move, what is essentially the inverse of the 1-3 move, we look at a vertex of degree three in addition to the face defined by the three vertices it is connected to. We then remove this vertex along with the three edges local to it and we are left with just a single face.
+
+\begin{figure}
+\centering
+\includegraphics[scale = 0.8]{Pictures/Flip.png}
+\caption{An example of a 2-2 flip.}
+\label{fig:flip}
+\end{figure}
 
 \subsection{Programming Structure}
 
@@ -99,6 +107,7 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \label{DT}
 
 \subsection{Definitions}
+\label{DTD}
 
 \noindent One special type of triangulation is known as a \textit{Delaunay triangulation}, of which there are two different types. The first type is the case of non-weighted triangulations, which we simply call ``Delaunay'', while the second type is reserved for weighted triangulations, which we refer to as ``weighted Delaunay''. Before we can define what it means for a triangulation to be Delaunay or weighted Delaunay in a global sense, we must define what it means for a triangulation to have either of these conditions in a local sense, and in order to do that, we must consider a single hinge.\newline
 
@@ -123,27 +132,18 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \centering
 \includegraphics[scale = 0.45]{Pictures/gentri.png}
 \includegraphics[scale = 0.45]{Pictures/gentri6.png}
-\caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right). The early version wound up spiraling around itself, increasing edge lengths as it went. Our newer version keeps edge lengths more }
+\caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right). The early version wound up spiraling around itself, increasing edge lengths as it went. Our newer version makes the edge lengths more random, with large and small triangles scattered throughout. }
 \end{figure}
 
 \noindent We can generate weights at random by restricting their maximum size with respect to the shortest edge length in the triangulation, so as not to make weights too large. We can also assign weights to individual vertices such that others remain unweighted. \newline
 
-\noindent In order for a triangulation that we have created to be Delaunay, we must be able to guarantee that all orthocircles behave as they should. However, in our gereration, we can create triangles that can make the end result hard to obtain. At times, we create triangles in which the largest side length is barely smaller than the sum of the other two sides, or ``skinny triangles.'' We find that the orthocircles related to these triangles have a large tendency to make the triangulation not Delaunay as the orthocircle is very large with respect to the dimensions of the triangle, and thus they like to contain other vertices. To remedy this issue, we aim to perform manipulations known as \textit{flips}. Also known as \textit{bistellar moves}, these slight alterations aim to make the triangulation Delaunay. \newline
-
-\noindent In particular, we will focus on one flip known as the 2-2 flip. In this flip, we take a pair of adjacent faces and readjust the edge that they share to connect the opposite pair of vertices, as shown in figure~\ref{fig:flip}. This move creates no new simplices and removes no existing vertices. The code for the 2-2 flip is located in $\S\ref{calcFlowCode}$. We will discuss other flips in []. \newline
+\noindent In order for a triangulation that we have created to be Delaunay, we must be able to guarantee that all orthocircles behave as they should. However, in our gereration, we may create triangles that can make the end result hard to obtain. At times, we create triangles in which the largest side length is barely smaller than the sum of the other two sides, or ``skinny triangles.'' We find that the orthocircles related to these triangles have a large tendency to make the triangulation not Delaunay as the orthocircle is very large with respect to the dimensions of the triangle, and thus they like to contain other vertices. \newline
 
 \noindent We feel that if a triangulation if not Delaunay, we can perform a series of 2-2 flips on various surfaces until it results in a Delauany configuration. We do not change the vertices in any fashion or the number of triangles, only how they are connected to each other. \newline
 
-\begin{figure}
-\centering
-\includegraphics[scale = 0.8]{Pictures/Flip.png}
-\caption{An example of a 2-2 flip.}
-\label{fig:flip}
-\end{figure}
-
 \noindent One issue we noted was that certain flips would change our notion of triangles. Flips sometimes produced triangles where they did not exist before. We call these anti-triangles, or \textit{negative triangles}. See Figure~\ref{AntiTri}. We can check for cases when this may happen and adapt our flipping process as needed. \newline
 
-\noindent We know that anti-triangles are related to the dual lengths associated with the faces (See $\S$2.3). If the center of a triangle is outisde the triangle itself, we say that the dual has a negative length. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. \newline
+\noindent The dual lengths of negative triangles are exactly opposite in length than of a congruent regular triangle. Similarly, we say that a negative triangle has a negative area in order to conserve area, as can also be seen in Fig.~\ref{AntiTri}. \newline
 
 \begin{figure}
 \centering
@@ -153,11 +153,18 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \label{AntiTri}
 \end{figure}
 
-\noindent We created a program called $weightedFlipAlgorithm$ that scans each face to see if it was Delaunay, and if not, we would perform a flip with an adjacent face. We would repeat the process until (hopefully) each face was Delaunay, and thus the whole triangulation was now Delaunay. Unfortunately, the process did not always end. \newline
+\noindent We created a program called $weightedFlipAlgorithm$ that scans each edge to see if it was Delaunay, and if not, we would perform a flip on the two faces of which the edge is connected. We would repeat the process until (hopefully) each face was Delaunay, and thus the whole triangulation was now Delaunay. Unfortunately, the process did not always end. \newline
 
-\noindent To get a better grasp of the evolution of the flips, we made a MATLAB program named $delaunayPlot$ that would draw a triangulation so we could visually ensure that our triangulations were being built correctly and also if and where flips were being performed, as well as tracking negative triangles. We use MATLAB as it is able to read data from files, like in C++, as well as generate pictures relatively easily. We adapted this code to then make $multiDelaunayPlot$, which regraphs the triangulation after a flip is performed. \newline
+\noindent To get a better grasp of the evolution of the flips, we made a MATLAB program named $delaunayPlot$ that would draw a triangulation so we could visually ensure that our triangulations were being built correctly and also if and where flips were being performed, as well as tracking negative triangles. We use MATLAB as it is able to read data from files, like in C++, as well as generate pictures relatively easily. We adapted this code to then make $multiDelaunayPlot$, which regraphs the triangulation after a flip is performed. See Figure~\ref{genTri5} for a beginning and end triangulation after going through $weightedFlipAlgorithm$. \newline
 
-\noindent Often times, we did find that triangulations were able to become Delaunay after a series of flips. As we added more faces, and increased weights by scalars, we noted that it was more likely for the algorithm to have issues. In watching our $multiDelaunayPlot$ results, we found that certain edges would loop in a series of flips such that performing one flip would require the adjacent edge to need flipping. Occasionally, one edge would get stuck flipping back and forth between two faces. We also noted that final triangulations did permit the existence of negative triangles. Often they were found on the edge boundary and of little concern. We were able to check our results by drawing the dual edges on top of all the faces using equations from []. If all vertices had zero weight, then the duals are simply the perpendicular bisectors of each edge. See Figure~\ref{Duals}. \newline
+\begin{figure}
+\centering
+\includegraphics[scale = 0.7]{Pictures/genTri5v2.png}
+\caption{An illustration of our $delaunayPlot$ program. The end triangulation is shown in black. Original edges that were later flipped are shown in red.}
+\label{genTri5}
+\end{figure}
+
+\noindent Often times, we did find that triangulations were able to become Delaunay after a series of flips. As we added more faces, and increased weights by scalars, we noted that it was more likely for the algorithm to have issues. See Table~\ref{DAT}. In watching our $multiDelaunayPlot$ results, we found that certain edges would loop in a series of flips such that performing one flip would require the adjacent edge to need flipping. Occasionally, one edge would get stuck flipping back and forth between two faces. We also noted that final triangulations did permit the existence of negative triangles. Often they were found on the edge boundary and of little concern. We were able to check our results by drawing the dual edges on top of all the faces (Refer to our criteria in \S\ref{BaD} and \S\ref{DTD}. If all vertices had zero weight, then the duals are simply the perpendicular bisectors of each edge. See Figure~\ref{Duals}. \newline
 
 \begin{figure}
 \centering
@@ -167,7 +174,7 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \label{Duals}
 \end{figure}
 
-\noindent We also observed a couple of interesting things from a statistical point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. This would lead to suggest that vertices try and form triangles with vertices close to itself, resulting in fewer skinny triangles. We also saw that the degrees of vertices tend to vary more after flips; more have a degree of 2 or 3, while others increase in degree. This indicates that the proximity of vertices to each other in its triangulation also has a great effect as well as the weights. See Figure~\ref{stats} for an example with a non-weighted case.\newline
+\noindent We also observed a couple of interesting things from a statistical point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. This would lead to suggest that vertices try and form triangles with vertices close to itself, resulting in fewer skinny triangles. We also saw that the degrees of vertices tend to vary more after flips; more have a degree of 2 or 3, while others increase in degree. This suggests that the weights of vertices in its triangulation also has a great effect as well as their relative proximities. See Figure~\ref{stats} for an example with a non-weighted case.\newline
 \begin{table}
 \begin{center}
 \begin{tabular}{|rrr|rrr|}
@@ -185,6 +192,7 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \end{tabular} 
 \end{center}
 \caption{An anlysis of number of flips required to obtain Delaunay triangulation for a given number of faces and scaled weights. Each test was performed on $weightedFlipAlgorithm$ until each test had ten successful runs. Each trial had unique weights.} 
+\label{DAT}
 \end{table} 
 
 \begin{figure}
@@ -194,18 +202,16 @@ d[C(\{i, j\}), C(\{i, j, k\})] = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\thet
 \label{stats}
 \end{figure}
 
-\noindent So to conclude, yeah, flips are awesome. 
+\noindent So to conclude, yeah, flips are awesome. We show that flips can be performed on ANY triangulation, not just certain ones. By using neative triangles, we are able to adapt our code for extraneous cases. 
 
 \section{Combinatorial Ricci flow}
 \label{RBk}
 
-Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. That the subject is still very new makes this research project exciting. \newline
+Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are even.The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was given the honor of one of seven millennium puzzles by the Clay Mathematics Institute. It was Ricci flow that turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in fluid dynamics and even in the theory of general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of the Ricci flow Hamilton had defined. The fact that the subject is still very new makes this research project exciting. \newline
 
 \subsection{Circle-packing}
 
-\noindent Looking back at our weighted Delaunay triangulations, we had the condition that the partial edge lengths were related by Eq.~\ref{eq1}. Let us take a subset of all possibile weight configurations and introduce a concept known as circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. Thus, we have the restrictions that $d_{ij} = d_{ik} = r_i, d_{ji} = d_{jk} = r_j,$ and $d_{ki} = d_{kj} = r_k$, ensuring that \ref{eq1} holds. For any lone triangle, this can be done. By applying weights to each vertex we determine the lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the The length of $\{i, j\}$. In Eulcidean space, the metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}.\newline
-
-\noindent From this point forward, we will use the terms ``weight'' and ``radius'' interchangably. Thus the weight is equal to the length of the radius and not its square.\newline
+\noindent Looking back at our weighted Delaunay triangulations, we had the condition that the partial edge lengths were related by Eq.~(\ref{eq1}). As mentioned in \S\ref{BaD}, let us take a subset of all possibile weight configurations and develop further the concept of circle-packing. Visually, circle-packing entails placing circles with their centers on a vertex so that neighboring circles are tangent to each other. That is, they intersect at only one point, as shown in Figure \ref{rightTri}. Thus, we have the restrictions that $d_{ij} = d_{ik} = r_i, d_{ji} = d_{jk} = r_j,$ and $d_{ki} = d_{kj} = r_k$, ensuring that \ref{eq1} holds. For any lone triangle, this can be done. By applying weights to each vertex we determine the lengths to the edges of our triangulation as $l_{ij}=r_i+r_j$, where $r_i$ and $r_j$ are the radii of the circles centered at vertices $v_i$ and $v_j$, and $l_{ij}$ is the The length of $\{i, j\}$. In Eulcidean space, the metric applied to the triangulation in this way is known as the \textit{cone metric} \cite{chowluo}.\newline
 
 \noindent Choosing to define the metric in this way, we guarantee the triangle inequality and ensure that we are creating triangles. It is also needed to run the combinatorial Ricci flow, explained in $\S\ref{ricciDef}$. But, there are restrictions to applying weights first. Not all combinations of edge lengths are possible under this system. Some triangulations can simply not be circle-packed. An example is shown in Figure \ref{rightTri}, where there is no combination of weights at the vertices that can make a proper circle-packing. By allowing generalizations of circle-packings, as discussed in $\S\ref{circExt}$, we can broaden our range of possible length assignments.
 
@@ -221,7 +227,7 @@ Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio R
 \label{ricciDef}
 We define a manifold to be a topological space where every neighborhood is locally Euclidean. This means that around any point in the space it appears similar to the sphere locally. What this means for our triangulated surfaces is that there are no borders. We also refer to this as a closed triangulation.\newline
 
-\noindent When talking about closed, triangulated surfaces an important characteristic is known the Euler characteristic $\chi$, defined by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
+\noindent When talking about closed, triangulated surfaces, one such important property related to the surface is known the Euler characteristic $\chi$, defined by the equation $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the toplogical property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface.\newline 
 
 \begin{table}
 \begin{tabular}{lccccc}
@@ -244,7 +250,7 @@ Two-holed torus & 10 & 36 & 24 &	2 & -2\\
   \frac{dr_i}{{dt}} = -K_ir_i
   \end{equation}
   
-\noindent where $K_i$ is a characteristic called the $curvature$ of a vertex, and $r_i$ is the $radius$ or $weight$ of the vertex $i$. We use the words ``radius'' and ``weight'' interchangeably, denoting the length of the radius that surrounds a vertex $i$ in circle-packing. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths we can determine the angle using the law of cosines. For a triangle with lengths $a, b,\mbox{ and }c,$ the angle opposite side $c$ is
+\noindent where $K_i$ is a characteristic called the $curvature$ of a vertex, and $r_i$ is the $weight$ of the vertex $i$. The value of $K_i$ changes with time. Its value is found by determining the angles of all triangles containing vertex $i$. Using side lengths we can determine the angle using the law of cosines. For a triangle with lengths $a, b,\mbox{ and }c,$ the angle opposite side $c$ is
   
   $$
   \angle C = \arccos(\frac{a^2 + b^2 - c^2}{2ab})
@@ -258,7 +264,7 @@ K_i = 2\pi - \sum{\angle i}.
   
 \noindent Since we are performing multiple non-linear differential equations as variables depend on the weights which change over time, we can probably not solve them explicitly.\newline
    
-\noindent A potential issue we noted is that, based on the equation, is it possible that the radii could continually decrease. Take, for example, a simple tetrahedron with all sides of equal length. We find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex by the same amount, but the curvature of each vertex would still remain $\pi$ because the curvature is not affected by uniform scaling. The radii would continue to decrease until they approach zero length. We have to address that issue since computers don't like working with numbers near zero, as in the denominator of the arccosine function. Numerical instability may occur. To avoid this issue, let us resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$ and equate as
+\noindent A potential issue we noted is that, based on the equation, is it possible that the radii could continually decrease. Take, for example, a simple tetrahedron with all sides of equal length. We find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex weight by the same amount, but the curvature of each vertex would still remain $\pi.$ This is because, in the Euclidean case, the curvatures are not affected by uniform scaling. Under (\ref{Riccif}), the radii would continue to decrease until they approach zero length. We have to address that issue since computers don't like working with numbers near zero, as in the denominator of the arccosine function. Numerical instability may occur. To avoid this issue, let us resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$ and equate as
  
 $$ \tilde{r_i} = \alpha r_i. $$ 
  
@@ -309,6 +315,53 @@ $$\sum{K_i} = 2\pi(V - \frac{F}{2}) = 2\pi(V - \frac{3F}{2} + F) = 2\pi(V - E + 
 \noindent This is known as normalized Ricci flow, as discussed by Chow and Luo in their paper \cite{chowluo}. In the case of our basic tetrahedron from earlier, the radii would not change after each iteration as $\overline{K} = K_i = \pi$ and thus $\displaystyle\frac{dr_i}{dt} = 0$ for $i = \{1,2,3,4\}$. 
 
 \subsection{Programming Ricci flow}
+
+\noindent While we are able to create our own triangulations from scratch, we noted an odd characteristic. The value of $\chi$ on our triangulations always equaled 1. However, for spheres and tori we know that $\chi = 2 - 2g,$ with $g$ being the number of ``holes.'' We noted that since our border edges contained unique vertices, we could not easily transform our triangulation into a common manifold.\newline
+
+\noindent Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a catalog of almost two million known manifold triangulations of varying sizes. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
+  
+\begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
+[2,3,5],[2,4,5],[3,4,5]]}
+\end{verbatim}
+ 
+\noindent which solely documents the faces, into our format, which can be seen in Table~\ref{tab:format}.\newline
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+ Vertex: 1 &    Edge: 1 &    Face: 1 \\ \hline 
+
+     2 3 4 &        1 2 &     1 2 3  \\
+
+    1 2 4  & 2 3 4 5 7  &     1 2 3  \\
+
+    1 2 3  &       1 2  &     2 3 4  \\ \hline 
+
+ Vertex: 2 &    Edge: 2 &    Face: 2 \\ \hline
+
+   1 3 4 5 &        1 3 &     1 2 4  \\
+
+  1 3 5 7  & 1 3 4 6 8  &     1 4 5  \\
+
+  1 2 4 5  &       1 3  &     1 3 5  \\ \hline 
+
+ 			\vdots & \vdots & \vdots \\ \hline 
+
+ Vertex: 5 &    Edge: 9 &    Face: 6 \\ \hline
+
+     2 3 4 &        4 5 &     3 4 5  \\
+
+    7 8 9  & 4 5 6 7 8  &     6 8 9  \\
+
+     4 5 6 &       5 6  &     3 4 5  \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Conversion of format from \cite{lutzmanifold} to ours.}
+\label{tab:format}
+\end{table}  
+
 \noindent The function $calcFlow$ runs a combinatorial Ricci flow on a triangulation and records the data in a file. The algorithm for solving the ODE, provided by J-P Moreau, employs a Runge-Kutta method of order 4 \cite{JPM}. First, the file name for the data is provided. Then, a $dt$ is given by the user that represents the time step for the system. The next parameter is a pointer to an array of initial weights to use. This is followed by the number of steps to calculate and record. Lastly, a boolean is provided, where $true$ indicates that the normalized differential equation, (\ref{Riccin}), should be used. Otherwise, the standard equation (\ref{Riccif}) is employed. Each step, with every vertex's weight and curvature at that step, is printed to the file. An example is shown in Table~\ref{tab:ricciSteps}.\newline
 
 \begin{table}
@@ -350,12 +403,12 @@ Vertex 9: &4.553 & 0.004906\\ \hline
 \label{tab:ricciSteps}
 \end{table}
 
-\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of total curvature, which remains constant in two-dimensional manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. The code for the $calcFlow$ function can be found in $\S\ref{calcFlowCode}$.
+\noindent After the initial design of $calcFlow$, tests were run to determine its speed. The time it took to run was directly proportional to the number of steps in the flow. However, it was also proportional to more than the square of the number of vertices of the triangulation. As a result, while a four-vertex triangulation can run a 1000 step flow in three seconds, it would take a twelve-vertex triangulation 43 seconds to run the same flow. After inspecting the speed of the non-adjusted flow in comparison, it became clear that the calculation of total curvature, which should remain constant in two-dimensional Euclidean manifold cases, was being calculated far too often. After being adjusted so that it is calculated just once per step, the speed of the flow is much faster so that a four-vertex system with 1000 steps takes just one second and twelve vertices is much improved with a time of only four seconds. The code for the $calcFlow$ function can be found in $\S\ref{calcFlowCode}$.
 
 \subsection{Initial testing and results}
 We have some expectations for combinatorial Ricci flow over two-dimensional Euclidean surfaces. Cases like the boundary of the tetrahedron can be calculated by hand so it will be useful to test our results against these surfaces. For example, we expect that the tetrahedron under (\ref{Riccif}) will have all weights converge to zero. Whereas under (\ref{Riccin}) the weights are expected to converge to positive constants.\newline
 
-\noindent There are other expected behaviors. We expect that the product of the initial weights will be equal to the product of the weights at any intermediate step of the flow, what we call the \textit{product area}. Also, it is predicted that the total curvature of a 2-manifold surface should remain a constant determined by its genus.\newline
+\noindent There are other expected behaviors. We expect that the \textit{product area} will be constant at any intermediate step of the flow. Also, it is predicted that the total curvature of a 2-manifold surface should remain a constant determined by its genus.\newline
 
 \noindent For the program we expect to create a system that allows for easy access of information while also providing that information in a time efficient way. Our goal is to create a program that can be built upon later to provide further functionality and options without requiring widespread and time consuming changes to the code. While we certainly expect a number of bugs, we plan to develop methods to test and find any errors in our code. \newline
 
@@ -447,7 +500,24 @@ Vertex 7: 6.18421 \\
 \end{table}
 
 
-\subsubsection{Specific cases}
+\subsubsection{Morphs and specific cases}
+
+Another part of the code is a file strictly made up of functions used to manipulate and alter the triangulations being run. These functions, known within the code as \textit{morphs}, allow us to change the triangulation in different ways, geometric as well as topological, in order to provide us with different kinds of discrete manifolds over which to run our flow.\newline
+
+One such example of our morphs is the use of flips, as mentioned in \S\ref{BaD}. We can perform 1-3, 2-2, and 3-1 flips on given triangulations and observe how those alterations affect the end flow. Flips have the special property that they do not change the Euler characteristic of the surface they are performed upon. For example, in performing a 1-3 flip, we have a total of 3 new edges, 2 more faces, and 1 new vertex. The value of $\chi$ does not change as $(V+1) - (E+3) + (F+2) = V - E + F = \chi$. This means we could do any number of these flips without changing the topology of the surface.\newline
+
+In addition, there are other ``morphs'' that can be performed to change the topology of a triangulation in order to give us some more diverse and interesting shapes over which to run these flows and observe their results. There are two such moves that we can perform.
+
+\begin{itemize}
+\item Adding Handles \newline
+By adding a handle to a surface, we are in essence adding a hole to it. One simple way to obtain this result is to ``patch'' the surface of a torus to the surface that we are working with. This is exactly what we have done. The method removes a face from the existing triangulation and replaces it with a 9-vertex triangulation of a torus. By using the three existing vertices and edges, we are actually adding 6 new vertices, 24 new edges, and 17 new faces. This operation changes the topology of the triangulation that we are working with. It will reduce the Euler characteristic, $\chi$, by 2 and thus change the total curvature of the figure.
+\item Adding Cross-Caps \newline
+A cross-cap is a piece of a surface with a self intersection. The purpose of adding a cross-cap to a manifold is to give us a property of non-orientability. A surface of this kind is characterized by the ability to move an object along it in such a way that it reaches its original location but in mirror-image form. In this way, the portion of the surface known as the cross-cap is, itself, topologically equivalent to the mobius band. It is sufficient to add only a single cross-cap to any given surface,. In conjunction with the method of adding handles, this technique allows us to create any topology in two dimensions.
+\end{itemize}
+
+\noindent Another shape we have been looking into is called the \textit{double triangle}. A double triangle is made of two triangles with the same three vertices. It can also be thought of as folding one triangle on top of another. We can add these to a triangulation and see how things vary with their presence. This is of interest because of their very peculiar effect on the definition of a triangulation. Without double triangles, there are certain restrictions on definitions and adjacency properties of simplices within a triangulation as outlined in the previous section on triangulations. However, with these double triangles, the restrictions are broken up by allowing double and even triple adjacency references, creating vertices with only one or two local vertices, faces with only two defining edges, and edges with only one defining vertex, among other bizarre properties. Because of these inconsistencies in definition, different surfaces that have these double triangles attached to them will behave in noteworthy ways. The function that adds these shapes takes an edge as an argument and adds another edge with the same two vertices. Then, a vertex is added and two edges are drawn from this vertex to the other two vertices mentioned. Two new faces are formed by these two new edges as well as the other two edges mentioned, one for each face. The process can be imagined as flattening a party hat and attaching it to an object along the open end.\newline
+
+\noindent We investigate our programs for sanctity by performing morphs on given manifolds and observe any changes in behavior. We include some examples. \newline
 
 \noindent \textit{Example}: Adding a vertex to a one-holed torus. See figure~\ref{torusaddv}. \newline
 
@@ -474,7 +544,7 @@ Vertex 7: 6.18421 \\
 
 \noindent \textit{Example}: Two tetrahedra connected at a vertex. See Figure \ref{fig:tt}\newline
 
-\noindent It turns out $\chi = $ 7 Vertices - 12 Edges + 8 Faces = 3, which is not a case we had seen before. In previous cases $\chi$ was an even integer. Starting each vertex with equal weight, we obtained an unexpected result. The center weight becomes very large, and the others become smaller in comparison. We concluded that since the central vertex has a much higher degree, its weight becomes large, creating elongated tetrahedra on either side, in order to have the same curvature as all other vertices. One good thing we noted was that the total curvature equaled $6\pi = 2\pi\chi$. Technically, this example contradicts our notion of a manifold, but we felt it useful in validating our program procedure.  
+\noindent It turns out $\chi = $ 7 Vertices - 12 Edges + 8 Faces = 3, which is not a case we had seen before. Technically, this example contradicts our notion of a manifold, but we felt it useful in validating our program procedure. Starting each vertex with equal weight, we obtained a somewhat unexpected result. The center weight becomes very large, and the others become smaller in comparison. We concluded that since the central vertex has a much higher degree, its weight becomes large, creating elongated tetrahedra on either side, in order to have the same curvature as all other vertices. One good thing we noted was that the total curvature equaled $6\pi = 2\pi\chi$. 
 
 \begin{figure}
 \includegraphics{Pictures/tetratouch.png}
@@ -718,7 +788,7 @@ since $ABCD$ is a quadrilateral. So $\angle BAC + \angle BDC = \pi$.\newline
 \Rightarrow 2\angle BAC + 2\angle BDC > 2\pi \quad \Rightarrow \angle BAC + \angle BDC > \pi.
 \end{align*}
 
-Hence the sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$. \qedhere
+\noindent Hence the sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$. \qedhere
 \end{proof}
 
 \begin{figure}
