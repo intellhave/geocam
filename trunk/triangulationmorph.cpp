@@ -195,12 +195,12 @@ void flip(Edge e)
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
           
-     diff = listDifference(f1.getLocalVertices(), f2.getLocalVertices());
+     diff = listDifference(f1.getLocalVertices(), e.getLocalVertices());
      if(diff.size() == 0){
      throw string("Invalid move, operation cancelled");
      }
      Vertex vb1 = Triangulation::vertexTable[diff[0]];
-     diff = listDifference(f2.getLocalVertices(), f1.getLocalVertices());
+     diff = listDifference(f2.getLocalVertices(), e.getLocalVertices());
      Vertex vb2 = Triangulation::vertexTable[diff[0]];
      
      sameAs = listIntersection(va1.getLocalEdges(), vb1.getLocalEdges());
@@ -217,31 +217,62 @@ void flip(Edge e)
      Edge eb2 = Triangulation::edgeTable[sameAs[0]];
      
      double ang1, ang2;
-     if(f1.isNegative() && !f2.isNegative()) 
+     if(f1.isNegative() && (!f2.isNegative())) 
      {
         ang1 = (-angle(va1, f1)) + angle(va1, f2);
         ang2 = (-angle(va2, f1)) + angle(va2, f2);
+        if(ang1 < 0 && ang2 < 0)
+        {
+           Triangulation::faceTable[f2.getIndex()].switchSide();
+        } else if(ang1 > 0 && ang2 > 0)
+        {
+            Triangulation::faceTable[f1.getIndex()].switchSide();
+        } else if (ang2 < 0)
+        {
+            Triangulation::faceTable[f1.getIndex()].switchSide();
+            Triangulation::faceTable[f2.getIndex()].switchSide();
+        }
      } else if((!f1.isNegative()) && f2.isNegative())
      {
         ang1 = angle(va1, f1) - angle(va1, f2);
         ang2 = angle(va2, f1) - angle(va2, f2);
+        if(ang1 < 0 && ang2 < 0)
+        {
+           Triangulation::faceTable[f1.getIndex()].switchSide();
+        } else if(ang1 > 0 && ang2 > 0)
+        {
+            Triangulation::faceTable[f2.getIndex()].switchSide();
+        }  else if (ang1 < 0)
+        {
+            Triangulation::faceTable[f1.getIndex()].switchSide();
+            Triangulation::faceTable[f2.getIndex()].switchSide();
+        }
      } else
      {
         ang1 = angle(va1, f1) + angle(va1, f2);
-        ang2 = angle(va2, f1) + angle(va2, f2);   
+        ang2 = angle(va2, f1) + angle(va2, f2);
+        if(ang1 > PI)
+        {//
+//           cout << "Angle1: " << ang1 << " f1: " << f1.isNegative();
+//           cout << " f2: " << f2.isNegative() << "\n";
+           Triangulation::faceTable[f1.getIndex()].switchSide();
+           f1 = Triangulation::faceTable[f1.getIndex()];
+//           cout << "f1: " << f1.isNegative() << "\n";
+           ang1 = 2 * PI - ang1;
+        }
+        else if(ang2 > PI)
+        {
+//           cout << "Angle2: " << ang2 << " f1: " << f1.isNegative();
+//           cout << " f2: " << f2.isNegative() << "\n";
+           Triangulation::faceTable[f2.getIndex()].switchSide();
+           f2 = Triangulation::faceTable[f2.getIndex()];
+//           cout << "f2: " << f2.isNegative() << "\n";   
+        }
      }
-     if(ang1 > PI)
-     {
-         Triangulation::faceTable[f1.getIndex()].switchSide();
-         ang1 = 2 * PI - ang1;
-     }
-     else if(ang2 > PI)
-     {
-         Triangulation::faceTable[f2.getIndex()].switchSide();   
-     } else if(ang1 <  0) 
-     {
-        ang1 = -ang1;
-     }
+
+     ang1 = abs(ang1);
+     
+     
      vector<Face> fa1, fb1, fa2, fb2;
      sameAs = listIntersection(f1.getLocalFaces(), ea1.getLocalFaces());
      for(int i = 0; i < sameAs.size(); i++)
@@ -348,6 +379,61 @@ void flip(Edge e)
      
      double l1 = ea1.getLength();
      double l2 = ea2.getLength();
+//     cout << "f1: " << f1.getIndex();
+//     cout << "  f2: " << f2.getIndex() << "\n";
+//     ea1 = Triangulation::edgeTable[ea1.getIndex()];
+//     ea2 = Triangulation::edgeTable[ea2.getIndex()];
+//     eb1 = Triangulation::edgeTable[eb1.getIndex()];
+//     eb2 = Triangulation::edgeTable[eb2.getIndex()];
+//     f1 = Triangulation::faceTable[f1.getIndex()];
+//     f2 = Triangulation::faceTable[f2.getIndex()];
+//     if(!(ea1.isBorder() || ea2.isBorder()))
+//     {
+//         vector<int> facesA1 = *(ea1.getLocalFaces());
+//         vector<int> facesA2 = *(ea2.getLocalFaces());
+//         cout << "FA1_1: " << facesA1[0];
+//         cout << "  FA1_2: " << facesA1[1];
+//         cout << "  FA2_1: " << facesA2[0];
+//         cout << "  FA2_2: " << facesA2[1];
+//         cout << "\n";
+//         if((facesA1[0] == facesA2[0] || facesA1[0] == facesA2[1]) &&
+//              (facesA1[1] == facesA2[0] || facesA1[1] == facesA2[1]))
+//         {
+//              int otherFace = facesA1[0] == f1.getIndex() ? facesA1[1] : facesA1[0];
+//              Face other = Triangulation::faceTable[otherFace];
+//              cout << "f1 is negative?: " << f1.isNegative();
+//              cout << "  Face " << otherFace << " is negative?: ";
+//              cout << other.isNegative() << endl;
+//              cout << "Edge " << e.getIndex() << " length: " << sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang1));
+//              sameAs = listDifference(other.getLocalEdges(), f1.getLocalEdges());
+//              Edge otherEdge = Triangulation::edgeTable[sameAs[0]];
+//              cout << "  Other edge's length: " << otherEdge.getLength() << "\n";
+//         }
+//     }
+//     if(!(eb1.isBorder() || eb2.isBorder()))
+//     {
+//         vector<int> facesB1 = *(eb1.getLocalFaces());
+//         vector<int> facesB2 = *(eb2.getLocalFaces());
+//         cout << "FB1_1: " << facesB1[0];
+//         cout << "  FB1_2: " << facesB1[1];
+//         cout << "  FB2_1: " << facesB2[0];
+//         cout << "  FB2_2: " << facesB2[1];
+//         cout << "\n";
+//         if((facesB1[0] == facesB2[0] || facesB1[0] == facesB2[1]) &&
+//              (facesB1[1] == facesB2[0] || facesB1[1] == facesB2[1]))
+//         {
+//              int otherFace = facesB1[0] == f2.getIndex() ? facesB1[1] : facesB1[0];
+//              Face other = Triangulation::faceTable[otherFace];
+//              cout << "f2 is negative?: " << f2.isNegative();
+//              cout << "  Face " << otherFace << " is negative?: ";
+//              cout << other.isNegative() << endl;
+//              cout << "Edge " << e.getIndex() << " length: " << sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang1));
+//              sameAs = listDifference(other.getLocalEdges(), f2.getLocalEdges());
+//              Edge otherEdge = Triangulation::edgeTable[sameAs[0]];
+//              cout << "  Other edge's length: " << otherEdge.getLength() << "\n";
+//         }
+//     } 
+  
      
      Triangulation::edgeTable[e.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang1)));
 }

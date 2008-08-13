@@ -403,7 +403,7 @@ void weightedFlipAlgorithm()
                Edge e = eit->second;
                if(!(isWeightedDelaunay(e)))
                {
-                    cout << "Edge# " << eit->first << "\n";                                                            
+                    cout << "Edge# " << eit->first << " Count: " << count << endl;                                                           
                     try
                     {
                          flip(e);
