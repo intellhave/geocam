@@ -45,8 +45,8 @@ A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... 
 \end{definition}
 
 \begin{figure}
-\includegraphics[scale = 0.5]{Pictures/flattetrahedron.png}
-\includegraphics[scale = 0.3]{Pictures/tetrahedron.jpg}
+\includegraphics[scale = 0.5]{Pictures3/flattetrahedron.png}
+\includegraphics[scale = 0.3]{Pictures3/tetrahedron.jpg}
 \caption{An example of a triangulation. In this case, the triangle, a 2-simplex, can be folded up into the boundary of a tetrahedron, a 3-simplex.}
 \end{figure}
 
@@ -102,7 +102,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.8]{Pictures/Flip1331.png}
+\includegraphics[scale = 0.8]{Pictures3/Flip1331.png}
 \caption{The 1-3 and 3-1 moves.}
 \label{fig:flip2}
 \end{figure}
@@ -110,7 +110,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.8]{Pictures/Flip2.png}
+\includegraphics[scale = 0.8]{Pictures3/Flip2.png}
 \caption{The 2-2 move.}
 \label{fig:flip}
 \end{figure}
@@ -131,7 +131,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = 0.47]{Pictures/triangulationUML.png}
+\includegraphics[scale = 0.47]{Pictures3/triangulationUML.png}
 \end{center}
 \caption{A UML diagram of the program. The UML shows how the various files interact as well as the functions and variables they hold. We will refer to many of these programs later on.}
 \label{triUML}
@@ -197,18 +197,12 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.6]{Pictures/genTri4.png}
+\includegraphics[scale = 0.6]{Pictures3/genTri4.png}
 \caption{A simple example of a Delaunay triangulation. The circumcircles are drawn along with the edges to show their compatibility. This is a non-weighted case.}
 \label{genTri}
 \end{figure}
-
-<<<<<<< .mine
-<<<<<<< .mine
- To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
-=======
-=======
->>>>>>> .r496
  To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
+
 
 \begin{proposition}
 \label{NonDelProp}
@@ -236,8 +230,8 @@ In the case of a weighted triangulation, a hinge is weighted Delaunay when the d
 \begin{figure}
 \label{antitri}
 \centering
-\includegraphics[scale = 0.4]{Pictures/antitri1.png}
-\includegraphics[scale = 0.4]{Pictures/antitri2.png}
+\includegraphics[scale = 0.4]{Pictures3/antitri1.png}
+\includegraphics[scale = 0.4]{Pictures3/antitri2.png}
 \caption{If flips are performed on nonconvex triangles, we create an anti-triangle, shaded here in red, and a larger regular triangle, shaded in blue.}
 \label{AntiTri}
 \end{figure}
@@ -266,8 +260,8 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.45]{Pictures/gentri.png}
-\includegraphics[scale = 0.45]{Pictures/gentri6.png}
+\includegraphics[scale = 0.45]{Pictures3/gentri.png}
+\includegraphics[scale = 0.45]{Pictures3/gentri6.png}
 \caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right). The early version wound up spiraling around itself, increasing edge lengths as it went. Our newer version makes the edge lengths more random, with large and small triangles scattered throughout.}
 \label{genTris}
 \end{figure}
@@ -280,7 +274,7 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.7]{Pictures/genTri5v2.png}
+\includegraphics[scale = 0.7]{Pictures3/genTri5v2.png}
 \caption{An illustration of our $delaunayPlot$ program. The end triangulation is shown in black. Original edges that were later flipped are shown in red.}
 \label{genTri5}
 \end{figure}
@@ -290,8 +284,8 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 
 \begin{figure}
 \centering
-\includegraphics[scale = .45]{Pictures/nonwduals.png}
-\includegraphics[scale = .45]{Pictures/Wduals.png}
+\includegraphics[scale = .45]{Pictures3/nonwduals.png}
+\includegraphics[scale = .45]{Pictures3/Wduals.png}
 \caption{A non-weighted (left) and weighted (right) triangulation with dual lengths added.}
 \label{Duals}
 \end{figure}
@@ -319,7 +313,7 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.6]{Pictures/Stats.png}
+\includegraphics[scale = 0.6]{Pictures3/Stats.png}
 \caption{A statistical illustration of edge lengths and vertex degrees before and after flips are performed.}
 \label{stats}
 \end{figure}
@@ -327,17 +321,19 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
  In testing our code, we used oneparticular example to examine a potential special case that may have occurred during the running of our algorithm. The special case, as shown in Figure~\ref{specialCase}, is one where every convex hinge is weighted Delaunay and every nonconvex hinge is not. The results of running our algorithm on this triangulation were of great interest and helped us in further refining the algorithm. When we started, there were seven faces, all positive. When the flip algorithm concluded, we were left with four positive faces and three negative faces. All of the negative faces were paired with positive faces defined by the same three vertices. The remaining odd positive face was defined by the three original boundary edges. This meant that by ``flipping through'' all of the nonconvex hinges, we were left with three pairs of reversely oriented faces, what we also referred to as ``flaps'' or ``double triangles''.
 
 \begin{figure}
-\includegraphics[scale = .45]{Pictures/triEx1.png}
-\includegraphics[scale = .45]{Pictures/triExD1.png}
-\includegraphics[scale = .45]{Pictures/triExD2.png}
-\includegraphics[scale = .45]{Pictures/triExD3.png}
-\includegraphics[scale = .45]{Pictures/triExD4.png}
-\includegraphics[scale = .45]{Pictures/triExD5.png}
+\includegraphics[scale = .45]{Pictures3/triEx1.png}
+\includegraphics[scale = .45]{Pictures3/triExD1.png}
+\includegraphics[scale = .45]{Pictures3/triExD2.png}
+\includegraphics[scale = .45]{Pictures3/triExD3.png}
+\includegraphics[scale = .45]{Pictures3/triExD4.png}
+\includegraphics[scale = .45]{Pictures3/triExD5.png}
 \caption{Evolution of our special triangulation. Edges that are flipped are shown in red. Negative triangles start off gray, with intersections a reddish brown. If multiple negative triangles intersect one region, we color it black.}
 \label{specialCase}
 \end{figure}
 
- The hypothesis was that after any triangulation underwent the transformation of the flip algorithm there would remain only positive triangles or negative triangles that sat opposite of positive triangles lying in the exact same area. The algorithm was modified to simply remove these flaps as a last step to the flip algorithm. This process required removing all vertices that lied at the end of a flap, as well as the edges along these flaps. Finally, the two edges defined by the same two vertices from which these flaps were stemming would be joined into one.
+The hypothesis was that after any triangulation underwent the transformation of the flip algorithm there would remain only positive triangles or negative triangles that sat opposite of positive triangles lying in the exact same area. The algorithm was modified to simply remove these flaps as a last step to the flip algorithm. This process required removing all vertices that lied at the end of a flap, as well as the edges along these flaps. Finally, the two edges defined by the same two vertices from which these flaps were stemming would be joined into one.
+ 
+While we are highly optimistic about verifying our conjectures, we are still in the development process of our code and feel that there are a few issues that must be straightened out. We are confident that we can figure out how and why our flip algorithms are getting into trouble, but may require more focused processes or changes in our algorithms. We have thus far been able to show that many triangulations with weighted vertices can become Delaunay after a series of flips, and we think that this is encouraging progress as this topic in Mathematics receives more attention. 
 
 \section{Combinatorial Ricci flow}
 \label{RBk}
@@ -356,8 +352,8 @@ A Circle Packing Metric is a distance metric that is an assignment of lengths $l
 
   
 \begin{figure}
-\includegraphics[scale = 0.3]{Pictures/righttriangulation.jpg}
-\includegraphics[scale = 0.5]{Pictures/badcase2.png}
+\includegraphics[scale = 0.3]{Pictures3/righttriangulation.jpg}
+\includegraphics[scale = 0.5]{Pictures3/badcase2.png}
 \caption{An example of circle packing (left) and a triangulation that cannot be circle-packed.}
 \label{rightTri}
 \end{figure}
@@ -624,8 +620,8 @@ The purpose of adding a cross-cap to a manifold is to give us a property of non-
  By inserting a vertex within a triangulation for a torus, we are essentially creating a bump on the torus. We can then observe what happens as we run it through our $calcFlow$ program. The new vertex shrinks in size to a weight much smaller than the other vertices, but to a positive constant. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). In all cases (where the vertices began with different weights), the weight that the new vertex converges to is in a proportion to the other weights by a factor of $3+2\sqrt{3}$, the exact proportion necessary to maintain equal curvature amongst all the weights. An oddity here is that the three vertices local to this added vertex converged to the same weight as all the vertices not near the flip, despite a difference in degree.
 
 \begin{figure}[ht]
-\includegraphics[scale = 0.5]{Pictures/torus22.png}
-\includegraphics[scale = 0.5]{Pictures/torus2addvertex2.png}
+\includegraphics[scale = 0.5]{Pictures3/torus22.png}
+\includegraphics[scale = 0.5]{Pictures3/torus2addvertex2.png}
 \caption{A triangulation of the torus, and the addition of a new vertex. This is a 1-3 flip.}
 \label{torusaddv}
 \end{figure}
@@ -647,7 +643,7 @@ The purpose of adding a cross-cap to a manifold is to give us a property of non-
  It turns out $\chi = $ 7 Vertices - 12 Edges + 8 Faces = 3, which is not a case we had seen before. Technically, this example is not a manifold, but we felt it was useful in validating our program procedure. Starting with equal weights, we obtained a somewhat unexpected result. The center weight becomes very large, and the others become smaller in comparison. We concluded that since the central vertex has a much higher degree, its weight becomes large, creating elongated tetrahedra on either side, in order to have the same curvature as all other vertices.
 
 \begin{figure}
-\includegraphics{Pictures/tetratouch.png}
+\includegraphics{Pictures3/tetratouch.png}
 \caption{Two tetrahedra joined at a vertex.}
 \label{fig:tt}
 \end{figure}
@@ -658,7 +654,7 @@ One experiment we performed was measuring convergence speeds of various triangul
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.7]{Pictures/ConvergenceTable.png}
+\includegraphics[scale = 0.7]{Pictures3/ConvergenceTable.png}
 \caption{Summary of convergence data for varying criteria}
 \label{fig:conv}
 \end{figure}
@@ -697,7 +693,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.6]{Pictures/octosph.png}
+\includegraphics[scale = 0.6]{Pictures3/octosph.png}
 \label{OctoSph}
 \caption{An illustration of a spherical octahedron through the X-Y plane. Each octet of the sphere surface, outlined in black, is the face of one triangle.} 
 \end{figure}
@@ -723,7 +719,7 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.65]{Pictures/kHatResult.png}
+\includegraphics[scale = 0.65]{Pictures3/kHatResult.png}
 \caption{An example using our notion of $\hat{K}$. Weights and curvatures were unable to converge, and crashed the program shortly after.}
 \label{kHat}
 \end{figure}
@@ -749,7 +745,7 @@ $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac
 
 \begin{figure}[ht]
 \centering
-\includegraphics[scale = 0.8]{Pictures/SphG0V10.png}
+\includegraphics[scale = 0.8]{Pictures3/SphG0V10.png}
 \caption{An example of a solution using Eq.~(\ref{SRicciN}). Starting off with equal initial weights of 0.1, vertices merge into one of four groups as they approach uniform curvature relatively quickly. As curvature drops to zero, slowly at first but more quickly as time passes, the weight groups separate from each other to obtain their final weight. In this trial, $dt = 0.50$ to show the complete process.}
 \label{SphGood}  
 \end{figure}
@@ -778,7 +774,7 @@ $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of 
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.5]{Pictures/pDisk.png}
+\includegraphics[scale = 0.5]{Pictures3/pDisk.png}
 \caption{An illustration of the hyperbolic plane using the Poincar\'{e} disk. All concentric circles are evenly spaced apart in a hyperbolic background, but the outer edge of the disk approaches infinity, so the circles appear closer together.}
 \label{PD}
 \end{figure}
@@ -836,7 +832,7 @@ Circle packing is but a very special way to characterize our side lengths. If we
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = 0.6]{Pictures/intcirc2.png}
+\includegraphics[scale = 0.6]{Pictures3/intcirc2.png}
 \end{center}
 \caption{An example of relaxing circle packing and introducing $\Phi.$}
 \label{fig:intcirc}
@@ -890,7 +886,7 @@ $$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K
 \begin{figure}
 \label{NonDelPropfig}
 \centering
-\includegraphics[scale = 0.5]{Pictures/geometryU.png}
+\includegraphics[scale = 0.5]{Pictures3/geometryU.png}
 \caption{An illustration associated with our proof of Proposition \ref{NonDelProp}.}
 \end{figure}
 
@@ -918,7 +914,7 @@ Now we suppose $\overline{DE}$ is less than $r$. So $\angle BDE > \angle EBD$ an
 \begin{figure}
 \label{weidelpropfig}
 \centering
-\includegraphics[scale = 0.45]{Pictures/geometryW2.png}
+\includegraphics[scale = 0.45]{Pictures3/geometryW2.png}
 \caption{An illustration associated with our proof of Proposition \ref{NonDelProp}.}
 \end{figure}
 
@@ -945,28 +941,28 @@ Based on our evaluations of radii and curvatures over time, it appears to conver
 
 \begin{figure}[ht]
 \centering
-\includegraphics[scale = 0.65]{Pictures/torus7addvaddhweights2.png}
+\includegraphics[scale = 0.65]{Pictures3/torus7addvaddhweights2.png}
 \caption{An example of how morphs can change the asymptotic behavior of vertices. In this case we saw the weights of some vertices change concavity.}
 \label{fig:t7vh}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.8]{Pictures/curvcurves.png}
+\includegraphics[scale = 0.8]{Pictures3/curvcurves.png}
 \caption{An example of curvatures over time. While they do converge to the same curvature, the vertex with the maximum or minimum curvature may change. This is a separate trial than that producing Fig.~\ref{fig:t7vh}}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.7]{Pictures/Curvg6v12addv.png}
-\includegraphics[scale = 0.7]{Pictures/Weightg6v12addv.png}
+\includegraphics[scale = 0.7]{Pictures3/Curvg6v12addv.png}
+\includegraphics[scale = 0.7]{Pictures3/Weightg6v12addv.png}
 \caption{An example of adding a vertex to a genus 6 surface. One of the curvatures in unable to drop below $-\pi$, and as a result, its weight is pushed to almost zero. Other vertices group together to compensate for this behavior.}
 \end{figure}
 
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale = 0.65]{Pictures/GUIpic.png}
+\includegraphics[scale = 0.65]{Pictures3/GUIpic.png}
 \caption{A snapshot of the user interface written to run both Ricci flows and Delaunay flip algorithms. Results of a flow are written in a text field on the right.}
 \end{center}
 \end{figure}
