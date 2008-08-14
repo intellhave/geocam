@@ -184,3 +184,99 @@ for i = 1:size(X3,1)*size(X3,2)
 end
 plot(X3,Y3,'b.')
 axis off;
+
+%Figure 14. A 1-3 and 3-1 flip. Draw arrows on Figure manually. 
+k = sqrt(3)/2;
+X = [0 1 .5 0];
+Y = [0 0 k 0];
+plot(X,Y,'k','linewidth',2)
+hold on;
+plot(X+1.5,Y,'k','linewidth',2)
+X2 = [1.5 2 2 2 2.5];
+Y2 = [0 k/3 k k/3 0];
+plot(X2,Y2,'k','linewidth',2)
+axis image
+axis off
+
+%Figure 15. Picture in front of proof. 
+th = 0:.001:2*pi;
+X = [-1 -.6 .8 .2 -1 .8];
+Y = [0 -.8 -.6 sqrt(.96) 0 -.6];
+plot(cos(th),sin(th),'k','linewidth',2)
+hold on
+plot(X,Y,'k','linewidth',2)
+for i = 1:size(X,2)-1
+    cx = X(i) + .3*cos(th);
+    cy = Y(i) + .3*sin(th);
+    %plot(cx,cy,'r')
+    plot([0 X(i)],[0 Y(i)],'b');
+end
+text(-.1,-.5,'A')
+text(.35,-.22,'B')
+text(.18,.1,'C')
+text(-.1, .24,'D')
+axis image
+axis off
+
+%Figure 16. Weighted picture
+figure;
+th = 0:.001:2*pi;
+X = [-1 -.2 1 -.3 -1];
+Y = [0 -.8 0 .7 0];
+text(-1.1, 0, 'i')
+text(1.1, 0, 'j')
+text(-.3, .8, 'k')
+text(-.2, -.9, 'l')
+%plot(cos(th),sin(th),'k','linewidth',2)
+hold on
+plot(X,Y,'k','linewidth',2)
+w = [ 1 .5 .5 1];
+for i = 1:size(X,2)-1
+    cx = X(i) + w(i)*cos(th);
+    cy = Y(i) + w(i)*sin(th);
+    plot(cx,cy,'r')
+end
+wi = w(1); wl = w(2); wj = w(3); wk = w(4);
+Lij = 2; Lik = sqrt(.7^2 + .7^2); Ljk = sqrt(1.3^2 + .7^2);
+Lil = sqrt(2*.8^2); Ljl = sqrt(1.2^2 + .8^2);
+
+thJIK = pi/4; thJIL = pi/4;
+
+Dij = (Lij^2 + wi^2 - wj^2)/(2*Lij);
+h = (Dik - Dij*cos(thJIK))/sin(thJIK);
+Xdij = -1 + Dij;
+plot([Xdij, Xdij],[0 h],'b','linewidth',2);
+
+Dik = (Lik^2 + wi^2 - wk^2)/(2*Lik);
+Xdik = -1 + .7*Dik/Lik;
+Ydik = .7*Dik/Lik;
+plot([Xdik, Xdij],[Ydik h],'b','linewidth',2);
+
+Djk = (Ljk^2 + wj^2 - wk^2)/(2*Ljk);
+Xdjk = 1 - 1.3*Djk/Ljk; 
+Ydjk = .7*Djk/Ljk;
+plot([Xdjk Xdij],[Ydjk h],'b','linewidth',2);
+
+Dil = (Lil^2 + wi^2 - wl^2)/(2*Lil);
+h2 = (Dil - Dij*cos(thJIL))/sin(thJIL);
+plot([Xdij, Xdij],[0, h2],'b','linewidth',2)
+
+Xdil = -1 + .8*Dil/Lil; 
+Ydil = -.8*Dil/Lil;
+plot([Xdil, Xdij],[Ydil, h2],'b','linewidth',2);
+
+Djl = (Ljl^2 + wj^2 - wl^2)/(2*Ljl);
+Xdjl = 1 - 1.2*Djl/Ljl; 
+Ydjl = -.8*Djl/Ljl;
+plot([Xdjl, Xdij],[Ydjl, h2],'b','linewidth',2)
+
+text(.05,-.5,'A')
+text(.4,-.22,'D')
+text(.18,.15,'B')
+text(-.2, -.24,'C')
+
+axis image
+axis off
+
+
+

@@ -1,3 +1,9 @@
+% This m-file contains graphs for the miscellaneous pictures used in the
+% report. The program can be run all at once, or individual figures can be
+% produced, either copied and pasted into the main MATLAB window, or
+% highlight, right click, and pick "Evaluate Selection". 3-D pictures can
+% be rotated to a preferred angle. 
+
 % figure 1. Right triangle made of circles. 
 figure;
 th = linspace(0,2*pi);
@@ -50,7 +56,7 @@ axis image
 axis off
 
 %figure 7. 2-2 Flip
-figure
+figure;
 k = sqrt(3)/2;
 x1 = [0,1,1.5,0.5,0,1,0.5]; y1 =[0,0,k,k,0,0,k];
 x2 = [3,4,4.5,3.5,3,4.5]; y2 = [0,0,k,k,0,k];
@@ -77,8 +83,12 @@ y = 5*sin(th);
 x2 = 7 + 4*cos(th);
 y2 = 4*sin(th);
 plot(x,y,'k',x2,y2,'k',[0 7],[0 0],'k')
-axis image
 axis off
+hold on; z = 8*sqrt(6)/7;
+plot([0 29/7],[0 z],'k',[7 29/7],[0 z],'k')
+text(29/7 - .4, z + 1.6, '\Phi', 'FontSize', 20)
+plot([29/7 7.3 29/7 2],[z 5.5 z 6],'k');
+axis image
 
 %figure 10. Bad case. 
 figure;
@@ -90,7 +100,11 @@ gy(9) = -sqrt(4-2.25);
 gy(13) = 1 + sqrt(4-2.25);
 gx(14) = 3;
 plot(gx,gy,'k')
-axis off
+text(1.1,0.5,num2str(5),'FontSize',15)
+text(-.2,.5,num2str(2),'FontSize',15)
+text(1.5,1.1,num2str(4),'FontSize',15)
+text(2,2,num2str(5),'FontSize',15)
+axis off;
 
 %figure 11. Octahedron sphere
 figure;
@@ -105,7 +119,6 @@ YT = [YT1 YT2];
 [XT, YT] = meshgrid(XT,YT);
 Z = real(sqrt(1 - XT.^2 - YT.^2));
 Z2 = -Z;
-figure;
 mesh(XT,YT,Z)
 hold on
 mesh(XT,YT,Z2)
@@ -128,5 +141,140 @@ end
 axis image
 axis off
 
+%Figure 13. An example of an anti- triangle. The red line is the one that
+%is flipped. Dots are used to illustrate the negative area. 
 
-    
+figure;
+Y = [0 0 1 0];
+X = [0 1 2 0];
+plot(X,Y,'linewidth',2)
+hold on; 
+plot(X,-Y,'g','linewidth',2)
+hold on;
+plot([0 1],[0 0],'r','linewidth',2)
+axis off;
+
+figure;
+X2 = 1:.1:1.9;
+Y2 = -1:.1:1;
+[X2, Y2] = meshgrid(X2,Y2);
+for i = 1:size(X2,1)*size(X2,2)
+    if Y2(i) - X2(i) >= -1;
+        X2(i) = 1.1; Y2(i) = 0;
+    end
+    if X2(i) + Y2(i) <= 1
+        X2(i) = 1.1; Y2(i) = 0;
+    end  
+end
+plot(X2,Y2,'r.','linewidth',2);
+hold on;
+plot([2 2],[-1,1],'r','linewidth',2)
+plot([0 2 1],[0 1 0],'linewidth',2)
+plot([0 2 1], [0 -1 0],'g', 'linewidth', 2)
+X3 = 0.05:.1:1.95;
+Y3 = -.95:.1:.95;
+[X3, Y3] = meshgrid(X3,Y3);
+for i = 1:size(X3,1)*size(X3,2)
+    if Y3(i) - .5*X3(i) >= 0
+        X3(i) = 1.1; Y3(i) = 0;
+    end
+    if .5*X3(i) + Y3(i) <= 0
+        X3(i) = 1.1; Y3(i) = 0;
+    end  
+end
+plot(X3,Y3,'b.')
+axis off;
+
+%Figure 14. A 1-3 and 3-1 flip. Draw arrows on Figure manually. 
+k = sqrt(3)/2;
+X = [0 1 .5 0];
+Y = [0 0 k 0];
+plot(X,Y,'k','linewidth',2)
+hold on;
+plot(X+1.5,Y,'k','linewidth',2)
+X2 = [1.5 2 2 2 2.5];
+Y2 = [0 k/3 k k/3 0];
+plot(X2,Y2,'k','linewidth',2)
+axis image
+axis off
+
+%Figure 15. Picture in front of proof. 
+th = 0:.001:2*pi;
+X = [-1 -.6 .8 .2 -1 .8];
+Y = [0 -.8 -.6 sqrt(.96) 0 -.6];
+plot(cos(th),sin(th),'k','linewidth',2)
+hold on
+plot(X,Y,'k','linewidth',2)
+for i = 1:size(X,2)-1
+    cx = X(i) + .3*cos(th);
+    cy = Y(i) + .3*sin(th);
+    %plot(cx,cy,'r')
+    plot([0 X(i)],[0 Y(i)],'b');
+end
+text(-.67,-.87,'A')
+text(-1.1,0,'B')
+text(.85,-.6,'C')
+text(.2, 1.05,'D')
+text(.03, .03, 'E')
+axis image
+axis off
+
+%Figure 16. Weighted proof
+figure;
+th = 0:.001:2*pi;
+X = [-1 -.2 1 -.3 -1];
+Y = [0 -.8 0 .7 0];
+text(-1.1, 0, 'i')
+text(1.1, 0, 'j')
+text(-.3, .8, 'k')
+text(-.2, -.9, 'l')
+%plot(cos(th),sin(th),'k','linewidth',2)
+hold on
+plot(X,Y,'k','linewidth',2)
+%w = [0.3692    0.1112    0.7803    0.3897];
+w = [ 0.9759  0.5502 0.6225   0.5870]
+for i = 1:size(X,2)-1
+    cx = X(i) + w(i)*cos(th);
+    cy = Y(i) + w(i)*sin(th);
+    plot(cx,cy,'r')
+end
+w
+wi = w(1); wl = w(2); wj = w(3); wk = w(4);
+Lij = 2; Lik = sqrt(.7^2 + .7^2); Ljk = sqrt(1.3^2 + .7^2);
+Lil = sqrt(2*.8^2); Ljl = sqrt(1.2^2 + .8^2);
+
+thJIK = pi/4; thJIL = pi/4;
+
+Dij = (Lij^2 + wi^2 - wj^2)/(2*Lij);
+h = (Dik - Dij*cos(thJIK))/sin(thJIK);
+Xdij = -1 + Dij;
+plot([Xdij, Xdij],[0 h],'b','linewidth',2);
+
+Dik = (Lik^2 + wi^2 - wk^2)/(2*Lik);
+Xdik = -1 + .7*Dik/Lik;
+Ydik = .7*Dik/Lik;
+plot([Xdik, Xdij],[Ydik h],'b','linewidth',2);
+
+Djk = (Ljk^2 + wj^2 - wk^2)/(2*Ljk);
+Xdjk = 1 - 1.3*Djk/Ljk; 
+Ydjk = .7*Djk/Ljk;
+plot([Xdjk Xdij],[Ydjk h],'b','linewidth',2);
+
+Dil = (Lil^2 + wi^2 - wl^2)/(2*Lil);
+h2 = (Dil - Dij*cos(thJIL))/sin(thJIL);
+plot([Xdij, Xdij],[0, h2],'b','linewidth',2)
+
+Xdil = -1 + .8*Dil/Lil; 
+Ydil = -.8*Dil/Lil;
+plot([Xdil, Xdij],[Ydil, h2],'b','linewidth',2);
+
+Djl = (Ljl^2 + wj^2 - wl^2)/(2*Ljl);
+Xdjl = 1 - 1.2*Djl/Ljl; 
+Ydjl = -.8*Djl/Ljl;
+plot([Xdjl, Xdij],[Ydjl, h2],'b','linewidth',2)
+
+axis image
+axis off
+
+
+

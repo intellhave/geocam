@@ -10,7 +10,7 @@ function drawDuals
 %useful check in our derivation of dual lengths.  
 
 
-h = 'C:\Dev-Cpp\geocam\Triangulations\duals.txt';
+h = 'C:\Dev-Cpp\geocam\Triangulations\duals2.txt';
 K = textread(h);
 S = size(K,1)/2;
 for i = 0:S-1

@@ -293,7 +293,7 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \label{Duals}
 \end{figure}
 
- We also observed a couple of interesting things from a experimental point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. See Figure~\ref{stats} for such an example. There are fewer edges with large weights, and more edges with smaller lengths. This would lead to suggest that vertices try to form triangles with vertices close to itself, resulting in fewer skinny triangles. We also noted that the degrees of vertices sometimes vary more, especially in weighted triangulations; more vertices have a degree of 2 or 3, while others increase in degree. This suggests that the weights of vertices in its triangulation also have a great effect as well as their relative proximities.  
+We also observed a couple of interesting things from a experimental point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. See Figure~\ref{stats} for such an example. There are fewer edges with large weights, and more edges with smaller lengths. This would lead to suggest that vertices try to form triangles with vertices close to itself, resulting in fewer skinny triangles. We also noted that the degrees of vertices sometimes vary more, especially in weighted triangulations; more vertices have a degree of 2 or 3, while others increase in degree. This suggests that the weights of vertices in its triangulation also have a great effect as well as their relative proximities.  
 \begin{table}
 \begin{center}
 \begin{tabular}{|rrr|rrr|}
@@ -335,6 +335,8 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \end{figure}
 
  The hypothesis was that after any triangulation underwent the transformation of the flip algorithm there would remain only positive triangles or negative triangles that sat opposite of positive triangles lying in the exact same area. The algorithm was modified to simply remove these flaps as a last step to the flip algorithm. This process required removing all vertices that lied at the end of a flap, as well as the edges along these flaps. Finally, the two edges defined by the same two vertices from which these flaps were stemming would be joined into one.
+ 
+While we feel that a lot of progress has been made in attempting to generalize the idea that weighted triangulations can become Delaunay after a series of flips, we feel that  
 
 \section{Combinatorial Ricci flow}
 \label{RBk}
