@@ -1,0 +1,34 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}
+\BOOKMARK [1][-]{section.2}{Triangulations}{}
+\BOOKMARK [2][-]{subsection.2.1}{Basics and Definitions}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{Bistellar moves}{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{Programming Structure}{section.2}
+\BOOKMARK [1][-]{section.3}{Delaunay triangulations}{}
+\BOOKMARK [2][-]{subsection.3.1}{Definitions}{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{Programming Structure}{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{Results}{section.3}
+\BOOKMARK [1][-]{section.4}{Combinatorial Ricci flow}{}
+\BOOKMARK [2][-]{subsection.4.1}{Circle-packing}{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{Definitions and Equations}{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{Programming Ricci flow}{section.4}
+\BOOKMARK [2][-]{subsection.4.4}{Initial testing and results}{section.4}
+\BOOKMARK [3][-]{subsubsection.4.4.1}{First tests}{subsection.4.4}
+\BOOKMARK [3][-]{subsubsection.4.4.2}{Morphs and specific cases}{subsection.4.4}
+\BOOKMARK [3][-]{subsubsection.4.4.3}{Convergence speeds}{subsection.4.4}
+\BOOKMARK [1][-]{section.5}{Spherical and hyperbolic Ricci flow}{}
+\BOOKMARK [2][-]{subsection.5.1}{Spherical flow}{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{Hyperbolic flow}{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{Comparison of Systems}{section.5}
+\BOOKMARK [1][-]{section.6}{Future work}{}
+\BOOKMARK [2][-]{subsection.6.1}{Linking Delaunay to Ricci flow}{section.6}
+\BOOKMARK [2][-]{subsection.6.2}{Circle packing expansions}{section.6}
+\BOOKMARK [2][-]{subsection.6.3}{Spherical and hyperbolic extensions}{section.6}
+\BOOKMARK [2][-]{subsection.6.4}{3-Dimensional triangulations}{section.6}
+\BOOKMARK [1][-]{section.7}{Conclusion}{}
+\BOOKMARK [1][-]{appendix.A}{Appendix}{}
+\BOOKMARK [2][-]{subsection.A.1}{Derivation of Eq. \(9\)}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.2}{Proof of Proposition 3.1}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.3}{Proof of Proposition 3.4}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.4}{Remarks on Runge-Kutta method for solving Eq. \(11\)}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.5}{Data Plots}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.6}{Code Examples}{appendix.A}

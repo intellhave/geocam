@@ -1,0 +1,743 @@
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  14 AUG 2008 15:34
+entering extended mode
+**C:/Dev-Cpp/geocam/Report/Report3.tex
+(C:/Dev-Cpp/geocam/Report/Report3.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman, ngerman, french, loaded.
+("C:\Program Files\MiKTeX 2.7\tex\latex\base\article.cls"
+Document Class: article 2005/09/16 v1.4f Standard LaTeX document class
+("C:\Program Files\MiKTeX 2.7\tex\latex\base\size12.clo"
+File: size12.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\graphics\graphicx.sty"
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\graphics\graphics.sty"
+Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 90.
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\graphics\pdftex.def"
+File: pdftex.def 2007/06/12 v0.04h Graphics/color for pdfTeX
+\Gread@gobject=\count87
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\tools\multicol.sty"
+Package: multicol 2006/05/18 v1.6g multicolumn formatting (FMi)
+\c@tracingmulticols=\count88
+\mult@box=\box26
+\multicol@leftmargin=\dimen105
+\c@unbalance=\count89
+\c@collectmore=\count90
+\doublecol@number=\count91
+\multicoltolerance=\count92
+\multicolpretolerance=\count93
+\full@width=\dimen106
+\page@free=\dimen107
+\premulticols=\dimen108
+\postmulticols=\dimen109
+\multicolsep=\skip43
+\multicolbaselineskip=\skip44
+\partial@page=\box27
+\last@line=\box28
+\mult@rightbox=\box29
+\mult@grightbox=\box30
+\mult@gfirstbox=\box31
+\mult@firstbox=\box32
+\@tempa=\box33
+\@tempa=\box34
+\@tempa=\box35
+\@tempa=\box36
+\@tempa=\box37
+\@tempa=\box38
+\@tempa=\box39
+\@tempa=\box40
+\@tempa=\box41
+\@tempa=\box42
+\@tempa=\box43
+\@tempa=\box44
+\@tempa=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\c@columnbadness=\count94
+\c@finalcolumnbadness=\count95
+\last@try=\dimen110
+\multicolovershoot=\dimen111
+\multicolundershoot=\dimen112
+\mult@nat@firstbox=\box50
+\colbreak@box=\box51
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\latex2html\html.sty"
+("C:\Program Files\MiKTeX 2.7\tex\latex\hyperref\hyperref.sty"
+Package: hyperref 2007/11/20 v6.77g Hypertext links for LaTeX
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\oberdiek\hycolor.sty"
+Package: hycolor 2007/04/11 v1.1 Code for color options of hyperref/bookmark (H
+O)
+)
+\@linkdim=\dimen113
+\Hy@linkcounter=\count96
+\Hy@pagecounter=\count97
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\hyperref\pd1enc.def"
+File: pd1enc.def 2007/11/20 v6.77g Hyperref: PDFDocEncoding definition (HO)
+)
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\etexcmds.sty"
+Package: etexcmds 2007/12/12 v1.2 Prefix for e-TeX command names (HO)
+
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2007/09/09 v1.2 Providing info/warning/message (HO)
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\00miktex\hyperref.cfg"
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\oberdiek\kvoptions.sty"
+Package: kvoptions 2007/10/18 v3.0 Keyval support for LaTeX options (HO)
+)
+Package hyperref Info: Hyper figures OFF on input line 2699.
+Package hyperref Info: Link nesting OFF on input line 2704.
+Package hyperref Info: Hyper index ON on input line 2707.
+Package hyperref Info: Plain pages OFF on input line 2714.
+Package hyperref Info: Backreferencing OFF on input line 2719.
+
+Implicit mode ON; LaTeX internals redefined
+Package hyperref Info: Bookmarks ON on input line 2875.
+("C:\Program Files\MiKTeX 2.7\tex\latex\ltxmisc\url.sty"
+\Urlmuskip=\muskip10
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 3045.
+
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\bitset.sty"
+Package: bitset 2007/09/28 v1.0 Data type bit set (HO)
+
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\intcalc.sty"
+Package: intcalc 2007/09/27 v1.1 Expandable integer calculations (HO)
+)
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\bigintcalc.sty"
+Package: bigintcalc 2007/11/11 v1.1 Expandable big integer calculations (HO)
+
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\pdftexcmds.sty"
+Package: pdftexcmds 2007/12/12 v0.3 LuaTeX support for pdfTeX utility functions
+ (HO)
+Package pdftexcmds Info: LuaTeX not detected on input line 139.
+)))
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\kvsetkeys.sty"
+Package: kvsetkeys 2007/09/29 v1.3 Key value parser with default handler suppor
+t (HO)
+)
+\Fld@menulength=\count98
+\Field@Width=\dimen114
+\Fld@charsize=\dimen115
+\Field@toks=\toks15
+Package hyperref Info: Hyper figures OFF on input line 3926.
+Package hyperref Info: Link nesting OFF on input line 3931.
+Package hyperref Info: Hyper index ON on input line 3934.
+Package hyperref Info: backreferencing OFF on input line 3941.
+Package hyperref Info: Link coloring OFF on input line 3946.
+
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\atbegshi.sty"
+Package: atbegshi 2007/09/09 v1.6 At begin shipout hook (HO)
+
+("C:\Program Files\MiKTeX 2.7\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2007/12/12 v1.6 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in pdf mode detected.
+))
+\Hy@abspage=\count99
+\c@Item=\count100
+\c@Hfootnote=\count101
+)
+*hyperref using default driver hpdftex*
+("C:\Program Files\MiKTeX 2.7\tex\latex\hyperref\hpdftex.def"
+File: hpdftex.def 2007/11/20 v6.77g Hyperref driver for pdfTeX
+\Fld@listcount=\count102
+)
+Package: html 1999/07/19 v1.38 hypertext commands for latex2html (nd, hws, rrm)
+
+\c@lpart=\count103
+\c@lchapter=\count104
+\c@chapter=\count105
+\c@lsection=\count106
+\c@lsubsection=\count107
+\c@lsubsubsection=\count108
+\c@lparagraph=\count109
+\c@lsubparagraph=\count110
+\c@lsubsubparagraph=\count111
+\ptrfile=\write3
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\base\makeidx.sty"
+Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsmath\amsmath.sty"
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip45
+
+For additional information on amsmath, use the `?' option.
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsmath\amstext.sty"
+Package: amstext 2000/06/29 v2.01
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsmath\amsgen.sty"
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks16
+\ex@=\dimen116
+))
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsmath\amsbsy.sty"
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen117
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsmath\amsopn.sty"
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count112
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count113
+\leftroot@=\count114
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count115
+\DOTSCASE@=\count116
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box52
+\strutbox@=\box53
+\big@size=\dimen118
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count117
+\c@MaxMatrixCols=\count118
+\dotsspace@=\muskip11
+\c@parentequation=\count119
+\dspbrk@lvl=\count120
+\tag@help=\toks17
+\row@=\count121
+\column@=\count122
+\maxfields@=\count123
+\andhelp@=\toks18
+\eqnshift@=\dimen119
+\alignsep@=\dimen120
+\tagshift@=\dimen121
+\tagwidth@=\dimen122
+\totwidth@=\dimen123
+\lineht@=\dimen124
+\@envbody=\toks19
+\multlinegap=\skip46
+\multlinetaggap=\skip47
+\mathdisplay@stack=\toks20
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\amscls\amsthm.sty"
+Package: amsthm 2004/08/06 v2.20
+\thm@style=\toks21
+\thm@bodyfont=\toks22
+\thm@headfont=\toks23
+\thm@notefont=\toks24
+\thm@headpunct=\toks25
+\thm@preskip=\skip48
+\thm@postskip=\skip49
+\thm@headsep=\skip50
+\dth@everypar=\toks26
+)
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\amssymb.sty"
+Package: amssymb 2002/01/22 v2.2d
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\amsfonts.sty"
+Package: amsfonts 2001/10/25 v2.2f
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 132.
+))
+("C:\Program Files\MiKTeX 2.7\tex\latex\ccaption\ccaption.sty"
+Package: ccaption 2005/03/29 v3.2a Extended captioning and new floats
+\@contcwidth=\skip51
+\@contindw=\skip52
+\abovelegendskip=\skip53
+\belowlegendskip=\skip54
+\c@@contsubnum=\count124
+\c@newflo@tctr=\count125
+)
+\c@theorem=\count126
+ (Report3.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+
+("C:\Program Files\MiKTeX 2.7\tex\context\base\supp-pdf.tex"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count127
+\scratchdimen=\dimen125
+\scratchbox=\box54
+\nofMPsegments=\count128
+\nofMParguments=\count129
+\MPscratchCnt=\count130
+\MPscratchDim=\dimen126
+\MPnumerator=\count131
+\everyMPtoPDFconversion=\toks27
+)
+Package hyperref Info: Link coloring OFF on input line 22.
+ ("C:\Program Files\MiKTeX 2.7\tex\latex\hyperref\nameref.sty"
+Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\oberdiek\refcount.sty"
+Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
+)
+\c@section@level=\count132
+)
+LaTeX Info: Redefining \ref on input line 22.
+LaTeX Info: Redefining \pageref on input line 22.
+ (Report3.out)
+(Report3.out)
+\@outlinefile=\write4
+\AtBeginShipoutBox=\box55
+LaTeX Font Info:    Try loading font information for U+msa on input line 25.
+ ("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2002/01/19 v2.2g AMS font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 25.
+
+("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2002/01/19 v2.2g AMS font definitions
+) [1
+
+{C:/Documents and Settings/All Users/Application Data/MiKTeX/2.7/pdftex/config/
+pdftex.map}]
+(Report3.toc [2])
+\tf@toc=\write5
+ [3]
+Underfull \hbox (badness 10000) in paragraph at lines 33--34
+
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 35.
+("C:\Program Files\MiKTeX 2.7\tex\latex\base\omscmr.fd"
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 35.
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+
+ []
+
+<Pictures/flattetrahedron.png, id=207, 418.66759pt x 314.00069pt>
+File: Pictures/flattetrahedron.png Graphic file (type png)
+
+<use Pictures/flattetrahedron.png>
+<Pictures/tetrahedron.jpg, id=208, 674.52pt x 505.89pt>
+File: Pictures/tetrahedron.jpg Graphic file (type jpg)
+
+<use Pictures/tetrahedron.jpg>
+Overfull \hbox (24.30193pt too wide) in paragraph at lines 43--45
+[][] [] 
+ []
+
+[4] [5 <Pictures/flattetrahedron.png (PNG copy)> <Pictures/tetrahedron.jpg>]
+[6] [7] <Pictures/Flip1331.png, id=244, 459.16371pt x 133.32568pt>
+File: Pictures/Flip1331.png Graphic file (type png)
+
+<use Pictures/Flip1331.png>
+<Pictures/Flip2.png, id=245, 459.16371pt x 133.32568pt>
+File: Pictures/Flip2.png Graphic file (type png)
+
+<use Pictures/Flip2.png> [8 <Pictures/Flip1331.png (PNG copy)> <Pictures/Flip2.
+png (PNG copy)>]
+<Pictures/triangulationUML.png, id=255, 808.01875pt x 1018.80624pt>
+File: Pictures/triangulationUML.png Graphic file (type png)
+
+<use Pictures/triangulationUML.png> [9] [10 <Pictures/triangulationUML.png (PNG
+ copy)>] [11] <Pictures/genTri4.png, id=277, 418.66759pt x 314.00069pt>
+File: Pictures/genTri4.png Graphic file (type png)
+
+<use Pictures/genTri4.png> [12 <Pictures/genTri4.png (PNG copy)>] [13]
+<Pictures/antitri1.png, id=292, 418.66759pt x 314.00069pt>
+File: Pictures/antitri1.png Graphic file (type png)
+
+<use Pictures/antitri1.png>
+<Pictures/antitri2.png, id=293, 418.66759pt x 314.00069pt>
+File: Pictures/antitri2.png Graphic file (type png)
+
+<use Pictures/antitri2.png>
+Overfull \hbox (18.02228pt too wide) in paragraph at lines 246--247
+\OT1/cmr/bx/n/12 Proposition 3.4. \OT1/cmr/m/it/12 Any hinge that is non-weight
+ed-Delaunay will be-come weighted
+ []
+
+[14 <Pictures/antitri1.png (PNG copy)> <Pictures/antitri2.png (PNG copy)>]
+Overfull \hbox (4.73062pt too wide) in paragraph at lines 262--263
+[]\OT1/cmr/m/n/12 Our ran-dom tri-an-gu-la-tion gen-er-a-tor be-gins with one t
+ri-an-gle with edge lengths
+ []
+
+<Pictures/gentri.png, id=301, 418.66759pt x 314.00069pt>
+File: Pictures/gentri.png Graphic file (type png)
+
+<use Pictures/gentri.png>
+<Pictures/gentri6.png, id=302, 418.66759pt x 314.00069pt>
+File: Pictures/gentri6.png Graphic file (type png)
+
+<use Pictures/gentri6.png> [15]
+<Pictures/genTri5v2.png, id=310, 378.79448pt x 304.03241pt>
+File: Pictures/genTri5v2.png Graphic file (type png)
+
+<use Pictures/genTri5v2.png> [16 <Pictures/gentri.png (PNG copy)> <Pictures/gen
+tri6.png (PNG copy)>]
+<Pictures/nonwduals.png, id=320, 418.66759pt x 314.00069pt>
+File: Pictures/nonwduals.png Graphic file (type png)
+
+<use Pictures/nonwduals.png>
+<Pictures/Wduals.png, id=321, 418.66759pt x 314.00069pt>
+File: Pictures/Wduals.png Graphic file (type png)
+
+<use Pictures/Wduals.png> [17 <Pictures/genTri5v2.png (PNG copy)>]
+<Pictures/Stats.png, id=330, 583.76715pt x 323.96896pt>
+File: Pictures/Stats.png Graphic file (type png)
+
+<use Pictures/Stats.png> [18 <Pictures/nonwduals.png (PNG copy)> <Pictures/Wdua
+ls.png (PNG copy)>] <Pictures/triEx1.png, id=337, 418.66759pt x 314.00069pt>
+File: Pictures/triEx1.png Graphic file (type png)
+
+<use Pictures/triEx1.png>
+<Pictures/triExD1.png, id=338, 418.66759pt x 314.00069pt>
+File: Pictures/triExD1.png Graphic file (type png)
+
+<use Pictures/triExD1.png>
+<Pictures/triExD2.png, id=339, 418.66759pt x 314.00069pt>
+File: Pictures/triExD2.png Graphic file (type png)
+
+<use Pictures/triExD2.png>
+<Pictures/triExD3.png, id=340, 418.66759pt x 314.00069pt>
+File: Pictures/triExD3.png Graphic file (type png)
+
+<use Pictures/triExD3.png>
+<Pictures/triExD4.png, id=341, 418.66759pt x 314.00069pt>
+File: Pictures/triExD4.png Graphic file (type png)
+
+<use Pictures/triExD4.png>
+<Pictures/triExD5.png, id=342, 418.66759pt x 314.00069pt>
+File: Pictures/triExD5.png Graphic file (type png)
+
+<use Pictures/triExD5.png>
+Underfull \hbox (badness 10000) in paragraph at lines 327--333
+[][] []
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 327--333
+[] []
+ []
+
+[19 <Pictures/Stats.png (PNG copy)>] [20 <Pictures/triEx1.png (PNG copy)> <Pict
+ures/triExD1.png (PNG copy)> <Pictures/triExD2.png (PNG copy)> <Pictures/triExD
+3.png (PNG copy)> <Pictures/triExD4.png (PNG copy)> <Pictures/triExD5.png (PNG 
+copy)>] [21] <Pictures/righttriangulation.jpg, id=367, 674.52pt x 505.89pt>
+File: Pictures/righttriangulation.jpg Graphic file (type jpg)
+
+<use Pictures/righttriangulation.jpg>
+<Pictures/badcase2.png, id=368, 418.66759pt x 314.00069pt>
+File: Pictures/badcase2.png Graphic file (type png)
+
+<use Pictures/badcase2.png>
+Overfull \hbox (24.30193pt too wide) in paragraph at lines 356--358
+[][] [] 
+ []
+
+[22 <Pictures/righttriangulation.jpg> <Pictures/badcase2.png (PNG copy)>]
+[23] [24] [25]
+Overfull \hbox (8.20491pt too wide) in paragraph at lines 480--493
+[][] 
+ []
+
+[26] [27]
+Overfull \hbox (2.61108pt too wide) in paragraph at lines 528--593
+[]$[]$ [] 
+ []
+
+[28] [29] <Pictures/torus22.png, id=442, 418.66759pt x 314.00069pt>
+File: Pictures/torus22.png Graphic file (type png)
+
+<use Pictures/torus22.png>
+<Pictures/torus2addvertex2.png, id=443, 418.66759pt x 314.00069pt>
+File: Pictures/torus2addvertex2.png Graphic file (type png)
+
+<use Pictures/torus2addvertex2.png>
+Overfull \hbox (31.27765pt too wide) in paragraph at lines 624--626
+[][] [] 
+ []
+
+[30] [31 <Pictures/torus22.png (PNG copy)> <Pictures/torus2addvertex2.png (PNG 
+copy)>] <Pictures/tetratouch.png, id=457, 442.34224pt x 211.82587pt>
+File: Pictures/tetratouch.png Graphic file (type png)
+
+<use Pictures/tetratouch.png>
+Overfull \hbox (52.34116pt too wide) in paragraph at lines 647--648
+[][] 
+ []
+
+[32] <Pictures/ConvergenceTable.png, id=463, 395.67825pt x 686.565pt>
+File: Pictures/ConvergenceTable.png Graphic file (type png)
+
+<use Pictures/ConvergenceTable.png> [33 <Pictures/tetratouch.png (PNG copy)>]
+[34 <Pictures/ConvergenceTable.png (PNG copy)>] [35]
+Overfull \hbox (0.2529pt too wide) in paragraph at lines 689--690
+[]\OT1/cmr/m/n/12 More im-por-tantly, our equa-tion for com-bi-na-to-rial Ricci
+ flow is al-tered slightly.
+ []
+
+<Pictures/octosph.png, id=479, 418.66759pt x 314.00069pt>
+File: Pictures/octosph.png Graphic file (type png)
+
+<use Pictures/octosph.png> [36] [37 <Pictures/octosph.png (PNG copy)>]
+<Pictures/kHatResult.png, id=494, 467.26292pt x 336.4293pt>
+File: Pictures/kHatResult.png Graphic file (type png)
+
+<use Pictures/kHatResult.png> [38 <Pictures/kHatResult.png (PNG copy)>]
+<Pictures/SphG0V10.png, id=504, 418.66759pt x 314.00069pt>
+File: Pictures/SphG0V10.png Graphic file (type png)
+
+<use Pictures/SphG0V10.png> [39] [40 <Pictures/SphG0V10.png (PNG copy)>]
+<Pictures/pDisk.png, id=520, 418.66759pt x 314.00069pt>
+File: Pictures/pDisk.png Graphic file (type png)
+
+<use Pictures/pDisk.png> [41]
+Overfull \hbox (8.10085pt too wide) in paragraph at lines 789--790
+\OT1/cmr/m/n/12 pro-gram into two new pro-grams, $\OML/cmm/m/it/12 sphericalCal
+cFlow$ \OT1/cmr/m/n/12 and $\OML/cmm/m/it/12 hyperbolicCalcFlow$\OT1/cmr/m/n/12
+ ,
+ []
+
+[42 <Pictures/pDisk.png (PNG copy)>] [43] [44]
+<Pictures/intcirc2.png, id=545, 418.66759pt x 314.00069pt>
+File: Pictures/intcirc2.png Graphic file (type png)
+
+<use Pictures/intcirc2.png> [45 <Pictures/intcirc2.png (PNG copy)>] [46]
+[47] (Report3.bbl
+Underfull \hbox (badness 10000) in paragraph at lines 24--27
+[]\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 29--32
+[]\OT1/cmr/m/n/12 Dana Macken-zie.  The Poincare con-jec-ture proved.
+ []
+
+) [48] <Pictures/geometryU.png, id=573, 418.66759pt x 314.00069pt>
+File: Pictures/geometryU.png Graphic file (type png)
+
+<use Pictures/geometryU.png> [49] [50 <Pictures/geometryU.png (PNG copy)>]
+<Pictures/geometryW2.png, id=588, 418.66759pt x 314.00069pt>
+File: Pictures/geometryW2.png Graphic file (type png)
+
+<use Pictures/geometryW2.png>
+Underfull \hbox (badness 10000) in paragraph at lines 926--927
+
+ []
+
+[51 <Pictures/geometryW2.png (PNG copy)>]
+Overfull \hbox (23.90465pt too wide) in paragraph at lines 934--934
+[]\OT1/cmr/bx/n/14.4 Remarks on Runge-Kutta method for solv-ing Eq. ([]11[]) 
+ []
+
+<Pictures/torus7addvaddhweights2.png, id=601, 413.1435pt x 333.04425pt>
+File: Pictures/torus7addvaddhweights2.png Graphic file (type png)
+
+<use Pictures/torus7addvaddhweights2.png>
+<Pictures/curvcurves.png, id=602, 523.33449pt x 314.00069pt>
+File: Pictures/curvcurves.png Graphic file (type png)
+
+<use Pictures/curvcurves.png>
+Overfull \hbox (28.66815pt too wide) in paragraph at lines 952--953
+ [][] 
+ []
+
+<Pictures/Curvg6v12addv.png, id=605, 418.66759pt x 314.00069pt>
+File: Pictures/Curvg6v12addv.png Graphic file (type png)
+
+<use Pictures/Curvg6v12addv.png>
+<Pictures/Weightg6v12addv.png, id=606, 418.66759pt x 314.00069pt>
+File: Pictures/Weightg6v12addv.png Graphic file (type png)
+
+<use Pictures/Weightg6v12addv.png>
+<Pictures/GUIpic.png, id=607, 580.1675pt x 443.6575pt>
+File: Pictures/GUIpic.png Graphic file (type png)
+
+<use Pictures/GUIpic.png>
+Overfull \hbox (5.57922pt too wide) in paragraph at lines 973--974
+\OT1/cmr/m/n/12 Code from the pro-gram can be found here: http://code.google.co
+m/p/geocam. 
+ []
+
+[52]
+Overfull \hbox (85.47523pt too wide) in paragraph at lines 1081--1081
+[]\OT1/cmtt/m/n/12 void calcFlow(vector<double>* weights, vector<double>* curva
+tures, double dt,[] 
+ []
+
+
+Overfull \hbox (60.77522pt too wide) in paragraph at lines 1081--1081
+[]  \OT1/cmtt/m/n/12 int p = Triangulation::vertexTable.size(); // The number o
+f vertices or[] 
+ []
+
+
+Overfull \hbox (91.65024pt too wide) in paragraph at lines 1081--1081
+[]                                             \OT1/cmtt/m/n/12 // number of va
+riables in system.[] 
+ []
+
+[53 <Pictures/torus7addvaddhweights2.png (PNG copy)>] [54 <Pictures/curvcurves.
+png (PNG copy)>] [55 <Pictures/Curvg6v12addv.png (PNG copy)> <Pictures/Weightg6
+v12addv.png (PNG copy)>] [56 <Pictures/GUIpic.png (PNG copy)>]
+Overfull \hbox (73.12523pt too wide) in paragraph at lines 1081--1081
+[]  \OT1/cmtt/m/n/12 double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays t
+o hold data for[] 
+ []
+
+
+Overfull \hbox (23.7252pt too wide) in paragraph at lines 1081--1081
+[]                                      \OT1/cmtt/m/n/12 // the intermediate st
+eps in.[] 
+ []
+
+
+Overfull \hbox (11.3752pt too wide) in paragraph at lines 1081--1081
+[]  \OT1/cmtt/m/n/12 int    i,k; // ints used for "for loops". i is the step nu
+mber,[] 
+ []
+
+
+Overfull \hbox (97.82524pt too wide) in paragraph at lines 1081--1081
+[]  \OT1/cmtt/m/n/12 map<int, Vertex>::iterator vit; // Iterator to traverse th
+rough the vertices.[] 
+ []
+
+
+Overfull \hbox (60.77522pt too wide) in paragraph at lines 1081--1081
+[]  \OT1/cmtt/m/n/12 map<int, Vertex>::iterator vBegin = Triangulation::vertexT
+able.begin();[] 
+ []
+
+
+Overfull \hbox (36.07521pt too wide) in paragraph at lines 1081--1081
+[]  \OT1/cmtt/m/n/12 map<int, Vertex>::iterator vEnd = Triangulation::vertexTab
+le.end();[] 
+ []
+
+
+Overfull \hbox (5.2002pt too wide) in paragraph at lines 1081--1081
+[]       \OT1/cmtt/m/n/12 if(i == 1) // If first time through, use static metho
+d to[] 
+ []
+
+
+Overfull \hbox (66.95023pt too wide) in paragraph at lines 1081--1081
+[]       \OT1/cmtt/m/n/12 {  // First "for loop"in whole step calculates everyt
+hing manually.[] 
+ []
+
+
+Overfull \hbox (48.42522pt too wide) in paragraph at lines 1081--1081
+[]           \OT1/cmtt/m/n/12 (*weights).push_back( z[k]); // Adds the data to 
+the vector.[] 
+ []
+
+
+Overfull \hbox (54.60022pt too wide) in paragraph at lines 1081--1081
+[]           \OT1/cmtt/m/n/12 {  // Adjusted for small numbers. We want it to p
+rint nicely.[] 
+ []
+
+
+Overfull \hbox (60.77522pt too wide) in paragraph at lines 1081--1081
+[]             \OT1/cmtt/m/n/12 (*curvatures).push_back(0.); // Adds the data t
+o the vector.[] 
+ []
+
+[57]
+Overfull \hbox (54.60022pt too wide) in paragraph at lines 1081--1081
+[]           \OT1/cmtt/m/n/12 // Calculates the differential equation, either n
+ormalized or[] 
+ []
+
+
+Overfull \hbox (11.3752pt too wide) in paragraph at lines 1081--1081
+[]            \OT1/cmtt/m/n/12 // Again calculates the differential equation, b
+ut we[] 
+ []
+
+[58]
+Overfull \hbox (11.3752pt too wide) in paragraph at lines 1081--1081
+[]       \OT1/cmtt/m/n/12 for (k=0; k<p; k++) // Adjust z[k] according to algor
+ithm.[] 
+ []
+
+[59] (Report3.aux) ) 
+Here is how much of TeX's memory you used:
+ 5844 strings out of 95340
+ 79607 string characters out of 1184156
+ 149832 words of memory out of 1500000
+ 8758 multiletter control sequences out of 110000
+ 13629 words of font info for 52 fonts, out of 1200000 for 2000
+ 14 hyphenation exceptions out of 8191
+ 43i,9n,36p,1497b,397s stack positions out of 5000i,500n,10000p,200000b,5000s
+<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx12.
+pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmex10.pfb><C:/Program 
+Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.7
+/fonts/type1/bluesky/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/blue
+sky/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr17.pfb>
+<C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr6.pfb><C:/Program Files/
+MiKTeX 2.7/fonts/type1/bluesky/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.7/fonts/t
+ype1/bluesky/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/
+cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti12.pfb><C:/Pr
+ogram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt12.pfb><C:/Program Files/MiKT
+eX 2.7/fonts/type1/bluesky/ams/msam10.pfb><C:/Program Files/MiKTeX 2.7/fonts/ty
+pe1/bluesky/ams/msbm10.pfb>
+Output written on Report3.pdf (59 pages, 1218596 bytes).
+PDF statistics:
+ 726 PDF objects out of 1000 (max. 8388607)
+ 160 named destinations out of 1000 (max. 131072)
+ 479 words of extra memory for PDF output out of 10000 (max. 10000000)
+

@@ -1,0 +1,38 @@
+\begin{thebibliography}{1}
+
+\bibitem{DiffEq}
+M.~Brown.
+\newblock {\em Ordinary Differential Equations and Their Applications}.
+\newblock Springer-Verlag, New York, NY, 1983.
+
+\bibitem{chowluo}
+B.~Chow and F.~Luo.
+\newblock {\em Combinatorial Ricci Flows on Surfaces}.
+\newblock Journal of Differential Geometry 63, Volume , 97-129, 2003.
+
+\bibitem{DrG}
+D.~Glickenstein.
+\newblock {\em A combnatorial Yamabe flow in three dimensions}.
+\newblock Topology 44, 791-808, 2005.
+
+\bibitem{Dave}
+D.~Glickenstein.
+\newblock Geometric triangulations and discrete laplacians on manifolds.
+\newblock Material given to us by David, 2008.
+
+\bibitem{lutzmanifold}
+F.~H. Lutz.
+\newblock The manifold page.
+\newblock http://www.math.tu-berlin.de/diskregeom/stellar/.
+
+\bibitem{RicciBkgd}
+Dana Mackenzie.
+\newblock The {P}oincar\'{e} conjecture proved.
+\newblock http://www.sciencemag.org.
+
+\bibitem{JPM}
+J-P Moreau.
+\newblock Differential equations in c++.
+\newblock http://pagesperso-orange.fr/\\jean-pierre.moreau/c$\_$eqdiff.html.
+
+\end{thebibliography}
