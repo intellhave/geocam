@@ -37,46 +37,7 @@ double angle(Vertex v, Face f)
      diff = listDifference(f.getLocalEdges(), v.getLocalEdges());
      Edge e3 = Triangulation::edgeTable[diff[0]];
      
-     return angle(e1.getLength(), e2.getLength(), e3.getLength());
-     
-//       vector<int>::iterator it;
-//       vector<int>* vEdges = v.getLocalEdges();
-//       vector<int> fLocalEdges = *(f.getLocalEdges());
-//       
-//       int edges[2]; // Holds the indices of the edges that are
-//                     // in common between the face and vertex.
-//       int j = 0;
-//       
-//       for(int i = 0; i < 3; i++) // Iterate through the three edges
-//       {                          // of the face.
-//           int edgeToMatch = fLocalEdges[i];
-//           
-//           // Uses the find algortihm in C++ library to point to match
-//           it = find((*vEdges).begin(), (*vEdges).end(), edgeToMatch);
-//           // If there is a match (not pointing to end iterator)...
-//           
-//           if(it != (*vEdges).end())
-//           {     
-//                 // Add index of the vector holding the int of the
-//                 // edge.
-//                 edges[j] = i;
-//                 j++;
-//           }
-//           if(j == 2) { // Already found the two matches
-//                break;
-//           }
-//       }
-//       Edge e1 = Triangulation::edgeTable[fLocalEdges[edges[0]]];
-//       Edge e2 = Triangulation::edgeTable[fLocalEdges[edges[1]]];
-//       /*
-//        * Finds the index of the third and opposite edge:
-//        *    [(Index1 + Index2) * 2]  mod 3
-//        *    ex: [(0 + 2) * 2] mod 3 = 1
-//        */
-//       int eC = ((edges[0] + edges[1]) * 2) % 3;
-//       
-//       Edge e3 = Triangulation::edgeTable[fLocalEdges[eC]];
-//       return angle(e1.getLength(), e2.getLength(), e3.getLength());       
+     return angle(e1.getLength(), e2.getLength(), e3.getLength());       
 }
 
 double curvature(Vertex v)

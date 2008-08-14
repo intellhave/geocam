@@ -85,7 +85,7 @@ for i = 0:S-1
 % Ctrl + C to cancel from the main console. This is useful when running a
 % single file, but not useful if running multiDelaunayPlot. 
 
-%pause(0.001);
+%pause(2.0);
 
 end
 

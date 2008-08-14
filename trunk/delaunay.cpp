@@ -100,7 +100,14 @@ double getDual(Edge e)
      
      double h1 = getHeight(f1, e);
      double h2 = getHeight(f2, e);
-     
+     if(listDifference(f1.getLocalVertices(), f2.getLocalVertices()).size() == 0)
+     {
+        cout << "Double triangle: " << e.getIndex() << " " << 
+        f1.getIndex() << " " << f2.getIndex() << "\n";
+        cout << "Heights: " << h1 << " " << h2 << "\n";
+        writeTriangulationFile("Triangulations/troubleshoot.txt");
+        system("PAUSE");
+     }
 //     cout << "Edge #" << e.getIndex() << endl;
 //     cout << "Face 1: (";
 //     cout << (*(f1.getLocalVertices()))[0] << ", ";

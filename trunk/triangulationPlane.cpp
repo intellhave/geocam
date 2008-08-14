@@ -17,6 +17,9 @@
 #include "delaunay.h"
 #define PI 	3.141592653589793238
 
+int checkForDoubleTriangles();
+bool isDoubleTriangle(Vertex);
+int checkFaces();
 void firstTriangle(double length1, double length2, double length3)
 {
      if(length1 >= length2 + length3)
@@ -417,6 +420,16 @@ void weightedFlipAlgorithm()
                          tcs.update();
                          tcs.printToFile(s);
                          writeTriangulationFile(s2);
+                         int vertex = checkForDoubleTriangles();
+                         if(vertex > 0)
+                         {
+                            cout << "Double triangle at: " << vertex << "\n";
+                         }
+                         int face = checkFaces();
+                         if(face > 0)
+                         {
+                            cout << "Face trouble at: " << face << "\n";
+                         }
                     }
                     catch(string s1)
                     {
@@ -661,10 +674,56 @@ void writeYuliyaFile(char* fileName)
           output << endl;
           
      }
-     
-     
-     
-     
+        
      
 }
 
+int checkForDoubleTriangles()
+{
+         map<int, Vertex>::iterator vit;
+         for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
+         {
+            if(isDoubleTriangle(vit->second)) 
+            {
+               return vit->first;
+            }
+         }
+         return -1;
+}
+     
+bool isDoubleTriangle(Vertex v)
+{
+          if(v.getDegree() != 2)
+          {
+             return false;
+          }
+          Edge e1 = Triangulation::edgeTable[(*(v.getLocalEdges()))[0]];
+          Edge e2 = Triangulation::edgeTable[(*(v.getLocalEdges()))[1]];
+          vector<int> faces1= *(e1.getLocalFaces());
+          vector<int> faces2= *(e2.getLocalFaces());
+          if(!(e1.isBorder() || e2.isBorder())) 
+          {
+             if((faces1[0] == faces2[0] || faces1[0] == faces2[1]) &&
+                  (faces1[1] == faces2[0] || faces1[1] == faces2[1]))
+             {
+                  Face f1 = Triangulation::faceTable[faces1[0]];
+                  Face f2 = Triangulation::faceTable[faces1 [1]];
+                  if(f1.isNegative() == f2.isNegative())
+                     return true;
+             }
+          }
+          return false;                             
+}
+
+int checkFaces()
+{
+         map<int, Face>::iterator fit;
+         for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+         {
+            if(fit->second.getLocalVertices()->size() == 2)
+            {
+               return fit->first;
+            }
+         }
+         return -1;
+}

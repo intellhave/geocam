@@ -53,6 +53,7 @@ bool readTriangulationFile(char*);
  */
 void writeTriangulationFile(char*);
 
+void writeTriangulationFileWithData(char*);
 /*
  * Reads a file in the format found on The Manifold Page, 
  * http://www.math.tu-berlin.de/diskregeom/stellar/ , and writes to another

@@ -183,12 +183,16 @@ void testMiscMath()
 int main(int argc, char *argv[])
 {
     
-    generateTriangulation(50);
+    generateTriangulation(100);
     generateWeights();
 //    makeSpecialCase();
     TriangulationCoordinateSystem tcs;
     tcs.generatePlane();
-    weightedFlipAlgorithm();
+    try{
+       weightedFlipAlgorithm();
+    } catch(string s) {
+       cout << s << "\n";
+    }
     system("PAUSE");
     return 0;
     
