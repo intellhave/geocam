@@ -4,6 +4,7 @@
 \usepackage{html,makeidx}
 \usepackage{amsmath, amsthm}
 \usepackage{amssymb}
+\usepackage[subfigure]{ccaption}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -25,7 +26,7 @@ Supervisor: Dr. David Glickenstein\\
 \newpage
 \renewcommand\contentsname{Table of Contents}
 \tableofcontents
-
+\hangcaption{}
 \newpage
 \section{Introduction}
 
@@ -204,13 +205,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \label{genTri}
 \end{figure}
 
-<<<<<<< .mine
-<<<<<<< .mine
- To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
-=======
-=======
->>>>>>> .r496
- To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
+To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
 
 \begin{proposition}
 \label{NonDelProp}
