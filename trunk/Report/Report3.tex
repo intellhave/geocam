@@ -884,12 +884,19 @@ There were many things we wanted to explore with triangulations, particularly to
 	Rearranging we have
 $$\frac{1}{\alpha}\frac{d\alpha}{dt} = \frac{d(\log \alpha)}{dt} = \frac{K_1 + K_2 + \ldots + K_n}{n} = \overline{K}$$
 	which we refer to as Eq.~(\ref{proof1})
-  
+
+\begin{figure}
+\label{NonDelPropfig}
+\centering
+\includegraphics[scale = 0.5]{Pictures/geometryU.png}
+\caption{An illustration associated with our proof of Proposition \ref{NonDelProp}.}
+\end{figure}
+
 \subsection{Proof of Proposition \ref{NonDelProp}}
 The sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$.
 \begin{proof}
 \label{prop1}
-Let $\Delta ABC$ and $\Delta BCD$ be triangles with common edge $\overline{BC}$. Let $r$ be the radius of the circumcircle of  $\Delta ABC$ and $E$ be the center of that circle. Then we wish to show that if $\overline{DE}$ is less than $r$, then $\angle BAC + \angle BDC > \pi$.\newline
+Let $\Delta ABC$ and $\Delta BCD$ be triangles with common edge $\overline{BC}$ (see fig. \ref{NonDelPropfig}). Let $r$ be the radius of the circumcircle of  $\Delta ABC$ and $E$ be the center of that circle. Then we wish to show that if $\overline{DE}$ is less than $r$, then $\angle BAC + \angle BDC > \pi$.\newline
 
 \noindent We know that $\overline{AB}=\overline{AE}=\overline{EC}=r$, so $\angle EBA = \angle BAE$ and $\angle EAC = \angle ACE$. Therefore, $\angle EBA + \angle ACE= \angle BAC$.\newline
 
@@ -907,29 +914,23 @@ since $ABCD$ is a quadrilateral. So $\angle BAC + \angle BDC = \pi$.\newline
 \end{proof}
 
 \begin{figure}
+\label{weidelpropfig}
 \centering
-\includegraphics[scale = 0.5]{Pictures/geometryU.png}
-\caption{An illustration associated with our proof of Proposition \ref{NonDelProp}.}
+\includegraphics[scale = 0.5]{Pictures/geometryW2.png}
+\caption{An illustration associated with our proof of Proposition \ref{weidelprop}.}
 \end{figure}
 
 \subsection{Proof of Proposition \ref{weidelprop}}
 Any hinge that is non-weighted-Delaunay will become weighted Delaunay after a 2-2 flip is performed on it.
 \begin{proof}
 \label{prop2}
-Consider the hinge consisting of edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. Assume this hinge is non-weighted-Delaunay. Let $A = C(\{i, j, k\})$ and $B = C(\{i, j, l\})$. We know that $B$ must lie closer to \textit{k} than $A$. Similarly, $A$ is closer to \textit{l} than $B$.\newline
+Consider the hinge consisting of edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. Assume this hinge is non-weighted-Delaunay. Let $A = C(\{i, j, k\})$ and $B = C(\{i, j, l\})$. We know that $B$ must lie closer to \textit{k} than $A$. Similarly, $A$ is closer to \textit{l} than $B$ (see fig. \ref{weidelpropfig}).\newline
 
 \noindent By definition of $C(\{i, j, k\})$, we can say that $A$ lies at the intersection of $h_{ij,k}$, $h_{ik,j}$, and $h_{jk,i}$. Since it suffices to look at only two of these lengths, we will consider just $h_{ik,j}$ and $h_{jk,i}$. Similarly, we can say that $B$ lies at the intersection on $h_{il,j}$ and $h_{jl,i}$. Because this hinge is weighted non-Delaunay, we know that there exists a point where $h_{ik,j}$ and $h_{il,j}$ intersect; the same can be said for $h_{jk,i}$, and $h_{jl,i}$. Let us call these points $C$ and $D$ respectively.\newline
 
 \noindent At this point, consider our hinge after a 2-2 flip has been performed on it. We now have faces $\{i, k, l\}$ and $\{j, k, l\}$. Since $C$ is the intersection of $h_{ik,j}$ and $h_{il,j}$, we know that it also must be the intersection of $h_{ik,l}$ and $h_{il,k}$, which is $C(\{i, k, l\})$. Similarly, $D$ must be $C(\{j, k, l\})$. We know that $C$ must lie closer to \textit{i} than $D$ and $D$ must lie closer to \textit{j} than $C$. This means that $\star\{k, l\}$ must be positive. Therefore, the hinge on $\{k, l\}$ is weighted Delaunay. \qedhere
 
 \end{proof}
-
-
-\begin{figure}
-\centering
-\includegraphics[scale = 0.5]{Pictures/geometryW2.png}
-\caption{An illustration associated with our proof of Proposition \ref{weidelprop}.}
-\end{figure}
 
 \subsection{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
 
