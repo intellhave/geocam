@@ -53,25 +53,9 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... , \tau_n\}$, consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = \{i_0, ... , i_k\}$. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, and 2-dimensional simplices as triangles or faces \cite{Dave}.
 \end{definition}
 
-\noindent In 2 dimensions, we think of a triangulation as a surface that is made up of triangles joined at edges where each edge is completely shared by the two triangles it joins. Typically, triangulations are also defined to have no two triangles sharing the same three vertices. We use a more generalized definition that applies to open as well as closed surfaces and allows for shared simplices. In this paper, it will not be necessary to work outside of 2 dimensions. For that reason, we will refer to the spaces being triangulated simply as surfaces.\newline
+\noindent In two dimensions, we think of a triangulation as a surface that is made up of triangles joined along edges. Typically, triangulations are also defined to have no two triangles sharing the same three vertices. We use a more generalized definition that applies to open as well as closed surfaces and allows for shared simplices. In this paper, it will not be necessary to work outside of two dimensions. For that reason, we will refer to the spaces being triangulated simply as surfaces.\newline
 
-\noindent In order to describe our surfaces we must provide a description for each individual simplex. For our data structure, we decided on creating a list of references to give each simplex within the triangulation, which are written as integers referring to each simplex of a given dimension. These lists of references for each simplex are refences to other simplices in the triangulation with the property of being local. We define the term ``local'' slightly different for each simplex.\newline
-
-  \begin{table}%[ht]
-  \begin{center}
-  \begin{tabular}{|c|c|c|}
-  \hline
-  Vertices & Edges & Faces\\
-  \hline
-  adjacent vertices & component vertices & component vertices\\
-  constructed edges & adjacent edges & component edges\\
-  constructed faces & constructed faces & adjacent faces\\
-  \hline
-  \end{tabular}
-  \end{center}
-  \caption{A layout of how data is organized}
-  \label{geomat}
-  \end{table}
+\noindent In order to define our surfaces we must provide a description for each individual simplex. For our data structure, we decided on creating a list of references to give each simplex within the triangulation. These lists of references for each simplex are refences to other simplices in the triangulation with the property of being local. We define the term ``local'' differently for each simplex.\newline
 
 \begin{itemize}
 \item Locality is commutative. That is, if one simplex is local to another simplex, then that simplex is also local to the first simplex.
@@ -82,7 +66,6 @@ A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... 
 \item A vertex \textit{i} is local to all vertices that share an edge with \textit{i}.
 \item An edge $\{i, j\}$ is local to all edges local to vertices \textit{i} and \textit{j}.
 \item A face $\{i, j, k\}$ is local to all faces that share edges $\{i, j\}$, $\{i, k\}$, and $\{j, k\}$.
-\item These definitions are outlined in Table \ref{geomat}.
 \end{itemize}
 
 \noindent As well as lists of references to other simplices, each simplex also has other information needed to form a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge $\{i, j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $r_i$. We think of the weight of a given vertex to be the radius of a circle centered at that vertex. For any $\textit{n}$-dimensional simplex, there exists an $(n-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex \cite{Dave}. We use this sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle $\{i, j, k\}$ has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex. We call this circle the \textit{orthocircle}. \newline
@@ -135,13 +118,19 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \label{fig:flip}
 \end{figure}
 
-\noindent On a given triangulation, we are able to perform different modifications, which we will refer to as \textit{bistellar moves} or \textit{flips}. The are three possible bistellar moves that can be performed on a 2-dimensional triangulation: a 1-3 move, a 2-2 move, and a 3-1 move. The 1-3 move and the 3-1 move are inverses of one another while the 2-2 move is its own inverse.\newline
+\noindent On a given triangulation, we are able to perform different modifications, which we will refer to as \textit{bistellar moves} or \textit{flips}. There are three possible bistellar moves that can be performed on a 2-dimensional triangulation: a 1-3 move, a 2-2 move, and a 3-1 move. The 1-3 move and the 3-1 move are inverses of one another while the 2-2 move is its own inverse.\newline
 
 \noindent For the 1-3 move, we consider a face $\{i, j, k\}$. We create a new vertex \textit{l} and place it inside of $\{i, j, k\}$. From this, we create edges $\{i, l\}$, $\{j, l\}$, and $\{k, l\}$. By doing this, we have turned $\{i, j, k\}$ into three new faces, $\{i, j, l\}$, $\{i, k, l\}$, and $\{j, k, l\}$ (see fig. \ref{fig:flip2}). The 3-1 move is simply the inverse of this move. We start by taking a vertex \textit{l} of degree 3 and removing it from the triangulation, essentially removing three faces and three edges with it and leaving behind a single face $\{i, j, k\}$. A 2-2 move is one that requires no additions or removals of any simplices. Consider a hinge with edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. In a 2-2 flip, we simply take edge $\{i, j\}$ and replace it with a new edge $\{k, l\}$ (see fig. \ref{fig:flip}). This move will be used extensively in $\S\ref{DT}$.
 
 \subsection{Programming Structure}
 
-\noindent When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. It was agreed that the system would have to hold the different simplices and that they would be referencing each other. This part of the program would need to be structured in a way that makes it quick and easy to move from one simplex to another. As seen in Figure~\ref{triUML}, all simplices are assumed to have lists of references to other simplices, what we call local simplices, broken down by dimension. For the two-dimensional case, each simplex has lists of local vertices, local edges, and local faces.\newline
+\noindent When creating the program, the data structure design was critical. The design not only helps dictate the direction of the project over the course of its lifespan, but the decisions affect the speed and efficiency of all added functionality. Some of the highest priorities of our program are:
+ 
+\begin{itemize}
+\item Fast calculations.
+\item Easy access to data.
+\item Adaptable to a number of situations.
+\end{itemize}
 
 \begin{figure}
 \begin{center}
@@ -151,7 +140,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \label{triUML}
 \end{figure}
 
-\noindent The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class is made up of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. See Table~\ref{geomat} for an illustration of our triangulation setup.\newline
+\noindent As seen in Figure~\ref{triUML}, all simplices are assumed to have lists of references to their local simplices broken down by dimension. Each simplex has lists of local vertices, local edges, and local faces. The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class consists of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. Maps also have quick access time.\newline
 
 \noindent In order to build the triangulations that we need for our tests, we decided upon a format that could be entered into a file and then read by our program. This format can be seen in Table~\ref{tab:format}. While this format works fine and we can create some basic triangulations by hand, it is not easy for creating a wide array of triangulations.\newline
 
@@ -194,7 +183,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \noindent Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a catalog of almost two million known manifold triangulations of varying sizes. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
   
 \begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
-[2,3,5],[2,4,5],[3,4,5]]}
+[2,3,5],[2,4,5],[3,4,5]]},
 \end{verbatim}
  
 \noindent which solely documents the faces, into our format. The result is shown in Table~\ref{tab:format}.\newline
