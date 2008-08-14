@@ -83,10 +83,17 @@ double getHeight(Face f, Edge e)
      Edge ea2 = Triangulation::edgeTable[sameAs[0]];
 
      double ang1 = angle(v1, f);
-     double d13 = (pow(ea1.getLength(), 2) + pow(v1.getWeight(), 2) - pow(v3.getWeight(), 2)) / (2 * ea1.getLength());
-     double d12 = (pow(e.getLength(), 2) + pow(v1.getWeight(), 2) - pow(v2.getWeight(), 2)) / (2 * e.getLength());
+
+
+     double d13 = getPartialEdge(ea1,v1);
+     double d12 = getPartialEdge(e,v1);
+//
+//     cout << "angle: " << ang1 << endl;
+//     cout << "ea2: " << ea2.getLength() << endl;
+
+
      double h = (d13 - d12*cos(ang1)) / sin(ang1);
-     
+
      if(f.isNegative())
           return -h;
      else
@@ -147,6 +154,9 @@ double getPartialEdge(Edge e, Vertex v1)
     }
     Vertex v2 = Triangulation::vertexTable[v2Index];
     double d12 = (pow(e.getLength(), 2) + pow(v1.getWeight(), 2) - pow(v2.getWeight(), 2)) / (2 * e.getLength());
+//    
+//    double d21 = (pow(e.getLength(), 2) + pow(v2.getWeight(), 2) - pow(v1.getWeight(), 2)) / (2 * e.getLength());
+//    cout << d12 + d21 << "     " << e.getLength() << "\n";
     return d12;
 }
 

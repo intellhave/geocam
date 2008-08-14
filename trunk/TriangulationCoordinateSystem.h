@@ -110,6 +110,7 @@ class TriangulationCoordinateSystem
       void addHalfDual(Edge, Face); 
       void addDual(Edge);
       void addDuals(Vertex);
+      void addDuals(Face);
 };
 
 #endif // TRIANGULATIONCOORDINATESYSTEM_H

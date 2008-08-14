@@ -356,8 +356,8 @@ void generateWeights()
                smallest = Triangulation::edgeTable[index].getLength();
           }
           double randNum = ((double) rand()) / RAND_MAX;
-          vit->second.setWeightIndependent(randNum * smallest * 3.0/2);
-          
+
+          vit->second.setWeightIndependent(randNum * smallest * 1);     
      }
 }
 
@@ -420,6 +420,9 @@ void weightedFlipAlgorithm()
                          tcs.update();
                          tcs.printToFile(s);
                          writeTriangulationFile(s2);
+<<<<<<< .mine
+
+=======
                          int vertex = checkForDoubleTriangles();
                          if(vertex > 0)
                          {
@@ -430,6 +433,7 @@ void weightedFlipAlgorithm()
                          {
                             cout << "Face trouble at: " << face << "\n";
                          }
+>>>>>>> .r499
                     }
                     catch(string s1)
                     {
@@ -473,11 +477,14 @@ void weightedFlipAlgorithm()
                     }
                }
           }
+
+
      }
      
      cout << "Finished" << endl;
+
      cout << "Total num flips: " << count << "\n";
-     
+
      vector<int> remverts;
      map<int, Vertex>::iterator vit;
      for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
@@ -506,7 +513,7 @@ void weightedFlipAlgorithm()
           writeTriangulationFile(s2);
           cout << remverts.size() << " vertices removed" << endl;
      }
-     
+
 }
 
 void checkTriangle(Edge e, double length1, double length2)
@@ -576,9 +583,10 @@ void makeSpecialCase()
      Triangulation::vertexTable[1].setWeightIndependent(0);
      Triangulation::vertexTable[2].setWeightIndependent(0);
      Triangulation::vertexTable[3].setWeightIndependent(0);
-     Triangulation::vertexTable[4].setWeightIndependent(1.466);
-     Triangulation::vertexTable[5].setWeightIndependent(1.466);
-     Triangulation::vertexTable[6].setWeightIndependent(1.466);
+     Triangulation::vertexTable[4].setWeightIndependent(1.5066);
+     Triangulation::vertexTable[5].setWeightIndependent(1.5066);
+     Triangulation::vertexTable[6].setWeightIndependent(1.5066);
+//     generateWeights();
      
 }
 

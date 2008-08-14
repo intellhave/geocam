@@ -413,16 +413,20 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
        v2 = temp;
      }
      Point p1 = pointTable[v1];
-     double d12 = getPartialEdge(e, v1);
+
+     double d12 = getPartialEdge(e, Triangulation::vertexTable[v1]);
+
      double height = getHeight(f, e);
-     double xComp = p1.x + d12*(pointTable[v2].x - p1.x) / e.getLength();
-     double yComp = p1.y + d12*(pointTable[v2].y - p1.y) / e.getLength();
+     double xComp = p1.x + (d12*(pointTable[v2].x - p1.x) / e.getLength());
+     double yComp = p1.y + (d12*(pointTable[v2].y - p1.y) / e.getLength());
      Point partial(xComp, yComp);
      Line halfLine(partial, p1);
+     cout << "hl: " << halfLine.getLength() << " d12: " << d12 << "\n";
      Point center1 = findPoint(halfLine, height, -PI/2);
      Point center2 = findPoint(halfLine, height, PI/2);
      int v3 = listDifference(f.getLocalVertices(), e.getLocalVertices())[0];
      bool v3Pos = l.isAbove(pointTable[v3]);
+     
      if(height < 0)
      {
         v3Pos = !v3Pos;
@@ -430,14 +434,25 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
      if(l.isAbove(center1) == v3Pos)
      {
         Line halfDual(partial, center1);
+        cout << "h: " << height << " hd: " << halfDual.getLength() << "\n";
         dualList.push_back(halfDual);                   
      }
      else if(l.isAbove(center2) == v3Pos)
      {
            Line halfDual(partial, center2);
+           cout << "h: " << height << " hd: " << halfDual.getLength() << "\n";
            dualList.push_back(halfDual); 
      }
      
+}
+
+void TriangulationCoordinateSystem::addDuals(Face f)
+{
+     for (int i = 0; i <= 2; i++)
+    {
+        Edge e = Triangulation::edgeTable[(*(f.getLocalEdges()))[i]]; 
+        addHalfDual(e, f);
+    }
 }
 
 void TriangulationCoordinateSystem::addDual(Edge e)
