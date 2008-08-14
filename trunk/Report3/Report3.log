@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  14 AUG 2008 15:34
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.5)  14 AUG 2008 16:27
 entering extended mode
-**C:/Dev-Cpp/geocam/Report/Report3.tex
-(C:/Dev-Cpp/geocam/Report/Report3.tex
+**C:/Dev-Cpp/geocam/Report3/Report3.tex
+(C:/Dev-Cpp/geocam/Report3/Report3.tex
 LaTeX2e <2005/12/01>
 Babel <v3.8h> and hyphenation patterns for english, dumylang, nohyphenation, ge
 rman, ngerman, french, loaded.
@@ -280,64 +280,55 @@ Package: amsfonts 2001/10/25 v2.2f
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 132.
 ))
-("C:\Program Files\MiKTeX 2.7\tex\latex\ccaption\ccaption.sty"
-Package: ccaption 2005/03/29 v3.2a Extended captioning and new floats
-\@contcwidth=\skip51
-\@contindw=\skip52
-\abovelegendskip=\skip53
-\belowlegendskip=\skip54
-\c@@contsubnum=\count124
-\c@newflo@tctr=\count125
-)
-\c@theorem=\count126
+\c@theorem=\count124
  (Report3.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 21.
+LaTeX Font Info:    ... okay on input line 21.
 
 ("C:\Program Files\MiKTeX 2.7\tex\context\base\supp-pdf.tex"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count127
+\scratchcounter=\count125
 \scratchdimen=\dimen125
 \scratchbox=\box54
-\nofMPsegments=\count128
-\nofMParguments=\count129
-\MPscratchCnt=\count130
+\nofMPsegments=\count126
+\nofMParguments=\count127
+\MPscratchCnt=\count128
 \MPscratchDim=\dimen126
-\MPnumerator=\count131
+\MPnumerator=\count129
 \everyMPtoPDFconversion=\toks27
 )
-Package hyperref Info: Link coloring OFF on input line 22.
+Package hyperref Info: Link coloring OFF on input line 21.
  ("C:\Program Files\MiKTeX 2.7\tex\latex\hyperref\nameref.sty"
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 
 ("C:\Program Files\MiKTeX 2.7\tex\latex\oberdiek\refcount.sty"
 Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
 )
-\c@section@level=\count132
+\c@section@level=\count130
 )
-LaTeX Info: Redefining \ref on input line 22.
-LaTeX Info: Redefining \pageref on input line 22.
+LaTeX Info: Redefining \ref on input line 21.
+LaTeX Info: Redefining \pageref on input line 21.
  (Report3.out)
 (Report3.out)
 \@outlinefile=\write4
 \AtBeginShipoutBox=\box55
-LaTeX Font Info:    Try loading font information for U+msa on input line 25.
+LaTeX Font Info:    Try loading font information for U+msa on input line 24.
  ("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2002/01/19 v2.2g AMS font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 25.
+LaTeX Font Info:    Try loading font information for U+msb on input line 24.
 
 ("C:\Program Files\MiKTeX 2.7\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2002/01/19 v2.2g AMS font definitions
@@ -348,212 +339,212 @@ pdftex.map}]
 (Report3.toc [2])
 \tf@toc=\write5
  [3]
-Underfull \hbox (badness 10000) in paragraph at lines 33--34
+Underfull \hbox (badness 10000) in paragraph at lines 32--33
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 35.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 34.
 ("C:\Program Files\MiKTeX 2.7\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 35.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 34.
 
-Underfull \hbox (badness 10000) in paragraph at lines 40--41
+<Pictures3/flattetrahedron.png, id=208, 418.66759pt x 314.00069pt>
+File: Pictures3/flattetrahedron.png Graphic file (type png)
 
- []
+<use Pictures3/flattetrahedron.png>
+<Pictures3/tetrahedron.jpg, id=209, 674.52pt x 505.89pt>
+File: Pictures3/tetrahedron.jpg Graphic file (type jpg)
 
-<Pictures/flattetrahedron.png, id=207, 418.66759pt x 314.00069pt>
-File: Pictures/flattetrahedron.png Graphic file (type png)
-
-<use Pictures/flattetrahedron.png>
-<Pictures/tetrahedron.jpg, id=208, 674.52pt x 505.89pt>
-File: Pictures/tetrahedron.jpg Graphic file (type jpg)
-
-<use Pictures/tetrahedron.jpg>
-Overfull \hbox (24.30193pt too wide) in paragraph at lines 43--45
+<use Pictures3/tetrahedron.jpg>
+Overfull \hbox (24.30193pt too wide) in paragraph at lines 48--50
 [][] [] 
  []
 
-[4] [5 <Pictures/flattetrahedron.png (PNG copy)> <Pictures/tetrahedron.jpg>]
-[6] [7] <Pictures/Flip1331.png, id=244, 459.16371pt x 133.32568pt>
-File: Pictures/Flip1331.png Graphic file (type png)
+[4] [5 <Pictures3/flattetrahedron.png (PNG copy)> <Pictures3/tetrahedron.jpg>]
+[6] <Pictures3/Flip1331.png, id=238, 459.16371pt x 133.32568pt>
+File: Pictures3/Flip1331.png Graphic file (type png)
 
-<use Pictures/Flip1331.png>
-<Pictures/Flip2.png, id=245, 459.16371pt x 133.32568pt>
-File: Pictures/Flip2.png Graphic file (type png)
+<use Pictures3/Flip1331.png>
+<Pictures3/Flip2.png, id=239, 459.16371pt x 133.32568pt>
+File: Pictures3/Flip2.png Graphic file (type png)
 
-<use Pictures/Flip2.png> [8 <Pictures/Flip1331.png (PNG copy)> <Pictures/Flip2.
-png (PNG copy)>]
-<Pictures/triangulationUML.png, id=255, 808.01875pt x 1018.80624pt>
-File: Pictures/triangulationUML.png Graphic file (type png)
+<use Pictures3/Flip2.png> [7] [8 <Pictures3/Flip1331.png (PNG copy)> <Pictures3
+/Flip2.png (PNG copy)>]
+<Pictures3/triangulationUML.png, id=255, 808.01875pt x 1018.80624pt>
+File: Pictures3/triangulationUML.png Graphic file (type png)
 
-<use Pictures/triangulationUML.png> [9] [10 <Pictures/triangulationUML.png (PNG
- copy)>] [11] <Pictures/genTri4.png, id=277, 418.66759pt x 314.00069pt>
-File: Pictures/genTri4.png Graphic file (type png)
+<use Pictures3/triangulationUML.png> [9] [10 <Pictures3/triangulationUML.png (P
+NG copy)>] [11] <Pictures3/genTri4.png, id=277, 418.66759pt x 314.00069pt>
+File: Pictures3/genTri4.png Graphic file (type png)
 
-<use Pictures/genTri4.png> [12 <Pictures/genTri4.png (PNG copy)>] [13]
-<Pictures/antitri1.png, id=292, 418.66759pt x 314.00069pt>
-File: Pictures/antitri1.png Graphic file (type png)
+<use Pictures3/genTri4.png> [12] [13 <Pictures3/genTri4.png (PNG copy)>]
+<Pictures3/antitri1.png, id=292, 418.66759pt x 314.00069pt>
+File: Pictures3/antitri1.png Graphic file (type png)
 
-<use Pictures/antitri1.png>
-<Pictures/antitri2.png, id=293, 418.66759pt x 314.00069pt>
-File: Pictures/antitri2.png Graphic file (type png)
+<use Pictures3/antitri1.png>
+<Pictures3/antitri2.png, id=293, 418.66759pt x 314.00069pt>
+File: Pictures3/antitri2.png Graphic file (type png)
 
-<use Pictures/antitri2.png>
-Overfull \hbox (18.02228pt too wide) in paragraph at lines 246--247
+<use Pictures3/antitri2.png> [14 <Pictures3/antitri1.png (PNG copy)> <Pictures3
+/antitri2.png (PNG copy)>]
+Overfull \hbox (18.02228pt too wide) in paragraph at lines 243--244
 \OT1/cmr/bx/n/12 Proposition 3.4. \OT1/cmr/m/it/12 Any hinge that is non-weight
 ed-Delaunay will be-come weighted
  []
 
-[14 <Pictures/antitri1.png (PNG copy)> <Pictures/antitri2.png (PNG copy)>]
-Overfull \hbox (4.73062pt too wide) in paragraph at lines 262--263
+
+Overfull \hbox (4.73062pt too wide) in paragraph at lines 259--260
 []\OT1/cmr/m/n/12 Our ran-dom tri-an-gu-la-tion gen-er-a-tor be-gins with one t
 ri-an-gle with edge lengths
  []
 
-<Pictures/gentri.png, id=301, 418.66759pt x 314.00069pt>
-File: Pictures/gentri.png Graphic file (type png)
+<Pictures3/gentri.png, id=301, 418.66759pt x 314.00069pt>
+File: Pictures3/gentri.png Graphic file (type png)
 
-<use Pictures/gentri.png>
-<Pictures/gentri6.png, id=302, 418.66759pt x 314.00069pt>
-File: Pictures/gentri6.png Graphic file (type png)
+<use Pictures3/gentri.png>
+<Pictures3/gentri6.png, id=302, 418.66759pt x 314.00069pt>
+File: Pictures3/gentri6.png Graphic file (type png)
 
-<use Pictures/gentri6.png> [15]
-<Pictures/genTri5v2.png, id=310, 378.79448pt x 304.03241pt>
-File: Pictures/genTri5v2.png Graphic file (type png)
+<use Pictures3/gentri6.png> [15]
+<Pictures3/genTri5v2.png, id=309, 378.79448pt x 304.03241pt>
+File: Pictures3/genTri5v2.png Graphic file (type png)
 
-<use Pictures/genTri5v2.png> [16 <Pictures/gentri.png (PNG copy)> <Pictures/gen
-tri6.png (PNG copy)>]
-<Pictures/nonwduals.png, id=320, 418.66759pt x 314.00069pt>
-File: Pictures/nonwduals.png Graphic file (type png)
+<use Pictures3/genTri5v2.png> [16 <Pictures3/gentri.png (PNG copy)> <Pictures3/
+gentri6.png (PNG copy)>]
+<Pictures3/nonwduals.png, id=320, 418.66759pt x 314.00069pt>
+File: Pictures3/nonwduals.png Graphic file (type png)
 
-<use Pictures/nonwduals.png>
-<Pictures/Wduals.png, id=321, 418.66759pt x 314.00069pt>
-File: Pictures/Wduals.png Graphic file (type png)
+<use Pictures3/nonwduals.png>
+<Pictures3/Wduals.png, id=321, 418.66759pt x 314.00069pt>
+File: Pictures3/Wduals.png Graphic file (type png)
 
-<use Pictures/Wduals.png> [17 <Pictures/genTri5v2.png (PNG copy)>]
-<Pictures/Stats.png, id=330, 583.76715pt x 323.96896pt>
-File: Pictures/Stats.png Graphic file (type png)
+<use Pictures3/Wduals.png> [17 <Pictures3/genTri5v2.png (PNG copy)>]
+<Pictures3/Stats.png, id=330, 583.76715pt x 323.96896pt>
+File: Pictures3/Stats.png Graphic file (type png)
 
-<use Pictures/Stats.png> [18 <Pictures/nonwduals.png (PNG copy)> <Pictures/Wdua
-ls.png (PNG copy)>] <Pictures/triEx1.png, id=337, 418.66759pt x 314.00069pt>
-File: Pictures/triEx1.png Graphic file (type png)
+<use Pictures3/Stats.png> [18 <Pictures3/nonwduals.png (PNG copy)> <Pictures3/W
+duals.png (PNG copy)>]
+<Pictures3/triEx1.png, id=337, 418.66759pt x 314.00069pt>
+File: Pictures3/triEx1.png Graphic file (type png)
 
-<use Pictures/triEx1.png>
-<Pictures/triExD1.png, id=338, 418.66759pt x 314.00069pt>
-File: Pictures/triExD1.png Graphic file (type png)
+<use Pictures3/triEx1.png>
+<Pictures3/triExD1.png, id=338, 418.66759pt x 314.00069pt>
+File: Pictures3/triExD1.png Graphic file (type png)
 
-<use Pictures/triExD1.png>
-<Pictures/triExD2.png, id=339, 418.66759pt x 314.00069pt>
-File: Pictures/triExD2.png Graphic file (type png)
+<use Pictures3/triExD1.png>
+<Pictures3/triExD2.png, id=339, 418.66759pt x 314.00069pt>
+File: Pictures3/triExD2.png Graphic file (type png)
 
-<use Pictures/triExD2.png>
-<Pictures/triExD3.png, id=340, 418.66759pt x 314.00069pt>
-File: Pictures/triExD3.png Graphic file (type png)
+<use Pictures3/triExD2.png>
+<Pictures3/triExD3.png, id=340, 418.66759pt x 314.00069pt>
+File: Pictures3/triExD3.png Graphic file (type png)
 
-<use Pictures/triExD3.png>
-<Pictures/triExD4.png, id=341, 418.66759pt x 314.00069pt>
-File: Pictures/triExD4.png Graphic file (type png)
+<use Pictures3/triExD3.png>
+<Pictures3/triExD4.png, id=341, 418.66759pt x 314.00069pt>
+File: Pictures3/triExD4.png Graphic file (type png)
 
-<use Pictures/triExD4.png>
-<Pictures/triExD5.png, id=342, 418.66759pt x 314.00069pt>
-File: Pictures/triExD5.png Graphic file (type png)
+<use Pictures3/triExD4.png>
+<Pictures3/triExD5.png, id=342, 418.66759pt x 314.00069pt>
+File: Pictures3/triExD5.png Graphic file (type png)
 
-<use Pictures/triExD5.png>
-Underfull \hbox (badness 10000) in paragraph at lines 327--333
+<use Pictures3/triExD5.png>
+Underfull \hbox (badness 10000) in paragraph at lines 324--330
 [][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 327--333
+Underfull \hbox (badness 10000) in paragraph at lines 324--330
 [] []
  []
 
-[19 <Pictures/Stats.png (PNG copy)>] [20 <Pictures/triEx1.png (PNG copy)> <Pict
-ures/triExD1.png (PNG copy)> <Pictures/triExD2.png (PNG copy)> <Pictures/triExD
-3.png (PNG copy)> <Pictures/triExD4.png (PNG copy)> <Pictures/triExD5.png (PNG 
-copy)>] [21] <Pictures/righttriangulation.jpg, id=367, 674.52pt x 505.89pt>
-File: Pictures/righttriangulation.jpg Graphic file (type jpg)
+[19 <Pictures3/Stats.png (PNG copy)>] [20 <Pictures3/triEx1.png (PNG copy)> <Pi
+ctures3/triExD1.png (PNG copy)> <Pictures3/triExD2.png (PNG copy)> <Pictures3/t
+riExD3.png (PNG copy)> <Pictures3/triExD4.png (PNG copy)> <Pictures3/triExD5.pn
+g (PNG copy)>] [21]
+<Pictures3/righttriangulation.jpg, id=366, 674.52pt x 505.89pt>
+File: Pictures3/righttriangulation.jpg Graphic file (type jpg)
 
-<use Pictures/righttriangulation.jpg>
-<Pictures/badcase2.png, id=368, 418.66759pt x 314.00069pt>
-File: Pictures/badcase2.png Graphic file (type png)
+<use Pictures3/righttriangulation.jpg>
+<Pictures3/badcase2.png, id=367, 418.66759pt x 314.00069pt>
+File: Pictures3/badcase2.png Graphic file (type png)
 
-<use Pictures/badcase2.png>
-Overfull \hbox (24.30193pt too wide) in paragraph at lines 356--358
+<use Pictures3/badcase2.png>
+Overfull \hbox (24.30193pt too wide) in paragraph at lines 355--357
 [][] [] 
  []
 
-[22 <Pictures/righttriangulation.jpg> <Pictures/badcase2.png (PNG copy)>]
+[22 <Pictures3/righttriangulation.jpg> <Pictures3/badcase2.png (PNG copy)>]
 [23] [24] [25]
-Overfull \hbox (8.20491pt too wide) in paragraph at lines 480--493
+Overfull \hbox (8.20491pt too wide) in paragraph at lines 479--492
 [][] 
  []
 
 [26] [27]
-Overfull \hbox (2.61108pt too wide) in paragraph at lines 528--593
+Overfull \hbox (2.61108pt too wide) in paragraph at lines 527--592
 []$[]$ [] 
  []
 
-[28] [29] <Pictures/torus22.png, id=442, 418.66759pt x 314.00069pt>
-File: Pictures/torus22.png Graphic file (type png)
+[28] [29] [30] <Pictures3/torus22.png, id=447, 418.66759pt x 314.00069pt>
+File: Pictures3/torus22.png Graphic file (type png)
 
-<use Pictures/torus22.png>
-<Pictures/torus2addvertex2.png, id=443, 418.66759pt x 314.00069pt>
-File: Pictures/torus2addvertex2.png Graphic file (type png)
+<use Pictures3/torus22.png>
+<Pictures3/torus2addvertex2.png, id=448, 418.66759pt x 314.00069pt>
+File: Pictures3/torus2addvertex2.png Graphic file (type png)
 
-<use Pictures/torus2addvertex2.png>
-Overfull \hbox (31.27765pt too wide) in paragraph at lines 624--626
+<use Pictures3/torus2addvertex2.png>
+Overfull \hbox (31.27765pt too wide) in paragraph at lines 623--625
 [][] [] 
  []
 
-[30] [31 <Pictures/torus22.png (PNG copy)> <Pictures/torus2addvertex2.png (PNG 
-copy)>] <Pictures/tetratouch.png, id=457, 442.34224pt x 211.82587pt>
-File: Pictures/tetratouch.png Graphic file (type png)
+[31 <Pictures3/torus22.png (PNG copy)> <Pictures3/torus2addvertex2.png (PNG cop
+y)>] <Pictures3/tetratouch.png, id=457, 442.34224pt x 211.82587pt>
+File: Pictures3/tetratouch.png Graphic file (type png)
 
-<use Pictures/tetratouch.png>
-Overfull \hbox (52.34116pt too wide) in paragraph at lines 647--648
+<use Pictures3/tetratouch.png>
+Overfull \hbox (52.34116pt too wide) in paragraph at lines 646--647
 [][] 
  []
 
-[32] <Pictures/ConvergenceTable.png, id=463, 395.67825pt x 686.565pt>
-File: Pictures/ConvergenceTable.png Graphic file (type png)
+[32] <Pictures3/ConvergenceTable.png, id=463, 395.67825pt x 686.565pt>
+File: Pictures3/ConvergenceTable.png Graphic file (type png)
 
-<use Pictures/ConvergenceTable.png> [33 <Pictures/tetratouch.png (PNG copy)>]
-[34 <Pictures/ConvergenceTable.png (PNG copy)>] [35]
-Overfull \hbox (0.2529pt too wide) in paragraph at lines 689--690
+<use Pictures3/ConvergenceTable.png> [33 <Pictures3/tetratouch.png (PNG copy)>]
+[34 <Pictures3/ConvergenceTable.png (PNG copy)>] [35]
+Overfull \hbox (0.2529pt too wide) in paragraph at lines 688--689
 []\OT1/cmr/m/n/12 More im-por-tantly, our equa-tion for com-bi-na-to-rial Ricci
  flow is al-tered slightly.
  []
 
-<Pictures/octosph.png, id=479, 418.66759pt x 314.00069pt>
-File: Pictures/octosph.png Graphic file (type png)
+<Pictures3/octosph.png, id=478, 418.66759pt x 314.00069pt>
+File: Pictures3/octosph.png Graphic file (type png)
 
-<use Pictures/octosph.png> [36] [37 <Pictures/octosph.png (PNG copy)>]
-<Pictures/kHatResult.png, id=494, 467.26292pt x 336.4293pt>
-File: Pictures/kHatResult.png Graphic file (type png)
+<use Pictures3/octosph.png> [36] [37 <Pictures3/octosph.png (PNG copy)>]
+<Pictures3/kHatResult.png, id=494, 467.26292pt x 336.4293pt>
+File: Pictures3/kHatResult.png Graphic file (type png)
 
-<use Pictures/kHatResult.png> [38 <Pictures/kHatResult.png (PNG copy)>]
-<Pictures/SphG0V10.png, id=504, 418.66759pt x 314.00069pt>
-File: Pictures/SphG0V10.png Graphic file (type png)
+<use Pictures3/kHatResult.png> [38]
+<Pictures3/SphG0V10.png, id=506, 418.66759pt x 314.00069pt>
+File: Pictures3/SphG0V10.png Graphic file (type png)
 
-<use Pictures/SphG0V10.png> [39] [40 <Pictures/SphG0V10.png (PNG copy)>]
-<Pictures/pDisk.png, id=520, 418.66759pt x 314.00069pt>
-File: Pictures/pDisk.png Graphic file (type png)
+<use Pictures3/SphG0V10.png> [39 <Pictures3/kHatResult.png (PNG copy)>]
+[40 <Pictures3/SphG0V10.png (PNG copy)>]
+<Pictures3/pDisk.png, id=520, 418.66759pt x 314.00069pt>
+File: Pictures3/pDisk.png Graphic file (type png)
 
-<use Pictures/pDisk.png> [41]
-Overfull \hbox (8.10085pt too wide) in paragraph at lines 789--790
+<use Pictures3/pDisk.png> [41]
+Overfull \hbox (8.10085pt too wide) in paragraph at lines 788--789
 \OT1/cmr/m/n/12 pro-gram into two new pro-grams, $\OML/cmm/m/it/12 sphericalCal
 cFlow$ \OT1/cmr/m/n/12 and $\OML/cmm/m/it/12 hyperbolicCalcFlow$\OT1/cmr/m/n/12
  ,
  []
 
-[42 <Pictures/pDisk.png (PNG copy)>] [43] [44]
-<Pictures/intcirc2.png, id=545, 418.66759pt x 314.00069pt>
-File: Pictures/intcirc2.png Graphic file (type png)
+[42 <Pictures3/pDisk.png (PNG copy)>] [43] [44]
+<Pictures3/intcirc2.png, id=545, 418.66759pt x 314.00069pt>
+File: Pictures3/intcirc2.png Graphic file (type png)
 
-<use Pictures/intcirc2.png> [45 <Pictures/intcirc2.png (PNG copy)>] [46]
+<use Pictures3/intcirc2.png> [45 <Pictures3/intcirc2.png (PNG copy)>] [46]
 [47] (Report3.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 24--27
 []\OT1/cmr/m/n/12 F. H. Lutz.  The man-i-fold page.  http://www.math.tu-
@@ -564,165 +555,165 @@ Underfull \hbox (badness 10000) in paragraph at lines 29--32
 []\OT1/cmr/m/n/12 Dana Macken-zie.  The Poincare con-jec-ture proved.
  []
 
-) [48] <Pictures/geometryU.png, id=573, 418.66759pt x 314.00069pt>
-File: Pictures/geometryU.png Graphic file (type png)
+) [48] <Pictures3/geometryU.png, id=573, 418.66759pt x 314.00069pt>
+File: Pictures3/geometryU.png Graphic file (type png)
 
-<use Pictures/geometryU.png> [49] [50 <Pictures/geometryU.png (PNG copy)>]
-<Pictures/geometryW2.png, id=588, 418.66759pt x 314.00069pt>
-File: Pictures/geometryW2.png Graphic file (type png)
+<use Pictures3/geometryU.png> [49] [50 <Pictures3/geometryU.png (PNG copy)>]
+<Pictures3/geometryW2.png, id=587, 418.66759pt x 314.00069pt>
+File: Pictures3/geometryW2.png Graphic file (type png)
 
-<use Pictures/geometryW2.png>
-Underfull \hbox (badness 10000) in paragraph at lines 926--927
+<use Pictures3/geometryW2.png>
+Underfull \hbox (badness 10000) in paragraph at lines 925--926
 
  []
 
-[51 <Pictures/geometryW2.png (PNG copy)>]
-Overfull \hbox (23.90465pt too wide) in paragraph at lines 934--934
+[51 <Pictures3/geometryW2.png (PNG copy)>]
+Overfull \hbox (23.90465pt too wide) in paragraph at lines 933--933
 []\OT1/cmr/bx/n/14.4 Remarks on Runge-Kutta method for solv-ing Eq. ([]11[]) 
  []
 
-<Pictures/torus7addvaddhweights2.png, id=601, 413.1435pt x 333.04425pt>
-File: Pictures/torus7addvaddhweights2.png Graphic file (type png)
+<Pictures3/torus7addvaddhweights2.png, id=599, 413.1435pt x 333.04425pt>
+File: Pictures3/torus7addvaddhweights2.png Graphic file (type png)
 
-<use Pictures/torus7addvaddhweights2.png>
-<Pictures/curvcurves.png, id=602, 523.33449pt x 314.00069pt>
-File: Pictures/curvcurves.png Graphic file (type png)
+<use Pictures3/torus7addvaddhweights2.png>
+<Pictures3/curvcurves.png, id=600, 523.33449pt x 314.00069pt>
+File: Pictures3/curvcurves.png Graphic file (type png)
 
-<use Pictures/curvcurves.png>
-Overfull \hbox (28.66815pt too wide) in paragraph at lines 952--953
+<use Pictures3/curvcurves.png>
+Overfull \hbox (28.66815pt too wide) in paragraph at lines 951--952
  [][] 
  []
 
-<Pictures/Curvg6v12addv.png, id=605, 418.66759pt x 314.00069pt>
-File: Pictures/Curvg6v12addv.png Graphic file (type png)
+<Pictures3/Curvg6v12addv.png, id=603, 418.66759pt x 314.00069pt>
+File: Pictures3/Curvg6v12addv.png Graphic file (type png)
 
-<use Pictures/Curvg6v12addv.png>
-<Pictures/Weightg6v12addv.png, id=606, 418.66759pt x 314.00069pt>
-File: Pictures/Weightg6v12addv.png Graphic file (type png)
+<use Pictures3/Curvg6v12addv.png>
+<Pictures3/Weightg6v12addv.png, id=604, 418.66759pt x 314.00069pt>
+File: Pictures3/Weightg6v12addv.png Graphic file (type png)
 
-<use Pictures/Weightg6v12addv.png>
-<Pictures/GUIpic.png, id=607, 580.1675pt x 443.6575pt>
-File: Pictures/GUIpic.png Graphic file (type png)
+<use Pictures3/Weightg6v12addv.png>
+<Pictures3/GUIpic.png, id=605, 580.1675pt x 443.6575pt>
+File: Pictures3/GUIpic.png Graphic file (type png)
 
-<use Pictures/GUIpic.png>
-Overfull \hbox (5.57922pt too wide) in paragraph at lines 973--974
+<use Pictures3/GUIpic.png>
+Overfull \hbox (5.57922pt too wide) in paragraph at lines 972--973
 \OT1/cmr/m/n/12 Code from the pro-gram can be found here: http://code.google.co
 m/p/geocam. 
  []
 
 [52]
-Overfull \hbox (85.47523pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (85.47523pt too wide) in paragraph at lines 1080--1080
 []\OT1/cmtt/m/n/12 void calcFlow(vector<double>* weights, vector<double>* curva
 tures, double dt,[] 
  []
 
 
-Overfull \hbox (60.77522pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (60.77522pt too wide) in paragraph at lines 1080--1080
 []  \OT1/cmtt/m/n/12 int p = Triangulation::vertexTable.size(); // The number o
 f vertices or[] 
  []
 
 
-Overfull \hbox (91.65024pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (91.65024pt too wide) in paragraph at lines 1080--1080
 []                                             \OT1/cmtt/m/n/12 // number of va
 riables in system.[] 
  []
 
-[53 <Pictures/torus7addvaddhweights2.png (PNG copy)>] [54 <Pictures/curvcurves.
-png (PNG copy)>] [55 <Pictures/Curvg6v12addv.png (PNG copy)> <Pictures/Weightg6
-v12addv.png (PNG copy)>] [56 <Pictures/GUIpic.png (PNG copy)>]
-Overfull \hbox (73.12523pt too wide) in paragraph at lines 1081--1081
+
+Overfull \hbox (73.12523pt too wide) in paragraph at lines 1080--1080
 []  \OT1/cmtt/m/n/12 double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays t
 o hold data for[] 
  []
 
-
-Overfull \hbox (23.7252pt too wide) in paragraph at lines 1081--1081
+[53 <Pictures3/torus7addvaddhweights2.png (PNG copy)>] [54 <Pictures3/curvcurve
+s.png (PNG copy)>] [55 <Pictures3/Curvg6v12addv.png (PNG copy)> <Pictures3/Weig
+htg6v12addv.png (PNG copy)>] [56 <Pictures3/GUIpic.png (PNG copy)>]
+Overfull \hbox (23.7252pt too wide) in paragraph at lines 1080--1080
 []                                      \OT1/cmtt/m/n/12 // the intermediate st
 eps in.[] 
  []
 
 
-Overfull \hbox (11.3752pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (11.3752pt too wide) in paragraph at lines 1080--1080
 []  \OT1/cmtt/m/n/12 int    i,k; // ints used for "for loops". i is the step nu
 mber,[] 
  []
 
 
-Overfull \hbox (97.82524pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (97.82524pt too wide) in paragraph at lines 1080--1080
 []  \OT1/cmtt/m/n/12 map<int, Vertex>::iterator vit; // Iterator to traverse th
 rough the vertices.[] 
  []
 
 
-Overfull \hbox (60.77522pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (60.77522pt too wide) in paragraph at lines 1080--1080
 []  \OT1/cmtt/m/n/12 map<int, Vertex>::iterator vBegin = Triangulation::vertexT
 able.begin();[] 
  []
 
 
-Overfull \hbox (36.07521pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (36.07521pt too wide) in paragraph at lines 1080--1080
 []  \OT1/cmtt/m/n/12 map<int, Vertex>::iterator vEnd = Triangulation::vertexTab
 le.end();[] 
  []
 
 
-Overfull \hbox (5.2002pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (5.2002pt too wide) in paragraph at lines 1080--1080
 []       \OT1/cmtt/m/n/12 if(i == 1) // If first time through, use static metho
 d to[] 
  []
 
 
-Overfull \hbox (66.95023pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (66.95023pt too wide) in paragraph at lines 1080--1080
 []       \OT1/cmtt/m/n/12 {  // First "for loop"in whole step calculates everyt
 hing manually.[] 
  []
 
 
-Overfull \hbox (48.42522pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (48.42522pt too wide) in paragraph at lines 1080--1080
 []           \OT1/cmtt/m/n/12 (*weights).push_back( z[k]); // Adds the data to 
 the vector.[] 
  []
 
 
-Overfull \hbox (54.60022pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (54.60022pt too wide) in paragraph at lines 1080--1080
 []           \OT1/cmtt/m/n/12 {  // Adjusted for small numbers. We want it to p
 rint nicely.[] 
  []
 
 
-Overfull \hbox (60.77522pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (60.77522pt too wide) in paragraph at lines 1080--1080
 []             \OT1/cmtt/m/n/12 (*curvatures).push_back(0.); // Adds the data t
 o the vector.[] 
  []
 
 [57]
-Overfull \hbox (54.60022pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (54.60022pt too wide) in paragraph at lines 1080--1080
 []           \OT1/cmtt/m/n/12 // Calculates the differential equation, either n
 ormalized or[] 
  []
 
 
-Overfull \hbox (11.3752pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (11.3752pt too wide) in paragraph at lines 1080--1080
 []            \OT1/cmtt/m/n/12 // Again calculates the differential equation, b
 ut we[] 
  []
 
 [58]
-Overfull \hbox (11.3752pt too wide) in paragraph at lines 1081--1081
+Overfull \hbox (11.3752pt too wide) in paragraph at lines 1080--1080
 []       \OT1/cmtt/m/n/12 for (k=0; k<p; k++) // Adjust z[k] according to algor
 ithm.[] 
  []
 
 [59] (Report3.aux) ) 
 Here is how much of TeX's memory you used:
- 5844 strings out of 95340
- 79607 string characters out of 1184156
- 149832 words of memory out of 1500000
- 8758 multiletter control sequences out of 110000
+ 5660 strings out of 95340
+ 77303 string characters out of 1184156
+ 145077 words of memory out of 1500000
+ 8577 multiletter control sequences out of 110000
  13629 words of font info for 52 fonts, out of 1200000 for 2000
  14 hyphenation exceptions out of 8191
- 43i,9n,36p,1497b,397s stack positions out of 5000i,500n,10000p,200000b,5000s
+ 43i,9n,36p,1498b,397s stack positions out of 5000i,500n,10000p,200000b,5000s
 <C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmbx12.
 pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmex10.pfb><C:/Program 
 Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2.7
@@ -735,9 +726,9 @@ cmsy8.pfb><C:/Program Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmti12.pfb><C:/Pr
 ogram Files/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt12.pfb><C:/Program Files/MiKT
 eX 2.7/fonts/type1/bluesky/ams/msam10.pfb><C:/Program Files/MiKTeX 2.7/fonts/ty
 pe1/bluesky/ams/msbm10.pfb>
-Output written on Report3.pdf (59 pages, 1218596 bytes).
+Output written on Report3.pdf (59 pages, 1217884 bytes).
 PDF statistics:
- 726 PDF objects out of 1000 (max. 8388607)
+ 724 PDF objects out of 1000 (max. 8388607)
  160 named destinations out of 1000 (max. 131072)
  479 words of extra memory for PDF output out of 10000 (max. 10000000)
 
