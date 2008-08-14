@@ -9,7 +9,7 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{definition}[theorem]{Definition}
-
+\newtheorem{conjecture}[theorem]{Conjecture}
 \title{Delaunay triangulations and combinatorial Ricci flows}
 \pagestyle{plain}
 \author{Alex Henniges \\ Thomas Williams \\ Mitch Wilson \\ \\ University of Arizona Undergraduate Research Program\\
@@ -50,10 +50,10 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 
 \begin{definition}
 \label{tridef}
-A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... , \tau_n\}$, consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = \{i_0, ... , i_k\}$. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, and 2-dimensional simplices as triangles or faces.
+A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... , \tau_n\}$, consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = \{i_0, ... , i_k\}$. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, and 2-dimensional simplices as triangles or faces \cite{Dave}.
 \end{definition}
 
-\noindent In 2 dimensions, we think of a triangulation as a surface that is made up of triangles joined at edges where each edge is completely shared by the two triangles it joins. Typically, triangulations are also defined to have now two triangles sharing the same three vertices. We use a more generalized definition that applies to open as well as closed surfaces and allows for shared simplices. In this paper, it will not be necessary to work outside of 2 dimensions. For that reason, we will refer to the spaces being triangulated simply as surfaces.\newline
+\noindent In 2 dimensions, we think of a triangulation as a surface that is made up of triangles joined at edges where each edge is completely shared by the two triangles it joins. Typically, triangulations are also defined to have no two triangles sharing the same three vertices. We use a more generalized definition that applies to open as well as closed surfaces and allows for shared simplices. In this paper, it will not be necessary to work outside of 2 dimensions. For that reason, we will refer to the spaces being triangulated simply as surfaces.\newline
 
 \noindent In order to describe our surfaces we must provide a description for each individual simplex. For our data structure, we decided on creating a list of references to give each simplex within the triangulation, which are written as integers referring to each simplex of a given dimension. These lists of references for each simplex are refences to other simplices in the triangulation with the property of being local. We define the term ``local'' slightly different for each simplex.\newline
 
@@ -82,10 +82,10 @@ A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... 
 \item A vertex \textit{i} is local to all vertices that share an edge with \textit{i}.
 \item An edge $\{i, j\}$ is local to all edges local to vertices \textit{i} and \textit{j}.
 \item A face $\{i, j, k\}$ is local to all faces that share edges $\{i, j\}$, $\{i, k\}$, and $\{j, k\}$.
-\item These definitions are outlined in \ref{geomat}.
+\item These definitions are outlined in Table \ref{geomat}.
 \end{itemize}
 
-\noindent As well as lists of references to other simplices, each simplex also has other information needed to form a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge $\{i, j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $r_i$. We think of the weight of a given vertex to be the radius of a circle centered at that vertex. For any $\textit{n}$-dimensional simplex, there exists an $(n-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex\cite{Dave}. We use this sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle $\{i, j, k\}$ has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex. We call this circle the \textit{orthocircle}. \newline
+\noindent As well as lists of references to other simplices, each simplex also has other information needed to form a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge $\{i, j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $r_i$. We think of the weight of a given vertex to be the radius of a circle centered at that vertex. For any $\textit{n}$-dimensional simplex, there exists an $(n-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex \cite{Dave}. We use this sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle $\{i, j, k\}$ has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex. We call this circle the \textit{orthocircle}. \newline
 
 \noindent For an edge $\{i, j\}$, it is true that 
 
@@ -116,20 +116,28 @@ d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2
 h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \end{equation}
 
-\noindent where $\theta_i$ is the angle at \textit{i} on face $\{i, j, k\}$. We refer to this distance as the height of $C(\{i, j, k\})$ with respect to $\{i, j\}$. In the case that $C(\{i, j, k\})$ lies outside of $\{i, j, k\}$, then its height has a negative value. Otherwise, the height is positive\cite{Dave}. Naturally, the dual of a given edge has a distance that is obained by adding the heights of the centers of the faces local to the edge with respect to that edge. The dual of a given vertex \textit{i} is the area enclosed by the duals of every edge local to \textit{i}. The duals of edges will be talked about again in $\S\ref{DT}$.\newline
+\noindent where $\theta_i$ is the angle at \textit{i} on face $\{i, j, k\}$. We refer to this distance as the height of $C(\{i, j, k\})$ with respect to $\{i, j\}$. In the case that $C(\{i, j, k\})$ lies outside of $\{i, j, k\}$ on the side of $\{i, j\}$ where the opposite faces lies, then its height has a negative value. Otherwise, the height is positive \cite{Dave}. Naturally, the dual of a given edge has a distance that is obained by adding the heights of the centers of the faces local to the edge with respect to that edge. The dual of a given vertex \textit{i} is the area enclosed by the duals of every edge local to \textit{i}. The duals of edges will be talked about again in $\S\ref{DT}$.\newline
 
 \subsection{Bistellar moves}
 
-\noindent On a given triangulation, we are able to perform different modifications, which we will refer to as \textit{bistellar moves} or \textit{flips}. The are three possible bistellar moves that can be performed on a 2-dimensional triangulation: a 1-3 move, a 2-2 move, and a 3-1 move. One way to understand these moves, and where the term \textit{flip} comes from, is to imagine holding in your hand a tetrahedron. You can look at this tetrahedron three different ways, at a face, at an edge, or at a vertex, and see a different image, as it would be embedded in the plane. If you were to ``flip over'' this object, you would see the reverse image which would describe the 2-dimensional image resulting from what we call a \textit{flip}. The image of a face would be replaced by the image of a face with an additional vertex in the middle of it. The image of an edge, a hinge as it were, would be replaced by the image of itself rotated $90^\circ$. The image of a vertex, as seen within a face, would be replaced with just a face. These moves respectively describe the 1-3, 2-2, and 3-1 moves.\newline
+\begin{figure}
+\centering
+\includegraphics[scale = 0.8]{Pictures/Flip1331.png}
+\caption{The 1-3 and 3-1 moves.}
+\label{fig:flip2}
+\end{figure}
 
-\noindent We will now describe these moves in terms of a triangulation. For a 1-3 move, we take a single face and place a vertex in the middle of it. We then add three edges connecting this vertex to the existing vertices of the face. For a 2-2 move, we look at the hinge. The move consists of removing the edge that describes the hinge and replacing it with an edge that connects the opposite two vertices of the hinge. See Figure~\ref{fig:flip}. For a 3-1 move, what is essentially the inverse of the 1-3 move, we look at a vertex of degree three in addition to the face defined by the three vertices it is connected to. We then remove this vertex along with the three edges local to it and we are left with just a single face.
 
 \begin{figure}
 \centering
-\includegraphics[scale = 0.8]{Pictures/Flip.png}
-\caption{An example of a 2-2 flip.}
+\includegraphics[scale = 0.8]{Pictures/Flip2.png}
+\caption{The 2-2 move.}
 \label{fig:flip}
 \end{figure}
+
+\noindent On a given triangulation, we are able to perform different modifications, which we will refer to as \textit{bistellar moves} or \textit{flips}. The are three possible bistellar moves that can be performed on a 2-dimensional triangulation: a 1-3 move, a 2-2 move, and a 3-1 move. The 1-3 move and the 3-1 move are inverses of one another while the 2-2 move is its own inverse.\newline
+
+\noindent For the 1-3 move, we consider a face $\{i, j, k\}$. We create a new vertex \textit{l} and place it inside of $\{i, j, k\}$. From this, we create edges $\{i, l\}$, $\{j, l\}$, and $\{k, l\}$. By doing this, we have turned $\{i, j, k\}$ into three new faces, $\{i, j, l\}$, $\{i, k, l\}$, and $\{j, k, l\}$ (see fig. \ref{fig:flip2}). The 3-1 move is simply the inverse of this move. We start by taking a vertex \textit{l} of degree 3 and removing it from the triangulation, essentially removing three faces and three edges with it and leaving behind a single face $\{i, j, k\}$. A 2-2 move is one that requires no additions or removals of any simplices. Consider a hinge with edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. In a 2-2 flip, we simply take edge $\{i, j\}$ and replace it with a new edge $\{k, l\}$ (see fig. \ref{fig:flip}). This move will be used extensively in $\S\ref{DT}$.
 
 \subsection{Programming Structure}
 
@@ -208,7 +216,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \label{genTri}
 \end{figure}
 
-\noindent To determine if a hinge is Delaunay, we must consider the orthocircle of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.\newline
+\noindent To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
 
 \begin{proposition}
 \label{NonDelProp}
@@ -220,18 +228,18 @@ The sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$.
 Any non-Delaunay hinge will become Delaunay after a 2-2 flip is performed on it.
 \end{corollary}
 
-\noindent This proof is given in \ref{prop1}. One thing that is important to note after the discovery of this property is what we refer to as the ``convergent case'', where the hinge forms a cyclic quadrilateral, i.e. all the vertices lie on the same circle. This occurs when the centers of the triangles, given by the centers of their orthocircles, lie on the same point. In such a case, both the hinge and its flipped image are considered Delaunay.\newline
+\noindent This proof is given in \ref{prop1}. One thing that is important to note after the discovery of this property is what we refer to as the ``boundary case'', where the hinge forms a cyclic quadrilateral, i.e. all the vertices lie on the same circle. This occurs when the centers of the triangles, given by the centers of their orthocircles, lie on the same point. In such a case, both the hinge and its flipped image are considered Delaunay.\newline
 
 \noindent The condition of a hinge being weighted Delaunay is somewhat different. As stated before, the dual of a hinge is found by connecting the centers of the two orthocircles. Its length can be found by adding up the two heights. Thus, for two faces, $\{i,j,k\}$ and $\{i,j,l\}$, the length of the dual on the hinge is given by
 
 $$\star\{i,j\} = h_{ij,k} + h_{ij,l}$$
 
-\noindent Recall that a dual height is measured as negative if the center of the triangle lies outside the triangle itself. Since one or both heights may be negative, we obtain the following:
+\noindent Recall that a height is measured as negative if the center of the triangle lies on the opposite side of the hinge. Since one or both heights may be negative, we obtain the following:
 \begin{definition}
 In the case of a weighted triangulation, a hinge is weighted Delaunay when the dual has positive length. If the dual has negative length, then it is not weighted Delauany. 
 \end{definition}
 
-\noindent A hinge that is nonconvex can also be not weighted Delaunay. This creates issues when one wishes to perform flips on hinges that are not weighted Delaunay. It is not entirely clear how one goes about performing a flip on a hinge that is nonconvex. The picture on the left in \ref{AntiTri} shows such a hinge before the flip is performed. The picture on the right shows the resulting image of a triangle with an ``anti-triangle'' lying over a portion of it. We consider this triangle to have negative area, its angle to have negative measure, and its half-duals to be of negative length.\newline
+\noindent A hinge that is nonconvex can also be not weighted Delaunay. This creates issues when one wishes to perform flips on hinges that are not weighted Delaunay. It is not entirely clear how one goes about performing a flip on a hinge that is nonconvex. Figure \ref{AntiTri} shows such a hinge before the flip is performed next to the resulting image of a triangle with an ``anti-triangle'' lying over a portion of it. We consider this triangle to have negative area, its angles to have negative measure, and its heights, when otherwise considered positive, to be of negative length.\newline
 
 \begin{figure}
 \label{antitri}
@@ -242,13 +250,20 @@ In the case of a weighted triangulation, a hinge is weighted Delaunay when the d
 \label{AntiTri}
 \end{figure}
 
-\noindent There are a number of remarks to be made regarding negative triangles in our triangulations. First of all, we can give all of our triangles a score, based on their positive or negative orientation, of either 1 or -1. Using this, we can create a value for any point covered by the boundary of a given triangulation. Regardless of the number of flips performed, where, or how many negative triangles are created from them, if one were to pick any point within the pre-existing boundary, the value is guaranteed to be one. That is to say, for every negative triangle or set of negative triangles created, there is a positive or set of positive triangles created to completely cover them. Additionally, if there is a nonconvex hinge that lies on the border that is flipped where the newly created edge lies outside of the original boundary, the value for every point in the area between this edge and the original boundary will remain 0. From this, we can conclude that the area of any triangulation is preserved under 2-2 flips.\newline
+\noindent There are a number of remarks to be made regarding negative triangles in our triangulations. First of all, we can give all of our triangles a score, based on their positive or negative orientation, of either 1 or -1. Using this, we can create a value for any point covered by the boundary of a given triangulation. Regardless of the number of flips performed, where, or how many negative triangles are created from them, if one were to pick any point within the pre-existing boundary, the value is guaranteed to be one. That is to say, for every negative triangle or set of negative triangles created, there is a positive or set of positive triangles created to completely cover them. Additionally, if there is a nonconvex hinge that lies on the border that is flipped where the newly created edge lies outside of the original boundary, the value for every point in the area between this edge and the original boundary will remain 0. From this, we can conclude that the area of any triangulation is preserved under 2-2 flips.
 
 \begin{proposition}
+\label{weidelprop}
 Any hinge that is not weighted Delaunay will become weighted Delaunay after a 2-2 flip is performed on it.
 \end{proposition}
 
-\noindent One thing we would like to attempt to show is that any triangulation can be made Delaunay or weighted Delaunay under a series of 2-2 flips.\newline
+\noindent A proof for this is given in $\S\ref{prop2}$. From this we have developed a conjecture.
+
+\begin{conjecture}
+Given an arbitrary triangulation in the plane with randomly assigned weights, one can create a weighted Delaunay triangulation through a series of 2-2 flips.
+\end{conjecture}
+
+\noindent The goal from this point forward for this part of the project is to write a computer algorithm that effectively asserts this conjecture.\newline
 
 \subsection{Programming Structure}
 \noindent We can produce a non-weighted Delaunay triangulation using mathematical software like MATLAB. However, less is known about weighted triangulations in general. For this project, we aim to develop an algorithm that can create a valid triangulation, add weights to vertices, and manipulate the faces to produce a weighted Delaunay triangulation.\newline
@@ -903,6 +918,18 @@ since $ABCD$ is a quadrilateral. So $\angle BAC + \angle BDC = \pi$.\newline
 \includegraphics[scale = 0.5]{Pictures/geometry4.png}
 \caption{An illustration associated with our proof of Proposition 1.}
 \end{figure}
+
+\subsection{Proof of Proposition \ref{weidelprop}}
+Any hinge that is not weighted Delaunay will become weighted Delaunay after a 2-2 flip is performed on it.
+\begin{proof}
+\label{prop2}
+Consider the hinge consisting of edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. Assume this hinge is weighted non-Delaunay. Let $A = C(\{i, j, k\})$ and $B = C(\{i, j, l\})$. We know that $B$ must lie closer to \textit{k} than $A$. Similarly, $A$ is closer to \textit{l} than $B$.\newline
+
+\noindent By definition of $C(\{i, j, k\})$, we can say that $A$ lies at the intersection of $h_{ij,k}$, $h_{ik,j}$, and $h_{jk,i}$. Since it suffices to look at only two of these lengths, we will consider just $h_{ik,j}$ and $h_{jk,i}$. Similarly, we can say that $B$ lies at the intersection on $h_{il,j}$ and $h_{jl,i}$. Because this hinge is weighted non-Delaunay, we know that there exists a point where $h_{ik,j}$ and $h_{il,j}$ intersect; the same can be said for $h_{jk,i}$, and $h_{jl,i}$. Let us call these points $C$ and $D$ respectively.\newline
+
+\noindent At this point, consider our hinge after a 2-2 flip has been performed on it. We now have faces $\{i, k, l\}$ and $\{j, k, l\}$. Since $C$ is the intersection of $h_{ik,j}$ and $h_{il,j}$, we know that it also must be the intersection of $h_{ik,l}$ and $h_{il,k}$, which is $C(\{i, k, l\})$. Similarly, $D$ must be $C(\{j, k, l\})$. We know that $C$ must lie closer to \textit{i} than $D$ and $D$ must lie closer to \textit{j} than $C$. This means that $\star\{k, l\}$ must be positive. Therefore, the hinge on $\{k, l\}$ is weighted Delaunay. \qedhere
+
+\end{proof}
 
 \subsection{Remarks on Runge-Kutta method for solving Eq.~(\ref{Riccin})}
 
