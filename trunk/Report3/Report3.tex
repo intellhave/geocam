@@ -246,6 +246,7 @@ Any hinge that is non-weighted-Delaunay will become weighted Delaunay after a 2-
  A proof for this is given in $\S\ref{prop2}$. From this we have developed a conjecture.
 
 \begin{conjecture}
+\label{flipConj}
 Given an arbitrary triangulation in the plane with randomly assigned weights, one can create a weighted Delaunay triangulation through a series of 2-2 flips.
 \end{conjecture}
 
@@ -332,8 +333,8 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \end{figure}
 
 The hypothesis was that after any triangulation underwent the transformation of the flip algorithm there would remain only positive triangles or negative triangles that sat opposite of positive triangles lying in the exact same area. The algorithm was modified to simply remove these flaps as a last step to the flip algorithm. This process required removing all vertices that lied at the end of a flap, as well as the edges along these flaps. Finally, the two edges defined by the same two vertices from which these flaps were stemming would be joined into one.
- 
-While we are highly optimistic about verifying our conjectures, we are still in the development process of our code and feel that there are a few issues that must be straightened out. We are confident that we can figure out how and why our flip algorithms are getting into trouble, but may require more focused processes or changes in our algorithms. We have thus far been able to show that many triangulations with weighted vertices can become Delaunay after a series of flips, and we think that this is encouraging progress as this topic in Mathematics receives more attention. 
+
+We have not yet run enough tests to make a stronger claim than our conjecture \ref{flipConj}. A significant issue has been the occurence of negative triangles. Without a widely accepted notion of negative triangles, it is still unclear how to handle them in our flip algorithm. Going forward we hope to generalize the cases with negative triangles and address the errors they are causing in our program. But besides such setbacks, we have been able to show that many triangulations with weighted vertices can become Delaunay after a series of flips. 
 
 \section{Combinatorial Ricci flow}
 \label{RBk}
