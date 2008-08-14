@@ -207,7 +207,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \subsection{Definitions}
 \label{DTD}
 
-\noindent One special type of triangulation is known as a \textit{Delaunay triangulation}, of which there are two different types. The first type is the case of non-weighted triangulations, which we simply call ``Delaunay'', while the second type is reserved for weighted triangulations, which we refer to as ``weighted Delaunay''. Before we can define what it means for a triangulation to be Delaunay or weighted Delaunay in a global sense, we must define what it means for a triangulation to have either of these conditions in a local sense, and in order to do that, we must consider a single hinge.\newline
+\noindent One special type of triangulation is known as a \textit{Delaunay triangulation}, of which there are two different types. The first type is the case of non-weighted triangulations, which we simply call ``Delaunay'', while the second type is reserved for weighted triangulations, which we refer to as ``weighted Delaunay''. We will refer to the condition of not being Delaunay as non-Delaunay and the condition of not being weighted Delaunay as non-weighted-Delaunay. Before we can define what it means for a triangulation to be Delaunay or weighted Delaunay in a global sense, we must define what it means for a triangulation to have either of these conditions in a local sense, and in order to do that, we must consider a single hinge.\newline
 
 \begin{figure}
 \centering
@@ -239,7 +239,7 @@ $$\star\{i,j\} = h_{ij,k} + h_{ij,l}$$
 In the case of a weighted triangulation, a hinge is weighted Delaunay when the dual has positive length. If the dual has negative length, then it is not weighted Delauany. 
 \end{definition}
 
-\noindent A hinge that is nonconvex can also be not weighted Delaunay. This creates issues when one wishes to perform flips on hinges that are not weighted Delaunay. It is not entirely clear how one goes about performing a flip on a hinge that is nonconvex. Figure \ref{AntiTri} shows such a hinge before the flip is performed next to the resulting image of a triangle with an ``anti-triangle'' lying over a portion of it. We consider this triangle to have negative area, its angles to have negative measure, and its heights, when otherwise considered positive, to be of negative length.\newline
+\noindent A hinge that is nonconvex can also be not weighted Delaunay. This creates issues when one wishes to perform flips on hinges that are non-weighted-Delaunay. It is not entirely clear how one goes about performing a flip on a hinge that is nonconvex. Figure \ref{AntiTri} shows such a hinge before the flip is performed next to the resulting image of a triangle with an ``anti-triangle'' lying over a portion of it. We consider this triangle to have negative area, its angles to have negative measure, and its heights, when otherwise considered positive, to be of negative length.\newline
 
 \begin{figure}
 \label{antitri}
@@ -254,7 +254,7 @@ In the case of a weighted triangulation, a hinge is weighted Delaunay when the d
 
 \begin{proposition}
 \label{weidelprop}
-Any hinge that is not weighted Delaunay will become weighted Delaunay after a 2-2 flip is performed on it.
+Any hinge that is non-weighted-Delaunay will become weighted Delaunay after a 2-2 flip is performed on it.
 \end{proposition}
 
 \noindent A proof for this is given in $\S\ref{prop2}$. From this we have developed a conjecture.
@@ -920,10 +920,10 @@ since $ABCD$ is a quadrilateral. So $\angle BAC + \angle BDC = \pi$.\newline
 \end{figure}
 
 \subsection{Proof of Proposition \ref{weidelprop}}
-Any hinge that is not weighted Delaunay will become weighted Delaunay after a 2-2 flip is performed on it.
+Any hinge that is non-weighted-Delaunay will become weighted Delaunay after a 2-2 flip is performed on it.
 \begin{proof}
 \label{prop2}
-Consider the hinge consisting of edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. Assume this hinge is weighted non-Delaunay. Let $A = C(\{i, j, k\})$ and $B = C(\{i, j, l\})$. We know that $B$ must lie closer to \textit{k} than $A$. Similarly, $A$ is closer to \textit{l} than $B$.\newline
+Consider the hinge consisting of edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. Assume this hinge is non-weighted-Delaunay. Let $A = C(\{i, j, k\})$ and $B = C(\{i, j, l\})$. We know that $B$ must lie closer to \textit{k} than $A$. Similarly, $A$ is closer to \textit{l} than $B$.\newline
 
 \noindent By definition of $C(\{i, j, k\})$, we can say that $A$ lies at the intersection of $h_{ij,k}$, $h_{ik,j}$, and $h_{jk,i}$. Since it suffices to look at only two of these lengths, we will consider just $h_{ik,j}$ and $h_{jk,i}$. Similarly, we can say that $B$ lies at the intersection on $h_{il,j}$ and $h_{jl,i}$. Because this hinge is weighted non-Delaunay, we know that there exists a point where $h_{ik,j}$ and $h_{il,j}$ intersect; the same can be said for $h_{jk,i}$, and $h_{jl,i}$. Let us call these points $C$ and $D$ respectively.\newline
 
