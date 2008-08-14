@@ -4,7 +4,6 @@
 \usepackage{html,makeidx}
 \usepackage{amsmath, amsthm}
 \usepackage{amssymb}
-\usepackage[subfigure]{ccaption}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -26,7 +25,7 @@ Supervisor: Dr. David Glickenstein\\
 \newpage
 \renewcommand\contentsname{Table of Contents}
 \tableofcontents
-\hangcaption{}
+
 \newpage
 \section{Introduction}
 
@@ -37,14 +36,6 @@ The purpose of this project is to explore and extend upon topics currently under
 \section{Triangulations}
 \label{Triangulationschap}
 
-Suppose you are asked to construct the surface of a sphere with as few pieces as possible. You could make a number of possible shapes, such as a cube or a soccer ball. While both of these shapes are discrete in nature, they can be used to approximate a round, continuous sphere. The most basic Euclidean approximation of the surface of a sphere is the boundary of a tetrahedron. Using only four vertices, six edges, and four faces, the tetrahedron is able to give us a surface that represents the surface of a sphere. Naturally, if we add more vertices, we are able to better illustrate our shapes through greater refinement. Similarly, in modern video games and Hollywood movies, various shapes are generated using polygons of many different sizes that mold to form a graphically rendered object. For these and all shapes, we will focus on representing them solely out of triangles. Since any regular polygon can be broken up into triangles, we can essentially represent any surface using this method. \newline
-
-\begin{figure}
-\includegraphics[scale = 0.5]{Pictures/flattetrahedron.png}
-\includegraphics[scale = 0.3]{Pictures/tetrahedron.jpg}
-\caption{An example of a triangulation. In this case, the triangle, a 2-simplex, can be folded up into the boundary of a tetrahedron, a 3-simplex.}
-\end{figure}
-
 \subsection{Basics and Definitions}
 \label{BaD}
 
@@ -52,6 +43,12 @@ Suppose you are asked to construct the surface of a sphere with as few pieces as
 \label{tridef}
 A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... , \tau_n\}$, consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = \{i_0, ... , i_k\}$. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, and 2-dimensional simplices as triangles or faces \cite{Dave}.
 \end{definition}
+
+\begin{figure}
+\includegraphics[scale = 0.5]{Pictures/flattetrahedron.png}
+\includegraphics[scale = 0.3]{Pictures/tetrahedron.jpg}
+\caption{An example of a triangulation. In this case, the triangle, a 2-simplex, can be folded up into the boundary of a tetrahedron, a 3-simplex.}
+\end{figure}
 
  In two dimensions, we think of a triangulation as a surface that is made up of triangles joined along edges. Typically, triangulations are also defined to have no two triangles sharing the same three vertices. We use a more generalized definition that applies to open as well as closed surfaces and allows for shared simplices. In this paper, it will not be necessary to work outside of two dimensions. For that reason, we will refer to the spaces being triangulated simply as surfaces.
 
@@ -205,7 +202,13 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \label{genTri}
 \end{figure}
 
-To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
+<<<<<<< .mine
+<<<<<<< .mine
+ To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex contained in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
+=======
+=======
+>>>>>>> .r496
+ To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
 
 \begin{proposition}
 \label{NonDelProp}
@@ -293,7 +296,7 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \label{Duals}
 \end{figure}
 
-We also observed a couple of interesting things from a experimental point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. See Figure~\ref{stats} for such an example. There are fewer edges with large weights, and more edges with smaller lengths. This would lead to suggest that vertices try to form triangles with vertices close to itself, resulting in fewer skinny triangles. We also noted that the degrees of vertices sometimes vary more, especially in weighted triangulations; more vertices have a degree of 2 or 3, while others increase in degree. This suggests that the weights of vertices in its triangulation also have a great effect as well as their relative proximities.  
+ We also observed a couple of interesting things from a experimental point of view. We found that, after flips were performed, the average length of all edges tended to decrease by a small amount. See Figure~\ref{stats} for such an example. There are fewer edges with large weights, and more edges with smaller lengths. This would lead to suggest that vertices try to form triangles with vertices close to itself, resulting in fewer skinny triangles. We also noted that the degrees of vertices sometimes vary more, especially in weighted triangulations; more vertices have a degree of 2 or 3, while others increase in degree. This suggests that the weights of vertices in its triangulation also have a great effect as well as their relative proximities.  
 \begin{table}
 \begin{center}
 \begin{tabular}{|rrr|rrr|}
@@ -335,8 +338,6 @@ We also observed a couple of interesting things from a experimental point of vie
 \end{figure}
 
  The hypothesis was that after any triangulation underwent the transformation of the flip algorithm there would remain only positive triangles or negative triangles that sat opposite of positive triangles lying in the exact same area. The algorithm was modified to simply remove these flaps as a last step to the flip algorithm. This process required removing all vertices that lied at the end of a flap, as well as the edges along these flaps. Finally, the two edges defined by the same two vertices from which these flaps were stemming would be joined into one.
- 
-While we feel that a lot of progress has been made in attempting to generalize the idea that weighted triangulations can become Delaunay after a series of flips, we feel that  
 
 \section{Combinatorial Ricci flow}
 \label{RBk}
@@ -942,7 +943,7 @@ Based on our evaluations of radii and curvatures over time, it appears to conver
 \subsection{Data Plots}
 \label{dataplots}
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 0.65]{Pictures/torus7addvaddhweights2.png}
 \caption{An example of how morphs can change the asymptotic behavior of vertices. In this case we saw the weights of some vertices change concavity.}
