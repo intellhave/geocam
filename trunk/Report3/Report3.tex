@@ -39,6 +39,8 @@ The purpose of this project is to explore and extend upon topics currently under
 \subsection{Basics and Definitions}
 \label{BaD}
 
+
+
 \begin{definition}
 \label{tridef}
 A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... , \tau_n\}$, consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = \{i_0, ... , i_k\}$. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, and 2-dimensional simplices as triangles or faces \cite{Dave}.
@@ -50,42 +52,45 @@ A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... 
 \caption{An example of a triangulation. In this case, the triangle, a 2-simplex, can be folded up into the boundary of a tetrahedron, a 3-simplex.}
 \end{figure}
 
- In two dimensions, we think of a triangulation as a surface that is made up of triangles joined along edges. Typically, triangulations are also defined to have no two triangles sharing the same three vertices. We use a more generalized definition that applies to open as well as closed surfaces and allows for shared simplices. In this paper, it will not be necessary to work outside of two dimensions. For that reason, we will refer to the spaces being triangulated simply as surfaces.
+In this paper, it will not be necessary to work outside of two dimensions. For that reason, we will refer to the spaces being triangulated simply as surfaces.
 
- In order to define our surfaces we must provide a description for each individual simplex. For our data structure, we decided on creating a list of references to give each simplex within the triangulation. These lists of references for each simplex are refences to other simplices in the triangulation with the property of being local. We define the term ``local'' differently for each simplex.
+ In two dimensions, we think of a triangulation as a surface that is made up of triangles joined along edges. Traditionally, triangulations are not allowed to have two $k$-simplices sharing the same $k$ vertices. We use a more generalized definition that allows this. Because of this, to define our surfaces we must provide a description for each simplex. In addition to the list of all simplices, for every $\sigma^k$, we must include a list of simplices local to $\sigma^k$. When it is not ambiguous, we will refer to a simplex simply as a set of vertices which it contains.
+ 
+ We define locality as follows:
+ \begin{enumerate}
+ \item Locality is symmetric. That is, if one simplex is local to another simplex, then that simplex is also local to the first simplex.
+ \item If $\sigma^k\subset\sigma^l$, then $\sigma^k$ is local to $\sigma^l$.
+ \item If $\sigma^k_1\subset\sigma^{k+1}$ and $\sigma^k_2\subset\sigma^{k+1}$, then $\sigma^k_1$ is local to $\sigma^k_2$.
+ \item If $\sigma^k_1\cap\sigma^k_2 = \sigma^{k-1}$, then $\sigma^k_1$ is local to $\sigma^k_2$.
+ \end{enumerate}
 
+The number of edges local to a given vertex is also known as the \textit{degree} of that vertex.
+
+In two dimensions, 
 \begin{itemize}
-\item Locality is commutative. That is, if one simplex is local to another simplex, then that simplex is also local to the first simplex.
-\item We write a vertex as its index \textit{i}, an edge as a pair of vertices $\{i, j\}$, and a face as a triple of vertices $\{i, j, k\}$. Edges do not have a direction, therefore $\{i, j\}$ is the same edge as $\{j, i\}$. 
 \item An edge $\{i, j\}$ is local to vertices \textit{i} and \textit{j}. A face $\{i, j, k\}$ is local to vertices \textit{i}, \textit{j}, and \textit{k}, and edges $\{i, j\}$, $\{i, k\}$, and $\{j, k\}$.
 \item Similarly, a vertex \textit{i} is local to all edges that meet at \textit{i} and all faces that meet at \textit{i}. An edge $\{i, j\}$ is local to all faces that meet at $\{i, j\}$.
-\item The number of edges local to a given vertex is also known as the \textit{degree} of that vertex.
 \item A vertex \textit{i} is local to all vertices that share an edge with \textit{i}.
 \item An edge $\{i, j\}$ is local to all edges local to vertices \textit{i} and \textit{j}.
 \item A face $\{i, j, k\}$ is local to all faces that share edges $\{i, j\}$, $\{i, k\}$, and $\{j, k\}$.
 \end{itemize}
 
- As well as lists of references to other simplices, each simplex also has other information needed to form a triangulation. While we say that these lists of references define the topology of a given triangulation, we must provide dimensions in order to define its geometry. Namely, each edge $\{i, j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $r_i$. We think of the weight of a given vertex to be the radius of a circle centered at that vertex. For any $\textit{n}$-dimensional simplex, there exists an $(n-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex \cite{Dave}. We use this sphere, and its center, to define the center of the given simplex. For our project, this means that a triangle $\{i, j, k\}$ has a center defined by the center of the circle which lies orthogonally to all of the circles at each vertex. We call this circle the \textit{orthocircle}. 
+In addition to lists of local simplices, each simplex has information needed to form a geometric triangulation. Namely, each edge $\{i, j\}$ is given a length $l_{ij}$ and each vertex $i$ is given what we call a \textit{weight}, denoted by $r_i$. We think of the weight of a given vertex to be the radius of a circle centered at that vertex. For any $k$-dimensional simplex, there exists an $(k-1)$-dimensional sphere that is orthogonal to each of the spheres centered at the vertices which define that particular simplex \cite{Dave}. The center of this sphere will be called the center of the simplex, denoted by $C(\sigma^k)$.
 
- For an edge $\{i, j\}$, it is true that 
-
-$$l_{ij} = d_{ij} + d_{ji},$$
-
- where $d_{ij}$ is the \textit{local length} of edge $\{i, j\}$ from vertex $i$, or the length from vertex $i$ to C($\{i, j\}$), the center of $\{i, j\}$. In this way, we have defined the centers for edges. If we examine the edge lengths of a given triangle, it can be concluded that 
-
+ For an edge $\{i, j\}$, we define \textit{local length} $d_{ij}$ at vertex $i$ as the distance from vertex $i$ to $C(\{i, j\})$. It is clear that
+$$l_{ij} = d_{ij} + d_{ji}.$$
+ It can be shown that
 \begin{equation}
 d_{ij} = \frac{l_{ij}^2 + r_i^2 - r_j^2}{2l_{ij}}
 \label{eq2}
 \end{equation}
-
- It also holds that 
-
+and
 \begin{equation}
 \label{eq1}
 d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2
 \end{equation}
 
- for any face $\{i, j, k\}$. Based on this condition, we are guaranteed that for every face $\{i, j, k\}$, the perpendiculars from each edge center meet at a single point, which is the center of the face $C(\{i, j, k\})$ as defined above \cite{Dave}.
+ for any face $\{i, j, k\}$. This proves that for every face $\{i, j, k\}$, the perpendiculars from each edge center meet at a single point, which is the center of the face $C(\{i, j, k\})$ as defined above \cite{Dave}.
 
  There are two notable examples of choices of weights and their corresponding face centers. The first is when all of the weights are zero. In this case, the triangle center $C(\{i, j, k\})$ is the center of the circumcircle of $\{i, j, k\}$. The second is when the weights are equal to the local lengths for \textit{i}, or for all vertices \textit{j} and \textit{k} that are local to \textit{i}, we have $d_{ij} = d_{ik}$. This case is known as a \textit{circle packing} and will be used in $\S\ref{RBk}$. In this case, the triangle center $C(\{i, j, k\})$ is the center of the incircle of $\{i, j, k\}$.
 
@@ -201,8 +206,8 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \caption{A simple example of a Delaunay triangulation. The circumcircles are drawn along with the edges to show their compatibility. This is a non-weighted case.}
 \label{genTri}
 \end{figure}
- To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
 
+ To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. It is worth noting that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
 
 \begin{proposition}
 \label{NonDelProp}
