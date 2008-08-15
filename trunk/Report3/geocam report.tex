@@ -33,7 +33,7 @@ Supervisor: Dr. David Glickenstein\\
 
 The purpose of this project is to learn about recent developments in discrete differential geometry and produce results, new conjectures, and visualizations. We did this by implementing known and new algorithms and flows computationally. Our program is written in C++. 
 
-We begin in \S\ref{Triangulationschap} with an introduction to triangulations and an explanation of how our program is structured. We then present our research on particular types of triangulations, known as Delaunay triangulations, in \S\ref{DT}. Section \ref{RBk} follows with an explanation of combinatorial Ricci flow along with results from our experiments. In \S\ref{HypSphere} we continue the exploration of combinatorial Ricci flow under different geometries. Lastly, in section \ref{Future}, we provide areas of future research towards relating and expanding the two subjects.
+We begin in \S\ref{Triangulationschap} with an introduction to triangulations and an explanation of how our program is structured. We then present our research on particular types of triangulations, known as Delaunay triangulations, in \S\ref{DT}. Section \ref{RBk} follows with an explanation of combinatorial Ricci flow along with results from our experiments. In \S\ref{HypSphere} we continue the exploration of combinatorial Ricci flow under different geometries. Lastly, in section \ref{Future}, we provide areas of future research relating and expanding the two subjects.
 
 \section{Triangulations}
 \label{Triangulationschap}
@@ -136,7 +136,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \label{triUML}
 \end{figure}
 
- As seen in Figure~\ref{triUML}, all simplices are assumed to have lists of references to their local simplices broken down by dimension. Each simplex has lists of local vertices, local edges, and local faces. The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class consists of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed at any time from anywhere in the code without the need to pass pointers through function calls. Maps also have quick access time.
+ As seen in Figure~\ref{triUML}, all simplices are assumed to have lists of references to their local simplices broken down by dimension. Each simplex has lists of local vertices, local edges, and local faces. The lists are vectors of integers. The vector, provided in the C++ library, was chosen so that the list can dynamically change in size. The integers are a decision based on both speed and size. Instead of, for example, a vertex having a list of actual edges ($\overline{AB}, \overline{CF},$ etc.) or pointers to edges, the vertex has a list of integers representing the edges. The actual edges are then obtained through the $Triangulation$ class, which holds maps from integers to simplices. The $Triangulation$ class consists of static functions and maps and is designed so only one triangulation exists at any time. Because the maps are static, they can be accessed from anywhere in the code without the need to pass pointers through function calls. Maps also have quick access time.
 
  In order to build the triangulations that we need for our tests, we decided upon a format that could be entered into a file and then read by our program. This format can be seen in Table~\ref{tab:format}. While this format works fine and we can create some basic triangulations by hand, it is not easy for creating a wide array of triangulations.
 
@@ -176,7 +176,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \label{tab:format}
 \end{table}
 
- Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a catalog of almost two million known manifold triangulations of varying sizes. We define manifold in \S\ref{ricciDef}. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
+ Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a catalog of almost two million manifold triangulations of varying sizes. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
   
 \begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
 [2,3,5],[2,4,5],[3,4,5]]},
@@ -201,7 +201,11 @@ which solely documents the faces, into our format. The result is shown in Table~
 \label{genTri}
 \end{figure}
 
-To determine if a hinge is Delaunay, we must consider the orthocircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. Note that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
+
+\begin{definition} A hinge is said to be Delaunay if it cannot fit entirely inside the circumcircle of either of its faces.
+\end{definition}
+
+To determine if a hinge is Delaunay, we must consider the circumcircles of both of the triangles in the hinge. In the non-weighted case, this is the circumcircle of the triangle. If the circumcircle of either of these triangles (and as it turns out, necessarily both of them) contains the opposite vertex in the hinge, then we say that the hinge is not Delaunay. However, if both triangles have circumcircles that do not contain the opposite vertex on the hinge, then the hinge is Delaunay. Note that all non-convex hinges, that is all hinges with one of the angles on the edge having a measure greater than $\pi$, are Delaunay.
  
 \begin{proposition}
 \label{NonDelProp}
@@ -235,7 +239,7 @@ In the case of a weighted triangulation, a hinge is weighted Delaunay when the d
 \label{AntiTri}
 \end{figure}
 
- There are a number of remarks to be made regarding negative triangles in our triangulations. First of all, we can give all of our triangles a score, based on their positive or negative orientation, of either 1 or -1. Using this, we can create a value for any point covered by the boundary of a given triangulation. Regardless of the number of flips performed, where, or how many negative triangles are created from them, if one were to pick any point within the pre-existing boundary, the value is guaranteed to be one. That is to say, for every negative triangle or set of negative triangles created, there is a positive or set of positive triangles created to completely cover them. Additionally, if there is a nonconvex hinge that lies on the border that is flipped where the newly created edge lies outside of the original boundary, the value for every point in the area between this edge and the original boundary will remain 0. From this, we can conclude that the area of any triangulation is preserved under 2-2 flips.
+ There are a number of remarks to be made regarding negative triangles in our triangulations. First of all, we can give all of our triangles a score, based on their positive or negative orientation, of either 1 or -1. Using this, we can create a value for any point covered by the boundary of a given triangulation. Regardless of the number of flips performed, where, or how many negative triangles are created from them, if one were to pick any point within the pre-existing boundary, the value is guaranteed to be 1. That is to say, for every negative triangle or set of negative triangles created, there is a positive or set of positive triangles created to completely cover them. Additionally, if there is a nonconvex hinge that lies on the border that is flipped where the newly created edge lies outside of the original boundary, the value for every point in the area between this edge and the original boundary will remain 0. From this, we can conclude that the area of any triangulation is preserved under 2-2 flips.
 
 \begin{proposition}
 \label{weidelprop}
@@ -262,15 +266,15 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \centering
 \includegraphics[scale = 0.45]{Pictures3/gentri.png}
 \includegraphics[scale = 0.45]{Pictures3/gentri6.png}
-\caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right). The early version wound up spiraling around itself, increasing edge lengths as it went. Our newer version makes the edge lengths more random, with large and small triangles scattered throughout.}
+\caption{Two examples of triangulations using our $generateTriangulation$ program, an early version (left) and a modern version (right). Our newer version makes the edge lengths more random, with large and small triangles scattered throughout.}
 \label{genTris}
 \end{figure}
 
- We can generate weights at random by restricting their maximum size with respect to the shortest edge length in the triangulation, so as not to make weights too large. We can also assign weights to individual vertices such that others remain unweighted. 
+ We can generate weights at random by restricting their maximum size the weights are not too large. For a given vertex the weight is chosen with respect to the length of the shortest edge local to that vertex. 
 
- We created a program called $weightedFlipAlgorithm$ that scans each edge to see if it is Delaunay, and if not, we perform a flip on the hinge. We repeat the process until (hopefully) each face was Delaunay, and thus the whole triangulation was now Delaunay. Unfortunately, the process did not always end. 
+ We have created a program called $weightedFlipAlgorithm$ that scans each hinge to check if it is Delaunay, and if not, we perform a flip on it. We repeat the process until each hinge is Delaunay, and thus the whole triangulation is Delaunay. 
 
- To get a better grasp of the sequence of flips, we made a MATLAB program named $delaunayPlot$ that draws a triangulation so we could visually ensure that our triangulations are being built correctly, see if and where flips were being performed, and track negative triangles. We use MATLAB to generate pictures relatively easily, including most figures in this paper. We adapted this code to then make $multiDelaunayPlot$, which regraphs the triangulation after a flip is performed. See Figure~\ref{genTri5} for a beginning and end triangulation after going through $weightedFlipAlgorithm$. 
+ To get a better grasp of the sequence of flips, we made a MATLAB program named $delaunayPlot$ that draws a triangulation so we could visually ensure that our triangulations are being built correctly, see if and where flips were being performed, and track negative triangles. We use MATLAB to generate pictures, including most figures in this paper. We adapted this code to then make $multiDelaunayPlot$, which regraphs the triangulation after a flip is performed. See Figure~\ref{genTri5} for a beginning and end triangulation after going through $weightedFlipAlgorithm$. 
 
 \begin{figure}
 \centering
@@ -281,7 +285,8 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 
 \subsection{Results}
 \label{DTRes}
- Often, we did find that triangulations became Delaunay after a series of flips. As we added more faces and increased the weights, we noted that it was more likely for the algorithm to have issues. See Table~\ref{DAT}. In watching our $multiDelaunayPlot$ results, we found that certain edges would loop in a series of flips such that performing one flip would require an adjacent edge to need flipping. Occasionally, one edge would get stuck flipping back and forth between two faces. One thing of note was that final triangulations did permit the existence of negative triangles. Often they were found on the edge boundary and of little concern. We were able to check our results by drawing the dual edges on top of all the faces (Refer to our criteria in \S\ref{BaD} and \S\ref{DTD}). If all vertices had zero weight, then the duals are simply the perpendicular bisectors of each edge. See Figure~\ref{Duals}. 
+ Often, we did find that triangulations became Delaunay after a series of flips. As we added more faces and increased the weights, we noted that it was more likely for the algorithm to show flaws. See Table~\ref{DAT}. In watching our $multiDelaunayPlot$ results, we found that certain edges would loop in a series of flips such that performing one flip would require an adjacent edge to need flipping. Occasionally, one edge would get stuck flipping back and forth between two faces. One thing of note was that final triangulations did permit the existence of negative triangles. Often they were found on the edge boundary and of little concern. We were able to check our results by drawing the dual edges on top of all the faces (Refer to our criteria in \S\ref{BaD} and \S\ref{DTD}). If all vertices had zero weight, then the duals are simply the perpendicular bisectors of each edge. See Figure~\ref{Duals}. 
+
 
 \begin{figure}
 \centering
@@ -328,7 +333,7 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \includegraphics[scale = .45]{Pictures3/triExD3.png}
 \includegraphics[scale = .45]{Pictures3/triExD4.png}
 \includegraphics[scale = .45]{Pictures3/triExD5.png}
-\caption{Evolution of our special triangulation. Edges that are flipped are shown in red. Negative triangles start off gray, with intersections a reddish brown. If multiple negative triangles intersect one region, we color it black.}
+\caption{Evolution of our special triangulation. Edges that are flipped are shown in red. Negative triangles start off gray, with intersections red. If multiple negative triangles intersect one region, we color it black.}
 \label{specialCase}
 \end{figure}
 
@@ -369,6 +374,7 @@ A manifold is a collection of points $\mathbb{P}$ such that the neighborhood at 
  What this definition means is that around any point of the manifold it appears similar to the sphere. In particular, there are no borders. We refer to this as a closed surface.
 
  When referring to closed, triangulated surfaces, one important property is the Euler characteristic, $\chi$, defined by $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface. 
+
 
 \begin{table}
 \begin{tabular}{lccccc}
@@ -675,7 +681,7 @@ One experiment we performed was measuring convergence speeds of various triangul
 
  Beginning with the basic case, the tetrahedron took an average of 156.8 steps to converge to four digits and remained fairly consistent through all five trials. Strangely, the octahedron converged faster on all five flows, averaging 138.4 steps. This was made all the stranger by the fact that the icosahedron averaged 198.8 steps. The torus revealed several things about convergences. First, the standard nine vertex torus averaged only 110 steps, suggesting that a torus converges faster than a sphere. When a vertex was added to the torus, it greatly decreased the convergence speed, to 248.8 steps. Compared to the Tetrahedron with an added vertex, 164.2, this was a very large jump. When another vertex was added to the same face as the first, the convergence speed dropped yet again, to an average of 437.6 steps. Yet when this vertex was added to a face not connected to the first, the convergence speed was almost steady at 264.8. And adding a third in the same style caused little increase.
 
- This seems to suggest that convergence speed is dependent on the number of vertices with the same properties. By the properties of the vertex, we mean the number of local vertices, the weight it converges to, etc. When the vertices were added to separate faces, there remained only three unique vertices. Whereas, adding the two vertices to the same face created five unique vertices. This theory is further supported by a twelve vertex sphere designed so that all vertices are unique. The average convergence was 460 steps, more than twice as long as the icosahedron, which also is a twelve vertex sphere.
+ This seems to suggest that convergence speed is dependent on the number of vertices with the same properties. By the properties of the vertex, we mean the number of local vertices, the weight it converges to, etc. When the vertices were added to separate faces, there remained only three unique sets of properties. Whereas, adding the two vertices to the same face created five unique sets. This theory is further supported by a twelve vertex sphere designed so that all vertices have distinct properties. The average convergence was 460 steps, more than twice as long as the icosahedron, which also is a twelve vertex sphere.
 
  As a final note, the deviation of the initial weights did not have a clear impact on the convergence speed. At some times, it would appear that initial weights with a higher deviation would converge faster, yet at other times it was lower deviation that seemed to lead to faster convergence.
 
@@ -692,7 +698,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 \item The sum of the weights of any triangle cannot exceed $\pi.$ As such, no two weights can add up over $\pi$. By circle-packing, each edge length must then be less than $\pi$, therefore we imply the geodesic between any two points, using the shortest distance on the surface between the two vertices. 
 \end{itemize}
 
- We also have different formulas for numerous things in the spherical case. There are now two laws of cosines. One gives you an angle based on the edge lengths, like in Euclidean space, and the other gives you the side lengths based on the angles. For the first law of cosines, given a triangle with edge lengths $a, b$, and $c$, we have $\cos(\angle C) = \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)}$. Using Taylor polynomials to a couple of terms, we can see that the spherical law of cosines approaches the Euclidean version in its limit. With $\sin(x) \approx x$ and $\cos(x) \approx 1 - \frac{x^2}{2}$ for $x$ small, we get 
+ We also have different formulas in the spherical case. There are now two laws of cosines. One gives you an angle based on the edge lengths, like in Euclidean space, and the other gives you the side lengths based on the angles. For the first law of cosines, given a triangle with edge lengths $a, b$, and $c$, we have $\cos(\angle C) = \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)}$. Using Taylor polynomials to a couple of terms, we can see that the spherical law of cosines approaches the Euclidean version in its limit. With $\sin(x) \approx x$ and $\cos(x) \approx 1 - \frac{x^2}{2}$ for $x$ small, we get 
 \begin{eqnarray*}
 \cos(\angle C) &=& \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)} \approx \frac{(1 - \frac{c^2}{2}) - (1 - \frac{a^2}{2})(1 - \frac{b^2}{2})}{ab}\\
 							&=& \frac{\frac{a^2}{2} + \frac{b^2}{2} - \frac{c^2}{2} + \frac{a^2b^2}{4}}{ab}\\
@@ -712,7 +718,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 \caption{An illustration of a spherical octahedron through the X-Y plane. Each octet of the sphere surface, outlined in black, is the face of one triangle.} 
 \end{figure}
 
- Like in the Euclidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths. Plus, we also need to make sure that the weights remain within bounds.
+ Like in the Euclidean case, we see the possibility that all weights could continually decrease towards zero. However, scaling in the spherical case is not quite as easy as before: the angles are affected by the change in edge lengths. We also need to make sure that the weights remain within bounds.
 
  We tried a few techniques to derive an equation for normalized spherical flow. Some ideas were:
 
@@ -747,15 +753,15 @@ $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 \frac{dr_i}{dt} = \overline{K}r_i - K_i\sin(r_i).
 \end{equation}
 
- This equation was derived by applying (\ref{ref1}) to the standard spherical equation and recognizing that the average curvature component should likely not be the sine of the weight, but just the product with the weight itself. Unfortunately, we have no proof that this equation is truly related to the original flow. However, in examining its behavior with various triangulations, we found that this one works very well, and acted similarly to that of the Euclidean normalized flow. We find that spheres converge to zero curvature and weights first group together and then approach optimal weights. See Figure~\ref{SphGood}.
+ This equation was derived by applying (\ref{ref1}) to the standard spherical equation and recognizing that the average curvature component should likely not be the sine of the weight, but just the product with the weight itself. Unfortunately, we have no proof that this equation is related to the normalized Euclidean flow. However, in examining its behavior with various triangulations, we found that this one works very well, and acted similarly to that of the normalized Euclidean flow. We find that spheres converge to zero curvature and weights first group together and then approach optimal weights. See Figure~\ref{SphGood}.
 
- In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependent on the number of vertices, and sometimes all the weights would be close to this number but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached or reached was equal to 
+ In dealing with vertex transitive triangulations, ones in which each vertex has the same degree, we noted that sometimes all weights would converge to a specific value that was dependent on the number of vertices, and sometimes all the weights would be close to this number but off by a small amount. In either case, the resulting surface area at the end turned out to be $4\pi$. For a vertex transitive genus 0 surface, we found that the preferred weight that each vertex approached was equal to 
 
 $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac{\pi(4 + F)}{3F}$$
 
  and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ 
 
- We found this equation to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that with a $dt$ size of $0.5$, it took over 500 steps for the system to reach equilibrium, and this would be much longer with the $dt$ used in $\S\ref{InitialResults}$.  
+ We found that this equation does fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that with a $dt$ size of $0.5$, it took over 500 steps for the system to reach equilibrium, and this would be much longer with the $dt$ used in $\S\ref{InitialResults}$.  
 
 \begin{figure}[ht]
 \centering
@@ -768,7 +774,7 @@ $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac
 
 In hyperbolic geometry, we encounter a new background that has properties both similar and distinct from Euclidean and spherical systems. A common way to visualize the hyperbolic plane can be seen in Fig.~\ref{PD}. This representation is often called the Poincar\'{e} disk, named after the same Poincar\'{e} as in $\S$\ref{RBk}.
 
- The hyperbolic plane has are several interesting properties. For a line $l$ and a point $P$ not on that line, there are an infinite number of lines through $P$ that do not intersect $l$. In Euclidean geometry, such a line is unique. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. A more thorough exposition on hyperbolic geometry can be found in most college geometry textbooks.
+ The hyperbolic plane has several interesting properties. For a line $l$ and a point $P$ not on that line, there are an infinite number of lines through $P$ that do not intersect $l$. In Euclidean geometry, such a line is unique. The shortest distance between two points is still a straight line, but illustratively can be found by following a curved path along a circle centered at infinity going through both points. A more thorough exposition on hyperbolic geometry can be found in most college geometry textbooks.
 
  In terms of the formulas, they remain relatively similar in format to the spherical equations, except there are two main substitutions. The cosine and sine functions are often replaced with their hyperbolic counterparts $cosh$ and $sinh$, defined as
 \begin{eqnarray*}
@@ -783,7 +789,7 @@ In hyperbolic geometry, we encounter a new background that has properties both s
 \end{equation}
  
 
- Like in the case of spherical flow, the average and total curvatures need not remain constant. For a surface, $X$, the average curvature is now
+ Like in the case of spherical flow, the average and total curvatures need not remain constant. For a surface, $X$, the average curvature is
 $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of }X}{|V|}.$$
 
 \begin{figure}
@@ -799,7 +805,7 @@ $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of 
 
 When we began looking into these background geometries, we thought that it would be a good idea to run uniform tests on all three systems. We could observe whether or not each triangulation converges in the same fashion, or if it matters which geometry we choose. If we do discover that all systems behave the same way, we would then like to focus on one geometry, most likely Euclidean. However, since our equation for normalized spherical Ricci flow is not wholly confirmed as the best method, and as the hyperbolic flow may or may not already be normalized, we can not make any strong conclusions on the normalized flows. We did decide, however, to take a look at the behaviors on various manifolds by using the unnormalized equations, (\ref{Riccif}), (\ref{SRiccif}), and (\ref{HRiccif}). We will look at three triangulations, each of a different genus, without performing any morphs, and compare results between each system. 
 
- In terms of programming these new flows, we were able to adapt our $calcFlow$ program into two new programs, $sphericalCalcFlow$ and $hyperbolicCalcFlow$, to easily distinguish which background we were using. This way we could run the systems one at a time, or all at once and observe differences in their behaviors in cases with the same initial conditions. 
+ In terms of programming these new flows, we were able to adapt our $calcFlow$ program into two new programs, $sphericalCalcFlow$ and $hyperbolicCalcFlow$, to easily distinguish which background we were using. This way we could run the systems one at a time and observe differences in their behaviors in cases with the same initial conditions. 
 
  \textit{Example:} 12 vertex sphere, vertex transitive of degree 5
 
@@ -813,7 +819,7 @@ When we began looking into these background geometries, we thought that it would
 
  Euclidean- Since we know that $\chi = 0$ for a one-holed torus, we also know that $\overline{K} = 0$ and so each vertex obtains zero curvature. The weights do not drop to zero, but converge to positive values. 
 
- Spherical- We found this system to be very unstable with the torus. If the initial weights were too large, we found that the total curvature would be well below zero, and the weights would continually increase until sphericalCalcFlow crashed. While we hoped that reducing the initial weights would bring stability to the system, we ended up with the same result.
+ Spherical- We found this system to be very unstable with the torus. If the initial weights were too large, the total curvature would be well below zero, and the weights would continually increase until sphericalCalcFlow crashed. While we hoped that reducing the initial weights would bring stability to the system, we ended up with the same result.
 
  Hyperbolic- While the total curvature of the system goes to zero, the weights also approach zero but try to attain the same proportion as the final Euclidean weights. Another thing we noted was the time required for the weights and curvatures to go to zero. This system was extremely slow and took much longer than either the Euclidean or spherical trials. 
 
@@ -828,8 +834,8 @@ When we began looking into these background geometries, we thought that it would
  To conclude, we conjecture that certain flows work best for triangulations whose total curvature goes to zero in that particular system. 
 
 \begin{itemize}
-\item Euclidean is best for systems of genus 1, or one-holed tori. As seen in the second example, the unnormalized system converged weights to nonzero values. 
-\item Spherical combinatorial Ricci flow should work best on manifolds of genus 0, or anything topologically equivalent to a sphere. This is because we have a positive $\chi$ value, so for total curvature to go to 0, the total surface area must go to $4\pi$. Spherical was the only system that could have produced a nontrivial solution in our first example. 
+\item Euclidean is best for systems of genus 1, or one-holed tori. As seen in the second example, the weights of the unnormalized system converged to nonzero values. 
+\item Spherical combinatorial Ricci flow works best on manifolds of genus 0, or anything topologically equivalent to a sphere. This is because we have a positive $\chi$ value, so for total curvature to go to 0, the total surface area must go to $4\pi$. Spherical was the only system that produced a nontrivial solution in our first example. 
 \item Hyperbolic Ricci flow is best suited for triangulations with a genus of 2 or more. We can see that these systems will be able to reach zero total curvature with a large enough surface area. 
 \end{itemize}
 
