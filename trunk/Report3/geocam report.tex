@@ -280,6 +280,7 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \end{figure}
 
 \subsection{Results}
+\label{DTRes}
  Often, we did find that triangulations became Delaunay after a series of flips. As we added more faces and increased the weights, we noted that it was more likely for the algorithm to have issues. See Table~\ref{DAT}. In watching our $multiDelaunayPlot$ results, we found that certain edges would loop in a series of flips such that performing one flip would require an adjacent edge to need flipping. Occasionally, one edge would get stuck flipping back and forth between two faces. One thing of note was that final triangulations did permit the existence of negative triangles. Often they were found on the edge boundary and of little concern. We were able to check our results by drawing the dual edges on top of all the faces (Refer to our criteria in \S\ref{BaD} and \S\ref{DTD}). If all vertices had zero weight, then the duals are simply the perpendicular bisectors of each edge. See Figure~\ref{Duals}. 
 
 \begin{figure}
@@ -295,7 +296,7 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \begin{center}
 \begin{tabular}{|rrr|rrr|}
  \hline
- &Standard weights      &            &            &  Weighted increased 50\%           &          \\ \hline
+ &Standard weights      &            &            &  Weights increased 50\%           &          \\ \hline
 
    Faces & Avg. Flips & \% Finish &               Faces & Avg. Flips & \% Finish \\ \hline
 
@@ -318,7 +319,7 @@ Given an arbitrary triangulation in the plane with randomly assigned weights, on
 \label{stats}
 \end{figure}
 
- In testing our code, we used oneparticular example to examine a potential special case that may have occurred during the running of our algorithm. The special case, as shown in Figure~\ref{specialCase}, is one where every convex hinge is weighted Delaunay and every nonconvex hinge is not. The results of running our algorithm on this triangulation were of great interest and helped us in further refining the algorithm. When we started, there were seven faces, all positive. When the flip algorithm concluded, we were left with four positive faces and three negative faces. All of the negative faces were paired with positive faces defined by the same three vertices. The remaining odd positive face was defined by the three original boundary edges. This meant that by ``flipping through'' all of the nonconvex hinges, we were left with three pairs of reversely oriented faces, what we also referred to as ``flaps'' or ``double triangles''.
+ In testing our code, we used one particular example to examine a potential special case that may have occurred during the running of our algorithm. The special case, as shown in Figure~\ref{specialCase}, is one where every convex hinge is weighted Delaunay and every nonconvex hinge is not. The results of running our algorithm on this triangulation were of great interest and helped us in further refining the algorithm. When we started, there were seven faces, all positive. When the flip algorithm concluded, we were left with four positive faces and three negative faces. All of the negative faces were paired with positive faces defined by the same three vertices. The remaining odd positive face was defined by the three original boundary edges. This meant that by ``flipping through'' all of the nonconvex hinges, we were left with three pairs of reversely oriented faces, what we also referred to as ``flaps'' or ``double triangles''.
 
 \begin{figure}
 \includegraphics[scale = .45]{Pictures3/triEx1.png}
@@ -338,7 +339,7 @@ We have not yet run enough tests to make a stronger claim than our conjecture \r
 \section{Combinatorial Ricci flow}
 \label{RBk}
 
-Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation on geometries. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are the same. The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was one of seven millennium puzzles. Ricci flow turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in many fields such as fluid dynamics and general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of Hamilton's Ricci flow. The fact that the subject is still very new makes this research project exciting. 
+Introduced by Richard Hamilton in 1982, Ricci flow, named in honor of Gregorio Ricci-Curbastro \cite{RicciBkgd}, has since had a large influence in the world of geometry and topology. It is often described as a heat equation on geometries. Imagine a room where a fireplace sits in one corner and a window is open on the other side. The heat will diffuse through the room until the temperature is the same everywhere. With Ricci flow, the same occurs with the curvature, which we explain in \S\ref{ricciDef}. Under Ricci flow, a geometric object that is distorted and uneven will morph and change as necessary so that all curvatures are the same. The biggest consequence of Ricci flow came when Grigori Perelman proved the Poincar\'{e} Conjecture in 2002. The Poincar\'{e} Conjecture, proposed in 1904, was particularly difficult to prove, and was one of seven millennium puzzles. Ricci flow turned out to be the cornerstone for the proof. In addition, its relation to the heat equation may open new doors for work in many fields such as fluid dynamics and general relativity \cite{RicciBkgd}. In 2002, Chow and Luo introduced the concept of combinatorial Ricci flow. They showed that this new concept, performed on a triangulation of a manifold, had many of the properties of Hamilton's Ricci flow. The fact that the subject is still very new makes this research project exciting. 
 
 \subsection{Circle-packing}
 
@@ -367,7 +368,7 @@ A manifold is a collection of points $\mathbb{P}$ such that the neighborhood at 
 
  What this definition means is that around any point of the manifold it appears similar to the sphere. In particular, there are no borders. We refer to this as a closed surface.
 
- When referring to closed, triangulated surfaces, one important property related is the Euler characteristic $\chi$, defined by $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface. 
+ When referring to closed, triangulated surfaces, one important property is the Euler characteristic, $\chi$, defined by $\chi = V - E + F$, where \textit{V} is the number of vertices in the triangulation, \textit{E} is the number of edges, and \textit{F} is the number of faces. This characteristic is directly connected to another important property, the \textit{genus} of a surface. The genus of a surface is the property that is more loosely known as the number of ``holes'' in the surface. For instance, a sphere has a genus of 0 while a torus has a genus of 1, a two-holed torus has genus 2, etc. The relationship between the two values is given by $\chi = 2 - 2g$, where \textit{g} is the genus of the surface. 
 
 \begin{table}
 \begin{tabular}{lccccc}
@@ -390,7 +391,7 @@ Two-holed torus & 10 & 36 & 24 &	2 & -2\\
   \frac{dr_i}{{dt}} = -K_ir_i
   \end{equation}
   
- where $K_i$ is the $curvature$ of a vertex, and $r_i$ is the $weight$ of the vertex $i$. The value of $K_i$ changes with time. We take the sum of all angles associated with a vertex $i$ and define the curvature $K_i$ as
+ where $K_i$ is the \textit{curvature} of a vertex, and $r_i$ is the weight of the vertex $i$. The value of $K_i$ changes with time. We take the sum of all angles associated with a vertex $i$ and define the curvature $K_i$ as
 
 \begin{equation}
 K_i = 2\pi - \sum{\angle i}.
@@ -403,7 +404,7 @@ Using side lengths we can determine the angle using the law of cosines. For a tr
   \angle C = \arccos(\frac{a^2 + b^2 - c^2}{2ab})
   \end{equation}
   
- with similar formulas for the other angles. We see that the system given by \ref{Riccif} is highly nonlinear. This equation often results in weights that decrease to zero. Take, for example, a simple tetrahedron with all sides of equal length. We find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex weight by the same amount, but the curvature of each vertex would still remain $\pi.$ This is because, in the Euclidean case, the curvatures are not affected by uniform scaling. Under (\ref{Riccif}), the radii would continue to decrease until they approach zero length. We have to address this issue since computers don't like working with numbers near zero, as in the denominator of \ref{LawOfCosines}. Numerical instability may occur. To avoid this issue, we resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$, i.e., as
+ with similar formulas for the other angles. We see that the system given by (\ref{Riccif}) is highly nonlinear. This equation often results in weights that decrease to zero. Take, for example, a simple tetrahedron with all sides of equal length. We find that the curvature of each vertex always equals $\pi$. Thus in solving the differential equation computationally we would decrease each vertex weight by the same amount, but the curvature of each vertex would still remain $\pi.$ This is because, in the Euclidean case, the curvatures are not affected by uniform scaling. Under (\ref{Riccif}), the radii would continue to decrease until they approach zero length. We have to address this issue since computers don't like working with numbers near zero, as in the denominator of (\ref{LawOfCosines}). Numerical instability may occur. To avoid this issue, we resize the length of each radius by a scalar, $\alpha$. We denote each scaled length by $\tilde{r_i}$ as
  
 $$ \tilde{r_i} = \alpha r_i. $$ 
  
@@ -511,13 +512,11 @@ We have some expectations for combinatorial Ricci flow on two-dimensional surfac
 
  There are other expected behaviors. We expect that the \textit{product area} will be constant at any intermediate step of the flow. Also, it is predicted that the total curvature of a 2-manifold surface should remain a constant determined by its genus.
 
- Our goal is to create a program that can be built upon later to provide further functionality and options without requiring widespread and time consuming changes to the code. While we certainly expect a number of bugs, we plan to develop methods to test and find any errors in our code. 
-
 \subsubsection{First tests}
 \label{InitialResults}
 The first test was the boundary of the tetrahedron. In the standard equation, it is easily shown that all weights approach zero exponentially fast. We then use the normalized Ricci flow for the rest of the testing. In the normalized equation the tetrahedron's weights approach a single positive number, the fourth root of the \textit{product area} of the tetrahedron, so that the area remains constant. In addition, all the curvatures converged to the same value, in this case $\pi$, so that the total curvature is $4\pi$. Results were similar for the other platonic solids.
 
- The next test was the torus with the standard nine-vertex triangulation. Again all the weights approached the same positive number to maintain constant area. As expected, the curvatures all went to zero while the total curvature remained zero throughout. Further simple tests included triangulations of larger genus, and in all cases the total curvature remained at the constant multiple of $\pi$ that was expected and the \textit{product area} was also constant. In addition, there does not appear to be any further effect from the initial weights other than determining the area of the triangulation. It is not clear from any of the tests we ran that having large disparities betweeen the weights (some small while others very large) causes a different end result.
+ The next test was the torus with a nine-vertex triangulation. Again all the weights approached the same positive number to maintain constant area. As expected, the curvatures all went to zero while the total curvature remained zero throughout. Further simple tests included triangulations of larger genus, and in all cases the total curvature remained at the constant multiple of $\pi$ that was expected and the \textit{product area} was also constant. In addition, there does not appear to be any further effect from the initial weights other than determining the area of the triangulation. It is not clear from any of the tests we ran that having large disparities betweeen the weights (some small while others very large) causes a different end result.
 
  In each case all vertices converged to the same curvature. This was not always the situation for the weights, as in many triangulations there would be several final weights. It became clear that this would occur when vertices had different degrees. In fact, we guess that there is a formula relating the \textit{product area} of a weighted triangulation and the degree of a vertex to that vertex's final weight. In most of the examples we tried, when two vertices had the same degree, they had the same final weight, but this is not always the case. One such example is adding three vertices to one face of the tetrahedron. As seen in Table \ref{tab:weightTab}, vertices 4, 5, and 6 all have degree four. Yet vertex 5 has a greater final weight than the other two. We believe this is because the local vertices of 5 are different in degree from those of 4 and 6. That is, the degrees of the local vertices of 5 are never less than four, while vertices 4 and 6 each have a local vertex with degree 3. See Figure \ref{fig:t7vh} in the Appendix for an illustration of weights over time. 
 
@@ -603,19 +602,19 @@ Another part of the code is a file strictly made up of functions used to manipul
  In addition, there are other ``morphs'' that can be performed to change the topology of a triangulation in order to give us some more diverse and interesting shapes over which to run these flows and observe their results. There are two such moves that we can perform.
 
 \begin{itemize}
-\item Adding Handles 
-By adding a handle to a surface, we are in essence adding a hole to it. One simple way to obtain this result is to ``patch'' the surface of a torus to the surface that we are working with. This is exactly what we have done. The method removes a face from the existing triangulation and replaces it with a 9-vertex triangulation of a torus. By using the three existing vertices and edges, we are actually adding 6 new vertices, 24 new edges, and 17 new faces. This operation changes the topology of the triangulation that we are working with. It will reduce the Euler characteristic, $\chi$, by 2 and thus change the total curvature of the surface.
-\item Adding Cross-Caps 
-The purpose of adding a cross-cap to a manifold is to give us a property of non-orientability. A surface of this kind is characterized by the ability to move an object along it in such a way that it reaches its original location but in mirror-image form. In this way, the portion of the surface known as the cross-cap is, itself, topologically equivalent to the mobius band. It is sufficient to add only a single cross-cap to any given surface,. In conjunction with the method of adding handles, this technique allows us to create any topology in two dimensions.
+\item Adding Handles \newline
+By adding a handle to a surface, we are in essence adding a hole to it. One simple way to obtain this result is to ``patch'' the surface of a torus to the surface that we are working with. This is exactly what we have done. The method removes a face from the existing triangulation and replaces it with a 9-vertex triangulation of a torus. By using the three existing vertices and edges, we are actually adding 6 new vertices, 24 new edges, and 16 new faces. This operation changes the topology of the triangulation that we are working with. It will reduce the Euler characteristic, $\chi$, by 2 and thus change the total curvature of the surface.
+\item Adding Cross-Caps \newline
+The purpose of adding a cross-cap to a manifold is to give us a property of non-orientability. A surface of this kind is characterized by the ability to move an object along it in such a way that it reaches its original location but in mirror-image form. In this way, the portion of the surface known as the cross-cap is, itself, topologically equivalent to the mobius band. It is sufficient to add only a single cross-cap to any given surface. In conjunction with the method of adding handles, this technique allows us to create any topology in two dimensions.
 \end{itemize}
 
- We introduce here the concept of a \textit{double triangle}. A double triangle is made of two triangles with the same three vertices. As part of a triangulation it can be imagined as flattening a party hat and attaching it to an object along the open end. Allowing for double triangles does not fit under our strict definition of triangulation, which does not allow for degree two vertices. However, we wish to observe how they are affected with combinatorial Ricci flow.
+We reintroduce here the concept of a \textit{double triangle}, first mentioned in \S\ref{DTRes}. A double triangle is made of two triangles with the same three vertices. As part of a triangulation it can be imagined as flattening a party hat and attaching it to an object along the open end. We wish to observe how they are affected with combinatorial Ricci flow.
 
 % Another shape we have been looking into is called the \textit{double triangle}. A double triangle is made of two triangles with the same three vertices. It can also be thought of as folding one triangle on top of another. We can add these to a triangulation and see how things vary with their presence. This is of interest because of their very peculiar effect on the definition of a triangulation. Without double triangles, there are certain restrictions on definitions and adjacency properties of simplices within a triangulation as outlined in the previous section on triangulations. However, with these double triangles, the restrictions are broken up by allowing double and even triple adjacency references, creating vertices with only one or two local vertices, faces with only two defining edges, and edges with only one defining vertex, among other bizarre properties. Because of these inconsistencies in definition, different surfaces that have these double triangles attached to them will behave in noteworthy ways. The function that adds these shapes takes an edge as an argument and adds another edge with the same two vertices. Then, a vertex is added and two edges are drawn from this vertex to the other two vertices mentioned. Two new faces are formed by these two new edges as well as the other two edges mentioned, one for each face. The process can be imagined as flattening a party hat and attaching it to an object along the open end.
 
  We investigate our programs for sanctity by performing morphs on given manifolds and observe any changes in behavior. We include some examples. 
 
- \textit{Example}: Adding a vertex to a one-holed torus. See figure~\ref{torusaddv}. 
+ \textit{Example}: Adding a vertex to a one-holed torus. See Figure~\ref{torusaddv}. 
 
  By inserting a vertex within a triangulation for a torus, we are essentially creating a bump on the torus. We can then observe what happens as we run it through our $calcFlow$ program. The new vertex shrinks in size to a weight much smaller than the other vertices, but to a positive constant. To counter this, the other vertices grow slightly to maintain Eq.~(\ref{eqprod}). In all cases (where the vertices began with different weights), the weight that the new vertex converges to is in a proportion to the other weights by a factor of $3+2\sqrt{3}$, the exact proportion necessary to maintain equal curvature amongst all the weights. An oddity here is that the three vertices local to this added vertex converged to the same weight as all the vertices not near the flip, despite a difference in degree.
 
@@ -628,17 +627,32 @@ The purpose of adding a cross-cap to a manifold is to give us a property of non-
 
  \textit{Example}: Adding a double triangle to a two-holed torus.
 
- When we added a double triangle to the edge of a two-holed torus, we experienced for the first time what is known as a singularity. At the special vertex that was only of degree two, its weight continued to shrink and never converged. Eventually, enough steps of the Ricci flow were performed that the size of the weight became less than what the computer could differentiate from 0 and the program crashed with a division-by-zero error. Before the crash, the other vertices were increasing without convergence to counteract the decreasing weight. The reason is that all vertices wanted to attain the same curvature, in this case $-\frac{2}{5}\pi$. Yet the new vertex, with only two angles in its sum, can only obtain a curvature of 0 (each angle $\sim\pi$ radians). The result is that the weight shrinks in an attempt to attain angles greater than $\pi$, which is simply not possible. What is still not clear is whether or not the weight reaches 0 in finite time, or simply approaches 0. This is difficult to test with a computer only capable of approximating the weight, though we expect that it does so in finite time.
+When we added a double triangle to the edge of a two-holed torus, we experienced for the first time what is known as a singularity. At the special vertex that was only of degree two, its weight continued to shrink and never converged. Eventually, enough steps of the Ricci flow were performed that the size of the weight became less than what the computer could differentiate from 0 and the program crashed with a division-by-zero error. Before the crash, the other vertices were increasing without convergence to counteract the decreasing weight. The reason is that all vertices wanted to attain the same curvature, in this case $-\frac{2}{5}\pi$. Yet the new vertex, with only two angles in its sum, can only obtain a curvature of 0 (each angle $\sim\pi$ radians). The result is that the weight shrinks in an attempt to attain angles greater than $\pi$, which is simply not possible. What is still not clear is whether or not the weight reaches 0 in finite time, or simply approaches 0. This is difficult to test with a computer only capable of approximating the weight, though we expect that it does so in finite time.
 
  \textit{Example}: Performing a 2-2 flip on a 12-vertex torus. 
 
- Flips can drastically change the behavior of some triangulations. For example, in a 12-vertex torus, performing a flip on a particular edge created a double triangle. Similarly to the previous case, all curvatures are converging to 0, but the vertex with degree 2 simply cannot accomplish this. However, unlike the previous case, we suspect that the weight does not become 0 in finite time, but instead approaches 0 in infinite time.
+ Flips can drastically change the behavior of some triangulations. For example, in a 12-vertex torus, performing a flip on a particular edge created a double triangle. Similarly to the previous case, all curvatures are converging to 0, but the vertex with degree 2 simply cannot accomplish this. However, unlike the previous case, we suspect that the weight does not become 0 in finite time, but instead approaches 0 in infinite time. See Fig.~\ref{fig:t7vh} for an illustration of how a 1-3 flip and another morph can change the behavior of weights over time.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale = 0.65]{Pictures3/torus2addvertex2new.png}
+\caption{An example of how morphs can change the asymptotic behavior of vertices. In this case we saw the weights of some vertices change concavity.}
+\label{fig:t7vh}
+\end{figure}
 
  \textit{Example}: Triangulation of genus 4.
 
- While the previous two cases were quite interesting, we were using double triangles and being less restrictive in what were allowable triangulations. But in the same sense that a degree two vertex could have a curvature no less than 0, a degree three vertex is bounded below by $-\pi$. It was found that the curvatures of a triangulation are dependent on the number of vertices and the genus, so a triangulation with a large enough genus and few vertices could have its curvatures converge to less than $-\pi$. The first we found, provided by \cite{lutzmanifold}, was an 11 vertex triangulation with genus 4. To create a vertex with degree 3, we chose to add a new vertex to a face with a 1-3 flip. This made all curvatures attempt to converge to $-\pi$. The new vertex reacted as in the previous example, approaching a weight of 0. Whether or not this situation is possible for a vertex of any degree is unknown. To test this one would need a very high genus, but this requires more vertices. Unfortunately, \cite{lutzmanifold} does not provide large enough triangulations to test for vertices with degree greater than three.
+ While the previous two cases were quite interesting, we were using double triangles and being less restrictive in what were allowable triangulations. But in the same sense that a degree two vertex could have a curvature no less than 0, a degree three vertex is bounded below by $-\pi$. It was found that the curvatures of a triangulation are dependent on the number of vertices and the genus, so a triangulation with a large enough genus and few vertices could have its curvatures converge to less than $-\pi$. The first we found, provided by \cite{lutzmanifold}, was an 11 vertex triangulation with genus 4. To create a vertex with degree 3, we chose to add a new vertex to a face with a 1-3 flip. This made all curvatures attempt to converge to $-\pi$. The new vertex reacted as in the previous example, approaching a weight of 0. Whether or not this situation is possible for a vertex of any degree is unknown. To test this one would need a very high genus, but this requires more vertices. Unfortunately, \cite{lutzmanifold} does not provide large enough triangulations to test for vertices with degree greater than three. A similar result can be seen on a genus 6 surface in Figure~\ref{g6}.
 
- \textit{Example}: Two tetrahedra connected at a vertex. See Figure \ref{fig:tt}
+\begin{figure}
+\centering
+\includegraphics[scale = 0.7]{Pictures3/Curvg6v12addv.png}
+\includegraphics[scale = 0.7]{Pictures3/Weightg6v12addv.png}
+\caption{An example of adding a vertex to a genus 6 surface. One of the curvatures in unable to drop below $-\pi$, and as a result, its weight is pushed to almost zero. Other vertices group together to compensate for this behavior.}
+\label{g6}
+\end{figure}
+
+\textit{Example}: Two tetrahedra connected at a vertex. See Figure \ref{fig:tt}
 
  It turns out $\chi = $ 7 Vertices - 12 Edges + 8 Faces = 3, which is not a case we had seen before. Technically, this example is not a manifold, but we felt it was useful in validating our program procedure. Starting with equal weights, we obtained a somewhat unexpected result. The center weight becomes very large, and the others become smaller in comparison. We concluded that since the central vertex has a much higher degree, its weight becomes large, creating elongated tetrahedra on either side, in order to have the same curvature as all other vertices.
 
@@ -671,7 +685,7 @@ One experiment we performed was measuring convergence speeds of various triangul
 So far we have focused exclusively on triangulations using Euclidean geometry. While this is useful for most cases, there are others where a different background space may be better suited. Two of these in particular are spherical and hyperbolic geometries. We will introduce the basics of each system to readers as they may be unfamiliar with these geometries. We will examine the adaptations of combinatorial Ricci flow for each case, test over various triangulations, and attempt to reach conclusions on our findings. 
 
 \subsection{Spherical flow}
-If you were to draw a large triangle on the surface of the earth, you would see that the line segments are no longer linear, but follow along an arc. In dealing with spherical geometry, we learn that many rules of planar geometry, some of them fundamental, do not apply. To begin, the sums of angles in a triangle do not add to $180^\circ$. The sum changes depending on the area of the triangle. For computational reasons, we cannot (easily) have edges of unbounded length. While we can assume our circle packing metric still holds, we do have additional restrictions: 
+If you were to draw a large triangle on the surface of the earth, you would see that the line segments are no longer linear, but follow along an arc. In dealing with spherical geometry, we learn that many rules of traditional planar geometry, some of them fundamental, do not apply. To begin, the sums of angles in a triangle do not add to $180^\circ$. The sum changes depending on the area of the triangle. For computational reasons, we cannot (easily) have edges of unbounded length. While we can assume our circle-packing metric still holds, we do have additional restrictions: 
 
 \begin{itemize}
 \item All triangles must be realizable on a sphere of radius 1, the unit sphere. 
@@ -680,7 +694,7 @@ If you were to draw a large triangle on the surface of the earth, you would see 
 
  We also have different formulas for numerous things in the spherical case. There are now two laws of cosines. One gives you an angle based on the edge lengths, like in Euclidean space, and the other gives you the side lengths based on the angles. For the first law of cosines, given a triangle with edge lengths $a, b$, and $c$, we have $\cos(\angle C) = \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)}$. Using Taylor polynomials to a couple of terms, we can see that the spherical law of cosines approaches the Euclidean version in its limit. With $\sin(x) \approx x$ and $\cos(x) \approx 1 - \frac{x^2}{2}$ for $x$ small, we get 
 \begin{eqnarray*}
-\cos(\angle C) &=& \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)} = \frac{(1 - \frac{c^2}{2}) - (1 - \frac{a^2}{2})(1 - \frac{b^2}{2})}{ab}\\
+\cos(\angle C) &=& \frac{\cos(c) - \cos(a)\cos(b)}{\sin(a)\sin(b)} \approx \frac{(1 - \frac{c^2}{2}) - (1 - \frac{a^2}{2})(1 - \frac{b^2}{2})}{ab}\\
 							&=& \frac{\frac{a^2}{2} + \frac{b^2}{2} - \frac{c^2}{2} + \frac{a^2b^2}{4}}{ab}\\
 							&=& \frac{a^2 + b^2 - c^2}{2ab} + \frac{ab}{4} \approx \frac{a^2 + b^2 - c^2}{2ab}.
 \end{eqnarray*}
@@ -703,24 +717,24 @@ If you were to draw a large triangle on the surface of the earth, you would see 
  We tried a few techniques to derive an equation for normalized spherical flow. Some ideas were:
 
 \begin{itemize}
-\item $\displaystyle \frac{dr_i}{dt} = (\overline{K} - K_i)\sin(r_i)$ 
+\item $\displaystyle \frac{dr_i}{dt} = (\overline{K} - K_i)\sin(r_i)$ \newline
  By maintaining the same construction as the normalized Euclidean Ricci flow, we hoped that replacing $r_i$ with $\sin(r_i)$ would work. However, in running even the simplest case of a tetrahedron, we found that the system was highly unstable. If more than one weight was initially different from the others, the program would fail. If the system was able to stabilize, we noted that the resultant surface area of the end product was $4\pi$, the same as a unit sphere. Another issue with this formula is that the value $\overline{K}$ is no longer constant. For a spherical construction of a surface $X$, we have 
 
 $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi - \mbox{Surface Area of }X}{|V|}.$$
 
  This is known as the Gauss-Bonnet theorem and is noted by Chow and Luo \cite{chowluo}. Since the surface area went to $4\pi$, then the average curvature went to zero. 
 
-\item $\displaystyle \frac{dr_i}{dt} = (\hat{K} - K_i)r_i$ 
+\item $\displaystyle \frac{dr_i}{dt} = (\hat{K} - K_i)r_i$ \newline
  Following the criteria we used to obtain our normalized Euclidean flow, we began experimenting and used the cases $\tilde{r_i} = \alpha r_i$ and $\prod{\alpha \sin r_i} = C$ to obtain a result similar to our original. We defined $\hat{K}$ as the the dot product of the curvatures and the cosines of the weights, divided by the number of vertices, or 
 
 $$\hat{K} = \frac{\sum{K_i \cos r_i}}{|V|}.$$
 
- The major problem we encountered with this formula was that we had to use a sine approximation in its derivation, which is not valid for larger weights. As angles are not conserved with scaling in the spherical case, we realized this formula would not work. We also found that weights and curvatures displayed sinusoidal behavior, but were unable to converge to a finite value. As time went on, the weights became more unstable until the program reached failure, as seen in Fig.~\ref{kHat}.
+ The major problem we encountered with this formula was that we had to use a sine approximation in its derivation, which is not valid for larger weights. As angles are not conserved with scaling in the spherical case, we realized this formula would not work. We also found that weights and curvatures displayed sinusoidal behavior, but were unable to converge to finite values. As time went on, the weights became more unstable until the program reached failure, as seen in Fig.~\ref{kHat}.
 
 \begin{figure}
 \centering
 \includegraphics[scale = 0.65]{Pictures3/kHatResult.png}
-\caption{An example using our notion of $\hat{K}$. Weights and curvatures were unable to converge, and crashed the program shortly after.}
+\caption{An example using our notion of $\hat{K}$. Weights and curvatures were unable to converge, and crashed the program shortly after. Each curve represents a different vertex.}
 \label{kHat}
 \end{figure}
 
@@ -741,7 +755,7 @@ $$r_i = \frac{1}{2}\arccos(\frac{\cos(Z)}{1 - \cos(Z)}) \mbox{ where } Z = \frac
 
  and $F$ is the number of faces of the given triangulation. For example, with a tetrahedron, $F = 4, Z = \frac{2\pi}{3},$ and $r_i = \frac{1}{2}\arccos(-\frac{1}{3}) \approx 0.9553.$ 
 
- We found with this equation to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that with a $dt$ size of $0.5$, it took over 500 steps for the system to reach equilibrium, and this would be much longer with the $dt$ used in $\S\ref{InitialResults}$.  
+ We found this equation to fail if some weights got too large, and the computation time required to reach a stable equilibrium was lengthier than expected. Looking at Fig.~\ref{SphGood}, we see that with a $dt$ size of $0.5$, it took over 500 steps for the system to reach equilibrium, and this would be much longer with the $dt$ used in $\S\ref{InitialResults}$.  
 
 \begin{figure}[ht]
 \centering
@@ -769,7 +783,7 @@ In hyperbolic geometry, we encounter a new background that has properties both s
 \end{equation}
  
 
- Like in the case of spherical flow, the average and total curvatures need not remain constant. The average curvature is now
+ Like in the case of spherical flow, the average and total curvatures need not remain constant. For a surface, $X$, the average curvature is now
 $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of }X}{|V|}.$$
 
 \begin{figure}
@@ -779,7 +793,7 @@ $$\overline{K} = \frac{\sum{K_i}}{|V|} = \frac{2\pi\chi + \mbox{Surface Area of 
 \label{PD}
 \end{figure}
 
- After running the hyperbolic Ricci flow on a few samples, we noted that the weights did not always go to zero, as was the case with the previous unnormalized systems. So in some cases, it almost seems as if this equation is already normalized. Curvatures would converge to zero, and optimum, nonzero weights are achieved in a relatively short time. Other times it behaved like both Euclidean and spherical. Weights would become chaotically large or drop to zero.  
+ After running the hyperbolic Ricci flow on a few samples, we noted that the weights did not always go to zero, as was the case with other unnormalized systems. So in some cases, it almost seems as if this equation is already normalized. Curvatures would converge to zero, and optimum, nonzero weights are achieved in a relatively short time. Other times it behaved like both Euclidean and spherical. Weights would become chaotically large or drop to zero.  
 
 \subsection{Comparison of Systems}
 
@@ -789,7 +803,7 @@ When we began looking into these background geometries, we thought that it would
 
  \textit{Example:} 12 vertex sphere, vertex transitive of degree 5
 
- Euclidean- As expected, we obtain a surface where all the vertices attain the same curvature of $\frac{\pi}{3}$ after multiple trials of uniform and randomized weights. The weights appeared to group together as in the normalized spherical case, but they were all decreasing towards zero.
+ Euclidean- As expected, we obtain a surface where all the vertices attain the same curvature of $\frac{\pi}{3}$ after multiple trials of various weights. The weights appeared to group together as in the normalized spherical case, but they were all decreasing towards zero.
 
  Spherical- We found that the system was truly stable with nonzero final weights if and only if all initial weights were set exactly to its preferred weight, which is $\approx$ 0.55357 based on the fact that this triangulation has 20 faces. If the initial curvature was below zero, the weights would increase rapidly until the program crashed. If the initial curvature was positive, the vertices would approach the same curvature as in the Euclidean case. In doing so, the weights would drop to zero.
 
@@ -797,11 +811,11 @@ When we began looking into these background geometries, we thought that it would
 
  \textit{Example:} 9 vertex, one-holed torus
 
- Euclidean- Since we know that $\chi = 0$ for a one-holed torus, we also know that $\overline{K} = 0$ and so each vertex obtains zero curvature. The weights do not drop to zero, but converge to positive values reflective of their degree. 
+ Euclidean- Since we know that $\chi = 0$ for a one-holed torus, we also know that $\overline{K} = 0$ and so each vertex obtains zero curvature. The weights do not drop to zero, but converge to positive values. 
 
  Spherical- We found this system to be very unstable with the torus. If the initial weights were too large, we found that the total curvature would be well below zero, and the weights would continually increase until sphericalCalcFlow crashed. While we hoped that reducing the initial weights would bring stability to the system, we ended up with the same result.
 
- Hyperbolic- While the total curvature of the system goes to zero, the weights also approach zero but maintain roughly the same proportion as the final Euclidean weights. Another thing we noted was the time required for the weights and curvatures to go to zero. This system was extremely slow and took much longer than either the Euclidean or spherical trials. 
+ Hyperbolic- While the total curvature of the system goes to zero, the weights also approach zero but try to attain the same proportion as the final Euclidean weights. Another thing we noted was the time required for the weights and curvatures to go to zero. This system was extremely slow and took much longer than either the Euclidean or spherical trials. 
 
  \textit{Example:} 11 vertex, two-holed torus
 
@@ -823,7 +837,7 @@ When we began looking into these background geometries, we thought that it would
 \label{Future}
 
 \subsection{Linking Delaunay to Ricci flow}
-Delaunay surfaces and combinatorial Ricci flows can seem to be very separate concepts, and in many ways with our program structure, they are. Yet there is the possibility of combining both of them to explore other mathematical inquiries. For instance, how does the idea of Delaunay triangles interact with triangulations on a manifold. We know that a circle packed triangulation is weighted Delaunay, but what if the triangulation is not circle packed (see below)? Will the Ricci flow lead to a weighted Delaunay triangulation?
+Delaunay surfaces and combinatorial Ricci flows can seem to be very separate concepts, and in many ways with our program structure, they are. Yet there is the possibility of combining both of them to explore other mathematical inquiries. For instance, how does the idea of Delaunay triangles interact with triangulations on a manifold? We know that a circle packed triangulation is weighted Delaunay, but what if the triangulation is not circle packed? Will the Ricci flow lead to a weighted Delaunay triangulation?
 
 \subsection{Circle packing expansions}
 \label{circExt}
@@ -839,7 +853,7 @@ Circle packing is but a very special way to characterize our side lengths. If we
 \end{figure}
 
 \subsection{Spherical and hyperbolic extensions}
-While we investigated various tests to compare the three combinatorial Ricci flows, we would like to investigate spherical and hyperbolic even further. Primarily, we would like to determine if our normalized equation, Eq.(~\ref{SRicciN}) is related to the Euclidean normalized flow or determine if a true normalized flow exists. Likewise, we would like to investigate the existence of a normalized hyperbolic flow that behaves like the Euclidean version. We would also like to implement a scaling notion per vertex in the spherical case so that the weights could increase without necessarily crashing the program. 
+While we investigated various tests to compare the three combinatorial Ricci flows, we would like to investigate spherical and hyperbolic even further. Primarily, we would like to determine if our normalized equation, Eq.~(\ref{SRicciN}) is related to the Euclidean normalized flow or determine if a true normalized flow exists. Likewise, we would like to investigate the existence of a normalized hyperbolic flow that behaves like the Euclidean version. We would also like to implement a scaling notion per vertex in the spherical case so that the weights could increase without necessarily crashing the program. 
 
 \subsection{3-Dimensional triangulations}
 Triangulations exist outside of two dimensions and one future goal is to perform flows in a three dimensional setting. The flow in this case is known as Yamabe flow, discussed in \cite{DrG}. While Yamabe flow is similar to Ricci flow, its value of $K_i$ is determined quite differently, involving not only the angles of the faces, but also the cone angles associated with tetrahedron vertices. The structure is in place from this project to accomplish this goal. To help the understanding of both the two and three dimensional triangulations, we would like to create a way to visualize them and explore the surfaces locally.
@@ -850,7 +864,7 @@ There were many things we wanted to explore with triangulations, particularly to
 
  Our work on Delaunay surfaces is unfinished, but we are excited about the prospects introduced by negative triangles. The research performed in this paper is the beginning of what we hope is a development of these negative triangles and of universally accepted definitions about them. In combinatorial Ricci flow, we have helped confirm the assertions given by \cite{chowluo} with numerical results in the Euclidean case. We have seen how certain properties of a weighted triangulation behave under combinatorial Ricci flow such as the weights and curvatures. Under Spherical geometry we remain uncertain as to the validity of our normalized Ricci flow, but are optimistic that such a formula does exist. Along with the above mentioned areas of further work, we also propose research in 3-dimensional Yamabe flow and in Delaunay algorithms on manifolds.
 
- In addition to the clearly defined goals in the paper, we were able to experience a large scale project that often required independent work. We also became knowledgeable in an area of mathematics that is still young in its development. For these things we would like to thank Dr. David Glickenstein for being our mentor and guide on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and the National Science Foundation VIGRE $\#$0602173.
+ In addition to the clearly defined goals in the paper, we were able to experience a large scale project that often required independent work. We also became knowledgeable in an area of mathematics that is still young in its development. For these things we would like to thank Dr. David Glickenstein for being our mentor and guide on this project, Dr. Robert Indik and the University of Arizona Math Department for their help and support, and National Science Foundation VIGRE $\#$0602173.
 
 \newpage
 \bibliography{Test1}  
@@ -896,13 +910,12 @@ The sum of the opposite angles on a non-Delaunay hinge is greater than $\pi$.
 \label{prop1}
 Let $\Delta ABC$ and $\Delta BCD$ be triangles with common edge $\overline{BC}$ (see fig. \ref{NonDelPropfig}). Let $r$ be the radius of the circumcircle of  $\Delta ABC$ and $E$ be the center of that circle. Then we wish to show that if $\overline{DE}$ is less than $r$, then $\angle BAC + \angle BDC > \pi$.
 
-We know that $\overline{AB}=\overline{AE}=\overline{EC}=r$, so $\angle EBA = \angle BAE$ and $\angle EAC = \angle ACE$. Therefore, $\angle EBA + \angle ACE= \angle BAC$.
+We know that $\overline{BE}=\overline{AE}=\overline{EC}=r$, so $\angle EBA = \angle BAE$ and $\angle EAC = \angle ACE$. Therefore, $\angle EBA + \angle ACE= \angle BAC$.
 
 We first consider $\overline{DE}=r$. Then similar to above, $\angle EBD = \angle BDE$ and $\angle EDC = \angle DCE$, so $\angle EBD + \angle DCE= \angle BDC$. Thus, $\angle BAC + \angle EBA + \angle ACE + \angle BDC + \angle EBD + \angle DCE = 2\angle BAC + 2\angle BDC = 2\pi$
 since $ABCD$ is a quadrilateral. So $\angle BAC + \angle BDC = \pi$.
 
 Now we suppose $\overline{DE}$ is less than $r$. So $\angle BDE > \angle EBD$ and $\angle DCE > \angle EDC$. Therefore we have
-
 \begin{align*}
 \angle BAC + \angle EBA + \angle ACE + \angle BDC + \angle EBD + \angle DCE = 2\pi \\
 \Rightarrow 2\angle BAC + 2\angle BDC > 2\pi \quad \Rightarrow \angle BAC + \angle BDC > \pi.
@@ -914,7 +927,7 @@ Now we suppose $\overline{DE}$ is less than $r$. So $\angle BDE > \angle EBD$ an
 \begin{figure}
 \label{weidelpropfig}
 \centering
-\includegraphics[scale = 0.45]{Pictures3/geometryW2.png}
+\includegraphics[scale = 0.45]{Pictures3/geometryW3.png}
 \caption{An illustration associated with our proof of Proposition \ref{NonDelProp}.}
 \end{figure}
 
@@ -922,11 +935,12 @@ Now we suppose $\overline{DE}$ is less than $r$. So $\angle BDE > \angle EBD$ an
 Any hinge that is non-weighted-Delaunay will become weighted Delaunay after a 2-2 flip is performed on it.
 \begin{proof}
 \label{prop2}
-Consider the hinge consisting of edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. Assume this hinge is non-weighted-Delaunay. Let $A = C(\{i, j, k\})$ and $B = C(\{i, j, l\})$. We know that $B$ must lie closer to \textit{k} than $A$. Similarly, $A$ is closer to \textit{l} than $B$ (see fig. \ref{weidelpropfig}).\newline
 
-By definition of $C(\{i, j, k\})$, we can say that $A$ lies at the intersection of $h_{ij,k}$, $h_{ik,j}$, and $h_{jk,i}$. Since it suffices to look at only two of these lengths, we will consider just $h_{ik,j}$ and $h_{jk,i}$. Similarly, we can say that $B$ lies at the intersection on $h_{il,j}$ and $h_{jl,i}$. Because this hinge is weighted non-Delaunay, we know that there exists a point where $h_{ik,j}$ and $h_{il,j}$ intersect; the same can be said for $h_{jk,i}$, and $h_{jl,i}$. Let us call these points $C$ and $D$ respectively.
+Consider the hinge consisting of edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. Assume this hinge is non-weighted-Delaunay. Let $A_{ik} = C(\{i, k\})$, $A_{il} = C(\{i, l\})$, $A_{jk} = C(\{j, k\})$, and $A_{jl} = C(\{j, l\})$.
+Let $B_{ijk} = C(\{i, j, k\})$ and $B_{ijl} = C(\{i, j, l\})$. If we draw the dual, $\overline{B_{ijk}B_{ijl}}$, we know that the length of the dual is negative and perpendicular to $\{i, j\}$. We can also say that $B_{ijk}$ lies on the side of $l$ and $B_{ijl}$ lies on the side of $k$. 
 
-At this point, consider our hinge after a 2-2 flip has been performed on it. We now have faces $\{i, k, l\}$ and $\{j, k, l\}$. Since $C$ is the intersection of $h_{ik,j}$ and $h_{il,j}$, we know that it also must be the intersection of $h_{ik,l}$ and $h_{il,k}$, which is $C(\{i, k, l\})$. Similarly, $D$ must be $C(\{j, k, l\})$. We know that $C$ must lie closer to \textit{i} than $D$ and $D$ must lie closer to \textit{j} than $C$. This means that $\star\{k, l\}$ must be positive. Therefore, the hinge on $\{k, l\}$ is weighted Delaunay. \qedhere
+Now conider the hinge when the edge has been flipped. We now have edge $\{k, l\}$ and faces $\{i, l, k\}$ and $\{j, l, k\}$.
+Let $B_{ikl} = C(\{i, k, l\})$ and $B_{jkl} = C(\{j, k, l\})$. Draw $\overline{A_{ik}B_{ijk}}$, $\overline{A_{jk}B_{ijk}}$, $\overline{A_{il}B_{ijl}}$, and $\overline{A_{jl}B_{ijl}}$. We know that $\overline{A_{ik}B_{ijk}}$ and $\overline{A_{il}B_{ijl}}$ intersect at $B_{ikl}$ and $\overline{A_{jk}B_{ijk}}$ and $\overline{A_{jl}B_{ijl}}$ intersect at $B_{jkl}$. We can draw the dual of $\{k, l\}$, $\overline{B_{ikl}B_{jkl}}$, and we know that $B_{ikl}$ lies on the side of $i$ and $B_{jkl}$ lies on the side of $j$. This means that the dual must have positive length.\qedhere
 
 \end{proof}
 
@@ -941,26 +955,11 @@ Based on our evaluations of radii and curvatures over time, it appears to conver
 
 \begin{figure}[ht]
 \centering
-\includegraphics[scale = 0.65]{Pictures3/torus7addvaddhweights2.png}
-\caption{An example of how morphs can change the asymptotic behavior of vertices. In this case we saw the weights of some vertices change concavity.}
-\label{fig:t7vh}
-\end{figure}
-
-\begin{figure}
-\centering
 \includegraphics[scale = 0.8]{Pictures3/curvcurves.png}
 \caption{An example of curvatures over time. While they do converge to the same curvature, the vertex with the maximum or minimum curvature may change. This is a separate trial than that producing Fig.~\ref{fig:t7vh}}
 \end{figure}
 
-\begin{figure}
-\centering
-\includegraphics[scale = 0.7]{Pictures3/Curvg6v12addv.png}
-\includegraphics[scale = 0.7]{Pictures3/Weightg6v12addv.png}
-\caption{An example of adding a vertex to a genus 6 surface. One of the curvatures in unable to drop below $-\pi$, and as a result, its weight is pushed to almost zero. Other vertices group together to compensate for this behavior.}
-\end{figure}
-
-
-\begin{figure}
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[scale = 0.65]{Pictures3/GUIpic.png}
 \caption{A snapshot of the user interface written to run both Ricci flows and Delaunay flip algorithms. Results of a flow are written in a text field on the right.}
