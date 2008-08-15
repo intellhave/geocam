@@ -241,7 +241,6 @@ void testMiscMath()
 
 int main(int argc, char *argv[])
 {
-<<<<<<< .mine
 TriangulationCoordinateSystem tcs;
 generateTriangulation(50); 
 //makeSpecialCase();
@@ -265,7 +264,6 @@ for (int j = 0 ; j <= 1; j++){
     tcs.printDuals("Triangulations/duals2.txt");
 
 
-=======
     
     generateTriangulation(100);
     generateWeights();
@@ -277,7 +275,6 @@ for (int j = 0 ; j <= 1; j++){
     } catch(string s) {
        cout << s << "\n";
     }
->>>>>>> .r499
     system("PAUSE");
     return 0;
     
