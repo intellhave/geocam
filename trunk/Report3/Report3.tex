@@ -31,9 +31,9 @@ Supervisor: Dr. David Glickenstein\\
 \newpage
 \section{Introduction}
 
-The purpose of this project is to explore and extend upon topics currently under research in Differential Geometry. Concepts will be addressed under a programmable, analytic structure to represent and evaluate Delaunay triangulations and combinatorial Ricci flows. Our goal is to solidify a data structure, as well as confirm known facts and conjecture new theories in this fairly unexplored area of mathematics. Our program is written in C++.\newline
+The purpose of this project is to learn about recent developments in discrete differential geometry and produce results, new conjectures, and visualizations. We did this by implementing known and new algorithms and flows computationally. Our program is written in C++. 
 
- We begin in \S\ref{Triangulationschap} with an introduction to triangulations and an explanation of how our program is structured to meet its function. We will then present our research on particular types of triangulations, known as Delaunay triangulations, in \S\ref{DT}. \S\ref{RBk} will follow with an explanation of combinatorial Ricci flow along with results from our experiments. In \S\ref{HypSphere} we continue the exploration of combinatorial Ricci flow under different geometries. Lastly, in \S\ref{Future}, we will provide areas of future research towards relating and expanding the two subjects.
+We begin in \S\ref{Triangulationschap} with an introduction to triangulations and an explanation of how our program is structured. We then present our research on particular types of triangulations, known as Delaunay triangulations, in \S\ref{DT}. Section \ref{RBk} follows with an explanation of combinatorial Ricci flow along with results from our experiments. In \S\ref{HypSphere} we continue the exploration of combinatorial Ricci flow under different geometries. Lastly, in section \ref{Future}, we provide areas of future research towards relating and expanding the two subjects.
 
 \section{Triangulations}
 \label{Triangulationschap}
@@ -48,15 +48,9 @@ The purpose of this project is to explore and extend upon topics currently under
 A triangulation in \textit{n} dimensions, written $\tau = \{\tau_0, \tau_1, ... , \tau_n\}$, consists of lists of simplices $\sigma^k$, where the super-script denotes the dimension of the simplex and $\tau_k$ is the list of all \textit{k}-dimensional simplices $\sigma^k = \{i_0, ... , i_k\}$. We shall refer to 0-dimensional simplices as vertices, 1-dimensional simplices as edges, and 2-dimensional simplices as triangles or faces \cite{Dave}.
 \end{definition}
 
-\begin{figure}
-\includegraphics[scale = 0.5]{Pictures3/flattetrahedron.png}
-\includegraphics[scale = 0.3]{Pictures3/tetrahedron.jpg}
-\caption{An example of a triangulation. In this case, the triangle, a 2-simplex, can be folded up into the boundary of a tetrahedron, a 3-simplex.}
-\end{figure}
-
 In this paper, it will not be necessary to work outside of two dimensions. For that reason, we will refer to the spaces being triangulated simply as surfaces.
 
- In two dimensions, we think of a triangulation as a surface that is made up of triangles joined along edges. Traditionally, triangulations are not allowed to have two $k$-simplices sharing the same $k$ vertices. We use a more generalized definition that allows this. Because of this, to define our surfaces we must provide a description for each simplex. In addition to the list of all simplices, for every $\sigma^k$, we must include a list of simplices local to $\sigma^k$. When it is not ambiguous, we will refer to a simplex simply as a set of vertices which it contains.
+In two dimensions, we think of a triangulation as a surface that is made up of triangles joined along edges. Traditionally, triangulations are not allowed to have two $k$-simplices sharing the same $k$ vertices. We use a more generalized definition that allows this. Because of this, to define our surfaces we must provide a description for each simplex. In addition to the list of all simplices, for every $\sigma^k$, we must include a list of simplices local to $\sigma^k$. When it is not ambiguous, we will refer to a simplex simply as a set of vertices which it contains.
  
  We define locality as follows:
  \begin{enumerate}
@@ -94,9 +88,9 @@ d_{ij}^2 + d_{jk}^2 + d_{ki}^2 = d_{ji}^2 + d_{kj}^2 + d_{ik}^2
 
  for any face $\{i, j, k\}$. This proves that for every face $\{i, j, k\}$, the perpendiculars from each edge center meet at a single point, which is the center of the face $C(\{i, j, k\})$ as defined above \cite{Dave}.
 
- There are two notable examples of choices of weights and their corresponding face centers. The first is when all of the weights are zero. In this case, the triangle center $C(\{i, j, k\})$ is the center of the circumcircle of $\{i, j, k\}$. The second is when the weights are equal to the local lengths for \textit{i}, or for all vertices \textit{j} and \textit{k} that are local to \textit{i}, we have $d_{ij} = d_{ik}$. This case is known as a \textit{circle packing} and will be used in $\S\ref{RBk}$. In this case, the triangle center $C(\{i, j, k\})$ is the center of the incircle of $\{i, j, k\}$.
+There are two notable examples of choices of weights and their corresponding face centers. The first is when all of the weights are zero. In this case, the triangle center $C(\{i, j, k\})$ is the center of the circumcircle of $\{i, j, k\}$. The second is when the weights are equal to the local lengths for \textit{i}, or for all vertices \textit{j} and \textit{k} that are local to \textit{i}, we have $d_{ij} = d_{ik}$. This case is known as a \textit{circle packing} and will be used in $\S\ref{RBk}$. In this case, the triangle center $C(\{i, j, k\})$ is the center of the incircle of $\{i, j, k\}$.
 
- We will now make definitions for duals of our simplices. First, the dual of a face is simply its center $C(\{i, j, k\})$ as defined above. Now we will define a dual for a given edge. Let us refer to any edge, along with its local faces, as a \textit{hinge}. We are able to embed any hinge in the plane. Because of (\ref{eq1}), we know that on any hinge in the plane, the center of an edge along with the centers of its two local faces are colinear. The line connecting these three points is the dual for the given edge. We can determine the length of this dual if we can determine the length of the line segment connecting the center of an edge to the center of one of its local faces. On triangle $\{i, j, k\}$, we write the distance between $C(\{i, j\})$ and $C(\{i, j, k\})$ as 
+We will now make definitions for the \textit{duals} of our simplices. First, the dual of a face is simply its center $C(\{i, j, k\})$ as defined above. Now we will define a dual for a given edge. Let us refer to any edge, along with its local faces, as a \textit{hinge}. We are able to embed any hinge in the plane. Because of (\ref{eq1}), we know that on any hinge in the plane, the center of an edge along with the centers of its two local faces are collinear. The line connecting these three points is the dual for the given edge. We can determine the length of this dual if we can determine the length of the line segment connecting the center of an edge to the center of one of its local faces. On triangle $\{i, j, k\}$, we write the distance between $C(\{i, j\})$ and $C(\{i, j, k\})$ as 
 
 \begin{equation}
 \label{eq3}
@@ -124,7 +118,7 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 
  On a given triangulation, we are able to perform different modifications, which we will refer to as \textit{bistellar moves} or \textit{flips}. There are three possible bistellar moves that can be performed on a 2-dimensional triangulation: a 1-3 move, a 2-2 move, and a 3-1 move. The 1-3 move and the 3-1 move are inverses of one another while the 2-2 move is its own inverse.
 
- For the 1-3 move, we consider a face $\{i, j, k\}$. We create a new vertex \textit{l} and place it inside of $\{i, j, k\}$. From this, we create edges $\{i, l\}$, $\{j, l\}$, and $\{k, l\}$. By doing this, we have turned $\{i, j, k\}$ into three new faces, $\{i, j, l\}$, $\{i, k, l\}$, and $\{j, k, l\}$ (see fig. \ref{fig:flip2}). The 3-1 move is simply the inverse of this move. We start by taking a vertex \textit{l} of degree 3 and removing it from the triangulation, essentially removing three faces and three edges with it and leaving behind a single face $\{i, j, k\}$. A 2-2 move is one that requires no additions or removals of any simplices. Consider a hinge with edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. In a 2-2 flip, we simply take edge $\{i, j\}$ and replace it with a new edge $\{k, l\}$ (see fig. \ref{fig:flip}). This move will be used extensively in $\S\ref{DT}$.
+ For the 1-3 move, we consider a face $\{i, j, k\}$. We create a new vertex \textit{l} and place it inside of $\{i, j, k\}$. From this, we create edges $\{i, l\}$, $\{j, l\}$, and $\{k, l\}$. By doing this, we have turned $\{i, j, k\}$ into three new faces, $\{i, j, l\}$, $\{i, k, l\}$, and $\{j, k, l\}$ (see fig. \ref{fig:flip2}). The 3-1 move is simply the inverse of this move. We start by taking a vertex \textit{l} of degree 3 and removing it from the triangulation, essentially removing three faces and three edges with it and leaving behind a single face $\{i, j, k\}$. A 2-2 move is one that requires no additions or removals of any simplices. Consider a hinge with edge $\{i, j\}$ and faces $\{i, j, k\}$ and $\{i, j, l\}$. In a 2-2 flip, we simply take edge $\{i, j\}$ and replace it with a new edge $\{k, l\}$ (see Fig. \ref{fig:flip}). This move will be used extensively in $\S\ref{DT}$.
 
 \subsection{Programming Structure}
 
@@ -184,13 +178,13 @@ h_{ij,k} = \frac{d_{ik} - d_{ij}\cos(\theta_i)}{\sin(\theta_i)}
 \label{tab:format}
 \end{table}
 
- Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a catalog of almost two million known manifold triangulations of varying sizes. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
+ Frank Lutz, creator of The Manifold Page \cite{lutzmanifold}, has a catalog of almost two million known manifold triangulations of varying sizes. We define manifold in \S\ref{ricciDef}. However, the format is different than our setup, so we developed an algorithm to take a given triangulation, saved on its own as a text file, and convert it into the form that we use. We were able to transform this
   
 \begin{verbatim}{manifold_lex_d2_n5_o1_g0_#1=[[1,2,3],[1,2,4],[1,3,4],
 [2,3,5],[2,4,5],[3,4,5]]},
 \end{verbatim}
  
- which solely documents the faces, into our format. The result is shown in Table~\ref{tab:format}.
+ which solely documents the faces, into our format. The result is shown in Table~\ref{tab:format}. You can see that the three integers representing 
 
  These functionalities of our code form the cornerstone for the rest of the program and have to be the most adaptable to future needs, both seen and unseen. Information on other important aspects, like calculating angles, displaying triangulations, and useful objects like points and lines can again be found in Figure~\ref{triUML} or in later sections. 
 
