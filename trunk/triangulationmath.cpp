@@ -42,14 +42,14 @@ double angle(Vertex v, Face f)
 
 double curvature(Vertex v)
 {
-       double sum = 0;
-       vector<int>::iterator it;
-       vector<int>* vp = v.getLocalFaces();
-       for(it = (*vp).begin(); it < (*vp).end(); it++)
-       {
-              sum += angle(v, Triangulation::faceTable[*it]);
-       }
-       return 2*PI - sum;
+     double sum = 0;
+     vector<int>::iterator it;
+     vector<int>* vp = v.getLocalFaces();
+     for(it = (*vp).begin(); it < (*vp).end(); it++)
+     {
+            sum += angle(v, Triangulation::faceTable[*it]);
+     }
+     return 2*PI - sum;
 }
 
 vector<int> listIntersection(vector<int>* list1, vector<int>* list2)

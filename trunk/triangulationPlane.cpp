@@ -472,9 +472,7 @@ void weightedFlipAlgorithm()
                          tcs.update();
                          tcs.printToFile(s);
                          writeTriangulationFile(s2);
-<<<<<<< .mine
 
-=======
                          int vertex = checkForDoubleTriangles();
                          if(vertex > 0)
                          {
@@ -485,7 +483,6 @@ void weightedFlipAlgorithm()
                          {
                             cout << "Face trouble at: " << face << "\n";
                          }
->>>>>>> .r499
                     }
                     catch(string s1)
                     {
