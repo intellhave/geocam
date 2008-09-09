@@ -99,6 +99,7 @@ int Triangulation::greatestEdge()
     }
     return greatest;
 }
+
 int Triangulation::greatestFace()
 {
     int greatest = 0;

@@ -48,6 +48,9 @@ bool isWeightedDelaunay(Edge e)
      {
         return true;
      }
+     
+     //almost always, calculations of dimensions, which involve arcsin,
+     // will not yield a zero value, but instead a value very close to zero
      return getDual(e) > -0.00001;
 
 }

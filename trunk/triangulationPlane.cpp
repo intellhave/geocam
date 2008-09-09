@@ -22,14 +22,15 @@ bool isDoubleTriangle(Vertex);
 int checkFaces();
 void firstTriangle(double length1, double length2, double length3)
 {
+     //first check the arguments for triangle inequality
      if(length1 >= length2 + length3)
      throw string("Invalid Edge Lengths");
      if(length2 >= length1 + length3)
      throw string("Invalid Edge Lengths");
      if(length3 >= length1 + length2)
      throw string("Invalid Edge Lengths");
-     
 
+     //initialize the simplices with proper indices
     Face f1(1);
     Edge e1(1);
     Edge e2(2);
@@ -38,6 +39,7 @@ void firstTriangle(double length1, double length2, double length3)
     Vertex v2(2);
     Vertex v3(3);
 
+    //place all the simplices into the triangulation structure
     Triangulation::putFace(1, f1);
     Triangulation::putEdge(1, e1);
     Triangulation::putEdge(2, e2);
@@ -45,6 +47,8 @@ void firstTriangle(double length1, double length2, double length3)
     Triangulation::putVertex(1, v1);
     Triangulation::putVertex(2, v2);
     Triangulation::putVertex(3, v3);
+    
+    //give all of the simplices the proper references to one another
     Triangulation::vertexTable[1].addVertex(2);
     Triangulation::vertexTable[1].addVertex(3);
     Triangulation::vertexTable[2].addVertex(1);
@@ -82,6 +86,7 @@ void firstTriangle(double length1, double length2, double length3)
     Triangulation::faceTable[1].addEdge(2);
     Triangulation::faceTable[1].addEdge(3);
     
+    //set the dimensions of the triangle
     Triangulation::edgeTable[1].setLength(length1);
     Triangulation::edgeTable[2].setLength(length2);
     Triangulation::edgeTable[3].setLength(length3);
@@ -91,18 +96,25 @@ void firstTriangle(double length1, double length2, double length3)
 void addTriangle(Edge e, double length1, double length2)
 {
      
+     //check to make sure the edge is "open"
      if(e.getLocalFaces()->size() > 1)
      throw string("Invalid Edge");
+     //check the edge lengths for triangle inequality
      if(e.getLength() >= (length1 + length2))
      throw string("Invalid Edge Lengths");
      if(length1 >= (e.getLength() + length2))
      throw string("Invalid Edge Lengths");
      if(length2 >= (e.getLength() + length1))
      throw string("Invalid Edge Lengths");
+     
+     //make variable references to existing simplices
      Vertex va1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
      Vertex va2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
      Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      
+     //make sure the structure remains locally Euclidean
+     //checks each vertex to see that the total angle sum 
+     //does not exceed 2 * PI
      double anglesum = getAngleSum(va1);
      if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
      throw string("angle sum 1");
@@ -110,35 +122,44 @@ void addTriangle(Edge e, double length1, double length2)
      if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
      throw string("angle sum 2");
 
+     //initialize the new simplices with the proper indices
      Vertex vb(Triangulation::greatestVertex() + 1);
      Edge eb1(Triangulation::greatestEdge() + 1);
      Edge eb2(Triangulation::greatestEdge() + 2);
      Face fb(Triangulation::greatestFace() + 1);
+     
+     //place the new simplices in the triangulation structure
      Triangulation::putVertex(vb.getIndex(), vb);
      Triangulation::putEdge(eb1.getIndex(), eb1);
      Triangulation::putEdge(eb2.getIndex(), eb2);
-     
      Triangulation::putFace(fb.getIndex(), fb);
      
+     //make the last variable reference needed
      vector<int> diff;
      diff = listDifference(fa.getLocalVertices(), e.getLocalVertices());
      Vertex va3 = Triangulation::vertexTable[diff[0]];
      
+     //arrange the simplex references as necessary
+     //vertex-vertex
      Triangulation::vertexTable[vb.getIndex()].addVertex(va1.getIndex());
      Triangulation::vertexTable[vb.getIndex()].addVertex(va2.getIndex());
      Triangulation::vertexTable[va1.getIndex()].addVertex(vb.getIndex());
      Triangulation::vertexTable[va2.getIndex()].addVertex(vb.getIndex());
+     //vertex-edge
      Triangulation::vertexTable[vb.getIndex()].addEdge(eb1.getIndex());
      Triangulation::vertexTable[vb.getIndex()].addEdge(eb2.getIndex());
      Triangulation::vertexTable[va1.getIndex()].addEdge(eb1.getIndex());
      Triangulation::vertexTable[va2.getIndex()].addEdge(eb2.getIndex());
+     //vertex-face
      Triangulation::vertexTable[vb.getIndex()].addFace(fb.getIndex());
      Triangulation::vertexTable[va1.getIndex()].addFace(fb.getIndex());
      Triangulation::vertexTable[va2.getIndex()].addFace(fb.getIndex());
+     //edge-vertex
      Triangulation::edgeTable[eb1.getIndex()].addVertex(vb.getIndex());
      Triangulation::edgeTable[eb1.getIndex()].addVertex(va1.getIndex());
      Triangulation::edgeTable[eb2.getIndex()].addVertex(vb.getIndex());
      Triangulation::edgeTable[eb2.getIndex()].addVertex(va2.getIndex());
+     //edge-edge
      for(int i = 0; i < va1.getLocalEdges()->size(); i++)
      {
              Triangulation::edgeTable[(*(va1.getLocalEdges()))[i]].addEdge(eb1.getIndex());
@@ -153,24 +174,30 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::edgeTable[eb2.getIndex()].addEdge(eb1.getIndex());
      Triangulation::edgeTable[e.getIndex()].addEdge(eb1.getIndex());
      Triangulation::edgeTable[e.getIndex()].addEdge(eb2.getIndex());
+     //edge-face
      Triangulation::edgeTable[e.getIndex()].addFace(fb.getIndex());
      Triangulation::edgeTable[eb1.getIndex()].addFace(fb.getIndex());
      Triangulation::edgeTable[eb2.getIndex()].addFace(fb.getIndex());
+     //face-vertex
      Triangulation::faceTable[fb.getIndex()].addVertex(va1.getIndex());
      Triangulation::faceTable[fb.getIndex()].addVertex(va2.getIndex());
      Triangulation::faceTable[fb.getIndex()].addVertex(vb.getIndex());
+     //face-edge
      Triangulation::faceTable[fb.getIndex()].addEdge(e.getIndex());
      Triangulation::faceTable[fb.getIndex()].addEdge(eb1.getIndex());
      Triangulation::faceTable[fb.getIndex()].addEdge(eb2.getIndex());
+     //face-face
      Triangulation::faceTable[fb.getIndex()].addFace(fa.getIndex());
      Triangulation::faceTable[fa.getIndex()].addFace(fb.getIndex());
      
+     //set the dimensions of the new triangle
      Triangulation::edgeTable[eb1.getIndex()].setLength(length1);
      Triangulation::edgeTable[eb2.getIndex()].setLength(length2);
 }
 
 void addTriangle(Edge e1, Edge e2)
 {
+     //checks to make sure the addition is in a valid place
      if(!e1.isAdjEdge(e2.getIndex()))
      throw string("Error: Not adjacent");
      if(!e2.isAdjEdge(e1.getIndex()))
@@ -178,9 +205,11 @@ void addTriangle(Edge e1, Edge e2)
      if(e1.getLocalFaces()->size() > 1 || e2.getLocalFaces()->size() > 1)
      throw string("Error: Not valid edges");
      
+     //initialize the variable references
      Vertex v1, v2, va;
      vector<int> diff, sameAs;
      
+     //create the variable references
      diff = listDifference(e1.getLocalVertices(), e2.getLocalVertices());
      v1 = Triangulation::vertexTable[diff[0]];
      diff = listDifference(e2.getLocalVertices(), e1.getLocalVertices());
@@ -188,10 +217,12 @@ void addTriangle(Edge e1, Edge e2)
      sameAs = listIntersection(e1.getLocalVertices(), e2.getLocalVertices());
      va = Triangulation::vertexTable[sameAs[0]];
      
+     //ensures the concavity of the area where the triangle is being placed
      double ang = 2 * PI - getAngleSum(va);
      if(ang > PI)
      throw string("...");
      
+     //initializes the new simplices with proper indices
      Edge eb(Triangulation::greatestEdge() + 1);
      Face fb(Triangulation::greatestFace() + 1);
      Face fa1 = Triangulation::faceTable[(*(e1.getLocalFaces()))[0]];
@@ -199,16 +230,21 @@ void addTriangle(Edge e1, Edge e2)
      Triangulation::putEdge(eb.getIndex(), eb);
      Triangulation::putFace(fb.getIndex(), fb);
      
-     
+     //arrange the simplex references as necessary
+     //vertex-vertex
      Triangulation::vertexTable[v1.getIndex()].addVertex(v2.getIndex());
      Triangulation::vertexTable[v2.getIndex()].addVertex(v1.getIndex());
+     //vertex-edge
      Triangulation::vertexTable[v1.getIndex()].addEdge(eb.getIndex());
      Triangulation::vertexTable[v2.getIndex()].addEdge(eb.getIndex());
+     //vertex-face
      Triangulation::vertexTable[v1.getIndex()].addFace(fb.getIndex());
      Triangulation::vertexTable[v2.getIndex()].addFace(fb.getIndex());
      Triangulation::vertexTable[va.getIndex()].addFace(fb.getIndex());
+     //edge-vertex
      Triangulation::edgeTable[eb.getIndex()].addVertex(v1.getIndex());
      Triangulation::edgeTable[eb.getIndex()].addVertex(v2.getIndex());
+     //edge-edge
      for(int i = 0; i < v1.getLocalEdges()->size(); i++)
      {
              Triangulation::edgeTable[(*(v1.getLocalEdges()))[i]].addEdge(eb.getIndex());
@@ -219,29 +255,34 @@ void addTriangle(Edge e1, Edge e2)
              Triangulation::edgeTable[(*(v2.getLocalEdges()))[i]].addEdge(eb.getIndex());
              Triangulation::edgeTable[eb.getIndex()].addEdge((*(v2.getLocalEdges()))[i]);
      }
+     //edge-face
      Triangulation::edgeTable[e1.getIndex()].addFace(fb.getIndex());
      Triangulation::edgeTable[e2.getIndex()].addFace(fb.getIndex());
      Triangulation::edgeTable[eb.getIndex()].addFace(fb.getIndex());
+     //face-vertex
      Triangulation::faceTable[fb.getIndex()].addVertex(v1.getIndex());
      Triangulation::faceTable[fb.getIndex()].addVertex(v2.getIndex());
      Triangulation::faceTable[fb.getIndex()].addVertex(va.getIndex());
+     //face-edge
      Triangulation::faceTable[fb.getIndex()].addEdge(e1.getIndex());
      Triangulation::faceTable[fb.getIndex()].addEdge(e2.getIndex());
      Triangulation::faceTable[fb.getIndex()].addEdge(eb.getIndex());
+     //face-face
      Triangulation::faceTable[fb.getIndex()].addFace(fa1.getIndex());
      Triangulation::faceTable[fb.getIndex()].addFace(fa2.getIndex());
      Triangulation::faceTable[fa1.getIndex()].addFace(fb.getIndex());
      Triangulation::faceTable[fa2.getIndex()].addFace(fb.getIndex());
      
+     //use lengths of existing edges to find new dimension
      double l1 = e1.getLength();
      double l2 = e2.getLength();
-     
      Triangulation::edgeTable[eb.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
      
 }
 
 double getAngleSum(Vertex v)
 {
+       //finds the sum of all angles at a given vertex
        double angleSum;
        for(int i = 0; i < v.getLocalFaces()->size(); i++)
        {
@@ -255,22 +296,33 @@ double getAngleSum(Vertex v)
 
 void generateTriangulation(int numFaces)
 {
+     //initialize the iterator for the triangulation and random number generator
      map<int, Edge>::iterator eit;
      srand(time(NULL));
      
+     //initialize the variables needed to create the dimensions for the triangulation
      double randNum, length1, length2, length3, range, rDec;
+     //use a large number (20,000) to get a random number in the interval (0,1]
+     // then multiply by ten, creating random dimensions between 1 and 10
      randNum = (rand()%20000 + 1) / 20000.0;
      length1 = randNum *10 + 1;
      randNum = (rand()%20000 + 1) / 20000.0;
      length2 = randNum*10 + 1;
+     //use a range variable ....
+     //
+     //need to ask Mitch about this convoluted piece of code
+     //
      range = (length1 + length2 - 1) - (abs(length1 - length2) + 1);
      int rInt = (int) range;
      rDec = range - rInt;
      randNum = (rand()%20000 + 1) / 20000.0;
      length3 = rand()%(rInt + 1) + (abs(length1 - length2) + 1) + randNum * rDec;
 
+     //make the first triangle in the plane
      firstTriangle(length1, length2, length3);
 
+     //use a loop to generate a planar triangulation with random lengths
+     // and a number of faces indicated by the argument
      while(Triangulation::faceTable.size() < numFaces)
      {
          for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
@@ -573,6 +625,7 @@ void checkTriangle(Edge e, double length1, double length2)
 
 void makeSpecialCase()
 {
+     //creates the canonical example using carefully chosen weights and lengths
      firstTriangle(1.0, 1.0, 1.0);
      addTriangle(Triangulation::edgeTable[1], 1.0, 1.97387802015);
      addTriangle(Triangulation::edgeTable[2], 1.97387802015, 1.0);
@@ -592,9 +645,11 @@ void makeSpecialCase()
 
 void removeDoubleTriangle(Vertex vb)
 {
+     //checks for valid choice
      if(vb.getLocalFaces()->size() != 2 || getAngleSum(vb) > 0.0001)
      throw string("Invalid Operation");
      
+     //creates reference variables
      Face f1 = Triangulation::faceTable[(*(vb.getLocalFaces()))[0]];
      Face f2 = Triangulation::faceTable[(*(vb.getLocalFaces()))[1]];
      
@@ -614,6 +669,9 @@ void removeDoubleTriangle(Vertex vb)
      
      Face fa1, fa2;
      
+     //check for instances of being on the border, and thus whether or not
+     //additional reference variables are necessary
+     //in whichever case, it is necessary to rearrange certain simplices
      if(!ea1.isBorder())
      {
           if((*(ea1.getLocalFaces()))[0] == f1.getIndex())
@@ -640,6 +698,7 @@ void removeDoubleTriangle(Vertex vb)
           Triangulation::faceTable[fa2.getIndex()].addFace(fa1.getIndex());
      }
      
+     //remove all simplices on the double triangle 
      Triangulation::eraseVertex(vb.getIndex());
      Triangulation::eraseEdge(eb1.getIndex());
      Triangulation::eraseEdge(eb2.getIndex());

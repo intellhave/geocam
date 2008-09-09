@@ -234,7 +234,7 @@ w = [ 1 .5 .5 1];
 for i = 1:size(X,2)-1
     cx = X(i) + w(i)*cos(th);
     cy = Y(i) + w(i)*sin(th);
-    plot(cx,cy,'r')
+    %plot(cx,cy,'r')
 end
 wi = w(1); wl = w(2); wj = w(3); wk = w(4);
 Lij = 2; Lik = sqrt(.7^2 + .7^2); Ljk = sqrt(1.3^2 + .7^2);
@@ -243,11 +243,10 @@ Lil = sqrt(2*.8^2); Ljl = sqrt(1.2^2 + .8^2);
 thJIK = pi/4; thJIL = pi/4;
 
 Dij = (Lij^2 + wi^2 - wj^2)/(2*Lij);
+Dik = (Lik^2 + wi^2 - wk^2)/(2*Lik);
 h = (Dik - Dij*cos(thJIK))/sin(thJIK);
 Xdij = -1 + Dij;
 plot([Xdij, Xdij],[0 h],'b','linewidth',2);
-
-Dik = (Lik^2 + wi^2 - wk^2)/(2*Lik);
 Xdik = -1 + .7*Dik/Lik;
 Ydik = .7*Dik/Lik;
 plot([Xdik, Xdij],[Ydik h],'b','linewidth',2);
@@ -270,13 +269,32 @@ Xdjl = 1 - 1.2*Djl/Ljl;
 Ydjl = -.8*Djl/Ljl;
 plot([Xdjl, Xdij],[Ydjl, h2],'b','linewidth',2)
 
-text(.05,-.5,'A')
-text(.4,-.22,'D')
-text(.18,.15,'B')
-text(-.2, -.24,'C')
-
+text(.05,-.5,'B_{ijk}')
+text(.4,-.22,'B_{jkl}')
+text(.18,.15,'B_{ijl}')
+text(-.2, -.24,'B_{ikl}')
+text(.45,-.42,'A_{jl}')
+text(-.42,-.66,'A_{il}')
+text(-.72,.42,'A_{ik}')
+text(.57,.27,'A_{jk}')
 axis image
 axis off
 
-
-
+%Figure 17. New bad case. 
+figure;
+gx = [0 4 4 0 0 4];
+gy = [0 0 2 2 0 2];
+h = 1 + sqrt(20)/2;
+x1 = h*cos(th);y1 = h*sin(th);
+ha = 4 - h; hc = sqrt(20) - h;
+x2 = 4 + ha*cos(th); y2 = ha*sin(th);
+x3 = 4 + hc*cos(th); y3 = 2 + hc*sin(th);
+x4 = 2 + 3.7225*cos(th); y4 = 2 + sqrt(21.25) +3.7225*sin(th);
+plot(gx,gy,'k',x1,y1,'b',x2,y2,'b',x3,y3,'b')
+c1 = 4 + h*cos(th); d1 = 2 + h*sin(th);
+c2 = ha*cos(th); d2 = 2 + ha*sin(th);
+c3 = hc*cos(th); d3 = hc*sin(th);
+hold on;
+plot(c1,d1,'r',c2,d2,'r',c3,d3,'r')
+axis image
+axis off
