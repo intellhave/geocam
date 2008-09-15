@@ -17,6 +17,7 @@ Version: July 16, 2008
 map<int, Vertex> Triangulation::vertexTable;
 map<int, Edge> Triangulation::edgeTable;
 map<int, Face> Triangulation::faceTable;
+map<int, Tetra> Triangulation::tetraTable;
 
 // class constructor
 Triangulation::Triangulation()
@@ -42,11 +43,15 @@ void Triangulation::putFace(int key, Face v)
 {
      faceTable.insert(pair<int, Face>(key, v));
 }
+void Triangulation::putTetra(int key, Tetra v)
+{
+     tetraTable.insert(pair<int, Tetra>(key, v));
+}
 
 bool Triangulation::containsVertex(int key)
 {
     map<int, Vertex>::iterator vit;
-    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
+    for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
     {
             if(vit->first == key)
             return true;
@@ -57,7 +62,7 @@ bool Triangulation::containsVertex(int key)
 bool Triangulation::containsEdge(int key)
 {
     map<int, Edge>::iterator eit;
-    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+    for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++)
     {
             if(eit->first == key)
             return true;
@@ -68,9 +73,19 @@ bool Triangulation::containsEdge(int key)
 bool Triangulation::containsFace(int key)
 {
     map<int, Face>::iterator fit;
-    for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+    for(fit = faceTable.begin(); fit != faceTable.end(); fit++)
     {
             if(fit->first == key)
+            return true;
+    }
+    return false;
+}
+bool Triangulation::containsTetra(int key)
+{
+    map<int, Tetra>::iterator tit;
+    for(tit = tetraTable.begin(); tit != tetraTable.end(); tit++)
+    {
+            if(tit->first == key)
             return true;
     }
     return false;
@@ -111,6 +126,17 @@ int Triangulation::greatestFace()
     }
     return greatest;
 }
+int Triangulation::greatestTetra()
+{
+    int greatest = 0;
+    map<int, Tetra>::iterator tit;
+    for(tit = tetraTable.begin(); tit != tetraTable.end(); tit++)
+    {
+            if(tit->first > greatest)
+            greatest = tit->first;
+    }
+    return greatest;
+}
 
 void Triangulation::eraseVertex(int key)
 {
@@ -128,6 +154,11 @@ void Triangulation::eraseVertex(int key)
      for(fit = faceTable.begin(); fit != faceTable.end(); fit++)
      {
          fit->second.removeVertex(key);
+     }
+     map<int, Tetra>::iterator tit;
+     for(tit = tetraTable.begin(); tit != tetraTable.end(); tit++)
+     {
+         tit->second.removeVertex(key);
      }
      vertexTable.erase(key);
 }
@@ -149,6 +180,11 @@ void Triangulation::eraseEdge(int key)
      {
          fit->second.removeEdge(key);
      }
+     map<int, Tetra>::iterator tit;
+     for(tit = tetraTable.begin(); tit != tetraTable.end(); tit++)
+     {
+         tit->second.removeEdge(key);
+     }
      edgeTable.erase(key);
 }
 
@@ -169,7 +205,37 @@ void Triangulation::eraseFace(int key)
      {
          fit->second.removeFace(key);
      }
+     map<int, Tetra>::iterator tit;
+     for(tit = tetraTable.begin(); tit != tetraTable.end(); tit++)
+     {
+         tit->second.removeFace(key);
+     }
      faceTable.erase(key);
+}
+
+void Triangulation::eraseTetra(int key)
+{
+     map<int, Vertex>::iterator vit;
+     for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
+     {
+         vit->second.removeTetra(key);
+     }
+     map<int, Edge>::iterator eit;
+     for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++)
+     {
+         eit->second.removeTetra(key);
+     }
+     map<int, Face>::iterator fit;
+     for(fit = faceTable.begin(); fit != faceTable.end(); fit++)
+     {
+         fit->second.removeTetra(key);
+     }
+     map<int, Tetra>::iterator tit;
+     for(tit = tetraTable.begin(); tit != tetraTable.end(); tit++)
+     {
+         tit->second.removeTetra(key);
+     }
+     tetraTable.erase(key);
 }
 
 void Triangulation::resetTriangulation()

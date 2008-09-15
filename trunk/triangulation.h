@@ -14,6 +14,7 @@ Version: July 16, 2008
 #include "simplex/vertex.h"
 #include "simplex/edge.h"
 #include "simplex/face.h"
+#include "simplex/tetra.h"
 #include "hyperbolic/hyperbolicmath.h"
 
 /*
@@ -40,7 +41,7 @@ class Triangulation
     static map<int, Vertex> vertexTable;
     static map<int, Edge> edgeTable;
     static map<int, Face> faceTable;
-    
+    static map<int, Tetra> tetraTable;
     /*
    	 * Adds a mapping from the given integer to the given Vertex in
      * the vertexTable. Called statically.
@@ -57,6 +58,7 @@ class Triangulation
      */
     static void putFace(int, Face);
     
+    static void putTetra(int, Tetra);
     /*
      * Removes the mapping from the given integer to its referenced vertex.
      * It also removes all local references to the integer in any simplices.
@@ -72,6 +74,8 @@ class Triangulation
      * It also removes all local references to the integer in any simplices.
      */
     static void eraseFace(int);
+    
+    static void eraseTetra(int);
     
     static void resetTriangulation();
     /*
@@ -90,6 +94,8 @@ class Triangulation
      */ 
     static bool containsFace(int);
     
+    static bool containsTetra(int);
+    
     /*
      * Returns the largest integer in the vertex table.
      */
@@ -103,6 +109,7 @@ class Triangulation
      */
     static int greatestFace();
 	
+	static int greatestTetra();
     /*
      * Calculates the sum of the curvatures over all vertices.
      */

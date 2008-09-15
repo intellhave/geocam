@@ -13,13 +13,11 @@ Face::Face() : Simplex()
 
       negative = false;
 
-	// insert your code here
 }
 
 // class destructor
 Face::~Face()
 {
-	// insert your code here
 }
 
 

@@ -30,6 +30,7 @@ class Simplex
       vector<int> localVertices;
       vector<int> localEdges;
       vector<int> localFaces;
+      vector<int> localTetras;
 	public:
 		// constructor
 		Simplex();
@@ -52,15 +53,20 @@ class Simplex
 	  */
 	  void addFace(int);
 	  
+	  void addTetra(int);
+	  
 	  void removeVertex(int);
 	  
 	  void removeEdge(int);
 	  
 	  void removeFace(int);
 	  
+	  void removeTetra(int);
+	  
 	  bool isAdjVertex(int);
 	  bool isAdjEdge(int);
 	  bool isAdjFace(int);
+	  bool isAdjTetra(int);
 	  
      /* Returns a pointer to the list of local vertices.
 	  */
@@ -71,6 +77,8 @@ class Simplex
      /* Returns a pointer to the list of local faces.
 	  */
 	  vector<int>* getLocalFaces();
+	  
+	  vector<int>* getLocalTetras();
 		
 	    
 };

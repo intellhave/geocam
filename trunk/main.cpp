@@ -268,7 +268,6 @@ for (int j = 0 ; j <= 1; j++){
     generateTriangulation(100);
     generateWeights();
 //    makeSpecialCase();
-    TriangulationCoordinateSystem tcs;
     tcs.generatePlane();
     try{
        weightedFlipAlgorithm();

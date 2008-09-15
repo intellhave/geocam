@@ -4,7 +4,7 @@ Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: July 3, 2008
 ***************************************************************
 The Triangulation Input/Output file holds the functions that handle
-the reading and writing of text files.
+the reading and writing of text files under a two-dimensional manifold.
 **************************************************************/
 
 /*

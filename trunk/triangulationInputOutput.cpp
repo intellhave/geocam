@@ -11,7 +11,6 @@ the reading and writing of text files.
 #include <vector>
 #include "simplex/simplex.h"
 #include <map>
-#include <vector>
 #include <algorithm>
 #include <set>
 #include <fstream>

@@ -48,6 +48,12 @@ void Simplex::addFace(int face)
      if(it == localFaces.end())
      localFaces.push_back(face);
 }
+void Simplex::addTetra(int tetra)
+{
+     vector<int>::iterator it = find(localTetras.begin(), localTetras.end(), tetra);
+     if(it == localTetras.end())
+     localTetras.push_back(tetra);
+}
 void Simplex::removeVertex(int vertex)
 {
      for(int i = 0; i < localVertices.size(); i++)
@@ -80,10 +86,19 @@ void Simplex::removeFace(int face)
               localFaces.erase(localFaces.begin() + i);
               return;
              }
-     }
-     
+     }   
 }
-
+void Simplex::removeTetra(int tetra)
+{
+     for(int i = 0; i < localTetras.size(); i++)
+     {
+             if(localTetras[i] == tetra)
+             {
+              localTetras.erase(localTetras.begin() + i);
+              return;
+             }
+     }   
+}
 bool Simplex::isAdjVertex(int vIndex)
 {
      for(int i = 0; i < localVertices.size(); i++)
@@ -114,6 +129,15 @@ bool Simplex::isAdjFace(int fIndex)
      return false;
 }
 
+bool Simplex::isAdjTetra(int tIndex)
+{
+     for(int i = 0; i < localTetras.size(); i++)
+     {
+             if(localTetras[i] == tIndex)
+             return true;
+     }
+     return false;
+}
 vector<int>* Simplex::getLocalVertices()
 {
      return &localVertices;
@@ -125,5 +149,9 @@ vector<int>* Simplex::getLocalEdges()
 vector<int>* Simplex::getLocalFaces() 
 {
      return &localFaces;
+}
+vector<int>* Simplex::getLocalTetras()
+{
+     return &localTetras;
 }
 
