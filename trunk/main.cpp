@@ -125,7 +125,6 @@ void testMiscMath()
 {
      Line l(4,5,1,1);
      Point p = findPoint(l, 3, -acos(3/5.));
-     //printPoint(p);
      Line l2(l.getEnding(), p);
      Line l1(l.getInitial(), p);
      cout << l2.getLength() << " ";
