@@ -5,10 +5,7 @@ Version: June 10, 2008
 **************************************************************/
 
 #include <iostream>
-#include <ctime>
 #include <cmath>
-#include "triangulation.h"
-#include "triangulationmath.h"
 #include "triangulationPlane.h"
 #define PI 	3.141592653589793238
 
