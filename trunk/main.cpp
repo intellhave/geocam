@@ -13,59 +13,26 @@ using namespace std;
 
 void runFlow()
 {
-//
-//
-//char from[] = "Triangulations/MATLABTRI2.txt";
-//char to[] = "Triangulations/testsampleresult.txt";
-//makeTriangulationFile(from, to);
+   char to[] = "Triangulations/icosahedron.txt";
+   readTriangulationFile(to);
 
-//char from[] = "Triangulations/manifold.txt";
-//char to[] = "Triangulations/manifold converted.txt";
-//makeTriangulationFile(from, to);
-//char to[] = "Triangulations/Tetrahedron.txt";
-//
-//readTriangulationFile(to);
-//
-//<<<<<<< .mine
-//<<<<<<< .mine
-//writeTriangulationFile(to);
-
-char to[] = "Triangulations/icosahedron.txt";
-readTriangulationFile(to);
+   //char from[] = "Triangulations/manifold.txt";
+   //char to[] = "Triangulations/manifold converted.txt";
+   //makeTriangulationFile(from, to);
 
 
-//char to[] = "Triangulations/torus-9.txt";
+   //flip(Triangulation::edgeTable[1]);  
+   //addNewVertex(Triangulation::faceTable[3], 1);
+   //removeVertex(Triangulation::vertexTable[3]);
+   //addLeaf(Triangulation::edgeTable[1], 2);
+   //addNewVertex(Triangulation::faceTable[5], 1);
+   //addNewVertex(Triangulation::faceTable[12], 1);
+   //map<int, Face>::iterator fit;
 
-//char from[] = "Triangulations/manifold.txt";
-//char to[] = "Triangulations/manifold converted.txt";
-//makeTriangulationFile(from, to);
-//char to[] = "Triangulations/testsampleresult.txt";
-//readTriangulationFile(to);
-
-
-//flip(Triangulation::edgeTable[1]);  
-//addNewVertex(Triangulation::faceTable[3], 1);
-//removeVertex(Triangulation::vertexTable[3]);
-//addLeaf(Triangulation::edgeTable[1], 2);
-//addNewVertex(Triangulation::faceTable[5], 1);
-//addNewVertex(Triangulation::faceTable[12], 1);
-//map<int, Face>::iterator fit;
-
-   srand(time(NULL));
-//   
+   srand(time(NULL)); 
    
     int vertexSize = Triangulation::vertexTable.size();
     double weights[vertexSize];
-//    weights[0] = 0.74;
-//    weights[1]=  0.54;
-//    weights[2] = 0.23;
-//    weights[3] = 0.04;
-//    weights[4] = 0.33;
-//    weights[5] = 0.37;
-//    weights[6] = 0.80;
-//    weights[7] = 0.89;
-//    weights[8] = 0.66;
-//    weights[9] = 0.61;
     double product = 1;
     for(int i = 1; i <= vertexSize; i++)
    {
@@ -73,7 +40,6 @@ readTriangulationFile(to);
        //weights[i - 1] = 3.141592653589793238/(rand() % 100 + 1.0);
        //weights[i - 1] = (i+0.0)/(2*vertexSize);
       weights[i-1] = 0.1;
-
       //weights[i - 1] = acos(1)/2 + (rand() % 5+1.0)/100.0;
       //weights[i - 1] =   (rand() % 80 + 1)/100.0;
       
@@ -86,45 +52,20 @@ readTriangulationFile(to);
    vector<double> curvatures;
    double dt = 0.03;
 
-   int Steps = 6000;
-
-//   sphericalCalcFlow(&weightsR, &curvatures, dt, weights, Steps, true);
-////   printResultsStep(fileName, &weightsR, &curvatures);
-//printResultsNum(fileName, &weightsR, &curvatures);
-
+   int Steps = 1000;
 
    calcFlow(&weightsR, &curvatures, dt, weights, Steps, true);
    printResultsStep(fileName, &weightsR, &curvatures);
-//printResultsNum(fileName, &weightsR, &curvatures);
 
-
-//   hyperbolicCalcFlow(&weightsR, &curvatures, dt, weights, Steps, false);
-//   printResultsStep(fileName, &weightsR, &curvatures);
-
-////printResultsNum(fileName, &weightsR, &curvatures);
 
    time(&end);
    cout << difftime(end, start) << " real time seconds" << endl;
    cout << dt*Steps << " simulated seconds" << endl;
-
-
-//=======
-
-//printResultsNum(fileName, &weightsR, &curvatures);
-
-   time(&end);
-   cout << difftime(end, start) << " second(s)" << endl;
-
 }
+
 void testDelaunay()
 {
-    //firstTriangle(1.0, 1.0, 1.0);
-    //addTriangle(Triangulation::edgeTable[1], 1.0, 1.0);
     char filename[] = "Triangulations/Plane Test.txt";
-//    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
-//    flip(Triangulation::edgeTable[1]);
-//    writeTriangulationFile(filename);
-//    cout << isDelaunay(Triangulation::edgeTable[1]) << endl;
     generateTriangulation(10);
     map<int, Edge>::iterator eit;
     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
@@ -140,7 +81,6 @@ void testDelaunay()
     {
         cout << "Edge " << i << ": ";
         cout << isDelaunay(Triangulation::edgeTable[i]) << "    ";
-        //printLengths(Triangulation::edgeTable[i]);
         cout << endl;
     }
 }
@@ -169,34 +109,6 @@ void testGeneratePlane()
         }
      }
      cout << "\n";
-//     cout << "Pick a line index between 1 and " << edgeSize << ":  ";
-//     cin >> index;
-//     while(index != 0)
-//     {
-//        if(!tp.containsLine(index))
-//        {
-//           cout << "Line is not in system!\n";
-//        }
-//        if(index <= edgeSize && index >= 1)
-//        {
-//             Line l = tp.getLine(index);
-//             cout << "Line " << index << "\n";
-//             cout << "Initial X: " << l.getInitialX() << endl;
-//             cout << "Initial Y: " << l.getInitialY() << endl;
-//             cout << "Ending X: " << l.getEndingX() << endl;
-//             cout << "Ending Y: " << l.getEndingY() << endl;
-//             cout << "Length: " << l.getLength() << endl; 
-//        }
-//        cout << "\nPick a point index between 1 and " << vertexSize << ": ";
-//        cin >> index;
-//        if(index <= vertexSize && index >= 1)
-//        {
-//           Point p = tp.getPoint(index);
-//           cout << "Point " << index << " (" << p.x << ", " << p.y << ")\n";
-//        }
-//        cout << "Pick a line index between 1 and " << edgeSize << ":  ";
-//        cin >> index;
-//     }
      
      char fileN[] = "Triangulations/ODE Result.txt";
      tp.printToFile(fileN);
@@ -223,25 +135,23 @@ void testMiscMath()
 
 int main(int argc, char *argv[])
 {
-TriangulationCoordinateSystem tcs;
-generateTriangulation(50); 
-//makeSpecialCase();
+    TriangulationCoordinateSystem tcs;
+    generateTriangulation(50); 
 
-tcs.generatePlane();
-generateWeights();
-weightedFlipAlgorithm();
-system("PAUSE");
-//tcs.update();
+    tcs.generatePlane();
+    generateWeights();
+    weightedFlipAlgorithm();
+    system("PAUSE");
 
-int faceSize = Triangulation::faceTable.size();
-cout << faceSize << "\n";
-system("PAUSE");
-for (int i = 0; i < faceSize; i++){
-for (int j = 0 ; j <= 1; j++){
-    Vertex v = Triangulation::vertexTable[(*(Triangulation::faceTable[i].getLocalVertices()))[j]]; 
-    tcs.addDuals(v);
-}   
-}
+    int faceSize = Triangulation::faceTable.size();
+    cout << faceSize << "\n";
+    system("PAUSE");
+    for (int i = 0; i < faceSize; i++){
+        for (int j = 0 ; j <= 1; j++){
+            Vertex v = Triangulation::vertexTable[(*(Triangulation::faceTable[i].getLocalVertices()))[j]]; 
+               tcs.addDuals(v);
+        }   
+    }
  
     tcs.printDuals("Triangulations/duals2.txt");
 
@@ -249,7 +159,6 @@ for (int j = 0 ; j <= 1; j++){
     
     generateTriangulation(100);
     generateWeights();
-//    makeSpecialCase();
     tcs.generatePlane();
     try{
        weightedFlipAlgorithm();
