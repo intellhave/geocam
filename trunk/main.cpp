@@ -3,28 +3,13 @@ Class: Main
 Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: June 10, 2008
 **************************************************************/
-#include <cstdlib>
+
 #include <iostream>
-#include <vector>
-#include "simplex/simplex.h"
-#include <map>
-#include <fstream>
-#include <string>
-#include "simplex/vertex.h"
-#include <sstream>
 #include <ctime>
+#include <cmath>
 #include "triangulation.h"
 #include "triangulationmath.h"
-#include "triangulationmorph.h"
-#include "triangulationInputOutput.h"
-#include "miscmath.h"
 #include "triangulationPlane.h"
-#include "delaunay.h"
-#include "TriangulationCoordinateSystem.h"
-#include <iomanip>
-#include <cmath>
-#include "spherical/sphericalmath.h"
-#include "hyperbolic/hyperbolicmath.h"
 #define PI 	3.141592653589793238
 
 using namespace std;
@@ -231,7 +216,7 @@ void testMiscMath()
 {
      Line l(4,5,1,1);
      Point p = findPoint(l, 3, -acos(3/5.));
-     printPoint(p);
+     //printPoint(p);
      Line l2(l.getEnding(), p);
      Line l1(l.getInitial(), p);
      cout << l2.getLength() << " ";

@@ -7,10 +7,22 @@ The Miscellaneous Math file holds the functions that perform
 calculations on Points, Lines, and Circles. All functions are
 done independently of any triangulation.
 **************************************************************/
-#include <cmath>
+
+#include "triangulation.h"
 #include "pointlinecircle.h"
-#include "triangulationmath.h"
-#include <vector>
+
+
+/*
+ * Returns a list of simplex indices that are common between the two lists
+ * given.
+ */
+vector<int> listIntersection(vector<int>*, vector<int>*);
+
+/*
+ * Returns a list of simplex indices that are in the first list and not in
+ * the second.
+ */
+vector<int> listDifference(vector<int>*, vector<int>*);
 
 /*
  * Returns a set of soultions to the quadratic equation given as
@@ -40,12 +52,6 @@ vector<Point> circleIntersection(Point, double, Point, double);
  * centers and radii. There are at most two solutions.
  */
 vector<Point> circleIntersection(Circle, Circle);
-
-/*
- * Prints out the given Point to the console in a clean format:
- *         Point: (x, y)
- */
-void printPoint(Point);
 
 /*
  * Determines the resulting vector after rotating a given vector by a

@@ -7,8 +7,6 @@ Version: June 9, 2008
 #ifndef SIMPLEX_H
 #define SIMPLEX_H
 #include <vector>
-#include <cstdlib>
-
 
 using namespace std;
 

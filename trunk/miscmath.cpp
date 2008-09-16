@@ -7,10 +7,44 @@ The Miscellaneous Math file holds the functions that perform
 calculations on Points, Lines, and Circles. All functions are
 done independently of any triangulation.
 **************************************************************/
-#include "miscmath.h"
-#include <iostream>
-#include<cmath>
 
+#include <cmath>
+#include "miscmath.h"
+
+vector<int> listIntersection(vector<int>* list1, vector<int>* list2)
+{
+    vector<int> sameAs;
+             
+    for(int i = 0; i < (*list1).size(); i++)
+    {
+         for(int j = 0; j < (*list2).size(); j++)
+         {
+              if((*list1)[i] == (*list2)[j])
+              {
+                    sameAs.push_back((*list1)[i]);
+                    break;
+              }
+         }
+    }
+    return sameAs;
+}
+
+vector<int> listDifference(vector<int>* list1, vector<int>* list2)
+{
+    vector<int> diff;
+            
+    for(int i = 0; i < (*list1).size(); i++)
+    {
+          for(int j = 0; j < (*list2).size(); j++)
+          {
+               if((*list1)[i] == (*list2)[j])
+                     break;
+               if(j == (*list2).size() - 1)
+                     diff.push_back((*list1)[i]);
+          }
+    }
+    return diff;
+}
 
 vector<double> quadratic(double a, double b, double c)
 {
@@ -55,27 +89,24 @@ vector<Point> circleIntersection(Point center1, double r1, Point center2, double
     vector<Point> solutions;
     if(distancePoint(center1 , center2) > (r1 + r2))
     {
-        cout << "No solutions\n";
         // No solutions
         return solutions;
     }
     if(center1.x == center2.x && center1.y == center2.y)
     {
        if(r1 == r2)
-       {     cout << "Infinite solutions\n";
+       {
              // Same circle, infinite options, return same point.
              solutions.push_back(center1);
              return solutions;
        }
        else{
        // No solutions
-       cout << "No solutions2\n";
           return solutions;
        }
     }
     if(distancePoint(center1, center2) < fabs(r1 - r2))
     {
-       cout << "No solutions3\n";
        return solutions;
     }
     // (x-x1)^2 + (y-y1)^2 = r1^2
@@ -159,11 +190,6 @@ vector<Point> circleIntersection(Circle circle1, Circle circle2)
     double r1 = circle1.getRadius();
     double r2 = circle2.getRadius();              
     return circleIntersection(center1, r1, center2, r2);
-}
-
-void printPoint(Point p)
-{
-     cout << "Point: (" << p.x << ", " << p.y << ") ";
 }
 
 Point rotateVector(Point vector, double angle)

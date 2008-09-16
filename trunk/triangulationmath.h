@@ -6,12 +6,8 @@ Version: July 16, 2008
 The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
 **************************************************************/
- 
-#include "simplex/edge.h"
-#include "simplex/vertex.h"
-#include "simplex/face.h"
-#include "triangulation.h"
 
+#include "triangulation.h"
 
 /*
  * Calculates the angle between two edges of a triangle, where the
@@ -31,18 +27,6 @@ double angle(Vertex, Face);
  * subtracting the sum of all the angles at i from 2*PI.
  */
 double curvature(Vertex);
-
-/*
- * Returns a list of simplex indices that are common between the two lists
- * given.
- */
-vector<int> listIntersection(vector<int>*, vector<int>*);
-
-/*
- * Returns a list of simplex indices that are in the first list and not in
- * the second.
- */
-vector<int> listDifference(vector<int>*, vector<int>*);
 
 /*
  * Calculates the Ricci flow of the current Triangulation using the 

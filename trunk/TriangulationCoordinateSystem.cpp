@@ -1,8 +1,6 @@
-#include "TriangulationCoordinateSystem.h"
-#include "miscmath.h"
 #include <fstream>
-#include <iostream>
 #include <iomanip>
+#include "TriangulationCoordinateSystem.h"
 #define PI 	3.141592653589793238
 
 TriangulationCoordinateSystem::TriangulationCoordinateSystem()
@@ -421,7 +419,6 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
      double yComp = p1.y + (d12*(pointTable[v2].y - p1.y) / e.getLength());
      Point partial(xComp, yComp);
      Line halfLine(partial, p1);
-     cout << "hl: " << halfLine.getLength() << " d12: " << d12 << "\n";
      Point center1 = findPoint(halfLine, height, -PI/2);
      Point center2 = findPoint(halfLine, height, PI/2);
      int v3 = listDifference(f.getLocalVertices(), e.getLocalVertices())[0];
@@ -434,13 +431,11 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
      if(l.isAbove(center1) == v3Pos)
      {
         Line halfDual(partial, center1);
-        cout << "h: " << height << " hd: " << halfDual.getLength() << "\n";
         dualList.push_back(halfDual);                   
      }
      else if(l.isAbove(center2) == v3Pos)
      {
            Line halfDual(partial, center2);
-           cout << "h: " << height << " hd: " << halfDual.getLength() << "\n";
            dualList.push_back(halfDual); 
      }
      

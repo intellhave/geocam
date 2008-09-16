@@ -6,17 +6,10 @@ Version: July 16, 2008
 The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
 **************************************************************/
-#include <cstdlib>
-#include <iostream>
+
 #include <cmath>
-#include "simplex/edge.h"
-#include "simplex/vertex.h"
-#include "simplex/face.h"
-#include <algorithm>
-#include "triangulation.h"
 #include "triangulationmath.h"
-#include <fstream>
-#include <iomanip>
+#include "miscmath.h"
 #define PI 	3.141592653589793238
 
 double angle(double lengthA, double lengthB, double lengthC)
@@ -51,44 +44,6 @@ double curvature(Vertex v)
      }
      return 2*PI - sum;
 }
-
-vector<int> listIntersection(vector<int>* list1, vector<int>* list2)
-{
-             vector<int> sameAs;
-             
-             for(int i = 0; i < (*list1).size(); i++)
-             {
-                     for(int j = 0; j < (*list2).size(); j++)
-                     {
-                             if((*list1)[i] == (*list2)[j])
-                             {
-                             sameAs.push_back((*list1)[i]);
-                             break;
-                             }
-                     }
-             }
-             return sameAs;
-}
-
-vector<int> listDifference(vector<int>* list1, vector<int>* list2)
-{
-            vector<int> diff;
-            
-            for(int i = 0; i < (*list1).size(); i++)
-            {
-                    for(int j = 0; j < (*list2).size(); j++)
-                    {
-                            if((*list1)[i] == (*list2)[j])
-                            break;
-                            if(j == (*list2).size() - 1)
-                            diff.push_back((*list1)[i]);
-                    }
-            }
-            return diff;
-}
-
-
-
 
 /*
  * Calculates the Ricci flow of the current Triangulation using the 

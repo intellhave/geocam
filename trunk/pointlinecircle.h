@@ -8,8 +8,6 @@ Line, and Circle. These classes can be used independently of a
 triangulation, but are useful for providing coordinates to such
 a system. Currently implemented as a two-dimensional model.
 **************************************************************/
-#include <vector>
-
 
 #ifndef POINT_H
 #define POINT_H

@@ -3,9 +3,10 @@ Class: TriangulationCoordinateSystem
 Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: July 28, 2008
 **************************************************************/
-#include "pointlinecircle.h"
+
 #include "triangulation.h"
 #include "delaunay.h"
+
 #ifndef TRIANGULATIONCOORDINATESYSTEM_H
 #define TRIANGULATIONCOORDINATESYSTEM_H
 

@@ -5,7 +5,6 @@ Version: June 9, 2008
 **************************************************************/
 
 #include "face.h" // class's header file
-#include <iostream>
 
 // class constructor
 Face::Face() : Simplex()

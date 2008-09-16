@@ -6,21 +6,12 @@ Version: July 3, 2008
 The Triangulation Input/Output file holds the functions that handle
 the reading and writing of text files.
 **************************************************************/
-#include <cstdlib>
-#include <iostream>
-#include <vector>
-#include "simplex/simplex.h"
-#include <map>
-#include <algorithm>
+
 #include <set>
 #include <fstream>
-#include <string>
-#include "simplex/vertex.h"
 #include <sstream>
-#include "triangulation.h"
-#include "triangulationmath.h"
-#include "triangulationPlane.h"
 #include <iomanip>
+#include "triangulationinputoutput.h"
 
 
 /*
@@ -317,7 +308,7 @@ void writeTriangulationFileWithData(char* newFileName)
             
              
              output << "Vertex: " << vit->first <<  "Weight: " << vit->second.getWeight();
-             output << " Angle sum: " << getAngleSum(vit->second) << "\n";
+             //output << " Angle sum: " << getAngleSum(vit->second) << "\n";
              
              for(int j = 0; j < vit->second.getLocalVertices()->size(); j++)
              {
@@ -609,7 +600,7 @@ void makeTriangulationFile (char* from, char* to) {
   outfile.close();
 }
 
-bool printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs)
+void printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs)
 {
      int vertSize = Triangulation::vertexTable.size();
      int numSteps = weights->size() / vertSize;

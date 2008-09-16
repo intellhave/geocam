@@ -7,16 +7,8 @@ The Triangulation Morph file holds the functions that manipulates
 the Triangulation in some way.
 **************************************************************/
 #include <cmath>
-#include <vector>
-#include "simplex/edge.h"
-#include "simplex/vertex.h"
-#include "simplex/face.h"
-#include <algorithm>
-#include "Triangulation.h"
-#include "Triangulationmath.h"
-#include <cstdlib>
 #include <iostream>
-
+#include "triangulationmorph.h"
 #define PI 	3.141592653589793238
 
 void addNewVertex(Face f, double newWeight)

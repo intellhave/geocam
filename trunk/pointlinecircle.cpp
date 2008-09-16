@@ -8,10 +8,9 @@ Line, and Circle. These classes can be used independently of a
 triangulation, but are useful for providing coordinates to such
 a system. Currently implemented as a two-dimensional model.
 **************************************************************/
-#include <cstdlib>
+
 #include <cmath>
 #include "pointlinecircle.h"
-#include <iostream>
 
 using namespace std;
 

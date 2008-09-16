@@ -1,20 +1,7 @@
-#include <cstdlib>
 #include <iostream>
 #include <cmath>
-#include "simplex/edge.h"
-#include "simplex/vertex.h"
-#include "simplex/face.h"
-#include <algorithm>
-#include "triangulation.h"
-#include "triangulationmath.h"
-#include "triangulationPlane.h"
-#include "triangulationInputOutput.h"
-#include "triangulationMorph.h"
-#include "TriangulationCoordinateSystem.h"
-#include "miscmath.h"
 #include <fstream>
-#include <iomanip>
-#include "delaunay.h"
+#include "triangulationplane.h"
 #define PI 	3.141592653589793238
 
 int checkForDoubleTriangles();

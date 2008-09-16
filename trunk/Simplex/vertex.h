@@ -8,10 +8,6 @@ Version: July 16, 2008
 #define VERTEX_H
 
 #include "simplex.h" // inheriting class's header file
-#include <vector>
-#include "edge.h"
-#include "face.h"
-#include "pointlinecircle.h"
 
 /*
  * The Vertex class is derived from the Simplex class. It is the

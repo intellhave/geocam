@@ -1,16 +1,4 @@
-#include <cstdlib>
-#include <iostream>
 #include <cmath>
-#include "simplex/edge.h"
-#include "simplex/vertex.h"
-#include "simplex/face.h"
-#include <algorithm>
-#include "triangulation.h"
-#include "triangulationmath.h"
-#include "triangulationInputOutput.h"
-#include "miscmath.h"
-#include <fstream>
-#include <iomanip>
 #include "delaunay.h"
 #define PI 	3.141592653589793238
 
@@ -64,14 +52,14 @@ double getHeight(Face f, Edge e)
      diff = listDifference(f.getLocalVertices(), e.getLocalVertices());
      if(diff.size() == 0)
      {
-       cout << "Face: " << f.getIndex() << " " << f.getLocalVertices()->size() << "(";
-       cout << (*(f.getLocalVertices()))[0] << ", ";
-       cout << (*(f.getLocalVertices()))[1] << ", ";
-       cout << (*(f.getLocalVertices()))[2] << ")\n";
-       cout << "Edge: " << e.getIndex() << " " << e.getLocalVertices()->size() << "(";
-       cout << (*(e.getLocalVertices()))[0] << ", ";
-       cout << (*(e.getLocalVertices()))[1] << ")" << endl;
-       writeTriangulationFile("Triangulations/troubleshoot.txt");
+//       cout << "Face: " << f.getIndex() << " " << f.getLocalVertices()->size() << "(";
+//       cout << (*(f.getLocalVertices()))[0] << ", ";
+//       cout << (*(f.getLocalVertices()))[1] << ", ";
+//       cout << (*(f.getLocalVertices()))[2] << ")\n";
+//       cout << "Edge: " << e.getIndex() << " " << e.getLocalVertices()->size() << "(";
+//       cout << (*(e.getLocalVertices()))[0] << ", ";
+//       cout << (*(e.getLocalVertices()))[1] << ")" << endl;
+//       writeTriangulationFile("Triangulations/troubleshoot.txt");
        system("PAUSE");
      }
      Vertex v3 = Triangulation::vertexTable[diff[0]];
@@ -110,14 +98,14 @@ double getDual(Edge e)
      
      double h1 = getHeight(f1, e);
      double h2 = getHeight(f2, e);
-     if(listDifference(f1.getLocalVertices(), f2.getLocalVertices()).size() == 0)
-     {
-        cout << "Double triangle: " << e.getIndex() << " " << 
-        f1.getIndex() << " " << f2.getIndex() << "\n";
-        cout << "Heights: " << h1 << " " << h2 << "\n";
-        writeTriangulationFile("Triangulations/troubleshoot.txt");
-        system("PAUSE");
-     }
+//     if(listDifference(f1.getLocalVertices(), f2.getLocalVertices()).size() == 0)
+//     {
+//        cout << "Double triangle: " << e.getIndex() << " " << 
+//        f1.getIndex() << " " << f2.getIndex() << "\n";
+//        cout << "Heights: " << h1 << " " << h2 << "\n";
+//        writeTriangulationFile("Triangulations/troubleshoot.txt");
+//        system("PAUSE");
+//     }
 //     cout << "Edge #" << e.getIndex() << endl;
 //     cout << "Face 1: (";
 //     cout << (*(f1.getLocalVertices()))[0] << ", ";
@@ -162,12 +150,3 @@ double getPartialEdge(Edge e, Vertex v1)
 //    cout << d12 + d21 << "     " << e.getLength() << "\n";
     return d12;
 }
-
-
-
-
-
-
-
-
-
