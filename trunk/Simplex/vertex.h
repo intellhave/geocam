@@ -11,15 +11,15 @@ Version: July 16, 2008
 
 /*
  * The Vertex class is derived from the Simplex class. It is the
- * zero-dimensional simplex. Every vertex also has a weight, which is
+ * zero-dimensional simplex. Every vertex also has a radius, which is
  * the basis for providing all measurements (length, curvature, etc).
- * Weights are initialized to zero and set by the user after building
+ * Radii are initialized to zero and set by the user after building
  * the triangulation. For when orientation is a concern, a vertex has
  * x- and y-coordinates.
  */
 class Vertex : public Simplex
 {
-        double weight;
+        double radius;
         
 	public:
            
@@ -30,23 +30,23 @@ class Vertex : public Simplex
 		~Vertex();
 		
         /*
-		 * Returns the weight of this vertex.
+		 * Returns the radius of this vertex.
 		 */
-        double getWeight()
+        double getRadius()
         {
-            return weight;
+            return radius;
         }
         
        	/*
 		 * Sets the weight to the given weight, then updates the lengths
          * of all of the edges local to this vertex.
 		 */
-		void setWeight(double);
+		void setRadius(double);
 		/*
 		 * Sets the weight of this vertex to the given weight but does
 		 * not update the lengths of any edges.
 		 */
-		void setWeightIndependent(double);
+		void setRadiusIndependent(double);
 		/*
 		 * Returns the degree of this vertex. The degree of a vertex is
 		 * defined as the number of edges local to it.

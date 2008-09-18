@@ -130,13 +130,13 @@ class Triangulation
      * doubles. This requires that one know the order of the vertices
      * as it does not use the indices.
      */
-    static void setWeights(double*);
+    static void setRadii(double*);
     /*
      * Places the values of the weights of the vertices into the array
      * provided. This is done in order of the vertices in the map, not
      * necessarily by index. Can be used to easily conjoin flows.
      */
-    static void getWeights(double*);
+    static void getRadii(double*);
     
     static void setLengths(double*);
 };

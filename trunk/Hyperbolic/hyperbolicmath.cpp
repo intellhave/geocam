@@ -40,7 +40,7 @@ double hyperbolicCurvature(Vertex v)
        return 2*PI - sum;
 }
 
-void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,double* initWeights,int numSteps, bool adjF)
+void hyperbolicCalcFlow(vector<double>* radii, vector<double>* curvatures,double dt ,double* initRadii,int numSteps, bool adjF)
 {
   int p = Triangulation::vertexTable.size(); // The number of vertices or 
                                              // number of variables in system.
@@ -54,7 +54,7 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
    for (k=0; k<p; k++) {
-    z[k]=initWeights[k]; // z[k] holds the current weights.
+    z[k]=initRadii[k]; // z[k] holds the current radii.
    }
    for (i=1; i<numSteps+1; i++) 
    {
@@ -63,8 +63,8 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
     
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-           // Set the weights of the Triangulation.
-           vit->second.setWeight(z[k]);
+           // Set the radii of the Triangulation.
+           vit->second.setRadius(z[k]);
        }
        if(i == 1) // If first time through, use static method.
        {
@@ -72,7 +72,7 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // First "for loop" in whole step calculates
        {                    // everything manually, prints to file.
-           (*weights).push_back( z[k]);
+           (*radii).push_back( z[k]);
            double curv = hyperbolicCurvature(vit->second);
            if(curv < 0.00005 && curv > -0.00005) // Adjusted for small errors.
            {
@@ -82,15 +82,15 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
                (*curvatures).push_back(curv);
              }
            net += curv;
-           if(adjF) ta[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
-                           * sinh(vit->second.getWeight()));
+           if(adjF) ta[k]= dt * ((prev/p) * vit->second.getRadius() - curv 
+                           * sinh(vit->second.getRadius()));
            else     ta[k] = dt * (-1) * curv 
-                           * sinh(vit->second.getWeight());
+                           * sinh(vit->second.getRadius());
            
        }
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
        {
-           vit->second.setWeight(z[k]+ta[k]/2);
+           vit->second.setRadius(z[k]+ta[k]/2);
        }
        prev = net;
        net = 0;
@@ -98,16 +98,16 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
        {
            double curv = hyperbolicCurvature(vit->second);
            net += curv;
-           if(adjF) tb[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
-                           * sinh(vit->second.getWeight()));
+           if(adjF) tb[k]= dt * ((prev/p) * vit->second.getRadius() - curv 
+                           * sinh(vit->second.getRadius()));
            else     tb[k] = dt * (-1) * curv 
-                           * sinh(vit->second.getWeight());
+                           * sinh(vit->second.getRadius());
            // if(adjF) tb[k]=dt*spherAdjDiffEQ(vit->first, net);
 //            else     tb[k]=dt*spherStdDiffEQ(vit->first);
        }
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
        {
-           vit->second.setWeight(z[k]+tb[k]/2);
+           vit->second.setRadius(z[k]+tb[k]/2);
        }
        prev = net;
        net = 0;
@@ -115,16 +115,16 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
        {
            double curv = hyperbolicCurvature(vit->second);
            net += curv;
-           if(adjF) tc[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
-                           * sinh(vit->second.getWeight()));
+           if(adjF) tc[k]= dt * ((prev/p) * vit->second.getRadius() - curv 
+                           * sinh(vit->second.getRadius()));
            else     tc[k] = dt * (-1) * curv 
-                           * sinh(vit->second.getWeight());
+                           * sinh(vit->second.getRadius());
           //  if(adjF) tc[k]=dt*spherAdjDiffEQ(vit->first, net);
 //            else     tc[k]=dt*spherStdDiffEQ(vit->first);
        }
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
        {
-           vit->second.setWeight(z[k]+tc[k]);
+           vit->second.setRadius(z[k]+tc[k]);
        }
        prev = net;
        net = 0;
@@ -132,10 +132,10 @@ void hyperbolicCalcFlow(vector<double>* weights, vector<double>* curvatures,doub
        {
            double curv = hyperbolicCurvature(vit->second);
            net += curv;
-           if(adjF) td[k]= dt * ((prev/p) * vit->second.getWeight() - curv 
-                           * sinh(vit->second.getWeight()));
+           if(adjF) td[k]= dt * ((prev/p) * vit->second.getRadius() - curv 
+                           * sinh(vit->second.getRadius()));
            else     td[k] = dt * (-1) * curv 
-                           * sinh(vit->second.getWeight());
+                           * sinh(vit->second.getRadius());
          //   if(adjF) td[k]=dt*spherAdjDiffEQ(vit->first, net);
 //            else     td[k]=dt*spherStdDiffEQ(vit->first);
        }

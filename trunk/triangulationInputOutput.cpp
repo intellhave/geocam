@@ -307,7 +307,7 @@ void writeTriangulationFileWithData(char* newFileName)
      {
             
              
-             output << "Vertex: " << vit->first <<  "Weight: " << vit->second.getWeight();
+             output << "Vertex: " << vit->first <<  "Radius: " << vit->second.getRadius();
              //output << " Angle sum: " << getAngleSum(vit->second) << "\n";
              
              for(int j = 0; j < vit->second.getLocalVertices()->size(); j++)
@@ -600,10 +600,10 @@ void makeTriangulationFile (char* from, char* to) {
   outfile.close();
 }
 
-void printResultsStep(char* fileName, vector<double>* weights, vector<double>* curvs)
+void printResultsStep(char* fileName, vector<double>* radii, vector<double>* curvs)
 {
      int vertSize = Triangulation::vertexTable.size();
-     int numSteps = weights->size() / vertSize;
+     int numSteps = radii->size() / vertSize;
      ofstream results(fileName, ios_base::trunc);
      results << left << setprecision(6); 
      results.setf(ios_base::showpoint);
@@ -615,14 +615,14 @@ void printResultsStep(char* fileName, vector<double>* weights, vector<double>* c
      {
          double netCurv = 0.;
          results << left << "Step " << left <<setw(6)  << i + 1;
-         results << right << setw(7) << "Weight";
+         results << right << setw(7) << "Radius";
          results << right << setw(12) << "Curv";
          results << "\n---------------------------------\n";
          vit = Triangulation::vertexTable.begin();
          for(int j = 0; j < vertSize; j++)
          {
              results << "Vertex " << left << setw(5) << vit->first;
-             results << left << setw(14)<< (*weights)[i*vertSize + j];
+             results << left << setw(14)<< (*radii)[i*vertSize + j];
              results << left << setw(12) << (*curvs)[i*vertSize+j] << "\n";
              netCurv += (*curvs)[i*vertSize+j];
              vit++;
@@ -637,10 +637,10 @@ void printResultsStep(char* fileName, vector<double>* weights, vector<double>* c
    results.close();
 }
 
-void printResultsVertex(char* fileName, vector<double>* weights, vector<double>* curvs)
+void printResultsVertex(char* fileName, vector<double>* radii, vector<double>* curvs)
 {
      int vertSize = Triangulation::vertexTable.size();
-     int numSteps = weights->size() / vertSize;
+     int numSteps = radii->size() / vertSize;
      ofstream results(fileName, ios_base::trunc);
      results << left << setprecision(6); 
      results.setf(ios_base::showpoint);
@@ -649,13 +649,13 @@ void printResultsVertex(char* fileName, vector<double>* weights, vector<double>*
    for(int k=0; k < vertSize; k++) 
    { 
       results << left << "Vertex: " << left << setw(4)<< vit->first;
-      results << right << setw(3) << "Weight";
+      results << right << setw(3) << "Radius";
       results << right << setw(10) << "Curv";
       results << "\n------------------------------\n";
       for(int j = 0; j < numSteps; j++)
       {
               results << left <<  "Step " << setw(7) << (j + 1);
-              results << left << setw(12) << (*weights)[j*vertSize + k];
+              results << left << setw(12) << (*radii)[j*vertSize + k];
               results << left << setw(12) << (*curvs)[j*vertSize + k] << "\n";
       }
       results << "\n";
@@ -665,10 +665,10 @@ void printResultsVertex(char* fileName, vector<double>* weights, vector<double>*
    results.close();
 }
 
-void printResultsNum(char* fileName, vector<double>* weights, vector<double>* curvs)
+void printResultsNum(char* fileName, vector<double>* radii, vector<double>* curvs)
 {
      int vertSize = Triangulation::vertexTable.size();
-     int numSteps = weights->size() / vertSize;
+     int numSteps = radii->size() / vertSize;
      ofstream results(fileName, ios_base::trunc);
      results << left << setprecision(6); 
      results.setf(ios_base::showpoint);
@@ -678,7 +678,7 @@ void printResultsNum(char* fileName, vector<double>* weights, vector<double>* cu
    {
       for(int j = 0; j < numSteps; j++)
       {
-              results << left << setw(20) << (*weights)[j*vertSize + k];
+              results << left << setw(20) << (*radii)[j*vertSize + k];
               results << left << setw(12) << (*curvs)[j*vertSize + k] << "\n";
       }
       results << "\n";

@@ -11,7 +11,7 @@ the Triangulation in some way.
 #include "triangulationmorph.h"
 #define PI 	3.141592653589793238
 
-void addNewVertex(Face f, double newWeight)
+void addNewVertex(Face f, double newRadius)
 {
      
      //start giving names to the existing simplices that are involved in this procedure
@@ -55,7 +55,7 @@ void addNewVertex(Face f, double newWeight)
      Face fb1(Triangulation::greatestFace() + 1);
      Face fb2(Triangulation::greatestFace() + 2);
      
-     //finally, add the new simplices to the triangulation and give the new vertex a weight
+     //finally, add the new simplices to the triangulation and give the new vertex a radius
      Triangulation::putVertex(vb.getIndex(), vb);
      Triangulation::putEdge(eb1.getIndex(), eb1);
      Triangulation::putEdge(eb2.getIndex(), eb2);
@@ -170,7 +170,7 @@ void addNewVertex(Face f, double newWeight)
      
      
      
-     Triangulation::vertexTable[vb.getIndex()].setWeight(newWeight);
+     Triangulation::vertexTable[vb.getIndex()].setRadius(newRadius);
      
 }
 
@@ -540,7 +540,7 @@ void removeVertex(Vertex v)
          
 }
 
-void addLeaf(Edge e, double newWeight)
+void addLeaf(Edge e, double newRadius)
 {
      Edge eb(Triangulation::greatestEdge() + 1);
      Edge ea1(Triangulation::greatestEdge() + 2);
@@ -640,11 +640,11 @@ void addLeaf(Edge e, double newWeight)
      Triangulation::faceTable[(fb1.getIndex())].addFace(fb2.getIndex());
      Triangulation::faceTable[(fb2.getIndex())].addFace(fb1.getIndex());
      
-     Triangulation::vertexTable[vb.getIndex()].setWeight(newWeight);
+     Triangulation::vertexTable[vb.getIndex()].setRadius(newRadius);
      
 }
 
-void addHandle(Face f, double newWeight)
+void addHandle(Face f, double newRadius)
 {
      
      Vertex va1 = Triangulation::vertexTable[(*(f.getLocalVertices()))[0]];
@@ -1378,7 +1378,7 @@ void addHandle(Face f, double newWeight)
      
 }
 
-void addCrossCap(Face f, double newWeight)
+void addCrossCap(Face f, double newRadius)
 {
      
      Vertex va1 = Triangulation::vertexTable[(*(f.getLocalVertices()))[0]];

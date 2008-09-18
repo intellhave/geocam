@@ -50,9 +50,9 @@ double curvature(Vertex v)
  * Runge-Kutta method. Results from the steps are written into vectors of
  * doubles provided. The parameters are:
  *          
- *      vector<double>* weights-
+ *      vector<double>* radii-
  *                           A vector of doubles to append the results of
- *                           weights, grouped by step, with a total size of
+ *                           radii, grouped by step, with a total size of
  *                           numSteps * numVertices.
  *      vector<double>* curvatures-
  *                           A vector of doubles to append the results of
@@ -61,14 +61,14 @@ double curvature(Vertex v)
  *      double dt -          The time step size. Initial and ending
  *                           times not needed since diff. equations are
  *                           independent of time.
- *      double* initWeights- Array of initial weights of the Vertices 
+ *      double* initRadii-   Array of initial radii of the Vertices 
  *                           in order.
  *      int numSteps -       The number of steps to take. 
  *                           (dt = (tf - ti)/numSteps)
  *      bool adjF -          Boolean of whether or not to use adjusted
  *                           differential equation. True to use adjusted.
  * 
- * The information placed in the vectors are the weights and curvatures for
+ * The information placed in the vectors are the radii and curvatures for
  * each Vertex at each step point. The data is grouped by steps, so the first
  * vertex of the first step is the beginning element. After n doubles are
  * placed, for an n-vertex triangulation, the first vertex of the next step
@@ -78,7 +78,7 @@ double curvature(Vertex v)
  *            ***Credit for the algorithm goes to J-P Moreau.***
  */
 
-void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,double *initWeights,int numSteps, bool adjF)  
+void calcFlow(vector<double>* radii, vector<double>* curvatures,double dt ,double *initRadii,int numSteps, bool adjF)  
 {
   int p = Triangulation::vertexTable.size(); // The number of vertices or 
                                              // number of variables in system.
@@ -95,7 +95,7 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
    for (k=0; k<p; k++) {
-    z[k]=initWeights[k]; // z[k] holds the current weights.
+    z[k]=initRadii[k]; // z[k] holds the current radii.
    }
    for (i=1; i<numSteps+1; i++) // This is the main loop through each step.
    {
@@ -104,8 +104,8 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
     
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-           // Set the weights of the Triangulation.
-           vit->second.setWeight(z[k]);
+           // Set the radii of the Triangulation.
+           vit->second.setRadius(z[k]);
        }
        if(i == 1) // If first time through, use static method to calculate total
        {           // cuvature.
@@ -113,7 +113,7 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
        {  // First "for loop"in whole step calculates everything manually.
-           (*weights).push_back( z[k]); // Adds the data to the vector.
+           (*radii).push_back( z[k]); // Adds the data to the vector.
            double curv = curvature(vit->second);
            if(curv < 0.00005 && curv > -0.00005) // Adjusted for small numbers.
            {                                     // We want it to print nicely.
@@ -126,16 +126,16 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
            // Calculates the differential equation, either normalized or
            // standard.
            if(adjF) ta[k]= dt * ((-1) * curv 
-                           * vit->second.getWeight() +
+                           * vit->second.getRadius() +
                            prev /  p
-                           * vit->second.getWeight());
+                           * vit->second.getRadius());
            else     ta[k] = dt * (-1) * curv 
-                           * vit->second.getWeight();
+                           * vit->second.getRadius();
            
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
-       { // Set the new weights to our triangulation.
-           vit->second.setWeight(z[k]+ta[k]/2);
+       { // Set the new radii to our triangulation.
+           vit->second.setRadius(z[k]+ta[k]/2);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
@@ -144,18 +144,18 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
             if(adjF) tb[k]=dt*adjDiffEQ(vit->first, net);
             else     tb[k]=dt*stdDiffEQ(vit->first);
        }
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
        {
-           vit->second.setWeight(z[k]+tb[k]/2);
+           vit->second.setRadius(z[k]+tb[k]/2);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
             if(adjF) tc[k]=dt*adjDiffEQ(vit->first, net);
             else     tc[k]=dt*stdDiffEQ(vit->first);
        }
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new weights.
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
        {
-           vit->second.setWeight(z[k]+tc[k]);
+           vit->second.setRadius(z[k]+tc[k]);
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
@@ -173,15 +173,15 @@ void calcFlow(vector<double>* weights, vector<double>* curvatures,double dt ,dou
 double stdDiffEQ(int vertex) 
 {
        return (-1) * curvature(Triangulation::vertexTable[vertex])
-                   * Triangulation::vertexTable[vertex].getWeight();
+                   * Triangulation::vertexTable[vertex].getRadius();
 }
 
 double adjDiffEQ(int vertex, double totalCurv)
 {
        return (-1) * curvature(Triangulation::vertexTable[vertex])
-                   * Triangulation::vertexTable[vertex].getWeight() +
+                   * Triangulation::vertexTable[vertex].getRadius() +
                    totalCurv /  Triangulation::vertexTable.size()
-                   * Triangulation::vertexTable[vertex].getWeight();
+                   * Triangulation::vertexTable[vertex].getRadius();
 }
 
 
@@ -195,7 +195,7 @@ double inRadius(Face f)
     double product = 1;
     for(int i = 0; i < 3; i++)
     {     int index =(*(f.getLocalVertices()))[i];
-          double w = Triangulation::vertexTable[index].getWeight();
+          double w = Triangulation::vertexTable[index].getRadius();
           sum += w;
           product *= w; 
     }
@@ -216,7 +216,7 @@ double dualArea(Vertex v)
        for(int i = 0; i < localEdges.size(); i++)
        {
           // Area of one of the triangles in this polygon.
-          areaSum += v.getWeight() * dualLength(Triangulation::edgeTable[localEdges[i]]) / 2;
+          areaSum += v.getRadius() * dualLength(Triangulation::edgeTable[localEdges[i]]) / 2;
        }
        return areaSum;
 }

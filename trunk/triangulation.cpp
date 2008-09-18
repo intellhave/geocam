@@ -278,24 +278,24 @@ double Triangulation::netHyperbolicCurvature()
        return net;
 }
 
-void Triangulation::setWeights(double* weights)
+void Triangulation::setRadii(double* radii)
 {
      map<int, Vertex>::iterator vit;
      int i = 0;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
      {
-       vit->second.setWeight(weights[i]);
+       vit->second.setRadius(radii[i]);
        i++;
      }
 }
 
-void Triangulation::getWeights(double* weights)
+void Triangulation::getRadii(double* radii)
 {
      map<int, Vertex>::iterator vit;
      int i = 0;
      for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
      {
-       weights[i] = vit->second.getWeight();
+       radii[i] = vit->second.getRadius();
        i++;
      }
 }

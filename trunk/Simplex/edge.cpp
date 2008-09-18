@@ -28,8 +28,8 @@ void Edge::setLength() {
      }
    Vertex v1 = Triangulation::vertexTable[(*getLocalVertices())[0]];
    Vertex v2 = Triangulation::vertexTable[(*getLocalVertices())[1]];
-   length = sqrt(pow(v1.getWeight(), 2) + pow(v2.getWeight(), 2)
-                        + 2*v1.getWeight()*v2.getWeight()*cos(intersectAngle));
+   length = sqrt(pow(v1.getRadius(), 2) + pow(v2.getRadius(), 2)
+                        + 2*v1.getRadius()*v2.getRadius()*cos(intersectAngle));
 }
 void Edge::setLength(double newLength) {
      length = newLength;

@@ -71,7 +71,7 @@ void makeTriangulationFile(char*, char*);
 
 /*
  * Prints the results of a calcFlow into the file given. Requires two vectors
- * of doubles, one representing the changing weights and the second the
+ * of doubles, one representing the changing radii and the second the
  * curvatures. The number of vertices is assumed to be the current number in
  * the triangulation and the number of steps is then derived from the size of
  * the vectors. The file is cleared before writing, and the format is grouping
@@ -79,7 +79,7 @@ void makeTriangulationFile(char*, char*);
  *            :
  *          Vertex 6: 10.6390     -1.21810
  *
- *          Step 5    Weight      Curv
+ *          Step 5    Radius       Curv
  *          ----------------------------
  *          Vertex 1: 15.2785     -5.90324    
  *          Vertex 2: 12.3130     -1.03506    
@@ -88,7 +88,7 @@ void makeTriangulationFile(char*, char*);
  *          Vertex 5: 10.8755     -1.19773    
  *          Vertex 6: 10.3957     -1.41971 
  *          
- *          Step 7    Weight      Curv
+ *          Step 7    Radius       Curv
  *          ----------------------------
  *            :  
  */
@@ -96,7 +96,7 @@ void printResultsStep(char*, vector<double>*, vector<double>*);
 
 /*
  * Prints the results of a calcFlow into the file given. Requires two vectors
- * of doubles, one representing the changing weights and the second the
+ * of doubles, one representing the changing radii and the second the
  * curvatures. The number of vertices is assumed to be the current number in
  * the triangulation and the number of steps is then derived from the size of
  * the vectors. The file is cleared before writing, and the format is grouping
@@ -105,7 +105,7 @@ void printResultsStep(char*, vector<double>*, vector<double>*);
  *           Step 99     20.8731     -2.09440    
  *           Step 100    20.8731     -2.09440    
  *
- *           Vertex: 2   Weight      Curv
+ *           Vertex: 2   Radius      Curv
  *           ------------------------------
  *           Step 1      14.0000     1.92788     
  *           Step 2      12.5241     1.29678     
@@ -117,7 +117,7 @@ void printResultsVertex(char*, vector<double>*, vector<double>*);
 
 /*
  * Prints the results of a calcFlow into the file given. Requires two vectors
- * of doubles, one representing the changing weights and the second the
+ * of doubles, one representing the changing radii and the second the
  * curvatures. The number of vertices is assumed to be the current number in
  * the triangulation and the number of steps is then derived from the size of
  * the vectors. The file is cleared before writing, and the format is grouped

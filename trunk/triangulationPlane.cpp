@@ -380,7 +380,7 @@ void generateTriangulation(int numFaces)
      }
 }
 
-void generateWeights()
+void generateRadii()
 {
      srand(time(NULL));
      map<int, Vertex>::iterator vit;
@@ -396,7 +396,7 @@ void generateWeights()
           }
           double randNum = ((double) rand()) / RAND_MAX;
 
-          vit->second.setWeightIndependent(randNum * smallest * 1);     
+          vit->second.setRadiusIndependent(randNum * smallest * 1);     
      }
 }
 
@@ -609,7 +609,7 @@ void checkTriangle(Edge e, double length1, double length2)
 
 void makeSpecialCase()
 {
-     //creates the canonical example using carefully chosen weights and lengths
+     //creates the canonical example using carefully chosen radii and lengths
      firstTriangle(1.0, 1.0, 1.0);
      addTriangle(Triangulation::edgeTable[1], 1.0, 1.97387802015);
      addTriangle(Triangulation::edgeTable[2], 1.97387802015, 1.0);
@@ -617,13 +617,12 @@ void makeSpecialCase()
      addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
      addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
      addTriangle(Triangulation::edgeTable[8], Triangulation::edgeTable[5]);
-     Triangulation::vertexTable[1].setWeightIndependent(0);
-     Triangulation::vertexTable[2].setWeightIndependent(0);
-     Triangulation::vertexTable[3].setWeightIndependent(0);
-     Triangulation::vertexTable[4].setWeightIndependent(1.5066);
-     Triangulation::vertexTable[5].setWeightIndependent(1.5066);
-     Triangulation::vertexTable[6].setWeightIndependent(1.5066);
-//     generateWeights();
+     Triangulation::vertexTable[1].setRadiusIndependent(0);
+     Triangulation::vertexTable[2].setRadiusIndependent(0);
+     Triangulation::vertexTable[3].setRadiusIndependent(0);
+     Triangulation::vertexTable[4].setRadiusIndependent(1.5066);
+     Triangulation::vertexTable[5].setRadiusIndependent(1.5066);
+     Triangulation::vertexTable[6].setRadiusIndependent(1.5066);
      
 }
 

@@ -33,9 +33,9 @@ double curvature(Vertex);
  * Runge-Kutta method. Results from the steps are written into vectors of
  * doubles provided. The parameters are:
  *          
- *      vector<double>* weights-
+ *      vector<double>* radii-
  *                           A vector of doubles to append the results of
- *                           weights, grouped by step, with a total size of
+ *                           radii, grouped by step, with a total size of
  *                           numSteps * numVertices.
  *      vector<double>* curvatures-
  *                           A vector of doubles to append the results of
@@ -44,14 +44,14 @@ double curvature(Vertex);
  *      double dt -          The time step size. Initial and ending
  *                           times not needed since diff. equations are
  *                           independent of time.
- *      double* initWeights- Array of initial weights of the Vertices 
+ *      double* initRadii-   Array of initial radii of the Vertices 
  *                           in order.
  *      int numSteps -       The number of steps to take. 
  *                           (dt = (tf - ti)/numSteps)
  *      bool adjF -          Boolean of whether or not to use adjusted
  *                           differential equation. True to use adjusted.
  * 
- * The information placed in the vectors are the weights and curvatures for
+ * The information placed in the vectors are the radii and curvatures for
  * each Vertex at each step point. The data is grouped by steps, so the first
  * vertex of the first step is the beginning element. After n doubles are
  * placed, for an n-vertex triangulation, the first vertex of the next step

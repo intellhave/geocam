@@ -10,7 +10,7 @@ Version: July 16, 2008
 // class constructor
 Vertex::Vertex() : Simplex()
 {
-    weight = 0;
+    radius = 0;
 }
 
 // class destructor
@@ -18,18 +18,18 @@ Vertex::~Vertex()
 {
 }
 
-void Vertex::setWeight(double newWeight)
+void Vertex::setRadius(double newRadius)
 {
-     weight = newWeight;
+     radius = newRadius;
      for(int i = 0; i < getLocalEdges()->size(); i++)
      {
            Triangulation::edgeTable[(*getLocalEdges())[i]].setLength();
      }
 }
 
-void Vertex::setWeightIndependent(double newWeight)
+void Vertex::setRadiusIndependent(double newRadius)
 {
-     weight = newWeight;     
+     radius = newRadius;     
 }
 
 int Vertex::getDegree()

@@ -40,11 +40,11 @@ double getAngleSum(Vertex);
 void generateTriangulation(int);
 
 /*
- * Generate weights randomly within a set threshold. 
+ * Generate radii randomly within a set threshold. 
  * Typically accompanies generateTriangulation, when a weighted
  * triangulation is desired.
  */
-void generateWeights();
+void generateRadii();
 
 /*
  * Intended to continually traverse the edges of a triangulation and perform
