@@ -11,9 +11,9 @@ Version: June 9, 2008
 
 /*
  * The Face class is derived from the Simplex class. It is the
- * two-dimensional simplex. The Face class currently has no
- * included properties. As a rule, every face has three vertices 
- * and three edges.
+ * two-dimensional simplex. As a rule, every face has three vertices 
+ * and three edges. A face can be negative and occurs during flips.
+ * For these cases, the face class has a boolean flag isNegative().
  */
 class Face : public Simplex
 {
