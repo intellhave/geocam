@@ -144,7 +144,7 @@ double getPartialEdge(Edge e, Vertex v1)
        v2Index = (*(e.getLocalVertices()))[1];
     }
     Vertex v2 = Triangulation::vertexTable[v2Index];
-    double d12 = (pow(e.getLength(), 2) + pow(v1.getWeight(), 2) - pow(v2.getWeight(), 2)) / (2 * e.getLength());
+    double d12 = (pow(e.getLength(), 2) + pow(v1.getRadius(), 2) - pow(v2.getRadius(), 2)) / (2 * e.getLength());
 //    
 //    double d21 = (pow(e.getLength(), 2) + pow(v2.getWeight(), 2) - pow(v1.getWeight(), 2)) / (2 * e.getLength());
 //    cout << d12 + d21 << "     " << e.getLength() << "\n";

@@ -4,6 +4,7 @@
 #include <vector>
 #include "resources.h"
 #include "TriangulationModel.h"
+#include <gl/gl.h>
 
 void FileChooser(HWND hwnd, LPSTR szFileName)
 {
@@ -221,6 +222,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
         
 		case WM_INITDIALOG:
         {
+           
            HWND hcombo = NULL;
            hcombo = GetDlgItem(hwnd, IDC_RESULTSSELECTBOX);
            if(hcombo == NULL)
@@ -233,6 +235,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
            SetDlgItemText(hwnd, IDC_CONSOLE, "Welcome to the Triangulation Program\r\n");
            HWND hHiddenEdit = GetDlgItem(hwnd, IDC_HIDDENTEXT);
            ShowWindow(hHiddenEdit, SW_HIDE);
+
         }
 		break;
 		case WM_COMMAND:
@@ -499,163 +502,13 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                              MessageBox(NULL, "Choose a print type", "Error", MB_OK | MB_ICONINFORMATION);   
                      }
                 }
-                /*
-				case IDC_ADD:
-				{
-					// When somebody clicks the Add button, first we get the number of
-					// they entered
-
-					BOOL bSuccess;
-					int nTimes = GetDlgItemInt(hwnd, IDC_NUMBER, &bSuccess, FALSE);
-					if(bSuccess) 
-					{
-						// Then we get the string they entered
-						// First we need to find out how long it is so that we can
-						// allocate some memory
-
-						int len = GetWindowTextLength(GetDlgItem(hwnd, IDC_TEXT));
-						if(len > 0)
-						{
-							// Now we allocate, and get the string into our buffer
-
-							int i;
-							char* buf;
-
-							buf = (char*)GlobalAlloc(GPTR, len + 1);
-							GetDlgItemText(hwnd, IDC_TEXT, buf, len + 1);
-
-							// Now we add the string to the list box however many times
-							// the user asked us to.
-
-							for(i = 0;i < nTimes; i++)
-							{
-								int index = SendDlgItemMessage(hwnd, IDC_LIST, LB_ADDSTRING, 0, (LPARAM)buf);
-
-								// Here we are associating the value nTimes with the item 
-								// just for the heck of it, we'll use it to display later.
-								// Normally you would put some more useful data here, such
-								// as a pointer.
-								SendDlgItemMessage(hwnd, IDC_LIST, LB_SETITEMDATA, (WPARAM)index, (LPARAM)nTimes);
-							}
-
-							// Dont' forget to free the memory!
-							GlobalFree((HANDLE)buf);
-						}
-						else 
-						{
-							MessageBox(hwnd, "You didn't enter anything!", "Warning", MB_OK);
-						}
-					}
-					else 
-					{
-						MessageBox(hwnd, "Couldn't translate that number :(", "Warning", MB_OK);
-					}
-
-				}
-				break;
-				case IDC_REMOVE:
-				{
-					// When the user clicks the Remove button, we first get the number
-					// of selected items
-
-					HWND hList = GetDlgItem(hwnd, IDC_LIST);
-					int count = SendMessage(hList, LB_GETSELCOUNT, 0, 0);
-					if(count != LB_ERR)
-					{
-						if(count != 0)
-						{
-							// And then allocate room to store the list of selected items.
-
-							int i;
-							int *buf = (int*)GlobalAlloc(GPTR, sizeof(int) * count);
-							SendMessage(hList, LB_GETSELITEMS, (WPARAM)count, (LPARAM)buf);
-							
-							// Now we loop through the list and remove each item that was
-							// selected.  
-
-							// WARNING!!!  
-							// We loop backwards, because if we removed items
-							// from top to bottom, it would change the indexes of the other
-							// items!!!
-
-							for(i = count - 1; i >= 0; i--)
-							{
-								SendMessage(hList, LB_DELETESTRING, (WPARAM)buf[i], 0);
-							}
-
-							GlobalFree(buf);
-						}
-						else 
-						{
-							MessageBox(hwnd, "No items selected.", "Warning", MB_OK);
-						}
-					}
-					else
-					{
-						MessageBox(hwnd, "Error counting items :(", "Warning", MB_OK);
-					}
-				}
-				break;
-				case IDC_CLEAR:
-					SendDlgItemMessage(hwnd, IDC_LIST, LB_RESETCONTENT, 0, 0);
-				break;
-				case IDC_LIST:
-					switch(HIWORD(wParam))
-					{
-						case LBN_SELCHANGE:
-						{
-							// Get the number of items selected.
-
-							HWND hList = GetDlgItem(hwnd, IDC_LIST);
-							int count = SendMessage(hList, LB_GETSELCOUNT, 0, 0);
-							if(count != LB_ERR)
-							{
-								// We only want to continue if one and only one item is
-								// selected.
-
-								if(count == 1)
-								{
-									// Since we know ahead of time we're only getting one
-									// index, there's no need to allocate an array.
-
-									int index;
-									int err = SendMessage(hList, LB_GETSELITEMS, (WPARAM)1, (LPARAM)&index);
-									if(err != LB_ERR)
-									{
-										// Get the data we associated with the item above
-										// (the number of times it was added)
-
-										int data = SendMessage(hList, LB_GETITEMDATA, (WPARAM)index, 0);
-
-										SetDlgItemInt(hwnd, IDC_SHOWCOUNT, data, FALSE);
-									}
-									else 
-									{
-										MessageBox(hwnd, "Error getting selected item :(", "Warning", MB_OK);
-									}
-								}
-								else 
-								{
-									// No items selected, or more than one
-									// Either way, we aren't going to process this.
-									SetDlgItemText(hwnd, IDC_SHOWCOUNT, "-");
-								}
-							}
-							else
-							{
-								MessageBox(hwnd, "Error counting items :(", "Warning", MB_OK);
-							}
-						}
-						break;
-					}
-				break;
-				*/
 			}
 		break;
 		
              
-		case WM_CLOSE:
+		case WM_CLOSE: {
 			EndDialog(hwnd, 0);
+        }
 		break;
 		default:
 			return FALSE;
@@ -668,3 +521,38 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
 	return DialogBox(hInstance, MAKEINTRESOURCE(IDD_MAIN), NULL, DlgProc);
 }
+
+VOID EnableOpenGL( HWND hWnd, HDC * hDC, HGLRC * hRC )
+{
+  PIXELFORMATDESCRIPTOR pfd;
+  int iFormat;
+
+  // get the device context (DC)
+  *hDC = GetDC( hWnd );
+
+  // set the pixel format for the DC
+  ZeroMemory( &pfd, sizeof( pfd ) );
+  pfd.nSize = sizeof( pfd );
+  pfd.nVersion = 1;
+  pfd.dwFlags = PFD_DRAW_TO_WINDOW | 
+  PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+  pfd.iPixelType = PFD_TYPE_RGBA;
+  pfd.cColorBits = 24;
+  pfd.cDepthBits = 16;
+  pfd.iLayerType = PFD_MAIN_PLANE;
+  iFormat = ChoosePixelFormat( *hDC, &pfd );
+  SetPixelFormat( *hDC, iFormat, &pfd );
+
+  // create and enable the render context (RC)
+  *hRC = wglCreateContext( *hDC );
+  wglMakeCurrent( *hDC, *hRC );
+}
+
+// Disable OpenGL
+
+VOID DisableOpenGL( HWND hWnd, HDC hDC, HGLRC hRC )
+{
+  wglMakeCurrent( NULL, NULL );
+  wglDeleteContext( hRC );
+  ReleaseDC( hWnd, hDC );
+} 

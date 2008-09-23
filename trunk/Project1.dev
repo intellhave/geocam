@@ -1,7 +1,7 @@
 [Project]
 FileName=Project1.dev
 Name=Project1
-UnitCount=35
+UnitCount=37
 Type=1
 Ver=1
 ObjFiles=
@@ -18,7 +18,7 @@ Icon=
 ExeOutput=
 ObjectOutput=
 OverrideOutput=0
-OverrideOutputName=
+OverrideOutputName=Project1.exe
 HostApplication=
 Folders=
 CommandLine=
@@ -27,7 +27,7 @@ CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=
+CompilerSettings=0000000000000101000000
 
 [Unit1]
 FileName=main.cpp
@@ -433,6 +433,26 @@ BuildCmd=
 FileName=Simplex\tetra.cpp
 CompileCpp=1
 Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit36]
+FileName=addremove.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit37]
+FileName=addremove.h
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000

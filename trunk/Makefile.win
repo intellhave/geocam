@@ -1,18 +1,18 @@
 # Project: Project1
 # Makefile created by Dev-C++ 4.9.9.2
 
-CPP  = g++.exe
-CC   = gcc.exe
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = 
-OBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o TriangulationCoordinateSystem.o Simplex/tetra.o 3DTriangulation/3DInputOutput.o $(RES)
-LINKOBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o TriangulationCoordinateSystem.o Simplex/tetra.o 3DTriangulation/3DInputOutput.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  
+OBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o TriangulationCoordinateSystem.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o $(RES)
+LINKOBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o TriangulationCoordinateSystem.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
 INCS =  -I"include" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam" 
 BIN  = Project1.exe
-CXXFLAGS = $(CXXINCS)  
-CFLAGS = $(INCS)  
+CXXFLAGS = $(CXXINCS)   -pg -g3
+CFLAGS = $(INCS)   -pg -g3
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
@@ -74,8 +74,11 @@ delaunay.o: delaunay.cpp
 TriangulationCoordinateSystem.o: TriangulationCoordinateSystem.cpp
 	$(CPP) -c TriangulationCoordinateSystem.cpp -o TriangulationCoordinateSystem.o $(CXXFLAGS)
 
+3DTriangulation/3DInputOutput.o: 3DTriangulation/3DInputOutput.cpp
+	$(CPP) -c 3DTriangulation/3DInputOutput.cpp -o 3DTriangulation/3DInputOutput.o $(CXXFLAGS)
+
 Simplex/tetra.o: Simplex/tetra.cpp
 	$(CPP) -c Simplex/tetra.cpp -o Simplex/tetra.o $(CXXFLAGS)
 
-3DTriangulation/3DInputOutput.o: 3DTriangulation/3DInputOutput.cpp
-	$(CPP) -c 3DTriangulation/3DInputOutput.cpp -o 3DTriangulation/3DInputOutput.o $(CXXFLAGS)
+addremove.o: addremove.cpp
+	$(CPP) -c addremove.cpp -o addremove.o $(CXXFLAGS)
