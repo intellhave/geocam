@@ -10,7 +10,7 @@ the reading and writing of text files under a two-dimensional manifold.
 #include <fstream>
 #include <sstream>
 #include "3DInputOutput.h"
-
+#include "triangulationInputOutput.h"
 
 bool read3DTriangulationFile(char* fileName) 
 {
@@ -399,4 +399,178 @@ void write3DTriangulationFile(char* newFileName)
              }
              output << "\n";
      }
+}
+
+struct Triple 
+{
+    int v1, v2, v3;
+    int positionOf(vector<Triple>*);
+    bool contains(int);
+    bool isInTuple(vector<int>*);
+};
+bool Triple::contains(int i)
+{
+    return (v1 == i || v2 == i) || v3 == i;
+}
+int Triple::positionOf(vector<Triple>* triple) 
+{
+    for(int i = 0; i < triple->size(); i++)
+    {
+       Triple other = (*triple)[i];
+       if(other.contains(v1) && other.contains(v2) && other.contains(v3))
+          return i;
+    }
+    return -1;
+}
+bool Triple::isInTuple(vector<int>* tuple)
+{
+     int result = 0;
+     for(int i = 0; i < tuple->size(); i++)
+     {
+          if(v1 == (*tuple)[i])
+          {
+                result++;
+          }
+          if(v2 == (*tuple)[i])
+          {
+                result++;
+          }
+          if(v3 == (*tuple)[i])
+          {
+                result++;
+          }
+     }
+     return result == 3;
+}
+
+
+void make3DTriangulationFile(char* from, char* to) {
+       ifstream infile;
+  vector< vector<int> > t; 
+  infile.open(from);
+  // Place the sets of four ints into a vector.
+  char temp[50]; // Temp gets rid of everything up to the '=' character.
+  infile.getline(temp, 50 ,'=');
+  char ch;
+  infile >> ch;
+  while (ch != ']') 
+  { // While we haven't reached the end, marked by a ']' ...
+     infile >> ch;
+     vector<int> tetra; // Our set to hold the 4 ints of a tetra.
+     for (int n = 1; n <= 4; n++)
+     {
+         int element;
+         infile >> element;
+         tetra.push_back(element);
+         infile >> ch; // Gets the ',' we don't need it.
+     }
+     t.push_back(tetra); // Add the set to the vector.
+     infile >> ch; // Gets the ']' marking the end of the current set.
+  }
+  infile.close();
+  
+  vector<int> vList;
+  vector<Pair> eList;
+  vector<Triple> fList;
+  vector<int>::iterator it;
+  
+  /*
+   * This "for" loop searches through every tetra and collects all 
+   * vertices, pairs and triples.
+   */
+  for(int i = 0; i < t.size(); i++)
+  {
+      for (int j = 0; j < t[i].size(); j++)
+      {
+          it = find(vList.begin(), vList.end(), (t[i])[j]);
+          if (it == vList.end())
+          {
+                 vList.push_back((t[i])[j]);
+          }
+      }
+     Pair p1 = {(t[i])[0], (t[i])[1]};
+     Pair p2 = {(t[i])[0], (t[i])[2]};
+     Pair p3 = {(t[i])[0], (t[i])[3]};
+     Pair p4 = {(t[i])[1], (t[i])[2]};
+     Pair p5 = {(t[i])[1], (t[i])[3]};
+     Pair p6 = {(t[i])[2], (t[i])[3]};
+     Triple t1 = {(t[i])[0], (t[i])[1], (t[i])[2]};
+     Triple t2 = {(t[i])[0], (t[i])[1], (t[i])[3]};
+     Triple t3 = {(t[i])[0], (t[i])[2], (t[i])[3]};
+     Triple t4 = {(t[i])[1], (t[i])[2], (t[i])[3]};
+     if (p1.positionOf(&eList) == -1) eList.push_back(p1);
+     if (p2.positionOf(&eList) == -1) eList.push_back(p2);
+     if (p3.positionOf(&eList) == -1) eList.push_back(p3);
+     if (p4.positionOf(&eList) == -1) eList.push_back(p4);
+     if (p5.positionOf(&eList) == -1) eList.push_back(p5);
+     if (p6.positionOf(&eList) == -1) eList.push_back(p6);
+     if (t1.positionOf(&fList) == -1) fList.push_back(t1);
+     if (t2.positionOf(&fList) == -1) fList.push_back(t2);
+     if (t3.positionOf(&fList) == -1) fList.push_back(t3);
+     if (t4.positionOf(&fList) == -1) fList.push_back(t4);
+  }
+  
+  ofstream outfile;
+  outfile.open(to, ios_base::trunc);
+  
+  // Vertices
+  /*
+   * Prints all the vertices, iterating through the list.
+   */
+  for (int i = 0; i < vList.size(); i++)
+  {
+      // Print the name.
+      outfile << "Vertex: " << vList[i] << "\n";
+      set<int> localv; // A collection of a vertex's local vertices.
+      vector<int> localt; // A collection of a vertex's local tetras.
+      
+      // Iterate through all triples
+      for (int k = 0; k < t.size(); k++)
+      {   
+          // Search for vertex in triple.
+          it = find(t[k].begin(), t[k].end(), vList[i]);
+          if (it != t[k].end())
+          { // If vertex is in triple...add face to localf
+                 localt.push_back(k+1);
+                 // Add all the vertices of that face.
+                 // NOTE: The use of a set prevents duplicates.
+                 for(int g = 0; g < t[k].size(); g++)
+                 {
+                       localv.insert((t[k])[g]);
+                 }
+          }        
+      }
+      // The vertex itself was added to its localv's, remove it.
+      localv.erase(v[i]);
+       
+      // Print local vertices
+      set<int>::iterator setit;
+      for (setit = localv.begin(); setit != localv.end(); setit++)
+      {
+          outfile << *setit << " ";
+      }   
+      // Print local edges using list of pairs and contains function of Pair
+      for (int j = 0; j < eList.size(); j++)
+      {
+          if (eList[j].contains(vList[i]))
+          {
+             outfile << j + 1 << " ";
+          }   
+      }
+      // Print local faces using list of triple and contains function of Triple
+      for (int j = 0; j < fList.size(); j++)
+      {
+          if (fList[j].contains(vList[i]))
+          {
+             outfile << j + 1 << " ";
+          }   
+      } 
+      outfile << "\n";
+      // Print local tetras
+      for (int j = 0; j < localt.size(); j++)
+      {
+          outfile << localt[j] << " ";
+      }
+      outfile << "\n";
+  }
 }

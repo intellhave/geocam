@@ -377,14 +377,6 @@ void writeTriangulationFileWithData(char* newFileName)
      
 }
 
-struct Pair
-{
-       int v1, v2;
-       int positionOf(vector<Pair>*);  
-       bool contains(int);
-       bool isInTriple(vector<int>*);
-};
-
 int Pair::positionOf(vector<Pair>* list)
 {
      for (int i = 0; i < (*list).size(); i++)
@@ -436,22 +428,27 @@ void makeTriangulationFile (char* from, char* to) {
   char ch;
   infile >> ch;
   while (ch != ']')
-        {
-            infile >> ch;
-            vector<int> face;
-            for (int n = 1; n <= 3; n++)
-            {
-                int element;
-                infile >> element;
-                face.push_back(element);
-                infile >> ch;
-            }
-            f.push_back(face);
-            infile >> ch;
-        }
+  {
+     infile >> ch;
+     vector<int> face;
+     for (int n = 1; n <= 3; n++)
+     {
+         int element;
+         infile >> element;
+         face.push_back(element);
+         infile >> ch;
+     }
+     f.push_back(face);
+     infile >> ch;
+  }
   
   infile.close();      
-  vector<Pair> list; 
+  vector<Pair> list;
+  /*
+   * This "for" loop searches through every triple and collects all pairs.
+   * If the pair has not yet been added to the list of all pairs, add it.
+   * Uses the positionOf function of the struct Pair to search the list.
+   */
   for(int i = 0; i < f.size(); i++)
   {
      Pair p1 = {(f[i])[0], (f[i])[1]};
@@ -473,6 +470,11 @@ void makeTriangulationFile (char* from, char* to) {
   
   vector<int> v;
   vector<int>::iterator it;
+  /*
+   * This "for" loop iterates through every triple and collects all vertices.
+   * If a vertex has not yet been added to the list of all vertices, add it.
+   * Uses the find function in vector to search through the list.
+   */
   for (int i = 0; i < f.size(); i++)
   {
       for (int j = 0; j < 3; j++)
@@ -488,36 +490,42 @@ void makeTriangulationFile (char* from, char* to) {
   ofstream outfile;
   outfile.open(to, ios_base::trunc);
   // Vertices
+  /*
+   * Prints all the vertices, iterating through the list.
+   */
   for (int i = 0; i < v.size(); i++)
   {
-      // name
+      // Print the name.
       outfile << "Vertex: " << v[i] << "\n";
-      set<int> localv; 
-      vector<int> localf; 
+      set<int> localv; // A collection of a vertex's local vertices.
+      vector<int> localf; // A collection of a vertex's local faces.
       
+      // Iterate through all triples
       for (int k = 0; k < f.size(); k++)
-      {      
+      {   
+          // Search for vertex in triple.
           it = find(f[k].begin(), f[k].end(), v[i]);
           if (it != f[k].end())
-          {
+          { // If vertex is in triple...add face to localf
                  localf.push_back(k+1);
+                 // Add all the vertices of that face.
+                 // NOTE: The use of a set prevents duplicates.
                  for(int g = 0; g < 3; g++)
                  {
                        localv.insert((f[k])[g]);
                  }
           }        
       }
+      // The vertex itself was added to its localv's, remove it.
       localv.erase(v[i]);
+       
+      // Print local vertices
       set<int>::iterator notit;
-      set<int>::iterator end = localv.end();
-      end--;
-      // local vertices
-      for (notit = localv.begin(); notit != end; notit++)
+      for (notit = localv.begin(); notit != localv.end(); notit++)
       {
           outfile << *notit << " ";
-      }
-      outfile << *notit << "\n";    
-      // local edges
+      }   
+      // Print local edges using list of pairs and contians function of Pair
       for (int j = 0; j < list.size(); j++)
       {
           if (list[j].contains(v[i]))
@@ -527,23 +535,27 @@ void makeTriangulationFile (char* from, char* to) {
              
       } 
       outfile << "\n";
-      // local faces
-      for (int i = 0; i < localf.size(); i++)
+      // Print local faces
+      for (int j = 0; j < localf.size(); j++)
       {
-          outfile << localf[i] << " ";
+          outfile << localf[j] << " ";
       }
       outfile << "\n";
   }
   
   //Edges
+  /*
+   * Prints all the edges, iterating through the list of pairs.
+   */
   for(int i = 0; i < list.size(); i++)
   {
           // name
           outfile << "Edge: " << i + 1 << "\n";
           Pair current = list[i];
-          // local vertices
+          // local vertices, just the two ints of the current pair.
           outfile << current.v1 << " " << current.v2 << "\n";
-          // local edges
+          // local edges, iterate through list finding pairs that share one vertex
+          // with this. Ignore the current pair.
           for(int j = 0; j < list.size(); j++)
           {
              if(j != i && 
@@ -553,6 +565,8 @@ void makeTriangulationFile (char* from, char* to) {
              }
           }
           outfile << "\n";
+          // Iterate through triples, check if pair is in triple with
+          // isInTriple function.
           for(int j = 0; j < f.size(); j++)
           {
                   if(current.isInTriple(&(f[j])))
@@ -564,18 +578,21 @@ void makeTriangulationFile (char* from, char* to) {
   }
   
   //Faces
+    /*
+   * Prints all the face, iterating through the list.
+   */
   for(int i = 0; i < f.size(); i++)
   {
       // name
       outfile << "Face: " << i + 1 << "\n";
       vector<int> current = f[i];
-      // local vertices
+      // local vertices, just the ints in current triple.
       for(int j = 0; j < current.size(); j++)
       {
               outfile << current[j] << " ";
       }
       outfile << "\n";
-      // local edges
+      // local edges, if pair is in triple, add it to local edges.
       for(int j = 0; j < list.size(); j++)
       {
               if((list[j]).isInTriple(&current))
@@ -584,6 +601,8 @@ void makeTriangulationFile (char* from, char* to) {
               }
       }
       outfile << "\n";
+      // local faces, check for triples that have two vertices in common
+      // with current one.
       for(int j = 0; j < f.size(); j++)
       {
          if( j != i)

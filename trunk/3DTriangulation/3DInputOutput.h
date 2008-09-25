@@ -58,3 +58,4 @@ bool read3DTriangulationFile(char* filename);
  */
 void write3DTriangulationFile(char* newFileName);
 
+void make3DTriangulationFile(char* from, char* to);
