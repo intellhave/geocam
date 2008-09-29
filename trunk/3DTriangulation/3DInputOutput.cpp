@@ -407,11 +407,16 @@ struct Triple
     int v1, v2, v3;
     int positionOf(vector<Triple>*);
     bool contains(int);
+    bool contains(Pair);
     bool isInTuple(vector<int>*);
 };
 bool Triple::contains(int i)
 {
     return (v1 == i || v2 == i) || v3 == i;
+}
+bool Triple::contains(Pair p)
+{
+     return contains(p.v1) && contains(p.v2);
 }
 int Triple::positionOf(vector<Triple>* triple) 
 {
@@ -549,7 +554,8 @@ void make3DTriangulationFile(char* from, char* to) {
       for (setit = localv.begin(); setit != localv.end(); setit++)
       {
           outfile << *setit << " ";
-      }   
+      }
+      outfile << "\n";
       // Print local edges using list of pairs and contains function of Pair
       for (int j = 0; j < eList.size(); j++)
       {
@@ -558,6 +564,7 @@ void make3DTriangulationFile(char* from, char* to) {
              outfile << j + 1 << " ";
           }   
       }
+      outfile << "\n";
       // Print local faces using list of triple and contains function of Triple
       for (int j = 0; j < fList.size(); j++)
       {
@@ -574,4 +581,147 @@ void make3DTriangulationFile(char* from, char* to) {
       }
       outfile << "\n";
   }
+  
+    //Edges
+  /*
+   * Prints all the edges, iterating through the list of pairs.
+   */
+  for(int i = 0; i < eList.size(); i++)
+  {
+          // name
+          outfile << "Edge: " << i + 1 << "\n";
+          Pair current = eList[i];
+          // local vertices, just the two ints of the current pair.
+          outfile << current.v1 << " " << current.v2 << "\n";
+          // local edges, iterate through list finding pairs that share one vertex
+          // with this. Ignore the current pair.
+          for(int j = 0; j < eList.size(); j++)
+          {
+             if(j != i && 
+                (eList[j].contains(current.v1) || eList[j].contains(current.v2)))
+             {
+                 outfile << j + 1 << " "; 
+             }
+          }
+          outfile << "\n";
+          // Iterate through triples, check if pair is in triple with
+          // contains(Pair) function of triple.
+          for(int j = 0; j < fList.size(); j++)
+          {
+                  if(fList[j].contains(current))
+                  {
+                      outfile << j + 1 << " ";
+                  }
+          }
+          outfile << "\n";
+          // Iterate through tetras, check if pair is in tetra with
+          // isInTuple function for Pairs.
+          for(int j = 0; j < t.size(); j++)
+          {
+                  if(current.isInTuple(&(t[j])))
+                  {
+                      outfile << j + 1 << " ";
+                  }
+          }
+          outfile << "\n";
+  }
+  //Faces
+  /*
+   * Prints all the faces, iterating through the list.
+   */
+  for(int i = 0; i < fList.size(); i++)
+  {
+      // name
+      outfile << "Face: " << i + 1 << "\n";
+      Triple current = fList[i];
+      // local vertices, just the ints in current triple.
+      outfile << current.v1 << " " << current.v2 << " " << current.v3;
+      outfile << "\n";
+      // local edges, if pair is in triple, add it to local edges.
+      for(int j = 0; j < eList.size(); j++)
+      {
+              if(current.contains(eList[j]))
+              {
+                 outfile << j + 1 << " ";
+              }
+      }
+      outfile << "\n";
+      // local faces, check for triples that have two vertices in common
+      // with current one.
+      for(int j = 0; j < fList.size(); j++)
+      {
+         if( j != i)
+         {
+            Triple other = fList[j];
+            Pair p1 = {current.v1, current.v2};
+            Pair p2 = {current.v1, current.v3};
+            Pair p3 = {current.v2, current.v3};
+            if(other.contains(p1) || other.contains(p2) || other.contains(p3))
+            {
+               outfile << j + 1 << " ";
+            }
+         }
+      }
+      outfile << "\n";
+      // Iterate through tetras, check if triple is in tetra with
+      // isInTuple function.
+      for(int j = 0; j < t.size(); j++)
+      {
+          if(current.isInTuple(&(t[j])))
+          {
+               outfile << j + 1 << " ";
+          }
+      }
+      outfile << "\n";
+  }
+  
+  //Tetras
+    /*
+   * Prints all the tetras, iterating through the list.
+   */
+  for(int i = 0; i < t.size(); i++)
+  {
+      // name
+      outfile << "Tetra: " << i + 1 << "\n";
+      vector<int> current = t[i];
+      // local vertices, just the ints in current tetra.
+      for(int j = 0; j < current.size(); j++)
+      {
+              outfile << current[j] << " ";
+      }
+      outfile << "\n";
+      // local edges, if pair is in tetra, add it to local edges.
+      for(int j = 0; j < eList.size(); j++)
+      {
+              if((eList[j]).isInTuple(&current))
+              {
+                 outfile << j + 1 << " ";
+              }
+      }
+      outfile << "\n";
+      // local faces, if triple is in tetra, add it to loacl faces.
+      for(int j = 0; j < fList.size(); j++)
+      {
+              if((fList[j]).isInTuple(&current))
+              {
+                 outfile << j + 1 << " ";
+              }
+      }
+      outfile << "\n";
+      // local tetras, check if tetra has three vertices in common with
+      // other tetras.
+      for(int j = 0; j < t.size(); j++)
+      {
+         if( j != i)
+         {
+            vector<int> inter = listIntersection(&current, &(t[j]));
+            if(inter.size() >= 3)
+            {
+               outfile << j + 1 << " ";
+            }
+         }
+      }
+      outfile << "\n";   
+  }
+  outfile.close();
 }
