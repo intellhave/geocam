@@ -5,8 +5,8 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = 
-OBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o TriangulationCoordinateSystem.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o $(RES)
-LINKOBJ  = main.o triangulation.o triangulationInputOutput.o triangulationmorph.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o triangulationmath.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o triangulationPlane.o miscmath.o pointlinecircle.o delaunay.o TriangulationCoordinateSystem.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o $(RES)
+OBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o $(RES)
+LINKOBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
 INCS =  -I"include" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam" 
@@ -29,15 +29,6 @@ $(BIN): $(OBJ)
 main.o: main.cpp
 	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
 
-triangulation.o: triangulation.cpp
-	$(CPP) -c triangulation.cpp -o triangulation.o $(CXXFLAGS)
-
-triangulationInputOutput.o: triangulationInputOutput.cpp
-	$(CPP) -c triangulationInputOutput.cpp -o triangulationInputOutput.o $(CXXFLAGS)
-
-triangulationmorph.o: triangulationmorph.cpp
-	$(CPP) -c triangulationmorph.cpp -o triangulationmorph.o $(CXXFLAGS)
-
 Simplex/edge.o: Simplex/edge.cpp
 	$(CPP) -c Simplex/edge.cpp -o Simplex/edge.o $(CXXFLAGS)
 
@@ -50,17 +41,11 @@ Simplex/simplex.o: Simplex/simplex.cpp
 Simplex/vertex.o: Simplex/vertex.cpp
 	$(CPP) -c Simplex/vertex.cpp -o Simplex/vertex.o $(CXXFLAGS)
 
-triangulationmath.o: triangulationmath.cpp
-	$(CPP) -c triangulationmath.cpp -o triangulationmath.o $(CXXFLAGS)
-
 Spherical/sphericalmath.o: Spherical/sphericalmath.cpp
 	$(CPP) -c Spherical/sphericalmath.cpp -o Spherical/sphericalmath.o $(CXXFLAGS)
 
 Hyperbolic/hyperbolicmath.o: Hyperbolic/hyperbolicmath.cpp
 	$(CPP) -c Hyperbolic/hyperbolicmath.cpp -o Hyperbolic/hyperbolicmath.o $(CXXFLAGS)
-
-triangulationPlane.o: triangulationPlane.cpp
-	$(CPP) -c triangulationPlane.cpp -o triangulationPlane.o $(CXXFLAGS)
 
 miscmath.o: miscmath.cpp
 	$(CPP) -c miscmath.cpp -o miscmath.o $(CXXFLAGS)
@@ -70,9 +55,6 @@ pointlinecircle.o: pointlinecircle.cpp
 
 delaunay.o: delaunay.cpp
 	$(CPP) -c delaunay.cpp -o delaunay.o $(CXXFLAGS)
-
-TriangulationCoordinateSystem.o: TriangulationCoordinateSystem.cpp
-	$(CPP) -c TriangulationCoordinateSystem.cpp -o TriangulationCoordinateSystem.o $(CXXFLAGS)
 
 3DTriangulation/3DInputOutput.o: 3DTriangulation/3DInputOutput.cpp
 	$(CPP) -c 3DTriangulation/3DInputOutput.cpp -o 3DTriangulation/3DInputOutput.o $(CXXFLAGS)
@@ -85,3 +67,21 @@ addremove.o: addremove.cpp
 
 3DTriangulation/3Dtriangulationmath.o: 3DTriangulation/3Dtriangulationmath.cpp
 	$(CPP) -c 3DTriangulation/3Dtriangulationmath.cpp -o 3DTriangulation/3Dtriangulationmath.o $(CXXFLAGS)
+
+Triangulation/triangulation.o: Triangulation/triangulation.cpp
+	$(CPP) -c Triangulation/triangulation.cpp -o Triangulation/triangulation.o $(CXXFLAGS)
+
+Triangulation/TriangulationCoordinateSystem.o: Triangulation/TriangulationCoordinateSystem.cpp
+	$(CPP) -c Triangulation/TriangulationCoordinateSystem.cpp -o Triangulation/TriangulationCoordinateSystem.o $(CXXFLAGS)
+
+Triangulation/triangulationInputOutput.o: Triangulation/triangulationInputOutput.cpp
+	$(CPP) -c Triangulation/triangulationInputOutput.cpp -o Triangulation/triangulationInputOutput.o $(CXXFLAGS)
+
+Triangulation/triangulationmath.o: Triangulation/triangulationmath.cpp
+	$(CPP) -c Triangulation/triangulationmath.cpp -o Triangulation/triangulationmath.o $(CXXFLAGS)
+
+Triangulation/triangulationmorph.o: Triangulation/triangulationmorph.cpp
+	$(CPP) -c Triangulation/triangulationmorph.cpp -o Triangulation/triangulationmorph.o $(CXXFLAGS)
+
+Triangulation/triangulationPlane.o: Triangulation/triangulationPlane.cpp
+	$(CPP) -c Triangulation/triangulationPlane.cpp -o Triangulation/triangulationPlane.o $(CXXFLAGS)

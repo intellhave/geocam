@@ -6,7 +6,7 @@ Version: June 10, 2008
 
 #include <iostream>
 #include <cmath>
-#include "triangulationPlane.h"
+#include "triangulation/triangulationPlane.h"
 #define PI 	3.141592653589793238
 
 using namespace std;

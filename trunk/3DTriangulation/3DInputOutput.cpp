@@ -9,8 +9,9 @@ the reading and writing of text files under a two-dimensional manifold.
 
 #include <fstream>
 #include <sstream>
+#include <set>
 #include "3DInputOutput.h"
-#include "triangulationInputOutput.h"
+#include "triangulation/triangulationInputOutput.h"
 
 bool read3DTriangulationFile(char* fileName) 
 {
@@ -541,7 +542,7 @@ void make3DTriangulationFile(char* from, char* to) {
           }        
       }
       // The vertex itself was added to its localv's, remove it.
-      localv.erase(v[i]);
+      localv.erase(vList[i]);
        
       // Print local vertices
       set<int>::iterator setit;

@@ -1,6 +1,6 @@
 /********************************Add************************************/
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include <vector>
 
 void add(Vertex, Vertex);

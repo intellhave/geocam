@@ -8,7 +8,7 @@ calculations on Points, Lines, and Circles. All functions are
 done independently of any triangulation.
 **************************************************************/
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include "pointlinecircle.h"
 
 

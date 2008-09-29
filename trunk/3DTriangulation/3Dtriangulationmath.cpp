@@ -1,5 +1,5 @@
 #include "3Dtriangulationmath.h"
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include "spherical/sphericalmath.h"
 #include "miscmath.h"
 #define PI 	3.141592653589793238

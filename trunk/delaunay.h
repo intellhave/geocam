@@ -7,7 +7,7 @@ The Delaunay file holds all functions that check triangulations
 locally for the condition of being Delaunay or weighted Delaunay.
 **************************************************************/
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 /*
  * Indicates whether or not a particular edge has the quality

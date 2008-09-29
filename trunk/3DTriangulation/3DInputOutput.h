@@ -7,7 +7,7 @@ The  3D Triangulation Input/Output file holds the functions that handle
 the reading and writing of text files under a three-dimensional manifold.
 **************************************************************/
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 /*
  * Function to read in a file and build the a three-dimensional

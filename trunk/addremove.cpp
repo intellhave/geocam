@@ -1,5 +1,5 @@
 #include "addremove.h"
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include <vector>
 
 void add(Vertex s1, Vertex s2) 

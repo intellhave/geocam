@@ -6,7 +6,7 @@ Version: July 16, 2008
 The Spherical Math file holds the functions that perform
 calculations on the triangulation under a spherical geometry.
 **************************************************************/
-#include <triangulationmath.h>
+#include "triangulation/triangulationmath.h"
 #include <miscmath.h>
 
 /*
