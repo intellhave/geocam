@@ -3,7 +3,7 @@ Class: Main
 Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: June 10, 2008
 **************************************************************/
-
+#include "3DTriangulation\3DInputOutput.h"
 #include <iostream>
 #include <cmath>
 #include "triangulation/triangulationPlane.h"
@@ -13,7 +13,11 @@ Version: June 10, 2008
 using namespace std;
 
 int main(int argc, char *argv[])
-{
+{   
+    
+    generateTriangulation(60);
+    
+    
     char from[] = "Triangulation Files/sphere3.txt";
     char to[] = "Triangulation Files/sphere3Conv.txt";
     make3DTriangulationFile(from, to);

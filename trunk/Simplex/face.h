@@ -26,6 +26,8 @@ class Face : public Simplex
 		// class destructor
 		~Face();
 		
+		
+		double getArea();
 		bool isNegative();
 		void setNegativity(bool);
 		void switchSide();

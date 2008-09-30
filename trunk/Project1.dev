@@ -1,7 +1,11 @@
 [Project]
 FileName=Project1.dev
 Name=Project1
-UnitCount=40
+<<<<<<< .mine
+UnitCount=37
+=======
+UnitCount=43
+>>>>>>> .r541
 Type=1
 Ver=1
 ObjFiles=
@@ -438,9 +442,35 @@ Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
+<<<<<<< .mine
 
 [Unit36]
+<<<<<<< .mine
+FileName=3DTriangulation\3DTriangulationMorph.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit37]
+FileName=3DTriangulation\3DTriangulationMorph.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+=======
+
+[Unit36]
+FileName=addremove.cpp
+=======
 FileName=Triangulation\triangulationmath.h
+>>>>>>> .r556
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -478,9 +508,40 @@ Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
+>>>>>>> .r541
 
 [Unit40]
-FileName=Triangulation\newtriangulationmorph.cpp
+FileName=3DTriangulation\3DTriangulationMorph.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit41]
+FileName=3DTriangulation\3DTriangulationMorph.h
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit42]
+FileName=Triangulation\smallMorphs.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit43]
+FileName=Triangulation\smallMorphs.cpp
 CompileCpp=1
 Folder=
 Compile=1
