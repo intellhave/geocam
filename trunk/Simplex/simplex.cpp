@@ -94,6 +94,15 @@ void Simplex::removeTetra(int tetra)
              }
      }   
 }
+
+void Simplex::clearLocals()
+{
+    localVertices.clear();
+    localEdges.clear();
+    localFaces.clear();
+    localTetras.clear();
+}
+
 bool Simplex::isAdjVertex(int vIndex)
 {
      for(int i = 0; i < localVertices.size(); i++)

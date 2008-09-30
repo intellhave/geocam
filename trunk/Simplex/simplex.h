@@ -61,6 +61,8 @@ class Simplex
 	  
 	  void removeTetra(int);
 	  
+	  void clearLocals();
+	  
 	  bool isAdjVertex(int);
 	  bool isAdjEdge(int);
 	  bool isAdjFace(int);
