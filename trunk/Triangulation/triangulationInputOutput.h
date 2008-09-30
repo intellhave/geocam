@@ -148,5 +148,5 @@ struct Pair
        int v1, v2;
        int positionOf(vector<Pair>*);  
        bool contains(int);
-       bool isInTriple(vector<int>*);
+       bool isInTuple(vector<int>*);
 };

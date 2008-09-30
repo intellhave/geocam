@@ -400,16 +400,16 @@ bool Pair::contains(int i)
          return false;
 }
  
-bool Pair::isInTriple(vector<int>* triple)
+bool Pair::isInTuple(vector<int>* tuple)
 {
      int result = 0;
-     for(int i = 0; i < triple->size(); i++)
+     for(int i = 0; i < tuple->size(); i++)
      {
-          if(v1 == (*triple)[i])
+          if(v1 == (*tuple)[i])
           {
                 result++;
           }
-          if(v2 == (*triple)[i])
+          if(v2 == (*tuple)[i])
           {
                 result++;
           }
@@ -569,7 +569,7 @@ void makeTriangulationFile (char* from, char* to) {
           // isInTriple function.
           for(int j = 0; j < f.size(); j++)
           {
-                  if(current.isInTriple(&(f[j])))
+                  if(current.isInTuple(&(f[j])))
                   {
                       outfile << j + 1 << " ";
                   }
@@ -579,7 +579,7 @@ void makeTriangulationFile (char* from, char* to) {
   
   //Faces
     /*
-   * Prints all the face, iterating through the list.
+   * Prints all the faces, iterating through the list.
    */
   for(int i = 0; i < f.size(); i++)
   {
@@ -595,7 +595,7 @@ void makeTriangulationFile (char* from, char* to) {
       // local edges, if pair is in triple, add it to local edges.
       for(int j = 0; j < list.size(); j++)
       {
-              if((list[j]).isInTriple(&current))
+              if((list[j]).isInTuple(&current))
               {
                  outfile << j + 1 << " ";
               }
@@ -608,7 +608,7 @@ void makeTriangulationFile (char* from, char* to) {
          if( j != i)
          {
             vector<int> inter = listIntersection(&current, &(f[j]));
-            if(inter.size() == 2)
+            if(inter.size() >= 2)
             {
                outfile << j + 1 << " ";
             }
