@@ -16,7 +16,7 @@ int addVertexToVertex(Vertex v)
      add(&Triangulation::vertexTable[v.getIndex()], 
          &Triangulation::edgeTable[e.getIndex()]);
      
-     return e;
+     return e.getIndex();
 }
 
 int addVertexToEdge(Edge e)
