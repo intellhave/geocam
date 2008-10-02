@@ -10,10 +10,8 @@ int addVertexToVertex(Vertex va, Vertex vb)
      }
      
      
-//     Vertex vb(Triangulation::greatestVertex() + 1);
      Edge e(Triangulation::greatestEdge() + 1);
      
-//     Triangulation::putVertex(vb.getIndex(), vb);
      Triangulation::putEdge(e.getIndex(), e);
      
      add(&Triangulation::vertexTable[vb.getIndex()], 
@@ -28,7 +26,6 @@ int addVertexToVertex(Vertex va, Vertex vb)
 
 int addVertexToEdge(Edge e, Vertex vb)
 {
-//     Vertex vb(Triangulation::greatestVertex() + 1);
      vector<int> localV = *(e.getLocalVertices());
      vector<int> edges;
      
@@ -41,7 +38,10 @@ int addVertexToEdge(Edge e, Vertex vb)
      Face f(Triangulation::greatestFace() + 1);
      
      Triangulation::putFace(f.getIndex(), f);
+     
      add(&Triangulation::vertexTable[vb.getIndex()], 
+         &Triangulation::faceTable[f.getIndex()]);
+     add(&Triangulation::edgeTable[e.getIndex()], 
          &Triangulation::faceTable[f.getIndex()]);
      for(int i = 0; i < localV.size(); i++)
      {
