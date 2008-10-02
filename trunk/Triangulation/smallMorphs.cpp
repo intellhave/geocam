@@ -76,15 +76,15 @@ int addVertexToEdge(Edge e, Vertex vb)
              &Triangulation::faceTable[f.getIndex()]);
      }
      // Add local edges of vertices to new edges.
-     for(int j = 0; j < edges.size(); j++)
+     for(int i = 0; i < edges.size(); i++)
      {
-        vector<int> localE = *(Triangulation::vertexTable[localV[j]].getLocalEdges());
-        for(int i = 0; i < localE.size(); i++)
+        vector<int> localE = *(Triangulation::vertexTable[localV[i]].getLocalEdges());
+        for(int j = 0; j < localE.size(); j++)
         {
-          if(localE[i] != edges[j])
+          if(localE[j] != edges[i])
           {
-            add(&Triangulation::edgeTable[localE[i]], 
-                &Triangulation::edgeTable[edges[j]]);
+            add(&Triangulation::edgeTable[localE[j]], 
+                &Triangulation::edgeTable[edges[i]]);
           }
         }
      }
@@ -97,51 +97,64 @@ int addVertexToEdge(Edge e, Vertex vb)
 
 int addVertexToFace(Face f, Vertex vb)
 {
+    // Vertices of face f
     vector<int> localV = *(f.getLocalVertices());
+    // Edges of face f
     vector<int> localE = *(f.getLocalEdges());
+    // vector to hold faces that will be added.
     vector<int> faces;
     
+    // Add vb to each edge of localE. Store face.
     for(int i = 0; i < localE.size(); i++)
     {
         faces.push_back(addVertexToEdge(Triangulation::edgeTable[localE[i]], vb));
     }
     
+    // Create Tetra
     Tetra t(Triangulation::greatestTetra());
+    // Place Tetra in Triangulation
     Triangulation::putTetra(t.getIndex(), t);
     
+    // Add vb to t
     add(&Triangulation::vertexTable[vb.getIndex()], 
         &Triangulation::tetraTable[t.getIndex()]);
+    // Add f to t
     add(&Triangulation::faceTable[f.getIndex()], 
         &Triangulation::tetraTable[t.getIndex()]);
+    // Add f's vertices to t
     for(int i = 0; i < localV.size(); i++)
     {
         add(&Triangulation::vertexTable[localV[i]], 
             &Triangulation::tetraTable[t.getIndex()]);
     }
-    for(int i = 0; i < localE.size(); i++)
-    {
-        add(&Triangulation::edgeTable[localE[i]], 
-            &Triangulation::tetraTable[t.getIndex()]);
-    }
+    // Add new faces to t, and the edges of the new faces to t.
     for(int i = 0; i < faces.size(); i++)
     {
         add(&Triangulation::faceTable[faces[i]], 
             &Triangulation::tetraTable[t.getIndex()]);
+        Face face = Triangulation::faceTable[faces[i]];
+        for(int j = 0; j < face.getLocalEdges()->size(); j++)
+        {
+           add(&Triangulation::edgeTable[(*(face.getLocalEdges()))[j]], 
+               &Triangulation::tetraTable[t.getIndex()]);
+        }
     }
     
-     for(int j = 0; j < faces.size(); j++)
+    // Add local faces of f's edges to new faces.
+     for(int i = 0; i < faces.size(); i++)
      {
-        vector<int> localF = *(Triangulation::vertexTable[localE[j]].getLocalFaces());
-        for(int i = 0; i < localF.size(); i++)
+        vector<int> localF = *(Triangulation::vertexTable[localE[i]].getLocalFaces());
+        for(int j = 0; j < localF.size(); j++)
         {
-          if(localF[i] != faces[j])
+          if(localF[j] != faces[i])
           {
-            add(&Triangulation::faceTable[localF[i]], 
-                &Triangulation::faceTable[faces[j]]);
+            add(&Triangulation::faceTable[localF[j]], 
+                &Triangulation::faceTable[faces[i]]);
           }
         }
      }
      
+     // Add new faces to each other.
      add(&Triangulation::faceTable[faces[0]], 
          &Triangulation::faceTable[faces[1]]);
      add(&Triangulation::faceTable[faces[0]], 
@@ -149,5 +162,6 @@ int addVertexToFace(Face f, Vertex vb)
      add(&Triangulation::faceTable[faces[1]], 
          &Triangulation::faceTable[faces[2]]);
     
+    // Return t's index
     return t.getIndex();
 }
