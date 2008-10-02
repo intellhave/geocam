@@ -1,5 +1,5 @@
 #include "triangulation.h"
 
-int addVertexToVertex(Vertex v);
-int addVertexToEdge(Edge e);
-int addVertexToFace(Face F);
+int addVertexToVertex(Vertex va, Vertex vb);
+int addVertexToEdge(Edge e, Vertex vb);
+int addVertexToFace(Face F, Vertex vb);

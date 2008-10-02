@@ -4,7 +4,7 @@ Name=Project1
 <<<<<<< .mine
 UnitCount=37
 =======
-UnitCount=43
+UnitCount=41
 >>>>>>> .r541
 Type=1
 Ver=1
@@ -511,9 +511,9 @@ BuildCmd=
 >>>>>>> .r541
 
 [Unit40]
-FileName=3DTriangulation\3DTriangulationMorph.cpp
+FileName=Triangulation\smallMorphs.h
 CompileCpp=1
-Folder=Project1
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -521,9 +521,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit41]
-FileName=3DTriangulation\3DTriangulationMorph.h
+FileName=Triangulation\smallMorphs.cpp
 CompileCpp=1
-Folder=Project1
+Folder=
 Compile=1
 Link=1
 Priority=1000
