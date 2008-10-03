@@ -1,3 +1,12 @@
+/**************************************************************
+File: Small Morphs
+Author: Alex Henniges, Tom Williams
+Version: October 3, 2008
+***************************************************************
+The Small Morphs file holds the functions that perform isolated 
+morphs on simplices. These functions are then used in morphs on
+a whole Triangulation.
+**************************************************************/
 #include "smallMorphs.h"
 #include "addRemove.h"
 
@@ -8,7 +17,8 @@ int addVertexToVertex(Vertex va, Vertex vb)
      if(va.isAdjVertex(vb.getIndex())) {
           vector<int> sameAs;
           sameAs = listIntersection(va.getLocalEdges(), vb.getLocalEdges());
-          return sameAs[0];
+          if(sameAs.size() == 0)
+             return sameAs[0];
      }
      
      // Create Edge

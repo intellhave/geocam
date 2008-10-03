@@ -1,8 +1,28 @@
-/********************************Add************************************/
+/**************************************************************
+File: Add/Remove
+Author: Alex Henniges, Tom Williams
+Version: October 3, 2008
+***************************************************************
+The Add/Remove file holds the functions that add or remove
+references between simplices.
+**************************************************************/
 
 #include "triangulation/triangulation.h"
 #include <vector>
 
+/* *******************************Add************************************ /
+ * The add method takes two lists of simplices and adds references between
+ * the elements of both lists. This function is overloaded to provide for
+ * a number of different combinations, including singular references between
+ * simplices and for vectors of simplices as either argument. Note that the
+ * references are added in both directions, so that the function
+ * add(Vertex*, Edge*) is equivalent to add(Edge*, Vertex*).
+ *
+ * The arguments are pointers to the simplices. This is provided so that a
+ * client function that calls the add method can provide the pointer to a
+ * simplex in the triangulation so that the references are made inside the
+ * triangulation. Note this then allows for simplices not inside a triangulation.
+ */
 void add(Vertex*, Vertex*);
 void add(Vertex*, Edge*);
 void add(Vertex*, Face*);
@@ -71,72 +91,83 @@ void add(vector<Tetra*>, vector<Edge*>);
 void add(vector<Tetra*>, vector<Face*>);
 void add(vector<Tetra*>, vector<Tetra*>);
 
-/******************************Remove***********************************/
+/* *****************************Remove*********************************** /
+ * The remove method takes two lists of simplices and removes references 
+ * between the elements of both lists. This function is overloaded to provide 
+ * for a number of different combinations, including singular references between
+ * simplices and for vectors of simplices as either argument. Note that the
+ * references are removed in both directions, so that the function
+ * remove(Vertex*, Edge*) is equivalent to remove(Edge*, Vertex*).
+ *
+ * The arguments are pointers to the simplices. This is provided so that a
+ * client function that calls the remove method can provide the pointer to a
+ * simplex in the triangulation so that the references are made inside the
+ * triangulation. Note this then allows for simplices not inside a triangulation.
+ */
+void remove(Vertex*, Vertex*);
+void remove(Vertex*, Edge*);
+void remove(Vertex*, Face*);
+void remove(Vertex*, Tetra*);
+void remove(Edge*, Vertex*);
+void remove(Edge*, Edge*);
+void remove(Edge*, Face*);
+void remove(Edge*, Tetra*);
+void remove(Face*, Vertex*);
+void remove(Face*, Edge*);
+void remove(Face*, Face*);
+void remove(Face*, Tetra*);
+void remove(Tetra*, Vertex*);
+void remove(Tetra*, Edge*);
+void remove(Tetra*, Face*);
+void remove(Tetra*, Tetra*);
 
-void remove(Vertex, Vertex);
-void remove(Vertex, Edge);
-void remove(Vertex, Face);
-void remove(Vertex, Tetra);
-void remove(Edge, Vertex);
-void remove(Edge, Edge);
-void remove(Edge, Face);
-void remove(Edge, Tetra);
-void remove(Face, Vertex);
-void remove(Face, Edge);
-void remove(Face, Face);
-void remove(Face, Tetra);
-void remove(Tetra, Vertex);
-void remove(Tetra, Edge);
-void remove(Tetra, Face);
-void remove(Tetra, Tetra);
+void remove(Vertex*, vector<Vertex*>);
+void remove(Vertex*, vector<Edge*>);
+void remove(Vertex*, vector<Face*>);
+void remove(Vertex*, vector<Tetra*>);
+void remove(Edge*, vector<Vertex*>);
+void remove(Edge*, vector<Edge*>);
+void remove(Edge*, vector<Face*>);
+void remove(Edge*, vector<Tetra*>);
+void remove(Face*, vector<Vertex*>);
+void remove(Face*, vector<Edge*>);
+void remove(Face*, vector<Face*>);
+void remove(Face*, vector<Tetra*>);
+void remove(Tetra*, vector<Vertex*>);
+void remove(Tetra*, vector<Edge*>);
+void remove(Tetra*, vector<Face*>);
+void remove(Tetra*, vector<Tetra*>);
 
-void remove(Vertex, vector<Vertex>);
-void remove(Vertex, vector<Edge>);
-void remove(Vertex, vector<Face>);
-void remove(Vertex, vector<Tetra>);
-void remove(Edge, vector<Vertex>);
-void remove(Edge, vector<Edge>);
-void remove(Edge, vector<Face>);
-void remove(Edge, vector<Tetra>);
-void remove(Face, vector<Vertex>);
-void remove(Face, vector<Edge>);
-void remove(Face, vector<Face>);
-void remove(Face, vector<Tetra>);
-void remove(Tetra, vector<Vertex>);
-void remove(Tetra, vector<Edge>);
-void remove(Tetra, vector<Face>);
-void remove(Tetra, vector<Tetra>);
+void remove(vector<Vertex*>, Vertex*);
+void remove(vector<Vertex*>, Edge*);
+void remove(vector<Vertex*>, Face*);
+void remove(vector<Vertex*>, Tetra*);
+void remove(vector<Edge*>, Vertex);
+void remove(vector<Edge*>, Edge*);
+void remove(vector<Edge*>, Face*);
+void remove(vector<Edge*>, Tetra*);
+void remove(vector<Face*>, Vertex*);
+void remove(vector<Face*>, Edge*);
+void remove(vector<Face*>, Face*);
+void remove(vector<Face*>, Tetra*);
+void remove(vector<Tetra*>, Vertex*);
+void remove(vector<Tetra*>, Edge*);
+void remove(vector<Tetra*>, Face*);
+void remove(vector<Tetra*>, Tetra*);
 
-void remove(vector<Vertex>, Vertex);
-void remove(vector<Vertex>, Edge);
-void remove(vector<Vertex>, Face);
-void remove(vector<Vertex>, Tetra);
-void remove(vector<Edge>, Vertex);
-void remove(vector<Edge>, Edge);
-void remove(vector<Edge>, Face);
-void remove(vector<Edge>, Tetra);
-void remove(vector<Face>, Vertex);
-void remove(vector<Face>, Edge);
-void remove(vector<Face>, Face);
-void remove(vector<Face>, Tetra);
-void remove(vector<Tetra>, Vertex);
-void remove(vector<Tetra>, Edge);
-void remove(vector<Tetra>, Face);
-void remove(vector<Tetra>, Tetra);
-
-void remove(vector<Vertex>, vector<Vertex>);
-void remove(vector<Vertex>, vector<Edge>);
-void remove(vector<Vertex>, vector<Face>);
-void remove(vector<Vertex>, vector<Tetra>);
-void remove(vector<Edge>, vector<Vertex>);
-void remove(vector<Edge>, vector<Edge>);
-void remove(vector<Edge>, vector<Face>);
-void remove(vector<Edge>, vector<Tetra>);
-void remove(vector<Face>, vector<Vertex>);
-void remove(vector<Face>, vector<Edge>);
-void remove(vector<Face>, vector<Face>);
-void remove(vector<Face>, vector<Tetra>);
-void remove(vector<Tetra>, vector<Vertex>);
-void remove(vector<Tetra>, vector<Edge>);
-void remove(vector<Tetra>, vector<Face>);
-void remove(vector<Tetra>, vector<Tetra>);
+void remove(vector<Vertex*>, vector<Vertex*>);
+void remove(vector<Vertex*>, vector<Edge*>);
+void remove(vector<Vertex*>, vector<Face*>);
+void remove(vector<Vertex*>, vector<Tetra*>);
+void remove(vector<Edge*>, vector<Vertex*>);
+void remove(vector<Edge*>, vector<Edge*>);
+void remove(vector<Edge*>, vector<Face*>);
+void remove(vector<Edge*>, vector<Tetra*>);
+void remove(vector<Face*>, vector<Vertex*>);
+void remove(vector<Face*>, vector<Edge*>);
+void remove(vector<Face*>, vector<Face*>);
+void remove(vector<Face*>, vector<Tetra*>);
+void remove(vector<Tetra*>, vector<Vertex*>);
+void remove(vector<Tetra*>, vector<Edge*>);
+void remove(vector<Tetra*>, vector<Face*>);
+void remove(vector<Tetra*>, vector<Tetra*>);
