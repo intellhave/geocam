@@ -5,8 +5,8 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = TriangulationGUI_private.res
-OBJ  = main.o ../miscmath.o ../pointlinecircle.o ../triangulation.o ../TriangulationCoordinateSystem.o ../triangulationInputOutput.o ../triangulationmath.o ../triangulationmorph.o ../triangulationPlane.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o TriangulationModel.o ../3DTriangulation/3DInputOutput.o ../Simplex/tetra.o $(RES)
-LINKOBJ  = main.o ../miscmath.o ../pointlinecircle.o ../triangulation.o ../TriangulationCoordinateSystem.o ../triangulationInputOutput.o ../triangulationmath.o ../triangulationmorph.o ../triangulationPlane.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o TriangulationModel.o ../3DTriangulation/3DInputOutput.o ../Simplex/tetra.o $(RES)
+OBJ  = main.o ../miscmath.o ../pointlinecircle.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o TriangulationModel.o ../3DTriangulation/3DInputOutput.o ../Simplex/tetra.o ../Triangulation/newtriangulationmorph.o ../Triangulation/smallMorphs.o ../Triangulation/triangulation.o ../Triangulation/TriangulationCoordinateSystem.o ../Triangulation/triangulationInputOutput.o ../Triangulation/triangulationmath.o ../Triangulation/triangulationmorph.o ../Triangulation/triangulationPlane.o ../addremove.o $(RES)
+LINKOBJ  = main.o ../miscmath.o ../pointlinecircle.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o TriangulationModel.o ../3DTriangulation/3DInputOutput.o ../Simplex/tetra.o ../Triangulation/newtriangulationmorph.o ../Triangulation/smallMorphs.o ../Triangulation/triangulation.o ../Triangulation/TriangulationCoordinateSystem.o ../Triangulation/triangulationInputOutput.o ../Triangulation/triangulationmath.o ../Triangulation/triangulationmorph.o ../Triangulation/triangulationPlane.o ../addremove.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam" -L"C:/Dev-Cpp/geocam" -mwindows -lopengl32 -lglu32  -lgmon -pg  -g3 
 INCS =  -I"include"  -I"C:/Dev-Cpp/geocam" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam" 
@@ -34,24 +34,6 @@ main.o: main.cpp
 
 ../pointlinecircle.o: ../pointlinecircle.cpp
 	$(CPP) -c ../pointlinecircle.cpp -o ../pointlinecircle.o $(CXXFLAGS)
-
-../triangulation.o: ../triangulation.cpp
-	$(CPP) -c ../triangulation.cpp -o ../triangulation.o $(CXXFLAGS)
-
-../TriangulationCoordinateSystem.o: ../TriangulationCoordinateSystem.cpp
-	$(CPP) -c ../TriangulationCoordinateSystem.cpp -o ../TriangulationCoordinateSystem.o $(CXXFLAGS)
-
-../triangulationInputOutput.o: ../triangulationInputOutput.cpp
-	$(CPP) -c ../triangulationInputOutput.cpp -o ../triangulationInputOutput.o $(CXXFLAGS)
-
-../triangulationmath.o: ../triangulationmath.cpp
-	$(CPP) -c ../triangulationmath.cpp -o ../triangulationmath.o $(CXXFLAGS)
-
-../triangulationmorph.o: ../triangulationmorph.cpp
-	$(CPP) -c ../triangulationmorph.cpp -o ../triangulationmorph.o $(CXXFLAGS)
-
-../triangulationPlane.o: ../triangulationPlane.cpp
-	$(CPP) -c ../triangulationPlane.cpp -o ../triangulationPlane.o $(CXXFLAGS)
 
 ../Simplex/simplex.o: ../Simplex/simplex.cpp
 	$(CPP) -c ../Simplex/simplex.cpp -o ../Simplex/simplex.o $(CXXFLAGS)
@@ -82,6 +64,33 @@ TriangulationModel.o: TriangulationModel.cpp
 
 ../Simplex/tetra.o: ../Simplex/tetra.cpp
 	$(CPP) -c ../Simplex/tetra.cpp -o ../Simplex/tetra.o $(CXXFLAGS)
+
+../Triangulation/newtriangulationmorph.o: ../Triangulation/newtriangulationmorph.cpp
+	$(CPP) -c ../Triangulation/newtriangulationmorph.cpp -o ../Triangulation/newtriangulationmorph.o $(CXXFLAGS)
+
+../Triangulation/smallMorphs.o: ../Triangulation/smallMorphs.cpp
+	$(CPP) -c ../Triangulation/smallMorphs.cpp -o ../Triangulation/smallMorphs.o $(CXXFLAGS)
+
+../Triangulation/triangulation.o: ../Triangulation/triangulation.cpp
+	$(CPP) -c ../Triangulation/triangulation.cpp -o ../Triangulation/triangulation.o $(CXXFLAGS)
+
+../Triangulation/TriangulationCoordinateSystem.o: ../Triangulation/TriangulationCoordinateSystem.cpp
+	$(CPP) -c ../Triangulation/TriangulationCoordinateSystem.cpp -o ../Triangulation/TriangulationCoordinateSystem.o $(CXXFLAGS)
+
+../Triangulation/triangulationInputOutput.o: ../Triangulation/triangulationInputOutput.cpp
+	$(CPP) -c ../Triangulation/triangulationInputOutput.cpp -o ../Triangulation/triangulationInputOutput.o $(CXXFLAGS)
+
+../Triangulation/triangulationmath.o: ../Triangulation/triangulationmath.cpp
+	$(CPP) -c ../Triangulation/triangulationmath.cpp -o ../Triangulation/triangulationmath.o $(CXXFLAGS)
+
+../Triangulation/triangulationmorph.o: ../Triangulation/triangulationmorph.cpp
+	$(CPP) -c ../Triangulation/triangulationmorph.cpp -o ../Triangulation/triangulationmorph.o $(CXXFLAGS)
+
+../Triangulation/triangulationPlane.o: ../Triangulation/triangulationPlane.cpp
+	$(CPP) -c ../Triangulation/triangulationPlane.cpp -o ../Triangulation/triangulationPlane.o $(CXXFLAGS)
+
+../addremove.o: ../addremove.cpp
+	$(CPP) -c ../addremove.cpp -o ../addremove.o $(CXXFLAGS)
 
 TriangulationGUI_private.res: TriangulationGUI_private.rc triangulationgui.rc 
 	$(WINDRES) -i TriangulationGUI_private.rc --input-format=rc -o TriangulationGUI_private.res -O coff 

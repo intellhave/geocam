@@ -88,8 +88,8 @@ bool TriangulationModel::loadFile(char* filename, int format)
        break;
        case IDLUTZ:
        {
-            makeTriangulationFile(filename, "C:/Dev-Cpp/geocam/Triangulations/manifold converted.txt");
-            readTriangulationFile("C:/Dev-Cpp/geocam/Triangulations/manifold converted.txt");
+            makeTriangulationFile(filename, "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
+            readTriangulationFile("C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
             loaded = true;
        }
        break;
@@ -107,17 +107,17 @@ bool TriangulationModel::printResults(int printType)
      {
          case IDPRINTSTEP:
          {
-              printResultsStep("C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt", &weights, &curvs);
+              printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
          }
          break;
          case IDPRINTVERTEX:
          {
-              printResultsVertex("C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt", &weights, &curvs);
+              printResultsVertex("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
          }
          break;
          case IDPRINTNUM:
          {
-              printResultsNum("C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt", &weights, &curvs);
+              printResultsNum("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
          }
          break;
          default: return false;

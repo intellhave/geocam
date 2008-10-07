@@ -483,19 +483,19 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                         case 's':
                         {
                              TriangulationModel::printResults(IDPRINTSTEP);
-                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt");
+                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
                         }
                         break;
                         case 'v':
                         {
                              TriangulationModel::printResults(IDPRINTVERTEX);
-                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt");
+                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
                         }
                         break;
                         case 'n':
                         {
                              TriangulationModel::printResults(IDPRINTNUM);
-                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulations/ODE Result.txt");
+                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
                         }
                         break;
                         default:

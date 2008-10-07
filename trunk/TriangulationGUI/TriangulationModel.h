@@ -1,9 +1,9 @@
 #include "resources.h"
-#include "triangulation.h"
-#include "triangulationmath.h"
+#include "triangulation/triangulation.h"
+#include "triangulation/triangulationmath.h"
 #include "spherical/sphericalmath.h"
 #include "hyperbolic/hyperbolicmath.h"
-#include "triangulationInputOutput.h"
+#include "triangulation/triangulationInputOutput.h"
 
 class TriangulationModel 
 {
