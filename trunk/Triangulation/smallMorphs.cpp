@@ -113,15 +113,12 @@ int addVertexToFace(Face f, Vertex vb)
     // vector to hold faces that will be added.
     vector<int> faces;
     
-    
-    cout << "Here\n";
     // Add vb to each edge of localE. Store face.
     for(int i = 0; i < localE.size(); i++)
     {
         faces.push_back(addVertexToEdge(Triangulation::edgeTable[localE[i]], 
                          Triangulation::vertexTable[vb.getIndex()]));
     }
-    system("PAUSE");
     // Create Tetra
     Tetra t(Triangulation::greatestTetra() + 1);
     // Place Tetra in Triangulation
@@ -185,9 +182,9 @@ int makeFace(Vertex v1, Vertex v2, Vertex v3) {
 
 int addEdgeToEdge(Edge e1, Edge e2) {
     Vertex v1 = Triangulation::vertexTable[(*(e1.getLocalVertices()))[0]];
-    Vertex v2 = Triangulation::vertexTable[(*(e2.getLocalVertices()))[0]];    
+    Vertex v2 = Triangulation::vertexTable[(*(e1.getLocalVertices()))[1]];    
     Face f1 = Triangulation::faceTable[addVertexToEdge(e2, v1)];
-    return addVertexToFace(f1, v2);
+    return addVertexToFace(f1, Triangulation::vertexTable[v2.getIndex()]);
 }
 
 int makeTetra(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
@@ -195,20 +192,4 @@ int makeTetra(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
     Edge e2 = Triangulation::edgeTable[addVertexToVertex(v3, v4)];
     return addEdgeToEdge(e1, e2);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
