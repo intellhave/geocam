@@ -7,6 +7,7 @@ The Small Morphs file holds the functions that perform isolated
 morphs on simplices. These functions are then used in morphs on
 a whole Triangulation.
 **************************************************************/
+#include <iostream>
 #include "smallMorphs.h"
 #include "addRemove.h"
 
@@ -15,9 +16,10 @@ int addVertexToVertex(Vertex va, Vertex vb)
      // Check if edge has already been created by checking
      // if va and vb are already adjacent.
      if(va.isAdjVertex(vb.getIndex())) {
+          cout << " In here\n";
           vector<int> sameAs;
           sameAs = listIntersection(va.getLocalEdges(), vb.getLocalEdges());
-          if(sameAs.size() == 0)
+          if(sameAs.size() == 1)
              return sameAs[0];
      }
      
@@ -43,6 +45,7 @@ int addVertexToEdge(Edge e, Vertex vb)
      // Check if face has already been created by checking
      // if any face already has e and vb.
      map<int, Face>::iterator fit;
+     
      for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
      {
          if(fit->second.isAdjVertex(vb.getIndex()) && fit->second.isAdjEdge(e.getIndex()))
@@ -50,18 +53,18 @@ int addVertexToEdge(Edge e, Vertex vb)
             return fit->first;
          }
      }
-     
+     system("PAUSE");
      // Vertices of Edge e
      vector<int> localV = *(e.getLocalVertices());
      // vector to hold edges that will be created.
      vector<int> edges;
-     
+     cout << e.getIndex() << " adding localv's\n";
      // Add vb to each vertex of localV. Store created edge.
      for(int i = 0; i < localV.size(); i++)
      {
          edges.push_back(addVertexToVertex(Triangulation::vertexTable[localV[i]], vb));
      }
-     
+     cout << e.getIndex() << "done\n";
      // Create Face
      Face f(Triangulation::greatestFace() + 1);
      // Place Face in Triangulation.
@@ -82,7 +85,7 @@ int addVertexToEdge(Edge e, Vertex vb)
      // Add new edges to f
      for(int i = 0; i < edges.size(); i++)
      {
-         add(&Triangulation::edgeTable[localV[i]], 
+         add(&Triangulation::edgeTable[edges[i]], 
              &Triangulation::faceTable[f.getIndex()]);
      }
      // Add local edges of vertices to new edges.
@@ -114,12 +117,14 @@ int addVertexToFace(Face f, Vertex vb)
     // vector to hold faces that will be added.
     vector<int> faces;
     
+    
+    cout << "Here\n";
     // Add vb to each edge of localE. Store face.
     for(int i = 0; i < localE.size(); i++)
     {
         faces.push_back(addVertexToEdge(Triangulation::edgeTable[localE[i]], vb));
     }
-    
+    system("PAUSE");
     // Create Tetra
     Tetra t(Triangulation::greatestTetra());
     // Place Tetra in Triangulation

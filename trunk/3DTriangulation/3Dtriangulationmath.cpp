@@ -26,7 +26,18 @@ double dihedralAngle(Vertex v, Tetra t)
        
        return dihedralAngle(angle1, angle2, angle3);
 }
-
+bool isDegenerate(Tetra t)
+{
+     vector<int> localV = *(t.getLocalVertices());
+     double sum = 0;
+     for(int i = 0; i < localV.size(); i++)
+     {
+        Vertex v = Triangulation::vertexTable[localV[i]];
+        sum += v.getRadius() * v.getRadius();
+        sum -= 2*v.getRadius();
+     }
+     return sum < 0;
+}
 double curvature3D(Vertex v)
 {
        // For each tetra containing v, get the dihedral angle at v.

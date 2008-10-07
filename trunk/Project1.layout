@@ -94,7 +94,7 @@ Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Focused=23
+Focused=-1
 =======
 Focused=0
 =======
@@ -199,7 +199,11 @@ Focused=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
+<<<<<<< .mine
+Order=24,23,-1,0
+=======
 Order=23,-1,0
+>>>>>>> .r569
 =======
 Order=-1,0
 =======
@@ -462,9 +466,9 @@ Top=0
 >>>>>>> .r400
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=21
-CursorRow=13
-TopLine=1
+CursorCol=1
+CursorRow=30
+TopLine=4
 =======
 <<<<<<< .mine
 CursorCol=2
@@ -1421,13 +1425,13 @@ TopLine=1
 >>>>>>> .r279
 LeftChar=1
 [Editor_11]
-Open=0
+Open=1
 Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 CursorCol=1
 CursorRow=1
-TopLine=1
+TopLine=34
 =======
 CursorCol=7
 CursorRow=14
@@ -1440,13 +1444,13 @@ TopLine=1
 >>>>>>> .r279
 LeftChar=1
 [Editor_12]
-Open=0
-Top=0
+Open=1
+Top=1
 <<<<<<< .mine
 <<<<<<< .mine
 CursorCol=11
 CursorRow=10
-TopLine=1
+TopLine=31
 =======
 =======
 <<<<<<< .mine
@@ -2088,7 +2092,7 @@ LeftChar=1
 <<<<<<< .mine
 Open=1
 <<<<<<< .mine
-Top=1
+Top=0
 =======
 Open=1
 Top=1
@@ -2131,7 +2135,7 @@ CursorRow=35
 TopLine=25
 =======
 CursorRow=952
-TopLine=1
+TopLine=19
 >>>>>>> .r568
 =======
 <<<<<<< .mine
@@ -2219,7 +2223,7 @@ CursorRow=13
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-TopLine=1
+TopLine=16
 LeftChar=1
 =======
 TopLine=11
@@ -2232,7 +2236,7 @@ TopLine=35
 LeftChar=1
 >>>>>>> .r389
 [Editor_25]
-Open=0
+Open=1
 <<<<<<< .mine
 Top=0
 =======
@@ -2243,9 +2247,9 @@ Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=11
-CursorRow=2
-TopLine=1
+CursorCol=21
+CursorRow=36
+TopLine=24
 =======
 <<<<<<< .mine
 CursorCol=10
@@ -2281,15 +2285,15 @@ LeftChar=1
 [Editor_21]
 =======
 [Editor_26]
-Open=0
+Open=1
 Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 >>>>>>> .r358
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=25
-CursorRow=1
+CursorCol=37
+CursorRow=4
 TopLine=1
 =======
 <<<<<<< .mine
@@ -2739,7 +2743,7 @@ LeftChar=1
 >>>>>>> .r541
 <<<<<<< .mine
 [Editor_39]
-Open=1
+Open=0
 <<<<<<< .mine
 Top=0
 CursorCol=45
@@ -2755,6 +2759,11 @@ LeftChar=1
 Open=1
 Top=0
 <<<<<<< .mine
+CursorCol=7
+CursorRow=24
+TopLine=7
+=======
+<<<<<<< .mine
 CursorCol=1
 CursorRow=174
 TopLine=1
@@ -2762,6 +2771,7 @@ TopLine=1
 CursorCol=64
 CursorRow=9
 TopLine=1
+>>>>>>> .r569
 >>>>>>> .r568
 LeftChar=1
 =======
