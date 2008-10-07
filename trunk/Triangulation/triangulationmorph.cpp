@@ -1811,18 +1811,31 @@ void addCrossCap(Face f, double newRadius)
 }
 
 void oneThreeMove(Face f) {
-     Edge e1 = Triangulation::edgeTable[(*(f.getLocalEdges()))[0]];
-     Edge e2 = Triangulation::edgeTable[(*(f.getLocalEdges()))[1]];
-     Edge e3 = Triangulation::edgeTable[(*(f.getLocalEdges()))[2]];
-     Vertex v(Triangulation::greatestVertex() + 1);
-     Triangulation::putVertex(v.getIndex(), v);
-     Triangulation::eraseFace(f.getIndex());
      
-     addVertexToEdge(e1, v);
-     addVertexToEdge(Triangulation::edgeTable[e2.getIndex()], 
-     Triangulation::vertexTable[v.getIndex()]);
-     addVertexToEdge(Triangulation::edgeTable[e3.getIndex()], 
-     Triangulation::vertexTable[v.getIndex()]);
+     Vertex v(Triangulation::greatestVertex() + 1);
+     addVertexToFace(f, v);
+     Triangulation::eraseFace(f.getIndex());
+     Triangulation::eraseTetra(t.getIndex());
+     
+//     Edge e1 = Triangulation::edgeTable[(*(f.getLocalEdges()))[0]];
+//     Edge e2 = Triangulation::edgeTable[(*(f.getLocalEdges()))[1]];
+//     Edge e3 = Triangulation::edgeTable[(*(f.getLocalEdges()))[2]];
+//     
+//     vector<int> sameAs;
+//     sameAs = listIntersection(f.getLocalFaces(), e1.getLocalFaces());
+//     
+//     
+//     Vertex v(Triangulation::greatestVertex() + 1);
+//     Triangulation::putVertex(v.getIndex(), v);
+//     Triangulation::eraseFace(f.getIndex());
+//     
+//     Face fb1 = Triangulation::faceTable[addVertexToEdge(e1, v)];
+//     Face fb2 = Triangulation::faceTable[addVertexToEdge(Triangulation::edgeTable[e2.getIndex()], 
+//                Triangulation::vertexTable[v.getIndex()])];
+//     Face fb3 = Triangulation::faceTable[addVertexToEdge(Triangulation::edgeTable[e3.getIndex()], 
+//                Triangulation::vertexTable[v.getIndex()])];
+     
+     
      
 }
 
