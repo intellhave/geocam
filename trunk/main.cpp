@@ -15,18 +15,9 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {   
-    Vertex v1(1);
-    Triangulation::putVertex(1, v1);
-    Vertex v2(2);
-    Triangulation::putVertex(2, v2);
-    addVertexToVertex(v1, v2);
-    Vertex v3(3);
-    Triangulation::putVertex(3, v3);
-    Vertex v4(4);
-    Triangulation::putVertex(4, v4);
-    addVertexToVertex(v3, v4);
-    addEdgeToEdge(Triangulation::edgeTable[1], Triangulation::edgeTable[2]);
-    write3DTriangulationFile("Triangulation Files/test.txt");
+    readTriangulationFile("Triangulation Files/Tetrahedron.txt");
+    oneThreeMove(Triangulation::faceTable[1]);
+    writeTriangulationFile("Triangulation Files/test.txt");
 
 
     system("PAUSE");

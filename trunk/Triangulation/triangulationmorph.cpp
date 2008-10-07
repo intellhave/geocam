@@ -1815,12 +1815,14 @@ void oneThreeMove(Face f) {
      Edge e2 = Triangulation::edgeTable[(*(f.getLocalEdges()))[1]];
      Edge e3 = Triangulation::edgeTable[(*(f.getLocalEdges()))[2]];
      Vertex v(Triangulation::greatestVertex() + 1);
-     
+     Triangulation::putVertex(v.getIndex(), v);
      Triangulation::eraseFace(f.getIndex());
      
      addVertexToEdge(e1, v);
-     addVertexToEdge(e2, v);
-     addVertexToEdge(e3, v);
+     addVertexToEdge(Triangulation::edgeTable[e2.getIndex()], 
+     Triangulation::vertexTable[v.getIndex()]);
+     addVertexToEdge(Triangulation::edgeTable[e3.getIndex()], 
+     Triangulation::vertexTable[v.getIndex()]);
      
 }
 

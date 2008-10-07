@@ -466,9 +466,9 @@ Top=0
 >>>>>>> .r400
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=41
-CursorRow=29
-TopLine=6
+CursorCol=47
+CursorRow=19
+TopLine=1
 =======
 <<<<<<< .mine
 CursorCol=2
@@ -2686,7 +2686,7 @@ Top=0
 [Editor_34]
 CursorCol=1
 CursorRow=11
-TopLine=1
+TopLine=166
 LeftChar=1
 Open=0
 Top=0
@@ -2704,11 +2704,11 @@ LeftChar=1
 Open=0
 Top=0
 [Editor_36]
-Open=0
-Top=0
+Open=1
+Top=1
 <<<<<<< .mine
-CursorCol=27
-CursorRow=1837
+CursorCol=49
+CursorRow=1824
 TopLine=1812
 =======
 CursorCol=44
@@ -2757,7 +2757,7 @@ TopLine=1
 LeftChar=1
 [Editor_40]
 Open=1
-Top=1
+Top=0
 <<<<<<< .mine
 CursorCol=72
 CursorRow=185
