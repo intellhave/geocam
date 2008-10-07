@@ -16,10 +16,9 @@ int addVertexToVertex(Vertex va, Vertex vb)
      // Check if edge has already been created by checking
      // if va and vb are already adjacent.
      if(va.isAdjVertex(vb.getIndex())) {
-          cout << " In here\n";
           vector<int> sameAs;
           sameAs = listIntersection(va.getLocalEdges(), vb.getLocalEdges());
-          if(sameAs.size() == 1)
+          if(sameAs.size() > 0)
              return sameAs[0];
      }
      
@@ -53,18 +52,15 @@ int addVertexToEdge(Edge e, Vertex vb)
             return fit->first;
          }
      }
-     system("PAUSE");
      // Vertices of Edge e
      vector<int> localV = *(e.getLocalVertices());
      // vector to hold edges that will be created.
      vector<int> edges;
-     cout << e.getIndex() << " adding localv's\n";
      // Add vb to each vertex of localV. Store created edge.
      for(int i = 0; i < localV.size(); i++)
      {
          edges.push_back(addVertexToVertex(Triangulation::vertexTable[localV[i]], vb));
      }
-     cout << e.getIndex() << "done\n";
      // Create Face
      Face f(Triangulation::greatestFace() + 1);
      // Place Face in Triangulation.
@@ -122,11 +118,12 @@ int addVertexToFace(Face f, Vertex vb)
     // Add vb to each edge of localE. Store face.
     for(int i = 0; i < localE.size(); i++)
     {
-        faces.push_back(addVertexToEdge(Triangulation::edgeTable[localE[i]], vb));
+        faces.push_back(addVertexToEdge(Triangulation::edgeTable[localE[i]], 
+                         Triangulation::vertexTable[vb.getIndex()]));
     }
     system("PAUSE");
     // Create Tetra
-    Tetra t(Triangulation::greatestTetra());
+    Tetra t(Triangulation::greatestTetra() + 1);
     // Place Tetra in Triangulation
     Triangulation::putTetra(t.getIndex(), t);
     
