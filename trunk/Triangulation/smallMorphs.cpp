@@ -180,3 +180,38 @@ int addVertexToFace(Face f, Vertex vb)
     // Return t's index
     return t.getIndex();
 }
+
+int makeFace(Vertex v1, Vertex v2, Vertex v3) {    
+    Edge e = Triangulation::edgeTable[addVertexToVertex(v1, v2)];
+    return addVertexToEdge(e, v3);
+}
+
+int addEdgeToEdge(Edge e1, Edge e2) {
+    Vertex v1 = Triangulation::vertexTable[(*(e1.getLocalVertices()))[0]];
+    Vertex v2 = Triangulation::vertexTable[(*(e2.getLocalVertices()))[0]];    
+    Face f1 = Triangulation::faceTable[addVertexToEdge(e2, v1)];
+    return addVertexToFace(f1, v2);
+}
+
+int makeTetra(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+    Edge e1 = Triangulation::edgeTable[addVertexToVertex(v1, v2)];
+    Edge e2 = Triangulation::edgeTable[addVertexToVertex(v3, v4)];
+    return addEdgeToEdge(e1, e2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

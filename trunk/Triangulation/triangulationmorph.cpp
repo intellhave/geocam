@@ -1810,6 +1810,54 @@ void addCrossCap(Face f, double newRadius)
      
 }
 
+void oneThreeMove(Face f) {
+     Edge e1 = Triangulation::edgeTable[(*(f.getLocalEdges()))[0]];
+     Edge e2 = Triangulation::edgeTable[(*(f.getLocalEdges()))[1]];
+     Edge e3 = Triangulation::edgeTable[(*(f.getLocalEdges()))[2]];
+     Vertex v(Triangulation::greatestVertex() + 1);
+     
+     Triangulation::eraseFace(f.getIndex());
+     
+     addVertexToEdge(e1, v);
+     addVertexToEdge(e2, v);
+     addVertexToEdge(e3, v);
+     
+}
+
+void threeOneMove(Vertex v) {
+     Vertex v1 = Triangulation::vertexTable[(*(v.getLocalVertices()))[0]];
+     Vertex v2 = Triangulation::vertexTable[(*(v.getLocalVertices()))[1]];
+     Vertex v3 = Triangulation::vertexTable[(*(v.getLocalVertices()))[2]];
+     
+     for(int i = 0; i < v.getLocalEdges()->size(); i++) {
+             Triangulation::eraseEdge((*(v.getLocalEdges()))[i]);
+     }
+     for(int i = 0; i < v.getLocalFaces()->size(); i++) {
+             Triangulation::eraseFace((*(v.getLocalFaces()))[i]);
+     }
+     
+     makeFace(v1, v2, v3);
+     
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

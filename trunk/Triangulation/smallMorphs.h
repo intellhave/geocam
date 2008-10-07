@@ -9,6 +9,7 @@ a whole Triangulation.
 **************************************************************/
 #include "triangulation.h"
 
+
 /*
  * This function takes a vertex and adds it to another forming an edge and
  * returns that edge's index. References are made between the vertices and 
@@ -41,3 +42,7 @@ int addVertexToEdge(Edge e, Vertex vb);
  *                          E-T, F-T, T-V, T-E, T-F.
  */
 int addVertexToFace(Face F, Vertex vb);
+
+int makeFace(Vertex, Vertex, Vertex);
+int addEdgeToEdge(Edge, Edge);
+int makeTetra(Vertex, Vertex, Vertex, Vertex);

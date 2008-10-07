@@ -7,6 +7,7 @@ The Triangulation Morph file holds the functions that manipulates
 the Triangulation in some way.
 **************************************************************/
 #include "triangulationmath.h"
+#include "smallMorphs.h"
 
 void addNewVertex(Face, double);
 
@@ -19,3 +20,7 @@ void addLeaf(Edge, double);
 void addHandle(Face, double);
 
 void addCrossCap(Face, double);
+
+void oneThreeMove(Face);
+
+void threeOneMove(Vertex);
