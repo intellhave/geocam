@@ -38,13 +38,13 @@ bool read3DTriangulationFile(char* fileName)
          char ignore[5];
          scanner.getline(ignore, 5); // Used to get to next line.
          
-         char localVertices[100];
-         char localEdges[100];
-         char localFaces[100];
-         char localTetras[100];
+         char localVertices[250];
+         char localEdges[250];
+         char localFaces[250];
+         char localTetras[250];
          
          stringstream vertexStream(stringstream::in | stringstream::out);
-         scanner.getline(localVertices, 100);
+         scanner.getline(localVertices, 250);
          vertexStream << localVertices;
          
          while(vertexStream.good()) // While there's another int...
@@ -55,7 +55,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream edgeStream(stringstream::in | stringstream::out);
-         scanner.getline(localEdges, 100);
+         scanner.getline(localEdges, 250);
          edgeStream << localEdges;
          
           while(edgeStream.good())
@@ -66,7 +66,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream faceStream(stringstream::in | stringstream::out);
-         scanner.getline(localFaces, 100);
+         scanner.getline(localFaces, 250);
          faceStream << localFaces;
          
           while(faceStream.good())
@@ -77,7 +77,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream tetraStream(stringstream::in | stringstream::out);
-         scanner.getline(localTetras, 100);
+         scanner.getline(localTetras, 250);
          tetraStream << localTetras;
          
           while(tetraStream.good())
@@ -99,13 +99,13 @@ bool read3DTriangulationFile(char* fileName)
          char ignore[5];
          scanner.getline(ignore, 5);
          
-         char localVertices[100];
-         char localEdges[100];
-         char localFaces[100];
-         char localTetras[100];
+         char localVertices[250];
+         char localEdges[250];
+         char localFaces[250];
+         char localTetras[250];
          
          stringstream vertexStream(stringstream::in | stringstream::out);
-         scanner.getline(localVertices, 100);
+         scanner.getline(localVertices, 250);
          vertexStream << localVertices;
          
          while(vertexStream.good())
@@ -116,7 +116,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream edgeStream(stringstream::in | stringstream::out);
-         scanner.getline(localEdges, 100);
+         scanner.getline(localEdges, 250);
          edgeStream << localEdges;
          
          while(edgeStream.good())
@@ -127,7 +127,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream faceStream(stringstream::in | stringstream::out);
-         scanner.getline(localFaces, 100);
+         scanner.getline(localFaces, 250);
          faceStream << localFaces;
          
          while(faceStream.good())
@@ -138,7 +138,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream tetraStream(stringstream::in | stringstream::out);
-         scanner.getline(localTetras, 100);
+         scanner.getline(localTetras, 250);
          tetraStream << localTetras;
          
           while(tetraStream.good())
@@ -160,13 +160,13 @@ bool read3DTriangulationFile(char* fileName)
          char ignore[5];
          scanner.getline(ignore, 5);
          
-         char localVertices[100];
-         char localEdges[100];
-         char localFaces[100];
-         char localTetras[100];
+         char localVertices[250];
+         char localEdges[250];
+         char localFaces[250];
+         char localTetras[250];
          
          stringstream vertexStream(stringstream::in | stringstream::out);
-         scanner.getline(localVertices, 100);
+         scanner.getline(localVertices, 250);
          vertexStream << localVertices;
          
          while(vertexStream.good())
@@ -177,7 +177,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream edgeStream(stringstream::in | stringstream::out);
-         scanner.getline(localEdges, 100);
+         scanner.getline(localEdges, 250);
          edgeStream << localEdges;
          
           while(edgeStream.good())
@@ -188,7 +188,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream faceStream(stringstream::in | stringstream::out);
-         scanner.getline(localFaces, 100);
+         scanner.getline(localFaces, 250);
          faceStream << localFaces;
          
           while(faceStream.good())
@@ -199,7 +199,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream tetraStream(stringstream::in | stringstream::out);
-         scanner.getline(localTetras, 100);
+         scanner.getline(localTetras, 250);
          tetraStream << localTetras;
          
           while(tetraStream.good())
@@ -220,13 +220,13 @@ bool read3DTriangulationFile(char* fileName)
          char ignore[5];
          scanner.getline(ignore, 5);
          
-         char localVertices[100];
-         char localEdges[100];
-         char localFaces[100];
-         char localTetras[100];
+         char localVertices[250];
+         char localEdges[250];
+         char localFaces[250];
+         char localTetras[250];
          
          stringstream vertexStream(stringstream::in | stringstream::out);
-         scanner.getline(localVertices, 100);
+         scanner.getline(localVertices, 250);
          vertexStream << localVertices;
          
          while(vertexStream.good())
@@ -237,7 +237,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream edgeStream(stringstream::in | stringstream::out);
-         scanner.getline(localEdges, 100);
+         scanner.getline(localEdges, 250);
          edgeStream << localEdges;
          
           while(edgeStream.good())
@@ -248,7 +248,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream faceStream(stringstream::in | stringstream::out);
-         scanner.getline(localFaces, 100);
+         scanner.getline(localFaces, 250);
          faceStream << localFaces;
          
           while(faceStream.good())
@@ -259,7 +259,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          stringstream tetraStream(stringstream::in | stringstream::out);
-         scanner.getline(localTetras, 100);
+         scanner.getline(localTetras, 250);
          tetraStream << localTetras;
          
           while(tetraStream.good())

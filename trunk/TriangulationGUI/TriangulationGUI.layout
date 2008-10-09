@@ -11,10 +11,10 @@ Order=1,2,0,22,21
 [Editor_0]
 Open=1
 Top=1
-CursorCol=31
-CursorRow=500
-TopLine=477
-LeftChar=26
+CursorCol=29
+CursorRow=362
+TopLine=348
+LeftChar=17
 [Editor_1]
 Open=1
 Top=0
@@ -113,7 +113,7 @@ Open=1
 Top=0
 CursorCol=69
 CursorRow=120
-TopLine=99
+TopLine=1
 LeftChar=1
 [Editor_22]
 Open=1

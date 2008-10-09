@@ -152,7 +152,9 @@ int addVertexToFace(Face f, Vertex vb)
     // Add local faces of f's edges to new faces.
      for(int i = 0; i < faces.size(); i++)
      {
-        vector<int> localF = *(Triangulation::vertexTable[localE[i]].getLocalFaces());
+        vector<int> edges = listIntersection(f.getLocalEdges(), 
+                           Triangulation::faceTable[faces[i]].getLocalEdges());
+        vector<int> localF = *(Triangulation::edgeTable[edges[0]].getLocalFaces());
         for(int j = 0; j < localF.size(); j++)
         {
           if(localF[j] != faces[i])
