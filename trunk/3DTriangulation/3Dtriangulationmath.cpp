@@ -1,4 +1,5 @@
 #include "3Dtriangulationmath.h"
+#include "3DInputOutput.h"
 #include "triangulation/triangulation.h"
 #include "spherical/sphericalmath.h"
 #include "miscmath.h"
@@ -26,18 +27,26 @@ double dihedralAngle(Vertex v, Tetra t)
        
        return dihedralAngle(angle1, angle2, angle3);
 }
+double volumeSq(Tetra t) 
+{
+   vector<int> localV = *(t.getLocalVertices());
+   double radii[4] = {0};
+   for(int i = 0; i < localV.size(); i++)
+   {
+       radii[i] = Triangulation::vertexTable[localV[i]].getRadius();
+   }
+   return volumeSq(radii[0], radii[1], radii[2], radii[3]);
+}
+double volumeSq(double r1, double r2, double r3, double r4)
+{
+   double sum1 = 1/r1 + 1/r2 + 1/r3 + 1/r4;
+   double sum2 = 1/(r1 * r1) + 1/(r2 * r2) + 1/(r3 * r3) + 1/(r4 * r4);
+   double product = 1/9.0 * (r1 * r1) * (r2 * r2) * (r3 * r3) * (r4 * r4);
+   return product * (sum1 * sum1 - 2 * sum2);
+}
 bool isDegenerate(Tetra t)
 {
-     vector<int> localV = *(t.getLocalVertices());
-     double sum1 = 0;
-     double sum2 = 0;
-     for(int i = 0; i < localV.size(); i++)
-     {
-        Vertex v = Triangulation::vertexTable[localV[i]];
-        sum1 += 1 / v.getRadius();
-        sum2 += 1 / ( v.getRadius() * v.getRadius() );
-     }
-     return sum1 * sum1 - 2 * sum2 > 0;
+     return volumeSq(t) > 0;
 }
 double curvature3D(Vertex v)
 {
@@ -57,7 +66,7 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
 {
   int p = Triangulation::vertexTable.size(); // The number of vertices or 
                                              // number of variables in system.
-                                         
+  vector<double> volumes;                                       
   double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data for 
                                       // the intermediate steps in.
   int    i,k; // ints used for "for loops". i is the step number,
@@ -66,7 +75,7 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
   // Beginning and Ending pointers. (Used for "for" loops)
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
-  
+  map<int, Tetra>::iterator tit;
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
    for (k=0; k<p; k++) {
@@ -81,6 +90,10 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
        {
            // Set the radii of the Triangulation.
            vit->second.setRadius(z[k]);
+       }
+       for (tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
+       {
+           volumes.push_back(volumeSq(tit->second));
        }
 //  ***     if(i == 1) // If first time through, use static method to calculate total
 //  ***     {           // cuvature.
@@ -141,6 +154,7 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
          
        }
    }
+   printResultsVolumes("Triangulation Files/Volume Results.txt", &volumes);
 }
 
 double stdDiffEQ3D(int vertex) 

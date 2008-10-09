@@ -2,6 +2,8 @@
 
 double dihedralAngle(double, double, double);
 double dihedralAngle(Vertex, Tetra);
+double volumeSq(Tetra);
+double volumeSq(double, double, double, double);
 bool isDegenerate(Tetra);
 double curvature3D(Vertex);
 void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
