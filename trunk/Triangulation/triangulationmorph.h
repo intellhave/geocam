@@ -8,6 +8,7 @@ the Triangulation in some way.
 **************************************************************/
 #include "triangulationmath.h"
 #include "smallMorphs.h"
+#include "addremove.h"
 
 void addNewVertex(Face, double);
 

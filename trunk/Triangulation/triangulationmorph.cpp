@@ -9,6 +9,7 @@ the Triangulation in some way.
 #include <cmath>
 #include <iostream>
 #include "triangulationmorph.h"
+#include "triangulationInputOutput.h"
 #define PI 	3.141592653589793238
 
 void addNewVertex(Face f, double newRadius)
@@ -1831,9 +1832,21 @@ void threeOneMove(Vertex v) {
      for(int i = 0; i < v.getLocalFaces()->size(); i++) {
              Triangulation::eraseFace((*(v.getLocalFaces()))[i]);
      }
+     Triangulation::eraseVertex(v.getIndex());
      
-     makeFace(v1, v2, v3);
+     vector<int> sameAs;
+     sameAs = listIntersection(v1.getLocalEdges(), v2.getLocalEdges());
+     Edge e1 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(v1.getLocalEdges(), v3.getLocalEdges());
+     Edge e2 = Triangulation::edgeTable[sameAs[0]];
+     sameAs = listIntersection(v2.getLocalEdges(), v3.getLocalEdges());
+     Edge e3 = Triangulation::edgeTable[sameAs[0]];
      
+     Face f = Triangulation::faceTable[makeFace(v1, v2, v3)];
+     add(&Triangulation::faceTable[(*(e1.getLocalFaces()))[0]], &Triangulation::faceTable[f.getIndex()]);
+     add(&Triangulation::faceTable[(*(e2.getLocalFaces()))[0]], &Triangulation::faceTable[f.getIndex()]);
+     add(&Triangulation::faceTable[(*(e3.getLocalFaces()))[0]], &Triangulation::faceTable[f.getIndex()]);
+          
 }
 
 
