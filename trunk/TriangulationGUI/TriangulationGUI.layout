@@ -7,16 +7,16 @@ Open=0
 Top=0
 [Editors]
 <<<<<<< .mine
-Focused=-1
-Order=-1
+Focused=0
+Order=0
 =======
 Focused=0
 Order=1,2,0,22,21
 >>>>>>> .r579
 [Editor_0]
-Open=0
+Open=1
 <<<<<<< .mine
-Top=0
+Top=1
 CursorCol=29
 CursorRow=527
 TopLine=326
@@ -129,14 +129,14 @@ Top=0
 Open=0
 Top=0
 [Editor_21]
-Open=1
+Open=0
 Top=0
 CursorCol=69
 CursorRow=120
 TopLine=1
 LeftChar=1
 [Editor_22]
-Open=1
+Open=0
 Top=0
 CursorCol=25
 CursorRow=6

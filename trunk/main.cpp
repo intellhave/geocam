@@ -7,12 +7,7 @@ Version: June 10, 2008
 #include "3DTriangulation/3DInputOutput.h"
 #include <iostream>
 #include <cmath>
-<<<<<<< .mine
-#include "triangulation/smallMorphs.h"
-#include "3DTriangulation/3DTriangulationMorph.h"
-=======
 #include <ctime>
->>>>>>> .r579
 #include "triangulation/triangulationPlane.h"
 #include "3DTriangulation/3Dtriangulationmath.h"
 #include "triangulation/smallmorphs.h"
@@ -22,7 +17,6 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {   
-<<<<<<< .mine
 //    generateTriangulation(60);
 //    
 //    char from[] = "Triangulation Files/sphere3.txt";
@@ -32,20 +26,20 @@ int main(int argc, char *argv[])
 //    system("PAUSE");
 //    return 0;
       
-      Vertex v1(1);
-      Triangulation::putVertex(v1.getIndex(), v1);
-      Vertex v2(2);
-      Triangulation::putVertex(v2.getIndex(), v2);
-      Vertex v3(3);
-      Triangulation::putVertex(v3.getIndex(), v3);
-      Vertex v4(4);
-      Triangulation::putVertex(v4.getIndex(), v4);
-      Edge e1 = Triangulation::edgeTable[addVertexToVertex(v1, v2)];
-      Face f1 = Triangulation::faceTable[addVertexToEdge(e1, v3)];
-      Tetra t1 = Triangulation::tetraTable[addVertexToFace(f1, v4)];
-      Vertex v5(5);
-      Triangulation::putVertex(v5.getIndex(), v5);
-      addVertexToFace(f1, v5);
+//      Vertex v1(1);
+//      Triangulation::putVertex(v1.getIndex(), v1);
+//      Vertex v2(2);
+//      Triangulation::putVertex(v2.getIndex(), v2);
+//      Vertex v3(3);
+//      Triangulation::putVertex(v3.getIndex(), v3);
+//      Vertex v4(4);
+//      Triangulation::putVertex(v4.getIndex(), v4);
+//      Edge e1 = Triangulation::edgeTable[addVertexToVertex(v1, v2)];
+//      Face f1 = Triangulation::faceTable[addVertexToEdge(e1, v3)];
+//      Tetra t1 = Triangulation::tetraTable[addVertexToFace(f1, v4)];
+//      Vertex v5(5);
+//      Triangulation::putVertex(v5.getIndex(), v5);
+//      addVertexToFace(f1, v5);
       
 //      twoThreeMove(f1);
 /*
@@ -56,12 +50,19 @@ int main(int argc, char *argv[])
  *      include E-E references, vertexToFace include F-F references, etc.
  */
       
-      write3DTriangulationFile("Triangulation Files/test.txt");
-           
-      system("PAUSE");
-      return 0;
-      
-=======
+//      write3DTriangulationFile("Triangulation Files/test.txt");
+//           
+//      system("PAUSE");
+//      return 0;
+
+
+/*
+ * Collecting data on different 3-manifolds. Writing out results in a file
+ * called "Yamabe Results.txt" in the usual place. Also, volume info is in
+ * "Volume Results.txt". "ODE Results" with a 's' is the curvature-radius file.
+ * My Observation: Convergent curvature decreasing depending on # of tetrahedron,
+ * which is directly affecting starting volume since all radii start as 1.
+ */
     vector<double> radii;
     vector<double> curvs;
     
@@ -93,5 +94,5 @@ int main(int argc, char *argv[])
     cout << "Elapsed time was " << difftime(end, start) << " seconds.\n";
     system("PAUSE");
     return 0;
->>>>>>> .r579
+
 }

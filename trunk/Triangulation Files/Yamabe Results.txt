@@ -1,0 +1,33 @@
+Topology	# Vertices	Convergent Curvature	Volume start	Volume end	Radii Behavior
+--------	----------	--------------------	------------	----------	-------------
+Pentachron	5		10.3612			4.71045		0		decrease to 0
+
+Poincare Sphere	16		-0.0748372		84.8528		+inf		very slowly increases after obtaining constant curvature
+
+RP^3		11		4.46745			37.7124		0		decrease to 0
+
+L_3_1		12		2.64323			50.9117		0		decrease to 0
+
+L_4_1		14		1.52434			65.9966		0		decrease to 0
+
+L_5_1		15		0.489610		77.3103		0		decrease to 0 slowly
+
+L_5_2		14		1.19667			67.8823		0		decrease to 0
+
+L_6_1		16		-0.468643		88.6240		+inf		slowly increasing
+
+L_7_1		17		-1.22236		99.9378		+inf		increasing
+
+
+
+cube_space	15		1.54066			70.7107		0		decreases to 0
+
+P_3		15		0.453886		77.3103		0		decreases to 0
+
+octhed-space	15		-0.236137		82.0244		+inf		increasing
+
+truncated
+cub_space	16		-0.369897		87.6812		+inf		increasing
+
+
+
