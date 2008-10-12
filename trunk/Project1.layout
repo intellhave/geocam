@@ -1846,7 +1846,7 @@ LeftChar=2
 <<<<<<< .mine
 CursorCol=1
 CursorRow=28
-TopLine=4
+TopLine=1
 =======
 <<<<<<< .mine
 CursorCol=43
@@ -2283,9 +2283,9 @@ Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=13
-CursorRow=2
-TopLine=137
+CursorCol=9
+CursorRow=97
+TopLine=101
 =======
 <<<<<<< .mine
 CursorCol=10
@@ -2730,9 +2730,9 @@ LeftChar=1
 Open=0
 Top=0
 [Editor_34]
-CursorCol=17
+CursorCol=18
 CursorRow=173
-TopLine=160
+TopLine=64
 LeftChar=1
 Open=0
 Top=0

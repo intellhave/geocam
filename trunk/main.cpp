@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 //           
 //      system("PAUSE");
 //      return 0;
-
+// this is to show dan how to update
 
 /*
  * Collecting data on different 3-manifolds. Writing out results in a file
