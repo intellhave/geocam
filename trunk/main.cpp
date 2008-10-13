@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
             //weights[i] = 1.5 + (rand() % 100) / 100.0;
     }
     double dt = 0.03;
-    int numSteps = 200;
+    int numSteps = 500;
     
     time(&start);
     yamabeFlow(&radii, &curvs, dt, weights, numSteps, false);
