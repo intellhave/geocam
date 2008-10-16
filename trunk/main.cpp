@@ -75,20 +75,27 @@ int main(int argc, char *argv[])
 
     srand(time(NULL));
     double weights[Triangulation::vertexTable.size()];
+//    double weights[16] =
+//    {2.73186,6.06383,6.74304,6.77510,6.77500,6.73368,6.73483,6.60649,6.60666,
+//     6.64489,6.64364,6.65459,5.96322,6.64632,5.51331,5.51328};
+//    
     for(int i = 0; i < Triangulation::vertexTable.size(); i++) {
-//            if(i >= 3 && i <= 12 || i == 14)
-//            {
-//                 weights[i] = 6;
-//            }
-//            else { weights[i] = 1; }
-            weights[i] = 1;
-            //weights[i] = 1.5 + (rand() % 100) / 100.0;
+            if(i >= 1 && i <= 5)
+            {
+                weights[i] = 2;
+            }
+           else { weights[i] = 3; }
+
+//            weights[i] = 1;
+            //weights[i] = 20 + (rand() % 100) / 20.0;
     }
+
+
     double dt = 0.03;
-    int numSteps = 500;
+    int numSteps = 200;
     
     time(&start);
-    yamabeFlow(&radii, &curvs, dt, weights, numSteps, false);
+    yamabeFlow(&radii, &curvs, dt, weights, numSteps, true);
     time(&end);
     printResultsStep("Triangulation Files/ODE Results.txt", &radii, &curvs);
     cout << "Elapsed time was " << difftime(end, start) << " seconds.\n";

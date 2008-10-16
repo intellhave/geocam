@@ -76,29 +76,32 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
   map<int, Tetra>::iterator tit;
-  double net = 0; // Net and prev hold the current and previous
-  double prev;    //  net curvatures, repsectively.
+  double netC = 0; // Net and prev hold the current and previous
+  double netR = 0;
+  double prevC;    //  net curvatures, repsectively.
    for (k=0; k<p; k++) {
     z[k]=initRadii[k]; // z[k] holds the current radii.
    }
    for (i=1; i<numSteps+1; i++) // This is the main loop through each step.
    {
-       //***prev = net; ***// Set prev to net.
-       //***net = 0;   *** // Reset net.
+       prevC = netC; // Set prev to net.
+       netC = 0;    // Reset net.
+       netR = 0;
     
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
            // Set the radii of the Triangulation.
            vit->second.setRadius(z[k]);
+           netR += z[k];
        }
        for (tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
        {
            volumes.push_back(volumeSq(tit->second));
        }
-//  ***     if(i == 1) // If first time through, use static method to calculate total
-//  ***     {           // cuvature.
-//  ***          prev = Triangulation::netCurvature();
-//  ***     }
+       if(i == 1) // If first time through, use static method to calculate total
+       {           // cuvature.
+          prevC = Triangulation::net3DCurvature();
+       }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
        {  // First "for loop" in whole step calculates everything manually.
            (*radii).push_back( z[k]); // Adds the data to the vector.
@@ -110,42 +113,50 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
            else {
                (*curvatures).push_back(curv);
            }
-           // ***net += curv; // Calculating the net curvature.***
+           netC += curv; // Calculating the net curvature.
            // Calculates the differential equation, either normalized or
            // standard.
-           if(adjF) ta[k]= dt * (-1) * curv 
-                           * vit->second.getRadius();
+           if(adjF) ta[k]= dt * ((-1) * curv 
+                           * vit->second.getRadius() +
+                           prevC /  netR
+                           * vit->second.getRadius());
            else     ta[k] = dt * (-1) * curv 
                            * vit->second.getRadius();
            
        }
+       netR = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        { // Set the new radii to our triangulation.
            vit->second.setRadius(z[k]+ta[k]/2);
+           netR += z[k]+ta[k]/2;
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
             // Again calculates the differential equation, but we still need
             // the data in ta[] so we use tb[] now.
-            if(adjF) tb[k]=dt*stdDiffEQ3D(vit->first);
+            if(adjF) tb[k]=dt*adjDiffEQ3D(vit->first, netC, netR);
             else     tb[k]=dt*stdDiffEQ3D(vit->first);
        }
+       netR = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
        {
            vit->second.setRadius(z[k]+tb[k]/2);
+           netR += z[k]+tb[k]/2;
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) tc[k]=dt*stdDiffEQ3D(vit->first);
+            if(adjF) tc[k]=dt*adjDiffEQ3D(vit->first, netC, netR);
             else     tc[k]=dt*stdDiffEQ3D(vit->first);
        }
+       netR = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
        {
            vit->second.setRadius(z[k]+tc[k]);
+           netR += z[k]+tc[k];
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) td[k]=dt*stdDiffEQ3D(vit->first);
+            if(adjF) td[k]=dt*adjDiffEQ3D(vit->first, netC, netR);
             else     td[k]=dt*stdDiffEQ3D(vit->first);
        }
        for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
@@ -160,5 +171,13 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
 double stdDiffEQ3D(int vertex) 
 {
        return (-1) * curvature3D(Triangulation::vertexTable[vertex])
+                   * Triangulation::vertexTable[vertex].getRadius();
+}
+
+double adjDiffEQ3D(int vertex, double totalCurv, double totalRadii)
+{
+       return (-1) * curvature3D(Triangulation::vertexTable[vertex])
+                   * Triangulation::vertexTable[vertex].getRadius() +
+                   totalCurv /  totalRadii
                    * Triangulation::vertexTable[vertex].getRadius();
 }

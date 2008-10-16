@@ -41,8 +41,8 @@ n_g10xs1	26		-10.3790 		254.558		+inf		increasing
 
 3-sphere	6		9.59708			7.54247		0		decreases
 
-3-sphere	7		not converging?		11.3137		0		decreases
+3-sphere	7		9.84349(1)/8.58247(2-7)	11.3137		0		decreases
 
 3-sphere	7		9.02282 (REALLY SLOWLY)	10.3709		0		decreases
 
-3-sphere	8		9.84349(1)/8.17611(2-7)	14.1421		0		decreases
+3-sphere	8		9.84349(1)/8.17611(2-8)	14.1421		0		decreases

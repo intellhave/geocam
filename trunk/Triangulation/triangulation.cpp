@@ -12,6 +12,7 @@ Version: July 16, 2008
 #include <vector>
 #include <iostream>
 #include "spherical/sphericalmath.h"
+#include "3DTriangulation/3Dtriangulationmath.h"
 
 
 map<int, Vertex> Triangulation::vertexTable;
@@ -309,4 +310,15 @@ void Triangulation::setLengths(double* lengths)
        eit->second.setLength(lengths[i]);
        i++;
      }
+}
+
+double Triangulation::net3DCurvature() 
+{
+       double net = 0;
+       map<int, Vertex>::iterator it;
+       for(it = vertexTable.begin(); it != vertexTable.end(); it++)
+       {
+              net += curvature3D((*it).second);
+       }
+       return net; 
 }

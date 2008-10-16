@@ -125,6 +125,8 @@ class Triangulation
      */
     static double netHyperbolicCurvature();
     
+    static double net3DCurvature();
+    
     /*
      * Sets the vertices to the weights provided by an array of 
      * doubles. This requires that one know the order of the vertices
