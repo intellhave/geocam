@@ -19,7 +19,7 @@ a whole Triangulation.
  *
  * The references made are: V-V, V-E, E-V
  */
-int addVertexToVertex(Vertex va, Vertex vb);
+int addVertexToVertex(int, int);
 
 /*
  * This function takes a vertex and adds it to an edge forming a face and
@@ -30,7 +30,7 @@ int addVertexToVertex(Vertex va, Vertex vb);
  *
  * The references made are: V-V, V-E, E-V, E-E, V-F, E-F, F-V, F-E.
  */
-int addVertexToEdge(Edge e, Vertex vb);
+int addVertexToEdge(int, int);
 
 /*
  * This function takes a vertex and adds it to a face forming a tetra and
@@ -41,8 +41,8 @@ int addVertexToEdge(Edge e, Vertex vb);
  * The references made are: V-V, V-E, E-V, E-E, V-F, E-F, F-V, F-E, F-F, V-T,
  *                          E-T, F-T, T-V, T-E, T-F.
  */
-int addVertexToFace(Face F, Vertex vb);
+int addVertexToFace(int, int);
 
-int makeFace(Vertex, Vertex, Vertex);
-int addEdgeToEdge(Edge, Edge);
-int makeTetra(Vertex, Vertex, Vertex, Vertex);
+int makeFace(int, int, int);
+int addEdgeToEdge(int, int);
+int makeTetra(int, int, int, int);

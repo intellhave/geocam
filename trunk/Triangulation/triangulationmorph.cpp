@@ -1815,7 +1815,7 @@ void oneThreeMove(Face f) {
      
      Vertex v(Triangulation::greatestVertex() + 1);
      Triangulation::putVertex(v.getIndex(), v);
-     int t = addVertexToFace(f, v);
+     int t = addVertexToFace(f.getIndex(), v.getIndex());
      Triangulation::eraseFace(f.getIndex());
      Triangulation::eraseTetra(t);
           
@@ -1842,7 +1842,7 @@ void threeOneMove(Vertex v) {
      sameAs = listIntersection(v2.getLocalEdges(), v3.getLocalEdges());
      Edge e3 = Triangulation::edgeTable[sameAs[0]];
      
-     Face f = Triangulation::faceTable[makeFace(v1, v2, v3)];
+     Face f = Triangulation::faceTable[makeFace(v1.getIndex(), v2.getIndex(), v3.getIndex())];
      add(&Triangulation::faceTable[(*(e1.getLocalFaces()))[0]], &Triangulation::faceTable[f.getIndex()]);
      add(&Triangulation::faceTable[(*(e2.getLocalFaces()))[0]], &Triangulation::faceTable[f.getIndex()]);
      add(&Triangulation::faceTable[(*(e3.getLocalFaces()))[0]], &Triangulation::faceTable[f.getIndex()]);
