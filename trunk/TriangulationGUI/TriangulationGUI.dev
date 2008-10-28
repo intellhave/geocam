@@ -1,7 +1,7 @@
 [Project]
 FileName=TriangulationGUI.dev
 Name=TriangulationGUI
-UnitCount=44
+UnitCount=46
 Type=0
 Ver=1
 ObjFiles=
@@ -478,6 +478,26 @@ BuildCmd=
 
 [Unit44]
 FileName=..\addremove.h
+CompileCpp=1
+Folder=TriangulationGUI
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit45]
+FileName=..\3DTriangulation\3Dtriangulationmath.cpp
+CompileCpp=1
+Folder=TriangulationGUI
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit46]
+FileName=..\3DTriangulation\3Dtriangulationmath.h
 CompileCpp=1
 Folder=TriangulationGUI
 Compile=1

@@ -1,6 +1,5 @@
 #include "TriangulationModel.h"
 
-
 vector<double> TriangulationModel::weights;
 vector<double> TriangulationModel::curvs;
 int TriangulationModel::numSteps;
@@ -71,6 +70,11 @@ bool TriangulationModel::runCalcFlow(double* weightArr, int type)
              hyperbolicCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
         break;
+        case ID_RUN_FLOW_YAMABE:
+        {
+             yamabeFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
+        }
+        break;
         default: return false;
      }
      return true;
@@ -90,6 +94,27 @@ bool TriangulationModel::loadFile(char* filename, int format)
        {
             makeTriangulationFile(filename, "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
             readTriangulationFile("C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
+            loaded = true;
+       }
+       break;
+       default: return false;
+    }
+    return true;
+}
+bool TriangulationModel::load3DFile(char* filename, int format)
+{
+    switch(format) 
+    {
+       case IDSTANDARD:
+       {
+            read3DTriangulationFile(filename);
+            loaded = true;
+       }
+       break;
+       case IDLUTZ:
+       {
+            make3DTriangulationFile(filename, "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
+            read3DTriangulationFile("C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
             loaded = true;
        }
        break;
@@ -118,6 +143,11 @@ bool TriangulationModel::printResults(int printType)
          case IDPRINTNUM:
          {
               printResultsNum("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
+         }
+         break;
+         case IDPRINTNUMSTEP:
+         {
+              printResultsNumSteps("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
          }
          break;
          default: return false;

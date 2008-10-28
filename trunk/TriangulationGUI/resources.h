@@ -3,6 +3,7 @@
 #define IDD_MAIN        102
 #define IDD_CHOOSEFILETYPE 103
 #define IDD_FLOWDIALOG     104
+#define IDD_POLYGON        105
 #define ID_FILE_EXIT                    40001
 #define ID_FILE_LOAD_MANIFOLD           40002
 #define ID_FILE_LOAD_PLANE              40003
@@ -14,6 +15,8 @@
 #define ID_RUN_FLOW_HYPERBOLIC          40009
 #define ID_RUN_FLIPALGORITHM            40010
 #define ID_RUN_WEIGHTEDFLIPALGORITHM    40011
+#define ID_FILE_LOAD_3DMANIFOLD         40012
+#define ID_RUN_FLOW_YAMABE              40013
 #define IDC_CONSOLE                     1001
 #define IDC_RESULTSBUTTON               1002
 #define IDC_RESULTSFIELD                1003
@@ -24,6 +27,7 @@
 #define IDC_RESULTSSELECTBOX            1008
 #define IDC_FLOWSELECTBOX               1009
 #define IDC_HIDDENTEXT                  1010
+#define IDC_POLYGON                     1011
 #define IDSTANDARD                      5001
 #define IDLUTZ                          5002
 #define IDPRINTSTEP                     5003
@@ -31,3 +35,5 @@
 #define IDPRINTNUM                      5005
 #define IDWEIGHTSRANDOM                 5006
 #define IDWEIGHTSFILE                   5007
+#define IDPRINTNUMSTEP                  5008
+#define IDPOLYGON                       5009

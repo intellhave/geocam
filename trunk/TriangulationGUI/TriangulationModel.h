@@ -4,7 +4,8 @@
 #include "spherical/sphericalmath.h"
 #include "hyperbolic/hyperbolicmath.h"
 #include "triangulation/triangulationInputOutput.h"
-
+#include "3DTriangulation/3DInputOutput.h"
+#include "3DTriangulation/3Dtriangulationmath.h"
 class TriangulationModel 
 {
       static bool loaded;
@@ -24,6 +25,7 @@ class TriangulationModel
       static void setFlowFunction(bool);
       static bool runCalcFlow(double*, int);
       static bool loadFile(char*, int);
+      static bool load3DFile(char*, int);
       static bool saveFile(char*);
       static bool printResults(int);
       static bool isLoaded();

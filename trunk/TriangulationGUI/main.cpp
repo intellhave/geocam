@@ -1,11 +1,16 @@
 #include <windows.h>
 #include <ctime>
 #include <fstream>
+#include <cmath>
 #include <vector>
 #include "resources.h"
 #include "TriangulationModel.h"
+#define PI 	3.141592653589793238
 #include <gl/gl.h>
-
+BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
+VOID EnableOpenGL( HWND hWnd, HDC * hDC, HGLRC * hRC );
+VOID DisableOpenGL( HWND hWnd, HDC hDC, HGLRC hRC );
+HINSTANCE hInst;
 void FileChooser(HWND hwnd, LPSTR szFileName)
 {
 	OPENFILENAME ofn;
@@ -107,7 +112,63 @@ void UpdateConsole(HWND hwnd, LPSTR message)
         GlobalFree((HANDLE)buf2);
     }
 }
+BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
+{
+     switch(Message)
+     {
+        case WM_INITDIALOG:
+        {
 
+        }
+        break;
+        case WM_COMMAND:
+            switch(LOWORD(wParam))
+            {
+                case IDPOLYGON: 
+                {
+                   HWND hPoly = GetDlgItem(hwnd, IDC_POLYGON);
+                   HDC hDC;
+                   HGLRC hRC;
+                   ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
+        
+                   EnableOpenGL( hPoly, &hDC, &hRC );
+                   // program main loop
+                   while (scanner.good()) 
+                   {
+                      
+                      SwapBuffers( hDC );
+                      int size = Triangulation::vertexTable.size();
+                      double curv[size];
+                      for(int i = 0; i < size; i++)
+                      {
+                          scanner >> curv[i];
+                      }
+                      glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+                      glClear(GL_COLOR_BUFFER_BIT); 
+                      glBegin(GL_LINE_LOOP);
+                      glColor3f( 0.0f, 0.0f, 0.0f ); 
+                      for(int i = 0; i < size; i++)
+                      {
+                          double angle = 2 * PI / size * i;
+                          glVertex2f((curv[i]) / 12 * cos(angle), (curv[i]) / 12 * sin(angle));              
+                      }
+                      glEnd();
+            
+                      Sleep(100);
+                    }
+                    DisableOpenGL( hPoly, hDC, hRC );
+                }
+                break;
+                case IDCANCEL:
+                    EndDialog(hwnd, IDCANCEL);
+                break;
+            }
+        break;
+        default:
+            return FALSE;
+    }
+    return TRUE;
+}
 BOOL CALLBACK FormatDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
      switch(Message)
@@ -232,6 +293,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
            SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Group by step");
            SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Group by vertex");
            SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Numbers only");
+           SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Polygon Flow");
            SetDlgItemText(hwnd, IDC_CONSOLE, "Welcome to the Triangulation Program\r\n");
            HWND hHiddenEdit = GetDlgItem(hwnd, IDC_HIDDENTEXT);
            ShowWindow(hHiddenEdit, SW_HIDE);
@@ -281,7 +343,43 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                      }
                 }
                 break;
-                
+                case ID_FILE_LOAD_3DMANIFOLD:
+                {
+                     char filename[MAX_PATH] ="";
+                     FileChooser((HWND)hwnd, (LPSTR) filename);
+                     UpdateConsole(hwnd, "Loading file...\r\n");
+                     int ret = DialogBox(GetModuleHandle(NULL),
+                        MAKEINTRESOURCE(IDD_CHOOSEFILETYPE), hwnd, FormatDlgProc);
+                     if(ret == IDSTANDARD)
+                     {
+                       TriangulationModel::clearSystem();
+                       bool success = TriangulationModel::load3DFile(filename, IDSTANDARD);
+                       if(!success)
+                       {
+                         MessageBox(NULL, "Could not load file", "Error", MB_OK | MB_ICONINFORMATION);
+                         UpdateConsole(hwnd, "File load failed.\r\n");
+                       } 
+                       else{
+                         UpdateConsole(hwnd, "File loaded.\r\n");
+                       } 
+                     } else if(ret == IDLUTZ)
+                     {
+                       TriangulationModel::clearSystem();
+                       bool success = TriangulationModel::load3DFile(filename, IDLUTZ);
+                       if(!success)
+                       {
+                         MessageBox(NULL, "Could not load file", "Error", MB_OK | MB_ICONINFORMATION);
+                         UpdateConsole(hwnd, "File load failed.\r\n");
+                       } 
+                       else{
+                         UpdateConsole(hwnd, "File loaded.\r\n");
+                       }    
+                     } else if(ret == IDCANCEL)
+                     {
+                         UpdateConsole(hwnd, "Load canceled.\r\n");   
+                     }
+                }
+                break;
                 case ID_RUN_FLOW_EUCLIDEAN:
                 {
                      if(!TriangulationModel::isLoaded()) {
@@ -469,7 +567,68 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                      }
                 }
                 break;
-                                                 
+                case ID_RUN_FLOW_YAMABE:
+                {
+                     if(!TriangulationModel::isLoaded()) {
+                        MessageBox(NULL, "You must load a Triangulation first!", "Error", MB_OK | MB_ICONINFORMATION);
+                        break;
+                     }
+                     
+                     UpdateConsole(hwnd, "Running flow, this may take a few moments...\r\n");
+                     TriangulationModel::clearData();
+                     int ret = DialogBox(GetModuleHandle(NULL),
+                        MAKEINTRESOURCE(IDD_FLOWDIALOG), hwnd, FlowDlgProc);
+                     switch(ret)
+                     {
+                        case IDWEIGHTSRANDOM:
+                        {
+                            srand(time(NULL));
+                            int vertexSize = Triangulation::vertexTable.size();
+                            double weights[vertexSize];
+                            for(int i = 1; i <= vertexSize; i++)
+                            {
+                               weights[i - 1] =   (rand() % 5 + 1);
+                            }
+                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_YAMABE);
+                            UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDWEIGHTSFILE:
+                        {
+                            UpdateConsole(hwnd, "Choose a file containing weights information.\r\n");
+                            char filename[MAX_PATH] ="";
+                            FileChooser((HWND)hwnd, (LPSTR) filename);
+                            ifstream infile(filename);
+                            vector<double> weightsVec;
+                            while(infile.good())
+                            {
+                               double weight;
+                               infile >> weight;
+                               weightsVec.push_back(weight);
+                            }
+                            if(weightsVec.size() != Triangulation::vertexTable.size()) 
+                            {
+                               MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
+                               break;
+                            }
+                            double weights[weightsVec.size()];
+                            for(int i = 0; i < weightsVec.size(); i++)
+                            {
+                               weights[i] = weightsVec[i];
+                            }
+                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_YAMABE);
+                            UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDCANCEL:
+                        {
+                            UpdateConsole(hwnd, "Flow canceled.\r\n"); 
+                        }
+                        break;
+                        default: break;
+                     }
+                }
+                break;                       
                 case IDC_RESULTSBUTTON:
                 {
                      char format[60];
@@ -498,6 +657,66 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                              LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
                         }
                         break;
+                        case 'l':
+                        {
+                             UpdateConsole(hwnd, "Polygon flow...\r\n");
+                             TriangulationModel::printResults(IDPRINTNUMSTEP);
+                             DialogBox(GetModuleHandle(NULL),
+                                MAKEINTRESOURCE(IDD_POLYGON), hwnd, PolygonProc);
+//                             Sleep(200);
+//                             HWND hHiddenPoly = GetDlgItem(hwnd, IDC_POLYGON);
+//                             //ShowWindow(hwnd, SW_HIDE);
+//                             ShowWindow(hHiddenPoly, SW_SHOW);
+//                             //HWND hedit = NULL;
+//                             //hedit = GetDlgItem(hwnd, IDC_RESULTSFIELD);
+//                             HDC hDC;
+//                             HGLRC hRC;
+//                             ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
+//                             //EnableOpenGL( hedit, &hDC, &hRC );
+//                             EnableOpenGL( hHiddenPoly, &hDC, &hRC );
+////                             glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+////                             glClear(GL_COLOR_BUFFER_BIT);
+////                             glBegin(GL_LINE_LOOP);
+////                             glColor3f( 0.0f, 0.0f, 0.0f );
+////                             glVertex2f(0.5, 0.5);
+////                             glVertex2f(0.5, -0.5);
+////                             glVertex2f(-0.5, -0.5);
+////                             glVertex2f(-0.5, 0.5);
+////                             glEnd();
+////                             SwapBuffers( hDC );
+//
+//                             // program main loop
+//                             while (scanner.good()) 
+//                             {
+//     
+//                                 int size = Triangulation::vertexTable.size();
+//                                 double curv[size];
+//                                 for(int i = 0; i < size; i++)
+//                                 {
+//                                     scanner >> curv[i];
+//                                 }
+//                                 glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+//                                 glClear(GL_COLOR_BUFFER_BIT); 
+//                                 glBegin(GL_LINE_LOOP);
+//                                 glColor3f( 0.0f, 0.0f, 0.0f ); 
+//                                 for(int i = 0; i < size; i++)
+//                                 {
+//                                    double angle = 2 * PI / size * i;
+//                                    glVertex2f( /*log(abs*/(curv[i])/*)*/ / 4 * cos(angle), /*log(abs*/(curv[i])/*)*/ / 4 * sin(angle));              
+//                                 }
+//                                 glEnd();
+//            
+//                                 SwapBuffers( hDC );
+//                                 Sleep(100);
+//                              } 
+//                              SwapBuffers( hDC );
+//                              //DisableOpenGL( hedit, hDC, hRC );
+//                              DisableOpenGL( hHiddenPoly, hDC, hRC );
+//                              //ShowWindow(hwnd, SW_SHOW);
+//                              ShowWindow(hHiddenPoly, SW_HIDE);
+                              UpdateConsole(hwnd, "Polygon flow complete.\r\n");
+                        }
+                        break;
                         default:
                              MessageBox(NULL, "Choose a print type", "Error", MB_OK | MB_ICONINFORMATION);   
                      }
@@ -519,6 +738,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
+    hInst = hInstance;
 	return DialogBox(hInstance, MAKEINTRESOURCE(IDD_MAIN), NULL, DlgProc);
 }
 
