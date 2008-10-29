@@ -130,9 +130,11 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                    HDC hDC;
                    HGLRC hRC;
                    ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
-        
+                   
                    EnableOpenGL( hPoly, &hDC, &hRC );
+                   SetDlgItemText(hwnd, IDC_POLYGON_STEP, "0000");
                    // program main loop
+                   char step[] = {'0', '0', '0', '1', '\0'};
                    while (scanner.good()) 
                    {
                       
@@ -153,9 +155,30 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                           glVertex2f((curv[i]) / 12 * cos(angle), (curv[i]) / 12 * sin(angle));              
                       }
                       glEnd();
-            
+                      SetDlgItemText(hwnd, IDC_POLYGON_STEP, step);
+                      if(step[3] == '9') {
+                         step[3] = '0';
+                         if(step[2] == '9') {
+                            step[2] = '0';
+                            if(step[1] == '9') {
+                               step[1] = '0';
+                               if(step[0] == '9') {
+                                  step[0] = '0';
+                               } else {
+                                  step[0]++;
+                               }
+                            } else {
+                               step[1]++;
+                            }
+                         } else {
+                            step[2]++;
+                         }
+                      } else {
+                        step[3]++;
+                      }
                       Sleep(100);
                     }
+                    SetDlgItemText(hwnd, IDC_POLYGON_STEP, "----");
                     DisableOpenGL( hPoly, hDC, hRC );
                 }
                 break;

@@ -18,9 +18,9 @@ Open=1
 <<<<<<< .mine
 Top=0
 <<<<<<< .mine
-CursorCol=81
-CursorRow=153
-TopLine=133
+CursorCol=47
+CursorRow=311
+TopLine=298
 =======
 CursorCol=17
 CursorRow=347
@@ -32,20 +32,20 @@ CursorCol=29
 CursorRow=362
 TopLine=1
 >>>>>>> .r579
-LeftChar=9
+LeftChar=1
 [Editor_1]
 Open=1
 Top=0
-CursorCol=46
-CursorRow=19
-TopLine=1
+CursorCol=17
+CursorRow=31
+TopLine=12
 LeftChar=1
 [Editor_2]
 Open=1
 Top=1
-CursorCol=46
-CursorRow=88
-TopLine=64
+CursorCol=51
+CursorRow=47
+TopLine=27
 <<<<<<< .mine
 LeftChar=1
 =======
@@ -150,7 +150,7 @@ Open=1
 Top=0
 CursorCol=29
 CursorRow=8
-TopLine=1
+TopLine=5
 LeftChar=1
 [Editor_23]
 Open=0

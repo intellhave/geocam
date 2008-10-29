@@ -135,6 +135,7 @@ void printResultsVertex(char*, vector<double>*, vector<double>*);
  *            :
  */
 void printResultsNum(char*, vector<double>*, vector<double>*);
+void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>* curvs);
 
 
 void printDegrees(char*);

@@ -706,6 +706,27 @@ void printResultsNum(char* fileName, vector<double>* radii, vector<double>* curv
    results.close();
 }
 
+void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>* curvs)
+{
+     int vertSize = Triangulation::vertexTable.size();
+     int numSteps = radii->size() / vertSize;
+     ofstream results(fileName, ios_base::trunc);
+     results << left << setprecision(6); 
+     results.setf(ios_base::showpoint);
+     map<int, Vertex>::iterator vit;
+     vit = Triangulation::vertexTable.begin();
+     for(int i = 0; i < numSteps; i++)
+     {
+         vit = Triangulation::vertexTable.begin();
+         for(int j = 0; j < vertSize; j++)
+         {
+             results << (*curvs)[i*vertSize+j] << "\n";
+             vit++;
+         }
+     }
+}
+
+
 void printDegrees(char* fileName)
 {
      int vertSize = Triangulation::vertexTable.size();

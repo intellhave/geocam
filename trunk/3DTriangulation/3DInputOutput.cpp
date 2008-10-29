@@ -780,12 +780,12 @@ void printResultsVolumes(char* fileName, vector<double>* volumes)
      {
          double netVolume = 0.;
          results << left << "Step " << left <<setw(6)  << i + 1;
-         results << right << setw(7) << "Volume";
+         results << right << setw(7) << "Volume ^ 2";
          results << "\n---------------------------\n";
          tit = Triangulation::tetraTable.begin();
          for(int j = 0; j < tetraSize; j++)
          {
-             double volume = sqrt((*volumes)[i*tetraSize + j]);
+             double volume = (*volumes)[i*tetraSize + j];
              results << "Tetra " << left << setw(5) << tit->first;
              results << left << setw(14)<< volume;
              results << "\n";

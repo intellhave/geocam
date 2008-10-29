@@ -28,6 +28,7 @@
 #define IDC_FLOWSELECTBOX               1009
 #define IDC_HIDDENTEXT                  1010
 #define IDC_POLYGON                     1011
+#define IDC_POLYGON_STEP                 1012
 #define IDSTANDARD                      5001
 #define IDLUTZ                          5002
 #define IDPRINTSTEP                     5003
