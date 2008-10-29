@@ -69,6 +69,7 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
   vector<double> volumes;                                       
   double ta[p],tb[p],tc[p],td[p],z[p]; // Temporary arrays to hold data for 
                                       // the intermediate steps in.
+  double curv[p];
   int    i,k; // ints used for "for loops". i is the step number,
               // k is the kth vertex for the arrays.
   map<int, Vertex>::iterator vit; // Iterator to traverse through the vertices.
@@ -105,22 +106,22 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
        {  // First "for loop" in whole step calculates everything manually.
            (*radii).push_back( z[k]); // Adds the data to the vector.
-           double curv = curvature3D(vit->second);
-           if(curv < 0.00005 && curv > -0.00005) // Adjusted for small numbers.
+           curv[k] = curvature3D(vit->second);
+           if(curv[k] < 0.00005 && curv[k] > -0.00005) // Adjusted for small numbers.
            {                                     // We want it to print nicely.
              (*curvatures).push_back(0.); // Adds the data to the vector.
            }
            else {
-               (*curvatures).push_back(curv);
+               (*curvatures).push_back(curv[k]);
            }
-           netC += curv; // Calculating the net curvature.
+           netC += curv[k]; // Calculating the net curvature.
            // Calculates the differential equation, either normalized or
            // standard.
-           if(adjF) ta[k]= dt * ((-1) * curv 
+           if(adjF) ta[k]= dt * ((-1) * curv[k] 
                            * vit->second.getRadius() +
                            prevC /  netR
                            * vit->second.getRadius());
-           else     ta[k] = dt * (-1) * curv 
+           else     ta[k] = dt * (-1) * curv[k] 
                            * vit->second.getRadius();
            
        }
@@ -134,8 +135,12 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
        {
             // Again calculates the differential equation, but we still need
             // the data in ta[] so we use tb[] now.
-            if(adjF) tb[k]=dt*adjDiffEQ3D(vit->first, netC, netR);
-            else     tb[k]=dt*stdDiffEQ3D(vit->first);
+            if(adjF) tb[k]=dt * ((-1) * curv[k] 
+                           * vit->second.getRadius() +
+                           netC /  netR
+                           * vit->second.getRadius());
+            else     tb[k]=dt * (-1) * curv[k] 
+                           * vit->second.getRadius();
        }
        netR = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
@@ -145,8 +150,12 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) tc[k]=dt*adjDiffEQ3D(vit->first, netC, netR);
-            else     tc[k]=dt*stdDiffEQ3D(vit->first);
+            if(adjF) tc[k]=dt * ((-1) * curv[k] 
+                           * vit->second.getRadius() +
+                           netC /  netR
+                           * vit->second.getRadius());
+            else     tc[k]=dt * (-1) * curv[k] 
+                           * vit->second.getRadius();
        }
        netR = 0;
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
@@ -156,8 +165,12 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
        {
-            if(adjF) td[k]=dt*adjDiffEQ3D(vit->first, netC, netR);
-            else     td[k]=dt*stdDiffEQ3D(vit->first);
+            if(adjF) td[k]=dt * ((-1) * curv[k] 
+                           * vit->second.getRadius() +
+                           netC /  netR
+                           * vit->second.getRadius());
+            else     td[k]=dt * (-1) * curv[k] 
+                           * vit->second.getRadius();
        }
        for (k=0; k<p; k++) // Adjust z[k] according to algorithm.
        {

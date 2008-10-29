@@ -244,6 +244,7 @@ void Triangulation::resetTriangulation()
      vertexTable.clear();
      edgeTable.clear();
      faceTable.clear();
+     tetraTable.clear();
 }
 
 double Triangulation::netCurvature()
