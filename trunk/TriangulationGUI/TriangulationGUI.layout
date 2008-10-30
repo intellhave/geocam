@@ -8,7 +8,7 @@ Top=0
 [Editors]
 <<<<<<< .mine
 Focused=0
-Order=0,21,-1
+Order=0,21
 =======
 Focused=0
 Order=1,2,0,22,21
@@ -236,7 +236,7 @@ CursorRow=25
 TopLine=1
 LeftChar=1
 [Editor_34]
-Open=1
+Open=0
 Top=0
 CursorCol=1
 CursorRow=153
