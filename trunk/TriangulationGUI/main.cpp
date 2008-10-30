@@ -152,7 +152,13 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                       for(int i = 0; i < size; i++)
                       {
                           double angle = 2 * PI / size * i;
-                          glVertex2f((curv[i]) / 12 * cos(angle), (curv[i]) / 12 * sin(angle));              
+                          //glVertex2f((curv[i]) / 12 * cos(angle), (curv[i]) / 12 * sin(angle));
+                          glVertex2f(.3 * (atan(.5*curv[i])+ PI / 2) * cos(angle), .3 * (atan(.5*curv[i]) + PI / 2) * sin(angle));
+                          // The above computation performs an arctan scaling of
+                          // the curvatures so that the curvature data is always
+                          // outputted in a disk of radius Pi.  The circle of 
+                          // radius Pi coreesponds to positive infinity, the 
+                          // origin corresponds to negative infinity.
                       }
                       glEnd();
                       SetDlgItemText(hwnd, IDC_POLYGON_STEP, step);

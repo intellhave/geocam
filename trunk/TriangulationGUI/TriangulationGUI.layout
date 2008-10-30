@@ -8,7 +8,7 @@ Top=0
 [Editors]
 <<<<<<< .mine
 Focused=0
-Order=0,21,2,1,22,-1
+Order=0,21,-1
 =======
 Focused=0
 Order=1,2,0,22,21
@@ -18,6 +18,11 @@ Open=1
 <<<<<<< .mine
 Top=1
 <<<<<<< .mine
+CursorCol=70
+CursorRow=161
+TopLine=137
+=======
+<<<<<<< .mine
 CursorCol=23
 CursorRow=389
 TopLine=415
@@ -25,6 +30,7 @@ TopLine=415
 CursorCol=17
 CursorRow=347
 TopLine=520
+>>>>>>> .r591
 >>>>>>> .r587
 =======
 Top=1
@@ -34,14 +40,20 @@ TopLine=1
 >>>>>>> .r579
 LeftChar=1
 [Editor_1]
-Open=1
+Open=0
 Top=0
+<<<<<<< .mine
+CursorCol=44
+CursorRow=21
+TopLine=4
+=======
 CursorCol=17
 CursorRow=31
 TopLine=12
+>>>>>>> .r591
 LeftChar=1
 [Editor_2]
-Open=1
+Open=0
 Top=0
 CursorCol=37
 CursorRow=47
@@ -145,16 +157,22 @@ Top=0
 [Editor_21]
 Open=1
 Top=0
-CursorCol=16
-CursorRow=21
-TopLine=16
+CursorCol=110
+CursorRow=150
+TopLine=1
 LeftChar=1
 [Editor_22]
-Open=1
+Open=0
 Top=0
+<<<<<<< .mine
+CursorCol=25
+CursorRow=6
+TopLine=2
+=======
 CursorCol=29
 CursorRow=8
 TopLine=5
+>>>>>>> .r591
 LeftChar=1
 [Editor_23]
 Open=0
@@ -166,6 +184,10 @@ LeftChar=1
 [Editor_24]
 Open=0
 Top=0
+CursorCol=1
+CursorRow=1
+TopLine=1
+LeftChar=1
 [Editor_25]
 Open=0
 Top=0
@@ -211,14 +233,14 @@ Open=0
 Top=0
 CursorCol=40
 CursorRow=25
-TopLine=3
+TopLine=1
 LeftChar=1
 [Editor_34]
-Open=0
+Open=1
 Top=0
 CursorCol=1
-CursorRow=709
-TopLine=705
+CursorRow=153
+TopLine=115
 LeftChar=1
 [Editor_35]
 Open=0
@@ -252,7 +274,7 @@ Top=0
 Open=0
 Top=0
 [Editor_44]
-Open=1
+Open=0
 Top=0
 CursorCol=1
 CursorRow=1

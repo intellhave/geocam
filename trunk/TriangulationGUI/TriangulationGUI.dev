@@ -1,7 +1,7 @@
 [Project]
 FileName=TriangulationGUI.dev
 Name=TriangulationGUI
-UnitCount=46
+UnitCount=45
 Type=0
 Ver=1
 ObjFiles=
@@ -277,16 +277,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit28]
-FileName=..\Triangulation\newtriangulationmorph.cpp
-CompileCpp=1
-Folder=TriangulationGUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit29]
 FileName=..\Triangulation\smallMorphs.cpp
 CompileCpp=1
 Folder=TriangulationGUI
@@ -296,7 +286,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit30]
+[Unit29]
 FileName=..\Triangulation\smallMorphs.h
 CompileCpp=1
 Folder=TriangulationGUI
@@ -306,7 +296,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit31]
+[Unit30]
 FileName=..\Triangulation\triangulation.cpp
 CompileCpp=1
 Folder=TriangulationGUI
@@ -316,7 +306,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit32]
+[Unit31]
 FileName=..\Triangulation\triangulation.h
 CompileCpp=1
 Folder=TriangulationGUI
@@ -326,7 +316,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit33]
+[Unit32]
 FileName=..\Triangulation\TriangulationCoordinateSystem.cpp
 CompileCpp=1
 Folder=TriangulationGUI
@@ -336,8 +326,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit34]
+[Unit33]
 FileName=..\Triangulation\TriangulationCoordinateSystem.h
+CompileCpp=1
+Folder=TriangulationGUI
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit34]
+FileName=..\Triangulation\triangulationInputOutput.cpp
 CompileCpp=1
 Folder=TriangulationGUI
 Compile=1
@@ -387,16 +387,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit35]
-FileName=..\Triangulation\triangulationInputOutput.cpp
-CompileCpp=1
-Folder=TriangulationGUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit36]
 FileName=..\Triangulation\triangulationInputOutput.h
 CompileCpp=1
 Folder=TriangulationGUI
@@ -406,7 +396,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit37]
+[Unit36]
 FileName=..\Triangulation\triangulationmath.cpp
 CompileCpp=1
 Folder=TriangulationGUI
@@ -416,7 +406,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit38]
+[Unit37]
 FileName=..\Triangulation\triangulationmath.h
 CompileCpp=1
 Folder=TriangulationGUI
@@ -426,7 +416,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit39]
+[Unit38]
 FileName=..\Triangulation\triangulationmorph.cpp
 CompileCpp=1
 Folder=TriangulationGUI
@@ -436,7 +426,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit40]
+[Unit39]
 FileName=..\Triangulation\triangulationmorph.h
 CompileCpp=1
 Folder=TriangulationGUI
@@ -446,7 +436,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit41]
+[Unit40]
 FileName=..\Triangulation\triangulationPlane.cpp
 CompileCpp=1
 Folder=TriangulationGUI
@@ -456,7 +446,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit42]
+[Unit41]
 FileName=..\Triangulation\triangulationPlane.h
 CompileCpp=1
 Folder=TriangulationGUI
@@ -466,7 +456,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit43]
+[Unit42]
 FileName=..\addremove.cpp
 CompileCpp=1
 Folder=TriangulationGUI
@@ -476,7 +466,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit44]
+[Unit43]
 FileName=..\addremove.h
 CompileCpp=1
 Folder=TriangulationGUI
@@ -486,7 +476,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit45]
+[Unit44]
 FileName=..\3DTriangulation\3Dtriangulationmath.cpp
 CompileCpp=1
 Folder=TriangulationGUI
@@ -496,7 +486,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit46]
+[Unit45]
 FileName=..\3DTriangulation\3Dtriangulationmath.h
 CompileCpp=1
 Folder=TriangulationGUI

@@ -22,15 +22,9 @@ using namespace std;
 void createMatrix();
 int main(int argc, char *argv[])
 {   
-//    generateTriangulation(60);
-//    
-//    char from[] = "Triangulation Files/sphere3.txt";
-//    char to[] = "Triangulation Files/sphere3Conv.txt";
-//    make3DTriangulationFile(from, to);
-//    read3DTriangulationFile(to);
-//    system("PAUSE");
-//    return 0;
       
+<<<<<<< .mine
+=======
 //      Vertex v1(1);
 //      Triangulation::putVertex(v1.getIndex(), v1);
 //      Vertex v2(2);
@@ -77,6 +71,7 @@ int main(int argc, char *argv[])
 //      
 //      write3DTriangulationFile("Triangulation Files/alien1.txt");
       
+>>>>>>> .r591
                   
 /*
  * Collecting data on different 3-manifolds. Writing out results in a file
@@ -85,6 +80,19 @@ int main(int argc, char *argv[])
  * My Observation: Convergent curvature decreasing depending on # of tetrahedron,
  * which is directly affecting starting volume since all radii start as 1.
  */
+<<<<<<< .mine
+
+
+//    vector<double> radii;
+//    vector<double> curvs;
+//    
+//    time_t start, end;
+//    
+//    make3DTriangulationFile("Triangulation Files/sphere3.txt",
+//                            "Triangulation Files/manifold converted.txt");
+//    read3DTriangulationFile("Triangulation Files/manifold converted.txt");
+//    write3DTriangulationFile("Triangulation Files/manifold.txt");
+=======
     vector<double> radii;
     vector<double> curvs;
     
@@ -94,6 +102,7 @@ int main(int argc, char *argv[])
                             "Triangulation Files/manifold converted.txt");
     read3DTriangulationFile("Triangulation Files/manifold converted.txt");
     write3DTriangulationFile("Triangulation Files/manifold.txt");
+>>>>>>> .r591
 
 
     srand(time(NULL));
