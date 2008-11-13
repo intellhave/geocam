@@ -486,7 +486,6 @@ void makeTriangulationFile (char* from, char* to) {
           }
       }
   }
-   
   ofstream outfile;
   outfile.open(to, ios_base::trunc);
   // Vertices
@@ -518,14 +517,15 @@ void makeTriangulationFile (char* from, char* to) {
       }
       // The vertex itself was added to its localv's, remove it.
       localv.erase(v[i]);
-       
       // Print local vertices
       set<int>::iterator notit;
       for (notit = localv.begin(); notit != localv.end(); notit++)
       {
           outfile << *notit << " ";
-      }   
+      } 
+      outfile << "\n";
       // Print local edges using list of pairs and contians function of Pair
+      
       for (int j = 0; j < list.size(); j++)
       {
           if (list[j].contains(v[i]))
@@ -535,6 +535,7 @@ void makeTriangulationFile (char* from, char* to) {
              
       } 
       outfile << "\n";
+      
       // Print local faces
       for (int j = 0; j < localf.size(); j++)
       {

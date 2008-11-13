@@ -45,6 +45,7 @@ void sphericalCalcFlow(vector<double>* radii, vector<double>* curvatures,double 
   int chi = p - Triangulation::edgeTable.size() + Triangulation::faceTable.size();
   double net = 0; // Net and prev hold the current and previous
   double prev;    //  net curvatures, repsectively.
+  double radius = 1;
    for (k=0; k<p; k++) {
     z[k]=initRadii[k]; // z[k] holds the current radii.
    }
@@ -74,7 +75,7 @@ void sphericalCalcFlow(vector<double>* radii, vector<double>* curvatures,double 
              }
            net += curv;
            if(adjF) ta[k]= dt * ((prev/p) * vit->second.getRadius() - curv 
-                           * sin(vit->second.getRadius()));
+                           * sin(vit->second.getRadius() / radius));
            else     ta[k] = dt * (-1) * curv * sin(vit->second.getRadius());
            
        }
@@ -92,7 +93,7 @@ void sphericalCalcFlow(vector<double>* radii, vector<double>* curvatures,double 
            double curv = sphericalCurvature(vit->second);         
            net += curv;
            if(adjF) tb[k]= dt * ((prev/p) * vit->second.getRadius() - curv 
-                           * sin(vit->second.getRadius()));
+                           * sin(vit->second.getRadius() / radius));
            else     tb[k] = dt * (-1) * curv * sin(vit->second.getRadius());
       }
       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
@@ -107,7 +108,7 @@ void sphericalCalcFlow(vector<double>* radii, vector<double>* curvatures,double 
           double curv = sphericalCurvature(vit->second);
           net += curv;
           if(adjF) tc[k]= dt * ((prev/p) * vit->second.getRadius() - curv
-                         * sin(vit->second.getRadius()));
+                         * sin(vit->second.getRadius() / radius));
           else     tc[k] = dt * (-1) * curv
                           * sin(vit->second.getRadius());
 
@@ -125,7 +126,7 @@ void sphericalCalcFlow(vector<double>* radii, vector<double>* curvatures,double 
            double curv = sphericalCurvature(vit->second);
            net += curv;
            if(adjF) tc[k]= dt * ((prev/p) * vit->second.getRadius() - curv 
-                         * sin(vit->second.getRadius()));
+                         * sin(vit->second.getRadius() / radius));
            else     tc[k] = dt * (-1) * curv * sin(vit->second.getRadius());
        }
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  // Set the new radii.
@@ -140,7 +141,7 @@ void sphericalCalcFlow(vector<double>* radii, vector<double>* curvatures,double 
            double curv = sphericalCurvature(vit->second);
            net += curv;
            if(adjF) td[k]= dt * ((prev/p) * vit->second.getRadius() - curv 
-                           * sin(vit->second.getRadius()));
+                           * sin(vit->second.getRadius() / radius));
            else     td[k] = dt * (-1) * curv * sin(vit->second.getRadius());
 
 

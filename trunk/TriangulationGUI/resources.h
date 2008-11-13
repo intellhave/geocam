@@ -1,9 +1,10 @@
-#define IDC_STATIC -1
-#define IDR_MAINMENU    101
-#define IDD_MAIN        102
-#define IDD_CHOOSEFILETYPE 103
-#define IDD_FLOWDIALOG     104
-#define IDD_POLYGON        105
+#define IDC_STATIC                      -1
+#define IDR_MAINMENU                    101
+#define IDD_MAIN                        102
+#define IDD_CHOOSEFILETYPE              103
+#define IDD_FLOWDIALOG                  104
+#define IDD_POLYGON                     105
+#define IDD_RADII                       106
 #define ID_FILE_EXIT                    40001
 #define ID_FILE_LOAD_MANIFOLD           40002
 #define ID_FILE_LOAD_PLANE              40003
@@ -28,7 +29,10 @@
 #define IDC_FLOWSELECTBOX               1009
 #define IDC_HIDDENTEXT                  1010
 #define IDC_POLYGON                     1011
-#define IDC_POLYGON_STEP                 1012
+#define IDC_POLYGON_STEP                1012
+#define IDC_RADII                       1013
+#define IDC_RADII_LIST                  1015
+#define IDC_RADII_FLOWER                1016
 #define IDSTANDARD                      5001
 #define IDLUTZ                          5002
 #define IDPRINTSTEP                     5003
@@ -38,3 +42,8 @@
 #define IDWEIGHTSFILE                   5007
 #define IDPRINTNUMSTEP                  5008
 #define IDPOLYGON                       5009
+#define IDWEIGHTSMAN                    5010
+#define IDRADII_SET                     5011
+#define IDRADII_RANDOM                  5012
+
+#define MAXWEIGHTSIZE                   10

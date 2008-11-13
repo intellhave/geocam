@@ -14,6 +14,7 @@ TriangulationModel::TriangulationModel()
 }
 TriangulationModel::~TriangulationModel()
 {
+   clearSystem();
 }
 void TriangulationModel::clearSystem()
 {
@@ -43,16 +44,31 @@ void TriangulationModel::setFlowFunction(bool flowF)
 {
      flow = flowF;
 }
+void TriangulationModel::setWeights(vector<double> *weightsVec) {
+     if(weightsVec->size() != Triangulation::vertexTable.size()) {
+        return;
+     }
+     double weightArr[weightsVec->size()];
+     for(int i = 0; i < weightsVec->size(); i++) {
+         weightArr[i] = (*weightsVec)[i];
+     }
+     Triangulation::setRadii(weightArr);
+}
+void TriangulationModel::setWeight(int vertex, double weight) {
+     Triangulation::vertexTable[vertex].setRadius(weight);
+}
 bool TriangulationModel::isLoaded()
 {
      return loaded;
 }
-bool TriangulationModel::runCalcFlow(double* weightArr, int type)
+bool TriangulationModel::runCalcFlow(int type)
 {
      if(!loaded || numSteps <= 0 || stepSize <= 0.0)
      {
         return false;
      }
+     double weightArr[Triangulation::vertexTable.size()];
+     Triangulation::getRadii(weightArr);
      switch(type)
      {
         case ID_RUN_FLOW_EUCLIDEAN:
@@ -154,3 +170,4 @@ bool TriangulationModel::printResults(int printType)
      }
      return true;
 }
+

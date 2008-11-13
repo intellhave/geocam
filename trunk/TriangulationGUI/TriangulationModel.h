@@ -1,4 +1,5 @@
 #include "resources.h"
+#include <windows.h>
 #include "triangulation/triangulation.h"
 #include "triangulation/triangulationmath.h"
 #include "spherical/sphericalmath.h"
@@ -23,7 +24,9 @@ class TriangulationModel
       static void setNumSteps(int);
       static void setStepSize(double);
       static void setFlowFunction(bool);
-      static bool runCalcFlow(double*, int);
+      static void setWeights(vector<double>*);
+      static void setWeight(int, double);
+      static bool runCalcFlow(int);
       static bool loadFile(char*, int);
       static bool load3DFile(char*, int);
       static bool saveFile(char*);

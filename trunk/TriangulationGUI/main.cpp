@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <ctime>
+#include <iostream>
 #include <fstream>
 #include <cmath>
 #include <vector>
@@ -11,6 +12,9 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 VOID EnableOpenGL( HWND hWnd, HDC * hDC, HGLRC * hRC );
 VOID DisableOpenGL( HWND hWnd, HDC hDC, HGLRC hRC );
 HINSTANCE hInst;
+HDC hDC;
+HGLRC hRC;
+GLuint listbase;
 void FileChooser(HWND hwnd, LPSTR szFileName)
 {
 	OPENFILENAME ofn;
@@ -127,8 +131,6 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                 case IDPOLYGON: 
                 {
                    HWND hPoly = GetDlgItem(hwnd, IDC_POLYGON);
-                   HDC hDC;
-                   HGLRC hRC;
                    ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
                    
                    EnableOpenGL( hPoly, &hDC, &hRC );
@@ -146,14 +148,34 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                           scanner >> curv[i];
                       }
                       glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-                      glClear(GL_COLOR_BUFFER_BIT); 
+                      glClear(GL_COLOR_BUFFER_BIT);
+                      
+                      glBegin(GL_LINE_LOOP);
+                      glColor3f( 1.0f, 0.0f, 0.0f );
+                      for(int i = 0; i < 25; i++)
+                      {
+                          double angle = 2 * PI / 25 * i;
+                          double radii = .3 * (PI / 2);
+                          glVertex2f(radii * cos(angle), radii * sin(angle));
+                      }
+                      glEnd();
+                      glBegin(GL_LINE_LOOP);
+                      glColor3f( 1.0f, 0.0f, 0.0f );
+                      for(int i = 0; i < 25; i++)
+                      {
+                          double angle = 2 * PI / 25 * i;
+                          double radii = .3 * (PI);
+                          glVertex2f(radii * cos(angle), radii * sin(angle));
+                      }
+                      glEnd();
                       glBegin(GL_LINE_LOOP);
                       glColor3f( 0.0f, 0.0f, 0.0f ); 
                       for(int i = 0; i < size; i++)
                       {
                           double angle = 2 * PI / size * i;
+                          double radii = .3 * (atan(curv[i])+ PI / 2);
                           //glVertex2f((curv[i]) / 12 * cos(angle), (curv[i]) / 12 * sin(angle));
-                          glVertex2f(.3 * (atan(.5*curv[i])+ PI / 2) * cos(angle), .3 * (atan(.5*curv[i]) + PI / 2) * sin(angle));
+                          glVertex2f(radii * cos(angle), radii * sin(angle));
                           // The above computation performs an arctan scaling of
                           // the curvatures so that the curvature data is always
                           // outputted in a disk of radius Pi.  The circle of 
@@ -182,13 +204,230 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                       } else {
                         step[3]++;
                       }
-                      Sleep(100);
+                      Sleep(50);
                     }
                     SetDlgItemText(hwnd, IDC_POLYGON_STEP, "----");
                     DisableOpenGL( hPoly, hDC, hRC );
                 }
                 break;
                 case IDCANCEL:
+                    EndDialog(hwnd, IDCANCEL);
+                break;
+            }
+        break;
+        default:
+            return FALSE;
+    }
+    return TRUE;
+}
+BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+{
+     switch(Message)
+     {
+        case WM_INITDIALOG:
+        {
+           
+           map<int, Vertex>::iterator vit;
+           int i = 0;
+           for(vit = Triangulation::vertexTable.begin(); 
+                   vit != Triangulation::vertexTable.end(); vit++) {
+               char text[25] = "Vertex    : 1.00000 ";
+               int vertexI = vit->first;
+               int arrSize = 0;
+               int temp = vertexI;
+               if(temp <= 0) {
+                 arrSize = 1;
+               } else {
+                 while(temp != 0) {
+                  temp /= 10;
+                  arrSize++;
+                 }
+               }
+               char vertexNum[arrSize + 1];
+               itoa(vertexI, vertexNum, 10);
+               strncpy(text + 7, vertexNum, arrSize);
+               int index = SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_ADDSTRING, 0, (LPARAM)text);
+               SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETITEMDATA, (WPARAM)index, 
+                                 (LPARAM)vertexI);
+               TriangulationModel::setWeight(vertexI, 1.00000);
+               i++;
+           }
+           HWND hEdit = GetDlgItem(hwnd, IDC_RADII_FLOWER);
+
+           EnableOpenGL( hEdit, &hDC, &hRC );
+           glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+           glClear(GL_COLOR_BUFFER_BIT);
+           
+           listbase = glGenLists(255);
+ 
+           // make the system font the device context's selected font
+            HFONT hFont = CreateFont(-10,
+                  0,
+                  0,
+                  0,
+                  FW_NORMAL,
+                  FALSE,
+                  FALSE,
+                  FALSE,
+                  ANSI_CHARSET,
+                  OUT_TT_PRECIS,
+                  CLIP_DEFAULT_PRECIS,
+                  ANTIALIASED_QUALITY,
+                  FF_DONTCARE|DEFAULT_PITCH,
+                  "Arial");
+           
+           //SelectObject (hDC, GetStockObject(SYSTEM_FONT)); 
+           SelectObject(hDC, hFont);
+           // create the bitmap display lists 
+           // we're making images of glyphs 0 thru 255 
+           // the display list numbering starts at 1000, an arbitrary choice 
+           wglUseFontBitmaps(hDC, 0, 255, listbase);
+           
+           SwapBuffers( hDC );
+           return TRUE;
+        }
+        case WM_COMMAND:
+            switch(LOWORD(wParam))
+            {
+                case IDRADII_SET:
+                {
+                     char weightStr[MAXWEIGHTSIZE];
+                     GetDlgItemText(hwnd, IDC_RADII, weightStr, MAXWEIGHTSIZE);
+                     double weight = atof(weightStr);
+                     if(weight <= 0.0) {
+                        MessageBox(NULL, "Invalid weight", "Error", MB_OK | MB_ICONINFORMATION);
+                     } else {
+       					HWND hList = GetDlgItem(hwnd, IDC_RADII_LIST);
+			            int count = SendMessage(hList, LB_GETSELCOUNT, 0, 0);
+					    
+						if(count != 0)
+						{
+							// And then allocate room to store the list of selected items.
+
+							int i;
+							int *buf;
+                            buf = (int*)GlobalAlloc(GPTR, sizeof(int) * count);
+							SendMessage(hList, LB_GETSELITEMS, (WPARAM)count, (LPARAM)buf);
+						    
+                            
+							for(i = count - 1; i >= 0; i--)
+							{
+                                char text[25];
+                                SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETTEXT, (WPARAM)buf[i], (LPARAM)text);
+                                int index = SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETITEMDATA, (WPARAM)buf[i], 0);
+                                strncpy(text + 12, weightStr, MAXWEIGHTSIZE);
+                                SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_INSERTSTRING, (WPARAM)buf[i], (LPARAM)text);
+                                SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETITEMDATA, (WPARAM)buf[i], (LPARAM)index);
+                                SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETSEL, (WPARAM)1, (LPARAM)buf[i]);
+                                SendDlgItemMessage(hwnd, IDC_RADII_LIST,  LB_DELETESTRING, (WPARAM)(buf[i] + 1), 0);
+                                TriangulationModel::setWeight(index, weight);
+     						}
+
+							GlobalFree(buf);
+				          }
+				          else 
+						  {
+						     MessageBox(hwnd, "No items selected.", "Warning", MB_OK);
+						  }
+                     }
+
+                     return TRUE;
+                }
+                break;
+                case IDRADII_RANDOM:
+                {
+                    srand(time(NULL));
+                    map<int, Vertex>::iterator vit;
+                    int i = 0;
+                    char weightStr[MAXWEIGHTSIZE];
+                    for(vit = Triangulation::vertexTable.begin(); 
+                            vit != Triangulation::vertexTable.end(); vit++) {
+                        double weight = rand() % 100 / 100.0 + 0.5;
+                        sprintf(weightStr, "%.4f", weight);
+                        char text[25];
+                        SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETTEXT, (WPARAM)i, (LPARAM)text);
+                        strncpy(text + 12, weightStr, MAXWEIGHTSIZE);
+                        SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_INSERTSTRING, (WPARAM)i, (LPARAM)text);
+                        SendDlgItemMessage(hwnd, IDC_RADII_LIST,  LB_DELETESTRING, (WPARAM)(i + 1), 0);
+                        SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETITEMDATA, (WPARAM)i, (LPARAM)vit->first);
+                        TriangulationModel::setWeight(vit->first, weight);
+                        i++;
+                    }
+                    return TRUE;
+                }
+                break;
+                case IDC_RADII_LIST: {
+                    switch(HIWORD(wParam))
+					{
+					  case LBN_SELCHANGE:
+						{
+                          glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+                          glClear(GL_COLOR_BUFFER_BIT);
+                          if(SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELCOUNT, 0, 0) == 1) {
+
+                             int index;
+                             SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELITEMS, (WPARAM)1, (LPARAM)&index);
+                             int vIndex = (int) SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETITEMDATA, (WPARAM)index, 0);
+                             vector<int> localV = *(Triangulation::vertexTable[vIndex].getLocalVertices());
+                             int size = localV.size();
+                             glBegin(GL_LINES);
+                             glColor3f( 0.0f, 0.0f, 0.0f );
+                             for(int i = 0; i < size; i++) {
+                                 double angle = 2 * PI / size * i;
+                                 glVertex2f(0.0f, 0.0f); glVertex2f(.9*cos(angle), .9*sin(angle));
+                             }
+                             glEnd();
+
+                             glDisable(GL_TEXTURE_2D);
+                             glColor3f(1.0f, 0.0f, 0.0f);
+                             for(int i = 0; i < size; i++) {
+                                 float angle = (float) 2 * PI / size * i;
+                                 // Specify the position of the text
+                                 glRasterPos2f(.8*cos(angle), .8*sin(angle));
+                                 int arrSize = 0;
+                                 int temp = localV[i];
+                                 if(temp <= 0) {
+                                    arrSize = 1;
+                                 } else {
+                                   while(temp != 0) {
+                                     temp /= 10;
+                                     arrSize++;
+                                   }
+                                 }
+                                 char vertexNum[arrSize + 1];
+                                 itoa(localV[i], vertexNum, 10);
+                                 // display a string: 
+                                 // indicate start of glyph display lists 
+                                 //glListBase (1000); 
+                                 // now draw the characters in a string 
+                                 glPushAttrib(GL_LIST_BIT);
+                                   glListBase(listbase); //32 offset backwards since we offset it forwards
+                                   glCallLists(arrSize, GL_UNSIGNED_BYTE, vertexNum);
+                                 glPopAttrib();
+                             }
+                             glEnable(GL_TEXTURE_2D);
+
+                          }
+                          
+                          SwapBuffers( hDC );
+                          return TRUE;
+                        }
+                        break;
+                    } 
+                }
+                break;
+                case IDOK: 
+                {
+                    HWND hEdit = GetDlgItem(hwnd, IDC_RADII_FLOWER);
+                    if(listbase)
+                      glDeleteLists(listbase,255);
+                    DisableOpenGL( hEdit, hDC, hRC ); 
+                    EndDialog(hwnd, IDOK);
+                }
+                break;
+                case IDCANCEL:
+                    HWND hEdit = GetDlgItem(hwnd, IDC_RADII_FLOWER);
+                    DisableOpenGL( hEdit, hDC, hRC );
                     EndDialog(hwnd, IDCANCEL);
                 break;
             }
@@ -253,6 +492,7 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
            }
            SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Random");
            SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"From file");
+           SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Manually");
            hcombo = NULL;
            hcombo = GetDlgItem(hwnd, IDC_FLOWSELECTBOX);
            if(hcombo == NULL)
@@ -291,6 +531,8 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                        EndDialog(hwnd, IDWEIGHTSRANDOM);
                     else if(ready && weight[0] == 'F')
                        EndDialog(hwnd, IDWEIGHTSFILE);
+                    else if(ready && weight[0] == 'M')
+                       EndDialog(hwnd, IDWEIGHTSMAN);
                     else if(ready)
                        MessageBox(NULL, "Weights not chosen", "Error", MB_OK | MB_ICONINFORMATION);
                 }
@@ -426,12 +668,13 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                         {
                             srand(time(NULL));
                             int vertexSize = Triangulation::vertexTable.size();
-                            double weights[vertexSize];
-                            for(int i = 1; i <= vertexSize; i++)
+                            vector<double> weightsVec;
+                            for(int i = 0; i < vertexSize; i++)
                             {
-                               weights[i - 1] =   (rand() % 10 + 1);
+                               weightsVec.push_back(rand() % 10 + 1);
                             }
-                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_EUCLIDEAN);
+                            TriangulationModel::setWeights(&weightsVec);
+                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_EUCLIDEAN);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -453,13 +696,21 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
                                break;
                             }
-                            double weights[weightsVec.size()];
-                            for(int i = 0; i < weightsVec.size(); i++)
-                            {
-                               weights[i] = weightsVec[i];
-                            }
-                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_EUCLIDEAN);
+                            TriangulationModel::setWeights(&weightsVec);
+                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_EUCLIDEAN);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDWEIGHTSMAN:
+                        {
+                             int ret = DialogBox(GetModuleHandle(NULL),
+                               MAKEINTRESOURCE(IDD_RADII), hwnd, RadiiDlgProc);
+                             if(ret == IDCANCEL) {
+                               UpdateConsole(hwnd, "Flow canceled.\r\n");
+                             } else if(ret == IDOK) {
+                               TriangulationModel::runCalcFlow(ID_RUN_FLOW_EUCLIDEAN);
+                               UpdateConsole(hwnd, "Flow complete.\r\n");
+                             }
                         }
                         break;
                         case IDCANCEL:
@@ -488,12 +739,13 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                         {
                             srand(time(NULL));
                             int vertexSize = Triangulation::vertexTable.size();
-                            double weights[vertexSize];
-                            for(int i = 1; i <= vertexSize; i++)
+                            vector<double> weightsVec;
+                            for(int i = 0; i < vertexSize; i++)
                             {
-                               weights[i - 1] =   (rand() % 100 + 1)/ 125.0;
+                               weightsVec.push_back((rand() % 100 + 1) / 125.0);
                             }
-                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_SPHERICAL);
+                            TriangulationModel::setWeights(&weightsVec);
+                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_SPHERICAL);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -515,13 +767,21 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
                                break;
                             }
-                            double weights[weightsVec.size()];
-                            for(int i = 0; i < weightsVec.size(); i++)
-                            {
-                               weights[i] = weightsVec[i];
-                            }
-                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_SPHERICAL);
+                            TriangulationModel::setWeights(&weightsVec);
+                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_SPHERICAL);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDWEIGHTSMAN:
+                        {
+                             int ret = DialogBox(GetModuleHandle(NULL),
+                               MAKEINTRESOURCE(IDD_RADII), hwnd, RadiiDlgProc);
+                             if(ret == IDCANCEL) {
+                               UpdateConsole(hwnd, "Flow canceled.\r\n");
+                             } else if(ret == IDOK) {
+                               TriangulationModel::runCalcFlow(ID_RUN_FLOW_SPHERICAL);
+                               UpdateConsole(hwnd, "Flow complete.\r\n");
+                             }
                         }
                         break;
                         case IDCANCEL:
@@ -551,12 +811,13 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                         {
                             srand(time(NULL));
                             int vertexSize = Triangulation::vertexTable.size();
-                            double weights[vertexSize];
-                            for(int i = 1; i <= vertexSize; i++)
+                            vector<double> weightsVec;
+                            for(int i = 0; i < vertexSize; i++)
                             {
-                               weights[i - 1] =   (rand() % 100 + 1)/ 125.0;
+                               weightsVec.push_back((rand() % 100 + 1) / 125.0);
                             }
-                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_HYPERBOLIC);
+                            TriangulationModel::setWeights(&weightsVec);
+                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_HYPERBOLIC);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -578,13 +839,21 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
                                break;
                             }
-                            double weights[weightsVec.size()];
-                            for(int i = 0; i < weightsVec.size(); i++)
-                            {
-                               weights[i] = weightsVec[i];
-                            }
-                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_HYPERBOLIC);
+                            TriangulationModel::setWeights(&weightsVec);
+                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_HYPERBOLIC);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDWEIGHTSMAN:
+                        {
+                             int ret = DialogBox(GetModuleHandle(NULL),
+                               MAKEINTRESOURCE(IDD_RADII), hwnd, RadiiDlgProc);
+                             if(ret == IDCANCEL) {
+                               UpdateConsole(hwnd, "Flow canceled.\r\n");
+                             } else if(ret == IDOK) {
+                               TriangulationModel::runCalcFlow(ID_RUN_FLOW_HYPERBOLIC);
+                               UpdateConsole(hwnd, "Flow complete.\r\n");
+                             }
                         }
                         break;
                         case IDCANCEL:
@@ -613,12 +882,13 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                         {
                             srand(time(NULL));
                             int vertexSize = Triangulation::vertexTable.size();
-                            double weights[vertexSize];
+                            vector<double> weightsVec;
                             for(int i = 1; i <= vertexSize; i++)
                             {
-                               weights[i - 1] =   (rand() % 5 + 1);
+                               weightsVec.push_back(1.5 + (rand() % 100) / 100.0);
                             }
-                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_YAMABE);
+                            TriangulationModel::setWeights(&weightsVec);
+                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_YAMABE);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -637,16 +907,29 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                             }
                             if(weightsVec.size() != Triangulation::vertexTable.size()) 
                             {
-                               MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
+                               cout << weightsVec.size() << "\n";
+                               if(Triangulation::vertexTable.size() != 16) {
+                                  MessageBox(NULL, "Improper file for weights*", "Error", MB_OK | MB_ICONINFORMATION);
+                               } else {
+                                  MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
+                               }
                                break;
                             }
-                            double weights[weightsVec.size()];
-                            for(int i = 0; i < weightsVec.size(); i++)
-                            {
-                               weights[i] = weightsVec[i];
-                            }
-                            TriangulationModel::runCalcFlow(weights, ID_RUN_FLOW_YAMABE);
+                            TriangulationModel::setWeights(&weightsVec);
+                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_YAMABE);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
+                        }
+                        break;
+                        case IDWEIGHTSMAN:
+                        {
+                             int ret = DialogBox(GetModuleHandle(NULL),
+                               MAKEINTRESOURCE(IDD_RADII), hwnd, RadiiDlgProc);
+                             if(ret == IDCANCEL) {
+                               UpdateConsole(hwnd, "Flow canceled.\r\n");
+                             } else if(ret == IDOK) {
+                               TriangulationModel::runCalcFlow(ID_RUN_FLOW_YAMABE);
+                               UpdateConsole(hwnd, "Flow complete.\r\n");
+                             }
                         }
                         break;
                         case IDCANCEL:

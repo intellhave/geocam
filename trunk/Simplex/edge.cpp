@@ -7,11 +7,13 @@ Version: July 16, 2008
 #include "edge.h" // class's header file
 #include "triangulation/triangulation.h"
 #include <cmath>
+#define PI 	3.141592653589793238
 
 // class constructor
 Edge::Edge() : Simplex()
 {
-    intersectAngle = 0;
+    eta = 1;
+    length = 0;
 }
 
 // class destructor
@@ -30,20 +32,24 @@ void Edge::setLength() {
    Vertex v2 = Triangulation::vertexTable[(*getLocalVertices())[1]];
    // Theta = intersection angle of the spheres
    length = sqrt(pow(v1.getRadius(), 2) + pow(v2.getRadius(), 2)
-                        + 2*v1.getRadius()*v2.getRadius()*cos(intersectAngle));
+                        + 2*v1.getRadius()*v2.getRadius()*eta);
 }
 void Edge::setLength(double newLength) {
      length = newLength;
 }
-
-double Edge::getAngle()
-{
-       return intersectAngle;
+double Edge::getEta() {
+     return eta;
 }
-
-void Edge::setAngle(double angle)
+double Edge::getIntersectAngle()
 {
-     intersectAngle = angle;
+    return acos(eta);
+}
+void Edge::setEta(double newEta) {
+     eta = newEta;
+}
+void Edge::setIntersectAngle(double angle)
+{
+    eta = cos(angle);
 }
 
 bool Edge::isBorder()
