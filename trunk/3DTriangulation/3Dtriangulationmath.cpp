@@ -4,14 +4,15 @@
 #include "spherical/sphericalmath.h"
 #include "miscmath.h"
 #define PI 	3.141592653589793238
-double dihedralAngle(double angle1, double angle2, double angle3)
+double solidAngle(double angle1, double angle2, double angle3)
 {
+       // Beta i = dihedral angle
        double beta1 = sphericalAngle(angle1, angle2, angle3);
        double beta2 = sphericalAngle(angle1, angle3, angle2);
        double beta3 = sphericalAngle(angle2, angle3, angle1);
        return beta1 + beta2 + beta3 - PI;      
 }       
-double dihedralAngle(Vertex v, Tetra t)
+double solidAngle(Vertex v, Tetra t)
 {
        // Find the three faces local to v and part of the t.
        vector<int> sameAs = listIntersection(v.getLocalFaces(), t.getLocalFaces());
@@ -24,8 +25,7 @@ double dihedralAngle(Vertex v, Tetra t)
        double angle1 = angle(v, f1);
        double angle2 = angle(v, f2);
        double angle3 = angle(v, f3);
-       
-       return dihedralAngle(angle1, angle2, angle3);
+       return solidAngle(angle1, angle2, angle3);
 }
 double volumeSq(Tetra t) 
 {
@@ -55,7 +55,7 @@ double curvature3D(Vertex v)
        for(int i = 0; i < v.getLocalTetras()->size(); i++)
        {
            Tetra t = Triangulation::tetraTable[(*(v.getLocalTetras()))[i]];
-           sum += dihedralAngle(v, t);
+           sum += solidAngle(v, t);
        }
        // Subtract sum from 4*PI
        return 4*PI - sum;
@@ -80,6 +80,11 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
   double netC = 0; // Net and prev hold the current and previous
   double netR = 0;
   double prevC;    //  net curvatures, repsectively.
+  map<int, Edge>::iterator eit;
+  for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+     eit->second.setEta(1.0);  
+  }
+  
    for (k=0; k<p; k++) {
     z[k]=initRadii[k]; // z[k] holds the current radii.
    }
@@ -114,7 +119,8 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
            else {
                (*curvatures).push_back(curv[k]);
            }
-           netC += curv[k]; // Calculating the net curvature.
+           //netC += curv[k]; // Calculating the net curvature.
+           netC += curv[k] * z[k]; // Calculating the net curvature.
            // Calculates the differential equation, either normalized or
            // standard.
            if(adjF) ta[k]= dt * ((-1) * curv[k] 
@@ -178,7 +184,7 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
          
        }
    }
-   printResultsVolumes("Triangulation Files/Volume Results.txt", &volumes);
+   printResultsVolumes("C:/Dev-Cpp/Geocam/Triangulation Files/Volume Results.txt", &volumes);
 }
 
 double stdDiffEQ3D(int vertex) 
