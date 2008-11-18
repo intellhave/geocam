@@ -136,11 +136,6 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                    bQuit = false;
                    HWND hPoly = GetDlgItem(hwnd, IDC_POLYGON);
                    ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
-                   FILE* msgFile = fopen("C:/Dev-Cpp/geocam/Triangulation Files/msgFile.txt", "w");
-                   fprintf(msgFile, "WM_COMMAND: %d\n", WM_COMMAND);
-                   fprintf(msgFile, "IDPOLYGON: %d\n", IDPOLYGON);
-                   fprintf(msgFile, "WM_QUIT: %d\n", WM_QUIT);
-                   fprintf(msgFile, "IDCANCEL: %d\n", IDCANCEL);
                    EnableOpenGL( hPoly, &hDC, &hRC );
                    SetDlgItemText(hwnd, IDC_POLYGON_STEP, "0000");
                    // program main loop
@@ -157,13 +152,10 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                    {
                      if (PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE)) 
                      {
-                        fprintf(msgFile, "%d   ", msg.message);
-                        fprintf(msgFile, "%d\n", LOWORD(msg.wParam));
                         switch(msg.message) {
                           case WM_COMMAND: {
                               switch(LOWORD(msg.wParam)) {
                               case IDCANCEL: {
-                                fprintf(msgFile, "IN\n");
                                 bQuit = true;
                               }
                               break;
@@ -252,7 +244,6 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                     }
                     SetDlgItemText(hwnd, IDC_POLYGON_STEP, "----");
                     DisableOpenGL( hPoly, hDC, hRC );
-                    fclose(msgFile);
                     bQuit = true;
                 }
                 break;
