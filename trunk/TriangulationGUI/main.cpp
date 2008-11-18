@@ -564,41 +564,78 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                              int eIndex = (int) SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETITEMDATA, (WPARAM)index, 0);
                              vector<int> localV = *(Triangulation::edgeTable[eIndex].getLocalVertices());
                              int size = localV.size();
+                             double edgeL = Triangulation::edgeTable[eIndex].getLength();
+                             double radii1 = Triangulation::vertexTable[localV[0]].getRadius();
+                             double radii2 = Triangulation::vertexTable[localV[1]].getRadius();
                              glBegin(GL_LINES);
                              glColor3f( 0.0f, 0.0f, 0.0f );
-                             for(int i = 0; i < size; i++) {
-                                 double angle = 2 * PI / size * i;
-                                 glVertex2f(0.0f, 0.0f); glVertex2f(.9*cos(angle), .9*sin(angle));
-                             }
+                                 glVertex2f(0.9f, 0.0f); glVertex2f(-0.9, 0.0);
                              glEnd();
 
+                             
+                             radii1 = radii1 * 1.8 / edgeL;
+                             radii2 = radii2 * 1.8 / edgeL;
+                             glBegin(GL_LINE_LOOP);
+                             glColor3f(0.0f, 1.0f, 0.0f);
+                             for(int i = 0; i < 25; i++) {
+                                 float angle = (float) 2 * PI / 25 * i;
+                                 glVertex2f(radii1*cos(angle) + 0.9, radii1*sin(angle));
+                             }
+                             glEnd();
+                             glBegin(GL_LINE_LOOP);
+                             glColor3f(0.0f, 1.0f, 0.0f);
+                             for(int i = 0; i < 25; i++) {
+                                 float angle = (float) 2 * PI / 25 * i;
+                                 glVertex2f(radii2*cos(angle) - 0.9, radii2*sin(angle));
+                             }
+                             glEnd();
+                             
                              glDisable(GL_TEXTURE_2D);
                              glColor3f(1.0f, 0.0f, 0.0f);
-                             for(int i = 0; i < size; i++) {
-                                 float angle = (float) 2 * PI / size * i;
-                                 // Specify the position of the text
-                                 glRasterPos2f(.8*cos(angle), .8*sin(angle));
-                                 int arrSize = 0;
-                                 int temp = localV[i];
-                                 if(temp <= 0) {
-                                    arrSize = 1;
-                                 } else {
-                                   while(temp != 0) {
-                                     temp /= 10;
-                                     arrSize++;
-                                   }
-                                 }
-                                 char vertexNum[arrSize + 1];
-                                 itoa(localV[i], vertexNum, 10);
-                                 // display a string: 
-                                 // indicate start of glyph display lists 
-                                 //glListBase (1000); 
-                                 // now draw the characters in a string 
-                                 glPushAttrib(GL_LIST_BIT);
-                                   glListBase(listbase); //32 offset backwards since we offset it forwards
-                                   glCallLists(arrSize, GL_UNSIGNED_BYTE, vertexNum);
-                                 glPopAttrib();
+                             // Specify the position of the text
+                             glRasterPos2f(0.8, 0.0);
+                             int arrSize = 0;
+                             int temp = localV[0];
+                             if(temp <= 0) {
+                                arrSize = 1;
+                             } else {
+                               while(temp != 0) {
+                                 temp /= 10;
+                                 arrSize++;
+                               }
                              }
+                             char vertexNum1[arrSize + 1];
+                             itoa(localV[0], vertexNum1, 10);
+                             // display a string: 
+                             // indicate start of glyph display lists 
+                             //glListBase (1000); 
+                             // now draw the characters in a string 
+                             glPushAttrib(GL_LIST_BIT);
+                             glListBase(listbase); //32 offset backwards since we offset it forwards
+                             glCallLists(arrSize, GL_UNSIGNED_BYTE, vertexNum1);
+                             glPopAttrib();
+                             
+                             glRasterPos2f(-0.8, 0.0);
+                             arrSize = 0;
+                             temp = localV[1];
+                             if(temp <= 0) {
+                                arrSize = 1;
+                             } else {
+                               while(temp != 0) {
+                                 temp /= 10;
+                                 arrSize++;
+                               }
+                             }
+                             char vertexNum2[arrSize + 1];
+                             itoa(localV[1], vertexNum2, 10);
+                             // display a string: 
+                             // indicate start of glyph display lists 
+                             //glListBase (1000); 
+                             // now draw the characters in a string 
+                             glPushAttrib(GL_LIST_BIT);
+                             glListBase(listbase); //32 offset backwards since we offset it forwards
+                             glCallLists(arrSize, GL_UNSIGNED_BYTE, vertexNum2);
+                             glPopAttrib();
                              glEnable(GL_TEXTURE_2D);
 
                           }
