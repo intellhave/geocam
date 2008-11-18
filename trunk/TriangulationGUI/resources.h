@@ -52,5 +52,6 @@
 #define IDRADII_RANDOM                  5012
 #define IDETA_SET                       5013
 #define IDETA_RANDOM                    5014
+#define IDPOLYGON_STOP                  5015
 
 #define MAXWEIGHTSIZE                   10

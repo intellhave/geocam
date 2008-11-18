@@ -139,7 +139,8 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                    EnableOpenGL( hPoly, &hDC, &hRC );
                    SetDlgItemText(hwnd, IDC_POLYGON_STEP, "0000");
                    // program main loop
-                   char step[] = {'0', '0', '0', '1', '\0'};
+                   char stepArr[5] = {'\0'};
+                   int step = 1;
                    char speedArr[5];
                    GetDlgItemText(hwnd, IDC_POLYGON_SPEED, speedArr, 5);
                    int speed = atoi(speedArr);
@@ -219,27 +220,9 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                           // origin corresponds to negative infinity.
                       }
                       glEnd();
-                      SetDlgItemText(hwnd, IDC_POLYGON_STEP, step);
-                      if(step[3] == '9') {
-                         step[3] = '0';
-                         if(step[2] == '9') {
-                            step[2] = '0';
-                            if(step[1] == '9') {
-                               step[1] = '0';
-                               if(step[0] == '9') {
-                                  step[0] = '0';
-                               } else {
-                                  step[0]++;
-                               }
-                            } else {
-                               step[1]++;
-                            }
-                         } else {
-                            step[2]++;
-                         }
-                      } else {
-                        step[3]++;
-                      }
+                      itoa(step, stepArr, 10);
+                      SetDlgItemText(hwnd, IDC_POLYGON_STEP, stepArr);
+                      step++;
                       Sleep(speed);
                     }
                     SetDlgItemText(hwnd, IDC_POLYGON_STEP, "----");
@@ -247,6 +230,9 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                     bQuit = true;
                 }
                 break;
+                case IDPOLYGON_STOP:
+                     bQuit = true;
+                break;                           
                 case IDCANCEL:
                     bQuit = true;
                     EndDialog(hwnd, IDCANCEL);
