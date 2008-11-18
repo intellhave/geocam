@@ -80,10 +80,6 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
   double netC = 0; // Net and prev hold the current and previous
   double netR = 0;
   double prevC;    //  net curvatures, repsectively.
-  map<int, Edge>::iterator eit;
-  for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-     eit->second.setEta(1.0);  
-  }
   
    for (k=0; k<p; k++) {
     z[k]=initRadii[k]; // z[k] holds the current radii.

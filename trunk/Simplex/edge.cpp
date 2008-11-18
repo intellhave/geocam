@@ -10,9 +10,9 @@ Version: July 16, 2008
 #define PI 	3.141592653589793238
 
 // class constructor
-Edge::Edge() : Simplex()
+Edge::Edge() : Simplex() //: eta = 1.0
 {
-    eta = 1;
+    eta = 1.0;
     length = 0;
 }
 
@@ -46,10 +46,12 @@ double Edge::getIntersectAngle()
 }
 void Edge::setEta(double newEta) {
      eta = newEta;
+     setLength();
 }
 void Edge::setIntersectAngle(double angle)
 {
     eta = cos(angle);
+    setLength();
 }
 
 bool Edge::isBorder()

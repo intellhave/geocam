@@ -57,6 +57,9 @@ void TriangulationModel::setWeights(vector<double> *weightsVec) {
 void TriangulationModel::setWeight(int vertex, double weight) {
      Triangulation::vertexTable[vertex].setRadius(weight);
 }
+void TriangulationModel::setEta(int edge, double eta) {
+     Triangulation::edgeTable[edge].setEta(eta);
+}
 bool TriangulationModel::isLoaded()
 {
      return loaded;

@@ -15,6 +15,8 @@ HINSTANCE hInst;
 HDC hDC;
 HGLRC hRC;
 GLuint listbase;
+HFONT hFont;
+BOOL bQuit;
 void FileChooser(HWND hwnd, LPSTR szFileName)
 {
 	OPENFILENAME ofn;
@@ -122,7 +124,7 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
      {
         case WM_INITDIALOG:
         {
-
+             SetDlgItemText(hwnd, IDC_POLYGON_SPEED, "100");
         }
         break;
         case WM_COMMAND:
@@ -130,16 +132,58 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
             {
                 case IDPOLYGON: 
                 {
+                   MSG msg;
+                   bQuit = false;
                    HWND hPoly = GetDlgItem(hwnd, IDC_POLYGON);
                    ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
-                   
+                   FILE* msgFile = fopen("C:/Dev-Cpp/geocam/Triangulation Files/msgFile.txt", "w");
+                   fprintf(msgFile, "WM_COMMAND: %d\n", WM_COMMAND);
+                   fprintf(msgFile, "IDPOLYGON: %d\n", IDPOLYGON);
+                   fprintf(msgFile, "WM_QUIT: %d\n", WM_QUIT);
+                   fprintf(msgFile, "IDCANCEL: %d\n", IDCANCEL);
                    EnableOpenGL( hPoly, &hDC, &hRC );
                    SetDlgItemText(hwnd, IDC_POLYGON_STEP, "0000");
                    // program main loop
                    char step[] = {'0', '0', '0', '1', '\0'};
-                   while (scanner.good()) 
+                   char speedArr[5];
+                   GetDlgItemText(hwnd, IDC_POLYGON_SPEED, speedArr, 5);
+                   int speed = atoi(speedArr);
+                   if(speed <= 0) 
                    {
-                      
+                      MessageBox(NULL, "Invalid speed", "Error", MB_OK | MB_ICONINFORMATION);
+                      return FALSE;
+                   }
+                   while (scanner.good() && !bQuit) 
+                   {
+                     if (PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE)) 
+                     {
+                        fprintf(msgFile, "%d   ", msg.message);
+                        fprintf(msgFile, "%d\n", LOWORD(msg.wParam));
+                        switch(msg.message) {
+                          case WM_COMMAND: {
+                              switch(LOWORD(msg.wParam)) {
+                              case IDCANCEL: {
+                                fprintf(msgFile, "IN\n");
+                                bQuit = true;
+                              }
+                              break;
+//                              case IDPOLYGON: {
+//                                SetDlgItemText(hwnd, IDC_POLYGON_SPEED, "003");
+//                                return TRUE;
+//                              }
+//                              break;
+                              default: ;// do nothing
+                              }
+                          }
+                          break;
+                          default: ;
+                        }
+//                          
+                          TranslateMessage(&msg);
+                          DispatchMessage(&msg);
+
+                      } 
+
                       SwapBuffers( hDC );
                       int size = Triangulation::vertexTable.size();
                       double curv[size];
@@ -204,13 +248,16 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                       } else {
                         step[3]++;
                       }
-                      Sleep(50);
+                      Sleep(speed);
                     }
                     SetDlgItemText(hwnd, IDC_POLYGON_STEP, "----");
                     DisableOpenGL( hPoly, hDC, hRC );
+                    fclose(msgFile);
+                    bQuit = true;
                 }
                 break;
                 case IDCANCEL:
+                    bQuit = true;
                     EndDialog(hwnd, IDCANCEL);
                 break;
             }
@@ -252,16 +299,37 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                TriangulationModel::setWeight(vertexI, 1.00000);
                i++;
            }
-           HWND hEdit = GetDlgItem(hwnd, IDC_RADII_FLOWER);
+           map<int, Edge>::iterator eit;
+           i = 0;
+           for(eit = Triangulation::edgeTable.begin(); 
+                   eit != Triangulation::edgeTable.end(); eit++) {
+               char text[25] = "Edge    : 1.00000 ";
+               int edgeI = eit->first;
+               int arrSize = 0;
+               int temp = edgeI;
+               if(temp <= 0) {
+                 arrSize = 1;
+               } else {
+                 while(temp != 0) {
+                  temp /= 10;
+                  arrSize++;
+                 }
+               }
+               char edgeNum[arrSize + 1];
+               itoa(edgeI, edgeNum, 10);
+               strncpy(text + 5, edgeNum, arrSize);
+               int index = SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_ADDSTRING, 0, (LPARAM)text);
+               SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_SETITEMDATA, (WPARAM)index, 
+                                 (LPARAM)edgeI);
+               TriangulationModel::setEta(edgeI, 1.00000);
+               i++;
+           }
 
-           EnableOpenGL( hEdit, &hDC, &hRC );
-           glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-           glClear(GL_COLOR_BUFFER_BIT);
            
            listbase = glGenLists(255);
  
            // make the system font the device context's selected font
-            HFONT hFont = CreateFont(-10,
+           hFont = CreateFont(-10,
                   0,
                   0,
                   0,
@@ -277,13 +345,9 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                   "Arial");
            
            //SelectObject (hDC, GetStockObject(SYSTEM_FONT)); 
-           SelectObject(hDC, hFont);
-           // create the bitmap display lists 
-           // we're making images of glyphs 0 thru 255 
-           // the display list numbering starts at 1000, an arbitrary choice 
-           wglUseFontBitmaps(hDC, 0, 255, listbase);
+
            
-           SwapBuffers( hDC );
+           //SwapBuffers( hDC );
            return TRUE;
         }
         case WM_COMMAND:
@@ -298,19 +362,19 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                         MessageBox(NULL, "Invalid weight", "Error", MB_OK | MB_ICONINFORMATION);
                      } else {
        					HWND hList = GetDlgItem(hwnd, IDC_RADII_LIST);
-			            int count = SendMessage(hList, LB_GETSELCOUNT, 0, 0);
+			            int countRadii = SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELCOUNT, 0, 0);
 					    
-						if(count != 0)
+						if(countRadii != 0)
 						{
 							// And then allocate room to store the list of selected items.
 
 							int i;
 							int *buf;
-                            buf = (int*)GlobalAlloc(GPTR, sizeof(int) * count);
-							SendMessage(hList, LB_GETSELITEMS, (WPARAM)count, (LPARAM)buf);
+                            buf = (int*)GlobalAlloc(GPTR, sizeof(int) * countRadii);
+							SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELITEMS, (WPARAM)countRadii, (LPARAM)buf);
 						    
                             
-							for(i = count - 1; i >= 0; i--)
+							for(i = countRadii - 1; i >= 0; i--)
 							{
                                 char text[25];
                                 SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETTEXT, (WPARAM)buf[i], (LPARAM)text);
@@ -324,13 +388,39 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
      						}
 
 							GlobalFree(buf);
-				          }
-				          else 
-						  {
-						     MessageBox(hwnd, "No items selected.", "Warning", MB_OK);
-						  }
+                          }
                      }
+                     char etaStr[MAXWEIGHTSIZE];
+                     GetDlgItemText(hwnd, IDC_ETA, etaStr, MAXWEIGHTSIZE);
+                     double eta = atof(etaStr);
+                     
+                     int countEta = SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELCOUNT, 0, 0);
+					    
+                     if(countEta != 0 && etaStr[0] != '\0')
+                     {
+							// And then allocate room to store the list of selected items.
 
+							int i;
+							int *buf;
+                            buf = (int*)GlobalAlloc(GPTR, sizeof(int) * countEta);
+							SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELITEMS, (WPARAM)countEta, (LPARAM)buf);
+						    
+                            
+							for(i = countEta - 1; i >= 0; i--)
+							{
+                                char text[25];
+                                SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETTEXT, (WPARAM)buf[i], (LPARAM)text);
+                                int index = SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETITEMDATA, (WPARAM)buf[i], 0);
+                                strncpy(text + 10, etaStr, MAXWEIGHTSIZE);
+                                SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_INSERTSTRING, (WPARAM)buf[i], (LPARAM)text);
+                                SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_SETITEMDATA, (WPARAM)buf[i], (LPARAM)index);
+                                SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_SETSEL, (WPARAM)1, (LPARAM)buf[i]);
+                                SendDlgItemMessage(hwnd, IDC_ETA_LIST,  LB_DELETESTRING, (WPARAM)(buf[i] + 1), 0);
+                                TriangulationModel::setEta(index, eta);
+     						}
+
+							GlobalFree(buf);
+                     }
                      return TRUE;
                 }
                 break;
@@ -356,19 +446,146 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                     return TRUE;
                 }
                 break;
+                case IDETA_RANDOM:
+                {
+                    srand(time(NULL));
+                    map<int, Edge>::iterator eit;
+                    int i = 0;
+                    char etaStr[MAXWEIGHTSIZE];
+                    for(eit = Triangulation::edgeTable.begin(); 
+                            eit != Triangulation::edgeTable.end(); eit++) {
+                        double eta = rand() % 100 / 100.0 + 0.5;
+                        sprintf(etaStr, "%.4f", eta);
+                        char text[25];
+                        SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETTEXT, (WPARAM)i, (LPARAM)text);
+                        strncpy(text + 10, etaStr, MAXWEIGHTSIZE);
+                        SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_INSERTSTRING, (WPARAM)i, (LPARAM)text);
+                        SendDlgItemMessage(hwnd, IDC_ETA_LIST,  LB_DELETESTRING, (WPARAM)(i + 1), 0);
+                        SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_SETITEMDATA, (WPARAM)i, (LPARAM)eit->first);
+                        TriangulationModel::setEta(eit->first, eta);
+                        i++;
+                    }
+                    return TRUE;
+                }                
                 case IDC_RADII_LIST: {
                     switch(HIWORD(wParam))
 					{
 					  case LBN_SELCHANGE:
 						{
+                          HWND hRadii = GetDlgItem(hwnd, IDC_RADII_FLOWER);
+                          EnableOpenGL( hRadii, &hDC, &hRC );
+                          SelectObject(hDC, hFont);
+                          // create the bitmap display lists 
+                          // we're making images of glyphs 0 thru 255 
+                          // the display list numbering starts at 1000, an arbitrary choice 
+                          wglUseFontBitmaps(hDC, 0, 255, listbase);
                           glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
                           glClear(GL_COLOR_BUFFER_BIT);
+                          
                           if(SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELCOUNT, 0, 0) == 1) {
 
                              int index;
                              SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELITEMS, (WPARAM)1, (LPARAM)&index);
                              int vIndex = (int) SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETITEMDATA, (WPARAM)index, 0);
-                             vector<int> localV = *(Triangulation::vertexTable[vIndex].getLocalVertices());
+                             vector<int> localE = *(Triangulation::vertexTable[vIndex].getLocalEdges());
+                             int size = localE.size();
+                             glBegin(GL_LINES);
+                             glColor3f( 0.0f, 0.0f, 0.0f );
+                             for(int i = 0; i < size; i++) {
+                                 double angle = 2 * PI / size * i;
+                                 glVertex2f(0.0f, 0.0f); glVertex2f(.9*cos(angle), .9*sin(angle));
+                             }
+                             glEnd();
+
+                             glDisable(GL_TEXTURE_2D);
+                             glColor3f(1.0f, 0.0f, 0.0f);
+                             vector<int> localV;
+                             for(int i = 0; i < size; i++) {
+                                 Edge edge = Triangulation::edgeTable[localE[i]];
+                                 localV = *(edge.getLocalVertices());
+                                 int otherIndex = localV[0] == vIndex ? 1 : 0; 
+                                 float angle = (float) 2 * PI / size * i;
+                                 // Specify the position of the text
+                                 glRasterPos2f(.8*cos(angle), .8*sin(angle));
+                                 int arrSize = 0;
+                                 int temp = localV[otherIndex];
+                                 if(temp <= 0) {
+                                    arrSize = 1;
+                                 } else {
+                                   while(temp != 0) {
+                                     temp /= 10;
+                                     arrSize++;
+                                   }
+                                 }
+                                 char vertexNum[arrSize + 1];
+                                 itoa(localV[otherIndex], vertexNum, 10);
+                                 // display a string: 
+                                 // indicate start of glyph display lists 
+                                 //glListBase (1000); 
+                                 // now draw the characters in a string
+                                
+                                 glPushAttrib(GL_LIST_BIT);
+                                   glListBase(listbase); //32 offset backwards since we offset it forwards
+                                   glCallLists(arrSize, GL_UNSIGNED_BYTE, vertexNum);
+                                 glPopAttrib();
+                             }
+                             
+                             glColor3f(0.0f, 0.0f, 1.0f);
+                             for(int i = 0; i < size; i++) {
+                                 float angle = (float) 2 * PI / size * i;
+                                 glRasterPos2f(.4*cos(angle), .4*sin(angle));
+                                 int arrSize = 0;
+                                 int temp = localE[i];
+                                 if(temp <= 0) {
+                                    arrSize = 1;
+                                 } else {
+                                   while(temp != 0) {
+                                     temp /= 10;
+                                     arrSize++;
+                                   }
+                                 }
+                                 char edgeNum[arrSize + 1];
+                                 itoa(localE[i], edgeNum, 10);
+                                 
+                                 glPushAttrib(GL_LIST_BIT);
+                                   glListBase(listbase); //32 offset backwards since we offset it forwards
+                                   glCallLists(arrSize, GL_UNSIGNED_BYTE, edgeNum);
+                                 glPopAttrib();                                 
+                             }
+                             glEnable(GL_TEXTURE_2D);
+
+                          }
+                          
+                          SwapBuffers( hDC );
+                          
+                          DisableOpenGL( hRadii, hDC, hRC );
+                          return TRUE;
+                        }
+                        break;
+                    }
+                    
+                }
+                break;
+                case IDC_ETA_LIST: {
+                    switch(HIWORD(wParam))
+					{
+					  case LBN_SELCHANGE:
+						{
+                          HWND hEta = GetDlgItem(hwnd, IDC_ETA_FLOWER);
+                          EnableOpenGL( hEta, &hDC, &hRC );
+                          SelectObject(hDC, hFont);
+                          // create the bitmap display lists 
+                          // we're making images of glyphs 0 thru 255 
+                          // the display list numbering starts at 1000, an arbitrary choice 
+                          wglUseFontBitmaps(hDC, 0, 255, listbase);
+                          glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+                          glClear(GL_COLOR_BUFFER_BIT);
+                          if(SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELCOUNT, 0, 0) == 1) {
+
+                             int index;
+                             SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELITEMS, (WPARAM)1, (LPARAM)&index);
+                             int eIndex = (int) SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETITEMDATA, (WPARAM)index, 0);
+                             vector<int> localV = *(Triangulation::edgeTable[eIndex].getLocalVertices());
                              int size = localV.size();
                              glBegin(GL_LINES);
                              glColor3f( 0.0f, 0.0f, 0.0f );
@@ -410,24 +627,25 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                           }
                           
                           SwapBuffers( hDC );
+                          
+                          DisableOpenGL( hEta, hDC, hRC );
                           return TRUE;
+
                         }
                         break;
-                    } 
+                    }
                 }
                 break;
                 case IDOK: 
                 {
-                    HWND hEdit = GetDlgItem(hwnd, IDC_RADII_FLOWER);
                     if(listbase)
                       glDeleteLists(listbase,255);
-                    DisableOpenGL( hEdit, hDC, hRC ); 
                     EndDialog(hwnd, IDOK);
                 }
                 break;
                 case IDCANCEL:
-                    HWND hEdit = GetDlgItem(hwnd, IDC_RADII_FLOWER);
-                    DisableOpenGL( hEdit, hDC, hRC );
+                    if(listbase)
+                      glDeleteLists(listbase,255);                     
                     EndDialog(hwnd, IDCANCEL);
                 break;
             }
@@ -437,6 +655,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
     }
     return TRUE;
 }
+
 BOOL CALLBACK FormatDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
      switch(Message)
@@ -490,9 +709,9 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
            {
               MessageBox(NULL, "hcombo is NULL", "Error", MB_OK | MB_ICONINFORMATION);
            }
-           SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Random");
+           SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Manually");
+           SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Random");
            SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"From file");
-           SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Manually");
            hcombo = NULL;
            hcombo = GetDlgItem(hwnd, IDC_FLOWSELECTBOX);
            if(hcombo == NULL)
@@ -660,6 +879,11 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                      
                      UpdateConsole(hwnd, "Running flow....\r\n");
                      TriangulationModel::clearData();
+                     map<int, Edge>::iterator eit;
+                     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+                     {
+                         eit->second.setEta(1.0);
+                     }
                      int ret = DialogBox(GetModuleHandle(NULL),
                         MAKEINTRESOURCE(IDD_FLOWDIALOG), hwnd, FlowDlgProc);
                      switch(ret)
@@ -975,57 +1199,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                              TriangulationModel::printResults(IDPRINTNUMSTEP);
                              DialogBox(GetModuleHandle(NULL),
                                 MAKEINTRESOURCE(IDD_POLYGON), hwnd, PolygonProc);
-//                             Sleep(200);
-//                             HWND hHiddenPoly = GetDlgItem(hwnd, IDC_POLYGON);
-//                             //ShowWindow(hwnd, SW_HIDE);
-//                             ShowWindow(hHiddenPoly, SW_SHOW);
-//                             //HWND hedit = NULL;
-//                             //hedit = GetDlgItem(hwnd, IDC_RESULTSFIELD);
-//                             HDC hDC;
-//                             HGLRC hRC;
-//                             ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
-//                             //EnableOpenGL( hedit, &hDC, &hRC );
-//                             EnableOpenGL( hHiddenPoly, &hDC, &hRC );
-////                             glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-////                             glClear(GL_COLOR_BUFFER_BIT);
-////                             glBegin(GL_LINE_LOOP);
-////                             glColor3f( 0.0f, 0.0f, 0.0f );
-////                             glVertex2f(0.5, 0.5);
-////                             glVertex2f(0.5, -0.5);
-////                             glVertex2f(-0.5, -0.5);
-////                             glVertex2f(-0.5, 0.5);
-////                             glEnd();
-////                             SwapBuffers( hDC );
-//
-//                             // program main loop
-//                             while (scanner.good()) 
-//                             {
-//     
-//                                 int size = Triangulation::vertexTable.size();
-//                                 double curv[size];
-//                                 for(int i = 0; i < size; i++)
-//                                 {
-//                                     scanner >> curv[i];
-//                                 }
-//                                 glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-//                                 glClear(GL_COLOR_BUFFER_BIT); 
-//                                 glBegin(GL_LINE_LOOP);
-//                                 glColor3f( 0.0f, 0.0f, 0.0f ); 
-//                                 for(int i = 0; i < size; i++)
-//                                 {
-//                                    double angle = 2 * PI / size * i;
-//                                    glVertex2f( /*log(abs*/(curv[i])/*)*/ / 4 * cos(angle), /*log(abs*/(curv[i])/*)*/ / 4 * sin(angle));              
-//                                 }
-//                                 glEnd();
-//            
-//                                 SwapBuffers( hDC );
-//                                 Sleep(100);
-//                              } 
-//                              SwapBuffers( hDC );
-//                              //DisableOpenGL( hedit, hDC, hRC );
-//                              DisableOpenGL( hHiddenPoly, hDC, hRC );
-//                              //ShowWindow(hwnd, SW_SHOW);
-//                              ShowWindow(hHiddenPoly, SW_HIDE);
+
                               UpdateConsole(hwnd, "Polygon flow complete.\r\n");
                         }
                         break;

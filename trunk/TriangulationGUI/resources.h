@@ -5,6 +5,7 @@
 #define IDD_FLOWDIALOG                  104
 #define IDD_POLYGON                     105
 #define IDD_RADII                       106
+#define IDD_ETA                         107
 #define ID_FILE_EXIT                    40001
 #define ID_FILE_LOAD_MANIFOLD           40002
 #define ID_FILE_LOAD_PLANE              40003
@@ -30,9 +31,13 @@
 #define IDC_HIDDENTEXT                  1010
 #define IDC_POLYGON                     1011
 #define IDC_POLYGON_STEP                1012
-#define IDC_RADII                       1013
+#define IDC_POLYGON_SPEED               1013
+#define IDC_RADII                       1014
 #define IDC_RADII_LIST                  1015
 #define IDC_RADII_FLOWER                1016
+#define IDC_ETA                         1017
+#define IDC_ETA_LIST                    1018
+#define IDC_ETA_FLOWER                  1019
 #define IDSTANDARD                      5001
 #define IDLUTZ                          5002
 #define IDPRINTSTEP                     5003
@@ -45,5 +50,7 @@
 #define IDWEIGHTSMAN                    5010
 #define IDRADII_SET                     5011
 #define IDRADII_RANDOM                  5012
+#define IDETA_SET                       5013
+#define IDETA_RANDOM                    5014
 
 #define MAXWEIGHTSIZE                   10

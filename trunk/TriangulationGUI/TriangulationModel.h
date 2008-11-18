@@ -26,6 +26,7 @@ class TriangulationModel
       static void setFlowFunction(bool);
       static void setWeights(vector<double>*);
       static void setWeight(int, double);
+      static void setEta(int, double);
       static bool runCalcFlow(int);
       static bool loadFile(char*, int);
       static bool load3DFile(char*, int);
