@@ -335,7 +335,10 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                      char weightStr[MAXWEIGHTSIZE];
                      GetDlgItemText(hwnd, IDC_RADII, weightStr, MAXWEIGHTSIZE);
                      double weight = atof(weightStr);
-                     if(weight <= 0.0) {
+                     if(weightStr[0] == '\0') {
+                        // Do nothing
+                     }
+                     else if(weight <= 0.0) {
                         MessageBox(NULL, "Invalid weight", "Error", MB_OK | MB_ICONINFORMATION);
                      } else {
        					HWND hList = GetDlgItem(hwnd, IDC_RADII_LIST);
