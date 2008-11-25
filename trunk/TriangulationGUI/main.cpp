@@ -575,7 +575,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                                  glVertex2f(0.9f, 0.0f); glVertex2f(-0.9, 0.0);
                              glEnd();
 
-                             
+             
                              radii1 = radii1 * 1.8 / edgeL;
                              radii2 = radii2 * 1.8 / edgeL;
                              glBegin(GL_LINE_LOOP);
@@ -594,6 +594,16 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                              glEnd();
                              
                              glDisable(GL_TEXTURE_2D);
+                             char lengthArr[15];
+                             sprintf(lengthArr, "%f", edgeL);
+                             glColor3f(0.0f, 0.0f, 1.0f);
+                             glRasterPos2f(0.2, -0.9);
+                             glPushAttrib(GL_LIST_BIT);
+                             glListBase(listbase); //32 offset backwards since we offset it forwards
+                             glCallLists(strlen(lengthArr), GL_UNSIGNED_BYTE, lengthArr);
+                             glPopAttrib();
+                             
+                             
                              glColor3f(1.0f, 0.0f, 0.0f);
                              // Specify the position of the text
                              glRasterPos2f(0.8, 0.0);
