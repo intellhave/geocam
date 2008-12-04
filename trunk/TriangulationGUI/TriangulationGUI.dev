@@ -1,7 +1,7 @@
 [Project]
 FileName=TriangulationGUI.dev
 Name=TriangulationGUI
-UnitCount=45
+UnitCount=47
 Type=0
 Ver=1
 ObjFiles=
@@ -12,7 +12,7 @@ ResourceIncludes=
 MakeIncludes=
 Compiler=
 CppCompiler=
-Linker=-lopengl32 -lglu32_@@_
+Linker=-lopengl32 -lglu32_@@__@@_
 IsCpp=1
 Icon=
 ExeOutput=
@@ -490,6 +490,26 @@ BuildCmd=
 FileName=..\3DTriangulation\3Dtriangulationmath.h
 CompileCpp=1
 Folder=TriangulationGUI
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit46]
+FileName=glTriangulation.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit47]
+FileName=glTriangulation.h
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000

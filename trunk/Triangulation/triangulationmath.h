@@ -48,8 +48,8 @@ double curvature(Vertex);
  *                           in order.
  *      int numSteps -       The number of steps to take. 
  *                           (dt = (tf - ti)/numSteps)
- *      bool adjF -          Boolean of whether or not to use adjusted
- *                           differential equation. True to use adjusted.
+ *      bool adjF -          Boolean of whether or not to use normalized
+ *                           differential equation. True to use normalized.
  * 
  * The information placed in the vectors are the radii and curvatures for
  * each Vertex at each step point. The data is grouped by steps, so the first
@@ -85,7 +85,7 @@ double adjDiffEQ(int, double);
  *     R =    \ |  -----------------------
  *             \|  r_1 + r_2 + ... + r_n
  */
-double inRadius(Face);
+double inRadius(Face, double);
 
 /*
  * Calculates the dual length between the two faces local to the given edge.

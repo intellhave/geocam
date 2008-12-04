@@ -185,7 +185,7 @@ double adjDiffEQ(int vertex, double totalCurv)
 }
 
 
-double inRadius(Face f)
+double inRadius(Face f, double radius)
 {
     if(f.getLocalVertices()->size() != 3) // Make sure the face has 3 vertices.
     {
@@ -195,18 +195,18 @@ double inRadius(Face f)
     double product = 1;
     for(int i = 0; i < 3; i++)
     {     int index =(*(f.getLocalVertices()))[i];
-          double w = Triangulation::vertexTable[index].getRadius();
-          sum += w;
-          product *= w; 
+          double r = Triangulation::vertexTable[index].getRadius();
+          sum += r / radius;
+          product *= r / radius; 
     }
-    return sqrt(product / sum);
+    return radius * sqrt(product / sum);
 }
 
 double dualLength(Edge e)
 {
        vector<int> localFaces = *(e.getLocalFaces());
-       return inRadius(Triangulation::faceTable[localFaces[0]])
-              + inRadius(Triangulation::faceTable[localFaces[1]]);
+       return inRadius(Triangulation::faceTable[localFaces[0]], 1)
+              + inRadius(Triangulation::faceTable[localFaces[1]], 1);
 }
 
 double dualArea(Vertex v)

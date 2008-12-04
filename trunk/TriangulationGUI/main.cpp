@@ -1,38 +1,88 @@
+/**************************************************************
+File: main.cpp
+Author: Alex Henniges
+Version: December 4, 2008
+***************************************************************
+This is the main file to run the user interface for the
+triangulation program. Requires the program to be run on a
+Windows machine.
+
+For a Win32 tutorial: http://www.winprog.org/tutorial/
+**************************************************************/
+
+/************** Include Files ***************/
 #include <windows.h>
 #include <ctime>
 #include <iostream>
 #include <fstream>
 #include <cmath>
 #include <vector>
+#include <gl/gl.h>
 #include "resources.h"
+#include "glTriangulation.h"
 #include "TriangulationModel.h"
 #define PI 	3.141592653589793238
-#include <gl/gl.h>
+/*******************************************/
+
+/*********** Function Prototypes ***********/
 BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 VOID EnableOpenGL( HWND hWnd, HDC * hDC, HGLRC * hRC );
 VOID DisableOpenGL( HWND hWnd, HDC hDC, HGLRC hRC );
+/*******************************************/
+
+/************ Global Variables *************/
 HINSTANCE hInst;
-HDC hDC;
-HGLRC hRC;
-GLuint listbase;
-HFONT hFont;
-BOOL bQuit;
+HDC hDC; // Used to enable a window with gl and other properties
+HGLRC hRC; // Used to enable a window with gl
+GLuint listbase; // Listbase for drawing text in gl
+HFONT hFont; // Font when drawing text in gl
+BOOL bQuit; // Boolean variable for use in PolygonProc
+/*******************************************/
+
+/**************************************************************
+Function: FileChooser
+Parameters: HWND hwnd, LPSTR szFileName
+Returns: void
+***************************************************************
+Opens the usual window to select a file from a directory, placing
+the pathname of the chosen file in szFileName. hwnd is the handle
+to the parent window, mainly needed by the system.
+
+Code outline provided by the Win32 tutorial.
+**************************************************************/
 void FileChooser(HWND hwnd, LPSTR szFileName)
 {
-	OPENFILENAME ofn;
+    // An OPENFILENAME contains all the needed information for opening a file
+	OPENFILENAME ofn; 
+	// Clear ofn first
 	ZeroMemory(&ofn, sizeof(ofn));
 
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	ofn.hwndOwner = hwnd;
+	// lpstrFilter holds the info for allowable file extensions.
+	// In this case, onlly need text files, but allow for any type of file
+	// to be chosen.
 	ofn.lpstrFilter = "Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0";
-	ofn.lpstrFile = szFileName;
+	ofn.lpstrFile = szFileName; // Give pointer for filename to placed into
 	ofn.nMaxFile = MAX_PATH;
+	// Flags: only allow existing files, don't show read only files
 	ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-	ofn.lpstrDefExt = "txt";
+	ofn.lpstrDefExt = "txt"; // The default extension
 
-	GetOpenFileName(&ofn);
+	GetOpenFileName(&ofn); // Call Windows to open up file choosing window
 }
 
+/**************************************************************
+Function: LoadTextFile
+Parameters: HWND hEdit, LPCTSTR pszFileName
+Returns: BOOL
+***************************************************************
+Prints the contents of the file given by pszFileName into the
+window given by hEdit. Returns a boolean indicating success of
+opening and printing file.
+
+Code outline provided by the Win32 tutorial.
+**************************************************************/
 BOOL LoadTextFile(HWND hEdit, LPCTSTR pszFileName)
 {
 	HANDLE hFile;
@@ -67,24 +117,42 @@ BOOL LoadTextFile(HWND hEdit, LPCTSTR pszFileName)
 	}
 	return bSuccess;
 }
+
+/**************************************************************
+Function: UpdateConsole
+Parameters: HWND hwnd, LPSTR message
+Returns: void
+***************************************************************
+Appends text given by message to the IDC_CONSOLE window.
+hwnd is the parent window and used only by system.
+**************************************************************/
 void UpdateConsole(HWND hwnd, LPSTR message)
 {
+    // First add message to the hidden_text window.
     SetDlgItemText(hwnd, IDC_HIDDENTEXT, message);
+    // Get length of current text and new text.
     int len = GetWindowTextLength(GetDlgItem(hwnd, IDC_CONSOLE));
     int len2 = GetWindowTextLength(GetDlgItem(hwnd, IDC_HIDDENTEXT));
     if(len > 0)
     {
-        char* buf;
-        char* buf2;
+        // Buffers to temporarily place text in
+        char* buf; // Will hold previous text and new text
+        char* buf2; // Will hold new text
+        // Globally allocate the memory for the buffers
         buf = (char*)GlobalAlloc(GPTR, len + len2 + 1);
         buf2 = (char*)GlobalAlloc(GPTR, len2 + 1);
+        // Place text in buffers
         GetDlgItemText(hwnd, IDC_CONSOLE, buf, len + 1);
         GetDlgItemText(hwnd, IDC_HIDDENTEXT, buf2, len2 + 1);
+        // Copy characters from buf2 into buf1
         for(int i = 0; i< len2 + 1; i++)
         {
             buf[len + i] = buf2[i];
         }
-        int newlines = 0;;
+        // Console can only show up to 17 lines, instead of scrolling text
+        // we want to only show the 17 newest lines.
+        int newlines = 0;
+        // Vector holds indices where newlines are in buf.
         vector<int> newlinePos;
         for(int i = 0; i < len + len2 + 1 ; i++)
         {
@@ -94,6 +162,8 @@ void UpdateConsole(HWND hwnd, LPSTR message)
               newlinePos.push_back(i);
            }
         }
+        // If there are more than 17 lines, remove as many lines from old text
+        // as there are lines from new text.
         if(newlines > 17) {
             newlines = 0;
             for(int i = 0; i < len2 + 1; i++)
@@ -109,15 +179,27 @@ void UpdateConsole(HWND hwnd, LPSTR message)
             {
                buf3[i] = buf[newlinePos[newlines - 1] + 1 + i];
             }
+            // Set the console with the new text
             SetDlgItemText(hwnd, IDC_CONSOLE, buf3);
         } else
         {
+          // Set the console with the new text
           SetDlgItemText(hwnd, IDC_CONSOLE, buf);
         }
+        // Free allocated memory
         GlobalFree((HANDLE)buf);
         GlobalFree((HANDLE)buf2);
     }
 }
+
+/**************************************************************
+Function: PolygonProc
+Parameters: HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
+Returns: BOOL
+***************************************************************
+Handles all procedures involving the Polygon Flow dialog box.
+
+**************************************************************/
 BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 {
      switch(Message)
@@ -160,18 +242,13 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                 bQuit = true;
                               }
                               break;
-//                              case IDPOLYGON: {
-//                                SetDlgItemText(hwnd, IDC_POLYGON_SPEED, "003");
-//                                return TRUE;
-//                              }
-//                              break;
                               default: ;// do nothing
                               }
                           }
                           break;
                           default: ;
                         }
-//                          
+                        
                           TranslateMessage(&msg);
                           DispatchMessage(&msg);
 
@@ -184,42 +261,12 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                       {
                           scanner >> curv[i];
                       }
+                      
                       glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
                       glClear(GL_COLOR_BUFFER_BIT);
                       
-                      glBegin(GL_LINE_LOOP);
-                      glColor3f( 1.0f, 0.0f, 0.0f );
-                      for(int i = 0; i < 25; i++)
-                      {
-                          double angle = 2 * PI / 25 * i;
-                          double radii = .3 * (PI / 2);
-                          glVertex2f(radii * cos(angle), radii * sin(angle));
-                      }
-                      glEnd();
-                      glBegin(GL_LINE_LOOP);
-                      glColor3f( 1.0f, 0.0f, 0.0f );
-                      for(int i = 0; i < 25; i++)
-                      {
-                          double angle = 2 * PI / 25 * i;
-                          double radii = .3 * (PI);
-                          glVertex2f(radii * cos(angle), radii * sin(angle));
-                      }
-                      glEnd();
-                      glBegin(GL_LINE_LOOP);
-                      glColor3f( 0.0f, 0.0f, 0.0f ); 
-                      for(int i = 0; i < size; i++)
-                      {
-                          double angle = 2 * PI / size * i;
-                          double radii = .3 * (atan(curv[i])+ PI / 2);
-                          //glVertex2f((curv[i]) / 12 * cos(angle), (curv[i]) / 12 * sin(angle));
-                          glVertex2f(radii * cos(angle), radii * sin(angle));
-                          // The above computation performs an arctan scaling of
-                          // the curvatures so that the curvature data is always
-                          // outputted in a disk of radius Pi.  The circle of 
-                          // radius Pi coreesponds to positive infinity, the 
-                          // origin corresponds to negative infinity.
-                      }
-                      glEnd();
+                      drawPolygon(size, curv);
+
                       itoa(step, stepArr, 10);
                       SetDlgItemText(hwnd, IDC_POLYGON_STEP, stepArr);
                       step++;
@@ -306,25 +353,8 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
            listbase = glGenLists(255);
  
            // make the system font the device context's selected font
-           hFont = CreateFont(-10,
-                  0,
-                  0,
-                  0,
-                  FW_NORMAL,
-                  FALSE,
-                  FALSE,
-                  FALSE,
-                  ANSI_CHARSET,
-                  OUT_TT_PRECIS,
-                  CLIP_DEFAULT_PRECIS,
-                  ANTIALIASED_QUALITY,
-                  FF_DONTCARE|DEFAULT_PITCH,
-                  "Arial");
-           
-           //SelectObject (hDC, GetStockObject(SYSTEM_FONT)); 
-
-           
-           //SwapBuffers( hDC );
+           setFont(&hFont, "Arial", 10);
+                      
            return TRUE;
         }
         case WM_COMMAND:
@@ -467,17 +497,10 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                              int index;
                              SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELITEMS, (WPARAM)1, (LPARAM)&index);
                              int vIndex = (int) SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETITEMDATA, (WPARAM)index, 0);
+                             drawVertex(Triangulation::vertexTable[vIndex]);
                              vector<int> localE = *(Triangulation::vertexTable[vIndex].getLocalEdges());
                              int size = localE.size();
-                             glBegin(GL_LINES);
-                             glColor3f( 0.0f, 0.0f, 0.0f );
-                             for(int i = 0; i < size; i++) {
-                                 double angle = 2 * PI / size * i;
-                                 glVertex2f(0.0f, 0.0f); glVertex2f(.9*cos(angle), .9*sin(angle));
-                             }
-                             glEnd();
 
-                             glDisable(GL_TEXTURE_2D);
                              glColor3f(1.0f, 0.0f, 0.0f);
                              vector<int> localV;
                              for(int i = 0; i < size; i++) {
@@ -485,8 +508,6 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                                  localV = *(edge.getLocalVertices());
                                  int otherIndex = localV[0] == vIndex ? 1 : 0; 
                                  float angle = (float) 2 * PI / size * i;
-                                 // Specify the position of the text
-                                 glRasterPos2f(.8*cos(angle), .8*sin(angle));
                                  int arrSize = 0;
                                  int temp = localV[otherIndex];
                                  if(temp <= 0) {
@@ -499,21 +520,14 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                                  }
                                  char vertexNum[arrSize + 1];
                                  itoa(localV[otherIndex], vertexNum, 10);
-                                 // display a string: 
-                                 // indicate start of glyph display lists 
-                                 //glListBase (1000); 
-                                 // now draw the characters in a string
                                 
-                                 glPushAttrib(GL_LIST_BIT);
-                                   glListBase(listbase); //32 offset backwards since we offset it forwards
-                                   glCallLists(arrSize, GL_UNSIGNED_BYTE, vertexNum);
-                                 glPopAttrib();
+                                 drawText(.8*cos(angle), .8*sin(angle), arrSize, vertexNum, listbase);
+
                              }
                              
                              glColor3f(0.0f, 0.0f, 1.0f);
                              for(int i = 0; i < size; i++) {
                                  float angle = (float) 2 * PI / size * i;
-                                 glRasterPos2f(.4*cos(angle), .4*sin(angle));
                                  int arrSize = 0;
                                  int temp = localE[i];
                                  if(temp <= 0) {
@@ -526,13 +540,8 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                                  }
                                  char edgeNum[arrSize + 1];
                                  itoa(localE[i], edgeNum, 10);
-                                 
-                                 glPushAttrib(GL_LIST_BIT);
-                                   glListBase(listbase); //32 offset backwards since we offset it forwards
-                                   glCallLists(arrSize, GL_UNSIGNED_BYTE, edgeNum);
-                                 glPopAttrib();                                 
+                                 drawText(.4*cos(angle), .4*sin(angle), arrSize, edgeNum, listbase);                             
                              }
-                             glEnable(GL_TEXTURE_2D);
 
                           }
                           
@@ -558,6 +567,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                           // we're making images of glyphs 0 thru 255 
                           // the display list numbering starts at 1000, an arbitrary choice 
                           wglUseFontBitmaps(hDC, 0, 255, listbase);
+
                           glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
                           glClear(GL_COLOR_BUFFER_BIT);
                           if(SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELCOUNT, 0, 0) == 1) {
@@ -567,46 +577,16 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                              int eIndex = (int) SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETITEMDATA, (WPARAM)index, 0);
                              vector<int> localV = *(Triangulation::edgeTable[eIndex].getLocalVertices());
                              int size = localV.size();
+                             drawEdge(Triangulation::edgeTable[eIndex]);
                              double edgeL = Triangulation::edgeTable[eIndex].getLength();
-                             double radii1 = Triangulation::vertexTable[localV[0]].getRadius();
-                             double radii2 = Triangulation::vertexTable[localV[1]].getRadius();
-                             glBegin(GL_LINES);
-                             glColor3f( 0.0f, 0.0f, 0.0f );
-                                 glVertex2f(0.9f, 0.0f); glVertex2f(-0.9, 0.0);
-                             glEnd();
 
-             
-                             radii1 = radii1 * 1.8 / edgeL;
-                             radii2 = radii2 * 1.8 / edgeL;
-                             glBegin(GL_LINE_LOOP);
-                             glColor3f(0.0f, 1.0f, 0.0f);
-                             for(int i = 0; i < 25; i++) {
-                                 float angle = (float) 2 * PI / 25 * i;
-                                 glVertex2f(radii1*cos(angle) + 0.9, radii1*sin(angle));
-                             }
-                             glEnd();
-                             glBegin(GL_LINE_LOOP);
-                             glColor3f(0.0f, 1.0f, 0.0f);
-                             for(int i = 0; i < 25; i++) {
-                                 float angle = (float) 2 * PI / 25 * i;
-                                 glVertex2f(radii2*cos(angle) - 0.9, radii2*sin(angle));
-                             }
-                             glEnd();
-                             
-                             glDisable(GL_TEXTURE_2D);
                              char lengthArr[15];
                              sprintf(lengthArr, "%f", edgeL);
                              glColor3f(0.0f, 0.0f, 1.0f);
-                             glRasterPos2f(0.2, -0.9);
-                             glPushAttrib(GL_LIST_BIT);
-                             glListBase(listbase); //32 offset backwards since we offset it forwards
-                             glCallLists(strlen(lengthArr), GL_UNSIGNED_BYTE, lengthArr);
-                             glPopAttrib();
-                             
-                             
+                             drawText(0.2, -0.9, strlen(lengthArr), lengthArr, listbase);
+                                                      
                              glColor3f(1.0f, 0.0f, 0.0f);
                              // Specify the position of the text
-                             glRasterPos2f(0.8, 0.0);
                              int arrSize = 0;
                              int temp = localV[0];
                              if(temp <= 0) {
@@ -619,16 +599,9 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                              }
                              char vertexNum1[arrSize + 1];
                              itoa(localV[0], vertexNum1, 10);
-                             // display a string: 
-                             // indicate start of glyph display lists 
-                             //glListBase (1000); 
-                             // now draw the characters in a string 
-                             glPushAttrib(GL_LIST_BIT);
-                             glListBase(listbase); //32 offset backwards since we offset it forwards
-                             glCallLists(arrSize, GL_UNSIGNED_BYTE, vertexNum1);
-                             glPopAttrib();
                              
-                             glRasterPos2f(-0.8, 0.0);
+                             drawText(0.8, 0.0, arrSize, vertexNum1, listbase);
+                             
                              arrSize = 0;
                              temp = localV[1];
                              if(temp <= 0) {
@@ -641,16 +614,8 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                              }
                              char vertexNum2[arrSize + 1];
                              itoa(localV[1], vertexNum2, 10);
-                             // display a string: 
-                             // indicate start of glyph display lists 
-                             //glListBase (1000); 
-                             // now draw the characters in a string 
-                             glPushAttrib(GL_LIST_BIT);
-                             glListBase(listbase); //32 offset backwards since we offset it forwards
-                             glCallLists(arrSize, GL_UNSIGNED_BYTE, vertexNum2);
-                             glPopAttrib();
-                             glEnable(GL_TEXTURE_2D);
-
+                             
+                             drawText(-0.8, 0.0, arrSize, vertexNum2, listbase);
                           }
                           
                           SwapBuffers( hDC );

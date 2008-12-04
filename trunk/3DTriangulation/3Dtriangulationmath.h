@@ -1,7 +1,7 @@
 #include "triangulation/triangulation.h"
 
-double dihedralAngle(double, double, double);
-double dihedralAngle(Vertex, Tetra);
+double solidAngle(double, double, double);
+double solidAngle(Vertex, Tetra);
 double volumeSq(Tetra);
 double volumeSq(double, double, double, double);
 bool isDegenerate(Tetra);

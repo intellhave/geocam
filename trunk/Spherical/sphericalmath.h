@@ -25,7 +25,7 @@ double sphericalAngle(Vertex, Face, double = 1);
  * Calculates the curvature of a vertex using spherical angles.
  *            K_i = 2*PI - sum of angles at i
  */
-double sphericalCurvature(Vertex);
+double sphericalCurvature(Vertex, double = 1);
 
 /*
  * Calculates the Ricci flow of the current Triangulation under a 
@@ -87,3 +87,11 @@ double sphericalTotalArea();
  * vertex under a spherical geometry.
  */
 double delCurv(Vertex);
+
+double vertexSum(Vertex, double = 1);
+
+double angleTotalSum(double = 1);
+
+double angleDiffSums(Face, double = 1);
+
+double angleDiff(double, double, double, double = 1);

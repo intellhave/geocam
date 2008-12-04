@@ -20,17 +20,30 @@ Version: June 10, 2008
 
 using namespace std;
 void createMatrix();
+void readWeights(char *filename, double *radii);
 int main(int argc, char *argv[])
 {   
-    ifstream infile("Triangulation Files/radii.txt");
-    vector<double> weightsVec;
-    while(infile.good())
-    {
-        double weight;
-        infile >> weight;
-        weightsVec.push_back(weight);
-    }
-    cout << weightsVec.size();
+    // The triangulation file to read in
+    char in[] = "Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
+    // Convert from Lutz Format to standrad format
+    make3DTriangulationFile(in, "Triangulation Files/manifold converted.txt");
+    // Read in and construct triangulation from file
+    read3DTriangulationFile("Triangulation Files/manifold converted.txt");
+    
+    srand ( time(NULL) ); // Seed the random generator
+    
+    
+    double initWeights[Triangulation::vertexTable.size()];
+    // Read in weights from a file
+    readWeights("Triangulation Files/radii.txt", initWeights);
+    
+    vector<double> weights;
+    vector<double> curvs;
+    double dt = 0.005;
+    int numSteps = 250;
+    bool normalized = true;
+    yamabeFlow(&weights, &curvs, dt, initWeights, numSteps, normalized);
+    printResultsStep("Triangulation Files/ODE Result.txt", &weights, &curvs);
     system("PAUSE");
     return 0;
 }
@@ -69,4 +82,13 @@ void createMatrix()
         }
     }
             
+}
+void readWeights(char *filename, double *radii) 
+{
+     ifstream input(filename);
+     int i = 0;
+     while(input.good()) {
+        input >> radii[i];
+        i++;
+     }
 }
