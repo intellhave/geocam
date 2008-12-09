@@ -199,6 +199,15 @@ Returns: BOOL
 ***************************************************************
 Handles all procedures involving the Polygon Flow dialog box.
 
+The PolygonProc, like all dialog procs has the following parameters:
+    HWND hwnd - The parent window calling the procedure
+    UINT Message - The particular command sent to the dialog box
+    WPARAM wParam - Possibly a parameter attached to the Message.
+    LPARAM lParam - Possibly a parameter attached to the Message.
+These parameters do not have to be given by the user, they are
+handled by the system.
+
+Returns the standard indication of success or failure of a dialog proc.
 **************************************************************/
 BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 {
@@ -206,24 +215,30 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
      {
         case WM_INITDIALOG:
         {
+             // Set the default flow speed.
              SetDlgItemText(hwnd, IDC_POLYGON_SPEED, "100");
         }
         break;
         case WM_COMMAND:
             switch(LOWORD(wParam))
             {
-                case IDPOLYGON: 
+                case IDPOLYGON: // Run the polygon flow
                 {
-                   MSG msg;
-                   bQuit = false;
+                   MSG msg; // Used to check for messages while flow is running.
+                   bQuit = false; // Setting it to false here resets flow if run
+                                  // button is clicked again.
                    HWND hPoly = GetDlgItem(hwnd, IDC_POLYGON);
+                   // Read in numerical data to draw flow
                    ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
+                   // Enable the hPoly window with gl properties.
                    EnableOpenGL( hPoly, &hDC, &hRC );
+                   // Set step number to 0.
                    SetDlgItemText(hwnd, IDC_POLYGON_STEP, "0000");
-                   // program main loop
-                   char stepArr[5] = {'\0'};
+                   
+                   char stepArr[5] = {'\0'}; // Used to maintain step number.
                    int step = 1;
-                   char speedArr[5];
+                   
+                   char speedArr[5]; // Used to determine a provided speed.
                    GetDlgItemText(hwnd, IDC_POLYGON_SPEED, speedArr, 5);
                    int speed = atoi(speedArr);
                    if(speed <= 0) 
@@ -231,14 +246,19 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                       MessageBox(NULL, "Invalid speed", "Error", MB_OK | MB_ICONINFORMATION);
                       return FALSE;
                    }
+                   
+                   // While there are more steps and not interrupted
                    while (scanner.good() && !bQuit) 
                    {
+                     // Check for any messages and perform them.
                      if (PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE)) 
                      {
                         switch(msg.message) {
                           case WM_COMMAND: {
                               switch(LOWORD(msg.wParam)) {
                               case IDCANCEL: {
+                                // End flow before closing dialog window.
+                                // Else flow just runs in background.
                                 bQuit = true;
                               }
                               break;
@@ -254,33 +274,42 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
                       } 
 
-                      SwapBuffers( hDC );
+                      SwapBuffers( hDC ); // Swap buffers.
+                      // Get number of vertices.
                       int size = Triangulation::vertexTable.size();
+                      
+                      // Get that number of curvatures from file
                       double curv[size];
                       for(int i = 0; i < size; i++)
                       {
                           scanner >> curv[i];
                       }
                       
+                      // Clear window.
                       glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
                       glClear(GL_COLOR_BUFFER_BIT);
                       
+                      // Draw a polygon given curvatures.
                       drawPolygon(size, curv);
-
+                      
+                      // Display step number, then increment
                       itoa(step, stepArr, 10);
                       SetDlgItemText(hwnd, IDC_POLYGON_STEP, stepArr);
                       step++;
+                      
+                      // Pause for length of time = speed.
                       Sleep(speed);
                     }
                     SetDlgItemText(hwnd, IDC_POLYGON_STEP, "----");
                     DisableOpenGL( hPoly, hDC, hRC );
-                    bQuit = true;
+                    bQuit = true; // Setting it to true here resets flow if run
+                                  // button was clicked more than once.
                 }
                 break;
-                case IDPOLYGON_STOP:
+                case IDPOLYGON_STOP: // Stop current flow
                      bQuit = true;
                 break;                           
-                case IDCANCEL:
+                case IDCANCEL: // End dialog box
                     bQuit = true;
                     EndDialog(hwnd, IDCANCEL);
                 break;
@@ -291,6 +320,24 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
     }
     return TRUE;
 }
+
+/**************************************************************
+Function: RadiiDlgProc
+Parameters: HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
+Returns: BOOL
+***************************************************************
+Handles all procedures involving the manual choosing of radii.
+
+The RadiiDlgProc, like all dialog procs has the following parameters:
+    HWND hwnd - The parent window calling the procedure
+    UINT Message - The particular command sent to the dialog box
+    WPARAM wParam - Possibly a parameter attached to the Message.
+    LPARAM lParam - Possibly a parameter attached to the Message.
+These parameters do not have to be given by the user, they are
+handled by the system.
+
+Returns the standard indication of success or failure of a dialog proc.
+**************************************************************/
 BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
      switch(Message)
@@ -1215,7 +1262,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
-{
+{ 
     hInst = hInstance;
 	return DialogBox(hInstance, MAKEINTRESOURCE(IDD_MAIN), NULL, DlgProc);
 }
