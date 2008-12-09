@@ -50,7 +50,7 @@ bool isDegenerate(Tetra t)
 }
 double curvature3D(Vertex v)
 {
-       // For each tetra containing v, get the dihedral angle at v.
+       // For each tetra containing v, get the solid angle at v.
        double sum = 0.0;
        for(int i = 0; i < v.getLocalTetras()->size(); i++)
        {

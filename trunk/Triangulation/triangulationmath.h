@@ -99,3 +99,4 @@ double dualLength(Edge);
  */
 double dualArea(Vertex);
 
+double area(Face);

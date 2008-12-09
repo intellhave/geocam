@@ -221,3 +221,28 @@ double dualArea(Vertex v)
        return areaSum;
 }
 
+double area(Face f) {
+   Edge e1 = Triangulation::edgeTable[(*(f.getLocalVertices()))[0]];
+   Edge e2 = Triangulation::edgeTable[(*(f.getLocalVertices()))[1]];
+   Edge e3 = Triangulation::edgeTable[(*(f.getLocalVertices()))[2]];
+   
+   double l1 = e1.getLength();
+   double l2 = e2.getLength();
+   double l3 = e3.getLength();
+   
+   double area = pow(l1*l1 + l2*l2 + l3*l3, 2) + 
+                    2*(pow(l1,4) + pow(l2,4) + pow(l3,4));
+   return (1.0 / 4) * sqrt(area);
+}
+
+double totalArea() {
+   double total = 0;
+   map<int, Face>::iterator fit;
+   
+   for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+   {
+       total += area(fit->second);
+   }
+   return total;
+}
+
