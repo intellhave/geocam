@@ -444,10 +444,10 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
 void TriangulationCoordinateSystem::addDuals(Face f)
 {
      for (int i = 0; i <= 2; i++)
-    {
+     {
         Edge e = Triangulation::edgeTable[(*(f.getLocalEdges()))[i]]; 
         addHalfDual(e, f);
-    }
+     }
 }
 
 void TriangulationCoordinateSystem::addDual(Edge e)

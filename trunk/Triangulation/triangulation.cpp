@@ -319,7 +319,16 @@ double Triangulation::net3DCurvature()
        map<int, Vertex>::iterator it;
        for(it = vertexTable.begin(); it != vertexTable.end(); it++)
        {
-              net += curvature3D((*it).second) * it->second.getRadius();
+              net += (*it).second.getCurvature();
        }
        return net; 
+}
+
+void Triangulation::setCurvature3D()
+{
+     map<int, Vertex>::iterator vit;
+     for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
+     {
+         vit->second.setCurvature(curvature3D(vit->second));
+     }
 }

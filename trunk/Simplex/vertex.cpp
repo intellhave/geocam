@@ -11,6 +11,7 @@ Version: July 16, 2008
 Vertex::Vertex() : Simplex()
 {
     radius = 0;
+    curvature = 0.0;
 }
 
 // class destructor
@@ -35,5 +36,15 @@ void Vertex::setRadiusIndependent(double newRadius)
 int Vertex::getDegree()
 {
     return getLocalEdges()->size();
+}
+
+double Vertex::getCurvature() 
+{
+    return curvature;
+}
+
+void Vertex::setCurvature(double curv)
+{
+     curvature = curv;
 }
 

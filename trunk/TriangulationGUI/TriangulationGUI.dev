@@ -1,7 +1,7 @@
 [Project]
 FileName=TriangulationGUI.dev
 Name=TriangulationGUI
-UnitCount=47
+UnitCount=49
 Type=0
 Ver=1
 ObjFiles=
@@ -508,6 +508,26 @@ BuildCmd=
 
 [Unit47]
 FileName=glTriangulation.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit48]
+FileName=..\Triangulation\MinMax.cpp
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit49]
+FileName=..\Triangulation\MinMax.h
 CompileCpp=1
 Folder=
 Compile=1

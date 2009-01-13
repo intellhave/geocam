@@ -4,7 +4,7 @@ Name=Project1
 <<<<<<< .mine
 UnitCount=37
 =======
-UnitCount=43
+UnitCount=45
 >>>>>>> .r541
 Type=1
 Ver=1
@@ -542,6 +542,26 @@ BuildCmd=
 
 [Unit43]
 FileName=3DTriangulation\3DTriangulationMorph.h
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit44]
+FileName=Triangulation\MinMax.cpp
+CompileCpp=1
+Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit45]
+FileName=Triangulation\MinMax.h
 CompileCpp=1
 Folder=Project1
 Compile=1

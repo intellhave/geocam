@@ -20,6 +20,7 @@ Version: July 16, 2008
 class Vertex : public Simplex
 {
         double radius;
+        double curvature;
         
 	public:
            
@@ -52,6 +53,8 @@ class Vertex : public Simplex
 		 * defined as the number of edges local to it.
 		 */
 		int getDegree();
+		double getCurvature();
+		void setCurvature(double);
 		
 };
 

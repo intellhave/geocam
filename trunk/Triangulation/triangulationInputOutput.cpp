@@ -643,7 +643,9 @@ void printResultsStep(char* fileName, vector<double>* radii, vector<double>* cur
          {
              results << "Vertex " << left << setw(5) << vit->first;
              results << left << setw(14)<< (*radii)[i*vertSize + j];
-             results << left << setw(12) << (*curvs)[i*vertSize+j] << "\n";
+             results << left << setw(12) << (*curvs)[i*vertSize+j];
+             results << left << setw(12) << (*curvs)[i*vertSize+j]/(*radii)[i*vertSize + j] << "\n";
+             
              netCurv += (*curvs)[i*vertSize+j];
              vit++;
          }

@@ -141,6 +141,8 @@ class Triangulation
     static void getRadii(double*);
     
     static void setLengths(double*);
+    
+    static void setCurvature3D();
 };
 
 
