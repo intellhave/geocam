@@ -33,24 +33,25 @@ int main(int argc, char *argv[])
         Triangulation::vertexTable[i].setRadius(0.8+0.01*i*i);
         //Triangulation::vertexTable[i].setRadius((0.4 + i/5.0));
     } 
-    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
-    {
-        //Triangulation::edgeTable[i].setEta(1.0);
-        Triangulation::edgeTable[i].setEta(0.84 + i*.03);
-        
-    }
+//    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+//    {
+//        //Triangulation::edgeTable[i].setEta(1.0);
+//        Triangulation::edgeTable[i].setEta(0.84 + i*.03);
+//        
+//    }
 
     
-//    Triangulation::edgeTable[1].setEta(1.00);
-//    Triangulation::edgeTable[2].setEta(0.1);
-//    Triangulation::edgeTable[3].setEta(1.00);
-//    Triangulation::edgeTable[4].setEta(1.00);
-//    Triangulation::edgeTable[5].setEta(1.00);
-//    Triangulation::edgeTable[6].setEta(1.00);
-//    Triangulation::edgeTable[7].setEta(1.00);
-//    Triangulation::edgeTable[8].setEta(1.00);
-//    Triangulation::edgeTable[9].setEta(1.00);
-//    Triangulation::edgeTable[10].setEta(1.00);
+    Triangulation::edgeTable[1].setEta(1.00);
+    Triangulation::edgeTable[2].setEta(0.95);
+    Triangulation::edgeTable[3].setEta(1.00);
+    Triangulation::edgeTable[4].setEta(1.00);
+    Triangulation::edgeTable[5].setEta(1.00);
+    Triangulation::edgeTable[6].setEta(1.00);
+    Triangulation::edgeTable[7].setEta(1.00);
+    Triangulation::edgeTable[8].setEta(1.00);
+    Triangulation::edgeTable[9].setEta(1.00);
+    Triangulation::edgeTable[10].setEta(1.00);
+
     
 //    Vertex v;
     time_t start,end;
@@ -87,10 +88,10 @@ int main(int argc, char *argv[])
 //       printf("Eta = %d, F = %f\n", j*j, F());
 //    }
 
-    double deltaEta = 0.001;
-    double deltaRadius = 0.001;
-    double a = 0.01;
-    double b = 0.01;
+    double deltaEta = 0.0001;
+    double deltaRadius = 0.0001;
+    double a = 0.001;
+    double b = 0.001;
    
     //MinMax(deltaRadius, a, deltaEta, b);
     MinMax(deltaEta, b);
