@@ -4,6 +4,8 @@
 #include "spherical/sphericalmath.h"
 #include "miscmath.h"
 #include "delaunay.h"
+#include <math.h>
+#include <cerrno>
 #define PI 	3.141592653589793238
 double solidAngle(double angle1, double angle2, double angle3)
 {
@@ -96,21 +98,33 @@ bool isDegenerate(Tetra t)
 //       return 4*PI - sum;
 //}
 
-double curvature3D(Vertex v)
+void curvature3D()
 {
-   double edgeCurv = 0;
-   for(int i = 0; i < v.getLocalEdges()->size(); i++)
+   map<int, Vertex>::iterator vit;
+   map<int, Edge>::iterator eit;
+   map<int, Tetra>::iterator tit;
+   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
    {
-       Edge e = Triangulation::edgeTable[(*(v.getLocalEdges()))[i]];
-       double betaSum = 2*PI;
-       for(int j = 0; j < e.getLocalTetras()->size(); j++)
-       {
-           betaSum -= dihedralAngle(v, e, 
-                   Triangulation::tetraTable[(*(e.getLocalTetras()))[j]]);
-       }
-       edgeCurv += betaSum * getPartialEdge(e, v);
+      eit->second.setDihedralAngles();
    }
-   return edgeCurv;
+
+
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++) 
+   {
+      double curv = 0;
+      for(int i = 0; i < vit->second.getLocalEdges()->size(); i++)
+      {
+        Edge e = Triangulation::edgeTable[(*(vit->second.getLocalEdges()))[i]];
+        double betaSum = 2*PI;
+        for(int j = 0; j < e.getLocalTetras()->size(); j++)
+        {
+           betaSum -= e.getDihedralAngle(j);
+        }
+        curv += betaSum * getPartialEdge(e, vit->second);
+      }
+      vit->second.setCurvature(curv);
+   }
 }
 
 void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
@@ -122,6 +136,7 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
   double z[p]; // Temporary array to hold data for 
                                       // the intermediate steps in.
   double curCurv;
+  double normalization;
   int    i,k; // ints used for "for loops". i is the step number,
               // k is the kth vertex for the arrays.
   map<int, Vertex>::iterator vit; // Iterator to traverse through the vertices.
@@ -130,24 +145,22 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
   map<int, Tetra>::iterator tit;
   
-   for (k=0; k<p; k++) {
-    z[k]=initRadii[k]; // z[k] holds the current radii.
+   for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+   {
+      // Set the radii of the Triangulation.
+      z[k]=initRadii[k];
+      vit->second.setRadius(z[k]);
    }
    for (i=1; i<numSteps+1; i++) // This is the main loop through each step.
    {
-    
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
-       {
-           // Set the radii of the Triangulation.
-           vit->second.setRadius(z[k]);
-       }
        for (tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
        {
            volumes.push_back(volumeSq(tit->second));
        }
-       Triangulation::setCurvature3D();
+       curvature3D();
+       normalization = calcNormalization();
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
-       {  // First "for loop" in whole step calculates everything manually.
+       {
            (*radii).push_back( z[k]); // Adds the data to the vector.
            curCurv = vit->second.getCurvature();
            if(curCurv < 0.00005 && curCurv > -0.00005) // Adjusted for small numbers.
@@ -160,8 +173,13 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
            // Calculates the differential equation, either normalized or
            // standard.
            if(adjF) z[k]= z[k] + dt * ((-1) * curCurv +
-                           calcNormalization()* vit->second.getRadius());
+                           normalization* vit->second.getRadius());
            else     z[k] = z[k] + dt * (-1) * curCurv;
+       }
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       {
+           // Set the radii of the Triangulation.
+           vit->second.setRadius(z[k]);
        }
    }
    printResultsVolumes("C:/Dev-Cpp/Geocam/Triangulation Files/Volume Results.txt", &volumes);
@@ -173,7 +191,7 @@ void yamabeFlow(double dt, double *initRadii,int numSteps, bool adjF)
                                              // number of variables in system.                                  
   double z[p]; // Temporary array to hold data for 
                                       // the intermediate steps in.
-  double curCurv;
+  double normalization;
   int    i,k; // ints used for "for loops". i is the step number,
               // k is the kth vertex for the arrays.
   map<int, Vertex>::iterator vit; // Iterator to traverse through the vertices.
@@ -181,28 +199,29 @@ void yamabeFlow(double dt, double *initRadii,int numSteps, bool adjF)
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
   
-   for (k=0; k<p; k++) {
-    z[k]=initRadii[k]; // z[k] holds the current radii.
+   for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+   {
+     z[k]=initRadii[k]; // z[k] holds the current radii.
+     // Set the radii of the Triangulation.
+     vit->second.setRadius(z[k]);
    }
    for (i=1; i<numSteps+1; i++) // This is the main loop through each step.
    {
-    
-       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
-       {
-           // Set the radii of the Triangulation.
-           vit->second.setRadius(z[k]);
-       }
-       
-       Triangulation::setCurvature3D();
-       
+       curvature3D();
+       normalization = calcNormalization();
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
        {  // First "for loop" in whole step calculates everything manually.
           
            // Calculates the differential equation, either normalized or
            // standard.
            if(adjF) z[k]= z[k] + dt * ((-1) * vit->second.getCurvature() +
-                           calcNormalization()* vit->second.getRadius());
+                           normalization* vit->second.getRadius());
            else     z[k] = z[k] + dt * (-1) * vit->second.getCurvature();
+       }
+       for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++)  
+       {
+           // Set the radii of the Triangulation.
+           vit->second.setRadius(z[k]);
        }
    }
 }
@@ -228,16 +247,156 @@ double calcNormalization()
    return result / denom;
 }
 
-double stdDiffEQ3D(int vertex) 
+
+void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt, double *initRadii, 
+                       double accuracy, double precision, bool adjF)
 {
-       return (-1) * curvature3D(Triangulation::vertexTable[vertex])
-                   * Triangulation::vertexTable[vertex].getRadius();
+    
+    bool done = false, accurate, precise, firstStep = true;
+    int numV = Triangulation::vertexTable.size();
+    int k;
+    double avgProp;
+    double normalization;
+    double curCurv;
+    double z[numV];
+    map<int, double> prevCurvs;
+    map<int, Vertex>::iterator vit;
+    map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+    map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+    for (k=0, vit = vBegin; k<numV && vit != vEnd; k++, vit++)  
+    {
+       prevCurvs.insert(pair<int, double>(vit->first, 0.0));
+       z[k] = initRadii[k]; // z[k] holds the current radii.
+       // Set the radii of the Triangulation.
+       vit->second.setRadius(z[k]);
+    }
+    while(!done && errno == 0)
+    {
+       curvature3D();
+       normalization = calcNormalization();
+       for (k=0, vit = vBegin; k<numV && vit != vEnd; k++, vit++) 
+       {   
+           (*radii).push_back( z[k]); // Adds the data to the vector.
+           curCurv = vit->second.getCurvature();
+           if(curCurv < 0.00005 && curCurv > -0.00005) // Adjusted for small numbers.
+           {                                     // We want it to print nicely.
+             (*curvatures).push_back(0.); // Adds the data to the vector.
+           }
+           else {
+               (*curvatures).push_back(curCurv);
+           }         
+           // Calculates the differential equation, either normalized or
+           // standard.
+           if(adjF) z[k]= z[k] + dt * ((-1) * curCurv +
+                           normalization* vit->second.getRadius());
+           else     z[k] = z[k] + dt * (-1) * curCurv;
+       }
+       if(!firstStep) 
+       {
+         precise = true;
+         for (vit = vBegin; vit != vEnd; vit++) 
+         {
+           precise = precise && ( fabs(prevCurvs[vit->first] - vit->second.getCurvature()) < precision );
+         }
+         if(precise)
+         {
+          accurate = true;
+          avgProp = 0;
+          for(vit = vBegin; vit != vEnd; vit++)
+          {
+            avgProp += vit->second.getCurvature() / vit->second.getRadius();
+          }
+          avgProp = avgProp / numV;
+          for(vit = vBegin; vit != vEnd; vit++)
+          {
+            accurate = accurate && ( fabs(avgProp - vit->second.getCurvature() / vit->second.getRadius()) < accuracy );
+          }
+          done = accurate;     
+         }
+       } else
+       {
+         firstStep = false;
+       }
+       for (k=0, vit = vBegin; k<numV && vit != vEnd; k++, vit++)  
+       {
+           // Set the radii of the Triangulation.
+           vit->second.setRadius(z[k]);
+       }
+       for (vit = vBegin; vit != vEnd; vit++) 
+       {
+           prevCurvs[vit->first] = vit->second.getCurvature();
+           if(prevCurvs[vit->first] < -10000000)
+           {
+              exit(1);
+           }
+       }
+    }
 }
 
-double adjDiffEQ3D(int vertex, double totalCurv, double totalRadii)
+void yamabeFlow(double dt, double *initRadii, 
+                       double accuracy, double precision, bool adjF)
 {
-       return (-1) * curvature3D(Triangulation::vertexTable[vertex])
-                   * Triangulation::vertexTable[vertex].getRadius() +
-                   totalCurv /  totalRadii
-                   * Triangulation::vertexTable[vertex].getRadius();
+    
+    bool done = false, accurate, precise, firstStep = true;
+    int numV = Triangulation::vertexTable.size();
+    int k;
+    double avgProp;
+    double normalization;
+    double z[numV];
+    map<int, double> prevCurvs;
+    map<int, Vertex>::iterator vit;
+    map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+    map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+    for (k=0, vit = vBegin; k<numV && vit != vEnd; k++, vit++)  
+    {
+       prevCurvs.insert(pair<int, double>(vit->first, 0.0));
+       z[k] = initRadii[k]; // z[k] holds the current radii.
+       // Set the radii of the Triangulation.
+       vit->second.setRadius(z[k]);
+    }
+    while(!done && errno == 0)
+    {
+       curvature3D();
+       normalization = calcNormalization();
+       if(!firstStep) 
+       {
+         precise = true;
+         for (vit = vBegin; vit != vEnd; vit++) 
+         {
+           precise = precise && ( fabs(prevCurvs[vit->first] - vit->second.getCurvature()) < precision );
+         }
+         if(precise)
+         {
+          accurate = true;
+          avgProp = 0;
+          for(vit = vBegin; vit != vEnd; vit++)
+          {
+            avgProp += vit->second.getCurvature() / vit->second.getRadius();
+          }
+          avgProp = avgProp / numV;
+          for(vit = vBegin; vit != vEnd; vit++)
+          {
+            accurate = accurate && ( fabs(avgProp - vit->second.getCurvature() / vit->second.getRadius()) < accuracy );
+          }
+          done = accurate;     
+         }
+       } else
+       {
+         firstStep = false;
+       }
+       for (k=0, vit = vBegin; k<numV && vit != vEnd; k++, vit++) 
+       {      
+           // Calculates the differential equation, either normalized or
+           // standard.
+           if(adjF) z[k]= z[k] + dt * ((-1) * vit->second.getCurvature() +
+                           normalization* vit->second.getRadius());
+           else     z[k] = z[k] + dt * (-1) * vit->second.getCurvature();
+           
+           vit->second.setRadius(z[k]);
+       }
+       for (vit = vBegin; vit != vEnd; vit++) 
+       {
+           prevCurvs[vit->first] = vit->second.getCurvature();
+       }
+    }
 }

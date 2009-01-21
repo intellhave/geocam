@@ -324,11 +324,3 @@ double Triangulation::net3DCurvature()
        return net; 
 }
 
-void Triangulation::setCurvature3D()
-{
-     map<int, Vertex>::iterator vit;
-     for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++)
-     {
-         vit->second.setCurvature(curvature3D(vit->second));
-     }
-}

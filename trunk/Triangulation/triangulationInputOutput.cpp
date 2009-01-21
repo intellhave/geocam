@@ -70,6 +70,7 @@ bool readTriangulationFile(char* fileName)
        {
          int indexMapping;
          scanner >> indexMapping;
+         
          Vertex v(indexMapping);
          
          char ignore[5];
@@ -87,6 +88,7 @@ bool readTriangulationFile(char* fileName)
          {
               int index;
               vertexStream >> index;
+              
               v.addVertex(index);
          }
          

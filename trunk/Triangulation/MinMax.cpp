@@ -11,10 +11,11 @@ void printData(FILE* result)
     {
         fprintf(result, "Vertex %d: %f\n", i, Triangulation::vertexTable[i].getRadius());
     }
-    fprintf(result, "\nEta\n__________\n");
+    fprintf(result, "\nEta - Length\n__________\n");
     for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
     {
-        fprintf(result, "Edge %d: %f\n", i, Triangulation::edgeTable[i].getEta());
+        fprintf(result, "Edge %d: %f - %f\n", i, Triangulation::edgeTable[i].getEta(),
+                       Triangulation::edgeTable[i].getLength() );
     }
     fprintf(result, "\nF() = %f\n", F());
 }
@@ -28,10 +29,11 @@ double FE(double deltaEta, int index)
    vector<double> radii;
    vector<double> curvs;
    double initRadii[Triangulation::vertexTable.size()];
-   int steps = 500;
-   double dt = 0.005;
+   double dt = 0.020;
+   double accuracy = 0.0000001;
+   double precision = 0.0000001;
    Triangulation::getRadii(initRadii);
-   yamabeFlow(&radii, &curvs, dt, initRadii, steps, true);
+   yamabeFlow(dt, initRadii, accuracy, precision, true);
    double result = F();
    Triangulation::edgeTable[index].setEta(curEta);
    Triangulation::setRadii(initRadii);
@@ -58,7 +60,7 @@ double F()
    double sumR = 0;
    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
    {
-       double curv = curvature3D(vit->second);
+       double curv = vit->second.getCurvature();
        //sumR += vit->second.getRadius();
        sumK += curv;
    }
@@ -81,8 +83,8 @@ void updateEtas(map<int, double>* deltaFE, double b)
      
      for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
      {
-        double curEta = Triangulation::edgeTable[dfit->first].getEta();
-        Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * b);
+         double curEta = Triangulation::edgeTable[dfit->first].getEta();
+         Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * b);
      }
 }
 void updateRadii(map<int, double>* deltaFR, double a) 
@@ -147,7 +149,6 @@ void MinMax(double deltaRadius, double a, double deltaEta, double b)
 {
    char results[] = "Triangulation Files/ODE Result.txt";
    FILE* result = fopen(results, "w");
-   printData(result);
    map<int, double> deltaFE;
    map<int, double> deltaFR;
    map<int, Edge>::iterator eit;
@@ -165,6 +166,7 @@ void MinMax(double deltaRadius, double a, double deltaEta, double b)
    {
       printf("MinMax FR: Index = %d, Value = %f\n", dfit->first, dfit->second);
    }
+   printf("\n");
    while(!allPositive(&deltaFR)) {
       updateRadii(&deltaFR, a);
       printData(result);
@@ -173,6 +175,7 @@ void MinMax(double deltaRadius, double a, double deltaEta, double b)
       {
          printf("MinMax FR: Index = %d, Value = %f\n", dfit->first, dfit->second);
       }
+      printf("\n");
    }
    
    calcDeltaFE(&deltaFE, deltaEta);
@@ -180,6 +183,7 @@ void MinMax(double deltaRadius, double a, double deltaEta, double b)
    {
       printf("MinMax FE: Index = %d, Value = %f\n", dfit->first, dfit->second);
    }
+   printf("\n");
    while(!allNegative(&deltaFE)) {
       updateEtas(&deltaFE, b);
       printData(result);
@@ -188,6 +192,7 @@ void MinMax(double deltaRadius, double a, double deltaEta, double b)
       {
         printf("MinMax FE: Index = %d, Value = %f\n", dfit->first, dfit->second);
       }
+      printf("\n");
    }    
     printData(result);
     fclose(result);
@@ -199,32 +204,34 @@ void MinMax(double deltaEta, double b)
    map<int, double> deltaFE;
    map<int, Edge>::iterator eit;
    double initRadii[Triangulation::vertexTable.size()];
-   int steps = 500;
-   double dt = 0.005;
+   double dt = 0.020;
+   double accuracy = 0.0000001;
+   double precision = 0.0000001;
    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
        deltaFE.insert(pair<int, double>(eit->first, 0));
    }
-   printData(result);
    map<int, double>::iterator dfit;
    
    Triangulation::getRadii(initRadii);
-   yamabeFlow(dt, initRadii, steps, true);
+   yamabeFlow(dt, initRadii, accuracy, precision, true);
    calcDeltaFE(&deltaFE, deltaEta);
    for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
    {
       printf("MinMax FE: Index = %d, Value = %f\n", dfit->first, dfit->second);
    }
+   printf("\n");
    printData(result);
    while(!allNegative(&deltaFE)) {
       updateEtas(&deltaFE, b);
       printData(result);
       Triangulation::getRadii(initRadii);
-      yamabeFlow(dt, initRadii, steps, true);
+      yamabeFlow(dt, initRadii, accuracy, precision, true);
       calcDeltaFE(&deltaFE, deltaEta);
       for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
       {
         printf("MinMax FE: Index = %d, Value = %f\n", dfit->first, dfit->second);
       }
+      printf("\n");
    }
     Triangulation::getRadii(initRadii);
     //yamabeFlow(dt, initRadii, steps, true);

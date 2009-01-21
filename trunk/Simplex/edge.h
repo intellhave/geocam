@@ -5,7 +5,6 @@ Version: July 16, 2008
 **************************************************************/
 
 #include "simplex.h"
-
 #ifndef EDGE_H
 #define EDGE_H
 
@@ -20,6 +19,7 @@ class Edge : public Simplex
 {
         double length;
         double eta;
+        vector<double> dihedralAngles;
 	public:
 		// class constructor
 		Edge();
@@ -48,6 +48,8 @@ class Edge : public Simplex
         void setEta(double);
         void setIntersectAngle(double);
         bool isBorder();
+        void setDihedralAngles();
+        double getDihedralAngle(int index);
 
 };
 

@@ -30,14 +30,28 @@ int main(int argc, char *argv[])
     
     for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
     {
-        //Triangulation::vertexTable[i].setRadius(1.0);
-        Triangulation::vertexTable[i].setRadius((0.4 + i/5.0));
+        Triangulation::vertexTable[i].setRadius(0.8+0.01*i*i);
+        //Triangulation::vertexTable[i].setRadius((0.4 + i/5.0));
     } 
     for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
     {
         //Triangulation::edgeTable[i].setEta(1.0);
-        Triangulation::edgeTable[i].setEta(0.3 + i/7.0);
+        Triangulation::edgeTable[i].setEta(0.84 + i*.03);
+        
     }
+
+    
+//    Triangulation::edgeTable[1].setEta(1.00);
+//    Triangulation::edgeTable[2].setEta(0.1);
+//    Triangulation::edgeTable[3].setEta(1.00);
+//    Triangulation::edgeTable[4].setEta(1.00);
+//    Triangulation::edgeTable[5].setEta(1.00);
+//    Triangulation::edgeTable[6].setEta(1.00);
+//    Triangulation::edgeTable[7].setEta(1.00);
+//    Triangulation::edgeTable[8].setEta(1.00);
+//    Triangulation::edgeTable[9].setEta(1.00);
+//    Triangulation::edgeTable[10].setEta(1.00);
+    
 //    Vertex v;
     time_t start,end;
 //    double dummy;
@@ -72,22 +86,35 @@ int main(int argc, char *argv[])
 //       }
 //       printf("Eta = %d, F = %f\n", j*j, F());
 //    }
-//    double deltaEta = 0.05;
-//    double deltaRadius = 0.05;
-//    double a = 0.1;
-//    double b = 0.1;
-//     
-//   
-//    //MinMax(deltaRadius, a, deltaEta, b);
-//    MinMax(deltaEta, b);
 
-    vector<double> radii;
-    vector<double> curvs;
-    double initRadii[Triangulation::vertexTable.size()];
-    Triangulation::getRadii(initRadii);
-    double dt = 0.020;
-    int numSteps = 400;
-    yamabeFlow(&radii, &curvs, dt, initRadii, numSteps, true);
-    printResultsStep("Triangulation Files/ODE Result.txt", &radii, &curvs);
+    double deltaEta = 0.001;
+    double deltaRadius = 0.001;
+    double a = 0.01;
+    double b = 0.01;
+   
+    //MinMax(deltaRadius, a, deltaEta, b);
+    MinMax(deltaEta, b);
+
+
+
+
+//    vector<double> radii;
+//    vector<double> curvs;
+//    double initRadii[Triangulation::vertexTable.size()];
+//    Triangulation::getRadii(initRadii);
+//    printf("%f, %f, %f, %f, %f\n", initRadii[0], initRadii[1], initRadii[2], initRadii[3], initRadii[4]);
+//    double dt = 0.020;
+//    //int stepSize = 2;
+//    double accuracy = 0.0000001;
+//    double precision = 0.0000001;
+//    time (&start);
+//    yamabeFlow(&radii, &curvs, dt, initRadii, accuracy, precision, true);
+//    time (&end);
+//    printf("%f\n", difftime(end,start));
+//    printResultsStep("Triangulation Files/ODE Result.txt", &radii, &curvs);
+
+
+
+
     system("PAUSE");
 }

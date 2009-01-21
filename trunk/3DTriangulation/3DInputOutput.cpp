@@ -97,7 +97,6 @@ bool read3DTriangulationFile(char* fileName)
          int indexMapping;
          scanner >> indexMapping;
          Edge e(indexMapping);
-         
          char ignore[5];
          scanner.getline(ignore, 5);
          
@@ -151,6 +150,7 @@ bool read3DTriangulationFile(char* fileName)
          }
          
          Triangulation::putEdge(indexMapping, e); 
+         
        } 
        
        else if(simplexName == faceString) 

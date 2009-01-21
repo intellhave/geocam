@@ -6,6 +6,7 @@ Version: July 16, 2008
 
 #include "edge.h" // class's header file
 #include "triangulation/triangulation.h"
+#include "3DTriangulation/3Dtriangulationmath.h"
 #include <cmath>
 #define PI 	3.141592653589793238
 
@@ -58,3 +59,20 @@ bool Edge::isBorder()
 {
      return getLocalFaces()->size() == 1;
 }
+
+void Edge::setDihedralAngles()
+{
+     dihedralAngles.clear();
+     for(int i = 0; i < getLocalTetras()->size(); i++)
+     {
+         Tetra t = Triangulation::tetraTable[(*getLocalTetras())[i]];
+         Vertex v = Triangulation::vertexTable[(*getLocalVertices())[0]];
+         dihedralAngles.push_back(dihedralAngle(v, *this, t));
+     }
+}
+
+double Edge::getDihedralAngle(int index)
+{
+   return dihedralAngles[index];
+}
+

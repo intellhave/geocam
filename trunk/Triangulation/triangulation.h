@@ -142,7 +142,6 @@ class Triangulation
     
     static void setLengths(double*);
     
-    static void setCurvature3D();
 };
 
 
