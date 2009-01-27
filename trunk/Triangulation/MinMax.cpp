@@ -6,6 +6,8 @@
 
 void printData(FILE* result) 
 {
+     double L;
+     L=0;
     fprintf(result, "\nRadii\n__________\n");
     for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
     {
@@ -16,12 +18,13 @@ void printData(FILE* result)
     {
         fprintf(result, "Edge %d: %f - %f\n", i, Triangulation::edgeTable[i].getEta(),
                        Triangulation::edgeTable[i].getLength() );
-    }
+                       L=L+Triangulation::edgeTable[i].getLength();
+            }
+    fprintf(result, "\nsum of lengths = %f\n", L);
     fprintf(result, "\nF() = %f\n", F());
 }
 
-
-
+ 
 double FE(double deltaEta, int index)
 {
    double curEta = Triangulation::edgeTable[index].getEta();
@@ -64,11 +67,14 @@ double F()
        //sumR += vit->second.getRadius();
        sumK += curv;
    }
+   //double parab=0;
    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();eit++)
    {
+    //   parab -= pow((eit->second.getEta() - 1),2);
+          
        sumR += eit->second.getLength();
    }
-   return sumK / sumR;
+   return sumK/sumR;
 }
 void updateEtas(map<int, double>* deltaFE, double b)
 {
@@ -83,7 +89,8 @@ void updateEtas(map<int, double>* deltaFE, double b)
      for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
      {
          double curEta = Triangulation::edgeTable[dfit->first].getEta();
-         Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * b);
+         Triangulation::edgeTable[dfit->first].setEta(curEta + b*(dfit->second) );
+         //Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * b);
      }
 }
 void updateRadii(map<int, double>* deltaFR, double a) 
@@ -128,10 +135,12 @@ bool allPositive(map<int, double>* deltaFR)
 void calcDeltaFE(map<int, double>* deltaFE, double deltaEta)
 {
      double base = F();
+     printf("F = %f\n", base);
      map<int, double>::iterator dfit;
      for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
      {
          dfit->second = (FE(deltaEta, dfit->first) - base) / deltaEta;
+ //        printf("%f  %f  %f\n", base, FE(deltaEta, dfit->first),FE(-deltaEta, dfit->first));
      }
 }
 void calcDeltaFR(map<int, double>* deltaFR, double deltaRadius)
@@ -224,7 +233,13 @@ void MinMax(double deltaEta, double b)
 
    printf("\n");
    printData(result);
-   while(!allNegative(&deltaFE)) {
+   
+while(true) {
+ //  while(!allNegative(&deltaFE)) { 
+      for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+                {
+                printf("Edge %d: %f\n", i, Triangulation::edgeTable[i].getEta());
+                }               
       updateEtas(&deltaFE, b);
       printData(result);
       Triangulation::getRadii(initRadii);

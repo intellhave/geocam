@@ -46,3 +46,6 @@ int addVertexToFace(int, int);
 int makeFace(int, int, int);
 int addEdgeToEdge(int, int);
 int makeTetra(int, int, int, int);
+
+void makePentagon(int, int, int, int, int, int);
+void makeDodecahedron();

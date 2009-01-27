@@ -266,3 +266,80 @@ int makeTetra(int v1, int v2, int v3, int v4) {
     return addEdgeToEdge(e1.getIndex(), e2.getIndex());
 }
 
+void cube() {
+     
+}
+
+void makePentagon(int v1, int v2, int v3, int v4, int v5, int v6) {
+     
+     
+     addVertexToEdge(v1, addVertexToVertex(v2, v3));
+     addVertexToEdge(v1, addVertexToVertex(v3, v4));
+     addVertexToEdge(v1, addVertexToVertex(v4, v5));
+     addVertexToEdge(v1, addVertexToVertex(v5, v6));
+     addVertexToEdge(v1, addVertexToVertex(v6, v2));
+     
+          
+}
+
+void makeDodecahedron() {
+     vector<Vertex> vertices;
+     
+     for(int i = 0; i <= 32; i++) {
+             Vertex v(i + 1);
+             Triangulation::putVertex(v.getIndex(), v);
+             vertices.push_back(v);
+     }
+     
+
+     makePentagon(vertices[21].getIndex(), vertices[1].getIndex(), vertices[2].getIndex(), 
+                  vertices[3].getIndex(), vertices[4].getIndex(), vertices[5].getIndex());
+     makePentagon(vertices[22].getIndex(), vertices[1].getIndex(), vertices[2].getIndex(), 
+                  vertices[7].getIndex(), vertices[12].getIndex(), vertices[6].getIndex());
+     makePentagon(vertices[23].getIndex(), vertices[2].getIndex(), vertices[3].getIndex(), 
+                  vertices[8].getIndex(), vertices[13].getIndex(), vertices[7].getIndex());
+     makePentagon(vertices[24].getIndex(), vertices[3].getIndex(), vertices[4].getIndex(), 
+                  vertices[9].getIndex(), vertices[14].getIndex(), vertices[8].getIndex());
+     makePentagon(vertices[25].getIndex(), vertices[4].getIndex(), vertices[5].getIndex(), 
+                  vertices[10].getIndex(), vertices[15].getIndex(), vertices[9].getIndex());
+     makePentagon(vertices[26].getIndex(), vertices[5].getIndex(), vertices[1].getIndex(), 
+                  vertices[6].getIndex(), vertices[11].getIndex(), vertices[10].getIndex());
+     makePentagon(vertices[27].getIndex(), vertices[6].getIndex(), vertices[11].getIndex(), 
+                  vertices[17].getIndex(), vertices[18].getIndex(), vertices[12].getIndex());
+     makePentagon(vertices[28].getIndex(), vertices[7].getIndex(), vertices[12].getIndex(), 
+                  vertices[18].getIndex(), vertices[19].getIndex(), vertices[13].getIndex());
+     makePentagon(vertices[29].getIndex(), vertices[8].getIndex(), vertices[13].getIndex(), 
+                  vertices[19].getIndex(), vertices[20].getIndex(), vertices[14].getIndex());
+     makePentagon(vertices[30].getIndex(), vertices[9].getIndex(), vertices[14].getIndex(), 
+                  vertices[20].getIndex(), vertices[16].getIndex(), vertices[15].getIndex());
+     makePentagon(vertices[31].getIndex(), vertices[10].getIndex(), vertices[15].getIndex(), 
+                  vertices[16].getIndex(), vertices[17].getIndex(), vertices[11].getIndex());
+     makePentagon(vertices[32].getIndex(), vertices[16].getIndex(), vertices[17].getIndex(), 
+                  vertices[18].getIndex(), vertices[19].getIndex(), vertices[20].getIndex());
+     
+
+     for(int i = 1; i <= 60; i++) {
+             addVertexToFace(vertices[0].getIndex(), i);
+     }
+}
+
+void identifyVertex(int v1, int v2) {
+     Vertex va = Triangulation::vertexTable[min(v1, v2)];
+     Vertex vb = Triangulation::vertexTable[max(v1, v2)];
+     
+     
+     
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
