@@ -73,10 +73,10 @@ int main(int argc, char *argv[])
    
     //MinMax(deltaRadius, a, deltaEta, b);
    // MinMax(deltaEta, b);
-
+time (&start);
 plotting();
-
-
+time (&end);
+printf("%f\n", difftime(end,start));
 //
 
 //  //  vector<double> radii;
@@ -95,7 +95,7 @@ plotting();
 //    printf("%f\n", difftime(end,start));
 //    printResultsStep("Triangulation Files/ODE Result.txt", &radii, &curvs);
 
-printf("%f\n", F());
+//printf("%f\n", F());
 
 
     system("PAUSE");

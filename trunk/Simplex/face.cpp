@@ -45,3 +45,17 @@ bool Face::isNegative()
 {
      return negative;
 }
+void Face::setAngles()
+{
+     angles.clear();
+     for(int i = 0; i < getLocalVertices()->size(); i++)
+     {
+         Vertex v = Triangulation::vertexTable[(*getLocalVertices())[i]];
+         angles.insert(pair<int, double>(v.getIndex(), angle(v,*this)) );
+     }
+}
+
+double Face::getAngle(int index)
+{
+   return angles[index];
+}

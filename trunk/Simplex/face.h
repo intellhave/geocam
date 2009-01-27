@@ -8,7 +8,7 @@ Version: June 9, 2008
 #define FACE_H
 
 #include "simplex.h" // inheriting class's header file
-
+#include <map>
 /*
  * The Face class is derived from the Simplex class. It is the
  * two-dimensional simplex. As a rule, every face has three vertices 
@@ -19,6 +19,7 @@ class Face : public Simplex
 {
       
       bool negative;
+      map<int, double> angles;
 	public:
 		// class constructor
 		Face();
@@ -31,6 +32,8 @@ class Face : public Simplex
 		bool isNegative();
 		void setNegativity(bool);
 		void switchSide();
+		void setAngles();
+		double getAngle(int index);
 };
 
 #endif // FACE_H

@@ -5,6 +5,7 @@ Version: July 16, 2008
 **************************************************************/
 
 #include "simplex.h"
+#include <map>
 #ifndef EDGE_H
 #define EDGE_H
 
@@ -19,7 +20,7 @@ class Edge : public Simplex
 {
         double length;
         double eta;
-        vector<double> dihedralAngles;
+        map<int, double> dihedralAngles;
 	public:
 		// class constructor
 		Edge();

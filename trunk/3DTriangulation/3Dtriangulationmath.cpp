@@ -56,10 +56,10 @@ double dihedralAngle(Vertex v, Edge e, Tetra t)
       f3 = Triangulation::faceTable[not_edge_faces[1]];
     }
     
-    double angle1 = angle(v, f1);
-    double angle2 = angle(v, f2);
-    double angle3 = angle(v, f3);
-    
+    double angle1 = f1.getAngle(v.getIndex());
+    double angle2 = f2.getAngle(v.getIndex());
+    double angle3 = f3.getAngle(v.getIndex());
+    //printf("%f \n", angle1);
     return sphericalAngle(angle1, angle2, angle3);
 }
 
@@ -103,11 +103,9 @@ void curvature3D()
    map<int, Vertex>::iterator vit;
    map<int, Edge>::iterator eit;
    map<int, Tetra>::iterator tit;
-   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
-   {
-      eit->second.setDihedralAngles();
-   }
-
+   
+   Triangulation::setAngles();
+   Triangulation::setDihedralAngles();
 
    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
            vit++) 
@@ -119,7 +117,7 @@ void curvature3D()
         double betaSum = 2*PI;
         for(int j = 0; j < e.getLocalTetras()->size(); j++)
         {
-           betaSum -= e.getDihedralAngle(j);
+           betaSum -= e.getDihedralAngle((*(e.getLocalTetras()))[j]);
         }
         curv += betaSum * getPartialEdge(e, vit->second);
       }

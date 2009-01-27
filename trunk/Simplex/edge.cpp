@@ -67,7 +67,7 @@ void Edge::setDihedralAngles()
      {
          Tetra t = Triangulation::tetraTable[(*getLocalTetras())[i]];
          Vertex v = Triangulation::vertexTable[(*getLocalVertices())[0]];
-         dihedralAngles.push_back(dihedralAngle(v, *this, t));
+         dihedralAngles.insert(pair<int, double>(t.getIndex(), dihedralAngle(v,*this,t)) );
      }
 }
 

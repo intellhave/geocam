@@ -324,3 +324,20 @@ double Triangulation::net3DCurvature()
        return net; 
 }
 
+void Triangulation::setDihedralAngles()
+{
+   map<int, Edge>::iterator eit;
+   for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++)
+   {
+      eit->second.setDihedralAngles();
+   }
+}
+
+void Triangulation::setAngles()
+{
+   map<int, Face>::iterator fit;
+   for(fit = faceTable.begin(); fit != faceTable.end(); fit++)
+   {
+      fit->second.setAngles();
+   }
+}

@@ -14,13 +14,14 @@ double plotting()
           int i, j;
           int index = 1;
           double curEta = Triangulation::edgeTable[index].getEta();
-          for(i=0; i<50; ++i) {
-                   for(j=0; j<50; ++j) {
+          for(i=0; i<10; ++i) {
+                   for(j=0; j<10; ++j) {
                             Triangulation::edgeTable[1].setEta(curEta+(double)i*0.01-0.25);
                             Triangulation::edgeTable[6].setEta(curEta+(double)j*0.01-0.25);
                             fprintf(result, "%12f", FE(0.00,1));
                             }
                    fprintf(result, "\n");
                    }
+    fclose(result);
 }
 
