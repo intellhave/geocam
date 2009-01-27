@@ -5,11 +5,11 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = 
-OBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o $(RES)
-LINKOBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
-INCS =  -I"include" 
-CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL" 
+OBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o $(RES)
+LINKOBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib"  -lgmon -pg  -g3 
+INCS =  -I"C:/Dev-Cpp/include" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include"  -I"C:/Dev-Cpp/geocam" 
 BIN  = Project1.exe
 CXXFLAGS = $(CXXINCS)   -pg -g3
 CFLAGS = $(INCS)   -pg -g3
@@ -94,3 +94,6 @@ Triangulation/smallMorphs.o: Triangulation/smallMorphs.cpp
 
 Triangulation/MinMax.o: Triangulation/MinMax.cpp
 	$(CPP) -c Triangulation/MinMax.cpp -o Triangulation/MinMax.o $(CXXFLAGS)
+
+plot.o: plot.cpp
+	$(CPP) -c plot.cpp -o plot.o $(CXXFLAGS)

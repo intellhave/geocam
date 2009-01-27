@@ -19,6 +19,8 @@ Version: June 10, 2008
 #include "triangulation/MinMax.h"
 #define PI 	3.141592653589793238
 
+double plotting();
+
 using namespace std;
 int main(int argc, char *argv[])
 {
@@ -31,7 +33,9 @@ int main(int argc, char *argv[])
     
     for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
     {
-        Triangulation::vertexTable[i].setRadius(1.0);
+
+        Triangulation::vertexTable[i].setRadius(1.00);
+
         //Triangulation::vertexTable[i].setRadius((0.4 + i/5.0));
     } 
 //    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
@@ -44,13 +48,14 @@ int main(int argc, char *argv[])
 
 
     
-    Triangulation::edgeTable[1].setEta(1.0);
-    Triangulation::edgeTable[2].setEta(1.3);
-    Triangulation::edgeTable[3].setEta(1.0);
-    Triangulation::edgeTable[4].setEta(1.00);
-    Triangulation::edgeTable[5].setEta(1.0);
-    Triangulation::edgeTable[6].setEta(1.00);
-    Triangulation::edgeTable[7].setEta(1.00);
+
+    Triangulation::edgeTable[1].setEta(1.00);
+    Triangulation::edgeTable[2].setEta(1.00);
+    Triangulation::edgeTable[3].setEta(1.00);
+    Triangulation::edgeTable[4].setEta(1.000);
+    Triangulation::edgeTable[5].setEta(1.000);
+    Triangulation::edgeTable[6].setEta(1.000);
+    Triangulation::edgeTable[7].setEta(1.000);
     Triangulation::edgeTable[8].setEta(1.00);
     Triangulation::edgeTable[9].setEta(1.00);
     Triangulation::edgeTable[10].setEta(1.00);
@@ -60,17 +65,19 @@ int main(int argc, char *argv[])
     time_t start,end;
 
 
-    double deltaEta = 0.0001;
-    double deltaRadius = 0.0001;
-    double a = 0.05;
-    double b = 0.05;
+    double deltaEta = 0.0000;
+    double deltaRadius = 0.00001;
+    double a = 0.0001;
+    double b = 0.25;
+
    
     //MinMax(deltaRadius, a, deltaEta, b);
-    MinMax(deltaEta, b);
+   // MinMax(deltaEta, b);
+
+plotting();
 
 
-
-
+//
 
 //  //  vector<double> radii;
 //    //vector<double> curvs;
