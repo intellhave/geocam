@@ -108,7 +108,7 @@ TopLine=12
 >>>>>>> .r591
 LeftChar=1
 [Editor_2]
-Open=1
+Open=0
 Top=0
 CursorCol=15
 CursorRow=160
@@ -410,7 +410,7 @@ CursorRow=3
 TopLine=1
 LeftChar=1
 [Editor_47]
-Open=1
+Open=0
 Top=0
 CursorCol=40
 CursorRow=68

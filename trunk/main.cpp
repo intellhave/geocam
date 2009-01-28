@@ -19,12 +19,12 @@ Version: June 10, 2008
 #include "triangulation/MinMax.h"
 #define PI 	3.141592653589793238
 
-double plotting();
+double plot();
 
 using namespace std;
 int main(int argc, char *argv[])
 {
-    char filename[] = "Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
+    char filename[] = "Triangulation Files/3D Manifolds/Lutz Format/poincare-16.txt";
     //char filename[] = "Triangulation Files/3D Manifolds/Lutz Format/s3-6.txt";
     char modified[] = "Triangulation Files/manifold converted.txt";
     
@@ -38,45 +38,45 @@ int main(int argc, char *argv[])
 
         //Triangulation::vertexTable[i].setRadius((0.4 + i/5.0));
     } 
-//    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
-//    {
-//        Triangulation::edgeTable[i].setEta(1.0);
+    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+    {
+        Triangulation::edgeTable[i].setEta(1.00);
 //        //Triangulation::edgeTable[i].setEta(0.84 + i*.03);
 //        
-//    }
+    }
 
 
 
     
 
-    Triangulation::edgeTable[1].setEta(1.00);
-    Triangulation::edgeTable[2].setEta(1.00);
-    Triangulation::edgeTable[3].setEta(1.00);
-    Triangulation::edgeTable[4].setEta(1.000);
-    Triangulation::edgeTable[5].setEta(1.000);
-    Triangulation::edgeTable[6].setEta(1.000);
-    Triangulation::edgeTable[7].setEta(1.000);
-    Triangulation::edgeTable[8].setEta(1.00);
-    Triangulation::edgeTable[9].setEta(1.00);
-    Triangulation::edgeTable[10].setEta(1.00);
+//    Triangulation::edgeTable[1].setEta(1.05);
+//    Triangulation::edgeTable[2].setEta(1.00);
+//    Triangulation::edgeTable[3].setEta(1.00);
+//    Triangulation::edgeTable[4].setEta(1.000);
+//    Triangulation::edgeTable[5].setEta(1.000);
+//    Triangulation::edgeTable[6].setEta(1.05);
+//    Triangulation::edgeTable[7].setEta(1.000);
+//    Triangulation::edgeTable[8].setEta(1.00);
+//    Triangulation::edgeTable[9].setEta(1.00);
+//    Triangulation::edgeTable[10].setEta(1.00);
 
 
     
     time_t start,end;
 
 
-    double deltaEta = 0.0000;
+    double deltaEta = 0.001;
     double deltaRadius = 0.00001;
     double a = 0.0001;
-    double b = 0.25;
+    double b = 20.00;
 
    
     //MinMax(deltaRadius, a, deltaEta, b);
-   // MinMax(deltaEta, b);
-time (&start);
-plotting();
-time (&end);
-printf("%f\n", difftime(end,start));
+    MinMax(deltaEta, b);
+//time (&start);
+//plot();
+//time (&end);
+//printf("%f\n", difftime(end,start));
 //
 
 //  //  vector<double> radii;
