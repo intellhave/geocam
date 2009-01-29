@@ -18,9 +18,9 @@ double plot()
    double curEta2 = Triangulation::edgeTable[index2].getEta();
    for(i=-10; i<11; ++i) {
       for(j=-10; j<11; ++j) {
-         Triangulation::edgeTable[index1].setEta(curEta1-(double)i*0.01);
-         Triangulation::edgeTable[index2].setEta(curEta2-(double)j*0.01);
-         fprintf(result, "%12f", FE(0.00,1));
+         Triangulation::edgeTable[index1].setEta(curEta1-(double)i*0.05);
+         Triangulation::edgeTable[index2].setEta(curEta2-(double)j*0.05);
+         fprintf(result, "%12.10f", FE(0.00,1));
          printf("j= %d\n" , j);
       }
                    

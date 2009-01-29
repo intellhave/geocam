@@ -16,7 +16,7 @@ void printData(FILE* result)
       for(vvit = Triangulation::vertexTable.begin(); vvit != Triangulation::vertexTable.end(); vvit++)
    {
        double curv = vvit->second.getCurvature();
-       fprintf(result, "Vertex %d:\t%f\t%f\n", vvit->first, vvit->second.getRadius(), curv/(vvit->second.getRadius()));
+       fprintf(result, "Vertex %d:\t%f\t%.10f\n", vvit->first, vvit->second.getRadius(), curv/(vvit->second.getRadius()));
           }
     fprintf(result, "\nEta - Length\n__________\n");
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
@@ -71,7 +71,7 @@ while(true) {
       //updateEtas(&deltaFE, b);
       Triangulation::getRadii(initRadii);
       yamabeFlow(dt, initRadii, accuracy, precision, true);
-      printf("F = %f\n", F());
+      printf("F = %.10f\n", F());
       printData(result);
       
           
@@ -79,7 +79,7 @@ while(true) {
       for(vvvit = Triangulation::vertexTable.begin(); vvvit != Triangulation::vertexTable.end(); vvvit++)
    {
        double curv = vvvit->second.getCurvature();
-       printf("vertex %d: %f\t%f\n", vvvit->first, vvvit->second.getRadius(), curv/(vvvit->second.getRadius()));
+       printf("vertex %d: %f\t%.10f\n", vvvit->first, vvvit->second.getRadius(), curv/(vvvit->second.getRadius()));
            }
       
       
@@ -88,7 +88,7 @@ while(true) {
       updateEtas(&deltaFE, b);
       for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
      {
-      printf("MinMax FE: Index = %d, Value = %f\n", dfit->first, dfit->second);
+      printf("MinMax FE: Index = %d, Value = %.10f\n", dfit->first, dfit->second);
      }
 
       printf("\n");
