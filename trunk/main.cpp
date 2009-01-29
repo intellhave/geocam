@@ -30,19 +30,17 @@ int main(int argc, char *argv[])
     
     make3DTriangulationFile(filename, modified);
     read3DTriangulationFile(modified);
-    
-    for(int i = 1; i <= Triangulation::vertexTable.size(); i++)
+    map<int, Vertex>::iterator vit;
+    map<int, Edge>::iterator eit;
+    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
     {
-
-        Triangulation::vertexTable[i].setRadius(1.00);
-
-        //Triangulation::vertexTable[i].setRadius((0.4 + i/5.0));
-    } 
-    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
+       vit->second.setRadius(1.00);
+       //vit->second.setRadius((0.4 + i/5.0));
+    }
+    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
     {
-        Triangulation::edgeTable[i].setEta(1.00);
-//        //Triangulation::edgeTable[i].setEta(0.84 + i*.03);
-//        
+       eit->second.setEta(.6+(eit->first)*.01);
+       //eit->second.setEta(0.84 + i*.03);
     }
 
 
@@ -65,10 +63,10 @@ int main(int argc, char *argv[])
     time_t start,end;
 
 
-    double deltaEta = 0.001;
+    double deltaEta = 0.00001;
     double deltaRadius = 0.00001;
     double a = 0.0001;
-    double b = 20.00;
+    double b = 100.00;
 
    
     //MinMax(deltaRadius, a, deltaEta, b);
