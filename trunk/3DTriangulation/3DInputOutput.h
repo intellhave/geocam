@@ -63,3 +63,5 @@ void make3DTriangulationFile(char* from, char* to);
 void print3DResultsStep(char* fileName, vector<double>* radii, vector<double>* curvs);
 
 void printResultsVolumes(char* fileName, vector<double>* volumes);
+
+void readEtas(char* fileneame);
