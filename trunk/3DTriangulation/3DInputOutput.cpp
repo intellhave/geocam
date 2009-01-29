@@ -810,8 +810,7 @@ void readEtas(char* filename)
      double eta;
      double dummy;
      for(int i = 0; i < Triangulation::edgeTable.size(); i++) {
-        fscanf(file, "Edge %d: %lf - %lf\n", &index, &eta, &dummy);
-        printf("readEtas: %d, %f\n", index, eta);
+        fscanf(file, "Edge %d:\t%lf\t%lf\n", &index, &eta, &dummy);
         Triangulation::edgeTable[index].setEta(eta);
      }
      fclose(file);
