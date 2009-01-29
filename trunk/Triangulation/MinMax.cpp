@@ -16,12 +16,12 @@ void printData(FILE* result)
       for(vvit = Triangulation::vertexTable.begin(); vvit != Triangulation::vertexTable.end(); vvit++)
    {
        double curv = vvit->second.getCurvature();
-       fprintf(result, "Vertex %d:\t%f\t%.10f\n", vvit->first, vvit->second.getRadius(), curv/(vvit->second.getRadius()));
+       fprintf(result, "Vertex %d:\t%.10f\t%.10f\n", vvit->first, vvit->second.getRadius(), curv/(vvit->second.getRadius()));
           }
     fprintf(result, "\nEta - Length\n__________\n");
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
       {
-        fprintf(result, "Edge %d:\t%f\t%f\n", eit->first, eit->second.getEta(),
+        fprintf(result, "Edge %d:\t%.10f\t%.10f\n", eit->first, eit->second.getEta(),
                        eit->second.getLength() );
                        L=L+eit->second.getLength();
             }
@@ -49,12 +49,12 @@ void MinMax(double deltaEta, double b)
    
    Triangulation::getRadii(initRadii);
    yamabeFlow(dt, initRadii, accuracy, precision, true);
-   printf("F = %f\n", F());
+   printf("F = %.10f\n", F());
    calcDeltaFE(&deltaFE, deltaEta);
 
    for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
    {
-      printf("MinMax FE: Index = %d, Value = %f\n", dfit->first, dfit->second);
+      printf("MinMax FE: Index = %d, Value = %.10f\n", dfit->first, dfit->second);
    }
 
    printf("\n");
@@ -64,7 +64,7 @@ while(true) {
  //  while(!allNegative(&deltaFE)) { 
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
                 {
-                printf("Edge %d: %f\n", eit->first, eit->second.getEta());
+                printf("Edge %d: %.10f\n", eit->first, eit->second.getEta());
                 }               
       //updateEtas(&deltaFE, b);
       //printData(result);
