@@ -31,12 +31,18 @@ void printData(FILE* result)
 
 
 
-void MinMax(double deltaEta, double b)
+void MinMax(double deltaEta, double b, double a)
 {
+                  
    char results[] = "Triangulation Files/ODE Result.txt";
    FILE* result = fopen(results, "w");
    map<int, double> deltaFE;
    map<int, Edge>::iterator eit;
+   //map<int, Edge>::iterator eeit;
+   //for(eeit = Triangulation::edgeTable.begin(); eeit != Triangulation::edgeTable.end(); eeit++)
+   //             {
+   //             printf("Edge %d: %.10f\n", eeit->first, eeit->second.getEta());
+   //             }
    double initRadii[Triangulation::vertexTable.size()];
    double dt = 0.020;
    double accuracy = 0.0000001;
@@ -49,15 +55,18 @@ void MinMax(double deltaEta, double b)
    
    Triangulation::getRadii(initRadii);
    yamabeFlow(dt, initRadii, accuracy, precision, true);
-   printf("F = %.10f\n", F());
+   printf("F = %.10f\n\n", F());
    calcDeltaFE(&deltaFE, deltaEta);
-
+   double length = 0;
    for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
    {
       printf("MinMax FE: Index = %d, Value = %.10f\n", dfit->first, dfit->second);
+      length += pow(dfit->second, 2);
    }
-
+     length = sqrt(length);
+     printf("\nGradient Length: %.10f\n", length);
    printf("\n");
+   updateEtas(&deltaFE, b, a);
    printData(result);
    
 while(true) {
@@ -70,8 +79,9 @@ while(true) {
       //printData(result);
       //updateEtas(&deltaFE, b);
       Triangulation::getRadii(initRadii);
+      printf("\n*** *** *** *** *** *** *** *** *** *** ***\n");
       yamabeFlow(dt, initRadii, accuracy, precision, true);
-      printf("F = %.10f\n", F());
+      printf("\nF = %.10f\n", F());
       printData(result);
       
           
@@ -85,7 +95,7 @@ while(true) {
       
       
       calcDeltaFE(&deltaFE, deltaEta);
-      updateEtas(&deltaFE, b);
+      updateEtas(&deltaFE, b, a);
       for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
      {
       printf("MinMax FE: Index = %d, Value = %.10f\n", dfit->first, dfit->second);
@@ -160,21 +170,22 @@ double F()
 }
 
 
-void updateEtas(map<int, double>* deltaFE, double b)
+void updateEtas(map<int, double>* deltaFE, double b, double a)
 {
-//     double length = 0;
+     double length = 0;
      map<int, double>::iterator dfit;
-//     for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
-//     {
-//        length += pow(dfit->second, 2);
-//     }
-//     length = sqrt(length);
+     for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
+     {
+        length += pow(dfit->second, 2);
+     }
+     length = sqrt(length);
+     printf("\nGradient Length: %.10f\n", length);
      
      for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
      {
          double curEta = Triangulation::edgeTable[dfit->first].getEta();
          Triangulation::edgeTable[dfit->first].setEta(curEta + b*(dfit->second) );
-         //Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * b);
+         //Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * a);
      }
 }
 //void updateRadii(map<int, double>* deltaFR, double a) 

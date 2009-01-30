@@ -53,9 +53,20 @@ int main(int argc, char *argv[])
     
 //    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
 //    {
+//       eit->second.setEta(1.00);
+       //eit->second.setEta(0.84 + i*.03);
+//    }
+
+
+
+
+
+//    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+//    {
 //       eit->second.setEta(.6+(eit->first)*.01);
 //       //eit->second.setEta(0.84 + i*.03);
 //    }
+
     
  //   time_t start,end;
 //      FILE* file = fopen("Triangulation Files/dummy.txt", "w");
@@ -67,15 +78,16 @@ int main(int argc, char *argv[])
 //      system("PAUSE");
     double deltaEta = 0.00001;
     double deltaRadius = 0.00001;
-    double a = 0.0001;
-    double b = 100.00;
+    double a = 0.0001;  //fixed length of gradient flow step
+    double b = 100.00;  //gradient flow scale factor
     
+    readEtas("Triangulation Files/MinMax Results/temp.txt");    
     //MinMax(deltaRadius, a, deltaEta, b);
-//    MinMax(deltaEta, b);
+    MinMax(deltaEta, b, a);
 //time (&start);
-readEtas("Triangulation Files/MinMax Results/Poincare Sphere-16 Final Etas 1-29-09.txt");
+//readEtas("Triangulation Files/MinMax Results/Poincare Sphere-16 Final Etas 1-29-09.txt");
 
-plot();
+//plot();
 //time (&end);
 //printf("%f\n", difftime(end,start));
 //
