@@ -184,8 +184,8 @@ void updateEtas(map<int, double>* deltaFE, double b, double a)
      for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
      {
          double curEta = Triangulation::edgeTable[dfit->first].getEta();
-         //Triangulation::edgeTable[dfit->first].setEta(curEta + b*(dfit->second) );
-         Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * a);
+         Triangulation::edgeTable[dfit->first].setEta(curEta + b*(dfit->second) );
+         //Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * a);
      }
 }
 //void updateRadii(map<int, double>* deltaFR, double a) 
