@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 //      system("PAUSE");
     double deltaEta = 0.00001;
     double deltaRadius = 0.00001;
-    double a = 0.0001;  //fixed length of gradient flow step
+    double a = 0.001;  //fixed length of gradient flow step
     double b = 100.00;  //gradient flow scale factor
     
     readEtas("Triangulation Files/MinMax Results/temp.txt");    
