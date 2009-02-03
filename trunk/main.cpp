@@ -24,7 +24,7 @@ double plot();
 using namespace std;
 int main(int argc, char *argv[])
 {
-    char filename[] = "Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
+    char filename[] = "Triangulation Files/3D Manifolds/Lutz Format/poincare-16.txt";
     //char filename[] = "Triangulation Files/3D Manifolds/Lutz Format/s3-6.txt";
     char modified[] = "Triangulation Files/manifold converted.txt";
     
@@ -56,17 +56,24 @@ int main(int argc, char *argv[])
 //       eit->second.setEta(1.00);
        //eit->second.setEta(0.84 + i*.03);
 //    }
-
-Triangulation::edgeTable[1].setEta(1.00);
-Triangulation::edgeTable[2].setEta(1.00);
-Triangulation::edgeTable[3].setEta(1.00);
-Triangulation::edgeTable[4].setEta(1.00);
-Triangulation::edgeTable[5].setEta(1.00);
-Triangulation::edgeTable[6].setEta(1.00);
-Triangulation::edgeTable[7].setEta(1.00);
-Triangulation::edgeTable[8].setEta(1.00);
-Triangulation::edgeTable[9].setEta(1.00);
-Triangulation::edgeTable[10].setEta(1.00);
+      
+      for(int i = -10; i < 10; i++)
+      {
+         Triangulation::vertexTable[1].setRadius(1 + i * 0.05);
+         printf("Cayley1: %f\n", CayleyvolumeSq(Triangulation::tetraTable[1]));
+         printf("Cayley2: %f\n", CayleyvolumeSq2(Triangulation::tetraTable[1]));
+      }
+      
+//Triangulation::edgeTable[1].setEta(1.00);
+//Triangulation::edgeTable[2].setEta(1.00);
+//Triangulation::edgeTable[3].setEta(1.00);
+//Triangulation::edgeTable[4].setEta(1.00);
+//Triangulation::edgeTable[5].setEta(1.00);
+//Triangulation::edgeTable[6].setEta(1.00);
+//Triangulation::edgeTable[7].setEta(1.00);
+//Triangulation::edgeTable[8].setEta(1.00);
+//Triangulation::edgeTable[9].setEta(1.00);
+//Triangulation::edgeTable[10].setEta(1.00);
 //    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
 //    {
 //       eit->second.setEta(.6+(eit->first)*.01);
@@ -82,12 +89,12 @@ Triangulation::edgeTable[10].setEta(1.00);
 //      }
 //      fclose(file);
 //      system("PAUSE");
-    double deltaEta = 0.00001;
+    double deltaEta = 0.0000001;
     double deltaRadius = 0.00001;
     double a = 0.001;  //fixed length of gradient flow step
-    double b = 10.00;  //gradient flow scale factor
+    double b = 100.00;  //gradient flow scale factor
     
-//readEtas("Triangulation Files/MinMax Results/temp.txt");    
+readEtas("Triangulation Files/MinMax Results/temp.txt");    
     //MinMax(deltaRadius, a, deltaEta, b);
     MinMax(deltaEta, b, a);
 //time (&start);
