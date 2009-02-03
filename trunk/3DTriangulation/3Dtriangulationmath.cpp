@@ -87,44 +87,24 @@ bool isDegenerate(Tetra t)
 
 double CayleyvolumeSq(Tetra t) 
 {
-   vector<int> nurg = *(t.getLocalVertices());
-   vector<int> zork = listIntersection(Triangulation::vertexTable[nurg[0]].getLocalEdges(), t.getLocalEdges());
-   vector<int> zool23 = listIntersection(Triangulation::edgeTable[zork[0]].getLocalFaces(), Triangulation::edgeTable[zork[1]].getLocalFaces());
-   vector<int> gorn23 = listDifference(Triangulation::faceTable[zool23[0]].getLocalEdges(), Triangulation::vertexTable[nurg[0]].getLocalEdges());
-   vector<int> zool24 = listIntersection(Triangulation::edgeTable[zork[0]].getLocalFaces(), Triangulation::edgeTable[zork[2]].getLocalFaces());
-   vector<int> gorn24 = listDifference(Triangulation::faceTable[zool24[0]].getLocalEdges(), Triangulation::vertexTable[nurg[0]].getLocalEdges());
-   vector<int> zool34 = listIntersection(Triangulation::edgeTable[zork[1]].getLocalFaces(), Triangulation::edgeTable[zork[2]].getLocalFaces());
-   vector<int> gorn34 = listDifference(Triangulation::faceTable[zool34[0]].getLocalEdges(), Triangulation::vertexTable[nurg[0]].getLocalEdges());
+   int vertex, face;
+   vector<int> edges1, edge23, edge24, edge34;
+  
+   vertex = (*(t.getLocalVertices()))[0];
+   edges1 = listIntersection(Triangulation::vertexTable[vertex].getLocalEdges(), t.getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[0]].getLocalFaces(), Triangulation::edgeTable[edges1[1]].getLocalFaces())[0];
+   edge23 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[0]].getLocalFaces(), Triangulation::edgeTable[edges1[2]].getLocalFaces())[0];
+   edge24 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[1]].getLocalFaces(), Triangulation::edgeTable[edges1[2]].getLocalFaces())[0];
+   edge34 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
     
-   double L12 = Triangulation::edgeTable[zork[0]].getLength();
-   double L13 = Triangulation::edgeTable[zork[1]].getLength();
-   double L14 = Triangulation::edgeTable[zork[2]].getLength();
-   double L23 = Triangulation::edgeTable[gorn23[0]].getLength();
-   double L24 = Triangulation::edgeTable[gorn24[0]].getLength();
-   double L34 = Triangulation::edgeTable[gorn34[0]].getLength();
-   
-   double CayleyMenger;
-   
-   CayleyMenger=-pow(L12, 4.0)*pow(L34,2.0)-pow(L13, 4.0)*pow(L24,2.0)-pow(L14, 4.0)*pow(L23,2.0)-pow(L23, 4.0)*pow(L14,2.0)-pow(L24, 4.0)*pow(L13,2.0)-pow(L34, 4.0)*pow(L12,2.0);
-   CayleyMenger=CayleyMenger-pow(L12, 2.0)*pow(L13,2.0)*pow(L23,2.0)-pow(L12, 2.0)*pow(L14,2.0)*pow(L24,2.0)-pow(L13, 2.0)*pow(L14,2.0)*pow(L34,2.0)-pow(L23, 2.0)*pow(L24,2.0)*pow(L34,2.0);
-   CayleyMenger=CayleyMenger+pow(L12, 2.0)*pow(L13,2.0)*pow(L24,2.0)+pow(L12, 2.0)*pow(L13,2.0)*pow(L34,2.0)+pow(L12, 2.0)*pow(L14,2.0)*pow(L23,2.0)+pow(L12, 2.0)*pow(L14,2.0)*pow(L34,2.0);
-   CayleyMenger=CayleyMenger+pow(L13, 2.0)*pow(L14,2.0)*pow(L23,2.0)+pow(L13, 2.0)*pow(L14,2.0)*pow(L24,2.0)+pow(L13, 2.0)*pow(L23,2.0)*pow(L24,2.0)+pow(L14, 2.0)*pow(L23,2.0)*pow(L24,2.0);
-   CayleyMenger=CayleyMenger+pow(L12, 2.0)*pow(L23,2.0)*pow(L34,2.0)+pow(L14, 2.0)*pow(L23,2.0)*pow(L34,2.0)+pow(L12, 2.0)*pow(L24,2.0)*pow(L34,2.0)+pow(L13, 2.0)*pow(L24,2.0)*pow(L34,2.0);
-   CayleyMenger=CayleyMenger/144.0;
-   
-   return CayleyMenger;
-}  
-
-double CayleyvolumeSq2(Tetra t) 
-{
-   vector>int> edges = *(t.getLocalEdges());
-    
-   double L12 = Triangulation::edgeTable[edges[0]].getLength();
-   double L13 = Triangulation::edgeTable[edges[1]].getLength();
-   double L14 = Triangulation::edgeTable[edges[2]].getLength();
-   double L23 = Triangulation::edgeTable[edges[3]].getLength();
-   double L24 = Triangulation::edgeTable[edges[4]].getLength();
-   double L34 = Triangulation::edgeTable[edges[5]].getLength();
+   double L12 = Triangulation::edgeTable[edges1[0]].getLength();
+   double L13 = Triangulation::edgeTable[edges1[1]].getLength();
+   double L14 = Triangulation::edgeTable[edges1[2]].getLength();
+   double L23 = Triangulation::edgeTable[edge23[0]].getLength();
+   double L24 = Triangulation::edgeTable[edge24[0]].getLength();
+   double L34 = Triangulation::edgeTable[edge34[0]].getLength();
    
    double CayleyMenger;
    

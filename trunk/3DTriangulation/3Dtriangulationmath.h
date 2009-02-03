@@ -16,4 +16,3 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt, dou
 void yamabeFlow(double dt, double *initRadii, 
                        double accuracy, double precision, bool adjF);                   
 double calcNormalization();
-double CayleyvolumeSq2(Tetra t) ;
