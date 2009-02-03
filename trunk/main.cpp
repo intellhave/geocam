@@ -37,7 +37,18 @@ int main(int argc, char *argv[])
         vit->second.setRadius(1.00);
 
         //Triangulation::vertexTable[i].setRadius((0.4 + i/5.0));
-    } 
+    }
+    for(int i = -10; i < 10; i++)
+    {
+      //Triangulation::vertexTable[1].setRadius(1 + i * 0.09999);
+      Triangulation::edgeTable[1].setLength(0.001);
+      double vol = volumeSq(Triangulation::tetraTable[1]);
+      double cay = CayleyvolumeSq(Triangulation::tetraTable[1]);
+      printf("VolumeSq: %f\n", vol);
+      printf("CayleyVolumeSq: %f\n", cay);
+      printf("Ratio: %f\n\n", vol / cay);
+      
+    }
 //    for(int i = 1; i <= Triangulation::edgeTable.size(); i++)
 //    {
 //        if(Triangulation::edgeTable[i].getLocalFaces()->size() == 4)
@@ -57,13 +68,7 @@ int main(int argc, char *argv[])
        //eit->second.setEta(0.84 + i*.03);
 //    }
       
-      for(int i = -10; i < 10; i++)
-      {
-         Triangulation::vertexTable[1].setRadius(1 + i * 0.05);
-         printf("Cayley1: %f\n", CayleyvolumeSq(Triangulation::tetraTable[1]));
-         printf("Cayley2: %f\n", CayleyvolumeSq2(Triangulation::tetraTable[1]));
-      }
-      
+
 //Triangulation::edgeTable[1].setEta(1.00);
 //Triangulation::edgeTable[2].setEta(1.00);
 //Triangulation::edgeTable[3].setEta(1.00);
@@ -89,14 +94,18 @@ int main(int argc, char *argv[])
 //      }
 //      fclose(file);
 //      system("PAUSE");
-    double deltaEta = 0.0000001;
-    double deltaRadius = 0.00001;
-    double a = 0.001;  //fixed length of gradient flow step
-    double b = 100.00;  //gradient flow scale factor
-    
-readEtas("Triangulation Files/MinMax Results/temp.txt");    
-    //MinMax(deltaRadius, a, deltaEta, b);
-    MinMax(deltaEta, b, a);
+
+//    double deltaEta = 0.0000001;
+//    double deltaRadius = 0.00001;
+//    double a = 0.001;  //fixed length of gradient flow step
+//    double b = 100.00;  //gradient flow scale factor
+//    
+//readEtas("Triangulation Files/MinMax Results/temp.txt");    
+//    //MinMax(deltaRadius, a, deltaEta, b);
+//    MinMax(deltaEta, b, a);
+
+
+
 //time (&start);
 //readEtas("Triangulation Files/MinMax Results/Poincare Sphere-16 Final Etas 1-29-09.txt");
 
