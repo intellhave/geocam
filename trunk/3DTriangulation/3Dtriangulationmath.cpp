@@ -114,9 +114,25 @@ double CayleyvolumeSq(Tetra t)
    CayleyMenger=CayleyMenger+pow(L13, 2.0)*pow(L14,2.0)*pow(L23,2.0)+pow(L13, 2.0)*pow(L14,2.0)*pow(L24,2.0)+pow(L13, 2.0)*pow(L23,2.0)*pow(L24,2.0)+pow(L14, 2.0)*pow(L23,2.0)*pow(L24,2.0);
    CayleyMenger=CayleyMenger+pow(L12, 2.0)*pow(L23,2.0)*pow(L34,2.0)+pow(L14, 2.0)*pow(L23,2.0)*pow(L34,2.0)+pow(L12, 2.0)*pow(L24,2.0)*pow(L34,2.0)+pow(L13, 2.0)*pow(L24,2.0)*pow(L34,2.0);
    CayleyMenger=CayleyMenger/144.0;
+
+
+//   CayleyMenger=-pow(L12, 4.0)*pow(L34,2.0)-pow(L13, 4.0)*pow(L24,2.0)-pow(L14, 4.0)*pow(L23,2.0)
+//                          -pow(L23, 4.0)*pow(L14,2.0)-pow(L24, 4.0)*pow(L13,2.0)-pow(L34, 4.0)*pow(L12,2.0)
+//                          -pow(L12, 2.0)*pow(L13,2.0)*pow(L23,2.0)-pow(L12, 2.0)*pow(L14,2.0)*pow(L24,2.0)
+//                          -pow(L13, 2.0)*pow(L14,2.0)*pow(L34,2.0)-pow(L23, 2.0)*pow(L24,2.0)*pow(L34,2.0)
+//                          +pow(L12, 2.0)*pow(L13,2.0)*pow(L24,2.0)+pow(L12, 2.0)*pow(L13,2.0)*pow(L34,2.0)
+//                          +pow(L12, 2.0)*pow(L14,2.0)*pow(L23,2.0)+pow(L12, 2.0)*pow(L14,2.0)*pow(L34,2.0)
+//                          +pow(L13, 2.0)*pow(L14,2.0)*pow(L23,2.0)+pow(L13, 2.0)*pow(L14,2.0)*pow(L24,2.0)
+//                          +pow(L13, 2.0)*pow(L23,2.0)*pow(L24,2.0)+pow(L14, 2.0)*pow(L23,2.0)*pow(L24,2.0)
+//                          +pow(L12, 2.0)*pow(L23,2.0)*pow(L34,2.0)+pow(L14, 2.0)*pow(L23,2.0)*pow(L34,2.0)
+//                          +pow(L12, 2.0)*pow(L24,2.0)*pow(L34,2.0)+pow(L13, 2.0)*pow(L24,2.0)*pow(L34,2.0);
+//   CayleyMenger=CayleyMenger/144.0;
+
    
    return CayleyMenger;
 }  
+
+
 
 //double curvature3D(Vertex v)
 //{

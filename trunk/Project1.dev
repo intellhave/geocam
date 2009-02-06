@@ -4,7 +4,7 @@ Name=Project1
 <<<<<<< .mine
 UnitCount=37
 =======
-UnitCount=46
+UnitCount=47
 >>>>>>> .r541
 Type=1
 Ver=1
@@ -574,6 +574,16 @@ BuildCmd=
 FileName=plot.cpp
 CompileCpp=1
 Folder=Project1
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit47]
+FileName=hessian.cpp
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000

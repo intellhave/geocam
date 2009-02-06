@@ -2,6 +2,7 @@
 #include <cmath>
 #include "3DTriangulation/3Dtriangulationmath.h"
 #include "delaunay.h"
+#include <cerrno>
 #define PI 	3.141592653589793238 
 
 void printData(FILE* result) 
@@ -38,6 +39,7 @@ void MinMax(double deltaEta, double b, double a)
    FILE* result = fopen(results, "w");
    map<int, double> deltaFE;
    map<int, Edge>::iterator eit;
+   map<int, Tetra>::iterator tit;
    //map<int, Edge>::iterator eeit;
    //for(eeit = Triangulation::edgeTable.begin(); eeit != Triangulation::edgeTable.end(); eeit++)
    //             {
@@ -45,8 +47,8 @@ void MinMax(double deltaEta, double b, double a)
    //             }
    double initRadii[Triangulation::vertexTable.size()];
    double dt = 0.020;
-   double accuracy = 0.0000001;
-   double precision = 0.0000001;
+   double accuracy = 0.000000001;
+   double precision = 0.000000001;
 
    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
        deltaFE.insert(pair<int, double>(eit->first, 0));
@@ -55,7 +57,7 @@ void MinMax(double deltaEta, double b, double a)
    
    Triangulation::getRadii(initRadii);
    yamabeFlow(dt, initRadii, accuracy, precision, true);
-   printf("F = %.10f\n\n", F());
+   printf("F = %.10f\n", F());
    calcDeltaFE(&deltaFE, deltaEta);
    double length = 0;
    for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
@@ -74,7 +76,15 @@ while(true) {
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
                 {
                 printf("Edge %d: %.10f\n", eit->first, eit->second.getEta());
-                }               
+                } 
+      double totalvolume=0;
+      //for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
+      //{
+      //        printf("Tetrahedron %d: %.10f\n", tit->first, CayleyvolumeSq(tit->second));
+      //        totalvolume += CayleyvolumeSq(tit->second) ;
+      //        }
+      //        printf("Total Volume = %.10f\n", totalvolume);
+                          
       //updateEtas(&deltaFE, b);
       //printData(result);
       //updateEtas(&deltaFE, b);
@@ -122,8 +132,8 @@ double FE(double deltaEta, int index)
    vector<double> curvs;
    double initRadii[Triangulation::vertexTable.size()];
    double dt = 0.020;
-   double accuracy = 0.0000001;
-   double precision = 0.0000001;
+   double accuracy = 0.000000001;
+   double precision = 0.000000001;
    Triangulation::getRadii(initRadii);
    yamabeFlow(dt, initRadii, accuracy, precision, true);
    double result = F();
