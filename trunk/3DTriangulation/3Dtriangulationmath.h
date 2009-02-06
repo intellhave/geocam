@@ -8,11 +8,23 @@ double volumeSq(double, double, double, double);
 double CayleyvolumeSq(Tetra);
 bool isDegenerate(Tetra);
 void curvature3D();
-void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
+
+/********** Yamabe Flows **********/
+void yamabeFlow(vector<double>* radii, vector<double>* curvatures, double dt,
                 double *initRadii,int numSteps, bool adjF);
+void yamabeFlow(vector<double>* radii, vector<double>* curvatures, double dt,
+                int numSteps, bool adjF);
 void yamabeFlow(double dt, double *initRadii,int numSteps, bool adjF);
-void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt, double *initRadii, 
-                       double accuracy, double precision, bool adjF);
-void yamabeFlow(double dt, double *initRadii, 
-                       double accuracy, double precision, bool adjF);                   
+
+void yamabeFlow(double dt, int numSteps, bool adjF);
+
+void yamabeFlow(vector<double>* radii, vector<double>* curvatures, double dt, 
+                double *initRadii, double accuracy, double precision, bool adjF);
+void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt, 
+                double accuracy, double precision, bool adjF);
+void yamabeFlow(double dt, double *initRadii, double accuracy, 
+                double precision, bool adjF);
+void yamabeFlow(double dt, double accuracy, double precision, bool adjF);
+/**********************************/
+                 
 double calcNormalization();

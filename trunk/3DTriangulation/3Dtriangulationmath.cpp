@@ -133,20 +133,6 @@ double CayleyvolumeSq(Tetra t)
 }  
 
 
-
-//double curvature3D(Vertex v)
-//{
-//       // For each tetra containing v, get the solid angle at v.
-//       double sum = 0.0;
-//       for(int i = 0; i < v.getLocalTetras()->size(); i++)
-//       {
-//           Tetra t = Triangulation::tetraTable[(*(v.getLocalTetras()))[i]];
-//           sum += solidAngle(v, t);
-//       }
-//       // Subtract sum from 4*PI
-//       return 4*PI - sum;
-//}
-
 void curvature3D()
 {
    map<int, Vertex>::iterator vit;
@@ -179,7 +165,7 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
 {
   int p = Triangulation::vertexTable.size(); // The number of vertices or 
                                              // number of variables in system.
-  vector<double> volumes;                                       
+                                     
   double z[p]; // Temporary array to hold data for 
                                       // the intermediate steps in.
   double curCurv;
@@ -200,10 +186,6 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
    }
    for (i=1; i<numSteps+1; i++) // This is the main loop through each step.
    {
-       for (tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
-       {
-           volumes.push_back(volumeSq(tit->second));
-       }
        curvature3D();
        normalization = calcNormalization();
        for (k=0, vit = vBegin; k<p && vit != vEnd; k++, vit++) 
@@ -229,7 +211,14 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
            vit->second.setRadius(z[k]);
        }
    }
-   printResultsVolumes("C:/Dev-Cpp/Geocam/Triangulation Files/Volume Results.txt", &volumes);
+}
+
+void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt ,
+               int numSteps, bool adjF)
+{
+   double initRadii[Triangulation::vertexTable.size()];
+   Triangulation::getRadii(initRadii);
+   yamabeFlow(radii, curvatures, dt, initRadii, numSteps, adjF);
 }
 
 void yamabeFlow(double dt, double *initRadii,int numSteps, bool adjF)
@@ -272,26 +261,11 @@ void yamabeFlow(double dt, double *initRadii,int numSteps, bool adjF)
        }
    }
 }
-
-double calcNormalization()
+void yamabeFlow(double dt, int numSteps, bool adjF)
 {
-   double result = 0;
-   double tempNum;
-   double denom = 0;
-   map<int, Edge>::iterator eit;
-   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
-   {
-      tempNum = 0;
-      Vertex v1 = Triangulation::vertexTable[(*(eit->second.getLocalVertices()))[0]];
-      Vertex v2 = Triangulation::vertexTable[(*(eit->second.getLocalVertices()))[1]];
-      
-      tempNum += v1.getRadius()*v1.getCurvature() + v2.getRadius()*v2.getCurvature();
-      tempNum += eit->second.getEta() * 
-              (v1.getRadius()*v2.getCurvature() + v2.getRadius()*v1.getCurvature());
-      result += tempNum / eit->second.getLength();
-      denom += eit->second.getLength();
-   }
-   return result / denom;
+   double initRadii[Triangulation::vertexTable.size()];
+   Triangulation::getRadii(initRadii);
+   yamabeFlow(dt, initRadii, numSteps, adjF);
 }
 
 
@@ -379,7 +353,13 @@ void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt, dou
        }
     }
 }
-
+void yamabeFlow(vector<double>* radii, vector<double>* curvatures,double dt,
+                       double accuracy, double precision, bool adjF)
+{
+   double initRadii[Triangulation::vertexTable.size()];
+   Triangulation::getRadii(initRadii);
+   yamabeFlow(radii, curvatures, dt, initRadii, accuracy, precision, adjF);
+}
 void yamabeFlow(double dt, double *initRadii, 
                        double accuracy, double precision, bool adjF)
 {
@@ -394,6 +374,7 @@ void yamabeFlow(double dt, double *initRadii,
     map<int, Vertex>::iterator vit;
     map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
     map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+    map<int, Edge>::iterator eit;
     for (k=0, vit = vBegin; k<numV && vit != vEnd; k++, vit++)  
     {
        prevCurvs.insert(pair<int, double>(vit->first, 0.0));
@@ -404,6 +385,17 @@ void yamabeFlow(double dt, double *initRadii,
     while(!done && errno == 0)
     {
        curvature3D();
+       if(errno != 0) {
+         for (vit = vBegin; vit != vEnd; vit++) 
+         {
+             printf("Vertex %3d:\t%12.10f\t%12.10f\n", vit->first, vit->second.getRadius(), vit->second.getCurvature());
+         }
+         printf("\n");
+         for (eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) 
+         {
+             printf("Edge %3d:\t%12.10f\t%12.10f\n", eit->first, eit->second.getEta(), eit->second.getLength());
+         }
+       }
        normalization = calcNormalization();
        if(!firstStep) 
        {
@@ -446,4 +438,32 @@ void yamabeFlow(double dt, double *initRadii,
            prevCurvs[vit->first] = vit->second.getCurvature();
        }
     }
+}
+
+void yamabeFlow(double dt, double accuracy, double precision, bool adjF)
+{
+   double initRadii[Triangulation::vertexTable.size()];
+   Triangulation::getRadii(initRadii);
+   yamabeFlow(dt, initRadii, accuracy, precision, adjF);
+}
+
+double calcNormalization()
+{
+   double result = 0;
+   double tempNum;
+   double denom = 0;
+   map<int, Edge>::iterator eit;
+   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+   {
+      tempNum = 0;
+      Vertex v1 = Triangulation::vertexTable[(*(eit->second.getLocalVertices()))[0]];
+      Vertex v2 = Triangulation::vertexTable[(*(eit->second.getLocalVertices()))[1]];
+      
+      tempNum += v1.getRadius()*v1.getCurvature() + v2.getRadius()*v2.getCurvature();
+      tempNum += eit->second.getEta() * 
+              (v1.getRadius()*v2.getCurvature() + v2.getRadius()*v1.getCurvature());
+      result += tempNum / eit->second.getLength();
+      denom += eit->second.getLength();
+   }
+   return result / denom;
 }

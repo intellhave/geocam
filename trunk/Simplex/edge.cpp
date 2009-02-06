@@ -16,7 +16,10 @@ Edge::Edge() : Simplex() //: eta = 1.0
     eta = 1.0;
     length = 0;
 }
-
+Edge::Edge(int setindex) : Simplex(setindex)
+{
+   eta = 1.0;
+}
 // class destructor
 Edge::~Edge()
 {

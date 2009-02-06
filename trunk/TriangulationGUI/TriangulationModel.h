@@ -15,6 +15,8 @@ class TriangulationModel
       static int numSteps;
       static double stepSize;
       static bool flow;
+      static double acc;
+      static bool smart;
       public:
       
       TriangulationModel();
@@ -23,7 +25,9 @@ class TriangulationModel
       static void clearData();
       static void setNumSteps(int);
       static void setStepSize(double);
+      static void setAccuracy(double);
       static void setFlowFunction(bool);
+      static void setSmartFlow(bool);
       static void setWeights(vector<double>*);
       static void setWeight(int, double);
       static void setEta(int, double);

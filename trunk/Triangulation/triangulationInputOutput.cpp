@@ -725,7 +725,7 @@ void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>*
          vit = Triangulation::vertexTable.begin();
          for(int j = 0; j < vertSize; j++)
          {
-             results << (*curvs)[i*vertSize+j] << "\n";
+             results << (*curvs)[i*vertSize+j] / (*radii)[i*vertSize+j] << "\n";
              vit++;
          }
      }

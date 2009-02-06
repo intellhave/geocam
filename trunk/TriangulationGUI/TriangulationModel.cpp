@@ -4,13 +4,16 @@ vector<double> TriangulationModel::weights;
 vector<double> TriangulationModel::curvs;
 int TriangulationModel::numSteps;
 double TriangulationModel::stepSize;
+double TriangulationModel::acc;
 bool TriangulationModel::loaded;
 bool TriangulationModel::flow;
+bool TriangulationModel::smart;
 
 TriangulationModel::TriangulationModel()
 {
     loaded = false;
     flow = false;
+    smart = false;
 }
 TriangulationModel::~TriangulationModel()
 {
@@ -40,9 +43,17 @@ void TriangulationModel::setStepSize(double size)
 {
     stepSize = size;
 }
+void TriangulationModel::setAccuracy(double accuracy)
+{
+     acc = accuracy;
+}
 void TriangulationModel::setFlowFunction(bool flowF)
 {
      flow = flowF;
+}
+void TriangulationModel::setSmartFlow(bool smartF)
+{
+     smart = smartF;
 }
 void TriangulationModel::setWeights(vector<double> *weightsVec) {
      if(weightsVec->size() != Triangulation::vertexTable.size()) {
@@ -66,32 +77,40 @@ bool TriangulationModel::isLoaded()
 }
 bool TriangulationModel::runCalcFlow(int type)
 {
-     if(!loaded || numSteps <= 0 || stepSize <= 0.0)
+     if(!loaded)
      {
         return false;
      }
-     double weightArr[Triangulation::vertexTable.size()];
-     Triangulation::getRadii(weightArr);
      switch(type)
      {
         case ID_RUN_FLOW_EUCLIDEAN:
         {
+             double weightArr[Triangulation::vertexTable.size()];
+             Triangulation::getRadii(weightArr);
              calcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
         break;
         case ID_RUN_FLOW_SPHERICAL:
         {
+             double weightArr[Triangulation::vertexTable.size()];
+             Triangulation::getRadii(weightArr);
              sphericalCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
         break;
         case ID_RUN_FLOW_HYPERBOLIC:
         {
+             double weightArr[Triangulation::vertexTable.size()];
+             Triangulation::getRadii(weightArr);
              hyperbolicCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
         break;
         case ID_RUN_FLOW_YAMABE:
         {
-             yamabeFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
+             if(smart) {
+               yamabeFlow(&weights, &curvs, stepSize, acc, acc, flow);
+             } else { 
+               yamabeFlow(&weights, &curvs, stepSize, numSteps, flow);
+             }
         }
         break;
         default: return false;

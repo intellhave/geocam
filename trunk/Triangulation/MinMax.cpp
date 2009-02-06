@@ -12,22 +12,30 @@ void printData(FILE* result)
         
     map<int, Vertex>::iterator vvit;
     map<int, Edge>::iterator eit;
+    map<int, Tetra>::iterator tit;
+    fprintf(result, "\n************************************\n");
     
-       fprintf(result, "\nRadii - Curvature\n__________\n");
+           fprintf(result, "\n\nRadii - Curvature\n__________\n");
       for(vvit = Triangulation::vertexTable.begin(); vvit != Triangulation::vertexTable.end(); vvit++)
    {
        double curv = vvit->second.getCurvature();
-       fprintf(result, "Vertex %d:\t%.10f\t%.10f\n", vvit->first, vvit->second.getRadius(), curv/(vvit->second.getRadius()));
+       fprintf(result, "Vertex %3d:\t%.10f\t%.10f\n", vvit->first, vvit->second.getRadius(), curv/(vvit->second.getRadius()));
           }
-    fprintf(result, "\nEta - Length\n__________\n");
+          fprintf(result, "\n\nVolumes:\n");
+          int i;
+          for(i=1; i<=Triangulation::tetraTable.size(); ++i)
+          {
+                   fprintf(result, "Tetrahedron %d:\t%.10f\n", i, CayleyvolumeSq(Triangulation::tetraTable[i]));
+          }
+    fprintf(result, "\n\nEta - Length\n__________\n");
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
       {
-        fprintf(result, "Edge %d:\t%.10f\t%.10f\n", eit->first, eit->second.getEta(),
+        fprintf(result, "Edge %3d:\t%.10f\t%.10f\n", eit->first, eit->second.getEta(),
                        eit->second.getLength() );
                        L=L+eit->second.getLength();
             }
-    fprintf(result, "\nsum of lengths = %f\n", L);
-    fprintf(result, "\nF() = %f\n", F());
+//    fprintf(result, "\nsum of lengths = %f\n", L);
+    fprintf(result, "\n\nF() = %f\n", F());
 }
 
 
@@ -46,6 +54,7 @@ void MinMax(double deltaEta, double b, double a)
    //             printf("Edge %d: %.10f\n", eeit->first, eeit->second.getEta());
    //             }
    double initRadii[Triangulation::vertexTable.size()];
+
    double dt = 0.020;
    double accuracy = 0.000000001;
    double precision = 0.000000001;
@@ -62,7 +71,7 @@ void MinMax(double deltaEta, double b, double a)
    double length = 0;
    for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
    {
-      printf("MinMax FE: Index = %d, Value = %.10f\n", dfit->first, dfit->second);
+      printf("MinMax FE: Index = %3d, Value = %.10f\n", dfit->first, dfit->second);
       length += pow(dfit->second, 2);
    }
      length = sqrt(length);
@@ -75,7 +84,7 @@ while(true) {
  //  while(!allNegative(&deltaFE)) { 
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
                 {
-                printf("Edge %d: %.10f\n", eit->first, eit->second.getEta());
+                printf("Edge %3d: %.10f\n", eit->first, eit->second.getEta());
                 } 
       double totalvolume=0;
       //for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
@@ -99,7 +108,7 @@ while(true) {
       for(vvvit = Triangulation::vertexTable.begin(); vvvit != Triangulation::vertexTable.end(); vvvit++)
    {
        double curv = vvvit->second.getCurvature();
-       printf("vertex %d: %f\t%.10f\n", vvvit->first, vvvit->second.getRadius(), curv/(vvvit->second.getRadius()));
+       printf("vertex %3d: %f\t%.10f\n", vvvit->first, vvvit->second.getRadius(), curv/(vvvit->second.getRadius()));
            }
       
       
@@ -108,15 +117,15 @@ while(true) {
       updateEtas(&deltaFE, b, a);
       for(dfit = (deltaFE).begin(); dfit != (deltaFE).end(); dfit++)
      {
-      printf("MinMax FE: Index = %d, Value = %.10f\n", dfit->first, dfit->second);
+      printf("MinMax FE: Index = %3d, Value = %.10f\n", dfit->first, dfit->second);
      }
-
+//     system("PAUSE");
       printf("\n");
    }
-    Triangulation::getRadii(initRadii);
+//    Triangulation::getRadii(initRadii);
     //yamabeFlow(dt, initRadii, steps, true);
-    printData(result);
-    fclose(result);
+//    printData(result);
+//    fclose(result);
 }
 
 
@@ -131,9 +140,11 @@ double FE(double deltaEta, int index)
    vector<double> radii;
    vector<double> curvs;
    double initRadii[Triangulation::vertexTable.size()];
+
    double dt = 0.020;
    double accuracy = 0.000000001;
    double precision = 0.000000001;
+   
    Triangulation::getRadii(initRadii);
    yamabeFlow(dt, initRadii, accuracy, precision, true);
    double result = F();
@@ -169,10 +180,10 @@ double F()
        //sumR += vit->second.getRadius();
        sumK += curv;
    }
-   //double parab=0;
+//   double parab=0;
    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();eit++)
    {
-    //   parab -= pow((eit->second.getEta() - 1),2);
+//       parab -= pow((eit->second.getEta() - 1),2);
           
        sumR += eit->second.getLength();
    }
@@ -194,8 +205,10 @@ void updateEtas(map<int, double>* deltaFE, double b, double a)
      for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
      {
          double curEta = Triangulation::edgeTable[dfit->first].getEta();
+
          Triangulation::edgeTable[dfit->first].setEta(curEta + b*(dfit->second) );
          //Triangulation::edgeTable[dfit->first].setEta(curEta + dfit->second / length * a);
+
      }
 }
 //void updateRadii(map<int, double>* deltaFR, double a) 

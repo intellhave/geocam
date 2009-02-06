@@ -12,6 +12,7 @@ For a Win32 tutorial: http://www.winprog.org/tutorial/
 
 /************** Include Files ***************/
 #include <windows.h>
+#include <commctrl.h>
 #include <ctime>
 #include <iostream>
 #include <fstream>
@@ -762,6 +763,25 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
            return TRUE;
         }
         case WM_COMMAND:
+            // Inspect check box
+            switch(SendDlgItemMessage(hwnd, IDC_SMART_CB, BM_GETCHECK, 0, 0) )
+            {
+               case BST_CHECKED:
+               {
+                   SendDlgItemMessage(hwnd, IDC_STEPSTEXT, EM_SETREADONLY, (WPARAM) TRUE, 0);
+                   SendDlgItemMessage(hwnd, IDC_ACCTEXT, EM_SETREADONLY, (WPARAM) FALSE, 0);
+                   TriangulationModel::setSmartFlow(true);
+               }
+               break;
+               case BST_UNCHECKED:
+               {
+                   SendDlgItemMessage(hwnd, IDC_STEPSTEXT, (WPARAM) EM_SETREADONLY, FALSE, 0);
+                   SendDlgItemMessage(hwnd, IDC_ACCTEXT, (WPARAM) EM_SETREADONLY, TRUE, 0);
+                   TriangulationModel::setSmartFlow(false);                          
+               }
+               break;
+               default: return FALSE;
+            }
             switch(LOWORD(wParam))
             {
                 case IDOK: 
@@ -772,19 +792,49 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                     char flow[25];
                     GetDlgItemText(hwnd, IDC_FLOWSELECTBOX, flow, 25);
                     TriangulationModel::setFlowFunction(flow[0] == 'N');
-                    BOOL numEntered;
-                    int steps = GetDlgItemInt(hwnd, IDC_STEPSTEXT, &numEntered, FALSE);
-                    ready = ready && numEntered;
-                    if(!numEntered)
-                       MessageBox(NULL, "Provide the number of steps", "Error", MB_OK | MB_ICONINFORMATION);           
+                    
+                    switch(SendDlgItemMessage(hwnd, IDC_SMART_CB, BM_GETCHECK, 0, 0) )
+                    {
+                      case BST_CHECKED:
+                      {
+                           double accuracy;
+                           char accStr[MAXDOUBLE_LEN];
+                           GetDlgItemText(hwnd, IDC_ACCTEXT, accStr, MAXDOUBLE_LEN);
+                           accuracy = atof(accStr);
+                           if(accuracy <= 0.0)
+                           {
+                              MessageBox(NULL, "Invalid Accuracy", "Error", MB_OK | MB_ICONINFORMATION);
+                              ready = false;                                       
+                           } else {
+                             TriangulationModel::setAccuracy(accuracy);
+                           }
+                      }
+                      break;
+                      case BST_UNCHECKED:
+                      {
+                           BOOL numEntered;
+                           int steps = GetDlgItemInt(hwnd, IDC_STEPSTEXT, &numEntered, FALSE);
+                           if(!numEntered) {
+                              MessageBox(NULL, "Provide the number of steps", "Error", MB_OK | MB_ICONINFORMATION);
+                              ready = false;
+                           }         
+                           else 
+                              TriangulationModel::setNumSteps(steps);                           
+                      }
+                      break;
+                      default: return FALSE;
+                    }
+                    
+                    char stepsizeStr[MAXDOUBLE_LEN];
+                    GetDlgItemText(hwnd, IDC_DTTEXT, stepsizeStr, MAXDOUBLE_LEN);
+                    double stepsize = atof(stepsizeStr);
+                    if(stepsize <= 0.0) {
+                       MessageBox(NULL, "Invalid step size", "Error", MB_OK | MB_ICONINFORMATION);
+                       ready = false;
+                    }          
                     else 
-                       TriangulationModel::setNumSteps(steps);
-                    int stepsize = GetDlgItemInt(hwnd, IDC_DTTEXT, &numEntered, FALSE);
-                    ready = ready && numEntered;
-                    if(!numEntered)
-                       MessageBox(NULL, "Provide the step size", "Error", MB_OK | MB_ICONINFORMATION);           
-                    else 
-                       TriangulationModel::setStepSize(stepsize / 1000.0);
+                       TriangulationModel::setStepSize(stepsize);
+                       
                     if(ready && weight[0] == 'R')
                        EndDialog(hwnd, IDWEIGHTSRANDOM);
                     else if(ready && weight[0] == 'F')
@@ -826,7 +876,6 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
            SetDlgItemText(hwnd, IDC_CONSOLE, "Welcome to the Triangulation Program\r\n");
            HWND hHiddenEdit = GetDlgItem(hwnd, IDC_HIDDENTEXT);
            ShowWindow(hHiddenEdit, SW_HIDE);
-
         }
 		break;
 		case WM_COMMAND:
@@ -1190,6 +1239,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                              if(ret == IDCANCEL) {
                                UpdateConsole(hwnd, "Flow canceled.\r\n");
                              } else if(ret == IDOK) {
+                               SendDlgItemMessage(hwnd, IDC_PROGRESS, PBM_STEPIT, 0, 0);
                                TriangulationModel::runCalcFlow(ID_RUN_FLOW_YAMABE);
                                UpdateConsole(hwnd, "Flow complete.\r\n");
                              }

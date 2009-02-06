@@ -38,6 +38,9 @@
 #define IDC_ETA                         1017
 #define IDC_ETA_LIST                    1018
 #define IDC_ETA_FLOWER                  1019
+#define IDC_SMART_CB                    1020
+#define IDC_ACCTEXT                     1021
+#define IDC_PROGRESS                    1022
 #define IDSTANDARD                      5001
 #define IDLUTZ                          5002
 #define IDPRINTSTEP                     5003
@@ -55,3 +58,4 @@
 #define IDPOLYGON_STOP                  5015
 
 #define MAXWEIGHTSIZE                   10
+#define MAXDOUBLE_LEN                   12 

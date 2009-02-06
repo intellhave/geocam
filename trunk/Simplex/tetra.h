@@ -15,6 +15,16 @@ Version: Sept 15, 2008
  * four local vertices, and four or less local tetras. Tetras are only
  * used in three-dimensional manifolds.
  */
+ 
+    /*
+             
+            /\`  
+           /  \ ` 
+          /    \  `
+         /      \  /
+        /________\/ 
+                
+   */
 class Tetra : public Simplex
 {
      public:

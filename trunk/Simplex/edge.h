@@ -24,7 +24,7 @@ class Edge : public Simplex
 	public:
 		// class constructor
 		Edge();
-		Edge(int setIndex) : Simplex(setIndex) {};
+		Edge(int setIndex);
 		// class destructor
 		~Edge();
 		
