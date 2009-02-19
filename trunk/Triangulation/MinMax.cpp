@@ -187,6 +187,7 @@ double F()
 //       parab -= pow((eit->second.getEta() - 1),2);
           
        sumV += sqrt(CayleyvolumeSq(tit->second));
+// sumV calculates the total volume of the manifold
    }
    return sumK/(pow(sumV, (1.0/3.0)));
 }

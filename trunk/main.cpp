@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 //      }
       
 
-//
+// specify specific eta values here for the pentachron:
 Triangulation::edgeTable[1].setEta(1.05);
 Triangulation::edgeTable[2].setEta(1.00);
 Triangulation::edgeTable[3].setEta(1.00);
