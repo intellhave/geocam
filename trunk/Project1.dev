@@ -1,5 +1,5 @@
 [Project]
-FileName=Project1.dev
+FileName=E:\Data\geocam\Project1.dev
 Name=Project1
 <<<<<<< .mine
 UnitCount=37
@@ -34,7 +34,7 @@ CompilerSet=0
 CompilerSettings=0000000000000101000000
 
 [Unit1]
-FileName=main.cpp
+FileName=E:\Data\geocam\main.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -62,7 +62,7 @@ ProductVersion=
 AutoIncBuildNr=0
 
 [Unit3]
-FileName=Simplex\edge.h
+FileName=E:\Data\geocam\Simplex\edge.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -72,7 +72,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=Simplex\face.h
+FileName=E:\Data\geocam\Simplex\face.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -82,7 +82,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit7]
-FileName=Simplex\simplex.h
+FileName=E:\Data\geocam\Simplex\simplex.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -92,7 +92,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=Simplex\edge.cpp
+FileName=E:\Data\geocam\Simplex\edge.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -102,7 +102,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit6]
-FileName=Simplex\simplex.cpp
+FileName=E:\Data\geocam\Simplex\simplex.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -112,7 +112,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit8]
-FileName=Simplex\vertex.cpp
+FileName=E:\Data\geocam\Simplex\vertex.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -122,7 +122,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit9]
-FileName=Simplex\vertex.h
+FileName=E:\Data\geocam\Simplex\vertex.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -132,7 +132,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit10]
-FileName=Spherical\sphericalmath.cpp
+FileName=E:\Data\geocam\Spherical\sphericalmath.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -142,7 +142,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit11]
-FileName=Spherical\sphericalmath.h
+FileName=E:\Data\geocam\Spherical\sphericalmath.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -152,7 +152,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit12]
-FileName=Hyperbolic\hyperbolicmath.cpp
+FileName=E:\Data\geocam\Hyperbolic\hyperbolicmath.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -162,7 +162,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit13]
-FileName=Hyperbolic\hyperbolicmath.h
+FileName=E:\Data\geocam\Hyperbolic\hyperbolicmath.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -172,7 +172,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit14]
-FileName=miscmath.cpp
+FileName=E:\Data\geocam\miscmath.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -182,7 +182,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit15]
-FileName=miscmath.h
+FileName=E:\Data\geocam\miscmath.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -192,7 +192,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit16]
-FileName=pointlinecircle.cpp
+FileName=E:\Data\geocam\pointlinecircle.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -202,7 +202,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit17]
-FileName=pointlinecircle.h
+FileName=E:\Data\geocam\pointlinecircle.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -212,7 +212,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit19]
-FileName=delaunay.cpp
+FileName=E:\Data\geocam\delaunay.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -222,7 +222,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=Simplex\face.cpp
+FileName=E:\Data\geocam\Simplex\face.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -232,7 +232,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit18]
-FileName=delaunay.h
+FileName=E:\Data\geocam\delaunay.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -242,7 +242,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit20]
-FileName=3DTriangulation\3DInputOutput.cpp
+FileName=E:\Data\geocam\3DTriangulation\3DInputOutput.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -252,7 +252,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit21]
-FileName=3DTriangulation\3DInputOutput.h
+FileName=E:\Data\geocam\3DTriangulation\3DInputOutput.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -303,7 +303,7 @@ BuildCmd=
 =======
 
 [Unit24]
-FileName=addremove.cpp
+FileName=E:\Data\geocam\addremove.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -313,7 +313,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit25]
-FileName=addremove.h
+FileName=E:\Data\geocam\addremove.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -323,7 +323,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit26]
-FileName=3DTriangulation\3Dtriangulationmath.cpp
+FileName=E:\Data\geocam\3DTriangulation\3Dtriangulationmath.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -333,7 +333,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit27]
-FileName=3DTriangulation\3Dtriangulationmath.h
+FileName=E:\Data\geocam\3DTriangulation\3Dtriangulationmath.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -344,7 +344,7 @@ BuildCmd=
 >>>>>>> .r314
 
 [Unit22]
-FileName=Simplex\tetra.h
+FileName=E:\Data\geocam\Simplex\tetra.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -354,7 +354,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit23]
-FileName=Simplex\tetra.cpp
+FileName=E:\Data\geocam\Simplex\tetra.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -364,7 +364,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit28]
-FileName=Triangulation\triangulationPlane.h
+FileName=E:\Data\geocam\Triangulation\triangulationPlane.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -374,7 +374,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit29]
-FileName=Triangulation\triangulation.cpp
+FileName=E:\Data\geocam\Triangulation\triangulation.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -384,7 +384,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit30]
-FileName=Triangulation\triangulation.h
+FileName=E:\Data\geocam\Triangulation\triangulation.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -394,7 +394,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit31]
-FileName=Triangulation\TriangulationCoordinateSystem.cpp
+FileName=E:\Data\geocam\Triangulation\TriangulationCoordinateSystem.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -404,7 +404,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit32]
-FileName=Triangulation\TriangulationCoordinateSystem.h
+FileName=E:\Data\geocam\Triangulation\TriangulationCoordinateSystem.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -414,7 +414,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit33]
-FileName=Triangulation\triangulationInputOutput.cpp
+FileName=E:\Data\geocam\Triangulation\triangulationInputOutput.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -424,7 +424,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit34]
-FileName=Triangulation\triangulationInputOutput.h
+FileName=E:\Data\geocam\Triangulation\triangulationInputOutput.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -434,7 +434,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit35]
-FileName=Triangulation\triangulationmath.cpp
+FileName=E:\Data\geocam\Triangulation\triangulationmath.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -469,7 +469,7 @@ BuildCmd=
 [Unit36]
 FileName=addremove.cpp
 =======
-FileName=Triangulation\triangulationmath.h
+FileName=E:\Data\geocam\Triangulation\triangulationmath.h
 >>>>>>> .r556
 CompileCpp=1
 Folder=Project1
@@ -480,7 +480,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit37]
-FileName=Triangulation\triangulationmorph.cpp
+FileName=E:\Data\geocam\Triangulation\triangulationmorph.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -490,7 +490,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit38]
-FileName=Triangulation\triangulationmorph.h
+FileName=E:\Data\geocam\Triangulation\triangulationmorph.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -500,7 +500,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit39]
-FileName=Triangulation\triangulationPlane.cpp
+FileName=E:\Data\geocam\Triangulation\triangulationPlane.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -511,7 +511,7 @@ BuildCmd=
 >>>>>>> .r541
 
 [Unit40]
-FileName=Triangulation\smallMorphs.h
+FileName=E:\Data\geocam\Triangulation\smallMorphs.h
 CompileCpp=1
 Folder=
 Compile=1
@@ -521,7 +521,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit41]
-FileName=Triangulation\smallMorphs.cpp
+FileName=E:\Data\geocam\Triangulation\smallMorphs.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -531,7 +531,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit42]
-FileName=3DTriangulation\3DTriangulationMorph.cpp
+FileName=E:\Data\geocam\3DTriangulation\3DTriangulationMorph.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -541,7 +541,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit43]
-FileName=3DTriangulation\3DTriangulationMorph.h
+FileName=E:\Data\geocam\3DTriangulation\3DTriangulationMorph.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -551,7 +551,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit44]
-FileName=Triangulation\MinMax.cpp
+FileName=E:\Data\geocam\Triangulation\MinMax.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -561,7 +561,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit45]
-FileName=Triangulation\MinMax.h
+FileName=E:\Data\geocam\Triangulation\MinMax.h
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -571,7 +571,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit46]
-FileName=plot.cpp
+FileName=E:\Data\geocam\plot.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
@@ -581,7 +581,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit47]
-FileName=hessian.cpp
+FileName=E:\Data\geocam\hessian.cpp
 CompileCpp=1
 Folder=Project1
 Compile=1
