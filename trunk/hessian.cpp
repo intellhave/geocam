@@ -39,7 +39,7 @@ printf("F = %12.10f\n", F());
 double Hess[Triangulation::edgeTable.size()][Triangulation::edgeTable.size()];
 //double currentEta[Triangulation::edgeTable.size()];
 int i, j;
-double deltaEta=0.01;
+double deltaEta=0.001;
 //printf("%d\n", errno);
 for(i=0; i<Triangulation::edgeTable.size(); ++i) {
       for(j=0; j<Triangulation::edgeTable.size(); ++j) {
@@ -85,7 +85,7 @@ double FEE(int ii, int jj, double dx_ii, double dx_jj)
               // take special note of the calculation above; it adds the two infinitesimals!
               }                
        double initRadii[Triangulation::vertexTable.size()];
-       double dt = 0.020;
+       double dt = 0.030;
        double accuracy = 0.000000001;
        double precision = 0.000000001;
        Triangulation::getRadii(initRadii);
@@ -117,7 +117,7 @@ double SecondPartial(int i, int j, double dx_i, double dx_j)
 //       result = (FEE(i,j,dx_i,0.00)-2.0*FEE(i,j,0.00,0.00)+FEE(i,j,-dx_i,0.00))/(dx_i*dx_i);
        result = (Alpha-2.0*Gamma+Beta)/(dx_i*dx_i);
        printf("%.10f, %.10f, %.10f\n", Alpha, Beta, Gamma);
-       printf("%.10f, %.10f, %.10f\n", FE(dx_i, i), FE(-dx_i, i), FE(0.00, i));
+//       printf("%.10f, %.10f, %.10f\n", FE(dx_i, i), FE(-dx_i, i), FE(0.00, i));
        }
        //       printf("%d\n", errno);
        return result;

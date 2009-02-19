@@ -19,7 +19,7 @@ Version: June 10, 2008
 #include "triangulation/MinMax.h"
 #define PI 	3.141592653589793238
 
-//double plot();
+double plot();
 double Hessian();
 
 using namespace std;
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 //    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
 //    {
 //       eit->second.setEta(1.00);
-       //eit->second.setEta(0.84 + i*.03);
+//       //eit->second.setEta(0.84 + i*.03);
 //    }
     
 //    for(int i = -10; i < 10; i++)
@@ -78,16 +78,17 @@ int main(int argc, char *argv[])
 
 
 //
-Triangulation::edgeTable[1].setEta(1.050);
-Triangulation::edgeTable[2].setEta(1.05);
+Triangulation::edgeTable[1].setEta(1.05);
+Triangulation::edgeTable[2].setEta(1.00);
 Triangulation::edgeTable[3].setEta(1.00);
 Triangulation::edgeTable[4].setEta(1.00);
 Triangulation::edgeTable[5].setEta(1.00);
-Triangulation::edgeTable[6].setEta(1.00);
+Triangulation::edgeTable[6].setEta(.95);
 Triangulation::edgeTable[7].setEta(1.00);
 Triangulation::edgeTable[8].setEta(1.00);
 Triangulation::edgeTable[9].setEta(1.00);
 Triangulation::edgeTable[10].setEta(1.00);
+
 
 //    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
 //    {
@@ -105,16 +106,16 @@ Triangulation::edgeTable[10].setEta(1.00);
 //      fclose(file);
 //      system("PAUSE");
 
-    double deltaEta = 0.0001;
+    double deltaEta = 0.0000001;
     double deltaRadius = 0.00001;
     double a = 0.01;  //fixed length of gradient flow step
-    double b = 10.0;  //gradient flow scale factor
+    double b = .01;  //gradient flow scale factor
     
 //readEtas("Triangulation Files/MinMax Results/temp.txt"); 
 //    
 ////readEtas("Triangulation Files/MinMax Results/temp.txt");    
 //    //MinMax(deltaRadius, a, deltaEta, b);
-    MinMax(deltaEta, b, a);
+//    MinMax(deltaEta, b, a);
 
 
 //   map<int, double> deltaFE;
@@ -140,7 +141,7 @@ Triangulation::edgeTable[10].setEta(1.00);
 
   
     //MinMax(deltaRadius, a, deltaEta, b);
-    //MinMax(deltaEta, b, a);
+    MinMax(deltaEta, b, a);
 //    Hessian();
 
 //time (&start);

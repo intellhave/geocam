@@ -87,12 +87,12 @@ while(true) {
                 printf("Edge %3d: %.10f\n", eit->first, eit->second.getEta());
                 } 
       double totalvolume=0;
-      //for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
-      //{
-      //        printf("Tetrahedron %d: %.10f\n", tit->first, CayleyvolumeSq(tit->second));
-      //        totalvolume += CayleyvolumeSq(tit->second) ;
-      //        }
-      //        printf("Total Volume = %.10f\n", totalvolume);
+      for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
+      {
+              printf("Tetrahedron %d: %.10f\n", tit->first, CayleyvolumeSq(tit->second));
+              totalvolume += CayleyvolumeSq(tit->second) ;
+              }
+              printf("Total Volume = %.10f\n", totalvolume);
                           
       //updateEtas(&deltaFE, b);
       //printData(result);
@@ -141,7 +141,7 @@ double FE(double deltaEta, int index)
    vector<double> curvs;
    double initRadii[Triangulation::vertexTable.size()];
 
-   double dt = 0.020;
+   double dt = 0.030;
    double accuracy = 0.000000001;
    double precision = 0.000000001;
    
@@ -171,9 +171,9 @@ double FE(double deltaEta, int index)
 double F()
 {
    map<int, Vertex>::iterator vit;
-   map<int, Edge>::iterator eit;
+   map<int, Tetra>::iterator tit;
    double sumK = 0;
-   double sumR = 0;
+   double sumV = 0;
    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
    {
        double curv = vit->second.getCurvature();
@@ -181,13 +181,13 @@ double F()
        sumK += curv;
    }
 //   double parab=0;
-   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();eit++)
+   for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
    {
 //       parab -= pow((eit->second.getEta() - 1),2);
           
-       sumR += eit->second.getLength();
+       sumV += sqrt(CayleyvolumeSq(tit->second));
    }
-   return sumK/sumR;
+   return sumK/(pow(sumV, (1.0/3.0)));
 }
 
 
@@ -258,11 +258,12 @@ void updateEtas(map<int, double>* deltaFE, double b, double a)
 void calcDeltaFE(map<int, double>* deltaFE, double deltaEta)
 {
      double base = F();
-     //printf("base= %f\n", base);
+//     printf("base= %f\n", base);
           map<int, double>::iterator dfit;
      for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
      {   
          dfit->second = (FE(deltaEta, dfit->first) - base) / deltaEta;
+//         printf("dfit: %f\n", dfit->second);
      }
 }
 

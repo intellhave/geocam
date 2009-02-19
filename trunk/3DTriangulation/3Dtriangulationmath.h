@@ -6,6 +6,7 @@ double dihedralAngle(Vertex v, Edge e, Tetra t);
 double volumeSq(Tetra);
 double volumeSq(double, double, double, double);
 double CayleyvolumeSq(Tetra);
+double CayleyvolumeSqDerivative(Tetra);
 bool isDegenerate(Tetra);
 void curvature3D();
 

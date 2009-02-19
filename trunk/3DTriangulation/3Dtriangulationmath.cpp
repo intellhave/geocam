@@ -132,6 +132,173 @@ double CayleyvolumeSq(Tetra t)
    return CayleyMenger;
 }  
 
+double CayleyvolumeSqDerivative(Tetra t)
+{
+   int vertex, face;
+   vector<int> edges1, edge23, edge24, edge34;
+   double result=0.0;
+  
+   vertex = (*(t.getLocalVertices()))[0];
+   edges1 = listIntersection(Triangulation::vertexTable[vertex].getLocalEdges(), t.getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[0]].getLocalFaces(), Triangulation::edgeTable[edges1[1]].getLocalFaces())[0];
+   edge23 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[0]].getLocalFaces(), Triangulation::edgeTable[edges1[2]].getLocalFaces())[0];
+   edge24 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[1]].getLocalFaces(), Triangulation::edgeTable[edges1[2]].getLocalFaces())[0];
+   edge34 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+    
+   double L12 = Triangulation::edgeTable[edges1[0]].getLength();
+   double L13 = Triangulation::edgeTable[edges1[1]].getLength();
+   double L14 = Triangulation::edgeTable[edges1[2]].getLength();
+   double L23 = Triangulation::edgeTable[edge23[0]].getLength();
+   double L24 = Triangulation::edgeTable[edge24[0]].getLength();
+   double L34 = Triangulation::edgeTable[edge34[0]].getLength();
+   
+   double  Eta12 = Triangulation::edgeTable[edges1[0]].getEta();
+   double  Eta13 = Triangulation::edgeTable[edges1[1]].getEta();
+   double  Eta14 = Triangulation::edgeTable[edges1[2]].getEta();
+   double  Eta23 = Triangulation::edgeTable[edge23[0]].getEta();
+   double  Eta24 = Triangulation::edgeTable[edge24[0]].getEta();
+   double  Eta34 = Triangulation::edgeTable[edge34[0]].getEta();
+    
+   int  V2 =  listIntersection(Triangulation::edgeTable[edge23[0]].getLocalVertices(), Triangulation::edgeTable[edge24[0]].getLocalVertices())[0];
+   int  V3 =  listIntersection(Triangulation::edgeTable[edge23[0]].getLocalVertices(), Triangulation::edgeTable[edge34[0]].getLocalVertices())[0];
+   int  V4 =  listIntersection(Triangulation::edgeTable[edge24[0]].getLocalVertices(), Triangulation::edgeTable[edge34[0]].getLocalVertices())[0];
+   
+   double  K1 =  Triangulation::vertexTable[vertex].getCurvature();
+   double  K2 =  Triangulation::vertexTable[V2].getCurvature();
+   double  K3 =  Triangulation::vertexTable[V3].getCurvature();
+   double  K4 =  Triangulation::vertexTable[V4].getCurvature();
+   
+   double  R1 =  Triangulation::vertexTable[vertex].getRadius();
+   double  R2 =  Triangulation::vertexTable[V2].getRadius();
+   double  R3 =  Triangulation::vertexTable[V3].getRadius();
+   double  R4 =  Triangulation::vertexTable[V4].getRadius();
+   
+//   result = (((1.0/72.0))*(((-2.0)*pow(L12, 3)*pow(L34, 2)*(((-((R1*K1+R2*K2+((K1*R2+K2*R1))*Eta12)))/L12))
+//   -L12*((((pow(L13, 2)-pow(L14, 2)))*((pow(L23, 2)-pow(L24, 2)))-((pow(L13, 2)+pow(L14, 2)
+//   +pow(L23, 2)+pow(L24, 2)))*pow(L34, 2)+pow(L34, 4)))*(((-((R1*K1+R2*K2+((K1*R2+K2*R1))
+//   *Eta12)))/L12))-2.0*pow(L13, 3)*pow(L24, 2)*(((-((R1*K1+R3*K3+((K1*R3+K3*R1))*Eta13)))/L13))
+//   +L13*((pow(L14, 2)*((pow(L23, 2)+pow(L24, 2)-pow(L34, 2)))+pow(L24, 2)*((pow(L23, 2)
+//   -pow(L24, 2)+pow(L34, 2)))))*(((-((R1*K1+R3*K3+((K1*R3+K3*R1))*Eta13)))/L13))-pow(L13, 4)
+//   *L24*(((-((R2*K2+R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))-pow(L12, 4)*L34*(((-((R3*K3+R4*K4
+//   +((K3*R4+K4*R3))*Eta34)))/L34))+pow(L13, 2)*((L14*((pow(L23, 2)+pow(L24, 2)-pow(L34, 2)))
+//   *(((-((R1*K1+R4*K4+((K1*R4+K4*R1))*Eta14)))/L14))+pow(L14, 2)*((L23*(((-((R2*K2+R3*K3
+//   +((K2*R3+K3*R2))*Eta23)))/L23))+L24*(((-((R2*K2+R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))
+//   -L34*(((-((R3*K3+R4*K4+((K3*R4+K4*R3))*Eta34)))/L34))))+L24*((L23*L24*(((-((R2*K2+R3*K3
+//   +((K2*R3+K3*R2))*Eta23)))/L23))+pow(L23, 2)*(((-((R2*K2+R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))
+//   -2.0*pow(L24, 2)*(((-((R2*K2+R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))+pow(L34, 2)*(((-((R2*K2+R4*K4
+//   +((K2*R4+K4*R2))*Eta24)))/L24))+L24*L34*(((-((R3*K3+R4*K4+((K3*R4+K4*R3))*Eta34)))/L34))))))
+//   +pow(L12, 2)*(((-L13)*((pow(L23, 2)-pow(L24, 2)-pow(L34, 2)))*(((-((R1*K1+R3*K3
+//   +((K1*R3+K3*R1))*Eta13)))/L13))+L14*((pow(L23, 2)-pow(L24, 2)+pow(L34, 2)))*(((-((R1*K1+R4*K4
+//   +((K1*R4+K4*R1))*Eta14)))/L14))+pow(L14, 2)*((L23*(((-((R2*K2+R3*K3+((K2*R3+K3*R2))*Eta23)))/L23))
+//   -L24*(((-((R2*K2+R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))+L34*(((-((R3*K3+R4*K4+((K3*R4+K4*R3))
+//   *Eta34)))/L34))))+pow(L13, 2)*(((-L23)*(((-((R2*K2+R3*K3+((K2*R3+K3*R2))*Eta23)))/L23))
+//   +L24*(((-((R2*K2+R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))+L34*(((-((R3*K3+R4*K4+((K3*R4+K4*R3))
+//   *Eta34)))/L34))))+L34*((L34*((L23*(((-((R2*K2+R3*K3+((K2*R3+K3*R2))*Eta23)))/L23))
+//   +L24*(((-((R2*K2+R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))))+((pow(L23, 2)+pow(L24, 2)
+//   -2.0*pow(L34, 2)))*(((-((R3*K3+R4*K4+((K3*R4+K4*R3))*Eta34)))/L34))))))+L23*(((-2.0)*pow(L14, 3)
+//   *L23*(((-((R1*K1+R4*K4+((K1*R4+K4*R1))*Eta14)))/L14))-L14*L23*((pow(L23, 2)-pow(L24, 2)
+//   -pow(L34, 2)))*(((-((R1*K1+R4*K4+((K1*R4+K4*R1))*Eta14)))/L14))-pow(L14, 4)*(((-((R2*K2+R3*K3
+//   +((K2*R3+K3*R2))*Eta23)))/L23))-L24*L34*((L23*L34*(((-((R2*K2+R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))
+//   +L24*((L34*(((-((R2*K2+R3*K3+((K2*R3+K3*R2))*Eta23)))/L23))+L23*(((-((R3*K3+R4*K4+((K3*R4+K4*R3))
+//   *Eta34)))/L34))))))+pow(L14, 2)*(((-2.0)*pow(L23, 2)*(((-((R2*K2+R3*K3+((K2*R3+K3*R2))*Eta23)))/L23))
+//   +((pow(L24, 2)+pow(L34, 2)))*(((-((R2*K2+R3*K3+((K2*R3+K3*R2))*Eta23)))/L23))+L23*((L24*(((-((R2*K2
+//   +R4*K4+((K2*R4+K4*R2))*Eta24)))/L24))+L34*(((-((R3*K3+R4*K4+((K3*R4+K4*R3))*Eta34)))/L34)))))))))));
+
+
+// The following computation calculates the derivative of the volume of a single tetrahedron.
+// The calculation above is for the derivative of the square of the volume.
+ 
+result=(((Eta12* K2* pow(L13, 2)* pow(L23, 2)* R1 - Eta12* K2* pow(L14, 2)* pow(L23, 2)* R1 +
+        K1* pow(L23, 4)* R1 - Eta12* K2* pow(L13, 2)* pow(L24, 2)* R1 +
+        Eta12* K2* pow(L14, 2)* pow(L24, 2)* R1 - 2* K1* pow(L23, 2)* pow(L24, 2)* R1 +
+        K1* pow(L24, 4)* R1 + 2* Eta12* K2* pow(L12, 2)* pow(L34, 2)* R1 -
+        Eta12* K2* pow(L13, 2)* pow(L34, 2)* R1 - Eta12* K2* pow(L14, 2)* pow(L34, 2)* R1
+-
+        2* K1* pow(L23, 2)* pow(L34, 2)* R1 - Eta12* K2* pow(L23, 2)* pow(L34, 2)* R1 -
+        2* K1* pow(L24, 2)* pow(L34, 2)* R1 - Eta12* K2* pow(L24, 2)* pow(L34, 2)* R1 +
+        K1* pow(L34, 4)* R1 + Eta12* K2* pow(L34, 4)* R1 +
+        Eta23* K3* pow(L12, 2)* pow(L13, 2)* R2 - Eta24* K4* pow(L12, 2)* pow(L13, 2)* R2
++
+        K2* pow(L13, 4)* R2 + Eta24* K4* pow(L13, 4)* R2 -
+        Eta23* K3* pow(L12, 2)* pow(L14, 2)* R2 + Eta24* K4* pow(L12, 2)* pow(L14, 2)* R2
+-
+        2* K2* pow(L13, 2)* pow(L14, 2)* R2 - Eta23* K3* pow(L13, 2)* pow(L14, 2)* R2 -
+        Eta24* K4* pow(L13, 2)* pow(L14, 2)* R2 + K2* pow(L14, 4)* R2 +
+        Eta23* K3* pow(L14, 4)* R2 + Eta12* K1* pow(L13, 2)* pow(L23, 2)* R2 -
+        Eta24* K4* pow(L13, 2)* pow(L23, 2)* R2 - Eta12* K1* pow(L14, 2)* pow(L23, 2)* R2
++
+        2* Eta23* K3* pow(L14, 2)* pow(L23, 2)* R2 - Eta24* K4* pow(L14, 2)* pow(L23, 2)*
+R2 -
+        Eta12* K1* pow(L13, 2)* pow(L24, 2)* R2 - Eta23* K3* pow(L13, 2)* pow(L24, 2)* R2
++
+        2* Eta24* K4* pow(L13, 2)* pow(L24, 2)* R2 + Eta12* K1* pow(L14, 2)* pow(L24, 2)*
+R2 -
+        Eta23* K3* pow(L14, 2)* pow(L24, 2)* R2 + 2* Eta12* K1* pow(L12, 2)* pow(L34, 2)*
+R2 -
+        Eta23* K3* pow(L12, 2)* pow(L34, 2)* R2 - Eta24* K4* pow(L12, 2)* pow(L34, 2)* R2
+-
+        Eta12* K1* pow(L13, 2)* pow(L34, 2)* R2 - 2* K2* pow(L13, 2)* pow(L34, 2)* R2 -
+        Eta24* K4* pow(L13, 2)* pow(L34, 2)* R2 - Eta12* K1* pow(L14, 2)* pow(L34, 2)* R2
+-
+        2* K2* pow(L14, 2)* pow(L34, 2)* R2 - Eta23* K3* pow(L14, 2)* pow(L34, 2)* R2 -
+        Eta12* K1* pow(L23, 2)* pow(L34, 2)* R2 + Eta24* K4* pow(L23, 2)* pow(L34, 2)* R2
+-
+        Eta12* K1* pow(L24, 2)* pow(L34, 2)* R2 + Eta23* K3* pow(L24, 2)* pow(L34, 2)* R2
++
+        Eta12* K1* pow(L34, 4)* R2 + K2* pow(L34, 4)* R2 + K3* pow(L12, 4)* R3 +
+        Eta34* K4* pow(L12, 4)* R3 + Eta23* K2* pow(L12, 2)* pow(L13, 2)* R3 -
+        Eta34* K4* pow(L12, 2)* pow(L13, 2)* R3 - Eta23* K2* pow(L12, 2)* pow(L14, 2)* R3
+-
+        2* K3* pow(L12, 2)* pow(L14, 2)* R3 - Eta34* K4* pow(L12, 2)* pow(L14, 2)* R3 -
+        Eta23* K2* pow(L13, 2)* pow(L14, 2)* R3 + Eta34* K4* pow(L13, 2)* pow(L14, 2)* R3
++
+        Eta23* K2* pow(L14, 4)* R3 + K3* pow(L14, 4)* R3 -
+        Eta34* K4* pow(L12, 2)* pow(L23, 2)* R3 + 2* Eta23* K2* pow(L14, 2)* pow(L23, 2)*
+R3 -
+        Eta34* K4* pow(L14, 2)* pow(L23, 2)* R3 - 2* K3* pow(L12, 2)* pow(L24, 2)* R3 -
+        Eta34* K4* pow(L12, 2)* pow(L24, 2)* R3 - Eta23* K2* pow(L13, 2)* pow(L24, 2)* R3
+-
+        Eta34* K4* pow(L13, 2)* pow(L24, 2)* R3 - Eta23* K2* pow(L14, 2)* pow(L24, 2)* R3
+-
+        2* K3* pow(L14, 2)* pow(L24, 2)* R3 + Eta34* K4* pow(L23, 2)* pow(L24, 2)* R3 +
+        K3* pow(L24, 4)* R3 - Eta23* K2* pow(L12, 2)* pow(L34, 2)* R3 +
+        2* Eta34* K4* pow(L12, 2)* pow(L34, 2)* R3 - Eta23* K2* pow(L14, 2)* pow(L34, 2)*
+R3 +
+        Eta23* K2* pow(L24, 2)* pow(L34, 2)* R3 +
+        Eta13* ((pow(L12, 2)* ((pow(L23, 2) - pow(L24, 2) - pow(L34, 2))) +
+              pow(L24, 2)* ((2* pow(L13, 2) - pow(L23, 2) + pow(L24, 2) - pow(L34, 2))) -
+              pow(L14, 2)* ((pow(L23, 2) + pow(L24, 2) - pow(L34, 2)))))* ((K3* R1 +
+              K1* R3)) + ((K4* ((L12 - L13 - L23))* ((L12 + L13 -
+                    L23))* ((L12 - L13 + L23))* ((L12 + L13 + L23)) +
+              Eta34* K3* ((pow(L12, 4) + ((L13 - L23))* ((L13 +
+                          L23))* ((L14 - L24))* ((L14 + L24)) -
+                    pow(L12, 2)* ((pow(L13, 2) + pow(L14, 2) + pow(L23, 2) + pow(L24, 2) -
+                          2* pow(L34, 2))))) +
+              Eta24* K2* ((pow(L13, 4) + pow(L23, 2)* (((-pow(L14, 2)) + pow(L34, 2))) -
+                    pow(L12, 2)* ((pow(L13, 2) - pow(L14, 2) + pow(L34, 2))) -
+                    pow(L13, 2)* ((pow(L14, 2) + pow(L23, 2) - 2* pow(L24, 2) +
+                          pow(L34, 2)))))))* R4 -
+        Eta14* ((pow(L13, 2)* ((pow(L23, 2) + pow(L24, 2) - pow(L34, 2))) +
+              pow(L12, 2)* ((pow(L23, 2) - pow(L24, 2) + pow(L34, 2))) +
+              pow(L23, 2)* (((-2)* pow(L14, 2) - pow(L23, 2) + pow(L24, 2) +
+                    pow(L34, 2)))))* ((K4* R1 +
+              K1* R4))))/((12* sqrt(((-pow(L13, 4))* pow(L24, 2) -
+              pow(L12, 4)* pow(L34, 2) +
+              pow(L12, 2)* (((((-pow(L13, 2)) + pow(L14, 2)))* ((L23 -
+                          L24))* ((L23 + L24)) + ((pow(L13, 2) + pow(L14, 2) +
+                          pow(L23, 2) + pow(L24, 2)))* pow(L34, 2) - pow(L34, 4))) -
+              pow(L23, 2)* ((pow(L14, 4) + pow(L24, 2)* pow(L34, 2) +
+                    pow(L14, 2)* ((pow(L23, 2) - pow(L24, 2) - pow(L34, 2))))) +
+              pow(L13, 2)* ((pow(L14, 2)* ((pow(L23, 2) + pow(L24, 2) - pow(L34, 2))) +
+                    pow(L24, 2)* ((pow(L23, 2) - pow(L24, 2) + pow(L34, 2))))))))));
+  
+// The calculation above is the derivative of the volume function (not squared).   
+   
+   return result;
+}
+
 
 void curvature3D()
 {
@@ -447,23 +614,45 @@ void yamabeFlow(double dt, double accuracy, double precision, bool adjF)
    yamabeFlow(dt, initRadii, accuracy, precision, adjF);
 }
 
+//double calcNormalization()
+//{
+//   double result = 0;
+//   double tempNum;
+//   double denom = 0;
+//   map<int, Edge>::iterator eit;
+//   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+//   {
+//      tempNum = 0;
+//      Vertex v1 = Triangulation::vertexTable[(*(eit->second.getLocalVertices()))[0]];
+//      Vertex v2 = Triangulation::vertexTable[(*(eit->second.getLocalVertices()))[1]];
+//      
+//      tempNum += v1.getRadius()*v1.getCurvature() + v2.getRadius()*v2.getCurvature();
+//      tempNum += eit->second.getEta() * 
+//              (v1.getRadius()*v2.getCurvature() + v2.getRadius()*v1.getCurvature());
+//      result += tempNum / eit->second.getLength();
+//      denom += eit->second.getLength();
+//   }
+//   return result / denom;
+//}
+
 double calcNormalization()
 {
    double result = 0;
-   double tempNum;
+//   double tempNum1=0;
+//   double tempNum2=0;
    double denom = 0;
-   map<int, Edge>::iterator eit;
-   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+   double V=0;
+   map<int, Tetra>::iterator tit;
+   for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
    {
-      tempNum = 0;
-      Vertex v1 = Triangulation::vertexTable[(*(eit->second.getLocalVertices()))[0]];
-      Vertex v2 = Triangulation::vertexTable[(*(eit->second.getLocalVertices()))[1]];
+      V=sqrt(CayleyvolumeSq(tit->second));
       
-      tempNum += v1.getRadius()*v1.getCurvature() + v2.getRadius()*v2.getCurvature();
-      tempNum += eit->second.getEta() * 
-              (v1.getRadius()*v2.getCurvature() + v2.getRadius()*v1.getCurvature());
-      result += tempNum / eit->second.getLength();
-      denom += eit->second.getLength();
+//      result += CayleyvolumeSqDerivative(tit->second)/(2*V);
+      result += CayleyvolumeSqDerivative(tit->second);
+      
+      denom += V;
+    
    }
-   return result / denom;
+//         printf("total volume = %.10f\n", denom); 
+   return (-1.0/3.0)*result / denom;
 }
