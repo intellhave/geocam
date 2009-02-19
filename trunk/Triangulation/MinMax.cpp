@@ -59,6 +59,7 @@ void MinMax(double deltaEta, double b, double a)
    double accuracy = 0.000000001;
    double precision = 0.000000001;
 
+
    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
        deltaFE.insert(pair<int, double>(eit->first, 0));
    }
@@ -141,7 +142,7 @@ double FE(double deltaEta, int index)
    vector<double> curvs;
    double initRadii[Triangulation::vertexTable.size()];
 
-   double dt = 0.030;
+   double dt = 0.020;
    double accuracy = 0.000000001;
    double precision = 0.000000001;
    
