@@ -8,7 +8,7 @@ Top=0
 [Editors]
 <<<<<<< .mine
 <<<<<<< .mine
-Focused=0
+Focused=2
 =======
 Focused=0
 >>>>>>> .r613
@@ -16,7 +16,7 @@ Focused=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Order=0,2,1,21,22,-1
+Order=0,2,1,21,22
 =======
 Order=0,2,1,22,21,-1
 =======
@@ -36,7 +36,7 @@ Order=1,2,0,22,21
 [Editor_0]
 Open=1
 <<<<<<< .mine
-Top=1
+Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
@@ -94,7 +94,7 @@ Top=0
 <<<<<<< .mine
 CursorCol=45
 CursorRow=43
-TopLine=31
+TopLine=1
 =======
 <<<<<<< .mine
 CursorCol=44
@@ -109,10 +109,10 @@ TopLine=12
 LeftChar=1
 [Editor_2]
 Open=1
-Top=0
+Top=1
 CursorCol=45
 CursorRow=37
-TopLine=33
+TopLine=1
 <<<<<<< .mine
 LeftChar=1
 =======
@@ -364,7 +364,7 @@ Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Open=1
+Open=0
 Top=0
 CursorCol=28
 CursorRow=416
@@ -389,7 +389,7 @@ TopLine=56
 >>>>>>> .r606
 LeftChar=1
 [Editor_44]
-Open=1
+Open=0
 Top=0
 CursorCol=38
 CursorRow=21
