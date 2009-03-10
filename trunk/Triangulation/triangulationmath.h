@@ -6,6 +6,8 @@ Version: July 16, 2008
 The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
 **************************************************************/
+#ifndef _TRIANGULATIONMATH_H_
+#define _TRIANGULATIONMATH_H_
 
 #include "triangulation.h"
 
@@ -100,3 +102,5 @@ double dualLength(Edge);
 double dualArea(Vertex);
 
 double area(Face);
+
+#endif /* _TRIANGULATION_H_ */

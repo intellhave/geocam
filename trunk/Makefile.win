@@ -5,29 +5,29 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = 
-OBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o $(RES)
-LINKOBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
-INCS =  -I"include"  -I"C:/Dev-Cpp/geocam" 
-CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL"  -I"C:/Dev-Cpp/geocam" 
-BIN  = Project1.exe
+OBJ  = RealMain.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/main.o flow/parsecalc.o $(RES)
+LINKOBJ  = RealMain.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o Spherical/sphericalmath.o Hyperbolic/hyperbolicmath.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o 3DTriangulation/3Dtriangulationmath.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmath.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/main.o flow/parsecalc.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib"  -lgmon -pg  -g3 
+INCS =  -I"C:/Dev-Cpp/include"  -I"C:/Documents and Settings/Joseph/Desktop/geocam" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include"  -I"C:/Documents and Settings/Joseph/Desktop/geocam" 
+BIN  = tests/flow.exe
 CXXFLAGS = $(CXXINCS)   -pg -g3
 CFLAGS = $(INCS)   -pg -g3
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before Project1.exe all-after
+all: all-before tests/flow.exe all-after
 
 
 clean: clean-custom
 	${RM} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "Project1.exe" $(LIBS)
+	$(CPP) $(LINKOBJ) -o "tests\flow.exe" $(LIBS)
 
-main.o: main.cpp
-	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+RealMain.o: RealMain.cpp
+	$(CPP) -c RealMain.cpp -o RealMain.o $(CXXFLAGS)
 
 Simplex/edge.o: Simplex/edge.cpp
 	$(CPP) -c Simplex/edge.cpp -o Simplex/edge.o $(CXXFLAGS)
@@ -100,3 +100,21 @@ plot.o: plot.cpp
 
 hessian.o: hessian.cpp
 	$(CPP) -c hessian.cpp -o hessian.o $(CXXFLAGS)
+
+flow/sysdiffeq.o: flow/sysdiffeq.cpp
+	$(CPP) -c flow/sysdiffeq.cpp -o flow/sysdiffeq.o $(CXXFLAGS)
+
+flow/approximator.o: flow/approximator.cpp
+	$(CPP) -c flow/approximator.cpp -o flow/approximator.o $(CXXFLAGS)
+
+flow/rungaApprox.o: flow/rungaApprox.cpp
+	$(CPP) -c flow/rungaApprox.cpp -o flow/rungaApprox.o $(CXXFLAGS)
+
+flow/eulerApprox.o: flow/eulerApprox.cpp
+	$(CPP) -c flow/eulerApprox.cpp -o flow/eulerApprox.o $(CXXFLAGS)
+
+flow/main.o: flow/main.cpp
+	$(CPP) -c flow/main.cpp -o flow/main.o $(CXXFLAGS)
+
+flow/parsecalc.o: flow/parsecalc.cpp
+	$(CPP) -c flow/parsecalc.cpp -o flow/parsecalc.o $(CXXFLAGS)
