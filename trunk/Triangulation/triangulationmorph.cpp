@@ -175,6 +175,197 @@ void addNewVertex(Face f, double newRadius)
      
 }
 
+/*       v2
+         /|\
+        / | \
+  e2   /  |  \ e3
+      /   |   \
+     /    |e0  \
+    /     |     \
+v1  \ f0  | f1  / v3
+     \    |    /
+      \   |   /
+  e1   \  |  / e4
+        \ | /
+         \|/
+         v0 
+*/
+
+void flip(Edge e) {
+     int e0 = e.getIndex();
+
+     int f0 = (*(e.getLocalFaces()))[0];
+     int f1 = (*(e.getLocalFaces()))[1];
+     
+     int v0 = (*(e.getLocalVertices()))[0];
+     int v2 = (*(e.getLocalVertices()))[1];
+     
+     //buckets for various set operations
+     vector<int> diff;
+     vector<int> same;
+     
+     //figure out what v3 is
+     diff = listDifference(Triangulation::faceTable[f1].getLocalVertices(), e.getLocalVertices());
+     if (diff.size() == 0) { cout << "v3 couldn't be found"; }
+     int v3 = diff[0];
+     
+     //figure out what v3 is
+     diff = listDifference(Triangulation::faceTable[f0].getLocalVertices(), e.getLocalVertices());
+     if (diff.size() == 0) { cout << "v1 couldn't be found"; }
+     int v1 = diff[0];
+     
+     //figure out what e1 is
+     same = listIntersection(Triangulation::vertexTable[v0].getLocalEdges(), Triangulation::vertexTable[v1].getLocalEdges());
+     if (same.size() == 0) { cout << "v0 and v1 had no edge in common, e1 couldn't be found"; }
+     int e1 = same[0];
+     
+     //figure out what e2 is
+     same = listIntersection(Triangulation::vertexTable[v1].getLocalEdges(), Triangulation::vertexTable[v2].getLocalEdges());
+     if (same.size() == 0) { cout << "v1 and v2 had no edge in common, e2 couldn't be found"; }
+     int e2 = same[0];
+     
+     //figure out what e3 is
+     same = listIntersection(Triangulation::vertexTable[v2].getLocalEdges(), Triangulation::vertexTable[v3].getLocalEdges());
+     if (same.size() == 0) { cout << "v2 and v3 had no edge in common, e3 couldn't be found"; }
+     int e3 = same[0];
+     
+     //figure out what e4 is
+     same = listIntersection(Triangulation::vertexTable[v3].getLocalEdges(), Triangulation::vertexTable[v0].getLocalEdges());
+     if (same.size() == 0) { cout << "v3 and v0 had no edge in common, e4 couldn't be found"; }
+     int e4 = same[0];
+     
+     
+     //reassign the local vertices, edges, and faces for each simplex defined above
+     
+     //fix f1's adjactent faces, from f1's perpesctive, and the outer faces's perspective
+     int i;
+     vector<int> *fs = Triangulation::edgeTable[e4].getLocalFaces();
+     for (i = 0; i < (*fs).size(); i++) {
+         Triangulation::faceTable[f1].removeFace((*fs).at(i));
+         Triangulation::faceTable[(*fs).at(i)].removeFace(f1);
+     }
+     fs = Triangulation::edgeTable[e2].getLocalFaces();
+     for (i = 0; i < (*fs).size(); i++) {
+         Triangulation::faceTable[f1].addFace((*fs).at(i));
+         Triangulation::faceTable[(*fs).at(i)].addFace(f1);
+     }
+     Triangulation::faceTable[f1].addFace(f0);
+     
+     //fix f0's adjacent faces, from f0's perspective, and the outer faces perspective
+     fs = Triangulation::edgeTable[e2].getLocalFaces();
+     for (i = 0; i < (*fs).size(); i++) {
+         Triangulation::faceTable[f0].removeFace((*fs).at(i));
+         Triangulation::faceTable[(*fs).at(i)].removeFace(f0);
+     }
+     fs = Triangulation::edgeTable[e4].getLocalFaces();
+     for (i = 0; i < (*fs).size(); i++) {
+         Triangulation::faceTable[f0].addFace((*fs).at(i));
+         Triangulation::faceTable[(*fs).at(i)].addFace(f0);
+     }
+     Triangulation::faceTable[f0].addFace(f1);
+     
+     //change f0 and f1 other adjacencies
+     Triangulation::faceTable[f0].removeVertex(v2);
+     Triangulation::faceTable[f1].removeVertex(v0);
+     
+     Triangulation::faceTable[f0].removeEdge(e2);
+     Triangulation::faceTable[f1].removeEdge(e4);
+     
+     Triangulation::faceTable[f0].addVertex(v3);
+     Triangulation::faceTable[f1].addVertex(v1);
+     
+     Triangulation::faceTable[f0].addEdge(e4);
+     Triangulation::faceTable[f1].addEdge(e2);
+     
+     //now e0 needs its vertices fixed
+     Triangulation::edgeTable[e0].removeVertex(v0);
+     Triangulation::edgeTable[e0].removeVertex(v2);
+     Triangulation::edgeTable[e0].addVertex(v1);
+     Triangulation::edgeTable[e0].addVertex(v3);
+     //note that the edges and faces are the same for e0
+     
+     //remove e0 from v2 and v0
+     Triangulation::vertexTable[v2].removeEdge(e0);
+     Triangulation::vertexTable[v0].removeEdge(e0);
+     
+     //remove v2 and v0 from each other
+     Triangulation::vertexTable[v2].removeVertex(v0);
+     Triangulation::vertexTable[v0].removeVertex(v2);
+     
+     //add e0 to v1 and v3
+     Triangulation::vertexTable[v1].addEdge(e0);
+     Triangulation::vertexTable[v3].addEdge(e0);
+     
+     //add v1 and v3 to each other
+     Triangulation::vertexTable[v1].addVertex(v3);
+     Triangulation::vertexTable[v3].addVertex(v1);
+     
+     //add f1 to e2 and add f0 to e4
+     Triangulation::edgeTable[e2].addFace(f1);
+     Triangulation::edgeTable[e4].addFace(f0);
+     
+     //add f1 to v1 and add f0 to v3
+     Triangulation::vertexTable[v1].addFace(f1);
+     Triangulation::vertexTable[v3].addFace(f0);
+     
+     //add f1 from v1 and add f0 from v3
+     Triangulation::vertexTable[v1].addFace(f1);
+     Triangulation::vertexTable[v3].addFace(f0);
+     
+     //remove f1 from v0, and remove f0 from v2
+     Triangulation::vertexTable[v0].removeFace(f1);
+     Triangulation::vertexTable[v2].removeFace(f0);
+     
+     //remove f1 from e4 and remove f0 from e2
+     Triangulation::edgeTable[e4].removeFace(f1);
+     Triangulation::edgeTable[e2].removeFace(f0);
+     
+     //v2 could be adjacent to a bunch of edges that are no longer
+     //adjacent to e0 so we need to mutually remove this adjacency
+     //for v2's adjacent edges, and v0's
+     vector<int> *es = Triangulation::vertexTable[v2].getLocalEdges();
+     for (i = 0; i < (*es).size(); i++) {
+         Triangulation::edgeTable[e0].removeEdge((*es).at(i));
+         Triangulation::edgeTable[(*es).at(i)].removeEdge(e0);
+     }
+     es = Triangulation::vertexTable[v0].getLocalEdges();
+     for (i = 0; i < (*es).size(); i++) {
+         Triangulation::edgeTable[e0].removeEdge((*es).at(i));
+         Triangulation::edgeTable[(*es).at(i)].removeEdge(e0);
+     }
+     
+     //now the reverse of this needs to be done for v1 and v3's adjecent edges
+     es = Triangulation::vertexTable[v1].getLocalEdges();
+     for (i = 0; i < (*es).size(); i++) {
+         Triangulation::edgeTable[e0].addEdge((*es).at(i));
+         Triangulation::edgeTable[(*es).at(i)].addEdge(e0);
+     }
+     es = Triangulation::vertexTable[v3].getLocalEdges();
+     for (i = 0; i < (*es).size(); i++) {
+         Triangulation::edgeTable[e0].addEdge((*es).at(i));
+         Triangulation::edgeTable[(*es).at(i)].addEdge(e0);
+     }
+
+/*       v2
+         / \
+        /   \
+  e2   /     \ e3
+      /       \
+     /    f1   \
+    /           \
+    -------------
+v1  \    e0     / v3
+     \         /
+      \  f0   /
+  e1   \     / e4
+        \   /
+         \ /
+         v0 
+*/
+
+} //end of kurt's flip
+
+/*
 void flip(Edge e)
 {
      
@@ -429,7 +620,9 @@ void flip(Edge e)
   
      
      Triangulation::edgeTable[e.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang1)));
-}
+}//end of old flip
+
+*/ //***********************************************************************************************************************************************
 
 void removeVertex(Vertex v)
 {
