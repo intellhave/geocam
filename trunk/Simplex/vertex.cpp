@@ -10,8 +10,6 @@ Version: July 16, 2008
 // class constructor
 Vertex::Vertex() : Simplex()
 {
-    radius = 0;
-    curvature = 0.0;
 }
 
 // class destructor
@@ -19,32 +17,8 @@ Vertex::~Vertex()
 {
 }
 
-void Vertex::setRadius(double newRadius)
-{
-     radius = newRadius;
-     for(int i = 0; i < getLocalEdges()->size(); i++)
-     {
-           Triangulation::edgeTable[(*getLocalEdges())[i]].setLength();
-     }
-}
-
-void Vertex::setRadiusIndependent(double newRadius)
-{
-     radius = newRadius;     
-}
-
 int Vertex::getDegree()
 {
     return getLocalEdges()->size();
-}
-
-double Vertex::getCurvature() 
-{
-    return curvature;
-}
-
-void Vertex::setCurvature(double curv)
-{
-     curvature = curv;
 }
 

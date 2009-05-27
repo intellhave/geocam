@@ -18,10 +18,7 @@ Version: July 16, 2008
  * x- and y-coordinates.
  */
 class Vertex : public Simplex
-{
-        double radius;
-        double curvature;
-        
+{        
 	public:
            
 		// default class constructor
@@ -29,32 +26,12 @@ class Vertex : public Simplex
 		Vertex(int setIndex) : Simplex(setIndex) {};
 		// class destructor
 		~Vertex();
-		
-        /*
-		 * Returns the radius of this vertex.
-		 */
-        double getRadius()
-        {
-            return radius;
-        }
-        
-       	/*
-		 * Sets the weight to the given weight, then updates the lengths
-         * of all of the edges local to this vertex.
-		 */
-		void setRadius(double);
-		/*
-		 * Sets the weight of this vertex to the given weight but does
-		 * not update the lengths of any edges.
-		 */
-		void setRadiusIndependent(double);
+
 		/*
 		 * Returns the degree of this vertex. The degree of a vertex is
 		 * defined as the number of edges local to it.
 		 */
 		int getDegree();
-		double getCurvature();
-		void setCurvature(double);
 		
 };
 

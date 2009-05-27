@@ -1,0 +1,127 @@
+Specifications for a data structure for studying geometric quantities
+defined on Triangulations
+
+Premise:
+
+A fundamental goal of the geocam project is to develop a body of
+source code that will be useful for a variety of experiments and
+demonstrations involving computational geometry. Particularly, we are
+interested in manipulating triangulations of manifolds in two and
+three dimensions.
+
+When running an experiment, the questions we ask about a triangulation
+are usually either topological ("Which vertices/edges/etc. are
+attached to simplex S?") or geometrical ("What is the length of edge
+e?") in nature. Currently, we use several "Map" objects to answer
+topological questions about the triangulation. However, developing a
+convenient data structure for answering geometric questions has been
+more difficult.
+
+We understand how to compute one geometric quantity (say, an angle)
+given other quantities, and have written code to do this. However,
+making effective use of this code is difficult. It is inefficient to
+recompute a quantity every time we want to inspect it---we would
+prefer to save these quantities each time we compute them. On the
+other hand, the geometric quantities we consider are
+interdependent---changing a radius at one vertex may affect angles
+elsewhere. 
+
+Since we are interested in triangulations in several different
+geometries, we would like it to be relatively easy to switch
+geometries or add new quantities of interest. Suppose we wish to
+examine a new area-quantity on a triangulation. Ideally, that should
+be a matter of adding a new definition for how to compute that
+quantity, noting which quantities the new quantity depends on, and
+signaling the triangulation that the new quantity needs attention.
+
+Since we will likely be studying triangulations in many different
+experiments, we would like to make manipulating the triangulation as
+user friendly as possible. Given an initialized triangulation, a
+programmer should be able to, say, change a length/weight/angle, and
+then ask questions about the new triangulation, without having to
+ponder which quantities must be recalculated. The triangulation should
+"know" which quantities to recompute, and automatically update itself.
+
+Having described the features we desire, we propose the following data
+structure, consisting of the following components:
+
+- A dependency digraph G. We assign each type of geometrical quantity
+  to a vertex, and draw a directed edge from vertex v to vertex w if v
+  depends on w. (For example, we might have a vertex "radii" and a
+  vertex "edge-length" and an edge from radii to "edge-length" ).
+
+- A list R of "readable" quantities and a list W of "writable"
+  quantities.
+
+- A subgraph S of G. S consists contains the vertices of R, W, and any
+  intermediate vertices that might be needed to compute the R
+  quantities from W quantities. (This might be a little too vague.)
+
+- A field "changed" that records the quantity (or quantities?) most
+  recently modified.
+
+- A collection of "Update" procedures. Each consists of a pair of
+  bitstrings and a procedure (a pointer to a function). Each bitstring
+  has one bit for each geometric quantity. The first bitstring has bits
+  set for the quantities it uses to perform an update. The second
+  bitstring has bits set for the quantities that will be updated by
+  the procedure. The procedure takes the Triangulation as input, and
+  updates the quantities as described.
+
+The proposed data structure will have the following interface:
+
+- Write(Quantity, NewValues) : Changes the specified quantity of the
+  triangulation using the input values.
+
+- Read(Quantity) : Returns a vector containing the value of the given
+  quantity at each vertex.
+
+- Update() : Updates the appropriate quantities of interest, using the
+  quantities known to be correct.
+
+- SetReadable(Quantity-List) : Set which quantities may be read (and
+  thus will need to be updated in the course of computations).
+
+- SetWritable(Quantity-List) : Set which quantities may be written to
+  (and thus will need to be updated in the course of computations.
+
+A Sketch of the Update Procedure: 
+
+If a write has occurred, then we know only some of the quantities
+computed for the triangulation are correct. To find out which
+quantities must be updated, we begin at the vertex of S corresponding
+to the written quantity, and then search S (say, breadth-first) to
+find all quantities that must be updated. We record these as a
+bitstring B, where each bit corresponds to some quantity, reflecting
+an update is needed. We iterate over the Update-procedures, using B to
+select applicable procedures. After applying a procedure, we flip the
+appropriate bits of B to indicate those quantities are up to date,
+halting when all of the bits of B are in the "clean" state.
+
+Discussion:
+
+In the process of writing code to study triangulations, we wish to be
+able to specify how some quantities are to be calculated, and then ask
+questions about those quantities on particular triangulations. This
+module is intended to free the programmer from the trouble of
+explicitly taking the specifications (procedures) to the triangulation
+whenever he wants to know about a quantity.
+
+A first draft of this data structure will likely take 2 to 3 weeks to
+code and debug. Then we would like to investigate the following
+questions:
+
+1) How much overhead will this data structure entail?  Will it impact
+the performance of other code, like the approximators?
+
+2) How should we specify the quantities of interest? A long list of
+enumerations might suffice, and hashing also comes to mind---this
+would allow us to work around the fact that some quantities might not
+be explicitly stored in the current Triangulation data structure.
+
+
+
+
+
+
+

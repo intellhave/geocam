@@ -26,3 +26,5 @@ double hyperbolicAngle(Vertex, Face);
  *            K_i = 2*PI - sum of angles at i
  */
 double hyperbolicCurvature(Vertex);
+
+void hyperbolicCurvature();

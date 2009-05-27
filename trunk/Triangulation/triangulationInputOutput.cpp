@@ -12,6 +12,7 @@ the reading and writing of text files.
 #include <sstream>
 #include <iomanip>
 #include "triangulationinputoutput.h"
+#include "Geometry/Geometry.h"
 
 
 /*
@@ -309,7 +310,7 @@ void writeTriangulationFileWithData(char* newFileName)
      {
             
              
-             output << "Vertex: " << vit->first <<  "Radius: " << vit->second.getRadius();
+             output << "Vertex: " << vit->first <<  "Radius: " << Geometry::radius(vit->second);
              //output << " Angle sum: " << getAngleSum(vit->second) << "\n";
              
              for(int j = 0; j < vit->second.getLocalVertices()->size(); j++)
@@ -333,7 +334,7 @@ void writeTriangulationFileWithData(char* newFileName)
      }
      for(map<int, Edge>::iterator eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
      {
-             output << "Edge: " << eit->first  << "Length: " << eit->second.getLength() << "\n";
+             output << "Edge: " << eit->first  << "Length: " << Geometry::length(eit->second) << "\n";
              
              for(int j = 0; j < eit->second.getLocalVertices()->size(); j++)
              {
@@ -626,98 +627,95 @@ void printResultsStep(char* fileName, vector<double>* radii, vector<double>* cur
 {
      int vertSize = Triangulation::vertexTable.size();
      int numSteps = radii->size() / vertSize;
-     ofstream results(fileName, ios_base::trunc);
-     results << left << setprecision(6); 
-     results.setf(ios_base::showpoint);
+     FILE* results = fopen(fileName, "w");
+     if(results == NULL) {
+       fprintf(stderr, "Null file given by %s\n", fileName);           
+     }
      
      map<int, Vertex>::iterator vit;
-
-     
      for(int i = 0; i < numSteps; i++)
      {
          double netCurv = 0.;
-         results << left << "Step " << left <<setw(6)  << i + 1;
-         results << right << setw(7) << "Radius";
-         results << right << setw(12) << "Curv";
-         results << "\n---------------------------------\n";
+         fprintf(results, "Step %5d     Radius          Curvature          ", i);
+         fprintf(results, "Curv:Radius\n");
+         fprintf(results, "-----------------------------------------------------\n");
          vit = Triangulation::vertexTable.begin();
          for(int j = 0; j < vertSize; j++)
          {
-             results << "Vertex " << left << setw(5) << vit->first;
-             results << left << setw(14)<< (*radii)[i*vertSize + j];
-             results << left << setw(12) << (*curvs)[i*vertSize+j];
-             results << left << setw(12) << (*curvs)[i*vertSize+j]/(*radii)[i*vertSize + j] << "\n";
-             
+             fprintf(results, "Vertex %3d     %3.7f       %3.7f       %3.7f\n",
+                   vit->first, 
+                  (*radii)[i*vertSize + j], (*curvs)[i*vertSize+j], 
+                  (*curvs)[i*vertSize+j]/(*radii)[i*vertSize + j]);
              netCurv += (*curvs)[i*vertSize+j];
              vit++;
          }
-       if(netCurv < 0.0000001 && netCurv > -0.0000001)
-       {
+         if(netCurv < 0.0000001 && netCurv > -0.0000001)
+         {
                     netCurv = 0.;
-       }
-         results << "Total Curvature: " << netCurv << "\n\n";
+         }
+         fprintf(results, "Total Curvature: %4.7f\n\n", netCurv);
      }
-     
-   results.close();
+     fclose(results);
 }
 
 void printResultsVertex(char* fileName, vector<double>* radii, vector<double>* curvs)
 {
      int vertSize = Triangulation::vertexTable.size();
      int numSteps = radii->size() / vertSize;
-     ofstream results(fileName, ios_base::trunc);
-     results << left << setprecision(6); 
-     results.setf(ios_base::showpoint);
+     FILE* results = fopen(fileName, "w");
+     if(results == NULL) {
+       fprintf(stderr, "Null file given by %s\n", fileName);           
+     }
      map<int, Vertex>::iterator vit;
-    vit = Triangulation::vertexTable.begin(); 
-   for(int k=0; k < vertSize; k++) 
-   { 
-      results << left << "Vertex: " << left << setw(4)<< vit->first;
-      results << right << setw(3) << "Radius";
-      results << right << setw(10) << "Curv";
-      results << "\n------------------------------\n";
-      for(int j = 0; j < numSteps; j++)
-      {
-              results << left <<  "Step " << setw(7) << (j + 1);
-              results << left << setw(12) << (*radii)[j*vertSize + k];
-              results << left << setw(12) << (*curvs)[j*vertSize + k] << "\n";
-      }
-      results << "\n";
-      vit++;
-   }
-   
-   results.close();
+     vit = Triangulation::vertexTable.begin(); 
+     for(int k=0; k < vertSize; k++) 
+     { 
+       fprintf(results, "Vertex: %3d\tRadius\tCurv\tCurv:Radius\n", vit->first);
+       fprintf(results, "\n---------------------------------\n");
+       for(int j = 0; j < numSteps; j++)
+       {
+           fprintf(results, "Step %4d\t%3.7f\t%3.7f\t%3.7f\n", j,
+                (*radii)[j*vertSize + k], (*curvs)[j*vertSize + k],
+                (*curvs)[j*vertSize + k]/(*radii)[j*vertSize + k]);
+       }
+       fprintf(results, "\n");
+       vit++;
+     }
+     fclose(results);
 }
 
 void printResultsNum(char* fileName, vector<double>* radii, vector<double>* curvs)
 {
      int vertSize = Triangulation::vertexTable.size();
      int numSteps = radii->size() / vertSize;
-     ofstream results(fileName, ios_base::trunc);
-     results << left << setprecision(6); 
-     results.setf(ios_base::showpoint);
+     FILE* results = fopen(fileName, "w");
+     if(results == NULL) {
+       fprintf(stderr, "Null file given by %s\n", fileName);           
+     }
      map<int, Vertex>::iterator vit;
-    vit = Triangulation::vertexTable.begin(); 
-   for(int k=0; k < vertSize; k++) 
-   {
-      for(int j = 0; j < numSteps; j++)
-      {
-              results << left << setw(20) << (*radii)[j*vertSize + k];
-              results << left << setw(12) << (*curvs)[j*vertSize + k] << "\n";
-      }
-      results << "\n";
-      vit++;
-   }
-   results.close();
+     vit = Triangulation::vertexTable.begin(); 
+     for(int k=0; k < vertSize; k++) 
+     {
+       for(int j = 0; j < numSteps; j++)
+       {
+          fprintf(results, "%3.10f\t%3.10f\t%3.10f\n",
+                (*radii)[j*vertSize + k], (*curvs)[j*vertSize + k],
+                (*curvs)[j*vertSize + k]/(*radii)[j*vertSize + k]);
+       }
+       fprintf(results, "\n");
+       vit++;
+     }
+     fclose(results);
 }
 
 void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>* curvs)
 {
      int vertSize = Triangulation::vertexTable.size();
      int numSteps = radii->size() / vertSize;
-     ofstream results(fileName, ios_base::trunc);
-     results << left << setprecision(6); 
-     results.setf(ios_base::showpoint);
+     FILE* results = fopen(fileName, "w");
+     if(results == NULL) {
+       fprintf(stderr, "Null file given by %s\n", fileName);           
+     }
      map<int, Vertex>::iterator vit;
      vit = Triangulation::vertexTable.begin();
      for(int i = 0; i < numSteps; i++)
@@ -725,10 +723,12 @@ void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>*
          vit = Triangulation::vertexTable.begin();
          for(int j = 0; j < vertSize; j++)
          {
-             results << (*curvs)[i*vertSize+j] / (*radii)[i*vertSize+j] << "\n";
+             fprintf(results, "%3.10f\n", 
+                 (*curvs)[i*vertSize+j] / (*radii)[i*vertSize+j]);
              vit++;
          }
      }
+     fclose(results);
 }
 
 
@@ -752,7 +752,7 @@ void printEdgeLengths(char* fileName)
      results.setf(ios_base::showpoint);
      for (int i = 1; i <= edgeSize; i++)
      {
-         results << Triangulation::edgeTable[i].getLength() << "\n";
+         results << Geometry::length(Triangulation::edgeTable[i]) << "\n";
      }
 }
 
@@ -774,7 +774,7 @@ void makeDelaunayTriangulationFile(char* triFile, char* lengthFile)
      {
          lengthArr[i] = lengths[i];
      }
-     Triangulation::setLengths(lengthArr);
+     Geometry::setLengths(lengthArr);
      infile.close();
 }
 

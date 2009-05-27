@@ -19,6 +19,7 @@ double sphericalAngle(Vertex v, Face f, double radius)
      
      return sphericalAngle(e1.getLength(), e2.getLength(), e3.getLength());
 }
+
 double sphericalCurvature(Vertex v, double radius)
 {
       double sum = 0;
@@ -29,6 +30,25 @@ double sphericalCurvature(Vertex v, double radius)
              sum += sphericalAngle(v, Triangulation::faceTable[*it], radius);
       }
       return 2*PI - sum;
+}
+
+
+void sphericalCurvature(double radius)
+{
+      Triangulation::setSphericalAngles(radius);
+      map<int, Vertex>::iterator vit;
+      map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+      map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+      double curv;
+      for(vit = vBegin; vit != vEnd; vit++) {
+         curv = 2 * PI;
+         vector<int> localF = (*(vit->second.getLocalFaces()));
+         for(int i = 0; i < localF.size(); i++)
+         {
+            curv -= Triangulation::faceTable[localF[i]].getAngle(vit->first);
+         }
+         vit->second.setCurvature(curv);
+      }
 }
 
 void sphericalCalcFlow(vector<double>* radii, vector<double>* curvatures,double dt ,double* initRadii,int numSteps, bool adjF)

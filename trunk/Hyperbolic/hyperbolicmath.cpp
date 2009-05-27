@@ -39,3 +39,21 @@ double hyperbolicCurvature(Vertex v)
        }
        return 2*PI - sum;
 }
+
+void hyperbolicCurvature()
+{
+      Triangulation::setHyperbolicAngles();
+      map<int, Vertex>::iterator vit;
+      map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+      map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+      double curv;
+      for(vit = vBegin; vit != vEnd; vit++) {
+         curv = 2 * PI;
+         vector<int> localF = (*(vit->second.getLocalFaces()));
+         for(int i = 0; i < localF.size(); i++)
+         {
+            curv -= Triangulation::faceTable[localF[i]].getAngle(vit->first);
+         }
+         vit->second.setCurvature(curv);
+      }
+}

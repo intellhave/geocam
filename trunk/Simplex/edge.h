@@ -18,39 +18,14 @@ Version: July 16, 2008
  */
 class Edge : public Simplex
 {
-        double length;
-        double eta;
-        map<int, double> dihedralAngles;
 	public:
 		// class constructor
 		Edge();
 		Edge(int setIndex);
 		// class destructor
 		~Edge();
-		
-		/*
-		 * Sets the length based on the radii of the vertices.
-		 */
-		void setLength();
-		/*
-		 * Sets the length to the given length.
-	     */
-		void setLength(double);
-		/*
-		 * Returns the length of this edge.
-		 */
-		double getLength() 
-        {
-               return length;
-        };
-        double getEta();
-        double getIntersectAngle();
-        
-        void setEta(double);
-        void setIntersectAngle(double);
+
         bool isBorder();
-        void setDihedralAngles();
-        double getDihedralAngle(int index);
 
 };
 

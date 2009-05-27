@@ -1,5 +1,6 @@
 #include <cmath>
 #include "delaunay.h"
+#include "Geometry/Geometry.h"
 #define PI 	3.141592653589793238
 
 bool isDelaunay(Edge e)
@@ -20,8 +21,8 @@ bool isDelaunay(Edge e)
      Vertex vb2 = Triangulation::vertexTable[diff[0]];
      
      
-     double ang1 = angle(vb1, fa1);
-     double ang2 = angle(vb2, fa2);
+     double ang1 = Geometry::angle(vb1, fa1);
+     double ang2 = Geometry::angle(vb2, fa2);
           
      if((ang1 + ang2) > PI)
           return false;
@@ -73,11 +74,11 @@ double getHeight(Face f, Edge e)
      sameAs = listIntersection(&sameAs, f.getLocalEdges());
      Edge ea2 = Triangulation::edgeTable[sameAs[0]];
 
-     double ang1 = angle(v1, f);
+     double ang1 = Geometry::angle(v1, f);
 
 
-     double d13 = getPartialEdge(ea1,v1);
-     double d12 = getPartialEdge(e,v1);
+     double d13 = Geometry::partialEdge(v1,ea1);
+     double d12 = Geometry::partialEdge(v1,e);
 //
 //     cout << "angle: " << ang1 << endl;
 //     cout << "ea2: " << ea2.getLength() << endl;
@@ -133,20 +134,20 @@ double getDual(Edge e)
      }
 }
 
-double getPartialEdge(Edge e, Vertex v1)
-{
-    int v2Index;
-    if((*(e.getLocalVertices()))[0] != v1.getIndex())
-    {
-       v2Index = (*(e.getLocalVertices()))[0];
-    } else
-    {
-       v2Index = (*(e.getLocalVertices()))[1];
-    }
-    Vertex v2 = Triangulation::vertexTable[v2Index];
-    double d12 = (pow(e.getLength(), 2) + pow(v1.getRadius(), 2) - pow(v2.getRadius(), 2)) / (2 * e.getLength());
-//    
-//    double d21 = (pow(e.getLength(), 2) + pow(v2.getRadius(), 2) - pow(v1.getRadius(), 2)) / (2 * e.getLength());
-//    cout << d12 + d21 << "     " << e.getLength() << "\n";
-    return d12;
-}
+//double getPartialEdge(Edge e, Vertex v1)
+//{
+//    int v2Index;
+//    if((*(e.getLocalVertices()))[0] != v1.getIndex())
+//    {
+//       v2Index = (*(e.getLocalVertices()))[0];
+//    } else
+//    {
+//       v2Index = (*(e.getLocalVertices()))[1];
+//    }
+//    Vertex v2 = Triangulation::vertexTable[v2Index];
+//    double d12 = (pow(e.getLength(), 2) + pow(v1.getRadius(), 2) - pow(v2.getRadius(), 2)) / (2 * e.getLength());
+////    
+////    double d21 = (pow(e.getLength(), 2) + pow(v2.getRadius(), 2) - pow(v1.getRadius(), 2)) / (2 * e.getLength());
+////    cout << d12 + d21 << "     " << e.getLength() << "\n";
+//    return d12;
+//}

@@ -2,6 +2,7 @@
 #include <cmath>
 #include <fstream>
 #include "triangulationplane.h"
+#include "Geometry/Geometry.h"
 #define PI 	3.141592653589793238
 
 int checkForDoubleTriangles();
@@ -74,9 +75,9 @@ void firstTriangle(double length1, double length2, double length3)
     Triangulation::faceTable[1].addEdge(3);
     
     //set the dimensions of the triangle
-    Triangulation::edgeTable[1].setLength(length1);
-    Triangulation::edgeTable[2].setLength(length2);
-    Triangulation::edgeTable[3].setLength(length3);
+    Geometry::setLength(Triangulation::edgeTable[1], length1);
+    Geometry::setLength(Triangulation::edgeTable[2], length2);
+    Geometry::setLength(Triangulation::edgeTable[3], length3);
         
 }
 
@@ -87,11 +88,11 @@ void addTriangle(Edge e, double length1, double length2)
      if(e.getLocalFaces()->size() > 1)
      throw string("Invalid Edge");
      //check the edge lengths for triangle inequality
-     if(e.getLength() >= (length1 + length2))
+     if(Geometry::length(e) >= (length1 + length2))
      throw string("Invalid Edge Lengths");
-     if(length1 >= (e.getLength() + length2))
+     if(length1 >= (Geometry::length(e) + length2))
      throw string("Invalid Edge Lengths");
-     if(length2 >= (e.getLength() + length1))
+     if(length2 >= (Geometry::length(e) + length1))
      throw string("Invalid Edge Lengths");
      
      //make variable references to existing simplices
@@ -103,10 +104,10 @@ void addTriangle(Edge e, double length1, double length2)
      //checks each vertex to see that the total angle sum 
      //does not exceed 2 * PI
      double anglesum = getAngleSum(va1);
-     if(getAngleSum(va1) + angle(e.getLength(), length1, length2) > 2 * PI)
+     if(getAngleSum(va1) + Geometry::angle(Geometry::length(e), length1, length2) > 2 * PI)
      throw string("angle sum 1");
      
-     if(getAngleSum(va2) + angle(e.getLength(), length2, length1) > 2 * PI)
+     if(getAngleSum(va2) + Geometry::angle(Geometry::length(e), length2, length1) > 2 * PI)
      throw string("angle sum 2");
 
      //initialize the new simplices with the proper indices
@@ -178,8 +179,8 @@ void addTriangle(Edge e, double length1, double length2)
      Triangulation::faceTable[fa.getIndex()].addFace(fb.getIndex());
      
      //set the dimensions of the new triangle
-     Triangulation::edgeTable[eb1.getIndex()].setLength(length1);
-     Triangulation::edgeTable[eb2.getIndex()].setLength(length2);
+     Geometry::setLength(Triangulation::edgeTable[eb1.getIndex()], length1);
+     Geometry::setLength(Triangulation::edgeTable[eb2.getIndex()], length2);
 }
 
 void addTriangle(Edge e1, Edge e2)
@@ -261,9 +262,9 @@ void addTriangle(Edge e1, Edge e2)
      Triangulation::faceTable[fa2.getIndex()].addFace(fb.getIndex());
      
      //use lengths of existing edges to find new dimension
-     double l1 = e1.getLength();
-     double l2 = e2.getLength();
-     Triangulation::edgeTable[eb.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
+     double l1 = Geometry::length(e1);
+     double l2 = Geometry::length(e2);
+     Geometry::setLength(Triangulation::edgeTable[eb.getIndex()], sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
      
 }
 
@@ -274,9 +275,9 @@ double getAngleSum(Vertex v)
        for(int i = 0; i < v.getLocalFaces()->size(); i++)
        {
                if(!Triangulation::faceTable[(*(v.getLocalFaces()))[i]].isNegative())
-                    angleSum += angle(v, Triangulation::faceTable[(*(v.getLocalFaces()))[i]]);
+                    angleSum += Geometry::angle(v, Triangulation::faceTable[(*(v.getLocalFaces()))[i]]);
                else
-                    angleSum -= angle(v, Triangulation::faceTable[(*(v.getLocalFaces()))[i]]);
+                    angleSum -= Geometry::angle(v, Triangulation::faceTable[(*(v.getLocalFaces()))[i]]);
        }
        return angleSum;
 }
@@ -317,7 +318,7 @@ void generateTriangulation(int numFaces)
             Edge e = eit->second;
             if(e.isBorder())
             {
-                length1 = e.getLength();
+                length1 = Geometry::length(e);
                 randNum = (rand()%20000 + 1) / 20000.0;
                 if(randNum < 0.5)
                    randNum = -randNum;
@@ -387,16 +388,16 @@ void generateRadii()
      for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
      {
           int index = (*(vit->second.getLocalEdges()))[0];
-          double smallest = Triangulation::edgeTable[index].getLength();
+          double smallest = Geometry::length(Triangulation::edgeTable[index]);
           for(int i = 1; i < vit->second.getLocalEdges()->size(); i++)
           {
                index = (*(vit->second.getLocalEdges()))[i];
-               if(Triangulation::edgeTable[index].getLength() < smallest)
-               smallest = Triangulation::edgeTable[index].getLength();
+               if(Geometry::length(Triangulation::edgeTable[index]) < smallest)
+               smallest = Geometry::length(Triangulation::edgeTable[index]);
           }
           double randNum = ((double) rand()) / RAND_MAX;
-
-          vit->second.setRadiusIndependent(randNum * smallest * 1);     
+          
+          Geometry::setRadius(randNum * smallest * 1);
      }
 }
 
@@ -490,11 +491,11 @@ void weightedFlipAlgorithm()
                          cout << (*(f1.getLocalVertices()))[2] << ") ";
                          cout << f1.isNegative() << "   ";
                          cout << "[" <<(*(f1.getLocalEdges()))[0] << ": ";
-                         cout << Triangulation::edgeTable[(*(f1.getLocalEdges()))[0]].getLength() << ", ";
+                         cout << Geometry::length(Triangulation::edgeTable[(*(f1.getLocalEdges()))[0]]) << ", ";
                          cout << (*(f1.getLocalEdges()))[1] << ": ";
-                         cout << Triangulation::edgeTable[(*(f1.getLocalEdges()))[1]].getLength() << ", ";
+                         cout << Geometry::length(Triangulation::edgeTable[(*(f1.getLocalEdges()))[1]]) << ", ";
                          cout << (*(f1.getLocalEdges()))[2] << ": ";
-                         cout << Triangulation::edgeTable[(*(f1.getLocalEdges()))[2]].getLength() << "]";
+                         cout << Geometry::length(Triangulation::edgeTable[(*(f1.getLocalEdges()))[2]]) << "]";
                          cout << endl;
                          cout << "Face 2: (";
                          cout << (*(f2.getLocalVertices()))[0] << ", ";
@@ -502,11 +503,11 @@ void weightedFlipAlgorithm()
                          cout << (*(f2.getLocalVertices()))[2] << ") ";
                          cout << f2.isNegative() << "   ";
                          cout << "[" <<(*(f2.getLocalEdges()))[0] << ": ";
-                         cout << Triangulation::edgeTable[(*(f2.getLocalEdges()))[0]].getLength() << ", ";
+                         cout << Geometry::length(Triangulation::edgeTable[(*(f2.getLocalEdges()))[0]]) << ", ";
                          cout << (*(f2.getLocalEdges()))[1] << ": ";
-                         cout << Triangulation::edgeTable[(*(f2.getLocalEdges()))[1]].getLength() << ", ";
+                         cout << Geometry::length(Triangulation::edgeTable[(*(f2.getLocalEdges()))[1]]) << ", ";
                          cout << (*(f2.getLocalEdges()))[2] << ": ";
-                         cout << Triangulation::edgeTable[(*(f2.getLocalEdges()))[2]].getLength() << "]";
+                         cout << Geometry::length(Triangulation::edgeTable[(*(f2.getLocalEdges()))[2]]) << "]";
                          cout << endl;
                          system("PAUSE");
                          flipCount++;
@@ -590,11 +591,11 @@ void checkTriangle(Edge e, double length1, double length2)
      double ang1 = 2 * PI - getAngleSum(va1);
      double ang2 = 2 * PI - getAngleSum(va2);
      
-     double tempLength1 = sqrt(pow(length1, 2) + pow(ea1.getLength(), 2) - 2 * ea1.getLength() * length1 * cos(ang1));
-     double tempLength2 = sqrt(pow(length2, 2) + pow(ea2.getLength(), 2) - 2 * ea2.getLength() * length2 * cos(ang2));
+     double tempLength1 = sqrt(pow(length1, 2) + pow(Geometry::length(ea1), 2) - 2 * Geometry::length(ea1) * length1 * cos(ang1));
+     double tempLength2 = sqrt(pow(length2, 2) + pow(Geometry::length(ea2), 2) - 2 * Geometry::length(ea2) * length2 * cos(ang2));
      
-     double tempAng1 = angle(ea1.getLength(), tempLength1, length1);
-     double tempAng2 = angle(ea2.getLength(), tempLength2, length2);
+     double tempAng1 = Geometry::angle(Geometry::length(ea1), tempLength1, length1);
+     double tempAng2 = Geometry::angle(Geometry::length(ea2), tempLength2, length2);
      
      if(getAngleSum(vb1) + tempAng1 > 2 * PI){
                          cout << "ANgle\n";
@@ -617,12 +618,12 @@ void makeSpecialCase()
      addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
      addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
      addTriangle(Triangulation::edgeTable[8], Triangulation::edgeTable[5]);
-     Triangulation::vertexTable[1].setRadiusIndependent(0);
-     Triangulation::vertexTable[2].setRadiusIndependent(0);
-     Triangulation::vertexTable[3].setRadiusIndependent(0);
-     Triangulation::vertexTable[4].setRadiusIndependent(1.5066);
-     Triangulation::vertexTable[5].setRadiusIndependent(1.5066);
-     Triangulation::vertexTable[6].setRadiusIndependent(1.5066);
+     Geometry::setRadius(Triangulation::vertexTable[1], 0);
+     Geometry::setRadius(Triangulation::vertexTable[2], 0);
+     Geometry::setRadius(Triangulation::vertexTable[3], 0);
+     Geometry::setRadius(Triangulation::vertexTable[4], 1.5066);
+     Geometry::setRadius(Triangulation::vertexTable[5], 1.5066);
+     Geometry::setRadius(Triangulation::vertexTable[6], 1.5066);
      
 }
 

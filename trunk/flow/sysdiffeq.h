@@ -25,6 +25,8 @@ void SpherRicci(double derivs[]);
 void AdjSpherRicci(double derivs[]);
 
 void HypRicci(double derivs[]);
-void AdjHypRicci(double derivs[]); 
+void AdjHypRicci(double derivs[]);
+
+void Yamabe(double derivs[]);
 
 #endif /* _SYSDIFFEQ_H_ */

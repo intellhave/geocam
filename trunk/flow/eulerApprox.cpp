@@ -1,4 +1,5 @@
 #include "triangulation/triangulation.h"
+#include "Geometry/Geometry.h"
 #include "eulerApprox.h"
 
 void EulerApprox::step(double dt){
@@ -15,7 +16,7 @@ void EulerApprox::step(double dt){
     double ri;
     int ii = 0;
     for(vIter = vBegin; vIter != vEnd; vIter++, ii++){
-        ri = vIter->second.getRadius();
-        vIter->second.setRadius(ri + slopes[ii]*dt);
+        ri = Geometry::radius(vIter->second);
+        Geometry::setRadius(vIter->second, ri + slopes[ii]*dt);
     }
 }

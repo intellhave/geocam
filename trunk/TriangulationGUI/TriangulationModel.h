@@ -7,6 +7,9 @@
 #include "triangulation/triangulationInputOutput.h"
 #include "3DTriangulation/3DInputOutput.h"
 #include "3DTriangulation/3Dtriangulationmath.h"
+#include "flow/approximator.h"
+#include "flow/eulerApprox.h"
+#include "flow/sysdiffeq.h"
 class TriangulationModel 
 {
       static bool loaded;
@@ -17,6 +20,7 @@ class TriangulationModel
       static bool flow;
       static double acc;
       static bool smart;
+      static EulerApprox app;
       public:
       
       TriangulationModel();

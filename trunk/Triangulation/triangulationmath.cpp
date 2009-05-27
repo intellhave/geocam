@@ -45,6 +45,21 @@ double curvature(Vertex v)
      return 2*PI - sum;
 }
 
+void curvature() {
+   Triangulation::setAngles();
+   map<int, Vertex>::iterator vit;
+   double curv;
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
+   {
+      curv = 2 * PI;
+      for(int i = 0; i < vit->second.getLocalFaces()->size(); i++)
+      {
+         curv -= Triangulation::faceTable[(*(vit->second.getLocalFaces()))[i]].getAngle(vit->first);
+      }
+      vit->second.setCurvature(curv);
+   }
+}
+
 double inRadius(Face f, double radius)
 {
     if(f.getLocalVertices()->size() != 3) // Make sure the face has 3 vertices.

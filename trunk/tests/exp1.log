@@ -1,10 +1,6 @@
 TRIANGULATION: tetrahedron.txt
-
 RADII: 0.8 0.9 1.0 1.1
 DIFFEQS: adj_ricci
-
 APPROXIMATOR: runga
-
-NUMSTEPS: 100
-
+NUMSTEPS: 300
 STEPSIZE: 0.01

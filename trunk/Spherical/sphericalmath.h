@@ -27,6 +27,8 @@ double sphericalAngle(Vertex, Face, double = 1);
  */
 double sphericalCurvature(Vertex, double = 1);
 
+void sphericalCurvature(double = 1);
+
 /*
  * Calculates the Ricci flow of the current Triangulation under a 
  * spherical geometry. Results from the steps are written into vectors 

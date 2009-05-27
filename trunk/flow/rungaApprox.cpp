@@ -1,4 +1,5 @@
 #include "Triangulation/triangulation.h"
+#include "Geometry/Geometry.h"
 #include "rungaApprox.h"
 
 void RungaApprox::step(double dt){
@@ -15,11 +16,10 @@ void RungaApprox::step(double dt){
     map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
      
     int kk, ii;
-    Vertex vert;
     
     // Initialize our copy of the radii...
     for(kk = 0, vIter = vBegin; vIter != vEnd; kk++, vIter++)
-      radii[kk] = vIter->second.getRadius();
+      radii[kk] = Geometry::radius(vIter->second);
 
     // Compute 4 samples, per the RK4 formula...
     for(ii = 0; ii < 4; ii++){
@@ -28,7 +28,8 @@ void RungaApprox::step(double dt){
       // Compute the next sample...
       for(kk = 0, vIter = vBegin; vIter != vEnd; kk++, vIter++){
           samples[ii][kk] = slopes[kk] * dt;
-          vIter->second.setRadius(radii[kk] + samples[ii][kk] * weight[ii]);
+          Geometry::setRadius(vIter->second, 
+                               radii[kk] + samples[ii][kk] * weight[ii]);
       }
     }
 
@@ -39,6 +40,6 @@ void RungaApprox::step(double dt){
       avg += 2 * samples[2][kk] + samples[3][kk];
       avg = avg * (0.1666666); // avg * 1/6;
      
-      vIter->second.setRadius(radii[kk] + avg);
+      Geometry::setRadius(vIter->second, radii[kk] + avg);
     }
 };

@@ -14,6 +14,7 @@ the reading and writing of text files under a two-dimensional manifold.
 #include <cmath>
 #include "3DInputOutput.h"
 #include "triangulation/triangulationInputOutput.h"
+#include "Geometry/Geometry.h"
 
 bool read3DTriangulationFile(char* fileName) 
 {
@@ -812,7 +813,7 @@ void readEtas(char* filename)
      for(int i = 0; i < Triangulation::edgeTable.size(); i++) {
         fscanf(file, "Edge %d:\t%lf\t%lf\n", &index, &eta, &dummy);
         //fscanf(file, "Edge %d: %lf - %lf\n", &index, &eta, &dummy);
-        Triangulation::edgeTable[index].setEta(eta);
+        Geometry::setEta(Triangulation::edgeTable[index], eta);
      }
      fclose(file);
 }

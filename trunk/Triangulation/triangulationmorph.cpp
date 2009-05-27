@@ -10,6 +10,7 @@ the Triangulation in some way.
 #include <iostream>
 #include "triangulationmorph.h"
 #include "triangulationInputOutput.h"
+#include "Geometry/Geometry.h"
 #define PI 	3.141592653589793238
 
 void addNewVertex(Face f, double newRadius)
@@ -171,7 +172,7 @@ void addNewVertex(Face f, double newRadius)
      
      
      
-     Triangulation::vertexTable[vb.getIndex()].setRadius(newRadius);
+     Geometry::setRadius(Triangulation::vertexTable[vb.getIndex()], newRadius);
      
 }
 
@@ -403,43 +404,43 @@ void flip(Edge e)
      double ang1, ang2;
      if(f1.isNegative() && (!f2.isNegative())) 
      {
-        ang1 = (-angle(va1, f1)) + angle(va1, f2);
-        ang2 = (-angle(va2, f1)) + angle(va2, f2);
+        ang1 = (-Geometry::angle(va1, f1)) + Geometry::angle(va1, f2);
+        ang2 = (-Geometry::angle(va2, f1)) + Geometry::angle(va2, f2);
         if(ang1 < 0 && ang2 < 0)
         {
-           Triangulation::faceTable[f2.getIndex()].switchSide();
+           Triangulation::faceTable[f2.getIndex()].switchPolarity();
         } else if(ang1 > 0 && ang2 > 0)
         {
-            Triangulation::faceTable[f1.getIndex()].switchSide();
+            Triangulation::faceTable[f1.getIndex()].switchPolarity();
         } else if (ang2 < 0)
         {
-            Triangulation::faceTable[f1.getIndex()].switchSide();
-            Triangulation::faceTable[f2.getIndex()].switchSide();
+            Triangulation::faceTable[f1.getIndex()].switchPolarity();
+            Triangulation::faceTable[f2.getIndex()].switchPolarity();
         }
      } else if((!f1.isNegative()) && f2.isNegative())
      {
-        ang1 = angle(va1, f1) - angle(va1, f2);
-        ang2 = angle(va2, f1) - angle(va2, f2);
+        ang1 = Geometry::angle(va1, f1) - Geometry::angle(va1, f2);
+        ang2 = Geometry::angle(va2, f1) - Geometry::angle(va2, f2);
         if(ang1 < 0 && ang2 < 0)
         {
-           Triangulation::faceTable[f1.getIndex()].switchSide();
+           Triangulation::faceTable[f1.getIndex()].switchPolarity();
         } else if(ang1 > 0 && ang2 > 0)
         {
-            Triangulation::faceTable[f2.getIndex()].switchSide();
+            Triangulation::faceTable[f2.getIndex()].switchPolarity();
         }  else if (ang1 < 0)
         {
-            Triangulation::faceTable[f1.getIndex()].switchSide();
-            Triangulation::faceTable[f2.getIndex()].switchSide();
+            Triangulation::faceTable[f1.getIndex()].switchPolarity();
+            Triangulation::faceTable[f2.getIndex()].switchPolarity();
         }
      } else
      {
-        ang1 = angle(va1, f1) + angle(va1, f2);
-        ang2 = angle(va2, f1) + angle(va2, f2);
+        ang1 = Geometry::angle(va1, f1) + Geometry::angle(va1, f2);
+        ang2 = Geometry::angle(va2, f1) + Geometry::angle(va2, f2);
         if(ang1 > PI)
         {//
 //           cout << "Angle1: " << ang1 << " f1: " << f1.isNegative();
 //           cout << " f2: " << f2.isNegative() << "\n";
-           Triangulation::faceTable[f1.getIndex()].switchSide();
+           Triangulation::faceTable[f1.getIndex()].switchPolarity();
            f1 = Triangulation::faceTable[f1.getIndex()];
 //           cout << "f1: " << f1.isNegative() << "\n";
            ang1 = 2 * PI - ang1;
@@ -448,7 +449,7 @@ void flip(Edge e)
         {
 //           cout << "Angle2: " << ang2 << " f1: " << f1.isNegative();
 //           cout << " f2: " << f2.isNegative() << "\n";
-           Triangulation::faceTable[f2.getIndex()].switchSide();
+           Triangulation::faceTable[f2.getIndex()].switchPolarity();
            f2 = Triangulation::faceTable[f2.getIndex()];
 //           cout << "f2: " << f2.isNegative() << "\n";   
         }
@@ -561,8 +562,8 @@ void flip(Edge e)
          Triangulation::faceTable[(fb1[i].getIndex())].addFace(f2.getIndex());
      }
      
-     double l1 = ea1.getLength();
-     double l2 = ea2.getLength();
+     double l1 = Geometry::length(ea1);
+     double l2 = Geometry::length(ea2);
 //     cout << "f1: " << f1.getIndex();
 //     cout << "  f2: " << f2.getIndex() << "\n";
 //     ea1 = Triangulation::edgeTable[ea1.getIndex()];
@@ -618,8 +619,8 @@ void flip(Edge e)
 //         }
 //     } 
   
-     
-     Triangulation::edgeTable[e.getIndex()].setLength(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang1)));
+     Geometry::setLength(Triangulation::edgeTable[e.getIndex()],
+         sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang1)) );
 }//end of old flip
 
 */ //***********************************************************************************************************************************************
@@ -834,8 +835,7 @@ void addLeaf(Edge e, double newRadius)
      Triangulation::faceTable[(fb1.getIndex())].addFace(fb2.getIndex());
      Triangulation::faceTable[(fb2.getIndex())].addFace(fb1.getIndex());
      
-     Triangulation::vertexTable[vb.getIndex()].setRadius(newRadius);
-     
+     Geometry::setRadius(Triangulation::vertexTable[vb.getIndex()], newRadius);
 }
 
 void addHandle(Face f, double newRadius)

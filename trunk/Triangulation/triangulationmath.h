@@ -30,6 +30,8 @@ double angle(Vertex, Face);
  */
 double curvature(Vertex);
 
+void curvature();
+
 /*
  * Calculates the Ricci flow of the current Triangulation using the 
  * Runge-Kutta method. Results from the steps are written into vectors of

@@ -19,7 +19,6 @@ class Face : public Simplex
 {
       
       bool negative;
-      map<int, double> angles;
 	public:
 		// class constructor
 		Face();
@@ -28,12 +27,9 @@ class Face : public Simplex
 		~Face();
 		
 		
-		double getArea();
 		bool isNegative();
 		void setNegativity(bool);
-		void switchSide();
-		void setAngles();
-		double getAngle(int index);
+		void switchPolarity();
 };
 
 #endif // FACE_H

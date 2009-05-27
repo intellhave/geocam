@@ -8,14 +8,14 @@ Version: June 9, 2008
 #include "edge.h"
 #include "Triangulation/Triangulation.h"
 #include "Triangulation/TriangulationMath.h"
+#include "Spherical/SphericalMath.h"
+#include "Hyperbolic/HyperbolicMath.h"
 #include <math.h>
 
 // class constructor
 Face::Face() : Simplex()
 {
-
       negative = false;
-
 }
 
 // class destructor
@@ -24,16 +24,7 @@ Face::~Face()
 }
 
 
-double Face::getArea()
-{
-    Edge e1 = Triangulation::edgeTable[(*(getLocalEdges()))[0]];
-    Edge e2 = Triangulation::edgeTable[(*(getLocalEdges()))[1]];
-    Edge e3 = Triangulation::edgeTable[(*(getLocalEdges()))[2]];
-    double theta = angle(e1.getLength(), e2.getLength(), e3.getLength());
-    return (sin(theta) * e1.getLength() * e2.getLength() / 2);    
-}
-
-void Face::switchSide()
+void Face::switchPolarity()
 {
      negative = !negative;
 }
@@ -45,17 +36,4 @@ bool Face::isNegative()
 {
      return negative;
 }
-void Face::setAngles()
-{
-     angles.clear();
-     for(int i = 0; i < getLocalVertices()->size(); i++)
-     {
-         Vertex v = Triangulation::vertexTable[(*getLocalVertices())[i]];
-         angles.insert(pair<int, double>(v.getIndex(), angle(v,*this)) );
-     }
-}
 
-double Face::getAngle(int index)
-{
-   return angles[index];
-}

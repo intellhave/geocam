@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "Triangulation/triangulation.h"
+#include "Geometry/Geometry.h"
 #include "Simplex/vertex.h"
 #include "approximator.h"
 
@@ -11,13 +12,10 @@ void Approximator :: recordState(){
   map<int, Vertex>::iterator vIt;    
   map<int, Vertex>::iterator vBegin = M.begin();
   map<int, Vertex>::iterator vEnd = M.end();
-
-  Vertex vert;
   
   for(vIt = vBegin; vIt != vEnd; vIt++){
-    vert = vIt->second;
-    radiiHistory.push_back( vert.getRadius() );  
-    curvHistory.push_back( curvature(vert) );
+    radiiHistory.push_back( Geometry::radius(vIt->second) );  
+    curvHistory.push_back( Geometry::curvature(vIt->second) );
   }
 }
 

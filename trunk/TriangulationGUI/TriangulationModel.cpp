@@ -8,6 +8,7 @@ double TriangulationModel::acc;
 bool TriangulationModel::loaded;
 bool TriangulationModel::flow;
 bool TriangulationModel::smart;
+EulerApprox TriangulationModel::app(StdRicci);
 
 TriangulationModel::TriangulationModel()
 {
@@ -85,32 +86,66 @@ bool TriangulationModel::runCalcFlow(int type)
      {
         case ID_RUN_FLOW_EUCLIDEAN:
         {
-             double weightArr[Triangulation::vertexTable.size()];
-             Triangulation::getRadii(weightArr);
-             calcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
+             if(flow) {
+                app.local_derivs = *AdjRicci;
+             } else {
+                app.local_derivs = *StdRicci;
+             }
+             if(smart) {
+                app.run(acc, acc, stepSize);
+             }
+             else{
+                app.run(numSteps, stepSize);
+             }
+             //calcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
         break;
         case ID_RUN_FLOW_SPHERICAL:
         {
-             double weightArr[Triangulation::vertexTable.size()];
-             Triangulation::getRadii(weightArr);
-             sphericalCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
+             if(flow) {
+                app.local_derivs = *AdjSpherRicci;
+             } else {
+                app.local_derivs = *SpherRicci;
+             }
+             if(smart) {
+                app.run(acc, acc, stepSize);
+             }
+             else{
+                app.run(numSteps, stepSize);
+             }
+             //sphericalCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
         break;
         case ID_RUN_FLOW_HYPERBOLIC:
         {
-             double weightArr[Triangulation::vertexTable.size()];
-             Triangulation::getRadii(weightArr);
-             hyperbolicCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
+             if(flow) {
+                app.local_derivs = *AdjHypRicci;
+             } else {
+                app.local_derivs = *HypRicci;
+             }
+             if(smart) {
+                app.run(acc, acc, stepSize);
+             }
+             else{
+                app.run(numSteps, stepSize);
+             }
+             //hyperbolicCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
         break;
         case ID_RUN_FLOW_YAMABE:
         {
+             app.local_derivs = *Yamabe;
              if(smart) {
-               yamabeFlow(&weights, &curvs, stepSize, acc, acc, flow);
-             } else { 
-               yamabeFlow(&weights, &curvs, stepSize, numSteps, flow);
+                app.run(acc, acc, stepSize);
              }
+             else{
+                app.run(numSteps, stepSize);
+             }
+//             if(smart) {
+//               yamabeFlow(&weights, &curvs, stepSize, acc, acc, flow);
+//             } else { 
+//               yamabeFlow(&weights, &curvs, stepSize, numSteps, flow);
+//             }
         }
         break;
         default: return false;
@@ -130,8 +165,8 @@ bool TriangulationModel::loadFile(char* filename, int format)
        break;
        case IDLUTZ:
        {
-            makeTriangulationFile(filename, "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
-            readTriangulationFile("C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
+            makeTriangulationFile(filename, ".manifoldConverted.txt");
+            readTriangulationFile(".manifoldConverted.txt");
             loaded = true;
        }
        break;
@@ -151,8 +186,8 @@ bool TriangulationModel::load3DFile(char* filename, int format)
        break;
        case IDLUTZ:
        {
-            make3DTriangulationFile(filename, "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
-            read3DTriangulationFile("C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt");
+            make3DTriangulationFile(filename, ".manifoldConverted.txt");
+            read3DTriangulationFile(".manifoldConverted.txt");
             loaded = true;
        }
        break;
@@ -170,22 +205,22 @@ bool TriangulationModel::printResults(int printType)
      {
          case IDPRINTSTEP:
          {
-              printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
+              printResultsStep(".GUIResult.txt", &(app.radiiHistory), &(app.curvHistory));
          }
          break;
          case IDPRINTVERTEX:
          {
-              printResultsVertex("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
+              printResultsVertex(".GUIResult.txt", &(app.radiiHistory), &(app.curvHistory));
          }
          break;
          case IDPRINTNUM:
          {
-              printResultsNum("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
+              printResultsNum(".GUIResult.txt", &(app.radiiHistory), &(app.curvHistory));
          }
          break;
          case IDPRINTNUMSTEP:
          {
-              printResultsNumSteps("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", &weights, &curvs);
+              printResultsNumSteps(".GUIResult.txt", &(app.radiiHistory), &(app.curvHistory));
          }
          break;
          default: return false;

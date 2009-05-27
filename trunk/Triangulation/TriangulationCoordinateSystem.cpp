@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iomanip>
 #include "triangulation/TriangulationCoordinateSystem.h"
+#include "Geometry/Geometry.h"
 #define PI 	3.141592653589793238
 
 TriangulationCoordinateSystem::TriangulationCoordinateSystem()
@@ -56,7 +57,7 @@ void TriangulationCoordinateSystem::generatePlane()
     int v1, v2, va, vb, ea1, ea2, eb1, eb2; // Needed references
     Edge e = Triangulation::edgeTable.begin()->second; // Get the first edge.
     Point p1(0, 0);
-    Point p2(e.getLength(), 0);
+    Point p2(Geometry::length(e), 0);
     Line l1(p1, p2); // Create the first line
     putLine(e.getIndex(), l1);
     int edgesAdded = 1; // Edges added keeps track of all the lines added 
@@ -82,12 +83,12 @@ void TriangulationCoordinateSystem::generatePlane()
     vector<Point> points; // Set of solution points.
     // Rotate line l1 by the proper angle counter-clockwise and scale by 
     // length ea1 to find coordinate point for third vertex.
-    Point p3 = findPoint(l1, Triangulation::edgeTable[ea1].getLength(), 
-               angle(Triangulation::vertexTable[v1], fa));
+    Point p3 = findPoint(l1, Geometry::length(Triangulation::edgeTable[ea1]), 
+               Geometry::angle(Triangulation::vertexTable[v1], fa));
     // Rotate line l1 by the proper angle clockwise and scale by length ea1
     // to find coordinate point for third vertex.
-    Point p4 = findPoint(l1, Triangulation::edgeTable[ea1].getLength(), 
-              (-1) * angle(Triangulation::vertexTable[v1], fa));
+    Point p4 = findPoint(l1, Geometry::length(Triangulation::edgeTable[ea1]), 
+              (-1) * Geometry::angle(Triangulation::vertexTable[v1], fa));
     points.push_back(p3);
     points.push_back(p4);
     for(int i = 0; i < points.size(); i++)
@@ -120,10 +121,10 @@ void TriangulationCoordinateSystem::generatePlane()
            eb2 = temp;
         }
         vector<Point> points2; // New solution set.
-        p3 = findPoint(l1, Triangulation::edgeTable[eb1].getLength(), 
-               angle(Triangulation::vertexTable[v1], fb));
-        p4 = findPoint(l1, Triangulation::edgeTable[eb1].getLength(), 
-              (-1) * angle(Triangulation::vertexTable[v1], fb));
+        p3 = findPoint(l1, Geometry::length(Triangulation::edgeTable[eb1]), 
+               Geometry::angle(Triangulation::vertexTable[v1], fb));
+        p4 = findPoint(l1, Geometry::length(Triangulation::edgeTable[eb1]), 
+              (-1) * Geometry::angle(Triangulation::vertexTable[v1], fb));
         points2.push_back(p3);
         points2.push_back(p4);
         
@@ -229,11 +230,11 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      {
          vector<Point> points;
          // Rotate counter-clockwise along v1 from edge e to edge ea1.
-         Point p1 = findPoint(l, Triangulation::edgeTable[ea1].getLength(), 
-                              angle(Triangulation::vertexTable[v1], fa));
+         Point p1 = findPoint(l, Geometry::length(Triangulation::edgeTable[ea1]), 
+                              Geometry::angle(Triangulation::vertexTable[v1], fa));
          // Rotate clockwise along v1 from edge e to edge ea1.
-         Point p2 = findPoint(l, Triangulation::edgeTable[ea1].getLength(), 
-                              (-1) * angle(Triangulation::vertexTable[v1], fa));
+         Point p2 = findPoint(l, Geometry::length(Triangulation::edgeTable[ea1]), 
+                              (-1) * Geometry::angle(Triangulation::vertexTable[v1], fa));
          points.push_back(p1);
          points.push_back(p2);
          
@@ -289,11 +290,11 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      {
          vector<Point> points;
          // Rotate counter-clockwise along v1 from edge e to edge eb1.
-         Point p1 = findPoint(l, Triangulation::edgeTable[eb1].getLength(), 
-                              angle(Triangulation::vertexTable[v1], fb));
+         Point p1 = findPoint(l, Geometry::length(Triangulation::edgeTable[eb1]), 
+                              Geometry::angle(Triangulation::vertexTable[v1], fb));
          // Rotate clockwise along v1 from edge e to edge eb1.
-         Point p2 = findPoint(l, Triangulation::edgeTable[eb1].getLength(), 
-                              (-1) * angle(Triangulation::vertexTable[v1], fb));
+         Point p2 = findPoint(l, Geometry::length(Triangulation::edgeTable[eb1]), 
+                              (-1) * Geometry::angle(Triangulation::vertexTable[v1], fb));
          points.push_back(p1);
          points.push_back(p2);
          
@@ -412,11 +413,11 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
      }
      Point p1 = pointTable[v1];
 
-     double d12 = getPartialEdge(e, Triangulation::vertexTable[v1]);
+     double d12 = Geometry::partialEdge(Triangulation::vertexTable[v1], e);
 
      double height = getHeight(f, e);
-     double xComp = p1.x + (d12*(pointTable[v2].x - p1.x) / e.getLength());
-     double yComp = p1.y + (d12*(pointTable[v2].y - p1.y) / e.getLength());
+     double xComp = p1.x + (d12*(pointTable[v2].x - p1.x) / Geometry::length(e));
+     double yComp = p1.y + (d12*(pointTable[v2].y - p1.y) / Geometry::length(e));
      Point partial(xComp, yComp);
      Line halfLine(partial, p1);
      Point center1 = findPoint(halfLine, height, -PI/2);

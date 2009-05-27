@@ -110,39 +110,7 @@ class Triangulation
     static int greatestFace();
 	
 	static int greatestTetra();
-    /*
-     * Calculates the sum of the curvatures over all vertices.
-     */
-    static double netCurvature();
-    /*
-     * Calculates the sum of the curvatures over all vertices under
-     * spherical geometry.
-     */
-    static double netSphericalCurvature();
-    /*
-     * Calculates the sum of the curvatures over all vertices under
-     * hyperbolic geometry.
-     */
-    static double netHyperbolicCurvature();
-    
-    static double net3DCurvature();
-    
-    /*
-     * Sets the vertices to the weights provided by an array of 
-     * doubles. This requires that one know the order of the vertices
-     * as it does not use the indices.
-     */
-    static void setRadii(double*);
-    /*
-     * Places the values of the weights of the vertices into the array
-     * provided. This is done in order of the vertices in the map, not
-     * necessarily by index. Can be used to easily conjoin flows.
-     */
-    static void getRadii(double*);
-    
-    static void setLengths(double*);
-    static void setDihedralAngles();
-    static void setAngles();
+        
 };
 
 

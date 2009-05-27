@@ -230,7 +230,7 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                   // button is clicked again.
                    HWND hPoly = GetDlgItem(hwnd, IDC_POLYGON);
                    // Read in numerical data to draw flow
-                   ifstream scanner("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
+                   ifstream scanner(".GUIResult.txt");
                    // Enable the hPoly window with gl properties.
                    EnableOpenGL( hPoly, &hDC, &hRC );
                    // Set step number to 0.
@@ -338,6 +338,8 @@ These parameters do not have to be given by the user, they are
 handled by the system.
 
 Returns the standard indication of success or failure of a dialog proc.
+
+TODO: Replace references to weight with radii.
 **************************************************************/
 BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
@@ -345,13 +347,14 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
      {
         case WM_INITDIALOG:
         {
-           
            map<int, Vertex>::iterator vit;
            int i = 0;
            for(vit = Triangulation::vertexTable.begin(); 
                    vit != Triangulation::vertexTable.end(); vit++) {
-               char text[25] = "Vertex    : 1.00000 ";
-               int vertexI = vit->first;
+               char text[25] = "Vertex    : 1.00000 "; // Initialize radii
+               int vertexI = vit->first; // Index of vertex
+               // Calculate # of digits of vertex (can we replace this with
+               // scanf?)
                int arrSize = 0;
                int temp = vertexI;
                if(temp <= 0) {
@@ -362,15 +365,20 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                   arrSize++;
                  }
                }
+               // Translate index to string, copy to text
                char vertexNum[arrSize + 1];
                itoa(vertexI, vertexNum, 10);
                strncpy(text + 7, vertexNum, arrSize);
+               // Add string to listbox, get return index back
                int index = SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_ADDSTRING, 0, (LPARAM)text);
+               // Add hidden data element (index of vertex) to list item given by index
                SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETITEMDATA, (WPARAM)index, 
                                  (LPARAM)vertexI);
+               // Set the vertex's radii
                TriangulationModel::setWeight(vertexI, 1.00000);
                i++;
            }
+           // Repeat above with Etas
            map<int, Edge>::iterator eit;
            i = 0;
            for(eit = Triangulation::edgeTable.begin(); 
@@ -397,9 +405,8 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                i++;
            }
 
-           
+           // Set up openGL (for writing text)
            listbase = glGenLists(255);
- 
            // make the system font the device context's selected font
            setFont(&hFont, "Arial", 10);
                       
@@ -408,46 +415,59 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
         case WM_COMMAND:
             switch(LOWORD(wParam))
             {
-                case IDRADII_SET:
+                case IDRADII_SET: // Set button has been pushed
                 {
+                     // Get radii value from textbox
                      char weightStr[MAXWEIGHTSIZE];
                      GetDlgItemText(hwnd, IDC_RADII, weightStr, MAXWEIGHTSIZE);
                      double weight = atof(weightStr);
                      if(weightStr[0] == '\0') {
-                        // Do nothing
+                        // Do nothing if textbox is empty
                      }
-                     else if(weight <= 0.0) {
-                        MessageBox(NULL, "Invalid weight", "Error", MB_OK | MB_ICONINFORMATION);
+                     else if(weight <= 0.0) { // Check for invalid radii
+                        MessageBox(NULL, "Invalid radii", "Error", MB_OK | MB_ICONINFORMATION);
                      } else {
+                        // Get number of list items that are currently selected
        					HWND hList = GetDlgItem(hwnd, IDC_RADII_LIST);
 			            int countRadii = SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELCOUNT, 0, 0);
 					    
 						if(countRadii != 0)
 						{
-							// And then allocate room to store the list of selected items.
-
+							// And then allocate room to store the indices of selected list items.
+                            // TODO: try switching to malloc
 							int i;
 							int *buf;
                             buf = (int*)GlobalAlloc(GPTR, sizeof(int) * countRadii);
 							SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELITEMS, (WPARAM)countRadii, (LPARAM)buf);
 						    
-                            
+                            // Working backwards on list...
 							for(i = countRadii - 1; i >= 0; i--)
 							{
+                                // Get current text of list item
                                 char text[25];
                                 SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETTEXT, (WPARAM)buf[i], (LPARAM)text);
+                                // Get vertex index through hidden data element
                                 int index = SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETITEMDATA, (WPARAM)buf[i], 0);
+                                // Replace text with new radii value
                                 strncpy(text + 12, weightStr, MAXWEIGHTSIZE);
+                                // Add text as new list item in slot given by buf[i], pushing current item down one
                                 SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_INSERTSTRING, (WPARAM)buf[i], (LPARAM)text);
+                                // Set the hidden data element of new list item
                                 SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETITEMDATA, (WPARAM)buf[i], (LPARAM)index);
+                                // Set list item to be selected
                                 SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETSEL, (WPARAM)1, (LPARAM)buf[i]);
+                                // Remove old list item
                                 SendDlgItemMessage(hwnd, IDC_RADII_LIST,  LB_DELETESTRING, (WPARAM)(buf[i] + 1), 0);
+                                // Set vertex with new radii
                                 TriangulationModel::setWeight(index, weight);
      						}
-
+                            // Free buffer space
+                            // TODO: try replacing with simply free(buf)
 							GlobalFree(buf);
                           }
                      }
+                     // Repeat above with etas
+                     // TODO: This looks more condense than above, can we simplify?
                      char etaStr[MAXWEIGHTSIZE];
                      GetDlgItemText(hwnd, IDC_ETA, etaStr, MAXWEIGHTSIZE);
                      double eta = atof(etaStr);
@@ -482,7 +502,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                      return TRUE;
                 }
                 break;
-                case IDRADII_RANDOM:
+                case IDRADII_RANDOM: // Set random values for radii
                 {
                     srand(time(NULL));
                     map<int, Vertex>::iterator vit;
@@ -504,7 +524,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                     return TRUE;
                 }
                 break;
-                case IDETA_RANDOM:
+                case IDETA_RANDOM: // Set random values for etas
                 {
                     srand(time(NULL));
                     map<int, Edge>::iterator eit;
@@ -528,32 +548,43 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                 case IDC_RADII_LIST: {
                     switch(HIWORD(wParam))
 					{
-					  case LBN_SELCHANGE:
+                      // When an item has been selected or deselcted
+					  case LBN_SELCHANGE: 
 						{
+                          // Enable openGL on Radii flower window
                           HWND hRadii = GetDlgItem(hwnd, IDC_RADII_FLOWER);
                           EnableOpenGL( hRadii, &hDC, &hRC );
                           SelectObject(hDC, hFont);
-                          // create the bitmap display lists 
-                          // we're making images of glyphs 0 thru 255 
-                          // the display list numbering starts at 1000, an arbitrary choice 
+                          // This builds predefined functions for drawing 
+                          // ascii characters
                           wglUseFontBitmaps(hDC, 0, 255, listbase);
+                          // Clear screen
                           glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
                           glClear(GL_COLOR_BUFFER_BIT);
                           
-                          if(SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELCOUNT, 0, 0) == 1) {
-
+                          // If only one item is selected
+                          if(SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELCOUNT, 0, 0) == 1) 
+                          {
+                             // Get index of selected item
                              int index;
                              SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETSELITEMS, (WPARAM)1, (LPARAM)&index);
+                             // Get vertex index of slected item
                              int vIndex = (int) SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_GETITEMDATA, (WPARAM)index, 0);
+                             // Draw flower using gl function in glTriangulation
                              drawVertex(Triangulation::vertexTable[vIndex]);
+                             
+                             // Get the local edges of vertex too label them
                              vector<int> localE = *(Triangulation::vertexTable[vIndex].getLocalEdges());
                              int size = localE.size();
 
+                             // Set color of text to red
                              glColor3f(1.0f, 0.0f, 0.0f);
                              vector<int> localV;
+                             // For each edge, label opposite vertex's index
                              for(int i = 0; i < size; i++) {
                                  Edge edge = Triangulation::edgeTable[localE[i]];
                                  localV = *(edge.getLocalVertices());
+                                 // Multiplexes to choose other vertex
                                  int otherIndex = localV[0] == vIndex ? 1 : 0; 
                                  float angle = (float) 2 * PI / size * i;
                                  int arrSize = 0;
@@ -568,12 +599,14 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                                  }
                                  char vertexNum[arrSize + 1];
                                  itoa(localV[otherIndex], vertexNum, 10);
-                                
+                                 // Draw text
                                  drawText(.8*cos(angle), .8*sin(angle), arrSize, vertexNum, listbase);
 
                              }
                              
+                             // Change text color to blue
                              glColor3f(0.0f, 0.0f, 1.0f);
+                             // For each edge, label index of edge
                              for(int i = 0; i < size; i++) {
                                  float angle = (float) 2 * PI / size * i;
                                  int arrSize = 0;
@@ -606,33 +639,34 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                 case IDC_ETA_LIST: {
                     switch(HIWORD(wParam))
 					{
+                      // When item in eta listbox has been selected or deselected
 					  case LBN_SELCHANGE:
 						{
                           HWND hEta = GetDlgItem(hwnd, IDC_ETA_FLOWER);
                           EnableOpenGL( hEta, &hDC, &hRC );
                           SelectObject(hDC, hFont);
-                          // create the bitmap display lists 
-                          // we're making images of glyphs 0 thru 255 
-                          // the display list numbering starts at 1000, an arbitrary choice 
                           wglUseFontBitmaps(hDC, 0, 255, listbase);
-
                           glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
                           glClear(GL_COLOR_BUFFER_BIT);
-                          if(SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELCOUNT, 0, 0) == 1) {
-
+                          
+                          if(SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELCOUNT, 0, 0) == 1) 
+                          {
                              int index;
                              SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELITEMS, (WPARAM)1, (LPARAM)&index);
                              int eIndex = (int) SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETITEMDATA, (WPARAM)index, 0);
                              vector<int> localV = *(Triangulation::edgeTable[eIndex].getLocalVertices());
                              int size = localV.size();
+                             // Draw edge and circles
                              drawEdge(Triangulation::edgeTable[eIndex]);
                              double edgeL = Triangulation::edgeTable[eIndex].getLength();
 
+                             // Give length of edge
                              char lengthArr[15];
                              sprintf(lengthArr, "%f", edgeL);
                              glColor3f(0.0f, 0.0f, 1.0f);
                              drawText(0.2, -0.9, strlen(lengthArr), lengthArr, listbase);
-                                                      
+                             
+                             // Label vertices
                              glColor3f(1.0f, 0.0f, 0.0f);
                              // Specify the position of the text
                              int arrSize = 0;
@@ -676,6 +710,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                     }
                 }
                 break;
+                // Clear listbases on exit
                 case IDOK: 
                 {
                     if(listbase)
@@ -696,6 +731,24 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
     return TRUE;
 }
 
+/**************************************************************
+Function: FormatDlgProc
+Parameters: HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
+Returns: BOOL
+***************************************************************
+Quick dialog box to indicate whether a chosen triangulation file
+is in a standard or lutz format.
+
+The FormatDlgProc, like all dialog procs has the following parameters:
+    HWND hwnd - The parent window calling the procedure
+    UINT Message - The particular command sent to the dialog box
+    WPARAM wParam - Possibly a parameter attached to the Message.
+    LPARAM lParam - Possibly a parameter attached to the Message.
+These parameters do not have to be given by the user, they are
+handled by the system.
+
+Returns indication of either standard or lutz format.
+**************************************************************/
 BOOL CALLBACK FormatDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
      switch(Message)
@@ -708,6 +761,7 @@ BOOL CALLBACK FormatDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
            {
               MessageBox(NULL, "m_hCmbo is NULL", "Error", MB_OK | MB_ICONINFORMATION);
            }
+           // Build combobox
            SendMessage(hcombo, CB_ADDSTRING, 0, (LPARAM)"Standard");
            SendMessage(hcombo, CB_ADDSTRING, 1, (LPARAM)"Lutz");
            return TRUE;
@@ -737,12 +791,33 @@ BOOL CALLBACK FormatDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPara
     }
     return TRUE;
 }
+
+/**************************************************************
+Function: FlowDlgProc
+Parameters: HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
+Returns: BOOL
+***************************************************************
+The main dialog box when preparing to run a curvature flow.
+
+The FormatDlgProc, like all dialog procs has the following parameters:
+    HWND hwnd - The parent window calling the procedure
+    UINT Message - The particular command sent to the dialog box
+    WPARAM wParam - Possibly a parameter attached to the Message.
+    LPARAM lParam - Possibly a parameter attached to the Message.
+These parameters do not have to be given by the user, they are
+handled by the system.
+
+Returns what fromat radii are in.
+
+TODO: Replace "weight" with "radii".
+**************************************************************/
 BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
      switch(Message)
      {
         case WM_INITDIALOG:
         {
+           // Build comboboxes
            HWND hcombo = NULL;
            hcombo = GetDlgItem(hwnd, IDC_WEIGHTSELECTBOX);
            if(hcombo == NULL)
@@ -763,7 +838,8 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
            return TRUE;
         }
         case WM_COMMAND:
-            // Inspect check box
+            // Inspect check box and possibly update based on result.
+            // Gray out the option not chosen.
             switch(SendDlgItemMessage(hwnd, IDC_SMART_CB, BM_GETCHECK, 0, 0) )
             {
                case BST_CHECKED:
@@ -786,13 +862,16 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
             {
                 case IDOK: 
                 {
+                    // Ready indicates flow options are all set and valid.
                     BOOL ready = TRUE;
+                    // Get format radii will be in from combobox
                     char weight[25];
                     GetDlgItemText(hwnd, IDC_WEIGHTSELECTBOX, weight, 25);
+                    // Get whether flow will be normalized or standard.
                     char flow[25];
                     GetDlgItemText(hwnd, IDC_FLOWSELECTBOX, flow, 25);
                     TriangulationModel::setFlowFunction(flow[0] == 'N');
-                    
+                    // Set either accuracy or num steps given checkbox
                     switch(SendDlgItemMessage(hwnd, IDC_SMART_CB, BM_GETCHECK, 0, 0) )
                     {
                       case BST_CHECKED:
@@ -824,7 +903,7 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                       break;
                       default: return FALSE;
                     }
-                    
+                    // Get stepsize (dt)
                     char stepsizeStr[MAXDOUBLE_LEN];
                     GetDlgItemText(hwnd, IDC_DTTEXT, stepsizeStr, MAXDOUBLE_LEN);
                     double stepsize = atof(stepsizeStr);
@@ -834,7 +913,8 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                     }          
                     else 
                        TriangulationModel::setStepSize(stepsize);
-                       
+                    
+                    // If ready, end dialog box with given radii format.
                     if(ready && weight[0] == 'R')
                        EndDialog(hwnd, IDWEIGHTSRANDOM);
                     else if(ready && weight[0] == 'F')
@@ -855,6 +935,22 @@ BOOL CALLBACK FlowDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
     }
     return TRUE;
 }
+
+/**************************************************************
+Function: FlowDlgProc
+Parameters: HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
+Returns: BOOL
+***************************************************************
+The main GUI window.
+
+The FormatDlgProc, like all dialog procs has the following parameters:
+    HWND hwnd - The parent window calling the procedure
+    UINT Message - The particular command sent to the dialog box
+    WPARAM wParam - Possibly a parameter attached to the Message.
+    LPARAM lParam - Possibly a parameter attached to the Message.
+These parameters do not have to be given by the user, they are
+handled by the system.
+**************************************************************/
 BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	switch(Message)
@@ -1267,19 +1363,19 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                         case 's':
                         {
                              TriangulationModel::printResults(IDPRINTSTEP);
-                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
+                             LoadTextFile(hedit, ".GUIResult.txt");
                         }
                         break;
                         case 'v':
                         {
                              TriangulationModel::printResults(IDPRINTVERTEX);
-                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
+                             LoadTextFile(hedit, ".GUIResult.txt");
                         }
                         break;
                         case 'n':
                         {
                              TriangulationModel::printResults(IDPRINTNUM);
-                             LoadTextFile(hedit, "C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt");
+                             LoadTextFile(hedit, ".GUIResult.txt");
                         }
                         break;
                         case 'l':
