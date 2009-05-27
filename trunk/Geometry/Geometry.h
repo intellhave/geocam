@@ -5,7 +5,7 @@
 #define FLOW      2
 
 #include "triangulation/triangulation.h"
-#include "ver2/geometry/geoquant.h"
+#include "geoquant.h"
 
 typedef enum geonum{Euclidean, Hyperbolic, Spherical} geometry;
 typedef enum dimnum{TwoD, ThreeD} dimension;

@@ -1,8 +1,8 @@
 #include "Geometry.h"
-#include "ver2/geometry/geoquant.h"
-#include "ver2/geometry/triposition.h"
+#include "geoquant.h"
+#include "triposition.h"
 #include "triangulation/triangulation.h"
-#include "ver2/geometry/geoquants.h"
+#include "geoquants.h"
 
 geometry Geometry::geo = Euclidean;
 dimension Geometry::dim = TwoD;
