@@ -30,4 +30,14 @@ void EdgeCurvature::recalculate() {
     
     value = curv;
 }
+
+void Init_EdgeCurvatures(GQIndex& gqi) {
+     map<int, Edge>::iterator eit;
+     for(eit = Triangulation::edgeTable.begin();
+               eit != Triangulation::edgeTable.end(); eit++)
+     {
+         EdgeCurvature *ec = new EdgeCurvature(eit->second, gqi);
+         gqi[ ec->getPosition()] = ec;
+     }     
+}
 #endif /* EDGECURVATURE_CPP_ */

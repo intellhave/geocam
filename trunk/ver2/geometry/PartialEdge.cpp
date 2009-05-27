@@ -35,4 +35,19 @@ void PartialEdge::recalculate(){
            - pow(radB->getValue(), 2)) / (2 * length);
 }
 
+void Init_PartialEdges(GQIndex& gqi) {
+     map<int, Vertex>::iterator vit;
+     vector<int> edges;
+     for(vit = Triangulation::vertexTable.begin(); 
+               vit != Triangulation::vertexTable.end(); vit++)
+     {
+         edges = *(vit->second.getLocalEdges());
+         Edge e;
+         for(int i = 0; i < edges.size(); i++) {
+             e = Triangulation::edgeTable[edges[i]];
+             PartialEdge *pe = new PartialEdge(vit->second, e, gqi);
+             gqi[pe->getPosition()] = pe;         
+         }
+     }
+}
 #endif /* PARTEDGE_H_ */

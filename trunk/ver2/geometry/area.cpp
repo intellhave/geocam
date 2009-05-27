@@ -34,4 +34,14 @@ void Area::recalculate(){
     double s = (l1 + l2 + l3) * 0.5;
     value = sqrt(s * (s - l1) * (s - l2) * (s - l3));
 }
+
+void Init_Areas(GQIndex& gqi) {
+     map<int, Face>::iterator fit;
+     for(fit = Triangulation::faceTable.begin(); 
+               fit != Triangulation::faceTable.end(); fit++)
+     {
+         Area *a = new Area(fit->second, gqi);
+         gqi[a->getPosition()] = a; 
+     }    
+}
 #endif /* AREA_CPP_ */

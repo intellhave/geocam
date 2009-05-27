@@ -22,8 +22,7 @@ class Geometry {
        static int mode;
        static double spherRadius;
        
-       static void build();
-       static void build( quantID quantType);       
+       static void build();       
        
        static void setMode(int m);
        static void setGeometry(geometry g);

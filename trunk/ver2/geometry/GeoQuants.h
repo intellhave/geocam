@@ -78,6 +78,7 @@ class SphericalAngle : public virtual GeoQuant {
 
   void recalculate();
 };
+void Init_SphericalAngles(GQIndex& gqi);
 /***************************/
 
 /***** HYPERBOLIC ANGLE *****/
@@ -92,6 +93,7 @@ class HyperbolicAngle : public virtual GeoQuant {
 
   void recalculate();
 };
+void Init_HyperbolicAngles(GQIndex& gqi);
 /***************************/
 
 /***** AREA *****/
@@ -104,6 +106,7 @@ class Area : public virtual GeoQuant {
 
   void recalculate();
 };
+void Init_Areas(GQIndex& gqi);
 /****************/
 
 /***** 2D CURVATURE *****/
@@ -144,6 +147,7 @@ class Volume : public virtual GeoQuant {
 
   void recalculate();
 };
+void Init_Volumes(GQIndex& gqi);
 /******************/
 
 /***** EDGE CURVATURE *****/
@@ -158,6 +162,7 @@ class EdgeCurvature : public virtual GeoQuant {
 
   void recalculate();
 };
+void Init_EdgeCurvatures(GQIndex& gqi);
 /*************************/
 
 /***** PARTIAL EDGE *****/
@@ -172,6 +177,7 @@ class PartialEdge : public virtual GeoQuant {
 
   void recalculate();
 };
+void Init_PartialEdges(GQIndex& gqi);
 /************************/
 
 /***** 3D CURVATURE *****/
@@ -187,6 +193,7 @@ class Curvature3D : public virtual GeoQuant {
 
   void recalculate();
 };
+void Init_Curvature3Ds(GQIndex& gqi);
 /***********************/
 
 

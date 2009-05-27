@@ -35,4 +35,18 @@ void SphericalAngle::recalculate(){
     value = acos((cos(c*c) - cos(b*b)*cos(a*a))/ (sin(a)*sin(b)));
 }
 
+void Init_SphericalAngles(GQIndex& gqi){
+  map<int, Vertex>::iterator vit;
+  for(vit = Triangulation::vertexTable.begin();
+      vit != Triangulation::vertexTable.end(); vit++){
+    vector<int>* faces = vit->second.getLocalFaces();
+    
+    for(int ii = 0; ii < faces->size(); ii++){
+      Face& f = Triangulation::faceTable[ faces->at(ii) ];
+      SphericalAngle* ea = new SphericalAngle(vit->second, f, gqi);
+      GeoQuant* gq = gqi[ea->getPosition()];
+      gqi[ ea->getPosition() ] = ea;            
+    }
+  }
+}
 #endif /* SPHERANGLE_CPP_ */

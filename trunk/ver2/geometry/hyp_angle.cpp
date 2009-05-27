@@ -35,4 +35,19 @@ void HyperbolicAngle::recalculate(){
     value = acos((cosh(c*c) - cosh(b*b)*cosh(a*a))/ (sinh(a)*sinh(b)));
 }
 
+void Init_HyperbolicAngles(GQIndex& gqi){
+  map<int, Vertex>::iterator vit;
+  for(vit = Triangulation::vertexTable.begin();
+      vit != Triangulation::vertexTable.end(); vit++){
+    vector<int>* faces = vit->second.getLocalFaces();
+    
+    for(int ii = 0; ii < faces->size(); ii++){
+      Face& f = Triangulation::faceTable[ faces->at(ii) ];
+      HyperbolicAngle* ea = new HyperbolicAngle(vit->second, f, gqi);
+      GeoQuant* gq = gqi[ea->getPosition()];
+      gqi[ ea->getPosition() ] = ea;            
+    }
+  }
+}
+
 #endif /* HYPANGLE_CPP_ */

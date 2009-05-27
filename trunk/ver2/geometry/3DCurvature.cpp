@@ -41,4 +41,13 @@ void Curvature3D::recalculate() {
     
     value = curv;
 }
+
+void Init_Curvature3Ds(GQIndex& gqi) {
+     map<int, Vertex>::iterator vit;
+     for(vit= Triangulation::vertexTable.begin(); 
+              vit != Triangulation::vertexTable.end(); vit++) {
+         Curvature3D *curv3D = new Curvature3D(vit->second, gqi);
+         gqi[curv3D->getPosition()]  = curv3D;
+     }   
+}
 #endif /* THREEDCURVATURE_CPP_ */

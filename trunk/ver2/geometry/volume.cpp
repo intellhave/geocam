@@ -58,4 +58,13 @@ void Volume::recalculate() {
    value = CayleyMenger;
 }
 
+void Init_Volumes(GQIndex& gqi) {
+     map<int, Tetra>::iterator tit;
+     for(tit = Triangulation::tetraTable.begin();
+               tit != Triangulation::tetraTable.end(); tit++)
+     {
+         Volume *v = new Volume(tit->second, gqi);
+         gqi[v->getPosition()] = v; 
+     }    
+}
 #endif /* VOLUME_H_ */

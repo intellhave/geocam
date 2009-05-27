@@ -46,10 +46,6 @@ void Init_EuclideanAngles(GQIndex& gqi){
       Face& f = Triangulation::faceTable[ faces->at(ii) ];
       EuclideanAngle* ea = new EuclideanAngle(vit->second, f, gqi);
       GeoQuant* gq = gqi[ea->getPosition()];
-      if(gq != NULL) {
-	fprintf(stdout, "Angle ejected!\n");
-	gq->getPosition().print();
-      }
       gqi[ ea->getPosition() ] = ea;            
     }
   }
