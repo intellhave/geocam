@@ -230,7 +230,7 @@ BOOL CALLBACK PolygonProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                   // button is clicked again.
                    HWND hPoly = GetDlgItem(hwnd, IDC_POLYGON);
                    // Read in numerical data to draw flow
-                   ifstream scanner(".GUIResult.txt");
+                   ifstream scanner("GUIResult.txt");
                    // Enable the hPoly window with gl properties.
                    EnableOpenGL( hPoly, &hDC, &hRC );
                    // Set step number to 0.
@@ -374,8 +374,8 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                // Add hidden data element (index of vertex) to list item given by index
                SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETITEMDATA, (WPARAM)index, 
                                  (LPARAM)vertexI);
-               // Set the vertex's radii
-               TriangulationModel::setWeight(vertexI, 1.00000);
+               // Set the vertex's radius
+               TriangulationModel::setRadius(vertexI, 1.00000);
                i++;
            }
            // Repeat above with Etas
@@ -459,7 +459,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                                 // Remove old list item
                                 SendDlgItemMessage(hwnd, IDC_RADII_LIST,  LB_DELETESTRING, (WPARAM)(buf[i] + 1), 0);
                                 // Set vertex with new radii
-                                TriangulationModel::setWeight(index, weight);
+                                TriangulationModel::setRadius(index, weight);
      						}
                             // Free buffer space
                             // TODO: try replacing with simply free(buf)
@@ -482,8 +482,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
 							int *buf;
                             buf = (int*)GlobalAlloc(GPTR, sizeof(int) * countEta);
 							SendDlgItemMessage(hwnd, IDC_ETA_LIST, LB_GETSELITEMS, (WPARAM)countEta, (LPARAM)buf);
-						    
-                            
+			
 							for(i = countEta - 1; i >= 0; i--)
 							{
                                 char text[25];
@@ -518,7 +517,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                         SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_INSERTSTRING, (WPARAM)i, (LPARAM)text);
                         SendDlgItemMessage(hwnd, IDC_RADII_LIST,  LB_DELETESTRING, (WPARAM)(i + 1), 0);
                         SendDlgItemMessage(hwnd, IDC_RADII_LIST, LB_SETITEMDATA, (WPARAM)i, (LPARAM)vit->first);
-                        TriangulationModel::setWeight(vit->first, weight);
+                        TriangulationModel::setRadius(vit->first, weight);
                         i++;
                     }
                     return TRUE;
@@ -658,7 +657,7 @@ BOOL CALLBACK RadiiDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
                              int size = localV.size();
                              // Draw edge and circles
                              drawEdge(Triangulation::edgeTable[eIndex]);
-                             double edgeL = Triangulation::edgeTable[eIndex].getLength();
+                             double edgeL = Geometry::length(Triangulation::edgeTable[eIndex]);
 
                              // Give length of edge
                              char lengthArr[15];
@@ -1066,8 +1065,9 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                      map<int, Edge>::iterator eit;
                      for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
                      {
-                         eit->second.setEta(1.0);
+                         TriangulationModel::setEta(eit->first, 1.0);
                      }
+
                      int ret = DialogBox(GetModuleHandle(NULL),
                         MAKEINTRESOURCE(IDD_FLOWDIALOG), hwnd, FlowDlgProc);
                      switch(ret)
@@ -1081,8 +1081,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                             {
                                weightsVec.push_back(rand() % 10 + 1);
                             }
-                            TriangulationModel::setWeights(&weightsVec);
-                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_EUCLIDEAN);
+                            TriangulationModel::setRadii(&weightsVec);
+                            TriangulationModel::runFlow(ID_RUN_FLOW_EUCLIDEAN);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -1104,8 +1104,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
                                break;
                             }
-                            TriangulationModel::setWeights(&weightsVec);
-                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_EUCLIDEAN);
+                            TriangulationModel::setRadii(&weightsVec);
+                            TriangulationModel::runFlow(ID_RUN_FLOW_EUCLIDEAN);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -1116,7 +1116,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                              if(ret == IDCANCEL) {
                                UpdateConsole(hwnd, "Flow canceled.\r\n");
                              } else if(ret == IDOK) {
-                               TriangulationModel::runCalcFlow(ID_RUN_FLOW_EUCLIDEAN);
+                               TriangulationModel::runFlow(ID_RUN_FLOW_EUCLIDEAN);
                                UpdateConsole(hwnd, "Flow complete.\r\n");
                              }
                         }
@@ -1152,8 +1152,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                             {
                                weightsVec.push_back((rand() % 100 + 1) / 125.0);
                             }
-                            TriangulationModel::setWeights(&weightsVec);
-                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_SPHERICAL);
+                            TriangulationModel::setRadii(&weightsVec);
+                            TriangulationModel::runFlow(ID_RUN_FLOW_SPHERICAL);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -1175,8 +1175,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
                                break;
                             }
-                            TriangulationModel::setWeights(&weightsVec);
-                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_SPHERICAL);
+                            TriangulationModel::setRadii(&weightsVec);
+                            TriangulationModel::runFlow(ID_RUN_FLOW_SPHERICAL);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -1187,7 +1187,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                              if(ret == IDCANCEL) {
                                UpdateConsole(hwnd, "Flow canceled.\r\n");
                              } else if(ret == IDOK) {
-                               TriangulationModel::runCalcFlow(ID_RUN_FLOW_SPHERICAL);
+                               TriangulationModel::runFlow(ID_RUN_FLOW_SPHERICAL);
                                UpdateConsole(hwnd, "Flow complete.\r\n");
                              }
                         }
@@ -1224,8 +1224,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                             {
                                weightsVec.push_back((rand() % 100 + 1) / 125.0);
                             }
-                            TriangulationModel::setWeights(&weightsVec);
-                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_HYPERBOLIC);
+                            TriangulationModel::setRadii(&weightsVec);
+                            TriangulationModel::runFlow(ID_RUN_FLOW_HYPERBOLIC);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -1247,8 +1247,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                MessageBox(NULL, "Improper file for weights", "Error", MB_OK | MB_ICONINFORMATION);
                                break;
                             }
-                            TriangulationModel::setWeights(&weightsVec);
-                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_HYPERBOLIC);
+                            TriangulationModel::setRadii(&weightsVec);
+                            TriangulationModel::runFlow(ID_RUN_FLOW_HYPERBOLIC);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -1259,7 +1259,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                              if(ret == IDCANCEL) {
                                UpdateConsole(hwnd, "Flow canceled.\r\n");
                              } else if(ret == IDOK) {
-                               TriangulationModel::runCalcFlow(ID_RUN_FLOW_HYPERBOLIC);
+                               TriangulationModel::runFlow(ID_RUN_FLOW_HYPERBOLIC);
                                UpdateConsole(hwnd, "Flow complete.\r\n");
                              }
                         }
@@ -1295,8 +1295,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                             {
                                weightsVec.push_back(1.5 + (rand() % 100) / 100.0);
                             }
-                            TriangulationModel::setWeights(&weightsVec);
-                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_YAMABE);
+                            TriangulationModel::setRadii(&weightsVec);
+                            TriangulationModel::runFlow(ID_RUN_FLOW_YAMABE);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -1323,8 +1323,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                }
                                break;
                             }
-                            TriangulationModel::setWeights(&weightsVec);
-                            TriangulationModel::runCalcFlow(ID_RUN_FLOW_YAMABE);
+                            TriangulationModel::setRadii(&weightsVec);
+                            TriangulationModel::runFlow(ID_RUN_FLOW_YAMABE);
                             UpdateConsole(hwnd, "Flow complete.\r\n");
                         }
                         break;
@@ -1336,7 +1336,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                UpdateConsole(hwnd, "Flow canceled.\r\n");
                              } else if(ret == IDOK) {
                                SendDlgItemMessage(hwnd, IDC_PROGRESS, PBM_STEPIT, 0, 0);
-                               TriangulationModel::runCalcFlow(ID_RUN_FLOW_YAMABE);
+                               TriangulationModel::runFlow(ID_RUN_FLOW_YAMABE);
                                UpdateConsole(hwnd, "Flow complete.\r\n");
                              }
                         }
@@ -1363,19 +1363,22 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                         case 's':
                         {
                              TriangulationModel::printResults(IDPRINTSTEP);
-                             LoadTextFile(hedit, ".GUIResult.txt");
+                             LoadTextFile(hedit, "GUIResult.txt");
+                             remove("manifoldConverted.txt");
                         }
                         break;
                         case 'v':
                         {
                              TriangulationModel::printResults(IDPRINTVERTEX);
-                             LoadTextFile(hedit, ".GUIResult.txt");
+                             LoadTextFile(hedit, "GUIResult.txt");
+                             remove("manifoldConverted.txt");
                         }
                         break;
                         case 'n':
                         {
                              TriangulationModel::printResults(IDPRINTNUM);
-                             LoadTextFile(hedit, ".GUIResult.txt");
+                             LoadTextFile(hedit, "GUIResult.txt");
+                             remove("manifoldConverted.txt");
                         }
                         break;
                         case 'l':
@@ -1386,6 +1389,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                 MAKEINTRESOURCE(IDD_POLYGON), hwnd, PolygonProc);
 
                               UpdateConsole(hwnd, "Polygon flow complete.\r\n");
+                              remove("manifoldConverted.txt");
                         }
                         break;
                         default:

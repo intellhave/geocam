@@ -14,8 +14,14 @@ void Approximator :: recordState(){
   map<int, Vertex>::iterator vEnd = M.end();
   
   for(vIt = vBegin; vIt != vEnd; vIt++){
-    radiiHistory.push_back( Geometry::radius(vIt->second) );  
-    curvHistory.push_back( Geometry::curvature(vIt->second) );
+    radiiHistory.push_back( Geometry::radius(vIt->second) );
+    if(Geometry::dim == ThreeD) {  
+         curvHistory.push_back( Geometry::curvature(vIt->second) /
+                                Geometry::radius(vIt->second) );
+    }
+    else {
+         curvHistory.push_back( Geometry::curvature(vIt->second) );
+    }
   }
 }
 

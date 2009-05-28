@@ -77,7 +77,7 @@ class Triangulation
     
     static void eraseTetra(int);
     
-    static void resetTriangulation();
+    static void reset();
     /*
      * Returns true if the current triangulation contains a vertex
      * represented by the given integer.

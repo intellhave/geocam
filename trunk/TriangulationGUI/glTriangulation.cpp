@@ -67,9 +67,9 @@ void drawEdge(Edge edge)
 {
     vector<int> localV = *(edge.getLocalVertices());
     int size = localV.size();
-    double edgeL = edge.getLength();
-    double radii1 = Triangulation::vertexTable[localV[0]].getRadius();
-    double radii2 = Triangulation::vertexTable[localV[1]].getRadius();
+    double edgeL = Geometry::length(edge);
+    double radii1 = Geometry::radius(Triangulation::vertexTable[localV[0]]);
+    double radii2 = Geometry::radius(Triangulation::vertexTable[localV[1]]);
                              
     glBegin(GL_LINES);
     glColor3f( 0.0f, 0.0f, 0.0f );

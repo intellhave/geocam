@@ -1,5 +1,6 @@
 #include "TriangulationModel.h"
 
+
 vector<double> TriangulationModel::weights;
 vector<double> TriangulationModel::curvs;
 int TriangulationModel::numSteps;
@@ -8,7 +9,7 @@ double TriangulationModel::acc;
 bool TriangulationModel::loaded;
 bool TriangulationModel::flow;
 bool TriangulationModel::smart;
-EulerApprox TriangulationModel::app(StdRicci);
+Approximator* TriangulationModel::app = new EulerApprox(StdRicci);;
 
 TriangulationModel::TriangulationModel()
 {
@@ -19,20 +20,18 @@ TriangulationModel::TriangulationModel()
 TriangulationModel::~TriangulationModel()
 {
    clearSystem();
+   delete app;
 }
 void TriangulationModel::clearSystem()
 {
-   weights.clear();
-   curvs.clear();
-   numSteps = 0;
-   stepSize = 0.0;
+   clearData();
    loaded = false;
-   Triangulation::resetTriangulation();
+   Geometry::reset();
+   Triangulation::reset();
 }
 void TriangulationModel::clearData()
 {
-    weights.clear();
-    curvs.clear();
+    app->clearHistories();
     numSteps = 0;
     stepSize = 0.0;
 }
@@ -56,7 +55,7 @@ void TriangulationModel::setSmartFlow(bool smartF)
 {
      smart = smartF;
 }
-void TriangulationModel::setWeights(vector<double> *weightsVec) {
+void TriangulationModel::setRadii(vector<double> *weightsVec) {
      if(weightsVec->size() != Triangulation::vertexTable.size()) {
         return;
      }
@@ -64,19 +63,19 @@ void TriangulationModel::setWeights(vector<double> *weightsVec) {
      for(int i = 0; i < weightsVec->size(); i++) {
          weightArr[i] = (*weightsVec)[i];
      }
-     Triangulation::setRadii(weightArr);
+     Geometry::setRadii(weightArr);
 }
-void TriangulationModel::setWeight(int vertex, double weight) {
-     Triangulation::vertexTable[vertex].setRadius(weight);
+void TriangulationModel::setRadius(int vertex, double weight) {
+     Geometry::setRadius(Triangulation::vertexTable[vertex], weight);
 }
 void TriangulationModel::setEta(int edge, double eta) {
-     Triangulation::edgeTable[edge].setEta(eta);
+     Geometry::setEta(Triangulation::edgeTable[edge], eta);
 }
 bool TriangulationModel::isLoaded()
 {
      return loaded;
 }
-bool TriangulationModel::runCalcFlow(int type)
+bool TriangulationModel::runFlow(int type)
 {
      if(!loaded)
      {
@@ -87,15 +86,15 @@ bool TriangulationModel::runCalcFlow(int type)
         case ID_RUN_FLOW_EUCLIDEAN:
         {
              if(flow) {
-                app.local_derivs = *AdjRicci;
+                app->local_derivs = *AdjRicci;
              } else {
-                app.local_derivs = *StdRicci;
+                app->local_derivs = *StdRicci;
              }
              if(smart) {
-                app.run(acc, acc, stepSize);
+                app->run(acc, acc, stepSize);
              }
              else{
-                app.run(numSteps, stepSize);
+                app->run(numSteps, stepSize);
              }
              //calcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
@@ -103,15 +102,15 @@ bool TriangulationModel::runCalcFlow(int type)
         case ID_RUN_FLOW_SPHERICAL:
         {
              if(flow) {
-                app.local_derivs = *AdjSpherRicci;
+                app->local_derivs = *AdjSpherRicci;
              } else {
-                app.local_derivs = *SpherRicci;
+                app->local_derivs = *SpherRicci;
              }
              if(smart) {
-                app.run(acc, acc, stepSize);
+                app->run(acc, acc, stepSize);
              }
              else{
-                app.run(numSteps, stepSize);
+                app->run(numSteps, stepSize);
              }
              //sphericalCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
@@ -119,27 +118,27 @@ bool TriangulationModel::runCalcFlow(int type)
         case ID_RUN_FLOW_HYPERBOLIC:
         {
              if(flow) {
-                app.local_derivs = *AdjHypRicci;
+                app->local_derivs = *AdjHypRicci;
              } else {
-                app.local_derivs = *HypRicci;
+                app->local_derivs = *HypRicci;
              }
              if(smart) {
-                app.run(acc, acc, stepSize);
+                app->run(acc, acc, stepSize);
              }
              else{
-                app.run(numSteps, stepSize);
+                app->run(numSteps, stepSize);
              }
              //hyperbolicCalcFlow(&weights, &curvs, stepSize, weightArr, numSteps, flow);
         }
         break;
         case ID_RUN_FLOW_YAMABE:
         {
-             app.local_derivs = *Yamabe;
+             app->local_derivs = *Yamabe;
              if(smart) {
-                app.run(acc, acc, stepSize);
+                app->run(acc, acc, stepSize);
              }
              else{
-                app.run(numSteps, stepSize);
+                app->run(numSteps, stepSize);
              }
 //             if(smart) {
 //               yamabeFlow(&weights, &curvs, stepSize, acc, acc, flow);
@@ -165,13 +164,16 @@ bool TriangulationModel::loadFile(char* filename, int format)
        break;
        case IDLUTZ:
        {
-            makeTriangulationFile(filename, ".manifoldConverted.txt");
-            readTriangulationFile(".manifoldConverted.txt");
+            makeTriangulationFile(filename, "manifoldConverted.txt");
+            readTriangulationFile("manifoldConverted.txt");
+            remove("manifoldConverted.txt");
             loaded = true;
        }
        break;
        default: return false;
     }
+    Geometry::setDimension(TwoD);
+    Geometry::build();
     return true;
 }
 bool TriangulationModel::load3DFile(char* filename, int format)
@@ -186,13 +188,16 @@ bool TriangulationModel::load3DFile(char* filename, int format)
        break;
        case IDLUTZ:
        {
-            make3DTriangulationFile(filename, ".manifoldConverted.txt");
-            read3DTriangulationFile(".manifoldConverted.txt");
+            make3DTriangulationFile(filename, "manifoldConverted.txt");
+            read3DTriangulationFile("manifoldConverted.txt");
+            remove("manifoldConverted.txt");
             loaded = true;
        }
        break;
        default: return false;
     }
+    Geometry::setDimension(ThreeD);
+    Geometry::build();
     return true;
 }
 bool TriangulationModel::printResults(int printType)
@@ -205,22 +210,22 @@ bool TriangulationModel::printResults(int printType)
      {
          case IDPRINTSTEP:
          {
-              printResultsStep(".GUIResult.txt", &(app.radiiHistory), &(app.curvHistory));
+              printResultsStep("GUIResult.txt", &(app->radiiHistory), &(app->curvHistory));
          }
          break;
          case IDPRINTVERTEX:
          {
-              printResultsVertex(".GUIResult.txt", &(app.radiiHistory), &(app.curvHistory));
+              printResultsVertex("GUIResult.txt", &(app->radiiHistory), &(app->curvHistory));
          }
          break;
          case IDPRINTNUM:
          {
-              printResultsNum(".GUIResult.txt", &(app.radiiHistory), &(app.curvHistory));
+              printResultsNum("GUIResult.txt", &(app->radiiHistory), &(app->curvHistory));
          }
          break;
          case IDPRINTNUMSTEP:
          {
-              printResultsNumSteps(".GUIResult.txt", &(app.radiiHistory), &(app.curvHistory));
+              printResultsNumSteps("GUIResult.txt", &(app->radiiHistory), &(app->curvHistory));
          }
          break;
          default: return false;

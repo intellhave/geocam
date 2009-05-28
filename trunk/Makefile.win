@@ -5,8 +5,8 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = 
-OBJ  = Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/main.o flow/parsecalc.o Geometry/Geometry.o ver2/geometry/area.o ver2/geometry/2DCurvature.o ver2/geometry/dih_angle.o ver2/geometry/eta.o ver2/geometry/euc_angle.o ver2/geometry/length.o ver2/geometry/radius.o ver2/geometry/triposition.o ver2/geometry/volume.o ver2/geometry/3DCurvature.o ver2/geometry/EdgeCurvature.o ver2/geometry/PartialEdge.o ver2/geometry/spher_angle.o ver2/geometry/hyp_angle.o $(RES)
-LINKOBJ  = Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/main.o flow/parsecalc.o Geometry/Geometry.o ver2/geometry/area.o ver2/geometry/2DCurvature.o ver2/geometry/dih_angle.o ver2/geometry/eta.o ver2/geometry/euc_angle.o ver2/geometry/length.o ver2/geometry/radius.o ver2/geometry/triposition.o ver2/geometry/volume.o ver2/geometry/3DCurvature.o ver2/geometry/EdgeCurvature.o ver2/geometry/PartialEdge.o ver2/geometry/spher_angle.o ver2/geometry/hyp_angle.o $(RES)
+OBJ  = Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/main.o flow/parsecalc.o Geometry/Geometry.o Geometry/volume.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o $(RES)
+LINKOBJ  = Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/main.o flow/parsecalc.o Geometry/Geometry.o Geometry/volume.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
 INCS =  -I"include"  -I"C:/Dev-Cpp/geocam" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL"  -I"C:/Dev-Cpp/geocam" 
@@ -107,44 +107,44 @@ flow/parsecalc.o: flow/parsecalc.cpp
 Geometry/Geometry.o: Geometry/Geometry.cpp
 	$(CPP) -c Geometry/Geometry.cpp -o Geometry/Geometry.o $(CXXFLAGS)
 
-ver2/geometry/area.o: ver2/geometry/area.cpp
-	$(CPP) -c ver2/geometry/area.cpp -o ver2/geometry/area.o $(CXXFLAGS)
+Geometry/volume.o: Geometry/volume.cpp
+	$(CPP) -c Geometry/volume.cpp -o Geometry/volume.o $(CXXFLAGS)
 
-ver2/geometry/2DCurvature.o: ver2/geometry/2DCurvature.cpp
-	$(CPP) -c ver2/geometry/2DCurvature.cpp -o ver2/geometry/2DCurvature.o $(CXXFLAGS)
+Geometry/2DCurvature.o: Geometry/2DCurvature.cpp
+	$(CPP) -c Geometry/2DCurvature.cpp -o Geometry/2DCurvature.o $(CXXFLAGS)
 
-ver2/geometry/dih_angle.o: ver2/geometry/dih_angle.cpp
-	$(CPP) -c ver2/geometry/dih_angle.cpp -o ver2/geometry/dih_angle.o $(CXXFLAGS)
+Geometry/3DCurvature.o: Geometry/3DCurvature.cpp
+	$(CPP) -c Geometry/3DCurvature.cpp -o Geometry/3DCurvature.o $(CXXFLAGS)
 
-ver2/geometry/eta.o: ver2/geometry/eta.cpp
-	$(CPP) -c ver2/geometry/eta.cpp -o ver2/geometry/eta.o $(CXXFLAGS)
+Geometry/area.o: Geometry/area.cpp
+	$(CPP) -c Geometry/area.cpp -o Geometry/area.o $(CXXFLAGS)
 
-ver2/geometry/euc_angle.o: ver2/geometry/euc_angle.cpp
-	$(CPP) -c ver2/geometry/euc_angle.cpp -o ver2/geometry/euc_angle.o $(CXXFLAGS)
+Geometry/dih_angle.o: Geometry/dih_angle.cpp
+	$(CPP) -c Geometry/dih_angle.cpp -o Geometry/dih_angle.o $(CXXFLAGS)
 
-ver2/geometry/length.o: ver2/geometry/length.cpp
-	$(CPP) -c ver2/geometry/length.cpp -o ver2/geometry/length.o $(CXXFLAGS)
+Geometry/EdgeCurvature.o: Geometry/EdgeCurvature.cpp
+	$(CPP) -c Geometry/EdgeCurvature.cpp -o Geometry/EdgeCurvature.o $(CXXFLAGS)
 
-ver2/geometry/radius.o: ver2/geometry/radius.cpp
-	$(CPP) -c ver2/geometry/radius.cpp -o ver2/geometry/radius.o $(CXXFLAGS)
+Geometry/eta.o: Geometry/eta.cpp
+	$(CPP) -c Geometry/eta.cpp -o Geometry/eta.o $(CXXFLAGS)
 
-ver2/geometry/triposition.o: ver2/geometry/triposition.cpp
-	$(CPP) -c ver2/geometry/triposition.cpp -o ver2/geometry/triposition.o $(CXXFLAGS)
+Geometry/euc_angle.o: Geometry/euc_angle.cpp
+	$(CPP) -c Geometry/euc_angle.cpp -o Geometry/euc_angle.o $(CXXFLAGS)
 
-ver2/geometry/volume.o: ver2/geometry/volume.cpp
-	$(CPP) -c ver2/geometry/volume.cpp -o ver2/geometry/volume.o $(CXXFLAGS)
+Geometry/hyp_angle.o: Geometry/hyp_angle.cpp
+	$(CPP) -c Geometry/hyp_angle.cpp -o Geometry/hyp_angle.o $(CXXFLAGS)
 
-ver2/geometry/3DCurvature.o: ver2/geometry/3DCurvature.cpp
-	$(CPP) -c ver2/geometry/3DCurvature.cpp -o ver2/geometry/3DCurvature.o $(CXXFLAGS)
+Geometry/length.o: Geometry/length.cpp
+	$(CPP) -c Geometry/length.cpp -o Geometry/length.o $(CXXFLAGS)
 
-ver2/geometry/EdgeCurvature.o: ver2/geometry/EdgeCurvature.cpp
-	$(CPP) -c ver2/geometry/EdgeCurvature.cpp -o ver2/geometry/EdgeCurvature.o $(CXXFLAGS)
+Geometry/PartialEdge.o: Geometry/PartialEdge.cpp
+	$(CPP) -c Geometry/PartialEdge.cpp -o Geometry/PartialEdge.o $(CXXFLAGS)
 
-ver2/geometry/PartialEdge.o: ver2/geometry/PartialEdge.cpp
-	$(CPP) -c ver2/geometry/PartialEdge.cpp -o ver2/geometry/PartialEdge.o $(CXXFLAGS)
+Geometry/radius.o: Geometry/radius.cpp
+	$(CPP) -c Geometry/radius.cpp -o Geometry/radius.o $(CXXFLAGS)
 
-ver2/geometry/spher_angle.o: ver2/geometry/spher_angle.cpp
-	$(CPP) -c ver2/geometry/spher_angle.cpp -o ver2/geometry/spher_angle.o $(CXXFLAGS)
+Geometry/spher_angle.o: Geometry/spher_angle.cpp
+	$(CPP) -c Geometry/spher_angle.cpp -o Geometry/spher_angle.o $(CXXFLAGS)
 
-ver2/geometry/hyp_angle.o: ver2/geometry/hyp_angle.cpp
-	$(CPP) -c ver2/geometry/hyp_angle.cpp -o ver2/geometry/hyp_angle.o $(CXXFLAGS)
+Geometry/triposition.o: Geometry/triposition.cpp
+	$(CPP) -c Geometry/triposition.cpp -o Geometry/triposition.o $(CXXFLAGS)

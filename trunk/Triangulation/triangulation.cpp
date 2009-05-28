@@ -239,7 +239,7 @@ void Triangulation::eraseTetra(int key)
      tetraTable.erase(key);
 }
 
-void Triangulation::resetTriangulation()
+void Triangulation::reset()
 {
      vertexTable.clear();
      edgeTable.clear();

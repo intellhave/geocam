@@ -1,7 +1,7 @@
 [Project]
 FileName=TriangulationGUI.dev
 Name=TriangulationGUI
-UnitCount=59
+UnitCount=70
 Type=0
 Ver=1
 ObjFiles=
@@ -20,7 +20,7 @@ ObjectOutput=
 OverrideOutput=0
 OverrideOutputName=TriangulationGUI.exe
 HostApplication=
-Folders=
+Folders=Extra,Flip,Flow,Geometry,GUI,InputOutput,Topology
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -60,7 +60,7 @@ AutoIncBuildNr=0
 [Unit2]
 FileName=resources.h
 CompileCpp=1
-Folder=
+Folder=GUI
 Compile=1
 Link=1
 Priority=1000
@@ -69,7 +69,7 @@ BuildCmd=
 
 [Unit3]
 FileName=triangulationgui.rc
-Folder=Resources
+Folder=GUI
 Compile=1
 Link=1
 Priority=1000
@@ -79,7 +79,7 @@ BuildCmd=
 [Unit5]
 FileName=..\miscmath.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Extra
 Compile=1
 Link=1
 Priority=1000
@@ -89,7 +89,7 @@ BuildCmd=
 [Unit6]
 FileName=..\pointlinecircle.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Extra
 Compile=1
 Link=1
 Priority=1000
@@ -99,7 +99,7 @@ BuildCmd=
 [Unit7]
 FileName=..\pointlinecircle.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Extra
 Compile=1
 Link=1
 Priority=1000
@@ -109,7 +109,7 @@ BuildCmd=
 [Unit8]
 FileName=..\Simplex\vertex.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -119,7 +119,7 @@ BuildCmd=
 [Unit9]
 FileName=..\Simplex\simplex.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -129,7 +129,7 @@ BuildCmd=
 [Unit10]
 FileName=..\Simplex\simplex.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -139,17 +139,7 @@ BuildCmd=
 [Unit11]
 FileName=..\Simplex\vertex.cpp
 CompileCpp=1
-Folder=TriangulationGUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit12]
-FileName=..\Spherical\sphericalmath.h
-CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -157,9 +147,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit13]
-FileName=..\Spherical\sphericalmath.cpp
+FileName=..\delaunay.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flip
 Compile=1
 Link=1
 Priority=1000
@@ -167,9 +157,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit14]
-FileName=..\delaunay.h
+FileName=..\Simplex\face.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -177,9 +167,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit15]
-FileName=..\delaunay.cpp
+FileName=..\Simplex\edge.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -187,9 +177,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit16]
-FileName=..\Simplex\face.h
+FileName=..\Simplex\edge.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -197,19 +187,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit17]
-FileName=..\Simplex\edge.cpp
+FileName=..\Simplex\face.cpp
 CompileCpp=1
-Folder=TriangulationGUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit18]
-FileName=..\Simplex\edge.h
-CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -217,9 +197,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit19]
-FileName=..\Simplex\face.cpp
+FileName=TriangulationModel.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=GUI
 Compile=1
 Link=1
 Priority=1000
@@ -227,9 +207,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit22]
-FileName=TriangulationModel.cpp
+FileName=..\Simplex\tetra.h
 CompileCpp=1
-Folder=
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -237,9 +217,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit24]
-FileName=..\3DTriangulation\3DInputOutput.cpp
+FileName=..\Triangulation\smallMorphs.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -247,9 +227,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit25]
-FileName=..\3DTriangulation\3DInputOutput.h
+FileName=..\Triangulation\smallMorphs.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -257,9 +237,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit26]
-FileName=..\Simplex\tetra.h
+FileName=..\Triangulation\triangulation.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -267,9 +247,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit27]
-FileName=..\Simplex\tetra.cpp
+FileName=..\Triangulation\triangulation.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -277,9 +257,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit28]
-FileName=..\Triangulation\smallMorphs.cpp
+FileName=..\Triangulation\TriangulationCoordinateSystem.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flip
 Compile=1
 Link=1
 Priority=1000
@@ -287,9 +267,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit29]
-FileName=..\Triangulation\smallMorphs.h
+FileName=..\Triangulation\TriangulationCoordinateSystem.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flip
 Compile=1
 Link=1
 Priority=1000
@@ -297,9 +277,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit30]
-FileName=..\Triangulation\triangulation.cpp
+FileName=..\Triangulation\triangulationInputOutput.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=InputOutput
 Compile=1
 Link=1
 Priority=1000
@@ -307,19 +287,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit31]
-FileName=..\Triangulation\triangulation.h
+FileName=..\Triangulation\triangulationInputOutput.h
 CompileCpp=1
-Folder=TriangulationGUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit32]
-FileName=..\Triangulation\TriangulationCoordinateSystem.cpp
-CompileCpp=1
-Folder=TriangulationGUI
+Folder=InputOutput
 Compile=1
 Link=1
 Priority=1000
@@ -327,9 +297,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit33]
-FileName=..\Triangulation\TriangulationCoordinateSystem.h
+FileName=..\Triangulation\triangulationmorph.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -337,9 +307,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit34]
-FileName=..\Triangulation\triangulationInputOutput.cpp
+FileName=..\Triangulation\triangulationPlane.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flip
 Compile=1
 Link=1
 Priority=1000
@@ -349,7 +319,7 @@ BuildCmd=
 [Unit4]
 FileName=..\miscmath.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Extra
 Compile=1
 Link=1
 Priority=1000
@@ -357,9 +327,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit20]
-FileName=..\Hyperbolic\hyperbolicmath.h
+FileName=..\3DTriangulation\3DInputOutput.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=InputOutput
 Compile=1
 Link=1
 Priority=1000
@@ -367,9 +337,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit21]
-FileName=..\Hyperbolic\hyperbolicmath.cpp
+FileName=..\3DTriangulation\3DInputOutput.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=InputOutput
 Compile=1
 Link=1
 Priority=1000
@@ -377,9 +347,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit23]
-FileName=TriangulationModel.h
+FileName=..\Simplex\tetra.cpp
 CompileCpp=1
-Folder=
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -387,9 +357,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit35]
-FileName=..\Triangulation\triangulationInputOutput.h
+FileName=..\Triangulation\triangulationPlane.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flip
 Compile=1
 Link=1
 Priority=1000
@@ -397,9 +367,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit36]
-FileName=..\Triangulation\triangulationmath.cpp
+FileName=..\addremove.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -407,19 +377,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit37]
-FileName=..\Triangulation\triangulationmath.h
+FileName=..\addremove.h
 CompileCpp=1
-Folder=TriangulationGUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit38]
-FileName=..\Triangulation\triangulationmorph.cpp
-CompileCpp=1
-Folder=TriangulationGUI
+Folder=Topology
 Compile=1
 Link=1
 Priority=1000
@@ -427,9 +387,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit39]
-FileName=..\Triangulation\triangulationmorph.h
+FileName=glTriangulation.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=GUI
 Compile=1
 Link=1
 Priority=1000
@@ -437,9 +397,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit40]
-FileName=..\Triangulation\triangulationPlane.cpp
+FileName=..\Triangulation\MinMax.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Extra
 Compile=1
 Link=1
 Priority=1000
@@ -447,9 +407,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit41]
-FileName=..\Triangulation\triangulationPlane.h
+FileName=..\Triangulation\MinMax.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Extra
 Compile=1
 Link=1
 Priority=1000
@@ -457,9 +417,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit42]
-FileName=..\addremove.cpp
+FileName=..\flow\approximator.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flow
 Compile=1
 Link=1
 Priority=1000
@@ -467,9 +427,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit43]
-FileName=..\addremove.h
+FileName=..\flow\approximator.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flow
 Compile=1
 Link=1
 Priority=1000
@@ -477,9 +437,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit44]
-FileName=..\3DTriangulation\3Dtriangulationmath.cpp
+FileName=..\flow\eulerApprox.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flow
 Compile=1
 Link=1
 Priority=1000
@@ -487,9 +447,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit45]
-FileName=..\3DTriangulation\3Dtriangulationmath.h
+FileName=..\flow\eulerApprox.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flow
 Compile=1
 Link=1
 Priority=1000
@@ -497,9 +457,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit46]
-FileName=glTriangulation.cpp
+FileName=..\flow\parsecalc.cpp
 CompileCpp=1
-Folder=
+Folder=Extra
 Compile=1
 Link=1
 Priority=1000
@@ -507,9 +467,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit47]
-FileName=glTriangulation.h
+FileName=..\flow\parsecalc.h
 CompileCpp=1
-Folder=
+Folder=Extra
 Compile=1
 Link=1
 Priority=1000
@@ -517,9 +477,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit48]
-FileName=..\Triangulation\MinMax.cpp
+FileName=..\flow\rungaApprox.cpp
 CompileCpp=1
-Folder=
+Folder=Flow
 Compile=1
 Link=1
 Priority=1000
@@ -527,9 +487,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit49]
-FileName=..\Triangulation\MinMax.h
+FileName=..\flow\rungaApprox.h
 CompileCpp=1
-Folder=
+Folder=Flow
 Compile=1
 Link=1
 Priority=1000
@@ -537,9 +497,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit50]
-FileName=..\flow\approximator.cpp
+FileName=..\flow\sysdiffeq.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flow
 Compile=1
 Link=1
 Priority=1000
@@ -547,9 +507,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit51]
-FileName=..\flow\approximator.h
+FileName=..\flow\sysdiffeq.h
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Flow
 Compile=1
 Link=1
 Priority=1000
@@ -557,9 +517,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit52]
-FileName=..\flow\eulerApprox.cpp
+FileName=..\Geometry\volume.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Geometry
 Compile=1
 Link=1
 Priority=1000
@@ -567,9 +527,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit53]
-FileName=..\flow\eulerApprox.h
+FileName=..\Geometry\2DCurvature.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Geometry
 Compile=1
 Link=1
 Priority=1000
@@ -577,9 +537,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit54]
-FileName=..\flow\parsecalc.cpp
+FileName=..\Geometry\3DCurvature.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Geometry
 Compile=1
 Link=1
 Priority=1000
@@ -587,9 +547,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit55]
-FileName=..\flow\parsecalc.h
+FileName=..\Geometry\area.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Geometry
 Compile=1
 Link=1
 Priority=1000
@@ -597,9 +557,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit56]
-FileName=..\flow\rungaApprox.cpp
+FileName=..\Geometry\dih_angle.cpp
 CompileCpp=1
-Folder=TriangulationGUI
+Folder=Geometry
 Compile=1
 Link=1
 Priority=1000
@@ -607,7 +567,167 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit57]
-FileName=..\flow\rungaApprox.h
+FileName=..\Geometry\EdgeCurvature.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit59]
+FileName=..\Geometry\Geometry.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit12]
+FileName=..\delaunay.h
+CompileCpp=1
+Folder=Flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit18]
+FileName=TriangulationModel.cpp
+CompileCpp=1
+Folder=GUI
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit32]
+FileName=..\Triangulation\triangulationmorph.cpp
+CompileCpp=1
+Folder=Topology
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit38]
+FileName=glTriangulation.cpp
+CompileCpp=1
+Folder=GUI
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit60]
+FileName=..\Geometry\Geometry.h
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit61]
+FileName=..\Geometry\geoquant.h
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit62]
+FileName=..\Geometry\GeoQuants.h
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit63]
+FileName=..\Geometry\hyp_angle.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit64]
+FileName=..\Geometry\length.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit65]
+FileName=..\Geometry\PartialEdge.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit66]
+FileName=..\Geometry\radius.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit67]
+FileName=..\Geometry\spher_angle.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit68]
+FileName=..\Geometry\triposition.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit69]
+FileName=..\Geometry\triposition.h
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit70]
+FileName=..\Geometry\eta.cpp
 CompileCpp=1
 Folder=TriangulationGUI
 Compile=1
@@ -617,19 +737,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit58]
-FileName=..\flow\sysdiffeq.cpp
+FileName=..\Geometry\euc_angle.cpp
 CompileCpp=1
-Folder=TriangulationGUI
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit59]
-FileName=..\flow\sysdiffeq.h
-CompileCpp=1
-Folder=TriangulationGUI
+Folder=Geometry
 Compile=1
 Link=1
 Priority=1000

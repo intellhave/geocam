@@ -1,4 +1,5 @@
 #include "triangulation/triangulation.h"
+#include "Geometry/Geometry.h"
 #include <windows.h>
 #include <gl/gl.h>
 void drawPolygon(int size, double* curv);

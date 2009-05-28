@@ -116,8 +116,7 @@ double calcNormalization()
    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
    {
       V=sqrt(Geometry::volume(tit->second));
-      
-      result += Geometry::volume(tit->second);
+      result += Geometry::CayleyVolumeDeriv(tit->second);
       
       denom += V;
     
@@ -133,7 +132,6 @@ void Yamabe(double derivs[]) {
   
   Geometry::netCurvature();  
   double norm = calcNormalization();
-  
   double Ki, ri;
   int ii = 0;
   for(vit = vBegin; vit != vEnd; ii++, vit++) {

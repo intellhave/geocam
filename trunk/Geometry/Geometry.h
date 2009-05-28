@@ -23,6 +23,7 @@ class Geometry {
        static double spherRadius;
        
        static void build();       
+       static void reset();
        
        static void setMode(int m);
        static void setGeometry(geometry g);
@@ -60,5 +61,6 @@ class Geometry {
        static double netCurvature();
        
        static double angle(double len1, double len2, double len3);
+       static double CayleyVolumeDeriv(Tetra& t);
 };
 #endif // GEOMETRY_H

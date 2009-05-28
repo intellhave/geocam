@@ -55,6 +55,7 @@ void loadRadii(vector<double> radii){
   }
 }
 
+/* COMMAND-LINE FLOW */
 //int main(int argc, char** argv){
 //  validateArgs(argc, argv);
 //  char* log_filename = argv[1];
@@ -79,6 +80,43 @@ void loadRadii(vector<double> radii){
 //  return 0;
 //}
 
+/* 2D FLOW */
+//int main(int argc, char** argv){
+//     map<int, Vertex>::iterator vit;
+//     map<int, Edge>::iterator eit;
+//     map<int, Face>::iterator fit;
+//     map<int, Tetra>::iterator tit;
+//     
+//     vector<int> edges;
+//     vector<int> faces;
+//     vector<int> tetras;
+//    
+//   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
+//   char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
+//   //make3DTriangulationFile(from, to);
+//   //read3DTriangulationFile(to);
+//   char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/torus-9.txt";
+//   readTriangulationFile(tetra);
+//   int vertSize = Triangulation::vertexTable.size();
+//   int edgeSize = Triangulation::edgeTable.size();
+//   //Geometry::setDimension(ThreeD);
+//   printf("Building Geoemtry\n");
+//   Geometry::build();
+//   printf("Done Building Geometry\n");
+//   for(int i = 1; i <= vertSize; i++) {
+//      Geometry::setRadius(Triangulation::vertexTable[i], 1 + (5 - i)/15.0);        
+//   }
+//   for(int i = 1; i <= edgeSize; i++) {
+//       Geometry::setEta(Triangulation::edgeTable[i], 1.0);
+//   }
+//   Approximator *app = new EulerApprox((sysdiffeq) AdjRicci);
+//   app->run(0.0001, 0.0001, 0.01);
+//   printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
+//                      &(app->radiiHistory), &(app->curvHistory));
+//   system("PAUSE");
+//}
+
+/* 3D FLOW */
 int main(int argc, char** argv){
      map<int, Vertex>::iterator vit;
      map<int, Edge>::iterator eit;
@@ -89,15 +127,15 @@ int main(int argc, char** argv){
      vector<int> faces;
      vector<int> tetras;
     
-   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
+   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/poincare-16.txt";
    char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
-   //make3DTriangulationFile(from, to);
-   //read3DTriangulationFile(to);
+   make3DTriangulationFile(from, to);
+   read3DTriangulationFile(to);
    char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
-   readTriangulationFile(tetra);
+   //readTriangulationFile(tetra);
    int vertSize = Triangulation::vertexTable.size();
    int edgeSize = Triangulation::edgeTable.size();
-   //Geometry::setDimension(ThreeD);
+   Geometry::setDimension(ThreeD);
    printf("Building Geoemtry\n");
    Geometry::build();
    printf("Done Building Geometry\n");
@@ -107,11 +145,7 @@ int main(int argc, char** argv){
    for(int i = 1; i <= edgeSize; i++) {
        Geometry::setEta(Triangulation::edgeTable[i], 1.0);
    }
-   for(int i = 1; i <= vertSize; i++) {
-      printf("Curvature at Vertex %d: %f\n", i,
-      Geometry::curvature(Triangulation::vertexTable[i]));        
-   }
-   Approximator *app = new EulerApprox((sysdiffeq) AdjRicci);
+   Approximator *app = new EulerApprox((sysdiffeq) Yamabe);
    app->run(0.0001, 0.0001, 0.01);
    printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
                       &(app->radiiHistory), &(app->curvHistory));

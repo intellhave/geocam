@@ -102,6 +102,10 @@ void Geometry::build() {
   }
 }
 
+void Geometry::reset() {
+    gqi.clear();    
+}
+
 void Geometry::setMode(int m) {
      mode = m;
 }
@@ -243,5 +247,138 @@ double Geometry::netCurvature() {
 
 double Geometry::angle(double len1, double len2, double len3) {
      return acos((len1*len1 + len2*len2 - len3*len3)/ (2*len1*len2));  
+}
+
+
+double Geometry::CayleyVolumeDeriv(Tetra& t)
+{
+   int vertex, face;
+   vector<int> edges1, edge23, edge24, edge34;
+   double result=0.0;
+  
+   vertex = (*(t.getLocalVertices()))[0];
+   edges1 = listIntersection(Triangulation::vertexTable[vertex].getLocalEdges(), t.getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[0]].getLocalFaces(), Triangulation::edgeTable[edges1[1]].getLocalFaces())[0];
+   edge23 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[0]].getLocalFaces(), Triangulation::edgeTable[edges1[2]].getLocalFaces())[0];
+   edge24 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+   face   = listIntersection(Triangulation::edgeTable[edges1[1]].getLocalFaces(), Triangulation::edgeTable[edges1[2]].getLocalFaces())[0];
+   edge34 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+    
+   double L12 = Geometry::length(Triangulation::edgeTable[edges1[0]]);
+   double L13 = Geometry::length(Triangulation::edgeTable[edges1[1]]);
+   double L14 = Geometry::length(Triangulation::edgeTable[edges1[2]]);
+   double L23 = Geometry::length(Triangulation::edgeTable[edge23[0]]);
+   double L24 = Geometry::length(Triangulation::edgeTable[edge24[0]]);
+   double L34 = Geometry::length(Triangulation::edgeTable[edge34[0]]);
+   
+   double  Eta12 = Geometry::eta(Triangulation::edgeTable[edges1[0]]);
+   double  Eta13 = Geometry::eta(Triangulation::edgeTable[edges1[1]]);
+   double  Eta14 = Geometry::eta(Triangulation::edgeTable[edges1[2]]);
+   double  Eta23 = Geometry::eta(Triangulation::edgeTable[edge23[0]]);
+   double  Eta24 = Geometry::eta(Triangulation::edgeTable[edge24[0]]);
+   double  Eta34 = Geometry::eta(Triangulation::edgeTable[edge34[0]]);
+    
+   int  V2 =  listIntersection(Triangulation::edgeTable[edge23[0]].getLocalVertices(), Triangulation::edgeTable[edge24[0]].getLocalVertices())[0];
+   int  V3 =  listIntersection(Triangulation::edgeTable[edge23[0]].getLocalVertices(), Triangulation::edgeTable[edge34[0]].getLocalVertices())[0];
+   int  V4 =  listIntersection(Triangulation::edgeTable[edge24[0]].getLocalVertices(), Triangulation::edgeTable[edge34[0]].getLocalVertices())[0];
+   
+   double  K1 =  Geometry::curvature(Triangulation::vertexTable[vertex]);
+   double  K2 =  Geometry::curvature(Triangulation::vertexTable[V2]);
+   double  K3 =  Geometry::curvature(Triangulation::vertexTable[V3]);
+   double  K4 =  Geometry::curvature(Triangulation::vertexTable[V4]);
+   
+   double  R1 =  Geometry::radius(Triangulation::vertexTable[vertex]);
+   double  R2 =  Geometry::radius(Triangulation::vertexTable[V2]);
+   double  R3 =  Geometry::radius(Triangulation::vertexTable[V3]);
+   double  R4 =  Geometry::radius(Triangulation::vertexTable[V4]);
+ 
+result=(((Eta12* K2* pow(L13, 2)* pow(L23, 2)* R1 - Eta12* K2* pow(L14, 2)* pow(L23, 2)* R1 +
+        K1* pow(L23, 4)* R1 - Eta12* K2* pow(L13, 2)* pow(L24, 2)* R1 +
+        Eta12* K2* pow(L14, 2)* pow(L24, 2)* R1 - 2* K1* pow(L23, 2)* pow(L24, 2)* R1 +
+        K1* pow(L24, 4)* R1 + 2* Eta12* K2* pow(L12, 2)* pow(L34, 2)* R1 -
+        Eta12* K2* pow(L13, 2)* pow(L34, 2)* R1 - Eta12* K2* pow(L14, 2)* pow(L34, 2)* R1
+-
+        2* K1* pow(L23, 2)* pow(L34, 2)* R1 - Eta12* K2* pow(L23, 2)* pow(L34, 2)* R1 -
+        2* K1* pow(L24, 2)* pow(L34, 2)* R1 - Eta12* K2* pow(L24, 2)* pow(L34, 2)* R1 +
+        K1* pow(L34, 4)* R1 + Eta12* K2* pow(L34, 4)* R1 +
+        Eta23* K3* pow(L12, 2)* pow(L13, 2)* R2 - Eta24* K4* pow(L12, 2)* pow(L13, 2)* R2
++
+        K2* pow(L13, 4)* R2 + Eta24* K4* pow(L13, 4)* R2 -
+        Eta23* K3* pow(L12, 2)* pow(L14, 2)* R2 + Eta24* K4* pow(L12, 2)* pow(L14, 2)* R2
+-
+        2* K2* pow(L13, 2)* pow(L14, 2)* R2 - Eta23* K3* pow(L13, 2)* pow(L14, 2)* R2 -
+        Eta24* K4* pow(L13, 2)* pow(L14, 2)* R2 + K2* pow(L14, 4)* R2 +
+        Eta23* K3* pow(L14, 4)* R2 + Eta12* K1* pow(L13, 2)* pow(L23, 2)* R2 -
+        Eta24* K4* pow(L13, 2)* pow(L23, 2)* R2 - Eta12* K1* pow(L14, 2)* pow(L23, 2)* R2
++
+        2* Eta23* K3* pow(L14, 2)* pow(L23, 2)* R2 - Eta24* K4* pow(L14, 2)* pow(L23, 2)*
+R2 -
+        Eta12* K1* pow(L13, 2)* pow(L24, 2)* R2 - Eta23* K3* pow(L13, 2)* pow(L24, 2)* R2
++
+        2* Eta24* K4* pow(L13, 2)* pow(L24, 2)* R2 + Eta12* K1* pow(L14, 2)* pow(L24, 2)*
+R2 -
+        Eta23* K3* pow(L14, 2)* pow(L24, 2)* R2 + 2* Eta12* K1* pow(L12, 2)* pow(L34, 2)*
+R2 -
+        Eta23* K3* pow(L12, 2)* pow(L34, 2)* R2 - Eta24* K4* pow(L12, 2)* pow(L34, 2)* R2
+-
+        Eta12* K1* pow(L13, 2)* pow(L34, 2)* R2 - 2* K2* pow(L13, 2)* pow(L34, 2)* R2 -
+        Eta24* K4* pow(L13, 2)* pow(L34, 2)* R2 - Eta12* K1* pow(L14, 2)* pow(L34, 2)* R2
+-
+        2* K2* pow(L14, 2)* pow(L34, 2)* R2 - Eta23* K3* pow(L14, 2)* pow(L34, 2)* R2 -
+        Eta12* K1* pow(L23, 2)* pow(L34, 2)* R2 + Eta24* K4* pow(L23, 2)* pow(L34, 2)* R2
+-
+        Eta12* K1* pow(L24, 2)* pow(L34, 2)* R2 + Eta23* K3* pow(L24, 2)* pow(L34, 2)* R2
++
+        Eta12* K1* pow(L34, 4)* R2 + K2* pow(L34, 4)* R2 + K3* pow(L12, 4)* R3 +
+        Eta34* K4* pow(L12, 4)* R3 + Eta23* K2* pow(L12, 2)* pow(L13, 2)* R3 -
+        Eta34* K4* pow(L12, 2)* pow(L13, 2)* R3 - Eta23* K2* pow(L12, 2)* pow(L14, 2)* R3
+-
+        2* K3* pow(L12, 2)* pow(L14, 2)* R3 - Eta34* K4* pow(L12, 2)* pow(L14, 2)* R3 -
+        Eta23* K2* pow(L13, 2)* pow(L14, 2)* R3 + Eta34* K4* pow(L13, 2)* pow(L14, 2)* R3
++
+        Eta23* K2* pow(L14, 4)* R3 + K3* pow(L14, 4)* R3 -
+        Eta34* K4* pow(L12, 2)* pow(L23, 2)* R3 + 2* Eta23* K2* pow(L14, 2)* pow(L23, 2)*
+R3 -
+        Eta34* K4* pow(L14, 2)* pow(L23, 2)* R3 - 2* K3* pow(L12, 2)* pow(L24, 2)* R3 -
+        Eta34* K4* pow(L12, 2)* pow(L24, 2)* R3 - Eta23* K2* pow(L13, 2)* pow(L24, 2)* R3
+-
+        Eta34* K4* pow(L13, 2)* pow(L24, 2)* R3 - Eta23* K2* pow(L14, 2)* pow(L24, 2)* R3
+-
+        2* K3* pow(L14, 2)* pow(L24, 2)* R3 + Eta34* K4* pow(L23, 2)* pow(L24, 2)* R3 +
+        K3* pow(L24, 4)* R3 - Eta23* K2* pow(L12, 2)* pow(L34, 2)* R3 +
+        2* Eta34* K4* pow(L12, 2)* pow(L34, 2)* R3 - Eta23* K2* pow(L14, 2)* pow(L34, 2)*
+R3 +
+        Eta23* K2* pow(L24, 2)* pow(L34, 2)* R3 +
+        Eta13* ((pow(L12, 2)* ((pow(L23, 2) - pow(L24, 2) - pow(L34, 2))) +
+              pow(L24, 2)* ((2* pow(L13, 2) - pow(L23, 2) + pow(L24, 2) - pow(L34, 2))) -
+              pow(L14, 2)* ((pow(L23, 2) + pow(L24, 2) - pow(L34, 2)))))* ((K3* R1 +
+              K1* R3)) + ((K4* ((L12 - L13 - L23))* ((L12 + L13 -
+                    L23))* ((L12 - L13 + L23))* ((L12 + L13 + L23)) +
+              Eta34* K3* ((pow(L12, 4) + ((L13 - L23))* ((L13 +
+                          L23))* ((L14 - L24))* ((L14 + L24)) -
+                    pow(L12, 2)* ((pow(L13, 2) + pow(L14, 2) + pow(L23, 2) + pow(L24, 2) -
+                          2* pow(L34, 2))))) +
+              Eta24* K2* ((pow(L13, 4) + pow(L23, 2)* (((-pow(L14, 2)) + pow(L34, 2))) -
+                    pow(L12, 2)* ((pow(L13, 2) - pow(L14, 2) + pow(L34, 2))) -
+                    pow(L13, 2)* ((pow(L14, 2) + pow(L23, 2) - 2* pow(L24, 2) +
+                          pow(L34, 2)))))))* R4 -
+        Eta14* ((pow(L13, 2)* ((pow(L23, 2) + pow(L24, 2) - pow(L34, 2))) +
+              pow(L12, 2)* ((pow(L23, 2) - pow(L24, 2) + pow(L34, 2))) +
+              pow(L23, 2)* (((-2)* pow(L14, 2) - pow(L23, 2) + pow(L24, 2) +
+                    pow(L34, 2)))))* ((K4* R1 +
+              K1* R4))))/((12* sqrt(((-pow(L13, 4))* pow(L24, 2) -
+              pow(L12, 4)* pow(L34, 2) +
+              pow(L12, 2)* (((((-pow(L13, 2)) + pow(L14, 2)))* ((L23 -
+                          L24))* ((L23 + L24)) + ((pow(L13, 2) + pow(L14, 2) +
+                          pow(L23, 2) + pow(L24, 2)))* pow(L34, 2) - pow(L34, 4))) -
+              pow(L23, 2)* ((pow(L14, 4) + pow(L24, 2)* pow(L34, 2) +
+                    pow(L14, 2)* ((pow(L23, 2) - pow(L24, 2) - pow(L34, 2))))) +
+              pow(L13, 2)* ((pow(L14, 2)* ((pow(L23, 2) + pow(L24, 2) - pow(L34, 2))) +
+                    pow(L24, 2)* ((pow(L23, 2) - pow(L24, 2) + pow(L34, 2))))))))));
+  
+// The calculation above is the derivative of the volume function (not squared).   
+   
+   return result;
 }
 /******************************************************************************/

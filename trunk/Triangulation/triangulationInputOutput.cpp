@@ -629,23 +629,26 @@ void printResultsStep(char* fileName, vector<double>* radii, vector<double>* cur
      int numSteps = radii->size() / vertSize;
      FILE* results = fopen(fileName, "w");
      if(results == NULL) {
-       fprintf(stderr, "Null file given by %s\n", fileName);           
+       fprintf(stderr, "Null file given by %s\n", fileName);
+       return;        
      }
      
      map<int, Vertex>::iterator vit;
      for(int i = 0; i < numSteps; i++)
      {
          double netCurv = 0.;
-         fprintf(results, "Step %5d     Radius          Curvature          ", i);
-         fprintf(results, "Curv:Radius\n");
+         if(Geometry::dim == ThreeD) {
+            fprintf(results, "Step %5d     Radius          Curv:Radius\n", i);              
+         } else {
+            fprintf(results, "Step %5d     Radius          Curvature\n", i);
+         }
          fprintf(results, "-----------------------------------------------------\n");
          vit = Triangulation::vertexTable.begin();
          for(int j = 0; j < vertSize; j++)
          {
-             fprintf(results, "Vertex %3d     %3.7f       %3.7f       %3.7f\n",
+             fprintf(results, "Vertex %3d     %3.7f       %3.7f\n",
                    vit->first, 
-                  (*radii)[i*vertSize + j], (*curvs)[i*vertSize+j], 
-                  (*curvs)[i*vertSize+j]/(*radii)[i*vertSize + j]);
+                  (*radii)[i*vertSize + j], (*curvs)[i*vertSize+j]);
              netCurv += (*curvs)[i*vertSize+j];
              vit++;
          }
@@ -670,13 +673,16 @@ void printResultsVertex(char* fileName, vector<double>* radii, vector<double>* c
      vit = Triangulation::vertexTable.begin(); 
      for(int k=0; k < vertSize; k++) 
      { 
-       fprintf(results, "Vertex: %3d\tRadius\tCurv\tCurv:Radius\n", vit->first);
+       if(Geometry::dim == ThreeD) {
+            fprintf(results, "Vertex: %3d\tRadius\tCurv:Radius\n", vit->first);              
+       } else {
+            fprintf(results, "Vertex: %3d\tRadius\tCurv\n", vit->first);
+       }
        fprintf(results, "\n---------------------------------\n");
        for(int j = 0; j < numSteps; j++)
        {
-           fprintf(results, "Step %4d\t%3.7f\t%3.7f\t%3.7f\n", j,
-                (*radii)[j*vertSize + k], (*curvs)[j*vertSize + k],
-                (*curvs)[j*vertSize + k]/(*radii)[j*vertSize + k]);
+           fprintf(results, "Step %4d\t%3.7f\t%3.7f\n", j,
+                (*radii)[j*vertSize + k], (*curvs)[j*vertSize + k]);
        }
        fprintf(results, "\n");
        vit++;
@@ -698,9 +704,8 @@ void printResultsNum(char* fileName, vector<double>* radii, vector<double>* curv
      {
        for(int j = 0; j < numSteps; j++)
        {
-          fprintf(results, "%3.10f\t%3.10f\t%3.10f\n",
-                (*radii)[j*vertSize + k], (*curvs)[j*vertSize + k],
-                (*curvs)[j*vertSize + k]/(*radii)[j*vertSize + k]);
+          fprintf(results, "%3.10f\t%3.10f\n",
+                (*radii)[j*vertSize + k], (*curvs)[j*vertSize + k]);
        }
        fprintf(results, "\n");
        vit++;
@@ -724,7 +729,7 @@ void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>*
          for(int j = 0; j < vertSize; j++)
          {
              fprintf(results, "%3.10f\n", 
-                 (*curvs)[i*vertSize+j] / (*radii)[i*vertSize+j]);
+                 (*curvs)[i*vertSize+j]);
              vit++;
          }
      }

@@ -1,12 +1,9 @@
 #include "resources.h"
 #include <windows.h>
 #include "triangulation/triangulation.h"
-#include "triangulation/triangulationmath.h"
-#include "spherical/sphericalmath.h"
-#include "hyperbolic/hyperbolicmath.h"
+#include "Geometry/Geometry.h"
 #include "triangulation/triangulationInputOutput.h"
 #include "3DTriangulation/3DInputOutput.h"
-#include "3DTriangulation/3Dtriangulationmath.h"
 #include "flow/approximator.h"
 #include "flow/eulerApprox.h"
 #include "flow/sysdiffeq.h"
@@ -20,7 +17,7 @@ class TriangulationModel
       static bool flow;
       static double acc;
       static bool smart;
-      static EulerApprox app;
+      static Approximator *app;
       public:
       
       TriangulationModel();
@@ -32,10 +29,10 @@ class TriangulationModel
       static void setAccuracy(double);
       static void setFlowFunction(bool);
       static void setSmartFlow(bool);
-      static void setWeights(vector<double>*);
-      static void setWeight(int, double);
+      static void setRadii(vector<double>*);
+      static void setRadius(int, double);
       static void setEta(int, double);
-      static bool runCalcFlow(int);
+      static bool runFlow(int);
       static bool loadFile(char*, int);
       static bool load3DFile(char*, int);
       static bool saveFile(char*);

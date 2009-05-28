@@ -5,8 +5,8 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = TriangulationGUI_private.res
-OBJ  = main.o ../miscmath.o ../pointlinecircle.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o TriangulationModel.o ../3DTriangulation/3DInputOutput.o ../Simplex/tetra.o ../Triangulation/smallMorphs.o ../Triangulation/triangulation.o ../Triangulation/TriangulationCoordinateSystem.o ../Triangulation/triangulationInputOutput.o ../Triangulation/triangulationmath.o ../Triangulation/triangulationmorph.o ../Triangulation/triangulationPlane.o ../addremove.o ../3DTriangulation/3Dtriangulationmath.o glTriangulation.o ../Triangulation/MinMax.o ../flow/approximator.o ../flow/eulerApprox.o ../flow/parsecalc.o ../flow/rungaApprox.o ../flow/sysdiffeq.o $(RES)
-LINKOBJ  = main.o ../miscmath.o ../pointlinecircle.o ../Simplex/simplex.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o ../Hyperbolic/hyperbolicmath.o TriangulationModel.o ../3DTriangulation/3DInputOutput.o ../Simplex/tetra.o ../Triangulation/smallMorphs.o ../Triangulation/triangulation.o ../Triangulation/TriangulationCoordinateSystem.o ../Triangulation/triangulationInputOutput.o ../Triangulation/triangulationmath.o ../Triangulation/triangulationmorph.o ../Triangulation/triangulationPlane.o ../addremove.o ../3DTriangulation/3Dtriangulationmath.o glTriangulation.o ../Triangulation/MinMax.o ../flow/approximator.o ../flow/eulerApprox.o ../flow/parsecalc.o ../flow/rungaApprox.o ../flow/sysdiffeq.o $(RES)
+OBJ  = main.o ../miscmath.o ../pointlinecircle.o ../Simplex/simplex.o ../Simplex/vertex.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o TriangulationModel.o ../3DTriangulation/3DInputOutput.o ../Simplex/tetra.o ../Triangulation/smallMorphs.o ../Triangulation/triangulation.o ../Triangulation/TriangulationCoordinateSystem.o ../Triangulation/triangulationInputOutput.o ../Triangulation/triangulationmorph.o ../Triangulation/triangulationPlane.o ../addremove.o glTriangulation.o ../Triangulation/MinMax.o ../flow/approximator.o ../flow/eulerApprox.o ../flow/parsecalc.o ../flow/rungaApprox.o ../flow/sysdiffeq.o ../Geometry/volume.o ../Geometry/2DCurvature.o ../Geometry/3DCurvature.o ../Geometry/area.o ../Geometry/dih_angle.o ../Geometry/EdgeCurvature.o ../Geometry/euc_angle.o ../Geometry/Geometry.o ../Geometry/hyp_angle.o ../Geometry/length.o ../Geometry/PartialEdge.o ../Geometry/radius.o ../Geometry/spher_angle.o ../Geometry/triposition.o ../Geometry/eta.o $(RES)
+LINKOBJ  = main.o ../miscmath.o ../pointlinecircle.o ../Simplex/simplex.o ../Simplex/vertex.o ../delaunay.o ../Simplex/edge.o ../Simplex/face.o TriangulationModel.o ../3DTriangulation/3DInputOutput.o ../Simplex/tetra.o ../Triangulation/smallMorphs.o ../Triangulation/triangulation.o ../Triangulation/TriangulationCoordinateSystem.o ../Triangulation/triangulationInputOutput.o ../Triangulation/triangulationmorph.o ../Triangulation/triangulationPlane.o ../addremove.o glTriangulation.o ../Triangulation/MinMax.o ../flow/approximator.o ../flow/eulerApprox.o ../flow/parsecalc.o ../flow/rungaApprox.o ../flow/sysdiffeq.o ../Geometry/volume.o ../Geometry/2DCurvature.o ../Geometry/3DCurvature.o ../Geometry/area.o ../Geometry/dih_angle.o ../Geometry/EdgeCurvature.o ../Geometry/euc_angle.o ../Geometry/Geometry.o ../Geometry/hyp_angle.o ../Geometry/length.o ../Geometry/PartialEdge.o ../Geometry/radius.o ../Geometry/spher_angle.o ../Geometry/triposition.o ../Geometry/eta.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam" -L".." -L"." -L"C:/Dev-Cpp/lib" -mwindows -lopengl32 -lglu32 -lglut32 -lglut  -lgmon -pg  -g3 
 INCS =  -I"include"  -I".."  -I"."  -I"C:/Dev-Cpp/include" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL"  -I".."  -I"."  -I"C:/Dev-Cpp/include" 
@@ -41,9 +41,6 @@ main.o: main.cpp
 ../Simplex/vertex.o: ../Simplex/vertex.cpp
 	$(CPP) -c ../Simplex/vertex.cpp -o ../Simplex/vertex.o $(CXXFLAGS)
 
-../Spherical/sphericalmath.o: ../Spherical/sphericalmath.cpp
-	$(CPP) -c ../Spherical/sphericalmath.cpp -o ../Spherical/sphericalmath.o $(CXXFLAGS)
-
 ../delaunay.o: ../delaunay.cpp
 	$(CPP) -c ../delaunay.cpp -o ../delaunay.o $(CXXFLAGS)
 
@@ -52,9 +49,6 @@ main.o: main.cpp
 
 ../Simplex/face.o: ../Simplex/face.cpp
 	$(CPP) -c ../Simplex/face.cpp -o ../Simplex/face.o $(CXXFLAGS)
-
-../Hyperbolic/hyperbolicmath.o: ../Hyperbolic/hyperbolicmath.cpp
-	$(CPP) -c ../Hyperbolic/hyperbolicmath.cpp -o ../Hyperbolic/hyperbolicmath.o $(CXXFLAGS)
 
 TriangulationModel.o: TriangulationModel.cpp
 	$(CPP) -c TriangulationModel.cpp -o TriangulationModel.o $(CXXFLAGS)
@@ -77,9 +71,6 @@ TriangulationModel.o: TriangulationModel.cpp
 ../Triangulation/triangulationInputOutput.o: ../Triangulation/triangulationInputOutput.cpp
 	$(CPP) -c ../Triangulation/triangulationInputOutput.cpp -o ../Triangulation/triangulationInputOutput.o $(CXXFLAGS)
 
-../Triangulation/triangulationmath.o: ../Triangulation/triangulationmath.cpp
-	$(CPP) -c ../Triangulation/triangulationmath.cpp -o ../Triangulation/triangulationmath.o $(CXXFLAGS)
-
 ../Triangulation/triangulationmorph.o: ../Triangulation/triangulationmorph.cpp
 	$(CPP) -c ../Triangulation/triangulationmorph.cpp -o ../Triangulation/triangulationmorph.o $(CXXFLAGS)
 
@@ -88,9 +79,6 @@ TriangulationModel.o: TriangulationModel.cpp
 
 ../addremove.o: ../addremove.cpp
 	$(CPP) -c ../addremove.cpp -o ../addremove.o $(CXXFLAGS)
-
-../3DTriangulation/3Dtriangulationmath.o: ../3DTriangulation/3Dtriangulationmath.cpp
-	$(CPP) -c ../3DTriangulation/3Dtriangulationmath.cpp -o ../3DTriangulation/3Dtriangulationmath.o $(CXXFLAGS)
 
 glTriangulation.o: glTriangulation.cpp
 	$(CPP) -c glTriangulation.cpp -o glTriangulation.o $(CXXFLAGS)
@@ -112,6 +100,51 @@ glTriangulation.o: glTriangulation.cpp
 
 ../flow/sysdiffeq.o: ../flow/sysdiffeq.cpp
 	$(CPP) -c ../flow/sysdiffeq.cpp -o ../flow/sysdiffeq.o $(CXXFLAGS)
+
+../Geometry/volume.o: ../Geometry/volume.cpp
+	$(CPP) -c ../Geometry/volume.cpp -o ../Geometry/volume.o $(CXXFLAGS)
+
+../Geometry/2DCurvature.o: ../Geometry/2DCurvature.cpp
+	$(CPP) -c ../Geometry/2DCurvature.cpp -o ../Geometry/2DCurvature.o $(CXXFLAGS)
+
+../Geometry/3DCurvature.o: ../Geometry/3DCurvature.cpp
+	$(CPP) -c ../Geometry/3DCurvature.cpp -o ../Geometry/3DCurvature.o $(CXXFLAGS)
+
+../Geometry/area.o: ../Geometry/area.cpp
+	$(CPP) -c ../Geometry/area.cpp -o ../Geometry/area.o $(CXXFLAGS)
+
+../Geometry/dih_angle.o: ../Geometry/dih_angle.cpp
+	$(CPP) -c ../Geometry/dih_angle.cpp -o ../Geometry/dih_angle.o $(CXXFLAGS)
+
+../Geometry/EdgeCurvature.o: ../Geometry/EdgeCurvature.cpp
+	$(CPP) -c ../Geometry/EdgeCurvature.cpp -o ../Geometry/EdgeCurvature.o $(CXXFLAGS)
+
+../Geometry/euc_angle.o: ../Geometry/euc_angle.cpp
+	$(CPP) -c ../Geometry/euc_angle.cpp -o ../Geometry/euc_angle.o $(CXXFLAGS)
+
+../Geometry/Geometry.o: ../Geometry/Geometry.cpp
+	$(CPP) -c ../Geometry/Geometry.cpp -o ../Geometry/Geometry.o $(CXXFLAGS)
+
+../Geometry/hyp_angle.o: ../Geometry/hyp_angle.cpp
+	$(CPP) -c ../Geometry/hyp_angle.cpp -o ../Geometry/hyp_angle.o $(CXXFLAGS)
+
+../Geometry/length.o: ../Geometry/length.cpp
+	$(CPP) -c ../Geometry/length.cpp -o ../Geometry/length.o $(CXXFLAGS)
+
+../Geometry/PartialEdge.o: ../Geometry/PartialEdge.cpp
+	$(CPP) -c ../Geometry/PartialEdge.cpp -o ../Geometry/PartialEdge.o $(CXXFLAGS)
+
+../Geometry/radius.o: ../Geometry/radius.cpp
+	$(CPP) -c ../Geometry/radius.cpp -o ../Geometry/radius.o $(CXXFLAGS)
+
+../Geometry/spher_angle.o: ../Geometry/spher_angle.cpp
+	$(CPP) -c ../Geometry/spher_angle.cpp -o ../Geometry/spher_angle.o $(CXXFLAGS)
+
+../Geometry/triposition.o: ../Geometry/triposition.cpp
+	$(CPP) -c ../Geometry/triposition.cpp -o ../Geometry/triposition.o $(CXXFLAGS)
+
+../Geometry/eta.o: ../Geometry/eta.cpp
+	$(CPP) -c ../Geometry/eta.cpp -o ../Geometry/eta.o $(CXXFLAGS)
 
 TriangulationGUI_private.res: TriangulationGUI_private.rc triangulationgui.rc 
 	$(WINDRES) -i TriangulationGUI_private.rc --input-format=rc -o TriangulationGUI_private.res -O coff 
