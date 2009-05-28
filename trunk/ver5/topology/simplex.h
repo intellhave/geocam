@@ -1,3 +1,17 @@
+/**************************************************************
+Class: Simplex
+Author: Alex Henniges, Tom Williams, Mitch Wilson
+Version: June 9, 2008
+**************************************************************/
+
+#ifndef SIMPLEX_H
+#define SIMPLEX_H
+#include <vector>
+
+using namespace std;
+
+static int simplexCounter = 0;
+
 /*
  * The Simplex class represents the base class for what all simplices
  * have in common. They all have sets of local simplices of different
@@ -11,17 +25,10 @@
  * that simplex where the tables are stored in the Triangulation.
  */
 
-#ifndef SIMPLEX_H
-#define SIMPLEX_H
-#include <vector>
-
-using namespace std;
-
-static int simplexCounter = 0;
-
 class Simplex {
  private:
   int serialNumber;
+
   int index;
   vector<int> localVertices;
   vector<int> localEdges;

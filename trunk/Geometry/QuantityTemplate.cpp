@@ -3,10 +3,15 @@
 
 class QUANTITY : public virtual GeoQuant {
 private:
-  /* Your private varaibles here. */
+  /* Your private varaibles go here. For example:
+   * - Private parameters (doubles, ints, etc) for
+   *   tracking the state of the quantity
+   * - Pointers to other GeoQuant objects that your
+   *   quantity depends on.
+   */
 
 public:
-  QUANTITY( ?????? ) : GeoQuant() {
+  quantity( ?????? ) : GeoQuant() {
     /* YOUR INITIALIZATION CODE GOES HERE:
      * 1) Establish a triposition
      * 2) Calculate dependencies (run AddDependents)
@@ -14,12 +19,20 @@ public:
      */
   }
 
+  ~quantity() {
+    /* IMPORTANT: 
+     * Free any memory you allocated to hold your
+     * private variables. For an example, see
+     * the destructor in euc_angle.cpp.
+     */
+  }
+  
   void recalculate(){
-    /* Recalculate this quantity your chosen
-     * private variables
+    /* Recalculate this quantity, given your chosen
+     * private variables and the quantities your
+     * quantity depends on.
      */
   }
 };
-
 
 #endif /* QUANTITY_H_ */

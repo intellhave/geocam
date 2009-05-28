@@ -16,8 +16,7 @@ class Approximator{
       local_derivs = de;
       vector<double> radiiHistory(); 
       vector<double> curvHistory();
-  }
-  
+  }  
   ~Approximator(){}
   
   virtual void step(double stepsize) = 0;
