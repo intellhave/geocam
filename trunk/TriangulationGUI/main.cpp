@@ -1364,21 +1364,21 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                         {
                              TriangulationModel::printResults(IDPRINTSTEP);
                              LoadTextFile(hedit, "GUIResult.txt");
-                             remove("manifoldConverted.txt");
+                             remove("GUIResult.txt");
                         }
                         break;
                         case 'v':
                         {
                              TriangulationModel::printResults(IDPRINTVERTEX);
                              LoadTextFile(hedit, "GUIResult.txt");
-                             remove("manifoldConverted.txt");
+                             remove("GUIResult.txt");
                         }
                         break;
                         case 'n':
                         {
                              TriangulationModel::printResults(IDPRINTNUM);
                              LoadTextFile(hedit, "GUIResult.txt");
-                             remove("manifoldConverted.txt");
+                             remove("GUIResult.txt");
                         }
                         break;
                         case 'l':
@@ -1389,7 +1389,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
                                 MAKEINTRESOURCE(IDD_POLYGON), hwnd, PolygonProc);
 
                               UpdateConsole(hwnd, "Polygon flow complete.\r\n");
-                              remove("manifoldConverted.txt");
+                              remove("GUIResult.txt");
                         }
                         break;
                         default:
