@@ -8,15 +8,15 @@ geometry Geometry::geo = Euclidean;
 dimension Geometry::dim = TwoD;
 double Geometry::spherRadius = 1;
 GQIndex Geometry::gqi;
-int Geometry::mode = FLOW;
+mode Geometry::type = Flow;
 /******************************************************************************/
 
 void Geometry::build() {
   
   gqi.clear();
   
-  switch(mode) {
-    case FLOW: 
+  switch(type) {
+    case Flow: 
          // Build Radii
          printf("Build Radii\n");
          Init_Radii(gqi);
@@ -73,7 +73,7 @@ void Geometry::build() {
                 return;                 
          }
          break;
-    case FLIP:
+    case Flip:
          // Build Radii
          Init_Radii(gqi);
          // Build Lengths
@@ -93,8 +93,9 @@ void Geometry::build() {
                 fprintf(stderr, "Error: Invalid geometry.\n");
                 return;            
          }         
-         // Build Dual Lengths
-         
+         // Build Partial Edges
+         printf("Build Partial Edges\n");
+         Init_PartialEdges(gqi);         
          break;
     default:
          printf("Error: Unidentifiable mode\n");
@@ -106,8 +107,8 @@ void Geometry::reset() {
     gqi.clear();    
 }
 
-void Geometry::setMode(int m) {
-     mode = m;
+void Geometry::setMode(mode m) {
+     type = m;
 }
 
 void Geometry::setGeometry(geometry g) {

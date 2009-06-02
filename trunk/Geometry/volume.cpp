@@ -55,7 +55,7 @@ void Volume::recalculate() {
    CayleyMenger=CayleyMenger+pow(L12, 2.0)*pow(L23,2.0)*pow(L34,2.0)+pow(L14, 2.0)*pow(L23,2.0)*pow(L34,2.0)+pow(L12, 2.0)*pow(L24,2.0)*pow(L34,2.0)+pow(L13, 2.0)*pow(L24,2.0)*pow(L34,2.0);
    CayleyMenger=CayleyMenger/144.0;
    
-   value = CayleyMenger;
+   value = sqrt(CayleyMenger);
 }
 
 void Init_Volumes(GQIndex& gqi) {
