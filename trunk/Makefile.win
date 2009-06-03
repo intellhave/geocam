@@ -1,3 +1,4 @@
+<<<<<<< .working
 # Project: Project1
 # Makefile created by Dev-C++ 4.9.9.2
 
@@ -151,3 +152,62 @@ Newtons_Method.o: Newtons_Method.cpp
 
 main.o: main.cpp
 	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+=======
+# Project: Project1
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = main.o vertex.o simplex.o edge.o triangulation.o face.o triangulationmath.o filereader.o triangulationInputOutput.o triangulationmorph.o $(RES)
+LINKOBJ  = main.o vertex.o simplex.o edge.o triangulation.o face.o triangulationmath.o filereader.o triangulationInputOutput.o triangulationmorph.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib"  
+INCS =  -I"C:/Dev-Cpp/include" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
+BIN  = Project1.exe
+CXXFLAGS = $(CXXINCS)  
+CFLAGS = $(INCS)  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before Project1.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "Project1.exe" $(LIBS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+vertex.o: vertex.cpp
+	$(CPP) -c vertex.cpp -o vertex.o $(CXXFLAGS)
+
+simplex.o: simplex.cpp
+	$(CPP) -c simplex.cpp -o simplex.o $(CXXFLAGS)
+
+edge.o: edge.cpp
+	$(CPP) -c edge.cpp -o edge.o $(CXXFLAGS)
+
+triangulation.o: triangulation.cpp
+	$(CPP) -c triangulation.cpp -o triangulation.o $(CXXFLAGS)
+
+face.o: face.cpp
+	$(CPP) -c face.cpp -o face.o $(CXXFLAGS)
+
+triangulationmath.o: triangulationmath.cpp
+	$(CPP) -c triangulationmath.cpp -o triangulationmath.o $(CXXFLAGS)
+
+filereader.o: filereader.cpp
+	$(CPP) -c filereader.cpp -o filereader.o $(CXXFLAGS)
+
+triangulationInputOutput.o: triangulationInputOutput.cpp
+	$(CPP) -c triangulationInputOutput.cpp -o triangulationInputOutput.o $(CXXFLAGS)
+
+triangulationmorph.o: triangulationmorph.cpp
+	$(CPP) -c triangulationmorph.cpp -o triangulationmorph.o $(CXXFLAGS)
+>>>>>>> .merge-right.r3
