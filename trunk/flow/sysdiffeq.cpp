@@ -115,7 +115,7 @@ double calcNormalization()
    map<int, Tetra>::iterator tit;
    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
    {
-      V=sqrt(Geometry::volume(tit->second));
+      V=Geometry::volume(tit->second);
       result += Geometry::CayleyVolumeDeriv(tit->second);
       
       denom += V;

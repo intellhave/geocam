@@ -52,9 +52,13 @@ CursorRow=1392
 CursorCol=39
 CursorRow=339
 <<<<<<< .mine
+TopLine=82
+=======
+<<<<<<< .mine
 TopLine=205
 =======
 TopLine=1389
+>>>>>>> .r677
 >>>>>>> .r670
 =======
 CursorCol=36
@@ -379,7 +383,7 @@ Open=1
 Top=0
 CursorCol=1
 CursorRow=70
-TopLine=73
+TopLine=91
 LeftChar=1
 [Editor_38]
 Open=1

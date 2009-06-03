@@ -2,6 +2,18 @@
 Class: Triangulation
 Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: July 16, 2008
+
+ * The Triangulation class stores the information about the running
+ * triangulation. A triangulation has three static public members:
+ *                 
+ *                vertexTable, edgeTable, faceTable
+ * 
+ * All three are maps from integer values to the respective simplex.
+ * These maps are expected to be used constantly to access the 
+ * elements of the triangulation. The triangulation class is designed
+ * to only exist as one instance during the running of the program.
+ * Since it is used in virtually every function call, this avoids the
+ * need of passing a pointer along a chain of function calls.
 **************************************************************/
 
 #ifndef TRIANGULATION_H
@@ -18,17 +30,7 @@ Version: July 16, 2008
 #include "hyperbolic/hyperbolicmath.h"
 
 /*
- * The Triangulation class stores the information about the running
- * triangulation. A triangulation has three static public members:
- *                 
- *                vertexTable, edgeTable, faceTable
- * 
- * All three are maps from integer values to the respective simplex.
- * These maps are expected to be used constantly to access the 
- * elements of the triangulation. The triangulation class is designed
- * to only exist as one instance during the running of the program.
- * Since it is used in virtually every function call, this avoids the
- * need of passing a pointer along a chain of function calls.
+
  */
 class Triangulation
 {

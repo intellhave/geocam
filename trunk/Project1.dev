@@ -24,8 +24,13 @@ ObjectOutput=
 OverrideOutput=0
 OverrideOutputName=Project1.exe
 HostApplication=
+<<<<<<< .mine
+Folders=Extra,Flip,Flow,Geometry,Geometry/GeoQuants,InputOutput,Morphs,Triangulation,Triangulation/Simplex
+CommandLine=C:/Dev-Cpp/geocam/tests/exp1.log exp1.txt
+=======
 Folders=Flip,Flow,Geometry,InputOutput,Topology
 CommandLine=
+>>>>>>> .r677
 UseCustomMakefile=0
 CustomMakefile=
 IncludeVersionInfo=0
@@ -36,7 +41,11 @@ CompilerSettings=0000000000000101000000
 [Unit1]
 FileName=main.cpp
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -64,7 +73,11 @@ AutoIncBuildNr=0
 [Unit3]
 FileName=Simplex\edge.h
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=Topology
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -74,7 +87,11 @@ BuildCmd=
 [Unit5]
 FileName=Simplex\face.h
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=Topology
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -84,7 +101,11 @@ BuildCmd=
 [Unit7]
 FileName=Simplex\simplex.h
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=Topology
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -94,7 +115,11 @@ BuildCmd=
 [Unit2]
 FileName=Simplex\edge.cpp
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=Topology
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -104,7 +129,11 @@ BuildCmd=
 [Unit6]
 FileName=Simplex\simplex.cpp
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=Topology
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -114,7 +143,11 @@ BuildCmd=
 [Unit8]
 FileName=Simplex\vertex.cpp
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=Topology
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -184,7 +217,11 @@ BuildCmd=
 [Unit17]
 FileName=3DTriangulation\3DInputOutput.h
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=InputOutput
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -204,7 +241,11 @@ BuildCmd=
 [Unit4]
 FileName=Simplex\face.cpp
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=Topology
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000
@@ -214,7 +255,11 @@ BuildCmd=
 [Unit18]
 FileName=Simplex\tetra.h
 CompileCpp=1
+<<<<<<< .mine
+Folder=Triangulation/Simplex
+=======
 Folder=Topology
+>>>>>>> .r677
 Compile=1
 Link=1
 Priority=1000

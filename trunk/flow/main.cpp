@@ -127,6 +127,9 @@ int main(int argc, char** argv){
      vector<int> faces;
      vector<int> tetras;
     
+    
+     time_t start, end;
+     
    char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/poincare-16.txt";
    char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
    make3DTriangulationFile(from, to);
@@ -146,9 +149,12 @@ int main(int argc, char** argv){
        Geometry::setEta(Triangulation::edgeTable[i], 1.0);
    }
    Approximator *app = new EulerApprox((sysdiffeq) Yamabe);
-   app->run(0.0001, 0.0001, 0.01);
+   time(&start);
+   app->run(300, 0.01);
+   time(&end);
    printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
                       &(app->radiiHistory), &(app->curvHistory));
+   printf("Time: %.2lf seconds\n", difftime(end, start));
    system("PAUSE");
 }
 

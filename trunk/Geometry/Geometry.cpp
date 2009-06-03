@@ -77,7 +77,7 @@ void Geometry::build() {
          // Build Radii
          Init_Radii(gqi);
          // Build Lengths
-         Init_Lengths(gqi);
+         Init_IndLengths(gqi);
          // Build Angles
          switch(geo) {
            case Euclidean:

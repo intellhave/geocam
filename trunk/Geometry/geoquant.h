@@ -1,3 +1,22 @@
+/**************************************************************
+Class: GeoQuant
+Author: Alex Henniges, Joe Thomas
+Version: June 3, 2009
+
+ * This is the abstract class that represents a quantity in our
+ * geometry. We consider a quantity to be a value that is defined
+ * by one or more simplices. We use this definition as the basis
+ * for accessing the quantities.
+ *
+ * We also define here a dependency tree. When a quantity is
+ * calculated using a set of other quantities, it is considered
+ * to be dependent on those quantities. When this quantity is created,
+ * the quantities it depends on our notified of its existence. When
+ * one of these other quantities' value changes, the dependent quantity
+ * is considered invalid and must be recalculated once it is requested
+ * 
+**************************************************************/
+
 #ifndef GEOQUANT_H_
 #define GEOQUANT_H_
 

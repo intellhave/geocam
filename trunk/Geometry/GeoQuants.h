@@ -51,6 +51,15 @@ class Length : public virtual GeoQuant {
 void Init_Lengths(GQIndex& gqi);
 /******************/
 
+/***** INDEPENDENT LENGTHS *****/
+class IndLength: public virtual GeoQuant {
+ public:
+  IndLength(Edge& e, GQIndex& gqi);
+  void recalculate();
+};
+void Init_IndLengths(GQIndex& gqi);
+/******************************/
+
 /***** EUCLIDEAN ANGLE *****/
 class EuclideanAngle : public virtual GeoQuant {
  private:

@@ -158,7 +158,7 @@ double F()
    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
    {
           
-       sumV += sqrt(Geometry::volume(tit->second));
+       sumV += Geometry::volume(tit->second);
 // sumV calculates the total volume of the manifold
    }
    return sumK/(pow(sumV, (1.0/3.0)));

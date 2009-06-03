@@ -701,8 +701,7 @@ double Total_Volume () {
        double sumV = 0;
        for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
        {
-       sumV += sqrt(Geometry::volume(tit->second));
-       // might need to change this in the future.
+       sumV += Geometry::volume(tit->second);
 // sumV calculates the total volume of the manifold
         }
         return sumV;
