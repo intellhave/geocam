@@ -54,7 +54,7 @@ void IndLength::recalculate() {
 
 }
 
-void Init_IndLength(GQIndex& gqi) {
+void Init_IndLengths(GQIndex& gqi) {
   map<int, Edge>::iterator eit;
   for(eit = Triangulation::edgeTable.begin();
       eit != Triangulation::edgeTable.end(); eit++){

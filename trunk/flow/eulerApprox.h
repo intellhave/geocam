@@ -7,6 +7,7 @@
 class EulerApprox : public Approximator {
 public:
   EulerApprox(sysdiffeq de) : Approximator(de){}
+  EulerApprox(sysdiffeq de, char* histories) : Approximator(de, histories){}
   ~EulerApprox(){}
   void step(double dt);
 };

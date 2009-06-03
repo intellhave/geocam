@@ -770,38 +770,32 @@ void printResultsVolumes(char* fileName, vector<double>* volumes)
 {
      int tetraSize = Triangulation::tetraTable.size();
      int numSteps = volumes->size() / tetraSize;
-     ofstream results(fileName, ios_base::trunc);
-     results << left << setprecision(6); 
-     results.setf(ios_base::showpoint);
-
+     FILE* results = fopen(fileName, "w");
+     if(results == NULL) {
+       fprintf(stderr, "Null file given by %s\n", fileName);           
+     }
      map<int, Tetra>::iterator tit;
 
-     
      for(int i = 0; i < numSteps; i++)
      {
          double netVolume = 0.;
-         results << left << "Step " << left <<setw(6)  << i + 1;
-         results << right << setw(7) << "Volume ^ 2";
-         results << "\n---------------------------\n";
+         fprintf(results, "Step %5d     Volume\n", i + 1);
+         fprintf(results, "---------------------------\n");
          tit = Triangulation::tetraTable.begin();
          for(int j = 0; j < tetraSize; j++)
          {
              double volume = (*volumes)[i*tetraSize + j];
-             results << "Tetra " << left << setw(5) << tit->first;
-             results << left << setw(14)<< volume;
-             results << "\n";
+             fprintf(results, "Tetra %3d     %3.7f\n", tit->first, volume);
              netVolume += volume;
              tit++;
          }
-       if(netVolume < 0.0000001 && netVolume > -0.0000001)
-       {
+         if(netVolume < 0.0000001 && netVolume > -0.0000001)
+         {
                     netVolume= 0.;
-       }
-         results << "Total Volume: " << netVolume << "\n\n";
+         }
+         fprintf(results, "Total Volume: %4.7f\n\n", netVolume);
      }
-     
-   results.close();     
-     
+     fclose(results); 
 }
 
 void readEtas(char* filename)

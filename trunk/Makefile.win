@@ -5,29 +5,26 @@ CPP  = g++.exe -D__DEBUG__
 CC   = gcc.exe -D__DEBUG__
 WINDRES = windres.exe
 RES  = 
-OBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o Newtons_Method.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Geometry/Geometry.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o Geometry/volume.o flow/approximator.o flow/convert.o flow/eulerApprox.o flow/parsecalc.o flow/rungaApprox.o flow/sysdiffeq.o $(RES)
-LINKOBJ  = main.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o Newtons_Method.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Geometry/Geometry.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o Geometry/volume.o flow/approximator.o flow/convert.o flow/eulerApprox.o flow/parsecalc.o flow/rungaApprox.o flow/sysdiffeq.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib"  -lgmon -pg  -g3 
-INCS =  -I"C:/Dev-Cpp/include"  -I"C:/Dev-Cpp/geocam" 
-CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include"  -I"C:/Dev-Cpp/geocam" 
-BIN  = Project1.exe
+OBJ  = Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/parsecalc.o Geometry/Geometry.o Geometry/volume.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o Newtons_Method.o main.o $(RES)
+LINKOBJ  = Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/parsecalc.o Geometry/Geometry.o Geometry/volume.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o Newtons_Method.o main.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
+INCS =  -I"include"  -I"C:/Dev-Cpp/geocam" 
+CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL"  -I"C:/Dev-Cpp/geocam" 
+BIN  = flow.exe
 CXXFLAGS = $(CXXINCS)   -pg -g3
 CFLAGS = $(INCS)   -pg -g3
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before Project1.exe all-after
+all: all-before flow.exe all-after
 
 
 clean: clean-custom
 	${RM} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "Project1.exe" $(LIBS)
-
-main.o: main.cpp
-	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+	$(CPP) $(LINKOBJ) -o "flow.exe" $(LIBS)
 
 Simplex/edge.o: Simplex/edge.cpp
 	$(CPP) -c Simplex/edge.cpp -o Simplex/edge.o $(CXXFLAGS)
@@ -89,8 +86,26 @@ plot.o: plot.cpp
 hessian.o: hessian.cpp
 	$(CPP) -c hessian.cpp -o hessian.o $(CXXFLAGS)
 
-Newtons_Method.o: Newtons_Method.cpp
-	$(CPP) -c Newtons_Method.cpp -o Newtons_Method.o $(CXXFLAGS)
+flow/sysdiffeq.o: flow/sysdiffeq.cpp
+	$(CPP) -c flow/sysdiffeq.cpp -o flow/sysdiffeq.o $(CXXFLAGS)
+
+flow/approximator.o: flow/approximator.cpp
+	$(CPP) -c flow/approximator.cpp -o flow/approximator.o $(CXXFLAGS)
+
+flow/rungaApprox.o: flow/rungaApprox.cpp
+	$(CPP) -c flow/rungaApprox.cpp -o flow/rungaApprox.o $(CXXFLAGS)
+
+flow/eulerApprox.o: flow/eulerApprox.cpp
+	$(CPP) -c flow/eulerApprox.cpp -o flow/eulerApprox.o $(CXXFLAGS)
+
+flow/parsecalc.o: flow/parsecalc.cpp
+	$(CPP) -c flow/parsecalc.cpp -o flow/parsecalc.o $(CXXFLAGS)
+
+Geometry/Geometry.o: Geometry/Geometry.cpp
+	$(CPP) -c Geometry/Geometry.cpp -o Geometry/Geometry.o $(CXXFLAGS)
+
+Geometry/volume.o: Geometry/volume.cpp
+	$(CPP) -c Geometry/volume.cpp -o Geometry/volume.o $(CXXFLAGS)
 
 Geometry/2DCurvature.o: Geometry/2DCurvature.cpp
 	$(CPP) -c Geometry/2DCurvature.cpp -o Geometry/2DCurvature.o $(CXXFLAGS)
@@ -113,9 +128,6 @@ Geometry/eta.o: Geometry/eta.cpp
 Geometry/euc_angle.o: Geometry/euc_angle.cpp
 	$(CPP) -c Geometry/euc_angle.cpp -o Geometry/euc_angle.o $(CXXFLAGS)
 
-Geometry/Geometry.o: Geometry/Geometry.cpp
-	$(CPP) -c Geometry/Geometry.cpp -o Geometry/Geometry.o $(CXXFLAGS)
-
 Geometry/hyp_angle.o: Geometry/hyp_angle.cpp
 	$(CPP) -c Geometry/hyp_angle.cpp -o Geometry/hyp_angle.o $(CXXFLAGS)
 
@@ -134,23 +146,8 @@ Geometry/spher_angle.o: Geometry/spher_angle.cpp
 Geometry/triposition.o: Geometry/triposition.cpp
 	$(CPP) -c Geometry/triposition.cpp -o Geometry/triposition.o $(CXXFLAGS)
 
-Geometry/volume.o: Geometry/volume.cpp
-	$(CPP) -c Geometry/volume.cpp -o Geometry/volume.o $(CXXFLAGS)
+Newtons_Method.o: Newtons_Method.cpp
+	$(CPP) -c Newtons_Method.cpp -o Newtons_Method.o $(CXXFLAGS)
 
-flow/approximator.o: flow/approximator.cpp
-	$(CPP) -c flow/approximator.cpp -o flow/approximator.o $(CXXFLAGS)
-
-flow/convert.o: flow/convert.cpp
-	$(CPP) -c flow/convert.cpp -o flow/convert.o $(CXXFLAGS)
-
-flow/eulerApprox.o: flow/eulerApprox.cpp
-	$(CPP) -c flow/eulerApprox.cpp -o flow/eulerApprox.o $(CXXFLAGS)
-
-flow/parsecalc.o: flow/parsecalc.cpp
-	$(CPP) -c flow/parsecalc.cpp -o flow/parsecalc.o $(CXXFLAGS)
-
-flow/rungaApprox.o: flow/rungaApprox.cpp
-	$(CPP) -c flow/rungaApprox.cpp -o flow/rungaApprox.o $(CXXFLAGS)
-
-flow/sysdiffeq.o: flow/sysdiffeq.cpp
-	$(CPP) -c flow/sysdiffeq.cpp -o flow/sysdiffeq.o $(CXXFLAGS)
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)

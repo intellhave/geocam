@@ -148,7 +148,7 @@ int main(int argc, char** argv){
    for(int i = 1; i <= edgeSize; i++) {
        Geometry::setEta(Triangulation::edgeTable[i], 1.0);
    }
-   Approximator *app = new EulerApprox((sysdiffeq) Yamabe);
+   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "rc");
    time(&start);
    app->run(300, 0.01);
    time(&end);

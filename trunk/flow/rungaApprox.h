@@ -7,6 +7,7 @@
 class RungaApprox : public Approximator {
 public:
   RungaApprox(sysdiffeq de) : Approximator(de){}
+  RungaApprox(sysdiffeq de, char* histories) : Approximator(de, histories){}
   ~RungaApprox(){}
   void step(double dt);
 };

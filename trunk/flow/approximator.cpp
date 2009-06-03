@@ -5,16 +5,37 @@
 #include "Simplex/vertex.h"
 #include "approximator.h"
 
-void Approximator :: recordState(){
-  int vertCount = Triangulation::vertexTable.size();
-    
-  map<int, Vertex> M = Triangulation::vertexTable;
+void Approximator :: recordState(){    
+  if(radii) {
+    recordRadii();
+  }
+  if(curvs) {
+    recordCurvs();
+  }
+  if(areas) {
+    recordAreas();
+  }
+  if(volumes) {
+    recordVolumes();            
+  }
+}
+
+void Approximator::recordRadii() {
   map<int, Vertex>::iterator vIt;    
-  map<int, Vertex>::iterator vBegin = M.begin();
-  map<int, Vertex>::iterator vEnd = M.end();
+  map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+  map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
   
   for(vIt = vBegin; vIt != vEnd; vIt++){
     radiiHistory.push_back( Geometry::radius(vIt->second) );
+  }
+}
+
+void Approximator::recordCurvs() {
+  map<int, Vertex>::iterator vIt;    
+  map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+  map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+  
+  for(vIt = vBegin; vIt != vEnd; vIt++){
     if(Geometry::dim == ThreeD) {  
          curvHistory.push_back( Geometry::curvature(vIt->second) /
                                 Geometry::radius(vIt->second) );
@@ -22,7 +43,27 @@ void Approximator :: recordState(){
     else {
          curvHistory.push_back( Geometry::curvature(vIt->second) );
     }
-  }
+  }    
+}
+
+void Approximator::recordAreas() {
+     map<int, Face>::iterator fIt;
+     map<int, Face>::iterator fBegin = Triangulation::faceTable.begin();
+     map<int, Face>::iterator fEnd = Triangulation::faceTable.end();
+     
+     for(fIt = fBegin; fIt != fEnd; fIt++) {
+             areaHistory.push_back(Geometry::area(fIt->second));        
+     }
+}
+
+void Approximator::recordVolumes() {
+     map<int, Tetra>::iterator tIt;
+     map<int, Tetra>::iterator tBegin = Triangulation::tetraTable.begin();
+     map<int, Tetra>::iterator tEnd = Triangulation::tetraTable.end();
+     
+     for(tIt = tBegin; tIt != tEnd; tIt++) {
+             volumeHistory.push_back(Geometry::volume(tIt->second));
+     }  
 }
 
 void Approximator :: getLatest(double radii[], double curvs[]){
