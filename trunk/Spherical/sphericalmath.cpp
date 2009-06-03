@@ -1,6 +1,7 @@
 #include "sphericalmath.h"
 #include <cmath>
 #define PI 3.141592653589793238
+#include "Geometry/Geometry.h"
 
 double sphericalAngle(double lengthA, double lengthB, double lengthC, double radius)
 {
@@ -17,7 +18,7 @@ double sphericalAngle(Vertex v, Face f, double radius)
      diff = listDifference(f.getLocalEdges(), v.getLocalEdges());
      Edge e3 = Triangulation::edgeTable[diff[0]];
      
-     return sphericalAngle(e1.getLength(), e2.getLength(), e3.getLength());
+     return sphericalAngle(Geometry::length(e1), Geometry::length(e2), Geometry::length(e3));
 }
 
 double sphericalCurvature(Vertex v, double radius)
@@ -35,7 +36,8 @@ double sphericalCurvature(Vertex v, double radius)
 
 void sphericalCurvature(double radius)
 {
-      Triangulation::setSphericalAngles(radius);
+//      Triangulation::setSphericalAngles(radius);
+//  Why is this here???
       map<int, Vertex>::iterator vit;
       map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
       map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
@@ -45,11 +47,14 @@ void sphericalCurvature(double radius)
          vector<int> localF = (*(vit->second.getLocalFaces()));
          for(int i = 0; i < localF.size(); i++)
          {
-            curv -= Triangulation::faceTable[localF[i]].getAngle(vit->first);
+//            curv -= Triangulation::faceTable[localF[i]].getAngle(vit->first);
+// I replaced the above with the following line.  I think it is flawed (not calculating spherical angles?.
+            curv -= Geometry::angle(vit->second, Triangulation::faceTable[localF[i]]);
          }
          vit->second.setCurvature(curv);
       }
 }
+
 
 void sphericalCalcFlow(vector<double>* radii, vector<double>* curvatures,double dt ,double* initRadii,int numSteps, bool adjF)
 {
