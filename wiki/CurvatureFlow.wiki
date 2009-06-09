@@ -16,7 +16,8 @@
   One cannot list both two- and three-dimensional curvatures.
 
   {{{
-  Approximator(sysdiffeq funct, char* histories)
+  typedef void (*sysdiffeq)(double derivs[]);
+  Approximator(sysdiffeq funct, char* histories);
   }}}
 
   == Variables ==
