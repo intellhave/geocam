@@ -1,7 +1,7 @@
 #summary An alphabetical list of the functions in the Geocam Project
 #labels Featured
 
-     <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, [Functions#run R], [Functions#run S], T, U, V, W, X, Y, Z>
+     <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, [Functions#run R], [Functions#step S], T, U, V, W, X, Y, Z>
 
 = `run` =
 
@@ -74,7 +74,7 @@ app->run(0.0001, 0.0001, 0.01);
   == Description ==
 
   == Practicum ==
-  see [Functions##Description Description]
+  see [2#Description Description]
   == Limitations ==
 
   == Revisions ==
