@@ -8,6 +8,6 @@ Description of the Approximator class.
 == Variables ==
 
 == Functions ==
-  * run
+  * [run]
   * step
   * recordState
