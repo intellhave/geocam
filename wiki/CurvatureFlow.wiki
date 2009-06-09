@@ -1,5 +1,5 @@
 #labels Featured
-Description of the Approximator class.
+_Description of the Approximator class._
 
 = Approximator class =
 
