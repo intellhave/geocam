@@ -3,11 +3,11 @@ Description of the Approximator class.
 
 = Approximator class =
 
-= Description =
+== Description ==
 
-= Variables =
+== Variables ==
 
-= Functions =
+== Functions ==
   * run
   * step
   * recordState
