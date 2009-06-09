@@ -1,0 +1,13 @@
+#labels Featured
+Description of the Approximator class.
+
+= Approximator class =
+
+= Description =
+
+= Variables =
+
+= Functions =
+  * run
+  * step
+  * recordState
