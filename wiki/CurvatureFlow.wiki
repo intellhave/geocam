@@ -8,6 +8,6 @@
 == Variables ==
 
 == Functions ==
-  * [run]
+  * [Functions#run]
   * step
   * recordState
