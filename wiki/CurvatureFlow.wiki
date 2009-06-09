@@ -8,8 +8,8 @@
  
   == Constructor ==
   The constructor takes in a function that defines a system of differential equations and a string of characters representing what histories to record. For the function to be a `sysdiffeq` it must nto return a value and its only paramter is an array of doubles that will be filled in with values after the function completes. The string must be nul-terminated and consisting of only valid characters. The valid characters are:
-   * 'r': Record radii
-   * '2': Record two-dimensional curvatures
+   * r - Record radii
+   * 2 - Record two-dimensional curvatures
    * '3': Record three-dimensional curvatures
    * 'a': Record areas
    * 'v': Record volumes
