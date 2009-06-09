@@ -4,7 +4,6 @@
 = Introduction =
 
 = run =
-#summary The function that runs a curvature flow.
 
 == Key Words ==
 flow, curvature, stepsize, precision, accuracy, approximator
