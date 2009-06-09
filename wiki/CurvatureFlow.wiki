@@ -3,11 +3,11 @@
 
 = Approximator =
 
-== Description ==
+   == Description ==
 
-== Variables ==
+   == Variables ==
 
-== Functions ==
-  * [Functions#run `run`]
-  * step
-  * recordState
+   == Functions ==
+    * [Functions#run run]
+    * step
+    * recordState
