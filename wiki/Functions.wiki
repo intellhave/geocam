@@ -74,7 +74,7 @@ app->run(0.0001, 0.0001, 0.01);
   == Description ==
 
   == Practicum ==
-  see [2#Description Description]
+  see [##Description Description]
   == Limitations ==
 
   == Revisions ==
@@ -83,4 +83,4 @@ app->run(0.0001, 0.0001, 0.01);
 
   == Future Work ==
 
-<wiki:toc max_depth="2" />
+<wiki:toc max_depth="1" />
