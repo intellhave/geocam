@@ -74,7 +74,7 @@ app->run(0.0001, 0.0001, 0.01);
   == Description ==
 
   == Practicum ==
-  see [step##Description Description]
+  see [Functions##Description Description]
   == Limitations ==
 
   == Revisions ==
