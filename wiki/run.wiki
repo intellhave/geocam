@@ -26,6 +26,7 @@ If the run function is given a precision and accuracy, it will continue to call 
 The run function and the overarching Approximator class exists as an improvement over the curvature flows of earlier versions of the Geocam project. The run function provides the skeleton that is similar for all types of curvature flows. Beyond the constructor, this should be the only thing a user calls from the Approximator class.
 
 == Practicum ==
+Format:
 {{{
 run(int numsteps, double stepsize)	
 run(double precision, double accuracy, double stepsize)
