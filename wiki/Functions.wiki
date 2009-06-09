@@ -1,7 +1,7 @@
 #summary An alphabetical list of the functions in the Geocam Project
 #labels Featured
 
-     <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, [run R], S, T, U, V, W, X, Y, Z>
+     <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, [Functions#run R], S, T, U, V, W, X, Y, Z>
 
 = `run` =
 
