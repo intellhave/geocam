@@ -3,7 +3,7 @@
 
 = Introduction =
 
-= run =
+= `run` =
 
   == Key Words ==
   flow, curvature, stepsize, precision, accuracy, approximator
