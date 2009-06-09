@@ -1,4 +1,4 @@
-#summary Description of the `Approximator` class and how to run a curvature flow.
+#summary Description of the Approximator class and how to run a curvature flow.
 #labels Featured
 
 = `Approximator` =
