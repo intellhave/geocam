@@ -1,5 +1,5 @@
 #labels Featured
-_Description of the Approximator class._
+_Description of the Approximator class and how to run a curvature flow._
 
 = Approximator class =
 
