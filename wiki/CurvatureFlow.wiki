@@ -14,13 +14,15 @@
    * A - Record areas
    * V - Record volumes
   One cannot list both two- and three-dimensional curvatures.
-
   {{{
   typedef void (*sysdiffeq)(double derivs[]);
   Approximator(sysdiffeq funct, char* histories);
   }}}
 
-  == Variables ==
+  == Public Variables ==
+  `vector<double> radiiHistory, curvHistory, areaHistory, volumeHistory`
+
+  `sysdiffeq local_derivs`
 
   == Functions ==
     * [Functions#run run]
