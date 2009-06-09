@@ -26,24 +26,28 @@ If the run function is given a precision and accuracy, it will continue to call 
 The run function and the overarching Approximator class exists as an improvement over the curvature flows of earlier versions of the Geocam project. The run function provides the skeleton that is similar for all types of curvature flows. Beyond the constructor, this should be the only thing a user calls from the Approximator class.
 
 == Practicum ==
-{{{ run(int numsteps, double stepsize)	
-run(double precision, double accuracy, double stepsize)	}}}
+{{{
+run(int numsteps, double stepsize)	
+run(double precision, double accuracy, double stepsize)
+}}}
 
 Example:
-{{{// Create an approximator that uses the Euler method on a Yamabe flow.
+{{{
+// Create an approximator that uses the Euler method on a Yamabe flow.
 Approximator *app = new EulerApprox(Yamabe);
 
 // Run a Yamabe flow for 300 steps with a stepsize of 0.01.
 app->run(300, 0.01);
 // Run with a precision and accuracy bounds of 0.0001 and a stepsize of 0.01
-app->run(0.0001, 0.0001, 0.01);	}}}
+app->run(0.0001, 0.0001, 0.01);
+}}}
 
 == Limitations ==
 The run function is limited in the systems of differential equations that it can run. It is designed to run with curvature flows and, when precision and accuracy are used, expects the values to converge. If a precision/accuracy run is performed on a flow that does not converge, the run function will not stop. If a new curvature flow is created whose convergence is not the usual (as in curvature divided by radius in Yamabe flow) then the run function will have to be modified to accommodate for this.
 
 == Revisions ==
-Version 1.0 5/1/09 - Initial run function uploaded to the code
-Version 1.1 6/3/09 - run function modified to work with new Geometry structure
+Version 1.0 5/1/09 - Initial run function uploaded to the code.
+Version 1.1 6/3/09 - run function modified to work with new Geometry structure.
 
 == Testing ==
 The function was tested by performing two and three dimensional flows on familar triangulations. The start and end values for radii and curvature was then compared with our expected values. The expected values were obtained from the earlier curvature flows we had. We also checked that the end values were within the precision and accuracy bounds when they were in effect. 
