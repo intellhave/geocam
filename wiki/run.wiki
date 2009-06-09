@@ -16,7 +16,7 @@ Functions: step, recordState, getLatest, isPrecise, isAccurate
 
 Global Variables: radii, curvatures
 
-Local Variables: *int* numsteps, *double* stepsize, *double* precision, *double* accuracy
+Local Variables: `int numsteps`, `double stepsize`, `double precision`, `double accuracy`
 
 == Description ==
 If the run function is given a number of steps, it will call its step function that number of times. In between steps, the run function will record the current state of any values that have been requested to be recorded (this is specified in the constructor).
