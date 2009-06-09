@@ -51,7 +51,7 @@ The run function is limited in the systems of differential equations that it can
  * Version 1.1 6/3/09: run function modified to work with new Geometry structure.
 
 == Testing ==
-The function was tested by performing two and three dimensional flows on familar triangulations. The start and end values for radii and curvature was then compared with our expected values. The expected values were obtained from the earlier curvature flows we had. We also checked that the end values were within the precision and accuracy bounds when they were in effect. 
+The function was tested by performing two and three dimensional flows on familiar triangulations. The start and end values for radii and curvature was then compared with our expected values. The expected values were obtained from the earlier curvature flows we had (see [run#Description Description]). We also checked that the end values were within the precision and accuracy bounds when they were in effect. 
 
 == Future Work ==
 No future work is planned at this time, though possible changes would include providing for more general systems to be able to run. This would involve changing the way precision and accuracy are determined as well as what values are recorded.
