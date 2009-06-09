@@ -1,11 +1,11 @@
-#summary Function that runs a curvature flow.
+#summary The function that runs a curvature flow.
 
 == Key Words ==
 flow, curvature, stepsize, precision, accuracy, approximator
 
 == Authors ==
-Joseph Thomas
-Alex Henniges
+* Joseph Thomas
+* Alex Henniges
 
 == Introduction ==
 The run function of the Approximator class runs a system of differential equations representing a curvature flow for either a number of steps or until the values are within a desired accuracy and precision. The system to use and how steps are performed is given in the constructor of the approximator. The type of run is based on the parameters given.
