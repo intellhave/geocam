@@ -15,9 +15,9 @@
    * V - Record volumes
   One cannot list both two- and three-dimensional curvatures.
 
-  {{{
-  Approximator(sysdiffeq funct, char* histories)
-  }}}
+   {{{
+   Approximator(sysdiffeq funct, char* histories)
+   }}}
 
   == Variables ==
 
