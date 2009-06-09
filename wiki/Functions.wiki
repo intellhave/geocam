@@ -52,8 +52,8 @@ app->run(0.0001, 0.0001, 0.01);
   The `run` function is limited in the systems of differential equations that it can run. It is designed to run with curvature flows and, when precision and accuracy are used, expects the values to converge. If a precision/accuracy run is performed on a flow that does not converge, the `run` function will not stop. If a new curvature flow is created whose convergence is not the usual (as in curvature divided by radius in Yamabe flow) then the `run` function will have to be modified to accommodate for this.
 
   == Revisions ==
-   * Version 1.0 5/1/09: Initial run function uploaded to the code.
-   * Version 1.1 6/3/09: run function modified to work with new Geometry structure.
+   * Version 1.0 5/1/09: Initial `run` function uploaded to the code.
+   * Version 1.1 6/3/09: `run` function modified to work with new Geometry structure.
 
   == Testing ==
   The function was tested by performing two and three dimensional flows on familiar triangulations. The start and end values for radii and curvature was then compared with our expected values. The expected values were obtained from the earlier curvature flows we had (see [Functions#run#Description Description]). We also checked that the end values were within the precision and accuracy bounds when they were in effect. 
