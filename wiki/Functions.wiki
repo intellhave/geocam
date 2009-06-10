@@ -1,9 +1,9 @@
 #summary An alphabetical list of the functions in the Geocam Project
 #labels Featured
 
-     <A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, [Functions#run R], [Functions#step S], T, U, V, W, X, Y, Z>
+     <[Functions#Approximator::run A], B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, [Functions#step S], T, U, V, W, X, Y, Z>
 
-= `run` =
+= `Approximator::run` =
 
   == Keywords ==
   flow, curvature, stepsize, precision, accuracy, approximator
