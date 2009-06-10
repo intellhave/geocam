@@ -148,14 +148,15 @@ int main(int argc, char** argv){
    for(int i = 1; i <= edgeSize; i++) {
        Geometry::setEta(Triangulation::edgeTable[i], 1.0);
    }
-   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "rcv");
+   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "rc");
    time(&start);
-   app->run(300, 0.01);
+  // app->run(300, 0.01);
+   app->run(0.0001, 0.0001, 0.01);
    time(&end);
    printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
                       &(app->radiiHistory), &(app->curvHistory));
-   printResultsVolumes("C:/Dev-Cpp/geocam/Triangulation Files/Volumes.txt",
-                          &(app->volumeHistory));
+   //printResultsVolumes("C:/Dev-Cpp/geocam/Triangulation Files/Volumes.txt",
+      //                    &(app->volumeHistory));
    printf("Time: %.2lf seconds\n", difftime(end, start));
    system("PAUSE");
 }

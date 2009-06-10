@@ -9,13 +9,13 @@ using namespace std;
 class Approximator{
  public:
   vector<double> radiiHistory; bool radii;
-  vector<double> curvHistory; bool curvs;
+  vector<double> curvHistory; bool curvs2D, curvs3D;
   vector<double> areaHistory; bool areas;
   vector<double> volumeHistory; bool volumes;
   sysdiffeq local_derivs;
  Approximator(sysdiffeq de) {
       local_derivs = de;
-      radii = curvs = areas = volumes = false;
+      radii = curvs2D = curvs3D = areas = volumes = false;
       
       vector<double> radiiHistory(); 
       vector<double> curvHistory();
@@ -32,9 +32,11 @@ class Approximator{
             case 'r': case 'R':
                  radii = true;
                  break;
-            case 'c': case 'C':
-                 curvs = true;
+            case '2':
+                 curvs2D = true;
                  break;
+            case '3':
+                 curvs3D = true;
             case 'a': case 'A':
                  areas = true;
                  break;
@@ -46,10 +48,10 @@ class Approximator{
   }  
   ~Approximator(){}
   
-  virtual void step(double stepsize) = 0;
   void run(int numSteps, double stepsize);
   void run(double precision, double accuracy, double stepsize);
-
+       
+  virtual void step(double stepsize) = 0;
   void recordState();
   void recordRadii();
   void recordCurvs();

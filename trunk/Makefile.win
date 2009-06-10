@@ -1,100 +1,66 @@
-<<<<<<< .working
 # Project: Project1
 # Makefile created by Dev-C++ 4.9.9.2
 
-CPP  = g++.exe -D__DEBUG__
-CC   = gcc.exe -D__DEBUG__
+CPP  = g++.exe
+CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/parsecalc.o Geometry/Geometry.o Geometry/volume.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o Newtons_Method.o main.o $(RES)
-LINKOBJ  = Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/vertex.o miscmath.o pointlinecircle.o delaunay.o 3DTriangulation/3DInputOutput.o Simplex/tetra.o addremove.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Triangulation/smallMorphs.o 3DTriangulation/3DTriangulationMorph.o Triangulation/MinMax.o plot.o hessian.o flow/sysdiffeq.o flow/approximator.o flow/rungaApprox.o flow/eulerApprox.o flow/parsecalc.o Geometry/Geometry.o Geometry/volume.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o Newtons_Method.o main.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
-INCS =  -I"include"  -I"C:/Dev-Cpp/geocam" 
-CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL"  -I"C:/Dev-Cpp/geocam" 
-BIN  = flow.exe
-CXXFLAGS = $(CXXINCS)   -pg -g3
-CFLAGS = $(INCS)   -pg -g3
+OBJ  = main.o addremove.o delaunay.o hessian.o miscmath.o Newtons_Method.o plot.o pointlinecircle.o 3DTriangulation/3DInputOutput.o 3DTriangulation/3DTriangulationMorph.o flow/approximator.o flow/convert.o flow/eulerApprox.o flow/parsecalc.o flow/rungaApprox.o flow/sysdiffeq.o Geometry/Geometry.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o Geometry/volume.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/tetra.o Simplex/vertex.o Triangulation/MinMax.o Triangulation/smallMorphs.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o $(RES)
+LINKOBJ  = main.o addremove.o delaunay.o hessian.o miscmath.o Newtons_Method.o plot.o pointlinecircle.o 3DTriangulation/3DInputOutput.o 3DTriangulation/3DTriangulationMorph.o flow/approximator.o flow/convert.o flow/eulerApprox.o flow/parsecalc.o flow/rungaApprox.o flow/sysdiffeq.o Geometry/Geometry.o Geometry/hyp_angle.o Geometry/length.o Geometry/PartialEdge.o Geometry/radius.o Geometry/spher_angle.o Geometry/triposition.o Geometry/volume.o Geometry/2DCurvature.o Geometry/3DCurvature.o Geometry/area.o Geometry/dih_angle.o Geometry/EdgeCurvature.o Geometry/eta.o Geometry/euc_angle.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/tetra.o Simplex/vertex.o Triangulation/MinMax.o Triangulation/smallMorphs.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  
+INCS =  -I"include" 
+CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL" 
+BIN  = Project1.exe
+CXXFLAGS = $(CXXINCS)  
+CFLAGS = $(INCS)  
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before flow.exe all-after
+all: all-before Project1.exe all-after
 
 
 clean: clean-custom
 	${RM} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "flow.exe" $(LIBS)
+	$(CPP) $(LINKOBJ) -o "Project1.exe" $(LIBS)
 
-Simplex/edge.o: Simplex/edge.cpp
-	$(CPP) -c Simplex/edge.cpp -o Simplex/edge.o $(CXXFLAGS)
-
-Simplex/face.o: Simplex/face.cpp
-	$(CPP) -c Simplex/face.cpp -o Simplex/face.o $(CXXFLAGS)
-
-Simplex/simplex.o: Simplex/simplex.cpp
-	$(CPP) -c Simplex/simplex.cpp -o Simplex/simplex.o $(CXXFLAGS)
-
-Simplex/vertex.o: Simplex/vertex.cpp
-	$(CPP) -c Simplex/vertex.cpp -o Simplex/vertex.o $(CXXFLAGS)
-
-miscmath.o: miscmath.cpp
-	$(CPP) -c miscmath.cpp -o miscmath.o $(CXXFLAGS)
-
-pointlinecircle.o: pointlinecircle.cpp
-	$(CPP) -c pointlinecircle.cpp -o pointlinecircle.o $(CXXFLAGS)
-
-delaunay.o: delaunay.cpp
-	$(CPP) -c delaunay.cpp -o delaunay.o $(CXXFLAGS)
-
-3DTriangulation/3DInputOutput.o: 3DTriangulation/3DInputOutput.cpp
-	$(CPP) -c 3DTriangulation/3DInputOutput.cpp -o 3DTriangulation/3DInputOutput.o $(CXXFLAGS)
-
-Simplex/tetra.o: Simplex/tetra.cpp
-	$(CPP) -c Simplex/tetra.cpp -o Simplex/tetra.o $(CXXFLAGS)
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
 
 addremove.o: addremove.cpp
 	$(CPP) -c addremove.cpp -o addremove.o $(CXXFLAGS)
 
-Triangulation/triangulation.o: Triangulation/triangulation.cpp
-	$(CPP) -c Triangulation/triangulation.cpp -o Triangulation/triangulation.o $(CXXFLAGS)
-
-Triangulation/TriangulationCoordinateSystem.o: Triangulation/TriangulationCoordinateSystem.cpp
-	$(CPP) -c Triangulation/TriangulationCoordinateSystem.cpp -o Triangulation/TriangulationCoordinateSystem.o $(CXXFLAGS)
-
-Triangulation/triangulationInputOutput.o: Triangulation/triangulationInputOutput.cpp
-	$(CPP) -c Triangulation/triangulationInputOutput.cpp -o Triangulation/triangulationInputOutput.o $(CXXFLAGS)
-
-Triangulation/triangulationmorph.o: Triangulation/triangulationmorph.cpp
-	$(CPP) -c Triangulation/triangulationmorph.cpp -o Triangulation/triangulationmorph.o $(CXXFLAGS)
-
-Triangulation/triangulationPlane.o: Triangulation/triangulationPlane.cpp
-	$(CPP) -c Triangulation/triangulationPlane.cpp -o Triangulation/triangulationPlane.o $(CXXFLAGS)
-
-Triangulation/smallMorphs.o: Triangulation/smallMorphs.cpp
-	$(CPP) -c Triangulation/smallMorphs.cpp -o Triangulation/smallMorphs.o $(CXXFLAGS)
-
-3DTriangulation/3DTriangulationMorph.o: 3DTriangulation/3DTriangulationMorph.cpp
-	$(CPP) -c 3DTriangulation/3DTriangulationMorph.cpp -o 3DTriangulation/3DTriangulationMorph.o $(CXXFLAGS)
-
-Triangulation/MinMax.o: Triangulation/MinMax.cpp
-	$(CPP) -c Triangulation/MinMax.cpp -o Triangulation/MinMax.o $(CXXFLAGS)
-
-plot.o: plot.cpp
-	$(CPP) -c plot.cpp -o plot.o $(CXXFLAGS)
+delaunay.o: delaunay.cpp
+	$(CPP) -c delaunay.cpp -o delaunay.o $(CXXFLAGS)
 
 hessian.o: hessian.cpp
 	$(CPP) -c hessian.cpp -o hessian.o $(CXXFLAGS)
 
-flow/sysdiffeq.o: flow/sysdiffeq.cpp
-	$(CPP) -c flow/sysdiffeq.cpp -o flow/sysdiffeq.o $(CXXFLAGS)
+miscmath.o: miscmath.cpp
+	$(CPP) -c miscmath.cpp -o miscmath.o $(CXXFLAGS)
+
+Newtons_Method.o: Newtons_Method.cpp
+	$(CPP) -c Newtons_Method.cpp -o Newtons_Method.o $(CXXFLAGS)
+
+plot.o: plot.cpp
+	$(CPP) -c plot.cpp -o plot.o $(CXXFLAGS)
+
+pointlinecircle.o: pointlinecircle.cpp
+	$(CPP) -c pointlinecircle.cpp -o pointlinecircle.o $(CXXFLAGS)
+
+3DTriangulation/3DInputOutput.o: 3DTriangulation/3DInputOutput.cpp
+	$(CPP) -c 3DTriangulation/3DInputOutput.cpp -o 3DTriangulation/3DInputOutput.o $(CXXFLAGS)
+
+3DTriangulation/3DTriangulationMorph.o: 3DTriangulation/3DTriangulationMorph.cpp
+	$(CPP) -c 3DTriangulation/3DTriangulationMorph.cpp -o 3DTriangulation/3DTriangulationMorph.o $(CXXFLAGS)
 
 flow/approximator.o: flow/approximator.cpp
 	$(CPP) -c flow/approximator.cpp -o flow/approximator.o $(CXXFLAGS)
 
-flow/rungaApprox.o: flow/rungaApprox.cpp
-	$(CPP) -c flow/rungaApprox.cpp -o flow/rungaApprox.o $(CXXFLAGS)
+flow/convert.o: flow/convert.cpp
+	$(CPP) -c flow/convert.cpp -o flow/convert.o $(CXXFLAGS)
 
 flow/eulerApprox.o: flow/eulerApprox.cpp
 	$(CPP) -c flow/eulerApprox.cpp -o flow/eulerApprox.o $(CXXFLAGS)
@@ -102,8 +68,32 @@ flow/eulerApprox.o: flow/eulerApprox.cpp
 flow/parsecalc.o: flow/parsecalc.cpp
 	$(CPP) -c flow/parsecalc.cpp -o flow/parsecalc.o $(CXXFLAGS)
 
+flow/rungaApprox.o: flow/rungaApprox.cpp
+	$(CPP) -c flow/rungaApprox.cpp -o flow/rungaApprox.o $(CXXFLAGS)
+
+flow/sysdiffeq.o: flow/sysdiffeq.cpp
+	$(CPP) -c flow/sysdiffeq.cpp -o flow/sysdiffeq.o $(CXXFLAGS)
+
 Geometry/Geometry.o: Geometry/Geometry.cpp
 	$(CPP) -c Geometry/Geometry.cpp -o Geometry/Geometry.o $(CXXFLAGS)
+
+Geometry/hyp_angle.o: Geometry/hyp_angle.cpp
+	$(CPP) -c Geometry/hyp_angle.cpp -o Geometry/hyp_angle.o $(CXXFLAGS)
+
+Geometry/length.o: Geometry/length.cpp
+	$(CPP) -c Geometry/length.cpp -o Geometry/length.o $(CXXFLAGS)
+
+Geometry/PartialEdge.o: Geometry/PartialEdge.cpp
+	$(CPP) -c Geometry/PartialEdge.cpp -o Geometry/PartialEdge.o $(CXXFLAGS)
+
+Geometry/radius.o: Geometry/radius.cpp
+	$(CPP) -c Geometry/radius.cpp -o Geometry/radius.o $(CXXFLAGS)
+
+Geometry/spher_angle.o: Geometry/spher_angle.cpp
+	$(CPP) -c Geometry/spher_angle.cpp -o Geometry/spher_angle.o $(CXXFLAGS)
+
+Geometry/triposition.o: Geometry/triposition.cpp
+	$(CPP) -c Geometry/triposition.cpp -o Geometry/triposition.o $(CXXFLAGS)
 
 Geometry/volume.o: Geometry/volume.cpp
 	$(CPP) -c Geometry/volume.cpp -o Geometry/volume.o $(CXXFLAGS)
@@ -129,85 +119,38 @@ Geometry/eta.o: Geometry/eta.cpp
 Geometry/euc_angle.o: Geometry/euc_angle.cpp
 	$(CPP) -c Geometry/euc_angle.cpp -o Geometry/euc_angle.o $(CXXFLAGS)
 
-Geometry/hyp_angle.o: Geometry/hyp_angle.cpp
-	$(CPP) -c Geometry/hyp_angle.cpp -o Geometry/hyp_angle.o $(CXXFLAGS)
+Simplex/edge.o: Simplex/edge.cpp
+	$(CPP) -c Simplex/edge.cpp -o Simplex/edge.o $(CXXFLAGS)
 
-Geometry/length.o: Geometry/length.cpp
-	$(CPP) -c Geometry/length.cpp -o Geometry/length.o $(CXXFLAGS)
+Simplex/face.o: Simplex/face.cpp
+	$(CPP) -c Simplex/face.cpp -o Simplex/face.o $(CXXFLAGS)
 
-Geometry/PartialEdge.o: Geometry/PartialEdge.cpp
-	$(CPP) -c Geometry/PartialEdge.cpp -o Geometry/PartialEdge.o $(CXXFLAGS)
+Simplex/simplex.o: Simplex/simplex.cpp
+	$(CPP) -c Simplex/simplex.cpp -o Simplex/simplex.o $(CXXFLAGS)
 
-Geometry/radius.o: Geometry/radius.cpp
-	$(CPP) -c Geometry/radius.cpp -o Geometry/radius.o $(CXXFLAGS)
+Simplex/tetra.o: Simplex/tetra.cpp
+	$(CPP) -c Simplex/tetra.cpp -o Simplex/tetra.o $(CXXFLAGS)
 
-Geometry/spher_angle.o: Geometry/spher_angle.cpp
-	$(CPP) -c Geometry/spher_angle.cpp -o Geometry/spher_angle.o $(CXXFLAGS)
+Simplex/vertex.o: Simplex/vertex.cpp
+	$(CPP) -c Simplex/vertex.cpp -o Simplex/vertex.o $(CXXFLAGS)
 
-Geometry/triposition.o: Geometry/triposition.cpp
-	$(CPP) -c Geometry/triposition.cpp -o Geometry/triposition.o $(CXXFLAGS)
+Triangulation/MinMax.o: Triangulation/MinMax.cpp
+	$(CPP) -c Triangulation/MinMax.cpp -o Triangulation/MinMax.o $(CXXFLAGS)
 
-Newtons_Method.o: Newtons_Method.cpp
-	$(CPP) -c Newtons_Method.cpp -o Newtons_Method.o $(CXXFLAGS)
+Triangulation/smallMorphs.o: Triangulation/smallMorphs.cpp
+	$(CPP) -c Triangulation/smallMorphs.cpp -o Triangulation/smallMorphs.o $(CXXFLAGS)
 
-main.o: main.cpp
-	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
-=======
-# Project: Project1
-# Makefile created by Dev-C++ 4.9.9.2
+Triangulation/triangulation.o: Triangulation/triangulation.cpp
+	$(CPP) -c Triangulation/triangulation.cpp -o Triangulation/triangulation.o $(CXXFLAGS)
 
-CPP  = g++.exe
-CC   = gcc.exe
-WINDRES = windres.exe
-RES  = 
-OBJ  = main.o vertex.o simplex.o edge.o triangulation.o face.o triangulationmath.o filereader.o triangulationInputOutput.o triangulationmorph.o $(RES)
-LINKOBJ  = main.o vertex.o simplex.o edge.o triangulation.o face.o triangulationmath.o filereader.o triangulationInputOutput.o triangulationmorph.o $(RES)
-LIBS =  -L"C:/Dev-Cpp/lib"  
-INCS =  -I"C:/Dev-Cpp/include" 
-CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
-BIN  = Project1.exe
-CXXFLAGS = $(CXXINCS)  
-CFLAGS = $(INCS)  
-RM = rm -f
+Triangulation/TriangulationCoordinateSystem.o: Triangulation/TriangulationCoordinateSystem.cpp
+	$(CPP) -c Triangulation/TriangulationCoordinateSystem.cpp -o Triangulation/TriangulationCoordinateSystem.o $(CXXFLAGS)
 
-.PHONY: all all-before all-after clean clean-custom
+Triangulation/triangulationInputOutput.o: Triangulation/triangulationInputOutput.cpp
+	$(CPP) -c Triangulation/triangulationInputOutput.cpp -o Triangulation/triangulationInputOutput.o $(CXXFLAGS)
 
-all: all-before Project1.exe all-after
+Triangulation/triangulationmorph.o: Triangulation/triangulationmorph.cpp
+	$(CPP) -c Triangulation/triangulationmorph.cpp -o Triangulation/triangulationmorph.o $(CXXFLAGS)
 
-
-clean: clean-custom
-	${RM} $(OBJ) $(BIN)
-
-$(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "Project1.exe" $(LIBS)
-
-main.o: main.cpp
-	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
-
-vertex.o: vertex.cpp
-	$(CPP) -c vertex.cpp -o vertex.o $(CXXFLAGS)
-
-simplex.o: simplex.cpp
-	$(CPP) -c simplex.cpp -o simplex.o $(CXXFLAGS)
-
-edge.o: edge.cpp
-	$(CPP) -c edge.cpp -o edge.o $(CXXFLAGS)
-
-triangulation.o: triangulation.cpp
-	$(CPP) -c triangulation.cpp -o triangulation.o $(CXXFLAGS)
-
-face.o: face.cpp
-	$(CPP) -c face.cpp -o face.o $(CXXFLAGS)
-
-triangulationmath.o: triangulationmath.cpp
-	$(CPP) -c triangulationmath.cpp -o triangulationmath.o $(CXXFLAGS)
-
-filereader.o: filereader.cpp
-	$(CPP) -c filereader.cpp -o filereader.o $(CXXFLAGS)
-
-triangulationInputOutput.o: triangulationInputOutput.cpp
-	$(CPP) -c triangulationInputOutput.cpp -o triangulationInputOutput.o $(CXXFLAGS)
-
-triangulationmorph.o: triangulationmorph.cpp
-	$(CPP) -c triangulationmorph.cpp -o triangulationmorph.o $(CXXFLAGS)
->>>>>>> .merge-right.r3
+Triangulation/triangulationPlane.o: Triangulation/triangulationPlane.cpp
+	$(CPP) -c Triangulation/triangulationPlane.cpp -o Triangulation/triangulationPlane.o $(CXXFLAGS)

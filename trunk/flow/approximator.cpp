@@ -5,12 +5,12 @@
 #include "Simplex/vertex.h"
 #include "approximator.h"
 
-void Approximator :: recordState(){    
-  if(radii) {
+void Approximator :: recordState(){  
     recordRadii();
-  }
   if(curvs) {
-    recordCurvs();
+    record3DCurvs();
+  } else {
+    record2DCurvs();
   }
   if(areas) {
     recordAreas();
@@ -30,7 +30,7 @@ void Approximator::recordRadii() {
   }
 }
 
-void Approximator::recordCurvs() {
+void Approximator::record2DCurvs() {
   map<int, Vertex>::iterator vIt;    
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
