@@ -12,6 +12,28 @@
 #include "Geometry/Geometry.h"
 #define PI 	3.141592653589793238 
 
+void getRadii(double* radii) {
+     map<int, Vertex>::iterator vit;
+     int i = 0;
+     for(vit = Triangulation::vertexTable.begin(); 
+             vit != Triangulation::vertexTable.end(); vit++)
+     {
+       radii[i] = Radius::valueAt(vit->second);
+       i++;
+     }     
+}
+
+void setRadii(double* radii) {
+     map<int, Vertex>::iterator vit;
+     int i = 0;
+     for(vit = Triangulation::vertexTable.begin(); 
+             vit != Triangulation::vertexTable.end(); vit++)
+     {
+       Radius::At(vit->second)->setValue(radii[i]);
+       i++;
+     }
+}
+
 void printData(FILE* result) 
 {
      double L;
@@ -25,21 +47,21 @@ void printData(FILE* result)
            fprintf(result, "\n\nRadii - Curvature\n__________\n");
     for(vvit = Triangulation::vertexTable.begin(); vvit != Triangulation::vertexTable.end(); vvit++)
     {
-       double curv = Geometry::curvature(vvit->second);
-       fprintf(result, "Vertex %3d:\t%.10f\t%.10f\n", vvit->first, Geometry::radius(vvit->second), curv/(Geometry::radius(vvit->second)));
+       double curv = Curvature3D::valueAt(vvit->second);
+       fprintf(result, "Vertex %3d:\t%.10f\t%.10f\n", vvit->first, Radius::valueAt(vvit->second), curv/(Radius::valueAt(vvit->second)));
           }
           fprintf(result, "\n\nVolumes:\n");
           int i;
           for(i=1; i<=Triangulation::tetraTable.size(); ++i)
           {
-                   fprintf(result, "Tetrahedron %d:\t%.10f\n", i, Geometry::volume(Triangulation::tetraTable[i]));
+                   fprintf(result, "Tetrahedron %d:\t%.10f\n", i, Volume::valueAt(Triangulation::tetraTable[i]));
           }
     fprintf(result, "\n\nEta - Length\n__________\n");
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
       {
-        fprintf(result, "Edge %3d:\t%.10f\t%.10f\n", eit->first, Geometry::eta(eit->second),
-                       Geometry::length(eit->second) );
-                       L=L+Geometry::length(eit->second);
+        fprintf(result, "Edge %3d:\t%.10f\t%.10f\n", eit->first, Eta::valueAt(eit->second),
+                       Length::valueAt(eit->second) );
+        L=L+Length::valueAt(eit->second);
       }
 //    fprintf(result, "\nsum of lengths = %f\n", L);
     fprintf(result, "\n\nF() = %f\n", F());
@@ -49,7 +71,7 @@ void printData(FILE* result)
 
 void MinMax(double deltaEta, double b, double a)
 {
-   Approximator* app = new EulerApprox( (sysdiffeq) Yamabe);                
+   Approximator* app = new EulerApprox( (sysdiffeq) Yamabe, "r3");                
    char results[] = "Triangulation Files/ODE Result.txt";
    FILE* result = fopen(results, "w");
    map<int, double> deltaFE;
@@ -86,20 +108,20 @@ while(true) {
  //  while(!allNegative(&deltaFE)) { 
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
                 {
-                printf("Edge %3d: %.10f\n", eit->first, Geometry::eta(eit->second));
+                printf("Edge %3d: %.10f\n", eit->first, Eta::valueAt(eit->second));
                 } 
       double totalvolume=0;
       for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
       {
-              printf("Tetrahedron %d: %.10f\n", tit->first, Geometry::volume(tit->second));
-              totalvolume += Geometry::volume(tit->second) ;
+              printf("Tetrahedron %d: %.10f\n", tit->first, Volume::valueAt(tit->second));
+              totalvolume += Volume::valueAt(tit->second) ;
               }
               printf("Total Volume = %.10f\n", totalvolume);
                           
       //updateEtas(&deltaFE, b);
       //printData(result);
       //updateEtas(&deltaFE, b);
-      Geometry::getRadii(initRadii);
+      getRadii(initRadii);
       printf("\n*** *** *** *** *** *** *** *** *** *** ***\n");
       app->run(precision, accuracy, dt);
       printf("\nF = %.10f\n", F());
@@ -109,7 +131,7 @@ while(true) {
       map<int, Vertex>::iterator vvvit;
       for(vvvit = Triangulation::vertexTable.begin(); vvvit != Triangulation::vertexTable.end(); vvvit++)
    {
-       double curv = Geometry::curvature(vvvit->second);
+       double curv = Curvature3D::valueAt(vvvit->second);
        printf("vertex %3d: %f\t%.10f\n", vvvit->first, Geometry::radius(vvvit->second), curv/(Geometry::radius(vvvit->second)));
            }
       
@@ -124,8 +146,9 @@ while(true) {
 
 double FE(double deltaEta, int index)
 {
-   Approximator* app = new EulerApprox( (sysdiffeq) Yamabe); 
-   double curEta = Geometry::eta(Triangulation::edgeTable[index]);
+   Approximator* app = new EulerApprox( (sysdiffeq) Yamabe, "r3");
+   Eta* eta = Eta::At(Triangulation::edgeTable[index])
+   double curEta = eta->getValue();
    Geometry::setEta(Triangulation::edgeTable[index], curEta + deltaEta);
    vector<double> radii;
    vector<double> curvs;
@@ -135,11 +158,11 @@ double FE(double deltaEta, int index)
    double accuracy = 0.000000001;
    double precision = 0.000000001;
    
-   Geometry::getRadii(initRadii);
+   getRadii(initRadii);
    app->run(precision, accuracy, dt);
    double result = F();
-   Geometry::setEta(Triangulation::edgeTable[index], curEta);
-   Geometry::setRadii(initRadii);
+   eta->setValue(curEta);
+   setRadii(initRadii);
    return result;
 }
 
@@ -151,14 +174,14 @@ double F()
    double sumV = 0;
    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
    {
-       double curv = Geometry::curvature(vit->second);
+       double curv = Curvature3D::valueAt(vit->second);
        //sumR += vit->second.getRadius();
        sumK += curv;
    }
    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
    {
           
-       sumV += Geometry::volume(tit->second);
+       sumV += Volume::valueAt(tit->second);
 // sumV calculates the total volume of the manifold
    }
    return sumK/(pow(sumV, (1.0/3.0)));
@@ -174,13 +197,15 @@ void updateEtas(map<int, double>* deltaFE, double b, double a)
      }
      length = sqrt(length);
      printf("\nGradient Length: %.10f\n", length);
-     
+     Eta* eta;
+     double curEta;
      for(dfit = (*deltaFE).begin(); dfit != (*deltaFE).end(); dfit++)
      {
-         double curEta = Geometry::eta(Triangulation::edgeTable[dfit->first]);
+         eta = Eta::At(Triangulation::edgeTable[dfit->first]);
+         double curEta = eta->getValue();
 
          //Triangulation::edgeTable[dfit->first].setEta(curEta + b*(dfit->second) );
-         Geometry::setEta(Triangulation::edgeTable[dfit->first], curEta + dfit->second / length * a);
+         eta->setValue(curEta + dfit->second / length * a);
 
      }
 }

@@ -11,12 +11,12 @@ void StdRicci(double derivs[]){
   map<int, Vertex>::iterator vit;
   map<int, Vertex>::iterator vBegin =  Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
-  Geometry::netCurvature();
+  
   double Ki, ri;
   int ii = 0;
   for(vit = vBegin; vit != vEnd; ii++, vit++){
-    Ki = Geometry::curvature(vit->second);     
-    ri = Geometry::radius(vit->second);     
+    Ki = Curvature2D::valueAt(vit->second);     
+    ri = Radius::valueAt(vit->second);     
     derivs[ii] = (-1) * Ki * ri;
   }
 }
@@ -25,15 +25,22 @@ void AdjRicci(double derivs[]){
   map<int, Vertex>::iterator vit;
   map<int, Vertex>::iterator vBegin =  Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
-  
-  double Ki, ri;
-  double avgK = Geometry::netCurvature() / Triangulation::vertexTable.size();
+  int vertSize = Triangulation::vertexTable.size();
+  double Ki[vertSize];
+  double ri, avgK;
   
   int ii = 0;
-  for(vit = vBegin; vit != vEnd; ii++, vit++){
-    Ki = Geometry::curvature(vit->second);     
-    ri = Geometry::radius(vit->second); 
-    derivs[ii] = (avgK - Ki) * ri;
+  for(vit = vBegin; vit != vEnd; ii++, vit++) {
+     Ki[ii] = Curvature2D::valueAt(vit->second);
+     avgK += Ki[ii];
+  }
+  
+  avgK = avgK / vertSize;
+  
+  ii = 0;
+  for(vit = vBegin; vit != vEnd; ii++, vit++){     
+    ri = Radius::valueAt(vit->second); 
+    derivs[ii] = (avgK - Ki[ii]) * ri;
   }   
 }
 
@@ -48,12 +55,11 @@ void SpherRicci(double derivs[]){
   
   double Ki, ri;
   double radius = 1.0; // Very mysterious constant. See sphericalmath.cpp.
-  Geometry::netCurvature();
   
   int ii = 0;
   for(vit = vBegin; vit != vEnd; ii++, vit++){
-      Ki = Geometry::curvature(vit->second);     
-      ri = Geometry::radius(vit->second) / radius; 
+      Ki = Curvature2D::valueAt(vit->second);     
+      ri = Radius::valueAt(vit->second) / radius; 
       derivs[ii] = (-1) * Ki * sin(ri / radius);
   }   
 }
@@ -65,14 +71,23 @@ void AdjSpherRicci(double derivs[]){
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();  
 
   double radius = 1.0; // Very mysterious constant. See sphericalmath.cpp.      
-  double avgK = Geometry::netCurvature() / Triangulation::vertexTable.size();
+  int vertSize = Triangulation::vertexTable.size();
+  double Ki[vertSize];
+  double ri, avgK;
 
-  double Ki, ri;
   int ii = 0;
-  for(vit = vBegin; vit != vEnd; ii++, vit++){
-      Ki = Geometry::curvature(vit->second);     
-      ri = Geometry::radius(vit->second) / radius; 
-      derivs[ii] = (avgK * ri) - (Ki * sin(ri));
+  for(vit = vBegin; vit != vEnd; ii++, vit++) {
+     Ki[ii] = Curvature2D::valueAt(vit->second);
+     avgK += Ki[ii];
+  }
+  
+  
+  avgK = avgK / vertSize;
+  
+  ii = 0;
+  for(vit = vBegin; vit != vEnd; ii++, vit++){  
+      ri = Radius::valueAt(vit->second) / radius; 
+      derivs[ii] = (avgK * ri) - (Ki[ii] * sin(ri));
   }     
 }
 
@@ -82,11 +97,10 @@ void HypRicci(double derivs[]){
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();  
 
   double Ki, ri;
-  Geometry::netCurvature();
   int ii = 0;
   for(vit = vBegin; vit != vEnd; ii++, vit++){
-      Ki = Geometry::curvature(vit->second);     
-      ri = Geometry::radius(vit->second); 
+      Ki = Curvature2D::valueAt(vit->second);     
+      ri = Radius::valueAt(vit->second); 
       derivs[ii] = (-1) * Ki * sinh(ri);
   }     
 }
@@ -95,15 +109,23 @@ void AdjHypRicci(double derivs[]){
   map<int, Vertex>::iterator vit;
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();  
-      
-  double avgK = Geometry::netCurvature() / Triangulation::vertexTable.size();
+  int vertSize = Triangulation::vertexTable.size();
+  double Ki[vertSize];
+  double ri, avgK;
 
-  double Ki, ri;
   int ii = 0;
-  for(vit = vBegin; vit != vEnd; ii++, vit++){
-      Ki = Geometry::curvature(vit->second);     
-      ri = Geometry::radius(vit->second); 
-      derivs[ii] = (avgK * ri) - (Ki * sinh(ri));
+  for(vit = vBegin; vit != vEnd; ii++, vit++) {
+     Ki[ii] = Curvature2D::valueAt(vit->second);
+     avgK += Ki[ii];
+  }
+  
+  
+  avgK = avgK / vertSize;
+  
+  ii = 0;
+  for(vit = vBegin; vit != vEnd; ii++, vit++){  
+      ri = Radius::valueAt(vit->second); 
+      derivs[ii] = (avgK * ri) - (Ki[ii] * sinh(ri));
   }     
 }
 
@@ -115,8 +137,8 @@ double calcNormalization()
    map<int, Tetra>::iterator tit;
    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
    {
-      V=Geometry::volume(tit->second);
-      result += Geometry::CayleyVolumeDeriv(tit->second);
+      V=Volume::valueAt(tit->second);
+      result += VolumePartial::valueAt(tit->second);
       
       denom += V;
     
@@ -129,14 +151,13 @@ void Yamabe(double derivs[]) {
   map<int, Vertex>::iterator vit;
   map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
-  
-  Geometry::netCurvature();  
+   
   double norm = calcNormalization();
   double Ki, ri;
   int ii = 0;
   for(vit = vBegin; vit != vEnd; ii++, vit++) {
-      Ki = Geometry::curvature(vit->second);     
-      ri = Geometry::radius(vit->second); 
+      Ki = Curvature3D::valueAt(vit->second);     
+      ri = Radius::valueAt(vit->second); 
       derivs[ii] = (norm * ri - Ki);        
   }    
 }

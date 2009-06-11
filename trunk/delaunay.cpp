@@ -21,8 +21,8 @@ bool isDelaunay(Edge e)
      Vertex vb2 = Triangulation::vertexTable[diff[0]];
      
      
-     double ang1 = Geometry::angle(vb1, fa1);
-     double ang2 = Geometry::angle(vb2, fa2);
+     double ang1 = EuclideanAngle::valueAt(vb1, fa1);
+     double ang2 = EuclideanAngle::valueAt(vb2, fa2);
           
      if((ang1 + ang2) > PI)
           return false;
@@ -74,11 +74,11 @@ double getHeight(Face f, Edge e)
      sameAs = listIntersection(&sameAs, f.getLocalEdges());
      Edge ea2 = Triangulation::edgeTable[sameAs[0]];
 
-     double ang1 = Geometry::angle(v1, f);
+     double ang1 = EuclideanAngle::valueAt(v1, f);
 
 
-     double d13 = Geometry::partialEdge(v1,ea1);
-     double d12 = Geometry::partialEdge(v1,e);
+     double d13 = PartialEdge::valueAt(v1,ea1);
+     double d12 = PartialEdge::valueAt(v1,e);
 //
 //     cout << "angle: " << ang1 << endl;
 //     cout << "ea2: " << ea2.getLength() << endl;

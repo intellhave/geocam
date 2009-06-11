@@ -213,3 +213,6 @@ Point findPoint(Line l, double length, double angle)
       Point p(l.getInitialX() + vectResult.x, l.getInitialY() + vectResult.y);
       return p;
 }
+double angle(double len1, double len2, double len3) {
+     return acos((len1*len1 + len2*len2 - len3*len3)/ (2*len1*len2));  
+}

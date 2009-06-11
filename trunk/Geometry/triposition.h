@@ -6,16 +6,11 @@
 #include <new>
 #include <map>
 
-typedef enum typenum{RADIUS, ETA, LENGTH, ANGLE, AREA,
-                     CURVATURE, VOLUME, DIHEDRAL_ANGLE,
-                     EDGE_CURVATURE, PARTIAL_EDGE} quantID;
-
 #define MAX_POINT_IDS 15
 
 class TriPosition {
  public:
   int length;
-  quantID qid;
   int pointIDs[MAX_POINT_IDS];
 
   /* Input: numPoints (a count of the simplicies that follow),
@@ -25,7 +20,7 @@ class TriPosition {
     for(int ii = 0; ii < MAX_POINT_IDS; ii++)
       pointIDs[ii] = -1;
   }
-  TriPosition(quantID q, int numPoints, ...);
+  TriPosition(int numPoints, ...);
   ~TriPosition(){}
  
    void print();
@@ -35,8 +30,6 @@ class TriPosition {
 class TriPositionCompare{
 public:
   bool operator()(const TriPosition x, const TriPosition y){
-    if(x.qid < y.qid) return true;
-    if(x.qid > y.qid) return false;
     for(int ii = 0; ii < x.length; ii++){
       if(x.pointIDs[ii] < y.pointIDs[ii]){ return true; }
       else if (x.pointIDs[ii] > y.pointIDs[ii]) { return false;} 

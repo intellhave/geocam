@@ -7,7 +7,7 @@
 /* Structure of a TriPosition call:
  * TriPosition(numPoints, TYPE, SimplexID1, SimplexID2, ... , SimplexIDN */
 
-TriPosition::TriPosition(quantID q, int numPoints, ... ){
+TriPosition::TriPosition(int numPoints, ... ){
   /* Load simplicies into the structure */
   length = numPoints;
   if(length > MAX_POINT_IDS) return;
@@ -15,7 +15,6 @@ TriPosition::TriPosition(quantID q, int numPoints, ... ){
   for(int ii = 0; ii < MAX_POINT_IDS; ii++)
     pointIDs[ii] = -1;
   
-  qid = q;
   va_list arguments;
   va_start(arguments, numPoints);
   for(int ii = 0; ii < length; ii++)    

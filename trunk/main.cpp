@@ -45,7 +45,7 @@ void loadRadii(vector<double> radii){
   
   int kk = 0;
   for(vIter = vStart; vIter != vEnd && kk < radii.size(); vIter++, kk++){
-    Geometry::setRadius(vIter->second, radii[kk]);
+    Radius::At(vIter->second)->setValue(radii[kk]);
   }
 
   if(kk != radii.size() || vIter != vEnd){
@@ -138,15 +138,11 @@ int main(int argc, char** argv){
    //readTriangulationFile(tetra);
    int vertSize = Triangulation::vertexTable.size();
    int edgeSize = Triangulation::edgeTable.size();
-   Geometry::setDimension(ThreeD);
-   printf("Building Geoemtry\n");
-   Geometry::build();
-   printf("Done Building Geometry\n");
    for(int i = 1; i <= vertSize; i++) {
-      Geometry::setRadius(Triangulation::vertexTable[i], 1);        
+      Radius::At(Triangulation::vertexTable[i])->setValue(1);        
    }
    for(int i = 1; i <= edgeSize; i++) {
-       Geometry::setEta(Triangulation::edgeTable[i], 1.0);
+       Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
    }
    Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "rc");
    time(&start);

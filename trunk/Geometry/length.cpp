@@ -1,65 +1,83 @@
-#ifndef LENGTH_CPP_
-#define LENGTH_CPP_
+#ifndef LENGTH_H_
+#define LENGTH_H_
 
+#include <map>
 #include <new>
+using namespace std;
 
 #include "geoquant.h"
-#include "geoquants.h"
 #include "triposition.h"
-#include "geometry.h"
+#include "triangulation/triangulation.h"
 
-Length::Length(Edge& e, GQIndex& gqi) : GeoQuant() {
-    position = new TriPosition( LENGTH, 1, e.getSerialNumber() );
-    dataID = LENGTH;
-    TriPosition t(ETA, 1, e.getSerialNumber());
-    eta = gqi[t];
-    eta->addDependent(this);
-    
-    Vertex v1 = Triangulation::vertexTable[ (*(e.getLocalVertices()))[0] ];
-    Vertex v2 = Triangulation::vertexTable[ (*(e.getLocalVertices()))[1] ];
+#include "simplex/edge.h"
+#include "radius.cpp"
+#include "eta.cpp"
 
-    TriPosition t1(RADIUS, 1, v1.getSerialNumber());
-    radius1 = gqi[ t1 ];
-    radius1->addDependent( this );
+class Length;
+typedef map<TriPosition, Length*, TriPositionCompare> LengthIndex;
 
-    TriPosition t2(RADIUS, 1, v2.getSerialNumber());
-    radius2 = gqi[ t2 ];
-    radius2->addDependent( this );
-    
+class Length : public virtual GeoQuant {
+private:
+  static LengthIndex* Index;
+  Radius* radius1;
+  Radius* radius2;
+  Eta* eta;  
+
+protected:
+  Length( Edge& e );
+  void recalculate();
+
+public:
+  ~Length();
+  static Length* At( Edge& e );
+  static void CleanUp();
+};
+LengthIndex* Length::Index = NULL;
+
+Length::Length( Edge& e ){
+  Vertex v1 = Triangulation::vertexTable[ (*(e.getLocalVertices()))[0] ];
+  Vertex v2 = Triangulation::vertexTable[ (*(e.getLocalVertices()))[1] ];
+
+  radius1 = Radius::At( v1 );
+  radius2 = Radius::At( v2 );
+  eta = Eta::At( e );
+  
+  radius1->addDependent( this );
+  radius2->addDependent( this );
+  eta->addDependent( this );
 }
 
 void Length::recalculate(){
-    double r1 = radius1->getValue();
-    double r2 = radius2->getValue();
-    double etaV = eta->getValue();
+  double r1 = radius1->getValue();
+  double r2 = radius2->getValue();
+  double etaV = eta->getValue();
 
-    value = sqrt( r1*r1 + r2*r2 + 2*r1*r2*etaV );
+  value = sqrt( r1*r1 + r2*r2 + 2*r1*r2*etaV );   
 }
 
-void Init_Lengths(GQIndex& gqi){
-  map<int, Edge>::iterator eit;
-  for(eit = Triangulation::edgeTable.begin();
-      eit != Triangulation::edgeTable.end(); eit++){
-    Length* l = new Length(eit->second, gqi);
-    gqi[l->getPosition()] = l;
+Length::~Length(){}
+
+Length* Length::At( Edge& e ){
+  TriPosition T( 1, e.getSerialNumber() );
+  if( Index == NULL ) Index = new LengthIndex();
+  LengthIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    Length* val = new Length( e );
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
   }
 }
 
-IndLength::IndLength(Edge& e, GQIndex& gqi) : GeoQuant() {
-    position = new TriPosition( LENGTH, 1, e.getSerialNumber() );
-    dataID = LENGTH;                           
+void Length::CleanUp(){
+  if( Index == NULL) return;
+  LengthIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    delete iter->second;
+  delete Index;
 }
 
-void IndLength::recalculate() {
+#endif /* LENGTH_H_ */
 
-}
-
-void Init_IndLengths(GQIndex& gqi) {
-  map<int, Edge>::iterator eit;
-  for(eit = Triangulation::edgeTable.begin();
-      eit != Triangulation::edgeTable.end(); eit++){
-    IndLength* l = new IndLength(eit->second, gqi);
-    gqi[l->getPosition()] = l;
-  }  
-}
-#endif /* LENGTH_CPP_ */

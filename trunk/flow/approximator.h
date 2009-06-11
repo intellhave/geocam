@@ -25,7 +25,7 @@ class Approximator{
  Approximator(sysdiffeq de, char* histories){
       local_derivs = de;
       
-      radii = curvs = areas = volumes = false;
+      radii = curvs2D = curvs3D = areas = volumes = false;
       int i, len = strlen(histories);
       for(i = 0; i < len; i++) {
          switch(histories[i]) {
@@ -45,6 +45,10 @@ class Approximator{
                  break;                        
          }
       }
+      vector<double> radiiHistory(); 
+      vector<double> curvHistory();
+      vector<double> areaHistory(); 
+      vector<double> volumeHistory();
   }  
   ~Approximator(){}
   
@@ -54,7 +58,8 @@ class Approximator{
   virtual void step(double stepsize) = 0;
   void recordState();
   void recordRadii();
-  void recordCurvs();
+  void record2DCurvs();
+  void record3DCurvs();
   void recordAreas();
   void recordVolumes();
   

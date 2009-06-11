@@ -1,24 +1,62 @@
 #ifndef RADIUS_H_
 #define RADIUS_H_
 
-#include "geoquants.h"
+#include <map>
+#include <new>
+using namespace std;
 
-Radius::Radius( Vertex &v, GQIndex& gqi ) : GeoQuant() {
-    position = new TriPosition( RADIUS, 1, v.getSerialNumber() );
-    dataID = RADIUS;
-}
+#include "geoquant.h"
+#include "triposition.h"
 
-void Radius::recalculate(){
-    /* No code. Radii are initialized and
-     * modified but not recalculated.*/
-}
+#include "simplex/vertex.h"
 
-void Init_Radii(GQIndex& gqi){
-  map<int, Vertex>::iterator vit;
-  for(vit = Triangulation::vertexTable.begin(); 
-      vit != Triangulation::vertexTable.end(); vit++){
-    Radius* r = new Radius(vit->second, gqi);
-    gqi[r->getPosition()] = r;
+class Radius;
+typedef map<TriPosition, Radius*, TriPositionCompare> RadiusIndex;
+
+class Radius : public virtual GeoQuant {
+private:
+  static RadiusIndex* Index;
+
+protected:
+  Radius( Vertex& v );
+  void recalculate();
+
+public:
+  ~Radius();
+  static Radius* At( Vertex& v );
+  static double valueAt(Vertex& v) {
+         return Radius::At(v)->getValue();
+  }
+  static void CleanUp();
+};
+RadiusIndex* Radius::Index = NULL;
+
+Radius::Radius( Vertex& v ){}
+
+Radius::~Radius(){}
+
+void Radius::recalculate(){}
+
+Radius* Radius::At( Vertex& v ){
+  TriPosition T( 1, v.getSerialNumber() );
+  if( Index == NULL ) Index = new RadiusIndex();
+  RadiusIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    Radius* val = new Radius( v );
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
   }
 }
+
+void Radius::CleanUp(){
+  if( Index == NULL ) return;
+  RadiusIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    delete iter->second;
+  delete Index;
+}
+
 #endif /* RADIUS_H_ */

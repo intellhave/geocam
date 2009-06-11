@@ -1,50 +1,91 @@
-#ifndef DIHEDRALANGLE_cpp_
-#define DIHEDRALANGLE_cpp_
-#include "geoquants.h"
+#ifndef DIHEDRALANGLE_H_
+#define DIHEDRALANGLE_H_
 
-DihedralAngle::DihedralAngle(Edge& e, Tetra& t, GQIndex& gqi) : GeoQuant() {
-  position = new TriPosition(DIHEDRAL_ANGLE, 2, e.getSerialNumber(), t.getSerialNumber());
-  dataID = DIHEDRAL_ANGLE;
+#include <cmath>
+#include <map>
+#include <new>
+using namespace std;
+
+#include "geoquant.h"
+#include "triposition.h"
+
+#include "euc_angle.cpp"
+#include "triangulation/triangulation.h"
+#include "simplex/edge.h"
+#include "simplex/tetra.h"
+
+#include "miscmath.h"
+
+
+class DihedralAngle;
+typedef map<TriPosition, DihedralAngle*, TriPositionCompare> DihedralAngleIndex;
+
+class DihedralAngle : public virtual GeoQuant {
+private:
+  static DihedralAngleIndex* Index;
+  GeoQuant* angleA;
+  GeoQuant* angleB;
+  GeoQuant* angleC;
+
+
+protected:
+  DihedralAngle( Edge& e, Tetra& t );
+  void recalculate();
+
+public:
+  ~DihedralAngle();
+  static DihedralAngle* At( Edge& e, Tetra& t );
+  static double valueAt(Edge& e, Tetra& t) {
+         return DihedralAngle::At(e, t)->getValue();
+  }
+  static void CleanUp();
+};
+DihedralAngleIndex* DihedralAngle::Index = NULL;
+
+DihedralAngle::DihedralAngle( Edge& e, Tetra& t ){
+  Vertex& v = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
     
-  Vertex *v = &Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
-    
-  vector<int> faces = listIntersection(t.getLocalFaces(), v->getLocalFaces());
+  vector<int> faces = listIntersection(t.getLocalFaces(), v.getLocalFaces());
   vector<int> edge_faces = listIntersection(&faces, e.getLocalFaces());
   vector<int> not_edge_faces = listDifference(&faces, e.getLocalFaces());
 
-  TriPosition tp1(ANGLE, 2, v->getSerialNumber(), Triangulation::faceTable[edge_faces[0]].getSerialNumber());
-  TriPosition tp2(ANGLE, 2, v->getSerialNumber(), Triangulation::faceTable[edge_faces[1]].getSerialNumber());
-  TriPosition tp3(ANGLE, 2, v->getSerialNumber(), Triangulation::faceTable[not_edge_faces[0]].getSerialNumber());
-    
-  angles[0] = gqi[tp1]; 
-  angles[1] = gqi[tp2]; 
-  angles[2] = gqi[tp3];
-    
-  for(int i = 0; i < 3; i++)
-    angles[i]->addDependent(this);
+  angleA = EuclideanAngle::At(v, Triangulation::faceTable[edge_faces[0]]);
+  angleB = EuclideanAngle::At(v, Triangulation::faceTable[edge_faces[1]]);
+  angleC = EuclideanAngle::At(v, Triangulation::faceTable[not_edge_faces[0]]);
+ 
+  angleA->addDependent(this);
+  angleB->addDependent(this);
+  angleC->addDependent(this);
 }
 
+DihedralAngle::~DihedralAngle() {}
 void DihedralAngle::recalculate() {
-  double ang0, ang1, ang2;
-  ang0 = angles[0]->getValue(); 
-  ang1 = angles[1]->getValue(); 
-  ang2 = angles[2]->getValue(); 
-  value =  acos((cos(ang2)-cos(ang0)*cos(ang1))
-		/ (sin(ang0)*sin(ang1)));;
+  double a = angleA->getValue();
+  double b = angleB->getValue();
+  double c = angleC->getValue();
+  value =  acos( (cos(c)-cos(a)*cos(b)) / (sin(a)*sin(b)) );
 }
 
-void Init_DihedralAngles(GQIndex& gqi){
-  vector<int>* tetras;
-  map<int, Edge>::iterator eit;  
-  for(eit = Triangulation::edgeTable.begin();
-      eit != Triangulation::edgeTable.end(); eit++){
-    tetras = eit->second.getLocalTetras();
-    
-    for(int i = 0; i < tetras->size(); i++){
-      Tetra& t = Triangulation::tetraTable[ tetras->at(i) ];
-      DihedralAngle* da = new DihedralAngle(eit->second, t, gqi);
-      gqi[ da->getPosition() ] = da;          
-    }             
+DihedralAngle* DihedralAngle::At( Edge& e,Tetra& t ){
+  TriPosition T( 2, e.getSerialNumber(), t.getSerialNumber() );
+  if( Index == NULL ) Index = new DihedralAngleIndex();
+  DihedralAngleIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    DihedralAngle* val = new DihedralAngle( e, t );
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
   }
 }
-#endif /* DIHEDRALANGLE_CPP_ */
+
+void DihedralAngle::CleanUp(){
+  if( Index == NULL) return;
+  DihedralAngleIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    delete iter->second;
+  delete Index;
+}
+
+#endif /* DIHEDRALANGLE_H_ */

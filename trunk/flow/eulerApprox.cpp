@@ -13,10 +13,10 @@ void EulerApprox::step(double dt){
     double slopes[vertexCount];
     local_derivs(slopes);
     
-    double ri;
+    Radius* ri;
     int ii = 0;
     for(vIter = vBegin; vIter != vEnd; vIter++, ii++){
-        ri = Geometry::radius(vIter->second);
-        Geometry::setRadius(vIter->second, ri + slopes[ii]*dt);
+        ri = Radius::At(vIter->second);
+        ri->setValue(ri->getValue() + slopes[ii]*dt);
     }
 }

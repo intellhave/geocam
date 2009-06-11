@@ -171,8 +171,7 @@ void addNewVertex(Face f, double newRadius)
      Triangulation::faceTable[(fb2.getIndex())].addFace(fb1.getIndex());
      
      
-     
-     Geometry::setRadius(Triangulation::vertexTable[vb.getIndex()], newRadius);
+     Radius::At(Triangulation::vertexTable[vb.getIndex()])->setValue(newRadius);
      
 }
 
@@ -835,7 +834,7 @@ void addLeaf(Edge e, double newRadius)
      Triangulation::faceTable[(fb1.getIndex())].addFace(fb2.getIndex());
      Triangulation::faceTable[(fb2.getIndex())].addFace(fb1.getIndex());
      
-     Geometry::setRadius(Triangulation::vertexTable[vb.getIndex()], newRadius);
+     Radius::At(Triangulation::vertexTable[vb.getIndex()])->setValue(newRadius);
 }
 
 void addHandle(Face f, double newRadius)

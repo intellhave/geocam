@@ -7,7 +7,7 @@
 
 void Approximator :: recordState(){  
     recordRadii();
-  if(curvs) {
+  if(curvs3D) {
     record3DCurvs();
   } else {
     record2DCurvs();
@@ -26,7 +26,7 @@ void Approximator::recordRadii() {
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
   
   for(vIt = vBegin; vIt != vEnd; vIt++){
-    radiiHistory.push_back( Geometry::radius(vIt->second) );
+    radiiHistory.push_back( Radius::valueAt(vIt->second) );
   }
 }
 
@@ -36,13 +36,18 @@ void Approximator::record2DCurvs() {
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
   
   for(vIt = vBegin; vIt != vEnd; vIt++){
-    if(Geometry::dim == ThreeD) {  
-         curvHistory.push_back( Geometry::curvature(vIt->second) /
-                                Geometry::radius(vIt->second) );
-    }
-    else {
-         curvHistory.push_back( Geometry::curvature(vIt->second) );
-    }
+     curvHistory.push_back( Curvature2D::valueAt(vIt->second));
+  }    
+}
+
+void Approximator::record3DCurvs() {
+  map<int, Vertex>::iterator vIt;    
+  map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+  map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+  
+  for(vIt = vBegin; vIt != vEnd; vIt++){
+     curvHistory.push_back( Curvature3D::valueAt(vIt->second) 
+                            / Radius::valueAt(vIt->second) );
   }    
 }
 
@@ -52,7 +57,7 @@ void Approximator::recordAreas() {
      map<int, Face>::iterator fEnd = Triangulation::faceTable.end();
      
      for(fIt = fBegin; fIt != fEnd; fIt++) {
-             areaHistory.push_back(Geometry::area(fIt->second));        
+             areaHistory.push_back( Area::valueAt(fIt->second) );        
      }
 }
 
@@ -62,27 +67,34 @@ void Approximator::recordVolumes() {
      map<int, Tetra>::iterator tEnd = Triangulation::tetraTable.end();
      
      for(tIt = tBegin; tIt != tEnd; tIt++) {
-             volumeHistory.push_back(Geometry::volume(tIt->second));
+             volumeHistory.push_back( Volume::valueAt(tIt->second) );
      }  
 }
 
-void Approximator :: getLatest(double radii[], double curvs[]){
-  int vertCount = Triangulation::vertexTable.size();  
-  int start = radiiHistory.size() - vertCount;
-  int end = radiiHistory.size();
-
-  for(int kk = start ; kk < end; kk++){
-    radii[kk - start] = radiiHistory[kk];
-    curvs[kk - start] = curvHistory[kk];
+void Approximator::getLatest(double radii[], double curvs[]){
+  map<int, Vertex>::iterator vIt;    
+  map<int, Vertex>::iterator vBegin = Triangulation::vertexTable.begin();
+  map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
+  int ii = 0;
+  for(vIt = vBegin; vIt != vEnd; vIt++, ii++){
+    radii[ii] = Radius::valueAt(vIt->second);
+    if(curvs3D) {
+       curvs[ii] = Curvature3D::valueAt(vIt->second) 
+                            / Radius::valueAt(vIt->second);
+    } else {
+        curvs[ii] = Curvature2D::valueAt(vIt->second);
+    }
   }
 }
 
-void Approximator :: clearHistories(){
+void Approximator::clearHistories(){
   radiiHistory.clear();
   curvHistory.clear();
+  areaHistory.clear();
+  volumeHistory.clear();
 }
 
-void Approximator :: run(int numSteps, double stepsize){
+void Approximator::run(int numSteps, double stepsize){
   map<int, Vertex> M = Triangulation::vertexTable;   
   map<int, Vertex>::iterator vBegin = M.begin();
   

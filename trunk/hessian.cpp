@@ -25,9 +25,31 @@ double SecondPartial(int i, int j, double dx_i, double dx_j);
 double FEE(int i, int j, double dx_i, double dx_j);
 double F();
 
+void getRadii(double* radii) {
+     map<int, Vertex>::iterator vit;
+     int i = 0;
+     for(vit = Triangulation::vertexTable.begin(); 
+             vit != Triangulation::vertexTable.end(); vit++)
+     {
+       radii[i] = Radius::valueAt(vit->second);
+       i++;
+     }     
+}
+
+void setRadii(double* radii) {
+     map<int, Vertex>::iterator vit;
+     int i = 0;
+     for(vit = Triangulation::vertexTable.begin(); 
+             vit != Triangulation::vertexTable.end(); vit++)
+     {
+       Radius::At(vit->second)->setValue(radii[i]);
+       i++;
+     }
+}
+
 void Hessian()
 {
-     Approximator* app = new EulerApprox( (sysdiffeq) Yamabe); 
+     Approximator* app = new EulerApprox( (sysdiffeq) Yamabe, "r3"); 
 char results[] = "Triangulation Files/ODE Result.txt";
    FILE* result = fopen(results, "w");
 
@@ -37,10 +59,10 @@ double initRadii[Triangulation::vertexTable.size()];
 double dt = 0.020;
 double accuracy = 0.000000001;
 double precision = 0.000000001;
-Geometry::getRadii(initRadii);
+getRadii(initRadii);
 app->run(precision, accuracy, dt);
 //Triangulation::setRadii(initRadii);
-Geometry::getRadii(initRadii);
+getRadii(initRadii);
 printf("F = %12.10f\n", F());
 // end initialization
  
@@ -52,7 +74,7 @@ double deltaEta=0.001;
 for(i=0; i<Triangulation::edgeTable.size(); ++i) {
       for(j=0; j<Triangulation::edgeTable.size(); ++j) {
                if (i <= j) {
-                    Geometry::setRadii(initRadii); 
+                    setRadii(initRadii); 
                     Hess[i][j]=SecondPartial(i+1, j+1, deltaEta, deltaEta);
                     Hess[j][i]=Hess[i][j];
                     printf("i=%d, j=%d, Hess[%d,%d]=%12.10f\n", i+1, j+1, i, j, Hess[i][j]);
@@ -78,34 +100,35 @@ fclose(result);
 
 double FEE(int ii, int jj, double dx_ii, double dx_jj)
 {
-       Approximator* app = new EulerApprox( (sysdiffeq) Yamabe); 
+       Approximator* app = new EulerApprox( (sysdiffeq) Yamabe, "r3"); 
        readEtas("Triangulation Files/MinMax Results/temp.txt");
-       double curEta_ii = Geometry::eta(Triangulation::edgeTable[ii]);
-       double curEta_jj = Geometry::eta(Triangulation::edgeTable[jj]);
-       
+       Eta* eta_ii = Eta::At(Triangulation::edgeTable[ii]);
+       Eta* eta_jj = Eta::At(Triangulation::edgeTable[jj]);
+       double curEta_ii = eta_ii->getValue();
+       double curEta_jj = eta_jj->getValue();
        if (ii != jj)
               {
-              Geometry::setEta(Triangulation::edgeTable[ii], curEta_ii+dx_ii);
-              Geometry::setEta(Triangulation::edgeTable[jj], curEta_jj+dx_jj);
+                eta_ii->setValue(curEta_ii+dx_ii);
+                eta_jj->setValue(curEta_jj+dx_jj);
               }
        else if (ii == jj)
               {
-              Geometry::setEta(Triangulation::edgeTable[ii], curEta_ii+dx_ii+dx_jj);
+                eta_ii->setValue(curEta_ii+dx_ii+dx_jj);
               // take special note of the calculation above; it adds the two infinitesimals!
               }                
        double initRadii[Triangulation::vertexTable.size()];
        double dt = 0.030;
        double accuracy = 0.000000001;
        double precision = 0.000000001;
-       Geometry::getRadii(initRadii);
+       getRadii(initRadii);
        app->run(precision, accuracy, dt);
 //       map<int, Vertex>::iterator vit;
 
        double result = F();
 //       Triangulation::getRadii(initRadii);
-       Geometry::setEta(Triangulation::edgeTable[ii], curEta_ii);
-       Geometry::setEta(Triangulation::edgeTable[jj], curEta_jj);
-       Geometry::setRadii(initRadii);
+       eta_ii->setValue(curEta_ii);
+       eta_jj->setValue(curEta_jj);
+       setRadii(initRadii);
        return result;
 }
 

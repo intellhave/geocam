@@ -310,7 +310,7 @@ void writeTriangulationFileWithData(char* newFileName)
      {
             
              
-             output << "Vertex: " << vit->first <<  "Radius: " << Geometry::radius(vit->second);
+             output << "Vertex: " << vit->first <<  "Radius: " << Radius::valueAt(vit->second);
              //output << " Angle sum: " << getAngleSum(vit->second) << "\n";
              
              for(int j = 0; j < vit->second.getLocalVertices()->size(); j++)
@@ -334,7 +334,7 @@ void writeTriangulationFileWithData(char* newFileName)
      }
      for(map<int, Edge>::iterator eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
      {
-             output << "Edge: " << eit->first  << "Length: " << Geometry::length(eit->second) << "\n";
+             output << "Edge: " << eit->first  << "Length: " << Length::valueAt(eit->second) << "\n";
              
              for(int j = 0; j < eit->second.getLocalVertices()->size(); j++)
              {
@@ -757,10 +757,21 @@ void printEdgeLengths(char* fileName)
      results.setf(ios_base::showpoint);
      for (int i = 1; i <= edgeSize; i++)
      {
-         results << Geometry::length(Triangulation::edgeTable[i]) << "\n";
+         results << Length::valueAt(Triangulation::edgeTable[i]) << "\n";
      }
 }
 
+void setLengths(double* lengths)
+{
+     map<int, Edge>::iterator eit;
+     int i = 0;
+     for(eit = Triangulation::edgeTable.begin(); 
+             eit != Triangulation::edgeTable.end(); eit++)
+     {
+       Length::At(eit->second)->setValue(lengths[i]);
+       i++;
+     }
+}
 
 void makeDelaunayTriangulationFile(char* triFile, char* lengthFile)
 {
@@ -779,7 +790,7 @@ void makeDelaunayTriangulationFile(char* triFile, char* lengthFile)
      {
          lengthArr[i] = lengths[i];
      }
-     Geometry::setLengths(lengthArr);
+     setLengths(lengthArr);
      infile.close();
 }
 

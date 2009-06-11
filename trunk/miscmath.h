@@ -67,3 +67,5 @@ Point rotateVector(Point, double);
  * of a triangle.
  */
 Point findPoint(Line, double, double);
+
+double angle(double, double, double);

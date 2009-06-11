@@ -4,8 +4,9 @@
 
 void RungaApprox::step(double dt){
     int vertexCount = Triangulation::vertexTable.size();
-                                  
-    double radii[vertexCount];           // A copy of the original radii 
+    
+    Radius* radii[vertexCount];                       
+    double radii_vals[vertexCount];           // A copy of the original radii 
     double slopes[vertexCount];          // Buffer for slope calculations.
     double samples[4][vertexCount];      // Sample values at each vertex.
     double weight[4] = {1, 1/2, 1/2, 1}; // RK4 sampling factors
@@ -18,9 +19,11 @@ void RungaApprox::step(double dt){
     int kk, ii;
     
     // Initialize our copy of the radii...
-    for(kk = 0, vIter = vBegin; vIter != vEnd; kk++, vIter++)
-      radii[kk] = Geometry::radius(vIter->second);
-
+    for(kk = 0, vIter = vBegin; vIter != vEnd; kk++, vIter++) {
+      radii[kk] = Radius::At(vIter->second);
+      radii_vals[kk] = radii[kk]->getValue();
+    }
+    
     // Compute 4 samples, per the RK4 formula...
     for(ii = 0; ii < 4; ii++){
       local_derivs(slopes); // Store derivatives into slopes
@@ -28,8 +31,7 @@ void RungaApprox::step(double dt){
       // Compute the next sample...
       for(kk = 0, vIter = vBegin; vIter != vEnd; kk++, vIter++){
           samples[ii][kk] = slopes[kk] * dt;
-          Geometry::setRadius(vIter->second, 
-                               radii[kk] + samples[ii][kk] * weight[ii]);
+          radii[kk]->setValue(radii_vals[kk] + samples[ii][kk] * weight[ii]);
       }
     }
 
@@ -40,6 +42,6 @@ void RungaApprox::step(double dt){
       avg += 2 * samples[2][kk] + samples[3][kk];
       avg = avg * (0.1666666); // avg * 1/6;
      
-      Geometry::setRadius(vIter->second, radii[kk] + avg);
+      radii[kk]->setValue(radii_vals[kk] + avg);
     }
 };
