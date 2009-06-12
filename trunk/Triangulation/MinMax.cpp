@@ -9,7 +9,7 @@
 #include "flow/eulerApprox.h"
 #include "flow/sysdiffeq.h"
 
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #define PI 	3.141592653589793238 
 
 void getRadii(double* radii) {
@@ -132,7 +132,7 @@ while(true) {
       for(vvvit = Triangulation::vertexTable.begin(); vvvit != Triangulation::vertexTable.end(); vvvit++)
    {
        double curv = Curvature3D::valueAt(vvvit->second);
-       printf("vertex %3d: %f\t%.10f\n", vvvit->first, Geometry::radius(vvvit->second), curv/(Geometry::radius(vvvit->second)));
+       printf("vertex %3d: %f\t%.10f\n", vvvit->first, Radius::valueAt(vvvit->second), curv/(Radius::valueAt(vvvit->second)));
            }
       
       
@@ -147,9 +147,9 @@ while(true) {
 double FE(double deltaEta, int index)
 {
    Approximator* app = new EulerApprox( (sysdiffeq) Yamabe, "r3");
-   Eta* eta = Eta::At(Triangulation::edgeTable[index])
+   Eta* eta = Eta::At(Triangulation::edgeTable[index]);
    double curEta = eta->getValue();
-   Geometry::setEta(Triangulation::edgeTable[index], curEta + deltaEta);
+   eta->setValue(curEta + deltaEta);
    vector<double> radii;
    vector<double> curvs;
    double initRadii[Triangulation::vertexTable.size()];

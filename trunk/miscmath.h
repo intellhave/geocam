@@ -69,3 +69,4 @@ Point rotateVector(Point, double);
 Point findPoint(Line, double, double);
 
 double angle(double, double, double);
+

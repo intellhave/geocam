@@ -12,7 +12,7 @@ the reading and writing of text files.
 #include <sstream>
 #include <iomanip>
 #include "triangulationinputoutput.h"
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 
 
 /*
@@ -637,11 +637,7 @@ void printResultsStep(char* fileName, vector<double>* radii, vector<double>* cur
      for(int i = 0; i < numSteps; i++)
      {
          double netCurv = 0.;
-         if(Geometry::dim == ThreeD) {
-            fprintf(results, "Step %5d     Radius          Curv:Radius\n", i);              
-         } else {
-            fprintf(results, "Step %5d     Radius          Curvature\n", i);
-         }
+         fprintf(results, "Step %5d     Radius          Curvature\n", i);
          fprintf(results, "-----------------------------------------------------\n");
          vit = Triangulation::vertexTable.begin();
          for(int j = 0; j < vertSize; j++)
@@ -673,11 +669,7 @@ void printResultsVertex(char* fileName, vector<double>* radii, vector<double>* c
      vit = Triangulation::vertexTable.begin(); 
      for(int k=0; k < vertSize; k++) 
      { 
-       if(Geometry::dim == ThreeD) {
-            fprintf(results, "Vertex: %3d\tRadius\tCurv:Radius\n", vit->first);              
-       } else {
-            fprintf(results, "Vertex: %3d\tRadius\tCurv\n", vit->first);
-       }
+       fprintf(results, "Vertex: %3d\tRadius\tCurv\n", vit->first);
        fprintf(results, "\n---------------------------------\n");
        for(int j = 0; j < numSteps; j++)
        {

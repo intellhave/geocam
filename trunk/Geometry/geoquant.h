@@ -3,6 +3,8 @@
 
 #include "triposition.h"
 
+#define PI 	3.141592653589793238
+
 #include <new>
 #include <vector>
 #include <map>

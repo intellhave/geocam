@@ -9,34 +9,9 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "edge_curvature.cpp"
-#include "partial_edge.cpp"
+#include "geoquants.h"
 #include "triangulation/triangulation.h"
-#include "simplex/vertex.h"
 
-
-
-class Curvature3D;
-typedef map<TriPosition, Curvature3D*, TriPositionCompare> Curvature3DIndex;
-
-class Curvature3D : public virtual GeoQuant {
-private:
-  static Curvature3DIndex* Index;
-  vector<GeoQuant*>* edgeCurvs;
-  vector<GeoQuant*>* partials;
-
-protected:
-  Curvature3D( Vertex& v );
-  void recalculate();
-
-public:
-  ~Curvature3D();
-  static Curvature3D* At( Vertex& v );
-  static double valueAt( Vertex& v ) { 
-     return Curvature3D::At(v)->getValue();
-  }
-  static void CleanUp();
-};
 Curvature3DIndex* Curvature3D::Index = NULL;
 
 Curvature3D::Curvature3D( Vertex& v  ){    

@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "Triangulation/triangulation.h"
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #include "Simplex/vertex.h"
 #include "approximator.h"
 

@@ -9,32 +9,9 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "length.cpp"
+#include "geoquants.h"
 #include "triangulation/triangulation.h"
-#include "simplex/face.h"
 
-
-
-class Area;
-typedef map<TriPosition, Area*, TriPositionCompare> AreaIndex;
-
-class Area : public virtual GeoQuant {
-private:
-  static AreaIndex* Index;
-  GeoQuant* Len[3];
-
-protected:
-  Area( Face& f );
-  void recalculate();
-
-public:
-  ~Area();
-  static Area* At( Face& f );
-  static double valueAt(Face& f) {
-         return Area::At(f)->getValue();
-  }
-  static void CleanUp();
-};
 AreaIndex* Area::Index = NULL;
 
 Area::Area( Face& f ){

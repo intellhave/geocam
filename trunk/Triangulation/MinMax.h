@@ -1,5 +1,7 @@
 #include "triangulation.h"
 
+void getRadii(double*);
+void setRadii(double*);
 double FE(double deltaEta, int index);
 double FR(double deltaRadius, int index);
 double F();

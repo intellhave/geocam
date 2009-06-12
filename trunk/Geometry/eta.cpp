@@ -6,29 +6,10 @@
 using namespace std;
 
 #include "geoquant.h"
+#include "geoquants.h"
 #include "triposition.h"
+#include "triangulation/triangulation.h"
 
-#include "simplex/edge.h"
-
-class Eta;
-typedef map<TriPosition, Eta*, TriPositionCompare> EtaIndex;
-
-class Eta : public virtual GeoQuant {
-private:
-  static EtaIndex* Index;
-
-protected:
-  Eta( Edge& e );
-  void recalculate();
-
-public:
-  ~Eta();
-  static Eta* At( Edge& e );
-  static double valueAt(Edge& e) {
-         return Eta::At(e)->getValue();
-  }
-  static void CleanUp();
-};
 EtaIndex* Eta::Index = NULL;
 
 Eta::Eta( Edge& e ){}

@@ -9,32 +9,10 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "length.cpp"
+#include "geoquants.h"
 
-#include "simplex/tetra.h"
 #include "triangulation/triangulation.h"
-#include "miscmath.h"
 
-class Volume;
-typedef map<TriPosition, Volume*, TriPositionCompare> VolumeIndex;
-
-class Volume : public virtual GeoQuant {
-private:
-  static VolumeIndex* Index;
-  Length* len[6];
-
-protected:
-  Volume( Tetra& t );
-  void recalculate();
-
-public:
-  ~Volume();
-  static Volume* At( Tetra& t );
-  static double valueAt(Tetra& t) {
-         return Volume::At(t)->getValue();
-  }
-  static void CleanUp();
-};
 VolumeIndex* Volume::Index = NULL;
 
 Volume::Volume( Tetra& t ){

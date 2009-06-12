@@ -1,5 +1,5 @@
 #include "triangulation/triangulation.h"
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #include "eulerApprox.h"
 
 void EulerApprox::step(double dt){

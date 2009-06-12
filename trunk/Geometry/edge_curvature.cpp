@@ -9,32 +9,9 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "dih_angle.cpp"
+#include "geoquants.h"
 #include "triangulation/triangulation.h"
-#include "simplex/edge.h"
 
-
-
-class EdgeCurvature;
-typedef map<TriPosition, EdgeCurvature*, TriPositionCompare> EdgeCurvatureIndex;
-
-class EdgeCurvature : public virtual GeoQuant {
-private:
-  static EdgeCurvatureIndex* Index;
-  vector<GeoQuant*>* dih_angles;
-
-protected:
-  EdgeCurvature( Edge& e );
-  void recalculate();
-
-public:
-  ~EdgeCurvature();
-  static EdgeCurvature* At( Edge& e  );
-  static double valueAt(Edge& e) {
-         return EdgeCurvature::At(e)->getValue();
-  }
-  static void CleanUp();
-};
 EdgeCurvatureIndex* EdgeCurvature::Index = NULL;
 
 EdgeCurvature::EdgeCurvature( Edge& e  ){    

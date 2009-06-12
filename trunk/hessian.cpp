@@ -18,34 +18,12 @@
 #include "flow/eulerApprox.h"
 #include "flow/sysdiffeq.h"
 
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #define PI 	3.141592653589793238
 
 double SecondPartial(int i, int j, double dx_i, double dx_j);
 double FEE(int i, int j, double dx_i, double dx_j);
 double F();
-
-void getRadii(double* radii) {
-     map<int, Vertex>::iterator vit;
-     int i = 0;
-     for(vit = Triangulation::vertexTable.begin(); 
-             vit != Triangulation::vertexTable.end(); vit++)
-     {
-       radii[i] = Radius::valueAt(vit->second);
-       i++;
-     }     
-}
-
-void setRadii(double* radii) {
-     map<int, Vertex>::iterator vit;
-     int i = 0;
-     for(vit = Triangulation::vertexTable.begin(); 
-             vit != Triangulation::vertexTable.end(); vit++)
-     {
-       Radius::At(vit->second)->setValue(radii[i]);
-       i++;
-     }
-}
 
 void Hessian()
 {

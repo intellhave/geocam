@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iomanip>
 #include "triangulation/TriangulationCoordinateSystem.h"
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #define PI 	3.141592653589793238
 
 TriangulationCoordinateSystem::TriangulationCoordinateSystem()

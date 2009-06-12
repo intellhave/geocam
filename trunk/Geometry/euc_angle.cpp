@@ -9,37 +9,11 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "length.cpp"
+#include "geoquants.h"
 #include "triangulation/triangulation.h"
-#include "simplex/vertex.h"
-#include "simplex/face.h"
 
 #include "miscmath.h"
 
-
-class EuclideanAngle;
-typedef map<TriPosition, EuclideanAngle*, TriPositionCompare> EuclideanAngleIndex;
-
-class EuclideanAngle : public virtual GeoQuant {
-private:
-  static EuclideanAngleIndex* Index;
-  GeoQuant* lengthA;
-  GeoQuant* lengthB;
-  GeoQuant* lengthC;
-
-
-protected:
-  EuclideanAngle( Vertex& v, Face& f );
-  void recalculate();
-
-public:
-  ~EuclideanAngle();
-  static EuclideanAngle* At( Vertex& v, Face& f );
-  static double valueAt(Vertex& v, Face& f) {
-         return EuclideanAngle::At(v, f)->getValue();
-  }
-  static void CleanUp();
-};
 EuclideanAngleIndex* EuclideanAngle::Index = NULL;
 
 EuclideanAngle::EuclideanAngle( Vertex& v, Face& f ){

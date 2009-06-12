@@ -8,31 +8,9 @@ using namespace std;
 
 #include "geoquant.h"
 #include "triposition.h"
-
-#include "euc_angle.cpp"
+#include "geoquants.h"
 #include "triangulation/triangulation.h"
-#include "simplex/vertex.h"
 
-class Curvature2D;
-typedef map<TriPosition, Curvature2D*, TriPositionCompare> Curvature2DIndex;
-
-class Curvature2D : public virtual GeoQuant {
-private:
-  static Curvature2DIndex* Index;
-  vector<GeoQuant*>* angles;
-
-protected:
-  Curvature2D( Vertex& v );
-  void recalculate();
-
-public:
-  ~Curvature2D();
-  static Curvature2D* At( Vertex& v );
-  static double valueAt(Vertex& v) {
-         return Curvature2D::At(v)->getValue();
-  }
-  static void CleanUp();
-};
 Curvature2DIndex* Curvature2D::Index = NULL;
 
 Curvature2D::Curvature2D( Vertex& v ){    
@@ -80,6 +58,6 @@ void Curvature2D::CleanUp(){
   delete Index;
 }
 
-#endif /* EDGECURVATURE_H_ */
+#endif /* TWODCURVATURE_H_ */
 
 

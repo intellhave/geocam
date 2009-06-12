@@ -3,35 +3,15 @@
 
 #include <map>
 #include <new>
+#include <cmath>
 using namespace std;
 
 #include "geoquant.h"
 #include "triposition.h"
 #include "triangulation/triangulation.h"
 
-#include "simplex/edge.h"
-#include "radius.cpp"
-#include "eta.cpp"
+#include "geoquants.h"
 
-class Length;
-typedef map<TriPosition, Length*, TriPositionCompare> LengthIndex;
-
-class Length : public virtual GeoQuant {
-private:
-  static LengthIndex* Index;
-  Radius* radius1;
-  Radius* radius2;
-  Eta* eta;  
-
-protected:
-  Length( Edge& e );
-  void recalculate();
-
-public:
-  ~Length();
-  static Length* At( Edge& e );
-  static void CleanUp();
-};
 LengthIndex* Length::Index = NULL;
 
 Length::Length( Edge& e ){

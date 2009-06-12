@@ -3,41 +3,16 @@
 
 #include <map>
 #include <new>
+#include <cmath>
 using namespace std;
 
-#include "simplex/vertex.h"
-#include "simplex/edge.h"
-#include "simplex/tetra.h"
-#include "triangulation/triangulation.h"
-
 #include "geoquant.h"
+#include "geoquants.h"
 #include "triposition.h"
 
-#include "radius.cpp"
-#include "eta.cpp"
+#include "triangulation/triangulation.h"
 
-class VolumePartial;
-typedef map<TriPosition, VolumePartial*, TriPositionCompare> VolumePartialIndex;
 
-class VolumePartial : public virtual GeoQuant {
-private:
-  static VolumePartialIndex* Index;
-  
-  Radius* rad[4];
-  Eta* eta[6];
- 
-protected:
-  VolumePartial( Vertex& v, Tetra& t );
-  void recalculate();
-
-public:
-  ~VolumePartial();
-  static VolumePartial* At( Vertex& v, Tetra& t );
-  static double valueAt(Vertex& v, Tetra& t) {
-         return VolumePartial::At(v, t)->getValue();
-  }
-  static void CleanUp();
-};
 VolumePartialIndex* VolumePartial::Index = NULL;
 
 VolumePartial::VolumePartial( Vertex& v, Tetra& t ){

@@ -1,7 +1,7 @@
 #include <cmath>
 #include "3DTriangulation/3Dtriangulationmath.h"
 #include "delaunay.h"
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #define PI 	3.141592653589793238 
 
 #include "Triangulation/MinMax.h"

@@ -25,7 +25,7 @@
 
 #include "flow/parsecalc.h"
 
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 
 #define PI 3.141592653589793238
 
@@ -80,7 +80,7 @@ void loadRadii(vector<double> radii){
 //  return 0;
 //}
 
-/* 2D FLOW */
+///* 2D FLOW */
 //int main(int argc, char** argv){
 //     map<int, Vertex>::iterator vit;
 //     map<int, Edge>::iterator eit;
@@ -95,26 +95,23 @@ void loadRadii(vector<double> radii){
 //   char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
 //   //make3DTriangulationFile(from, to);
 //   //read3DTriangulationFile(to);
-//   char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/torus-9.txt";
+//   char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
 //   readTriangulationFile(tetra);
 //   int vertSize = Triangulation::vertexTable.size();
 //   int edgeSize = Triangulation::edgeTable.size();
-//   //Geometry::setDimension(ThreeD);
-//   printf("Building Geoemtry\n");
-//   Geometry::build();
-//   printf("Done Building Geometry\n");
 //   for(int i = 1; i <= vertSize; i++) {
-//      Geometry::setRadius(Triangulation::vertexTable[i], 1 + (5 - i)/15.0);        
+//      Radius::At(Triangulation::vertexTable[i])->setValue(1 + (2 - i)/4.0);        
 //   }
 //   for(int i = 1; i <= edgeSize; i++) {
-//       Geometry::setEta(Triangulation::edgeTable[i], 1.0);
+//       Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
 //   }
-//   Approximator *app = new EulerApprox((sysdiffeq) AdjRicci);
-//   app->run(0.0001, 0.0001, 0.01);
+//   Approximator *app = new EulerApprox((sysdiffeq) AdjRicci, "r2");
+//   app->run(300, 0.01);
 //   printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
 //                      &(app->radiiHistory), &(app->curvHistory));
 //   system("PAUSE");
 //}
+
 
 /* 3D FLOW */
 int main(int argc, char** argv){
@@ -135,7 +132,7 @@ int main(int argc, char** argv){
    make3DTriangulationFile(from, to);
    read3DTriangulationFile(to);
    char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
-   //readTriangulationFile(tetra);
+   readTriangulationFile(tetra);
    int vertSize = Triangulation::vertexTable.size();
    int edgeSize = Triangulation::edgeTable.size();
    for(int i = 1; i <= vertSize; i++) {
@@ -144,9 +141,9 @@ int main(int argc, char** argv){
    for(int i = 1; i <= edgeSize; i++) {
        Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
    }
-   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "rc");
+   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "r3");
    time(&start);
-  // app->run(300, 0.01);
+   //app->run(300, 0.01);
    app->run(0.0001, 0.0001, 0.01);
    time(&end);
    printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
@@ -154,6 +151,8 @@ int main(int argc, char** argv){
    //printResultsVolumes("C:/Dev-Cpp/geocam/Triangulation Files/Volumes.txt",
       //                    &(app->volumeHistory));
    printf("Time: %.2lf seconds\n", difftime(end, start));
+
    system("PAUSE");
 }
+
 

@@ -10,7 +10,7 @@ the Triangulation in some way.
 #include <iostream>
 #include "triangulationmorph.h"
 #include "triangulationInputOutput.h"
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #define PI 	3.141592653589793238
 
 void addNewVertex(Face f, double newRadius)

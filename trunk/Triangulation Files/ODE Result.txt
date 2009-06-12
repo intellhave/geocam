@@ -1,4 +1,4 @@
-Step     0     Radius          Curv:Radius
+Step     0     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     1.0000000       8.1560858
 Vertex   2     1.0000000       0.4380874
@@ -18,7 +18,7 @@ Vertex  15     1.0000000       2.6432298
 Vertex  16     1.0000000       2.6432298
 Total Curvature: 2.5991144
 
-Step     1     Radius          Curv:Radius
+Step     1     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.9149795       7.5633125
 Vertex   2     0.9921595       0.3077877
@@ -38,7 +38,7 @@ Vertex  15     0.9701081       2.1471140
 Vertex  16     0.9701081       2.1471481
 Total Curvature: 2.5414366
 
-Step     2     Radius          Curv:Radius
+Step     2     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.8430178       6.9678588
 Vertex   2     0.9861140       0.2146971
@@ -58,7 +58,7 @@ Vertex  15     0.9463535       1.7247961
 Vertex  16     0.9463532       1.7248971
 Total Curvature: 2.3955216
 
-Step     3     Radius          Curv:Radius
+Step     3     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.7820422       6.3785421
 Vertex   2     0.9813821       0.1491115
@@ -78,7 +78,7 @@ Vertex  15     0.9275215       1.3700276
 Vertex  16     0.9275203       1.3701923
 Total Curvature: 2.1933940
 
-Step     4     Radius          Curv:Radius
+Step     4     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.7303199       5.8033769
 Vertex   2     0.9776106       0.1034646
@@ -98,7 +98,7 @@ Vertex  15     0.9126327       1.0754120
 Vertex  16     0.9126299       1.0756209
 Total Curvature: 1.9581312
 
-Step     5     Radius          Curv:Radius
+Step     5     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.6864002       5.2492882
 Vertex   2     0.9745423       0.0719895
@@ -118,7 +118,7 @@ Vertex  15     0.9008981       0.8331958
 Vertex  16     0.9008934       0.8334253
 Total Curvature: 1.7063362
 
-Step     6     Radius          Curv:Radius
+Step     6     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.6490668       4.7219266
 Vertex   2     0.9719918       0.0503789
@@ -138,7 +138,7 @@ Vertex  15     0.8916826       0.6358190
 Vertex  16     0.8916759       0.6360476
 Total Curvature: 1.4498988
 
-Step     7     Radius          Curv:Radius
+Step     7     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.6172991       4.2255878
 Vertex   2     0.9698260       0.0354769
@@ -158,7 +158,7 @@ Vertex  15     0.8844755       0.4762575
 Vertex  16     0.8844668       0.4764687
 Total Curvature: 1.1972398
 
-Step     8     Radius          Curv:Radius
+Step     8     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.5902398       3.7632233
 Vertex   2     0.9679505       0.0250156
@@ -178,7 +178,7 @@ Vertex  15     0.8788664       0.3482069
 Vertex  16     0.8788560       0.3483895
 Total Curvature: 0.9541926
 
-Step     9     Radius          Curv:Radius
+Step     9     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.5671681       3.3365288
 Vertex   2     0.9662985       0.0173991
@@ -198,7 +198,7 @@ Vertex  15     0.8745261       0.2461518
 Vertex  16     0.8745141       0.2462998
 Total Curvature: 0.7246371
 
-Step    10     Radius          Curv:Radius
+Step    10     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.5474771       2.9460857
 Vertex   2     0.9648232       0.0115307
@@ -218,7 +218,7 @@ Vertex  15     0.8711904       0.1653605
 Vertex  16     0.8711771       0.1654719
 Total Curvature: 0.5109686
 
-Step    11     Radius          Curv:Radius
+Step    11     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.5306555       2.5915368
 Vertex   2     0.9634916       0.0066785
@@ -238,7 +238,7 @@ Vertex  15     0.8686479       0.1018354
 Vertex  16     0.8686337       0.1019113
 Total Curvature: 0.3144549
 
-Step    12     Radius          Curv:Radius
+Step    12     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.5162718       2.2717753
 Vertex   2     0.9622807       0.0023717
@@ -258,7 +258,7 @@ Vertex  15     0.8667295       0.0522401
 Vertex  16     0.8667147       0.0522833
 Total Curvature: 0.1355167
 
-Step    13     Radius          Curv:Radius
+Step    13     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.5039617       1.9851306
 Vertex   2     0.9611739       -0.0016766
@@ -278,7 +278,7 @@ Vertex  15     0.8653004       0.0138167
 Vertex  16     0.8652852       0.0138313
 Total Curvature: -0.0260475
 
-Step    14     Radius          Curv:Radius
+Step    14     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4934171       1.7295403
 Vertex   2     0.9601594       -0.0056279
@@ -298,7 +298,7 @@ Vertex  15     0.8642531       -0.0156956
 Vertex  16     0.8642378       -0.0157051
 Total Curvature: -0.1708819
 
-Step    15     Radius          Curv:Radius
+Step    15     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4843770       1.5027004
 Vertex   2     0.9592283       -0.0095600
@@ -318,7 +318,7 @@ Vertex  15     0.8635020       -0.0381380
 Vertex  16     0.8634868       -0.0381670
 Total Curvature: -0.2999274
 
-Step    16     Radius          Curv:Radius
+Step    16     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4766205       1.3021894
 Vertex   2     0.9583738       -0.0134975
@@ -338,7 +338,7 @@ Vertex  15     0.8629796       -0.0550010
 Vertex  16     0.8629646       -0.0550452
 Total Curvature: -0.4143085
 
-Step    17     Radius          Curv:Radius
+Step    17     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4699599       1.1255675
 Vertex   2     0.9575902       -0.0174334
@@ -358,7 +358,7 @@ Vertex  15     0.8626321       -0.0674854
 Vertex  16     0.8626175       -0.0675407
 Total Curvature: -0.5152442
 
-Step    18     Radius          Curv:Radius
+Step    18     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4642360       0.9704506
 Vertex   2     0.9568725       -0.0213431
@@ -378,7 +378,7 @@ Vertex  15     0.8624173       -0.0765535
 Vertex  16     0.8624033       -0.0766166
 Total Curvature: -0.6039824
 
-Step    19     Radius          Curv:Radius
+Step    19     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4593135       0.8345633
 Vertex   2     0.9562164       -0.0251950
@@ -398,7 +398,7 @@ Vertex  15     0.8623022       -0.0829740
 Vertex  16     0.8622886       -0.0830420
 Total Curvature: -0.6817516
 
-Step    20     Radius          Curv:Radius
+Step    20     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4550770       0.7157737
 Vertex   2     0.9556179       -0.0289559
@@ -418,7 +418,7 @@ Vertex  15     0.8622606       -0.0873576
 Vertex  16     0.8622477       -0.0874281
 Total Curvature: -0.7497283
 
-Step    21     Radius          Curv:Radius
+Step    21     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4514284       0.6121135
 Vertex   2     0.9550730       -0.0325954
@@ -438,7 +438,7 @@ Vertex  15     0.8622725       -0.0901878
 Vertex  16     0.8622602       -0.0902589
 Total Curvature: -0.8090156
 
-Step    22     Radius          Curv:Radius
+Step    22     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4482840       0.5217873
 Vertex   2     0.9545780       -0.0360876
@@ -458,7 +458,7 @@ Vertex  15     0.8623223       -0.0918457
 Vertex  16     0.8623105       -0.0919159
 Total Curvature: -0.8606312
 
-Step    23     Radius          Curv:Radius
+Step    23     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4455725       0.4431730
 Vertex   2     0.9541293       -0.0394120
@@ -478,7 +478,7 @@ Vertex  15     0.8623978       -0.0926302
 Vertex  16     0.8623867       -0.0926985
 Total Curvature: -0.9055019
 
-Step    24     Radius          Curv:Radius
+Step    24     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4432327       0.3748171
 Vertex   2     0.9537235       -0.0425538
@@ -498,7 +498,7 @@ Vertex  15     0.8624899       -0.0927747
 Vertex  16     0.8624794       -0.0928402
 Total Curvature: -0.9444632
 
-Step    25     Radius          Curv:Radius
+Step    25     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4412125       0.3154259
 Vertex   2     0.9533572       -0.0455036
@@ -518,7 +518,7 @@ Vertex  15     0.8625918       -0.0924602
 Vertex  16     0.8625819       -0.0925224
 Total Curvature: -0.9782619
 
-Step    26     Radius          Curv:Radius
+Step    26     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4394673       0.2638535
 Vertex   2     0.9530272       -0.0482564
@@ -538,7 +538,7 @@ Vertex  15     0.8626983       -0.0918264
 Vertex  16     0.8626889       -0.0918848
 Total Curvature: -1.0075608
 
-Step    27     Radius          Curv:Radius
+Step    27     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4379589       0.2190902
 Vertex   2     0.9527305       -0.0508116
@@ -558,7 +558,7 @@ Vertex  15     0.8628056       -0.0909801
 Vertex  16     0.8627966       -0.0910346
 Total Curvature: -1.0329454
 
-Step    28     Radius          Curv:Radius
+Step    28     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4366544       0.1802493
 Vertex   2     0.9524641       -0.0531717
@@ -578,7 +578,7 @@ Vertex  15     0.8629109       -0.0900022
 Vertex  16     0.8629025       -0.0900527
 Total Curvature: -1.0549299
 
-Step    29     Radius          Curv:Radius
+Step    29     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4355257       0.1465544
 Vertex   2     0.9522255       -0.0553421
@@ -598,7 +598,7 @@ Vertex  15     0.8630125       -0.0889534
 Vertex  16     0.8630045       -0.0890000
 Total Curvature: -1.0739649
 
-Step    30     Radius          Curv:Radius
+Step    30     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4345487       0.1173275
 Vertex   2     0.9520119       -0.0573300
@@ -618,7 +618,7 @@ Vertex  15     0.8631090       -0.0878786
 Vertex  16     0.8631014       -0.0879213
 Total Curvature: -1.0904434
 
-Step    31     Radius          Curv:Radius
+Step    31     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4337027       0.0919777
 Vertex   2     0.9518211       -0.0591440
@@ -638,7 +638,7 @@ Vertex  15     0.8631997       -0.0868102
 Vertex  16     0.8631925       -0.0868492
 Total Curvature: -1.1047078
 
-Step    32     Radius          Curv:Radius
+Step    32     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4329697       0.0699905
 Vertex   2     0.9516509       -0.0607941
@@ -658,7 +658,7 @@ Vertex  15     0.8632842       -0.0857712
 Vertex  16     0.8632772       -0.0858067
 Total Curvature: -1.1170558
 
-Step    33     Radius          Curv:Radius
+Step    33     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4323344       0.0509192
 Vertex   2     0.9514992       -0.0622904
@@ -678,7 +678,7 @@ Vertex  15     0.8633622       -0.0847773
 Vertex  16     0.8633556       -0.0848095
 Total Curvature: -1.1277454
 
-Step    34     Radius          Curv:Radius
+Step    34     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4317837       0.0343756
 Vertex   2     0.9513642       -0.0636436
@@ -698,7 +698,7 @@ Vertex  15     0.8634339       -0.0838385
 Vertex  16     0.8634275       -0.0838677
 Total Curvature: -1.1370004
 
-Step    35     Radius          Curv:Radius
+Step    35     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4313060       0.0200232
 Vertex   2     0.9512443       -0.0648644
@@ -718,7 +718,7 @@ Vertex  15     0.8634993       -0.0829609
 Vertex  16     0.8634932       -0.0829872
 Total Curvature: -1.1450145
 
-Step    36     Radius          Curv:Radius
+Step    36     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4308915       0.0075700
 Vertex   2     0.9511377       -0.0659632
@@ -738,7 +738,7 @@ Vertex  15     0.8635589       -0.0821472
 Vertex  16     0.8635530       -0.0821708
 Total Curvature: -1.1519554
 
-Step    37     Radius          Curv:Radius
+Step    37     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4305319       -0.0032369
 Vertex   2     0.9510432       -0.0669501
@@ -758,7 +758,7 @@ Vertex  15     0.8636128       -0.0813978
 Vertex  16     0.8636071       -0.0814191
 Total Curvature: -1.1579680
 
-Step    38     Radius          Curv:Radius
+Step    38     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4302196       -0.0126166
 Vertex   2     0.9509594       -0.0678348
@@ -778,7 +778,7 @@ Vertex  15     0.8636615       -0.0807117
 Vertex  16     0.8636560       -0.0807308
 Total Curvature: -1.1631776
 
-Step    39     Radius          Curv:Radius
+Step    39     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4299485       -0.0207591
 Vertex   2     0.9508852       -0.0686265
@@ -798,7 +798,7 @@ Vertex  15     0.8637053       -0.0800866
 Vertex  16     0.8637000       -0.0801036
 Total Curvature: -1.1676925
 
-Step    40     Radius          Curv:Radius
+Step    40     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4297130       -0.0278288
 Vertex   2     0.9508195       -0.0693339
@@ -818,7 +818,7 @@ Vertex  15     0.8637447       -0.0795193
 Vertex  16     0.8637395       -0.0795345
 Total Curvature: -1.1716062
 
-Step    41     Radius          Curv:Radius
+Step    41     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4295084       -0.0339681
 Vertex   2     0.9507615       -0.0699650
@@ -838,7 +838,7 @@ Vertex  15     0.8637799       -0.0790065
 Vertex  16     0.8637749       -0.0790201
 Total Curvature: -1.1749997
 
-Step    42     Radius          Curv:Radius
+Step    42     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4293307       -0.0393005
 Vertex   2     0.9507102       -0.0705272
@@ -858,7 +858,7 @@ Vertex  15     0.8638114       -0.0785443
 Vertex  16     0.8638065       -0.0785564
 Total Curvature: -1.1779427
 
-Step    43     Radius          Curv:Radius
+Step    43     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4291761       -0.0439327
 Vertex   2     0.9506649       -0.0710275
@@ -878,7 +878,7 @@ Vertex  15     0.8638395       -0.0781290
 Vertex  16     0.8638347       -0.0781398
 Total Curvature: -1.1804957
 
-Step    44     Radius          Curv:Radius
+Step    44     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4290418       -0.0479575
 Vertex   2     0.9506250       -0.0714721
@@ -898,7 +898,7 @@ Vertex  15     0.8638646       -0.0777566
 Vertex  16     0.8638599       -0.0777662
 Total Curvature: -1.1827109
 
-Step    45     Radius          Curv:Radius
+Step    45     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4289250       -0.0514551
 Vertex   2     0.9505897       -0.0718668
@@ -918,7 +918,7 @@ Vertex  15     0.8638868       -0.0774235
 Vertex  16     0.8638822       -0.0774320
 Total Curvature: -1.1846335
 
-Step    46     Radius          Curv:Radius
+Step    46     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4288235       -0.0544951
 Vertex   2     0.9505587       -0.0722168
@@ -938,7 +938,7 @@ Vertex  15     0.8639066       -0.0771261
 Vertex  16     0.8639021       -0.0771337
 Total Curvature: -1.1863024
 
-Step    47     Radius          Curv:Radius
+Step    47     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4287351       -0.0571378
 Vertex   2     0.9505313       -0.0725269
@@ -958,7 +958,7 @@ Vertex  15     0.8639242       -0.0768610
 Vertex  16     0.8639197       -0.0768677
 Total Curvature: -1.1877515
 
-Step    48     Radius          Curv:Radius
+Step    48     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4286583       -0.0594354
 Vertex   2     0.9505072       -0.0728015
@@ -978,7 +978,7 @@ Vertex  15     0.8639397       -0.0766251
 Vertex  16     0.8639353       -0.0766311
 Total Curvature: -1.1890100
 
-Step    49     Radius          Curv:Radius
+Step    49     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4285914       -0.0614333
 Vertex   2     0.9504860       -0.0730443
@@ -998,7 +998,7 @@ Vertex  15     0.8639535       -0.0764155
 Vertex  16     0.8639491       -0.0764207
 Total Curvature: -1.1901032
 
-Step    50     Radius          Curv:Radius
+Step    50     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4285333       -0.0631708
 Vertex   2     0.9504674       -0.0732589
@@ -1018,7 +1018,7 @@ Vertex  15     0.8639657       -0.0762295
 Vertex  16     0.8639613       -0.0762341
 Total Curvature: -1.1910529
 
-Step    51     Radius          Curv:Radius
+Step    51     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4284826       -0.0646822
 Vertex   2     0.9504510       -0.0734485
@@ -1038,7 +1038,7 @@ Vertex  15     0.8639764       -0.0760646
 Vertex  16     0.8639721       -0.0760686
 Total Curvature: -1.1918783
 
-Step    52     Radius          Curv:Radius
+Step    52     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4284386       -0.0659969
 Vertex   2     0.9504366       -0.0736158
@@ -1058,7 +1058,7 @@ Vertex  15     0.8639859       -0.0759185
 Vertex  16     0.8639817       -0.0759221
 Total Curvature: -1.1925956
 
-Step    53     Radius          Curv:Radius
+Step    53     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4284002       -0.0671408
 Vertex   2     0.9504239       -0.0737634
@@ -1078,7 +1078,7 @@ Vertex  15     0.8639943       -0.0757893
 Vertex  16     0.8639901       -0.0757925
 Total Curvature: -1.1932191
 
-Step    54     Radius          Curv:Radius
+Step    54     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4283668       -0.0681361
 Vertex   2     0.9504128       -0.0738936
@@ -1098,7 +1098,7 @@ Vertex  15     0.8640017       -0.0756751
 Vertex  16     0.8639975       -0.0756779
 Total Curvature: -1.1937612
 
-Step    55     Radius          Curv:Radius
+Step    55     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4283378       -0.0690023
 Vertex   2     0.9504030       -0.0740082
@@ -1118,7 +1118,7 @@ Vertex  15     0.8640082       -0.0755742
 Vertex  16     0.8640040       -0.0755767
 Total Curvature: -1.1942326
 
-Step    56     Radius          Curv:Radius
+Step    56     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4283125       -0.0697561
 Vertex   2     0.9503944       -0.0741092
@@ -1138,7 +1138,7 @@ Vertex  15     0.8640139       -0.0754852
 Vertex  16     0.8640098       -0.0754874
 Total Curvature: -1.1946426
 
-Step    57     Radius          Curv:Radius
+Step    57     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4282904       -0.0704122
 Vertex   2     0.9503869       -0.0741980
@@ -1158,7 +1158,7 @@ Vertex  15     0.8640190       -0.0754067
 Vertex  16     0.8640148       -0.0754086
 Total Curvature: -1.1949992
 
-Step    58     Radius          Curv:Radius
+Step    58     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4282712       -0.0709834
 Vertex   2     0.9503803       -0.0742762
@@ -1178,7 +1178,7 @@ Vertex  15     0.8640234       -0.0753375
 Vertex  16     0.8640193       -0.0753392
 Total Curvature: -1.1953094
 
-Step    59     Radius          Curv:Radius
+Step    59     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4282545       -0.0714806
 Vertex   2     0.9503745       -0.0743450
@@ -1198,7 +1198,7 @@ Vertex  15     0.8640273       -0.0752766
 Vertex  16     0.8640232       -0.0752781
 Total Curvature: -1.1955793
 
-Step    60     Radius          Curv:Radius
+Step    60     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4282400       -0.0719135
 Vertex   2     0.9503694       -0.0744055
@@ -1218,7 +1218,7 @@ Vertex  15     0.8640308       -0.0752229
 Vertex  16     0.8640267       -0.0752242
 Total Curvature: -1.1958142
 
-Step    61     Radius          Curv:Radius
+Step    61     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4282273       -0.0722905
 Vertex   2     0.9503650       -0.0744586
@@ -1238,7 +1238,7 @@ Vertex  15     0.8640338       -0.0751757
 Vertex  16     0.8640297       -0.0751769
 Total Curvature: -1.1960185
 
-Step    62     Radius          Curv:Radius
+Step    62     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4282162       -0.0726187
 Vertex   2     0.9503611       -0.0745053
@@ -1258,7 +1258,7 @@ Vertex  15     0.8640364       -0.0751342
 Vertex  16     0.8640324       -0.0751352
 Total Curvature: -1.1961964
 
-Step    63     Radius          Curv:Radius
+Step    63     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4282066       -0.0729045
 Vertex   2     0.9503577       -0.0745463
@@ -1278,7 +1278,7 @@ Vertex  15     0.8640388       -0.0750977
 Vertex  16     0.8640347       -0.0750986
 Total Curvature: -1.1963512
 
-Step    64     Radius          Curv:Radius
+Step    64     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281983       -0.0731535
 Vertex   2     0.9503547       -0.0745822
@@ -1298,7 +1298,7 @@ Vertex  15     0.8640408       -0.0750656
 Vertex  16     0.8640367       -0.0750664
 Total Curvature: -1.1964860
 
-Step    65     Radius          Curv:Radius
+Step    65     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281910       -0.0733703
 Vertex   2     0.9503521       -0.0746138
@@ -1318,7 +1318,7 @@ Vertex  15     0.8640426       -0.0750374
 Vertex  16     0.8640385       -0.0750381
 Total Curvature: -1.1966033
 
-Step    66     Radius          Curv:Radius
+Step    66     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281846       -0.0735591
 Vertex   2     0.9503498       -0.0746415
@@ -1338,7 +1338,7 @@ Vertex  15     0.8640442       -0.0750127
 Vertex  16     0.8640401       -0.0750133
 Total Curvature: -1.1967054
 
-Step    67     Radius          Curv:Radius
+Step    67     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281791       -0.0737236
 Vertex   2     0.9503478       -0.0746658
@@ -1358,7 +1358,7 @@ Vertex  15     0.8640455       -0.0749910
 Vertex  16     0.8640415       -0.0749915
 Total Curvature: -1.1967944
 
-Step    68     Radius          Curv:Radius
+Step    68     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281742       -0.0738669
 Vertex   2     0.9503460       -0.0746871
@@ -1378,7 +1378,7 @@ Vertex  15     0.8640468       -0.0749719
 Vertex  16     0.8640427       -0.0749724
 Total Curvature: -1.1968718
 
-Step    69     Radius          Curv:Radius
+Step    69     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281700       -0.0739917
 Vertex   2     0.9503445       -0.0747058
@@ -1398,7 +1398,7 @@ Vertex  15     0.8640478       -0.0749552
 Vertex  16     0.8640438       -0.0749556
 Total Curvature: -1.1969392
 
-Step    70     Radius          Curv:Radius
+Step    70     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281664       -0.0741005
 Vertex   2     0.9503431       -0.0747222
@@ -1418,7 +1418,7 @@ Vertex  15     0.8640487       -0.0749405
 Vertex  16     0.8640447       -0.0749409
 Total Curvature: -1.1969980
 
-Step    71     Radius          Curv:Radius
+Step    71     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281632       -0.0741952
 Vertex   2     0.9503419       -0.0747365
@@ -1438,7 +1438,7 @@ Vertex  15     0.8640496       -0.0749277
 Vertex  16     0.8640455       -0.0749280
 Total Curvature: -1.1970491
 
-Step    72     Radius          Curv:Radius
+Step    72     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281604       -0.0742777
 Vertex   2     0.9503409       -0.0747491
@@ -1458,7 +1458,7 @@ Vertex  15     0.8640503       -0.0749164
 Vertex  16     0.8640462       -0.0749167
 Total Curvature: -1.1970937
 
-Step    73     Radius          Curv:Radius
+Step    73     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281580       -0.0743496
 Vertex   2     0.9503400       -0.0747601
@@ -1478,7 +1478,7 @@ Vertex  15     0.8640509       -0.0749065
 Vertex  16     0.8640469       -0.0749067
 Total Curvature: -1.1971325
 
-Step    74     Radius          Curv:Radius
+Step    74     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281558       -0.0744123
 Vertex   2     0.9503392       -0.0747698
@@ -1498,7 +1498,7 @@ Vertex  15     0.8640514       -0.0748979
 Vertex  16     0.8640474       -0.0748981
 Total Curvature: -1.1971663
 
-Step    75     Radius          Curv:Radius
+Step    75     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281540       -0.0744669
 Vertex   2     0.9503385       -0.0747782
@@ -1518,7 +1518,7 @@ Vertex  15     0.8640519       -0.0748903
 Vertex  16     0.8640479       -0.0748905
 Total Curvature: -1.1971957
 
-Step    76     Radius          Curv:Radius
+Step    76     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281524       -0.0745145
 Vertex   2     0.9503379       -0.0747856
@@ -1538,7 +1538,7 @@ Vertex  15     0.8640523       -0.0748836
 Vertex  16     0.8640483       -0.0748838
 Total Curvature: -1.1972214
 
-Step    77     Radius          Curv:Radius
+Step    77     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281510       -0.0745559
 Vertex   2     0.9503374       -0.0747921
@@ -1558,7 +1558,7 @@ Vertex  15     0.8640527       -0.0748778
 Vertex  16     0.8640487       -0.0748780
 Total Curvature: -1.1972437
 
-Step    78     Radius          Curv:Radius
+Step    78     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281498       -0.0745921
 Vertex   2     0.9503369       -0.0747977
@@ -1578,7 +1578,7 @@ Vertex  15     0.8640530       -0.0748727
 Vertex  16     0.8640490       -0.0748728
 Total Curvature: -1.1972632
 
-Step    79     Radius          Curv:Radius
+Step    79     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281487       -0.0746235
 Vertex   2     0.9503365       -0.0748027
@@ -1598,7 +1598,7 @@ Vertex  15     0.8640533       -0.0748683
 Vertex  16     0.8640493       -0.0748684
 Total Curvature: -1.1972801
 
-Step    80     Radius          Curv:Radius
+Step    80     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281478       -0.0746510
 Vertex   2     0.9503362       -0.0748070
@@ -1618,7 +1618,7 @@ Vertex  15     0.8640535       -0.0748644
 Vertex  16     0.8640495       -0.0748645
 Total Curvature: -1.1972949
 
-Step    81     Radius          Curv:Radius
+Step    81     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281470       -0.0746749
 Vertex   2     0.9503358       -0.0748108
@@ -1638,7 +1638,7 @@ Vertex  15     0.8640538       -0.0748610
 Vertex  16     0.8640498       -0.0748610
 Total Curvature: -1.1973078
 
-Step    82     Radius          Curv:Radius
+Step    82     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281463       -0.0746957
 Vertex   2     0.9503356       -0.0748142
@@ -1658,7 +1658,7 @@ Vertex  15     0.8640540       -0.0748580
 Vertex  16     0.8640499       -0.0748580
 Total Curvature: -1.1973190
 
-Step    83     Radius          Curv:Radius
+Step    83     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281457       -0.0747139
 Vertex   2     0.9503353       -0.0748171
@@ -1678,7 +1678,7 @@ Vertex  15     0.8640541       -0.0748554
 Vertex  16     0.8640501       -0.0748554
 Total Curvature: -1.1973288
 
-Step    84     Radius          Curv:Radius
+Step    84     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281451       -0.0747297
 Vertex   2     0.9503351       -0.0748196
@@ -1698,7 +1698,7 @@ Vertex  15     0.8640543       -0.0748531
 Vertex  16     0.8640503       -0.0748531
 Total Curvature: -1.1973373
 
-Step    85     Radius          Curv:Radius
+Step    85     Radius          Curvature
 -----------------------------------------------------
 Vertex   1     0.4281447       -0.0747435
 Vertex   2     0.9503350       -0.0748218

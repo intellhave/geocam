@@ -9,37 +9,9 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "length.cpp"
-#include "radius.cpp"
+#include "geoquants.h"
 #include "triangulation/triangulation.h"
-#include "simplex/vertex.h"
-#include "simplex/edge.h"
 
-
-
-class PartialEdge;
-typedef map<TriPosition, PartialEdge*, TriPositionCompare> PartialEdgeIndex;
-
-class PartialEdge : public virtual GeoQuant {
-private:
-  static PartialEdgeIndex* Index;
-  GeoQuant* length;
-  GeoQuant* radA;
-  GeoQuant* radB;
-
-
-protected:
-  PartialEdge( Vertex& v, Edge& e );
-  void recalculate();
-
-public:
-  ~PartialEdge();
-  static PartialEdge* At( Vertex& v, Edge& e  );
-  static double valueAt(Vertex& v, Edge& e) {
-         return PartialEdge::At(v, e)->getValue();
-  }
-  static void CleanUp();
-};
 PartialEdgeIndex* PartialEdge::Index = NULL;
 
 PartialEdge::PartialEdge( Vertex& v, Edge& e  ){    

@@ -1,5 +1,5 @@
 #include "Triangulation/triangulation.h"
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #include "rungaApprox.h"
 
 void RungaApprox::step(double dt){

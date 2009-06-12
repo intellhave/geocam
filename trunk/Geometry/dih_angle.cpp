@@ -9,37 +9,11 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "euc_angle.cpp"
+#include "geoquants.h"
 #include "triangulation/triangulation.h"
-#include "simplex/edge.h"
-#include "simplex/tetra.h"
 
 #include "miscmath.h"
 
-
-class DihedralAngle;
-typedef map<TriPosition, DihedralAngle*, TriPositionCompare> DihedralAngleIndex;
-
-class DihedralAngle : public virtual GeoQuant {
-private:
-  static DihedralAngleIndex* Index;
-  GeoQuant* angleA;
-  GeoQuant* angleB;
-  GeoQuant* angleC;
-
-
-protected:
-  DihedralAngle( Edge& e, Tetra& t );
-  void recalculate();
-
-public:
-  ~DihedralAngle();
-  static DihedralAngle* At( Edge& e, Tetra& t );
-  static double valueAt(Edge& e, Tetra& t) {
-         return DihedralAngle::At(e, t)->getValue();
-  }
-  static void CleanUp();
-};
 DihedralAngleIndex* DihedralAngle::Index = NULL;
 
 DihedralAngle::DihedralAngle( Edge& e, Tetra& t ){

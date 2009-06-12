@@ -2,7 +2,7 @@
 #include <cmath>
 #include <fstream>
 #include "triangulationplane.h"
-#include "Geometry/Geometry.h"
+#include "Geometry/geoquants.h"
 #include "miscmath.h"
 #define PI 	3.141592653589793238
 
@@ -90,9 +90,9 @@ void addTriangle(Edge e, double length1, double length2)
      //check the edge lengths for triangle inequality
      if(Length::valueAt(e) >= (length1 + length2))
      throw string("Invalid Edge Lengths");
-     if(length1 >= (Geometry::length(e) + length2))
+     if(length1 >= (Length::valueAt(e) + length2))
      throw string("Invalid Edge Lengths");
-     if(length2 >= (Geometry::length(e) + length1))
+     if(length2 >= (Length::valueAt(e) + length1))
      throw string("Invalid Edge Lengths");
      
      //make variable references to existing simplices
@@ -107,7 +107,7 @@ void addTriangle(Edge e, double length1, double length2)
      if(getAngleSum(va1) + angle(Length::valueAt(e), length1, length2) > 2 * PI)
      throw string("angle sum 1");
      
-     if(getAngleSum(va2) + Geometry::angle(Length::valueAt(e), length2, length1) > 2 * PI)
+     if(getAngleSum(va2) + angle(Length::valueAt(e), length2, length1) > 2 * PI)
      throw string("angle sum 2");
 
      //initialize the new simplices with the proper indices
@@ -264,7 +264,7 @@ void addTriangle(Edge e1, Edge e2)
      //use lengths of existing edges to find new dimension
      double l1 = Length::valueAt(e1);
      double l2 = Length::valueAt(e2);
-     Length::At((Triangulation::edgeTable[eb.getIndex()])->setValue(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
+     Length::At(Triangulation::edgeTable[eb.getIndex()])->setValue(sqrt(pow(l1, 2) + pow(l2, 2) - 2 * l1 * l2 * cos(ang)));
      
 }
 
@@ -397,7 +397,7 @@ void generateRadii()
           }
           double randNum = ((double) rand()) / RAND_MAX;
           
-          Geometry::setRadius(randNum * smallest * 1);
+          Radius::At(vit->second)->setValue(randNum * smallest * 1);
      }
 }
 
@@ -591,8 +591,8 @@ void checkTriangle(Edge e, double length1, double length2)
      double ang1 = 2 * PI - getAngleSum(va1);
      double ang2 = 2 * PI - getAngleSum(va2);
      
-     double tempLength1 = sqrt(pow(length1, 2) + pow(Geometry::length(ea1), 2) - 2 * Geometry::length(ea1) * length1 * cos(ang1));
-     double tempLength2 = sqrt(pow(length2, 2) + pow(Geometry::length(ea2), 2) - 2 * Geometry::length(ea2) * length2 * cos(ang2));
+     double tempLength1 = sqrt(pow(length1, 2) + pow(Length::valueAt(ea1), 2) - 2 * Length::valueAt(ea1) * length1 * cos(ang1));
+     double tempLength2 = sqrt(pow(length2, 2) + pow(Length::valueAt(ea2), 2) - 2 * Length::valueAt(ea2) * length2 * cos(ang2));
      
      double tempAng1 = angle(Length::valueAt(ea1), tempLength1, length1);
      double tempAng2 = angle(Length::valueAt(ea2), tempLength2, length2);
@@ -618,12 +618,12 @@ void makeSpecialCase()
      addTriangle(Triangulation::edgeTable[4], Triangulation::edgeTable[6]);
      addTriangle(Triangulation::edgeTable[7], Triangulation::edgeTable[9]);
      addTriangle(Triangulation::edgeTable[8], Triangulation::edgeTable[5]);
-     Radius::At(Triangulation::vertexTable[1])::setValue(0);
-     Radius::At(Triangulation::vertexTable[2])::setValue(0);
-     Radius::At(Triangulation::vertexTable[3])::setValue(0);
-     Radius::At(Triangulation::vertexTable[4])::setValue(1.5066);
-     Radius::At(Triangulation::vertexTable[5])::setValue(1.5066);
-     Radius::At(Triangulation::vertexTable[6])::setValue(1.5066);     
+     Radius::At(Triangulation::vertexTable[1])->setValue(0);
+     Radius::At(Triangulation::vertexTable[2])->setValue(0);
+     Radius::At(Triangulation::vertexTable[3])->setValue(0);
+     Radius::At(Triangulation::vertexTable[4])->setValue(1.5066);
+     Radius::At(Triangulation::vertexTable[5])->setValue(1.5066);
+     Radius::At(Triangulation::vertexTable[6])->setValue(1.5066);     
 }
 
 void removeDoubleTriangle(Vertex vb)

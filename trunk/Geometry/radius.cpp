@@ -6,29 +6,10 @@
 using namespace std;
 
 #include "geoquant.h"
+#include "geoquants.h"
 #include "triposition.h"
+#include "triangulation/triangulation.h"
 
-#include "simplex/vertex.h"
-
-class Radius;
-typedef map<TriPosition, Radius*, TriPositionCompare> RadiusIndex;
-
-class Radius : public virtual GeoQuant {
-private:
-  static RadiusIndex* Index;
-
-protected:
-  Radius( Vertex& v );
-  void recalculate();
-
-public:
-  ~Radius();
-  static Radius* At( Vertex& v );
-  static double valueAt(Vertex& v) {
-         return Radius::At(v)->getValue();
-  }
-  static void CleanUp();
-};
 RadiusIndex* Radius::Index = NULL;
 
 Radius::Radius( Vertex& v ){}
