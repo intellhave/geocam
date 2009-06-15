@@ -175,20 +175,20 @@ double hij_k( Vertex vi, Vertex vj, Vertex vk){
 
 double hijk_l( Vertex vi, Vertex vj, Vertex vk, Vertex vl)
 {
-       Edge eij;
-       Tetra tijkl;
-       vector<int> temp_ij = listIntersection(vi.getLocalTetras(), vj.getLocalTetras());
-       vector<int> temp_ijk = listIntersection(&temp_ij, vk.getLocalTetras());
-       vector<int> temp_ijkl = listIntersection(&temp_ijk, vl.getLocalTetras());
-       vector<int> temp2_ij = listIntersection(vi.getLocalEdges(), vj.getLocalEdges());
-       // replace the above with a different operator
-       eij = Triangulation::edgeTable[temp2_ij[0]];
-       tijkl = Triangulation::tetraTable[temp_ijkl[0]];
-       // This assumes four vertices define a unique tetrahedron.
-       double result = (hij_k(vi, vj, vl) - hij_k(vi, vj, vk) * 
-			cos(Geometry::dihedralAngle(eij, tijkl))) / 
-	                sin(Geometry::dihedralAngle(eij, tijkl));
-       return result;
+  Edge eij;
+  Tetra tijkl;
+  vector<int> temp_ij = listIntersection(vi.getLocalTetras(), vj.getLocalTetras());
+  vector<int> temp_ijk = listIntersection(&temp_ij, vk.getLocalTetras());
+  vector<int> temp_ijkl = listIntersection(&temp_ijk, vl.getLocalTetras());
+  vector<int> temp2_ij = listIntersection(vi.getLocalEdges(), vj.getLocalEdges());
+  // replace the above with a different operator
+  eij = Triangulation::edgeTable[temp2_ij[0]];
+  tijkl = Triangulation::tetraTable[temp_ijkl[0]];
+  // This assumes four vertices define a unique tetrahedron.
+  double result = (hij_k(vi, vj, vl) - hij_k(vi, vj, vk) * 
+		   cos(Geometry::dihedralAngle(eij, tijkl))) / 
+    sin(Geometry::dihedralAngle(eij, tijkl));
+  return result;
 }
 
 double Aij_kl( Vertex vi, Vertex vj, Vertex vk, Vertex vl)

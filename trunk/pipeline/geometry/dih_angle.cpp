@@ -40,9 +40,9 @@ public:
 DihedralAngleIndex* DihedralAngle::Index = NULL;
 
 DihedralAngle::DihedralAngle( Edge& e, Tetra& t ){
-  Vertex *v = &Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+  Vertex& v = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
     
-  vector<int> faces = listIntersection(t.getLocalFaces(), v->getLocalFaces());
+  vector<int> faces = listIntersection(t.getLocalFaces(), v.getLocalFaces());
   vector<int> edge_faces = listIntersection(&faces, e.getLocalFaces());
   vector<int> not_edge_faces = listDifference(&faces, e.getLocalFaces());
 
@@ -56,7 +56,8 @@ DihedralAngle::DihedralAngle( Edge& e, Tetra& t ){
 }
 
 DihedralAngle::~DihedralAngle() {}
-DihedralAngle::recalculate() {
+
+void DihedralAngle::recalculate() {
   double a = angleA->getValue();
   double b = angleB->getValue();
   double c = angleC->getValue();
@@ -65,7 +66,7 @@ DihedralAngle::recalculate() {
 
 DihedralAngle* DihedralAngle::At( Edge& e,Tetra& t ){
   TriPosition T( 2, e.getSerialNumber(), t.getSerialNumber() );
-  if( Index == NULL ) Index = new EuclideanAngleIndex();
+  if( Index == NULL ) Index = new DihedralAngleIndex();
   DihedralAngleIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
