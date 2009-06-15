@@ -6,6 +6,7 @@
 #include <cmath>
 using namespace std;
 
+#include "miscmath.h"
 #include "geoquant.h"
 #include "geoquants.h"
 #include "triposition.h"
@@ -16,37 +17,36 @@ using namespace std;
 VolumePartialIndex* VolumePartial::Index = NULL;
 
 VolumePartial::VolumePartial( Vertex& v, Tetra& t ){
-    vector<int> opedges; 
-    opedges = listDifference(t.getLocalEdges(),  v.getLocalEdges());
-    Edge e23, e34, e24, e12, e13, e14;
-    Vertex v1, v2, v3, v4;
-    
-    e23 = Triangulation::edgeTable[opedges[0]]; 
-    e24 = Triangulation::edgeTable[opedges[2]];
-    e34 = Triangulation::edgeTable[opedges[1]];
-   
-    v1 = v;       
-    v2 = Triangulation::vertexTable[listIntersection(e23.getLocalVertices(), e24.getLocalVertices())[0]];
-    v3 = Triangulation::vertexTable[listIntersection(e23.getLocalVertices(), e34.getLocalVertices())[0]];
-    v4 = Triangulation::vertexTable[listIntersection(e24.getLocalVertices(), e34.getLocalVertices())[0]];
-   
-    
-    
-    e12 = Triangulation::edgeTable[listIntersection(v1.getLocalEdges(),v2.getLocalEdges())[0]];
-    e13 = Triangulation::edgeTable[listIntersection(v1.getLocalEdges(),v3.getLocalEdges())[0]];
-    e14 = Triangulation::edgeTable[listIntersection(v1.getLocalEdges(),v4.getLocalEdges())[0]];
+  StdTetra st = labelTetra( v, t );
+  
+  rad[0] = Radius::At( st.v1 );
+  rad[1] = Radius::At( st.v2 );
+  rad[2] = Radius::At( st.v3 );
+  rad[3] = Radius::At( st.v4 );
+  
+  eta[0] = Eta::At( st.e12 );
+  eta[1] = Eta::At( st.e13 );
+  eta[2] = Eta::At( st.e14 );
+  eta[3] = Eta::At( st.e23 );
+  eta[4] = Eta::At( st.e24 );
+  eta[5] = Eta::At( st.e34 );
    
 }
 
 void VolumePartial::recalculate(){
   double r1, r2, r3, r4, Eta12, Eta13, Eta14, Eta23, Eta24, Eta34;
        
-  r1 = rad[0]->getValue();   r2 = rad[1]->getValue();
-  r3 = rad[2]->getValue();   r4 = rad[3]->getValue();
+  r1 = rad[0]->getValue();
+  r2 = rad[1]->getValue();
+  r3 = rad[2]->getValue();
+  r4 = rad[3]->getValue();
        
-  Eta12 = eta[0]->getValue();  Eta13 = eta[1]->getValue();
-  Eta14 = eta[2]->getValue();  Eta23 = eta[3]->getValue();
-  Eta24 = eta[4]->getValue();  Eta34 = eta[5]->getValue();
+  Eta12 = eta[0]->getValue();  
+  Eta13 = eta[1]->getValue();
+  Eta14 = eta[2]->getValue(); 
+  Eta23 = eta[3]->getValue();
+  Eta24 = eta[4]->getValue();  
+  Eta34 = eta[5]->getValue();
 
   // Hideous!
   value = (r1*(r2*r3*r4*((Eta14 - Eta14*pow(Eta23,2) + Eta13*(Eta23*Eta24 + Eta34) + 

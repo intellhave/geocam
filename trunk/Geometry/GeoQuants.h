@@ -303,4 +303,78 @@ public:
 };
 /*************************/
 
+/***** Volume Second Partial *****/
+class VolumeSecondPartial;
+typedef map<TriPosition, VolumeSecondPartial*, TriPositionCompare> VolumeSecondPartialIndex;
+
+class VolumeSecondPartial : public virtual GeoQuant {
+private:
+  static VolumeSecondPartialIndex* Index;
+  Radius* rad[4];
+  Eta* eta[6];
+  bool sameVertices;
+
+protected:
+  VolumeSecondPartial( Vertex& v, Vertex& w, Tetra& t );
+  void recalculate();
+
+public:
+  ~VolumeSecondPartial();
+  static VolumeSecondPartial* At( Vertex& v, Vertex& w, Tetra& t );
+  static double valueAt( Vertex& v, Vertex& w, Tetra& t ) {
+         return VolumeSecondPartial::At( v, w, t)->getValue();
+  }
+  static void CleanUp();
+};
+/*********************************/
+
+/***** Edge Height *****/
+class EdgeHeight;
+typedef map<TriPosition, EdgeHeight*, TriPositionCompare> EdgeHeightIndex;
+
+class EdgeHeight : public virtual GeoQuant {
+private:
+  static EdgeHeightIndex* Index;
+  PartialEdge* d_ij;
+  PartialEdge* d_ik;
+  EuclideanAngle* theta_i;
+
+protected:
+  EdgeHeight( Edge& e, Face& f );
+  void recalculate();
+
+public:
+  ~EdgeHeight();
+  static EdgeHeight* At( Edge& e, Face& f );
+  static double valueAt( Edge& e, Face& f ) {
+        return EdgeHeight::At( e, f )->getValue();
+  }
+  static void CleanUp();
+};
+/***********************/
+
+/***** Face Height *****/
+class FaceHeight;
+typedef map<TriPosition, FaceHeight*, TriPositionCompare> FaceHeightIndex;
+
+class FaceHeight : public virtual GeoQuant {
+private:
+  static FaceHeightIndex* Index;
+  EdgeHeight* hij_l;
+  EdgeHeight* hij_k;
+  DihedralAngle* beta_ij_kl;
+
+protected:
+  FaceHeight( Face& f, Tetra& t );
+  void recalculate();
+
+public:
+  ~FaceHeight();
+  static FaceHeight* At( Face& f, Tetra& t );
+  static double valueAt( Face& f, Tetra& t ) {
+        return FaceHeight::At( f, t )->getValue();
+  }
+  static void CleanUp();
+};
+/***********************/
 #endif /* GEOQUANTS_H_ */
