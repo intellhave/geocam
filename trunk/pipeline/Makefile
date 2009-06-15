@@ -1,4 +1,4 @@
-BASE= /home/jthomas/ver7
+BASE= /home/jthomas/geocam/pipeline
 GEOM= $(BASE)/geometry
 TOPO= $(BASE)/topology
 CC= g++ -ansi -c -iquote$(GEOM) -iquote$(TOPO) -iquote$(BASE)

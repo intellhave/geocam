@@ -52,6 +52,11 @@ struct stand_psn_tetra{
   Edge e23;
   Edge e24;
   Edge e34;
+
+  Face f123;
+  Face f124;
+  Face f134;
+  Face f234;
 };
 typedef struct stand_psn_tetra StdTetra;
 
