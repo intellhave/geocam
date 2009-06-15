@@ -1,7 +1,7 @@
 #summary An alphabetical list of the functions in the Geocam Project
 #labels Featured
 
-     <[Functions#Approximator::run A], B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, [Functions#step S], T, U, V, W, X, Y, Z>
+     <[Functions#Approximator::run A], B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z>
 
 = `Approximator::run` =
   {{{
@@ -64,27 +64,5 @@ app->run(0.0001, 0.0001, 0.01);
 
   == Future Work ==
   No future work is planned at this time, though possible changes would include providing for more general systems to be able to run. This would involve changing the way precision and accuracy are determined as well as what values are recorded.
-
-= `step` =
-  
-  == Keywords ==
-
-  == Authors == 
-
-  == Introduction == 
-
-  == Subsidiaries == 
-
-  == Description ==
-
-  == Practicum ==
-
-  == Limitations ==
-
-  == Revisions ==
-
-  == Testing ==
-
-  == Future Work ==
 
 <wiki:toc max_depth="1" />
