@@ -56,19 +56,14 @@ int main(int argc, char** argv) {
 
    int vertSize = Triangulation::vertexTable.size();
    int edgeSize = Triangulation::edgeTable.size();
-
-   // Set the dimension of our system to three dimensions
-   Geometry::setDimension(ThreeD);
-   // Build values
-   Geometry::build();
    
    // Set the radii
    for(int i = 1; i <= vertSize; i++) {
-      Geometry::setRadius(Triangulation::vertexTable[i], 1 + (0.5 - i/5.0) );        
+      Radius::At(Triangulation::vertexTable[i])->setValue(1 + (0.5 - i/5.0) );        
    }
    // Set the etas
    for(int i = 1; i <= edgeSize; i++) {
-       Geometry::setEta(Triangulation::edgeTable[i], 1.0);
+       Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
    }
 
    // Construct an Approximator object that uses the Euler method and Yamabe flow while
