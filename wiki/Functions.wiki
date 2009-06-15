@@ -4,7 +4,11 @@
      <[Functions#Approximator::run A], B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, [Functions#step S], T, U, V, W, X, Y, Z>
 
 = `Approximator::run` =
-
+  {{{
+run(int numsteps, double stepsize)	
+run(double precision, double accuracy, double stepsize)
+  }}}
+  
   == Keywords ==
   flow, curvature, stepsize, precision, accuracy, approximator
 
@@ -31,12 +35,6 @@
   The `run` function and the overarching [CurvatureFlow Approximator] class exists as an improvement over the curvature flows of earlier versions of the Geocam project. The `run` function provides the skeleton that is similar for all types of curvature flows. Beyond the constructor, this should be the only thing a user calls from the [CurvatureFlow Approximator] class.
 
   == Practicum ==
-  Format:
-{{{
-run(int numsteps, double stepsize)	
-run(double precision, double accuracy, double stepsize)
-}}}
-
   Example:
 {{{
 // Create an approximator that uses the Euler method on a Yamabe flow.
