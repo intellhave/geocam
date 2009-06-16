@@ -5,8 +5,8 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = main.o addremove.o delaunay.o hessian.o miscmath.o plot.o pointlinecircle.o 3DTriangulation/3DInputOutput.o 3DTriangulation/3DTriangulationMorph.o flow/approximator.o flow/eulerApprox.o flow/parsecalc.o flow/rungaApprox.o flow/sysdiffeq.o Geometry/radius.o Geometry/triposition.o Geometry/area.o Geometry/dih_angle.o Geometry/eta.o Geometry/euc_angle.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/tetra.o Simplex/vertex.o Triangulation/MinMax.o Triangulation/smallMorphs.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Geometry/curvature2D.o Geometry/curvature3D.o Geometry/edge_curvature.o Geometry/partial_edge.o Geometry/volume_partial.o Geometry/length.o Geometry/volume.o Geometry/edge_height.o Geometry/volume_second_partial.o $(RES)
-LINKOBJ  = main.o addremove.o delaunay.o hessian.o miscmath.o plot.o pointlinecircle.o 3DTriangulation/3DInputOutput.o 3DTriangulation/3DTriangulationMorph.o flow/approximator.o flow/eulerApprox.o flow/parsecalc.o flow/rungaApprox.o flow/sysdiffeq.o Geometry/radius.o Geometry/triposition.o Geometry/area.o Geometry/dih_angle.o Geometry/eta.o Geometry/euc_angle.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/tetra.o Simplex/vertex.o Triangulation/MinMax.o Triangulation/smallMorphs.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Geometry/curvature2D.o Geometry/curvature3D.o Geometry/edge_curvature.o Geometry/partial_edge.o Geometry/volume_partial.o Geometry/length.o Geometry/volume.o Geometry/edge_height.o Geometry/volume_second_partial.o $(RES)
+OBJ  = main.o addremove.o delaunay.o hessian.o miscmath.o plot.o pointlinecircle.o 3DTriangulation/3DInputOutput.o 3DTriangulation/3DTriangulationMorph.o flow/approximator.o flow/eulerApprox.o flow/parsecalc.o flow/rungaApprox.o flow/sysdiffeq.o Geometry/radius.o Geometry/triposition.o Geometry/area.o Geometry/dih_angle.o Geometry/eta.o Geometry/euc_angle.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/tetra.o Simplex/vertex.o Triangulation/MinMax.o Triangulation/smallMorphs.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Geometry/curvature2D.o Geometry/curvature3D.o Geometry/edge_curvature.o Geometry/partial_edge.o Geometry/volume_partial.o Geometry/length.o Geometry/volume.o Geometry/edge_height.o Geometry/volume_second_partial.o Geometry/face_height.o Geometry/dualarea.o Geometry/dualareasegment.o $(RES)
+LINKOBJ  = main.o addremove.o delaunay.o hessian.o miscmath.o plot.o pointlinecircle.o 3DTriangulation/3DInputOutput.o 3DTriangulation/3DTriangulationMorph.o flow/approximator.o flow/eulerApprox.o flow/parsecalc.o flow/rungaApprox.o flow/sysdiffeq.o Geometry/radius.o Geometry/triposition.o Geometry/area.o Geometry/dih_angle.o Geometry/eta.o Geometry/euc_angle.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/tetra.o Simplex/vertex.o Triangulation/MinMax.o Triangulation/smallMorphs.o Triangulation/triangulation.o Triangulation/TriangulationCoordinateSystem.o Triangulation/triangulationInputOutput.o Triangulation/triangulationmorph.o Triangulation/triangulationPlane.o Geometry/curvature2D.o Geometry/curvature3D.o Geometry/edge_curvature.o Geometry/partial_edge.o Geometry/volume_partial.o Geometry/length.o Geometry/volume.o Geometry/edge_height.o Geometry/volume_second_partial.o Geometry/face_height.o Geometry/dualarea.o Geometry/dualareasegment.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  
 INCS =  -I"include" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL" 
@@ -148,3 +148,12 @@ Geometry/edge_height.o: Geometry/edge_height.cpp
 
 Geometry/volume_second_partial.o: Geometry/volume_second_partial.cpp
 	$(CPP) -c Geometry/volume_second_partial.cpp -o Geometry/volume_second_partial.o $(CXXFLAGS)
+
+Geometry/face_height.o: Geometry/face_height.cpp
+	$(CPP) -c Geometry/face_height.cpp -o Geometry/face_height.o $(CXXFLAGS)
+
+Geometry/dualarea.o: Geometry/dualarea.cpp
+	$(CPP) -c Geometry/dualarea.cpp -o Geometry/dualarea.o $(CXXFLAGS)
+
+Geometry/dualareasegment.o: Geometry/dualareasegment.cpp
+	$(CPP) -c Geometry/dualareasegment.cpp -o Geometry/dualareasegment.o $(CXXFLAGS)

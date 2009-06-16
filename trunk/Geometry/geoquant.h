@@ -60,6 +60,15 @@ class GeoQuant {
     }
   }
 
+  void GeoQuant::removeDependent(GeoQuant* dep){
+    for(int ii = 0; ii < dependents->size(); ii++) {
+      if(dependents->at(ii) == dep){
+        dependents->erase(ii);
+        return;
+      }
+    }
+  }
+
   static void CleanUp(){}
 };
 
@@ -71,13 +80,7 @@ void GeoQuant::copyDependents(vector<GeoQuant*>* deps){
     deps.push_back( dependents.at(ii) );
 }
 
-void GeoQuant::dropDependent(GeoQuant* dep){
-  for(int ii = 0; ii < dependents->size(); ii++)
-    if(dependents->at(ii) == dep){
-      dependents->erase(ii);
-      return;
-    }
-}
+
 */
 
 #endif  /* GEOQUANT_H_ */

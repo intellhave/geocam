@@ -227,6 +227,15 @@ bool readTriangulationFile(const char* fileName)
     return true; // File read successfully!
 }
 
+void buildTriangulation(char* filename) {
+   FILE* file = fopen(filename, "r");
+   if(file == NULL) {
+      printf("buildTriangulation error: file does not exist.\n");
+      return;
+   }
+   char
+}
+
 void writeTriangulationFile(char* newFileName)
 {
      ofstream output(newFileName);

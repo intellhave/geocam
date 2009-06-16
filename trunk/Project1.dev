@@ -649,9 +649,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit68]
-FileName=Triangulation\triangulationmorph.h
+FileName=Geometry\face_height.cpp
 CompileCpp=1
-Folder=Morphs
+Folder=Geometry/Quantities
 Compile=1
 Link=1
 Priority=1000
@@ -659,9 +659,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit69]
-FileName=Triangulation\triangulationPlane.cpp
+FileName=Geometry\dualarea.cpp
 CompileCpp=1
-Folder=Flip
+Folder=Geometry/Quantities
 Compile=1
 Link=1
 Priority=1000
@@ -669,9 +669,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit70]
-FileName=Triangulation\triangulationPlane.h
+FileName=Geometry\dualareasegment.cpp
 CompileCpp=1
-Folder=Flip
+Folder=Geometry/Quantities
 Compile=1
 Link=1
 Priority=1000
@@ -797,7 +797,7 @@ BuildCmd=
 [Project]
 FileName=Project1.dev
 Name=Project1
-UnitCount=67
+UnitCount=70
 Type=1
 Ver=1
 ObjFiles=

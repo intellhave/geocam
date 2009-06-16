@@ -377,4 +377,54 @@ public:
   static void CleanUp();
 };
 /***********************/
+
+
+/***** Dual Area Segment *****/
+class DualAreaSegment;
+typedef map<TriPosition, DualAreaSegment*, TriPositionCompare> DualAreaSegmentIndex;
+
+class DualAreaSegment : public virtual GeoQuant {
+private:
+  static DualAreaSegmentIndex* Index;
+  EdgeHeight* hij_k;
+  EdgeHeight* hij_l;
+  FaceHeight* hijk_l;
+  FaceHeight* hijl_k;
+
+protected:
+  DualAreaSegment( Edge& e, Tetra& t );
+  void recalculate();
+
+public:
+  ~DualAreaSegment();
+  static DualAreaSegment* At( Edge& e, Tetra& t );
+  static double valueAt( Edge& e, Tetra& t ) {
+         return DualAreaSegment::At(e, t)->getValue();
+  }
+  static void CleanUp();
+};
+/****************************/
+
+/***** Dual Area *****/
+class DualArea;
+typedef map<TriPosition, DualArea*, TriPositionCompare> DualAreaIndex;
+
+class DualArea : public virtual GeoQuant {
+private:
+  static DualAreaIndex* Index;
+  vector<DualAreaSegment*>* segments;
+
+protected:
+  DualArea( Edge& e );
+  void recalculate();
+
+public:
+  ~DualArea();
+  static DualArea* At( Edge& e );
+  static double valueAt( Edge& e) {
+         return DualArea::At(e)->getValue();
+  }
+  static void CleanUp();
+};
+/*********************/
 #endif /* GEOQUANTS_H_ */
