@@ -111,10 +111,7 @@ EuclideanAngle  *ang  =  EuclideanAngle::At(v,  f);
   subversion 761, 6/12/09, A working copy of `At` and the Geoquant system.
 
   == Testing ==
-  The `At` function was tested in small modularized systems, then tested in a three dimen-
-sional ﬂow, which required many varied uses of `At`.   Some retrieved quantities had their
-values set while others had their values accessed and compared with what mathematica
-calculations predicted.
+  The `At` function was tested in small modularized systems, then tested in a three dimensional ﬂow, which required many varied uses of `At`.   Some retrieved quantities had their values set while others had their values accessed and compared with what mathematica calculations predicted.
 
   == Future Work ==
   No future work is planned at this time.
