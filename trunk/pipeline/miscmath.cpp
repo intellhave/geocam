@@ -240,6 +240,20 @@ StdTetra labelTetra(Vertex& v, Tetra& t){
   return retval;
 }
 
+StdTetra labelTetra( Face& f, Tetra& t ){
+  StdTetra retval;
+ 
+  vector<int>* verts = f.getLocalVertices();
+  retval.v1 = verts->at(0);
+  retval.v2 = verts->at(1);
+  retval.v3 = verts->at(2);
+  verts = listDifference( t.getLocalVertices(), f.getLocalVertices() );
+  retval.v4 = verts->at(0);
+
+  fixEdges( retval, t );
+  fixFaces( retval, t );
+}
+
 StdTetra labelTetra( Tetra& t ){
   Vertex& v = Triangulation::vertexTable[ (*(t.getLocalVertices()))[0] ];
   return labelTetra( v, t );
