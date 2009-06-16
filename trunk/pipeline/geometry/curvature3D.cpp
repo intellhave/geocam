@@ -9,15 +9,13 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "EdgeCurvature.cpp"
-#include "PartialEdge.cpp"
+#include "edge_curvature.cpp"
+#include "partial_edge.cpp"
 #include "triangulation.h"
 #include "vertex.h"
 
-
-
 class Curvature3D;
-typedef map<TriPosition, Curvature3D;*, TriPositionCompare> Curvature3DIndex;
+typedef map<TriPosition, Curvature3D*, TriPositionCompare> Curvature3DIndex;
 
 class Curvature3D : public virtual GeoQuant {
 private:
@@ -55,7 +53,8 @@ Curvature3D::Curvature3D( Vertex& v  ){
 }
 
 Curvature3D::~Curvature3D(){ delete edgeCurvs; delete partials;}
-Curvature3D::recalculate() {
+
+void Curvature3D::recalculate() {
     double curv = 0; 
     GeoQuant* edgeC;
     GeoQuant* partial;
@@ -69,7 +68,7 @@ Curvature3D::recalculate() {
 }
 
 Curvature3D* Curvature3D::At( Vertex& v  ){
-  TriPosition T( 1, e.getSerialNumber() );
+  TriPosition T( 1, v.getSerialNumber() );
   if( Index == NULL ) Index = new Curvature3DIndex();
   Curvature3DIndex::iterator iter = Index->find( T );
 

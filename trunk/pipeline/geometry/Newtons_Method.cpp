@@ -224,7 +224,6 @@ double Lij_star( Edge eij)
 
 double Curvature_Partial ( int i, int l )
 {
-
   double result;
   vector<int> temp;
   Vertex V, Vprime;
@@ -256,12 +255,12 @@ double Curvature_Partial ( int i, int l )
 	T = Triangulation::tetraTable[local_tetra->at(m)];
 	dihedral_sum += Geometry::dihedralAngle(E,T);
       }
-      //                printf("dihedral_sum = %.10f\n", dihedral_sum);    
+      // printf("dihedral_sum = %.10f\n", dihedral_sum);    
       sum += -1.0*(Lij_star(E)/(Geometry::length(E))
-		   -(2*PI-dihedral_sum)*(pow(Geometry::radius(V), 2)*pow(Geometry::radius(Vprime),2)*(1-pow(Geometry::eta(E),2)))/pow(Geometry::length(E),3))+Geometry::curvature(V);             
+		   -(2*PI-dihedral_sum)*(pow(Geometry::radius(V), 2)*pow(Geometry::radius(Vprime),2)*(1-pow(Geometry::eta(E),2)))/pow(Geometry::length(E),3))+Geometry::curvature(V);
     }
                 
-    //            printf("sum = %.10f\n", sum);    
+     // printf("sum = %.10f\n", sum);    
                 
                 
     result = sum;

@@ -34,7 +34,7 @@ public:
 VolumeIndex* Volume::Index = NULL;
 
 Volume::Volume( Tetra& t ){
-  StdTetra st = orderTetra( t );
+  StdTetra st = labelTetra( t );
     
   len[0] = Length::At( st.e12 );
   len[1] = Length::At( st.e13 );

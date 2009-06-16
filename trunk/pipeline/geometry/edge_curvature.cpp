@@ -13,7 +13,7 @@ using namespace std;
 #include "triangulation.h"
 #include "edge.h"
 
-
+#define PI 3.1415926
 
 class EdgeCurvature;
 typedef map<TriPosition, EdgeCurvature*, TriPositionCompare> EdgeCurvatureIndex;
@@ -46,8 +46,9 @@ EdgeCurvature::EdgeCurvature( Edge& e  ){
 }
 
 EdgeCurvature::~EdgeCurvature(){ delete dih_angles; }
-EdgeCurvature::recalculate() {
-    double curv = 2*PI;
+
+void EdgeCurvature::recalculate() {
+    double curv = 2 * PI;
     GeoQuant* dih_angle;
     for(int ii = 0; ii < dih_angles->size(); ii++){
       dih_angle = dih_angles->at(ii);
