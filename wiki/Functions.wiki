@@ -92,7 +92,7 @@ Geoquant*  Geoquant::At(Simplex  s1,  ...)
 
   When the `At` function is called, it searches a local map for a quantity with the given list of simplices.  If it is found, a pointer to that quantity in the map is simply returned.  If it is not found, the quantity is constructed and placed into the map.  If the construction of the object requires other types of quantities not yet created, then these will be constructed automatically at this time. Lastly, this quantity is returned.
 
-  The constructor is hidden from the user for several reasons. The ﬁrst is that this avoids redundant construction and the need for an encapsulating object to hold a large set of geoquants (like the Geometry class in a previous version).  In the same vein, the need for an initial build step and a required order of construction is removed. In addition, this is an eﬃciency improvement as quantities that are never requested are never created, decreasing memory use and large dependency trees which can take a while for an invalidate to traverse.
+  The constructor is hidden from the user for several reasons. The ﬁrst is that this avoids redundant construction and the need for an encapsulating object to hold a large set of geoquants (like the Geometry class in a previous version).  In the same vein, the need for an initial build step and a required order of construction is removed. In addition, this is an eﬃciency improvement as quantities that are never requested are never created, decreasing memory use and large dependency trees which can take a while for an `invalidate` to traverse.
 
   == Practicum ==
   Example:
@@ -118,4 +118,6 @@ EuclideanAngle  *ang  =  EuclideanAngle::At(v,  f);
   == Future Work ==
   No future work is planned at this time.
 
+--------------------------------------------------------------------------------
+= Table of Contents =
 <wiki:toc max_depth="1" />
