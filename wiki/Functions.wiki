@@ -65,6 +65,8 @@ app->run(0.0001, 0.0001, 0.01);
   == Future Work ==
   No future work is planned at this time, though possible changes would include providing for more general systems to be able to run. This would involve changing the way precision and accuracy are determined as well as what values are recorded.
 
+  6/17 - Add more run options (ex. precision and maxNumSteps).
+
 = `Geoquant::At` =
   {{{
 Geoquant*  Geoquant::At(Simplex  s1,  ...)
