@@ -93,7 +93,7 @@ void Approximator::clearHistories(){
   volumeHistory.clear();
 }
 
-void Approximator::run(int numSteps, double stepsize){  
+int Approximator::run(int numSteps, double stepsize){  
   recordState();
   for(int ii = 0; ii < numSteps && !errno; ii++){
     step(stepsize);
@@ -161,8 +161,8 @@ static bool isPrecise(double precision, double* curvsPrev, double* curvsCurr){
 //           !isAccurate(accuracy, curvs[curr]) && !errno );
 //}
 
-void Approximator::run(double precision, double stepsize) {
-     if(precision <= 0) return;
+int Approximator::run(double precision, double stepsize) {
+     if(precision <= 0) return 1;
      
      int numverts = Triangulation::vertexTable.size();
      double curvs[2][numverts];
@@ -184,8 +184,8 @@ void Approximator::run(double precision, double stepsize) {
      return errno;
 }
 
-void Approximator::run(double precision, int maxNumSteps, double stepsize) {
-     if(precision <= 0) return;
+int Approximator::run(double precision, int maxNumSteps, double stepsize) {
+     if(precision <= 0) return 1;
      
      int numverts = Triangulation::vertexTable.size();
      double curvs[2][numverts];
@@ -203,7 +203,7 @@ void Approximator::run(double precision, int maxNumSteps, double stepsize) {
         getLatest(radii[curr], curvs[curr]);
         prev = curr;
         if( isPrecise(precision, curvs[0], curvs[1]) ) {
-           return;
+           return errno;
         }
      }
      return errno;
