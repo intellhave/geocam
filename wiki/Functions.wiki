@@ -4,9 +4,9 @@
 
 = `Approximator::run` =
   {{{
-run(int numsteps, double stepsize)	
-run(double precision, double stepsize)
-run(double precision, int maxNumSteps, double stepsize)
+int run(int numsteps, double stepsize)	
+int run(double precision, double stepsize)
+int run(double precision, int maxNumSteps, double stepsize)
   }}}
   
   == Keywords ==
@@ -17,7 +17,7 @@ run(double precision, int maxNumSteps, double stepsize)
    * Alex Henniges
 
   == Introduction ==
-  The `run` function of the [CurvatureFlow Approximator] class runs a system of differential equations representing a curvature flow for either a number of steps or until the values are within a desired precision. The system to use and how steps are performed is given in the constructor of the approximator. The type of run is based on the parameters given.
+  The `run` function of the [CurvatureFlow Approximator] class runs a system of differential equations representing a curvature flow for either a number of steps or until the values are within a desired precision. The system to use and how steps are performed is given in the constructor of the approximator. The type of run is based on the parameters given. The `run` function returns 0 on success or any other number if an error is encountered.
 
 
   == Subsidiaries ==
