@@ -54,6 +54,8 @@ class Approximator{
   
   void run(int numSteps, double stepsize);
   void run(double precision, double accuracy, double stepsize);
+  void run(double precision, double stepsize);
+  void run(double precision, int maxNumSteps, double stepsize);
        
   virtual void step(double stepsize) = 0;
   void recordState();

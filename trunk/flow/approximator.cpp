@@ -46,8 +46,7 @@ void Approximator::record3DCurvs() {
   map<int, Vertex>::iterator vEnd = Triangulation::vertexTable.end();
   
   for(vIt = vBegin; vIt != vEnd; vIt++){
-     curvHistory.push_back( Curvature3D::valueAt(vIt->second) 
-                            / Radius::valueAt(vIt->second) );
+     curvHistory.push_back( Curvature3D::valueAt(vIt->second));
   }    
 }
 
@@ -79,8 +78,7 @@ void Approximator::getLatest(double radii[], double curvs[]){
   for(vIt = vBegin; vIt != vEnd; vIt++, ii++){
     radii[ii] = Radius::valueAt(vIt->second);
     if(curvs3D) {
-       curvs[ii] = Curvature3D::valueAt(vIt->second) 
-                            / Radius::valueAt(vIt->second);
+       curvs[ii] = Curvature3D::valueAt(vIt->second);
     } else {
         curvs[ii] = Curvature2D::valueAt(vIt->second);
     }
@@ -94,10 +92,7 @@ void Approximator::clearHistories(){
   volumeHistory.clear();
 }
 
-void Approximator::run(int numSteps, double stepsize){
-  map<int, Vertex> M = Triangulation::vertexTable;   
-  map<int, Vertex>::iterator vBegin = M.begin();
-  
+void Approximator::run(int numSteps, double stepsize){  
   recordState();
   for(int ii = 0; ii < numSteps; ii++){
     step(stepsize);
@@ -105,13 +100,13 @@ void Approximator::run(int numSteps, double stepsize){
   }
 }
 
-static bool isPrecise(double precision, double curvs[]){
+static bool isPrecise(double precision, double* curvsPrev, double* curvsCurr){
     int numverts = Triangulation::vertexTable.size();
     
     double delta;
     bool precise = true;
     for(int ii = 0; ii < numverts; ii++){
-      delta = fabs(curvs[ii] - curvs[ii]);
+      delta = fabs(curvsPrev[ii] - curvsCurr[ii]);
       precise = precise && (delta < precision);
     }     
     return precise;
@@ -159,6 +154,52 @@ void Approximator :: run(double precision, double accuracy, double stepsize){
     curr = (prev + 1)%2;
     getLatest(radii[curr], curvs[curr]);
     prev = curr;
-  } while(! isPrecise(precision, curvs[curr]) ||
+  } while(! isPrecise(precision, curvs[0], curvs[1]) ||
           ! isAccurate(accuracy, curvs[curr]));
+}
+
+void Approximator::run(double precision, double stepsize) {
+     if(precision <= 0) return;
+     
+     int numverts = Triangulation::vertexTable.size();
+     double curvs[2][numverts];
+     double radii[2][numverts];
+
+     int prev = 0;
+     int curr;
+
+     recordState(); 
+     getLatest(radii[prev], curvs[prev]);
+  
+     do{
+        step(stepsize);
+        recordState();
+        curr = (prev + 1)%2;
+        getLatest(radii[curr], curvs[curr]);
+        prev = curr;
+     } while(! isPrecise(precision, curvs[0], curvs[1]) );
+}
+
+void Approximator::run(double precision, int maxNumSteps, double stepsize) {
+     if(precision <= 0) return;
+     
+     int numverts = Triangulation::vertexTable.size();
+     double curvs[2][numverts];
+     double radii[2][numverts];
+     
+     int prev = 0;
+     int curr;
+
+     recordState(); 
+     getLatest(radii[prev], curvs[prev]);
+     for(int ii = 0; ii < maxNumSteps; ii++){
+        step(stepsize);
+        recordState();
+        curr = (prev + 1)%2;
+        getLatest(radii[curr], curvs[curr]);
+        prev = curr;
+        if( isPrecise(precision, curvs[0], curvs[1]) ) {
+           return;
+        }
+     }    
 }

@@ -144,9 +144,9 @@ int main(int argc, char** argv){
    Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "r3");
    time(&start);
    //app->run(300, 0.01);
-   app->run(0.0001, 0.0001, 0.01);
+   app->run(0.000000001, 100, 0.01);
    time(&end);
-   printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
+   print3DResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
                       &(app->radiiHistory), &(app->curvHistory));
    //printResultsVolumes("C:/Dev-Cpp/geocam/Triangulation Files/Volumes.txt",
       //                    &(app->volumeHistory));

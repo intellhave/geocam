@@ -60,15 +60,6 @@ class GeoQuant {
     }
   }
 
-  void GeoQuant::removeDependent(GeoQuant* dep){
-    for(int ii = 0; ii < dependents->size(); ii++) {
-      if(dependents->at(ii) == dep){
-        dependents->erase(ii);
-        return;
-      }
-    }
-  }
-
   static void CleanUp(){}
 };
 

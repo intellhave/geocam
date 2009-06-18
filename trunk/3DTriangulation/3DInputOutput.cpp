@@ -729,43 +729,6 @@ void make3DTriangulationFile(char* from, char* to) {
   outfile.close();
 }
 
-void print3DResultsStep(char* fileName, vector<double>* radii, vector<double>* curvs)
-{
-     int vertSize = Triangulation::vertexTable.size();
-     int numSteps = radii->size() / vertSize;
-     ofstream results(fileName, ios_base::trunc);
-     results << left << setprecision(6); 
-     results.setf(ios_base::showpoint);
-     
-     map<int, Vertex>::iterator vit;
-
-     
-     for(int i = 0; i < numSteps; i++)
-     {
-         double netCurv = 0.;
-         results << left << "Step " << left <<setw(6)  << i + 1;
-         results << right << setw(7) << "Radius";
-         results << right << setw(12) << "Curv";
-         results << "\n---------------------------------\n";
-         vit = Triangulation::vertexTable.begin();
-         for(int j = 0; j < vertSize; j++)
-         {
-             results << "Vertex " << left << setw(5) << vit->first;
-             results << left << setw(14)<< (*radii)[i*vertSize + j];
-             results << left << setw(12) << (*curvs)[i*vertSize+j] << "\n";
-             netCurv += (*curvs)[i*vertSize+j];
-             vit++;
-         }
-       if(netCurv < 0.0000001 && netCurv > -0.0000001)
-       {
-                    netCurv = 0.;
-       }
-         results << "Total Curvature: " << netCurv << "\n\n";
-     }
-     
-   results.close();
-}
-
 void printResultsVolumes(char* fileName, vector<double>* volumes)
 {
      int tetraSize = Triangulation::tetraTable.size();
@@ -810,4 +773,39 @@ void readEtas(char* filename)
         Eta::At(Triangulation::edgeTable[index])->setValue(eta);
      }
      fclose(file);
+}
+
+void print3DResultsStep(char* fileName, vector<double>* radii, vector<double>* curvs)
+{
+     int vertSize = Triangulation::vertexTable.size();
+     int numSteps = radii->size() / vertSize;
+     FILE* results = fopen(fileName, "w");
+     if(results == NULL) {
+       fprintf(stderr, "Null file given by %s\n", fileName);
+       return;        
+     }
+     
+     map<int, Vertex>::iterator vit;
+     for(int i = 0; i < numSteps; i++)
+     {
+         double netCurv = 0.;
+         fprintf(results, "Step %5d     Radius          Curvature        Curv:Radius\n", i);
+         fprintf(results, "-----------------------------------------------------\n");
+         vit = Triangulation::vertexTable.begin();
+         for(int j = 0; j < vertSize; j++)
+         {
+             fprintf(results, "Vertex %3d     %3.7f       %3.7f       %3.7f\n",
+                   vit->first, 
+                  (*radii)[i*vertSize + j], (*curvs)[i*vertSize+j],
+                   (*curvs)[i*vertSize+j] / (*radii)[i*vertSize + j]);
+             netCurv += (*curvs)[i*vertSize+j];
+             vit++;
+         }
+         if(netCurv < 0.0000001 && netCurv > -0.0000001)
+         {
+                    netCurv = 0.;
+         }
+         fprintf(results, "Total Curvature: %4.7f\n\n", netCurv);
+     }
+     fclose(results);
 }

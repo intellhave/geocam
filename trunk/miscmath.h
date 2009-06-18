@@ -116,5 +116,6 @@ StdFace labelFace(Edge& e, Face& f);
 
 StdTetra labelTetra(Edge& e, Tetra& t);
 StdTetra labelTetra(Vertex& v, Tetra& t);
+StdTetra labelTetra(Face& f, Tetra& t);
 StdTetra labelTetra( Tetra& t );
 #endif
