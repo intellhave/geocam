@@ -1,5 +1,4 @@
 #summary An alphabetical list of the functions in the Geocam Project
-#labels Featured
 
      <[#Approximator::run A], B, C, D, E, F, [#Geoquant::At G], H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z>
 
@@ -7,6 +6,8 @@
   {{{
 run(int numsteps, double stepsize)	
 run(double precision, double accuracy, double stepsize)
+run(double precision, double stepsize)
+run(double precision, int maxNumSteps, double stepsize)
   }}}
   
   == Keywords ==
@@ -37,6 +38,8 @@ run(double precision, double accuracy, double stepsize)
 
   If the `run` function is given a precision and accuracy, it will continue to call its step function until the desired quantities (curvature in two dimensions and curvature divide by radius in three dimensions) have converged within the precision and accuracy bounds. Precision is defined to be the difference between subsequent values of a quantity. Therefore, precision is a measure of how much a value is changing. Accuracy is defined to be the difference in value between quantities. Therefore, accuracy is a measure of how close values are to each other. In between steps, the `run` function will record the current state of any values that have been requested to be recorded (this is specified in the constructor).	
 
+  A flow can also be run with just precision or with a precision and a max number of steps, that will stop once of the conditions is reached.
+
   The `run` function and the overarching [CurvatureFlow Approximator] class exists as an improvement over the curvature flows of earlier versions of the Geocam project. The `run` function provides the skeleton that is similar for all types of curvature flows. Beyond the constructor, this should be the only thing a user calls from the [CurvatureFlow Approximator] class.
 
   == Practicum ==
@@ -65,7 +68,8 @@ app->run(0.0001, 0.0001, 0.01);
   == Future Work ==
   No future work is planned at this time, though possible changes would include providing for more general systems to be able to run. This would involve changing the way precision and accuracy are determined as well as what values are recorded.
 
-  6/17 - Add more run options (ex. precision and maxNumSteps).
+  6/17 - ~~Add more run options (ex. precision and maxNumSteps).~~ *complete*
+  6/17 - Have a run stop the moment an undefined number appears.
 
 = `Geoquant::At` =
   {{{
