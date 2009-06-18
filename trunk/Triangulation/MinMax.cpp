@@ -80,7 +80,6 @@ void MinMax(double deltaEta, double b, double a)
    double initRadii[Triangulation::vertexTable.size()];
 
    double dt = 0.030;
-   double accuracy = 0.000000001;
    double precision = 0.000000001;
 
 
@@ -89,7 +88,7 @@ void MinMax(double deltaEta, double b, double a)
    }
    map<int, double>::iterator dfit;
    
-   app->run(precision, accuracy, dt);
+   app->run(precision, dt);
    printf("F = %.10f\n", F());
    calcDeltaFE(&deltaFE, deltaEta);
    double length = 0;
@@ -123,7 +122,7 @@ while(true) {
       //updateEtas(&deltaFE, b);
       getRadii(initRadii);
       printf("\n*** *** *** *** *** *** *** *** *** *** ***\n");
-      app->run(precision, accuracy, dt);
+      app->run(precision, dt);
       printf("\nF = %.10f\n", F());
       printData(result);
       
@@ -155,11 +154,10 @@ double FE(double deltaEta, int index)
    double initRadii[Triangulation::vertexTable.size()];
 
    double dt = 0.030;
-   double accuracy = 0.000000001;
    double precision = 0.000000001;
    
    getRadii(initRadii);
-   app->run(precision, accuracy, dt);
+   app->run(precision, dt);
    double result = F();
    eta->setValue(curEta);
    setRadii(initRadii);

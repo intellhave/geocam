@@ -4,6 +4,7 @@
 #include "Geometry/geoquants.h"
 #include "Simplex/vertex.h"
 #include "approximator.h"
+#include <cerrno>
 
 void Approximator :: recordState(){  
     recordRadii();
@@ -94,10 +95,11 @@ void Approximator::clearHistories(){
 
 void Approximator::run(int numSteps, double stepsize){  
   recordState();
-  for(int ii = 0; ii < numSteps; ii++){
+  for(int ii = 0; ii < numSteps && !errno; ii++){
     step(stepsize);
     recordState();
   }
+  return errno;
 }
 
 static bool isPrecise(double precision, double* curvsPrev, double* curvsCurr){
@@ -112,51 +114,52 @@ static bool isPrecise(double precision, double* curvsPrev, double* curvsCurr){
     return precise;
 }
 
-static bool isAccurate(double accuracy, double curvs[]){
-  int numVerts = Triangulation::vertexTable.size();
-  double avgProp = 0;
-  double norms[numVerts];
-  int ii;
-  
-  for(ii = 0; ii < numVerts; ii++){
-    norms[ii] = curvs[ii];
-    avgProp += norms[ii];
-  }
-  avgProp = avgProp/numVerts;
- 
-  bool accurate = true; 
-  double delta;
-  for(ii = 0; ii < numVerts; ii++){
-    delta = fabs(norms[ii] - avgProp);
-    accurate = accurate && (delta < accuracy);
-  }
+/** REMOVING ACCURACY FROM THE APPROXIMATOR **/
+//static bool isAccurate(double accuracy, double curvs[]){
+//  int numVerts = Triangulation::vertexTable.size();
+//  double avgProp = 0;
+//  double norms[numVerts];
+//  int ii;
+//  
+//  for(ii = 0; ii < numVerts; ii++){
+//    norms[ii] = curvs[ii];
+//    avgProp += norms[ii];
+//  }
+//  avgProp = avgProp/numVerts;
+// 
+//  bool accurate = true; 
+//  double delta;
+//  for(ii = 0; ii < numVerts; ii++){
+//    delta = fabs(norms[ii] - avgProp);
+//    accurate = accurate && (delta < accuracy);
+//  }
+//
+//  return accurate;
+//}
 
-  return accurate;
-}
 
-
-void Approximator :: run(double precision, double accuracy, double stepsize){
-  if(precision <= 0 || accuracy <= 0) return;
-
-  int numverts = Triangulation::vertexTable.size();
-  double curvs[2][numverts];
-  double radii[2][numverts];
-
-  int prev = 0;
-  int curr;
-
-  recordState(); 
-  getLatest(radii[prev], curvs[prev]);
-  
-  do{
-    step(stepsize);
-    recordState();
-    curr = (prev + 1)%2;
-    getLatest(radii[curr], curvs[curr]);
-    prev = curr;
-  } while(! isPrecise(precision, curvs[0], curvs[1]) ||
-          ! isAccurate(accuracy, curvs[curr]));
-}
+//void Approximator :: run(double precision, double accuracy, double stepsize){
+//  if(precision <= 0 || accuracy <= 0) return;
+//
+//  int numverts = Triangulation::vertexTable.size();
+//  double curvs[2][numverts];
+//  double radii[2][numverts];
+//
+//  int prev = 0;
+//  int curr;
+//
+//  recordState(); 
+//  getLatest(radii[prev], curvs[prev]);
+//  
+//  do{
+//    step(stepsize);
+//    recordState();
+//    curr = (prev + 1)%2;
+//    getLatest(radii[curr], curvs[curr]);
+//    prev = curr;
+//  } while(!isPrecise(precision, curvs[0], curvs[1]) ||
+//           !isAccurate(accuracy, curvs[curr]) && !errno );
+//}
 
 void Approximator::run(double precision, double stepsize) {
      if(precision <= 0) return;
@@ -177,7 +180,8 @@ void Approximator::run(double precision, double stepsize) {
         curr = (prev + 1)%2;
         getLatest(radii[curr], curvs[curr]);
         prev = curr;
-     } while(! isPrecise(precision, curvs[0], curvs[1]) );
+     } while(! (isPrecise(precision, curvs[0], curvs[1]) || errno) );
+     return errno;
 }
 
 void Approximator::run(double precision, int maxNumSteps, double stepsize) {
@@ -192,7 +196,7 @@ void Approximator::run(double precision, int maxNumSteps, double stepsize) {
 
      recordState(); 
      getLatest(radii[prev], curvs[prev]);
-     for(int ii = 0; ii < maxNumSteps; ii++){
+     for(int ii = 0; ii < maxNumSteps && !errno; ii++){
         step(stepsize);
         recordState();
         curr = (prev + 1)%2;
@@ -201,5 +205,6 @@ void Approximator::run(double precision, int maxNumSteps, double stepsize) {
         if( isPrecise(precision, curvs[0], curvs[1]) ) {
            return;
         }
-     }    
+     }
+     return errno;
 }

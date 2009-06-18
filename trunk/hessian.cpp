@@ -35,10 +35,9 @@ char results[] = "Triangulation Files/ODE Result.txt";
 double initRadii[Triangulation::vertexTable.size()];
 //double initEta[Triangulation::edgeTable.size()];
 double dt = 0.020;
-double accuracy = 0.000000001;
 double precision = 0.000000001;
 getRadii(initRadii);
-app->run(precision, accuracy, dt);
+app->run(precision, dt);
 //Triangulation::setRadii(initRadii);
 getRadii(initRadii);
 printf("F = %12.10f\n", F());
@@ -96,10 +95,9 @@ double FEE(int ii, int jj, double dx_ii, double dx_jj)
               }                
        double initRadii[Triangulation::vertexTable.size()];
        double dt = 0.030;
-       double accuracy = 0.000000001;
        double precision = 0.000000001;
        getRadii(initRadii);
-       app->run(precision, accuracy, dt);
+       app->run(precision, dt);
 //       map<int, Vertex>::iterator vit;
 
        double result = F();
