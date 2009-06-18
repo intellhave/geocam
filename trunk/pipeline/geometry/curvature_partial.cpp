@@ -8,18 +8,33 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
+#include "dualarea.cpp"
+#include "radius.cpp"
+#include "eta.cpp"
+#include "length.cpp"
+#include "dih_angle_sum.cpp"
+#include "curvature3D.cpp"
+
 class CurvaturePartial;
 typedef map<TriPosition, CurvaturePartial*, TriPositionCompare> CurvaturePartialIndex;
 
 class CurvaturePartial : public virtual GeoQuant {
 private:
   static CurvaturePartialIndex* Index;
-  int case;
   
-  Radius* rv;
+  bool verticesMatch, verticesAdjacent;
   
+  Radius* vRadius;
+  Curvature3D* vCurv;
 
+  vector<DualArea*>* dualAreas;
+  vector<DihedralAngleSum*>* dihSums;
+  vector<Length*>* lengths;
+  vector<Eta*>* etas;
+  vector<Radius*>* radii;
 
+  double calculateEqualCase();
+  double calculateAdjCase();
 
 protected:
   CurvaturePartial( Vertex& v, Vertex& w );
@@ -33,58 +48,110 @@ public:
 CurvaturePartialIndex* CurvaturePartial::Index = NULL;
 
 CurvaturePartial::CurvaturePartial( Vertex& v, Vertex& w ){  
-  verticesMatch = (v.getIndex == w.getIndex);
-  verticesAdjacent = ( v.isAdjVertex( w ) );
-}
+  verticesMatch = (v.getIndex() == w.getIndex());
+  verticesAdjacent = ( v.isAdjVertex( w.getIndex() ) );
 
-static double calculateEqualCase(){
-  edges = Triangulation::vertexTable[i].getLocalEdges();
-  double ri = Geometry::radius(Triangulation::vertexTable[i]);
-  double sum = 0.0;
-  double dihedral_sum = 0.0;
-                      
-  for (int n=0; n < edges->size(); ++n) {
-    int zork = edges->at(n);
-    local_tetra = Triangulation::edgeTable[zork].getLocalTetras();
-    dihedral_sum = 0.0;
-    E = Triangulation::edgeTable[zork];
-    Vprime = Triangulation::vertexTable[listDifference(E.getLocalVertices(), &Varray)[0]];
-                
-    for (int m=0; m < (*(local_tetra)).size(); ++m) {
-      T = Triangulation::tetraTable[local_tetra->at(m)];
-      dihedral_sum += Geometry::dihedralAngle(E,T);
-    }
+  if( ! ( verticesMatch || verticesAdjacent ) ) return;
 
-    sum += -1.0*(Lij_star(E)/(Geometry::length(E))
-		 -(2*PI-dihedral_sum)*(pow(Geometry::radius(V), 2)*pow(Geometry::radius(Vprime),2)*(1-pow(Geometry::eta(E),2)))/pow(Geometry::length(E),3))+Geometry::curvature(V);
+  vRadius = Radius::At( v );
+  vCurv = Curvature3D::At( v );
+
+  dualAreas = new vector<DualArea*>();
+  dihSums = new vector<DihedralAngleSum*>();
+  lengths = new vector<Length*>();
+  etas = new vector<Eta*>();
+  radii = new vector<Radius*>();
+
+  vector<int> edges;
+  if( verticesMatch ){
+    edges = *(v.getLocalEdges());
+  } else if ( verticesAdjacent ){
+    edges = listIntersection( v.getLocalEdges(), w.getLocalEdges() );
   }
-  result = sum;
-  return result;
+  
+  StdEdge se;
+  DualArea* da; 
+  DihedralAngleSum* ds;
+  Length* l;
+  Eta* eta;
+  Radius* r;
+
+  for(int ii = 0; ii < edges.size(); ii++){
+    Edge& e = Triangulation::edgeTable[ edges[ii] ];
+
+    da = DualArea::At( e );
+    da->addDependent( this );
+    dualAreas->push_back( da );
+
+    ds = DihedralAngleSum::At( e );
+    ds->addDependent( this );
+    dihSums->push_back( ds );
+
+    l = Length::At( e );
+    l->addDependent( this );
+    lengths->push_back( l );
+    
+    eta = Eta::At( e );
+    eta->addDependent( this );
+    etas->push_back( eta  );
+
+    se = labelEdge( v, e );
+    r = Radius::At( se.v2 );
+    r->addDependent( this );
+    radii->push_back( r );
+  }
 }
 
-static double calculateAdjCase(){
+double CurvaturePartial::calculateEqualCase(){
+  double rV = vRadius->getValue();
+  double curv = vCurv->getValue();
+  double dih_sum, len, Lij_star, eta, rW;
+  
+  double sum = 0.0;
+  for(int ii; ii < dualAreas->size(); ii++) {
+    Lij_star = dualAreas->at(ii)->getValue();
+    dih_sum = dihSums->at(ii)->getValue();
+    len = lengths->at(ii)->getValue();
+    eta = etas->at(ii)->getValue();
+    rW = radii->at(ii)->getValue();
+
+    sum -= Lij_star / len;
+    sum -= (2*PI - dih_sum)* rV*rV * rW*rW * (1 - eta*eta) / (len*len*len);
+    sum += curv;
+  }
+
+  return sum;
+}
+
+double CurvaturePartial::calculateAdjCase(){
   double vr = vRadius->getValue();
-  double wr = wRadius->getValue();
-  double Lvw_star = vwDualArea->getValue();
-  double dih_sum = dihedral_sum->getValue();
-  double l_vw = length_vw->getValue();
-  double eta = eta_vw->getValue();
+  double wr = radii->at(0)->getValue();
+  double Lvw_star = dualAreas->at(0)->getValue();
+  double dih_sum = dihSums->at(0)->getValue();
+  double l_vw = lengths->at(0)->getValue();
+  double eta = etas->at(0)->getValue();
                 
-  return Lij_star/l_vw - (2*PI - dih_sum)* 
-    (vr*vr * vw*vw * (1-eta*eta))/(l_vw*l_vw*l_vw); 
+  return Lvw_star/l_vw - (2*PI - dih_sum)* 
+    (vr*vr * wr*wr * (1-eta*eta))/(l_vw*l_vw*l_vw); 
 }
 
 void CurvaturePartial::recalculate(){
   if( verticesMatch ){
-    value = calculateCase1();
+    value = calculateEqualCase();
   } else if( verticesAdjacent ) {
-    value = calculateCase2();
+    value = calculateAdjCase();
   } else {
     value = 0.0;
   }
 }
 
-CurvaturePartial::~CurvaturePartial(){}
+CurvaturePartial::~CurvaturePartial(){
+  delete dualAreas;
+  delete dihSums;
+  delete lengths;
+  delete etas;
+  delete radii;
+}
 
 CurvaturePartial* CurvaturePartial::At( Vertex& v, Vertex& w ){
   TriPosition T( 2, v.getSerialNumber(), w.getSerialNumber() );
@@ -109,4 +176,3 @@ void CurvaturePartial::CleanUp(){
 }
 
 #endif /* CURVATUREPARTIAL_H_ */
-
