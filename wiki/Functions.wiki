@@ -49,7 +49,7 @@ Approximator *app = new EulerApprox(Yamabe);
 
 // Run a Yamabe flow for 300 steps with a stepsize of 0.01.
 app->run(300, 0.01);
-// Run with precision bound of 0.000001 and a stepsize of 0.01
+// Run with a precision bound of 0.000001 and a stepsize of 0.01
 app->run(0.000001, 0.01);
 }}}
 
