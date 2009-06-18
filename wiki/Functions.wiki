@@ -37,7 +37,7 @@ run(double precision, int maxNumSteps, double stepsize)
 
   If the `run` function is given a precision, it will continue to call its step function until the desired quantities (curvature in two dimensions and curvature divide by radius in three dimensions) have converged within the precision bounds. Precision is defined to be the difference between subsequent values of a quantity. Therefore, precision is a measure of how much a value is changing. In between steps, the `run` function will record the current state of any values that have been requested to be recorded (this is specified in the constructor).	
 
-  A flow can also be run with a precision and a max number of steps that will stop once one of the conditions is reached.
+  A flow can also be run with a precision and a max number of steps that will stop once one of the conditions is reached. The last parameter of any run indicates the step size of the flow. A lower step size will lead to more accurate steps, but a longer time to convergence.
 
   The `run` function and the overarching [CurvatureFlow Approximator] class exists as an improvement over the curvature flows of earlier versions of the Geocam project. The `run` function provides the skeleton that is similar for all types of curvature flows. Beyond the constructor, this should be the only thing a user calls from the [CurvatureFlow Approximator] class.
 
@@ -68,9 +68,9 @@ app->run(0.0001, 0.0001, 0.01);
   == Future Work ==
   No future work is planned at this time, though possible changes would include providing for more general systems to be able to run. This would involve changing the way precision and accuracy are determined as well as what values are recorded.
 
-  6/17 - ~~Add more run options (ex. precision and maxNumSteps).~~ *complete*
+  6/17 - ~~Add more run options (ex. precision and maxNumSteps).~~ *Complete (6/18)*
 
-  6/17 - ~~Have a run stop the moment an undefined number appears.~~ *complete*
+  6/17 - ~~Have a run stop the moment an undefined number appears.~~ *Complete (6/18)*
 
 = `Geoquant::At` =
   {{{
