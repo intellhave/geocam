@@ -717,67 +717,48 @@ double Total_Curvature () {
        
 
 double EHR_Partial (int i) {
-       // Calculates the partial derivative of the EHR-functional with respect to the 
-       // logarithm of radius i.  
-       double V = Total_Volume();
-       double K = Total_Curvature();
-       double result = 0;
-       double VolSumPartial = 0;
-       map<int, Tetra>::iterator tit;
+  // Calculates the partial derivative of the EHR-functional with respect to the 
+  // logarithm of radius i.  
+  double V = Total_Volume();
+  double K = Total_Curvature();
+  double result = 0;
+  double VolSumPartial = 0;
+  map<int, Tetra>::iterator tit;
        
-       for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
-       {
-       VolSumPartial += Volume_Partial(i,tit->second);
-       }
+  for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++){
+      VolSumPartial += Volume_Partial(i,tit->second);
+  }
        
-       result = pow(V, -4.0/3.0)*(Geometry::curvature(Triangulation::vertexTable[i])*V 
-                       - (1.0/3.0)*K*VolSumPartial);
-//       printf("EHR_Partial= %.10f\n", result);
-       return result;
+  result = pow(V, -4.0/3.0)*(Geometry::curvature(Triangulation::vertexTable[i])*V 
+			     - (1.0/3.0)*K*VolSumPartial);
+
+  return result;
 }
 
 
 double EHR_Second_Partial (int i, int j) {
-       // Calculates the second partial of the EHR (with respect to log radii).
-       double V = Total_Volume();
-       double K = Total_Curvature();
-       double result = 0;
-       double VolSumPartial_i = 0;
-       double VolSumPartial_j = 0;
-       double VolSumSecondPartial = 0;
-       map<int, Tetra>::iterator tit;
+  // Calculates the second partial of the EHR (with respect to log radii).
+  double V = Total_Volume();
+  double K = Total_Curvature();
+  double result = 0;
+  double VolSumPartial_i = 0;
+  double VolSumPartial_j = 0;
+  double VolSumSecondPartial = 0;
+  map<int, Tetra>::iterator tit;
        
-       for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++)
-       {
-       VolSumPartial_i += Volume_Partial(i,tit->second);
-       
-       VolSumPartial_j += Volume_Partial(j,tit->second);
-       VolSumSecondPartial += Volume_Second_Partial(i, j, tit->second);
+  for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++){
+    VolSumPartial_i += Volume_Partial(i,tit->second);
+    VolSumPartial_j += Volume_Partial(j,tit->second);
+    VolSumSecondPartial += Volume_Second_Partial(i, j, tit->second);
+  }
+  
+  result = pow(V, (-4.0/3.0))*(1.0/3.0)*(3*V*Curvature_Partial(i,j)
+					 -Geometry::curvature(Triangulation::vertexTable[i])*VolSumPartial_j
+					 -Geometry::curvature(Triangulation::vertexTable[j])*VolSumPartial_i
+					 +(4.0/3.0)*K*pow(V, -1.0)*VolSumPartial_i*VolSumPartial_j
+					 -K*VolSumSecondPartial);
 
-       }
-       result = pow(V, (-4.0/3.0))*(1.0/3.0)*(3*V*Curvature_Partial(i,j)
-                       -Geometry::curvature(Triangulation::vertexTable[i])*VolSumPartial_j
-                       -Geometry::curvature(Triangulation::vertexTable[j])*VolSumPartial_i
-                       +(4.0/3.0)*K*pow(V, -1.0)*VolSumPartial_i*VolSumPartial_j
-                       -K*VolSumSecondPartial);
-                       
-                      
-//                       result = pow(V, (-4.0/3.0))*(1.0/3.0)*(3*V*Curvature_Partial(i,j)
-//                       -Triangulation::vertexTable[i].getCurvature()*VolSumPartial_j
-//                       -Triangulation::vertexTable[j].getCurvature()*VolSumPartial_i
-//                       +(4.0/3.0)*K*pow(V, -1.0)*VolSumPartial_i*VolSumPartial_j
-//                       -K*VolSumSecondPartial);
-                       
-
-//printf("Curvature_Partial = %.10f\n", Curvature_Partial(i,j));
-//printf("VolSumPartial_j = %.10f\n", VolSumPartial_j);
-//printf("VolSumPartial_i = %.10f\n", VolSumPartial_i); 
-//printf("K = %.10f\n", K); 
-//printf("V = %.10f\n", V); 
-//printf("VolSumSecondPartial = %.10f\n", VolSumSecondPartial);
-//printf(" = %.10f\n", ); 
-//printf(" = %.10f\n", );     
-       return result;
+  return result;
 }
 
             

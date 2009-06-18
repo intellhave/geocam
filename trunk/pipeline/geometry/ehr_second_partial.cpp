@@ -8,60 +8,111 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
+#include "totalvolume.cpp"
+#include "totalcurvature.cpp"
+#include "curvature3D.cpp"
+#include "volume_partial_sum.cpp"
+#include "volume_second_partial.cpp"
+#include "curvature_partial.cpp"
+
 class EHRSecondPartial;
 typedef map<TriPosition, EHRSecondPartial*, TriPositionCompare> EHRSecondPartialIndex;
 
 class EHRSecondPartial : public virtual GeoQuant {
 private:
   static EHRSecondPartialIndex* Index;
+  TotalVolume* totVolume;
+  TotalCurvature* totCurvature;
+  Curvature3D* curvature_i;
+  Curvature3D* curvature_j;
 
+  CurvaturePartial* curvPartial_ij;
+
+  VolumePartialSum* vps_i;
+  VolumePartialSum* vps_j;
+  vector< VolumeSecondPartial* >* volSecPartials;
+  
 protected:
-  EHRSecondPartial( SIMPLICES );
+  EHRSecondPartial( Vertex& v, Vertex& w );
   void recalculate();
 
 public:
   ~EHRSecondPartial();
-  static EHRSecondPartial* At( SIMPLICES );
+  static EHRSecondPartial* At( Vertex& v, Vertex& w );
   static void CleanUp();
 };
 EHRSecondPartialIndex* EHRSecondPartial::Index = NULL;
 
-EHRSecondPartial::EHRSecondPartial( SIMPLICES ){}
+EHRSecondPartial::EHRSecondPartial( Vertex& v, Vertex& w ){
+  totVolume = TotalVolume::At();
+  totVolume->addDependent( this );
+
+  totCurvature = TotalCurvature::At();
+  totVolume->addDependent( this );
+
+  curvature_i = Curvature3D::At( v );
+  curvature_i->addDependent( this );
+  curvature_j = Curvature3D::At( w );
+  
+  if( curvature_j != curvature_i )
+    curvature_j->addDependent( this );
+
+  vps_i = VolumePartialSum::At( v );
+  vps_i->addDependent( this );
+
+  vps_j = VolumePartialSum::At( w );
+  if( vps_j != vps_i )
+    vps_j->addDependent( this );
+
+  volSecPartials = new vector< VolumeSecondPartial* >();
+
+  curvPartial_ij = CurvaturePartial::At( v, w );
+
+  VolumeSecondPartial* vsp;
+  vector<int>* localTetra = v.getLocalTetras();
+  for(int ii = 0; ii < localTetra->size(); ii++){
+    Tetra& t = Triangulation::tetraTable[ localTetra->at(ii) ];
+    if( t.isAdjVertex( w.getIndex() ) ){
+      vsp = VolumeSecondPartial::At( v, w, t );
+      vsp->addDependent( this );
+      volSecPartials->push_back( vsp );
+    }
+  }
+}
 
 void EHRSecondPartial::recalculate(){
   // Calculates the second partial of the EHR (with respect to log radii).
-  double V = Total_Volume();
-  double K = Total_Curvature();
-  double result = 0;
-  double VolSumPartial_i = 0;
-  double VolSumPartial_j = 0;
-  double VolSumSecondPartial = 0;
-  map<int, Tetra>::iterator tit;
-       
-  for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++){
-      VolSumPartial_i += Volume_Partial(i,tit->second);
-       
-      VolSumPartial_j += Volume_Partial(j,tit->second);
-      VolSumSecondPartial += Volume_Second_Partial(i, j, tit->second);
-  }
+  double totV = totVolume->getValue();
+  double totK = totCurvature->getValue();
+  double VPS_i = vps_i->getValue();
+  double VPS_j = vps_j->getValue();
 
-  value = pow(V, (-4.0/3.0))*(1.0/3.0)*(3*V*Curvature_Partial(i,j)
-					-Geometry::curvature(Triangulation::vertexTable[i])*VolSumPartial_j
-					-Geometry::curvature(Triangulation::vertexTable[j])*VolSumPartial_i
-					+(4.0/3.0)*K*pow(V, -1.0)*VolSumPartial_i*VolSumPartial_j
-					-K*VolSumSecondPartial);
-                       
+  double curvPartial = curvPartial_ij->getValue();
+
+  double Ki = curvature_i->getValue();
+  double Kj = curvature_j->getValue();
+
+  double VolSumSecondPartial = 0;       
+  for(int ii = 0; ii < volSecPartials->size(); ii++)
+    VolSumSecondPartial += volSecPartials->at(ii)->getValue();
+
+  value = pow(totV, (-4.0/3.0));
+  value *= (1.0/3.0) * (3 * totV * curvPartial - Ki * VPS_j
+			- Kj * VPS_i + (4.0/3.0) * totK * ( 1 / totV ) *
+			VPS_i * VPS_j - totK * VolSumSecondPartial);
 }
 
-EHRSecondPartial::~EHRSecondPartial(){}
+EHRSecondPartial::~EHRSecondPartial(){
+  delete volSecPartials;
+}
 
-EHRSecondPartial* EHRSecondPartial::At( SIMPLICES ){
-  TriPosition T( NUMSIMPLICES, SIMPLICES );
+EHRSecondPartial* EHRSecondPartial::At( Vertex& v, Vertex& w ){
+  TriPosition T( 2, v.getSerialNumber(), w.getSerialNumber() );
   if( Index == NULL ) Index = new EHRSecondPartialIndex();
   EHRSecondPartialIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
-    EHRSecondPartial* val = new EHRSecondPartial( SIMPLICES );
+    EHRSecondPartial* val = new EHRSecondPartial( v, w );
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
