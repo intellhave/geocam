@@ -1,0 +1,105 @@
+# Project: new_flip
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = main.o ../addremove.o ../delaunay.o ../hessian.o ../miscmath.o ../plot.o ../pointlinecircle.o ../Triangulation/MinMax.o ../Triangulation/smallMorphs.o ../Triangulation/triangulation.o ../Triangulation/TriangulationCoordinateSystem.o ../Triangulation/triangulationInputOutput.o ../Triangulation/triangulationmath.o ../Triangulation/triangulationmorph.o ../Triangulation/triangulationPlane.o ../Simplex/edge.o ../Simplex/face.o ../Simplex/simplex.o ../Simplex/tetra.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../Hyperbolic/hyperbolicmath.o ../3DTriangulation/3DInputOutput.o ../3DTriangulation/3Dtriangulationmath.o ../3DTriangulation/3DTriangulationMorph.o flip_algorithm.o $(RES)
+LINKOBJ  = main.o ../addremove.o ../delaunay.o ../hessian.o ../miscmath.o ../plot.o ../pointlinecircle.o ../Triangulation/MinMax.o ../Triangulation/smallMorphs.o ../Triangulation/triangulation.o ../Triangulation/TriangulationCoordinateSystem.o ../Triangulation/triangulationInputOutput.o ../Triangulation/triangulationmath.o ../Triangulation/triangulationmorph.o ../Triangulation/triangulationPlane.o ../Simplex/edge.o ../Simplex/face.o ../Simplex/simplex.o ../Simplex/tetra.o ../Simplex/vertex.o ../Spherical/sphericalmath.o ../Hyperbolic/hyperbolicmath.o ../3DTriangulation/3DInputOutput.o ../3DTriangulation/3Dtriangulationmath.o ../3DTriangulation/3DTriangulationMorph.o flip_algorithm.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -pg  
+INCS =  -I"C:/Dev-Cpp/include"  -I"C:/Dev-Cpp/geocam" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include"  -I"C:/Dev-Cpp/geocam" 
+BIN  = new_flip.exe
+CXXFLAGS = $(CXXINCS)  
+CFLAGS = $(INCS)  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before new_flip.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "new_flip.exe" $(LIBS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+../addremove.o: ../addremove.cpp
+	$(CPP) -c ../addremove.cpp -o ../addremove.o $(CXXFLAGS)
+
+../delaunay.o: ../delaunay.cpp
+	$(CPP) -c ../delaunay.cpp -o ../delaunay.o $(CXXFLAGS)
+
+../hessian.o: ../hessian.cpp
+	$(CPP) -c ../hessian.cpp -o ../hessian.o $(CXXFLAGS)
+
+../miscmath.o: ../miscmath.cpp
+	$(CPP) -c ../miscmath.cpp -o ../miscmath.o $(CXXFLAGS)
+
+../plot.o: ../plot.cpp
+	$(CPP) -c ../plot.cpp -o ../plot.o $(CXXFLAGS)
+
+../pointlinecircle.o: ../pointlinecircle.cpp
+	$(CPP) -c ../pointlinecircle.cpp -o ../pointlinecircle.o $(CXXFLAGS)
+
+../Triangulation/MinMax.o: ../Triangulation/MinMax.cpp
+	$(CPP) -c ../Triangulation/MinMax.cpp -o ../Triangulation/MinMax.o $(CXXFLAGS)
+
+../Triangulation/smallMorphs.o: ../Triangulation/smallMorphs.cpp
+	$(CPP) -c ../Triangulation/smallMorphs.cpp -o ../Triangulation/smallMorphs.o $(CXXFLAGS)
+
+../Triangulation/triangulation.o: ../Triangulation/triangulation.cpp
+	$(CPP) -c ../Triangulation/triangulation.cpp -o ../Triangulation/triangulation.o $(CXXFLAGS)
+
+../Triangulation/TriangulationCoordinateSystem.o: ../Triangulation/TriangulationCoordinateSystem.cpp
+	$(CPP) -c ../Triangulation/TriangulationCoordinateSystem.cpp -o ../Triangulation/TriangulationCoordinateSystem.o $(CXXFLAGS)
+
+../Triangulation/triangulationInputOutput.o: ../Triangulation/triangulationInputOutput.cpp
+	$(CPP) -c ../Triangulation/triangulationInputOutput.cpp -o ../Triangulation/triangulationInputOutput.o $(CXXFLAGS)
+
+../Triangulation/triangulationmath.o: ../Triangulation/triangulationmath.cpp
+	$(CPP) -c ../Triangulation/triangulationmath.cpp -o ../Triangulation/triangulationmath.o $(CXXFLAGS)
+
+../Triangulation/triangulationmorph.o: ../Triangulation/triangulationmorph.cpp
+	$(CPP) -c ../Triangulation/triangulationmorph.cpp -o ../Triangulation/triangulationmorph.o $(CXXFLAGS)
+
+../Triangulation/triangulationPlane.o: ../Triangulation/triangulationPlane.cpp
+	$(CPP) -c ../Triangulation/triangulationPlane.cpp -o ../Triangulation/triangulationPlane.o $(CXXFLAGS)
+
+../Simplex/edge.o: ../Simplex/edge.cpp
+	$(CPP) -c ../Simplex/edge.cpp -o ../Simplex/edge.o $(CXXFLAGS)
+
+../Simplex/face.o: ../Simplex/face.cpp
+	$(CPP) -c ../Simplex/face.cpp -o ../Simplex/face.o $(CXXFLAGS)
+
+../Simplex/simplex.o: ../Simplex/simplex.cpp
+	$(CPP) -c ../Simplex/simplex.cpp -o ../Simplex/simplex.o $(CXXFLAGS)
+
+../Simplex/tetra.o: ../Simplex/tetra.cpp
+	$(CPP) -c ../Simplex/tetra.cpp -o ../Simplex/tetra.o $(CXXFLAGS)
+
+../Simplex/vertex.o: ../Simplex/vertex.cpp
+	$(CPP) -c ../Simplex/vertex.cpp -o ../Simplex/vertex.o $(CXXFLAGS)
+
+../Spherical/sphericalmath.o: ../Spherical/sphericalmath.cpp
+	$(CPP) -c ../Spherical/sphericalmath.cpp -o ../Spherical/sphericalmath.o $(CXXFLAGS)
+
+../Hyperbolic/hyperbolicmath.o: ../Hyperbolic/hyperbolicmath.cpp
+	$(CPP) -c ../Hyperbolic/hyperbolicmath.cpp -o ../Hyperbolic/hyperbolicmath.o $(CXXFLAGS)
+
+../3DTriangulation/3DInputOutput.o: ../3DTriangulation/3DInputOutput.cpp
+	$(CPP) -c ../3DTriangulation/3DInputOutput.cpp -o ../3DTriangulation/3DInputOutput.o $(CXXFLAGS)
+
+../3DTriangulation/3Dtriangulationmath.o: ../3DTriangulation/3Dtriangulationmath.cpp
+	$(CPP) -c ../3DTriangulation/3Dtriangulationmath.cpp -o ../3DTriangulation/3Dtriangulationmath.o $(CXXFLAGS)
+
+../3DTriangulation/3DTriangulationMorph.o: ../3DTriangulation/3DTriangulationMorph.cpp
+	$(CPP) -c ../3DTriangulation/3DTriangulationMorph.cpp -o ../3DTriangulation/3DTriangulationMorph.o $(CXXFLAGS)
+
+flip_algorithm.o: flip_algorithm.cpp
+	$(CPP) -c flip_algorithm.cpp -o flip_algorithm.o $(CXXFLAGS)
