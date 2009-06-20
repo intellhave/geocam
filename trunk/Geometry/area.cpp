@@ -21,7 +21,8 @@ Area::Area( Face& f ){
     }
 }
 
-Area::~Area(){ }
+Area::~Area() {
+}
 void Area::recalculate() {
     double l1 = Len[0]->getValue();
     double l2 = Len[1]->getValue();

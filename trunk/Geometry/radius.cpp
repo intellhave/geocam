@@ -14,7 +14,10 @@ RadiusIndex* Radius::Index = NULL;
 
 Radius::Radius( Vertex& v ){}
 
-Radius::~Radius(){}
+Radius::~Radius(){
+   deleteDependents();
+   Index->erase(pos);
+}
 
 void Radius::recalculate(){}
 
@@ -25,6 +28,7 @@ Radius* Radius::At( Vertex& v ){
 
   if( iter == Index->end() ){
     Radius* val = new Radius( v );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -34,9 +38,7 @@ Radius* Radius::At( Vertex& v ){
 
 void Radius::CleanUp(){
   if( Index == NULL ) return;
-  RadiusIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    delete iter->second;
+
   delete Index;
 }
 

@@ -151,7 +151,9 @@ int main(int argc, char** argv){
    //printResultsVolumes("C:/Dev-Cpp/geocam/Triangulation Files/Volumes.txt",
       //                    &(app->volumeHistory));
    printf("Time: %.2lf seconds\n", difftime(end, start));
-
+//   system("PAUSE");
+//   printf("%d.\n", Triangulation::edgeTable.size());
+//   Length::CleanUp();
    system("PAUSE");
 }
 

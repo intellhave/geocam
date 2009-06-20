@@ -8,6 +8,7 @@
 #include <new>
 #include <vector>
 #include <map>
+#include <algorithm>
 using namespace std;
 
 class GeoQuant {
@@ -25,13 +26,29 @@ class GeoQuant {
   }
 
  public:  
-  virtual ~GeoQuant(){
-    delete dependents;
-  }
+  virtual ~GeoQuant();
 
   bool isValid(){return valid;}
   void addDependent(GeoQuant* dep){dependents->push_back(dep);}
-
+  
+  void removeDependent(GeoQuant* dep){
+    vector<GeoQuant*>::iterator it;
+    it = find(dependents->begin(), dependents->end(), dep);
+    if( it != dependents->end() ){
+      dependents->erase(it);
+      return;
+    }
+  }
+  
+  /* To be called only with deconstructor */
+  void deleteDependents() {
+    int size = dependents->size();
+    for(int ii = size - 1; ii >= 0; ii--) {
+       delete dependents->at(ii);
+    }
+    delete dependents;
+  }
+  
   double getValue(){
     if(! valid){
       recalculate();

@@ -34,7 +34,12 @@ EuclideanAngle::EuclideanAngle( Vertex& v, Face& f ){
   lengthC->addDependent(this);
 }
 
-EuclideanAngle::~EuclideanAngle(){}
+EuclideanAngle::~EuclideanAngle(){
+  lengthA->removeDependent(this);
+  lengthB->removeDependent(this);
+  lengthC->removeDependent(this);
+  Index->erase(pos);
+}
 void EuclideanAngle::recalculate() {
   double a = lengthA->getValue();
   double b = lengthB->getValue();
@@ -49,6 +54,7 @@ EuclideanAngle* EuclideanAngle::At( Vertex& v, Face& f ){
 
   if( iter == Index->end() ){
     EuclideanAngle* val = new EuclideanAngle( v, f );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -58,9 +64,7 @@ EuclideanAngle* EuclideanAngle::At( Vertex& v, Face& f ){
 
 void EuclideanAngle::CleanUp(){
   if( Index == NULL) return;
-  EuclideanAngleIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    delete iter->second;
+
   delete Index;
 }
 

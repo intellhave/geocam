@@ -35,7 +35,15 @@ void Length::recalculate(){
   value = sqrt( r1*r1 + r2*r2 + 2*r1*r2*etaV );   
 }
 
-Length::~Length(){}
+Length::~Length() {
+   printf("Erasing...");
+   deleteDependents();
+   radius1->removeDependent(this);
+   radius2->removeDependent(this);
+   eta->removeDependent(this);
+   Index->erase(pos);
+   printf("done erasing.\n");
+}
 
 Length* Length::At( Edge& e ){
   TriPosition T( 1, e.getSerialNumber() );
@@ -44,6 +52,7 @@ Length* Length::At( Edge& e ){
 
   if( iter == Index->end() ){
     Length* val = new Length( e );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -53,9 +62,7 @@ Length* Length::At( Edge& e ){
 
 void Length::CleanUp(){
   if( Index == NULL) return;
-  LengthIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    delete iter->second;
+
   delete Index;
 }
 

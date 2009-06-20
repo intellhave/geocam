@@ -23,7 +23,7 @@ typedef map<TriPosition, Radius*, TriPositionCompare> RadiusIndex;
 class Radius : public virtual GeoQuant {
 private:
   static RadiusIndex* Index;
-
+  TriPosition pos;
 protected:
   Radius( Vertex& v );
   void recalculate();
@@ -67,6 +67,7 @@ typedef map<TriPosition, Length*, TriPositionCompare> LengthIndex;
 class Length : public virtual GeoQuant {
 private:
   static LengthIndex* Index;
+  TriPosition pos;
   Radius* radius1;
   Radius* radius2;
   Eta* eta;  
@@ -92,6 +93,7 @@ typedef map<TriPosition, EuclideanAngle*, TriPositionCompare> EuclideanAngleInde
 class EuclideanAngle : public virtual GeoQuant {
 private:
   static EuclideanAngleIndex* Index;
+  TriPosition pos;
   GeoQuant* lengthA;
   GeoQuant* lengthB;
   GeoQuant* lengthC;
@@ -182,6 +184,29 @@ public:
 };
 /*************************/
 
+/***** Dihedral Angle Sum *****/
+class DihedralAngleSum;
+typedef map<TriPosition, DihedralAngleSum*, TriPositionCompare> DihedralAngleSumIndex;
+
+class DihedralAngleSum : public virtual GeoQuant {
+private:
+  static DihedralAngleSumIndex* Index;
+  vector<DihedralAngle*>* angles;
+
+protected:
+  DihedralAngleSum( Edge& e );
+  void recalculate();
+
+public:
+  ~DihedralAngleSum();
+  static DihedralAngleSum* At( Edge& e );
+  static double valueAt( Edge& e ) {
+         return DihedralAngleSum::At(e)->getValue();
+  }
+  static void CleanUp();
+};
+/******************************/
+
 /***** VOLUME *****/
 class Volume;
 typedef map<TriPosition, Volume*, TriPositionCompare> VolumeIndex;
@@ -204,6 +229,28 @@ public:
   static void CleanUp();
 };
 /******************/
+
+/***** Total Volume *****/
+class TotalVolume;
+
+class TotalVolume : public virtual GeoQuant {
+private:
+  static TotalVolume* totVol;
+  vector<Volume*>* volumes;
+
+protected:
+  TotalVolume();
+  void recalculate();
+
+public:
+  ~TotalVolume();
+  static TotalVolume* At();
+  static double valueAt() {
+         return TotalVolume::At()->getValue();
+  }
+  static void CleanUp();
+};
+/************************/
 
 /***** EDGE CURVATURE *****/
 class EdgeCurvature;
@@ -278,6 +325,28 @@ public:
 };
 /***********************/
 
+/***** Total Curvature *****/
+class TotalCurvature;
+
+class TotalCurvature : public virtual GeoQuant {
+private:
+  static TotalCurvature* totCurv;
+  vector<Curvature3D*>* curvatures;
+
+protected:
+  TotalCurvature();
+  void recalculate();
+
+public:
+  ~TotalCurvature();
+  static TotalCurvature* At();
+  static double valueAt() {
+         return TotalCurvature::At()->getValue();
+  }
+  static void CleanUp();
+};
+/***************************/
+
 /***** Volume Partial *****/
 class VolumePartial;
 typedef map<TriPosition, VolumePartial*, TriPositionCompare> VolumePartialIndex;
@@ -302,6 +371,29 @@ public:
   static void CleanUp();
 };
 /*************************/
+
+/***** Volume Partial Sum *****/
+class VolumePartialSum;
+typedef map<TriPosition, VolumePartialSum*, TriPositionCompare> VolumePartialSumIndex;
+
+class VolumePartialSum : public virtual GeoQuant {
+private:
+  static VolumePartialSumIndex* Index;
+  vector<VolumePartial*>* volPartials;
+
+protected:
+  VolumePartialSum( Vertex& v );
+  void recalculate();
+
+public:
+  ~VolumePartialSum();
+  static VolumePartialSum* At( Vertex& v );
+  static double valueAt(Vertex& v) {
+         return VolumePartialSum::At(v)->getValue();
+  }
+  static void CleanUp();
+};
+/******************************/
 
 /***** Volume Second Partial *****/
 class VolumeSecondPartial;
@@ -427,4 +519,98 @@ public:
   static void CleanUp();
 };
 /*********************/
+
+/***** Curvature Partial *****/
+class CurvaturePartial;
+typedef map<TriPosition, CurvaturePartial*, TriPositionCompare> CurvaturePartialIndex;
+
+class CurvaturePartial : public virtual GeoQuant {
+private:
+  static CurvaturePartialIndex* Index;
+  
+  bool verticesMatch, verticesAdjacent;
+  
+  Radius* vRadius;
+  Curvature3D* vCurv;
+
+  vector<DualArea*>* dualAreas;
+  vector<DihedralAngleSum*>* dihSums;
+  vector<Length*>* lengths;
+  vector<Eta*>* etas;
+  vector<Radius*>* radii;
+
+  double calculateEqualCase();
+  double calculateAdjCase();
+
+protected:
+  CurvaturePartial( Vertex& v, Vertex& w );
+  void recalculate();
+
+public:
+  ~CurvaturePartial();
+  static CurvaturePartial* At( Vertex& v, Vertex& w );
+  static double valueAt( Vertex& v, Vertex& w ) {
+         return CurvaturePartial::At(v, w)->getValue();
+  }
+  static void CleanUp();
+};
+/*****************************/
+
+/***** EHR Partial *****/
+class EHRPartial;
+typedef map<TriPosition, EHRPartial*, TriPositionCompare> EHRPartialIndex;
+
+class EHRPartial : public virtual GeoQuant {
+private:
+  static EHRPartialIndex* Index;
+  TotalVolume* totVolume;
+  TotalCurvature* totCurvature;
+  Curvature3D* localCurvature;
+  VolumePartialSum* vps;
+
+protected:
+  EHRPartial( Vertex& v );
+  void recalculate();
+
+public:
+  ~EHRPartial();
+  static EHRPartial* At( Vertex& v );
+  static double valueAt( Vertex& v ) {
+         return EHRPartial::At(v)->getValue();
+  }
+  static void CleanUp();
+};
+/***********************/
+
+/***** EHR Second Partial *****/
+class EHRSecondPartial;
+typedef map<TriPosition, EHRSecondPartial*, TriPositionCompare> EHRSecondPartialIndex;
+
+class EHRSecondPartial : public virtual GeoQuant {
+private:
+  static EHRSecondPartialIndex* Index;
+  TotalVolume* totVolume;
+  TotalCurvature* totCurvature;
+  Curvature3D* curvature_i;
+  Curvature3D* curvature_j;
+
+  CurvaturePartial* curvPartial_ij;
+
+  VolumePartialSum* vps_i;
+  VolumePartialSum* vps_j;
+  vector< VolumeSecondPartial* >* volSecPartials;
+  
+protected:
+  EHRSecondPartial( Vertex& v, Vertex& w );
+  void recalculate();
+
+public:
+  ~EHRSecondPartial();
+  static EHRSecondPartial* At( Vertex& v, Vertex& w );
+  static double valueAt(Vertex& v, Vertex& w) {
+         return EHRSecondPartial::At(v, w)->getValue();
+  }
+  static void CleanUp();
+};
+/******************************/
 #endif /* GEOQUANTS_H_ */
