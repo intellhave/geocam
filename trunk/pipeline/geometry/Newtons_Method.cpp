@@ -21,131 +21,69 @@ double EHR_Second_Partial (int i, int j);
 double EHR_Partial (int i);
 
 
-void Newtons_Method()
-{
-//     Geometry::setDimension(ThreeD);
-//     Geometry::setGeometry(Euclidean);
-//     Geometry::build();
-          
-     int N = Triangulation::vertexTable.size();
+void Newtons_Method() {
+  int N = Triangulation::vertexTable.size();
 
-     double Rvector[Triangulation::vertexTable.size()];
-     double ARE[Triangulation::vertexTable.size()];
-     double X_n[Triangulation::vertexTable.size()];
-     double X_np1[Triangulation::vertexTable.size()];
-     double P_n[Triangulation::vertexTable.size()];
+  double Rvector[Triangulation::vertexTable.size()];
+  double X_n[Triangulation::vertexTable.size()];
+  double X_next[Triangulation::vertexTable.size()];
+  double P_n[Triangulation::vertexTable.size()];
      
-     double EHRhessian[Triangulation::vertexTable.size()][Triangulation::vertexTable.size()];
-     double EHRneg_gradient[Triangulation::vertexTable.size()];
-     double BEE[Triangulation::vertexTable.size()];
-     double Solution[Triangulation::vertexTable.size()];  
+  double EHRhessian[Triangulation::vertexTable.size()][Triangulation::vertexTable.size()];
+  double EHRneg_gradient[Triangulation::vertexTable.size()];
+  double BEE[Triangulation::vertexTable.size()];
+  double Solution[Triangulation::vertexTable.size()];  
 
-     double* matrix;
+  double* matrix;
 
-     map<int, Vertex>::iterator vit;
+  map<int, Vertex>::iterator vit;
      
-     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-        X_n[vit->first] = log(Geometry::radius(vit->second));
-        X_np1[vit->first] = 0.0;
-        }
+  for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+    X_n[vit->first] = log(Geometry::radius(vit->second));
+    X_next[vit->first] = 0.0;
+  }
 
-while(true) {
-           
-            
-for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++)
-   {
-       double curv = Geometry::curvature(vit->second);
-       printf("vertex %3d: radius = %f\t  curvature = %.10f\n", vit->first, Geometry::radius(vit->second), curv/(Geometry::radius(vit->second)));
-           }            
+  while(true) {            
+    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++){
+	double curv = Geometry::curvature(vit->second);
+	printf("vertex %3d: radius = %f\t  curvature = %.10f\n", vit->first, Geometry::radius(vit->second), curv/(Geometry::radius(vit->second)));
+      }            
 
-//     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-//        Rvector[vit->first] = vit->second.getRadius(); 
-//        X_n[vit->first] = log(vit->second.getRadius());
-//        X_np1[vit->first] = 0.0;
-//        }
-
-// Should we use the same technique for the procedures directly 
-// above and below this comment (iterating through the vertices?  Is the top better?
-     for(int i = 0; i < Triangulation::vertexTable.size(); ++i) {
-               for(int j = 0; j < Triangulation::vertexTable.size(); ++j) {
-                       if (i <= j) {
-                       EHRhessian[i][j]=EHR_Second_Partial( i+1 , j+1 );
-                       EHRhessian[j][i]=EHRhessian[i][j];
-//                       printf("EHR_Second_Partial = %.10f, i=%d, j=%d\n", EHR_Second_Partial( i+1 , j+1 ), i+1, j+1);
-//                           system("PAUSE");
-//                    printf("i=%d, j=%d, Hess[%d,%d]=%12.10f\n", i+1, j+1, i, j, Hess[i][j]);
-                       }
-               }
+    // Should we use the same technique for the procedures directly 
+    // above and below this comment (iterating through the vertices?  Is the top better?
+    for(int i = 0; i < Triangulation::vertexTable.size(); ++i) {
+      for(int j = 0; j < Triangulation::vertexTable.size(); ++j) {
+	if (i <= j) {
+	  EHRhessian[i][j] = EHR_Second_Partial( i+1 , j+1 );
+	  EHRhessian[j][i] = EHRhessian[i][j];
+	}
       }
-printf("end hessian\n"); 
-//system("PAUSE");
-     for(int i=0; i < Triangulation::vertexTable.size(); ++i) {
-               EHRneg_gradient[i] = -1.0*EHR_Partial(i+1);
-               BEE[i] = EHRneg_gradient[i];
-               }
-printf("end gradient\n"); 
-//system("PAUSE");
-     matrix = (double*) EHRhessian;
-//       matrix = **(EHRhessian);
+    }
+    printf("end hessian\n"); 
 
-     LinearEquationsSolving( N , matrix, BEE, Solution);
+    for(int i=0; i < Triangulation::vertexTable.size(); ++i) {
+      EHRneg_gradient[i] = -1.0*EHR_Partial(i+1);
+      BEE[i] = EHRneg_gradient[i];
+    }
+    printf("end gradient\n"); 
+
+    matrix = (double*) EHRhessian;
+
+    LinearEquationsSolving( N , matrix, BEE, Solution);
      
-printf("Linear system solved\n"); 
-//system("PAUSE");     
+    printf("Linear system solved\n"); 
 
-     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-        X_np1[(vit->first)-1] = Solution[(vit->first)-1] + X_n[(vit->first)-1];
-        Rvector[(vit->first)-1] = exp(X_np1[(vit->first)-1]);
-        Geometry::setRadius(vit->second, Rvector[(vit->first)-1]);
-        X_n[(vit->first)-1] = X_np1[(vit->first)-1];
-        }
-
-// The following prints data from the cuurrent interation.  
+    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+      X_next[(vit->first)-1] = Solution[(vit->first)-1] + X_n[(vit->first)-1];
       
-printf("new radii updated\n");
-//           system("PAUSE");
-
-     
-} // End of while (true)    
+      Rvector[(vit->first)-1] = exp(X_next[(vit->first)-1]);
+      Geometry::setRadius(vit->second, Rvector[(vit->first)-1]);
       
-////////////////////////
-//What follows between the "///////////////'s" is a toy use of 
-//LinearEquationSolving that works.  Solves: AYE*AXE=BEE for AXE. 
-//double AYE[3][3] = {{ 1, 2, 3 }, { 4, 5, 6 }, { 0, 8, 9 } };
-//  double BEE[3];
-//  double SOL[3];
-//  double AXE[3];
-//  int N;
-//
-//  BEE[0] = 1;
-//  BEE[1] = 2;
-//  BEE[2] = 3;
-//  N=3;
-//
-//  double* matrix = (double*) AYE;
-//
-//  LinearEquationsSolving(N, matrix, BEE, SOL);
-//
-//  printf("%12.10f\n", SOL[0]);
-//  printf("%12.10f\n", SOL[1]);
-//  printf("%12.10f\n", SOL[2]);
-//
-//  return 0;
-//////////////////////////////
-     
-    
-//     int i,j;
-//     for(i=1; i<=Triangulation::faceTable.size(); ++i) {
-//              vector<int> vertexIds;
-//              for(j=0; j<3; ++j)  {
-//                       vertexIds = *(Triangulation::faceTable[i].getLocalVertices());
-//                       int zork = vertexIds[j];
-//                       double temp = angle(Triangulation::vertexTable[zork] , Triangulation::faceTable[i]);
-//                       printf("Face: %d, Vertex: %d, Angle = %12.10f\n", i, j+1, temp);
-//                       }
-//                       system("PAUSE");
-//                       }
-}  // End of Newtons Method
+      X_n[(vit->first)-1] = X_next[(vit->first)-1];
+    }   
+    printf("new radii updated\n");
+  }
+}
 
 
 double dij( Vertex vi, Vertex vj)  
