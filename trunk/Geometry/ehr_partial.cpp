@@ -33,9 +33,10 @@ void EHRPartial::remove() {
      localCurvature->removeDependent(this);
      vps->removeDependent(this);
      Index->erase(pos);
+     delete this;
 }
 
-EHRPartial::~EHRPartial(){ remove(); }
+EHRPartial::~EHRPartial(){}
 
 void EHRPartial::recalculate(){
   double totV = totVolume->getValue();
@@ -66,7 +67,7 @@ void EHRPartial::CleanUp(){
   EHRPartialIndex::iterator iter;
   EHRPartialIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

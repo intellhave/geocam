@@ -19,6 +19,7 @@ void Eta::recalculate(){}
 void Eta::remove() {
      deleteDependents();
      Index->erase(pos);
+     delete this;
 }
 Eta::~Eta(){}
 
@@ -42,7 +43,7 @@ void Eta::CleanUp(){
   EtaIndex::iterator iter;
   EtaIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

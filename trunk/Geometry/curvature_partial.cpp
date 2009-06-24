@@ -124,10 +124,11 @@ void CurvaturePartial::remove() {
     delete lengths;
     delete etas;
     delete radii;
+    delete this;
 }
 
 CurvaturePartial::~CurvaturePartial(){
-    remove();
+    
 }
 
 CurvaturePartial* CurvaturePartial::At( Vertex& v, Vertex& w ){
@@ -150,7 +151,7 @@ void CurvaturePartial::CleanUp(){
   CurvaturePartialIndex::iterator iter;
   CurvaturePartialIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

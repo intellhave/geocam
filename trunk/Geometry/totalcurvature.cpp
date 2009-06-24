@@ -30,10 +30,10 @@ void TotalCurvature::remove() {
         curvatures->at(ii)->removeDependent(this);
      }
      delete curvatures;
+     delete this;
 }
 
 TotalCurvature::~TotalCurvature(){
-    remove();
 }
 
 void TotalCurvature::recalculate(){
@@ -53,7 +53,7 @@ TotalCurvature* TotalCurvature::At(){
 }
 
 void TotalCurvature::CleanUp(){
-  delete totCurv;
+  totCurv->remove();
 }
 
 #endif /* TOTALCURVATURE_H_ */

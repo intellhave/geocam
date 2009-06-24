@@ -144,15 +144,7 @@ int main(int argc, char** argv){
    for(int i = 1; i <= edgeSize; i++) {
        Length::At(Triangulation::edgeTable[i]);
    }
-  for(vit = Triangulation::vertexTable.begin();
-      vit != Triangulation::vertexTable.end(); vit++){
-    vector<int>* faces = vit->second.getLocalFaces();
-    
-    for(int ii = 0; ii < faces->size(); ii++){
-      Face& f = Triangulation::faceTable[ faces->at(ii) ];
-      EuclideanAngle::At(vit->second, f);        
-    }
-  }
+
    Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "r3va");
    time(&start);
    //app->run(300, 0.01);
@@ -166,7 +158,7 @@ int main(int argc, char** argv){
 
    system("PAUSE");
 
-   Area::CleanUp();
+   Radius::CleanUp();
    Length::At(Triangulation::edgeTable[1]);
   
    system("PAUSE");

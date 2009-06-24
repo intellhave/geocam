@@ -32,9 +32,10 @@ void EdgeCurvature::remove() {
      }
      Index->erase(pos);
      delete dih_angles;
+     delete this;
 }
 
-EdgeCurvature::~EdgeCurvature(){ remove(); }
+EdgeCurvature::~EdgeCurvature(){ }
 void EdgeCurvature::recalculate() {
     double curv = 2*PI;
     GeoQuant* dih_angle;
@@ -66,7 +67,7 @@ void EdgeCurvature::CleanUp(){
   EdgeCurvatureIndex::iterator iter;
   EdgeCurvatureIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

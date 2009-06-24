@@ -30,10 +30,10 @@ void TotalVolume::remove() {
              volumes->at(ii)->removeDependent(this);
      }
      delete volumes;
+     delete this;
 }
 
 TotalVolume::~TotalVolume(){
-   remove();
 }
 
 void TotalVolume::recalculate(){
@@ -53,7 +53,7 @@ TotalVolume* TotalVolume::At(){
 }
 
 void TotalVolume::CleanUp(){
-  delete totVol;
+  totVol->remove();
 }
 
 #endif /* TOTALVOLUME_H_ */

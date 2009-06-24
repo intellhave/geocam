@@ -83,10 +83,11 @@ void EHRSecondPartial::remove() {
        volSecPartials->at(ii)->removeDependent(this);
      Index->erase(pos);
      delete volSecPartials;
+     delete this;
 }
 
 EHRSecondPartial::~EHRSecondPartial(){
-    remove();
+  
 }
 
 EHRSecondPartial* EHRSecondPartial::At( Vertex& v, Vertex& w ){
@@ -109,7 +110,7 @@ void EHRSecondPartial::CleanUp(){
   EHRSecondPartialIndex::iterator iter;
   EHRSecondPartialIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

@@ -38,10 +38,10 @@ void DihedralAngle::remove() {
      angleB->removeDependent(this);
      angleC->removeDependent(this);
      Index->erase(pos);
+     delete this;
 }
 
 DihedralAngle::~DihedralAngle() {
-     remove();
 }
 
 void DihedralAngle::recalculate() {
@@ -71,7 +71,7 @@ void DihedralAngle::CleanUp(){
   DihedralAngleIndex::iterator iter;
   DihedralAngleIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

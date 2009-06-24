@@ -41,9 +41,10 @@ void Curvature3D::remove() {
      Index->erase(pos);
      delete edgeCurvs;
      delete partials;
+     delete this;
 }
 
-Curvature3D::~Curvature3D(){ remove();}
+Curvature3D::~Curvature3D(){}
 void Curvature3D::recalculate() {
     double curv = 0; 
     GeoQuant* edgeC;
@@ -78,7 +79,7 @@ void Curvature3D::CleanUp(){
   Curvature3DIndex::iterator iter;
   Curvature3DIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

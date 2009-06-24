@@ -31,10 +31,11 @@ void DualArea::remove() {
      }
      Index->erase(pos);
      delete segments;
+     delete this;
 }
 
 DualArea::~DualArea(){
-   remove();
+   
 }
 
 void DualArea::recalculate(){
@@ -66,7 +67,7 @@ void DualArea::CleanUp(){
   DualAreaIndex::iterator iter;
   DualAreaIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

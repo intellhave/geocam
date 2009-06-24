@@ -38,9 +38,10 @@ void FaceHeight::remove() {
      hij_k->removeDependent(this);
      beta_ij_kl->removeDependent(this);
      Index->erase(pos);  
+     delete this;
 }
 
-FaceHeight::~FaceHeight(){ remove(); }
+FaceHeight::~FaceHeight(){ }
 
 FaceHeight* FaceHeight::At( Face& f, Tetra& t ){
   TriPosition T( 2, f.getSerialNumber(), t.getSerialNumber() );
@@ -62,7 +63,7 @@ void FaceHeight::CleanUp(){
   FaceHeightIndex::iterator iter;
   FaceHeightIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

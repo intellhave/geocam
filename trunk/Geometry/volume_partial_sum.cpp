@@ -44,10 +44,10 @@ void VolumePartialSum::remove() {
      }
      Index->erase(pos);
      delete volPartials;
+     delete this;
 }
 
 VolumePartialSum::~VolumePartialSum(){
-   remove();
 }
 
 VolumePartialSum* VolumePartialSum::At( Vertex& v ){
@@ -70,7 +70,7 @@ void VolumePartialSum::CleanUp(){
   VolumePartialSumIndex::iterator iter;
   VolumePartialSumIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

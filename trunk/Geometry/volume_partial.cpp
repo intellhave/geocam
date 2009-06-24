@@ -115,9 +115,10 @@ void VolumePartial::remove() {
   eta[4]->removeDependent(this);
   eta[5]->removeDependent(this);     
   Index->erase(pos);
+  delete this;
 }
 
-VolumePartial::~VolumePartial(){ remove(); }
+VolumePartial::~VolumePartial(){ }
 
 VolumePartial* VolumePartial::At( Vertex& v, Tetra& t ){
   TriPosition T( 1, v.getSerialNumber(), t.getSerialNumber() );
@@ -139,7 +140,7 @@ void VolumePartial::CleanUp(){
   VolumePartialIndex::iterator iter;
   VolumePartialIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

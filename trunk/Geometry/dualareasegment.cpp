@@ -45,10 +45,11 @@ void DualAreaSegment::remove() {
      hij_l->removeDependent(this);
      hijl_k->removeDependent(this);
      Index->erase(pos);
+     delete this;
 }
 
 DualAreaSegment::~DualAreaSegment(){
-   remove();
+  
 }
 
 DualAreaSegment* DualAreaSegment::At( Edge& e, Tetra& t ){
@@ -71,7 +72,7 @@ void DualAreaSegment::CleanUp(){
   DualAreaSegmentIndex::iterator iter;
   DualAreaSegmentIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

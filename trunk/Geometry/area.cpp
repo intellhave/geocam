@@ -27,10 +27,10 @@ void Area::remove() {
     Len[1]->removeDependent(this);
     Len[2]->removeDependent(this);
     Index->erase(pos);
+    delete this;
 }
 
 Area::~Area() {
-    remove();
 }
 void Area::recalculate() {
     double l1 = Len[0]->getValue();
@@ -63,7 +63,7 @@ void Area::CleanUp(){
   AreaIndex::iterator iter;
   AreaIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

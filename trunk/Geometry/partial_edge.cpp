@@ -41,10 +41,11 @@ void PartialEdge::remove() {
     radA->removeDependent(this);
     radB->removeDependent(this);
     Index->erase(pos);
+    delete this;
 }
 
 PartialEdge::~PartialEdge(){ 
-    remove();
+    
 }
 void PartialEdge::recalculate() {
    double len = length->getValue();
@@ -72,7 +73,7 @@ void PartialEdge::CleanUp(){
   PartialEdgeIndex::iterator iter;
   PartialEdgeIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

@@ -38,9 +38,10 @@ void EdgeHeight::remove() {
      d_ik->removeDependent(this);
      theta_i->removeDependent(this);
      Index->erase(pos);
+     delete this;
 }
 
-EdgeHeight::~EdgeHeight(){ remove(); }
+EdgeHeight::~EdgeHeight(){ }
 
 EdgeHeight* EdgeHeight::At( Edge& e, Face& f ){
   TriPosition T( 2, e.getSerialNumber(), f.getSerialNumber() );
@@ -62,7 +63,7 @@ void EdgeHeight::CleanUp(){
   EdgeHeightIndex::iterator iter;
   EdgeHeightIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

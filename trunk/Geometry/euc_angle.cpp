@@ -40,10 +40,11 @@ void EuclideanAngle::remove() {
   lengthB->removeDependent(this);
   lengthC->removeDependent(this);
   Index->erase(pos);
+  delete this;
 }
 
 EuclideanAngle::~EuclideanAngle(){
-  remove();
+  
 }
 void EuclideanAngle::recalculate() {
   double a = lengthA->getValue();
@@ -72,9 +73,10 @@ void EuclideanAngle::CleanUp(){
   EuclideanAngleIndex::iterator iter;
   EuclideanAngleIndex copy = *Index;
   
-  for(iter = copy.begin(); iter != copy.end(); iter++)
-    delete iter->second;
-
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
+    iter->second->remove();
+  }
+    
   delete Index;
   Index = NULL;
 }

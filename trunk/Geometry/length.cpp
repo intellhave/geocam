@@ -41,10 +41,10 @@ void Length::remove() {
    radius2->removeDependent(this);
    eta->removeDependent(this);
    Index->erase(pos);
+   delete this;
 }
 
 Length::~Length() {
-  remove();
 }
 
 Length* Length::At( Edge& e ){
@@ -67,7 +67,7 @@ void Length::CleanUp(){
   LengthIndex::iterator iter;
   LengthIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

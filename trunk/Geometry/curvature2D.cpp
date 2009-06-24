@@ -31,9 +31,10 @@ void Curvature2D::remove() {
      }    
      Index->erase(pos);
      delete angles;
+     delete this;
 }
 
-Curvature2D::~Curvature2D(){ remove(); }
+Curvature2D::~Curvature2D(){ }
 void Curvature2D::recalculate() {
     double curv = 2*PI;
     GeoQuant* angle;
@@ -65,7 +66,7 @@ void Curvature2D::CleanUp(){
   Curvature2DIndex::iterator iter;
   Curvature2DIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

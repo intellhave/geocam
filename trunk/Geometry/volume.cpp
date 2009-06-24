@@ -84,10 +84,10 @@ void Volume::remove() {
    len[4]->removeDependent(this);
    len[5]->removeDependent(this);
    Index->erase(pos);
+   delete this;
 }
 
 Volume::~Volume(){
-   remove();
 }
 
 Volume* Volume::At( Tetra& t ){
@@ -110,7 +110,7 @@ void Volume::CleanUp(){
   VolumeIndex::iterator iter;
   VolumeIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;

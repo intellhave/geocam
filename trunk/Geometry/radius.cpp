@@ -16,11 +16,11 @@ Radius::Radius( Vertex& v ){
 }
 
 Radius::~Radius(){
-  remove();
 }
 void Radius::remove() {
    deleteDependents();
    Index->erase(pos);
+   delete this;
 }
 
 void Radius::recalculate(){}
@@ -45,9 +45,10 @@ void Radius::CleanUp(){
   RadiusIndex::iterator iter;
   RadiusIndex copy = *Index;
   
-  for(iter = copy.begin(); iter != copy.end(); iter++)
-    delete iter->second;
-
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
+    iter->second->remove();
+  }
+    
   delete Index;
   Index = NULL;
 }

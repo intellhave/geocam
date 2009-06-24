@@ -40,10 +40,11 @@ void DihedralAngleSum::remove() {
      }
      Index->erase(pos);
      delete angles;
+     delete this;
 }
 
 DihedralAngleSum::~DihedralAngleSum(){
-  remove();
+
 }
 
 DihedralAngleSum* DihedralAngleSum::At( Edge& e ){
@@ -66,7 +67,7 @@ void DihedralAngleSum::CleanUp(){
   DihedralAngleSumIndex::iterator iter;
   DihedralAngleSumIndex copy = *Index;
   for(iter = copy.begin(); iter != copy.end(); iter++) {
-    delete iter->second;
+    iter->second->remove();
   }
     
   delete Index;
