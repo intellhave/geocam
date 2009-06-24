@@ -12,9 +12,9 @@ This page contains basic information on the documentation of the functions and c
 
 
 
-||*Function*||*Type*||*Owner*||
-||allNegative||bool||  ||
-||allPositive||bool||  ||
+||*Function*||*Type*||*Owner*||*Progress*||
+||allNegative||bool||||||
+||allPositive||bool||||||
 
 
 Add your content here.  Format your content with:
