@@ -48,16 +48,16 @@ This page contains basic information on the documentation of the functions and c
 || *Function* || *Type* || *Owner* || *Progress* ||
 ||allNegative||bool|| || ||
 ||allPositive||bool|| || ||
-||isAccurate||bool
-||isDegenerate||bool
-||isDelaunay||bool
-||isDoubleTriangle||bool
-||isPrecise||bool
-||isWeightedDelaunay||bool
-||read3DTriangulationFile||bool
-||adjDiffEQ||double
-||Aij_kl||double
-||angle||double
+||isAccurate||bool|| || ||
+||isDegenerate||bool|| || ||
+||isDelaunay||bool|| || ||
+||isDoubleTriangle||bool|| || ||
+||isPrecise||bool|| || ||
+||isWeightedDelaunay||bool|| || ||
+||read3DTriangulationFile||bool|| || ||
+||adjDiffEQ||double|| || ||
+||Aij_kl||double|| || ||
+||angle||double|| || ||
 ||angleDiff||double|| || ||
 ||angleDiffSums||double|| || ||
 ||angleTotalSum||double|| || ||
