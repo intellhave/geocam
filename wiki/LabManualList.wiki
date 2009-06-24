@@ -6,7 +6,7 @@ This page contains basic information on the documentation of the functions and c
 
 = Details =
 
-||*Class*||*Owner*||*Progress*||
+|| *Class* || *Owner* || *Progress* ||
 ||Approximator||Alex||draft||
 ||Area||  ||  ||
 ||calcSpecs|| || ||
