@@ -32,7 +32,18 @@ DihedralAngle::DihedralAngle( Edge& e, Tetra& t ){
   angleC->addDependent(this);
 }
 
-DihedralAngle::~DihedralAngle() {}
+void DihedralAngle::remove() {
+     deleteDependents();
+     angleA->removeDependent(this);
+     angleB->removeDependent(this);
+     angleC->removeDependent(this);
+     Index->erase(pos);
+}
+
+DihedralAngle::~DihedralAngle() {
+     remove();
+}
+
 void DihedralAngle::recalculate() {
   double a = angleA->getValue();
   double b = angleB->getValue();
@@ -47,6 +58,7 @@ DihedralAngle* DihedralAngle::At( Edge& e,Tetra& t ){
 
   if( iter == Index->end() ){
     DihedralAngle* val = new DihedralAngle( e, t );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -55,11 +67,15 @@ DihedralAngle* DihedralAngle::At( Edge& e,Tetra& t ){
 }
 
 void DihedralAngle::CleanUp(){
-  if( Index == NULL) return;
+  if( Index == NULL ) return;
   DihedralAngleIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  DihedralAngleIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* DIHEDRALANGLE_H_ */

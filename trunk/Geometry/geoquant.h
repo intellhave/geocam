@@ -17,17 +17,18 @@ class GeoQuant {
 
  protected:
   double value;
+  TriPosition pos;
   vector<GeoQuant*>* dependents;
   virtual void recalculate() = 0;
-
+  virtual void remove() = 0;
   GeoQuant(){
     dependents = new vector<GeoQuant*>();
     valid = false;
   }
 
  public:  
-  virtual ~GeoQuant();
-
+  ~GeoQuant() {}
+  
   bool isValid(){return valid;}
   void addDependent(GeoQuant* dep){dependents->push_back(dep);}
   
@@ -43,11 +44,14 @@ class GeoQuant {
   /* To be called only with deconstructor */
   void deleteDependents() {
     int size = dependents->size();
+    vector<GeoQuant*> copy = *dependents;
     for(int ii = size - 1; ii >= 0; ii--) {
-       delete dependents->at(ii);
+       copy.at(ii)->remove();
     }
     delete dependents;
   }
+
+
   
   double getValue(){
     if(! valid){

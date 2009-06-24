@@ -109,12 +109,25 @@ void CurvaturePartial::recalculate(){
   }
 }
 
+void CurvaturePartial::remove() {
+    deleteDependents();
+    for(int ii = 0; ii < dualAreas->size(); ii++) {
+            dualAreas->at(ii)->removeDependent(this);
+            dihSums->at(ii)->removeDependent(this);
+            lengths->at(ii)->removeDependent(this);
+            etas->at(ii)->removeDependent(this);
+            radii->at(ii)->removeDependent(this);
+    }
+    Index->erase(pos);
+    delete dualAreas;
+    delete dihSums;
+    delete lengths;
+    delete etas;
+    delete radii;
+}
+
 CurvaturePartial::~CurvaturePartial(){
-  delete dualAreas;
-  delete dihSums;
-  delete lengths;
-  delete etas;
-  delete radii;
+    remove();
 }
 
 CurvaturePartial* CurvaturePartial::At( Vertex& v, Vertex& w ){
@@ -124,6 +137,7 @@ CurvaturePartial* CurvaturePartial::At( Vertex& v, Vertex& w ){
 
   if( iter == Index->end() ){
     CurvaturePartial* val = new CurvaturePartial( v, w );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -134,9 +148,13 @@ CurvaturePartial* CurvaturePartial::At( Vertex& v, Vertex& w ){
 void CurvaturePartial::CleanUp(){
   if( Index == NULL ) return;
   CurvaturePartialIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  CurvaturePartialIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* CURVATUREPARTIAL_H_ */

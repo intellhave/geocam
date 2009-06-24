@@ -71,8 +71,22 @@ void EHRSecondPartial::recalculate(){
 			VPS_i * VPS_j - totK * VolSumSecondPartial);
 }
 
+void EHRSecondPartial::remove() {
+     deleteDependents();
+     totVolume->removeDependent(this);
+     totCurvature->removeDependent(this);
+     vps_i->removeDependent(this);
+     vps_j->removeDependent(this);
+     curvature_i->removeDependent(this);
+     curvature_j->removeDependent(this);
+     for(int ii = 0; ii < volSecPartials->size(); ii++)
+       volSecPartials->at(ii)->removeDependent(this);
+     Index->erase(pos);
+     delete volSecPartials;
+}
+
 EHRSecondPartial::~EHRSecondPartial(){
-  delete volSecPartials;
+    remove();
 }
 
 EHRSecondPartial* EHRSecondPartial::At( Vertex& v, Vertex& w ){
@@ -82,6 +96,7 @@ EHRSecondPartial* EHRSecondPartial::At( Vertex& v, Vertex& w ){
 
   if( iter == Index->end() ){
     EHRSecondPartial* val = new EHRSecondPartial( v, w );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -92,9 +107,13 @@ EHRSecondPartial* EHRSecondPartial::At( Vertex& v, Vertex& w ){
 void EHRSecondPartial::CleanUp(){
   if( Index == NULL ) return;
   EHRSecondPartialIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  EHRSecondPartialIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* EHRSECONDPARTIAL_H_ */

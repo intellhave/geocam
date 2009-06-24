@@ -51,6 +51,18 @@ VolumeSecondPartial::VolumeSecondPartial( Vertex& v, Vertex& w, Tetra& t ){
   eta[3] = Eta::At( st.e23 );
   eta[4] = Eta::At( st.e24 );
   eta[5] = Eta::At( st.e34 );
+  
+  rad[0]->addDependent(this);
+  rad[1]->addDependent(this);
+  rad[2]->addDependent(this);
+  rad[3]->addDependent(this);
+  
+  eta[0]->addDependent(this);
+  eta[1]->addDependent(this);
+  eta[2]->addDependent(this);
+  eta[3]->addDependent(this);
+  eta[4]->addDependent(this);
+  eta[5]->addDependent(this);
 }
 
 void VolumeSecondPartial::recalculate(){
@@ -284,7 +296,23 @@ void VolumeSecondPartial::recalculate(){
   }
 }
 
-VolumeSecondPartial::~VolumeSecondPartial(){}
+void VolumeSecondPartial::remove() {
+  deleteDependents();
+  rad[0]->removeDependent(this);
+  rad[1]->removeDependent(this);
+  rad[2]->removeDependent(this);
+  rad[3]->removeDependent(this);
+  
+  eta[0]->removeDependent(this);
+  eta[1]->removeDependent(this);
+  eta[2]->removeDependent(this);
+  eta[3]->removeDependent(this);
+  eta[4]->removeDependent(this);
+  eta[5]->removeDependent(this);     
+  Index->erase(pos);
+}
+
+VolumeSecondPartial::~VolumeSecondPartial(){ remove(); }
 
 VolumeSecondPartial* VolumeSecondPartial::At( Vertex& v, Vertex& w, Tetra& t ){
   TriPosition T( 3, v.getSerialNumber(), w.getSerialNumber(), t.getSerialNumber() );
@@ -293,6 +321,7 @@ VolumeSecondPartial* VolumeSecondPartial::At( Vertex& v, Vertex& w, Tetra& t ){
 
   if( iter == Index->end() ){
     VolumeSecondPartial* val = new VolumeSecondPartial( v, w, t );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -303,9 +332,13 @@ VolumeSecondPartial* VolumeSecondPartial::At( Vertex& v, Vertex& w, Tetra& t ){
 void VolumeSecondPartial::CleanUp(){
   if( Index == NULL ) return;
   VolumeSecondPartialIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  VolumeSecondPartialIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* VOLUMESECONDPARTIAL_H_ */

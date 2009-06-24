@@ -24,8 +24,16 @@ TotalCurvature::TotalCurvature(){
   }
 }
 
+void TotalCurvature::remove() {
+     deleteDependents();
+     for(int ii = 0; ii < curvatures->size(); ii++) {
+        curvatures->at(ii)->removeDependent(this);
+     }
+     delete curvatures;
+}
+
 TotalCurvature::~TotalCurvature(){
-  delete curvatures;
+    remove();
 }
 
 void TotalCurvature::recalculate(){

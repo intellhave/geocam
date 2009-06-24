@@ -23,11 +23,10 @@ typedef map<TriPosition, Radius*, TriPositionCompare> RadiusIndex;
 class Radius : public virtual GeoQuant {
 private:
   static RadiusIndex* Index;
-  TriPosition pos;
 protected:
   Radius( Vertex& v );
   void recalculate();
-
+  void remove();
 public:
   ~Radius();
   static Radius* At( Vertex& v );
@@ -49,7 +48,7 @@ private:
 protected:
   Eta( Edge& e );
   void recalculate();
-
+  void remove();
 public:
   ~Eta();
   static Eta* At( Edge& e );
@@ -67,7 +66,6 @@ typedef map<TriPosition, Length*, TriPositionCompare> LengthIndex;
 class Length : public virtual GeoQuant {
 private:
   static LengthIndex* Index;
-  TriPosition pos;
   Radius* radius1;
   Radius* radius2;
   Eta* eta;  
@@ -75,7 +73,7 @@ private:
 protected:
   Length( Edge& e );
   void recalculate();
-
+  void remove();
 public:
   ~Length();
   static Length* At( Edge& e );
@@ -93,11 +91,10 @@ typedef map<TriPosition, EuclideanAngle*, TriPositionCompare> EuclideanAngleInde
 class EuclideanAngle : public virtual GeoQuant {
 private:
   static EuclideanAngleIndex* Index;
-  TriPosition pos;
   GeoQuant* lengthA;
   GeoQuant* lengthB;
   GeoQuant* lengthC;
-
+  void remove();
 protected:
   EuclideanAngle( Vertex& v, Face& f );
   void recalculate();
@@ -120,11 +117,11 @@ class Area : public virtual GeoQuant {
 private:
   static AreaIndex* Index;
   GeoQuant* Len[3];
-
+  
 protected:
   Area( Face& f );
   void recalculate();
-
+  void remove();
 public:
   ~Area();
   static Area* At( Face& f );
@@ -147,7 +144,7 @@ private:
 protected:
   Curvature2D( Vertex& v );
   void recalculate();
-
+  void remove();
 public:
   ~Curvature2D();
   static Curvature2D* At( Vertex& v );
@@ -173,7 +170,7 @@ private:
 protected:
   DihedralAngle( Edge& e, Tetra& t );
   void recalculate();
-
+  void remove();
 public:
   ~DihedralAngle();
   static DihedralAngle* At( Edge& e, Tetra& t );
@@ -196,7 +193,7 @@ private:
 protected:
   DihedralAngleSum( Edge& e );
   void recalculate();
-
+  void remove();
 public:
   ~DihedralAngleSum();
   static DihedralAngleSum* At( Edge& e );
@@ -219,7 +216,7 @@ private:
 protected:
   Volume( Tetra& t );
   void recalculate();
-
+  void remove();
 public:
   ~Volume();
   static Volume* At( Tetra& t );
@@ -241,7 +238,7 @@ private:
 protected:
   TotalVolume();
   void recalculate();
-
+  void remove();
 public:
   ~TotalVolume();
   static TotalVolume* At();
@@ -264,7 +261,7 @@ private:
 protected:
   EdgeCurvature( Edge& e );
   void recalculate();
-
+  void remove();
 public:
   ~EdgeCurvature();
   static EdgeCurvature* At( Edge& e  );
@@ -290,7 +287,7 @@ private:
 protected:
   PartialEdge( Vertex& v, Edge& e );
   void recalculate();
-
+  void remove();
 public:
   ~PartialEdge();
   static PartialEdge* At( Vertex& v, Edge& e  );
@@ -314,7 +311,7 @@ private:
 protected:
   Curvature3D( Vertex& v );
   void recalculate();
-
+  void remove();
 public:
   ~Curvature3D();
   static Curvature3D* At( Vertex& v );
@@ -336,7 +333,7 @@ private:
 protected:
   TotalCurvature();
   void recalculate();
-
+  void remove();
 public:
   ~TotalCurvature();
   static TotalCurvature* At();
@@ -361,7 +358,7 @@ private:
 protected:
   VolumePartial( Vertex& v, Tetra& t );
   void recalculate();
-
+  void remove();
 public:
   ~VolumePartial();
   static VolumePartial* At( Vertex& v, Tetra& t );
@@ -384,7 +381,7 @@ private:
 protected:
   VolumePartialSum( Vertex& v );
   void recalculate();
-
+  void remove();
 public:
   ~VolumePartialSum();
   static VolumePartialSum* At( Vertex& v );
@@ -409,7 +406,7 @@ private:
 protected:
   VolumeSecondPartial( Vertex& v, Vertex& w, Tetra& t );
   void recalculate();
-
+  void remove();
 public:
   ~VolumeSecondPartial();
   static VolumeSecondPartial* At( Vertex& v, Vertex& w, Tetra& t );
@@ -434,7 +431,7 @@ private:
 protected:
   EdgeHeight( Edge& e, Face& f );
   void recalculate();
-
+  void remove();
 public:
   ~EdgeHeight();
   static EdgeHeight* At( Edge& e, Face& f );
@@ -459,7 +456,7 @@ private:
 protected:
   FaceHeight( Face& f, Tetra& t );
   void recalculate();
-
+  void remove();
 public:
   ~FaceHeight();
   static FaceHeight* At( Face& f, Tetra& t );
@@ -486,7 +483,7 @@ private:
 protected:
   DualAreaSegment( Edge& e, Tetra& t );
   void recalculate();
-
+  void remove();
 public:
   ~DualAreaSegment();
   static DualAreaSegment* At( Edge& e, Tetra& t );
@@ -509,7 +506,7 @@ private:
 protected:
   DualArea( Edge& e );
   void recalculate();
-
+  void remove();
 public:
   ~DualArea();
   static DualArea* At( Edge& e );
@@ -545,7 +542,7 @@ private:
 protected:
   CurvaturePartial( Vertex& v, Vertex& w );
   void recalculate();
-
+  void remove();
 public:
   ~CurvaturePartial();
   static CurvaturePartial* At( Vertex& v, Vertex& w );
@@ -571,7 +568,7 @@ private:
 protected:
   EHRPartial( Vertex& v );
   void recalculate();
-
+  void remove();
 public:
   ~EHRPartial();
   static EHRPartial* At( Vertex& v );
@@ -603,7 +600,7 @@ private:
 protected:
   EHRSecondPartial( Vertex& v, Vertex& w );
   void recalculate();
-
+  void remove();
 public:
   ~EHRSecondPartial();
   static EHRSecondPartial* At( Vertex& v, Vertex& w );

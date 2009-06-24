@@ -21,7 +21,16 @@ Area::Area( Face& f ){
     }
 }
 
+void Area::remove() {
+    deleteDependents();
+    Len[0]->removeDependent(this);
+    Len[1]->removeDependent(this);
+    Len[2]->removeDependent(this);
+    Index->erase(pos);
+}
+
 Area::~Area() {
+    remove();
 }
 void Area::recalculate() {
     double l1 = Len[0]->getValue();
@@ -39,6 +48,7 @@ Area* Area::At( Face& f ){
 
   if( iter == Index->end() ){
     Area* val = new Area( f );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -49,11 +59,15 @@ Area* Area::At( Face& f ){
 
 
 void Area::CleanUp(){
-  if( Index == NULL) return;
+  if( Index == NULL ) return;
   AreaIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  AreaIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* AREA_H_ */

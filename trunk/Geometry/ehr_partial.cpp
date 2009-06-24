@@ -26,7 +26,16 @@ EHRPartial::EHRPartial( Vertex& v ){
   vps->addDependent( this );
 }
 
-EHRPartial::~EHRPartial(){}
+void EHRPartial::remove() {
+     deleteDependents();
+     totVolume->removeDependent(this);
+     totCurvature->removeDependent(this);
+     localCurvature->removeDependent(this);
+     vps->removeDependent(this);
+     Index->erase(pos);
+}
+
+EHRPartial::~EHRPartial(){ remove(); }
 
 void EHRPartial::recalculate(){
   double totV = totVolume->getValue();
@@ -44,6 +53,7 @@ EHRPartial* EHRPartial::At( Vertex& v ){
 
   if( iter == Index->end() ){
     EHRPartial* val = new EHRPartial( v );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -54,9 +64,13 @@ EHRPartial* EHRPartial::At( Vertex& v ){
 void EHRPartial::CleanUp(){
   if( Index == NULL ) return;
   EHRPartialIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  EHRPartialIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* EHRPARTIAL_H_ */

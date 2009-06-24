@@ -33,8 +33,17 @@ void DihedralAngleSum::recalculate(){
   }
 }
 
+void DihedralAngleSum::remove() {
+     deleteDependents();
+     for(int ii = 0; ii < angles->size(); ii++) {
+         angles->at(ii)->removeDependent(this);
+     }
+     Index->erase(pos);
+     delete angles;
+}
+
 DihedralAngleSum::~DihedralAngleSum(){
-  delete angles;
+  remove();
 }
 
 DihedralAngleSum* DihedralAngleSum::At( Edge& e ){
@@ -44,6 +53,7 @@ DihedralAngleSum* DihedralAngleSum::At( Edge& e ){
 
   if( iter == Index->end() ){
     DihedralAngleSum* val = new DihedralAngleSum( e );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -54,9 +64,13 @@ DihedralAngleSum* DihedralAngleSum::At( Edge& e ){
 void DihedralAngleSum::CleanUp(){
   if( Index == NULL ) return;
   DihedralAngleSumIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  DihedralAngleSumIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* DIHEDRALANGLESUM_H_ */

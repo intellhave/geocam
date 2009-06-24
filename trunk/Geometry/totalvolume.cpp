@@ -24,8 +24,16 @@ TotalVolume::TotalVolume(){
   }
 }
 
+void TotalVolume::remove() {
+     deleteDependents();
+     for(int ii = 0 ; ii < volumes->size(); ii++) {
+             volumes->at(ii)->removeDependent(this);
+     }
+     delete volumes;
+}
+
 TotalVolume::~TotalVolume(){
-  delete volumes;
+   remove();
 }
 
 void TotalVolume::recalculate(){

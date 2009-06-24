@@ -38,7 +38,18 @@ void DualAreaSegment::recalculate(){
   double result = 0.5*(Hij_k * Hijk_l + Hij_l * Hijl_k);
 }
 
-DualAreaSegment::~DualAreaSegment(){}
+void DualAreaSegment::remove() {
+     deleteDependents();
+     hij_k->removeDependent(this);
+     hijk_l->removeDependent(this);
+     hij_l->removeDependent(this);
+     hijl_k->removeDependent(this);
+     Index->erase(pos);
+}
+
+DualAreaSegment::~DualAreaSegment(){
+   remove();
+}
 
 DualAreaSegment* DualAreaSegment::At( Edge& e, Tetra& t ){
   TriPosition T( 2, e.getSerialNumber(), t.getSerialNumber() );
@@ -47,6 +58,7 @@ DualAreaSegment* DualAreaSegment::At( Edge& e, Tetra& t ){
 
   if( iter == Index->end() ){
     DualAreaSegment* val = new DualAreaSegment( e, t );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -57,9 +69,13 @@ DualAreaSegment* DualAreaSegment::At( Edge& e, Tetra& t ){
 void DualAreaSegment::CleanUp(){
   if( Index == NULL ) return;
   DualAreaSegmentIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  DualAreaSegmentIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* DUALAREASEGMENT_H_ */

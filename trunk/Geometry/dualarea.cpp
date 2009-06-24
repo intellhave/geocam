@@ -24,8 +24,17 @@ DualArea::DualArea( Edge& e ){
   }
 }
 
+void DualArea::remove() {
+     deleteDependents();
+     for(int ii = 0; ii < segments->size(); ii++) {
+        segments->at(ii)->removeDependent(this);
+     }
+     Index->erase(pos);
+     delete segments;
+}
+
 DualArea::~DualArea(){
-  delete segments;
+   remove();
 }
 
 void DualArea::recalculate(){
@@ -44,6 +53,7 @@ DualArea* DualArea::At( Edge& e ){
 
   if( iter == Index->end() ){
     DualArea* val = new DualArea(e);
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -54,9 +64,13 @@ DualArea* DualArea::At( Edge& e ){
 void DualArea::CleanUp(){
   if( Index == NULL ) return;
   DualAreaIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  DualAreaIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* DUALAREA_H_ */

@@ -127,7 +127,7 @@ int main(int argc, char** argv){
     
      time_t start, end;
      
-   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/poincare-16.txt";
+   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
    char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
    make3DTriangulationFile(from, to);
    read3DTriangulationFile(to);
@@ -141,7 +141,19 @@ int main(int argc, char** argv){
    for(int i = 1; i <= edgeSize; i++) {
        Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
    }
-   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "r3");
+   for(int i = 1; i <= edgeSize; i++) {
+       Length::At(Triangulation::edgeTable[i]);
+   }
+  for(vit = Triangulation::vertexTable.begin();
+      vit != Triangulation::vertexTable.end(); vit++){
+    vector<int>* faces = vit->second.getLocalFaces();
+    
+    for(int ii = 0; ii < faces->size(); ii++){
+      Face& f = Triangulation::faceTable[ faces->at(ii) ];
+      EuclideanAngle::At(vit->second, f);        
+    }
+  }
+   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "r3va");
    time(&start);
    //app->run(300, 0.01);
    app->run(0.0001, 0.01);
@@ -151,9 +163,12 @@ int main(int argc, char** argv){
    //printResultsVolumes("C:/Dev-Cpp/geocam/Triangulation Files/Volumes.txt",
       //                    &(app->volumeHistory));
    printf("Time: %.2lf seconds\n", difftime(end, start));
-//   system("PAUSE");
-//   printf("%d.\n", Triangulation::edgeTable.size());
-//   Length::CleanUp();
+
+   system("PAUSE");
+
+   Area::CleanUp();
+   Length::At(Triangulation::edgeTable[1]);
+  
    system("PAUSE");
 }
 

@@ -35,7 +35,17 @@ PartialEdge::PartialEdge( Vertex& v, Edge& e  ){
     radB->addDependent(this);  
 }
 
-PartialEdge::~PartialEdge(){ }
+void PartialEdge::remove() {
+    deleteDependents();
+    length->removeDependent(this);
+    radA->removeDependent(this);
+    radB->removeDependent(this);
+    Index->erase(pos);
+}
+
+PartialEdge::~PartialEdge(){ 
+    remove();
+}
 void PartialEdge::recalculate() {
    double len = length->getValue();
    value = (pow(len, 2) + pow(radA->getValue(), 2) 
@@ -49,6 +59,7 @@ PartialEdge* PartialEdge::At( Vertex& v, Edge& e  ){
 
   if( iter == Index->end() ){
     PartialEdge* val = new PartialEdge( v, e );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -57,11 +68,15 @@ PartialEdge* PartialEdge::At( Vertex& v, Edge& e  ){
 }
 
 void PartialEdge::CleanUp(){
-  if( Index == NULL) return;
+  if( Index == NULL ) return;
   PartialEdgeIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  PartialEdgeIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* PARTEDGE_H_ */

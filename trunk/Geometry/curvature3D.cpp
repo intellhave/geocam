@@ -32,7 +32,18 @@ Curvature3D::Curvature3D( Vertex& v  ){
     }
 }
 
-Curvature3D::~Curvature3D(){ delete edgeCurvs; delete partials;}
+void Curvature3D::remove() {
+     deleteDependents();
+     for(int ii = 0; ii < edgeCurvs->size(); ii++){
+       edgeCurvs->at(ii)->removeDependent(this);
+       partials->at(ii)->removeDependent(this);
+     }    
+     Index->erase(pos);
+     delete edgeCurvs;
+     delete partials;
+}
+
+Curvature3D::~Curvature3D(){ remove();}
 void Curvature3D::recalculate() {
     double curv = 0; 
     GeoQuant* edgeC;
@@ -53,6 +64,7 @@ Curvature3D* Curvature3D::At( Vertex& v  ){
 
   if( iter == Index->end() ){
     Curvature3D* val = new Curvature3D( v );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -62,11 +74,15 @@ Curvature3D* Curvature3D::At( Vertex& v  ){
 
 
 void Curvature3D::CleanUp(){
-  if( Index == NULL) return;
+  if( Index == NULL ) return;
   Curvature3DIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  Curvature3DIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* THREEDCURVATURE_H_ */

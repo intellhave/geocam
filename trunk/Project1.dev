@@ -261,17 +261,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit27]
-FileName=Geometry\radius.cpp
-CompileCpp=1
-Folder=Geometry/Quantities
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-=======
-
 [Unit24]
 FileName=flow\sysdiffeq.cpp
 CompileCpp=1
@@ -302,30 +291,10 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit29]
-FileName=Geometry\triposition.h
-CompileCpp=1
-Folder=Geometry
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit31]
-FileName=Geometry\dih_angle.cpp
-CompileCpp=1
-Folder=Geometry/Quantities
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit32]
-FileName=Geometry\eta.cpp
+FileName=Simplex\edge.cpp
 CompileCpp=1
-Folder=Geometry/Quantities
+Folder=Triangulation/Simplices
 Compile=1
 Link=1
 Priority=1000
@@ -333,9 +302,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit33]
-FileName=Geometry\euc_angle.cpp
+FileName=Simplex\edge.h
 CompileCpp=1
-Folder=Geometry/Quantities
+Folder=Triangulation/Simplices
 Compile=1
 Link=1
 Priority=1000
@@ -343,7 +312,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit34]
-FileName=Simplex\vertex.h
+FileName=Simplex\face.cpp
 CompileCpp=1
 Folder=Triangulation/Simplices
 Compile=1
@@ -377,7 +346,7 @@ BuildCmd=
 [Unit36]
 FileName=addremove.cpp
 =======
-FileName=Simplex\edge.h
+FileName=Simplex\simplex.cpp
 >>>>>>> .r556
 CompileCpp=1
 Folder=Triangulation/Simplices
@@ -388,7 +357,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit37]
-FileName=Simplex\face.cpp
+FileName=Simplex\simplex.h
 CompileCpp=1
 Folder=Triangulation/Simplices
 Compile=1
@@ -398,7 +367,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit38]
-FileName=Simplex\face.h
+FileName=Simplex\tetra.cpp
 CompileCpp=1
 Folder=Triangulation/Simplices
 Compile=1
@@ -408,7 +377,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit39]
-FileName=Simplex\simplex.cpp
+FileName=Simplex\tetra.h
 CompileCpp=1
 Folder=Triangulation/Simplices
 Compile=1
@@ -419,36 +388,6 @@ BuildCmd=
 >>>>>>> .r541
 
 [Unit40]
-FileName=Simplex\simplex.h
-CompileCpp=1
-Folder=Triangulation/Simplices
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit41]
-FileName=Simplex\tetra.cpp
-CompileCpp=1
-Folder=Triangulation/Simplices
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit42]
-FileName=Simplex\tetra.h
-CompileCpp=1
-Folder=Triangulation/Simplices
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit43]
 FileName=Simplex\vertex.cpp
 CompileCpp=1
 Folder=Triangulation/Simplices
@@ -458,7 +397,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit44]
+[Unit41]
 FileName=Triangulation\MinMax.cpp
 CompileCpp=1
 Folder=Extra
@@ -468,7 +407,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit45]
+[Unit42]
 FileName=Triangulation\MinMax.h
 CompileCpp=1
 Folder=Extra
@@ -478,7 +417,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit46]
+[Unit43]
 FileName=Triangulation\smallMorphs.cpp
 CompileCpp=1
 Folder=Morphs
@@ -488,38 +427,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit49]
-FileName=Triangulation\triangulation.h
-CompileCpp=1
-Folder=Triangulation
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit50]
-FileName=Triangulation\TriangulationCoordinateSystem.cpp
-CompileCpp=1
-Folder=Flip
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit51]
-FileName=Triangulation\TriangulationCoordinateSystem.h
-CompileCpp=1
-Folder=Flip
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit55]
-FileName=Triangulation\triangulationmorph.h
+[Unit44]
+FileName=Triangulation\smallMorphs.h
 CompileCpp=1
 Folder=Morphs
 Compile=1
@@ -528,37 +437,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit56]
-FileName=Triangulation\triangulationPlane.cpp
-CompileCpp=1
-Folder=Flip
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit53]
-FileName=Triangulation\triangulationInputOutput.h
-CompileCpp=1
-Folder=InputOutput
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit54]
-FileName=Triangulation\triangulationmorph.cpp
-CompileCpp=1
-Folder=Morphs
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit48]
+[Unit45]
 FileName=Triangulation\triangulation.cpp
 CompileCpp=1
 Folder=Triangulation
@@ -568,17 +447,47 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit57]
-FileName=Triangulation\triangulationPlane.h
+[Unit46]
+FileName=Triangulation\triangulation.h
 CompileCpp=1
-Folder=Flip
+Folder=Triangulation
 Compile=1
 Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit58]
+[Unit49]
+FileName=Triangulation\triangulationInputOutput.cpp
+CompileCpp=1
+Folder=InputOutput
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit50]
+FileName=Triangulation\triangulationInputOutput.h
+CompileCpp=1
+Folder=InputOutput
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit51]
+FileName=Triangulation\triangulationmorph.cpp
+CompileCpp=1
+Folder=Morphs
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit55]
 FileName=Geometry\curvature2D.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -588,7 +497,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit59]
+[Unit56]
 FileName=Geometry\curvature3D.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -598,17 +507,37 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit63]
-FileName=Geometry\length.cpp
+[Unit53]
+FileName=Triangulation\triangulationPlane.cpp
 CompileCpp=1
-Folder=Geometry/Quantities
+Folder=Flip
 Compile=1
 Link=1
 Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit60]
+[Unit54]
+FileName=Triangulation\triangulationPlane.h
+CompileCpp=1
+Folder=Flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit48]
+FileName=Triangulation\TriangulationCoordinateSystem.h
+CompileCpp=1
+Folder=Flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit57]
 FileName=Geometry\edge_curvature.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -618,7 +547,17 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit62]
+[Unit58]
+FileName=Geometry\partial_edge.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit59]
 FileName=Geometry\volume_partial.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -628,7 +567,27 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit65]
+[Unit63]
+FileName=Geometry\edge_height.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit60]
+FileName=Geometry\length.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit62]
 FileName=Geometry\volume.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -638,17 +597,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit67]
-FileName=Geometry\volume_second_partial.cpp
-CompileCpp=1
-Folder=Geometry/Quantities
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit68]
+[Unit65]
 FileName=Geometry\face_height.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -658,17 +607,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit69]
-FileName=Geometry\dualarea.cpp
-CompileCpp=1
-Folder=Geometry/Quantities
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit70]
+[Unit67]
 FileName=Geometry\dualareasegment.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -678,7 +617,27 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit73]
+[Unit68]
+FileName=Geometry\curvature_partial.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit69]
+FileName=Geometry\dih_angle_sum.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit70]
 FileName=Geometry\ehr_partial.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -688,27 +647,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit74]
-FileName=Geometry\ehr_second_partial.cpp
-CompileCpp=1
-Folder=Geometry/Quantities
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit75]
-FileName=Geometry\totalcurvature.cpp
-CompileCpp=1
-Folder=Geometry/Quantities
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit76]
+[Unit73]
 FileName=Geometry\totalvolume.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -718,7 +657,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit77]
+[Unit74]
 FileName=Geometry\volume_partial_sum.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
@@ -728,8 +667,35 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit78]
-FileName=ver2\geometry\hyp_angle.cpp
+[Unit75]
+FileName=Geometry\radius.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit76]
+FileName=Geometry\area.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit77]
+FileName=Geometry\dih_angle.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
 
 [Unit9]
 FileName=plot.cpp
@@ -762,7 +728,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit28]
-FileName=Geometry\triposition.cpp
+FileName=Geometry\triposition.h
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -772,9 +738,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit61]
-FileName=Geometry\partial_edge.cpp
+FileName=Geometry\GeoQuants.h
 CompileCpp=1
-Folder=Geometry/Quantities
+Folder=Geometry
 Compile=1
 Link=1
 Priority=1000
@@ -782,9 +748,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit52]
-FileName=Triangulation\triangulationInputOutput.cpp
+FileName=Triangulation\triangulationmorph.h
 CompileCpp=1
-Folder=InputOutput
+Folder=Morphs
 Compile=1
 Link=1
 Priority=1000
@@ -792,9 +758,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit47]
-FileName=Triangulation\smallMorphs.h
+FileName=Triangulation\TriangulationCoordinateSystem.cpp
 CompileCpp=1
-Folder=Morphs
+Folder=Flip
 Compile=1
 Link=1
 Priority=1000
@@ -1033,7 +999,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit35]
-FileName=Simplex\edge.cpp
+FileName=Simplex\face.h
 CompileCpp=1
 Folder=Triangulation/Simplices
 Compile=1
@@ -1043,9 +1009,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit64]
-FileName=Geometry\GeoQuants.h
+FileName=Geometry\volume_second_partial.cpp
 CompileCpp=1
-Folder=Geometry
+Folder=Geometry/Quantities
 Compile=1
 Link=1
 Priority=1000
@@ -1053,7 +1019,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit30]
-FileName=Geometry\area.cpp
+FileName=Geometry\euc_angle.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
 Compile=1
@@ -1063,7 +1029,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit66]
-FileName=Geometry\edge_height.cpp
+FileName=Geometry\dualarea.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
 Compile=1
@@ -1073,7 +1039,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit71]
-FileName=Geometry\curvature_partial.cpp
+FileName=Geometry\ehr_second_partial.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
 Compile=1
@@ -1083,9 +1049,49 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit72]
-FileName=Geometry\dih_angle_sum.cpp
+FileName=Geometry\totalcurvature.cpp
 CompileCpp=1
 Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit79]
+FileName=flip_algorithm.h
+CompileCpp=1
+Folder=Flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit27]
+FileName=Geometry\triposition.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit29]
+FileName=Geometry\eta.cpp
+CompileCpp=1
+Folder=Geometry/Quantities
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit31]
+FileName=Simplex\vertex.h
+CompileCpp=1
+Folder=Triangulation/Simplices
 Compile=1
 Link=1
 Priority=1000

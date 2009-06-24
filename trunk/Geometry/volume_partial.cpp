@@ -30,6 +30,18 @@ VolumePartial::VolumePartial( Vertex& v, Tetra& t ){
   eta[3] = Eta::At( st.e23 );
   eta[4] = Eta::At( st.e24 );
   eta[5] = Eta::At( st.e34 );
+  
+  rad[0]->addDependent(this);
+  rad[1]->addDependent(this);
+  rad[2]->addDependent(this);
+  rad[3]->addDependent(this);
+  
+  eta[0]->addDependent(this);
+  eta[1]->addDependent(this);
+  eta[2]->addDependent(this);
+  eta[3]->addDependent(this);
+  eta[4]->addDependent(this);
+  eta[5]->addDependent(this);
    
 }
 
@@ -89,7 +101,23 @@ void VolumePartial::recalculate(){
 			    pow(Eta34,2))*pow(r3,2))*pow(r4,2))));            
 }
 
-VolumePartial::~VolumePartial(){}
+void VolumePartial::remove() {
+  deleteDependents();
+  rad[0]->removeDependent(this);
+  rad[1]->removeDependent(this);
+  rad[2]->removeDependent(this);
+  rad[3]->removeDependent(this);
+  
+  eta[0]->removeDependent(this);
+  eta[1]->removeDependent(this);
+  eta[2]->removeDependent(this);
+  eta[3]->removeDependent(this);
+  eta[4]->removeDependent(this);
+  eta[5]->removeDependent(this);     
+  Index->erase(pos);
+}
+
+VolumePartial::~VolumePartial(){ remove(); }
 
 VolumePartial* VolumePartial::At( Vertex& v, Tetra& t ){
   TriPosition T( 1, v.getSerialNumber(), t.getSerialNumber() );
@@ -98,6 +126,7 @@ VolumePartial* VolumePartial::At( Vertex& v, Tetra& t ){
 
   if( iter == Index->end() ){
     VolumePartial* val = new VolumePartial( v, t );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -108,9 +137,13 @@ VolumePartial* VolumePartial::At( Vertex& v, Tetra& t ){
 void VolumePartial::CleanUp(){
   if( Index == NULL ) return;
   VolumePartialIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  VolumePartialIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* VOLUMEPARTIAL_H_ */

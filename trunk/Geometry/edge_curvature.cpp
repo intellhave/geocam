@@ -25,7 +25,16 @@ EdgeCurvature::EdgeCurvature( Edge& e  ){
     } 
 }
 
-EdgeCurvature::~EdgeCurvature(){ delete dih_angles; }
+void EdgeCurvature::remove() {
+     deleteDependents();
+     for(int ii = 0; ii < dih_angles->size(); ii++){
+       dih_angles->at(ii)->removeDependent(this);
+     }
+     Index->erase(pos);
+     delete dih_angles;
+}
+
+EdgeCurvature::~EdgeCurvature(){ remove(); }
 void EdgeCurvature::recalculate() {
     double curv = 2*PI;
     GeoQuant* dih_angle;
@@ -44,6 +53,7 @@ EdgeCurvature* EdgeCurvature::At( Edge& e  ){
 
   if( iter == Index->end() ){
     EdgeCurvature* val = new EdgeCurvature( e );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -52,11 +62,15 @@ EdgeCurvature* EdgeCurvature::At( Edge& e  ){
 }
 
 void EdgeCurvature::CleanUp(){
-  if( Index == NULL) return;
+  if( Index == NULL ) return;
   EdgeCurvatureIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  EdgeCurvatureIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* EDGECURVATURE_H_ */

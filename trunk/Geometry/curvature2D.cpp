@@ -24,7 +24,16 @@ Curvature2D::Curvature2D( Vertex& v ){
     }
 }
 
-Curvature2D::~Curvature2D(){ delete angles; }
+void Curvature2D::remove() {
+     deleteDependents();
+     for(int ii = 0; ii < angles->size(); ii++){
+       angles->at(ii)->removeDependent(this);
+     }    
+     Index->erase(pos);
+     delete angles;
+}
+
+Curvature2D::~Curvature2D(){ remove(); }
 void Curvature2D::recalculate() {
     double curv = 2*PI;
     GeoQuant* angle;
@@ -43,6 +52,7 @@ Curvature2D* Curvature2D::At( Vertex& v  ){
 
   if( iter == Index->end() ){
     Curvature2D* val = new Curvature2D( v );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -51,11 +61,15 @@ Curvature2D* Curvature2D::At( Vertex& v  ){
 }
 
 void Curvature2D::CleanUp(){
-  if( Index == NULL) return;
+  if( Index == NULL ) return;
   Curvature2DIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  Curvature2DIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* TWODCURVATURE_H_ */

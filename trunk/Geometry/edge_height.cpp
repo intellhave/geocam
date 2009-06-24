@@ -19,6 +19,9 @@ EdgeHeight::EdgeHeight( Edge& e, Face& f ){
   d_ij = PartialEdge::At( sf.v1, sf.e12 );
   d_ik = PartialEdge::At( sf.v1, sf.e13 );
   theta_i = EuclideanAngle::At( sf.v1, f );
+  d_ij->addDependent(this);
+  d_ik->addDependent(this);
+  theta_i->addDependent(this);
 }
 
 void EdgeHeight::recalculate(){
@@ -29,7 +32,15 @@ void EdgeHeight::recalculate(){
   value = dik - dij * cos(theta)/sin(theta);
 }
 
-EdgeHeight::~EdgeHeight(){}
+void EdgeHeight::remove() {
+     deleteDependents();
+     d_ij->removeDependent(this);
+     d_ik->removeDependent(this);
+     theta_i->removeDependent(this);
+     Index->erase(pos);
+}
+
+EdgeHeight::~EdgeHeight(){ remove(); }
 
 EdgeHeight* EdgeHeight::At( Edge& e, Face& f ){
   TriPosition T( 2, e.getSerialNumber(), f.getSerialNumber() );
@@ -38,6 +49,7 @@ EdgeHeight* EdgeHeight::At( Edge& e, Face& f ){
 
   if( iter == Index->end() ){
     EdgeHeight* val = new EdgeHeight( e, f );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -48,9 +60,13 @@ EdgeHeight* EdgeHeight::At( Edge& e, Face& f ){
 void EdgeHeight::CleanUp(){
   if( Index == NULL ) return;
   EdgeHeightIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  EdgeHeightIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* EDGEHEIGHT_H_ */

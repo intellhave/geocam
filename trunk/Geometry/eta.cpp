@@ -16,6 +16,10 @@ Eta::Eta( Edge& e ){}
 
 void Eta::recalculate(){}
 
+void Eta::remove() {
+     deleteDependents();
+     Index->erase(pos);
+}
 Eta::~Eta(){}
 
 Eta* Eta::At( Edge& e ){
@@ -25,6 +29,7 @@ Eta* Eta::At( Edge& e ){
 
   if( iter == Index->end() ){
     Eta* val = new Eta( e );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -33,11 +38,15 @@ Eta* Eta::At( Edge& e ){
 }
 
 void Eta::CleanUp(){
-  if( Index == NULL) return;
+  if( Index == NULL ) return;
   EtaIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  EtaIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* ETA_H_ */

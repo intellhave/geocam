@@ -12,9 +12,13 @@ using namespace std;
 
 RadiusIndex* Radius::Index = NULL;
 
-Radius::Radius( Vertex& v ){}
+Radius::Radius( Vertex& v ){
+}
 
 Radius::~Radius(){
+  remove();
+}
+void Radius::remove() {
    deleteDependents();
    Index->erase(pos);
 }
@@ -38,8 +42,14 @@ Radius* Radius::At( Vertex& v ){
 
 void Radius::CleanUp(){
   if( Index == NULL ) return;
+  RadiusIndex::iterator iter;
+  RadiusIndex copy = *Index;
+  
+  for(iter = copy.begin(); iter != copy.end(); iter++)
+    delete iter->second;
 
   delete Index;
+  Index = NULL;
 }
 
 #endif /* RADIUS_H_ */

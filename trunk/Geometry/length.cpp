@@ -35,14 +35,16 @@ void Length::recalculate(){
   value = sqrt( r1*r1 + r2*r2 + 2*r1*r2*etaV );   
 }
 
-Length::~Length() {
-   printf("Erasing...");
+void Length::remove() {
    deleteDependents();
    radius1->removeDependent(this);
    radius2->removeDependent(this);
    eta->removeDependent(this);
    Index->erase(pos);
-   printf("done erasing.\n");
+}
+
+Length::~Length() {
+  remove();
 }
 
 Length* Length::At( Edge& e ){
@@ -61,9 +63,15 @@ Length* Length::At( Edge& e ){
 }
 
 void Length::CleanUp(){
-  if( Index == NULL) return;
-
+  if( Index == NULL ) return;
+  LengthIndex::iterator iter;
+  LengthIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
+    delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* LENGTH_H_ */

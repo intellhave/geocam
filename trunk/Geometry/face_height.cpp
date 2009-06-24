@@ -32,7 +32,15 @@ void FaceHeight::recalculate(){
     value = Hij_l - Hij_k * cos(angle)/sin(angle);
 }
 
-FaceHeight::~FaceHeight(){}
+void FaceHeight::remove() {
+     deleteDependents();
+     hij_l->removeDependent(this);
+     hij_k->removeDependent(this);
+     beta_ij_kl->removeDependent(this);
+     Index->erase(pos);  
+}
+
+FaceHeight::~FaceHeight(){ remove(); }
 
 FaceHeight* FaceHeight::At( Face& f, Tetra& t ){
   TriPosition T( 2, f.getSerialNumber(), t.getSerialNumber() );
@@ -41,6 +49,7 @@ FaceHeight* FaceHeight::At( Face& f, Tetra& t ){
 
   if( iter == Index->end() ){
     FaceHeight* val = new FaceHeight( f, t );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -51,9 +60,13 @@ FaceHeight* FaceHeight::At( Face& f, Tetra& t ){
 void FaceHeight::CleanUp(){
   if( Index == NULL ) return;
   FaceHeightIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  FaceHeightIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* FACEHEIGHT_H_ */

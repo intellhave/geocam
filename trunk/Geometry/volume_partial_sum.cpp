@@ -37,8 +37,17 @@ void VolumePartialSum::recalculate(){
   }
 }
 
+void VolumePartialSum::remove() {
+     deleteDependents();
+     for(int ii = 0; ii < volPartials->size(); ii++){
+        volPartials->at(ii)->removeDependent(this);
+     }
+     Index->erase(pos);
+     delete volPartials;
+}
+
 VolumePartialSum::~VolumePartialSum(){
-  delete volPartials;
+   remove();
 }
 
 VolumePartialSum* VolumePartialSum::At( Vertex& v ){
@@ -48,6 +57,7 @@ VolumePartialSum* VolumePartialSum::At( Vertex& v ){
 
   if( iter == Index->end() ){
     VolumePartialSum* val = new VolumePartialSum( v );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -58,9 +68,13 @@ VolumePartialSum* VolumePartialSum::At( Vertex& v ){
 void VolumePartialSum::CleanUp(){
   if( Index == NULL ) return;
   VolumePartialSumIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  VolumePartialSumIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* VOLUMEPARTIALSUM_H_ */

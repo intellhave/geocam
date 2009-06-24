@@ -75,7 +75,20 @@ void Volume::recalculate(){
   value = sqrt(CayleyMenger / 144.0);
 }
 
-Volume::~Volume(){}
+void Volume::remove() {
+   deleteDependents();
+   len[0]->removeDependent(this);
+   len[1]->removeDependent(this);
+   len[2]->removeDependent(this);
+   len[3]->removeDependent(this);
+   len[4]->removeDependent(this);
+   len[5]->removeDependent(this);
+   Index->erase(pos);
+}
+
+Volume::~Volume(){
+   remove();
+}
 
 Volume* Volume::At( Tetra& t ){
   TriPosition T( 1, t.getSerialNumber() );
@@ -84,6 +97,7 @@ Volume* Volume::At( Tetra& t ){
 
   if( iter == Index->end() ){
     Volume* val = new Volume( t );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -94,9 +108,13 @@ Volume* Volume::At( Tetra& t ){
 void Volume::CleanUp(){
   if( Index == NULL ) return;
   VolumeIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
+  VolumeIndex copy = *Index;
+  for(iter = copy.begin(); iter != copy.end(); iter++) {
     delete iter->second;
+  }
+    
   delete Index;
+  Index = NULL;
 }
 
 #endif /* VOLUME_H_ */
