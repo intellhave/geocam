@@ -6,6 +6,17 @@ This page contains basic information on the documentation of the functions and c
 
 = Details =
 
+||*Class*||*Owner*||*Progress*||
+||Approximator||Alex||draft||
+||Area||  ||  ||
+
+
+
+||*Function*||*Type*||*Owner*||
+||allNegative||bool||  ||
+||allPositive||bool||  ||
+
+
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
