@@ -45,72 +45,71 @@ This page contains basic information on the documentation of the functions and c
 
 
 
-||*Function*||*Type*||*Owner*||*Progress*||
+|| *Function* || *Type* || *Owner* || *Progress* ||
 ||allNegative||bool|| || ||
 ||allPositive||bool|| || ||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
+||isAccurate||bool
+||isDegenerate||bool
+||isDelaunay||bool
+||isDoubleTriangle||bool
+||isPrecise||bool
+||isWeightedDelaunay||bool
+||read3DTriangulationFile||bool
+||adjDiffEQ||double
+||Aij_kl||double
+||angle||double
+||angleDiff||double|| || ||
+||angleDiffSums||double|| || ||
+||angleTotalSum||double|| || ||
+||area||double|| || ||
+||calcNormalization||double|| || ||
+||CayleyvolumeSq||double|| || ||
+||CayleyvolumeSqDerivative||double|| || ||
+||curvature||double|| || ||
+||Curvature_Partial||double|| || ||
+||delArea||double|| || ||
+||delCurv||double|| || ||
+||delta||double|| || ||
+||dihedralAngle||double|| || ||
+||dij||double|| || ||
+||distancePoint||double|| || ||
+||dualArea||double|| || ||
+||dualLength||double|| || ||
+||EHR||double|| || ||
+||EHR_Partial||double|| || ||
+||EHR_Second_Partial||double|| || ||
+||F||double|| || ||
+||FE||double|| || ||
+||FEE||double|| || ||
+||FR||double|| || ||
+||getAngleSum||double|| || ||
+||getDual||double|| || ||
+||getHeight||double|| || ||
+||getPartialEdge||double|| || ||
+||hij_k||double|| || ||
+||hijk_l||double|| || ||
+||hyperbolicAngle||double|| || ||
+||hyperbolicCurvature||double|| || ||
+||inRadius||double|| || ||
+||Lij_star||double|| || ||
+||plot||double|| || ||
+||SecondPartial||double|| || ||
+||solidAngle||double|| || ||
+||sphericalAngle||double|| || ||
+||sphericalArea||double|| || ||
+||sphericalCurvature||double|| || ||
+||sphericalTotalArea||double|| || ||
+||stdDiffEQ||double|| || ||
+||Total_Curvature||double|| || ||
+||Total_Volume||double|| || ||
+||vertexSum||double|| || ||
+||Volume_Partial||double|| || ||
+||Volume_Second_Partial||double|| || ||
+||volumeSq||double|| || ||
+||addEdgeToEdge||int|| || ||
+||addVertexToEdge
+||addVertexToFace
+||addVertexToVertex
 ||
 ||
 ||
