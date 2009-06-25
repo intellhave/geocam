@@ -46,6 +46,8 @@ This page contains basic information on the documentation of the functions and c
 
 
 || *Function* || *Type* || *Owner* || *Progress* ||
+|| || || || ||
+|| *boolean functions* || *boolean functions* || || ||
 ||allNegative||bool|| || ||
 ||allPositive||bool|| || ||
 ||isAccurate||bool|| || ||
@@ -55,6 +57,8 @@ This page contains basic information on the documentation of the functions and c
 ||isPrecise||bool|| || ||
 ||isWeightedDelaunay||bool|| || ||
 ||read3DTriangulationFile||bool|| || ||
+|| || || || ||
+|| *double functions* || *double functions* || || ||
 ||adjDiffEQ||double|| || ||
 ||Aij_kl||double|| || ||
 ||angle||double|| || ||
@@ -106,947 +110,127 @@ This page contains basic information on the documentation of the functions and c
 ||Volume_Partial||double|| || ||
 ||Volume_Second_Partial||double|| || ||
 ||volumeSq||double|| || ||
+|| || || || ||
+|| *int functions* || *int functions* || || ||
 ||addEdgeToEdge||int|| || ||
-||addVertexToEdge
-||addVertexToFace
-||addVertexToVertex
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
-||
+||addVertexToEdge||int|| || ||
+||addVertexToFace||int|| || ||
+||addVertexToVertex||int|| || ||
+||checkFaces||int|| || ||
+||checkForDoubleTriangles||int|| || ||
+||LinearEquationsSolving||int|| || ||
+||main||int|| || ||
+||makeFace||int|| || ||
+||makeTetra||int|| || ||
+|| || || || ||
+|| *point functions* || *point functions* || || ||
+||findPoint||point|| || ||
+||rotateVector||point|| || ||
+|| || || || ||
+|| *vector functions* || *vector functions* || || ||
+||quadratic||vector|| || ||
+||listDifference||vector|| || ||
+||listIntersection||vector|| || ||
+||circleIntersection||vector|| || ||
+|| || || || ||
+|| *void functions* || *void functions* || || ||
+||add||void|| || ||
+||addCrossCap||void|| || ||
+||addHandle||void|| || ||
+||addLeaf||void|| || ||
+||addNewVertex||void|| || ||
+||addTriangle||void|| || ||
+||AdjHypRicc||void|| || ||
+||AdjSpherRicci||void|| || ||
+||calcDeltaFE||void|| || ||
+||calcDeltaFR||void|| || ||
+||calcFlow||void|| || ||
+||checkTriangle||void|| || ||
+||cube||void|| || ||
+||curvature||void|| || ||
+||errorMessage||void|| || ||
+||firstTriangle||void|| || ||
+||flip||void|| || ||
+||flipAlgorithm||void|| || ||
+||fourOneMove||void|| || ||
+||generateRadii||void|| || ||
+||generateTriangulation||void|| || ||
+||Hessian||void|| || ||
+||hyperbolicCurvature||void|| || ||
+||HypRicci||void|| || ||
+||identifyVertex||void|| || ||
+||Init_Areas||void|| || ||
+||Init_Curvature2Ds||void|| || ||
+||Init_Curvature3Ds||void|| || ||
+||Init_DihedralAngles||void|| || ||
+||Init_EdgeCurvatures||void|| || ||
+||Init_Etas||void|| || ||
+||Init_EuclideanAngles||void|| || ||
+||Init_HyperbolicAngles||void|| || ||
+||Init_IndLengths||void|| || ||
+||Init_Lengths||void|| || ||
+||Init_PartialEdges||void|| || ||
+||Init_Radii||void|| || ||
+||Init_SphericalAngles||void|| || ||
+||Init_Volumes||void|| || ||
+||loadRadii||void|| || ||
+||make3DTriangulationFile||void|| || ||
+||makeDelaunayTriangulationFile||void|| || ||
+||makeDodecahedron||void|| || ||
+||makePentagon||void|| || ||
+||makeSpecialCase||void|| || ||
+||makeTriangulationFile||void|| || ||
+||MinMax||void|| || ||
+||Newtons_Method||void|| || ||
+||oneFourMove||void|| || ||
+||oneThreeMove||void|| || ||
+||print3DResultsStep||void|| || ||
+||printData||void|| || ||
+||printDegrees||void|| || ||
+||printEdgeLengths||void|| || ||
+||printResultsNum||void|| || ||
+||printResultsNumSteps||void|| || ||
+||printResultsStep||void|| || ||
+||printResultsVertex||void|| || ||
+||printResultsVolumes||void|| || ||
+||readEtas||void|| || ||
+||recalculate||void|| || ||
+||remove||void|| || ||
+||removeDoubleTriangle||void|| || ||
+||removeVertex||void|| || ||
+||sphericalCalcFlow||void|| || ||
+||sphericalCurvature||void|| || ||
+||SpherRicci||void|| || ||
+||StdRicci||void|| || ||
+||threeOneMove||void|| || ||
+||threeTwoMove||void|| || ||
+||updateEtas||void|| || ||
+||updateRadii||void|| || ||
+||validateArgs||void|| || ||
+||weightedFlipAlgorithm||void|| || ||
+||write3DTriangulationFile||void|| || ||
+||writeTriangulationFile||void|| || ||
+||writeTriangulationFileWithData||void|| || ||
+||writeYuliyaFile||void|| || ||
+||Yamabe||void|| || ||
+||yamabeFlow||void|| || ||
+|| || || || ||
+|| *constructor functions* || *constructor functions* || || ||
+||Area||constructor|| || ||
+||Curvature2D||constructor|| || ||
+||Curvature3D||constructor|| || ||
+||DihedralAngle||constructor|| || ||
+||EdgeCurvature||constructor|| || ||
+||Eta||constructor|| || ||
+||EuclideanAngle||constructor|| || ||
+||HyperbolicAngle||constructor|| || ||
+||IndLength||constructor|| || ||
+||Length||constructor|| || ||
+||PartialEdge||constructor|| || ||
+||Radius||constructor|| || ||
+||SphericalAngle||constructor|| || ||
+||TriPosition||constructor|| || ||
+||Volume||constructor|| || ||
 
 
 
