@@ -11,8 +11,9 @@ Add classes and functions to the following lists as follows:
 {{{
 ||ExampleFunction1||double||Kathrine||draft||
 ||ExampleFunction2||int||Jules||done||
-||ExampleFunction3||void||Zoltar|| ||   <- leave "Progress" blank if no progress
-||ExampleFunction3||bool|| || ||        <- leave "Owner" blank if it is unknown
+||ExampleFunction3||vector||Lord Vader||partial||
+||ExampleFunction4||void||Zoltar|| ||   <- leave "Progress" blank if no progress
+||ExampleFunction5||bool|| || ||        <- leave "Owner" blank if it is unknown
 }}}
 
 || *Class* || *Owner* || *Progress* ||
