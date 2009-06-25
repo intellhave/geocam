@@ -60,56 +60,56 @@ This page contains basic information on the documentation of the functions and c
 || || || || ||
 || *double functions* || *double functions* || || ||
 ||adjDiffEQ||double|| || ||
-||Aij_kl||double|| || ||
+||Aij_kl||double||Dan || ||
 ||angle||double|| || ||
 ||angleDiff||double|| || ||
 ||angleDiffSums||double|| || ||
 ||angleTotalSum||double|| || ||
 ||area||double|| || ||
-||calcNormalization||double|| || ||
-||CayleyvolumeSq||double|| || ||
-||CayleyvolumeSqDerivative||double|| || ||
+||calcNormalization||double||Dan || ||
+||CayleyvolumeSq||double||Dan || ||
+||CayleyvolumeSqDerivative||double||Dan || ||
 ||curvature||double|| || ||
 ||Curvature_Partial||double|| || ||
 ||delArea||double|| || ||
 ||delCurv||double|| || ||
 ||delta||double|| || ||
 ||dihedralAngle||double|| || ||
-||dij||double|| || ||
+||dij||double||Dan || ||
 ||distancePoint||double|| || ||
 ||dualArea||double|| || ||
 ||dualLength||double|| || ||
-||EHR||double|| || ||
-||EHR_Partial||double|| || ||
-||EHR_Second_Partial||double|| || ||
-||F||double|| || ||
-||FE||double|| || ||
-||FEE||double|| || ||
-||FR||double|| || ||
+||EHR||double||Dan || ||
+||EHR_Partial||double||Dan || ||
+||EHR_Second_Partial||double||Dan || ||
+||F||double||Dan || ||
+||FE||double||Dan || ||
+||FEE||double||Dan || ||
+||FR||double||Dan || ||
 ||getAngleSum||double|| || ||
 ||getDual||double|| || ||
 ||getHeight||double|| || ||
 ||getPartialEdge||double|| || ||
-||hij_k||double|| || ||
-||hijk_l||double|| || ||
+||hij_k||double||Dan || ||
+||hijk_l||double||Dan || ||
 ||hyperbolicAngle||double|| || ||
 ||hyperbolicCurvature||double|| || ||
 ||inRadius||double|| || ||
-||Lij_star||double|| || ||
-||plot||double|| || ||
-||SecondPartial||double|| || ||
+||Lij_star||double||Dan || ||
+||plot||double||Dan || ||
+||SecondPartial||double||Dan || ||
 ||solidAngle||double|| || ||
 ||sphericalAngle||double|| || ||
 ||sphericalArea||double|| || ||
 ||sphericalCurvature||double|| || ||
 ||sphericalTotalArea||double|| || ||
 ||stdDiffEQ||double|| || ||
-||Total_Curvature||double|| || ||
-||Total_Volume||double|| || ||
+||Total_Curvature||double||Dan || ||
+||Total_Volume||double||Dan || ||
 ||vertexSum||double|| || ||
-||Volume_Partial||double|| || ||
-||Volume_Second_Partial||double|| || ||
-||volumeSq||double|| || ||
+||Volume_Partial||double||Dan || ||
+||Volume_Second_Partial||double||Dan || ||
+||volumeSq||double||Dan || ||
 || || || || ||
 || *int functions* || *int functions* || || ||
 ||addEdgeToEdge||int|| || ||
@@ -118,7 +118,7 @@ This page contains basic information on the documentation of the functions and c
 ||addVertexToVertex||int|| || ||
 ||checkFaces||int|| || ||
 ||checkForDoubleTriangles||int|| || ||
-||LinearEquationsSolving||int|| || ||
+||LinearEquationsSolving||int||??? || ||
 ||main||int|| || ||
 ||makeFace||int|| || ||
 ||makeTetra||int|| || ||
@@ -142,8 +142,8 @@ This page contains basic information on the documentation of the functions and c
 ||addTriangle||void|| || ||
 ||AdjHypRicc||void|| || ||
 ||AdjSpherRicci||void|| || ||
-||calcDeltaFE||void|| || ||
-||calcDeltaFR||void|| || ||
+||calcDeltaFE||void||Dan || ||
+||calcDeltaFR||void||Dan || ||
 ||calcFlow||void|| || ||
 ||checkTriangle||void|| || ||
 ||cube||void|| || ||
@@ -155,7 +155,7 @@ This page contains basic information on the documentation of the functions and c
 ||fourOneMove||void|| || ||
 ||generateRadii||void|| || ||
 ||generateTriangulation||void|| || ||
-||Hessian||void|| || ||
+||Hessian||void||Dan || ||
 ||hyperbolicCurvature||void|| || ||
 ||HypRicci||void|| || ||
 ||identifyVertex||void|| || ||
@@ -180,8 +180,8 @@ This page contains basic information on the documentation of the functions and c
 ||makePentagon||void|| || ||
 ||makeSpecialCase||void|| || ||
 ||makeTriangulationFile||void|| || ||
-||MinMax||void|| || ||
-||Newtons_Method||void|| || ||
+||MinMax||void||Dan || ||
+||Newtons_Method||void||Dan || ||
 ||oneFourMove||void|| || ||
 ||oneThreeMove||void|| || ||
 ||print3DResultsStep||void|| || ||
@@ -193,7 +193,7 @@ This page contains basic information on the documentation of the functions and c
 ||printResultsStep||void|| || ||
 ||printResultsVertex||void|| || ||
 ||printResultsVolumes||void|| || ||
-||readEtas||void|| || ||
+||readEtas||void||Alex || ||
 ||recalculate||void|| || ||
 ||remove||void|| || ||
 ||removeDoubleTriangle||void|| || ||
@@ -204,8 +204,8 @@ This page contains basic information on the documentation of the functions and c
 ||StdRicci||void|| || ||
 ||threeOneMove||void|| || ||
 ||threeTwoMove||void|| || ||
-||updateEtas||void|| || ||
-||updateRadii||void|| || ||
+||updateEtas||void||Dan || ||
+||updateRadii||void||Dan || ||
 ||validateArgs||void|| || ||
 ||weightedFlipAlgorithm||void|| || ||
 ||write3DTriangulationFile||void|| || ||
@@ -234,7 +234,7 @@ This page contains basic information on the documentation of the functions and c
 
 
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+#Add your content here.  Format your content with:
+#  * Text in *bold* or _italic_
+#  * Headings, paragraphs, and lists
+#  * Automatic links to other wiki pages
