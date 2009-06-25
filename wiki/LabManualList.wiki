@@ -5,6 +5,15 @@
 This page contains basic information on the documentation of the functions and classes for the geocam project.
 
 = Details =
+Add classes and functions to the following lists as follows:
+  1.  locate the appropriate function type (double, int, void, etc.), 
+  2.  Place the function in alphabetical order with the following format (in edit mode):
+{{{
+||ExampleFunction1||double||Kathrine||draft||
+||ExampleFunction2||int||Jules||done||
+||ExampleFunction3||void||Zoltar|| ||   <- leave "Progress" blank if no progress
+||ExampleFunction3||bool|| || ||        <- leave "Owner" blank if it is unknown
+}}}
 
 || *Class* || *Owner* || *Progress* ||
 ||Approximator||Alex||draft||
