@@ -138,10 +138,11 @@ Add classes and functions to the following lists as follows:
 ||rotateVector||point|| || ||
 || || || || ||
 || *vector functions* || *vector functions* || || ||
-||quadratic||vector|| || ||
+||circleIntersection||vector|| || ||
+||getTriangles||vector<triangle_parts>||Kurt|| ||
 ||listDifference||vector|| || ||
 ||listIntersection||vector|| || ||
-||circleIntersection||vector|| || ||
+||quadratic||vector|| || ||
 || || || || ||
 || *void functions* || *void functions* || || ||
 ||add||void|| || ||
@@ -160,7 +161,7 @@ Add classes and functions to the following lists as follows:
 ||curvature||void|| || ||
 ||errorMessage||void|| || ||
 ||firstTriangle||void|| || ||
-||flip||void|| || ||
+||flip||void||Kurt|| ||
 ||flipAlgorithm||void|| || ||
 ||fourOneMove||void|| || ||
 ||generateRadii||void|| || ||
