@@ -19,8 +19,7 @@ Add classes and functions to the following lists as follows:
 || *Class* || *Owner* || *Progress* ||
 ||Approximator||Alex||draft||
 ||Area||  ||  ||
-||calcSpecs|| || ||
-||Circle|| || ||
+||Circle||Alex|| ||
 ||Curvature2D|| || ||
 ||Curvature3D|| || ||
 ||DihedralAngle|| || ||
@@ -30,27 +29,23 @@ Add classes and functions to the following lists as follows:
 ||EuclideanAngle|| || ||
 ||EulerApprox|| || ||
 ||Face|| || ||
-||Geometry|| || ||
 ||GeoQuant|| || ||
-||HyperbolicAngle|| || ||
-||IndLength|| || ||
 ||Length|| || ||
 ||Line|| || ||
 ||PartialEdge||Dan || ||
-||Point|| || ||
+||Point||Alex|| ||
 ||Radius|| || ||
 ||RungaApprox||Joe || ||
-||Simplex|| || ||
+||Simplex||Alex|| ||
 ||SphericalAngle|| || ||
 ||Tetra|| || ||
-||Triangulation|| || ||
-||TriangulationCoordinateSystem|| || ||
+||Triangulation||Alex|| ||
+||TriangulationCoordinateSystem||Alex|| ||
 ||TriPosition|| || ||
-||TriPositionCompare|| || ||
 ||Vertex|| || ||
 ||Volume|| || ||
-||Pair|| || ||
-||Triple|| || ||
+||Pair||Alex|| ||
+||Triple||Alex|| ||
 
 
 
@@ -58,33 +53,22 @@ Add classes and functions to the following lists as follows:
 || *Function* || *Type* || *Owner* || *Progress* ||
 || || || || ||
 || *boolean functions* || *boolean functions* || || ||
-||allNegative||bool|| || ||
-||allPositive||bool|| || ||
 ||isAccurate||bool|| || ||
-||isDegenerate||bool|| || ||
-||isDelaunay||bool|| || ||
-||isDoubleTriangle||bool|| || ||
+||isDelaunay||bool||Alex||obsolete||
+||isDoubleTriangle||bool||Alex||obsolete||
 ||isPrecise||bool|| || ||
-||isWeightedDelaunay||bool|| || ||
-||read3DTriangulationFile||bool|| || ||
+||isWeightedDelaunay||bool||Alex||obsolete||
+||read3DTriangulationFile||bool||Alex|| ||
 || || || || ||
 || *double functions* || *double functions* || || ||
 ||adjDiffEQ||double|| || ||
 ||Aij_kl||double||Dan || ||
-||angle||double|| || ||
-||angleDiff||double|| || ||
-||angleDiffSums||double|| || ||
-||angleTotalSum||double|| || ||
-||area||double|| || ||
+||angle||double||Alex|| ||
 ||calcNormalization||double||Dan || ||
 ||CayleyvolumeSq||double||Dan || ||
 ||CayleyvolumeSqDerivative||double||Dan || ||
 ||curvature||double|| || ||
 ||Curvature_Partial||double|| || ||
-||delArea||double|| || ||
-||delCurv||double|| || ||
-||delta||double|| || ||
-||dihedralAngle||double|| || ||
 ||dij||double||Dan || ||
 ||distancePoint||double|| || ||
 ||dualArea||double|| || ||
@@ -96,135 +80,85 @@ Add classes and functions to the following lists as follows:
 ||FE||double||Dan || ||
 ||FEE||double||Dan || ||
 ||FR||double||Dan || ||
-||getAngleSum||double|| || ||
-||getDual||double|| || ||
-||getHeight||double|| || ||
-||getPartialEdge||double|| || ||
+||getDual||double||Alex|| ||
+||getHeight||double||Alex|| ||
 ||hij_k||double||Dan || ||
 ||hijk_l||double||Dan || ||
-||hyperbolicAngle||double|| || ||
-||hyperbolicCurvature||double|| || ||
-||inRadius||double|| || ||
+||inRadius||double||Alex||obsolete||
 ||Lij_star||double||Dan || ||
 ||plot||double||Dan || ||
 ||SecondPartial||double||Dan || ||
-||solidAngle||double|| || ||
-||sphericalAngle||double|| || ||
-||sphericalArea||double|| || ||
-||sphericalCurvature||double|| || ||
-||sphericalTotalArea||double|| || ||
-||stdDiffEQ||double|| || ||
 ||Total_Curvature||double||Dan || ||
 ||Total_Volume||double||Dan || ||
-||vertexSum||double|| || ||
 ||Volume_Partial||double||Dan || ||
 ||Volume_Second_Partial||double||Dan || ||
 ||volumeSq||double||Dan || ||
 || || || || ||
 || *int functions* || *int functions* || || ||
-||addEdgeToEdge||int|| || ||
-||addVertexToEdge||int|| || ||
-||addVertexToFace||int|| || ||
-||addVertexToVertex||int|| || ||
-||checkFaces||int|| || ||
-||checkForDoubleTriangles||int|| || ||
+||addEdgeToEdge||int||Alex|| ||
+||addVertexToEdge||int||Alex|| ||
+||addVertexToFace||int||Alex|| ||
+||addVertexToVertex||int||Alex|| ||
 ||LinearEquationsSolving||int||??? || ||
-||main||int|| || ||
-||makeFace||int|| || ||
-||makeTetra||int|| || ||
+||makeFace||int||Alex|| ||
+||makeTetra||int||Alex|| ||
 || || || || ||
 || *point functions* || *point functions* || || ||
-||findPoint||point|| || ||
-||rotateVector||point|| || ||
+||findPoint||point||Alex|| ||
+||rotateVector||point||Alex|| ||
 || || || || ||
 || *vector functions* || *vector functions* || || ||
-||circleIntersection||vector|| || ||
+||circleIntersection||vector||Alex|| ||
 ||getTriangles||vector<triangle_parts>||Kurt|| ||
-||listDifference||vector|| || ||
-||listIntersection||vector|| || ||
-||quadratic||vector|| || ||
+||listDifference||vector||Alex|| ||
+||listIntersection||vector||Alex|| ||
+||quadratic||vector||Alex|| ||
 || || || || ||
 || *void functions* || *void functions* || || ||
-||add||void|| || ||
-||addCrossCap||void|| || ||
-||addHandle||void|| || ||
-||addLeaf||void|| || ||
-||addNewVertex||void|| || ||
-||addTriangle||void|| || ||
+||add||void||Alex|| ||
+||addCrossCap||void||Tom|| ||
+||addHandle||void||Tom|| ||
+||addLeaf||void||Tom|| ||
+||addNewVertex||void||Tom|| ||
+||addTriangle||void||Tom|| ||
 ||AdjHypRicc||void|| || ||
 ||AdjSpherRicci||void|| || ||
 ||calcDeltaFE||void||Dan || ||
 ||calcDeltaFR||void||Dan || ||
-||calcFlow||void|| || ||
-||checkTriangle||void|| || ||
-||cube||void|| || ||
-||curvature||void|| || ||
 ||errorMessage||void|| || ||
-||firstTriangle||void|| || ||
 ||flip||void||Kurt|| ||
-||flipAlgorithm||void|| || ||
-||fourOneMove||void|| || ||
-||generateRadii||void|| || ||
-||generateTriangulation||void|| || ||
+||fourOneMove||void||Tom|| ||
 ||Hessian||void||Dan || ||
-||hyperbolicCurvature||void|| || ||
 ||HypRicci||void|| || ||
-||identifyVertex||void|| || ||
-||Init_Areas||void|| || ||
-||Init_Curvature2Ds||void|| || ||
-||Init_Curvature3Ds||void|| || ||
-||Init_DihedralAngles||void|| || ||
-||Init_EdgeCurvatures||void|| || ||
-||Init_Etas||void|| || ||
-||Init_EuclideanAngles||void|| || ||
-||Init_HyperbolicAngles||void|| || ||
-||Init_IndLengths||void|| || ||
-||Init_Lengths||void|| || ||
-||Init_PartialEdges||void|| || ||
-||Init_Radii||void|| || ||
-||Init_SphericalAngles||void|| || ||
-||Init_Volumes||void|| || ||
 ||loadRadii||void|| || ||
-||make3DTriangulationFile||void|| || ||
-||makeDelaunayTriangulationFile||void|| || ||
-||makeDodecahedron||void|| || ||
-||makePentagon||void|| || ||
-||makeSpecialCase||void|| || ||
-||makeTriangulationFile||void|| || ||
+||make3DTriangulationFile||void||Alex|| ||
+||makeTriangulationFile||void||Alex|| ||
 ||MinMax||void||Dan || ||
 ||Newtons_Method||void||Dan || ||
-||oneFourMove||void|| || ||
-||oneThreeMove||void|| || ||
-||print3DResultsStep||void|| || ||
+||oneFourMove||void||Tom|| ||
+||oneThreeMove||void||Tom|| ||
+||print3DResultsStep||void||Alex|| ||
 ||printData||void|| || ||
-||printDegrees||void|| || ||
-||printEdgeLengths||void|| || ||
-||printResultsNum||void|| || ||
-||printResultsNumSteps||void|| || ||
-||printResultsStep||void|| || ||
-||printResultsVertex||void|| || ||
-||printResultsVolumes||void|| || ||
+||printResultsNum||void||Alex|| ||
+||printResultsNumSteps||void||Alex|| ||
+||printResultsStep||void||Alex|| ||
+||printResultsVertex||void||Alex|| ||
+||printResultsVolumes||void||Alex|| ||
 ||readEtas||void||Alex || ||
 ||recalculate||void|| || ||
-||remove||void|| || ||
-||removeDoubleTriangle||void|| || ||
-||removeVertex||void|| || ||
-||sphericalCalcFlow||void|| || ||
-||sphericalCurvature||void|| || ||
+||remove||void||Alex|| ||
+||removeVertex||void||Alex|| ||
 ||SpherRicci||void|| || ||
 ||StdRicci||void|| || ||
-||threeOneMove||void|| || ||
-||threeTwoMove||void|| || ||
+||threeOneMove||void||Tom|| ||
+||threeTwoMove||void||Tom|| ||
 ||updateEtas||void||Dan || ||
 ||updateRadii||void||Dan || ||
 ||validateArgs||void|| || ||
-||weightedFlipAlgorithm||void|| || ||
-||write3DTriangulationFile||void|| || ||
-||writeTriangulationFile||void|| || ||
-||writeTriangulationFileWithData||void|| || ||
-||writeYuliyaFile||void|| || ||
+||write3DTriangulationFile||void||Alex|| ||
+||writeTriangulationFile||void||Alex|| ||
+||writeTriangulationFileWithData||void||Alex|| ||
 ||Yamabe||void|| || ||
-||yamabeFlow||void|| || ||
 || || || || ||
 || *constructor functions* || *constructor functions* || || ||
 ||Area||constructor|| || ||
