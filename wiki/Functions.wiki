@@ -1,6 +1,6 @@
 #summary An alphabetical list of the functions in the Geocam Project
 
-     <[#Approximator::run A], B, C, D, E, F, [#Geoquant::At G], H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z>
+     <[#Approximator::run A], B, C, D, E, F, [#Geoquant::At G], H, I, J, K, L, M, N, O, [#printResultsStep P], Q, R, S, T, U, V, W, X, Y, Z>
 
 = `Approximator::run` =
   {{{
@@ -115,14 +115,81 @@ EuclideanAngle  *ang  =  EuclideanAngle::At(v,  f);
   The `At` function is limited in that a speciﬁc set of simplices will always return the exact same object.  While this is in fact the design goal, this can limit one’s ability to modify an object as a change in one place will aﬀect its use elsewhere in the code. The function also will require the user to handle pointers, a powerful yet fragile and sometimes daunting aspect of the programming language.
 
   == Revisions ==
-  subversion 761, 6/12/09, A working copy of `At` and the Geoquant system.
+   * subversion 761, 6/12/09: A working copy of `At` and the Geoquant system.
 
   == Testing ==
   The `At` function was tested in small modularized systems, then tested in a three dimensional ﬂow, which required many varied uses of `At`.   Some retrieved quantities had their values set while others had their values accessed and compared with what mathematica calculations predicted.
 
   == Future Work ==
   No future work is planned at this time.
+ 
+= `printResultsStep` =
+   {{{
+   void printResultsStep(char* fileName, vector<double>* radii, vector<double>* curvs)
+   }}}
 
+  == Key Words ==
+  radii, curvatures, file, flow, step, print
+
+  == Authors ==
+  Alex Henniges
+
+  == Introduction ==
+  The `printResultsStep` function prints out the results of a curvature flow, with the results grouped by each step of the flow. These results will be written to the file given by `filename`.
+
+  == Subsidiaries ==
+  Functions:
+
+  Global Variables:
+
+  Local Variables: `int vertSize`, `int numSteps`
+
+  == Description ==
+  Prints the results of a curvature flow into the file given by `filename`. The results, that is, the radii and curvature values, are given by vectors of doubles. Most commonly, these vectors are taken from the [CurvatureFlow Approximator] class after the flow is run. The `printResultsStep` function determines the number of vertices of the current triangulation and the total number of steps are then derived from this and the size of the vectors.
+
+  There are several ways to display the results. The `printResultsStep` function groups by step. This means that for each step of the curvature flow, the radii and curvature values for each vertex is printed. An example is shown below. Other formats are given by (printResultsVertex), (printResultsNum), (print3DResultsStep).
+
+  == Practicum ==
+  Example:
+  {{{
+  // Print the results of a curvature run with Approximator app into file "ODEResult.txt"
+  printResultsStep("./ODEResults.txt", app->radiiHistory, app->curvHistory);
+  }}}
+
+  The output of such an example may then be
+  {{{      
+         :    
+         :
+       Vertex 6: 10.6390     -1.21810
+ 
+       Step 5    Radius       Curv
+       ----------------------------
+       Vertex 1: 15.2785     -5.90324    
+       Vertex 2: 12.3130     -1.03506    
+       Vertex 3: 12.7753     -0.856032   
+       Vertex 4: 24.1124     -2.15461    
+       Vertex 5: 10.8755     -1.19773    
+       Vertex 6: 10.3957     -1.41971 
+           
+       Step 7    Radius       Curv
+       ----------------------------
+         :
+         :
+  }}}
+
+  == Limitations ==
+  Currently the `printResultsStep` function is limited in the information it prints. As our curvature flow has evolved to record additional information such as volumes, it may be time to explore a more robust form for displaying results. As there is considerable dependence on the [CurvatureFlow Approximator] for the data vectors, it may be wise to place this and similar functions in the [CurvatureFlow Approximator] class.
+
+  == Revisions ==
+   * subversion 545, 9/29/08: Moved the printing of results out of calcFlow and into a new function.
+   * subversion 783, 6/18/09: Small modifications in response to changes in the Approximator class.
+
+  == Testing ==
+  The `printResultsStep` function was tested by running multiple curvautre flows and printing the results. It was considered working when the format of the data was as desired.
+
+  == Future Work ==
+   * 6/29 - Recreate the print functions to print more data and be more flexible.
+   * 6/29 - Move the print functions into the Approximator class.
 --------------------------------------------------------------------------------
 = Table of Contents =
 <wiki:toc max_depth="1" />
