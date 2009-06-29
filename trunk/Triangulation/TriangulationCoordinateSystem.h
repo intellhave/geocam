@@ -10,6 +10,11 @@ Version: July 28, 2008
 #ifndef TRIANGULATIONCOORDINATESYSTEM_H
 #define TRIANGULATIONCOORDINATESYSTEM_H
 
+struct triangle_parts {
+    int negativity;
+    float coords[3][2];
+};
+
 /*
  * A TriangulationCoordinateSystem combines a triangulation with
  * points and lines to create a coordinate system that can allow
@@ -96,6 +101,12 @@ class TriangulationCoordinateSystem
        * triangle is filled with a color when visualizing.      
        */
       void printToFile(char*);
+      
+      //added by Kurt for use with displaying the triangulation
+      //the contents of the returned vector basically match the printout of the printToFile
+      //function included in this class
+      vector<triangle_parts> TriangulationCoordinateSystem::getTriangles(void);
+
       void printDuals(char*);
       /*
        * Returns the Point in the pointTable with the given index.

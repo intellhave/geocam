@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 #include <iomanip>
 #include "triangulation/TriangulationCoordinateSystem.h"
 #include "Geometry/geoquants.h"
@@ -137,7 +138,6 @@ void TriangulationCoordinateSystem::generatePlane()
         { // If either fa or fb is negative, but not both ... switch otherPos.
               otherPos = !otherPos; // Now the correct point is also above l1.
         }  
-        
         for(int i = 0; i < points2.size(); i++)
         {
              if(l1.isAbove(points2[i]) != otherPos)
@@ -492,6 +492,28 @@ void TriangulationCoordinateSystem::printToFile(char* filename)
         }
         results << "\n";
      }
+}
+
+vector<triangle_parts> TriangulationCoordinateSystem::getTriangles(void) {
+    vector<triangle_parts> ts;
+    map<int, Face>::iterator fit;
+    for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
+    {
+        vector<int> vertices = *(fit->second.getLocalVertices());
+        struct triangle_parts a_tri;
+        if(fit->second.isNegative())
+            a_tri.negativity = -1;
+        else
+            a_tri.negativity = 1;
+        for(int i = 0; i < vertices.size(); i++)
+        {
+            a_tri.coords[i][0] = pointTable[vertices[i]].x;
+            a_tri.coords[i][1] = pointTable[vertices[i]].y;
+        }
+        ts.push_back(a_tri);
+    }
+
+    return ts;
 }
 
 void TriangulationCoordinateSystem::printDuals(char* filename)

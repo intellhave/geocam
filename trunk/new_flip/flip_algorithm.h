@@ -1,9 +1,15 @@
-#include "triangulation/triangulationmath.h"
-#include "triangulation/smallMorphs.h"
-#include "addremove.h"
-
 #ifndef flip_algorithm
 #define flip_algorithm
+
+#include <cmath>
+#include <iostream>
+#include "delaunay.h"
+#include "triangulation/triangulationmorph.h"
+#include "triangulation/triangulationInputOutput.h"
+#include "triangulation/TriangulationCoordinateSystem.h"
+#include "miscmath.h"
+#include "geometry/geoquants.h"
+#define PI 	3.141592653589793238
 
 //a simps struct is supposed to hold all the important values that are
 //necessary for performing the flip
@@ -47,7 +53,7 @@ struct simps {
 
 //performs a topological flip and determines the geometric configuration
 //of the adjacent triangles of Edge e so that e's length can be changed appropriately
-void
+Edge
 flip(Edge e);
 
 //performs the recalculation of the length of edge e for a flip that starts

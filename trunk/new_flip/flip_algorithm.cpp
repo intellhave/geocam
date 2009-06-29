@@ -1,31 +1,23 @@
-#include <cmath>
-#include <iostream>
-#include "triangulation/triangulationmorph.h"
-#include "delaunay.h"
-#include "triangulation/triangulationInputOutput.h"
-#define PI 	3.141592653589793238
-
-
 #include "new_flip/flip_algorithm.h"
 
 
 
-void flip(Edge e) {
-  struct simps bucket;
-  prep_for_flip(e, &bucket);
-  
-  if (!Triangulation::faceTable[bucket.f0].isNegative() && !Triangulation::faceTable[bucket.f1].isNegative()) {
-    flipPP(bucket);
-  } else if((Triangulation::faceTable[bucket.f0].isNegative() == true) ^ (Triangulation::faceTable[bucket.f1].isNegative() == true)) {
-    flipPN(bucket);
-  } else if (Triangulation::faceTable[bucket.f0].isNegative() && Triangulation::faceTable[bucket.f1].isNegative()) {
-    flipNN(bucket);
-  } else {
-    printf("hmm, no case was found\n");
-  }
-  topo_flip(e, bucket);
-  
+Edge flip(Edge e) {
+    struct simps bucket;
+    prep_for_flip(e, &bucket);
 
+    if (!Triangulation::faceTable[bucket.f0].isNegative() && !Triangulation::faceTable[bucket.f1].isNegative()) {
+        flipPP(bucket);
+    } else if((Triangulation::faceTable[bucket.f0].isNegative() == true) ^ (Triangulation::faceTable[bucket.f1].isNegative() == true)) {
+        flipPN(bucket);
+    } else if (Triangulation::faceTable[bucket.f0].isNegative() && Triangulation::faceTable[bucket.f1].isNegative()) {
+        flipNN(bucket);
+    } else {
+        printf("hmm, no case was found\n");
+    }
+    topo_flip(e, bucket);
+  
+    return Triangulation::edgeTable[e.getIndex()];
 } //end of flip
 
 
@@ -69,7 +61,7 @@ void flipPP(struct simps b) {
   
   e_length = sqrt( (b.e2_len*b.e2_len) + (b.e3_len * b.e3_len) - (2*b.e2_len*b.e3_len*cos(b.a2)) );
   
-  Triangulation::edgeTable[b.e0].setLength(e_length);
+  Length::At(Triangulation::edgeTable[b.e0])->setValue(e_length);
 
   //figure out which one is negative
   //in the PP_PN case we need to set one to be negative
@@ -101,52 +93,52 @@ void swap(double *j, double *k) {
  *            PN -> PP
  */
 void flipPN(struct simps b) {
-  double e_length;
-  double alpha, beta;
-  alpha = angle(b.e0_len, b.e1_len, b.e2_len);
-  beta  = angle(b.e0_len, b.e4_len, b.e3_len);
-  e_length = sqrt(b.e4_len * b.e4_len + b.e1_len * b.e1_len - 2 * b.e4_len * b.e1_len * cos(abs(beta - alpha)));
-  Triangulation::edgeTable[b.e0].setLength(e_length);
-  b.e0_len = e_length;
+    double e_length;
+    double alpha, beta;
+    alpha = angle(b.e0_len, b.e1_len, b.e2_len);
+    beta  = angle(b.e0_len, b.e4_len, b.e3_len);
+    e_length = sqrt(b.e4_len * b.e4_len + b.e1_len * b.e1_len - 2 * b.e4_len * b.e1_len * cos(abs(beta - alpha)));
+    Length::At(Triangulation::edgeTable[b.e0])->setValue(e_length);
+    b.e0_len = e_length;
 
-  //flip flop everything so that the negative triangle is f1
-  if (Triangulation::faceTable[b.f0].isNegative()) {
-    swap(&b.v1, &b.v3);
-    swap(&b.e1, &b.e4);
-    swap(&b.e2, &b.e3);
-    swap(&b.f0, &b.f1);
-    //next two lines are the important ones but the ones above were swapped
-    //as well for consistency
-    swap(&b.e1_len, &b.e4_len);
-    swap(&b.e2_len, &b.e3_len);
-  }
+    //flip flop everything so that the negative triangle is f1
+    if (Triangulation::faceTable[b.f0].isNegative()) {
+        swap(&b.v1, &b.v3);
+        swap(&b.e1, &b.e4);
+        swap(&b.e2, &b.e3);
+        swap(&b.f0, &b.f1);
+        //next two lines are the important ones but the ones above were swapped
+        //as well for consistency
+        swap(&b.e1_len, &b.e4_len);
+        swap(&b.e2_len, &b.e3_len);
+    }
 
-  //now determine which is negative and positive
-  //a negative leaning across e1
-  if (angle(b.e0_len, b.e1_len, b.e2_len) < angle(b.e0_len, b.e4_len, b.e3_len) &&
-      angle(b.e0_len, b.e2_len, b.e1_len) > angle(b.e0_len, b.e3_len, b.e4_len)) { // right case as shown above
-    Triangulation::faceTable[b.f1].setNegativity(false);
-    Triangulation::faceTable[b.f0].setNegativity(true);
+    //now determine which is negative and positive
+    //a negative leaning across e1
+    if (angle(b.e0_len, b.e1_len, b.e2_len) < angle(b.e0_len, b.e4_len, b.e3_len) &&
+        angle(b.e0_len, b.e2_len, b.e1_len) > angle(b.e0_len, b.e3_len, b.e4_len)) { // right case as shown above
+        Triangulation::faceTable[b.f1].setNegativity(false);
+        Triangulation::faceTable[b.f0].setNegativity(true);
     
-  //a negative leaning across e2
-  } else if (angle(b.e0_len, b.e1_len, b.e2_len) > angle(b.e0_len, b.e4_len, b.e3_len) &&
-             angle(b.e0_len, b.e2_len, b.e1_len) < angle(b.e0_len, b.e3_len, b.e4_len)) { //left case... flip across vert of above picture
-    //actually setting these shouldn't be necessary but its nice to be explicit
-    Triangulation::faceTable[b.f1].setNegativity(true);
-    Triangulation::faceTable[b.f0].setNegativity(false);
+    //a negative leaning across e2
+    } else if (angle(b.e0_len, b.e1_len, b.e2_len) > angle(b.e0_len, b.e4_len, b.e3_len) &&
+               angle(b.e0_len, b.e2_len, b.e1_len) < angle(b.e0_len, b.e3_len, b.e4_len)) { //left case... flip across vert of above picture
+        //actually setting these shouldn't be necessary but its nice to be explicit
+        Triangulation::faceTable[b.f1].setNegativity(true);
+        Triangulation::faceTable[b.f0].setNegativity(false);
 
-  //a negative inside a positie
-  } else if (angle(b.e0_len, b.e1_len, b.e2_len) > angle(b.e0_len, b.e4_len, b.e3_len) &&
-             angle(b.e0_len, b.e2_len, b.e1_len) > angle(b.e0_len, b.e3_len, b.e4_len)) {
-    Triangulation::faceTable[b.f1].setNegativity(false);
-    Triangulation::faceTable[b.f0].setNegativity(false);
+    //a negative inside a positie
+    } else if (angle(b.e0_len, b.e1_len, b.e2_len) > angle(b.e0_len, b.e4_len, b.e3_len) &&
+               angle(b.e0_len, b.e2_len, b.e1_len) > angle(b.e0_len, b.e3_len, b.e4_len)) {
+        Triangulation::faceTable[b.f1].setNegativity(false);
+        Triangulation::faceTable[b.f0].setNegativity(false);
     
-  //a positive inside a negative
-  } else if (angle(b.e0_len, b.e1_len, b.e2_len) < angle(b.e0_len, b.e4_len, b.e3_len) &&
+    //a positive inside a negative
+    } else if (angle(b.e0_len, b.e1_len, b.e2_len) < angle(b.e0_len, b.e4_len, b.e3_len) &&
              angle(b.e0_len, b.e2_len, b.e1_len) < angle(b.e0_len, b.e3_len, b.e4_len)) {
-    Triangulation::faceTable[b.f1].setNegativity(true);
-    Triangulation::faceTable[b.f0].setNegativity(true);
-  }
+        Triangulation::faceTable[b.f1].setNegativity(true);
+        Triangulation::faceTable[b.f0].setNegativity(true);
+    }
 }
 
 /*
@@ -154,17 +146,17 @@ void flipPN(struct simps b) {
  *            NN -> PN
  */
 void flipNN(struct simps b) {
-  double e_length;
-  e_length = sqrt(b.e2_len*b.e2_len + b.e3_len*b.e3_len - 2 * b.e2_len * b.e3_len * cos(b.a2));
-  Triangulation::edgeTable[b.e0].setLength(e_length);
+    double e_length;
+    e_length = sqrt(b.e2_len*b.e2_len + b.e3_len*b.e3_len - 2 * b.e2_len * b.e3_len * cos(b.a2));
+    Length::At(Triangulation::edgeTable[b.e0])->setValue(e_length);
 
-  if (b.a0 > PI || b.a2 > PI) {
-    if (angle(e_length, b.e4_len, b.e1_len) < angle(e_length, b.e3_len, b.e2_len)) {
-      Triangulation::faceTable[b.f0].setNegativity(false);
-    } else {
-      Triangulation::faceTable[b.f1].setNegativity(false);
+    if (b.a0 > PI || b.a2 > PI) {
+        if (angle(e_length, b.e4_len, b.e1_len) < angle(e_length, b.e3_len, b.e2_len)) {
+            Triangulation::faceTable[b.f0].setNegativity(false);
+        } else {
+            Triangulation::faceTable[b.f1].setNegativity(false);
+        }
     }
-  }
 }
 
 /*       v2
@@ -360,11 +352,11 @@ void prep_for_flip(Edge e, struct simps * bucket) {
   if (same.size() == 0) { cout << "v3 and v0 had no edge in common, e4 couldn't be found"; }
   bucket->e4 = same[0];
   
-  double e0_len = Triangulation::edgeTable[bucket->e0].getLength();
-  double e2_len = Triangulation::edgeTable[bucket->e2].getLength();
-  double e3_len = Triangulation::edgeTable[bucket->e3].getLength();
-  double e1_len = Triangulation::edgeTable[bucket->e1].getLength();
-  double e4_len = Triangulation::edgeTable[bucket->e4].getLength();
+  double e0_len = Length::valueAt(Triangulation::edgeTable[bucket->e0]);
+  double e2_len = Length::valueAt(Triangulation::edgeTable[bucket->e2]);
+  double e3_len = Length::valueAt(Triangulation::edgeTable[bucket->e3]);
+  double e1_len = Length::valueAt(Triangulation::edgeTable[bucket->e1]);
+  double e4_len = Length::valueAt(Triangulation::edgeTable[bucket->e4]);
   
   bucket->e0_len = e0_len;
   bucket->e1_len = e1_len;

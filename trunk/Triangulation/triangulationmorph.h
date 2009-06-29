@@ -12,7 +12,7 @@ the Triangulation in some way.
 
 void addNewVertex(Face, double);
 
-void flip(Edge);
+//void flip(Edge);
 
 void removeVertex(Vertex);
 

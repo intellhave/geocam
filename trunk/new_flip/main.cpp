@@ -1,18 +1,170 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <cmath>
-#include <ctime>
-
-#include "triangulation/triangulationInputOutput.h"
-#include "triangulation/triangulationmorph.h"
 #include "new_flip/flip_algorithm.h"
 
-#include "new_flip/flip_algorithm.h"
+#ifdef __APPLE__
+#include <OpenGL/OpenGL.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 
-#define PI 	3.141592653589793238
+//#include "new_flip/triangulation_display.h"
 
+using namespace std;
+float _dist = -5.0f;
+float _hori = 0.0f;
+float _vert = 0.0f;
+Edge _e;
+TriangulationCoordinateSystem _coord_system;
+
+float _angle = 30.0f;
+float _camera_angle = 0.0f;
+
+void handleKeypress(unsigned char key, int x, int y) {
+	switch (key) {
+	   case 27: //Escape key
+			exit(0); //Exit the program
+            break;
+        case 91: // [
+            _dist-=.5;
+            break;
+        case 93: // ]
+            _dist+=.5;
+            break;
+        case 97: // a
+	       _hori -= .5;
+	       break;
+        case 100: // d
+            _hori += .5;
+            break;
+        case 119: // w
+            _vert += .5;
+            break;
+        case 115: // s
+            _vert -= .5;
+            break;
+        case 32: //space bar
+            _e = flip(_e);
+            break;
+	}
+	glutPostRedisplay();
+}
+
+void handleSpecialKeypress(int key, int x, int y) {
+	switch (key) {
+		case GLUT_KEY_LEFT:
+		    _hori -= .5;
+            break;
+		case GLUT_KEY_RIGHT:
+            _hori += .5;
+            break;
+		case GLUT_KEY_UP:
+            _vert += .5;
+            break;
+        case GLUT_KEY_DOWN:
+            _vert -= .5;
+            break;
+	}
+    glutPostRedisplay();
+}
+
+void initRendering() {
+	glEnable(GL_DEPTH_TEST);
+}
+
+void handleResize(int w, int h) {
+	glViewport(0, 0, w, h);
+
+	glMatrixMode(GL_PROJECTION);
+
+	//Set the camera perspective
+	glLoadIdentity();
+	gluPerspective(45.0,                  //The camera angle
+				   (double)w / (double)h, //The width-to-height ratio
+				   1.0,                   //The near z clipping coordinate
+				   200.0);                //The far z clipping coordinate
+}
+
+//Draws the 3D scene
+void drawScene() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW); //Switch to the drawing perspective
+    glLoadIdentity(); //Reset the drawing perspective
+    glTranslatef(_hori, _vert, _dist);
+
+    vector<triangle_parts> tps;
+
+    _coord_system.update();
+    tps = _coord_system.getTriangles();
+    vector<triangle_parts>::iterator iter;
+    iter = tps.begin();
+
+    while (iter != tps.end()) {
+        glBegin(GL_LINE_STRIP);
+        glBegin(GL_TRIANGLES);
+        if (iter->negativity == -1)
+            glColor3d(1, 0, 0);
+        else
+            glColor3d(0, 0, 1);
+
+        glVertex3d(iter->coords[0][0],iter->coords[0][1],0);
+        glVertex3d(iter->coords[1][0],iter->coords[1][1],0);
+        glVertex3d(iter->coords[2][0],iter->coords[2][1],0);
+        glVertex3d(iter->coords[0][0],iter->coords[0][1],0);
+        iter++;
+        glEnd();
+    }
+
+
+
+    glutSwapBuffers();
+}
+
+int main(int argc, char** argv) {
+
+  //triangulation initializaiton steps
+    char *testFile = "test_files/six_triangles_with_geom.txt";
+    char outFile[strlen(testFile)+5];
+    strcpy(outFile, testFile);
+    strcpy(&outFile[strlen(testFile)], ".out");
+    //makeTriangulationFile(testFile, outFile);
+    bool b = readTriangulationFile(testFile);
+    if (!b) {
+        cout << "file read failed";
+    }
+    //prepare some edge lengths
+    map<int, Edge>::iterator iter;
+    iter = Triangulation::edgeTable.begin();
+    while(iter != Triangulation::edgeTable.end()) {
+      if(((iter->second).getLocalFaces())->size() == 2 ) {
+        struct simps bucket;
+        _e = iter->second;
+        break;
+      }
+      iter++;
+    }
+    _coord_system.generatePlane();
+
+	//Initialize GLUT
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitWindowSize(400, 400); //Set the window size
+
+	//Create the window
+	glutCreateWindow("flip algorithm");
+	initRendering(); //Initialize rendering
+
+	//Set handler functions for drawing, keypresses, and window resizes
+	glutDisplayFunc(drawScene);
+	glutKeyboardFunc(handleKeypress);
+	glutSpecialFunc(handleSpecialKeypress);
+	glutReshapeFunc(handleResize);
+
+	glutMainLoop();
+	return 0; //This line is never reached
+}
+
+/*
 using namespace std;
 
 //several tests for the different cases
@@ -50,7 +202,7 @@ int main(int argc, char *argv[]) {
     }
 
     cout << "\n\n\n";
-    
+
     while(iter != Triangulation::edgeTable.end()){
       printf("edge %d ended up with length %lf\n", (iter->second).getIndex(), (iter->second).getLength());
       iter++;
@@ -77,7 +229,7 @@ int main(int argc, char *argv[]) {
 void testTopoFlip() {
      map<int, Edge>::iterator iter;
      iter = Triangulation::edgeTable.begin();
-    
+
      Edge e = iter->second;
      flip(e);
 }
@@ -295,3 +447,4 @@ void testNN2PN() {
     }
     flip(e);
 }
+*/

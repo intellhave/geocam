@@ -130,6 +130,7 @@ bool readTriangulationFile(const char* fileName)
          char localVertices[100];
          char localEdges[100];
          char localFaces[100];
+         char specifiedlength[100];
          
          stringstream vertexStream(stringstream::in | stringstream::out);
          scanner.getline(localVertices, 100);
@@ -164,7 +165,25 @@ bool readTriangulationFile(const char* fileName)
               e.addFace(index);
          }
          
+         //edge length info
+         char nextChar;
+         double len;
+         nextChar = scanner.peek();
+         if(!(nextChar == 'V' || nextChar == 'E' || nextChar == 'F')) {
+            stringstream lengthStream(stringstream::in | stringstream::out);
+            scanner.getline(specifiedlength, 100);
+            lengthStream << specifiedlength;
+
+            while(lengthStream.good())
+            {
+                lengthStream >> len;
+                //e.setLength(len);
+            }
+            //end of edge length info
+         }
+         
          Triangulation::putEdge(indexMapping, e); 
+         Length::At(Triangulation::edgeTable[indexMapping])->setValue(len);
        } 
        
        else if(simplexName == faceString) 

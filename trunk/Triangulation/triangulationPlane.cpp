@@ -416,7 +416,7 @@ void flipAlgorithm()
                Edge e = eit->second;
                if(!(isDelaunay(Triangulation::edgeTable[e.getIndex()])))
                {
-                    flip(Triangulation::edgeTable[e.getIndex()]);
+                   // flip(Triangulation::edgeTable[e.getIndex()]);
                     flipCount++;
                }
           }
@@ -449,7 +449,7 @@ void weightedFlipAlgorithm()
                     cout << "Edge# " << eit->first << " Count: " << count << endl;                                                           
                     try
                     {
-                         flip(e);
+                         //flip(e);
                          flipCount++;
                          count++;
                          char s[100];
