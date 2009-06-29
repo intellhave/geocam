@@ -141,7 +141,7 @@ Add classes and functions to the following lists as follows:
 ||printData||void|| || ||
 ||printResultsNum||void||Alex|| ||
 ||printResultsNumSteps||void||Alex|| ||
-||printResultsStep||void||Alex|| ||
+||printResultsStep||void||Alex||beginning||
 ||printResultsVertex||void||Alex|| ||
 ||printResultsVolumes||void||Alex|| ||
 ||readEtas||void||Alex || ||
