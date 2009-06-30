@@ -138,12 +138,12 @@ Add classes and functions to the following lists as follows:
 ||Newtons_Method||void||Dan || ||
 ||oneFourMove||void||Tom|| ||
 ||oneThreeMove||void||Tom|| ||
-||print3DResultsStep||void||Alex|| ||
+||print3DResultsStep||void||Alex||complete||
 ||printData||void|| || ||
-||printResultsNum||void||Alex|| ||
+||printResultsNum||void||Alex||complete||
 ||printResultsNumSteps||void||Alex|| ||
-||printResultsStep||void||Alex||beginning||
-||printResultsVertex||void||Alex|| ||
+||printResultsStep||void||Alex||complete||
+||printResultsVertex||void||Alex||complete||
 ||printResultsVolumes||void||Alex|| ||
 ||readEtas||void||Alex || ||
 ||recalculate||void|| || ||
@@ -177,10 +177,3 @@ Add classes and functions to the following lists as follows:
 ||SphericalAngle||constructor|| || ||
 ||TriPosition||constructor|| || ||
 ||Volume||constructor|| || ||
-
-
-
-#Add your content here.  Format your content with:
-#  * Text in *bold* or _italic_
-#  * Headings, paragraphs, and lists
-#  * Automatic links to other wiki pages
