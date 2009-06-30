@@ -40,6 +40,8 @@
 = `P` =
   * [printResultsStep]
   * [printResultsVertex]
+  * [printResultsNum]
+  * [print3DResultsStep]  
 
 = `Q` =
 
