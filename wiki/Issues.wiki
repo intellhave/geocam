@@ -1,4 +1,5 @@
 #summary Current issues.
+#labels Issues
 = Introduction =
 
 Post issues we find here.
