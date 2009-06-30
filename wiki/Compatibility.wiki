@@ -1,4 +1,5 @@
 #summary Mac and Unix compatibility
+#labels Issues
 = Introduction =
 
 Issues with other platforms.
