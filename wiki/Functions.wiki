@@ -1,259 +1,62 @@
 #summary An alphabetical list of the functions in the Geocam Project
+#labels Featured
 
-     <[#Approximator::run A], B, C, D, E, F, [#Geoquant::At G], H, I, J, K, L, M, N, O, [#printResultsStep P], Q, R, S, T, U, V, W, X, Y, Z>
+     <[#A], [#B], [#C], [#D], [#E], [#F], [#G], [#H], [#I], [#J], [#K], [#L], [#M], [#N], [#O], [#P], [#Q], [#R], [#S], [#T], [#U], [#V], [#W], [#X], [#Y], [#Z]>
 
-= `Approximator::run` =
-  {{{
-int run(int numsteps, double stepsize)	
-int run(double precision, double stepsize)
-int run(double precision, int maxNumSteps, double stepsize)
-  }}}
-  
-  == Keywords ==
-  flow, curvature, stepsize, precision, accuracy, approximator
+--------------------------------------------------------------------------------------------
 
-  == Authors ==
-   * Joseph Thomas
-   * Alex Henniges
+= A =
+  * [ApproximatorRun Approximator::run]
 
-  == Introduction ==
-  The `run` function of the [CurvatureFlow Approximator] class runs a system of differential equations representing a curvature flow for either a number of steps or until the values are within a desired precision. The system to use and how steps are performed is given in the constructor of the approximator. The type of run is based on the parameters given. The `run` function returns 0 on success or any other number if an error is encountered.
+= B =
 
+= C =
 
-  == Subsidiaries ==
-  Functions: 
-     * `step`
-     * `isPrecise`
-     * `isAccurate` 
-     * `getLatest`
-        # `recordState`
+= D =
 
-  Global Variables: `radii`, `curvatures`
+= E =
 
-  Local Variables: `int numsteps`, `double stepsize`, `double precision`, `double accuracy`
+= F =
 
-  == Description ==
-  If the `run` function is given a number of steps, it will call its step function that number of times. In between steps, the `run` function will record the current state of any values that have been requested to be recorded (this is specified in the constructor).
+= G =
+  * [GeoquantAt Geoquant::At]
 
-  If the `run` function is given a precision, it will continue to call its step function until the desired quantities (curvature in two dimensions and curvature divide by radius in three dimensions) have converged within the precision bounds. Precision is defined to be the difference between subsequent values of a quantity. Therefore, precision is a measure of how much a value is changing. In between steps, the `run` function will record the current state of any values that have been requested to be recorded (this is specified in the constructor).	
+= H =
 
-  A flow can also be run with a precision and a max number of steps that will stop once one of the conditions is reached. The last parameter of any run indicates the step size of the flow. A lower step size will lead to more accurate steps, but a longer time to convergence.
+= I =
 
-  The `run` function and the overarching [CurvatureFlow Approximator] class exists as an improvement over the curvature flows of earlier versions of the Geocam project. The `run` function provides the skeleton that is similar for all types of curvature flows. Beyond the constructor, this should be the only thing a user calls from the [CurvatureFlow Approximator] class.
+= J =
 
-  == Practicum ==
-  Example:
-{{{
-// Create an approximator that uses the Euler method on a Yamabe flow.
-Approximator *app = new EulerApprox(Yamabe);
+= K =
 
-// Run a Yamabe flow for 300 steps with a stepsize of 0.01.
-app->run(300, 0.01);
-// Run with a precision bound of 0.000001 and a stepsize of 0.01
-app->run(0.000001, 0.01);
-}}}
+= L =
 
-  == Limitations ==
-  The `run` function is limited in the systems of differential equations that it can run. It is designed to run with curvature flows and, when precision is used, expects the values to converge. If a precision run is performed on a flow that does not converge, the `run` function will not stop. If a new curvature flow is created whose convergence is not the usual (as in curvature divided by radius in Yamabe flow) then the `run` function will have to be modified to accommodate for this.
+= M =
 
-  == Revisions ==
-   * subversion 659, 5/1/09: Initial `run` function uploaded to the code.
-   * subversion 679, 6/3/09: `run` function modified to work with new Geometry structure.
-   * subversion 761, 6/12/09: `run` function modified to work with new quantity structure.
-   * subversion 787, 6/18/09: Added new `run` options to approximator. Removed accuracy. Checks for bad numbers.
+= N =
 
-  == Testing ==
-  The function was tested by performing two and three dimensional flows on familiar triangulations. The start and end values for radii and curvature was then compared with our expected values. The expected values were obtained from the earlier curvature flows we had (see Description above). We also checked that the end values were within the precision and accuracy bounds when they were in effect. 
+= O =
 
-  == Future Work ==
-   * 6/17 - ~~Add more run options (ex. precision and maxNumSteps).~~ *Complete (6/18)*
-   * 6/17 - ~~Have a run stop the moment an undefined number appears.~~ *Complete (6/18)*
+= P =
+  * [printResultsStep]
+  * [printResultsVertex]
 
-  No future work is planned at this time.
+= Q =
 
+= R =
 
-= `Geoquant::At` =
-  {{{
-Geoquant*  Geoquant::At(Simplex  s1,  ...)
-  }}}
+= S =
 
-  == Key Words ==
-  geoquant, recalculate, dependent, triposition, simplex
+= T =
 
-  == Authors ==
-   * Joseph Thomas
-  
-  == Introduction ==
-  The `At` function is defined for every type of geoquant as a way to retrieve that quantity. Once the quantity is retrieved, a value can be set or asked of the quantity. A quantity is retrieved by providing a list of simplices that describe the position of the quantity in the triangulation.
+= U =
 
-  == Subsidiaries ==
-  Functions: 
-     * getSerialNumber
-  Global Variables: map
-  Local Variables: possible list of simplices
+= V =
 
-  == Description ==
-  The `At` function is a little diﬀerent for every type of geoquant, but in all cases it is a static function for that class that serves as an object retrieval in place of a constructor. The function takes as a parameter a list of simplices which may be diﬀerent for each type of geoquant. The list is the natural description of where the quantity is in the triangulation. For example, a radius is described by a vertex, whereas an angle is described as a vertex on a certain face. The At function returns a pointer to the requested quantity.
+= W =
 
-  When the `At` function is called, it searches a local map for a quantity with the given list of simplices.  If it is found, a pointer to that quantity in the map is simply returned.  If it is not found, the quantity is constructed and placed into the map.  If the construction of the object requires other types of quantities not yet created, then these will be constructed automatically at this time. Lastly, this quantity is returned.
+= X =
 
-  The constructor is hidden from the user for several reasons. The ﬁrst is that this avoids redundant construction and the need for an encapsulating object to hold a large set of geoquants (like the Geometry class in a previous version).  In the same vein, the need for an initial build step and a required order of construction is removed. In addition, this is an eﬃciency improvement as quantities that are never requested are never created, decreasing memory use and large dependency trees which can take a while for an `invalidate` to traverse.
+= Y =
 
-  == Practicum ==
-  Example:
-  {{{
-//  Get  the  Radius  quantity  from  the  first  vertex  in  the  triangulation.
-Radius  *r  =  Radius::At(Triangulation::vertexTable[0]);
-//  Get  the  angle  of  vertex  v  incident  on  face  f
-Vertex  v;
-Face  f;
-...
-EuclideanAngle  *ang  =  EuclideanAngle::At(v,  f);
-  }}}
-
-  == Limitations ==
-  The `At` function is limited in that a speciﬁc set of simplices will always return the exact same object.  While this is in fact the design goal, this can limit one’s ability to modify an object as a change in one place will aﬀect its use elsewhere in the code. The function also will require the user to handle pointers, a powerful yet fragile and sometimes daunting aspect of the programming language.
-
-  == Revisions ==
-   * subversion 761, 6/12/09: A working copy of `At` and the Geoquant system.
-
-  == Testing ==
-  The `At` function was tested in small modularized systems, then tested in a three dimensional ﬂow, which required many varied uses of `At`.   Some retrieved quantities had their values set while others had their values accessed and compared with what mathematica calculations predicted.
-
-  == Future Work ==
-  No future work is planned at this time.
- 
-= `printResultsStep` =
-   {{{
-   void printResultsStep(char* fileName, vector<double>* radii, vector<double>* curvs)
-   }}}
-
-  == Key Words ==
-  radii, curvatures, file, flow, step, print
-
-  == Authors ==
-  Alex Henniges
-
-  == Introduction ==
-  The `printResultsStep` function prints out the results of a curvature flow, with the results grouped by each step of the flow. These results will be written to the file given by `filename`.
-
-  == Subsidiaries ==
-  Functions:
-
-  Global Variables:
-
-  Local Variables: `int vertSize`, `int numSteps`
-
-  == Description ==
-  Prints the results of a curvature flow into the file given by `filename`. The results, that is, the radii and curvature values, are given by vectors of doubles. Most commonly, these vectors are taken from the [CurvatureFlow Approximator] class after the flow is run. The `printResultsStep` function determines the number of vertices of the current triangulation and the total number of steps are then derived from this and the size of the vectors.
-
-  There are several ways to display the results. The `printResultsStep` function groups by step. This means that for each step of the curvature flow, the radii and curvature values for each vertex is printed. An example is shown below. Other formats are given by [#printResultsVertex], (printResultsNum), (print3DResultsStep).
-
-  == Practicum ==
-  Example:
-  {{{
-  // Print the results of a curvature flow with Approximator app into file "ODEResult.txt"
-  printResultsStep("./ODEResults.txt", app->radiiHistory, app->curvHistory);
-  }}}
-
-  The output of such an example may then be
-  {{{      
-         :    
-         :
-       Vertex 6: 10.6390     -1.21810
- 
-       Step 5    Radius       Curv
-       ----------------------------
-       Vertex 1: 15.2785     -5.90324    
-       Vertex 2: 12.3130     -1.03506    
-       Vertex 3: 12.7753     -0.856032   
-       Vertex 4: 24.1124     -2.15461    
-       Vertex 5: 10.8755     -1.19773    
-       Vertex 6: 10.3957     -1.41971 
-           
-       Step 7    Radius       Curv
-       ----------------------------
-         :
-         :
-  }}}
-
-  == Limitations ==
-  Currently the `printResultsStep` function is limited in the information it prints. As our curvature flow has evolved to record additional information such as volumes, it may be time to explore a more robust form for displaying results. As there is considerable dependence on the [CurvatureFlow Approximator] for the data vectors, it may be wise to place this and similar functions in the [CurvatureFlow Approximator] class.
-
-  == Revisions ==
-   * subversion 545, 9/29/08: Moved the printing of results out of calcFlow and into a new function.
-   * subversion 783, 6/18/09: Small modifications in response to changes in the Approximator class.
-
-  == Testing ==
-  The `printResultsStep` function was tested by running multiple curvature flows and printing the results. It was considered working when the format of the data was as desired.
-
-  == Future Work ==
-   * 6/29 - Recreate the print functions to print more data and be more flexible.
-   * 6/29 - Move the print functions into the Approximator class.
-
-= `printResultsVertex` =
-   {{{
-   void printResultsVertex(char* fileName, vector<double>* radii, vector<double>* curvs)
-   }}}
-
-  == Key Words ==
-  radii, curvatures, file, flow, vertex, print
-
-  == Authors ==
-  Alex Henniges
-
-  == Introduction ==
-  The `printResultsVertex` function prints out the results of a curvature flow, with the results grouped by each vertex of the triangulation. These results will be written to the file given by `filename`.
-
-  == Subsidiaries ==
-  Functions:
-
-  Global Variables:
-
-  Local Variables: `int vertSize`, `int numSteps`
-
-  == Description ==
-  Prints the results of a curvature flow into the file given by `filename`. The results, that is, the radii and curvature values, are given by vectors of doubles. Most commonly, these vectors are taken from the [CurvatureFlow Approximator] class after the flow is run. The `printResultsVertex` function determines the number of vertices of the current triangulation and the total number of steps are then derived from this and the size of the vectors.
-
-  There are several ways to display the results. The `printResultsVertex` function groups by vertex. This means that for each vertex of the triangulation, the radii and curvature values for each step is given. An example is shown below. Other formats are given by [#printResultsStep], (printResultsNum), (print3DResultsStep).
-
-  == Practicum ==
-  Example:
-  {{{
-  // Print the results of a curvature flow with Approximator app into file "ODEResult.txt"
-  printResultsVertex("./ODEResults.txt", app->radiiHistory, app->curvHistory);
-  }}}
-
-  The output of such an example may then be
-  {{{
-         : 
-         :
-       Step 99     20.8731     -2.09440    
-       Step 100    20.8731     -2.09440    
- 
-       Vertex: 2   Radius      Curv
-       ------------------------------
-       Step 1      14.0000     1.92788     
-       Step 2      12.5241     1.29678     
-       Step 3      11.4253     1.13484    
-       Step 4      10.6237     1.05625
-         :
-         :
-  }}}
-
-  == Limitations ==
-  Currently the `printResultsVertex` function is limited in the information it prints. As our curvature flow has evolved to record additional information such as volumes, it may be time to explore a more robust form for displaying results. As there is considerable dependence on the [CurvatureFlow Approximator] for the data vectors, it may be wise to place this and similar functions in the [CurvatureFlow Approximator] class.
-
-  == Revisions ==
-   * subversion 545, 9/29/08: Moved the printing of results out of calcFlow and into a new function.
-   * subversion 783, 6/18/09: Small modifications in response to changes in the Approximator class.
-
-  == Testing ==
-  The `printResultsVertex` function was tested by running multiple curvature flows and printing the results. It was considered working when the format of the data was as desired.
-
-  == Future Work ==
-   * 6/29 - Recreate the print functions to print more data and be more flexible.
-   * 6/29 - Move the print functions into the Approximator class.
---------------------------------------------------------------------------------
-= Table of Contents =
-<wiki:toc max_depth="1" />
+= Z =
