@@ -23,7 +23,7 @@
   == Description ==
   Prints the results of a curvature flow into the file given by `filename`. The results, that is, the radii and curvature values, are given by vectors of doubles. Most commonly, these vectors are taken from the [CurvatureFlow Approximator] class after the flow is run. The `printResultsNum` function determines the number of vertices of the current triangulation and the total number of steps are then derived from this and the size of the vectors.
 
-  There are several ways to display the results. The `printResultsNum` function groups by vertex but provides no labels. This means that for each vertex of the triangulation, the radii (first column) and curvature (second column) values for each step is given. This format is used for when a program, (GUI, Matlab, etc) needs to parse the data. Therefore, it would be difficult for a human to read, but allows the computer to do so much easier. An example is shown below. Other formats are given by [printResultsStep], [printResultsVertex], (print3DResultsStep).
+  There are several ways to display the results. The `printResultsNum` function groups by vertex but provides no labels. This means that for each vertex of the triangulation, the radii (first column) and curvature (second column) values for each step is given. This format is used for when a program, (GUI, Matlab, etc) needs to parse the data. Therefore, it would be difficult for a human to read, but allows the computer to do so much easier. An example is shown below. Other formats are given by [printResultsStep], [printResultsVertex], [print3DResultsStep].
 
   == Practicum ==
   Example:
