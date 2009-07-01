@@ -104,8 +104,7 @@ void MinMax(double deltaEta, double b, double a)
    printData(result);
    
 while(true) {
- //  while(!allNegative(&deltaFE)) { 
-      for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
+       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
                 {
                 printf("Edge %3d: %.10f\n", eit->first, Eta::valueAt(eit->second));
                 } 

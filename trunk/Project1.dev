@@ -771,7 +771,7 @@ BuildCmd=
 [Project]
 FileName=Project1.dev
 Name=Project1
-UnitCount=77
+UnitCount=79
 Type=1
 Ver=1
 ObjFiles=
@@ -1059,7 +1059,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit79]
-FileName=flip_algorithm.h
+FileName=new_flip\flip_algorithm.cpp
 CompileCpp=1
 Folder=Flip
 Compile=1
@@ -1092,6 +1092,16 @@ BuildCmd=
 FileName=Simplex\vertex.h
 CompileCpp=1
 Folder=Triangulation/Simplices
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit78]
+FileName=new_flip\flip_algorithm.h
+CompileCpp=1
+Folder=Flip
 Compile=1
 Link=1
 Priority=1000

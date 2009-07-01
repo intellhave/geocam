@@ -756,31 +756,6 @@ void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>*
      fclose(results);
 }
 
-
-void printDegrees(char* fileName)
-{
-     int vertSize = Triangulation::vertexTable.size();
-     ofstream results(fileName, ios_base::trunc);
-     results << left << setprecision(6); 
-     results.setf(ios_base::showpoint);
-     for (int i = 1; i <= vertSize; i++)
-     {
-         results << Triangulation::vertexTable[i].getDegree() << "\n";
-     }
-}
-
-void printEdgeLengths(char* fileName)
-{
-     int edgeSize = Triangulation::edgeTable.size();
-     ofstream results(fileName, ios_base::trunc);
-     results << left << setprecision(6); 
-     results.setf(ios_base::showpoint);
-     for (int i = 1; i <= edgeSize; i++)
-     {
-         results << Length::valueAt(Triangulation::edgeTable[i]) << "\n";
-     }
-}
-
 void setLengths(double* lengths)
 {
      map<int, Edge>::iterator eit;
@@ -791,26 +766,5 @@ void setLengths(double* lengths)
        Length::At(eit->second)->setValue(lengths[i]);
        i++;
      }
-}
-
-void makeDelaunayTriangulationFile(char* triFile, char* lengthFile)
-{
-     makeTriangulationFile(triFile, triFile);
-     readTriangulationFile(triFile);
-     vector<double> lengths;
-     ifstream infile(lengthFile);
-     while(infile.good())
-     {
-        double length;
-        infile >> length;
-        lengths.push_back(length);
-     }
-     double lengthArr[lengths.size()];
-     for(int i = 0; i < lengths.size(); i++)
-     {
-         lengthArr[i] = lengths[i];
-     }
-     setLengths(lengthArr);
-     infile.close();
 }
 

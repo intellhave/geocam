@@ -75,7 +75,7 @@ void makeTriangulationFile(char*, char*);
  * curvatures. The number of vertices is assumed to be the current number in
  * the triangulation and the number of steps is then derived from the size of
  * the vectors. The file is cleared before writing, and the format is grouping
- * by size as shown below:
+ * by step as shown below:
  *            :
  *          Vertex 6: 10.6390     -1.21810
  *
@@ -136,13 +136,6 @@ void printResultsVertex(char*, vector<double>*, vector<double>*);
  */
 void printResultsNum(char*, vector<double>*, vector<double>*);
 void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>* curvs);
-
-
-void printDegrees(char*);
-void printEdgeLengths(char*);
-
-void makeDelaunayTriangulationFile(char*, char*);
-
 
 struct Pair
 {
