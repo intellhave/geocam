@@ -60,7 +60,7 @@ app->run(0.000001, 0.01);
    * subversion 787, 6/18/09: Added new `run` options to approximator. Removed accuracy. Checks for bad numbers.
 
   == Testing ==
-  The function was tested by performing two and three dimensional flows on familiar triangulations. The start and end values for radii and curvature was then compared with our expected values. The expected values were obtained from the earlier curvature flows we had (see [#Description] above). We also checked that the end values were within the precision and accuracy bounds when they were in effect. 
+  The function was tested by performing two and three dimensional flows on familiar triangulations. The start and end values for radii and curvature was then compared with our expected values. The expected values were obtained from the earlier curvature flows we had (see [#Description Description] above). We also checked that the end values were within the precision and accuracy bounds when they were in effect. 
 
   == Future Work ==
    * 6/17 - ~~Add more run options (ex. precision and maxNumSteps).~~ *Complete (6/18)*
