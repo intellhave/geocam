@@ -132,7 +132,7 @@ Add classes and functions to the following lists as follows:
 ||Hessian||void||Dan || ||
 ||HypRicci||void|| || ||
 ||loadRadii||void|| || ||
-||make3DTriangulationFile||void||Alex|| ||
+||make3DTriangulationFile||void||Alex||complete||
 ||makeTriangulationFile||void||Alex|| ||
 ||MinMax||void||Dan || ||
 ||Newtons_Method||void||Dan || ||
