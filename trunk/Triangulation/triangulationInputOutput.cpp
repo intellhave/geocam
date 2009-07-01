@@ -749,7 +749,7 @@ void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>*
          for(int j = 0; j < vertSize; j++)
          {
              fprintf(results, "%3.10f\n", 
-                 (*curvs)[i*vertSize+j]);
+                 (*curvs)[i*vertSize+j] / (*radii)[i*vertSize+j]);
              vit++;
          }
      }

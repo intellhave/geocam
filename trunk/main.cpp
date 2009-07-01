@@ -91,12 +91,12 @@ int main(int argc, char** argv){
      vector<int> faces;
      vector<int> tetras;
     
-   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
+   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Lutz Format/tetrahedron.txt";
    char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
-   //make3DTriangulationFile(from, to);
-   //read3DTriangulationFile(to);
-   char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
-   readTriangulationFile(tetra);
+   makeTriangulationFile(from, to);
+   readTriangulationFile(to);
+   //char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
+   //readTriangulationFile(tetra);
    int vertSize = Triangulation::vertexTable.size();
    int edgeSize = Triangulation::edgeTable.size();
    for(int i = 1; i <= vertSize; i++) {
