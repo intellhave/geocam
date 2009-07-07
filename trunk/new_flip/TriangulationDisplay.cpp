@@ -1,17 +1,26 @@
 #include "new_flip/TriangulationDisplay.h"
+#include "new_flip/flip_algorithm.h"
 
 TriangulationDisplay::TriangulationDisplay(char *f)
 {
-    fileName = f;
+    if (readTriangulationFile(f)) {
+        fileName = f;
+        //load up the specified file into the maps contained in triangulation.cpp
 
-    //load up the specified file into the maps contained in triangulation.cpp
-    readTriangulationFile(fileName);
+        //construct the coordinates
+        coordSystem.generatePlane();
 
-    //construct a
-    coordSystem.generatePlane();
+        //this will be used to display the triangles
+        listOfTriangles = coordSystem.getTriangles();
+    
+        //this will be used to show which edge is currently selected
+        selectedEdge = Triangulation::edgeTable.begin();
+    }
 
-    listOfTriangles = coordSystem.getTriangles();
+}
 
+TriangulationDisplay::TriangulationDisplay()
+{
 }
 
 TriangulationDisplay::~TriangulationDisplay()
@@ -20,18 +29,64 @@ TriangulationDisplay::~TriangulationDisplay()
 
 void TriangulationDisplay::changeFileTo(char* f)
 {
-    fileName = f;
-
     //load up the specified file into the maps contained in triangulation.cpp
-    readTriangulationFile(fileName);
+    if (readTriangulationFile(f)) {
+        fileName = f;
+        //construct a
+        coordSystem.generatePlane();
 
-    //construct a
-    coordSystem.generatePlane();
+        listOfTriangles = coordSystem.getTriangles();
+    } else {
+        readTriangulationFile(fileName);
+        //construct a
+        coordSystem.generatePlane();
 
-    listOfTriangles = coordSystem.getTriangles();
+        listOfTriangles = coordSystem.getTriangles();
+    }
 }
 
 char * TriangulationDisplay::getCurrentFile()
 {
     return fileName;
+}
+
+void TriangulationDisplay::update() {
+    coordSystem.update();
+    listOfTriangles = coordSystem.getTriangles();
+}
+
+Line TriangulationDisplay::currentEdgeToLine() {
+    int edgeIndex;
+    edgeIndex = (selectedEdge->second).getIndex();
+    return coordSystem.getLine(edgeIndex);
+}
+
+Edge TriangulationDisplay::currentEdge(void) {
+    return selectedEdge->second;
+}
+
+Edge TriangulationDisplay::nextEdge(void) {
+    selectedEdge++;
+    if (Triangulation::edgeTable.end() == selectedEdge) {
+        selectedEdge = Triangulation::edgeTable.begin();
+    }
+    return selectedEdge->second;
+}
+
+Edge TriangulationDisplay::previousEdge(void) {
+    if (Triangulation::edgeTable.begin() == selectedEdge) {
+        selectedEdge = Triangulation::edgeTable.end();
+        selectedEdge--;
+    } else {
+        selectedEdge--;
+    }
+    return selectedEdge->second;
+}
+
+void TriangulationDisplay::flipCurrentEdge() {
+    flip(Triangulation::edgeTable[(selectedEdge->second).getIndex()]);
+}
+
+vector<triangle_parts> TriangulationDisplay::getTriangles(void) {
+    return listOfTriangles;
 }

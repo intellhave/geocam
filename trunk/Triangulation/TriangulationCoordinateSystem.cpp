@@ -386,7 +386,7 @@ void TriangulationCoordinateSystem::update()
      map<int, Point>::iterator pit;
      for(pit = pointTable.begin(); pit != pointTable.end(); pit++)
      {
-         vector<int> edges = *(Triangulation::vertexTable[pit->first].getLocalVertices());
+         vector<int> edges = *(Triangulation::vertexTable[pit->first].getLocalEdges());
          for(int i = 0; i < edges.size(); i++)
          {
                if(!containsLine(edges[i]))

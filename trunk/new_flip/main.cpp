@@ -1,4 +1,5 @@
 #include "new_flip/flip_algorithm.h"
+#include "new_flip/TriangulationDisplay.h"
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -7,14 +8,11 @@
 #include <GL/glut.h>
 #endif
 
-//#include "new_flip/triangulation_display.h"
-
 using namespace std;
 float _dist = -5.0f;
 float _hori = 0.0f;
 float _vert = 0.0f;
-Edge _e;
-TriangulationCoordinateSystem _coord_system;
+TriangulationDisplay *_triDisp;
 
 float _angle = 30.0f;
 float _camera_angle = 0.0f;
@@ -43,7 +41,13 @@ void handleKeypress(unsigned char key, int x, int y) {
             _vert -= .5;
             break;
         case 32: //space bar
-            _e = flip(_e);
+            _triDisp->flipCurrentEdge();
+            break;
+        case 104: //h
+            _triDisp->previousEdge();
+            break;
+        case 108: //l
+            _triDisp->nextEdge();
             break;
 	}
 	glutPostRedisplay();
@@ -94,14 +98,15 @@ void drawScene() {
 
     vector<triangle_parts> tps;
 
-    _coord_system.update();
-    tps = _coord_system.getTriangles();
+    _triDisp->update();
+    tps = _triDisp->getTriangles();
     vector<triangle_parts>::iterator iter;
     iter = tps.begin();
 
+    //draws the triangulation
     while (iter != tps.end()) {
         glBegin(GL_LINE_STRIP);
-        glBegin(GL_TRIANGLES);
+        //glBegin(GL_TRIANGLES);
         if (iter->negativity == -1)
             glColor3d(1, 0, 0);
         else
@@ -114,36 +119,29 @@ void drawScene() {
         iter++;
         glEnd();
     }
-
-
+    
+    //draws the edge that is currently selected
+    Line l;
+    l = _triDisp->currentEdgeToLine();
+    //draws the selected edge, should appear on top
+    glBegin(GL_LINE_STRIP);
+    glColor3d(0xFF, 0xD7, 0x00);
+    glVertex3d(l.getInitialX(), l.getInitialY(), 0.01);
+    glVertex3d(l.getEndingX(), l.getEndingY(), 0.01);
+    glEnd();
 
     glutSwapBuffers();
 }
 
 int main(int argc, char** argv) {
 
-  //triangulation initializaiton steps
+    //triangulation initializaiton steps
     char *testFile = "test_files/six_triangles_with_geom.txt";
     char outFile[strlen(testFile)+5];
     strcpy(outFile, testFile);
     strcpy(&outFile[strlen(testFile)], ".out");
-    //makeTriangulationFile(testFile, outFile);
-    bool b = readTriangulationFile(testFile);
-    if (!b) {
-        cout << "file read failed";
-    }
-    //prepare some edge lengths
-    map<int, Edge>::iterator iter;
-    iter = Triangulation::edgeTable.begin();
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        struct simps bucket;
-        _e = iter->second;
-        break;
-      }
-      iter++;
-    }
-    _coord_system.generatePlane();
+
+    _triDisp = new TriangulationDisplay (testFile);
 
 	//Initialize GLUT
 	glutInit(&argc, argv);

@@ -8,7 +8,8 @@ the reading and writing of text files under a two-dimensional manifold.
 **************************************************************/
 
 #include "triangulation.h"
-
+#ifndef triangulationInputOutput
+#define triangulationInputOutput
 /*
  * Function to read in a file and build the Triangulation. The 
  * function parses the file and creates the simplices, adding them to
@@ -144,3 +145,4 @@ struct Pair
        bool contains(int);
        bool isInTuple(vector<int>*);
 };
+#endif

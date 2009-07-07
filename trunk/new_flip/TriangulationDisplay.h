@@ -14,21 +14,39 @@ class TriangulationDisplay {
 
     vector<triangle_parts> listOfTriangles;
 
-    Edge* selectedEdge;
+    map<int,Edge>::iterator selectedEdge;
 
     public:
+    TriangulationDisplay(void);
     TriangulationDisplay(char* f);
     ~TriangulationDisplay(void);
 
+    //changes the file that the triangulation represents and should reset everything
+    //within this class to represent that change (i.e. the coordSystem should be updated)
     void changeFileTo(char * f);
 
     char* getCurrentFile(void);
 
+    //the line object representing the currently selected edge
+    Line currentEdgeToLine();
+    
+    //returns the currently selected edge
+    Edge currentEdge(void);
+
+    //increments the currently selected edge to another edge in the triangulations
     Edge nextEdge(void);
 
+    //decrements the currently selected edge, returning to the previously selected edge
     Edge previousEdge(void);
 
-    Edge flipSelectedEdge(void);
+    //calls the flip function on the currently selected edge
+    void flipCurrentEdge(void);
 
+    //returns a vector of structs containing the information necessary for
+    //displaying the triangulation in opengl
     vector<triangle_parts> getTriangles(void);
+    
+    //updates the underlying coordinateSystem object to represent the current state
+    //of the triangulation
+    void update();
 };
