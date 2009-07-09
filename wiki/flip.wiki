@@ -1,0 +1,24 @@
+=`flip`=
+{{{
+Edge flip(Edge e)
+}}}
+
+  ==Keywords==
+
+  ==Authors==
+
+  ==Introduction==
+
+  ==Subsidiaries==
+
+  ==Description==
+
+  ==Pracicum==
+
+  ==Limitations==
+
+  ==Revisions==
+
+  ==Testing==
+
+  ==Future Work==
