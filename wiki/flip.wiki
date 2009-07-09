@@ -10,13 +10,49 @@ Edge flip(Edge e)
   Kurt Norwood
 
   ==Introduction==
-  The {{{flip}}} function takes a single Edge as a parameter and performs a flip on it. This involves determining the new length of the edge after the flip and changing the topological information in the edge being flipped as well as all its adjacent simplices.
- 
-
+  The {{{flip}}} function takes a single Edge as a parameter and performs a flip on it. This involves determining the new length of the edge after the flip and changing the topological information in the edge being flipped as well as all of the edge's adjacent simplices. This can be thought of as taking two triangles which share an edge (the parameter to flip) and making two new triangles which share an edge between the two vertices which were previously non-adjacent.
 
   ==Subsidiaries==
 
+  Functions:
+
+{{{
+    void flipPP(struct simps b)
+
+    void flipPN(struct simps b)
+
+    void flipNN(struct simps b)
+
+    void topo_flip(Edge, struct simps)
+
+    bool prep_for_flip(Edge, struct simps*)
+}}}
+  
+  Global Variables:
+  
+  Local Variables:
+
+{{{
+    Edge e
+}}}
+
+
   ==Description==
+
+    flip begins by calling the prep_for_flip function, that will setup the struct given to it to contain all the important information necessary for the flip to occur, such as indices for the different simplices and the lengths of the triangles' edges, and the two angles which are not incident on the edge being flipped. The struct looks like:
+{{{
+struct simps {
+       int v0, v1, v2, v3, e0, e1, e2, e3, e4, f0, f1;
+       double e0_len, e1_len, e2_len, e3_len, e4_len;
+       double a0, a2;
+};
+}}}
+
+    With all this information known, the next step is to determine the type of flip that is to occur. The possibilities are broken up three ways: positive positive (PP), positive negative (PN), negative negative (NN); based on the initial condition of the two triangles. This will determine which of flipPP, flipPN, flipNN is called. Within these function is logic which should compute the new edge length and assign it to the edge e, and determine the positive/negative configuration of the two triangles and assign the appropriate boolean value to each face.
+
+    With the new edge length computed and assigned, the topo_flip function is called which performs the rearrangement of all the adjacencies of the different simplices which are adjacent to edge e.
+
+    The edge is returned.
 
   ==Pracicum==
 
