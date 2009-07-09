@@ -4,8 +4,10 @@ Edge flip(Edge e)
 }}}
 
   ==Keywords==
+  flip, delaunay
 
   ==Authors==
+  Kurt Norwood
 
   ==Introduction==
 
