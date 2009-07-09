@@ -10,6 +10,7 @@ Edge flip(Edge e)
   Kurt Norwood
 
   ==Introduction==
+  The flip function takes a single Edge as a parameter and performs a "flip" on it. This involves determining the new length of the edge after the flip and changing the topological information in the edge being flipped as well as all its adjacent simplices.
 
   ==Subsidiaries==
 
