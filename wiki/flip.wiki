@@ -75,6 +75,13 @@ struct simps {
 
   have all the new_flip stuff up to date and working with the new geometry classes
 
+  ------------------------------------------------------------------------
+  r795 | kortox | 2009-06-18 17:58:30 -0700 (Thu, 18 Jun 2009) | 5 lines
+
+  anyway, this is a project for devopment of the flip algorithm, so far it contains a new flip function which is intended to replace the flip function that was previously in Triangulation/triangulationmorphs.cpp
+
+  main currently contains some test functions that can be called one at a time manually and should produce output that can indicate how the flip function is performing, this testing really needs to be improved
+
 
   ==Testing==
   
