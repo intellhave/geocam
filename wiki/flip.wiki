@@ -54,12 +54,36 @@ struct simps {
 
     The edge is returned.
 
-  ==Pracicum==
+  ==Practicum==
+  
+{{{
+  Edge e;
+  e = Triangulation::edgeTable[indexOfE];
+  e = flip(e);
+}}}
+
+  one thing to note is that in future implementations the edge being given as the parameter may be different than the one returned
 
   ==Limitations==
+  
+  The biggest limitation of the flip function is that it currently only works for bistellar flips. If higher dimensional flips are required this function will need to be modified heavily.
 
   ==Revisions==
+  
+  ------------------------------------------------------------------------
+  r816 | kortox | 2009-06-29 12:41:33 -0700 (Mon, 29 Jun 2009) | 1 line
+
+  have all the new_flip stuff up to date and working with the new geometry classes
+
 
   ==Testing==
+  
+  Initially testing was done inefficiently by manually analyzing what was written by the writeTriangulationFile  function. Now that we have a way to display the triangulation, we can select an edge and flip it in the display and see that the flip occurred correctly. Granted this should at sometime in the future be automated, but for now if there is an issue we can try to debug it with the display.
 
   ==Future Work==
+  
+  * Adding the ability to flip in higher dimensions. This would involve altering the function to take a Simplex object instead of an edge so that it is more general.
+  
+  * We'll most likely want to have the function add an edge to the triangulation instead of just reposition the edge given, since this will lend itself better to the possible addition of 3-1 flips. Related to this would also be changing the return type to be a vector of Simplex objects for generality's sake.
+  
+  * Moving the whole thing to a different file with an appropriate name other than new_flip
