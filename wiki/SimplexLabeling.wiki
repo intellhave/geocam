@@ -2,7 +2,7 @@
 
 = Description =
 
-To perform a calculation on a triangulation, one invariably has to inspect the topology of that triangulation. Such an inspection often involves examining all the simplices associated with a particular region of the triangulation, and examining how they are connected to each other. For example, given a face, we might like to know the edges and vertices of that face and their relative positions on the face. This module provides a convenient way to address these questions.
+To perform a calculation on a triangulation, one invariably has to inspect the topology of that triangulation. This inspection often involves examining the simplices in a particular region of the triangulation and their connections. For example, given a face we might like to know its edges and vertices and their relative positions. This module provides a convenient way to address these questions.
 
 = Procedure Definitions =
   * `StdEdge labelEdge(Edge& e, Vertex& v)`
@@ -36,7 +36,28 @@ The integers `v1`, `v2`, and `v3` each represent a vertex in Triangulation::vert
 Finally, we should explain what is meant by "with respect to" in the phrase "Label Simplex A with respect to Simplex B." Depending on the dimension of Simplex B, the chosen labeling procedure makes sure that the integer `v1`, `e12`, or `f123` (as appropriate) references Simplex B. In some cases, this will mean that other positions in the labeling are ambiguous. For example, if we used labelTetra( Tetra& t, Edge& e ) to label a tetrahedron with respect to one of its edges, then we could exchange vertices 1 and 2 and maintain a correct labeling---we only insist that e12 denotes our chosen edge, and that the labeling is consistent with the tetrahedron's topology.
  
 = Details =
-All of the procedures in this module work in constant time.
+All of the procedures in this module work in constant time. This is achieved by exploiting the fact that a given simplex can only be adjacent to finitely many lower dimensional simplices.
+
+= Example =
+
+Below is a portion of code used in computing a face height (see face_height.cpp). In this calculation, we use `labelTetra` to set up the topological portion of the calculation:
+{{{
+FaceHeight::FaceHeight( Face& f, Tetra& t ){
+  StdTetra st = labelTetra( t, f );
+
+  Edge& ed12 = Triangulation::edgeTable[ st.e12 ];
+  Face& fa123 = Triangulation::faceTable[ st.f123 ];
+  Face& fa124 = Triangulation::faceTable[ st.f124 ];
+
+  hij_l = EdgeHeight::At( ed12, fa123 );
+  hij_k = EdgeHeight::At( ed12, fa124 );
+  beta_ij_kl = DihedralAngle::At( ed12, t);
+
+  hij_l->addDependent(this);
+  hij_k->addDependent(this);
+  beta_ij_kl->addDependent(this);
+}
+}}}
 
 = To Do =
 1) There is currently no error checking in this module; the results of labeling one simplex with respect to a non-adjacent simplex is not defined.
