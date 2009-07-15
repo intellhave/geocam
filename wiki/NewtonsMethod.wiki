@@ -58,7 +58,7 @@
    }
   }}}
 
-  In this example, we use a one variable Gaussian function, but provide a gradient and hessian for the function as well. The maximum is found at `x = 0`.
+  In this example, we use a one variable Gaussian function, but provide a gradient and hessian, as well. The maximum is found at `x = 0`.
 
   {{{
    // The function, e^(-x^2).
