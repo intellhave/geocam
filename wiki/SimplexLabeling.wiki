@@ -1,4 +1,4 @@
-#summary This module describes how to use the procedures in the miscmath module to obtain labelings of portions of a triangulation.
+#summary How to use the procedures in the miscmath module to "label" a simplex.
 
 = Description =
 
