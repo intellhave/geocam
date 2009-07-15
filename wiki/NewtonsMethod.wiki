@@ -34,7 +34,6 @@
 
   == Pracicum ==
   Below is a full example of how to use the `NewtonsMethod` class to find the minimum of an ellipse. In this case, the gradient and hessian are not given. The minimum found is at (0,0).
-
   {{{
    // This function takes two variables.
    double ellipse(double vars[]) {
@@ -59,7 +58,6 @@
   }}}
 
   In this example, we use a one variable Gaussian function, but provide a gradient and hessian, as well. The maximum is found at `x = 0`.
-
   {{{
    // The function, e^(-x^2).
    double gaussian(double vars[]) {
