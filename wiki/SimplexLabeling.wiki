@@ -1,0 +1,42 @@
+#This module describes how to use the procedures in the miscmath module to obtain labelings of portions of a triangulation.
+
+= Description =
+
+To perform a calculation on a triangulation, one invariably has to inspect the topology of that triangulation. Such an inspection often involves examining all the simplices associated with a particular region of the triangulation, and examining how they are connected to each other. For example, given a face, we might like to know the edges and vertices of that face, how they are positioned with respect to each other on the face. This module provides a convenient way to address these questions.
+
+= Procedure Definitions =
+  * `StdEdge labelEdge(Edge& e, Vertex& v)`
+  * `StdFace labelFace(Face& f, Vertex& v)`
+  * `StdFace labelFace(Face& f, Edge& e)`
+  * `StdTetra labelTetra(Tetra& t, Edge& e)`
+  * `StdTetra labelTetra(Tetra& t, Vertex& v)`
+  * `StdTetra labelTetra(Tetra& t, Face& f)`
+  * `StdTetra labelTetra(Tetra& t)`
+
+In each procedure
+
+
+Currently, we describe a labeling as a `struct` of integers. For example, below is the definition for a labeled face:
+{{{
+struct stand_psn_face{
+int v1;
+int v2;
+int v3;
+
+int e12;
+int e13;
+int e23;
+};
+typedef stand_psn_face StdFace;
+}}}
+The other structure are analogous.
+
+
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
