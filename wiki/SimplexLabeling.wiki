@@ -1,8 +1,8 @@
-#This module describes how to use the procedures in the miscmath module to obtain labelings of portions of a triangulation.
+#summary This module describes how to use the procedures in the miscmath module to obtain labelings of portions of a triangulation.
 
 = Description =
 
-To perform a calculation on a triangulation, one invariably has to inspect the topology of that triangulation. Such an inspection often involves examining all the simplices associated with a particular region of the triangulation, and examining how they are connected to each other. For example, given a face, we might like to know the edges and vertices of that face, how they are positioned with respect to each other on the face. This module provides a convenient way to address these questions.
+To perform a calculation on a triangulation, one invariably has to inspect the topology of that triangulation. Such an inspection often involves examining all the simplices associated with a particular region of the triangulation, and examining how they are connected to each other. For example, given a face, we might like to know the edges and vertices of that face and their relative positions on the face. This module provides a convenient way to address these questions.
 
 = Procedure Definitions =
   * `StdEdge labelEdge(Edge& e, Vertex& v)`
