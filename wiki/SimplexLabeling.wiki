@@ -31,9 +31,9 @@ int e23;
 typedef stand_psn_face StdFace;
 }}}
 
-The integers `v1`, `v2`, and `v3` each represent a vertex in Triangulation::vertexTable. Likewise, `e12` represents an edge in Triangulation::edgeTable, and this edge has as its endpoints the vertices represented by v1 and v2. The other structures, `StdEdge` and `StdTetra` are analogous.
+The integers `v1`, `v2`, and `v3` each represent a vertex in `Triangulation::vertexTable`. Likewise, `e12` represents an edge in `Triangulation::edgeTable`, and this edge has as its endpoints the vertices represented by `v1` and `v2`. The other structures, `StdEdge` and `StdTetra` are analogous.
 
-Finally, we should explain what is meant by "with respect to" in the phrase "Label Simplex A with respect to Simplex B." Depending on the dimension of Simplex B, the chosen labeling procedure makes sure that the integer `v1`, `e12`, or `f123` (as appropriate) references Simplex B. In some cases, this will mean that other positions in the labeling are ambiguous. For example, if we used labelTetra( Tetra& t, Edge& e ) to label a tetrahedron with respect to one of its edges, then we could exchange vertices 1 and 2 and maintain a correct labeling---we only insist that e12 denotes our chosen edge, and that the labeling is consistent with the tetrahedron's topology.
+Finally, we should explain what is meant by "with respect to" in the phrase "Label Simplex A with respect to Simplex B." Depending on the dimension of Simplex B, the chosen labeling procedure makes sure that the integer `v1`, `e12`, or `f123` (as appropriate) references Simplex B. In some cases, this will mean that other positions in the labeling are ambiguous. For example, if we used `labelTetra( Tetra& t, Edge& e )` to label a tetrahedron with respect to one of its edges, then we could exchange vertices 1 and 2 and maintain a correct labeling---we only insist that `e12` denotes our chosen edge, and that the labeling is consistent with the tetrahedron's topology.
  
 = Details =
 All of the procedures in this module work in constant time. This is achieved by exploiting the fact that a given simplex can only be adjacent to finitely many lower dimensional simplices.
@@ -60,5 +60,5 @@ FaceHeight::FaceHeight( Face& f, Tetra& t ){
 }}}
 
 = To Do =
-1) There is currently no error checking in this module; the results of labeling one simplex with respect to a non-adjacent simplex is not defined.
-2) It isn't totally clear that this module will necessarily cover "unusual boundary cases" such as a face with only one or two vertices. 
+  *There is currently no error checking in this module; the results of labeling one simplex with respect to a non-adjacent simplex is not defined.
+  *It isn't totally clear that this module will necessarily cover "unusual boundary cases" such as a face with only one or two vertices. 
