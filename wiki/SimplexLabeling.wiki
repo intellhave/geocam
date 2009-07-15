@@ -15,7 +15,7 @@ To perform a calculation on a triangulation, one invariably has to inspect the t
 
 Each procedure (with the exception of the last) answers the following request: "Label Simplex A with respect to Simplex B," subject to the requirement that Simplex B is of lower dimension than Simplex A, and Simplex B is adjacent to Simplex A "
 
-Currently, we describe a labeling as a `struct` of integers. Each integer can be thought of as a reference to a particular simplex---used in the appropriate "Triangulation::<Simplex>Table" data structure, one can obtain a reference to an actual simplex object.
+Currently, we describe a labeling as a `struct` of integers. Each integer can be thought of as a reference to a particular simplex---used in the appropriate `Triangulation::__Simplex__Table` data structure, one can obtain a reference to an actual simplex object.
 
 For example, below is the definition for a labeled face:
 {{{
