@@ -60,5 +60,5 @@ FaceHeight::FaceHeight( Face& f, Tetra& t ){
 }}}
 
 = To Do =
-  *There is currently no error checking in this module; the results of labeling one simplex with respect to a non-adjacent simplex is not defined.
-  *It isn't totally clear that this module will necessarily cover "unusual boundary cases" such as a face with only one or two vertices. 
+  * There is currently no error checking in this module; the results of labeling one simplex with respect to a non-adjacent simplex is not defined.
+  * It isn't totally clear that this module will necessarily cover "unusual boundary cases" such as a face with only one or two vertices. 
