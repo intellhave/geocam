@@ -17,6 +17,7 @@
   = `E` =
 
   = `F` =
+   * [flip]
 
   = `G` =
    * [GeoquantAt Geoquant::At]
