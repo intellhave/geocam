@@ -14,7 +14,10 @@
   == Subsidiaries ==
   Functions:
    * NewtonsMethod::maximize
-
+   * NewtonsMethod::step
+   * NewtonsMethod::setPrintFunc
+   * NewtonsMethod::printInfo
+ 
   == Description ==
   As a class, `NewtonsMethod` is used as a general way to perform Newton's method on a function in order to find its extrema. Newton's method will find an extrema much faster than Euler's method, but is also more complicated. In order for Newton's method to work, it requires the first and second-order partial derivatives in addition to the original function. If the user knows these explicitly, they can be passed in the [#Constructor constructor] and should lead to more accurate and possible quicker calculations. If the first and secord-partial derivatives are not provided, then they will be approximated using quotients.
 
@@ -121,7 +124,7 @@
   }}}
 
   == Limitations ==
-  There are limitations with the `NewtonsMethod` class with regards to the approximation of the gradient and hessian. In both cases, a delta value for the quotients is hard-coded as 10^-5^. This could lead to accuracy issues when the point where the derivative is being calculated is less than this value. It can also be too accurate at times and lead to unnecessarily slowing down the procedure. One solution could be to provide a function where a delta value could be set by the user.
+  There are limitations with the `NewtonsMethod` class with regards to the approximation of the gradient and hessian. In both cases, a delta value for the quotients is hard-coded as 10^-5^. This could lead to accuracy issues when the point where the derivative is being calculated is less than this value. It can also be too accurate at times and lead to unnecessarily slowing down the procedure. One solution could be to provide a function where a delta value is set by the user.
 
   == Revisions ==
    * subversion 876, 7/16/09: Added a NewtonsMethod class for general maximizing.
