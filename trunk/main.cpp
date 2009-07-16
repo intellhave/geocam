@@ -24,7 +24,7 @@
 #include "flow/sysdiffeq.h"
 
 #include "flow/parsecalc.h"
-
+#include "NMethod.h"
 #include "Geometry/geoquants.h"
 
 #define PI 3.141592653589793238
@@ -80,37 +80,92 @@ void loadRadii(vector<double> radii){
 //  return 0;
 //}
 
-/* 2D FLOW */
-int main(int argc, char** argv){
-     map<int, Vertex>::iterator vit;
-     map<int, Edge>::iterator eit;
-     map<int, Face>::iterator fit;
-     map<int, Tetra>::iterator tit;
-     
-     vector<int> edges;
-     vector<int> faces;
-     vector<int> tetras;
-    
-   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Lutz Format/tetrahedron.txt";
-   char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
-   makeTriangulationFile(from, to);
-   readTriangulationFile(to);
-   //char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
-   //readTriangulationFile(tetra);
-   int vertSize = Triangulation::vertexTable.size();
-   int edgeSize = Triangulation::edgeTable.size();
-   for(int i = 1; i <= vertSize; i++) {
-      Radius::At(Triangulation::vertexTable[i])->setValue(1 + (2 - i)/4.0);        
-   }
-   for(int i = 1; i <= edgeSize; i++) {
-       Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
-   }
-   Approximator *app = new EulerApprox((sysdiffeq) AdjRicci, "r2");
-   app->run(300, 0.01);
-   printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
-                      &(app->radiiHistory), &(app->curvHistory));
-   system("PAUSE");
+double func(double vars[]) {
+       return exp(-pow(vars[0], 2));
 }
+
+void gradFunc(double vars[], double sol[]) {
+     sol[0] = -2 * vars[0] * func(vars);
+}
+
+void hessFunc(double vars[], double *sol[]) {
+     sol[0][0] = func(vars) * (4 * pow(vars[0], 2) - 2);
+}
+
+double func2(double vars[]) {
+       double val = (pow(vars[0], 2) + pow(vars[1], 2));
+       val *= exp(1 - (pow(vars[0], 2) + pow(vars[1], 2)));
+       return val;
+}
+
+double func3(double vars[]) {
+       return pow(vars[0], 8) + pow(vars[1], 8);
+}
+
+double func4(double vars[]) {
+       double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+       return sqrt(val);
+}
+
+double func5(double vars[]) {
+       return pow(pow(vars[0], 8), 1.0/7.0);
+}
+
+int main(int arg, char** argv) {
+    NewtonsMethod *nm = new NewtonsMethod(func4, 2);
+    double initial[] = {1, 1};
+    //printf("f(%f, %f) = %f\n", initial[0], initial[1], func4(initial));
+    double soln[1];
+    double x_n[] = {1, 1};
+    int i = 1;
+    printf("Initial\n-----------------\n");
+    for(int j = 0; j < 2; j++) {
+      printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
+    }
+    while(nm->step(x_n) > 0.000001) {
+      printf("\n***** Step %d *****\n", i++);
+      nm->printInfo(stdout);
+      for(int j = 0; j < 2; j++) {
+        printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
+      }
+    }
+    //nm->maximize(initial, soln);
+    printf("\nSolution: %.10f\n", x_n[0]);
+    system("PAUSE");
+}
+
+
+/* 2D FLOW */
+//int main(int argc, char** argv){
+//     map<int, Vertex>::iterator vit;
+//     map<int, Edge>::iterator eit;
+//     map<int, Face>::iterator fit;
+//     map<int, Tetra>::iterator tit;
+//     
+//     vector<int> edges;
+//     vector<int> faces;
+//     vector<int> tetras;
+//    
+//   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Lutz Format/tetrahedron.txt";
+//   char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
+//   makeTriangulationFile(from, to);
+//   readTriangulationFile(to);
+//   //char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
+//   //readTriangulationFile(tetra);
+//   int vertSize = Triangulation::vertexTable.size();
+//   int edgeSize = Triangulation::edgeTable.size();
+//   for(int i = 1; i <= vertSize; i++) {
+//      Radius::At(Triangulation::vertexTable[i])->setValue(1 + (2 - i)/4.0);        
+//   }
+//   for(int i = 1; i <= edgeSize; i++) {
+//       Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
+//   }
+//   Approximator *app = new EulerApprox((sysdiffeq) AdjRicci, "r2");
+//   app->run(300, 0.01);
+//   printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
+//                      &(app->radiiHistory), &(app->curvHistory));
+//   system("PAUSE");
+//}
 
 
 

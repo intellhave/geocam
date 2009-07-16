@@ -26,7 +26,6 @@ private:
 protected:
   Radius( Vertex& v );
   void recalculate();
-  void remove();
 public:
   ~Radius();
   static Radius* At( Vertex& v );
@@ -34,6 +33,7 @@ public:
          return Radius::At(v)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /******************/
 
@@ -48,7 +48,7 @@ private:
 protected:
   Eta( Edge& e );
   void recalculate();
-  void remove();
+  
 public:
   ~Eta();
   static Eta* At( Edge& e );
@@ -56,6 +56,7 @@ public:
          return Eta::At(e)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /***************/
 
@@ -73,7 +74,7 @@ private:
 protected:
   Length( Edge& e );
   void recalculate();
-  void remove();
+  
 public:
   ~Length();
   static Length* At( Edge& e );
@@ -81,6 +82,7 @@ public:
          return Length::At(e)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /******************/
 
@@ -94,7 +96,7 @@ private:
   GeoQuant* lengthA;
   GeoQuant* lengthB;
   GeoQuant* lengthC;
-  void remove();
+  
 protected:
   EuclideanAngle( Vertex& v, Face& f );
   void recalculate();
@@ -106,6 +108,7 @@ public:
          return EuclideanAngle::At(v, f)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /**************************/
 
@@ -121,7 +124,7 @@ private:
 protected:
   Area( Face& f );
   void recalculate();
-  void remove();
+  
 public:
   ~Area();
   static Area* At( Face& f );
@@ -129,6 +132,7 @@ public:
          return Area::At(f)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /****************/
 
@@ -144,7 +148,7 @@ private:
 protected:
   Curvature2D( Vertex& v );
   void recalculate();
-  void remove();
+  
 public:
   ~Curvature2D();
   static Curvature2D* At( Vertex& v );
@@ -152,6 +156,7 @@ public:
          return Curvature2D::At(v)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /***********************/
 
@@ -170,7 +175,7 @@ private:
 protected:
   DihedralAngle( Edge& e, Tetra& t );
   void recalculate();
-  void remove();
+  
 public:
   ~DihedralAngle();
   static DihedralAngle* At( Edge& e, Tetra& t );
@@ -178,6 +183,7 @@ public:
          return DihedralAngle::At(e, t)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /*************************/
 
@@ -193,7 +199,7 @@ private:
 protected:
   DihedralAngleSum( Edge& e );
   void recalculate();
-  void remove();
+  
 public:
   ~DihedralAngleSum();
   static DihedralAngleSum* At( Edge& e );
@@ -201,6 +207,7 @@ public:
          return DihedralAngleSum::At(e)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /******************************/
 
@@ -216,7 +223,7 @@ private:
 protected:
   Volume( Tetra& t );
   void recalculate();
-  void remove();
+  
 public:
   ~Volume();
   static Volume* At( Tetra& t );
@@ -224,6 +231,7 @@ public:
          return Volume::At(t)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /******************/
 
@@ -238,7 +246,7 @@ private:
 protected:
   TotalVolume();
   void recalculate();
-  void remove();
+  
 public:
   ~TotalVolume();
   static TotalVolume* At();
@@ -246,6 +254,7 @@ public:
          return TotalVolume::At()->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /************************/
 
@@ -261,7 +270,7 @@ private:
 protected:
   EdgeCurvature( Edge& e );
   void recalculate();
-  void remove();
+  
 public:
   ~EdgeCurvature();
   static EdgeCurvature* At( Edge& e  );
@@ -269,6 +278,7 @@ public:
          return EdgeCurvature::At(e)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /*************************/
 
@@ -287,7 +297,7 @@ private:
 protected:
   PartialEdge( Vertex& v, Edge& e );
   void recalculate();
-  void remove();
+  
 public:
   ~PartialEdge();
   static PartialEdge* At( Vertex& v, Edge& e  );
@@ -295,6 +305,7 @@ public:
          return PartialEdge::At(v, e)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /************************/
 
@@ -311,7 +322,7 @@ private:
 protected:
   Curvature3D( Vertex& v );
   void recalculate();
-  void remove();
+  
 public:
   ~Curvature3D();
   static Curvature3D* At( Vertex& v );
@@ -319,6 +330,7 @@ public:
      return Curvature3D::At(v)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /***********************/
 
@@ -333,7 +345,7 @@ private:
 protected:
   TotalCurvature();
   void recalculate();
-  void remove();
+  
 public:
   ~TotalCurvature();
   static TotalCurvature* At();
@@ -341,6 +353,7 @@ public:
          return TotalCurvature::At()->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /***************************/
 
@@ -358,7 +371,7 @@ private:
 protected:
   VolumePartial( Vertex& v, Tetra& t );
   void recalculate();
-  void remove();
+  
 public:
   ~VolumePartial();
   static VolumePartial* At( Vertex& v, Tetra& t );
@@ -366,6 +379,7 @@ public:
          return VolumePartial::At(v, t)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /*************************/
 
@@ -381,7 +395,7 @@ private:
 protected:
   VolumePartialSum( Vertex& v );
   void recalculate();
-  void remove();
+  
 public:
   ~VolumePartialSum();
   static VolumePartialSum* At( Vertex& v );
@@ -389,6 +403,7 @@ public:
          return VolumePartialSum::At(v)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /******************************/
 
@@ -406,7 +421,7 @@ private:
 protected:
   VolumeSecondPartial( Vertex& v, Vertex& w, Tetra& t );
   void recalculate();
-  void remove();
+  
 public:
   ~VolumeSecondPartial();
   static VolumeSecondPartial* At( Vertex& v, Vertex& w, Tetra& t );
@@ -414,6 +429,7 @@ public:
          return VolumeSecondPartial::At( v, w, t)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /*********************************/
 
@@ -431,7 +447,7 @@ private:
 protected:
   EdgeHeight( Edge& e, Face& f );
   void recalculate();
-  void remove();
+  
 public:
   ~EdgeHeight();
   static EdgeHeight* At( Edge& e, Face& f );
@@ -439,6 +455,7 @@ public:
         return EdgeHeight::At( e, f )->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /***********************/
 
@@ -456,7 +473,7 @@ private:
 protected:
   FaceHeight( Face& f, Tetra& t );
   void recalculate();
-  void remove();
+  
 public:
   ~FaceHeight();
   static FaceHeight* At( Face& f, Tetra& t );
@@ -464,6 +481,7 @@ public:
         return FaceHeight::At( f, t )->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /***********************/
 
@@ -483,7 +501,7 @@ private:
 protected:
   DualAreaSegment( Edge& e, Tetra& t );
   void recalculate();
-  void remove();
+  
 public:
   ~DualAreaSegment();
   static DualAreaSegment* At( Edge& e, Tetra& t );
@@ -491,6 +509,7 @@ public:
          return DualAreaSegment::At(e, t)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /****************************/
 
@@ -506,7 +525,7 @@ private:
 protected:
   DualArea( Edge& e );
   void recalculate();
-  void remove();
+  
 public:
   ~DualArea();
   static DualArea* At( Edge& e );
@@ -514,6 +533,7 @@ public:
          return DualArea::At(e)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /*********************/
 
@@ -542,7 +562,7 @@ private:
 protected:
   CurvaturePartial( Vertex& v, Vertex& w );
   void recalculate();
-  void remove();
+  
 public:
   ~CurvaturePartial();
   static CurvaturePartial* At( Vertex& v, Vertex& w );
@@ -550,6 +570,7 @@ public:
          return CurvaturePartial::At(v, w)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /*****************************/
 
@@ -568,7 +589,7 @@ private:
 protected:
   EHRPartial( Vertex& v );
   void recalculate();
-  void remove();
+  
 public:
   ~EHRPartial();
   static EHRPartial* At( Vertex& v );
@@ -576,6 +597,7 @@ public:
          return EHRPartial::At(v)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /***********************/
 
@@ -600,7 +622,7 @@ private:
 protected:
   EHRSecondPartial( Vertex& v, Vertex& w );
   void recalculate();
-  void remove();
+  
 public:
   ~EHRSecondPartial();
   static EHRSecondPartial* At( Vertex& v, Vertex& w );
@@ -608,6 +630,7 @@ public:
          return EHRSecondPartial::At(v, w)->getValue();
   }
   static void CleanUp();
+  void remove();
 };
 /******************************/
 #endif /* GEOQUANTS_H_ */
