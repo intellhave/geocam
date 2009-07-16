@@ -1,0 +1,29 @@
+#summary To do list of glossary entries.
+
+= Introduction =
+
+We will make a to-do list for glossary entries as they come up in writing manual pages.
+
+
+= Details =
+
+  * piecewise flat manifold
+  * metric
+  * Einstein metric
+  * scalar curvature
+  * constant scalar curvature
+  * Yamabe flow
+  * normalized total scalar curvature functional
+  * Einstein-Hilbert functional
+  * Einstein-Hilbert-Regge functional
+  * conformal class
+  * conformal deformation
+  * inversive distance
+  * min-max procedure
+  * Yamabe constant
+
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
