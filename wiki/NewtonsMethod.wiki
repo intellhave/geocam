@@ -53,8 +53,36 @@
 
     // Display the results
     printf("\nSolution: %.10f, %.10f\n", soln[0], soln[1]);
-    system("PAUSE");
    }
+  }}}
+
+  Using the same ellipse, one can use the `step` function instead of `maximize` to gain greater flexibility over the procedure. In this case, we also print out useful information after each step.
+  {{{
+     // This function takes two variables.
+   double ellipse(double vars[]) {
+       double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+       return sqrt(val);
+   }
+
+   int main(int arg, char** argv) {
+    NewtonsMethod *nm = new NewtonsMethod(ellipse, 2);
+    double x_n[] = {1, 1};
+    int i = 1;
+    fprintf(stdout, "Initial\n-----------------\n");
+    for(int j = 0; j < 2; j++) {
+      fprintf(stdout, "x_n_%d[%d] = %f\n", i, j, x_n[j]);
+    }
+    // Continue with the procedure until the length of the gradient is 
+    // less than 0.000001.
+    while(nm->step(x_n) > 0.000001) {
+      fprintf(stdout, "\n***** Step %d *****\n", i++);
+      nm->printInfo(stdout);
+      for(int j = 0; j < 2; j++) {
+        fprintf(stdout, "x_n_%d[%d] = %f\n", i, j, x_n[j]);
+      }
+    }
+    printf("\nSolution: %.10f\n", x_n[0]);
+}
   }}}
 
   In this example, we use a one variable Gaussian function, but provide a gradient and hessian, as well. The maximum is found at `x = 0`.
@@ -89,6 +117,14 @@
 
     // Display the results
     printf("\nSolution: %.10f\n", soln[0]);
-    system("PAUSE");
    }
   }}}
+
+  == Limitations ==
+  There are limitations with the `NewtonsMethod` class with regards to the approximation of the gradient and hessian. In both cases, a delta value for the quotients is hard-coded as 10^-5^. This could lead to accuracy issues when the point where the derivative is being calculated is less than this value. It can also be too accurate at times and lead to unnecessarily slowing down the procedure. One solution could be to provide a function where a delta value could be set by the user.
+
+  == Revisions ==
+   * subversion 876, 7/16/09: Added a NewtonsMethod class for general maximizing.
+
+  == Future Work ==
+   * 7/16 - Provide greater flexibility to the user for approximating the gradient and hessian.
