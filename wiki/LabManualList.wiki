@@ -63,7 +63,7 @@ Add classes and functions to the following lists as follows:
 || || || || ||
 || *double functions* || *double functions* || || ||
 ||adjDiffEQ||double|| || ||
-||Aij_kl||double||Dan || ||
+||Aij_kl||double||Dan ||LaTex ||
 ||angle||double||Alex|| ||
 ||calcNormalization||double||Dan || ||
 ||CayleyvolumeSq||double||Dan || ||
@@ -75,24 +75,24 @@ Add classes and functions to the following lists as follows:
 ||dualArea||double|| || ||
 ||dualLength||double|| || ||
 ||EHR||double||Dan || ||
-||EHR_Partial||double||Dan || ||
-||EHR_Second_Partial||double||Dan || ||
+||EHR_Partial||double||Dan ||LaTex ||
+||EHR_Second_Partial||double||Dan ||LaTex ||
 ||F||double||Dan || ||
 ||FE||double||Dan || ||
 ||FEE||double||Dan || ||
 ||FR||double||Dan || ||
 ||getDual||double||Alex|| ||
 ||getHeight||double||Alex|| ||
-||hij_k||double||Dan || ||
-||hijk_l||double||Dan || ||
+||hij_k||double||Dan ||LaTex ||
+||hijk_l||double||Dan ||LaTex ||
 ||inRadius||double||Alex||obsolete||
-||Lij_star||double||Dan || ||
+||Lij_star||double||Dan ||LaTex ||
 ||plot||double||Dan || ||
 ||SecondPartial||double||Dan || ||
-||Total_Curvature||double||Dan || ||
-||Total_Volume||double||Dan || ||
-||Volume_Partial||double||Dan || ||
-||Volume_Second_Partial||double||Dan || ||
+||Total_Curvature||double||Dan ||LaTex ||
+||Total_Volume||double||Dan ||LaTex ||
+||Volume_Partial||double||Dan ||LaTex ||
+||Volume_Second_Partial||double||Dan ||LaTex ||
 ||volumeSq||double||Dan || ||
 || || || || ||
 || *int functions* || *int functions* || || ||
