@@ -1,5 +1,27 @@
 #labels Class
 = `Approximator` =
+  
+  == Key Words ==
+  curvature flow, differential equations, Euler's method, Runga Kutta
+
+  == Authors ==
+   * Joe Thomas
+   * Alex Henniges
+
+  == Introduction ==
+  The Approximator class runs a curvature flow using one of several methods. The class itself is abstract and the method is chosen by the instantiating object.
+
+  == Subsidiaries ==
+  Functions:
+   * [Functions#Approximator::run run]
+  Sub-classes:
+   * EulerApprox
+   * RungaApprox
+  Public Variables:
+   * radiiHistory
+   * curvHistory
+   * areaHistory
+   * volumeHistory
 
   == Description ==
   The `Approximator` class is the shell for running a curvature flow. The class provides the functionality to determine what system of differential equations to use, how to perform a step, and even which values to record for later use. The system is provided by the user at run-time and is defined to be a function that takes in an empty array of `double`s and fills the array with the values calculated in the system of equations. The `Approximator` class is abstract with an abstract method `step`. A class that extends `Approximator` implements `step` with the method of approximation to use (i.e Euler's method). Lastly, the `Approximator` stores values after each `step` of a flow according to which values were requested at construction. Values include radii, curvatures, areas, and volumes. These histories can then be accessed directly from the `Approximator` object.
@@ -17,20 +39,9 @@
   Approximator(sysdiffeq funct, char* histories);
   }}}
 
-  == Public Variables ==
+  == Practicum ==
+  This example will show how to run a Yamabe curvature flow on the pentachoron using precision and accuracy bounds (see [Functions#run run]) while recording radii, curvatures, and volumes. It will show how to initialize the system and also how to print out results at the end.
   {{{
-  vector<double> radiiHistory, curvHistory, areaHistory, volumeHistory
-  sysdiffeq local_derivs
-  }}}
-
-  == Functions ==
-    * [Functions#Approximator::run run]
-    * step
-    * recordState
-
-= Example =
-This example will show how to run a Yamabe curvature flow on the pentachoron using precision and accuracy bounds (see [Functions#run run]) while recording radii, curvatures, and volumes. It will show how to initialize the system and also how to print out results at the end.
-{{{
 int main(int argc, char** argv) {
    map<int, Vertex>::iterator vit;
    map<int, Edge>::iterator eit;
