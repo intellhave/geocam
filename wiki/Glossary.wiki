@@ -1,4 +1,5 @@
 #summary To do list of glossary entries.
+#labels Featured
 
 = Introduction =
 
