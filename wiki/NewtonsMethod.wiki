@@ -56,6 +56,8 @@
 
     // Display the results
     printf("\nSolution: %.10f, %.10f\n", soln[0], soln[1]);
+
+    return 0;
    }
   }}}
 
@@ -85,7 +87,9 @@
       }
     }
     printf("\nSolution: %.10f\n", x_n[0]);
-}
+
+    return 0;
+   }
   }}}
 
   In this example, we use a one variable Gaussian function, but provide a gradient and hessian, as well. The maximum is found at `x = 0`.
@@ -120,6 +124,8 @@
 
     // Display the results
     printf("\nSolution: %.10f\n", soln[0]);
+
+    return 0;
    }
   }}}
 
