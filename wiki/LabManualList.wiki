@@ -69,7 +69,7 @@ Add classes and functions to the following lists as follows:
 ||CayleyvolumeSq||double||Dan || ||
 ||CayleyvolumeSqDerivative||double||Dan || ||
 ||curvature||double|| || ||
-||Curvature_Partial||double|| || ||
+||Curvature_Partial||double||Dan ||LaTex ||
 ||dij||double||Dan || ||
 ||distancePoint||double|| || ||
 ||dualArea||double|| || ||
