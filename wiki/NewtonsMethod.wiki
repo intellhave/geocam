@@ -9,7 +9,7 @@
    * Dan Champion  
   
   == Introduction ==
-  The `NewtonsMethod` class is used to find an extrema of a given functional. In addition to the functional given, the user can provide the gradient or hessian function. If not, these are approximated during runtime.
+  The `NewtonsMethod` class is used to find an extremum of a given functional. In addition to the functional given, the user can provide the gradient or hessian function. If not, these are approximated during run-time.
 
   == Subsidiaries ==
   Functions:
@@ -35,10 +35,11 @@
     NewtonsMethod(orig_function func, gradient df, hessian d2f, int numVars)
   }}}
 
-  == Pracicum ==
-  Below is a full example of how to use the `NewtonsMethod` class to find the minimum of an ellipse. In this case, the gradient and hessian are not given. The minimum found is at (0,0).
+  == Practicum ==
+  Below is a full example of how to use the `NewtonsMethod` class to find the minimum of an ellipse. In this case, the gradient and hessian are not given. The maximum found is at (0,0).
   {{{
    // This function takes two variables.
+   // f(x, y) = (1 - x^/4 - y^2/9) ^(1/2)
    double ellipse(double vars[]) {
        double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
        return sqrt(val);
@@ -114,7 +115,7 @@
 
    int main(int arg, char** argv) {
     // Create the NewtonsMethod object
-    NewtonsMethod *nm = new NewtonsMethod(gaussian, 1);
+    NewtonsMethod *nm = new NewtonsMethod(gaussian, gradFunc, hessFunc, 1);
     // Build the array that holds the initial value.
     double initial[] = {0.1};
     // Build the array that will hold the final solution.
