@@ -17,7 +17,7 @@ PartialEdgeIndex* PartialEdge::Index = NULL;
 PartialEdge::PartialEdge( Vertex& v, Edge& e  ){    
     length = Length::At(e);
     length->addDependent(this);
-    
+
     radA = Radius::At(v);
     radA->addDependent(this);
      

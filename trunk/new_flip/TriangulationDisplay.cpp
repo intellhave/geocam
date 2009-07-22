@@ -3,6 +3,8 @@
 
 TriangulationDisplay::TriangulationDisplay(char *f)
 {
+    showWeights = false;
+    voronoi = 0;
     if (readTriangulationFile(f)) {
         fileName = f;
         //load up the specified file into the maps contained in triangulation.cpp
@@ -15,6 +17,9 @@ TriangulationDisplay::TriangulationDisplay(char *f)
     
         //this will be used to show which edge is currently selected
         selectedEdge = Triangulation::edgeTable.begin();
+    } else {
+        cout << "BAD FILE NAME!!!\n";
+        system("PAUSE");
     }
 
 }
@@ -90,3 +95,16 @@ void TriangulationDisplay::flipCurrentEdge() {
 vector<triangle_parts> TriangulationDisplay::getTriangles(void) {
     return listOfTriangles;
 }
+
+vector<Line> TriangulationDisplay::getDuals(void) {
+    //map<int, Edge>::iterator eit;
+    //for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+    //    coordSystem.addDual(eit->second);
+    //}
+    return coordSystem.TriangulationCoordinateSystem::getDuals();
+}
+
+Point TriangulationDisplay::getPoint(int index){
+    return coordSystem.getPoint(index);
+}
+

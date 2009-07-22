@@ -1,5 +1,6 @@
 #include <cmath>
 #include "delaunay.h"
+#include <iostream>
 #include "Geometry/geoquants.h"
 #define PI 	3.141592653589793238
 
@@ -28,110 +29,96 @@ bool isDelaunay(Edge e)
           return false;
      else
           return true;
-     
 }
 
 bool isWeightedDelaunay(Edge e)
 {
-     if(e.isBorder())
-     {
+    if(e.isBorder())
+    {
         return true;
-     }
+    }
      
-     //almost always, calculations of dimensions, which involve arcsin,
-     // will not yield a zero value, but instead a value very close to zero
-     return getDual(e) > -0.00001;
-
+    //almost always, calculations of dimensions, which involve arcsin,
+    // will not yield a zero value, but instead a value very close to zero
+    return getDual(e) > -0.00001;
 }
 
 double getHeight(Face f, Edge e)
 {
-     Vertex v1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
-     Vertex v2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
-     
-     vector<int> diff;
-     diff = listDifference(f.getLocalVertices(), e.getLocalVertices());
-     if(diff.size() == 0)
-     {
-//       cout << "Face: " << f.getIndex() << " " << f.getLocalVertices()->size() << "(";
-//       cout << (*(f.getLocalVertices()))[0] << ", ";
-//       cout << (*(f.getLocalVertices()))[1] << ", ";
-//       cout << (*(f.getLocalVertices()))[2] << ")\n";
-//       cout << "Edge: " << e.getIndex() << " " << e.getLocalVertices()->size() << "(";
-//       cout << (*(e.getLocalVertices()))[0] << ", ";
-//       cout << (*(e.getLocalVertices()))[1] << ")" << endl;
-//       writeTriangulationFile("Triangulations/troubleshoot.txt");
-       system("PAUSE");
-     }
-     Vertex v3 = Triangulation::vertexTable[diff[0]];
-     
-     
-     vector<int> sameAs;
-     sameAs = listIntersection(v1.getLocalEdges(), v3.getLocalEdges());
-     sameAs = listIntersection(&sameAs, f.getLocalEdges());
-     Edge ea1 = Triangulation::edgeTable[sameAs[0]];
-     sameAs = listIntersection(v2.getLocalEdges(), v3.getLocalEdges());
-     sameAs = listIntersection(&sameAs, f.getLocalEdges());
-     Edge ea2 = Triangulation::edgeTable[sameAs[0]];
+    Vertex v1 = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
+    Vertex v2 = Triangulation::vertexTable[(*(e.getLocalVertices()))[1]];
 
-     double ang1 = EuclideanAngle::valueAt(v1, f);
+    vector<int> diff;
+    diff = listDifference(f.getLocalVertices(), e.getLocalVertices());
 
+    Vertex v3 = Triangulation::vertexTable[diff[0]];
 
-     double d13 = PartialEdge::valueAt(v1,ea1);
-     double d12 = PartialEdge::valueAt(v1,e);
-//
-//     cout << "angle: " << ang1 << endl;
-//     cout << "ea2: " << ea2.getLength() << endl;
+    vector<int> sameAs;
+    sameAs = listIntersection(v1.getLocalEdges(), v3.getLocalEdges());
+    sameAs = listIntersection(&sameAs, f.getLocalEdges());
+    Edge ea1 = Triangulation::edgeTable[sameAs[0]];
+    /*sameAs = listIntersection(v2.getLocalEdges(), v3.getLocalEdges());
+    sameAs = listIntersection(&sameAs, f.getLocalEdges());
+    Edge ea2 = Triangulation::edgeTable[sameAs[0]];*/
 
+    double ang1 = EuclideanAngle::valueAt(v1, f);
 
-     double h = (d13 - d12*cos(ang1)) / sin(ang1);
+    double d13 = PartialEdge::valueAt(v1,ea1);
+    double d12 = PartialEdge::valueAt(v1,e);
 
-     if(f.isNegative())
-          return -h;
-     else
-          return h;
+    double h = (d13 - d12*cos(ang1)) / sin(ang1);
+
+    if(f.isNegative())
+        return -h;
+    else
+        return h;
 }
 
 double getDual(Edge e)
 {
-     Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
-     Face f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
-     
-     double h1 = getHeight(f1, e);
-     double h2 = getHeight(f2, e);
-//     if(listDifference(f1.getLocalVertices(), f2.getLocalVertices()).size() == 0)
-//     {
-//        cout << "Double triangle: " << e.getIndex() << " " << 
-//        f1.getIndex() << " " << f2.getIndex() << "\n";
-//        cout << "Heights: " << h1 << " " << h2 << "\n";
-//        writeTriangulationFile("Triangulations/troubleshoot.txt");
-//        system("PAUSE");
-//     }
-//     cout << "Edge #" << e.getIndex() << endl;
-//     cout << "Face 1: (";
-//     cout << (*(f1.getLocalVertices()))[0] << ", ";
-//     cout << (*(f1.getLocalVertices()))[1] << ", ";
-//     cout << (*(f1.getLocalVertices()))[2] << ") ";
-//     cout << f1.isNegative() << endl;
-//     cout << "Face 2: (";
-//     cout << (*(f2.getLocalVertices()))[0] << ", ";
-//     cout << (*(f2.getLocalVertices()))[1] << ", ";
-//     cout << (*(f2.getLocalVertices()))[2] << ") ";
-//     cout << f2.isNegative() << endl;
-//     cout << "Height 1: " << h1 << endl;
-//     cout << "Height 2: " << h2 << endl;
-//     cout << "Dual: ";
+    Face f1, f2;
+    double h1 = 0;
+    double h2 = 0;
+    
+    int numFaces = (*(e.getLocalFaces())).size();
 
-     if(f1.isNegative() || f2.isNegative())
-     {
-        //  cout << -(h1 + h2) << endl;
-          return -(h1 + h2);
-     }
-     else
-     {
-       //   cout << (h1 + h2) << endl;
-          return h1 + h2;
-     }
+    if (numFaces > 0) {
+        f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
+        h1 = getHeight(f1, e);
+    }
+    if (numFaces > 1) {
+        f2 = Triangulation::faceTable[(*(e.getLocalFaces()))[1]];
+        h2 = getHeight(f2, e);
+    }
+
+    /*if(f1.isNegative() || f2.isNegative()) {
+        return -(h1 + h2);
+    }
+    else {
+        return h1 + h2;
+    }*/
+    return h1+h2;
+}
+
+/*
+ *  E(f) = 1/2 sum_({i,j} in T_1) |*{i,j}|/|{i,j}| (f_j - f_i)^2
+ *
+ */
+double dirichletEnergy() {
+    double total = 0.0;
+    cout << "\n";
+    map<int, Edge>::iterator eit;
+    //perform the {i,j} and {j,i} computation at the same time
+    for (eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+        double f_i = (*(eit->second).getLocalVertices())[0];
+        double f_j = (*(eit->second).getLocalVertices())[1];
+        cout << "\t" << f_i << " " << f_j << " " << getDual(eit->second) << " " << Length::valueAt(eit->second) << "\n";
+        double subtotal = (getDual(eit->second)/Length::valueAt(eit->second));
+        cout << "\t" << subtotal << "\n";
+        total += subtotal * pow(f_i-f_j, 2) + subtotal * pow(f_j-f_i, 2);
+    }
+    total = total / 2;
+return total;
 }
 
 //double getPartialEdge(Edge e, Vertex v1)

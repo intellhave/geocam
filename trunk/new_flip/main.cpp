@@ -1,5 +1,6 @@
 #include "new_flip/flip_algorithm.h"
 #include "new_flip/TriangulationDisplay.h"
+#include "delaunay.h"
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -9,15 +10,16 @@
 #endif
 
 using namespace std;
-float _dist = -5.0f;
-float _hori = 0.0f;
-float _vert = 0.0f;
+float _dist = -20.0f;
+float _hori = -5.0f;
+float _vert = -5.0f;
 TriangulationDisplay *_triDisp;
 
 float _angle = 30.0f;
 float _camera_angle = 0.0f;
 
 void handleKeypress(unsigned char key, int x, int y) {
+    bool somethingHappened = true;
 	switch (key) {
 	   case 27: //Escape key
 			exit(0); //Exit the program
@@ -41,7 +43,9 @@ void handleKeypress(unsigned char key, int x, int y) {
             _vert -= .5;
             break;
         case 32: //space bar
+            printf("\n\n%lf  \n", dirichletEnergy());
             _triDisp->flipCurrentEdge();
+            printf("%lf  \n\n\n", dirichletEnergy());
             break;
         case 104: //h
             _triDisp->previousEdge();
@@ -49,8 +53,36 @@ void handleKeypress(unsigned char key, int x, int y) {
         case 108: //l
             _triDisp->nextEdge();
             break;
+        case 112: //p
+            _triDisp->showWeights = !(_triDisp->showWeights);
+            break;
+        case 44: // ,
+            _triDisp->previousEdge();
+            break;
+        case 46: // .
+            _triDisp->nextEdge();
+            break;
+        case 118: //v
+            switch (_triDisp->voronoi) {
+                case 0:
+                    _triDisp->voronoi = 1;
+                    break;
+                case 1:
+                    _triDisp->voronoi = 2;
+                    break;
+                case 2:
+                    _triDisp->voronoi = 0;
+                    break;
+            }
+            break;
+        default:
+            somethingHappened = false;
+            break;
+
 	}
-	glutPostRedisplay();
+    if (somethingHappened) {
+        glutPostRedisplay();
+    }
 }
 
 void handleSpecialKeypress(int key, int x, int y) {
@@ -120,23 +152,80 @@ void drawScene() {
         glEnd();
     }
     
+    //draw the duals
+    if (_triDisp->voronoi == 1) {
+        vector<Line> ds;
+        ds = _triDisp->getDuals();
+        for(int i = 0; i < ds.size(); i++) {
+            glBegin(GL_LINE_STRIP);
+            glColor3d(0, 255, 0);
+            glVertex3d(ds[i].getInitialX(),ds[i].getInitialY(),0);
+            glVertex3d(ds[i].getEndingX(),ds[i].getEndingY(),0);
+            iter++;
+            glEnd();
+        }
+    } else if (_triDisp->voronoi == 2) {
+
+    }
+    
+    
+    //draws the weights around the vertices
+    if (_triDisp->showWeights) {
+        map<int,Vertex>::iterator vit;
+        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+            Point p;
+            p = _triDisp->getPoint(vit->first);
+            double radius = Radius::valueAt(vit->second);
+            glBegin(GL_LINE_STRIP);
+            glColor3d(255,250,250);
+            for (double i = 0; i <= 2*PI; i+=0.0174532925) {
+                glVertex3d(p.x + cos(i) * radius, p.y + sin(i) * radius, 0);
+            }
+            glEnd();
+        }
+    }
+    
+    
+    
     //draws the edge that is currently selected
     Line l;
     l = _triDisp->currentEdgeToLine();
     //draws the selected edge, should appear on top
     glBegin(GL_LINE_STRIP);
-    glColor3d(0xFF, 0xD7, 0x00);
+    glColor3d(255, 127, 0);
     glVertex3d(l.getInitialX(), l.getInitialY(), 0.01);
     glVertex3d(l.getEndingX(), l.getEndingY(), 0.01);
     glEnd();
+    
+    Edge e = _triDisp->currentEdge();
 
     glutSwapBuffers();
 }
 
+/*
+ *  Main takes the name of a file to read from as its only argument
+ *
+ *  to give it an argument in dev, go to Execute > Parameters...
+ *  then in the top field labeled "Parameters to pass to your program"
+ *  type the file name containing the triangulation data you want used
+ */
 int main(int argc, char** argv) {
 
+    //cout << "starting!\n";
+    //makeTriangulationFile("test_files/eight_triangles_redux.lutz", "test_files/eight_triangles_redux.txt");
+    //cout << "done!\n";
+
     //triangulation initializaiton steps
-    char *testFile = "test_files/six_triangles_with_geom.txt";
+    char *testFile;
+    if (argc <= 1) {
+        cout << "ATTENTION: YOU NEED TO SPECIFY A FILE TO BE READ BY GIVING MAIN AN ARGUMENT!!!\n"
+             << "READ THE COMMENT ABOVE MAIN's DEFINITION\n\nif you press any key to continue now,"
+             << " the file being used will default to test_files/convex_pair.txt\n\n";
+            system("PAUSE");
+            testFile = "test_files/convex_pair.txt";
+    } else {
+        testFile = argv[1];
+    }
     char outFile[strlen(testFile)+5];
     strcpy(outFile, testFile);
     strcpy(&outFile[strlen(testFile)], ".out");
@@ -159,290 +248,7 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(handleResize);
 
 	glutMainLoop();
-	return 0; //This line is never reached
+	system("PAUSE"); //This line is never reached
+	return 0;
+
 }
-
-/*
-using namespace std;
-
-//several tests for the different cases
-//tester unfortunately has to visually inspect the output to confirm
-//that the functions are working, need to think of an easy way to automate this
-void testTopoFlip();
-void testPP2PP();
-void testPP2PN();
-void testPN2PN();
-void testPN2PP();
-void testPN2NN();
-void testPN2NN();
-void testNN2PN();
-void testNN2NN();
-
-int main(int argc, char *argv[]) {
-    char *testFile = "test_files/pair_for_geo_tests.txt";
-    char outFile[strlen(testFile)+5];
-    strcpy(outFile, testFile);
-    strcpy(&outFile[strlen(testFile)], ".out");
-    //makeTriangulationFile(testFile, outFile);
-    readTriangulationFile(testFile);
-    //call test here
-    testNN2PN();
-    writeTriangulationFile(outFile);
-
-    map<int, Edge>::iterator iter;
-    Edge e;
-    iter = Triangulation::edgeTable.begin();
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        e = iter->second;
-      }
-      iter++;
-    }
-
-    cout << "\n\n\n";
-
-    while(iter != Triangulation::edgeTable.end()){
-      printf("edge %d ended up with length %lf\n", (iter->second).getIndex(), (iter->second).getLength());
-      iter++;
-    }
-    vector<int> *fs = Triangulation::edgeTable[e.getIndex()].getLocalFaces();
-    vector<int> *es = Triangulation::faceTable[(*fs).at(0)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(0)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-
-    es = Triangulation::faceTable[(*fs).at(1)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(1)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-
-
-
-    system("PAUSE");
-    return 0;
-}
-
-void testTopoFlip() {
-     map<int, Edge>::iterator iter;
-     iter = Triangulation::edgeTable.begin();
-
-     Edge e = iter->second;
-     flip(e);
-}
-
-void testPP2PP() {
-    map<int, Edge>::iterator iter;
-    iter = Triangulation::edgeTable.begin();
-    Edge e;
-    double len = 5;
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        e = iter->second;
-        printf("common edge found!\n");
-      }
-      printf("edge %d started with length %lf\n", (iter->second).getIndex(), len);
-      (iter->second).setLength(len);
-      len++;
-      iter++;
-    }
-    flip(e);
-}
-
-void testPP2PN() {
-    map<int, Edge>::iterator iter;
-    iter = Triangulation::edgeTable.begin();
-    Edge e;
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        struct simps bucket;
-        e = iter->second;
-        prep_for_flip(iter->second, &bucket);
-        Triangulation::edgeTable[bucket.e0].setLength(2.0);
-        Triangulation::edgeTable[bucket.e1].setLength(4.472);
-        Triangulation::edgeTable[bucket.e2].setLength(2.828);
-        Triangulation::edgeTable[bucket.e3].setLength(2.828);
-        Triangulation::edgeTable[bucket.e4].setLength(4.472);
-        break;
-      }
-      iter++;
-    }
-    flip(e);
-}
-
-void testPN2PN() {
-    map<int, Edge>::iterator iter;
-    iter = Triangulation::edgeTable.begin();
-    Edge e;
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        struct simps bucket;
-        e = iter->second;
-        prep_for_flip(iter->second, &bucket);
-        Triangulation::edgeTable[bucket.e0].setLength(3.0);
-        Triangulation::edgeTable[bucket.e1].setLength(3.162);
-        Triangulation::edgeTable[bucket.e2].setLength(5.0);
-        Triangulation::edgeTable[bucket.e3].setLength(3.163);
-        Triangulation::edgeTable[bucket.e4].setLength(5.1);
-            vector<int> *fs = Triangulation::edgeTable[e.getIndex()].getLocalFaces();
-            Triangulation::faceTable[(*fs).at(0)].setNegativity(true);
-    vector<int> *es = Triangulation::faceTable[(*fs).at(0)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(0)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-
-    es = Triangulation::faceTable[(*fs).at(1)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(1)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-        break;
-      }
-      iter++;
-    }
-    flip(e);
-}
-
-void testPN2PP() {
-    map<int, Edge>::iterator iter;
-    iter = Triangulation::edgeTable.begin();
-    Edge e;
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        struct simps bucket;
-        e = iter->second;
-        prep_for_flip(iter->second, &bucket);
-        Triangulation::edgeTable[bucket.e0].setLength(3.998);
-        Triangulation::edgeTable[bucket.e1].setLength(2.828);
-        Triangulation::edgeTable[bucket.e2].setLength(2.828);
-        Triangulation::edgeTable[bucket.e3].setLength(4.472);
-        Triangulation::edgeTable[bucket.e4].setLength(4.472);
-            vector<int> *fs = Triangulation::edgeTable[e.getIndex()].getLocalFaces();
-            Triangulation::faceTable[(*fs).at(0)].setNegativity(true);
-    vector<int> *es = Triangulation::faceTable[(*fs).at(0)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(0)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-
-    es = Triangulation::faceTable[(*fs).at(1)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(1)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-        break;
-      }
-      iter++;
-    }
-    flip(e);
-}
-
-void testPN2NN() {
-    map<int, Edge>::iterator iter;
-    iter = Triangulation::edgeTable.begin();
-    Edge e;
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        struct simps bucket;
-        e = iter->second;
-        prep_for_flip(iter->second, &bucket);
-        Triangulation::edgeTable[bucket.e0].setLength(3.998);
-        Triangulation::edgeTable[bucket.e1].setLength(2.828);
-        Triangulation::edgeTable[bucket.e2].setLength(2.828);
-        Triangulation::edgeTable[bucket.e3].setLength(4.472);
-        Triangulation::edgeTable[bucket.e4].setLength(4.472);
-    vector<int> *fs = Triangulation::edgeTable[e.getIndex()].getLocalFaces();
-    //only line different between the PN2PP and PN2NN tests
-    Triangulation::faceTable[(*fs).at(1)].setNegativity(true);
-    vector<int> *es = Triangulation::faceTable[(*fs).at(0)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(0)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-
-    es = Triangulation::faceTable[(*fs).at(1)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(1)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-        break;
-      }
-      iter++;
-    }
-    flip(e);
-}
-
-void testNN2NN() {
-    map<int, Edge>::iterator iter;
-    iter = Triangulation::edgeTable.begin();
-    Edge e;
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        struct simps bucket;
-        e = iter->second;
-        prep_for_flip(iter->second, &bucket);
-        Triangulation::edgeTable[bucket.e0].setLength(2.0);
-        Triangulation::edgeTable[bucket.e1].setLength(3.0);
-        Triangulation::edgeTable[bucket.e2].setLength(3.0);
-        Triangulation::edgeTable[bucket.e3].setLength(3.0);
-        Triangulation::edgeTable[bucket.e4].setLength(3.0);
-    vector<int> *fs = Triangulation::edgeTable[e.getIndex()].getLocalFaces();
-    //only line different between the PN2PP and PN2NN tests
-    Triangulation::faceTable[(*fs).at(0)].setNegativity(true);
-    Triangulation::faceTable[(*fs).at(1)].setNegativity(true);
-    vector<int> *es = Triangulation::faceTable[(*fs).at(0)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(0)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-
-    es = Triangulation::faceTable[(*fs).at(1)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(1)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-        break;
-      }
-      iter++;
-    }
-    flip(e);
-}
-
-void testNN2PN() {
-    map<int, Edge>::iterator iter;
-    iter = Triangulation::edgeTable.begin();
-    Edge e;
-    while(iter != Triangulation::edgeTable.end()) {
-      if(((iter->second).getLocalFaces())->size() == 2 ) {
-        struct simps bucket;
-        e = iter->second;
-        prep_for_flip(iter->second, &bucket);
-        Triangulation::edgeTable[bucket.e0].setLength(2.0);
-        Triangulation::edgeTable[bucket.e1].setLength(4.472);
-        Triangulation::edgeTable[bucket.e2].setLength(2.828);
-        Triangulation::edgeTable[bucket.e3].setLength(2.828);
-        Triangulation::edgeTable[bucket.e4].setLength(4.472);
-    vector<int> *fs = Triangulation::edgeTable[e.getIndex()].getLocalFaces();
-    //only line different between the PN2PP and PN2NN tests
-    Triangulation::faceTable[(*fs).at(0)].setNegativity(true);
-    Triangulation::faceTable[(*fs).at(1)].setNegativity(true);
-    vector<int> *es = Triangulation::faceTable[(*fs).at(0)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(0)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-
-    es = Triangulation::faceTable[(*fs).at(1)].getLocalEdges();
-    cout << "the face with negativity set to " << Triangulation::faceTable[(*fs).at(1)].isNegative();
-    cout << " has sides with lengths \n" << Triangulation::edgeTable[(*es).at(0)].getLength();
-    cout << "\n" << Triangulation::edgeTable[(*es).at(1)].getLength() << "\n" << Triangulation::edgeTable[(*es).at(2)].getLength();
-    cout << "\n\n";
-        break;
-      }
-      iter++;
-    }
-    flip(e);
-}
-*/

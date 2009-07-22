@@ -101,17 +101,27 @@ class TriangulationCoordinateSystem
        * triangle is filled with a color when visualizing.      
        */
       void printToFile(char*);
-      
-      //added by Kurt for use with displaying the triangulation
-      //the contents of the returned vector basically match the printout of the printToFile
-      //function included in this class
-      vector<triangle_parts> TriangulationCoordinateSystem::getTriangles(void);
+
+      /*
+       *added by Kurt for use with displaying the triangulation
+       *the contents of the returned vector basically match the printout of the printToFile
+       *function included in this class
+       */
+      vector<triangle_parts> getTriangles(void);
+
+      /*
+       *returns a vector of the duals
+       */
+      vector<Line> getDuals(void);
 
       void printDuals(char*);
       /*
        * Returns the Point in the pointTable with the given index.
        */
       Point getPoint(int);
+      
+      Line dualOfEdge(Edge e);
+      
       /*
        * Returns the Line in the lineTable with the given index.
        */

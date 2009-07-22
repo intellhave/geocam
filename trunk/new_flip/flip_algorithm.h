@@ -76,6 +76,6 @@ void
 topo_flip(Edge, struct simps);
 
 //helper function that constructs the struct to hold all the important values
-void
+bool
 prep_for_flip(Edge, struct simps*);
 #endif

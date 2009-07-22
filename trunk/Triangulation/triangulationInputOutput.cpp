@@ -80,6 +80,7 @@ bool readTriangulationFile(const char* fileName)
          char localVertices[100];
          char localEdges[100];
          char localFaces[100];
+         char specifiedradius[100];
          
          stringstream vertexStream(stringstream::in | stringstream::out);
          scanner.getline(localVertices, 100);
@@ -115,7 +116,24 @@ bool readTriangulationFile(const char* fileName)
               v.addFace(index);
          }
          
-         Triangulation::putVertex(indexMapping, v); //Finally add to table. 
+         //vertex radius info
+         char nextChar;
+         double radius = 0;
+         nextChar = scanner.peek();
+         if(!(nextChar == 'V' || nextChar == 'E' || nextChar == 'F')) {
+            stringstream radiusStream(stringstream::in | stringstream::out);
+            scanner.getline(specifiedradius, 100);
+            radiusStream << specifiedradius;
+
+            while(radiusStream.good())
+            {
+                radiusStream >> radius;
+            }
+         }
+         
+         Triangulation::putVertex(indexMapping, v); //Finally add to table.
+         //sets the radius to a value that was given, zero if nothing was specified
+         Radius::At(Triangulation::vertexTable[indexMapping])->setValue(radius);
        } 
        
        else if(simplexName == edgeString) 
@@ -167,7 +185,7 @@ bool readTriangulationFile(const char* fileName)
          
          //edge length info
          char nextChar;
-         double len;
+         double len = 0;
          nextChar = scanner.peek();
          if(!(nextChar == 'V' || nextChar == 'E' || nextChar == 'F')) {
             stringstream lengthStream(stringstream::in | stringstream::out);
@@ -177,12 +195,11 @@ bool readTriangulationFile(const char* fileName)
             while(lengthStream.good())
             {
                 lengthStream >> len;
-                //e.setLength(len);
             }
-            //end of edge length info
          }
          
          Triangulation::putEdge(indexMapping, e); 
+         //sets the length to a value given, zero if no value was specified
          Length::At(Triangulation::edgeTable[indexMapping])->setValue(len);
        } 
        

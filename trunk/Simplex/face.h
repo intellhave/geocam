@@ -18,7 +18,7 @@ Version: June 9, 2008
 class Face : public Simplex
 {
       
-      bool negative;
+        bool negative;
 	public:
 		// class constructor
 		Face();

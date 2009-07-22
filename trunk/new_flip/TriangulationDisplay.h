@@ -17,6 +17,10 @@ class TriangulationDisplay {
     map<int,Edge>::iterator selectedEdge;
 
     public:
+
+    bool showWeights;
+    int voronoi; // 0 is nothing, 1 is the whole voronoi diagram, 2 is the hinge only
+
     TriangulationDisplay(void);
     TriangulationDisplay(char* f);
     ~TriangulationDisplay(void);
@@ -45,6 +49,11 @@ class TriangulationDisplay {
     //returns a vector of structs containing the information necessary for
     //displaying the triangulation in opengl
     vector<triangle_parts> getTriangles(void);
+    
+    //return a vector of the duals
+    vector<Line> getDuals(void);
+    
+    Point getPoint(int index);
     
     //updates the underlying coordinateSystem object to represent the current state
     //of the triangulation

@@ -4,8 +4,12 @@
 
 Edge flip(Edge e) {
     struct simps bucket;
-    prep_for_flip(e, &bucket);
+    if(!prep_for_flip(e, &bucket)) {
+        return e;
+    }
 
+    topo_flip(e, bucket);
+    Length::At(e)->remove();
     if (!Triangulation::faceTable[bucket.f0].isNegative() && !Triangulation::faceTable[bucket.f1].isNegative()) {
         flipPP(bucket);
     } else if((Triangulation::faceTable[bucket.f0].isNegative() == true) ^ (Triangulation::faceTable[bucket.f1].isNegative() == true)) {
@@ -14,8 +18,9 @@ Edge flip(Edge e) {
         flipNN(bucket);
     } else {
         printf("hmm, no case was found\n");
+        //just need to escape return e seems sufficient;
+        return e;
     }
-    topo_flip(e, bucket);
   
     return Triangulation::edgeTable[e.getIndex()];
 } //end of flip
@@ -135,7 +140,7 @@ void flipPN(struct simps b) {
     
     //a positive inside a negative
     } else if (angle(b.e0_len, b.e1_len, b.e2_len) < angle(b.e0_len, b.e4_len, b.e3_len) &&
-             angle(b.e0_len, b.e2_len, b.e1_len) < angle(b.e0_len, b.e3_len, b.e4_len)) {
+               angle(b.e0_len, b.e2_len, b.e1_len) < angle(b.e0_len, b.e3_len, b.e4_len)) {
         Triangulation::faceTable[b.f1].setNegativity(true);
         Triangulation::faceTable[b.f0].setNegativity(true);
     }
@@ -308,7 +313,11 @@ v1  \    e0     / v3
          v0
 */
 
-void prep_for_flip(Edge e, struct simps * bucket) {
+bool prep_for_flip(Edge e, struct simps * bucket) {
+
+    if ((*(Triangulation::edgeTable[e.getIndex()].getLocalFaces())).size() <= 1) {
+        return false;
+    }
 
   bucket->e0 = e.getIndex();
 
@@ -324,32 +333,32 @@ void prep_for_flip(Edge e, struct simps * bucket) {
 
   //figure out what v3 is
   diff = listDifference(Triangulation::faceTable[bucket->f1].getLocalVertices(), e.getLocalVertices());
-  if (diff.size() == 0) { cout << "v3 couldn't be found"; }
+  if (diff.size() == 0) { cout << "v3 couldn't be found"; return false;}
   bucket->v3 = diff[0];
 
-  //figure out what v3 is
+  //figure out what v1 is
   diff = listDifference(Triangulation::faceTable[bucket->f0].getLocalVertices(), e.getLocalVertices());
-  if (diff.size() == 0) { cout << "v1 couldn't be found"; }
+  if (diff.size() == 0) { cout << "v1 couldn't be found"; return false;}
   bucket->v1 = diff[0];
 
   //figure out what e1 is
   same = listIntersection(Triangulation::vertexTable[bucket->v0].getLocalEdges(), Triangulation::vertexTable[bucket->v1].getLocalEdges());
-  if (same.size() == 0) { cout << "v0 and v1 had no edge in common, e1 couldn't be found"; }
+  if (same.size() == 0) { cout << "v0 and v1 had no edge in common, e1 couldn't be found"; return false;}
   bucket->e1 = same[0];
 
   //figure out what e2 is
   same = listIntersection(Triangulation::vertexTable[bucket->v1].getLocalEdges(), Triangulation::vertexTable[bucket->v2].getLocalEdges());
-  if (same.size() == 0) { cout << "v1 and v2 had no edge in common, e2 couldn't be found"; }
+  if (same.size() == 0) { cout << "v1 and v2 had no edge in common, e2 couldn't be found"; return false;}
   bucket->e2 = same[0];
 
   //figure out what e3 is
   same = listIntersection(Triangulation::vertexTable[bucket->v2].getLocalEdges(), Triangulation::vertexTable[bucket->v3].getLocalEdges());
-  if (same.size() == 0) { cout << "v2 and v3 had no edge in common, e3 couldn't be found"; }
+  if (same.size() == 0) { cout << "v2 and v3 had no edge in common, e3 couldn't be found"; return false;}
   bucket->e3 = same[0];
 
   //figure out what e4 is
   same = listIntersection(Triangulation::vertexTable[bucket->v3].getLocalEdges(), Triangulation::vertexTable[bucket->v0].getLocalEdges());
-  if (same.size() == 0) { cout << "v3 and v0 had no edge in common, e4 couldn't be found"; }
+  if (same.size() == 0) { cout << "v3 and v0 had no edge in common, e4 couldn't be found"; return false;}
   bucket->e4 = same[0];
   
   double e0_len = Length::valueAt(Triangulation::edgeTable[bucket->e0]);
@@ -373,4 +382,5 @@ void prep_for_flip(Edge e, struct simps * bucket) {
 
   bucket->a0 = a0;
   bucket->a2 = a2;
+  return true;
 }

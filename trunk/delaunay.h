@@ -38,5 +38,5 @@ double getDual(Edge);
  */
 double getPartialEdge(Edge, Vertex);
 
-
-//should the above three functions be moved to the triangulationmath class?
+//computes the dirichlet energy of the triangulation
+double dirichletEnergy();
