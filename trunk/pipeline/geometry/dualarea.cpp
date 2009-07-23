@@ -1,33 +1,9 @@
-#ifndef DUALAREA_H_
-#define DUALAREA_H_
+#include "dualarea.h"
 
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "dualareasegment.cpp"
-
-class DualArea;
 typedef map<TriPosition, DualArea*, TriPositionCompare> DualAreaIndex;
-
-class DualArea : public virtual GeoQuant {
-private:
-  static DualAreaIndex* Index;
-  vector<DualAreaSegment*>* segments;
-
-protected:
-  DualArea( Edge& e );
-  void recalculate();
-
-public:
-  ~DualArea();
-  static DualArea* At( Edge& e );
-  static void CleanUp();
-};
-DualAreaIndex* DualArea::Index = NULL;
+static DualAreaIndex* Index = NULL;
 
 DualArea::DualArea( Edge& e ){
   segments = new vector<DualAreaSegment*>();
@@ -49,6 +25,7 @@ DualArea::~DualArea(){
 void DualArea::recalculate(){
   DualAreaSegment* das;
   value = 0.0;
+
   for(int ii = 0; ii < segments->size(); ii++){
     das = segments->at(ii);
     value += das->getValue();
@@ -77,5 +54,13 @@ void DualArea::CleanUp(){
   delete Index;
 }
 
-#endif /* DUALAREA_H_ */
+void DualArea::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  DualAreaIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

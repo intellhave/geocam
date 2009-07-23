@@ -1,4 +1,4 @@
-CC= g++ -ansi -c 
+CC= g++ -ansi -c -g
 	
 archive: simplex.o vertex.o edge.o face.o tetra.o triangulation.o triangulationIO.o 
 	ar rcs topology.a *.o	

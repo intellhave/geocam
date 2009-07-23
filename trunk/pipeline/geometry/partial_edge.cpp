@@ -1,43 +1,20 @@
-#ifndef PARTIALEDGE_H_
-#define PARTIALEDGE_H_
-
-#include <map>
-#include <new>
-using namespace std;
-
+#include "partial_edge.h"
 #include "miscmath.h"
-#include "geoquant.h"
-#include "triposition.h"
 
-#include "radius.cpp"
-#include "length.cpp"
+#include <stdio.h>
 
-class PartialEdge;
 typedef map<TriPosition, PartialEdge*, TriPositionCompare> PartialEdgeIndex;
-
-class PartialEdge : public virtual GeoQuant {
-private:
-  static PartialEdgeIndex* Index;
-  Radius* ri;
-  Radius* rj;
-  Length* Lij;
-
-protected:
-  PartialEdge( Vertex& v, Edge& e );
-  void recalculate();
-
-public:
-  ~PartialEdge();
-  static PartialEdge* At( Vertex& v, Edge& e );
-  static void CleanUp();
-};
-PartialEdgeIndex* PartialEdge::Index = NULL;
+static PartialEdgeIndex* Index = NULL;
 
 PartialEdge::PartialEdge( Vertex& v, Edge& e ){
-  StdEdge st = labelEdge( v, e );  
-  ri = Radius::At( st.v1 );
-  rj = Radius::At( st.v2 );
+  StdEdge st = labelEdge( e, v );  
+  ri = Radius::At( v );
+  rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
   Lij = Length::At( e );
+
+  ri->addDependent( this );
+  rj->addDependent( this );
+  Lij->addDependent( this );
 }
 
 void PartialEdge::recalculate(){
@@ -72,4 +49,13 @@ void PartialEdge::CleanUp(){
   delete Index;
 }
 
-#endif /* PARTIALEDGE_H_ */
+void PartialEdge::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  PartialEdgeIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

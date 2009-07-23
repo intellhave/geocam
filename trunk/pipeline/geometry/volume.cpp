@@ -1,50 +1,22 @@
-#ifndef VOLUME_H_
-#define VOLUME_H_
-
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
-
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "length.cpp"
-
-#include "triangulation.h"
+#include "volume.h"
 #include "miscmath.h"
 
-class Volume;
+#include <stdio.h>
+
 typedef map<TriPosition, Volume*, TriPositionCompare> VolumeIndex;
-
-class Volume : public virtual GeoQuant {
-private:
-  static VolumeIndex* Index;
-  Length* len[6];
-
-protected:
-  Volume( Tetra& t );
-  void recalculate();
-
-public:
-  ~Volume();
-  static Volume* At( Tetra& t );
-  static void CleanUp();
-};
-VolumeIndex* Volume::Index = NULL;
+static VolumeIndex* Index = NULL;
 
 Volume::Volume( Tetra& t ){
   StdTetra st = labelTetra( t );
     
-  len[0] = Length::At( st.e12 );
-  len[1] = Length::At( st.e13 );
-  len[2] = Length::At( st.e14 );
-  len[3] = Length::At( st.e23 );
-  len[4] = Length::At( st.e24 );
-  len[5] = Length::At( st.e34 );
+  len[0] = Length::At( Triangulation::edgeTable[ st.e12 ] );
+  len[1] = Length::At( Triangulation::edgeTable[ st.e13 ] );
+  len[2] = Length::At( Triangulation::edgeTable[ st.e14 ] );
+  len[3] = Length::At( Triangulation::edgeTable[ st.e23 ] );
+  len[4] = Length::At( Triangulation::edgeTable[ st.e24 ] );
+  len[5] = Length::At( Triangulation::edgeTable[ st.e34 ] );
    
-  for(int i = 0; i < 6; i++)
-    len[i]->addDependent( this );        
+  for(int i = 0; i < 6; i++) len[i]->addDependent( this );        
 }
 
 void Volume::recalculate(){
@@ -107,4 +79,14 @@ void Volume::CleanUp(){
   delete Index;
 }
 
-#endif /* VOLUME_H_ */
+void Volume::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  VolumeIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}
+

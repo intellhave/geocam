@@ -1,42 +1,9 @@
-#ifndef EHRPARTIAL_H_
-#define EHRPARTIAL_H_
+#include "ehr_partial.h"
 
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "triangulation.h"
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "volume_partial.cpp"
-#include "totalvolume.cpp"
-#include "totalcurvature.cpp"
-#include "curvature3D.cpp"
-
-#include "volume_partial_sum.cpp"
-
-class EHRPartial;
 typedef map<TriPosition, EHRPartial*, TriPositionCompare> EHRPartialIndex;
-
-class EHRPartial : public virtual GeoQuant {
-private:
-  static EHRPartialIndex* Index;
-  TotalVolume* totVolume;
-  TotalCurvature* totCurvature;
-  Curvature3D* localCurvature;
-  VolumePartialSum* vps;
-
-protected:
-  EHRPartial( Vertex& v );
-  void recalculate();
-
-public:
-  ~EHRPartial();
-  static EHRPartial* At( Vertex& v );
-  static void CleanUp();
-};
-EHRPartialIndex* EHRPartial::Index = NULL;
+static EHRPartialIndex* Index = NULL;
 
 EHRPartial::EHRPartial( Vertex& v ){
   totVolume = TotalVolume::At();
@@ -84,6 +51,3 @@ void EHRPartial::CleanUp(){
     delete iter->second;
   delete Index;
 }
-
-#endif /* EHRPARTIAL_H_ */
-

@@ -1,51 +1,14 @@
-#ifndef CURVATUREPARTIAL_H_
-#define CURVATUREPARTIAL_H_
 
-#include <map>
-#include <new>
-using namespace std;
+#include "curvature_partial.h"
+#include "miscmath.h"
 
-#include "geoquant.h"
-#include "triposition.h"
+#include <utility>
+#include <cstdio>
 
-#include "dualarea.cpp"
-#include "radius.cpp"
-#include "eta.cpp"
-#include "length.cpp"
-#include "dih_angle_sum.cpp"
-#include "curvature3D.cpp"
+static const double PI = 3.1415926;
 
-class CurvaturePartial;
-typedef map<TriPosition, CurvaturePartial*, TriPositionCompare> CurvaturePartialIndex;
-
-class CurvaturePartial : public virtual GeoQuant {
-private:
-  static CurvaturePartialIndex* Index;
-  
-  bool verticesMatch, verticesAdjacent;
-  
-  Radius* vRadius;
-  Curvature3D* vCurv;
-
-  vector<DualArea*>* dualAreas;
-  vector<DihedralAngleSum*>* dihSums;
-  vector<Length*>* lengths;
-  vector<Eta*>* etas;
-  vector<Radius*>* radii;
-
-  double calculateEqualCase();
-  double calculateAdjCase();
-
-protected:
-  CurvaturePartial( Vertex& v, Vertex& w );
-  void recalculate();
-
-public:
-  ~CurvaturePartial();
-  static CurvaturePartial* At( Vertex& v, Vertex& w );
-  static void CleanUp();
-};
-CurvaturePartialIndex* CurvaturePartial::Index = NULL;
+typedef map<pair<int,int>, CurvaturePartial*> CurvaturePartialIndex;
+static CurvaturePartialIndex* Index = NULL;
 
 CurvaturePartial::CurvaturePartial( Vertex& v, Vertex& w ){  
   verticesMatch = (v.getIndex() == w.getIndex());
@@ -77,26 +40,26 @@ CurvaturePartial::CurvaturePartial( Vertex& v, Vertex& w ){
   Radius* r;
 
   for(int ii = 0; ii < edges.size(); ii++){
-    Edge& e = Triangulation::edgeTable[ edges[ii] ];
+    Edge& ed = Triangulation::edgeTable[ edges[ii] ];
 
-    da = DualArea::At( e );
+    da = DualArea::At( ed );
     da->addDependent( this );
     dualAreas->push_back( da );
 
-    ds = DihedralAngleSum::At( e );
+    ds = DihedralAngleSum::At( ed );
     ds->addDependent( this );
     dihSums->push_back( ds );
 
-    l = Length::At( e );
+    l = Length::At( ed );
     l->addDependent( this );
     lengths->push_back( l );
     
-    eta = Eta::At( e );
+    eta = Eta::At( ed );
     eta->addDependent( this );
-    etas->push_back( eta  );
+    etas->push_back( eta );
 
-    se = labelEdge( v, e );
-    r = Radius::At( se.v2 );
+    se = labelEdge( ed, v );
+    r = Radius::At( Triangulation::vertexTable[ se.v2 ] );
     r->addDependent( this );
     radii->push_back( r );
   }
@@ -108,17 +71,18 @@ double CurvaturePartial::calculateEqualCase(){
   double dih_sum, len, Lij_star, eta, rW;
   
   double sum = 0.0;
-  for(int ii; ii < dualAreas->size(); ii++) {
+
+  for(int ii = 0; ii < dualAreas->size(); ii++) {
     Lij_star = dualAreas->at(ii)->getValue();
     dih_sum = dihSums->at(ii)->getValue();
     len = lengths->at(ii)->getValue();
     eta = etas->at(ii)->getValue();
     rW = radii->at(ii)->getValue();
 
-    sum -= Lij_star / len;
-    sum -= (2*PI - dih_sum)* rV*rV * rW*rW * (1 - eta*eta) / (len*len*len);
-    sum += curv;
+    sum += 2.0*Lij_star/len - (2*PI - dih_sum)* pow(rV,2) * pow(rW,2) * (1 - pow(eta,2)) / pow(len,3);
   }
+
+  sum += curv;
 
   return sum;
 }
@@ -131,11 +95,10 @@ double CurvaturePartial::calculateAdjCase(){
   double l_vw = lengths->at(0)->getValue();
   double eta = etas->at(0)->getValue();
                 
-  return Lvw_star/l_vw - (2*PI - dih_sum)* 
-    (vr*vr * wr*wr * (1-eta*eta))/(l_vw*l_vw*l_vw); 
+  return -2*Lvw_star/l_vw + (2*PI - dih_sum)*(pow(vr,2)*pow(wr,2)*(1-pow(eta,2))/pow(l_vw, 3)); 
 }
 
-void CurvaturePartial::recalculate(){
+void CurvaturePartial::recalculate(){  
   if( verticesMatch ){
     value = calculateEqualCase();
   } else if( verticesAdjacent ) {
@@ -154,13 +117,14 @@ CurvaturePartial::~CurvaturePartial(){
 }
 
 CurvaturePartial* CurvaturePartial::At( Vertex& v, Vertex& w ){
-  TriPosition T( 2, v.getSerialNumber(), w.getSerialNumber() );
-  if( Index == NULL ) Index = new CurvaturePartialIndex();
-  CurvaturePartialIndex::iterator iter = Index->find( T );
+  pair<int,int> P( v.getIndex(), w.getIndex() );
+
+  if( Index == NULL) Index = new CurvaturePartialIndex();
+  CurvaturePartialIndex::iterator iter = Index->find( P );
 
   if( iter == Index->end() ){
     CurvaturePartial* val = new CurvaturePartial( v, w );
-    Index->insert( make_pair( T, val ) );
+    Index->insert( make_pair( P, val ) );
     return val;
   } else {
     return iter->second;
@@ -175,4 +139,13 @@ void CurvaturePartial::CleanUp(){
   delete Index;
 }
 
-#endif /* CURVATUREPARTIAL_H_ */
+void CurvaturePartial::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  CurvaturePartialIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "(%d,%d): %lf\n", iter->first.first, iter->first.second, iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

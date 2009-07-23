@@ -1,47 +1,10 @@
-#ifndef EHRSECONDPARTIAL_H_
-#define EHRSECONDPARTIAL_H_
+#include "ehr_second_partial.h"
 
-#include <map>
-#include <new>
-using namespace std;
-
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "totalvolume.cpp"
-#include "totalcurvature.cpp"
-#include "curvature3D.cpp"
-#include "volume_partial_sum.cpp"
-#include "volume_second_partial.cpp"
-#include "curvature_partial.cpp"
+#include <cstdio>
 
 class EHRSecondPartial;
 typedef map<TriPosition, EHRSecondPartial*, TriPositionCompare> EHRSecondPartialIndex;
-
-class EHRSecondPartial : public virtual GeoQuant {
-private:
-  static EHRSecondPartialIndex* Index;
-  TotalVolume* totVolume;
-  TotalCurvature* totCurvature;
-  Curvature3D* curvature_i;
-  Curvature3D* curvature_j;
-
-  CurvaturePartial* curvPartial_ij;
-
-  VolumePartialSum* vps_i;
-  VolumePartialSum* vps_j;
-  vector< VolumeSecondPartial* >* volSecPartials;
-  
-protected:
-  EHRSecondPartial( Vertex& v, Vertex& w );
-  void recalculate();
-
-public:
-  ~EHRSecondPartial();
-  static EHRSecondPartial* At( Vertex& v, Vertex& w );
-  static void CleanUp();
-};
-EHRSecondPartialIndex* EHRSecondPartial::Index = NULL;
+static EHRSecondPartialIndex* Index = NULL;
 
 EHRSecondPartial::EHRSecondPartial( Vertex& v, Vertex& w ){
   totVolume = TotalVolume::At();
@@ -50,23 +13,30 @@ EHRSecondPartial::EHRSecondPartial( Vertex& v, Vertex& w ){
   totCurvature = TotalCurvature::At();
   totVolume->addDependent( this );
 
+  int vIndex = v.getIndex();
+  int wIndex = w.getIndex();
+
   curvature_i = Curvature3D::At( v );
   curvature_i->addDependent( this );
-  curvature_j = Curvature3D::At( w );
-  
-  if( curvature_j != curvature_i )
-    curvature_j->addDependent( this );
 
   vps_i = VolumePartialSum::At( v );
   vps_i->addDependent( this );
 
-  vps_j = VolumePartialSum::At( w );
-  if( vps_j != vps_i )
-    vps_j->addDependent( this );
+  if( vIndex == wIndex ){
+    curvature_j = curvature_i;
+    vps_j = vps_i;
+  } else {
+    curvature_j = Curvature3D::At( w );
+    curvature_j->addDependent( this );
 
-  volSecPartials = new vector< VolumeSecondPartial* >();
+    vps_j = VolumePartialSum::At( w );
+    vps_j->addDependent( this );
+  }
 
   curvPartial_ij = CurvaturePartial::At( v, w );
+  curvPartial_ij->addDependent( this );
+
+  volSecPartials = new vector< VolumeSecondPartial* >();
 
   VolumeSecondPartial* vsp;
   vector<int>* localTetra = v.getLocalTetras();
@@ -96,10 +66,10 @@ void EHRSecondPartial::recalculate(){
   for(int ii = 0; ii < volSecPartials->size(); ii++)
     VolSumSecondPartial += volSecPartials->at(ii)->getValue();
 
-  value = pow(totV, (-4.0/3.0));
-  value *= (1.0/3.0) * (3 * totV * curvPartial - Ki * VPS_j
-			- Kj * VPS_i + (4.0/3.0) * totK * ( 1 / totV ) *
-			VPS_i * VPS_j - totK * VolSumSecondPartial);
+  value = pow(totV, (-4.0/3.0)) * (1.0 / 3.0);
+  value *= (3 * totV * curvPartial - Ki * VPS_j
+	    - Kj * VPS_i + (4.0/3.0) * ( totK / totV ) *
+	    VPS_i * VPS_j - totK * VolSumSecondPartial);
 }
 
 EHRSecondPartial::~EHRSecondPartial(){
@@ -127,6 +97,4 @@ void EHRSecondPartial::CleanUp(){
     delete iter->second;
   delete Index;
 }
-
-#endif /* EHRSECONDPARTIAL_H_ */
 

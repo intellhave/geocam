@@ -1,32 +1,9 @@
-#ifndef ETA_H_
-#define ETA_H_
+#include "eta.h"
 
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "edge.h"
-
-class Eta;
 typedef map<TriPosition, Eta*, TriPositionCompare> EtaIndex;
-
-class Eta : public virtual GeoQuant {
-private:
-  static EtaIndex* Index;
-
-protected:
-  Eta( Edge& e );
-  void recalculate();
-
-public:
-  ~Eta();
-  static Eta* At( Edge& e );
-  static void CleanUp();
-};
-EtaIndex* Eta::Index = NULL;
+static EtaIndex* Index = NULL;
 
 Eta::Eta( Edge& e ){}
 
@@ -56,5 +33,13 @@ void Eta::CleanUp(){
   delete Index;
 }
 
-#endif /* ETA_H_ */
+void Eta::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  EtaIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

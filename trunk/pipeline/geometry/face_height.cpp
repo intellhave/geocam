@@ -1,43 +1,23 @@
-#ifndef FACEHEIGHT_H_
-#define FACEHEIGHT_H_
+#include "face_height.h"
+#include "miscmath.h"
 
-#include <map>
-#include <new>
-using namespace std;
-
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "edge_height.cpp"
-#include "dih_angle.cpp"
+#include <cstdio>
 
 class FaceHeight;
 typedef map<TriPosition, FaceHeight*, TriPositionCompare> FaceHeightIndex;
-
-class FaceHeight : public virtual GeoQuant {
-private:
-  static FaceHeightIndex* Index;
-  EdgeHeight* hij_l;
-  EdgeHeight* hij_k;
-  DihedralAngle* beta_ij_kl;
-
-protected:
-  FaceHeight( Face& f, Tetra& t );
-  void recalculate();
-
-public:
-  ~FaceHeight();
-  static FaceHeight* At( Face& f, Tetra& t );
-  static void CleanUp();
-};
-FaceHeightIndex* FaceHeight::Index = NULL;
+FaceHeightIndex* Index = NULL;
 
 FaceHeight::FaceHeight( Face& f, Tetra& t ){
-  StdTetra st = labelTetra( f, t );
+  StdTetra st = labelTetra( t, f );
+  
+  Edge& ed12 = Triangulation::edgeTable[ st.e12 ];
+  Face& fa123 = Triangulation::faceTable[ st.f123 ];
+  Face& fa124 = Triangulation::faceTable[ st.f124 ];
 
-  hij_l = EdgeHeight::At(st.e12, st.f123);
-  hij_k = EdgeHeight::At(st.e12, st.f124);
-  beta_ij_kl = DihedralAngle::At(st.e12, t);
+  hij_k = EdgeHeight::At( ed12, fa123 );
+  hij_l = EdgeHeight::At( ed12, fa124 );
+
+  beta_ij_kl = DihedralAngle::At( ed12, t);
 
   hij_l->addDependent(this);
   hij_k->addDependent(this);
@@ -45,11 +25,11 @@ FaceHeight::FaceHeight( Face& f, Tetra& t ){
 }
 
 void FaceHeight::recalculate(){
-    double Hij_l = hij_l->getValue();
-    double Hij_k = hij_k->getValue();
-    double angle = beta_ij_kl->getValue();
+  double Hij_l = hij_l->getValue();
+  double Hij_k = hij_k->getValue();
+  double angle = beta_ij_kl->getValue();
 
-    value = Hij_l - Hij_k * cos(angle)/sin(angle);
+  value = (Hij_l - Hij_k * cos(angle))/sin(angle);
 }
 
 FaceHeight::~FaceHeight(){}
@@ -76,4 +56,13 @@ void FaceHeight::CleanUp(){
   delete Index;
 }
 
-#endif /* FACEHEIGHT_H_ */
+void FaceHeight::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  FaceHeightIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

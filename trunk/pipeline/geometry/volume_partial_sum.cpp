@@ -1,34 +1,9 @@
-#ifndef VOLUMEPARTIALSUM_H_
-#define VOLUMEPARTIALSUM_H_
+#include "volume_partial_sum.h"
 
-#include <vector>
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "volume_partial.cpp"
-
-class VolumePartialSum;
 typedef map<TriPosition, VolumePartialSum*, TriPositionCompare> VolumePartialSumIndex;
-
-class VolumePartialSum : public virtual GeoQuant {
-private:
-  static VolumePartialSumIndex* Index;
-  vector<VolumePartial*>* volPartials;
-
-protected:
-  VolumePartialSum( Vertex& v );
-  void recalculate();
-
-public:
-  ~VolumePartialSum();
-  static VolumePartialSum* At( Vertex& v );
-  static void CleanUp();
-};
-VolumePartialSumIndex* VolumePartialSum::Index = NULL;
+static VolumePartialSumIndex* Index = NULL;
 
 VolumePartialSum::VolumePartialSum( Vertex& v ){
   volPartials = new vector<VolumePartial*>();
@@ -81,5 +56,5 @@ void VolumePartialSum::CleanUp(){
   delete Index;
 }
 
-#endif /* VOLUMEPARTIALSUM_H_ */
+
 

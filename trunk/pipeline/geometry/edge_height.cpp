@@ -1,44 +1,24 @@
-#ifndef EDGEHEIGHT_H_
-#define EDGEHEIGHT_H_
-
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
-
+#include "edge_height.h"
 #include "miscmath.h"
-#include "geoquant.h"
-#include "triposition.h"
 
-#include "partial_edge.cpp"
-#include "euc_angle.cpp"
+#include <stdio.h>
 
-class EdgeHeight;
 typedef map<TriPosition, EdgeHeight*, TriPositionCompare> EdgeHeightIndex;
-
-class EdgeHeight : public virtual GeoQuant {
-private:
-  static EdgeHeightIndex* Index;
-  PartialEdge* d_ij;
-  PartialEdge* d_ik;
-  EuclideanAngle* theta_i;
-
-protected:
-  EdgeHeight( Edge& e, Face& f );
-  void recalculate();
-
-public:
-  ~EdgeHeight();
-  static EdgeHeight* At( Edge& e, Face& f );
-  static void CleanUp();
-};
-EdgeHeightIndex* EdgeHeight::Index = NULL;
+static EdgeHeightIndex* Index = NULL;
 
 EdgeHeight::EdgeHeight( Edge& e, Face& f ){
-  StdFace sf = labelFace( e, f );
-  d_ij = PartialEdge::At( sf.v1, sf.e12 );
-  d_ik = PartialEdge::At( sf.v1, sf.e13 );
-  theta_i = EuclideanAngle::At( sf.v1, f );
+  StdFace sf = labelFace( f, e );
+  
+  Vertex& vert1 = Triangulation::vertexTable[ sf.v1 ];
+  Edge& ed13 = Triangulation::edgeTable[ sf.e13 ]; 
+  
+  d_ij = PartialEdge::At( vert1, e ); // Note e = edge_12
+  d_ik = PartialEdge::At( vert1, ed13 );
+  theta_i = EuclideanAngle::At( vert1, f );
+
+  d_ij->addDependent( this );
+  d_ik->addDependent( this );
+  theta_i->addDependent( this );
 }
 
 void EdgeHeight::recalculate(){
@@ -46,7 +26,7 @@ void EdgeHeight::recalculate(){
   double dik = d_ik->getValue();
   double theta = theta_i->getValue();
 
-  value = dik - dij * cos(theta)/sin(theta);
+  value = (dik - dij * cos(theta))/sin(theta);
 }
 
 EdgeHeight::~EdgeHeight(){}
@@ -73,5 +53,13 @@ void EdgeHeight::CleanUp(){
   delete Index;
 }
 
-#endif /* EDGEHEIGHT_H_ */
+void EdgeHeight::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  EdgeHeightIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

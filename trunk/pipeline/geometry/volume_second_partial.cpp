@@ -1,45 +1,16 @@
-#ifndef VOLUMESECONDPARTIAL_H_
-#define VOLUMESECONDPARTIAL_H_
-
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
-
-#include "triangulation.h"
-#include "geoquant.h"
-#include "triposition.h"
+#include "volume_second_partial.h"
 #include "miscmath.h"
 
-#include "radius.cpp"
-#include "eta.cpp"
+#include <stdio.h>
 
-class VolumeSecondPartial;
 typedef map<TriPosition, VolumeSecondPartial*, TriPositionCompare> VolumeSecondPartialIndex;
-
-class VolumeSecondPartial : public virtual GeoQuant {
-private:
-  static VolumeSecondPartialIndex* Index;
-  Radius* rad[4];
-  Eta* eta[6];
-  bool sameVertices;
-
-protected:
-  VolumeSecondPartial( Vertex& v, Vertex& w, Tetra& t );
-  void recalculate();
-
-public:
-  ~VolumeSecondPartial();
-  static VolumeSecondPartial* At( Vertex& v, Vertex& w, Tetra& t );
-  static void CleanUp();
-};
-VolumeSecondPartialIndex* VolumeSecondPartial::Index = NULL;
+static VolumeSecondPartialIndex* Index = NULL;
 
 VolumeSecondPartial::VolumeSecondPartial( Vertex& v, Vertex& w, Tetra& t ){
   StdTetra st;
 
   if( v.getIndex() == w.getIndex() ){
-    st = labelTetra( v, t );
+    st = labelTetra( t, v );
     sameVertices = true;
   } else {
     sameVertices = false;
@@ -49,30 +20,34 @@ VolumeSecondPartial::VolumeSecondPartial( Vertex& v, Vertex& w, Tetra& t ){
     vector<int>* localVertices;
     vector<int>* localEdges = t.getLocalEdges();
     for(int ii = 0; ii < localEdges->size(); ii++){
-      Edge e = Triangulation::edgeTable[ localEdges->at(ii) ];
+      Edge& e = Triangulation::edgeTable[ localEdges->at(ii) ];
       
       localVertices = e.getLocalVertices();
       int v0 = localVertices->at(0);
       int v1 = localVertices->at(1);
 
       if( (v0 == vI && v1 == wI) || (v0 == wI && v1 == vI) ){
-	st = labelTetra( e, t );
+	st = labelTetra( t, e );
 	break;
       }
     }
   }
 
-  rad[0] = Radius::At( st.v1 );
-  rad[1] = Radius::At( st.v2 );
-  rad[2] = Radius::At( st.v3 );
-  rad[3] = Radius::At( st.v4 );
+  rad[0] = Radius::At( Triangulation::vertexTable[ st.v1 ] );
+  rad[1] = Radius::At( Triangulation::vertexTable[ st.v2 ] );
+  rad[2] = Radius::At( Triangulation::vertexTable[ st.v3 ] );
+  rad[3] = Radius::At( Triangulation::vertexTable[ st.v4 ] );
+
+  for(int ii = 0; ii < 4; ii++) rad[ii]->addDependent( this );
   
-  eta[0] = Eta::At( st.e12 );
-  eta[1] = Eta::At( st.e13 );
-  eta[2] = Eta::At( st.e14 );
-  eta[3] = Eta::At( st.e23 );
-  eta[4] = Eta::At( st.e24 );
-  eta[5] = Eta::At( st.e34 );
+  eta[0] = Eta::At( Triangulation::edgeTable[ st.e12 ] );
+  eta[1] = Eta::At( Triangulation::edgeTable[ st.e13 ] );
+  eta[2] = Eta::At( Triangulation::edgeTable[ st.e14 ] );
+  eta[3] = Eta::At( Triangulation::edgeTable[ st.e23 ] );
+  eta[4] = Eta::At( Triangulation::edgeTable[ st.e24 ] );
+  eta[5] = Eta::At( Triangulation::edgeTable[ st.e34 ] );
+
+  for(int ii = 0; ii < 6; ii++) eta[ii]->addDependent( this );
 }
 
 void VolumeSecondPartial::recalculate(){
@@ -330,5 +305,15 @@ void VolumeSecondPartial::CleanUp(){
   delete Index;
 }
 
-#endif /* VOLUMESECONDPARTIAL_H_ */
+void VolumeSecondPartial::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  VolumeSecondPartialIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}
+
 

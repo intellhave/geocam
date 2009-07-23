@@ -24,49 +24,50 @@ vector<int> listIntersection(vector<int>* list1, vector<int>* list2);
 vector<int> listDifference(vector<int>* list1, vector<int>* list2);
 
 struct stand_psn_edge{
-  Vertex v1;
-  Vertex v2;
+  int v1;
+  int v2;
 };
 typedef struct stand_psn_edge StdEdge;
 
 struct stand_psn_face{
-  Vertex v1;
-  Vertex v2;
-  Vertex v3;
+  int v1;
+  int v2;
+  int v3;
   
-  Edge e12;
-  Edge e13;
-  Edge e23;
+  int e12;
+  int e13;
+  int e23;
 };
 typedef struct stand_psn_face StdFace;
 
 struct stand_psn_tetra{
-  Vertex v1;
-  Vertex v2;
-  Vertex v3;
-  Vertex v4;
+  int v1;
+  int v2;
+  int v3;
+  int v4;
   
-  Edge e12;
-  Edge e13;
-  Edge e14;
-  Edge e23;
-  Edge e24;
-  Edge e34;
+  int e12;
+  int e13;
+  int e14;
+  int e23;
+  int e24;
+  int e34;
 
-  Face f123;
-  Face f124;
-  Face f134;
-  Face f234;
+  int f123;
+  int f124;
+  int f134;
+  int f234;
 };
 typedef struct stand_psn_tetra StdTetra;
 
-StdEdge labelEdge(Vertex& v, Edge& e);
+StdEdge labelEdge(Edge& e, Vertex& v);
 
-StdFace labelFace(Vertex& v, Face& f);
-StdFace labelFace(Edge& e, Face& f);
+StdFace labelFace(Face& f, Vertex& v);
+StdFace labelFace(Face& f, Edge& e);
 
-StdTetra labelTetra(Edge& e, Tetra& t);
-StdTetra labelTetra(Vertex& v, Tetra& t);
-StdTetra labelTetra(Face& f, Tetra& t);
-StdTetra labelTetra( Tetra& t );
+StdTetra labelTetra(Tetra& t, Edge& e);
+StdTetra labelTetra(Tetra& t, Vertex& v);
+StdTetra labelTetra(Tetra& t, Face& f);
+StdTetra labelTetra(Tetra& t);
+
 #endif /* MISCMATH_H_ */

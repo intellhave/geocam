@@ -1,41 +1,10 @@
-#ifndef EUCLIDEANANGLE_H_
-#define EUCLIDEANANGLE_H_
-
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
-
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "length.cpp"
-#include "triangulation.h"
-#include "vertex.h"
-#include "face.h"
-
+#include "euc_angle.h"
 #include "miscmath.h"
 
-class EuclideanAngle;
+#include <stdio.h>
+
 typedef map<TriPosition, EuclideanAngle*, TriPositionCompare> EuclideanAngleIndex;
-
-class EuclideanAngle : public virtual GeoQuant {
-private:
-  static EuclideanAngleIndex* Index;
-  GeoQuant* lengthA;
-  GeoQuant* lengthB;
-  GeoQuant* lengthC;
-
-protected:
-  EuclideanAngle( Vertex& v, Face& f );
-  void recalculate();
-
-public:
-  ~EuclideanAngle();
-  static EuclideanAngle* At( Vertex& v, Face& f );
-  static void CleanUp();
-};
-EuclideanAngleIndex* EuclideanAngle::Index = NULL;
+static EuclideanAngleIndex* Index = NULL;
 
 EuclideanAngle::EuclideanAngle( Vertex& v, Face& f ){
   vector<int> sameAs, diff;
@@ -86,4 +55,13 @@ void EuclideanAngle::CleanUp(){
   delete Index;
 }
 
-#endif /* EUCLIDEANANGLE_H_ */
+void EuclideanAngle::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  EuclideanAngleIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

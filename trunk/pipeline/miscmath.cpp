@@ -37,187 +37,136 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2){
   return diff;
 }
 
-bool containsVertex( Simplex& s, Vertex& v ){
-  vector<int>* localVertices = s.getLocalVertices();
-
-  int index = v.getIndex();
-  for(int ii; ii < localVertices->size(); ii++)
-    if( localVertices->at(ii) == index )
-      return true;
-
-  return false;
-}
-
-StdEdge labelEdge(Vertex& v, Edge& e){
+StdEdge labelEdge( Edge& e, Vertex& v ){
   StdEdge retval;
 
-  vector<int>* localVertices =  e.getLocalVertices();
-  retval.v1 = v;
+  vector<int>* localVertices = e.getLocalVertices();
+  retval.v1 = v.getIndex();
   
-  for(int ii; ii < localVertices->size(); ii++){
-    if( localVertices->at(ii) != v.getIndex() )
-      retval.v2 = Triangulation::vertexTable[ localVertices->at( ii ) ];
+  for(int ii = 0; ii < localVertices->size(); ii++){
+    if( localVertices->at(ii) != retval.v1 )
+      retval.v2 = localVertices->at( ii );
   }
 
   return retval;
 }
 
-StdFace labelFace(Edge& e, Face& f){
+void fixFaceEdges( Face& f, StdFace& sf ){
+ vector<int>* localEdges = f.getLocalEdges();
+  for(int ii = 0; ii < localEdges->size(); ii++ ){
+    Edge& ed = Triangulation::edgeTable[ localEdges->at(ii) ];
+
+    bool b1 = ed.isAdjVertex( sf.v1 );
+    bool b2 = ed.isAdjVertex( sf.v2 );
+    bool b3 = ed.isAdjVertex( sf.v3 );
+
+    if( b1 && b2 ){ sf.e12 = ed.getIndex(); }
+    else if( b1 && b3 ){ sf.e13 = ed.getIndex(); }
+    else if( b2 && b3 ){ sf.e23 = ed.getIndex(); }
+    else{
+      fprintf( stderr, "Corrupt Edge Data!\n");
+    }
+  }   
+}
+
+StdFace labelFace( Face& f, Edge& e ){
   StdFace retval;
 
   vector<int>* localVertices = e.getLocalVertices();
 
-  retval.v1 = Triangulation::vertexTable[ localVertices->at(0) ];
-  retval.v2 = Triangulation::vertexTable[ localVertices->at(1) ];
+  retval.v1 = localVertices->at(0);
+  retval.v2 = localVertices->at(1);
 
   vector<int>* allVertices = f.getLocalVertices();
   int ii;
   for( ii = 0; ii < localVertices->size(); ii++ ){
-    if( allVertices->at( ii ) != localVertices->at( 0 ) &&
-	allVertices->at( ii ) != localVertices->at( 1 ) )
+    if( allVertices->at( ii ) != retval.v1 &&
+	allVertices->at( ii ) != retval.v2 )
       break;
   }
-  retval.v3 = Triangulation::vertexTable[ allVertices->at( ii ) ];
+  retval.v3 = allVertices->at( ii );
    
-  vector<int>* localEdges = f.getLocalEdges();
-  for( ii = 0; ii < localEdges->size(); ii++ ){
-    Edge e = Triangulation::edgeTable[ localEdges->at( ii ) ];
-    
-    if( e.isAdjVertex( retval.v1.getIndex() ) ){
-      if( e.isAdjVertex( retval.v2.getIndex() ) ){
-	retval.e12 = e;
-      } else{
-	retval.e13 = e;
-      }
-    } else {
-      retval.e23 = e;
-    }
-  }   
+  fixFaceEdges( f, retval );
   
   return retval;
 }
 
-StdFace labelFace(Vertex& v, Face& f){
+StdFace labelFace(Face& f, Vertex& v){
   StdFace retval;
 
-  retval.v1 = v;
+  retval.v1 = v.getIndex();
 
-  int index = v.getIndex();
-  vector<int> otherverts;
+  vector<int> otherVertices;
   vector<int>* localVertices = f.getLocalVertices();  
   int ii;
   for( ii = 0; ii < localVertices->size(); ii++ ){
     int jj = localVertices->at( ii );
-    if( jj != index )
-      otherverts.push_back( jj );
+    if( jj != v.getIndex() )
+      otherVertices.push_back( jj );
   }
 
-  retval.v2 = Triangulation::vertexTable[ localVertices->at( 0 ) ];
-  retval.v3 = Triangulation::vertexTable[ localVertices->at( 1 ) ];
+  retval.v2 = otherVertices[0];
+  retval.v3 = otherVertices[1];
        
-  vector<int>* localEdges = f.getLocalEdges();
-  for( ii = 0; ii < localEdges->size(); ii++ ){
-    Edge e = Triangulation::edgeTable[ localEdges->at( ii ) ];
-    
-    bool b1 = e.isAdjVertex( retval.v1.getIndex() );
-    bool b2 = e.isAdjVertex( retval.v2.getIndex() );
-    bool b3 = e.isAdjVertex( retval.v3.getIndex() );
-    
-    if( b1 && b2 ){
-      retval.e12 = e;
-    } else if ( b1 && b3 ){
-      retval.e13 = e;
-    } else if ( b2 && b3 ){
-      retval.e23 = e;
-    } else {
-      fprintf( stderr, "Error: Corrupt face data!\n");
-    }
-  }   
+  fixFaceEdges( f, retval );
   
   return retval;
 }
 
 /*****************************************************/
 
-void fixEdges( Tetra& t, StdTetra& st ){
+void fixTetraEdges( Tetra& t, StdTetra& st ){
   vector<int>* localEdges = t.getLocalEdges();
   for( int ii = 0; ii < localEdges->size(); ii++ ){
     Edge ed = Triangulation::edgeTable[ localEdges->at( ii ) ];
     
-    bool b1 = ed.isAdjVertex( st.v1.getIndex() );
-    bool b2 = ed.isAdjVertex( st.v2.getIndex() );
-    bool b3 = ed.isAdjVertex( st.v3.getIndex() );
-    bool b4 = ed.isAdjVertex( st.v4.getIndex() );
+    bool b1 = ed.isAdjVertex( st.v1 );
+    bool b2 = ed.isAdjVertex( st.v2 );
+    bool b3 = ed.isAdjVertex( st.v3 );
+    bool b4 = ed.isAdjVertex( st.v4 );
 
     if( b1 && b2 ){
-      st.e12 = ed;
+      st.e12 = ed.getIndex();
     } else if( b1 && b3 ){
-      st.e13 = ed;
+      st.e13 = ed.getIndex();
     } else if( b1 && b4 ){
-      st.e14 = ed;
+      st.e14 = ed.getIndex();
     } else if( b2 && b3 ){
-      st.e23 = ed;
+      st.e23 = ed.getIndex();
     } else if( b2 && b4 ){
-      st.e24 = ed;
+      st.e24 = ed.getIndex();
     } else if( b3 && b4 ){
-      st.e34 = ed;
+      st.e34 = ed.getIndex();
     } else {
       fprintf( stderr, "Error! Corrupt Tetra data!\n" );
     }
   }  
 }
 
-void fixFaces( Tetra& t, StdTetra& st ){
+void fixTetraFaces( Tetra& t, StdTetra& st ){
   vector<int>* localFaces = t.getLocalFaces();
   for( int ii = 0; ii < localFaces->size(); ii++ ){    
-    Face f = Triangulation::faceTable[ localFaces->at(ii) ];
+    Face& f = Triangulation::faceTable[ localFaces->at(ii) ];
 
-    bool b1 = f.isAdjEdge( st.e12.getIndex() );
-    bool b2 = f.isAdjEdge( st.e13.getIndex() );
-    bool b3 = f.isAdjEdge( st.e14.getIndex() );
-    bool b4 = f.isAdjEdge( st.e34.getIndex() );
+    bool b1 = f.isAdjEdge( st.e12 );
+    bool b2 = f.isAdjEdge( st.e13 );
+    bool b3 = f.isAdjEdge( st.e14 );
+    bool b4 = f.isAdjEdge( st.e34 );
     
-    if( b1 && b2 ){ st.f123 = f; }
-    else if( b1 && b3 ){ st.f124 = f; }
-    else if( b2 && b3 ){ st.f134 = f; }
-    else if( b4 && ! b1){ st.f234 = f; }
+    if( b1 && b2 ){ st.f123 = f.getIndex(); }
+    else if( b1 && b3 ){ st.f124 = f.getIndex(); }
+    else if( b2 && b3 ){ st.f134 = f.getIndex(); }
+    else if( b4 && ! b1){ st.f234 = f.getIndex(); }
     else {
       fprintf( stderr, "Error! Corrupt Tetra data!\n" );
     }
   }
 }
 
-StdTetra labelTetra(Edge& e, Tetra& t){
+StdTetra labelTetra(Tetra& t, Vertex& v){
   StdTetra retval;
 
-  vector<int>* localVertices = e.getLocalVertices();
-  vector<int> verts; 
-
-  retval.v1 = Triangulation::vertexTable[ localVertices->at(0) ];
-  retval.v2 = Triangulation::vertexTable[ localVertices->at(1) ];
-
-  localVertices = t.getLocalVertices();
-  for( int ii = 0; ii < localVertices->size(); ii++ ){
-    int jj =  localVertices->at( ii );
-    if( jj != retval.v1.getIndex() &&
-	jj != retval.v2.getIndex() ){
-      verts.push_back( jj ); 
-    }
-  }
-
-  retval.v3 = Triangulation::vertexTable[ verts[0] ];
-  retval.v4 = Triangulation::vertexTable[ verts[1] ];
-  
-  fixEdges( t, retval );
-  fixFaces( t, retval );
-  
-  return retval;
-}
-
-StdTetra labelTetra(Vertex& v, Tetra& t){
-  StdTetra retval;
-
-  retval.v1 = v; 
+  retval.v1 = v.getIndex(); 
 
   vector<int>* localVertices = t.getLocalVertices();
   vector<int> verts; 
@@ -230,32 +179,63 @@ StdTetra labelTetra(Vertex& v, Tetra& t){
     }
   }
   
-  retval.v2 = Triangulation::vertexTable[ verts[0] ];
-  retval.v3 = Triangulation::vertexTable[ verts[1] ];
-  retval.v4 = Triangulation::vertexTable[ verts[2] ];
+  retval.v2 = verts[0];
+  retval.v3 = verts[1];
+  retval.v4 = verts[2];
   
-  fixEdges( t, retval );
-  fixFaces( t, retval );
+  fixTetraEdges( t, retval );
+  fixTetraFaces( t, retval );
 
   return retval;
 }
 
-StdTetra labelTetra( Face& f, Tetra& t ){
+
+StdTetra labelTetra(Tetra& t, Edge& e){
+  StdTetra retval;
+
+  vector<int>* localVertices = e.getLocalVertices();
+  vector<int> verts; 
+
+  retval.v1 = localVertices->at(0);
+  retval.v2 = localVertices->at(1);
+
+  localVertices = t.getLocalVertices();
+  for( int ii = 0; ii < localVertices->size(); ii++ ){
+    int jj =  localVertices->at( ii );
+    if( jj != retval.v1 && jj != retval.v2 ){
+      verts.push_back( jj ); 
+    }
+  }
+
+  retval.v3 = verts[0];
+  retval.v4 = verts[1];
+  
+  fixTetraEdges( t, retval );
+  fixTetraFaces( t, retval );
+  
+  return retval;
+}
+
+StdTetra labelTetra(Tetra& t, Face& f){
   StdTetra retval;
  
   vector<int>* verts = f.getLocalVertices();
-  retval.v1 = verts->at(0);
-  retval.v2 = verts->at(1);
-  retval.v3 = verts->at(2);
-  verts = listDifference( t.getLocalVertices(), f.getLocalVertices() );
-  retval.v4 = verts->at(0);
+  
+  retval.v1 = verts->at(0);    
+  retval.v2 = verts->at(1); 
+  retval.v3 = verts->at(2);     
+  
+  vector<int> diff = listDifference( t.getLocalVertices(), f.getLocalVertices() );
+  retval.v4 = diff[0]; 
 
-  fixEdges( retval, t );
-  fixFaces( retval, t );
+  fixTetraEdges( t, retval );
+  fixTetraFaces( t, retval );
+    
+  return retval;
 }
 
 StdTetra labelTetra( Tetra& t ){
   Vertex& v = Triangulation::vertexTable[ (*(t.getLocalVertices()))[0] ];
-  return labelTetra( v, t );
+  return labelTetra( t, v );
 }
 

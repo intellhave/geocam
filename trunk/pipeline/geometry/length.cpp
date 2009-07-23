@@ -1,39 +1,9 @@
-#ifndef LENGTH_H_
-#define LENGTH_H_
+#include "length.h"
 
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "triposition.h"
-#include "triangulation.h"
-
-#include "edge.h"
-#include "radius.cpp"
-#include "eta.cpp"
-
-class Length;
 typedef map<TriPosition, Length*, TriPositionCompare> LengthIndex;
-
-class Length : public virtual GeoQuant {
-private:
-  static LengthIndex* Index;
-  Radius* radius1;
-  Radius* radius2;
-  Eta* eta;  
-
-protected:
-  Length( Edge& e );
-  void recalculate();
-
-public:
-  ~Length();
-  static Length* At( Edge& e );
-  static void CleanUp();
-};
-LengthIndex* Length::Index = NULL;
+static LengthIndex* Index = NULL;
 
 Length::Length( Edge& e ){
   Vertex v1 = Triangulation::vertexTable[ (*(e.getLocalVertices()))[0] ];
@@ -80,5 +50,13 @@ void Length::CleanUp(){
   delete Index;
 }
 
-#endif /* LENGTH_H_ */
+void Length::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  LengthIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}
