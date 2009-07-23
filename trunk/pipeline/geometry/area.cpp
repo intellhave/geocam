@@ -1,48 +1,27 @@
-#ifndef AREA_H_
-#define AREA_H_
+#include "area.h"
 
 #include <cmath>
 #include <map>
 #include <new>
 using namespace std;
 
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "length.cpp"
-#include "triangulation.h"
-#include "face.h"
-
-
-
-class Area;
 typedef map<TriPosition, Area*, TriPositionCompare> AreaIndex;
-
-class Area : public virtual GeoQuant {
-private:
-  static Area* Index;
-  GeoQuant* Len[3];
-
-protected:
-  Area( Face& f );
-  void recalculate();
-
-public:
-  ~Area();
-  static Area* At( Face& f );
-  static void CleanUp();
-};
-AreaIndex* Area::Index = NULL;
+static AreaIndex* Index = NULL;
 
 Area::Area( Face& f ){
-    for(int ii = 0; ii < 3; ii++){
-      Len[ii] = Length::At( Triangulation::edgeTable[(*(f.getLocalEdges()))[ii]] );
-      Len[ii]->addDependent(this);
-    }
+  vector<int>* edgeIndices = f.getLocalEdges();
+
+  for(int ii = 0; ii < 3; ii++){
+    int ed = edgeIndices->at(ii);
+    Edge& e = Triangulation::edgeTable[ ed ];
+    Len[ii] = Length::At( e );
+    Len[ii]->addDependent(this);
+  }
 }
 
 Area::~Area(){ }
-Area::recalculate() {
+
+void Area::recalculate() {
     double l1 = Len[0]->getValue();
     double l2 = Len[1]->getValue();
     double l3 = Len[2]->getValue();
@@ -52,7 +31,7 @@ Area::recalculate() {
 }
 
 Area* Area::At( Face& f ){
-  TriPosition T( 1, e.getSerialNumber() );
+  TriPosition T( 1, f.getSerialNumber() );
   if( Index == NULL ) Index = new AreaIndex();
   AreaIndex::iterator iter = Index->find( T );
 
@@ -72,7 +51,5 @@ void Area::CleanUp(){
     delete iter->second;
   delete Index;
 }
-
-#endif /* AREA_H_ */
 
 
