@@ -11,7 +11,7 @@ done independently of any triangulation.
 #define MISCMATH_H_
 
 #include "triangulation.h"
-
+#include "pointlinecircle.h"
 #include <vector>
 using namespace std;
 

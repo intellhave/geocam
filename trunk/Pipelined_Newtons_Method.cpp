@@ -12,11 +12,12 @@
 #include "3DTriangulation/3Dtriangulationmath.h"
 #include "triangulation/smallmorphs.h"
 #include "triangulation/MinMax.h"
+#include <map>
 
-#include "radius.cpp"
-#include "curvature3D.cpp"
-#include "ehr_partial.cpp"
-#include "ehr_second_partial.cpp"
+#include "radius.h"
+#include "curvature3D.h"
+#include "ehr_partial.h"
+#include "ehr_second_partial.h"
 
 #define PI 	3.141592653589793238
 
@@ -25,7 +26,7 @@ int SolveLinearEquation(int nDim, double* pfMatr, double* pfVect, double* pfSolu
 void Newtons_Method() {
   int V = Triangulation::vertexTable.size();
 
-  Curvature* Curvatures[ V ];
+  Curvature3D* Curvatures[ V ];
   Radius* Radii[ V ];
   double log_Radii[ V ];
        
@@ -44,7 +45,7 @@ void Newtons_Method() {
   map<int, Vertex>::iterator vit, vit2;
   int ii = 0;;
   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++, ii++) {
-    Vertex& v = vit->second();
+    Vertex& v = vit->second;
     
     Radii[ii] = Radius::At( v );
     Curvatures[ii] = Curvature3D::At( v );
@@ -52,7 +53,7 @@ void Newtons_Method() {
 
     int jj = ii;
     for( vit2 = vit; vit2 != Triangulation::vertexTable.end(); vit2++, jj++ ){
-      Vertex& w = vit2->second();
+      Vertex& w = vit2->second;
       hessianGenerator[ii][jj] = EHRSecondPartial::At( v, w );
       hessianGenerator[jj][ii] = hessianGenerator[ii][jj];
     }

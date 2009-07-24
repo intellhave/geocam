@@ -761,7 +761,7 @@ BuildCmd=
 [Project]
 FileName=Project1.dev
 Name=Project1
-UnitCount=104
+UnitCount=105
 Type=1
 Ver=1
 ObjFiles=
@@ -1352,6 +1352,16 @@ BuildCmd=
 FileName=Geometry\volume_partial_sum.h
 CompileCpp=1
 Folder=Geometry/Quantities/headers
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit105]
+FileName=Pipelined_Newtons_Method.cpp
+CompileCpp=1
+Folder=Project1
 Compile=1
 Link=1
 Priority=1000

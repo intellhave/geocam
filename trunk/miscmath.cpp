@@ -8,6 +8,7 @@ calculations on Points, Lines, and Circles. All functions are
 done independently of any triangulation.
 **************************************************************/
 #include "miscmath.h"
+#include <cmath>
 #include <cstdio>
 
 vector<int> listIntersection(vector<int>* list1, vector<int>* list2){
