@@ -1,34 +1,34 @@
-#include "delaunay.h"
-#include "3DTriangulation/3DInputOutput.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 #include <cmath>
-#include "triangulation/smallMorphs.h"
-#include "3DTriangulation/3DTriangulationMorph.h"
 #include <ctime>
-#include "triangulation/triangulationPlane.h"
-#include "3DTriangulation/3Dtriangulationmath.h"
-#include "triangulation/smallmorphs.h"
-#include "triangulation/MinMax.h"
-#include <map>
+#include <cstdio>
 
+#include "triangulation.h"
+#include "Pipelined_Newtons_Method.h"
+
+/********** Quantities we explicitly use **********/
 #include "radius.h"
 #include "curvature3D.h"
 #include "ehr_partial.h"
 #include "ehr_second_partial.h"
 
-#define PI 	3.141592653589793238
+/**** Quantities we need to examine ****/
+#include "total_volume_partial.h"
+/*****************************************/
 
-int SolveLinearEquation(int nDim, double* pfMatr, double* pfVect, double* pfSolution);
+//#define PI = 3.141592653589793238;
 
-void Newtons_Method() {
+void Newtons_Method( int numsteps ) {
   int V = Triangulation::vertexTable.size();
 
   Curvature3D* Curvatures[ V ];
   Radius* Radii[ V ];
-  double log_Radii[ V ];
+  TotalVolumePartial* TVPs[ V ];
+
+  double log_radii[ V ];
        
   EHRSecondPartial* hessianGenerator[ V ][ V ];
   double hessian[ V ][ V ];
@@ -39,21 +39,22 @@ void Newtons_Method() {
   double soln[V];  
   double* matrix;
 
-
   /*** Initialize Quantities ***/
-
   map<int, Vertex>::iterator vit, vit2;
-  int ii = 0;;
-  for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++, ii++) {
+  int ii = 0;
+  for(vit = Triangulation::vertexTable.begin();
+      vit != Triangulation::vertexTable.end(); vit++, ii++) {
     Vertex& v = vit->second;
-    
+
     Radii[ii] = Radius::At( v );
     Curvatures[ii] = Curvature3D::At( v );
-    gradientGenerator[ii] = EHRPartial::At( v );
+    TVPs[ii] = TotalVolumePartial::At( v );
 
+    gradientGenerator[ii] = EHRPartial::At( v );
+    
     int jj = ii;
     for( vit2 = vit; vit2 != Triangulation::vertexTable.end(); vit2++, jj++ ){
-      Vertex& w = vit2->second;
+      Vertex w = vit2->second;
       hessianGenerator[ii][jj] = EHRSecondPartial::At( v, w );
       hessianGenerator[jj][ii] = hessianGenerator[ii][jj];
     }
@@ -61,12 +62,30 @@ void Newtons_Method() {
 
   /*** Run Newton's Method ***/
 
-  while(true) {            
+  /* Ensure we do at least one iteration. */
+  double maxDelta, old, change;
+
+  TotalVolume* totVol = TotalVolume::At();
+  double init_totVol = totVol->getValue();
+
+  int stepnum = 0;
+  while(stepnum < numsteps){ 
+    /**********************QUANTITY LOGGING HERE*****************/
+    fprintf( stdout, "\nStep #%d:\n", stepnum++);
     for(int ii = 0; ii < V; ii++){
-      double curv = Curvatures[ii]->getValue();
       double radius = Radii[ii]->getValue(); 
-      printf("vertex %3d: radius = %f\t  curvature = %.10f\n", ii, radius, curv/radius); 
+      double curv = Curvatures[ii]->getValue();
+      double v_i = TVPs[ii]->getValue();
+
+      printf("vertex %3d: radius = %f\t  K_i / V_i = %.10f\n", ii, radius, curv / v_i); 
     }            
+    fprintf( stdout, "Total volume: %lf\n", totVol->getValue() ); 
+    
+    /**********************END OF LOGGING************************/
+
+    for(int ii = 0; ii < V; ii++){ 
+      log_radii[ii] = log( Radii[ii]->getValue() );
+    }
 
     // Obtain a copy of the current hessian from the hessianGenerator
     for(int i = 0; i < V; i++) {
@@ -77,33 +96,44 @@ void Newtons_Method() {
     }
 
     // Likewise, obtain a copy of the current graident.
-    for(int i=0; i < V; i++)
+    for(int i = 0 ; i < V; i++)
       negative_gradient[i] = -1.0 * gradientGenerator[i]->getValue();
 
-    SolveLinearEquation( V, (double*) EHRhessian, negative_gradient, soln);
+    /**********************QUANTITY LOGGING HERE*************************/
 
-    double temp;
+    fprintf( stdout, "\nGRADIENT:\n" );
+    for(int ii = 0; ii < V; ii++)
+      fprintf(stdout, " %lf", negative_gradient[ii]);
+    fprintf(stdout, "\n");
 
-    for(int ii - 0; ii < V; ii++){
+
+    fprintf( stdout, "\nHESSIAN:\n" );
+    for(int ii = 0; ii < V; ii++) {
+      for(int jj = 0; jj < V; jj++){
+	fprintf(stdout, "%lf ", hessian[ii][jj]);
+      }
+      fprintf( stdout, "\n" );
+    }
+
+    /**********************END OF LOGGING********************************/
+    LinearEquationsSolving( V, (double*) hessian, negative_gradient, soln);
+
+    maxDelta = 0.0;
+    for(int ii = 0; ii < V; ii++){
       log_radii[ii] += soln[ii];
       Radii[ii]->setValue( exp( log_radii[ii] ) );
-    }   
+    }
+
+    double radius_scaling_factor = pow( init_totVol/totVol->getValue(), 1.0/3.0 );
+
+    for(int ii = 0; ii < V; ii++){
+      Radii[ii]->setValue( radius_scaling_factor * Radii[ii]->getValue() );
+    }
   }
 }
 
-//==============================================================================
-// return 1 if system not solving
-// nDim - system dimension
-// pfMatr - matrix with coefficients
-// pfVect - vector with free members
-// pfSolution - vector with system solution
-// pfMatr becames trianglular after function call
-// pfVect changes after function call
-//
-// Developer: Henry Guennadi Levkin
-//
-//==============================================================================
-int SolveLinearEquation(int nDim, double* pfMatr, double* pfVect, double* pfSolution)
+int LinearEquationsSolving(int nDim, double* pfMatr, double* pfVect, double* pfSolution)
+//int LinearEquationsSolving(int nDim, double pfMatr[3][3], double pfVect[3], double pfSolution[3])
 {
   double fMaxElem;
   double fAcc;
@@ -120,7 +150,7 @@ int SolveLinearEquation(int nDim, double* pfMatr, double* pfVect, double* pfSolu
     {
       if(fMaxElem < fabs(pfMatr[i*nDim + k]) )
       {
-        fMaxElem = pfMatr[i*nDim + k];
+        fMaxElem = fabs(pfMatr[i*nDim + k]);
         m = i;
       }
     }
@@ -165,4 +195,3 @@ int SolveLinearEquation(int nDim, double* pfMatr, double* pfVect, double* pfSolu
 
   return 0;
 }
-
