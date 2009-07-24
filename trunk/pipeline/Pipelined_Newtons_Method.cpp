@@ -16,8 +16,7 @@
 #include "ehr_second_partial.h"
 
 /**** Quantities we need to examine ****/
-#include "eta.h"
-#include "curvature_partial.h"
+#include "total_volume_partial.h"
 /*****************************************/
 
 static const double PI = 3.141592653589793238;
@@ -27,6 +26,8 @@ void Newtons_Method( int numsteps ) {
 
   Curvature3D* Curvatures[ V ];
   Radius* Radii[ V ];
+  TotalVolumePartial* TVPs[ V ];
+
   double log_radii[ V ];
        
   EHRSecondPartial* hessianGenerator[ V ][ V ];
@@ -47,6 +48,8 @@ void Newtons_Method( int numsteps ) {
 
     Radii[ii] = Radius::At( v );
     Curvatures[ii] = Curvature3D::At( v );
+    TVPs[ii] = TotalVolumePartial::At( v );
+
     gradientGenerator[ii] = EHRPartial::At( v );
     
     int jj = ii;
@@ -70,9 +73,11 @@ void Newtons_Method( int numsteps ) {
     /**********************QUANTITY LOGGING HERE*****************/
     fprintf( stdout, "\nStep #%d:\n", stepnum++);
     for(int ii = 0; ii < V; ii++){
-      double curv = Curvatures[ii]->getValue();
       double radius = Radii[ii]->getValue(); 
-      printf("vertex %3d: radius = %f\t  curvature = %.10f\n", ii, radius, curv/radius); 
+      double curv = Curvatures[ii]->getValue();
+      double v_i = TVPs[ii]->getValue();
+
+      printf("vertex %3d: radius = %f\t  K_i / V_i = %.10f\n", ii, radius, curv / v_i); 
     }            
     fprintf( stdout, "Total volume: %lf\n", totVol->getValue() ); 
     

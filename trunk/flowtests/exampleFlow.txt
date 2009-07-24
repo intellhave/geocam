@@ -1,0 +1,26 @@
+Parameters for the Objects of Study:
+Triangulation -- Supplied via a filename.
+Radii -- 
+Etas  -- 
+Geometry??
+
+System of Differential Equations -- specified by name??
+
+Parameters for the Calculation:
+Approximator
+Accuracy and Precision - or - Num-Steps
+Step Size
+
+Example:
+TRIANGULATION: pentachron.txt
+RADII: 1.0000 2.0000 0.5000 ... 1.2470
+#ETAS:(1,2,0.145) ... (3,5, 12.1) <--- (Endpt 1, Endpt 2, Eta)
+DIFFEQS: std_ricii std_ricci unusual_ricci ... std_ricci
+APPROXIMATOR: newtons (or euler, runga)
+ACCURACY: 0.1000      | Or: NUMSTEPS: 1000
+PRECISION: 0.1000     
+STEPSIZE: 0.0100
+
+
+
+
