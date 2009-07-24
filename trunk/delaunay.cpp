@@ -1,7 +1,8 @@
 #include <cmath>
 #include "delaunay.h"
 #include <iostream>
-#include "Geometry/geoquants.h"
+#include "partial_edge.h"
+#include "euc_angle.h"
 #define PI 	3.141592653589793238
 
 bool isDelaunay(Edge e)

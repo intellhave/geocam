@@ -18,7 +18,7 @@
 #include "flow/eulerApprox.h"
 #include "flow/sysdiffeq.h"
 
-#include "Geometry/geoquants.h"
+#include "curvature3D.h"
 #define PI 	3.141592653589793238
 
 double SecondPartial(int i, int j, double dx_i, double dx_j);

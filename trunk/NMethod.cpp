@@ -4,57 +4,11 @@
 #include <math.h>
 
 void NewtonsMethod::maximize(double initial[], double soln[]) {
-   double gradLen;
-      
-   double next[nDim];
-   
    for(int i = 0; i < nDim; i++) {
      soln[i] = initial[i];
    }
-   int j = 1;
    while(true) {
-      
-      printf("\n***** Step %d *****\n", j++);
-      
-      for(int i = 0; i < nDim; i++) {
-        printf("soln[%d] = %.10f\n", i, soln[i]);
-      }
-      if(df == NULL) {
-        approxGradient(soln, grad);
-      } else {
-        df(soln, grad);
-      }
-      for(int i = 0; i < nDim; i++) {
-        printf("grad[%d] = %.10f\n", i, grad[i]);
-      }
-
-      if( d2f == NULL) {
-        approxHessian(soln, hess);
-      } else {
-        d2f(soln, hess);
-      }
-      for(int i = 0; i < nDim; i++) {
-        for(int k = 0; k < nDim; k++) {
-          printf("hess[%d][%d] = %.10f\n", i, k, hess[i][k]);
-        }
-      }
-
-      negateArray(grad);
-      LinearEquationsSolver(hess, grad, next);
-      gradLen = getGradientLength(grad);
-      
-      if(gradLen < 0.00000001) {
-        return;
-      }
-      printf("gradlen = %.10f\n", gradLen);
-      for(int i = 0; i < nDim; i++) {
-        printf("next[%d] = %.10f\n", i, next[i]);
-      }
-
-      for(int i = 0; i < nDim; i++) {
-              soln[i] += next[i];
-      }      
-      system("PAUSE");
+      step(soln);     
    }
 }
 
@@ -62,28 +16,17 @@ double NewtonsMethod::step(double x_n[]) {
    double gradLen;
    double next[nDim];
 
-//   for(int i = 0; i < nDim; i++) {
-//      printf("soln[%d] = %.10f\n", i, soln[i]);
-//   }
    if(df == NULL) {
       approxGradient(x_n, grad);
    } else {
       df(x_n, grad);
    }
-//   for(int i = 0; i < nDim; i++) {
-//      printf("grad[%d] = %.10f\n", i, grad[i]);
-//   }
 
    if( d2f == NULL) {
       approxHessian(x_n, hess);
    } else {
       d2f(x_n, hess);
    }
-//   for(int i = 0; i < nDim; i++) {
-//      for(int k = 0; k < nDim; k++) {
-//         printf("hess[%d][%d] = %.10f\n", i, k, hess[i][k]);
-//      }
-//   }
 
    negateArray(grad);
    LinearEquationsSolver(hess, grad, next);
@@ -92,10 +35,6 @@ double NewtonsMethod::step(double x_n[]) {
    if(gradLen < 0.0000000001) {
         return gradLen;
    }
-//   printf("gradlen = %.10f\n", gradLen);
-//   for(int i = 0; i < nDim; i++) {
-//      printf("next[%d] = %.10f\n", i, next[i]);
-//   }
 
    for(int i = 0; i < nDim; i++) {
       x_n[i] += next[i];

@@ -1,16 +1,9 @@
-#ifndef ETA_H_
-#define ETA_H_
+#include "eta.h"
 
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "geoquants.h"
-#include "triposition.h"
-#include "triangulation/triangulation.h"
-
-EtaIndex* Eta::Index = NULL;
+typedef map<TriPosition, Eta*, TriPositionCompare> EtaIndex;
+static EtaIndex* Index = NULL;
 
 Eta::Eta( Edge& e ){}
 
@@ -21,6 +14,7 @@ void Eta::remove() {
      Index->erase(pos);
      delete this;
 }
+
 Eta::~Eta(){}
 
 Eta* Eta::At( Edge& e ){
@@ -50,5 +44,13 @@ void Eta::CleanUp(){
   Index = NULL;
 }
 
-#endif /* ETA_H_ */
+void Eta::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  EtaIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

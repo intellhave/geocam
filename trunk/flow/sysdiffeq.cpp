@@ -1,7 +1,9 @@
 #include <cmath>
 
 #include "sysdiffeq.h"
-#include "Geometry/geoquants.h"
+#include "curvature2D.h"
+#include "curvature3D.h"
+#include "volume.h"
 #include "Triangulation/triangulation.h"
 #include "spherical/sphericalmath.h"
 #include "hyperbolic/hyperbolicmath.h"

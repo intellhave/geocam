@@ -1,15 +1,8 @@
-#ifndef TOTALCURVATURE_H_
-#define TOTALCURVATURE_H_
+#include "totalcurvature.h"
 
-#include <vector>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "geoquants.h"
-#include "triposition.h"
-
-TotalCurvature* TotalCurvature::totCurv = NULL;
+static TotalCurvature* totCurv = NULL;
 
 TotalCurvature::TotalCurvature(){
   curvatures = new vector<Curvature3D*>();
@@ -55,5 +48,3 @@ TotalCurvature* TotalCurvature::At(){
 void TotalCurvature::CleanUp(){
   totCurv->remove();
 }
-
-#endif /* TOTALCURVATURE_H_ */

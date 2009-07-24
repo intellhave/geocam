@@ -2,7 +2,8 @@
 #include <iostream>
 #include <iomanip>
 #include "triangulation/TriangulationCoordinateSystem.h"
-#include "Geometry/geoquants.h"
+#include "euc_angle.h"
+#include "partial_edge.h"
 #define PI 	3.141592653589793238
 
 TriangulationCoordinateSystem::TriangulationCoordinateSystem()

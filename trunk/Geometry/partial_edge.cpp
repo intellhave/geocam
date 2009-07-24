@@ -1,59 +1,42 @@
-#ifndef PARTEDGE_H_
-#define PARTEDGE_H_
+#include "partial_edge.h"
+#include "miscmath.h"
 
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "triposition.h"
+typedef map<TriPosition, PartialEdge*, TriPositionCompare> PartialEdgeIndex;
+static PartialEdgeIndex* Index = NULL;
 
-#include "geoquants.h"
-#include "triangulation/triangulation.h"
+PartialEdge::PartialEdge( Vertex& v, Edge& e ){
+  StdEdge st = labelEdge( e, v );  
+  ri = Radius::At( v );
+  rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
+  Lij = Length::At( e );
 
-PartialEdgeIndex* PartialEdge::Index = NULL;
+  ri->addDependent( this );
+  rj->addDependent( this );
+  Lij->addDependent( this );
+}
 
-PartialEdge::PartialEdge( Vertex& v, Edge& e  ){    
-    length = Length::At(e);
-    length->addDependent(this);
+void PartialEdge::recalculate(){
+  double length = Lij->getValue();
+  double radi = ri->getValue();
+  double radj = rj->getValue();
 
-    radA = Radius::At(v);
-    radA->addDependent(this);
-     
-    
-    int v2Index;
-    if((*(e.getLocalVertices()))[0] != v.getIndex())
-    {
-       v2Index = (*(e.getLocalVertices()))[0];
-    } else
-    {
-       v2Index = (*(e.getLocalVertices()))[1];
-    }
-    
-    radB = Radius::At(Triangulation::vertexTable[v2Index]);
-    radB->addDependent(this);  
+  value = (length*length + radi*radi - radj*radj)/(2*length);
 }
 
 void PartialEdge::remove() {
     deleteDependents();
-    length->removeDependent(this);
-    radA->removeDependent(this);
-    radB->removeDependent(this);
+    Lij->removeDependent(this);
+    ri->removeDependent(this);
+    rj->removeDependent(this);
     Index->erase(pos);
     delete this;
 }
 
-PartialEdge::~PartialEdge(){ 
-    
-}
-void PartialEdge::recalculate() {
-   double len = length->getValue();
-   value = (pow(len, 2) + pow(radA->getValue(), 2) 
-           - pow(radB->getValue(), 2)) / (2 * len);
-}
+PartialEdge::~PartialEdge(){}
 
-PartialEdge* PartialEdge::At( Vertex& v, Edge& e  ){
+PartialEdge* PartialEdge::At( Vertex& v, Edge& e ){
   TriPosition T( 2, v.getSerialNumber(), e.getSerialNumber() );
   if( Index == NULL ) Index = new PartialEdgeIndex();
   PartialEdgeIndex::iterator iter = Index->find( T );
@@ -80,6 +63,13 @@ void PartialEdge::CleanUp(){
   Index = NULL;
 }
 
-#endif /* PARTEDGE_H_ */
+void PartialEdge::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  PartialEdgeIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
 
+  fclose( output );
+}

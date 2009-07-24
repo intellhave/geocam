@@ -25,7 +25,8 @@
 
 #include "flow/parsecalc.h"
 #include "NMethod.h"
-#include "Geometry/geoquants.h"
+#include "radius.h"
+#include "curvature3D.h"
 
 #define PI 3.141592653589793238
 
@@ -111,28 +112,28 @@ double func5(double vars[]) {
        return pow(pow(vars[0], 8), 1.0/7.0);
 }
 
-int main(int arg, char** argv) {
-    NewtonsMethod *nm = new NewtonsMethod(func4, 2);
-    double initial[] = {1, 1};
-    //printf("f(%f, %f) = %f\n", initial[0], initial[1], func4(initial));
-    double soln[1];
-    double x_n[] = {1, 1};
-    int i = 1;
-    printf("Initial\n-----------------\n");
-    for(int j = 0; j < 2; j++) {
-      printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
-    }
-    while(nm->step(x_n) > 0.000001) {
-      printf("\n***** Step %d *****\n", i++);
-      nm->printInfo(stdout);
-      for(int j = 0; j < 2; j++) {
-        printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
-      }
-    }
-    //nm->maximize(initial, soln);
-    printf("\nSolution: %.10f\n", x_n[0]);
-    system("PAUSE");
-}
+//int main(int arg, char** argv) {
+//    NewtonsMethod *nm = new NewtonsMethod(func4, 2);
+//    double initial[] = {1, 1};
+//    //printf("f(%f, %f) = %f\n", initial[0], initial[1], func4(initial));
+//    double soln[1];
+//    double x_n[] = {1, 1};
+//    int i = 1;
+//    printf("Initial\n-----------------\n");
+//    for(int j = 0; j < 2; j++) {
+//      printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
+//    }
+//    while(nm->step(x_n) > 0.000001) {
+//      printf("\n***** Step %d *****\n", i++);
+//      nm->printInfo(stdout);
+//      for(int j = 0; j < 2; j++) {
+//        printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
+//      }
+//    }
+//    //nm->maximize(initial, soln);
+//    printf("\nSolution: %.10f\n", x_n[0]);
+//    printf("PAUSE..."); scanf("%*c", NULL); // PAUSE
+//}
 
 
 /* 2D FLOW */
@@ -164,61 +165,60 @@ int main(int arg, char** argv) {
 //   app->run(300, 0.01);
 //   printResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
 //                      &(app->radiiHistory), &(app->curvHistory));
-//   system("PAUSE");
+//   printf("PAUSE..."); scanf("%*c", NULL); // PAUSE
 //}
 
 
 
 /* 3D FLOW */
-//int main(int argc, char** argv){
-//     map<int, Vertex>::iterator vit;
-//     map<int, Edge>::iterator eit;
-//     map<int, Face>::iterator fit;
-//     map<int, Tetra>::iterator tit;
-//     
-//     vector<int> edges;
-//     vector<int> faces;
-//     vector<int> tetras;
-//    
-//    
-//     time_t start, end;
-//     
-//   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
-//   char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
-//   make3DTriangulationFile(from, to);
-//   read3DTriangulationFile(to);
-//   char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
-//   //readTriangulationFile(tetra);
-//   int vertSize = Triangulation::vertexTable.size();
-//   int edgeSize = Triangulation::edgeTable.size();
-//   for(int i = 1; i <= vertSize; i++) {
-//      Radius::At(Triangulation::vertexTable[i])->setValue(1.0 - (i - 2.5) / 5.);        
+int main(int argc, char** argv){
+     map<int, Vertex>::iterator vit;
+     map<int, Edge>::iterator eit;
+     map<int, Face>::iterator fit;
+     map<int, Tetra>::iterator tit;
+     
+     vector<int> edges;
+     vector<int> faces;
+     vector<int> tetras;
+    
+    
+     time_t start, end;
+     
+   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
+   char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
+   make3DTriangulationFile(from, to);
+   read3DTriangulationFile(to);
+   char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
+   //readTriangulationFile(tetra);
+   int vertSize = Triangulation::vertexTable.size();
+   int edgeSize = Triangulation::edgeTable.size();
+   for(int i = 1; i <= vertSize; i++) {
+      Radius::At(Triangulation::vertexTable[i])->setValue(1.0 - (i - 2.5) / 5.);        
+   }
+   for(int i = 1; i <= edgeSize; i++) {
+       Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
+   }
+//   double sum;
+//   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+//           printf("%d: %f\n", eit->first, EdgeCurvature::valueAt(eit->second));
 //   }
-//   for(int i = 1; i <= edgeSize; i++) {
-//       Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
+//   printf("PAUSE..."); scanf("%*c", NULL); // PAUSE
+   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "r3");
+   time(&start);
+   app->run(300, 0.01);
+   //app->run(0.0001, 0.01);
+   time(&end);
+   print3DResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
+                      &(app->radiiHistory), &(app->curvHistory));
+   //printResultsVolumes("C:/Dev-Cpp/geocam/Triangulation Files/Volumes.txt",
+      //                    &(app->volumeHistory));
+   printf("Time: %.2lf seconds\n", difftime(end, start));
+
+   printf("PAUSE..."); scanf("%*c", NULL); // PAUSE
+//   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+//           printf("%d: %f\n", eit->first, EdgeCurvature::valueAt(eit->second));
 //   }
-////   double sum;
-////   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-////           printf("%d: %f\n", eit->first, EdgeCurvature::valueAt(eit->second));
-////   }
-////   system("PAUSE");
-//   Approximator *app = new EulerApprox((sysdiffeq) Yamabe, "r3");
-//   time(&start);
-//   //app->run(300, 0.01);
-//   app->run(0.0001, 0.01);
-//   time(&end);
-//   print3DResultsStep("C:/Dev-Cpp/geocam/Triangulation Files/ODE Result.txt", 
-//                      &(app->radiiHistory), &(app->curvHistory));
-//   //printResultsVolumes("C:/Dev-Cpp/geocam/Triangulation Files/Volumes.txt",
-//      //                    &(app->volumeHistory));
-//   printf("Time: %.2lf seconds\n", difftime(end, start));
-//
-//   system("PAUSE");
-////   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-////           printf("%d: %f\n", eit->first, EdgeCurvature::valueAt(eit->second));
-////   }
-//
-//   system("PAUSE");
-//}
+}
+
 
 

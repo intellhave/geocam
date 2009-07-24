@@ -1,15 +1,9 @@
-#ifndef DIHEDRALANGLESUM_H_
-#define DIHEDRALANGLESUM_H_
+#include "dih_angle_sum.h"
 
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "geoquants.h"
-#include "triposition.h"
-
-DihedralAngleSumIndex* DihedralAngleSum::Index = NULL;
+typedef map<TriPosition, DihedralAngleSum*, TriPositionCompare> DihedralAngleSumIndex;
+static DihedralAngleSumIndex* Index = NULL;
 
 DihedralAngleSum::DihedralAngleSum( Edge& e ){
   angles = new vector<DihedralAngle*>();
@@ -33,6 +27,10 @@ void DihedralAngleSum::recalculate(){
   }
 }
 
+DihedralAngleSum::~DihedralAngleSum(){
+
+}
+
 void DihedralAngleSum::remove() {
      deleteDependents();
      for(int ii = 0; ii < angles->size(); ii++) {
@@ -41,10 +39,6 @@ void DihedralAngleSum::remove() {
      Index->erase(pos);
      delete angles;
      delete this;
-}
-
-DihedralAngleSum::~DihedralAngleSum(){
-
 }
 
 DihedralAngleSum* DihedralAngleSum::At( Edge& e ){
@@ -74,4 +68,13 @@ void DihedralAngleSum::CleanUp(){
   Index = NULL;
 }
 
-#endif /* DIHEDRALANGLESUM_H_ */
+void DihedralAngleSum::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  DihedralAngleSumIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

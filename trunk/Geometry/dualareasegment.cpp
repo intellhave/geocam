@@ -1,28 +1,23 @@
-#ifndef DUALAREASEGMENT_H_
-#define DUALAREASEGMENT_H_
-
-#include <map>
-#include <new>
-using namespace std;
-
+#include "dualareasegment.h"
 #include "miscmath.h"
 
-#include "geoquant.h"
-#include "triposition.h"
+#include <stdio.h>
 
-#include "geoquants.h"
-
-DualAreaSegmentIndex* DualAreaSegment::Index = NULL;
+typedef map<TriPosition, DualAreaSegment*, TriPositionCompare> DualAreaSegmentIndex;
+static DualAreaSegmentIndex* Index = NULL;
 
 DualAreaSegment::DualAreaSegment( Edge& e, Tetra& t ){
-  StdTetra st = labelTetra(e, t);
+  StdTetra st = labelTetra( t, e );
   
-  hij_k = EdgeHeight::At( st.e12, st.f123 );
-  hij_l = EdgeHeight::At( st.e12, st.f124 );
-  
-  hijk_l = FaceHeight::At( st.f123, t );
-  hijl_k = FaceHeight::At( st.f124, t );
+  Face& fa123 = Triangulation::faceTable[ st.f123 ];
+  Face& fa124 = Triangulation::faceTable[ st.f124 ];
 
+  hij_k = EdgeHeight::At( e, fa123 );
+  hij_l = EdgeHeight::At( e, fa124 );
+  
+  hijk_l = FaceHeight::At( fa123, t );
+  hijl_k = FaceHeight::At( fa124, t );
+ 
   hij_k->addDependent(this);
   hij_l->addDependent(this);
   hijk_l->addDependent(this);
@@ -35,7 +30,7 @@ void DualAreaSegment::recalculate(){
   double Hij_l = hij_l->getValue();
   double Hijl_k = hijl_k->getValue();
 
-  double result = 0.5*(Hij_k * Hijk_l + Hij_l * Hijl_k);
+  value = 0.5*(Hij_k * Hijk_l + Hij_l * Hijl_k);
 }
 
 void DualAreaSegment::remove() {
@@ -48,9 +43,7 @@ void DualAreaSegment::remove() {
      delete this;
 }
 
-DualAreaSegment::~DualAreaSegment(){
-  
-}
+DualAreaSegment::~DualAreaSegment(){}
 
 DualAreaSegment* DualAreaSegment::At( Edge& e, Tetra& t ){
   TriPosition T( 2, e.getSerialNumber(), t.getSerialNumber() );
@@ -79,5 +72,13 @@ void DualAreaSegment::CleanUp(){
   Index = NULL;
 }
 
-#endif /* DUALAREASEGMENT_H_ */
+void DualAreaSegment::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  DualAreaSegmentIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

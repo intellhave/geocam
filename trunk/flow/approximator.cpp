@@ -1,7 +1,10 @@
 #include <cmath>
 
 #include "Triangulation/triangulation.h"
-#include "Geometry/geoquants.h"
+#include "curvature2D.h"
+#include "curvature3D.h"
+#include "volume.h"
+#include "area.h"
 #include "Simplex/vertex.h"
 #include "approximator.h"
 #include <cerrno>

@@ -2,7 +2,8 @@
 #include <cmath>
 #include <fstream>
 #include "triangulationplane.h"
-#include "Geometry/geoquants.h"
+#include "length.h"
+#include "euc_angle.h"
 #include "miscmath.h"
 #define PI 	3.141592653589793238
 
@@ -509,7 +510,7 @@ void weightedFlipAlgorithm()
                          cout << (*(f2.getLocalEdges()))[2] << ": ";
                          cout << Length::valueAt(Triangulation::edgeTable[(*(f2.getLocalEdges()))[2]]) << "]";
                          cout << endl;
-                         system("PAUSE");
+                         printf("PAUSE..."); scanf("%*c", NULL); // PAUSE
                          flipCount++;
                     }
                }

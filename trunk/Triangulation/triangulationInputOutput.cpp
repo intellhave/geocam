@@ -12,7 +12,8 @@ the reading and writing of text files.
 #include <sstream>
 #include <iomanip>
 #include "triangulationinputoutput.h"
-#include "Geometry/geoquants.h"
+#include "length.h"
+#include "area.h"
 
 
 /*

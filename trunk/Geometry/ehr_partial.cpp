@@ -1,16 +1,9 @@
-#ifndef EHRPARTIAL_H_
-#define EHRPARTIAL_H_
+#include "ehr_partial.h"
 
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "geoquants.h"
-#include "triposition.h"
-
-
-EHRPartialIndex* EHRPartial::Index = NULL;
+typedef map<TriPosition, EHRPartial*, TriPositionCompare> EHRPartialIndex;
+static EHRPartialIndex* Index = NULL;
 
 EHRPartial::EHRPartial( Vertex& v ){
   totVolume = TotalVolume::At();
@@ -73,6 +66,3 @@ void EHRPartial::CleanUp(){
   delete Index;
   Index = NULL;
 }
-
-#endif /* EHRPARTIAL_H_ */
-

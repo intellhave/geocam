@@ -8,7 +8,7 @@
 #include "triangulation/triangulationInputOutput.h"
 #include "triangulation/TriangulationCoordinateSystem.h"
 #include "miscmath.h"
-#include "geometry/geoquants.h"
+#include "length.h"
 #define PI 	3.141592653589793238
 
 //a simps struct is supposed to hold all the important values that are

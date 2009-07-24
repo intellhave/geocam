@@ -1,51 +1,39 @@
-#ifndef VOLUMEPARTIAL_H_
-#define VOLUMEPARTIAL_H_
+#include "volume_partial.h"
 
-#include <map>
-#include <new>
-#include <cmath>
-using namespace std;
+#include <stdio.h>
 
-#include "miscmath.h"
-#include "geoquant.h"
-#include "geoquants.h"
-#include "triposition.h"
-
-#include "triangulation/triangulation.h"
-
-
-VolumePartialIndex* VolumePartial::Index = NULL;
+typedef map<TriPosition, VolumePartial*, TriPositionCompare> VolumePartialIndex;
+static VolumePartialIndex* Index = NULL;
 
 VolumePartial::VolumePartial( Vertex& v, Tetra& t ){
-  StdTetra st = labelTetra( v, t );
+  isIncident = t.isAdjVertex( v.getIndex() );
+  if( ! isIncident ) return;
+
+  StdTetra st = labelTetra( t, v );
+
+  rad[0] = Radius::At( Triangulation::vertexTable[ st.v1 ] );
+  rad[1] = Radius::At( Triangulation::vertexTable[ st.v2 ] );
+  rad[2] = Radius::At( Triangulation::vertexTable[ st.v3 ] );
+  rad[3] = Radius::At( Triangulation::vertexTable[ st.v4 ] );
+
+  for(int ii = 0; ii < 4; ii++) rad[ii]->addDependent( this );
   
-  rad[0] = Radius::At( st.v1 );
-  rad[1] = Radius::At( st.v2 );
-  rad[2] = Radius::At( st.v3 );
-  rad[3] = Radius::At( st.v4 );
-  
-  eta[0] = Eta::At( st.e12 );
-  eta[1] = Eta::At( st.e13 );
-  eta[2] = Eta::At( st.e14 );
-  eta[3] = Eta::At( st.e23 );
-  eta[4] = Eta::At( st.e24 );
-  eta[5] = Eta::At( st.e34 );
-  
-  rad[0]->addDependent(this);
-  rad[1]->addDependent(this);
-  rad[2]->addDependent(this);
-  rad[3]->addDependent(this);
-  
-  eta[0]->addDependent(this);
-  eta[1]->addDependent(this);
-  eta[2]->addDependent(this);
-  eta[3]->addDependent(this);
-  eta[4]->addDependent(this);
-  eta[5]->addDependent(this);
-   
+  eta[0] = Eta::At( Triangulation::edgeTable[ st.e12 ] );
+  eta[1] = Eta::At( Triangulation::edgeTable[ st.e13 ] );
+  eta[2] = Eta::At( Triangulation::edgeTable[ st.e14 ] );
+  eta[3] = Eta::At( Triangulation::edgeTable[ st.e23 ] );
+  eta[4] = Eta::At( Triangulation::edgeTable[ st.e24 ] );
+  eta[5] = Eta::At( Triangulation::edgeTable[ st.e34 ] );
+
+  for(int ii = 0; ii < 6; ii++) eta[ii]->addDependent( this );
 }
 
 void VolumePartial::recalculate(){
+  if( ! isIncident ){
+    value = 0.0;
+    return;
+  }
+
   double r1, r2, r3, r4, Eta12, Eta13, Eta14, Eta23, Eta24, Eta34;
        
   r1 = rad[0]->getValue();
@@ -118,10 +106,10 @@ void VolumePartial::remove() {
   delete this;
 }
 
-VolumePartial::~VolumePartial(){ }
+VolumePartial::~VolumePartial(){}
 
 VolumePartial* VolumePartial::At( Vertex& v, Tetra& t ){
-  TriPosition T( 1, v.getSerialNumber(), t.getSerialNumber() );
+  TriPosition T( 2, v.getSerialNumber(), t.getSerialNumber() );
   if( Index == NULL ) Index = new VolumePartialIndex();
   VolumePartialIndex::iterator iter = Index->find( T );
 
@@ -147,5 +135,13 @@ void VolumePartial::CleanUp(){
   Index = NULL;
 }
 
-#endif /* VOLUMEPARTIAL_H_ */
+void VolumePartial::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  VolumePartialIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

@@ -11,6 +11,9 @@ using namespace std;
 #include "geoquants.h"
 #include "triangulation/triangulation.h"
 
+typedef map<TriPosition, Curvature2D*, TriPositionCompare> Curvature2DIndex;
+static Curvature2DIndex* Index = NULL;
+
 Curvature2DIndex* Curvature2D::Index = NULL;
 
 Curvature2D::Curvature2D( Vertex& v ){    

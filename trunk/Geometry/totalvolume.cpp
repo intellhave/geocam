@@ -1,15 +1,8 @@
-#ifndef TOTALVOLUME_H_
-#define TOTALVOLUME_H_
+#include "totalvolume.h"
 
-#include <vector>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "geoquants.h"
-#include "triposition.h"
-
-TotalVolume* TotalVolume::totVol = NULL;
+static TotalVolume* totVol = NULL;
 
 TotalVolume::TotalVolume(){
   volumes = new vector<Volume*>();
@@ -34,6 +27,7 @@ void TotalVolume::remove() {
 }
 
 TotalVolume::~TotalVolume(){
+
 }
 
 void TotalVolume::recalculate(){
@@ -55,6 +49,4 @@ TotalVolume* TotalVolume::At(){
 void TotalVolume::CleanUp(){
   totVol->remove();
 }
-
-#endif /* TOTALVOLUME_H_ */
 

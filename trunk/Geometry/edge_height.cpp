@@ -1,27 +1,24 @@
-#ifndef EDGEHEIGHT_H_
-#define EDGEHEIGHT_H_
-
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
-
+#include "edge_height.h"
 #include "miscmath.h"
-#include "geoquant.h"
-#include "geoquants.h"
-#include "triposition.h"
 
+#include <stdio.h>
 
-EdgeHeightIndex* EdgeHeight::Index = NULL;
+typedef map<TriPosition, EdgeHeight*, TriPositionCompare> EdgeHeightIndex;
+static EdgeHeightIndex* Index = NULL;
 
 EdgeHeight::EdgeHeight( Edge& e, Face& f ){
-  StdFace sf = labelFace( e, f );
-  d_ij = PartialEdge::At( sf.v1, sf.e12 );
-  d_ik = PartialEdge::At( sf.v1, sf.e13 );
-  theta_i = EuclideanAngle::At( sf.v1, f );
-  d_ij->addDependent(this);
-  d_ik->addDependent(this);
-  theta_i->addDependent(this);
+  StdFace sf = labelFace( f, e );
+  
+  Vertex& vert1 = Triangulation::vertexTable[ sf.v1 ];
+  Edge& ed13 = Triangulation::edgeTable[ sf.e13 ]; 
+  
+  d_ij = PartialEdge::At( vert1, e ); // Note e = edge_12
+  d_ik = PartialEdge::At( vert1, ed13 );
+  theta_i = EuclideanAngle::At( vert1, f );
+
+  d_ij->addDependent( this );
+  d_ik->addDependent( this );
+  theta_i->addDependent( this );
 }
 
 void EdgeHeight::recalculate(){
@@ -29,7 +26,7 @@ void EdgeHeight::recalculate(){
   double dik = d_ik->getValue();
   double theta = theta_i->getValue();
 
-  value = dik - dij * cos(theta)/sin(theta);
+  value = (dik - dij * cos(theta))/sin(theta);
 }
 
 void EdgeHeight::remove() {
@@ -41,7 +38,7 @@ void EdgeHeight::remove() {
      delete this;
 }
 
-EdgeHeight::~EdgeHeight(){ }
+EdgeHeight::~EdgeHeight(){}
 
 EdgeHeight* EdgeHeight::At( Edge& e, Face& f ){
   TriPosition T( 2, e.getSerialNumber(), f.getSerialNumber() );
@@ -70,5 +67,13 @@ void EdgeHeight::CleanUp(){
   Index = NULL;
 }
 
-#endif /* EDGEHEIGHT_H_ */
+void EdgeHeight::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  EdgeHeightIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

@@ -9,7 +9,9 @@
 #include "flow/eulerApprox.h"
 #include "flow/sysdiffeq.h"
 
-#include "Geometry/geoquants.h"
+#include "radius.h"
+#include "curvature3D.h"
+#include "volume.h"
 #define PI 	3.141592653589793238 
 
 void getRadii(double* radii) {

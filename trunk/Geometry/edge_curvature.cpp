@@ -1,28 +1,22 @@
-#ifndef EDGECURVATURE_H_
-#define EDGECURVATURE_H_
+#include "edge_curvature.h"
 
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "triposition.h"
+//static const double PI = 3.1415926;
 
-#include "geoquants.h"
-#include "triangulation/triangulation.h"
-
-EdgeCurvatureIndex* EdgeCurvature::Index = NULL;
+class EdgeCurvature;
+typedef map<TriPosition, EdgeCurvature*, TriPositionCompare> EdgeCurvatureIndex;
+static EdgeCurvatureIndex* Index = NULL;
 
 EdgeCurvature::EdgeCurvature( Edge& e  ){    
-    dih_angles = new vector<GeoQuant*>();
+  dih_angles = new vector<GeoQuant*>();
 
-    GeoQuant* dih_angle;
-    for(int i = 0; i < e.getLocalTetras()->size(); i++) {
-        dih_angle = DihedralAngle::At(e, Triangulation::tetraTable[(*(e.getLocalTetras()))[i]]);
-	    dih_angle->addDependent(this);
-	    dih_angles->push_back( dih_angle );
-    } 
+  GeoQuant* dih_angle;
+  for(int i = 0; i < e.getLocalTetras()->size(); i++) {
+    dih_angle = DihedralAngle::At(e, Triangulation::tetraTable[(*(e.getLocalTetras()))[i]]);
+    dih_angle->addDependent(this);
+    dih_angles->push_back( dih_angle );
+  } 
 }
 
 void EdgeCurvature::remove() {
@@ -36,8 +30,9 @@ void EdgeCurvature::remove() {
 }
 
 EdgeCurvature::~EdgeCurvature(){ }
+
 void EdgeCurvature::recalculate() {
-    double curv = 2*PI;
+    double curv = 2 * PI;
     GeoQuant* dih_angle;
     for(int ii = 0; ii < dih_angles->size(); ii++){
       dih_angle = dih_angles->at(ii);
@@ -74,6 +69,13 @@ void EdgeCurvature::CleanUp(){
   Index = NULL;
 }
 
-#endif /* EDGECURVATURE_H_ */
+void EdgeCurvature::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
 
+  EdgeCurvatureIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
 
+  fclose( output );
+}

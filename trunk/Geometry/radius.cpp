@@ -1,27 +1,19 @@
-#ifndef RADIUS_H_
-#define RADIUS_H_
+#include "radius.h"
 
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "geoquants.h"
-#include "triposition.h"
-#include "triangulation/triangulation.h"
+typedef map<TriPosition, Radius*, TriPositionCompare> RadiusIndex;
+static RadiusIndex* Index = NULL;
 
-RadiusIndex* Radius::Index = NULL;
+Radius::Radius( Vertex& v ){}
 
-Radius::Radius( Vertex& v ){
-}
-
-Radius::~Radius(){
-}
 void Radius::remove() {
    deleteDependents();
    Index->erase(pos);
    delete this;
 }
+
+Radius::~Radius(){}
 
 void Radius::recalculate(){}
 
@@ -52,5 +44,3 @@ void Radius::CleanUp(){
   delete Index;
   Index = NULL;
 }
-
-#endif /* RADIUS_H_ */

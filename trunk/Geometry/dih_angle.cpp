@@ -1,20 +1,10 @@
-#ifndef DIHEDRALANGLE_H_
-#define DIHEDRALANGLE_H_
-
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
-
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "geoquants.h"
-#include "triangulation/triangulation.h"
-
+#include "dih_angle.h"
 #include "miscmath.h"
 
-DihedralAngleIndex* DihedralAngle::Index = NULL;
+#include <stdio.h>
+
+typedef map<TriPosition, DihedralAngle*, TriPositionCompare> DihedralAngleIndex;
+static DihedralAngleIndex* Index = NULL;
 
 DihedralAngle::DihedralAngle( Edge& e, Tetra& t ){
   Vertex& v = Triangulation::vertexTable[(*(e.getLocalVertices()))[0]];
@@ -32,6 +22,8 @@ DihedralAngle::DihedralAngle( Edge& e, Tetra& t ){
   angleC->addDependent(this);
 }
 
+DihedralAngle::~DihedralAngle() {}
+
 void DihedralAngle::remove() {
      deleteDependents();
      angleA->removeDependent(this);
@@ -39,9 +31,6 @@ void DihedralAngle::remove() {
      angleC->removeDependent(this);
      Index->erase(pos);
      delete this;
-}
-
-DihedralAngle::~DihedralAngle() {
 }
 
 void DihedralAngle::recalculate() {
@@ -78,4 +67,13 @@ void DihedralAngle::CleanUp(){
   Index = NULL;
 }
 
-#endif /* DIHEDRALANGLE_H_ */
+void DihedralAngle::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  DihedralAngleIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}

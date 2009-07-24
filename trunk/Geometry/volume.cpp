@@ -1,42 +1,22 @@
-#ifndef VOLUME_H_
-#define VOLUME_H_
+#include "volume.h"
+#include "miscmath.h"
 
-#include <cmath>
-#include <map>
-#include <new>
-using namespace std;
+#include <stdio.h>
 
-#include "geoquant.h"
-#include "triposition.h"
-
-#include "geoquants.h"
-
-#include "triangulation/triangulation.h"
-
-VolumeIndex* Volume::Index = NULL;
+typedef map<TriPosition, Volume*, TriPositionCompare> VolumeIndex;
+static VolumeIndex* Index = NULL;
 
 Volume::Volume( Tetra& t ){
-  int vertex, face;
-  vector<int> edges1, edge23, edge24, edge34;
-  
-  vertex = (*(t.getLocalVertices()))[0];
-  edges1 = listIntersection(Triangulation::vertexTable[vertex].getLocalEdges(), t.getLocalEdges());
-  face   = listIntersection(Triangulation::edgeTable[edges1[0]].getLocalFaces(), Triangulation::edgeTable[edges1[1]].getLocalFaces())[0];
-  edge23 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
-  face   = listIntersection(Triangulation::edgeTable[edges1[0]].getLocalFaces(), Triangulation::edgeTable[edges1[2]].getLocalFaces())[0];
-  edge24 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
-  face   = listIntersection(Triangulation::edgeTable[edges1[1]].getLocalFaces(), Triangulation::edgeTable[edges1[2]].getLocalFaces())[0];
-  edge34 = listDifference(Triangulation::faceTable[face].getLocalEdges(), Triangulation::vertexTable[vertex].getLocalEdges());
+  StdTetra st = labelTetra( t );
     
-  len[0] = Length::At( Triangulation::edgeTable[edges1[0]] );
-  len[1] = Length::At( Triangulation::edgeTable[edges1[1]] );
-  len[2] = Length::At( Triangulation::edgeTable[edges1[2]] );
-  len[3] = Length::At( Triangulation::edgeTable[edge23[0]] );
-  len[4] = Length::At( Triangulation::edgeTable[edge24[0]] );   
-  len[5] = Length::At( Triangulation::edgeTable[edge34[0]] );
+  len[0] = Length::At( Triangulation::edgeTable[ st.e12 ] );
+  len[1] = Length::At( Triangulation::edgeTable[ st.e13 ] );
+  len[2] = Length::At( Triangulation::edgeTable[ st.e14 ] );
+  len[3] = Length::At( Triangulation::edgeTable[ st.e23 ] );
+  len[4] = Length::At( Triangulation::edgeTable[ st.e24 ] );
+  len[5] = Length::At( Triangulation::edgeTable[ st.e34 ] );
    
-  for(int i = 0; i < 6; i++)
-    len[i]->addDependent( this );        
+  for(int i = 0; i < 6; i++) len[i]->addDependent( this );        
 }
 
 void Volume::recalculate(){
@@ -57,7 +37,7 @@ void Volume::recalculate(){
 			 + pow(L13, 2.0)*pow(L14,2.0)*pow(L34,2.0)
 			 + pow(L23, 2.0)*pow(L24,2.0)*pow(L34,2.0) );
 
-  CayleyMenger +=  pow(L12, 2.0)*pow(L13,2.0)*pow(L24,2.0) 
+  CayleyMenger += pow(L12, 2.0)*pow(L13,2.0)*pow(L24,2.0) 
                          + pow(L12, 2.0)*pow(L13,2.0)*pow(L34,2.0)
                          + pow(L12, 2.0)*pow(L14,2.0)*pow(L23,2.0) 
                          + pow(L12, 2.0)*pow(L14,2.0)*pow(L34,2.0);
@@ -87,8 +67,7 @@ void Volume::remove() {
    delete this;
 }
 
-Volume::~Volume(){
-}
+Volume::~Volume(){}
 
 Volume* Volume::At( Tetra& t ){
   TriPosition T( 1, t.getSerialNumber() );
@@ -117,4 +96,14 @@ void Volume::CleanUp(){
   Index = NULL;
 }
 
-#endif /* VOLUME_H_ */
+void Volume::Record( char* filename ){
+  FILE* output = fopen( filename, "a+" );
+
+  VolumeIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    fprintf( output, "%lf ", iter->second->getValue() );
+  fprintf( output, "\n");
+
+  fclose( output );
+}
+

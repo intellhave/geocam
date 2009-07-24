@@ -1,18 +1,12 @@
-#ifndef AREA_H_
-#define AREA_H_
-
 #include <cmath>
 #include <map>
 #include <new>
 using namespace std;
 
-#include "geoquant.h"
-#include "triposition.h"
+#include "area.h"
 
-#include "geoquants.h"
-#include "triangulation/triangulation.h"
-
-AreaIndex* Area::Index = NULL;
+typedef map<TriPosition, Area*, TriPositionCompare> AreaIndex;
+static AreaIndex* Index = NULL;
 
 Area::Area( Face& f ){
     for(int ii = 0; ii < 3; ii++){
@@ -69,7 +63,5 @@ void Area::CleanUp(){
   delete Index;
   Index = NULL;
 }
-
-#endif /* AREA_H_ */
 
 
