@@ -74,7 +74,7 @@ Add classes and functions to the following lists as follows:
 ||distancePoint||double|| || ||
 ||dualArea||double|| || ||
 ||dualLength||double|| || ||
-||EHR||double||Dan || ||
+||EHR||double||Dan ||Latex ||
 ||EHR_Partial||double||Dan ||LaTex ||
 ||EHR_Second_Partial||double||Dan ||LaTex ||
 ||F||double||Dan || ||
