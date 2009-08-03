@@ -83,7 +83,7 @@ class NewtonsMethod {
         free(hess);
      }
      
-     void maximize(double initial[], double soln[]);
+     void optimize(double initial[], double soln[]);
      
      double step(double x_n[]);
      

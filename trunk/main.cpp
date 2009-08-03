@@ -130,10 +130,11 @@ double func5(double vars[]) {
 //        printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
 //      }
 //    }
-//    //nm->maximize(initial, soln);
+//    //nm->optimize(initial, soln);
 //    printf("\nSolution: %.10f\n", x_n[0]);
 //    printf("PAUSE..."); scanf("%*c", NULL); // PAUSE
 //}
+
 
 
 /* 2D FLOW */
@@ -214,7 +215,7 @@ int main(int argc, char** argv){
       //                    &(app->volumeHistory));
    printf("Time: %.2lf seconds\n", difftime(end, start));
 
-   printf("PAUSE..."); scanf("%*c", NULL); // PAUSE
+   printf("PAUSE...press enter to continue"); scanf("%*c", NULL); // PAUSE
 //   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
 //           printf("%d: %f\n", eit->first, EdgeCurvature::valueAt(eit->second));
 //   }

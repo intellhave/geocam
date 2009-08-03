@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
-void NewtonsMethod::maximize(double initial[], double soln[]) {
+void NewtonsMethod::optimize(double initial[], double soln[]) {
    for(int i = 0; i < nDim; i++) {
      soln[i] = initial[i];
    }

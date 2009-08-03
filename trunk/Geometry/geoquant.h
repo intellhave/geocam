@@ -57,7 +57,7 @@ class GeoQuant {
     if(! valid){
       recalculate();
       valid = true;
-      notifyDependents();
+     // notifyDependents();
     }
     return value;
   }
