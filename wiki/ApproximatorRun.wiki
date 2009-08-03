@@ -19,11 +19,11 @@ int run(double precision, int maxNumSteps, double stepsize)
 
   == Subsidiaries ==
   Functions: 
-     * `step`
-     * `isPrecise`
-     * `isAccurate` 
-     * `getLatest`
-        # `recordState`
+     * `Approximator::step`
+     * `Approximator::isPrecise`
+     * `Approximator::isAccurate` 
+     * `Approximator::getLatest`
+        # `Approximator::recordState`
 
   Global Variables: `radii`, `curvatures`
 
