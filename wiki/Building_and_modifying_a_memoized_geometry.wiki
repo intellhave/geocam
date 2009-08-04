@@ -24,12 +24,15 @@ We view quantities as being specified by 3 pieces of information:
   # A definition of the other quantities (if any) needed to calculate the value of the current quantity, and where those quantities can be found on the triangulation.
   # A formula for calculating a quantity's value, given the values of the other quantities it depends on.
 
-Usually, specifying just these 3 pieces of information is enough to create a new type of quantity. To help speed the development of quantities, we have developed a Ruby script `makeQuantities.rb` that generates much of the source code. This can be invoked at the command line as follows
+Usually, specifying just these 3 pieces of information is enough to create a new type of quantity. To help speed the development of quantities, we have developed a Ruby script `makeQuantities.rb` that generates much of the source code. This can be invoked at the command line as follows:
 {{{
-> ruby makeQuantities.rb [quantity name, no whitespace]
+> ruby makeQuantities.rb [quantity_name]
 }}}
+This produces two files: `[quantity_name].h` and `[quantity_name].cpp`
 
-===
+=== Filling Out `quantity-name.h` ===
+
+
 
 == Example ==
 Adding a quantity to the Einstein-Hilbert-Regge geometry. (More details and diagrams will go here)
