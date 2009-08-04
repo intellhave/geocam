@@ -119,7 +119,7 @@ int main(int arg, char** argv) {
     //double initial[] = {0.5};
     //printf("f(%f, %f) = %f\n", initial[0], initial[1], func4(initial));
     //double soln[1];
-    double x_n[] = {1.7};
+    double x_n[] = {0.5};
     int i = 1;
     printf("Initial\n-----------------\n");
     for(int j = 0; j < 1; j++) {
@@ -135,7 +135,8 @@ int main(int arg, char** argv) {
     }
     //nm->optimize(initial, soln);
     printf("\nSolution: %.10f\n", x_n[0]);
-    pause(); // PAUSE
+    pause();
+    pause("Done...press enter to exit."); // PAUSE
 }
 
 

@@ -575,9 +575,9 @@ Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=18
-CursorRow=222
-TopLine=209
+CursorCol=13
+CursorRow=138
+TopLine=118
 =======
 <<<<<<< .mine
 CursorCol=2
@@ -3744,7 +3744,7 @@ LeftChar=1
 Open=0
 Top=0
 [Editor_78]
-CursorCol=23
+CursorCol=38
 CursorRow=83
 TopLine=73
 LeftChar=1
@@ -4072,14 +4072,14 @@ Top=0
 [Editor_107]
 Open=1
 Top=0
-CursorCol=11
-CursorRow=3
+CursorCol=31
+CursorRow=4
 TopLine=1
 LeftChar=1
 [Editor_108]
 Open=1
 Top=0
-CursorCol=11
-CursorRow=3
+CursorCol=21
+CursorRow=5
 TopLine=1
 LeftChar=1

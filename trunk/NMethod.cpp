@@ -80,7 +80,7 @@ double NewtonsMethod::step(double x_n[], int extremum) {
            if( j == 0 ) {
                int k = 1;
                while(nextVal < curVal && k <= 10) {
-                 pause(); // PAUSE
+                 pause("k = %d...", k); // PAUSE
                  for(int i = 0; i < nDim; i++) {
                    x_n[i] -= (1.0/10.0 * next[i]) / (pow(2, k));
                  }
