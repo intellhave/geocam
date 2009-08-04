@@ -41,3 +41,9 @@ void optimize(double initial[], double soln[])
   == Revisions ==
    * subversion 876 7/16/09: Added a NewtonsMethod class for general maximizing.
    * subversion 906 8/3/09: Changed the name of the function maximize to optimize in the NewtonsMethod class.
+
+  == Testing ==
+  Newtons Method has been tested using several functions of 1 or 2 variables including the Gaussian function. It has been tested with both approximating the gradient and hessian and when both are given explicitly.
+
+  == Future Work ==
+   * 8/4 - Add the ability to only move partially in the direction of the gradient.
