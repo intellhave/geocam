@@ -1,7 +1,11 @@
 #ifndef NMETHOD_H_
 #define NMETHOD_H_
+
 #include <stdlib.h>
 #include <stdio.h>
+
+#define NMETHOD_MIN 1
+#define NMETHOD_MAX 2
 class NewtonsMethod;
 
 typedef double (*orig_function)(double vars[]);
@@ -86,6 +90,7 @@ class NewtonsMethod {
      void optimize(double initial[], double soln[]);
      
      double step(double x_n[]);
+     double step(double x_n[], int extremum);
      
      void printInfo(FILE* out);
      

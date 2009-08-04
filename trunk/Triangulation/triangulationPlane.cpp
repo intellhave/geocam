@@ -5,6 +5,7 @@
 #include "length.h"
 #include "euc_angle.h"
 #include "miscmath.h"
+#include "utilities.h"
 #define PI 	3.141592653589793238
 
 int checkForDoubleTriangles();
@@ -510,7 +511,7 @@ void weightedFlipAlgorithm()
                          cout << (*(f2.getLocalEdges()))[2] << ": ";
                          cout << Length::valueAt(Triangulation::edgeTable[(*(f2.getLocalEdges()))[2]]) << "]";
                          cout << endl;
-                         printf("PAUSE..."); scanf("%*c", NULL); // PAUSE
+                         pause(); // PAUSE
                          flipCount++;
                     }
                }

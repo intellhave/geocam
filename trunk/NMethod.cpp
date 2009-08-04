@@ -1,4 +1,5 @@
 #include "NMethod.h"
+#include "utilities.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -39,6 +40,87 @@ double NewtonsMethod::step(double x_n[]) {
    for(int i = 0; i < nDim; i++) {
       x_n[i] += next[i];
    }
+   return gradLen;   
+}
+
+double NewtonsMethod::step(double x_n[], int extremum) {
+   double gradLen;
+   double next[nDim];
+
+   if(df == NULL) {
+      approxGradient(x_n, grad);
+   } else {
+      df(x_n, grad);
+   }
+
+   if( d2f == NULL) {
+      approxHessian(x_n, hess);
+   } else {
+      d2f(x_n, hess);
+   }
+
+   negateArray(grad);
+   LinearEquationsSolver(hess, grad, next);
+   gradLen = getGradientLength(grad);
+      
+   if(gradLen < 0.0000000001) {
+        return gradLen;
+   }
+
+   double curVal; 
+   double nextVal = f(x_n);
+
+   if( extremum == NMETHOD_MAX) {
+       for(int j = 0; j < 10; j++) {
+         curVal = nextVal;      
+         for(int i = 0; i < nDim; i++) {
+           x_n[i] += 1.0/10.0 * next[i];
+         }
+         if( (nextVal = f(x_n)) < curVal ) {
+           if( j == 0 ) {
+               int k = 1;
+               while(nextVal < curVal && k <= 10) {
+                 pause(); // PAUSE
+                 for(int i = 0; i < nDim; i++) {
+                   x_n[i] -= (1.0/10.0 * next[i]) / (pow(2, k));
+                 }
+                 k++;
+                 nextVal = f(x_n);
+               }
+               return gradLen;
+           }
+           for(int i = 0; i < nDim; i++) {
+             x_n[i] -= 1.0/10.0 * next[i];
+           }
+           return gradLen;   
+         }
+       }
+   } else { // NMETHOD_MIN
+       for(int j = 0; j < 10; j++) {
+         curVal = nextVal;      
+         for(int i = 0; i < nDim; i++) {
+           x_n[i] += 1.0/10.0 * next[i];
+         }
+         if( (nextVal = f(x_n)) > curVal ) {
+           if( j == 0 ) {
+               int k = 1;
+               while(nextVal > curVal && k <= 10) {
+                 for(int i = 0; i < nDim; i++) {
+                   x_n[i] -= (1.0/10.0 * next[i]) / (pow(2, k));
+                 }
+                 k++;
+                 nextVal = f(x_n);
+               }
+               return gradLen;
+           }
+           for(int i = 0; i < nDim; i++) {
+             x_n[i] -= 1.0/10.0 * next[i];
+           }
+           break;  
+         }
+       }   
+   }
+   
    return gradLen;   
 }
 
