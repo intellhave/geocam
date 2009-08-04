@@ -24,21 +24,84 @@ We view quantities as being specified by 3 pieces of information:
   # A definition of the other quantities (if any) needed to calculate the value of the current quantity, and where those quantities can be found on the triangulation.
   # A formula for calculating a quantity's value, given the values of the other quantities it depends on.
 
-Usually, specifying just these 3 pieces of information is enough to create a new type of quantity. To help speed the development of quantities, we have developed a Ruby script `makeQuantities.rb` that generates much of the source code. This can be invoked at the command line as follows:
+Usually, specifying just these 3 pieces of information is enough to create a new type of quantity. To help speed the development of quantities, we have developed a Ruby script, `makeQuantities.rb`, that generates much of the source code. This can be invoked at the command line as follows:
 {{{
 > ruby makeQuantities.rb [quantity_name]
 }}}
-This produces two files: `[quantity_name].h` and `[quantity_name].cpp`
+This produces two files, `[quantity_name].h` and `[quantity_name].cpp`.
 
-=== Filling Out `quantity-name.h` ===
+=== The anatomy of `quantity_name.h` ===
+{{{
+#ifndef QUANTITY_H_
+#define QUANTITY_H_
+
+#include <map>
+#include <new>
+using namespace std;
+
+#include "geoquant.h"
+#include "triposition.h"
+
+class #{name} : public virtual GeoQuant {
+protected:
+  QUANTITY( SIMPLICES );
+  void recalculate();
+
+public:
+  ~QUANTITY();
+  static QUANTITY* At( SIMPLICES );
+  static void CleanUp();
+};
+#endif /* QUANTITY_H_ */
+}}}
+
+=== The anatomy of `quantity_name.cpp` ===
+{{{
 
 
+QUANTITYIndex* Index = NULL;
 
+QUANTITY::QUANTITY( SIMPLICES ){}
+
+void QUANTITY::recalculate(){}
+
+QUANTITY::~QUANTITY(){}
+
+QUANTITY* QUANTITY::At( SIMPLICES ){
+  TriPosition T( NUMSIMPLICES, SIMPLICES );
+  if( Index == NULL ) Index = new QUANTITYIndex();
+  QUANTITYIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    QUANTITY* val = new QUANTITY( SIMPLICES );
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
+  }
+}
+
+void QUANTITY::CleanUp(){
+  if( Index == NULL ) return;
+  QUANTITYIndex::iterator iter;
+  for(iter = Index->begin(); iter != Index->end(); iter++)
+    delete iter->second;
+  delete Index;
+}
+
+
+}}}
 == Example ==
 Adding a quantity to the Einstein-Hilbert-Regge geometry. (More details and diagrams will go here)
 
 == Common Mistakes ==
 A panoply of debugging hints should go here.
 
+== Fancier Tricks ==
+Techniques for less common quantities go here.
+
 == Limitations, Areas to Improve ==
+
+
+
 Discussion of the current topological assumptions our code makes.
