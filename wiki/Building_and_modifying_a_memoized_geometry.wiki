@@ -1,6 +1,6 @@
 #summary How to encode and modify a geometry written as a "memoized-pipeline."
 
-=Working with a "memoized-pipeline" data structure=
+=Working with a "memoized-pipeline" data structure (ROUGH DRAFT)=
 
 ==Key Words==
 geometry, memoized-pipeline, extending, modifying, data structure, geoquant, quantities, singleton, observer, observable
@@ -12,7 +12,7 @@ geometry, memoized-pipeline, extending, modifying, data structure, geoquant, qua
 == Introduction ==
 The memoized-pipeline is a data structure we developed for investigating geometries defined on triangulations. It is particularly suited to the situation in which we need to specify the values of some geometric quantities (independent variables) and then need to rapidly calculate the values of some other quantities (the dependent variables). Basically, we achieve this speedup by trading space for time. Usually, the definitions of the dependent variables have many intermediate values in common. By saving these values the first time we compute them, and then reusing them later, we can avoid a lot of useless recalculation. This strategy, which can be found in most algorithms textbooks, is called "memoization." 
 
-In implementing various geometries, we have already developed code and techniques for making memoization an automatic part of coding up a geometry. In this tutorial, we describe how to make use of this code.  
+In implementing various geometries, we have already developed code and techniques for making memoization an automatic part of encoding a geometry. In this tutorial, we describe how to make use of this code.  
 
 == Implementation Details ==
 The underlying implementation of the pipeline is designed to solve two problems in a fairly user-friendly way:
@@ -22,7 +22,14 @@ The underlying implementation of the pipeline is designed to solve two problems 
 We view quantities as being specified by 3 pieces of information:
   # A position on the triangulation.
   # A definition of the other quantities (if any) needed to calculate the value of the current quantity, and where those quantities can be found on the triangulation.
-  # An formula for calculating a quantity's value, given the values of the other quantities it depends on.
+  # A formula for calculating a quantity's value, given the values of the other quantities it depends on.
+
+Usually, specifying just these 3 pieces of information is enough to create a new type of quantity. To help speed the development of quantities, we have developed a Ruby script `makeQuantities.rb` that generates much of the source code. This can be invoked at the command line as follows
+{{{
+> ruby makeQuantities.rb [quantity name, no whitespace]
+}}}
+
+===
 
 == Example ==
 Adding a quantity to the Einstein-Hilbert-Regge geometry. (More details and diagrams will go here)
