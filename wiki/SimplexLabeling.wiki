@@ -1,6 +1,6 @@
 #summary How to use the procedures in the miscmath module to "label" a simplex.
 
-===Putting simplices in a canonical form using `miscmath.h`===
+=Putting simplices in a canonical form using `miscmath.h`=
 {{{
 StdEdge labelEdge(Edge& e, Vertex& v)
 StdFace labelFace(Face& f, Vertex& v)
@@ -14,7 +14,7 @@ StdTetra labelTetra(Tetra& t)
 ==Keywords==
 simplex, labeling, canonical form
 
-=Authors=
+==Authors==
 Joseph Thomas
 
 ==Introduction==
