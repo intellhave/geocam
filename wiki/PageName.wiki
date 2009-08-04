@@ -13,7 +13,7 @@ geometry, memoized-pipeline, extending, modifying, data structure, geoquant, qua
 The memoized-pipeline is a data structure we developed for investigating geometries defined on triangulations. It is particularly suited to the situation in which we need to specify the values of some geometric quantities (independent variables) and then need to very quickly calculate the values of some other quantities (the dependent variables). Basically, we achieve this speedup by trading space for time. Usually, the definitions of the dependent variables will have many intermediate values in common, and by saving these values the first time we compute them we can avoid a lot of useless recalculation.
 
 == Example ==
-Adding a quantity to the Einstein-Hilbert-Regge geometry. [ More details and diagrams to come here. ]
+Adding a quantity to the Einstein-Hilbert-Regge geometry. (More details and diagrams will go here)
 
 == Common Mistakes ==
 A panoply of debugging hints should go here.
