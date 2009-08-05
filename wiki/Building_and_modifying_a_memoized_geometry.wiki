@@ -1,6 +1,6 @@
 #summary How to encode and modify a geometry written as a "memoized-pipeline."
 
-=Working with a "memoized-pipeline" data structure (ROUGH DRAFT)=
+=Working with a "memoized-pipeline" data structure (WORK IN PROGRESS)=
 
 ==Key Words==
 geometry, memoized-pipeline, extending, modifying, data structure, geoquant, quantities, singleton, observer, observable
