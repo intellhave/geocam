@@ -114,12 +114,18 @@ double func5(double vars[]) {
        return pow(pow(vars[0], 8), 1.0/7.0);
 }
 
+double func6(double vars[]) {
+       double a = 1;
+       double b = 1;
+       return a * sqrt(1 + pow(vars[0] / b, 2));
+}
+
 int main(int arg, char** argv) {
-    NewtonsMethod *nm = new NewtonsMethod(func, 1);
+    NewtonsMethod *nm = new NewtonsMethod(func6, 1);
     //double initial[] = {0.5};
     //printf("f(%f, %f) = %f\n", initial[0], initial[1], func4(initial));
     //double soln[1];
-    double x_n[] = {0.5};
+    double x_n[] = {3};
     int i = 1;
     printf("Initial\n-----------------\n");
     for(int j = 0; j < 1; j++) {
@@ -135,7 +141,6 @@ int main(int arg, char** argv) {
     }
     //nm->optimize(initial, soln);
     printf("\nSolution: %.10f\n", x_n[0]);
-    pause();
     pause("Done...press enter to exit."); // PAUSE
 }
 

@@ -8,9 +8,22 @@ void NewtonsMethod::optimize(double initial[], double soln[]) {
    for(int i = 0; i < nDim; i++) {
      soln[i] = initial[i];
    }
-   while(true) {
-      step(soln);     
+   double len;
+   do {
+     len = step(soln);   
    }
+   while(len >= gradLenCond);
+}
+
+void NewtonsMethod::optimize(double initial[], double soln[], int extremum) {
+   for(int i = 0; i < nDim; i++) {
+     soln[i] = initial[i];
+   }
+   double len;
+   do {
+     len = step(soln, extremum);  
+   }
+   while(len >= gradLenCond);
 }
 
 double NewtonsMethod::step(double x_n[]) {
@@ -33,7 +46,7 @@ double NewtonsMethod::step(double x_n[]) {
    LinearEquationsSolver(hess, grad, next);
    gradLen = getGradientLength(grad);
       
-   if(gradLen < 0.0000000001) {
+   if(gradLen < gradLenCond) {
         return gradLen;
    }
 
@@ -63,7 +76,7 @@ double NewtonsMethod::step(double x_n[], int extremum) {
    LinearEquationsSolver(hess, grad, next);
    gradLen = getGradientLength(grad);
       
-   if(gradLen < 0.0000000001) {
+   if(gradLen < gradLenCond) {
         return gradLen;
    }
 
@@ -74,23 +87,27 @@ double NewtonsMethod::step(double x_n[], int extremum) {
        for(int j = 0; j < 10; j++) {
          curVal = nextVal;      
          for(int i = 0; i < nDim; i++) {
-           x_n[i] += 1.0/10.0 * next[i];
+           x_n[i] += stepRatio * next[i];
          }
          if( (nextVal = f(x_n)) < curVal ) {
            if( j == 0 ) {
                int k = 1;
                while(nextVal < curVal && k <= 10) {
-                 pause("k = %d...", k); // PAUSE
+                 //pause("k = %d...", k); // PAUSE
                  for(int i = 0; i < nDim; i++) {
-                   x_n[i] -= (1.0/10.0 * next[i]) / (pow(2, k));
+                   x_n[i] -= (stepRatio * next[i]) / (pow(2, k));
                  }
                  k++;
                  nextVal = f(x_n);
                }
+               if(k == 11) {
+                    pause("Wrong Direction! Press enter to continue...");
+                    return -1;
+               }
                return gradLen;
            }
            for(int i = 0; i < nDim; i++) {
-             x_n[i] -= 1.0/10.0 * next[i];
+             x_n[i] -= stepRatio * next[i];
            }
            return gradLen;   
          }
@@ -99,22 +116,26 @@ double NewtonsMethod::step(double x_n[], int extremum) {
        for(int j = 0; j < 10; j++) {
          curVal = nextVal;      
          for(int i = 0; i < nDim; i++) {
-           x_n[i] += 1.0/10.0 * next[i];
+           x_n[i] += stepRatio * next[i];
          }
          if( (nextVal = f(x_n)) > curVal ) {
            if( j == 0 ) {
                int k = 1;
                while(nextVal > curVal && k <= 10) {
                  for(int i = 0; i < nDim; i++) {
-                   x_n[i] -= (1.0/10.0 * next[i]) / (pow(2, k));
+                   x_n[i] -= (stepRatio * next[i]) / (pow(2, k));
                  }
                  k++;
                  nextVal = f(x_n);
                }
+               if(k == 11) {
+                    pause("Wrong Direction! Press enter to continue...");
+                    return -1;
+               }
                return gradLen;
            }
            for(int i = 0; i < nDim; i++) {
-             x_n[i] -= 1.0/10.0 * next[i];
+             x_n[i] -= stepRatio * next[i];
            }
            break;  
          }
@@ -131,25 +152,23 @@ void NewtonsMethod::negateArray(double arr[]) {
 }
 
 void NewtonsMethod::approxGradient(double vars[], double sol[]) {
-     double delX = 0.00001;
      double val = 0;
      
      for(int i = 0; i < nDim; i++) {
         //printf("grad[%d] : ", i);
-        vars[i] = vars[i] + delX;
+        vars[i] = vars[i] + delta;
         val = f(vars);
         //printf("(%.10f - ", val);
-        vars[i] = vars[i] - 2*delX;
+        vars[i] = vars[i] - 2*delta;
         val = val - f(vars);
         //printf("%.10f) / (2 * %.10f) = ", f(vars), delX);
-        sol[i] = val / (2*delX);
+        sol[i] = val / (2*delta);
         //printf("%.10f\n", sol[i]);
-        vars[i] = vars[i] + delX;
+        vars[i] = vars[i] + delta;
      }
 }
 
 void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
-     double delta = 0.00001;
      double val = 0;
      double f_x = f(vars);
      

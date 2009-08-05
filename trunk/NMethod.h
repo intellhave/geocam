@@ -22,15 +22,23 @@ class NewtonsMethod {
    double *grad;
    double **hess;
    
+   // PARAMETERS
+   double delta;
+   double stepRatio;
+   double gradLenCond;
    
    int LinearEquationsSolver(double *matr[], double vect[], double sol[]);
    
    void negateArray(double arr[]);
 
-   void approxGradient(double vars[], double sol[]);
-   void approxHessian(double vars[], double *sol[]);
    
    double getGradientLength(double gradient[]);
+   
+   void setDefaults() {
+        delta = 0.00001;
+        stepRatio = 1.0 / 10.0;
+        gradLenCond = 0.0000000001;
+   }
    
    public:
           
@@ -41,6 +49,8 @@ class NewtonsMethod {
         printFunc = NULL;
         
         nDim = size;
+        
+        setDefaults();
         
         grad = (double*) malloc(sizeof(double) * nDim);
         hess = (double**) malloc(sizeof(double*) * nDim);
@@ -57,6 +67,8 @@ class NewtonsMethod {
         
         nDim = size;
         
+        setDefaults();
+        
         grad = (double*) malloc(sizeof(double) * nDim);
         hess = (double**) malloc(sizeof(double*) * nDim);
         for(int i = 0 ; i < nDim; i++) {
@@ -71,6 +83,8 @@ class NewtonsMethod {
         printFunc = NULL;
         
         nDim = size;
+        
+        setDefaults();
         
         grad = (double*) malloc(sizeof(double) * nDim);
         hess = (double**) malloc(sizeof(double*) * nDim);
@@ -87,7 +101,12 @@ class NewtonsMethod {
         free(hess);
      }
      
+     
+     void approxGradient(double vars[], double sol[]);
+     void approxHessian(double vars[], double *sol[]);
+     
      void optimize(double initial[], double soln[]);
+     void optimize(double initial[], double soln[], int extremum);
      
      double step(double x_n[]);
      double step(double x_n[], int extremum);
@@ -96,6 +115,16 @@ class NewtonsMethod {
      
      void setPrintFunc(printer pf) {
           printFunc = pf;
+     }
+     
+     void setDelta(double del) {
+          delta = del;
+     }
+     void setStepRatio(double ratio) {
+          stepRatio = ratio;
+     }
+     void setStoppingGradientLength(double cond) {
+          gradLenCond = cond;
      }
      
 };
