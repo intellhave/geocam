@@ -36,7 +36,10 @@ In `C++`, header files serve several purposes. Among other uses, a header file c
  * Define an interface for other parts of your project to use. This includes:
     * Definitions for new data-types (like classes).
     * Definitions for procedure calls (what arguments a procedure takes, and what it returns).
-By default, `makeQuantity.rb` gives you the following header file to use (here, we chose `quantity/QUANTITY` as the quantity name, in practice, this is filled out by the script). [FURTHER DISCUSSION HERE] 
+By default, `makeQuantity.rb` gives you the following header file to use (here, we chose `quantity/QUANTITY` as the quantity name, in practice, this is filled out by the script). 
+
+FURTHER DISCUSSION HERE 
+
 {{{
 #ifndef QUANTITY_H_
 #define QUANTITY_H_
@@ -62,7 +65,9 @@ public:
 }}}
 
 === The anatomy of `quantity.cpp` ===
-[DISCUSSION TO GO HERE]
+
+DISCUSSION OF THE CPP FILE HERE
+
 {{{
 #include "quantity.h"
 
