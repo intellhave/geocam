@@ -24,56 +24,68 @@ We view quantities as being specified by 3 pieces of information:
   # A definition of the other quantities (if any) needed to calculate the value of the current quantity, and where those quantities can be found on the triangulation.
   # A formula for calculating a quantity's value, given the values of the other quantities it depends on.
 
-Usually, specifying just these 3 pieces of information is enough to create a new type of quantity. To help speed the development of quantities, we have developed a Ruby script, `makeQuantities.rb`, that generates much of the source code. This can be invoked at the command line as follows:
+Usually, specifying just these 3 pieces of information is enough to create a new type of quantity. To help speed the development of quantities, we have developed a Ruby script, `makeQuantity.rb`, that generates much of the source code. This can be invoked at the command line as follows:
 {{{
-> ruby makeQuantities.rb [quantity_name]
+> ruby makeQuantity.rb [quantity]
 }}}
-This produces two files, `[quantity_name].h` and `[quantity_name].cpp`.
+This produces two files, `[quantity].h` and `[quantity].cpp`.
 
-=== The anatomy of `quantity_name.h` ===
+=== The anatomy of `quantity.h` ===
+In `C++`, header files serve several purposes. Among other uses, a header file can:
+ * Specify dependencies on other parts of the project.   
+ * Define an interface for other parts of your project to use. This includes:
+    * Definitions for new data-types (like classes).
+    * Definitions for procedure calls (what arguments a procedure takes, and what it returns).
+By default, `makeQuantity.rb` gives you the following header file to use (here, we chose `quantity/QUANTITY` as the quantity name, in practice, this is filled out by the script). [FURTHER DISCUSSION HERE] 
 {{{
 #ifndef QUANTITY_H_
 #define QUANTITY_H_
 
-#include <map>
-#include <new>
-using namespace std;
-
 #include "geoquant.h"
 #include "triposition.h"
 
-class #{name} : public virtual GeoQuant {
+/* This is where you load the headers of the *
+ * quantities you require.                   */
+
+class quantity : public virtual GeoQuant {
 protected:
-  QUANTITY( SIMPLICES );
+  quantity( SIMPLICES );
   void recalculate();
+  /* The quantity references you need go here. */
 
 public:
-  ~QUANTITY();
-  static QUANTITY* At( SIMPLICES );
+  ~quantity();
+  static quantity* At( SIMPLICES );
   static void CleanUp();
 };
 #endif /* QUANTITY_H_ */
 }}}
 
-=== The anatomy of `quantity_name.cpp` ===
+=== The anatomy of `quantity.cpp` ===
+[DISCUSSION TO GO HERE]
 {{{
+#include "quantity.h"
 
+#include <map>
+#include <new>
+using namespace std;
 
-QUANTITYIndex* Index = NULL;
+#define map<TriPosition, quantity*, TriPositionCompare> quantityIndex 
+static quantityIndex* Index = NULL;
 
-QUANTITY::QUANTITY( SIMPLICES ){}
+quantity::quantity( SIMPLICES ){}
 
-void QUANTITY::recalculate(){}
+void quantity::recalculate(){}
 
-QUANTITY::~QUANTITY(){}
+quantity::~quantity(){}
 
-QUANTITY* QUANTITY::At( SIMPLICES ){
+quantity* quantity::At( SIMPLICES ){
   TriPosition T( NUMSIMPLICES, SIMPLICES );
-  if( Index == NULL ) Index = new QUANTITYIndex();
-  QUANTITYIndex::iterator iter = Index->find( T );
+  if( Index == NULL ) Index = new quantityIndex();
+  quantityIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
-    QUANTITY* val = new QUANTITY( SIMPLICES );
+    quantity* val = new quantity( SIMPLICES );
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
@@ -81,15 +93,13 @@ QUANTITY* QUANTITY::At( SIMPLICES ){
   }
 }
 
-void QUANTITY::CleanUp(){
+void quantity::CleanUp(){
   if( Index == NULL ) return;
-  QUANTITYIndex::iterator iter;
+  quantityIndex::iterator iter;
   for(iter = Index->begin(); iter != Index->end(); iter++)
     delete iter->second;
   delete Index;
 }
-
-
 }}}
 == Example ==
 Adding a quantity to the Einstein-Hilbert-Regge geometry. (More details and diagrams will go here)
@@ -101,7 +111,4 @@ A panoply of debugging hints should go here.
 Techniques for less common quantities go here.
 
 == Limitations, Areas to Improve ==
-
-
-
 Discussion of the current topological assumptions our code makes.
