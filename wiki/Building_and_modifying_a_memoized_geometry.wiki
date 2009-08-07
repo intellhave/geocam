@@ -123,7 +123,9 @@ There are a few smaller areas to fill out, but in general defining the quantity 
     # Using a formula and the values found in step 1, we calculate the value of the current quantity.
 
 == An Extended Example ==
-Perhaps the easiest way to understand the system is by examining a few working quantities. In this example, we consider the quantity `dual_area_segment` discussed in [1].
+Perhaps the easiest way to understand the system is by examining a few working quantities. In this example, we consider the code written to represent the "Dual Area Segment" quantity discussed in  [http://arxiv.org/abs/0906.1560 "Discrete conformal variations and scalar curvature on piecewise flat two and three dimensional manifolds"] (in the paper, this quantity is also called A,,ij,kl,,).
+
+PICTURES AND A PROSE DESCRIPTION GO HERE
 
 {{{
 #ifndef DUALAREASEGMENT_H_
@@ -160,8 +162,6 @@ public:
 #endif /* DUALAREASEGMENT_H_ */
 }}}
 
-
-
 {{{
 
 #include "dualareasegment.h"
@@ -173,33 +173,36 @@ typedef map<TriPosition, DualAreaSegment*, TriPositionCompare> DualAreaSegmentIn
 static DualAreaSegmentIndex* Index = NULL;
 
 DualAreaSegment::DualAreaSegment( Edge& e, Tetra& t ){
-  StdTetra st = labelTetra( t, e );
+  StdTetra st = labelTetra( t, e );  // We use the topological tools in miscmath to
+                                     // label the tetrahedron with respect to edge e.
 
   Face& fa123 = Triangulation::faceTable[ st.f123 ];
   Face& fa124 = Triangulation::faceTable[ st.f124 ];
 
-  hij_k = EdgeHeight::At( e, fa123 );
-  hij_l = EdgeHeight::At( e, fa124 );
-
-  hijk_l = FaceHeight::At( fa123, t );
+  hij_k = EdgeHeight::At( e, fa123 );  // Here we use the calculated topological values
+  hij_l = EdgeHeight::At( e, fa124 );  // to look up the edge and face heights required
+  hijk_l = FaceHeight::At( fa123, t ); // to calculate the dual area.
   hijl_k = FaceHeight::At( fa124, t );
 
-  hij_k->addDependent(this);
-  hij_l->addDependent(this);
-  hijk_l->addDependent(this);
-  hijl_k->addDependent(this);
+  hij_k->addDependent(this);  // Here we notify the quantities we reference
+  hij_l->addDependent(this);  // that we wish to observe them (this is the            
+  hijk_l->addDependent(this); // where an important part of our observer-
+  hijl_k->addDependent(this); // observable design is implemented).
 }
+
+DualAreaSegment::~DualAreaSegment(){} // We didn't allocate any memory to store
+                                      // this quantity's data, so the destructor 
+                                      // can be left blank.
 
 void DualAreaSegment::recalculate(){
-  double Hij_k = hij_k->getValue();
-  double Hijk_l = hijk_l->getValue();
-  double Hij_l = hij_l->getValue();
+  double Hij_k = hij_k->getValue();   // Step 1: We use the quantity references
+  double Hijk_l = hijk_l->getValue(); // to obtain correct values for the referenced
+  double Hij_l = hij_l->getValue();   // quantities.
   double Hijl_k = hijl_k->getValue();
 
-  value = 0.5*(Hij_k * Hijk_l + Hij_l * Hijl_k);
+  // Step 2: We use a formula to calculate the value of the dual-area segment.
+  value = 0.5*(Hij_k * Hijk_l + Hij_l * Hijl_k); 
 }
-
-DualAreaSegment::~DualAreaSegment(){}
 
 DualAreaSegment* DualAreaSegment::At( Edge& e, Tetra& t ){
   TriPosition T( 2, e.getSerialNumber(), t.getSerialNumber() );
