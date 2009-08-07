@@ -29,8 +29,14 @@
 #include "NMethod.h"
 #include "radius.h"
 #include "curvature3D.h"
+#include "totalcurvature.h"
+#include "totalvolume.h"
+
+#include "Pipelined_Newtons_Method.h"
 
 #define PI 3.141592653589793238
+#define CONST_VOL 4.71404520791
+
 
 using namespace std;
 
@@ -120,29 +126,137 @@ double func6(double vars[]) {
        return a * sqrt(1 + pow(vars[0] / b, 2));
 }
 
+double saddleFinder(double etas[]) {
+   // Set Etas
+   map<int, Edge>::iterator eit;
+   map<int, Vertex>::iterator vit;
+   int i = 0;
+   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+           eit++, i++) {
+       Eta::At(eit->second)->setValue(etas[i]);        
+   }
+   double radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
+
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++) {
+     Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
+   }
+
+
+//   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+//           vit++) {
+//     printf("Radius[%d] = %.16f\n", vit->first, Radius::valueAt(vit->second) );
+//   }
+
+
+   Newtons_Method(0.00001);
+   return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
+}
+
+void printFunc(FILE* out) {
+     map<int, Vertex>::iterator vit;
+     map<int, Edge>::iterator eit;
+     fprintf(out, "\n");
+     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+             vit++) {
+        fprintf(out, "Radius %d = %.10f\n", vit->first, Radius::valueAt(vit->second));
+     }
+     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+             eit++) {
+        fprintf(out, "Eta %d = %.10f\n", eit->first, Eta::valueAt(eit->second));
+     }
+     fprintf(out, "-----------------\nEHR: %.10f\n", TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0));
+}
+
 int main(int arg, char** argv) {
-    NewtonsMethod *nm = new NewtonsMethod(func6, 1);
-    //double initial[] = {0.5};
-    //printf("f(%f, %f) = %f\n", initial[0], initial[1], func4(initial));
-    //double soln[1];
-    double x_n[] = {3};
+     map<int, Vertex>::iterator vit;
+     map<int, Edge>::iterator eit;
+     map<int, Face>::iterator fit;
+     map<int, Tetra>::iterator tit;
+     
+     vector<int> edges;
+     vector<int> faces;
+     vector<int> tetras;
+    
+    
+     time_t start, end;
+     
+   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
+   char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
+   make3DTriangulationFile(from, to);
+   read3DTriangulationFile(to);
+   //char tetra[] = "C:/Dev-Cpp/geocam/Triangulation Files/2D Manifolds/Standard Format/tetrahedron.txt";
+   //readTriangulationFile(tetra);
+   int vertSize = Triangulation::vertexTable.size();
+   int edgeSize = Triangulation::edgeTable.size();
+   for(int i = 1; i <= vertSize; i++) {
+      if( i == 1) {
+         Radius::At(Triangulation::vertexTable[i])->setValue(1.0);     
+      } else {
+         Radius::At(Triangulation::vertexTable[i])->setValue(1.0);
+      }        
+   }
+   double etas[edgeSize];
+   
+   for(int i = 0; i < edgeSize; i++) {
+      if( i ==0 ) {
+          etas[i] = 1.0;
+      } else {
+      etas[i] = 1.0; 
+      }       
+   }
+//  etas[0] = 0.92;
+//  etas[1] = 0.87;
+//  etas[2] = 1.03;
+//  etas[3] = 0.98;
+//  etas[4] = 1.12;
+//  etas[5] = 1.06;
+//  etas[6] = 0.96;
+//  etas[7] = 0.83;
+//  etas[8] = 1.09;
+//  etas[9] = 1.00;
+
+    NewtonsMethod *nm = new NewtonsMethod(saddleFinder, edgeSize);
+    nm->setDelta(0.001);
+    nm->setPrintFunc(printFunc);
     int i = 1;
-    printf("Initial\n-----------------\n");
-    for(int j = 0; j < 1; j++) {
-      printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
-    }
-    while(nm->step(x_n, NMETHOD_MAX) > 0.000001) {
+    printf("%f\n", saddleFinder(etas));
+    while(nm->step(etas, NMETHOD_MAX) > 0.00001) {
       printf("\n***** Step %d *****\n", i++);
       nm->printInfo(stdout);
-      for(int j = 0; j < 1; j++) {
-        printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
-      }
-      //pause(); // PAUSE
+      pause(); // PAUSE
     }
-    //nm->optimize(initial, soln);
-    printf("\nSolution: %.10f\n", x_n[0]);
-    pause("Done...press enter to exit."); // PAUSE
+    printf("\n----Solution----\n");
+    for(int j = 0; j < edgeSize; j++) {
+        printf("eta_%d[%d] = %f\n", i, j, etas[j]);
+    }
+    pause("Done...press enter to exit."); // PAUSE   
 }
+
+
+//int main(int arg, char** argv) {
+//    NewtonsMethod *nm = new NewtonsMethod(func6, 1);
+//    //double initial[] = {0.5};
+//    //printf("f(%f, %f) = %f\n", initial[0], initial[1], func4(initial));
+//    //double soln[1];
+//    double x_n[] = {3};
+//    int i = 1;
+//    printf("Initial\n-----------------\n");
+//    for(int j = 0; j < 1; j++) {
+//      printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
+//    }
+//    while(nm->step(x_n, NMETHOD_MAX) > 0.000001) {
+//      printf("\n***** Step %d *****\n", i++);
+//      nm->printInfo(stdout);
+//      for(int j = 0; j < 1; j++) {
+//        printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
+//      }
+//      //pause(); // PAUSE
+//    }
+//    //nm->optimize(initial, soln);
+//    printf("\nSolution: %.10f\n", x_n[0]);
+//    pause("Done...press enter to exit."); // PAUSE
+//}
 
 
 
@@ -209,6 +323,7 @@ int main(int arg, char** argv) {
 //   for(int i = 1; i <= edgeSize; i++) {
 //       Eta::At(Triangulation::edgeTable[i])->setValue(1.0);
 //   }
+//
 ////   double sum;
 ////   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
 ////           printf("%d: %f\n", eit->first, EdgeCurvature::valueAt(eit->second));

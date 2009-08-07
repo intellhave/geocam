@@ -59,7 +59,6 @@ double NewtonsMethod::step(double x_n[]) {
 double NewtonsMethod::step(double x_n[], int extremum) {
    double gradLen;
    double next[nDim];
-
    if(df == NULL) {
       approxGradient(x_n, grad);
    } else {
@@ -71,9 +70,10 @@ double NewtonsMethod::step(double x_n[], int extremum) {
    } else {
       d2f(x_n, hess);
    }
-
    negateArray(grad);
-   LinearEquationsSolver(hess, grad, next);
+   if(LinearEquationsSolver(hess, grad, next) == 1) {
+     pause("Error with Solver!\n");
+   }
    gradLen = getGradientLength(grad);
       
    if(gradLen < gradLenCond) {
@@ -174,7 +174,10 @@ void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
      
      for(int i = 0; i < nDim; i++) {
        for(int j = 0; j < nDim; j++) {
-          if( i != j) {
+          //printf("Approximating %d, %d\n", i, j);
+          if(i > j) {
+            sol[i][j] = sol[j][i];
+          } else if( i != j) {
               vars[i] = vars[i] + delta;
               vars[j] = vars[j] + delta;
               val = f(vars);

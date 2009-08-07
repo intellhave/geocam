@@ -761,7 +761,7 @@ BuildCmd=
 [Project]
 FileName=Project1.dev
 Name=Project1
-UnitCount=109
+UnitCount=110
 Type=1
 Ver=1
 ObjFiles=
@@ -1402,6 +1402,16 @@ BuildCmd=
 FileName=utilities.cpp
 CompileCpp=1
 Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit110]
+FileName=Pipelined_Newtons_Method.h
+CompileCpp=1
+Folder=Project1
 Compile=1
 Link=1
 Priority=1000
