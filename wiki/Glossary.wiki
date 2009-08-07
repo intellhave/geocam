@@ -22,7 +22,7 @@ We will make a to-do list for glossary entries as they come up in writing manual
   * Yamabe flow
   * normalized total scalar curvature functional
   * Einstein-Hilbert functional
-  * Einstein-Hilbert-Regge functional
+  * Einstein-Hilbert-Regge functional $EHR=\frac{la}{ba}$
   * conformal class
   * conformal deformation
   * inversive distance
