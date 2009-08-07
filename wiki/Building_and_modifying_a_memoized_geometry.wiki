@@ -42,7 +42,6 @@ By default, `makeQuantity.rb` gives you the following header file to use (here, 
 #define QUANTITY_H_
 
 #include "geoquant.h"
-#include "triposition.h"
 
 /******************REGION 1*******************
  * This is where you load the headers of the *
@@ -131,10 +130,6 @@ PICTURES AND A PROSE DESCRIPTION GO HERE
 #ifndef DUALAREASEGMENT_H_
 #define DUALAREASEGMENT_H_
 
-#include <map>
-#include <new>
-using namespace std;
-
 #include "geoquant.h"
 #include "triposition.h"
 
@@ -163,7 +158,6 @@ public:
 }}}
 
 {{{
-
 #include "dualareasegment.h"
 #include "miscmath.h"
 
@@ -237,6 +231,3 @@ Techniques for less common quantities go here.
 
 == Limitations, Areas to Improve ==
 Discussion of the current topological assumptions our code makes.
-
-== Works Cited ==
-[1] A bibliographic reference goes here...
