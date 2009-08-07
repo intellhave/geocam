@@ -10,16 +10,16 @@ geometry, memoized-pipeline, extending, modifying, data structure, geoquant, qua
     * Joseph Thomas
 
 == Introduction ==
-The memoized-pipeline is a data structure we developed for investigating geometries defined on triangulations. It is particularly suited to the situation in which we need to specify the values of some geometric quantities (independent variables) and then need to rapidly calculate the values of some other quantities (the dependent variables). Basically, we achieve this speedup by trading space for time. Usually, the definitions of the dependent variables have many intermediate values in common. By saving these values the first time we compute them, and then reusing them later, we can avoid a lot of useless recalculation. This strategy, which can be found in most algorithms textbooks, is called "memoization." 
+The memoized-pipeline is a data structure we developed for investigating geometries defined on triangulations. It is particularly suited to the situation in which we need to specify the values of some geometric quantities (independent variables) and then need to rapidly calculate the values of some other quantities (the dependent variables). Basically, we achieve this speedup by trading space for time. Usually, the definitions of the dependent variables have many intermediate values in common. By saving these values the first time we compute them, and then reusing them later, we can avoid a lot of useless recalculation. This strategy of saving calculated values, which can be found in most algorithms textbooks, is called "memoization." 
 
-In implementing various geometries, we have already developed code and techniques for making memoization an automatic part of encoding a geometry. In this tutorial, we describe how to make use of this code.  
+In implementing various geometries, we have already developed code and techniques for making memoization an automatic part of encoding a geometry. In this tutorial, we describe how to take advantage of this existing code.
 
 == Implementation Details ==
 The underlying implementation of the pipeline is designed to solve two problems in a fairly user-friendly way:
-  # We would like to be able to identify geometric quantities with positions on the triangulation. For example, when doing mathematics we can speak of the dihedral angle associated with a particular edge on a tetrahedron. We would like to be able to write code in the same way.
+  # We would like to be able to identify geometric quantities with positions on the triangulation. For example, we can speak of the dihedral angle associated with a particular edge on a tetrahedron. We would like to be able to write code in the same way.
   # We would like memoization to be nearly automatic. In other words, when writing a particular quantity, the programmer shouldn't have to think much about what happens to memoize that quantity's value.
  
-We view quantities as being specified by 3 pieces of information:
+Taking the programmer's perspective, we can view quantities as being specified by 3 pieces of information:
   # A position on the triangulation.
   # A definition of the other quantities (if any) needed to calculate the value of the current quantity, and where those quantities can be found on the triangulation.
   # A formula for calculating a quantity's value, given the values of the other quantities it depends on.
@@ -30,16 +30,13 @@ Usually, specifying just these 3 pieces of information is enough to create a new
 }}}
 This produces two files, `[quantity].h` and `[quantity].cpp`.
 
-=== The anatomy of `quantity.h` ===
+=== The "anatomy" of `quantity.h` ===
 In `C++`, header files serve several purposes. Among other uses, a header file can:
  * Specify dependencies on other parts of the project.   
  * Define an interface for other parts of your project to use. This includes:
     * Definitions for new data-types (like classes).
     * Definitions for procedure calls (what arguments a procedure takes, and what it returns).
 By default, `makeQuantity.rb` gives you the following header file to use (here, we chose `quantity/QUANTITY` as the quantity name, in practice, this is filled out by the script). 
-
-FURTHER DISCUSSION HERE 
-
 {{{
 #ifndef QUANTITY_H_
 #define QUANTITY_H_
@@ -47,14 +44,18 @@ FURTHER DISCUSSION HERE
 #include "geoquant.h"
 #include "triposition.h"
 
-/* This is where you load the headers of the *
- * quantities you require.                   */
+/******************REGION 1*******************
+ * This is where you load the headers of the *
+ * quantities you require.                   *
+ *********************************************/
 
 class quantity : public virtual GeoQuant {
 protected:
   quantity( SIMPLICES );
   void recalculate();
-  /* The quantity references you need go here. */
+  /****************REGION 2*********************
+   * The quantity references you need go here. *
+   *********************************************/
 
 public:
   ~quantity();
@@ -64,10 +65,11 @@ public:
 #endif /* QUANTITY_H_ */
 }}}
 
-=== The anatomy of `quantity.cpp` ===
+The two important areas of the header are labeled `REGION 1` and `REGION 2`. In region 1, you specify the header files for the quantities and utilities you use in the rest of your quantity. These `#include` statements can be thought of as providing definitions for the data and procedures you want to use in building your quantity. In region 2, you specify the data associated with a given instance of the quantity; typically this amounts to several references to other quantities, or a data structure that manages references to other quantities. Lastly, you will need to modify the region tagged `SIMPLICES` so that it reflects a collection of simplices that describe your quantity's position on the triangulation.
 
-DISCUSSION OF THE CPP FILE HERE
+=== The "anatomy" of `quantity.cpp` ===
 
+In general, a `.cpp` file provides the internal implementation to support the operations described in the corresponding header file. Editing this file will be a little more complicated. By default, `makeQuantity.rb` will produce the following `.cpp` file: 
 {{{
 #include "quantity.h"
 
@@ -78,11 +80,17 @@ using namespace std;
 #define map<TriPosition, quantity*, TriPositionCompare> quantityIndex 
 static quantityIndex* Index = NULL;
 
-quantity::quantity( SIMPLICES ){}
+quantity::quantity( SIMPLICES ){
+  /* REGION 1 */
+}
 
-void quantity::recalculate(){}
+quantity::~quantity(){
+  /* REGION 2 */
+}
 
-quantity::~quantity(){}
+void quantity::recalculate(){
+  /* REGION 3 */
+}
 
 quantity* quantity::At( SIMPLICES ){
   TriPosition T( NUMSIMPLICES, SIMPLICES );
@@ -106,6 +114,14 @@ void quantity::CleanUp(){
   delete Index;
 }
 }}}
+
+Here is the basic purpose of the major regions of the code:
+  * In region 1, you specify how to obtain references on the quantities your quantity depends on. Typically, this will involve using the input simplex information and some utilities for inspecting the triangulation to look up the quantity you require.
+  * In region 2, you specify how to release any data structures you built up using dynamic memory. In many cases, this field will be left blank.
+  * In region 3, you specify how to calculate the value of an instance of the quantity. Typically, this will occur in two steps:
+    # You use the quantity references obtained in region 1 to acquire the current values of the quantities used in the calculation.
+    # You use a formula (or a set of loops that implement a formula) to calculate the value of the current quantity.
+
 == Example ==
 Adding a quantity to the Einstein-Hilbert-Regge geometry. (More details and diagrams will go here)
 
