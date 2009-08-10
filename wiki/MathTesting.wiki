@@ -1,0 +1,5 @@
+Enter some math here:
+
+{{math|<VAR>&alpha;</VAR>}}
+{{math|{{radical|2}}}}
+<math>\sqrt{2}</math>
