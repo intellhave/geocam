@@ -1,0 +1,124 @@
+%html2tex: Version  2.7 of June 17, 2008.
+%Written by  F.J. Faase.  http://www.iwriteiam.nl/
+
+\documentclass[10pt]{article}%
+\usepackage{amssymb}
+\usepackage{geometry}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}%
+\setcounter{MaxMatrixCols}{30}
+%TCIDATA{OutputFilter=latex2.dll}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{CSTFile=40 LaTeX article.cst}
+%TCIDATA{Created=Friday, March 30, 2007 00:21:27}
+%TCIDATA{LastRevised=Wednesday, June 10, 2009 11:42:33}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=Manual}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Standard LaTeX\Blank - Standard LaTeX Article">}
+%TCIDATA{Language=American English}
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\geometry{left=1in,right=1in,top=1in,bottom=1in}
+
+\begin{document}
+
+%%%%% BEGINNING OF DOCUMENT BODY %%%%%
+% html: Beginning of file: `clean.html'
+% DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+%  This is a (PRE) block.  Make sure it's left aligned or your toc title will be off. 
+
+\section*{\texttt{Geoquant::At}}
+
+\label{f0}\begin{quotation} {\small{\begin{verbatim} 
+Geoquant*  Geoquant::At(Simplex  s1,  ...)
+  \end{verbatim}
+}}
+\end{quotation}
+\subsection*{Key Words}
+
+\begin{quotation} geoquant, recalculate, dependent, triposition, simplex\end{quotation}
+
+\subsection*{Authors}
+
+\begin{itemize}\item  Joseph Thomas
+\end{itemize}
+\begin{quotation} \end{quotation}
+\subsection*{Introduction}
+
+\begin{quotation} The \texttt{At} function is defined for every type of geoquant as a way to retrieve that quantity. Once the quantity is retrieved, a value can be set or asked of the quantity. A quantity is retrieved by providing a list of simplices that describe the position of the quantity in the triangulation.\end{quotation}
+
+\subsection*{Subsidiaries}
+
+\begin{quotation} Functions: \end{quotation}
+\begin{itemize}
+\item  getSerialNumber
+\end{itemize}
+\begin{quotation} Global Variables: mapLocal Variables: possible list of simplices\end{quotation}
+
+\subsection*{Description}
+
+\begin{quotation} The \texttt{At} function is a little di\"{\i}\&not;erent for every type of geoquant, but in all cases it is a static function for that class that serves as an object retrieval in place of a constructor. The function takes as a parameter a list of simplices which may be di\"{\i}\&not;erent for each type of geoquant. The list is the natural description of where the quantity is in the triangulation. For example, a radius is described by a vertex, whereas an angle is described as a vertex on a certain face. The At function returns a pointer to the requested quantity.\end{quotation}
+\begin{quotation} When the \texttt{At} function is called, it searches a local map for a quantity with the given list of simplices.  If it is found, a pointer to that quantity in the map is simply returned.  If it is not found, the quantity is constructed and placed into the map.  If the construction of the object requires other types of quantities not yet created, then these will be constructed automatically at this time. Lastly, this quantity is returned.\end{quotation}
+\begin{quotation} The constructor is hidden from the user for several reasons. The \"{\i}\&not;rst is that this avoids redundant construction and the need for an encapsulating object to hold a large set of geoquants (like the Geometry class in a previous version).  In the same vein, the need for an initial build step and a required order of construction is removed. In addition, this is an e\"{\i}\&not;ciency improvement as quantities that are never requested are never created, decreasing memory use and large dependency trees which can take a while for an \texttt{invalidate} to traverse.\end{quotation}
+
+\subsection*{Practicum}
+
+\begin{quotation} Example:{\small{\begin{verbatim} 
+//  Get  the  Radius  quantity  from  the  first  vertex  in  the  triangulation.
+Radius  *r  =  Radius::At(Triangulation::vertexTable[0]);
+//  Get  the  angle  of  vertex  v  incident  on  face  f
+Vertex  v;
+Face  f;
+...
+EuclideanAngle  *ang  =  EuclideanAngle::At(v,  f);
+  \end{verbatim}
+}}
+\end{quotation}
+\subsection*{Limitations}
+
+\begin{quotation} The \texttt{At} function is limited in that a speci\"{\i}\&not;c set of simplices will always return the exact same object.  While this is in fact the design goal, this can limit one\^as ability to modify an object as a change in one place will a\"{\i}\&not;ect its use elsewhere in the code. The function also will require the user to handle pointers, a powerful yet fragile and sometimes daunting aspect of the programming language.\end{quotation}
+
+\subsection*{Revisions}
+
+\begin{itemize}\item  subversion 761, 6/12/09: A working copy of \texttt{At} and the Geoquant system.
+\end{itemize}
+
+\subsection*{Testing}
+
+\begin{quotation} The \texttt{At} function was tested in small modularized systems, then tested in a three dimensional \"{\i}\&not;ow, which required many varied uses of \texttt{At}.   Some retrieved quantities had their values set while others had their values accessed and compared with what mathematica calculations predicted.\end{quotation}
+
+\subsection*{Future Work}
+
+\begin{quotation} No future work is planned at this time.\end{quotation}
+    
+% html: End of file: `clean.html'
+
+%%%%% END OF DOCUMENT BODY %%%%%
+% In the future, we might want to put some additional data here, such
+% as when the documentation was converted from wiki to TeX.
+%
+
+\end{document}
