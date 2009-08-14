@@ -1,5 +1,5 @@
 #include "new_flip/TriangulationDisplay.h"
-#include "new_flip/flip_algorithm.h"
+#include "new_flip/hinge_flip.h"
 
 TriangulationDisplay::TriangulationDisplay(char *f)
 {
@@ -11,14 +11,28 @@ TriangulationDisplay::TriangulationDisplay(char *f)
 
         //construct the coordinates
         coordSystem.generatePlane();
-
+        
         //this will be used to display the triangles
         listOfTriangles = coordSystem.getTriangles();
     
         //this will be used to show which edge is currently selected
         selectedEdge = Triangulation::edgeTable.begin();
+
+        //set f values for each vertex
+        /*map<int, Vertex>::iterator vit;
+        int numVerts = 0;
+        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+            numVerts++;
+        }
+        double range = sqrt(3.0/numVerts);
+        srand(time(NULL));
+        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+            cout << "ahhhh\n";
+            (vit->second).f = 2 * range * ((double) rand()/RAND_MAX) - range;
+        }*/
+        
     } else {
-        cout << "BAD FILE NAME!!!\n";
+        cout << "BAD FILE NAME!!!\nPerhaps your file ends in a blank line?";
         system("PAUSE");
     }
 
@@ -66,8 +80,19 @@ Line TriangulationDisplay::currentEdgeToLine() {
     return coordSystem.getLine(edgeIndex);
 }
 
-Edge TriangulationDisplay::currentEdge(void) {
+Edge TriangulationDisplay::getCurrentEdge(void) {
     return selectedEdge->second;
+}
+
+void TriangulationDisplay::setCurrentEdge(int cei) {
+    map<int,Edge>::iterator eit = Triangulation::edgeTable.begin();
+    while (eit != Triangulation::edgeTable.end()) {
+        if (cei == (eit->first)) {
+            selectedEdge = eit;
+            return;
+        }
+        eit++;
+    }
 }
 
 Edge TriangulationDisplay::nextEdge(void) {

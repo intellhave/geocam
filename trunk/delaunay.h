@@ -8,6 +8,10 @@ locally for the condition of being Delaunay or weighted Delaunay.
 **************************************************************/
 
 #include "triangulation/triangulation.h"
+#include <cmath>
+
+#ifndef delaunay
+#define delaunay
 
 /*
  * Indicates whether or not a particular edge has the quality
@@ -40,3 +44,4 @@ double getPartialEdge(Edge, Vertex);
 
 //computes the dirichlet energy of the triangulation
 double dirichletEnergy();
+#endif

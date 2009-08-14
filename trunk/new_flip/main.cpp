@@ -1,6 +1,7 @@
-#include "new_flip/flip_algorithm.h"
+#include "new_flip/hinge_flip.h"
 #include "new_flip/TriangulationDisplay.h"
 #include "delaunay.h"
+#include "FlipAlgorithm.h"
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -14,12 +15,15 @@ float _dist = -20.0f;
 float _hori = -5.0f;
 float _vert = -5.0f;
 TriangulationDisplay *_triDisp;
+FlipAlgorithm *_flipAlg;
 
 float _angle = 30.0f;
 float _camera_angle = 0.0f;
+int usingflipalgorithm = 0;
 
 void handleKeypress(unsigned char key, int x, int y) {
     bool somethingHappened = true;
+    Line l;
 	switch (key) {
 	   case 27: //Escape key
 			exit(0); //Exit the program
@@ -43,17 +47,17 @@ void handleKeypress(unsigned char key, int x, int y) {
             _vert -= .5;
             break;
         case 32: //space bar
-            printf("\n\n%lf  \n", dirichletEnergy());
             _triDisp->flipCurrentEdge();
-            printf("%lf  \n\n\n", dirichletEnergy());
             break;
         case 104: //h
-            _triDisp->previousEdge();
+            //_triDisp->previousEdge();
             break;
         case 108: //l
-            _triDisp->nextEdge();
+            cout << "geoquant length is " << Length::valueAt(Triangulation::edgeTable[_triDisp->getCurrentEdge().getIndex()]) << "\n";
+            l = _triDisp->currentEdgeToLine();
+            cout << "distance between vertices is " << sqrt(pow(l.getInitialX() - l.getEndingX(),2) + pow(l.getInitialY() - l.getEndingY(),2)) << "\n\n";
             break;
-        case 112: //p
+        case 114: //p
             _triDisp->showWeights = !(_triDisp->showWeights);
             break;
         case 44: // ,
@@ -74,6 +78,10 @@ void handleKeypress(unsigned char key, int x, int y) {
                     _triDisp->voronoi = 0;
                     break;
             }
+            break;
+        case 110: //n
+            _flipAlg->step();
+            _triDisp->setCurrentEdge(_flipAlg->currentEdgeIndex());
             break;
         default:
             somethingHappened = false;
@@ -197,9 +205,45 @@ void drawScene() {
     glVertex3d(l.getEndingX(), l.getEndingY(), 0.01);
     glEnd();
     
-    Edge e = _triDisp->currentEdge();
+    Edge e = _triDisp->getCurrentEdge();
 
     glutSwapBuffers();
+}
+
+void setup_view_parameters(void) {
+    double count = 0;
+    double sumx = 0;
+    double sumy = 0;
+    //average all the coordinates to figure out where the view should be centered
+    map<int,Vertex>::iterator vit;
+    vit = Triangulation::vertexTable.begin();
+    Point p;
+    p = _triDisp->getPoint(vit->first);
+    double minx = p.x;
+    double maxx = p.x;
+    double miny = p.y;
+    double maxy = p.y;
+    for (; vit != Triangulation::vertexTable.end(); vit++) {
+        p = _triDisp->getPoint(vit->first);
+        sumx += p.x;
+        sumy += p.y;
+        count++;
+        if (p.x < minx) {minx = p.x;}
+        if (p.x > maxx) {maxx = p.x;}
+        if (p.y < miny) {miny = p.y;}
+        if (p.y > maxy) {maxy = p.y;}
+    }
+    double centerx = sumx / count;
+    double centery = sumy / count;
+    _hori = 0 - centerx;
+    _vert = 0 - centery;
+    
+    //the screen will be shifted in the positive z direction by _dist
+    if (maxx - minx > maxy - miny) {
+        _dist = 0 - abs(maxx - minx) - 2;
+    } else {
+        _dist = 0 - abs(maxy - miny) - 2;
+    }
 }
 
 /*
@@ -212,8 +256,10 @@ void drawScene() {
 int main(int argc, char** argv) {
 
     //cout << "starting!\n";
-    //makeTriangulationFile("test_files/eight_triangles_redux.lutz", "test_files/eight_triangles_redux.txt");
+    //makeTriangulationFile("", "");
     //cout << "done!\n";
+    //system("PAUSE");
+    //exit(0);
 
     //triangulation initializaiton steps
     char *testFile;
@@ -231,6 +277,8 @@ int main(int argc, char** argv) {
     strcpy(&outFile[strlen(testFile)], ".out");
 
     _triDisp = new TriangulationDisplay (testFile);
+    _flipAlg = new FlipAlgorithm ();
+    setup_view_parameters();
 
 	//Initialize GLUT
 	glutInit(&argc, argv);

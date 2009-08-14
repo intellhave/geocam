@@ -1,5 +1,5 @@
-#ifndef flip_algorithm
-#define flip_algorithm
+#ifndef hinge_flip
+#define hinge_flip
 
 #include <cmath>
 #include <iostream>

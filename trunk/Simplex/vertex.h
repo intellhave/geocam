@@ -20,7 +20,7 @@ Version: July 16, 2008
 class Vertex : public Simplex
 {        
 	public:
-           
+
 		// default class constructor
 		Vertex();
 		Vertex(int setIndex) : Simplex(setIndex) {};

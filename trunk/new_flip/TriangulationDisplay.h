@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <cstdlib>
 #include "delaunay.h"
 #include "triangulation/triangulationmorph.h"
 #include "triangulation/triangulationInputOutput.h"
@@ -35,7 +36,9 @@ class TriangulationDisplay {
     Line currentEdgeToLine();
     
     //returns the currently selected edge
-    Edge currentEdge(void);
+    Edge getCurrentEdge(void);
+    
+    void setCurrentEdge(int cei);
 
     //increments the currently selected edge to another edge in the triangulations
     Edge nextEdge(void);

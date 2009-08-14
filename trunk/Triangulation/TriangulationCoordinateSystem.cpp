@@ -69,7 +69,7 @@ void TriangulationCoordinateSystem::generatePlane()
     v2 = (*(e.getLocalVertices()))[1]; // Get the second vertex.
     putPoint(v1, p1); // Add the points to the system.
     putPoint(v2, p2);
-    
+
     // Get the first face.
     Face fa = Triangulation::faceTable[(*(e.getLocalFaces()))[0]]; 
     vector<int> vertex = listDifference(fa.getLocalVertices(), e.getLocalVertices());
@@ -130,7 +130,7 @@ void TriangulationCoordinateSystem::generatePlane()
               (-1) * EuclideanAngle::valueAt(Triangulation::vertexTable[v1], fb));
         points2.push_back(p3);
         points2.push_back(p4);
-        
+
         bool otherPos = false; // The orientation of the other vertex. False
                                // since va was above line l1.
         
@@ -424,6 +424,10 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
      double d12 = PartialEdge::valueAt(Triangulation::vertexTable[v1], e);
 
      double height = getHeight(f, e);
+     //added the next line to flip the height if face is negative to handle duals of neg faces
+     if (f.isNegative()) {
+        height = -height;
+     }
      double xComp = p1.x + (d12*(pointTable[v2].x - p1.x) / Length::valueAt(e));
      double yComp = p1.y + (d12*(pointTable[v2].y - p1.y) / Length::valueAt(e));
      Point partial(xComp, yComp);

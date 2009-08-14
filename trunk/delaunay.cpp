@@ -1,4 +1,3 @@
-#include <cmath>
 #include "delaunay.h"
 #include <iostream>
 #include "partial_edge.h"
@@ -9,6 +8,10 @@ bool isDelaunay(Edge e)
 {
      if(e.isBorder())
      {
+
+
+
+
         return true;
      }
      Face fa1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
@@ -101,41 +104,65 @@ double getDual(Edge e)
     return h1+h2;
 }
 
+map<int, double> fVertex;
+bool notSet = true;
 /*
  *  E(f) = 1/2 sum_({i,j} in T_1) |*{i,j}|/|{i,j}| (f_j - f_i)^2
  *
  */
 double dirichletEnergy() {
+
+    if (notSet) {
+        notSet = false;
+        /*fVertex[0] = -0.825;
+        fVertex[2] = 0.129;
+        fVertex[1] = -0.407;
+        fVertex[3] =  0.608;
+        */map<int, Vertex>::iterator vit;
+        int numVerts = 0;
+        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+            numVerts++;
+        }
+        double range = sqrt(3.0/numVerts);
+        srand(time(NULL));
+        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+            //fVertex[vit->first] = 2 * range * ((double) rand()/RAND_MAX) - range;
+            fVertex[vit->first] = 2 * range * ((double) rand()/RAND_MAX) - range;
+        }
+    }
+
     double total = 0.0;
     cout << "\n";
     map<int, Edge>::iterator eit;
+    Face face0 = Triangulation::faceTable[0];
+    Face face1 = Triangulation::faceTable[1];
     //perform the {i,j} and {j,i} computation at the same time
     for (eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-        double f_i = (*(eit->second).getLocalVertices())[0];
-        double f_j = (*(eit->second).getLocalVertices())[1];
-        cout << "\t" << f_i << " " << f_j << " " << getDual(eit->second) << " " << Length::valueAt(eit->second) << "\n";
-        double subtotal = (getDual(eit->second)/Length::valueAt(eit->second));
-        cout << "\t" << subtotal << "\n";
+        double f_i = fVertex[(*(eit->second).getLocalVertices())[0]];
+        double f_j = fVertex[(*(eit->second).getLocalVertices())[1]];
+        //begin special example stuff
+        /*int f0 = (*((eit->second).getLocalFaces()))[0];
+        int f1 = (*((eit->second).getLocalFaces()))[1];
+        if (f0 != face0.getIndex()) {
+            int temp = f0;
+            f0 = f1;
+            f1 = temp;
+        }
+        double a = 0;
+        double b = 0;
+        if ( (*((eit->second).getLocalFaces())).size() >= 2 ) {
+            a = getHeight(face0, eit->second);
+            b = getHeight(face1, eit->second);
+        } else if ( (*((eit->second).getLocalFaces()))[0] == f0 ) {
+            a = getHeight(face0, eit->second);
+        } else {
+            b = getHeight(face1, eit->second);
+        }
+        printf("  {%d, %d}:   f_i  ,   f_j  ,   |*{i,j}|  ,  face0   ,  face1  ,   |{i,j}|\n        %9lf, %9lf, %9lf, %9lf, %9lf, %9lf\n",(*((eit->second).getLocalVertices()))[0], (*((eit->second).getLocalVertices()))[1], f_i, f_j, getDual(eit->second), a, b, Length::valueAt(eit->second) );
+        */double subtotal = (getDual(eit->second)/Length::valueAt(eit->second));
+        //printf("    %lf\n", subtotal);
         total += subtotal * pow(f_i-f_j, 2) + subtotal * pow(f_j-f_i, 2);
     }
     total = total / 2;
 return total;
 }
-
-//double getPartialEdge(Edge e, Vertex v1)
-//{
-//    int v2Index;
-//    if((*(e.getLocalVertices()))[0] != v1.getIndex())
-//    {
-//       v2Index = (*(e.getLocalVertices()))[0];
-//    } else
-//    {
-//       v2Index = (*(e.getLocalVertices()))[1];
-//    }
-//    Vertex v2 = Triangulation::vertexTable[v2Index];
-//    double d12 = (pow(e.getLength(), 2) + pow(v1.getRadius(), 2) - pow(v2.getRadius(), 2)) / (2 * e.getLength());
-////    
-////    double d21 = (pow(e.getLength(), 2) + pow(v2.getRadius(), 2) - pow(v1.getRadius(), 2)) / (2 * e.getLength());
-////    cout << d12 + d21 << "     " << e.getLength() << "\n";
-//    return d12;
-//}

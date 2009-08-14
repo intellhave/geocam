@@ -511,7 +511,7 @@ void weightedFlipAlgorithm()
                          cout << (*(f2.getLocalEdges()))[2] << ": ";
                          cout << Length::valueAt(Triangulation::edgeTable[(*(f2.getLocalEdges()))[2]]) << "]";
                          cout << endl;
-                         pause(); // PAUSE
+                         //pause(); // PAUSE
                          flipCount++;
                     }
                }
