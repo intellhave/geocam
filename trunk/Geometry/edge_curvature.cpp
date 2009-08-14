@@ -8,38 +8,26 @@ class EdgeCurvature;
 typedef map<TriPosition, EdgeCurvature*, TriPositionCompare> EdgeCurvatureIndex;
 static EdgeCurvatureIndex* Index = NULL;
 
-EdgeCurvature::EdgeCurvature( Edge& e  ){    
-  dih_angles = new vector<GeoQuant*>();
-
-  GeoQuant* dih_angle;
-  for(int i = 0; i < e.getLocalTetras()->size(); i++) {
-    dih_angle = DihedralAngle::At(e, Triangulation::tetraTable[(*(e.getLocalTetras()))[i]]);
-    dih_angle->addDependent(this);
-    dih_angles->push_back( dih_angle );
-  } 
+EdgeCurvature::EdgeCurvature( Edge& e  ){
+  length = Length::At(e); 
+  sectionalCurv = SectionalCurvature::At(e);
+  
+  length->addDependent(this);
+  sectionalCurv->addDependent(this);
 }
 
 void EdgeCurvature::remove() {
      deleteDependents();
-     for(int ii = 0; ii < dih_angles->size(); ii++){
-       dih_angles->at(ii)->removeDependent(this);
-     }
+     length->removeDependent(this);
+     sectionalCurv->removeDependent(this);     
      Index->erase(pos);
-     delete dih_angles;
      delete this;
 }
 
 EdgeCurvature::~EdgeCurvature(){ }
 
 void EdgeCurvature::recalculate() {
-    double curv = 2 * PI;
-    GeoQuant* dih_angle;
-    for(int ii = 0; ii < dih_angles->size(); ii++){
-      dih_angle = dih_angles->at(ii);
-      curv -= dih_angle->getValue();
-    }
-    
-    value = curv;
+    value = sectionalCurv->getValue() * length->getValue();
 }
 
 EdgeCurvature* EdgeCurvature::At( Edge& e  ){

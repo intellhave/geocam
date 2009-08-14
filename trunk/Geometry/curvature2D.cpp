@@ -1,20 +1,16 @@
-#ifndef TWODCURVATURE_H_
-#define TWODCURVATURE_H_
-
 #include <cmath>
 #include <map>
 #include <new>
 using namespace std;
 
 #include "geoquant.h"
+#include "curvature2D.h"
+#include "euc_angle.h"
 #include "triposition.h"
-#include "geoquants.h"
 #include "triangulation/triangulation.h"
 
 typedef map<TriPosition, Curvature2D*, TriPositionCompare> Curvature2DIndex;
 static Curvature2DIndex* Index = NULL;
-
-Curvature2DIndex* Curvature2D::Index = NULL;
 
 Curvature2D::Curvature2D( Vertex& v ){    
     angles = new vector<GeoQuant*>();
@@ -76,6 +72,5 @@ void Curvature2D::CleanUp(){
   Index = NULL;
 }
 
-#endif /* TWODCURVATURE_H_ */
 
 

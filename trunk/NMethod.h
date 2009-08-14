@@ -76,6 +76,24 @@ class NewtonsMethod {
         }
      }
      
+     NewtonsMethod(orig_function func, hessian d2func, int size) {
+        printf("IN HERE\n");
+        f = func;
+        df = NULL;
+        d2f = d2func;
+        printFunc = NULL;
+        
+        nDim = size;
+        
+        setDefaults();
+        
+        grad = (double*) malloc(sizeof(double) * nDim);
+        hess = (double**) malloc(sizeof(double*) * nDim);
+        for(int i = 0 ; i < nDim; i++) {
+           hess[i] = (double*) malloc(sizeof(double) * nDim);
+        }
+     }
+     
      NewtonsMethod(orig_function func, gradient dfunc, hessian d2func, int size) {
         f = func;
         df = dfunc;
@@ -115,6 +133,16 @@ class NewtonsMethod {
      
      void setPrintFunc(printer pf) {
           printFunc = pf;
+     }
+     
+     double getDelta() {
+            return delta;
+     }
+     double getStepRatio() {
+            return stepRatio;
+     }
+     double getStoppingGradientLength() {
+            return gradLenCond;
      }
      
      void setDelta(double del) {

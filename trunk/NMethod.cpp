@@ -56,6 +56,12 @@ double NewtonsMethod::step(double x_n[]) {
    return gradLen;   
 }
 
+void printArray(double arr[], int size) {
+     for(int i = 0; i < size; i++) {
+             printf("arr[%d] = %f\n", i, arr[i]);
+     }
+}
+
 double NewtonsMethod::step(double x_n[], int extremum) {
    double gradLen;
    double next[nDim];
@@ -74,6 +80,11 @@ double NewtonsMethod::step(double x_n[], int extremum) {
    if(LinearEquationsSolver(hess, grad, next) == 1) {
      pause("Error with Solver!\n");
    }
+   
+   for(int i = 0; i < nDim; i++) {
+      printf("next[%d] = %f\n", i, next[i]);
+      next[i] = stepRatio * next[i];
+   }
    gradLen = getGradientLength(grad);
       
    if(gradLen < gradLenCond) {
@@ -83,61 +94,70 @@ double NewtonsMethod::step(double x_n[], int extremum) {
    double curVal; 
    double nextVal = f(x_n);
 
+   int maxNum = (int) floor( 1 / stepRatio );
+   printf("MaxNum = %d\n", maxNum);
+  // printArray(x_n, nDim);
    if( extremum == NMETHOD_MAX) {
-       for(int j = 0; j < 10; j++) {
+       for(int j = 0; j < maxNum; j++) {
          curVal = nextVal;      
          for(int i = 0; i < nDim; i++) {
-           x_n[i] += stepRatio * next[i];
+           x_n[i] += next[i];
          }
-         if( (nextVal = f(x_n)) < curVal ) {
+         nextVal = f(x_n);
+         if( nextVal < curVal ) {
            if( j == 0 ) {
                int k = 1;
-               while(nextVal < curVal && k <= 10) {
+               while(nextVal < curVal && k <= 15) {
                  //pause("k = %d...", k); // PAUSE
                  for(int i = 0; i < nDim; i++) {
-                   x_n[i] -= (stepRatio * next[i]) / (pow(2, k));
+                   x_n[i] -= next[i] / (pow(2, k));
                  }
                  k++;
                  nextVal = f(x_n);
                }
-               if(k == 11) {
+               if(k > 15) {
                     pause("Wrong Direction! Press enter to continue...");
                     return -1;
                }
                return gradLen;
            }
            for(int i = 0; i < nDim; i++) {
-             x_n[i] -= stepRatio * next[i];
+             x_n[i] -= next[i];
            }
            return gradLen;   
          }
        }
    } else { // NMETHOD_MIN
-       for(int j = 0; j < 10; j++) {
+       for(int j = 0; j < maxNum; j++) {
          curVal = nextVal;      
          for(int i = 0; i < nDim; i++) {
-           x_n[i] += stepRatio * next[i];
+           x_n[i] += next[i];
          }
-         if( (nextVal = f(x_n)) > curVal ) {
+        // printArray(x_n, nDim);
+         nextVal = f(x_n);
+         if( nextVal > curVal ) {
            if( j == 0 ) {
                int k = 1;
-               while(nextVal > curVal && k <= 10) {
+               while(nextVal > curVal && k <= 15) {
                  for(int i = 0; i < nDim; i++) {
-                   x_n[i] -= (stepRatio * next[i]) / (pow(2, k));
+                   x_n[i] -= next[i] / (pow(2, k));
                  }
                  k++;
                  nextVal = f(x_n);
                }
-               if(k == 11) {
+               printf("k = %d\n", k);
+               if(k > 15) {
                     pause("Wrong Direction! Press enter to continue...");
                     return -1;
                }
                return gradLen;
            }
            for(int i = 0; i < nDim; i++) {
-             x_n[i] -= stepRatio * next[i];
+             x_n[i] -= next[i];
            }
-           break;  
+          // printArray(x_n, nDim);
+           printf("j = %d\n", j);
+           return gradLen;  
          }
        }   
    }
@@ -155,6 +175,7 @@ void NewtonsMethod::approxGradient(double vars[], double sol[]) {
      double val = 0;
      
      for(int i = 0; i < nDim; i++) {
+        printf("Approximating gradient of %d\n", i);
         //printf("grad[%d] : ", i);
         vars[i] = vars[i] + delta;
         val = f(vars);
@@ -174,7 +195,7 @@ void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
      
      for(int i = 0; i < nDim; i++) {
        for(int j = 0; j < nDim; j++) {
-          //printf("Approximating %d, %d\n", i, j);
+          printf("Approximating hessian of %d, %d\n", i, j);
           if(i > j) {
             sol[i][j] = sol[j][i];
           } else if( i != j) {
@@ -216,11 +237,14 @@ void NewtonsMethod::printInfo(FILE* out) {
       fprintf(out, "grad[%d] = %.10f\n", i, grad[i]);
    }     
 
+   fprintf(out, "\nHessian:\n");
    for(int i = 0; i < nDim; i++) {
       for(int k = 0; k < nDim; k++) {
-         printf("hess[%d][%d] = %.10f\n", i, k, hess[i][k]);
+         fprintf(out, "% 3.5f", hess[i][k]);
       }
+      fprintf(out, "\n");
    }
+   fprintf(out, "-------------------\n");
    
    if(printFunc != NULL) {
      printFunc(out);
@@ -308,7 +332,11 @@ int NewtonsMethod::LinearEquationsSolver(double *pfMatr[], double* pfVect, doubl
     {
       pfSolution[k] -= (pfMatr[k][i]*pfSolution[i]);
     }
-    pfSolution[k] = pfSolution[k] / pfMatr[k][k];
+    if(fabs(pfMatr[k][k]) < 0.000000001) {
+       pfSolution[k] = 0;
+    } else {
+      pfSolution[k] = pfSolution[k] / pfMatr[k][k];
+    }
   }
 
   return 0;

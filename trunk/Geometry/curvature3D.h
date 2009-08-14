@@ -11,12 +11,12 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "edge_curvature.h"
+#include "sectional_curvature.h"
 #include "partial_edge.h"
 
 class Curvature3D : public virtual GeoQuant {
 private:
-  vector<GeoQuant*>* edgeCurvs;
+  vector<GeoQuant*>* sectionalCurvs;
   vector<GeoQuant*>* partials;
 
 protected:

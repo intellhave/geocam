@@ -78,9 +78,7 @@ void Newtons_Method( double stopping_threshold ) {
     for(int ii = 0; ii < V; ii++){ 
       log_radii[ii] = log( Radii[ii]->getValue() );
     }
-    if(errno) {
-      pause("Error after setting log_radii\n");
-    }
+
     // Obtain a copy of the current hessian from the hessianGenerator
     for(int i = 0; i < V; i++) {
       for(int j = i; j < V; j++) {
@@ -88,48 +86,36 @@ void Newtons_Method( double stopping_threshold ) {
 	  hessian[j][i] = hessian[i][j];
       }
     }
-    
-    if(errno) {
-      pause("Error after getting hessian\n");
-    }
+
     // Likewise, obtain a copy of the current graident.
     for(int ii = 0 ; ii < V; ii++)
       negative_gradient[ii] = -1.0 * gradientGenerator[ii]->getValue();
    
     LinearEquationsSolving( V, (double*) hessian, negative_gradient, soln);
-    if(errno) {
-      pause("Error after solving linear equation.\n");
-    }
+
     //maxDelta = 0.0;
     for(int ii = 0; ii < V; ii++){
       log_radii[ii] += soln[ii];
       
       Radii[ii]->setValue( exp( log_radii[ii] ) );
     }
-    if(errno) {
-      pause("Error after converting from log_radii to Radii\n");
-    } 
+
     double radius_scaling_factor = pow( init_totVol/totVol->getValue(), 1.0/3.0 );
-    if(errno) {
-      pause("radius_scaling factor is a bad number: %f\n", radius_scaling_factor);
-    }  
+ 
     for(int ii = 0; ii < V; ii++){
       Radii[ii]->setValue( radius_scaling_factor * Radii[ii]->getValue() );
     }
-    
-    if(errno) {
-      pause("Error after scaling Radii\n");
-    }    
+  
     /***** CHECK STOPPING CONDITION HERE *****/
     converged = true;
     double K_prev = Curvatures[0]->getValue();
     double V_prev = TVPs[0]->getValue();
     double K_curr, V_curr;
-    printf("K_0 = %f, V_0 = %f, K / V = %f\n", K_prev, V_prev, K_prev/V_prev);
+    //printf("K_0 = %f, V_0 = %f, K / V = %f\n", K_prev, V_prev, K_prev/V_prev);
     for(int ii = 1; (ii < V) && converged; ii++){
       K_curr = Curvatures[ii]->getValue();
       V_curr = TVPs[ii]->getValue();
-      printf("K_%d = %f, V_%d = %f, K / V = %f\n", ii, K_curr, ii, V_curr, K_prev/V_prev);
+      //printf("K_%d = %f, V_%d = %f, K / V = %f\n", ii, K_curr, ii, V_curr, K_prev/V_prev);
       converged = converged && (abs(K_curr/V_curr - K_prev/V_prev) < stopping_threshold);
       K_prev = K_curr;
       V_prev = V_curr;

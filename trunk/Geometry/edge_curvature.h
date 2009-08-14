@@ -10,11 +10,13 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "dih_angle.h"
+#include "sectional_curvature.h"
+#include "length.h"
 
 class EdgeCurvature : public virtual GeoQuant {
 private:
-  vector<GeoQuant*>* dih_angles;
+  GeoQuant* sectionalCurv;
+  GeoQuant* length;
 
 protected:
   EdgeCurvature( Edge& e );

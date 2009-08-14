@@ -6,30 +6,30 @@ typedef map<TriPosition, Curvature3D*, TriPositionCompare> Curvature3DIndex;
 static Curvature3DIndex* Index = NULL;
 
 Curvature3D::Curvature3D( Vertex& v ){    
-  edgeCurvs = new vector<GeoQuant*>();
+  sectionalCurvs = new vector<GeoQuant*>();
   partials = new vector<GeoQuant*>();
 
-  GeoQuant* edgeC;
+  GeoQuant* sectC;
   GeoQuant* partial;
     
   for(int i = 0; i < v.getLocalEdges()->size(); i++){
-    edgeC = EdgeCurvature::At(Triangulation::edgeTable[(*(v.getLocalEdges()))[i]]);
+    sectC = SectionalCurvature::At(Triangulation::edgeTable[(*(v.getLocalEdges()))[i]]);
     partial = PartialEdge::At(v, Triangulation::edgeTable[(*(v.getLocalEdges()))[i]]);
-    edgeC->addDependent(this);
+    sectC->addDependent(this);
     partial->addDependent(this);
-    edgeCurvs->push_back( edgeC );
+    sectionalCurvs->push_back( sectC );
     partials->push_back( partial );
   }
 }
 
 void Curvature3D::recalculate() {
   double curv = 0; 
-  GeoQuant* edgeC;
+  GeoQuant* sectC;
   GeoQuant* partial;
-  for(int ii = 0; ii < edgeCurvs->size(); ii++){
-    edgeC = edgeCurvs->at(ii);
+  for(int ii = 0; ii < sectionalCurvs->size(); ii++){
+    sectC = sectionalCurvs->at(ii);
     partial = partials->at(ii);
-    curv += edgeC->getValue()* partial->getValue();
+    curv += sectC->getValue()* partial->getValue();
   }
     
   value = curv;
@@ -39,12 +39,12 @@ Curvature3D::~Curvature3D() {}
 
 void Curvature3D::remove() {
      deleteDependents();
-     for(int ii = 0; ii < edgeCurvs->size(); ii++){
-       edgeCurvs->at(ii)->removeDependent(this);
+     for(int ii = 0; ii < sectionalCurvs->size(); ii++){
+       sectionalCurvs->at(ii)->removeDependent(this);
        partials->at(ii)->removeDependent(this);
      }    
      Index->erase(pos);
-     delete edgeCurvs;
+     delete sectionalCurvs;
      delete partials;
      delete this;
 }
