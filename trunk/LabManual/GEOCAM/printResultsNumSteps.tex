@@ -1,0 +1,169 @@
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=0,0,functions.tex}
+                      
+
+%%%%% BEGINNING OF DOCUMENT BODY %%%%%
+% html: Beginning of file: `clean.html'
+% DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+%  This is a (PRE) block.  Make sure it's left aligned or your toc title will be off. 
+
+\section*{\texttt{printResultsNumSteps}}
+
+\label{f0}
+
+\begin{quotation}
+{\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small 
+   void printResultsNumSteps(char* fileName, vector<double>* radii, vector<double>* curvs)
+}
+{\small    
+}
+\end{verbatim}
+
+\subsection*{Key Words}
+
+\begin{quotation}
+radii, curvatures, file, flow, vertex, print
+\end{quotation}
+
+\subsection*{Authors}
+
+\begin{quotation}
+Alex Henniges
+\end{quotation}
+
+\subsection*{Introduction}
+
+\begin{quotation}
+The \texttt{printResultsNumSteps} function prints out the results of a
+curvature flow, with the results grouped by each step of the triangulation
+but without labels. This format is used for with the GUI to create a
+polygonal representation of curvatures. These results will be written to the
+file given by \texttt{filename}.
+\end{quotation}
+
+\subsection*{Subsidiaries}
+
+\begin{quotation}
+Functions:
+
+Global Variables:
+
+Local Variables: \texttt{int vertSize}, \texttt{int numSteps}
+\end{quotation}
+
+\subsection*{Description}
+
+\begin{quotation}
+Prints the results of a curvature flow into the file given by \texttt{%
+filename}. The results are curvature divided by radii values, and are given
+by vectors of doubles. Most commonly, these vectors are taken from the
+Approximator class after the flow is run. The \texttt{printResultsNumSteps}
+function determines the number of vertices of the current triangulation and
+the total number of steps are then derived from this and the size of the
+vectors.
+
+There are several ways to display the results. The \texttt{%
+printResultsNumSteps} function groups by step but provides no labels and
+does not print out radii, but instead curvautre divided by radii. The
+purpose for this format is to create the ``Polygon flows'' in the GUI.
+Therefore, it would be difficult for a human to read, but allows the
+computer to do so much easier. An example is shown below.
+\end{quotation}
+
+\subsection*{Practicum}
+
+\begin{quotation}
+Example:{\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small 
+  // Print the results of a curvature flow with Approximator app into file "ODEResult.txt"
+}
+{\small 
+  printResultsNumSteps("./ODEResults.txt", app->radiiHistory, app->curvHistory);
+}
+{\small   
+}
+\end{verbatim}
+
+\begin{quotation}
+The output of such an example may then be{\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small          :
+}
+{\small          :
+}
+{\small       3.1425515910
+}
+{\small       3.1425294463
+}
+{\small       3.1425078130
+}
+ 
+{\small       3.1415926536
+}
+{\small       3.5987926375
+}
+{\small       3.5877016632
+}
+{\small       3.5768691746
+}
+{\small       3.5662905388
+}
+{\small          :
+}
+{\small          :
+}
+{\small   
+}
+\end{verbatim}
+
+\subsection*{Limitations}
+
+\begin{quotation}
+Unlike the other print functions, the purpose of \texttt{printResultsNumSteps%
+} is to only display the curvature divided by radii, and so is not limited
+in the information it prints. On the otherhand, an overhaul of the entire
+printing system would likely involve modifying this function.
+\end{quotation}
+
+\subsection*{Revisions}
+
+\begin{itemize}
+\item subversion 545, 9/29/08: Moved the printing of results out of calcFlow
+and into a new function.
+
+\item subversion 783, 6/18/09: Small modifications in response to changes in
+the Approximator class.
+\end{itemize}
+
+\subsection*{Testing}
+
+\begin{quotation}
+The \texttt{printResultsNumSteps} function was tested by running multiple
+curvature flows and printing the results. It was considered working when the
+format of the data was as desired.
+\end{quotation}
+
+\subsection*{Future Work}
+
+\begin{itemize}
+\item 6/29 - Recreate the print functions to print more data and be more
+flexible.
+
+\item 6/29 - Move the print functions into the Approximator class.
+\end{itemize}
+
+% html: End of file: `clean.html'
+
+%%%%% END OF DOCUMENT BODY %%%%%
+% In the future, we might want to put some additional data here, such
+% as when the documentation was converted from wiki to TeX.
+%

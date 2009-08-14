@@ -1,0 +1,126 @@
+
+\documentclass{book}
+\usepackage{makeidx}
+\usepackage{amssymb}
+\usepackage{eurosym}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+\setcounter{MaxMatrixCols}{10}
+%TCIDATA{OutputFilter=LATEX.DLL}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=Manual}
+%TCIDATA{Created=Monday, July 27, 2009 13:07:40}
+%TCIDATA{LastRevised=Sunday, August 02, 2009 11:10:22}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Standard LaTeX\Standard LaTeX Book">}
+%TCIDATA{CSTFile=40 LaTeX Book.cst}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\input{tcilatex}
+
+\begin{document}
+
+\frontmatter
+\title{GEOCAM\\
+Geometric Evolutions on Computational Abstract Manifolds}
+\author{Daniel Champion, David Glickenstein, Yuliya Gorlina,  \and Alex
+Henniges, Kurtis Norwood, Jeff Taft,  \and Joseph Thomas, Andrea Young}
+\date{Summer 2009}
+\maketitle
+\tableofcontents
+
+\chapter*{Preface}
+
+\markboth{PREFACE}{PREFACE}This is the preface. It is an unnumbered chapter.
+The \verb|markboth| TeX field at the beginning of this paragraph sets the
+correct page heading for the Preface portion of the document. The preface
+does not appear in the table of contents.
+
+\mainmatter
+
+\part{Introductory Information}
+
+%TCIMACRO{\QSubDoc{Include introduction}{\input{introduction.tex}}}%
+%BeginExpansion
+\input{introduction.tex}%
+%EndExpansion
+
+%TCIMACRO{\QSubDoc{Include cplusplus}{\input{cplusplus.tex}}}%
+%BeginExpansion
+\input{cplusplus.tex}%
+%EndExpansion
+
+\part{System Documentation}
+
+%TCIMACRO{\QSubDoc{Include system}{\input{system.tex}}}%
+%BeginExpansion
+\input{system.tex}%
+%EndExpansion
+
+%TCIMACRO{\QSubDoc{Include subsystems}{\input{subsystems.tex}}}%
+%BeginExpansion
+\input{subsystems.tex}%
+%EndExpansion
+
+%TCIMACRO{\QSubDoc{Include functions}{\input{functions.tex}}}%
+%BeginExpansion
+\input{functions.tex}%
+%EndExpansion
+
+%TCIMACRO{\QSubDoc{Include classes}{\input{classes.tex}}}%
+%BeginExpansion
+\input{classes.tex}%
+%EndExpansion
+
+\part{Theory}
+
+%TCIMACRO{\QSubDoc{Include glossary}{\input{glossary.tex}}}%
+%BeginExpansion
+\input{glossary.tex}%
+%EndExpansion
+
+\bigskip 
+
+\appendix
+
+\chapter{Appendix}
+
+The appendix fragment is used only once. Subsequent appendices can be
+created using the Chapter Section/Body Tag.
+
+\backmatter
+
+\chapter{Afterword}
+
+The back matter often includes one or more of an index, an afterword,
+acknowledgements, a bibliography, a colophon, or any other similar item. In
+the back matter, chapters do not produce a chapter number, but they are
+entered in the table of contents. If you are not using anything in the back
+matter, you can delete the back matter TeX field and everything that follows
+it.
+
+\end{document}

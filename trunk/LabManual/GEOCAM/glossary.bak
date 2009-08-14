@@ -1,0 +1,190 @@
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=0,0,geocam.tex}
+                      
+
+\chapter{Glossary}
+
+\begin{description}
+\item[circle power] Given a circle $C$ and a point $P$, let $L$ be the line
+through the point $P$ that passes through the center of the circle. \ The $A$
+and $B$ be the intersection points of the $L$ with the circle. \ Define a
+signed distance $\left\Vert \overline{PX}\right\Vert $ for a line segment $%
+\overline{PX}$ to be negative if the line segment lies entirely within the
+circle, and positive otherwise. \ The \textit{circle power} of $P$ relative
+to $C$, denoted by $pow_{C}\left( P\right) $, is given by:%
+\begin{equation*}
+pow_{C}\left( P\right) =\left\Vert \overline{PA}\right\Vert \left\Vert 
+\overline{PB}\right\Vert .
+\end{equation*}%
+Alternatively, if $C$ is defined implicitly by $\left( x-x_{c}\right)
+^{2}+\left( y-y_{c}\right) ^{2}=r_{c}^{2}$, then the circle power can be
+expressed as:%
+\begin{equation*}
+pow_{C}\left( P\right) =\left( x-x_{c}\right) ^{2}+\left( y-y_{c}\right)
+^{2}-r_{c}^{2}.
+\end{equation*}
+
+\item[common power point] The point of the plane (or $%
+%TCIMACRO{\U{211d} }%
+%BeginExpansion
+\mathbb{R}
+%EndExpansion
+^{3}$) containing a decorated triangle (or tetrahedron) that has the same
+circle power with respect to each of the weight circles. \ 
+
+\item[decorated simplex (edge, triangle, tetrahedron,...)] A simplex is
+called \textit{decorated} when weights are assigned to the vertices of the
+simplex and then actualized by embedding the simplex into Euclidean space
+together with spheres centered at the vertices with radii determined by the
+weights. \ The orthocircle (if one exists) is sometimes considered part of
+the decorated simplex when appropriate.
+
+\item[edge curvature] Given a three-dimensional piecewise flat manifold $%
+\left( M,\mathcal{T},d\right) $, the \textit{edge curvature} along an edge $%
+\left\{ i,j\right\} $, measures how much that edge differs from Euclidean
+space. \ Specifically, the edge curvature $K_{ij}$ is given by 
+\begin{equation*}
+K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that} \\ \left\{
+i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij},
+\end{equation*}%
+where $l_{ij}$ is the edge length, and $\beta _{ij,kl}$ is the dihedral
+angle of the edge $\left\{ i,j\right\} $ of the tetrahedron $\left\{
+i,j,k,l\right\} $. \ In a triangulation of three-dimensional Euclidean space 
+$K_{ij}=0$ for all edges. \ 
+
+\item[Einstein constant] For a piecewise flat manifold $\left( M,\mathcal{T}%
+,d\right) $, the \textit{Einstein constant} $\lambda $ is given by%
+\begin{equation*}
+\lambda =\frac{EHR\left( M,\mathcal{T},d\right) }{3\mathcal{V}},
+\end{equation*}%
+where $EHR\left( M,\mathcal{T},d\right) $ is the Einstein-Hilbert-Regge
+functional and $\mathcal{V}$ is the total volume.
+
+\item[Einstein metric] Given a piecewise flat manifold $\left( M,\mathcal{T}%
+,d\right) $, we say that $d$ is an \textit{Einstein metric} provided that
+for all edges $\left\{ i,j\right\} $ in the triangulation we have:%
+\begin{equation*}
+K_{ij}=\lambda l_{ij}\frac{\partial \mathcal{V}}{\partial l_{ij}},
+\end{equation*}%
+where $K_{ij}$ is the edge curvature, $l_{ij}$ is the edge length, $\mathcal{%
+V}$ is the total volume, and $\lambda $ is the Einstein constant.
+
+\item[inversive distance] Start with a decorated edge $e_{ij}$, that is, an
+edge of length $l_{ij}$ with weight circles of radius $r_{i},r_{j}$ centered
+on its vertices. \ The inversive distance $\eta _{ij}$ of the edge $e_{ij}$
+can be calculated with the formula:%
+\begin{equation*}
+\eta _{ij}=\frac{l_{ij}^{2}-r_{i}^{2}-r_{j}^{2}}{2r_{i}r_{j}}.
+\end{equation*}%
+When the two weight circles intersect with angle $\theta _{ij}$, we have the
+simple formula:%
+\begin{equation*}
+\eta _{ij}=\cos \left( \theta _{ij}\right) .
+\end{equation*}%
+The former formula was obtained by using the law of cosines and solving for
+the $\cos \left( \theta _{ij}\right) $ term. \ When the weight circle do not
+intersect and do not contain one or the other $\eta _{ij}>1$. \ When the
+weight circles intersect at some angle then $1\geq \eta _{ij}\geq -1$. \ If
+one weight circle contains the other we have $\eta _{ij}<1$. \ 
+
+\item[manifold] A second countable Hausdorff topological space $M$ is a 
+\textit{manifold} provided there is an integer $n>0$ such that for each $%
+x\in M$ there is an open set $U_{x}$ containing $x$ and a homeomorphism $%
+h_{x}:U_{x}\rightarrow B\left( 1,0\right) \subset 
+%TCIMACRO{\U{211d} }%
+%BeginExpansion
+\mathbb{R}
+%EndExpansion
+^{n}$.
+
+\item[orthocircle] Given a decorated triangle, provided the common power
+point is outside all of the weight circles, there exists a circle that is
+orthogonal to each of the weight circles. \ That is, the \textit{orthocircle}
+is the circle that intersects each of the weight circles orthogonally. \ The
+orthocircle does not exist when the common power point is on or inside all
+three circles, however if the common power point is at infinity, there is a
+line that is orthogonal to the three weight circles which will also be
+identified as the orthocircle.
+
+\item[piecewise flat manifold] A triple $\left( M,\mathcal{T},d\right) $
+where $\left( M,\mathcal{T}\right) $ is a compact triangulated manifold with
+triangulation $\mathcal{T}$, $d$ is a metric on $M$ so that the restriction
+of $d$ to each simplex of $\mathcal{T}$ is isometric to a Euclidean simplex
+of the same dimension. \ 
+
+\item[triangulation] A collection of $n$-dimensional simplices $\mathcal{T}$
+together with pairwise identifications for the $\left( n-1\right) $%
+-dimensional faces of the simplices. \ More restrictions are needed to
+ensure that the resultant space is a manifold. \ Alternatively, given a
+space $M$ of dimension $n$, a \textit{triangulation} of $M$ is a subdivision
+of $M$ into components $\left\{ \sigma _{i}\right\} $ by (hyper)surfaces (of
+dimension $n-1$) so that each component is homeomorphic to an $n$%
+-dimensional ball, and each component is combinatorially (as determined by
+the subdivisions) equivalent to an $n$-simplex. \ 
+
+\item[pseudomanifold] 
+
+\item[dimension] 
+
+\item[metric] 
+
+\item[curvature] 
+
+\item[scalar curvature] 
+
+\item[constant scalar curvature] 
+
+\item[geometric flow] 
+
+\item[curvature flow] 
+
+\item[Yamabe flow] 
+
+\item[normalized total scalar curvature functional] 
+
+\item[Einstein-Hilbert functional] 
+
+\item[Einstein-Hilbert-Regge functional] 
+
+\item[conformal class] 
+
+\item[conformal deformation] 
+
+\item[min-max procedure] 
+
+\item[Yamabe constant] 
+
+\item[flip] 
+
+\item[Pachner move] 
+
+\item[flip algorithm] 
+
+\item[hinge] 
+
+\item[convex hinge] 
+
+\item[nonconvex hinge] 
+
+\item[bone] 
+
+\item[Delaunay triangulation (or hinge)] 
+
+\item[weighted triangulation (or hinge)] 
+
+\item[weighted Delaunay triangulation] 
+
+\item[Voronoi diagram (or cell)] 
+
+\item[weighted Voronoi diagram (or cell)] 
+
+\item[power diagram (or cell)] 
+
+\item[negative triangles] 
+
+\item[dual, Poincare dual] 
+
+\item[dual length] 
+
+\item[dual volume] 
+\end{description}
