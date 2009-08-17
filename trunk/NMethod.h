@@ -77,7 +77,6 @@ class NewtonsMethod {
      }
      
      NewtonsMethod(orig_function func, hessian d2func, int size) {
-        printf("IN HERE\n");
         f = func;
         df = NULL;
         d2f = d2func;

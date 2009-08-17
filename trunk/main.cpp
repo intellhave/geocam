@@ -228,7 +228,10 @@ int main(int arg, char** argv) {
     
      time_t start, end;
      
-   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/3-toruspacking.txt";
+     
+//   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/Hopf_Triangulation.txt"; 
+   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/3-toruspacking.txt";    
+//   char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/3-toruspacking.txt";
    char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold converted.txt";
    make3DTriangulationFile(from, to);
    read3DTriangulationFile(to);
@@ -247,7 +250,7 @@ int main(int arg, char** argv) {
 
 
 
-//    Radius::At(Triangulation::vertexTable[1])->setValue(1.0); 
+//    Radius::At(Triangulation::vertexTable[1])->setValue(0.9); 
 //    Radius::At(Triangulation::vertexTable[2])->setValue(2.0); 
 //    Radius::At(Triangulation::vertexTable[3])->setValue(3.0); 
 //    Radius::At(Triangulation::vertexTable[4])->setValue(0.001); 
@@ -326,22 +329,28 @@ int main(int arg, char** argv) {
 //    pause("EHR: %f\n", TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0));
 
     
-
+//Newtons_Method(0.00001);
     NewtonsMethod *nm = new NewtonsMethod(saddleFinder, saddleFinderHess, edgeSize);
-    //nm->setDelta(0.0001);
-    //nm->setPrintFunc(printFunc);
+    nm->setDelta(0.0001);
+    nm->setPrintFunc(printFunc);
     int i = 1;
-    printf("%.10f\n", saddleFinder(etas));
-    pause();
+//    printf("%.10f\n", saddleFinder(etas));
+//    pause();
     double soln[edgeSize];
-    //nm->setStepRatio(3.0/4.0);
+    time(&start);
+
     while(nm->step(etas, NMETHOD_MIN) > 0.00001) {
+      time(&end);
+      pause("The step took %f seconds\n", difftime(end, start));
       printf("\n***** Step %d *****\n", i++);
       setEtas(etas);
       nm->printInfo(stdout);
       fprintf(stdout, "-------------------\nEHR: %.10f\n", EHR());
       pause(); // PAUSE
+      time(&start);
     }
+    time(&end);
+    pause("The step took %f seconds\n", difftime(end, start));
 
     printf("\n----Solution----\n");
     setEtas(etas);

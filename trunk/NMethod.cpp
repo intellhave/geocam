@@ -116,7 +116,7 @@ double NewtonsMethod::step(double x_n[], int extremum) {
                  nextVal = f(x_n);
                }
                if(k > 15) {
-                    pause("Wrong Direction! Press enter to continue...");
+                    //pause("Wrong Direction! Press enter to continue...");
                     return -1;
                }
                return gradLen;
@@ -147,7 +147,7 @@ double NewtonsMethod::step(double x_n[], int extremum) {
                }
                printf("k = %d\n", k);
                if(k > 15) {
-                    pause("Wrong Direction! Press enter to continue...");
+                    //pause("Wrong Direction! Press enter to continue...");
                     return -1;
                }
                return gradLen;

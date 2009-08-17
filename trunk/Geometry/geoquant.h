@@ -6,7 +6,7 @@
 #define PI 	3.141592653589793238
 
 #include <new>
-#include <vector>
+#include <list>
 #include <map>
 #include <algorithm>
 using namespace std;
@@ -18,11 +18,11 @@ class GeoQuant {
  protected:
   double value;
   TriPosition pos;
-  vector<GeoQuant*>* dependents;
+  list<GeoQuant*>* dependents;
   virtual void recalculate() = 0;
   virtual void remove() = 0;
   GeoQuant(){
-    dependents = new vector<GeoQuant*>();
+    dependents = new list<GeoQuant*>();
     valid = false;
   }
 
@@ -33,20 +33,15 @@ class GeoQuant {
   void addDependent(GeoQuant* dep){dependents->push_back(dep);}
   
   void removeDependent(GeoQuant* dep){
-    vector<GeoQuant*>::iterator it;
-    it = find(dependents->begin(), dependents->end(), dep);
-    if( it != dependents->end() ){
-      dependents->erase(it);
-      return;
-    }
+    dependents->remove(dep);
   }
   
   /* To be called only with deconstructor */
   void deleteDependents() {
-    int size = dependents->size();
-    vector<GeoQuant*> copy = *dependents;
-    for(int ii = size - 1; ii >= 0; ii--) {
-       copy.at(ii)->remove();
+    list<GeoQuant*>::iterator it;
+    list<GeoQuant*> copy = *dependents;
+    for(it = copy.begin(); it != copy.end(); it++) {
+       (*it)->remove();
     }
     delete dependents;
   }
@@ -57,7 +52,6 @@ class GeoQuant {
     if(! valid){
       recalculate();
       valid = true;
-     // notifyDependents();
     }
     return value;
   }
@@ -69,9 +63,10 @@ class GeoQuant {
   }
 
   void notifyDependents(){
-    unsigned int ii;
-    for(ii = 0; ii < dependents->size(); ii++)
-      dependents->at(ii)->invalidate();
+    list<GeoQuant*>::iterator it;
+    for(it = dependents->begin(); it != dependents->end(); it++) {
+       (*it)->invalidate();
+    }
   }
 
   void invalidate(){
