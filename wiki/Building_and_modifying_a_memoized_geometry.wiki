@@ -117,115 +117,112 @@ void quantity::CleanUp(){
 There are a few smaller areas to fill out, but in general defining the quantity requires the following three definitions:
   * Region 1 specifies how to obtain references on the quantities your quantity depends on. Typically, this will involve using the input simplex information and some utilities for inspecting the triangulation to look up the quantities needed for later calculations.
   * Region 2 specifies how to release any data structures built up using dynamic memory. In many cases, this field will be left blank.
-  * Region 3 specifies how to calculate the value of an instance of the quantity. Typically, this will occur in two steps:
-    # Using the quantity references obtained in region 1, we acquire the current values of the quantities used in the calculation.
-    # Using a formula and the values found in step 1, we calculate the value of the current quantity.
+  * Region 3 specifies how to calculate the value of an instance of the quantity. Typically, this will occur in two steps: First, using the quantity references obtained in region 1, we acquire the current values of the quantities used in the calculation. Second, using a formula and the values found in step 1, we calculate the value of the current quantity.
 
 == An Extended Example ==
-Perhaps the easiest way to understand the system is by examining a few working quantities. In this example, we consider the code written to represent the "Dual Area Segment" quantity discussed in  [http://arxiv.org/abs/0906.1560 "Discrete conformal variations and scalar curvature on piecewise flat two and three dimensional manifolds"] (in the paper, this quantity is also called A,,ij,kl,,).
+Perhaps the easiest way to understand the system is by examining a few working quantities. In this example, we consider the code written to represent the "Length" quantity discussed in [http://arxiv.org/abs/0906.1560 "Discrete conformal variations and scalar curvature on piecewise flat two and three dimensional manifolds"] (in the paper, this quantity is also called l,,ij,,). We assign length quantities to the edges of the triangulation; for a given edge, we can determine its length as a function of the radii assigned to the edge's end vertices and the inversive distance assigned to the edge (this is also discussed in the paper).
 
-PICTURES AND A PROSE DESCRIPTION GO HERE
-
+The header file for length.h is as follows:
 {{{
-#ifndef DUALAREASEGMENT_H_
-#define DUALAREASEGMENT_H_
+#ifndef LENGTH_H_
+#define LENGTH_H_
+
+#include <cmath>
+#include <map>
+#include <new>
+using namespace std;
 
 #include "geoquant.h"
 #include "triposition.h"
+#include "triangulation.h"
 
-#include "edge_height.h"
-#include "face_height.h"
+#include "radius.h"
+#include "eta.h"
 
-class DualAreaSegment : public virtual GeoQuant {
-private:
-  EdgeHeight* hij_k;
-  EdgeHeight* hij_l;
-  FaceHeight* hijk_l;
-  FaceHeight* hijl_k;
+class Length : public virtual GeoQuant {
+ private:
+  Radius* radius1;  // To calculate the length of an edge, 
+  Radius* radius2;  // we require references to three 
+  Eta* eta;         // quantities associated with the edge.
 
 protected:
-  DualAreaSegment( Edge& e, Tetra& t );
+  Length( Edge& e ); 
   void recalculate();
 
 public:
-  ~DualAreaSegment();
-  static DualAreaSegment* At( Edge& e, Tetra& t );
-  static void CleanUp();
-  static void Record( char* filename );
+  ~Length();
+  static Length* At( Edge& e );
 };
 
-#endif /* DUALAREASEGMENT_H_ */
+#endif /* LENGTH_H_ */
 }}}
 
-{{{
-#include "dualareasegment.h"
-#include "miscmath.h"
 
+{{{
+#include "length.h"
 #include <stdio.h>
 
-typedef map<TriPosition, DualAreaSegment*, TriPositionCompare> DualAreaSegmentIndex;
-static DualAreaSegmentIndex* Index = NULL;
+typedef map<TriPosition, Length*, TriPositionCompare> LengthIndex;
+static LengthIndex* Index = NULL;
 
-DualAreaSegment::DualAreaSegment( Edge& e, Tetra& t ){
-  StdTetra st = labelTetra( t, e );  // We use the topological tools in miscmath to
-                                     // label the tetrahedron with respect to edge e.
+Length::Length( Edge& e ){
+  // Step #1: Acquire additional topological information about the edge.
+  Vertex& v1 = Triangulation::vertexTable[ (*(e.getLocalVertices()))[0] ];
+  Vertex& v2 = Triangulation::vertexTable[ (*(e.getLocalVertices()))[1] ];
 
-  Face& fa123 = Triangulation::faceTable[ st.f123 ];
-  Face& fa124 = Triangulation::faceTable[ st.f124 ];
-
-  hij_k = EdgeHeight::At( e, fa123 );  // Here we use the calculated topological values
-  hij_l = EdgeHeight::At( e, fa124 );  // to look up the edge and face heights required
-  hijk_l = FaceHeight::At( fa123, t ); // to calculate the dual area.
-  hijl_k = FaceHeight::At( fa124, t );
-
-  hij_k->addDependent(this);  // Here we notify the quantities we reference
-  hij_l->addDependent(this);  // that we wish to observe them (this is the            
-  hijk_l->addDependent(this); // where an important part of our observer-
-  hijl_k->addDependent(this); // observable design is implemented).
+  // Step #2: Use the topological information to locate other quantities. 
+  radius1 = Radius::At( v1 );  
+  radius2 = Radius::At( v2 );
+  eta = Eta::At( e );
+  
+  // Step #3: Inform the quantities that they have a new dependent.
+  radius1->addDependent( this );
+  radius2->addDependent( this );
+  eta->addDependent( this );
 }
 
-DualAreaSegment::~DualAreaSegment(){} // We didn't allocate any memory to store
-                                      // this quantity's data, so the destructor 
-                                      // can be left blank.
+void Length::recalculate(){
+  // Step #1: Acquire the current values from our quantity references.
+  double r1 = radius1->getValue();
+  double r2 = radius2->getValue();
+  double etaV = eta->getValue();
 
-void DualAreaSegment::recalculate(){
-  double Hij_k = hij_k->getValue();   // Step 1: We use the quantity references
-  double Hijk_l = hijk_l->getValue(); // to obtain correct values for the referenced
-  double Hij_l = hij_l->getValue();   // quantities.
-  double Hijl_k = hijl_k->getValue();
-
-  // Step 2: We use a formula to calculate the value of the dual-area segment.
-  value = 0.5*(Hij_k * Hijk_l + Hij_l * Hijl_k); 
+  // Step #2: Use the values and a formula to calculate the current
+  // value of the quantity.
+  value = sqrt( r1*r1 + r2*r2 + 2*r1*r2*etaV );   
 }
 
-DualAreaSegment* DualAreaSegment::At( Edge& e, Tetra& t ){
-  TriPosition T( 2, e.getSerialNumber(), t.getSerialNumber() );
-  if( Index == NULL ) Index = new DualAreaSegmentIndex();
-  DualAreaSegmentIndex::iterator iter = Index->find( T );
+// We didn't allocate any additional memory to construct
+// this quantity, so the destructor can be left blank.
+Length::~Length(){} 
+
+// This procedure is responsible for making length
+// construction "idempotent." That is, once a Length
+// quantity is constructed for a given edge, it
+// should be the only Length quantity assigned to that
+// edge. In addition, all calls for the length
+// associated with a given edge should receive a
+// reference to the same quantity.
+
+Length* Length::At( Edge& e ){
+  TriPosition T( 1, e.getSerialNumber() );
+  if( Index == NULL ) Index = new LengthIndex();
+  LengthIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
-    DualAreaSegment* val = new DualAreaSegment( e, t );
+    Length* val = new Length( e );
+    val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
   } else {
     return iter->second;
   }
 }
-
-void DualAreaSegment::CleanUp(){
-  if( Index == NULL ) return;
-  DualAreaSegmentIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    delete iter->second;
-  delete Index;
-}
-
 }}}
 
-
 == Common Mistakes ==
-A panoply of debugging hints should go here.
-
+A common mistake is to forget to call "addDependent" for each of the quantities your quantity references. If you observe that, within a given run of your program, the quantity works correctly the first time but is incorrect in later iterations, then it is likely that some quantity in the pipeline has failed to call "addDependent" (and hence isn't ever being updated).
+  
 == Fancier Tricks ==
 Techniques for less common quantities go here.
 
