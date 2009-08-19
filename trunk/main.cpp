@@ -65,30 +65,7 @@ void loadRadii(vector<double> radii){
   }
 }
 
-/* COMMAND-LINE FLOW */
-//int main(int argc, char** argv){
-//  validateArgs(argc, argv);
-//  char* log_filename = argv[1];
-//  calcSpecs specs(log_filename);
-//
-//  readTriangulationFile(specs.tri_filename.c_str());
-//  loadRadii(specs.radii);
-//  
-//  Approximator* app = specs.approx;
-//
-//  switch(specs.ctype){
-//  case BY_ACCURACY:
-//    app->run(specs.precision, specs.accuracy, specs.stepsize);
-//    break;
-//  case BY_STEPS:
-//    app->run((int) specs.numsteps, specs.stepsize);
-//    break;
-//  }
-//  
-//  printResultsStep(argv[2], &(app->radiiHistory), &(app->curvHistory)); 
-//  delete app;
-//  return 0;
-//}
+
 
 double func(double vars[]) {
        return exp(-pow(vars[0], 2));
@@ -123,7 +100,8 @@ double saddleFinder(double etas[]) {
    int i = 0;
 
    setEtas(etas);
-   double radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
+//   double radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
+   double radius_scaling_factor = pow( 1.0/TotalVolume::valueAt(), 1.0/3.0 );
 
    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
            vit++) {
@@ -267,16 +245,17 @@ int main(int arg, char** argv) {
 //    Eta::At(Triangulation::edgeTable[10])->setValue(0.125);
 
 
-//    etas[0] = 0.98;
-//    etas[1] = 0.87;
-//    etas[2] = 1.03;
-//    etas[3] = 0.98;
-//    etas[4] = 1.12;
-//    etas[5] = 1.06;
-//    etas[6] = 0.96;
-//    etas[7] = 0.83;
-//    etas[8] = 1.09;
-//    etas[9] = 1.00;
+    etas[0] = 0.98;
+    etas[1] = 0.87;
+    etas[2] = 1.03;
+    etas[3] = 0.98;
+    etas[4] = 1.12;
+    etas[5] = 1.06;
+    etas[6] = 0.96;
+    etas[7] = 0.83;
+    etas[8] = 1.09;
+    etas[9] = 1.00;
+
     
 //    etas[0] = 1.00; //
 //    etas[1] = 1.00; //
@@ -288,7 +267,7 @@ int main(int arg, char** argv) {
 //    etas[7] = 5.0 / 3.0; //
 //    etas[8] = 5.0 / 3.0; //
 //    etas[9] = 1.00; //
-
+//
 //    etas[0] = 1.00; //
 //    etas[1] = 1.00; //
 //    etas[2] = 166.67; //
@@ -299,6 +278,7 @@ int main(int arg, char** argv) {
 //    etas[7] = 166.67; //
 //    etas[8] = 166.67; //
 //    etas[9] = 0.125; //
+
 
 
 
@@ -328,34 +308,42 @@ int main(int arg, char** argv) {
 //
 //    pause("EHR: %f\n", TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0));
 
-    
-//Newtons_Method(0.00001);
+    setEtas(etas);    
+//Newtons_Method(0.0000001);
+
+//printf("Enjoy your data");
+
+//system("PAUSE");
+
+//    setEtas(etas);
     NewtonsMethod *nm = new NewtonsMethod(saddleFinder, saddleFinderHess, edgeSize);
-    nm->setDelta(0.0001);
+    nm->setDelta(0.00001);
     nm->setPrintFunc(printFunc);
     int i = 1;
 //    printf("%.10f\n", saddleFinder(etas));
 //    pause();
     double soln[edgeSize];
     time(&start);
-
-    while(nm->step(etas, NMETHOD_MIN) > 0.00001) {
+    
+    FILE* result = fopen("C:/Dev-Cpp/geocam/Triangulation Files/O1_result.txt", "w");
+    while(nm->step(etas, NMETHOD_MAX) > 0.0000001) {
       time(&end);
-      pause("The step took %f seconds\n", difftime(end, start));
+//      pause("The step took %f seconds\n", difftime(end, start));
       printf("\n***** Step %d *****\n", i++);
       setEtas(etas);
-      nm->printInfo(stdout);
-      fprintf(stdout, "-------------------\nEHR: %.10f\n", EHR());
-      pause(); // PAUSE
+      nm->printInfo(result);
+      fprintf(result, "-------------------\nEHR: %.10f\n", EHR());
+//      pause(); // PAUSE
       time(&start);
     }
     time(&end);
-    pause("The step took %f seconds\n", difftime(end, start));
+    //pause("The step took %f seconds\n", difftime(end, start));
 
     printf("\n----Solution----\n");
     setEtas(etas);
-    nm->printInfo(stdout);
-    fprintf(stdout, "-------------------\nEHR: %.10f\n", EHR());
+    nm->printInfo(result);
+    fprintf(result, "-------------------\nEHR: %.10f\n", EHR());
+    fclose(result);
     for(int j = 0; j < edgeSize; j++) {
         printf("eta_%d[%d] = %f\n", i, j, etas[j]);
     }

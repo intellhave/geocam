@@ -181,11 +181,13 @@ void NewtonsMethod::approxGradient(double vars[], double sol[]) {
         val = f(vars);
         //printf("(%.10f - ", val);
         vars[i] = vars[i] - 2*delta;
-        val = val - f(vars);
-        //printf("%.10f) / (2 * %.10f) = ", f(vars), delX);
+        double f_x = f(vars);
+        val = val - f_x;
+        //printf("%.10f) / (2 * %.10f) = ", f_x, delta);
         sol[i] = val / (2*delta);
         //printf("%.10f\n", sol[i]);
         vars[i] = vars[i] + delta;
+//        pause();
      }
 }
 

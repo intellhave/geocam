@@ -21,6 +21,8 @@
 #include "total_volume_partial.h"
 /*****************************************/
 
+double EHR();
+
 //#define PI = 3.141592653589793238;
 
 void Newtons_Method( double stopping_threshold ) {
@@ -107,12 +109,33 @@ void Newtons_Method( double stopping_threshold ) {
     }
   
     /***** CHECK STOPPING CONDITION HERE *****/
+    
+// *************** Printing Data ********************
+// map<int, Vertex>::iterator vit;
+//     map<int, Edge>::iterator eit;
+////     fprintf(out, "\n");
+//     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+//             vit++) {
+////        printf("Radius %d = %.10f\n", vit->first, Radius::valueAt(vit->second));
+//          printf("CSC %d = %.10f\n", vit->first, Curvatures[vit->first-1]->getValue()/TVPs[vit->first-1]->getValue());
+//     }
+//     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+//             eit++) {
+////        printf("Eta %d = %.10f\n", eit->first, Eta::valueAt(eit->second));
+//        printf("Length %d = %.10f\n", eit->first, Length::valueAt(eit->second));
+//     }
+//     printf("-----------------\nEHR: %.10f\n", EHR());
+
+// ***************** End Printing Data ************ 
+    
+    
+    
     converged = true;
     double K_prev = Curvatures[0]->getValue();
     double V_prev = TVPs[0]->getValue();
     double K_curr, V_curr;
 //    printf("K_0 = %f, V_0 = %f, K / V = %f\n", K_prev, V_prev, K_prev/V_prev);
-    map<int, Edge>::iterator eit;
+//    map<int, Edge>::iterator eit;
     for(int ii = 1; (ii < V) && converged; ii++){
       K_curr = Curvatures[ii]->getValue();
       V_curr = TVPs[ii]->getValue();
