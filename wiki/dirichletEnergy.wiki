@@ -1,0 +1,87 @@
+=`dirichletEnergy`=
+{{{
+double dirichletEnergy(void)
+}}}
+
+  ==Keywords==
+  Dirichlet, energy, flip algorithm
+
+  ==Authors==
+  Kurt Norwood
+
+  ==Introduction==
+
+  The {{{dirichletEnergy}}} function computes the Dirichlet energy of the triangulation currently being modeled. It is important to us because it is central to the proof of the flip algorithm for triangulations. It decreases when a non-Delaunay hinge is flipped to being Delaunay. This characteristic does not completely carry over to weighted triangulations so being able to compute this energy easily at anytime may give us insight into developing a weighted flip algorithm. For our purposes the Dirichlet energy is being used to test our model and the {{{flip}}} procedure.
+
+  ==Subsidiaries==
+
+  Functions:
+  
+{{{
+  getDual(Edge e)
+
+  Length::valueAt(Edge e)
+}}}
+  
+  Global Variables:
+
+{{{
+  map<int, double> fVertex
+  
+  bool notSet
+}}}
+  
+  Local Variables:
+
+{{{
+  double total, subtotal
+}}}
+
+  ==Description==
+  
+  The first thing that happens in the function is checking the value of the global variable {{{notSet}}}, which for the time being indicates whether some function values have been applied to the vertices of the triangulation. This must be done the first time {{{dirichletEnergy}}} is called but not again afterwards because we want consistent values while the program is running. So if {{{notSet}}} is true we give all the vertices random values in the range (-a,a) where a = sqrt(3/V) where V is the number of vertices, otherwise this is skipped.
+  
+  What follows is the actual computation. For each edge, we grab the function values of it's vertices. The assign {{{subtotal}}} to be the ratio between the dual length of the edge and the length of the edge. Then increase the total value by the subtotal times the vertices function values differences squared. We do both arrangements of function values at the same time. Finally half the total is returned.
+
+
+  ==Practicum==
+  
+  The following code should be able to be dropped in a {{{main}}} and give a demonstration of the Dirichlet energy decreasing as a result of flipping non-Delaunay edges.
+  
+{{{
+  readTriangulationFile("killer_triangulation.txt");
+  
+  cout << dirichletEnergy() << "\n";
+  
+  map<int, Edge>::iterator eit;
+  eit = Triangulation::edgeTable.begin();
+  
+  for (; eit != Triangulation::edgeTable.end(); eit++) {
+    if (!isWeightedDelaunay(eit->second)) {
+      flip(eit->second);
+      cout << dirichletEnergy() << "\n";
+    }
+  }
+  
+  cout << "done!\n";
+}}}
+
+  ==Limitations==
+
+  Right now the main limitation is generating new random numbers each time the program is run. Hopefully soon Kurt will replace the the part of the code that generates random number to something that reads numbers from a file, and if the file doesn't have enough numbers to cover all the vertices, it'll append more numbers to the file so we can have consistent numbers each time we run tests.
+
+  ==Revisions==
+  
+  ------------------------------------------------------------------------
+  r890 | kortox | 2009-07-22 11:13:23 -0700 (Wed, 22 Jul 2009) | 2 lines
+
+  Lots of changes to the graphical display of the triangulation, displaying the dual edges works properly now, as well as showing the weights on the vertices. The dirichlet energy computation is included in the delaunay.cpp file and it seems to be working properly. added several files to the new_flip/test_files as examples of how flipping reduces the dirichlet energy which right now is the only info that will be printed while running the new_flip project
+
+  ==Testing==
+  
+  It's been used many times, and exhibits the behavior expected. Also it is relatively simple so it is tested by inspection of the code.
+
+  ==Future Work==
+  
+  Implement what is mentioned in the Limitations
+  
