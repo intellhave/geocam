@@ -13,29 +13,33 @@ double dirichletEnergy(void)
 
   The {{{dirichletEnergy}}} function computes the Dirichlet energy of the triangulation currently being modeled. It is important to us because it is central to the proof of the flip algorithm for triangulations. It decreases when a non-Delaunay hinge is flipped to being Delaunay. This characteristic does not completely carry over to weighted triangulations so being able to compute this energy easily at anytime may give us insight into developing a weighted flip algorithm. For our purposes the Dirichlet energy is being used to test our model and the {{{flip}}} procedure.
 
+The formula for the Dirichlet energy can be viewed in latex with:
+ {{{ D(f_{V(T)}, T) = \sum\limits_{\{i,j\}\in E(T)} \frac{|dual(\{i,j\})|}{|\{i,j\}|} (f(j)- f(i))^2}}}
+
+
   ==Subsidiaries==
 
   Functions:
   
-{{{
+  {{{
   getDual(Edge e)
 
   Length::valueAt(Edge e)
-}}}
+  }}}
   
   Global Variables:
 
-{{{
+  {{{
   map<int, double> fVertex
   
   bool notSet
-}}}
+  }}}
   
   Local Variables:
 
-{{{
+  {{{
   double total, subtotal
-}}}
+  }}}
 
   ==Description==
   
@@ -48,8 +52,8 @@ double dirichletEnergy(void)
   
   The following code should be able to be dropped in a {{{main}}} and give a demonstration of the Dirichlet energy decreasing as a result of flipping non-Delaunay edges.
   
-{{{
-  readTriangulationFile("path/to/a_triangulation_file.txt");
+  {{{
+  readTriangulationFile("path/to/a/triangulation/file.txt");
   
   cout << dirichletEnergy() << "\n";
   
@@ -64,15 +68,21 @@ double dirichletEnergy(void)
   }
   
   cout << "done!\n";
+
   ------------output-might-look-something-like---------------------
-  1.6068
-  1.53691
-  1.45355
-  1.35277
-  1.35011
-  done!
+ 
+4.61646
+
+4.06364
+
+3.72746
+
+2.43225
+
+1.72232
+done!
   
-}}}
+  }}}
 
   ==Limitations==
 
