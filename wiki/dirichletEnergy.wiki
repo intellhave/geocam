@@ -49,7 +49,7 @@ double dirichletEnergy(void)
   The following code should be able to be dropped in a {{{main}}} and give a demonstration of the Dirichlet energy decreasing as a result of flipping non-Delaunay edges.
   
 {{{
-  readTriangulationFile("killer_triangulation.txt");
+  readTriangulationFile("path/to/a_triangulation_file.txt");
   
   cout << dirichletEnergy() << "\n";
   
@@ -64,6 +64,14 @@ double dirichletEnergy(void)
   }
   
   cout << "done!\n";
+  ------------gives-this-output---------------------
+  1.6068
+  1.53691
+  1.45355
+  1.35277
+  1.35011
+  done!
+  
 }}}
 
   ==Limitations==
