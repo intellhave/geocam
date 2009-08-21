@@ -44,8 +44,8 @@ the decorated simplex when appropriate.
 \left\{ i,j\right\} $, measures how much that edge differs from Euclidean
 space. \ Specifically, the edge curvature $K_{ij}$ is given by 
 \begin{equation*}
-K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that} \\ \left\{
-i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij},
+K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that}  \\ %
+\left\{ i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij},
 \end{equation*}%
 where $l_{ij}$ is the edge length, and $\beta _{ij,kl}$ is the dihedral
 angle of the edge $\left\{ i,j\right\} $ of the tetrahedron $\left\{
@@ -69,6 +69,23 @@ K_{ij}=\lambda l_{ij}\frac{\partial \mathcal{V}}{\partial l_{ij}},
 where $K_{ij}$ is the edge curvature, $l_{ij}$ is the edge length, $\mathcal{%
 V}$ is the total volume, and $\lambda $ is the Einstein constant.
 
+\item[hinge] A hinge consists of a pair of triangles that share a single
+edge. \ Often, two adjacent triangles in a simplicial surface are identified
+as a hinge while studying the edge they share. \ Any hinge can be
+isometrically embedding $%
+%TCIMACRO{\U{211d} }%
+%BeginExpansion
+\mathbb{R}
+%EndExpansion
+^{2}$. \ There is a natural generalization to three (and higher) dimensions
+for two tetrahedra sharing a face. \ Similarly, this generalized hinge can
+be isometrically embedded in $%
+%TCIMACRO{\U{211d} }%
+%BeginExpansion
+\mathbb{R}
+%EndExpansion
+^{3}$. \ 
+
 \item[inversive distance] Start with a decorated edge $e_{ij}$, that is, an
 edge of length $l_{ij}$ with weight circles of radius $r_{i},r_{j}$ centered
 on its vertices. \ The inversive distance $\eta _{ij}$ of the edge $e_{ij}$
@@ -84,10 +101,10 @@ simple formula:%
 The former formula was obtained by using the law of cosines and solving for
 the $\cos \left( \theta _{ij}\right) $ term. \ When the weight circle do not
 intersect and do not contain one or the other $\eta _{ij}>1$. \ When the
-weight circles intersect at some angle then $1\geq \eta _{ij}\geq -1$. \ If
+weight circles intersect at some angle then $-1\leq \eta _{ij}\leq 1$. \ If
 one weight circle contains the other we have $\eta _{ij}<1$. \ 
 
-\item[manifold] A second countable Hausdorff topological space $M$ is a 
+\item[manifold] A second countable, Hausdorff topological space $M$ is a 
 \textit{manifold} provided there is an integer $n>0$ such that for each $%
 x\in M$ there is an open set $U_{x}$ containing $x$ and a homeomorphism $%
 h_{x}:U_{x}\rightarrow B\left( 1,0\right) \subset 
@@ -95,7 +112,41 @@ h_{x}:U_{x}\rightarrow B\left( 1,0\right) \subset
 %BeginExpansion
 \mathbb{R}
 %EndExpansion
-^{n}$.
+^{n}$. \ A discrete (or piecewise flat) space is a manifold provided the
+sub-simplices satisfy the following conditions:
+
+\item \textbf{Dimension 2:}
+
+\begin{itemize}
+\item All edges have exactly two adjacent faces.
+
+\item For a vertex $v$, the faces incident upon $v$ can be arranged
+cyclically as $f_{1},f_{2},...,f_{N},f_{1},...$ so that there is an edge
+(containing $v$ as an endpoint) between each pair of consecutive faces $%
+f_{i},f_{i+1}$, where $N+1$ is understood to be $1$. \ 
+\end{itemize}
+
+\item \textbf{Dimension 3:}
+
+\begin{itemize}
+\item All faces have exactly two adjacent tetrahedra.
+
+\item For each edge $e$, the tetrahedra incident upon $e$ can be arranged
+cyclically as $\sigma _{1},\sigma _{2},...,\sigma _{M},\sigma _{1},...$ so
+that there is a face (containing $e$ as an edge) between each pair of
+consecutive tetrahedra $\sigma _{i},\sigma _{i+1}$ where $M+1$ is understood
+to be $1$. \ 
+
+\item For each vertex $v$, the number of incident edges, faces and
+tetrahedra, $E,F,T$, respectively (including multiple occurrences) satisfy:%
+\begin{equation*}
+E-F+T=2.
+\end{equation*}
+\end{itemize}
+
+\item More generally, given a simplicial manifold $M$ of dimension $n$, and
+a sub-simplex $\sigma $ of dimension $m<n$, the sub-simplices of $M$ of
+dimension greater than $m$ have the structure of $S^{n-m-1}$.
 
 \item[orthocircle] Given a decorated triangle, provided the common power
 point is outside all of the weight circles, there exists a circle that is
@@ -122,7 +173,20 @@ dimension $n-1$) so that each component is homeomorphic to an $n$%
 -dimensional ball, and each component is combinatorially (as determined by
 the subdivisions) equivalent to an $n$-simplex. \ 
 
-\item[pseudomanifold] 
+\item[pseudo manifold] A discrete \textit{pseudo manifold} is a relaxation
+of the manifold conditions for a discrete space. \ For dimensions two and
+three, the bullet conditions given in the entry on manifold may no longer
+hold. \ However, the manifold condition is still (trivially) satisfied in
+the interior of all top dimensional simplices.
+
+\item[weighted triangulation (or hinge)] A triangulation together with a map 
+$w:V\rightarrow 
+%TCIMACRO{\U{211d} }%
+%BeginExpansion
+\mathbb{R}
+%EndExpansion
+$, where $V$ is the set of vertices of the triangulation. \ Each simplex
+becomes a decorated simplex. \ 
 
 \item[dimension] 
 
@@ -160,8 +224,6 @@ the subdivisions) equivalent to an $n$-simplex. \
 
 \item[flip algorithm] 
 
-\item[hinge] 
-
 \item[convex hinge] 
 
 \item[nonconvex hinge] 
@@ -170,7 +232,14 @@ the subdivisions) equivalent to an $n$-simplex. \
 
 \item[Delaunay triangulation (or hinge)] 
 
-\item[weighted triangulation (or hinge)] 
+\item[weighted triangulation (or hinge)] A triangulation together with a map 
+$w:V\rightarrow 
+%TCIMACRO{\U{211d} }%
+%BeginExpansion
+\mathbb{R}
+%EndExpansion
+$, where $V$ is the set of vertices of the triangulation. \ Each simplex
+becomes a decorated simplex. \ 
 
 \item[weighted Delaunay triangulation] 
 
