@@ -64,7 +64,7 @@ double dirichletEnergy(void)
   }
   
   cout << "done!\n";
-  ------------gives-this-output---------------------
+  ------------output-might-look-something-like---------------------
   1.6068
   1.53691
   1.45355
