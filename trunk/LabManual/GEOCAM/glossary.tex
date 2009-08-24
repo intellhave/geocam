@@ -8,9 +8,9 @@
 
 \begin{description}
 \item[circle power] Given a circle $C$ and a point $P$, let $L$ be the line
-through the point $P$ that passes through the center of the circle. \ The $A$
-and $B$ be the intersection points of the $L$ with the circle. \ Define a
-signed distance $\left\Vert \overline{PX}\right\Vert $ for a line segment $%
+through the point $P$ that passes through the center of the circle. \ Let $A$
+and $B$ be the intersection points of $L$ with the circle.\ Define a signed
+distance $\left\Vert \overline{PX}\right\Vert $ for a line segment $%
 \overline{PX}$ to be negative if the line segment lies entirely within the
 circle, and positive otherwise. \ The \textit{circle power} of $P$ relative
 to $C$, denoted by $pow_{C}\left( P\right) $, is given by:%
@@ -54,22 +54,25 @@ angle of the edge $\left\{ i,j\right\} $ of the tetrahedron $\left\{
 i,j,k,l\right\} $. \ In a triangulation of three-dimensional Euclidean space 
 $K_{ij}=0$ for all edges. \ 
 
-\item[Einstein constant] For a piecewise flat manifold $\left( M,\mathcal{T}%
-,d\right) $, the \textit{Einstein constant} $\lambda $ is given by%
+\item[Einstein constant] For a 3-dimensional piecewise flat manifold $\left(
+M,\mathcal{T},d\right) $, the \textit{Einstein constant} $\lambda $ is given
+by%
 \begin{equation*}
 \lambda =\frac{EHR\left( M,\mathcal{T},d\right) }{3\mathcal{V}},
 \end{equation*}%
 where $EHR\left( M,\mathcal{T},d\right) $ is the Einstein-Hilbert-Regge
 functional and $\mathcal{V}$ is the total volume.
 
-\item[Einstein metric] Given a piecewise flat manifold $\left( M,\mathcal{T}%
-,d\right) $, we say that $d$ is an \textit{Einstein metric} provided that
-for all edges $\left\{ i,j\right\} $ in the triangulation we have:%
+\item[Einstein metric] Given a 3-dimensional piecewise flat manifold $\left(
+M,\mathcal{T},d\right) $, we say that $d$ is an \textit{Einstein metric}
+provided there exists $\lambda \in \mathbb{R}$ such that for all edges $%
+\left\{ i,j\right\} $ in the triangulation we have:%
 \begin{equation*}
 K_{ij}=\lambda l_{ij}\frac{\partial \mathcal{V}}{\partial l_{ij}},
 \end{equation*}%
-where $K_{ij}$ is the edge curvature, $l_{ij}$ is the edge length, $\mathcal{%
-V}$ is the total volume, and $\lambda $ is the Einstein constant.
+where $K_{ij}$ is the edge curvature, $l_{ij}$ is the edge length, and $%
+\mathcal{V}$ is the total volume. By summing both sides, we see that $%
+\lambda $ is the Einstein constant.
 
 \item[hinge] A hinge consists of a pair of triangles that share a single
 edge. \ Often, two adjacent triangles in a simplicial surface are identified
@@ -98,11 +101,11 @@ can be calculated with the formula:%
 When the two weight circles intersect with angle $\theta _{ij}$, we have the
 simple formula:%
 \begin{equation*}
-\eta _{ij}=\cos \left( \theta _{ij}\right) .
+\eta _{ij}=-\cos \left( \theta _{ij}\right) .
 \end{equation*}%
 The former formula was obtained by using the law of cosines and solving for
-the $\cos \left( \theta _{ij}\right) $ term. \ When the weight circle do not
-intersect and do not contain one or the other $\eta _{ij}>1$. \ When the
+the $\cos \left( \theta _{ij}\right) $ term. \ When the weight circles do
+not intersect and do not contain one or the other $\eta _{ij}>1$. \ When the
 weight circles intersect at some angle then $-1\leq \eta _{ij}\leq 1$. \ If
 one weight circle contains the other we have $\eta _{ij}<1$. \ 
 
