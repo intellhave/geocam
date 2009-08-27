@@ -2,7 +2,7 @@
 #include <new>
 #include <cstdio>
 
-#include "simplex.h"
+#include "../Simplex/simplex.h"
 
 /* Structure of a TriPosition call:
  * TriPosition(numPoints, TYPE, SimplexID1, SimplexID2, ... , SimplexIDN */
