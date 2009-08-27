@@ -1,13 +1,13 @@
 #summary How to encode and modify a geometry written as a "memoized-pipeline."
 
-=Working with a "memoized-pipeline" data structure (WORK IN PROGRESS)=
+=Working with a "memoized-pipeline" data structure=
 
 ==Key Words==
 geometry, memoized-pipeline, extending, modifying, data structure, geoquant, quantities, singleton, observer, observable
 
 ==Authors==
-    * Alex Henniges
-    * Joseph Thomas
+  * Alex Henniges
+  * Joseph Thomas
 
 == Introduction ==
 The memoized-pipeline is a data structure we developed for investigating geometries defined on triangulations. It is particularly suited to the situation in which we need to specify the values of some geometric quantities (independent variables) and then need to rapidly calculate the values of some other quantities (the dependent variables). Basically, we achieve this speedup by trading space for time. Usually, the definitions of the dependent variables have many intermediate values in common. By saving these values the first time we compute them, and then reusing them later, we can avoid a lot of useless recalculation. This strategy of saving calculated values, which can be found in most algorithms textbooks, is called "memoization." 
@@ -220,13 +220,24 @@ Length* Length::At( Edge& e ){
 }
 }}}
 
+== Consequences of Our Design ==
+You may have noticed that in the example above, the constructor for `Length` objects is private. This is intentional; in general, when you are using your quantities, you should obtain them through the `At` procedure. You never need to explicitly construct a quantity---instead the `At` quantity will construct quantities as needed. This turns out to be very convenient, because there may be many quantities of a given type on a triangulation; explicitly describing how to initialize them all would be tedious and error-prone.
+
+Another intentional feature of our design is that each quantity is given by a header and source file. Why not have one massive file describing all the quantities in the geometry? We decided to spare fellow programmers the trouble of having to cut up an existing geometry file when they want to reuse code in creating new geometries. Currently, if a programmer wants to build a new geometry using some existing quantities, he needs only to write the new quantities he needs, and `#include` the appropriate header files from existing quantities. The resulting quantity object code can be bundled together using a static-library creation tool like `ar` to create a "geometry library" (like `geometry.a`) that other parts of the project can compile against to create the final executable. 
+
 == Common Mistakes ==
-A common mistake is to forget to call "addDependent" for each of the quantities your quantity references. If you observe that within a given run of your program the pipeline works correctly initially but is incorrect in later iterations, it is likely that some quantity in the pipeline has failed to call "addDependent" (and hence isn't ever being updated).
+A common mistake is to forget to call `addDependent` for each of the quantities your quantity references. If you observe that within a given run of your program the pipeline works correctly initially but is incorrect in later iterations, it is likely that some quantity in the pipeline has failed to call `addDependent` (and hence isn't ever being updated).
   
 == Fancier Techniques ==
-One detail to note is that you are not obliged to use the "Map-TriPosition" construction to identify quantity objects with positions on the triangulation. For example, suppose you wish to create a quantity `TotalVolume` that describes the total volume of the triangulation. Since there is only one `TotalVolume` for the triangulation, we could substitute the standard static TriPosition/Quantity map for a single `TotalVolume` pointer. The first time the quantity is requested, it is constructed and the pointer is directed to the new object. On later requests for the quantity, we simply return the pointer.
+One detail to note is that you are not obliged to use the "Map-TriPosition" construction to identify quantity objects with positions on the triangulation. For example, suppose you wish to create a quantity `TotalVolume` that describes the total volume of the triangulation. Since there is only one `TotalVolume` for the triangulation, we could substitute the standard mapping of tripositions to quantities with a single `TotalVolume` pointer. The first time the quantity is requested, it is constructed and the pointer is directed to the new object. On later requests for the quantity, we simply return the pointer.
 
 The data structure you select has an impact on the run-time of the `At` procedure for the quantity, and also on the ease with which your code can be understood. For example, since TriPositions are unordered tuples of simplicies, selecting these as key values for a quantity most easily parameterized by ordered pairs of vertices might be a bad choice. Instead, you could use the standard `C++` "pair" data type along with the standard `C++` map to store your quantities.
 
+In working on our geometry-code for studying the Einstein-Hilbert-Regge functional, we found that the `dot` utility ([http://www.graphviz.org/]) provided a very nice tool for documenting how quantities depend on one another. It was also very useful for debugging the geometry. Basically, `dot` provides a way to draw a nice-looking directed graph given a text file that describes the nodes and edges of the graph (these look like `"Node A" -> "Node B"`. Learning how to use `dot` is fairly easy and well worth the effort.
+
 == Limitations, Areas to Improve ==
-Discussion of the current topological assumptions our code makes.
+Currently, many of our quantities use our "simplex-labeling" code in order to determine topological information about the triangulation (this is often necessary for a quantity to find the other quantities it depends on). Consequently, any topological assumptions the "simplex-labeling" code makes about the triangulation also hold for our geometry code.
+
+In the future, it might be nice to have a tool that converts a graphical description of a "memoized-pipeline" (for example, the source code for a `dot` graph) and creates all the necessary quantity templates for coding up that geometry. This would require a fair amount of clever parsing, but it might speed up the task of writing a given geometry.
+
+A problem that has come up frequently in debugging is the need to iterate over all of the quantities of a particular type (say, to inspect their values). This is a little hard to support currently, since we don't have a specified data structure for storing quantities of a given type. If someone could devise an iterator that supplied quantities as (key, value) pairs (key being a position on the triangulation, value being a quantity), we suspect that feature would be widely used.
