@@ -49,7 +49,7 @@ The only exceptions to this rule are the labeling procedures that take a single 
 All of the procedures in this module work in constant time. This is achieved by using the fact that a given simplex can only be incident on a bounded number of lower dimensional simplices.
 
 ==Example==
-Below is a portion of code used in calculating two edge heights for a given face `f` and tetrahedron `t` (see edge_height.cpp for more details about this particular quantity). In this calculation, we use `labelTetra` to set up the topological portion of the calculation:
+Below is a portion of code used in calculating two edge heights for a given face `f` and tetrahedron `t` (see `edge_height.cpp` for more details about this particular quantity). In this calculation, we use `labelTetra` to set up the topological portion of the calculation:
 
 {{{
 // Declared elsewhere: Face& f, Tetra& t
