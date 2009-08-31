@@ -44,7 +44,7 @@ wiki2latex foo.wiki bar.wiki baz.wiki
 }}}
 which produces just `foo.tex`, `bar.tex`, and `baz.tex`.
 
-Obviously, you can modify these scripts to add functionality to the converter (say, for example, you would like the script to intelligently convert and replace just recently updated wikis).
+Obviously, you can modfy these scripts to add functionality to the converter (say, for example, you would like the script to intelligently convert and replace just recently updated wikis).
 
 == Known Issues ==
 The converter does not correctly parse wiki-links into links between TeX files. For the time being, these will have to be updated manually.
