@@ -1,8 +1,12 @@
 #summary A brief discussion of the program that converts these wiki pages to (roughly) equivalent LaTeX source code.
 
 = Manual Converter =
-Key Words: Manual, LaTeX, wiki, documentation, converting.
-Author: Joe Thomas
+
+== Key Words ==
+Manual, LaTeX, wiki, documentation, converting.
+
+==Author==
+Joe Thomas
 
 == Introduction ==
 These wiki pages serve as a rough draft of the manual for our code. One of their chief advantages is that they can be updated rapidly, and are accessible to everyone on the project. Once a piece of documentation has "matured" we would like to incorporate it into our more polished LaTeX based manual. Our manual-converter code provides a convenient way to automate this process.
