@@ -34,26 +34,13 @@ Within your wiki directory, you will see several files with the extension `.wiki
 {{{
 wiki2latex *.wiki
 }}}
-which makes `.tex` files for each wiki in the folder, or
+which makes a `.tex` file for each `.wiki` in the folder, or
 {{{
 wiki2latex foo.wiki bar.wiki baz.wiki
 }}}
 which produces just `foo.tex`, `bar.tex`, and `baz.tex`.
 
-Obviously, you can also add commands to these scripts to add functionality to the converter (say, for example, you would like the script to intelligently convert and replace just recently updated wikis).
+Obviously, you can add commands to these scripts to add functionality to the converter (say, for example, you would like the script to intelligently convert and replace just recently updated wikis).
 
 == Known Issues ==
 The converter does not correctly parse wiki-links into links between TeX files. For the time being, these will have to be updated manually.
-
- 
-
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
