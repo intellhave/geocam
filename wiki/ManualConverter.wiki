@@ -34,7 +34,7 @@ Using the manual converter is fairly simple. First, use `svn` to download a copy
 {{{
 svn checkout https://geocam.googlecode.com/svn/wiki/ geocam_wiki --username YOUR_USER_NAME
 }}}
-Within your wiki directory, you will see several files with the extension `.wiki`. Say you want to convert `foo.wiki`, `bar.wiki`, and `baz.wiki`. To do this, you can type:
+Within your wiki directory, you will see several files with the extension `.wiki`. Say you want to convert `foo.wiki`, `bar.wiki`, and `baz.wiki`. To do this, you can type (at the command line):
 {{{
 wiki2latex *.wiki
 }}}
