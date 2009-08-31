@@ -10,10 +10,12 @@ These wiki pages serve as a rough draft of the manual for our code. One of their
 == Description ==
 Many other programmers have solved the problem of converting between LaTeX source and some other text-formatting scheme. So, the main problem this package solves is: "How can I compose these existing solutions into a program that suits our needs?" We accomplish this with two converter programs, `wikify.py` and `html2latex`.
 
-Here is the brief version for input wiki source `foo.wiki`:
+Here is a brief version of what happens to convert `foo.wiki` to `foo.tex`:
   # The `wikify.py` script converts `foo.wiki` to `foo.html`.
-  # Several `sed` commands removes from `foo.html` several special `html` tags that `html2latex` cannot parse.
-  # The `html2latex` takes `foo.html` and turns it into `foo.tex`
+  # Several `sed` commands remove from `foo.html` special `html` tags that `html2latex` cannot parse.
+  # `html2latex` takes `foo.html` and turns it into `foo.tex`  
+  # Several more `sed` commands clean up `foo.tex` (these remove incorrect conversions by `html2tex`).
+  
 
 The `wikify.py` python script is a modified version of another Google Code project for converting wikis to html. (There are a few projects like this on the web, one is:[http://chrisroos.co.uk/blog/2008-07-30-converting-google-code-wiki-content-to-html])
 
