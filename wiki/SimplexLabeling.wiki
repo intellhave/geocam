@@ -1,4 +1,4 @@
-#summary How to use the procedures in the miscmath module to "label" a simplex.
+#summary How to use the procedures in the miscmath module to label a simplex.
 
 =Putting simplices in a canonical form using `miscmath.h`=
 {{{
