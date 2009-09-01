@@ -1,4 +1,4 @@
-# A brief note on the organization of the code ready to be run on a Unix/Mac platform.
+#summary A brief note on the organization of the code ready to be run on a Unix/Mac platform.
 
 =Unix Compatibility=
 
