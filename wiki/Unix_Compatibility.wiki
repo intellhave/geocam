@@ -1,4 +1,4 @@
-#A brief note on the organization of the code ready to be run on a Unix/Mac platform.
+# A brief note on the organization of the code ready to be run on a Unix/Mac platform.
 
 =Unix Compatibility=
 
@@ -18,9 +18,9 @@ Ideally, any of the code we write for this project should be easy to compile on 
 Consequently, in addition to the Windows version of our project, we also have a concurrent Unix version that is basically equivalent. This project shares no source code with the windows version (in the interest of not breaking the Windows developers work), but most of the files differ very little from their windows counterparts.
 
 The Unix version may have value to the programmer who wants...
-  * Code to run custom experiments on a unix platform (like one of the high-performance machines).
-  * To study a small subset of the project to understand how the project as a whole is organized.
-  * To see the project decomposed into individually compilable modules.
+  * code to run custom experiments on a unix platform (like one of the high-performance machines).
+  * to study a small subset of the project to understand how the project as a whole is organized.
+  * to see the project decomposed into individually compilable modules.
 
 Currently, the Unix branch of our project is stored within the directory `unix`. It consists of four directories: `topology`, `utils`, `ehr_geometry`, and `newtons_method`. The first three directories are examples of general-purpose modules:
   * `topology` implements a data structure for storing triangulations.
