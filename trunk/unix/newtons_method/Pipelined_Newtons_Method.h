@@ -4,6 +4,6 @@
 int LinearEquationsSolving(int nDim, double* pfMatr, 
 			double* pfVect, double* pfSolution);
 
-void Newtons_Method( int numsteps );
+void Newtons_Method( double stoppingcondition );
 
 #endif /* PIPELINED_NEWTONS_METHOD_H */

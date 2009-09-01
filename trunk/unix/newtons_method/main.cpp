@@ -40,7 +40,6 @@ void init_quantities( char* param_filename ){
       exit(1);
     }
     Radius::At( Triangulation::vertexTable[i] )->setValue( radius );        
-
     fprintf( stdout, " %lf", radius );
   }
   
@@ -55,19 +54,28 @@ void init_quantities( char* param_filename ){
       exit(1);
     }
     Eta::At( Triangulation::edgeTable[i] )->setValue(eta);
-
     fprintf( stdout, " %lf", eta );
   }
   
   fprintf( stdout, "\n" );
-
   fclose( paramfile );
 }
 
 
+void printRadii(){
+  int vertSize = Triangulation::vertexTable.size();
+  fprintf(stdout, "Radii: ");
+  for(int i = 1; i <= vertSize; i++) {
+    double r_val = Radius::At( Triangulation::vertexTable[i] )->getValue();        
+    fprintf( stdout, " %lf", r_val );
+  }
+  fprintf(stdout, "\n");
+}
+
+
 int main(int argc, char** argv){      
-  if( argc < 5 ){
-    fprintf( stderr, "USAGE: pnewtons [ manifold file ] [ parameter-file (radii + etas) ] [ # steps ] [ # trials ]\n");
+  if( argc < 4 ){
+    fprintf( stderr, "USAGE: newtons [ manifold file ] [ parameter-file (radii + etas) ] [ threshold ]\n");
     exit( 1 );
   }
 
@@ -82,40 +90,10 @@ int main(int argc, char** argv){
   init_quantities( parameterFile );
   fprintf( stdout, "Initialized Etas and Radii.\n");
   
-  int edgeSize = Triangulation::edgeTable.size();
-  Eta* etas[ edgeSize ];
-  for(int ii = 1; ii <= edgeSize; ii++) {
-    etas[ii-1] = Eta::At( Triangulation::edgeTable[ii] );
-  }
+  double thresh = atof( argv[3] );
 
-  int vertSize = Triangulation::vertexTable.size();
-  Radius* radii[ vertSize ];
-  for(int ii = 1; ii <= vertSize; ii++) {
-    radii[ii-1] = Radius::At( Triangulation::vertexTable[ii] );        
-  }
+  Newtons_Method( thresh );
+  printRadii();
 
-  int steps = atoi( argv[3] );
-  int trials = atoi( argv[4] );
-
-  while( trials > 0 ){
-    fprintf(stdout, "##############################################\n");
-    fprintf(stdout, "Running Trial #%d:\n\n", trials);
-    fprintf(stdout, "##############################################\n");
-
-    etas[0]->setValue(2.0/trials);
-    for(int ii = 1; ii < edgeSize; ii++){
-      etas[ii]->setValue(1.0/trials);
-    }
-    
-    radii[0]->setValue(8.0);
-    radii[1]->setValue(9.0);
-    for(int jj = 2; jj < vertSize; jj++){
-      radii[jj]->setValue(10.0);
-    }
-
-    Newtons_Method( steps );
-    trials--;
-  }
-  
   return 0;
 }

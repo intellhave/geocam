@@ -13,26 +13,28 @@ TOPO= $(BASE)/topology
 # labeling a simplex, etc.)
 UTIL= $(BASE)/util
 
-# This definition tells where the definitions for the
-# geometry pipeline can be found.
-GEOM= $(BASE)/ehr_geometry
-
 #################################################################
 #
 # Compiler options:
 #
 # For general use, use this compiler:
-CC= g++ -c -iquote$(TOPO) -iquote$(UTIL) -iquote$(GEOM)
+CC= g++ -c -iquote$(TOPO) -iquote$(UTIL)
 
 # For proviling/debugging, use this compiler:
 #CC= g++ -g -pg -fno-omit-frame-pointer -c -iquote$(TOPO) -iquote$(UTIL)
 
 #################################################################
 
-OBJS= main.o Pipelined_Newtons_Method.o 
+QUANTS= area.o curvature2D.o curvature3D.o curvature_partial.o \
+	dih_angle.o dih_angle_sum.o dualarea.o dualareasegment.o \
+	edge_curvature.o edge_height.o ehr_partial.o ehr_second_partial.o \
+	eta.o euc_angle.o face_height.o length.o partial_edge.o radius.o \
+	sectional_curvature.o totalcurvature.o totalvolume.o \
+	total_volume_partial.o triposition.o volume.o volume_partial.o \
+	volume_partial_sum.o volume_second_partial.o
 
-newtons: $(OBJS) $(IO) $(GEOM)/geometry.a $(TOPO)/topology.a $(UTIL)/util.a
-	g++ $(OBJS) $(GEOM)/geometry.a $(TOPO)/topology.a $(UTIL)/util.a -o newtons
+archive: $(QUANTS) triposition.o
+	ar rcs geometry.a $(QUANTS) triposition.o
 
 ##################################################################
 #
@@ -43,9 +45,6 @@ newtons: $(OBJS) $(IO) $(GEOM)/geometry.a $(TOPO)/topology.a $(UTIL)/util.a
 %.o: %.cpp
 	$(CC) $<
 
-#####################################################################
-
-log_clean:
-	/bin/rm *.log
+##################################################################
 clean:
-	/bin/rm -rf *~ *.o *.a newtons
+	/bin/rm -rf *~ *.o *.a

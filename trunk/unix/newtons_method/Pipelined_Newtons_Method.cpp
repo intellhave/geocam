@@ -5,6 +5,7 @@
 #include <cmath>
 #include <ctime>
 #include <cstdio>
+#include <cerrno>
 
 #include "triangulation.h"
 #include "Pipelined_Newtons_Method.h"
@@ -19,9 +20,9 @@
 #include "total_volume_partial.h"
 /*****************************************/
 
-static const double PI = 3.141592653589793238;
+double EHR();
 
-void Newtons_Method( int numsteps ) {
+void Newtons_Method( double stopping_threshold ) {
   int V = Triangulation::vertexTable.size();
 
   Curvature3D* Curvatures[ V ];
@@ -61,28 +62,11 @@ void Newtons_Method( int numsteps ) {
   }
 
   /*** Run Newton's Method ***/
-
-  /* Ensure we do at least one iteration. */
-  double maxDelta, old, change;
-
   TotalVolume* totVol = TotalVolume::At();
-  double init_totVol = totVol->getValue();
-
-  int stepnum = 0;
-  while(stepnum < numsteps){ 
-    /**********************QUANTITY LOGGING HERE*****************/
-    fprintf( stdout, "\nStep #%d:\n", stepnum++);
-    for(int ii = 0; ii < V; ii++){
-      double radius = Radii[ii]->getValue(); 
-      double curv = Curvatures[ii]->getValue();
-      double v_i = TVPs[ii]->getValue();
-
-      printf("vertex %3d: radius = %f\t  K_i / V_i = %.10f\n", ii, radius, curv / v_i); 
-    }            
-    fprintf( stdout, "Total volume: %lf\n", totVol->getValue() ); 
-    
-    /**********************END OF LOGGING************************/
-
+  double init_totVol = 4.71404520791;
+  
+  bool converged = false;
+  while(!converged && !errno){ 
     for(int ii = 0; ii < V; ii++){ 
       log_radii[ii] = log( Radii[ii]->getValue() );
     }
@@ -96,61 +80,47 @@ void Newtons_Method( int numsteps ) {
     }
 
     // Likewise, obtain a copy of the current graident.
-    for(int i = 0 ; i < V; i++)
-      negative_gradient[i] = -1.0 * gradientGenerator[i]->getValue();
-
-    /**********************QUANTITY LOGGING HERE*************************/
-
-    fprintf( stdout, "\nGRADIENT:\n" );
-    for(int ii = 0; ii < V; ii++)
-      fprintf(stdout, " %lf", negative_gradient[ii]);
-    fprintf(stdout, "\n");
-
-
-    fprintf( stdout, "\nHESSIAN:\n" );
-    for(int ii = 0; ii < V; ii++) {
-      for(int jj = 0; jj < V; jj++){
-	fprintf(stdout, "%lf ", hessian[ii][jj]);
-      }
-      fprintf( stdout, "\n" );
-    }
-
-    /**********************END OF LOGGING********************************/
+    for(int ii = 0 ; ii < V; ii++)
+      negative_gradient[ii] = -1.0 * gradientGenerator[ii]->getValue();
+   
     LinearEquationsSolving( V, (double*) hessian, negative_gradient, soln);
 
-    /*
-    fprintf( stdout, "\nHESSIAN, POST-SOLVE:\n" );
-    for(int ii = 0; ii < V; ii++) {
-      for(int jj = 0; jj < V; jj++){
-	fprintf(stdout, "%lf ", hessian[ii][jj]);
-      }
-      fprintf( stdout, "\n" );
-    }
-    */
-    maxDelta = 0.0;
+    //maxDelta = 0.0;
     for(int ii = 0; ii < V; ii++){
       log_radii[ii] += soln[ii];
+      
       Radii[ii]->setValue( exp( log_radii[ii] ) );
     }
 
     double radius_scaling_factor = pow( init_totVol/totVol->getValue(), 1.0/3.0 );
-
+ 
     for(int ii = 0; ii < V; ii++){
       Radii[ii]->setValue( radius_scaling_factor * Radii[ii]->getValue() );
+    }
+      
+    converged = true;
+    double K_prev = Curvatures[0]->getValue();
+    double V_prev = TVPs[0]->getValue();
+    double K_curr, V_curr;
+
+    for(int ii = 1; (ii < V) && converged; ii++){
+      K_curr = Curvatures[ii]->getValue();
+      V_curr = TVPs[ii]->getValue();
+      converged = converged && (abs(K_curr/V_curr - K_prev/V_prev) < stopping_threshold);
+      K_prev = K_curr;
+      V_prev = V_curr;
     }
   }
 }
 
-int LinearEquationsSolving(int nDim, double* pfMatr, double* pfVect, double* pfSolution)
-{
+int LinearEquationsSolving(int nDim, double* pfMatr, double* pfVect, double* pfSolution){
   double fMaxElem;
   double fAcc;
 
   int i , j, k, m;
 
-  for(k=0; k<(nDim-1); k++) // base row of matrix
-  {
-    // search of line with max element
+
+  for(k=0; k<(nDim-1); k++){
     fMaxElem = fabs( pfMatr[k*nDim + k] );
     m = k;
     for(i=k+1; i<nDim; i++)
@@ -175,7 +145,6 @@ int LinearEquationsSolving(int nDim, double* pfMatr, double* pfVect, double* pfS
       pfVect[k] = pfVect[m];
       pfVect[m] = fAcc;
     }
-
     if( pfMatr[k*nDim + k] == 0.) return 1; // needs improvement !!!
 
     // triangulation of matrix with coefficients
@@ -197,7 +166,11 @@ int LinearEquationsSolving(int nDim, double* pfMatr, double* pfVect, double* pfS
     {
       pfSolution[k] -= (pfMatr[k*nDim + i]*pfSolution[i]);
     }
-    pfSolution[k] = pfSolution[k] / pfMatr[k*nDim + k];
+    if(fabs(pfMatr[k*nDim + k]) < 0.000000001) {
+       pfSolution[k] = 0;
+    } else {
+      pfSolution[k] = pfSolution[k] / pfMatr[k*nDim + k];
+    }
   }
 
   return 0;
