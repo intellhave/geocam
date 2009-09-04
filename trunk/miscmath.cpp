@@ -210,6 +210,7 @@ double angle(double len1, double len2, double len3) {
      return acos((len1*len1 + len2*len2 - len3*len3)/ (2*len1*len2));  
 }
 
+/***************BEGINING OF EDGE LABELING CODE*****************/
 StdEdge labelEdge( Edge& e, Vertex& v ){
   StdEdge retval;
 
@@ -224,6 +225,10 @@ StdEdge labelEdge( Edge& e, Vertex& v ){
   return retval;
 }
 
+// This is a helper procedure for the "labelFace" procedures.
+// The input StdFace record has correctly labeled vertices.
+// From these, fixFaceEdges derives the correct labeling of
+// the edges of the input Face f
 void fixFaceEdges( Face& f, StdFace& sf ){
  vector<int>* localEdges = f.getLocalEdges();
   for(int ii = 0; ii < localEdges->size(); ii++ ){
@@ -287,7 +292,10 @@ StdFace labelFace(Face& f, Vertex& v){
 }
 
 /*****************************************************/
-
+// As in fixFaceEdges, this procedure takes in a tetrahedron
+// and a StdTetra struct with correctly labeled vertices.
+// From this information, it derives the correct labeling of
+// the edges of the tetrahedron.
 void fixTetraEdges( Tetra& t, StdTetra& st ){
   vector<int>* localEdges = t.getLocalEdges();
   for( int ii = 0; ii < localEdges->size(); ii++ ){
@@ -316,6 +324,10 @@ void fixTetraEdges( Tetra& t, StdTetra& st ){
   }  
 }
 
+// Similar to fixTetraEdges, this procedure takes in a tetrahedron
+// and a StdTetra struct with correctly labeled edges.
+// From this information, it derives the correct labeling of
+// the faces of the tetrahedron.
 void fixTetraFaces( Tetra& t, StdTetra& st ){
   vector<int>* localFaces = t.getLocalFaces();
   for( int ii = 0; ii < localFaces->size(); ii++ ){    

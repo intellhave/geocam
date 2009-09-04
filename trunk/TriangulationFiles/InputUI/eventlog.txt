@@ -1,0 +1,3 @@
+TriangulationFiles/NewtonsMethod/PentachoronInput3.txt
+TriangulationFiles/NewtonsMethod/PentachoronInput2.txt
+TriangulationFiles/NewtonsMethod/PentachoronInput.txt

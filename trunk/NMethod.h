@@ -1,46 +1,88 @@
+/**************************************************************
+Class: Generalized Newton's Method
+Author: Alex Henniges
+Version: August 31, 2009
+***************************************************************
+This file defines the NMethod class, which acts as a generalized
+Newton's Method where one provides a functional and optionally a
+gradient and/or hessian of the functional. The purpose of Newton's
+Method is to optimize the given functional.
+**************************************************************/
+
 #ifndef NMETHOD_H_
 #define NMETHOD_H_
 
+/*** HEADERS ***/
 #include <stdlib.h>
 #include <stdio.h>
 
-#define NMETHOD_MIN 1
-#define NMETHOD_MAX 2
+/*** DEFINITIONS ***/
+#define NMETHOD_MIN 1 // Define the flag for finding a minimum
+#define NMETHOD_MAX 2 // Define the flag for finding a maximum
 class NewtonsMethod;
 
+// Description of what a functional should look like.
+// Math - F : R^n -> R
+// C++  - F(arr[n]) : double
 typedef double (*orig_function)(double vars[]);
+
+// A gradient takes in an array of doubles that represents the
+// base point for the gradient. The second array of doubles is where
+// the gradient vector will be placed.
 typedef void (*gradient)(double vars[], double sol[]);
+
+// A hessian takes in an array of doubles that represents the
+// base point for the hessian. The n x n matrix of doubles is where
+// the hessian matrix will be placed.
 typedef void (*hessian)(double vars[], double *sol[]);
+
+// This defined a function that will print out results. The FILE* 
+// parameter is the file stream that the data will be printed to.
+// It may be useful to learn about the fopen( ) function. Also,
+// stdout is a pre-defined FILE* that indicates printing to the console.
 typedef void (*printer)(FILE* out);
 
+
+/*** CLASS DEFINITION ***/
 class NewtonsMethod {
-   orig_function f;
-   gradient df;
-   hessian d2f;
-   printer printFunc;
-   int nDim;
-   double *grad;
-   double **hess;
+   /*** PRIVATE INFO ***/
+   orig_function f; // instance variable for functional
+   gradient df; // instance variable for gradient
+   hessian d2f; // instance variable for hessian
+   printer printFunc; // instance variable for printing function
+   int nDim; // The dimension of our space ( ex. R^n)
+   double *grad; // Used to hold the gradient vector
+   double **hess; // Used to hold the hessian vector
    
-   // PARAMETERS
+   // The following are values that are "soft-coded" into NMethod to create
+   // consistency in the calculations. They have default values but can all
+   // be set by the user.
+   
+   // The value used for approximating derivatives.
    double delta;
-   double stepRatio;
+   // The value used for advancing along the gradient, indicates the amount
+   // to move in that direction.
+   double stepRatio; 
+   // This value is used only as a safety to end a step early if the length
+   // of the gradient is very nearly 0.0.
    double gradLenCond;
    
+   // This function solves a system of linear equations given the hessian
+   // and gradient to determine the direction and magnitude of the next step.
    int LinearEquationsSolver(double *matr[], double vect[], double sol[]);
-   
+   // This function simply changes the sign of every entry of the gradient vector.
    void negateArray(double arr[]);
-
-   
+   // This function returns the length of a given gradient vector.
    double getGradientLength(double gradient[]);
    
+   // This function sets the above parameters to "hard-coded" defaults.
    void setDefaults() {
         delta = 0.00001;
-        stepRatio = 1.0;
-//        stepRatio = 1.0 / 10.0;
+        stepRatio = 1.0 / 10.0;
         gradLenCond = 0.0000000001;
    }
    
+   /*** PUBLIC INFO ***/
    public:
           
      NewtonsMethod(orig_function func, int size) {

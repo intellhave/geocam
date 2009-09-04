@@ -72,12 +72,21 @@ Point rotateVector(Point, double);
 Point findPoint(Line, double, double);
 
 double angle(double, double, double);
+
+// This structure describes a labeled edge. 
+// When properly initialized, v1 and v2 are indices
+// to the vertices at the ends of the edge, these
+// can be fed into the Triangulation::VertexTable
+// data structure to retrieve the actual vertex objects.
 struct stand_psn_edge{
   int v1;
   int v2;
 };
 typedef struct stand_psn_edge StdEdge;
 
+// Similar to the StdEdge struct, this struct describes
+// a labelled face. when initialized, v1...v3 describe
+// the face's vertices, and e12...e23 describe its edges.
 struct stand_psn_face{
   int v1;
   int v2;
@@ -89,6 +98,10 @@ struct stand_psn_face{
 };
 typedef struct stand_psn_face StdFace;
 
+// This structure describes a labeled tetrahedron. Once
+// initialized, the v entries describe the tetrahedron's
+// vertices, the e entries its edges, and the f entries
+// its faces.
 struct stand_psn_tetra{
   int v1;
   int v2;
@@ -109,14 +122,29 @@ struct stand_psn_tetra{
 };
 typedef struct stand_psn_tetra StdTetra;
 
+// On the project's wiki, we have an extensive
+// discussion of the semantics of "labeling" a
+// vertex.
+
+// Label edge e with respect to vertex v.
 StdEdge labelEdge(Edge& e, Vertex& v);
 
+// Label face f with respect to vertex v.
 StdFace labelFace(Face& f, Vertex& v);
+
+// Label face f with respect to edge e.
 StdFace labelFace(Face& f, Edge& e);
 
+// Label tetrahedron t with respect to edge e.
 StdTetra labelTetra(Tetra& t, Edge& e);
+
+// Label tetrahedron t with respect to vertex v.
 StdTetra labelTetra(Tetra& t, Vertex& v);
+
+// Label tetrahedron t with respect to face f.
 StdTetra labelTetra(Tetra& t, Face& f);
+
+// Label tetrahedron t in a consistent way.
 StdTetra labelTetra(Tetra& t);
 
 #endif /* MISCMATH_H_ */

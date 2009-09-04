@@ -20,12 +20,14 @@
 /**** Quantities we need to examine ****/
 #include "total_volume_partial.h"
 /*****************************************/
+void printFunc(FILE* out);
 
 double EHR();
 
 //#define PI = 3.141592653589793238;
 
-void Newtons_Method( double stopping_threshold ) {
+void Newtons_Method( double stopping_threshold, bool printdata ) {
+     
      
 //  double matr[5][5] = {{1, 2, 3, 4, 6}, {2, 4, 1, 3, 5}, {5, 3, 1, 2, 4}, 
 //                       {2, 2, 4, 6, 7}, {8, 3, 1, 2, 4}};
@@ -76,7 +78,10 @@ void Newtons_Method( double stopping_threshold ) {
   double init_totVol = 4.71404520791;
   
   bool converged = false;
-  while(!converged && !errno){ 
+  
+  FILE* results = fopen("TriangulationFiles/NM_results.txt", "w"); 
+  while(!converged && !errno){
+
     for(int ii = 0; ii < V; ii++){ 
       log_radii[ii] = log( Radii[ii]->getValue() );
     }
@@ -142,10 +147,9 @@ void Newtons_Method( double stopping_threshold ) {
 //      printf("K_%d = %f, V_%d = %f, K / V = %f\n", ii, K_curr, ii, V_curr, K_prev/V_prev);
       converged = converged && (abs(K_curr/V_curr - K_prev/V_prev) < stopping_threshold);
       K_prev = K_curr;
-      V_prev = V_curr;
-      
+      V_prev = V_curr;      
     }
-    
+
 //    for(int ii = 1; (ii < V) && converged; ii++){
 //      K_curr = Curvatures[ii]->getValue();
 //      V_curr = TVPs[ii]->getValue();
@@ -157,7 +161,11 @@ void Newtons_Method( double stopping_threshold ) {
 //                    printf("length = %.12f\n",Length::valueAt(eit->second));
 //                    }
     //system("PAUSE");
-    /***** FINISHED CHECKING STOPPING CONDITION *****/            
+    /***** FINISHED CHECKING STOPPING CONDITION *****/ 
+    if (printdata) {
+       printFunc(results);
+    }
+              
   }
 }
 

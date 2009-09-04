@@ -1,7 +1,8 @@
 #ifndef EDGECURVATURE_H_
 #define EDGECURVATURE_H_
 
-#include <cmath>
+//#include <cmath>
+#include <math.h>
 #include <map>
 #include <new>
 using namespace std;

@@ -1,0 +1,54 @@
+-------------------
+
+Radius 1 = 1.#QNAN00000
+Radius 2 = 1.#QNAN00000
+Radius 3 = 1.#QNAN00000
+Radius 4 = 1.#QNAN00000
+Radius 5 = 1.#QNAN00000
+Eta 1 = 1.#QNAN00000
+Eta 2 = 1.#QNAN00000
+Eta 3 = 1.#QNAN00000
+Eta 4 = 1.#QNAN00000
+Eta 5 = 1.#QNAN00000
+Eta 6 = 1.#QNAN00000
+Eta 7 = 1.#QNAN00000
+Eta 8 = 1.#QNAN00000
+Eta 9 = 1.#QNAN00000
+Eta 10 = 1.#QNAN00000
+Length 1 = 1.#QNAN00000
+Length 2 = 1.#QNAN00000
+Length 3 = 1.#QNAN00000
+Length 4 = 1.#QNAN00000
+Length 5 = 1.#QNAN00000
+Length 6 = 1.#QNAN00000
+Length 7 = 1.#QNAN00000
+Length 8 = 1.#QNAN00000
+Length 9 = 1.#QNAN00000
+Length 10 = 1.#QNAN00000
+Edge Curvature 1 = 1.#QNAN00000
+Edge Curvature 2 = 1.#QNAN00000
+Edge Curvature 3 = 1.#QNAN00000
+Edge Curvature 4 = 1.#QNAN00000
+Edge Curvature 5 = 1.#QNAN00000
+Edge Curvature 6 = 1.#QNAN00000
+Edge Curvature 7 = 1.#QNAN00000
+Edge Curvature 8 = 1.#QNAN00000
+Edge Curvature 9 = 1.#QNAN00000
+Edge Curvature 10 = 1.#QNAN00000
+Einstein Ratio 1 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 2 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 3 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 4 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 5 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 6 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 7 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 8 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 9 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+Einstein Ratio 10 = 1.#QNAN00000 	 Edge Volume = 1.#QNAN00000
+CSC Ratio 1 = 1.#QNAN00000
+CSC Ratio 2 = 1.#QNAN00000
+CSC Ratio 3 = 1.#QNAN00000
+CSC Ratio 4 = 1.#QNAN00000
+CSC Ratio 5 = 1.#QNAN00000
+EHR: 1.#QNAN00000
+=================================================

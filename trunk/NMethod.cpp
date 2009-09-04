@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <math.h>
 
+
+
+
 void NewtonsMethod::optimize(double initial[], double soln[]) {
    for(int i = 0; i < nDim; i++) {
      soln[i] = initial[i];
@@ -93,7 +96,8 @@ double NewtonsMethod::step(double x_n[], int extremum) {
 
    double curVal; 
    double nextVal = f(x_n);
-
+   
+   printf("Step ratio = %f\n", stepRatio);
    int maxNum = (int) floor( 1 / stepRatio );
    printf("MaxNum = %d\n", maxNum);
   // printArray(x_n, nDim);
@@ -116,7 +120,7 @@ double NewtonsMethod::step(double x_n[], int extremum) {
                  nextVal = f(x_n);
                }
                if(k > 15) {
-                    //pause("Wrong Direction! Press enter to continue...");
+                    pause("Wrong Direction! Press enter to continue...");
                     return -1;
                }
                return gradLen;
@@ -147,7 +151,7 @@ double NewtonsMethod::step(double x_n[], int extremum) {
                }
                printf("k = %d\n", k);
                if(k > 15) {
-                    //pause("Wrong Direction! Press enter to continue...");
+                    pause("Wrong Direction! Press enter to continue...");
                     return -1;
                }
                return gradLen;
@@ -235,17 +239,18 @@ void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
 
 
 void NewtonsMethod::printInfo(FILE* out) {
-   for(int i = 0; i < nDim; i++) {
-      fprintf(out, "grad[%d] = %.10f\n", i, grad[i]);
-   }     
+ //  for(int i = 0; i < nDim; i++) {
+//      fprintf(out, "grad[%d] = %.10f\n", i, grad[i]);
+//   }  
 
-   fprintf(out, "\nHessian:\n");
-   for(int i = 0; i < nDim; i++) {
-      for(int k = 0; k < nDim; k++) {
-         fprintf(out, "% 3.5f", hess[i][k]);
-      }
-      fprintf(out, "\n");
-   }
+
+//   fprintf(out, "\nHessian:\n");
+//   for(int i = 0; i < nDim; i++) {
+//      for(int k = 0; k < nDim; k++) {
+//         fprintf(out, "% 3.5f", hess[i][k]);
+//      }
+//      fprintf(out, "\n");
+//   }
    fprintf(out, "-------------------\n");
    
    if(printFunc != NULL) {
@@ -349,5 +354,8 @@ double NewtonsMethod::getGradientLength(double gradient[]) {
    for(int i = 0; i < nDim; i++) {
       sum += gradient[i] * gradient[i];
    }
-   return sqrt(sum);
+   double temp = sqrt(sum);
+   printf("Gradient Length = %.10f\n", temp);
+   return temp;
+    
 }

@@ -1,16 +1,21 @@
 #include "utilities.h"
 #include <stdio.h>
 #include <stdarg.h>
+#include <iostream>
+#include <fstream>
 #include <map>
 #include "triangulation.h"
 #include "Volume.h"
+
+using namespace std;
+
 void pause() {
   pause("PAUSE...");
 }
 void pause(char* format, ...) {
   va_list args;
   va_start(args, format);
-  vprintf(format, args); scanf("%*c", NULL); fflush(stdin); // PAUSE
+  fflush(stdin); vprintf(format, args); cin.get(); // PAUSE
   va_end(args);
 }
 

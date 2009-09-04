@@ -1,7 +1,7 @@
 [Project]
 FileName=TriangulationGUI.dev
 Name=TriangulationGUI
-UnitCount=70
+UnitCount=63
 Type=0
 Ver=1
 ObjFiles=
@@ -527,26 +527,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit53]
-FileName=..\Geometry\2DCurvature.cpp
-CompileCpp=1
-Folder=Geometry
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit54]
-FileName=..\Geometry\3DCurvature.cpp
-CompileCpp=1
-Folder=Geometry
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit55]
 FileName=..\Geometry\area.cpp
 CompileCpp=1
 Folder=Geometry
@@ -556,7 +536,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit56]
+[Unit54]
 FileName=..\Geometry\dih_angle.cpp
 CompileCpp=1
 Folder=Geometry
@@ -566,8 +546,28 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+[Unit55]
+FileName=..\Geometry\euc_angle.cpp
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit56]
+FileName=..\Geometry\Geometry.h
+CompileCpp=1
+Folder=Geometry
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
 [Unit57]
-FileName=..\Geometry\EdgeCurvature.cpp
+FileName=..\Geometry\geoquant.h
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -577,7 +577,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit59]
-FileName=..\Geometry\Geometry.cpp
+FileName=..\Geometry\length.cpp
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -627,7 +627,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit60]
-FileName=..\Geometry\Geometry.h
+FileName=..\Geometry\radius.cpp
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -637,7 +637,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit61]
-FileName=..\Geometry\geoquant.h
+FileName=..\Geometry\triposition.cpp
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -647,7 +647,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit62]
-FileName=..\Geometry\GeoQuants.h
+FileName=..\Geometry\triposition.h
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -657,9 +657,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit63]
-FileName=..\Geometry\hyp_angle.cpp
+FileName=..\Geometry\eta.cpp
 CompileCpp=1
-Folder=Geometry
+Folder=TriangulationGUI
 Compile=1
 Link=1
 Priority=1000
@@ -737,7 +737,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit58]
-FileName=..\Geometry\euc_angle.cpp
+FileName=..\Geometry\GeoQuants.h
 CompileCpp=1
 Folder=Geometry
 Compile=1
