@@ -1,7 +1,7 @@
 [Project]
 FileName=NewtonsMethodForPoets.dev
 Name=NewtonsMethodForPoets
-UnitCount=91
+UnitCount=90
 Type=1
 Ver=1
 ObjFiles=
@@ -469,18 +469,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit45]
-FileName=Geometry\geometry.h
-CompileCpp=1
-Folder=Geometry
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit46]
-FileName=Geometry\geoquant.h
+FileName=Geometry\length.cpp
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -490,16 +480,6 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit48]
-FileName=Geometry\length.h
-CompileCpp=1
-Folder=Geometry
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit49]
 FileName=Geometry\partial_edge.cpp
 CompileCpp=1
 Folder=Geometry
@@ -509,8 +489,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit51]
-FileName=Geometry\radius.cpp
+[Unit49]
+FileName=Geometry\partial_edge.h
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -519,7 +499,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit52]
+[Unit51]
 FileName=Geometry\radius.h
 CompileCpp=1
 Folder=Geometry
@@ -529,7 +509,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit53]
+[Unit52]
 FileName=Geometry\sectional_curvature.cpp
 CompileCpp=1
 Folder=Geometry
@@ -539,7 +519,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit54]
+[Unit53]
 FileName=Geometry\sectional_curvature.h
 CompileCpp=1
 Folder=Geometry
@@ -549,7 +529,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit55]
+[Unit54]
 FileName=Geometry\total_volume_partial.cpp
 CompileCpp=1
 Folder=Geometry
@@ -559,7 +539,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit56]
+[Unit55]
 FileName=Geometry\total_volume_partial.h
 CompileCpp=1
 Folder=Geometry
@@ -569,7 +549,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit57]
+[Unit56]
 FileName=Geometry\totalcurvature.cpp
 CompileCpp=1
 Folder=Geometry
@@ -579,7 +559,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit58]
+[Unit57]
 FileName=Geometry\totalcurvature.h
 CompileCpp=1
 Folder=Geometry
@@ -589,7 +569,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit59]
+[Unit58]
 FileName=Geometry\totalvolume.cpp
 CompileCpp=1
 Folder=Geometry
@@ -599,7 +579,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit60]
+[Unit59]
 FileName=Geometry\totalvolume.h
 CompileCpp=1
 Folder=Geometry
@@ -609,7 +589,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit61]
+[Unit60]
 FileName=Geometry\triposition.cpp
 CompileCpp=1
 Folder=Geometry
@@ -619,7 +599,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit62]
+[Unit61]
 FileName=Geometry\triposition.h
 CompileCpp=1
 Folder=Geometry
@@ -629,7 +609,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit63]
+[Unit62]
 FileName=Geometry\volume.cpp
 CompileCpp=1
 Folder=Geometry
@@ -639,7 +619,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit64]
+[Unit63]
 FileName=Geometry\volume.h
 CompileCpp=1
 Folder=Geometry
@@ -649,7 +629,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit65]
+[Unit64]
 FileName=Geometry\volume_length_partial.cpp
 CompileCpp=1
 Folder=Geometry
@@ -659,7 +639,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit66]
+[Unit65]
 FileName=Geometry\volume_length_partial.h
 CompileCpp=1
 Folder=Geometry
@@ -669,7 +649,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit67]
+[Unit66]
 FileName=Geometry\volume_length_tetra_partial.cpp
 CompileCpp=1
 Folder=Geometry
@@ -679,7 +659,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit68]
+[Unit67]
 FileName=Geometry\volume_length_tetra_partial.h
 CompileCpp=1
 Folder=Geometry
@@ -689,7 +669,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit69]
+[Unit68]
 FileName=Geometry\volume_partial.cpp
 CompileCpp=1
 Folder=Geometry
@@ -699,7 +679,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit70]
+[Unit69]
 FileName=Geometry\volume_partial.h
 CompileCpp=1
 Folder=Geometry
@@ -709,7 +689,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit71]
+[Unit70]
 FileName=Geometry\volume_partial_sum.cpp
 CompileCpp=1
 Folder=Geometry
@@ -719,7 +699,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit72]
+[Unit71]
 FileName=Geometry\volume_partial_sum.h
 CompileCpp=1
 Folder=Geometry
@@ -729,7 +709,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit73]
+[Unit72]
 FileName=Geometry\volume_second_partial.cpp
 CompileCpp=1
 Folder=Geometry
@@ -739,7 +719,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit74]
+[Unit73]
 FileName=Triangulation\triangulation.cpp
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -749,7 +729,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit75]
+[Unit74]
 FileName=Triangulation\triangulation.h
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -759,7 +739,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit76]
+[Unit75]
 FileName=Triangulation\triangulationInputOutput.cpp
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -769,7 +749,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit77]
+[Unit76]
 FileName=Triangulation\triangulationInputOutput.h
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -779,8 +759,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit79]
-FileName=3DTriangulation\3DInputOutput.h
+[Unit77]
+FileName=3DTriangulation\3DInputOutput.cpp
 CompileCpp=1
 Folder=NewtonsMethodForPoets
 Compile=1
@@ -789,7 +769,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit80]
+[Unit79]
 FileName=Simplex\vertex.h
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -799,7 +779,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit81]
+[Unit80]
 FileName=Simplex\edge.cpp
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -809,7 +789,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit82]
+[Unit81]
 FileName=Simplex\edge.h
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -819,7 +799,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit83]
+[Unit82]
 FileName=Simplex\face.cpp
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -829,7 +809,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit84]
+[Unit83]
 FileName=Simplex\face.h
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -839,7 +819,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit85]
+[Unit84]
 FileName=Simplex\simplex.cpp
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -849,7 +829,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit86]
+[Unit85]
 FileName=Simplex\simplex.h
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -859,7 +839,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit87]
+[Unit86]
 FileName=Simplex\tetra.cpp
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -869,7 +849,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit88]
+[Unit87]
 FileName=Simplex\tetra.h
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -879,7 +859,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit89]
+[Unit88]
 FileName=Simplex\vertex.cpp
 CompileCpp=1
 Folder=NewtonsMethodForPoets
@@ -889,8 +869,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit90]
+[Unit89]
 FileName=textRuns.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit90]
+FileName=textRuns.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -948,7 +938,7 @@ ProductVersion=
 AutoIncBuildNr=0
 
 [Unit47]
-FileName=Geometry\length.cpp
+FileName=Geometry\length.h
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -958,7 +948,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit50]
-FileName=Geometry\partial_edge.h
+FileName=Geometry\radius.cpp
 CompileCpp=1
 Folder=Geometry
 Compile=1
@@ -968,9 +958,19 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit78]
-FileName=3DTriangulation\3DInputOutput.cpp
+FileName=3DTriangulation\3DInputOutput.h
 CompileCpp=1
 Folder=NewtonsMethodForPoets
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit45]
+FileName=Geometry\geoquant.h
+CompileCpp=1
+Folder=Geometry
 Compile=1
 Link=1
 Priority=1000

@@ -14,7 +14,7 @@
 #include "volume_length_tetra_partial.h"
 
 void runPipelinedNewtonsMethod(char* outputFile) {
-     Newtons_Method(0.00001, true);
+     Newtons_Method(0.00001, outputFile);
 }
 
 
@@ -98,7 +98,7 @@ double saddleFinder(double etas[]) {
      Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
    }
    
-   Newtons_Method(0.00001, false);
+   Newtons_Method(0.00001);
    double value = EHR();
  
    return value;

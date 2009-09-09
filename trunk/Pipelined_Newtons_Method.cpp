@@ -26,7 +26,11 @@ double EHR();
 
 //#define PI = 3.141592653589793238;
 
-void Newtons_Method( double stopping_threshold, bool printdata ) {
+void Newtons_Method(double stopping_threshold) {
+     Newtons_Method(stopping_threshold, NULL);
+}
+
+void Newtons_Method( double stopping_threshold, char* filename ) {
      
      
 //  double matr[5][5] = {{1, 2, 3, 4, 6}, {2, 4, 1, 3, 5}, {5, 3, 1, 2, 4}, 
@@ -36,7 +40,7 @@ void Newtons_Method( double stopping_threshold, bool printdata ) {
 //  LinearEquationsSolving(5, (double*) matr, vect, solution);  
 //  pause();
   int V = Triangulation::vertexTable.size();
-
+  FILE* results;
   Curvature3D* Curvatures[ V ];
   Radius* Radii[ V ];
   TotalVolumePartial* TVPs[ V ];
@@ -79,7 +83,9 @@ void Newtons_Method( double stopping_threshold, bool printdata ) {
   
   bool converged = false;
   
-  FILE* results = fopen("TriangulationFiles/NM_results.txt", "w"); 
+  if(filename != NULL) {
+    results = fopen(filename, "w"); 
+  }
   while(!converged && !errno){
 
     for(int ii = 0; ii < V; ii++){ 
@@ -162,10 +168,13 @@ void Newtons_Method( double stopping_threshold, bool printdata ) {
 //                    }
     //system("PAUSE");
     /***** FINISHED CHECKING STOPPING CONDITION *****/ 
-    if (printdata) {
+    if (filename != NULL) {
        printFunc(results);
     }
               
+  }
+  if(filename != NULL) {
+    fclose(results);
   }
 }
 
