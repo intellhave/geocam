@@ -3,22 +3,19 @@
 class FlipAlgorithm {
 
     map<int, Edge>::iterator currEdge;
+    int pausesON;
 
     public:
     FlipAlgorithm(void);
     ~FlipAlgorithm(void);
 
-    int findNextFlip(void);
+    int flipConvexHinges(void);
+    
+    int flipOneNonConvexHinge(void);
 
     void performFlip(void);
 
-    //void undoFlip(void);
-
     int currentEdgeIndex(void);
-    
-    bool step(void);
-    
-    void reset(void);
 
     void runFlipAlgorithm(void);
 };

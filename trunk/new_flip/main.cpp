@@ -1,7 +1,8 @@
 #include "new_flip/hinge_flip.h"
 #include "new_flip/TriangulationDisplay.h"
 #include "delaunay.h"
-#include "FlipAlgorithm.h"
+#include "new_flip/FlipAlgorithm.h"
+#include "new_flip/Function.h"
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -16,6 +17,7 @@ float _hori = -5.0f;
 float _vert = -5.0f;
 TriangulationDisplay *_triDisp;
 FlipAlgorithm *_flipAlg;
+Function *_vertexF;
 
 float _angle = 30.0f;
 float _camera_angle = 0.0f;
@@ -35,19 +37,22 @@ void handleKeypress(unsigned char key, int x, int y) {
             _dist+=.5;
             break;
         case 97: // a
-	       _hori -= .5;
+	       //_hori -= .5;
 	       break;
         case 100: // d
-            _hori += .5;
+            //_hori += .5;
+            cout << (isWeightedDelaunay(_triDisp->getCurrentEdge()) ? "Edge is weighted Delaunay\n" : "Edge is NOT weighted Delaunay\n");
             break;
         case 119: // w
-            _vert += .5;
+            //_vert += .5;
             break;
         case 115: // s
-            _vert -= .5;
+            //_vert -= .5;
             break;
         case 32: //space bar
+            printf("\n%lf\n\n", dirichletEnergy(*_vertexF));
             _triDisp->flipCurrentEdge();
+            printf("\n%lf\n\n", dirichletEnergy(*_vertexF));
             break;
         case 104: //h
             //_triDisp->previousEdge();
@@ -72,16 +77,18 @@ void handleKeypress(unsigned char key, int x, int y) {
                     _triDisp->voronoi = 1;
                     break;
                 case 1:
-                    _triDisp->voronoi = 2;
-                    break;
-                case 2:
                     _triDisp->voronoi = 0;
                     break;
+                //case 2:
+                //    _triDisp->voronoi = 0;
+                //    break;
             }
             break;
         case 110: //n
-            _flipAlg->step();
-            _triDisp->setCurrentEdge(_flipAlg->currentEdgeIndex());
+            _flipAlg->runFlipAlgorithm();
+            break;
+        case 't':
+            cout << isWeightedDelaunay();
             break;
         default:
             somethingHappened = false;
@@ -164,17 +171,40 @@ void drawScene() {
     if (_triDisp->voronoi == 1) {
         vector<Line> ds;
         ds = _triDisp->getDuals();
+        glBegin(GL_LINES);
+        glColor3d(0, 255, 0);
         for(int i = 0; i < ds.size(); i++) {
-            glBegin(GL_LINE_STRIP);
-            glColor3d(0, 255, 0);
             glVertex3d(ds[i].getInitialX(),ds[i].getInitialY(),0);
             glVertex3d(ds[i].getEndingX(),ds[i].getEndingY(),0);
             iter++;
-            glEnd();
         }
-    } else if (_triDisp->voronoi == 2) {
-
-    }
+        glEnd();
+    }//TODO: need to figure out a good way to display only the duals of the current hinge
+    /*else if (_triDisp->voronoi == 2) {
+        Edge e = _triDisp->getCurrentEdge();
+        int numFaces = (*(e.getLocalFaces())).size();
+        int f0 = (*(e.getLocalFaces()))[0];
+        vector<int> edges;
+        vector<int>::iterator eit;
+        for (eit = (*(Triangulation::faceTable[f0].getLocalEdges())).begin(); eit != (*(Triangulation::faceTable[f0].getLocalEdges())).end(); eit++) {
+            edges.push_back(*eit);
+        }
+        if (numFaces >= 2) {
+            int f1 = (*(e.getLocalFaces()))[1];
+            for (eit = (*(Triangulation::faceTable[f1].getLocalEdges())).begin(); eit != (*(Triangulation::faceTable[f1].getLocalEdges())).end(); eit++) {
+                edges.push_back(*eit);
+            }
+        }
+        Line l;
+        glBegin(GL_LINES);
+        glColor3d(0, 255, 0);
+        for (eit = edges.begin(); eit != edges.end(); eit++) {
+            l = _triDisp->getDualAtEdge(*eit);
+            glVertex3d(l.getInitialX(),l.getInitialY(),0);
+            glVertex3d(l.getEndingX(),l.getEndingY(),0);
+        }
+        glEnd();
+    }*/
     
     
     //draws the weights around the vertices
@@ -256,10 +286,29 @@ void setup_view_parameters(void) {
 int main(int argc, char** argv) {
 
     //cout << "starting!\n";
-    //makeTriangulationFile("", "");
+    //makeTriangulationFile("test_files/weird.lutz", "test_files/weird.txt");
     //cout << "done!\n";
     //system("PAUSE");
     //exit(0);
+
+   /* readTriangulationFile("test_files/non_convex_pair.txt");
+    
+    map<int, Vertex>::iterator sit;
+    sit = Triangulation::vertexTable.begin();
+    vector<int> v;
+    for (; sit != Triangulation::vertexTable.end(); sit++) {
+        v.push_back(sit->first);
+        cout << sit->first << "\n";
+    }
+    
+    Functional* f;
+    f = new Functional("someNumbers.txt", "vertex", v);
+    cout << "here\n";
+    
+    for (sit = Triangulation::vertexTable.begin(); sit != Triangulation::vertexTable.end(); sit++) {
+        cout << sit->first << "    " << f->valueOf(sit->first) << "\n";
+    }*/
+
 
     //triangulation initializaiton steps
     char *testFile;
@@ -278,6 +327,7 @@ int main(int argc, char** argv) {
 
     _triDisp = new TriangulationDisplay (testFile);
     _flipAlg = new FlipAlgorithm ();
+    _vertexF = new Function("someNumbers.txt", "vertex", Triangulation::vertexTable, true);
     setup_view_parameters();
 
 	//Initialize GLUT
@@ -298,5 +348,4 @@ int main(int argc, char** argv) {
 	glutMainLoop();
 	system("PAUSE"); //This line is never reached
 	return 0;
-
 }

@@ -550,8 +550,7 @@ vector<Line> TriangulationCoordinateSystem::getDuals(void)
     return ds;
 }
 
-Line TriangulationCoordinateSystem::dualOfEdge(Edge e) {
-    Line l;
-    
+Line TriangulationCoordinateSystem::getDual(int e) {
+    Line l = dualList[e];
     return l;
 }

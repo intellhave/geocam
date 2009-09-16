@@ -4,28 +4,44 @@
 
 FlipAlgorithm::FlipAlgorithm()
 {
-    currEdge = Triangulation::edgeTable.begin();
+    pausesON = 0;
 }
 FlipAlgorithm::~FlipAlgorithm()
 {
 }
 
-//checks the current edge then checks subsequent edges
-int FlipAlgorithm::findNextFlip(void)
-{
-    while( currEdge != Triangulation::edgeTable.end()) {
-        if (isWeightedDelaunay(currEdge->second)) {
-            currEdge++;
-        } else {
-            break;
+/*
+ * return 0 is nothing happened, 1 is something happened
+ */
+int FlipAlgorithm::flipConvexHinges() {
+    int ret = 0;
+    for (currEdge = Triangulation::edgeTable.begin(); currEdge != Triangulation::edgeTable.end(); currEdge++) {
+            cout << "here about to check\n";
+        if (!(currEdge->second).isBorder() && isConvexHinge(currEdge->second) && !isWeightedDelaunay(currEdge->second)) {
+            cout << "flipped an edge\n";
+            flip(currEdge->second);
+            ret = 1;
+            //return ret;
+        }
+        cout << "checked an edge\n";
+    }
+    return ret;
+}
+
+/*
+ * return 0 is nothing happened, 1 is something happened
+ */
+int FlipAlgorithm::flipOneNonConvexHinge() {
+    bool somethingHappened = false;
+    for (currEdge = Triangulation::edgeTable.begin(); currEdge != Triangulation::edgeTable.end(); currEdge++) {
+        if (!(currEdge->second).isBorder()  && facesAreTheSame((currEdge->second))
+                                            && !isConvexHinge(currEdge->second)
+                                            && !isWeightedDelaunay(currEdge->second)) {
+            flip(currEdge->second);
+            return 1;
         }
     }
-    
-    if (currEdge == Triangulation::edgeTable.end()) {
-        return 0;
-    } else {
-        return 1;
-    }
+    return 0;
 }
 
 //flips and increments iterator
@@ -41,21 +57,15 @@ int FlipAlgorithm::currentEdgeIndex(void)
     return currEdge->first;
 }
 
-void FlipAlgorithm::runFlipAlgorithm(void)
+void FlipAlgorithm::runFlipAlgorithm()
 {
-    while (step()) {}
-}
-
-bool FlipAlgorithm::step(void) {
-    if (findNextFlip()) {
-        performFlip();
-        currEdge++;
-        return true;
-    } else {
-        return false;
+    int count = 0;
+    //cout << "flip beginning\n";
+    while(!isWeightedDelaunay() && count < 5) {
+        //cout << "in loop\n";
+        flipConvexHinges();
+        flipOneNonConvexHinge();
+        count++;
     }
-}
-
-void FlipAlgorithm::reset(void) {
-    currEdge == Triangulation::edgeTable.begin();
+    //cout << "flip loop ending\n";
 }

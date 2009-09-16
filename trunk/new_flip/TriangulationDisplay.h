@@ -56,6 +56,8 @@ class TriangulationDisplay {
     //return a vector of the duals
     vector<Line> getDuals(void);
     
+    Line getDualAtEdge(int e);
+    
     Point getPoint(int index);
     
     //updates the underlying coordinateSystem object to represent the current state

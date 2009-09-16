@@ -120,7 +120,10 @@ class TriangulationCoordinateSystem
        */
       Point getPoint(int);
       
-      Line dualOfEdge(Edge e);
+      /*
+       * Returns the Dual of the line with the given index
+       */
+      Line getDual(int e);
       
       /*
        * Returns the Line in the lineTable with the given index.

@@ -133,3 +133,7 @@ Point TriangulationDisplay::getPoint(int index){
     return coordSystem.getPoint(index);
 }
 
+Line TriangulationDisplay::getDualAtEdge(int e) {
+    return coordSystem.getDual(e);
+}
+

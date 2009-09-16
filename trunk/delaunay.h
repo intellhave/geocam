@@ -9,9 +9,10 @@ locally for the condition of being Delaunay or weighted Delaunay.
 
 #include "triangulation/triangulation.h"
 #include <cmath>
+#include "new_flip/Function.h"
 
-#ifndef delaunay
-#define delaunay
+#ifndef delaunay_h
+#define delaunay_h
 
 /*
  * Indicates whether or not a particular edge has the quality
@@ -24,6 +25,18 @@ bool isDelaunay(Edge);
  * of being weighted Delaunay.
  */
 bool isWeightedDelaunay(Edge);
+
+/*
+ *  Checks whether the entire triangulation is weighted Delaunay or not
+ */
+bool isWeightedDelaunay(void);
+
+/*
+ *  true if the faces are both positive or both negative, otherwise false
+ */
+bool facesAreTheSame(Edge e);
+
+bool isConvexHinge(Edge);
 
 /*
  * Returns the partial dual of a particular edge, as indicated
@@ -43,5 +56,5 @@ double getDual(Edge);
 double getPartialEdge(Edge, Vertex);
 
 //computes the dirichlet energy of the triangulation
-double dirichletEnergy();
+double dirichletEnergy(Function);
 #endif

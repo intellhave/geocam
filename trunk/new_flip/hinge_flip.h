@@ -3,7 +3,6 @@
 
 #include <cmath>
 #include <iostream>
-#include "delaunay.h"
 #include "triangulation/triangulationmorph.h"
 #include "triangulation/triangulationInputOutput.h"
 #include "triangulation/TriangulationCoordinateSystem.h"

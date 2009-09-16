@@ -1,7 +1,7 @@
 #include "new_flip/hinge_flip.h"
 
 Edge flip(Edge e) {
-    printf("\n\n%lf  \n", dirichletEnergy());
+
     struct simps bucket;
     if(!prep_for_flip(e, &bucket)) {
         return e;
@@ -21,8 +21,7 @@ Edge flip(Edge e) {
         //just need to escape return e seems sufficient;
         return e;
     }
-  
-    printf("%lf  \n\n\n", dirichletEnergy());
+
     return Triangulation::edgeTable[e.getIndex()];
 } //end of flip
 
@@ -119,7 +118,6 @@ void flipPN(struct simps b) {
         //as well for consistency
         swap(&b.e1_len, &b.e4_len);
         swap(&b.e2_len, &b.e3_len);
-        cout << "swapped\n";
     }
 
     //now determine which is negative and positive

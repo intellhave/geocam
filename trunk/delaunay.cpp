@@ -1,5 +1,9 @@
 #include "delaunay.h"
 #include <iostream>
+#include <set>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
 #include "partial_edge.h"
 #include "euc_angle.h"
 #define PI 	3.141592653589793238
@@ -8,10 +12,6 @@ bool isDelaunay(Edge e)
 {
      if(e.isBorder())
      {
-
-
-
-
         return true;
      }
      Face fa1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
@@ -45,6 +45,47 @@ bool isWeightedDelaunay(Edge e)
     //almost always, calculations of dimensions, which involve arcsin,
     // will not yield a zero value, but instead a value very close to zero
     return getDual(e) > -0.00001;
+}
+
+bool isWeightedDelaunay(void) {
+    map<int, Edge>::iterator eit;
+    for (eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+        if (false == isWeightedDelaunay(eit->second)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isConvexHinge(Edge e) {
+    if (e.isBorder()) {
+        true;
+    }
+    int f0 = (*(e.getLocalFaces()))[0];
+    int f1 = (*(e.getLocalFaces()))[1];
+    int v0 = (*(e.getLocalVertices()))[0];
+    int v1 = (*(e.getLocalVertices()))[1];
+    
+    double ang0 = EuclideanAngle::valueAt(Triangulation::vertexTable[v0], Triangulation::faceTable[f0]);
+    ang0 += EuclideanAngle::valueAt(Triangulation::vertexTable[v0], Triangulation::faceTable[f1]);
+    
+    double ang1 = EuclideanAngle::valueAt(Triangulation::vertexTable[v1], Triangulation::faceTable[f0]);
+    ang1 += EuclideanAngle::valueAt(Triangulation::vertexTable[v1], Triangulation::faceTable[f1]);
+    
+    if (ang0 > PI || ang1 > PI) {
+        return false;
+    } else {
+        true;
+    }
+}
+
+bool facesAreTheSame(Edge e) {
+    if (e.isBorder()) {
+        false;
+    }
+    int f0 = (*(e.getLocalFaces()))[0];
+    int f1 = (*(e.getLocalFaces()))[1];
+    return Triangulation::faceTable[f0].isNegative() == Triangulation::faceTable[f1].isNegative();
 }
 
 double getHeight(Face f, Edge e)
@@ -95,51 +136,24 @@ double getDual(Edge e)
         h2 = getHeight(f2, e);
     }
 
-    /*if(f1.isNegative() || f2.isNegative()) {
-        return -(h1 + h2);
-    }
-    else {
-        return h1 + h2;
-    }*/
     return h1+h2;
 }
 
-map<int, double> fVertex;
-bool notSet = true;
 /*
  *  E(f) = 1/2 sum_({i,j} in T_1) |*{i,j}|/|{i,j}| (f_j - f_i)^2
  *
  */
-double dirichletEnergy() {
-
-    if (notSet) {
-        notSet = false;
-        /*fVertex[0] = -0.825;
-        fVertex[2] = 0.129;
-        fVertex[1] = -0.407;
-        fVertex[3] =  0.608;
-        */map<int, Vertex>::iterator vit;
-        int numVerts = 0;
-        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-            numVerts++;
-        }
-        double range = sqrt(3.0/numVerts);
-        srand(time(NULL));
-        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-            //fVertex[vit->first] = 2 * range * ((double) rand()/RAND_MAX) - range;
-            fVertex[vit->first] = 2 * range * ((double) rand()/RAND_MAX) - range;
-        }
-    }
+double dirichletEnergy(Function vertexF) {
 
     double total = 0.0;
-    cout << "\n";
+    //cout << "\n";
     map<int, Edge>::iterator eit;
-    Face face0 = Triangulation::faceTable[0];
-    Face face1 = Triangulation::faceTable[1];
-    //perform the {i,j} and {j,i} computation at the same time
+    //Face face0 = Triangulation::faceTable[0];
+    //Face face1 = Triangulation::faceTable[1];
+
     for (eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-        double f_i = fVertex[(*(eit->second).getLocalVertices())[0]];
-        double f_j = fVertex[(*(eit->second).getLocalVertices())[1]];
+        double f_i = vertexF.valueOf((*(eit->second).getLocalVertices())[0]);
+        double f_j = vertexF.valueOf((*(eit->second).getLocalVertices())[1]);
         //begin special example stuff
         /*int f0 = (*((eit->second).getLocalFaces()))[0];
         int f1 = (*((eit->second).getLocalFaces()))[1];
@@ -159,9 +173,9 @@ double dirichletEnergy() {
             b = getHeight(face1, eit->second);
         }
         printf("  {%d, %d}:   f_i  ,   f_j  ,   |*{i,j}|  ,  face0   ,  face1  ,   |{i,j}|\n        %9lf, %9lf, %9lf, %9lf, %9lf, %9lf\n",(*((eit->second).getLocalVertices()))[0], (*((eit->second).getLocalVertices()))[1], f_i, f_j, getDual(eit->second), a, b, Length::valueAt(eit->second) );
-        */double subtotal = (getDual(eit->second)/Length::valueAt(eit->second));
+        *///end special example stuff
         //printf("    %lf\n", subtotal);
-        total += subtotal * pow(f_i-f_j, 2) + subtotal * pow(f_j-f_i, 2);
+        total += (getDual(eit->second)/Length::valueAt(eit->second)) * pow(f_j-f_i, 2);
     }
     total = total / 2;
 return total;

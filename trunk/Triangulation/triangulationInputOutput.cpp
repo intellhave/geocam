@@ -62,6 +62,7 @@ bool readTriangulationFile(const char* fileName)
     
     // The file stream.
     ifstream scanner(fileName);
+    
     // Name of the simplex to be read in.
     char simplexName[15];
     
@@ -199,7 +200,7 @@ bool readTriangulationFile(const char* fileName)
             }
          }
          
-         Triangulation::putEdge(indexMapping, e); 
+         Triangulation::putEdge(indexMapping, e);
          //sets the length to a value given, zero if no value was specified
          Length::At(Triangulation::edgeTable[indexMapping])->setValue(len);
        } 
@@ -471,6 +472,11 @@ void makeTriangulationFile (char* from, char* to) {
   ifstream infile;
   vector< vector<int> > f; 
   infile.open(from);
+    if (infile.fail()) {
+        fprintf(stderr, "!!!!!!!!!!!!!!!!!\nThere was an error in reading the file you specified\nThe file name you provided to makeTriangulationFile\nwas likely incorrect\n!!!!!!!!!!!!!!!!!\n");
+        system("PAUSE");
+        exit(1);
+    }
   // >> i/o operations here <<
   char temp[50];
   infile.getline(temp, 50 ,'=');
@@ -633,6 +639,12 @@ void makeTriangulationFile (char* from, char* to) {
    */
   for(int i = 0; i < f.size(); i++)
   {
+        //this looks weird but iwill explain
+        if (i > 0) {
+            //this new line was inserted after each face was specified, but this left
+            //a new line at the end of the file which interfered with the file reading function
+            outfile << "\n";
+        }
       // name
       outfile << "Face: " << i + 1 << "\n";
       vector<int> current = f[i];
@@ -664,7 +676,6 @@ void makeTriangulationFile (char* from, char* to) {
             }
          }
       }
-      outfile << "\n";   
   }
   outfile.close();
 }
