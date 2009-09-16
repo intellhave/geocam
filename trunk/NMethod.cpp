@@ -1,24 +1,30 @@
+/*=========================================================================
+ ||Class: NewtonsMethod (Generalized Newton's Method)
+ ||Author: Alex Henniges (henniges@email.arizona.edu)
+ ||
+ || The source file for the NewtonsMethod class.
+ *=========================================================================*/
 #include "NMethod.h"
 #include "utilities.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
-
-
-
 void NewtonsMethod::optimize(double initial[], double soln[]) {
+   // Copy the values of initial to soln.
    for(int i = 0; i < nDim; i++) {
      soln[i] = initial[i];
    }
    double len;
    do {
+     // Step through NewtonsMethod, updating soln, until len < gradLenCond
      len = step(soln);   
    }
    while(len >= gradLenCond);
 }
 
 void NewtonsMethod::optimize(double initial[], double soln[], int extremum) {
+   // Same as above, but use the extremum value in the step function.
    for(int i = 0; i < nDim; i++) {
      soln[i] = initial[i];
    }
@@ -30,29 +36,42 @@ void NewtonsMethod::optimize(double initial[], double soln[], int extremum) {
 }
 
 double NewtonsMethod::step(double x_n[]) {
-   double gradLen;
-   double next[nDim];
+   double gradLen;        // The length of the gradient vector
+   double next[nDim];     // The array values that x_n will be incremented by.
 
+   // If a gradient function was not provided, approximate the gradient instead.
    if(df == NULL) {
       approxGradient(x_n, grad);
-   } else {
+   } else { // Otherise, get the gradient vector from a user-defined function.
       df(x_n, grad);
    }
 
+   // If a hesiian function was not provided, approximate the hessian instead.
    if( d2f == NULL) {
       approxHessian(x_n, hess);
-   } else {
+   } else { // Otherwise, get the hessian matrix from a user-defined function.
       d2f(x_n, hess);
    }
-
-   negateArray(grad);
-   LinearEquationsSolver(hess, grad, next);
+   
+   // Calculate the length of the gradient.
    gradLen = getGradientLength(grad);
-      
+
+   // If the gradient length is already less than the stopping condition, then
+   // just return now. This is for cases when gradLen = 0, which can cause other
+   // problems.
    if(gradLen < gradLenCond) {
         return gradLen;
+   }   
+   
+   // Set grad[i] = - grad[i] for all i = 1,...,nDim
+   negateArray(grad);
+   // Use the linear equations solver to fill out values for next[].
+   if(LinearEquationsSolver(hess, grad, next) == 1) {
+     printf("Error with Solver\n");
+     return -1;
    }
 
+   // Shift x_n[i] by next[i].
    for(int i = 0; i < nDim; i++) {
       x_n[i] += next[i];
    }
@@ -66,101 +85,135 @@ void printArray(double arr[], int size) {
 }
 
 double NewtonsMethod::step(double x_n[], int extremum) {
-   double gradLen;
-   double next[nDim];
+   double gradLen;        // The length of the gradient vector
+   double next[nDim];     // The array values that x_n will be incremented by.
+
+   // If a gradient function was not provided, approximate the gradient instead.
    if(df == NULL) {
       approxGradient(x_n, grad);
-   } else {
+   } else { // Otherise, get the gradient vector from a user-defined function.
       df(x_n, grad);
    }
 
+   // If a hesiian function was not provided, approximate the hessian instead.
    if( d2f == NULL) {
       approxHessian(x_n, hess);
-   } else {
+   } else { // Otherwise, get the hessian matrix from a user-defined function.
       d2f(x_n, hess);
    }
-   negateArray(grad);
-   if(LinearEquationsSolver(hess, grad, next) == 1) {
-     pause("Error with Solver!\n");
-   }
    
-   for(int i = 0; i < nDim; i++) {
-      printf("next[%d] = %f\n", i, next[i]);
-      next[i] = stepRatio * next[i];
-   }
+   // Calculate the length of the gradient.
    gradLen = getGradientLength(grad);
-      
+
+   // If the gradient length is already less than the stopping condition, then
+   // just return now. This is for cases when gradLen = 0, which can cause other
+   // problems.
    if(gradLen < gradLenCond) {
         return gradLen;
+   }   
+   
+   // Set grad[i] = - grad[i] for all i = 1,...,nDim
+   negateArray(grad);
+   // Use the linear equations solver to fill out values for next[].
+   if(LinearEquationsSolver(hess, grad, next) == 1) {
+     printf("Error with Solver\n");
+     return -1;
+   }
+   
+   // Modify the next[] array by scaling it by stepRatio.
+   for(int i = 0; i < nDim; i++) {
+      next[i] = stepRatio * next[i];
    }
 
-   double curVal; 
-   double nextVal = f(x_n);
+   double curVal;           // The current function value.
+   double nextVal = f(x_n); // The next function value.
    
-   printf("Step ratio = %f\n", stepRatio);
-   int maxNum = (int) floor( 1 / stepRatio );
-   printf("MaxNum = %d\n", maxNum);
-  // printArray(x_n, nDim);
+   // The max number of increments before a point has moved the entire length
+   // in the direction of optimization.
+   int maxNum = (int) floor( 1 / stepRatio ); 
+   
+   // If the searched for extremum is a maximum...
    if( extremum == NMETHOD_MAX) {
        for(int j = 0; j < maxNum; j++) {
-         curVal = nextVal;      
+         curVal = nextVal;   // Set current value to next.
+         // Increment the point by one unit of next[].
          for(int i = 0; i < nDim; i++) {
            x_n[i] += next[i];
          }
-         nextVal = f(x_n);
+         nextVal = f(x_n);   // Get the next value of the function.
+         // If the nextVal < curVal, we have moved too far and we want to 
+         // stop.
          if( nextVal < curVal ) {
+           // If this was the first increment, then we need to check smaller.
            if( j == 0 ) {
                int k = 1;
+               // While we still haven't increased and we're still decrementing
+               // by a non-zero amount...
                while(nextVal < curVal && k <= 15) {
-                 //pause("k = %d...", k); // PAUSE
+                 // Decrement by a sclaing factor of 1/2, 1/4, 1/8, etc.
                  for(int i = 0; i < nDim; i++) {
                    x_n[i] -= next[i] / (pow(2, k));
                  }
                  k++;
-                 nextVal = f(x_n);
+                 nextVal = f(x_n);   // Get the next value of the functional.
                }
-               if(k > 15) {
-                    pause("Wrong Direction! Press enter to continue...");
+               // If we still couldn't find it, announce that it can't be found
+               // (i.e. we were headed towards a minimum) and return -1.
+               if(nextVal < curVal) {
+                    printf("Wrong Direction!\n");
                     return -1;
                }
+               // Else if it was found, we are at the correct point right now, 
+               // so return.
                return gradLen;
            }
+           // If this wasn't the first increment, then we found the right point,
+           // but we went one unit too far.
            for(int i = 0; i < nDim; i++) {
              x_n[i] -= next[i];
            }
            return gradLen;   
          }
        }
-   } else { // NMETHOD_MIN
+   } else { // The search is for a minimum
        for(int j = 0; j < maxNum; j++) {
-         curVal = nextVal;      
+         curVal = nextVal;   // Set current value to next.
+         // Increment the point by one unit of next[].      
          for(int i = 0; i < nDim; i++) {
            x_n[i] += next[i];
          }
-        // printArray(x_n, nDim);
-         nextVal = f(x_n);
+         nextVal = f(x_n);   // Get the next value of the function.
+         // If the nextVal > curVal, we have moved too far and we want to 
+         // stop.
          if( nextVal > curVal ) {
+           // If this was the first increment, then we need to check smaller.
            if( j == 0 ) {
                int k = 1;
+               // While we still haven't decreased and we're still decrementing
+               // by a non-zero amount...
                while(nextVal > curVal && k <= 15) {
+                 // Decrement by a sclaing factor of 1/2, 1/4, 1/8, etc.
                  for(int i = 0; i < nDim; i++) {
                    x_n[i] -= next[i] / (pow(2, k));
                  }
                  k++;
-                 nextVal = f(x_n);
+                 nextVal = f(x_n);   // Get the next value of the functional.
                }
-               printf("k = %d\n", k);
-               if(k > 15) {
-                    pause("Wrong Direction! Press enter to continue...");
+               // If we still couldn't find it, announce that it can't be found
+               // (i.e. we were headed towards a minimum) and return -1.
+               if(nextVal > curVal) {
+                    printf("Wrong Direction!\n");
                     return -1;
                }
+               // Else if it was found, we are at the correct point right now, 
+               // so return.
                return gradLen;
            }
+           // If this wasn't the first increment, then we found the right point,
+           // but we went one unit too far.
            for(int i = 0; i < nDim; i++) {
              x_n[i] -= next[i];
            }
-          // printArray(x_n, nDim);
-           printf("j = %d\n", j);
            return gradLen;  
          }
        }   
@@ -176,62 +229,57 @@ void NewtonsMethod::negateArray(double arr[]) {
 }
 
 void NewtonsMethod::approxGradient(double vars[], double sol[]) {
-     double val = 0;
+     double val = 0;        // A running sum for the numerator
      
      for(int i = 0; i < nDim; i++) {
-        printf("Approximating gradient of %d\n", i);
-        //printf("grad[%d] : ", i);
-        vars[i] = vars[i] + delta;
-        val = f(vars);
-        //printf("(%.10f - ", val);
-        vars[i] = vars[i] - 2*delta;
-        double f_x = f(vars);
-        val = val - f_x;
-        //printf("%.10f) / (2 * %.10f) = ", f_x, delta);
-        sol[i] = val / (2*delta);
-        //printf("%.10f\n", sol[i]);
-        vars[i] = vars[i] + delta;
-//        pause();
+        vars[i] = vars[i] + delta; // x_i + delta
+        val = f(vars); // f(x_i + delta);
+        vars[i] = vars[i] - 2*delta; // x_i - delta
+        val = val - f(vars); // f(x_i + delta) - f(x_i - delta)
+        sol[i] = val / (2*delta); // soln[i] = [f(x_i + delta) - f(x_i - delta)] 
+                                  //              / (2 * delta)
+        vars[i] = vars[i] + delta; // Reset x_i.
      }
 }
 
 void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
-     double val = 0;
-     double f_x = f(vars);
+     double val = 0;        // A running sum for the numerator
+     double f_x = f(vars);  // Save f(vars)
      
      for(int i = 0; i < nDim; i++) {
        for(int j = 0; j < nDim; j++) {
-          printf("Approximating hessian of %d, %d\n", i, j);
-          if(i > j) {
+          if(i > j) { // The matrix is diagonal
             sol[i][j] = sol[j][i];
-          } else if( i != j) {
-              vars[i] = vars[i] + delta;
-              vars[j] = vars[j] + delta;
-              val = f(vars);
-              vars[j] = vars[j] - 2 * delta;
-              val = val - f(vars);
-              vars[i] = vars[i] - 2*delta;
-              val = val + f(vars);
-              vars[j] = vars[j] + 2*delta;
-              val = val - f(vars);
-              vars[i] = vars[i] + delta;
-              vars[j] = vars[j] - delta;
+          } else if( i != j) { // If i != j
+              vars[i] = vars[i] + delta; // x_i + delta
+              vars[j] = vars[j] + delta; // x_j + delta
+              val = f(vars); // f(x_i + delta, x_j + delta)
+              vars[j] = vars[j] - 2 * delta; // x_j - delta
+              val = val - f(vars); // val - f(x_i + delta, x_j - delta)
+              vars[i] = vars[i] - 2*delta; // x_i - delta
+              val = val + f(vars); // val + f(x_i - delta, x_j - delta)
+              vars[j] = vars[j] + 2*delta; // x_j + delta
+              val = val - f(vars); // val - f(x_i - delta, x_j + delta)
+              vars[i] = vars[i] + delta; // Reset x_i
+              vars[j] = vars[j] - delta; // Reset x_j
               
+              //    f(x_i + del, x_j + del) - f(x_i + del, x_j - del) 
+              //       - f(x_i - del, x_j + del) + f(x_i - del, x_j - del)
+              //  ------------------------------------------------------------
+              //                        4 * delta ^ 2
               sol[i][j] = val / (4 * delta * delta);
-          } else {
-              //printf("Hess[%d][%d] : ", i, j);
-              vars[i] = vars[i] + delta;
-              val = f(vars);
-              //printf("(%.10f + ", val); 
-              vars[i] = vars[i] - 2*delta;
-              val = val + f(vars);
-              //printf("%.10f - 2 * ", f(vars));
-              vars[i] = vars[i] + delta;
-              val = val - 2*f_x;
-              //printf("%.10f) / %.10f = ", f_x, delta * delta);
+          } else { // If i = j
+              vars[i] = vars[i] + delta; // x_i + delta
+              val = f(vars); // f(x_i + delta)
+              vars[i] = vars[i] - 2*delta; // x_i - delta
+              val = val + f(vars); // val + f(x_i - delta)
+              vars[i] = vars[i] + delta; // reset x_i
+              val = val - 2*f_x; // val - 2 * f(vars)
               
+              //  f(x_i + delta) + f(x_i - delta) - 2 * f(x)
+              // --------------------------------------------
+              //                 delta ^ 2
               sol[i][j] = val / (delta * delta);
-              //printf("%.10f\n", sol[i][j]);
           }
        }
      }
@@ -239,18 +287,6 @@ void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
 
 
 void NewtonsMethod::printInfo(FILE* out) {
- //  for(int i = 0; i < nDim; i++) {
-//      fprintf(out, "grad[%d] = %.10f\n", i, grad[i]);
-//   }  
-
-
-//   fprintf(out, "\nHessian:\n");
-//   for(int i = 0; i < nDim; i++) {
-//      for(int k = 0; k < nDim; k++) {
-//         fprintf(out, "% 3.5f", hess[i][k]);
-//      }
-//      fprintf(out, "\n");
-//   }
    fprintf(out, "-------------------\n");
    
    if(printFunc != NULL) {
@@ -339,6 +375,7 @@ int NewtonsMethod::LinearEquationsSolver(double *pfMatr[], double* pfVect, doubl
     {
       pfSolution[k] -= (pfMatr[k][i]*pfSolution[i]);
     }
+    // If the solution is 0, don't bother dividing.
     if(fabs(pfMatr[k][k]) < 0.000000001) {
        pfSolution[k] = 0;
     } else {
@@ -354,8 +391,6 @@ double NewtonsMethod::getGradientLength(double gradient[]) {
    for(int i = 0; i < nDim; i++) {
       sum += gradient[i] * gradient[i];
    }
-   double temp = sqrt(sum);
-   printf("Gradient Length = %.10f\n", temp);
-   return temp;
+   double sqrt(sum);
     
 }

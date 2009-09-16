@@ -12,14 +12,54 @@
 #include "edge_curvature.h"
 #include "total_volume_partial.h"
 #include "volume_length_tetra_partial.h"
+#include "ehr_partial.h"
+#include "ehr_second_partial.h"
+
 
 void runPipelinedNewtonsMethod(char* outputFile) {
      Newtons_Method(0.00001, outputFile);
 }
 
+void EHR_Partial(double radii[], double grad[]) {
+  map<int, Vertex>::iterator vit;
+  int i;
+  for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
+          Radius::At(vit->second)->setValue(radii[i]);        
+  }
+  for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
+        grad[i] = EHRPartial::valueAt(vit->second);
+  }
+}
+
+void EHR_Second_Partial(double radii[], double *hess[]) {
+     map<int, Vertex>::iterator vit1;
+     map<int, Vertex>::iterator vit2;
+     int i, j;
+     for(vit1 = Triangulation::vertexTable.begin(), i = 0; vit1 != Triangulation::vertexTable.end(); vit1++, i++) {
+              Radius::At(vit1->second)->setValue(radii[i]);
+     }
+     for(vit1 = Triangulation::vertexTable.begin(), i = 0; vit1 != Triangulation::vertexTable.end(); vit1++, i++) {
+        for(vit2 = Triangulation::vertexTable.begin(), j = 0; vit2 != Triangulation::vertexTable.end(); vit2++, j++) {
+              if(i > j) {
+                   hess[i][j] = hess[j][i];
+              } else {
+                   hess[i][j] = EHRSecondPartial::valueAt(vit1->second, vit2->second);
+              }
+        }
+     }     
+}
 
 double EHR() {
        return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
+}
+
+double EHR(double radii[]) {
+  map<int, Vertex>::iterator vit;
+  int i;
+  for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
+          Radius::At(vit->second)->setValue(radii[i]);        
+  }
+  return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
 }
 
 void printFunc(FILE* out) {
@@ -80,6 +120,33 @@ void setEtas(double etas[]) {
    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
            eit++, i++) {
        Eta::At(eit->second)->setValue(etas[i]);        
+   }
+}
+
+void getEtas(double etas[]) {
+   map<int, Edge>::iterator eit;
+   int i = 0;
+   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+           eit++, i++) {
+       etas[i] = Eta::At(eit->second)->getValue();        
+   }
+}
+
+void setRadii(double radii[]) {
+   map<int, Vertex>::iterator vit;
+   int i = 0;
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++, i++) {
+       Radius::At(vit->second)->setValue(radii[i]);        
+   }
+}
+
+void getRadii(double radii[]) {
+   map<int, Vertex>::iterator vit;
+   int i = 0;
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++, i++) {
+       radii[i] = Radius::At(vit->second)->getValue();        
    }
 }
 
@@ -161,7 +228,7 @@ void saddleFinderHess(double vals[], double *soln[]) {
 void runNewtonsMethod(char* outputFile) {
      int edgeSize = Triangulation::edgeTable.size();
      double etas[edgeSize];
-     setEtas(etas);
+     getEtas(etas);
      
      NewtonsMethod *nm = new NewtonsMethod(saddleFinder, edgeSize);
      nm->setPrintFunc(printFunc);
@@ -175,5 +242,24 @@ void runNewtonsMethod(char* outputFile) {
      setEtas(etas);
      nm->printInfo(result);
      fclose(result);
+}
+
+void runMin(char* outputFile) {
+     int vertSize = Triangulation::vertexTable.size();
+     double radii[vertSize];
+     getRadii(radii);
+     
+     NewtonsMethod *nm = new NewtonsMethod(EHR, EHR_Partial, EHR_Second_Partial, vertSize);
+     nm->setPrintFunc(printFunc);
+     FILE* result = fopen(outputFile, "w");
+     
+     while(nm->step(radii, NMETHOD_MIN) > 0.000001) {
+       setRadii(radii);
+       nm->printInfo(result);     
+     }
+     
+     setRadii(radii);
+     nm->printInfo(result);
+     fclose(result);     
 }
 
