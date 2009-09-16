@@ -13,8 +13,8 @@ double dirichletEnergy(Function vertexF)
 
   The {{{dirichletEnergy}}} function computes the Dirichlet energy of the triangulation currently being modeled. It is important to us because it could be used in a proof of the flip algorithm for triangulations. It decreases when a non-Delaunay hinge is flipped to being Delaunay. This characteristic does not completely carry over to weighted triangulations so being able to compute this energy easily at anytime may give us insight into developing a weighted flip algorithm. For our purposes the Dirichlet energy is being used to test our model and the {{{flip}}} procedure.
 
-The formula for the Dirichlet energy can be viewed in latex with:
- {{{ D(f_{V(T)}, T) = \sum\limits_{\{i,j\}\in E(T)} \frac{|dual(\{i,j\})|}{|\{i,j\}|} (f(j)- f(i))^2}}}
+  The formula for the Dirichlet energy can be viewed in latex with:
+  {{{ D(f_{V(T)}, T) = \sum\limits_{\{i,j\}\in E(T)} \frac{|dual(\{i,j\})|}{|\{i,j\}|} (f(j)- f(i))^2}}}
 
 
   ==Subsidiaries==
