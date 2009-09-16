@@ -1,6 +1,6 @@
 =`dirichletEnergy`=
 {{{
-double dirichletEnergy(void)
+double dirichletEnergy(Function vertexF)
 }}}
 
   ==Keywords==
@@ -11,7 +11,7 @@ double dirichletEnergy(void)
 
   ==Introduction==
 
-  The {{{dirichletEnergy}}} function computes the Dirichlet energy of the triangulation currently being modeled. It is important to us because it is central to the proof of the flip algorithm for triangulations. It decreases when a non-Delaunay hinge is flipped to being Delaunay. This characteristic does not completely carry over to weighted triangulations so being able to compute this energy easily at anytime may give us insight into developing a weighted flip algorithm. For our purposes the Dirichlet energy is being used to test our model and the {{{flip}}} procedure.
+  The {{{dirichletEnergy}}} function computes the Dirichlet energy of the triangulation currently being modeled. It is important to us because it could be used in a proof of the flip algorithm for triangulations. It decreases when a non-Delaunay hinge is flipped to being Delaunay. This characteristic does not completely carry over to weighted triangulations so being able to compute this energy easily at anytime may give us insight into developing a weighted flip algorithm. For our purposes the Dirichlet energy is being used to test our model and the {{{flip}}} procedure.
 
 The formula for the Dirichlet energy can be viewed in latex with:
  {{{ D(f_{V(T)}, T) = \sum\limits_{\{i,j\}\in E(T)} \frac{|dual(\{i,j\})|}{|\{i,j\}|} (f(j)- f(i))^2}}}
@@ -28,24 +28,20 @@ The formula for the Dirichlet energy can be viewed in latex with:
   }}}
   
   Global Variables:
-
-  {{{
-  map<int, double> fVertex
-  
-  bool notSet
-  }}}
   
   Local Variables:
 
   {{{
-  double total, subtotal
+  double total - the running sum of the terms in the dirchlet energy formula
+
+  Function vertexF - the function on the vertices
   }}}
 
   ==Description==
   
-  The first thing that happens in the function is checking the value of the global variable {{{notSet}}}, which for the time being indicates whether some function values have been applied to the vertices of the triangulation. This must be done the first time {{{dirichletEnergy}}} is called but not again afterwards because we want consistent values while the program is running. So if {{{notSet}}} is true we give all the vertices random values in the range (-a,a) where a = sqrt(3/V) where V is the number of vertices, otherwise this is skipped.
-  
-  What follows is the actual computation. For each edge, we grab the function values of it's vertices. The assign {{{subtotal}}} to be the ratio between the dual length of the edge and the length of the edge. Then increase the total value by the subtotal times the vertices function values differences squared. We do both arrangements of function values at the same time. Finally half the total is returned.
+  {{{dirichletEnergy()}}} assumes that {{{vertexF}}} was built correctly, this is important to keep in mind because a call like {{{vertexF[n]}}} with the variable {{{n}}} undefined {{{vertexF}}} will just return 0.0 so the program will run without error.
+
+  With that in mind, {{{dirichletEnergy}}} simply iterates over the edges, computing each edge's {{{dualHeight}}} and length, as well as getting the vertexF value for each of its vertices. These values can be used to compute each term in the formula for the dirichlet energy. Each of these terms is added to the variable {{{total}}} which is eventually returned.
 
 
   ==Practicum==
@@ -86,7 +82,7 @@ done!
 
   ==Limitations==
 
-  Right now the main limitation is generating new random numbers each time the program is run. Hopefully soon Kurt will replace the the part of the code that generates random number to something that reads numbers from a file, and if the file doesn't have enough numbers to cover all the vertices, it'll append more numbers to the file so we can have consistent numbers each time we run tests.
+  The only current limitation is that the {{{vertexF}}} variable is assumed to be built correctly for the current triangulation.
 
   ==Revisions==
   
@@ -100,6 +96,4 @@ done!
   It's been used many times, and exhibits the behavior expected. Also it is relatively simple so it is tested by inspection of the code.
 
   ==Future Work==
-  
-  Implement what is mentioned in the Limitations
   
