@@ -89,11 +89,9 @@ done!
   ------------------------------------------------------------------------
   r992
 
-  Added the class Function.cpp which represents a function on a set of Simplex
-objects.
+  Added the class Function.cpp which represents a function on a set of Simplex objects.
 
-  Also fixed dirichletEnergy() in delaunay.cpp so that is looks like
-dirichletEnergy(Function vertexF)
+  Also fixed dirichletEnergy() in delaunay.cpp so that is looks like dirichletEnergy(Function vertexF)
   
   ------------------------------------------------------------------------
   r890 
