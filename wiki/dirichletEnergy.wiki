@@ -85,9 +85,18 @@ done!
   The only current limitation is that the {{{vertexF}}} variable is assumed to be built correctly for the current triangulation.
 
   ==Revisions==
+
+  ------------------------------------------------------------------------
+  r992
+
+  Added the class Function.cpp which represents a function on a set of Simplex
+objects.
+
+  Also fixed dirichletEnergy() in delaunay.cpp so that is looks like
+dirichletEnergy(Function vertexF)
   
   ------------------------------------------------------------------------
-  r890 | kortox | 2009-07-22 11:13:23 -0700 (Wed, 22 Jul 2009) | 2 lines
+  r890 
 
   Lots of changes to the graphical display of the triangulation, displaying the dual edges works properly now, as well as showing the weights on the vertices. The dirichlet energy computation is included in the delaunay.cpp file and it seems to be working properly. added several files to the new_flip/test_files as examples of how flipping reduces the dirichlet energy which right now is the only info that will be printed while running the new_flip project
 
