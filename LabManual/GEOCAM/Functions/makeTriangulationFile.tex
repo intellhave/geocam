@@ -1,0 +1,283 @@
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=0,0,functions.tex}
+                      
+
+%%%%% BEGINNING OF DOCUMENT BODY %%%%%
+% html: Beginning of file: `clean.html'
+% DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+%  This is a (PRE) block.  Make sure it's left aligned or your toc title will be off. 
+
+\section*{\texttt{makeTriangulationFile}}
+
+\label{f0}{\small }
+\begin{verbatim}
+{\small void makeTriangulationfile(char* fileIN, char* fileOUT)
+}
+\end{verbatim}
+
+\subsection*{Keywords}
+
+\begin{quotation}
+triangulation, Lutz, simplices
+\end{quotation}
+
+\subsection*{Authors}
+
+\begin{itemize}
+\item Alex Henniges
+
+\item Mitch Wilson
+\end{itemize}
+
+\subsection*{Introduction}
+
+\begin{quotation}
+The \texttt{makeTriangulationFile} function converts a text file, given by 
+\texttt{fileIn}, in the \texttt{Lutz} format to the standard format, printed
+to \texttt{fileOUT}. The file in standard format can then be read into the
+system to build the triangulation.
+\end{quotation}
+
+\subsection*{Subsidiaries}
+
+\begin{quotation}
+Functions:
+\end{quotation}
+
+\begin{itemize}
+\item Pair::positionOf
+
+\item Pair::contains
+
+\item Pair::isInTuple
+\end{itemize}
+
+\begin{quotation}
+Global Variables:
+
+Local Variables: \texttt{fileIN}, \texttt{fileOUT}
+\end{quotation}
+
+\subsection*{Description}
+
+\begin{quotation}
+This function is used to convert one format to another format that we
+consider to be the standard for reading in a triangulation. We have dubbed
+the format we are converting from \texttt{Lutz}. This is based on the source
+we retrieve this format from,
+http://www.math.tu-berlin.de/diskregeom/stellar/\footnote{%
+See URL http://www.math.tu-berlin.de/diskregeom/stellar/} .
+
+The \texttt{Lutz} format provides a simpler interface than our standard
+format, and can therefore allow for a user to create a quick triangulation.
+The idea is to provide only the index of every vertex on each face of the
+triangulation. No information about edges or adjacencies need to be given.
+The file should begin with a ``=\"{} followed by \"{}\mbox{$[$}\"{} and \"{}%
+\mbox{$]$}'''s to contain the triangulation and each face. An example 
+\texttt{Lutz} format for a tetrahedron is given \mbox{$[$}\#Practicum below%
+\mbox{$]$}.
+
+Note that the \texttt{makeTriangulationFile} is used only for
+two-dimensional triangulations, and that for three-dimensions, one should
+use make3DTriangulationFile.
+\end{quotation}
+
+\subsection*{Pracicum}
+
+\begin{quotation}
+{\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small 
+  // Convert the tetrahedron written in Lutz format to a file in standard format.
+}
+{\small 
+  makeTriangulationFile("./tetra_lutz.txt", "./tetra_standard.txt");
+}
+{\small   
+}
+{\small   // Now read in the triangulation from standard format.
+}
+{\small   readTriangulationFile("./tetra_standard.txt");
+}
+{\small   
+}
+\end{verbatim}
+
+\begin{quotation}
+The \texttt{Lutz} format may look like:{\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small =[[1,2,3],[1,2,4],[2,3,4],[1,3,4]]
+}
+{\small   
+}
+\end{verbatim}
+
+\begin{quotation}
+The \texttt{makeTriangulationFile} would then create a file with:{\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small Vertex: 1
+}
+{\small 2 3 4 
+}
+{\small 1 2 4 
+}
+{\small 1 2 4 
+}
+{\small Vertex: 2
+}
+{\small 1 3 4 
+}
+{\small 1 3 5 
+}
+{\small 1 2 3 
+}
+{\small Vertex: 3
+}
+{\small 1 2 4 
+}
+{\small 2 3 6 
+}
+{\small 1 3 4 
+}
+{\small Vertex: 4
+}
+{\small 1 2 3 
+}
+{\small 4 5 6 
+}
+{\small 2 3 4 
+}
+{\small Edge: 1
+}
+{\small 1 2
+}
+{\small 2 3 4 5 
+}
+{\small 1 2 
+}
+{\small Edge: 2
+}
+{\small 1 3
+}
+{\small 1 3 4 6 
+}
+{\small 1 4 
+}
+{\small Edge: 3
+}
+{\small 2 3
+}
+{\small 1 2 5 6 
+}
+{\small 1 3 
+}
+{\small Edge: 4
+}
+{\small 1 4
+}
+{\small 1 2 5 6 
+}
+{\small 2 4 
+}
+{\small Edge: 5
+}
+{\small 2 4
+}
+{\small 1 3 4 6 
+}
+{\small 2 3 
+}
+{\small Edge: 6
+}
+{\small 3 4
+}
+{\small 2 3 4 5 
+}
+{\small 3 4 
+}
+{\small Face: 1
+}
+{\small 1 2 3 
+}
+{\small 1 2 3 
+}
+{\small 2 3 4 
+}
+{\small Face: 2
+}
+{\small 1 2 4 
+}
+{\small 1 4 5 
+}
+{\small 1 3 4 
+}
+{\small Face: 3
+}
+{\small 2 3 4 
+}
+{\small 3 5 6 
+}
+{\small 1 2 4 
+}
+{\small Face: 4
+}
+{\small 1 3 4 
+}
+{\small 2 4 6 
+}
+{\small 1 2 3 
+}
+{\small   
+}
+\end{verbatim}
+
+\subsection*{Limitations}
+
+\begin{quotation}
+The limitation with the \texttt{Lutz} format that prevents it from being
+considered the standard format is that the user cannot create the most
+general of triangulations. To be more specific, it is impossible with the 
+\texttt{Lutz} format to specify for there to be two edges with the same
+vertices.
+
+A limitation of the \texttt{makeTriangulationFile} is that its requirements
+are unintuitive. There should be no ``='' required, for example. Another
+limitation is that despite collecting enough information to build the
+triangulation, the function instead writes this to a file, requiring the
+user to subsequently call the function readTriangulationFile.
+\end{quotation}
+
+\subsection*{Revisions}
+
+\begin{itemize}
+\item subversion 545, 9/29/08: Added the \texttt{makeTriangulationFile}
+function.
+\end{itemize}
+
+\subsection*{Testing}
+
+\begin{quotation}
+This function has been tested through frequent use.
+\end{quotation}
+
+\subsection*{Future Work}
+
+\begin{itemize}
+\item 7/1 - Improve the format system.
+
+\item 7/1 - Create the triangulation without performing a conversion to
+another file.
+\end{itemize}
+
+% html: End of file: `clean.html'
+
+%%%%% END OF DOCUMENT BODY %%%%%
+% In the future, we might want to put some additional data here, such
+% as when the documentation was converted from wiki to TeX.
+%
