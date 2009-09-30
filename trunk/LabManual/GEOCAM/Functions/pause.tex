@@ -1,0 +1,150 @@
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=0,0,functions.tex}
+                      
+
+%%%%% BEGINNING OF DOCUMENT BODY %%%%%
+% html: Beginning of file: `clean.html'
+% DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+%  This is a (PRE) block.  Make sure it's left aligned or your toc title will be off. 
+
+\section*{\texttt{pause}}
+
+\label{f0}
+
+\begin{quotation}
+{\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small    void pause();
+}
+{\small    void pause(char *fmt, ...);
+}
+{\small    
+}
+\end{verbatim}
+
+\subsection*{Key Words}
+
+\begin{quotation}
+pause, print
+\end{quotation}
+
+\subsection*{Authors}
+
+\begin{quotation}
+Alex Henniges
+\end{quotation}
+
+\subsection*{Introduction}
+
+\begin{quotation}
+The \texttt{pause} freezes the current process until the user presses the 
+\textbf{enter} key. This function also allows the user to print information
+at the pause line.
+\end{quotation}
+
+\subsection*{Subsidiaries}
+
+\begin{quotation}
+Functions:
+\end{quotation}
+
+\begin{itemize}
+\item \texttt{vprintf}
+
+\item \texttt{scanf}
+
+\item \texttt{fflush}
+\end{itemize}
+
+\begin{quotation}
+Global Variables:
+
+Local Variables:
+\end{quotation}
+
+\subsection*{Description}
+
+\begin{quotation}
+The \texttt{pause} function is designed to place break points in the code
+that will stop the process until the user presses the enter key. There are
+several uses to this. A standard one is debugging as it can allow a
+programmer to step through a procedure. While there are usually similar
+debugging options in code editors, this function can be added and removed
+easily from within the code. The second use is that the console for programs
+will close immediately after execution with some editors. Without a way to
+freeze the program, the console would close before the data could be read
+and interpreted.
+
+There are two options for this \texttt{pause} function. If the default pause
+is used, the following message will be printed:``PAUSE...''Pressing the 
+\textbf{enter} key will resume the process. The function can also print out
+a message provided to it. This uses the \texttt{vprintf} function so that
+the printed information can be formatted text. The user must still press 
+\textbf{enter} to resume when this form is used. Pressing other keys will
+not affect the program.
+
+Historically, the project has used {\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small   system("PAUSE");
+}
+{\small   
+}
+\end{verbatim}
+
+\begin{quotation}
+to pause the program. However, this can only be used on a Windows machine, a
+limiting factor that we wish to remove from the project.
+\end{quotation}
+
+\subsection*{Practicum}
+
+\begin{quotation}
+Example:{\small }
+\end{quotation}
+
+\begin{verbatim}
+{\small   pause("Done...press enter to exit."); // PAUSE
+}
+{\small   
+}
+\end{verbatim}
+
+\subsection*{Limitations}
+
+\begin{quotation}
+One limitation of the \texttt{pause} function is that it only resumes after
+pressing the \textbf{enter} key. This is compared to the former pause
+function (see above) that would resume after pressing any key. This could
+also be considered an improvement.
+\end{quotation}
+
+\subsection*{Revisions}
+
+\begin{itemize}
+\item subversion 909, 8/4/09: Added the fully functional \texttt{pause}
+function.
+\end{itemize}
+
+\subsection*{Testing}
+
+\begin{quotation}
+The \texttt{pause} function has been tested simply through using it
+extensively.
+\end{quotation}
+
+\subsection*{Future Work}
+
+\begin{quotation}
+No future work is planned at this time.
+\end{quotation}
+
+% html: End of file: `clean.html'
+
+%%%%% END OF DOCUMENT BODY %%%%%
+% In the future, we might want to put some additional data here, such
+% as when the documentation was converted from wiki to TeX.
+%

@@ -1,0 +1,162 @@
+# Project: NewtonsMethodForPoets
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
+WINDRES = windres.exe
+RES  = 
+OBJ  = textMain.o addremove.o miscmath.o NMethod.o Pipelined_Newtons_Method.o pointlinecircle.o utilities.o Geometry/area.o Geometry/curvature2D.o Geometry/curvature3D.o Geometry/curvature_partial.o Geometry/dih_angle.o Geometry/dih_angle_sum.o Geometry/dualarea.o Geometry/dualareasegment.o Geometry/edge_curvature.o Geometry/edge_height.o Geometry/ehr_partial.o Geometry/ehr_second_partial.o Geometry/eta.o Geometry/euc_angle.o Geometry/face_height.o Geometry/length.o Geometry/partial_edge.o Geometry/radius.o Geometry/sectional_curvature.o Geometry/total_volume_partial.o Geometry/totalcurvature.o Geometry/totalvolume.o Geometry/triposition.o Geometry/volume.o Geometry/volume_length_partial.o Geometry/volume_length_tetra_partial.o Geometry/volume_partial.o Geometry/volume_partial_sum.o Geometry/volume_second_partial.o Triangulation/triangulation.o Triangulation/triangulationInputOutput.o 3DTriangulation/3DInputOutput.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/tetra.o Simplex/vertex.o textRuns.o $(RES)
+LINKOBJ  = textMain.o addremove.o miscmath.o NMethod.o Pipelined_Newtons_Method.o pointlinecircle.o utilities.o Geometry/area.o Geometry/curvature2D.o Geometry/curvature3D.o Geometry/curvature_partial.o Geometry/dih_angle.o Geometry/dih_angle_sum.o Geometry/dualarea.o Geometry/dualareasegment.o Geometry/edge_curvature.o Geometry/edge_height.o Geometry/ehr_partial.o Geometry/ehr_second_partial.o Geometry/eta.o Geometry/euc_angle.o Geometry/face_height.o Geometry/length.o Geometry/partial_edge.o Geometry/radius.o Geometry/sectional_curvature.o Geometry/total_volume_partial.o Geometry/totalcurvature.o Geometry/totalvolume.o Geometry/triposition.o Geometry/volume.o Geometry/volume_length_partial.o Geometry/volume_length_tetra_partial.o Geometry/volume_partial.o Geometry/volume_partial_sum.o Geometry/volume_second_partial.o Triangulation/triangulation.o Triangulation/triangulationInputOutput.o 3DTriangulation/3DInputOutput.o Simplex/edge.o Simplex/face.o Simplex/simplex.o Simplex/tetra.o Simplex/vertex.o textRuns.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
+INCS =  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam/Geometry"  -I"C:/Dev-Cpp/geocam/Triangulation"  -I"C:/Dev-Cpp/geocam/Simplex" 
+CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam/Geometry"  -I"C:/Dev-Cpp/geocam/Triangulation"  -I"C:/Dev-Cpp/geocam/Simplex" 
+BIN  = NewtonsMethodForPoets.exe
+CXXFLAGS = $(CXXINCS)   -O3 -pg -g3
+CFLAGS = $(INCS)   -O3 -pg -g3
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before NewtonsMethodForPoets.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "NewtonsMethodForPoets.exe" $(LIBS)
+
+textMain.o: textMain.cpp
+	$(CPP) -c textMain.cpp -o textMain.o $(CXXFLAGS)
+
+addremove.o: addremove.cpp
+	$(CPP) -c addremove.cpp -o addremove.o $(CXXFLAGS)
+
+miscmath.o: miscmath.cpp
+	$(CPP) -c miscmath.cpp -o miscmath.o $(CXXFLAGS)
+
+NMethod.o: NMethod.cpp
+	$(CPP) -c NMethod.cpp -o NMethod.o $(CXXFLAGS)
+
+Pipelined_Newtons_Method.o: Pipelined_Newtons_Method.cpp
+	$(CPP) -c Pipelined_Newtons_Method.cpp -o Pipelined_Newtons_Method.o $(CXXFLAGS)
+
+pointlinecircle.o: pointlinecircle.cpp
+	$(CPP) -c pointlinecircle.cpp -o pointlinecircle.o $(CXXFLAGS)
+
+utilities.o: utilities.cpp
+	$(CPP) -c utilities.cpp -o utilities.o $(CXXFLAGS)
+
+Geometry/area.o: Geometry/area.cpp
+	$(CPP) -c Geometry/area.cpp -o Geometry/area.o $(CXXFLAGS)
+
+Geometry/curvature2D.o: Geometry/curvature2D.cpp
+	$(CPP) -c Geometry/curvature2D.cpp -o Geometry/curvature2D.o $(CXXFLAGS)
+
+Geometry/curvature3D.o: Geometry/curvature3D.cpp
+	$(CPP) -c Geometry/curvature3D.cpp -o Geometry/curvature3D.o $(CXXFLAGS)
+
+Geometry/curvature_partial.o: Geometry/curvature_partial.cpp
+	$(CPP) -c Geometry/curvature_partial.cpp -o Geometry/curvature_partial.o $(CXXFLAGS)
+
+Geometry/dih_angle.o: Geometry/dih_angle.cpp
+	$(CPP) -c Geometry/dih_angle.cpp -o Geometry/dih_angle.o $(CXXFLAGS)
+
+Geometry/dih_angle_sum.o: Geometry/dih_angle_sum.cpp
+	$(CPP) -c Geometry/dih_angle_sum.cpp -o Geometry/dih_angle_sum.o $(CXXFLAGS)
+
+Geometry/dualarea.o: Geometry/dualarea.cpp
+	$(CPP) -c Geometry/dualarea.cpp -o Geometry/dualarea.o $(CXXFLAGS)
+
+Geometry/dualareasegment.o: Geometry/dualareasegment.cpp
+	$(CPP) -c Geometry/dualareasegment.cpp -o Geometry/dualareasegment.o $(CXXFLAGS)
+
+Geometry/edge_curvature.o: Geometry/edge_curvature.cpp
+	$(CPP) -c Geometry/edge_curvature.cpp -o Geometry/edge_curvature.o $(CXXFLAGS)
+
+Geometry/edge_height.o: Geometry/edge_height.cpp
+	$(CPP) -c Geometry/edge_height.cpp -o Geometry/edge_height.o $(CXXFLAGS)
+
+Geometry/ehr_partial.o: Geometry/ehr_partial.cpp
+	$(CPP) -c Geometry/ehr_partial.cpp -o Geometry/ehr_partial.o $(CXXFLAGS)
+
+Geometry/ehr_second_partial.o: Geometry/ehr_second_partial.cpp
+	$(CPP) -c Geometry/ehr_second_partial.cpp -o Geometry/ehr_second_partial.o $(CXXFLAGS)
+
+Geometry/eta.o: Geometry/eta.cpp
+	$(CPP) -c Geometry/eta.cpp -o Geometry/eta.o $(CXXFLAGS)
+
+Geometry/euc_angle.o: Geometry/euc_angle.cpp
+	$(CPP) -c Geometry/euc_angle.cpp -o Geometry/euc_angle.o $(CXXFLAGS)
+
+Geometry/face_height.o: Geometry/face_height.cpp
+	$(CPP) -c Geometry/face_height.cpp -o Geometry/face_height.o $(CXXFLAGS)
+
+Geometry/length.o: Geometry/length.cpp
+	$(CPP) -c Geometry/length.cpp -o Geometry/length.o $(CXXFLAGS)
+
+Geometry/partial_edge.o: Geometry/partial_edge.cpp
+	$(CPP) -c Geometry/partial_edge.cpp -o Geometry/partial_edge.o $(CXXFLAGS)
+
+Geometry/radius.o: Geometry/radius.cpp
+	$(CPP) -c Geometry/radius.cpp -o Geometry/radius.o $(CXXFLAGS)
+
+Geometry/sectional_curvature.o: Geometry/sectional_curvature.cpp
+	$(CPP) -c Geometry/sectional_curvature.cpp -o Geometry/sectional_curvature.o $(CXXFLAGS)
+
+Geometry/total_volume_partial.o: Geometry/total_volume_partial.cpp
+	$(CPP) -c Geometry/total_volume_partial.cpp -o Geometry/total_volume_partial.o $(CXXFLAGS)
+
+Geometry/totalcurvature.o: Geometry/totalcurvature.cpp
+	$(CPP) -c Geometry/totalcurvature.cpp -o Geometry/totalcurvature.o $(CXXFLAGS)
+
+Geometry/totalvolume.o: Geometry/totalvolume.cpp
+	$(CPP) -c Geometry/totalvolume.cpp -o Geometry/totalvolume.o $(CXXFLAGS)
+
+Geometry/triposition.o: Geometry/triposition.cpp
+	$(CPP) -c Geometry/triposition.cpp -o Geometry/triposition.o $(CXXFLAGS)
+
+Geometry/volume.o: Geometry/volume.cpp
+	$(CPP) -c Geometry/volume.cpp -o Geometry/volume.o $(CXXFLAGS)
+
+Geometry/volume_length_partial.o: Geometry/volume_length_partial.cpp
+	$(CPP) -c Geometry/volume_length_partial.cpp -o Geometry/volume_length_partial.o $(CXXFLAGS)
+
+Geometry/volume_length_tetra_partial.o: Geometry/volume_length_tetra_partial.cpp
+	$(CPP) -c Geometry/volume_length_tetra_partial.cpp -o Geometry/volume_length_tetra_partial.o $(CXXFLAGS)
+
+Geometry/volume_partial.o: Geometry/volume_partial.cpp
+	$(CPP) -c Geometry/volume_partial.cpp -o Geometry/volume_partial.o $(CXXFLAGS)
+
+Geometry/volume_partial_sum.o: Geometry/volume_partial_sum.cpp
+	$(CPP) -c Geometry/volume_partial_sum.cpp -o Geometry/volume_partial_sum.o $(CXXFLAGS)
+
+Geometry/volume_second_partial.o: Geometry/volume_second_partial.cpp
+	$(CPP) -c Geometry/volume_second_partial.cpp -o Geometry/volume_second_partial.o $(CXXFLAGS)
+
+Triangulation/triangulation.o: Triangulation/triangulation.cpp
+	$(CPP) -c Triangulation/triangulation.cpp -o Triangulation/triangulation.o $(CXXFLAGS)
+
+Triangulation/triangulationInputOutput.o: Triangulation/triangulationInputOutput.cpp
+	$(CPP) -c Triangulation/triangulationInputOutput.cpp -o Triangulation/triangulationInputOutput.o $(CXXFLAGS)
+
+3DTriangulation/3DInputOutput.o: 3DTriangulation/3DInputOutput.cpp
+	$(CPP) -c 3DTriangulation/3DInputOutput.cpp -o 3DTriangulation/3DInputOutput.o $(CXXFLAGS)
+
+Simplex/edge.o: Simplex/edge.cpp
+	$(CPP) -c Simplex/edge.cpp -o Simplex/edge.o $(CXXFLAGS)
+
+Simplex/face.o: Simplex/face.cpp
+	$(CPP) -c Simplex/face.cpp -o Simplex/face.o $(CXXFLAGS)
+
+Simplex/simplex.o: Simplex/simplex.cpp
+	$(CPP) -c Simplex/simplex.cpp -o Simplex/simplex.o $(CXXFLAGS)
+
+Simplex/tetra.o: Simplex/tetra.cpp
+	$(CPP) -c Simplex/tetra.cpp -o Simplex/tetra.o $(CXXFLAGS)
+
+Simplex/vertex.o: Simplex/vertex.cpp
+	$(CPP) -c Simplex/vertex.cpp -o Simplex/vertex.o $(CXXFLAGS)
+
+textRuns.o: textRuns.cpp
+	$(CPP) -c textRuns.cpp -o textRuns.o $(CXXFLAGS)
