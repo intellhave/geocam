@@ -1,5 +1,0 @@
-TriangulationFiles/NewtonsMethod/MinTest2.txt
-TriangulationFiles/NewtonsMethod/MinTest1.txt
-TriangulationFiles/trial1input.txt
-TriangulationFiles/NewtonsMethod/PentachoronInput2.txt
-TriangulationFiles/NewtonsMethod/PentachoronInput3.txt
