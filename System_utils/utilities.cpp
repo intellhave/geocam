@@ -28,3 +28,22 @@ void printVolumes() {
 
       // for(int i = 0; i < Triangulation::e
 }
+
+void printGradient(double grad[], int size) {
+     printf("grad = <");
+     for(int i = 0; i < size; i++) {
+       printf("%f, ", grad[i]);
+     }
+     printf(">\n");
+}
+
+void printHessian(double *hess[], int size) {
+     for(int i = 0; i < size; i++) {
+        printf("hess[%d][] = <", i);
+        for(int j = 0; j < size; j++) {
+           printf("%f, ", hess[i][j]);
+        }
+        printf(">\n");
+     }
+}
+

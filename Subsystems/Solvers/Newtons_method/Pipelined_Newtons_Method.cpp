@@ -99,11 +99,11 @@ void Newtons_Method( double stopping_threshold, char* filename ) {
 	  hessian[j][i] = hessian[i][j];
       }
     }
-
+    
     // Likewise, obtain a copy of the current graident.
     for(int ii = 0 ; ii < V; ii++)
       negative_gradient[ii] = -1.0 * gradientGenerator[ii]->getValue();
-   
+       
     LinearEquationsSolving( V, (double*) hessian, negative_gradient, soln);
 
     //maxDelta = 0.0;

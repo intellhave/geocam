@@ -104,7 +104,7 @@ class NewtonsMethod {
    void setDefaults() {
         delta = 0.00001;
         stepRatio = 1.0 / 10.0;
-        gradLenCond = 0.0000000001;
+        gradLenCond = 0.000001;
    }
    
    /*** PUBLIC INFO ***/
