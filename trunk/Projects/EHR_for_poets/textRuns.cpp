@@ -1,6 +1,8 @@
 #include "textRuns.h"
 #include "triangulation.h"
 #include <map>
+#include <cmath>
+#include <cerrno>
 #include "Pipelined_Newtons_Method.h"
 #include "NMethod.h"
 
@@ -15,28 +17,30 @@
 #include "ehr_partial.h"
 #include "ehr_second_partial.h"
 
+#include "utilities.h"
+
 
 void runPipelinedNewtonsMethod(char* outputFile) {
      Newtons_Method(0.00001, outputFile);
 }
 
-void EHR_Partial(double radii[], double grad[]) {
+void EHR_Partial(double log_radii[], double grad[]) {
   map<int, Vertex>::iterator vit;
   int i;
   for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
-          Radius::At(vit->second)->setValue(radii[i]);        
+          Radius::At(vit->second)->setValue(exp(log_radii[i]));        
   }
   for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
         grad[i] = EHRPartial::valueAt(vit->second);
   }
 }
 
-void EHR_Second_Partial(double radii[], double *hess[]) {
+void EHR_Second_Partial(double log_radii[], double *hess[]) {
      map<int, Vertex>::iterator vit1;
      map<int, Vertex>::iterator vit2;
      int i, j;
      for(vit1 = Triangulation::vertexTable.begin(), i = 0; vit1 != Triangulation::vertexTable.end(); vit1++, i++) {
-              Radius::At(vit1->second)->setValue(radii[i]);
+              Radius::At(vit1->second)->setValue(exp(log_radii[i]));
      }
      for(vit1 = Triangulation::vertexTable.begin(), i = 0; vit1 != Triangulation::vertexTable.end(); vit1++, i++) {
         for(vit2 = Triangulation::vertexTable.begin(), j = 0; vit2 != Triangulation::vertexTable.end(); vit2++, j++) {
@@ -53,11 +57,11 @@ double EHR() {
        return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
 }
 
-double EHR(double radii[]) {
+double EHR(double log_radii[]) {
   map<int, Vertex>::iterator vit;
   int i;
   for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
-          Radius::At(vit->second)->setValue(radii[i]);        
+          Radius::At(vit->second)->setValue(exp(log_radii[i]));        
   }
   return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
 }
@@ -91,24 +95,24 @@ void printFunc(FILE* out) {
              eit++) {
         fprintf(out, "Edge Curvature %d = %.10f\n", eit->first, EdgeCurvature::valueAt(eit->second));
      }
-     
-     // Prints Einstein Ratios and Edge Volumes:
-     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-             eit++) {
-                    double temp=0.0;
-                    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++) {
-                            if(eit->second.isAdjTetra(tit->first)){
-                          temp += VolumeLengthTetraPartial::valueAt(eit->second, tit->second);
-                          }
-                    }
-        fprintf(out, "Einstein Ratio %d = %.10f \t Edge Volume = %.10f\n", eit->first, EdgeCurvature::valueAt(eit->second)/temp, temp);
-          }
-          
-     // Prints The Constant Scalar Curvature Ratio:
-     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-             vit++) {
-          fprintf(out, "CSC Ratio %d = %.10f\n", vit->first, Curvature3D::valueAt(vit->second)/TotalVolumePartial::valueAt(vit->second));
-     }
+//     
+//     // Prints Einstein Ratios and Edge Volumes:
+//     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+//             eit++) {
+//                    double temp=0.0;
+//                    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++) {
+//                            if(eit->second.isAdjTetra(tit->first)){
+//                          temp += VolumeLengthTetraPartial::valueAt(eit->second, tit->second);
+//                          }
+//                    }
+//        fprintf(out, "Einstein Ratio %d = %.10f \t Edge Volume = %.10f\n", eit->first, EdgeCurvature::valueAt(eit->second)/temp, temp);
+//          }
+//          
+//     // Prints The Constant Scalar Curvature Ratio:
+//     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+//             vit++) {
+//          fprintf(out, "CSC Ratio %d = %.10f\n", vit->first, Curvature3D::valueAt(vit->second)/TotalVolumePartial::valueAt(vit->second));
+//     }
      
      // Prints The NEHR Functional:
      fprintf(out, "EHR: %.10f\n=================================================\n", EHR());
@@ -132,21 +136,21 @@ void getEtas(double etas[]) {
    }
 }
 
-void setRadii(double radii[]) {
+void setLogRadii(double log_radii[]) {
    map<int, Vertex>::iterator vit;
    int i = 0;
    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
            vit++, i++) {
-       Radius::At(vit->second)->setValue(radii[i]);        
+       Radius::At(vit->second)->setValue(exp(log_radii[i]));        
    }
 }
 
-void getRadii(double radii[]) {
+void getLogRadii(double log_radii[]) {
    map<int, Vertex>::iterator vit;
    int i = 0;
    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
            vit++, i++) {
-       radii[i] = Radius::At(vit->second)->getValue();        
+       log_radii[i] = log( Radius::At(vit->second)->getValue() );        
    }
 }
 
@@ -166,6 +170,83 @@ double saddleFinder(double etas[]) {
    }
    
    Newtons_Method(0.00001);
+
+//   FILE* test = fopen("TriangulationFiles/NewtonsMethod/testFile1.txt", "a");
+//   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+//           eit++, i++) {
+//       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
+//   }
+//   fprintf(test, "\n");
+//   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+//           vit++) {
+//     fprintf(test, "Radius %d: %.12f, ", vit->first, Radius::valueAt(vit->second));
+//   }  
+//   fprintf(test, "\n%.12f\n\n", EHR());
+//   fclose(test);
+ 
+   if(errno) {
+      pause("There was an error after Pipelined_NM\n");
+   }
+   double value = EHR();
+ 
+   return value;
+}
+
+double saddleFinder2(double etas[]) {
+   // Set Etas
+   map<int, Edge>::iterator eit;
+   map<int, Vertex>::iterator vit;
+   int i = 0;
+
+   setEtas(etas);
+   double radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
+//   double radius_scaling_factor = pow( 1.0/TotalVolume::valueAt(), 1.0/3.0 );
+
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++) {
+     Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
+   }
+
+   
+   int vertSize = Triangulation::vertexTable.size();
+   double log_radii[vertSize];    
+   getLogRadii(log_radii);
+     
+   NewtonsMethod *nm = new NewtonsMethod(EHR, EHR_Partial, EHR_Second_Partial, vertSize);     
+   while(nm->step(log_radii) > 0.000001) {
+     setLogRadii(log_radii);
+     radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
+     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++) {
+         Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
+     }    
+   }
+   delete nm;
+   setLogRadii(log_radii);
+   radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++) {
+      Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
+   }
+   
+//   FILE* test = fopen("TriangulationFiles/NewtonsMethod/testFile2.txt", "a");
+//   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+//           eit++, i++) {
+//       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
+//   }
+//   fprintf(test, "\n");
+//   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+//           vit++) {
+//     fprintf(test, "Radius %d: %.12f, ", vit->first, Radius::valueAt(vit->second));
+//   }  
+//   fprintf(test, "\n%.12f\n\n", EHR());
+//   
+//   fclose(test);
+
+   
+   if(errno) {
+      pause("There was an error after Pipelined_NM\n");
+   }
    double value = EHR();
  
    return value;
@@ -230,11 +311,16 @@ void runNewtonsMethod(char* outputFile) {
      double etas[edgeSize];
      getEtas(etas);
      
+     for(int i = 0; i < edgeSize; i++) {
+       printf("etas[%d] = %f\n", i, etas[i]);
+     }
+     
      NewtonsMethod *nm = new NewtonsMethod(saddleFinder, edgeSize);
      nm->setPrintFunc(printFunc);
+     //nm->setStepRatio(1.0/100.0);
      FILE* result = fopen(outputFile, "w");
      
-     while(nm->step(etas, NMETHOD_MAX) > 0.000001) {
+     while(nm->step(etas, NMETHOD_MIN) > 0.00001) {
        setEtas(etas);
        nm->printInfo(result);     
      }
@@ -246,19 +332,32 @@ void runNewtonsMethod(char* outputFile) {
 
 void runMin(char* outputFile) {
      int vertSize = Triangulation::vertexTable.size();
-     double radii[vertSize];
-     getRadii(radii);
+     double log_radii[vertSize];
+     double radius_scaling_factor;
+     map<int, Vertex>::iterator vit;    
+     getLogRadii(log_radii);
      
      NewtonsMethod *nm = new NewtonsMethod(EHR, EHR_Partial, EHR_Second_Partial, vertSize);
      nm->setPrintFunc(printFunc);
      FILE* result = fopen(outputFile, "w");
      
-     while(nm->step(radii, NMETHOD_MIN) > 0.000001) {
-       setRadii(radii);
+     while(nm->step(log_radii) > 0.000001) {
+       setLogRadii(log_radii);
+       radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
+       for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++) {
+         Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
+       }
+       
        nm->printInfo(result);     
      }
-     
-     setRadii(radii);
+          
+     setLogRadii(log_radii);
+     radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
+     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++) {
+        Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
+     }
      nm->printInfo(result);
      fclose(result);     
 }
