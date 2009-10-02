@@ -29,7 +29,7 @@
 #include <list>
 
 #include "triangulation.h"
-#include "3DTriangulation/3DInputOutput.h"
+#include "3DInputOutput.h"
 
 #include "textRuns.h"
 
@@ -139,7 +139,10 @@ int main(int argc, char *argv[])
     int fileChoice, program; // Values that will be filled in by the user.
     FILE* inputFile; // File handle for the input file.
     // Open the hidden file.
-    FILE* log = fopen("TriangulationFiles/InputUI/eventlog.txt", "r");
+    FILE* log = fopen("Projects/EHR_for_poets/eventlog.txt", "r");
+    if(log == NULL) {
+         pause("Error: Couldn't find log file\n");       
+    }
     // Collect any previous events.
     list<event> eventList;
     checkPastEvents(log, &eventList);
@@ -225,7 +228,7 @@ int main(int argc, char *argv[])
     } else {
        runMin(outputFile);
     }
-    log = fopen("TriangulationFiles/InputUI/eventlog.txt", "w");
+    log = fopen("Projects/EHR_for_poets/eventlog.txt", "w");
     logEvents(log, &eventList);
     fclose(log);
     

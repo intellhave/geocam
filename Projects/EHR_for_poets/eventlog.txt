@@ -1,5 +1,5 @@
-TriangulationFiles/NewtonsMethod/MinTest2.txt
-TriangulationFiles/NewtonsMethod/MinTest1.txt
-TriangulationFiles/trial1input.txt
-TriangulationFiles/NewtonsMethod/PentachoronInput2.txt
-TriangulationFiles/NewtonsMethod/PentachoronInput3.txt
+Data/Input_EHR/MinTest2.txt
+Data/Input_EHR/MinTest1.txt
+Data/Input_EHR/PentachoronInput3.txt
+Data/Input_EHR/PentachoronInput2.txt
+Data/Input_EHR/PentachoronInput.txt

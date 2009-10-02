@@ -14,6 +14,7 @@ the reading and writing of text files.
 #include "triangulationinputoutput.h"
 #include "length.h"
 #include "area.h"
+#include "miscmath.h"
 
 
 /*

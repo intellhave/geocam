@@ -1,5 +1,5 @@
 #include "partial_edge.h"
-#include "../miscmath.h"
+#include "miscmath.h"
 
 #include <stdio.h>
 

@@ -5,7 +5,7 @@ Version: July 16, 2008
 **************************************************************/
 
 #include "vertex.h" // class's header file
-#include "triangulation/triangulation.h"
+#include "triangulation.h"
 
 // class constructor
 Vertex::Vertex() : Simplex()

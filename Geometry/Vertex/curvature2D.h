@@ -2,7 +2,7 @@
 #define TWODCURVATURE_H_
 
 #include "geoquant.h"
-#include "../Triangulation/triangulation.h"
+#include "triangulation.h"
 
 class Curvature2D : public virtual GeoQuant {
 private:

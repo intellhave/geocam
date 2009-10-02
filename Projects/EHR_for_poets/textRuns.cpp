@@ -171,7 +171,7 @@ double saddleFinder(double etas[]) {
    
    Newtons_Method(0.00001);
 
-//   FILE* test = fopen("TriangulationFiles/NewtonsMethod/testFile1.txt", "a");
+//   FILE* test = fopen("Data/Input_EHR/testFile1.txt", "a");
 //   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
 //           eit++, i++) {
 //       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
@@ -229,7 +229,7 @@ double saddleFinder2(double etas[]) {
       Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
    }
    
-//   FILE* test = fopen("TriangulationFiles/NewtonsMethod/testFile2.txt", "a");
+//   FILE* test = fopen("Data/Input_EHR/testFile2.txt", "a");
 //   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
 //           eit++, i++) {
 //       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
@@ -310,21 +310,20 @@ void runNewtonsMethod(char* outputFile) {
      int edgeSize = Triangulation::edgeTable.size();
      double etas[edgeSize];
      getEtas(etas);
-     
-     for(int i = 0; i < edgeSize; i++) {
-       printf("etas[%d] = %f\n", i, etas[i]);
-     }
-     
+          
      NewtonsMethod *nm = new NewtonsMethod(saddleFinder, edgeSize);
      nm->setPrintFunc(printFunc);
-     //nm->setStepRatio(1.0/100.0);
+     
      FILE* result = fopen(outputFile, "w");
+     if(result == NULL) {
+       pause("Error: %s is not a valid file\n", outputFile);
+       exit(1);
+     }
      
      while(nm->step(etas, NMETHOD_MIN) > 0.00001) {
        setEtas(etas);
        nm->printInfo(result);     
      }
-     
      setEtas(etas);
      nm->printInfo(result);
      fclose(result);

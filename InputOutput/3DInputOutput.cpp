@@ -13,8 +13,9 @@ the reading and writing of text files under a two-dimensional manifold.
 #include <iomanip>
 #include <cmath>
 #include "3DInputOutput.h"
-#include "triangulation/triangulationInputOutput.h"
+#include "triangulationInputOutput.h"
 #include "volume.h"
+#include "miscmath.h"
 
 bool read3DTriangulationFile(char* fileName) 
 {

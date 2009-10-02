@@ -1,6 +1,6 @@
 #include "total_volume_partial.h"
 
-#include "../miscmath.h"
+#include "miscmath.h"
 
 #include <stdio.h>
 

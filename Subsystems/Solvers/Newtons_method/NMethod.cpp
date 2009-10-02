@@ -104,7 +104,6 @@ double NewtonsMethod::step(double x_n[], int extremum) {
    } else { // Otherwise, get the hessian matrix from a user-defined function.
       d2f(x_n, hess);
    }
-   
    // Calculate the length of the gradient.
    gradLen = getGradientLength(grad);
 //DAN   printf("Gradient length = %.12f\n", gradLen);
@@ -116,16 +115,16 @@ double NewtonsMethod::step(double x_n[], int extremum) {
 //DAN        printf("Returned cause gradient = 0\n");
         return gradLen;
    }   
-   
-//   FILE* test = fopen("TriangulationFiles/NewtonsMethod/grad_hess.txt", "w");
+
+//   FILE* test = fopen("Data/Input_EHR/grad_hess.txt", "w");
 //   printInfo(test);
 //   fclose(test);
 //   
-//   test = fopen("TriangulationFiles/NewtonsMethod/testFile1.txt", "a");
+//   test = fopen("Data/Input_EHR/testFile1.txt", "a");
 //   fprintf(test, "-----------------------------------\n");
 //   fclose(test);
 //   
-//   test = fopen("TriangulationFiles/NewtonsMethod/testFile2.txt", "a");
+//   test = fopen("Data/Input_EHR/testFile2.txt", "a");
 //   fprintf(test, "-----------------------------------\n");
 //   fclose(test);
    
@@ -137,7 +136,6 @@ double NewtonsMethod::step(double x_n[], int extremum) {
      printf("Error with Solver\n");
      return -1;
    }
-   
    // Modify the next[] array by scaling it by stepRatio.
    for(int i = 0; i < nDim; i++) {
       next[i] = stepRatio * next[i];
@@ -251,7 +249,7 @@ void NewtonsMethod::approxGradient(double vars[], double sol[]) {
      double val = 0;        // A running sum for the numerator
      
      for(int i = 0; i < nDim; i++) {
-//DAN        printf("grad: %d\n", i);
+//        printf("grad: %d\n", i);
         vars[i] = vars[i] + delta; // x_i + delta
         val = f(vars); // f(x_i + delta);
         vars[i] = vars[i] - 2*delta; // x_i - delta
@@ -265,10 +263,10 @@ void NewtonsMethod::approxGradient(double vars[], double sol[]) {
 void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
      double val = 0;        // A running sum for the numerator
      double f_x = f(vars);  // Save f(vars)
-  //   FILE* hessFile = fopen("TriangulationFiles/NewtonsMethod/hessian.txt", "w");
+  //   FILE* hessFile = fopen("../../TriangulationFiles/NewtonsMethod/hessian.txt", "w");
      for(int i = 0; i < nDim; i++) {
        for(int j = 0; j < nDim; j++) {
-  //        fprintf(hessFile, "hess: %d, %d = ", i, j);
+//        printf("hess: %d, %d = ", i, j);
           if(i > j) { // The matrix is diagonal
             sol[i][j] = sol[j][i];
           } else if( i != j) { // If i != j
