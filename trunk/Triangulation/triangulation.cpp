@@ -7,12 +7,9 @@ Version: July 16, 2008
 #include "triangulation.h" // class's header file
 #include <cstdlib>
 #include <map>
-#include "triangulationmath.h"
 #include <algorithm>
 #include <vector>
 #include <iostream>
-#include "spherical/sphericalmath.h"
-#include "3DTriangulation/3Dtriangulationmath.h"
 
 
 map<int, Vertex> Triangulation::vertexTable;

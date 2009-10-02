@@ -8,7 +8,7 @@ using namespace std;
 #include "triposition.h"
 #include "length.h"
 #include "miscmath.h"
-#include "triangulation/triangulation.h"
+#include "triangulation.h"
 
 typedef map<TriPosition, VolumeLengthTetraPartial*, TriPositionCompare> VolumeLengthTetraPartialIndex;
 static VolumeLengthTetraPartialIndex* Index = NULL;

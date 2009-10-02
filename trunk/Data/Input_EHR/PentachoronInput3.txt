@@ -1,11 +1,11 @@
-Triangulation: TriangulationFiles/3DManifolds/StandardFormat/pentachoron.txt
-Output: TriangulationFiles/NewtonsMethod/results.txt
+Triangulation: Data/3DManifolds/StandardFormat/pentachoron.txt
+Output: Data/Input_EHR/results.txt
 radius 1: 1.0
 radius 2: 1.0
 radius 3: 1.0
 radius 4: 1.0
 radius 5: 1.0
-eta 1: 0.95
+eta 1: 0.98
 eta 2: 1.0
 eta 3: 1.0
 eta 4: 1.0

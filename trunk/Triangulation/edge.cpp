@@ -5,8 +5,7 @@ Version: July 16, 2008
 **************************************************************/
 
 #include "edge.h" // class's header file
-#include "triangulation/triangulation.h"
-#include "3DTriangulation/3Dtriangulationmath.h"
+#include "triangulation.h"
 #include <cmath>
 #define PI 	3.141592653589793238
 

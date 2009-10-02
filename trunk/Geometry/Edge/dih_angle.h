@@ -8,7 +8,7 @@ using namespace std;
 
 #include "geoquant.h"
 #include "triposition.h"
-#include "../triangulation/triangulation.h"
+#include "triangulation.h"
 #include "euc_angle.h"
 
 class DihedralAngle : public virtual GeoQuant {

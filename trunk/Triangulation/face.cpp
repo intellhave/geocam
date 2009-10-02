@@ -6,10 +6,7 @@ Version: June 9, 2008
 
 #include "face.h" // class's header file
 #include "edge.h"
-#include "Triangulation/Triangulation.h"
-#include "Triangulation/TriangulationMath.h"
-#include "Spherical/SphericalMath.h"
-#include "Hyperbolic/HyperbolicMath.h"
+#include "Triangulation.h"
 #include <math.h>
 
 // class constructor

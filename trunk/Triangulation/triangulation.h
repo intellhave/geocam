@@ -23,11 +23,10 @@ Version: July 16, 2008
 #include <cstdlib>
 #include <vector>
 #include <map>
-#include "simplex/vertex.h"
-#include "simplex/edge.h"
-#include "simplex/face.h"
-#include "simplex/tetra.h"
-#include "hyperbolic/hyperbolicmath.h"
+#include "vertex.h"
+#include "edge.h"
+#include "face.h"
+#include "tetra.h"
 
 /*
 

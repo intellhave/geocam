@@ -1,5 +1,5 @@
 #include "dih_angle.h"
-#include "../miscmath.h"
+#include "miscmath.h"
 
 #include <stdio.h>
 

@@ -9,7 +9,7 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "../Triangulation/triangulation.h"
+#include "triangulation.h"
 
 #include "length.h"
 

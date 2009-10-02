@@ -7,8 +7,8 @@
 
 using namespace std;
 
-#include "../miscmath.h"
-#include "../Triangulation/triangulation.h"
+#include "miscmath.h"
+#include "triangulation.h"
 #include "geoquant.h"
 #include "triposition.h"
 
