@@ -1,0 +1,17 @@
+Triangulation: Data/3DManifolds/StandardFormat/pentachoron.txt
+Output: Data/Input_EHR/min_test2.txt
+radius 1: 1.0
+radius 2: 1.0
+radius 3: 1.0
+radius 4: 1.0
+radius 5: 1.0
+eta 1: 1.0
+eta 2: 1.0
+eta 3: 1.0
+eta 4: 1.0
+eta 5: 1.0
+eta 6: 1.0
+eta 7: 1.0
+eta 8: 1.0
+eta 9: 1.0
+eta 10: 1.0
