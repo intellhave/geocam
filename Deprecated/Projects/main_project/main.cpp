@@ -204,140 +204,14 @@ void printFunc(FILE* out) {
      fprintf(out, "EHR: %.10f\n=================================================\n", EHR());
 }
 
+
+
+
+
+
 int main(int arg, char** argv) { 
-    time_t start, end;
     
-     char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/pentachron.txt";
-//     char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/sixhundredcell.txt";
-//     char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/Hopf_Triangulation.txt";
-//     char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/3-toruspacking.txt";
-//     char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/poincare-16.txt";
-//     char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/FlatTorus.txt";
-//     char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/poincare-24.txt";
-//     char from[] = "C:/Dev-Cpp/geocam/Triangulation Files/3D Manifolds/Lutz Format/weber-seifert.txt";
-     char to[] = "C:/Dev-Cpp/geocam/Triangulation Files/manifold_converted.txt";
-     make3DTriangulationFile(from, to);
-     read3DTriangulationFile(to);
- 
-   int vertSize = Triangulation::vertexTable.size();
-   for(int i = 1; i <= vertSize; i++) {
-      Radius::At(Triangulation::vertexTable[i])->setValue(1.0);     
-   }
-   
-//   Radius::At(Triangulation::vertexTable[1])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[2])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[3])->setValue(.5);
-//   Radius::At(Triangulation::vertexTable[4])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[5])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[6])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[7])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[8])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[9])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[10])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[11])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[12])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[13])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[14])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[15])->setValue(.5);
-//   Radius::At(Triangulation::vertexTable[16])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[17])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[18])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[19])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[20])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[21])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[22])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[23])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[24])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[25])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[26])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[27])->setValue(.5);
-//   Radius::At(Triangulation::vertexTable[28])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[29])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[30])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[31])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[32])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[33])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[34])->setValue(1.4);
-//   Radius::At(Triangulation::vertexTable[35])->setValue(1.0);
-//   Radius::At(Triangulation::vertexTable[36])->setValue(1.0);
-   
-   int edgeSize = Triangulation::edgeTable.size();
-   double etas[edgeSize];
-   for(int i = 0; i < edgeSize; i++) {
-      etas[i] = 1.0;     
-   }
-    
-   etas[0] = 0.90;
-   setEtas(etas);   
-   //Eta::At(Triangulation::edgeTable[1])->setValue(1.0);
-   
-   // Create an approximator that uses the Euler method on a Yamabe flow.
-//Approximator *app = new EulerApprox(Yamabe);
+TransConformal();  
 
-// Run a Yamabe flow for 300 steps with a stepsize of 0.01.
-//app->run(300, 0.01);
-// Run with a precision bound of 0.000001 and a stepsize of 0.01
-// app->run(0.000001, 0.01);
-
-//   Newtons_Method(0.000000000001, true);
-//   Curvature3D::Record("my_curvatures.txt");
-//   Length::Record("my_lengths.txt");
-//
-//   Volume::Record("my_volumes.txt");
-//   
-//   for(int i = 1; i <= vertSize; i++) {
-//      double r = Radius::At(Triangulation::vertexTable[i])->getValue();
-//      printf("Radius #%d: %lf\n", i, r);     
-//   }
-//   pause();
-//
-//
-    printFunc(stdout);
-    pause();
-    //NewtonsMethod *nm = new NewtonsMethod(saddleFinder, saddleFinderHess, edgeSize);
-    NewtonsMethod *nm = new NewtonsMethod(saddleFinder, edgeSize);
-    
-//    Curvature3D::Record("my_curvatures1.txt");
-//    Length::Record("my_lengths1.txt");
-//
-//    Volume::Record("my_volumes1.txt");
-   
-//    nm->setDelta(0.00001);
-    nm->setPrintFunc(printFunc);
-    int i = 1;
-//    double soln[edgeSize];
-//    time(&start);
-////    
-    FILE* result = fopen("C:/Dev-Cpp/geocam/Triangulation Files/MinMax_result.txt", "w");
-//    while(nm->step(etas, NMETHOD_MIN) > 0.000001) {
-    while(nm->step(etas) > 0.000001) {
-//    while(i <= 100) { 
-//            nm->step(etas, NMETHOD_MAX);                        
-//     time(&end);
-////      pause("The step took %f seconds\n", difftime(end, start));
-      printf("\n***** Step %d *****\n", i++);
-      setEtas(etas);
-      nm->printInfo(result);
-      nm->printInfo(stdout);
-//      fprintf(result, "-------------------\nEHR: %.10f\n", EHR());
-////      pause(); // PAUSE
-//      time(&start);
-      i++;
-    }
-//    system("PAUSE");
-    setEtas(etas);
-          nm->printInfo(result);
-//      fprintf(result, "-------------------\nEHR: %.10f\n", EHR());
-//    time(&end);
-//    //pause("The step took %f seconds\n", difftime(end, start));
-//
-//    printf("\n----Solution----\n");
-//    setEtas(etas);
-//    nm->printInfo(result);
-//    fprintf(result, "-------------------\nEHR: %.10f\n", EHR());
-    fclose(result);
-//    for(int j = 0; j < edgeSize; j++) {
-//        printf("eta_%d[%d] = %f\n", i, j, etas[j]);
-//    }
     pause("Done...press enter to exit."); // PAUSE   
 }

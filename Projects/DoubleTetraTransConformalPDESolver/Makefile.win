@@ -1,0 +1,39 @@
+# Project: DoubleTetraTransConformalPDESolver
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
+WINDRES = windres.exe
+RES  = 
+OBJ  = ../../Subsystems/Solvers/Newtons_method/NMethod.o ../../Subsystems/Solvers/PDE_approximators/DoubleTetraTransConformalPDESolver.o main.o ../../System_utils/utilities.o $(RES)
+LINKOBJ  = ../../Subsystems/Solvers/Newtons_method/NMethod.o ../../Subsystems/Solvers/PDE_approximators/DoubleTetraTransConformalPDESolver.o main.o ../../System_utils/utilities.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam" -L"C:/Dev-Cpp/geocam"  -lgmon -pg  -g3 
+INCS =  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam/Subsystems/Solvers/Newtons_method"  -I"C:/Dev-Cpp/geocam/Geometry"  -I"C:/Dev-Cpp/geocam/InputOutput"  -I"C:/Dev-Cpp/geocam/System_utils"  -I"C:/Dev-Cpp/geocam/Triangulation"  -I"C:/Dev-Cpp/geocam/Math"  -I"C:/Dev-Cpp/geocam/Geometry/Vertex"  -I"C:/Dev-Cpp/geocam/Geometry/Edge"  -I"C:/Dev-Cpp/geocam/Geometry/Face"  -I"C:/Dev-Cpp/geocam/Geometry/Tetrahedron"  -I"C:/Dev-Cpp/geocam/Geometry/Triangulation"  -I"C:/Dev-Cpp/geocam/Geometry/Geoquant_general"  -I"C:/Dev-Cpp/geocam/Visualization" 
+CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam/Subsystems/Solvers/Newtons_method"  -I"C:/Dev-Cpp/geocam/Geometry"  -I"C:/Dev-Cpp/geocam/InputOutput"  -I"C:/Dev-Cpp/geocam/System_utils"  -I"C:/Dev-Cpp/geocam/Triangulation"  -I"C:/Dev-Cpp/geocam/Math"  -I"C:/Dev-Cpp/geocam/Geometry/Vertex"  -I"C:/Dev-Cpp/geocam/Geometry/Edge"  -I"C:/Dev-Cpp/geocam/Geometry/Face"  -I"C:/Dev-Cpp/geocam/Geometry/Tetrahedron"  -I"C:/Dev-Cpp/geocam/Geometry/Triangulation"  -I"C:/Dev-Cpp/geocam/Geometry/Geoquant_general"  -I"C:/Dev-Cpp/geocam/Visualization" 
+BIN  = DoubleTetraTransConformalPDESolver.exe
+CXXFLAGS = $(CXXINCS)   -O3 -pg -g3
+CFLAGS = $(INCS)   -O3 -pg -g3
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before DoubleTetraTransConformalPDESolver.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "DoubleTetraTransConformalPDESolver.exe" $(LIBS)
+
+../../Subsystems/Solvers/Newtons_method/NMethod.o: ../../Subsystems/Solvers/Newtons_method/NMethod.cpp
+	$(CPP) -c ../../Subsystems/Solvers/Newtons_method/NMethod.cpp -o ../../Subsystems/Solvers/Newtons_method/NMethod.o $(CXXFLAGS)
+
+../../Subsystems/Solvers/PDE_approximators/DoubleTetraTransConformalPDESolver.o: ../../Subsystems/Solvers/PDE_approximators/DoubleTetraTransConformalPDESolver.cpp
+	$(CPP) -c ../../Subsystems/Solvers/PDE_approximators/DoubleTetraTransConformalPDESolver.cpp -o ../../Subsystems/Solvers/PDE_approximators/DoubleTetraTransConformalPDESolver.o $(CXXFLAGS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+../../System_utils/utilities.o: ../../System_utils/utilities.cpp
+	$(CPP) -c ../../System_utils/utilities.cpp -o ../../System_utils/utilities.o $(CXXFLAGS)
