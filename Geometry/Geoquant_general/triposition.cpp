@@ -32,9 +32,9 @@ TriPosition::TriPosition(int numPoints, ... ){
   }
 }
 
-void TriPosition::print(){
-  printf("[ " );
+void TriPosition::print(FILE* out){
+  fprintf(out, "[ " );
   for(int ii = 0; ii < length; ii++)
-    printf("%d ", pointIDs[ii]);
-  printf("]");
+    fprintf(out, "%d ", pointIDs[ii]);
+  fprintf(out, "]");
 }

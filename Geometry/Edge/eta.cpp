@@ -54,3 +54,17 @@ void Eta::Record( char* filename ){
 
   fclose( output );
 }
+
+void Eta::print(FILE* out) {
+  EtaIndex::iterator iter;
+  
+  for(iter = Index->begin(); iter != Index->end(); iter++) {
+     fprintf(out, "Eta");
+     fprintf(out, "[ " );
+     for(int ii = 0; ii < (iter->first).length; ii++) {
+       fprintf(out, "%d ", (iter->first).pointIDs[ii]);
+     }
+     fprintf(out, "]");
+     fprintf(out, " = % 2.8f\n", iter->second->getValue());
+  }       
+}

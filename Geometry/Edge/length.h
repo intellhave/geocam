@@ -31,7 +31,9 @@ public:
   }
   static void CleanUp();
   void remove();
-  static void Record( char* filename );
+  static void print(FILE* out);
+  
+  
 };
 
 #endif /* LENGTH_H_ */

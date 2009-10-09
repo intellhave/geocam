@@ -27,29 +27,34 @@ double C3424(double radii[4],double etas[6]);
 void derivative_s(double radii[4],double etas[6], double der_etas[6]);
 void derivative_t(double radii[4],double etas[6], double der_etas[6]);
 
+const int N=100;
+
+double MiniNEHRCCW[2*N+1][2*N+1];
+double MiniNEHRCW[2*N+1][2*N+1];
+double MiniNEHR[2*N+1][2*N+1];
+double etasCCW[2*N+1][2*N+1][6];
+double etasCW[2*N+1][2*N+1][6];
+double radiiCCW[2*N+1][2*N+1][4];
+double radiiCW[2*N+1][2*N+1][4];
+double Avg_radii[2*N+1][2*N+1][4];
+double Avg_etas[2*N+1][2*N+1][6];
+
 double global_etas[6];
 // Input the desired value used for the stopping condition on all calls to Newton's method.
-double NMaccuracy=.00000000001;
+//double NMaccuracy=.00000000001;
+double NMaccuracy=.0001;
 // Set the following boolean to true if you want to run the Runga-Kutta method.
 // False will run the frowar Euler method.
 bool RK = true;
 
 void TransConformal()
 {
-     int N=10;
+     
      int i,j,k;
      double delta_st=.1;
      double initial_etas[6];
      double initial_radii[4];
-     double MiniNEHRCCW[2*N+1][2*N+1];
-     double MiniNEHRCW[2*N+1][2*N+1];
-     double MiniNEHR[2*N+1][2*N+1];
-     double etasCCW[2*N+1][2*N+1][6];
-     double etasCW[2*N+1][2*N+1][6];
-     double radiiCCW[2*N+1][2*N+1][4];
-     double radiiCW[2*N+1][2*N+1][4];
-     double Avg_radii[2*N+1][2*N+1][4];
-     double Avg_etas[2*N+1][2*N+1][6];
+
      double prev_radiiCCW[4];
      double prev_etasCCW[6];
      double prev_radiiCW[4];
@@ -76,7 +81,7 @@ void TransConformal()
      double soln_radii[4];
      
      
-     char results[] = "TriangulationFiles/TransConformalResult.txt";
+     char results[] = "TransConformalResult.txt";
    FILE* result = fopen(results, "w");
    
    initial_radii[0]=1;

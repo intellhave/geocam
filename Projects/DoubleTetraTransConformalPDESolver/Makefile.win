@@ -11,8 +11,8 @@ LIBS =  -L"C:/Dev-Cpp/lib" -L"lib" -L"C:/Dev-Cpp/geocam" -L"C:/Dev-Cpp/geocam"  
 INCS =  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam/Subsystems/Solvers/Newtons_method"  -I"C:/Dev-Cpp/geocam/Geometry"  -I"C:/Dev-Cpp/geocam/InputOutput"  -I"C:/Dev-Cpp/geocam/System_utils"  -I"C:/Dev-Cpp/geocam/Triangulation"  -I"C:/Dev-Cpp/geocam/Math"  -I"C:/Dev-Cpp/geocam/Geometry/Vertex"  -I"C:/Dev-Cpp/geocam/Geometry/Edge"  -I"C:/Dev-Cpp/geocam/Geometry/Face"  -I"C:/Dev-Cpp/geocam/Geometry/Tetrahedron"  -I"C:/Dev-Cpp/geocam/Geometry/Triangulation"  -I"C:/Dev-Cpp/geocam/Geometry/Geoquant_general"  -I"C:/Dev-Cpp/geocam/Visualization" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/include/GL"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam/Subsystems/Solvers/Newtons_method"  -I"C:/Dev-Cpp/geocam/Geometry"  -I"C:/Dev-Cpp/geocam/InputOutput"  -I"C:/Dev-Cpp/geocam/System_utils"  -I"C:/Dev-Cpp/geocam/Triangulation"  -I"C:/Dev-Cpp/geocam/Math"  -I"C:/Dev-Cpp/geocam/Geometry/Vertex"  -I"C:/Dev-Cpp/geocam/Geometry/Edge"  -I"C:/Dev-Cpp/geocam/Geometry/Face"  -I"C:/Dev-Cpp/geocam/Geometry/Tetrahedron"  -I"C:/Dev-Cpp/geocam/Geometry/Triangulation"  -I"C:/Dev-Cpp/geocam/Geometry/Geoquant_general"  -I"C:/Dev-Cpp/geocam/Visualization" 
 BIN  = DoubleTetraTransConformalPDESolver.exe
-CXXFLAGS = $(CXXINCS)   -O3 -pg -g3
-CFLAGS = $(INCS)   -O3 -pg -g3
+CXXFLAGS = $(CXXINCS)   -pg -g3
+CFLAGS = $(INCS)   -pg -g3
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom

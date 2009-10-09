@@ -23,7 +23,7 @@ class TriPosition {
   TriPosition(int numPoints, ...);
   ~TriPosition(){}
  
-   void print();
+   void print(FILE* out);
 };
 
 /* THIS IS BAD BAD BAD. IT MUST BE FIXED LATER. */

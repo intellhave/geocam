@@ -106,27 +106,14 @@ double NewtonsMethod::step(double x_n[], int extremum) {
    }
    // Calculate the length of the gradient.
    gradLen = getGradientLength(grad);
-//DAN   printf("Gradient length = %.12f\n", gradLen);
+   
    // If the gradient length is already less than the stopping condition, then
    // just return now. This is for cases when gradLen = 0, which can cause other
    // problems.
    if(gradLen < gradLenCond) {
         f(x_n);
-//DAN        printf("Returned cause gradient = 0\n");
         return gradLen;
    }   
-
-//   FILE* test = fopen("Data/Input_EHR/grad_hess.txt", "w");
-//   printInfo(test);
-//   fclose(test);
-//   
-//   test = fopen("Data/Input_EHR/testFile1.txt", "a");
-//   fprintf(test, "-----------------------------------\n");
-//   fclose(test);
-//   
-//   test = fopen("Data/Input_EHR/testFile2.txt", "a");
-//   fprintf(test, "-----------------------------------\n");
-//   fclose(test);
    
    // Set grad[i] = - grad[i] for all i = 1,...,nDim
    negateArray(grad);
@@ -139,7 +126,6 @@ double NewtonsMethod::step(double x_n[], int extremum) {
    // Modify the next[] array by scaling it by stepRatio.
    for(int i = 0; i < nDim; i++) {
       next[i] = stepRatio * next[i];
-//DAN      printf("next[%d] = %f\n", i, next[i]);
    }
 
    double curVal;           // The current function value.
@@ -263,24 +249,34 @@ void NewtonsMethod::approxGradient(double vars[], double sol[]) {
 void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
      double val = 0;        // A running sum for the numerator
      double f_x = f(vars);  // Save f(vars)
-  //   FILE* hessFile = fopen("../../TriangulationFiles/NewtonsMethod/hessian.txt", "w");
+     double temp;
+     //DEBUG: FILE* hessFile = fopen("Data/Input_EHR/hessian.txt", "w");
      for(int i = 0; i < nDim; i++) {
        for(int j = 0; j < nDim; j++) {
-//        printf("hess: %d, %d = ", i, j);
+        //DEBUG: fprintf(hessFile, "hess: %d, %d = ", i, j);
           if(i > j) { // The matrix is diagonal
             sol[i][j] = sol[j][i];
           } else if( i != j) { // If i != j
               vars[i] = vars[i] + delta; // x_i + delta
               vars[j] = vars[j] + delta; // x_j + delta
               val = f(vars); // f(x_i + delta, x_j + delta)
+              //DEBUG: fprintf(hessFile, "%.20f - ", val);
               vars[j] = vars[j] - 2 * delta; // x_j - delta
-              val = val - f(vars); // val - f(x_i + delta, x_j - delta)
+              temp = f(vars); 
+              val = val - temp; // val - f(x_i + delta, x_j - delta)
+              //DEBUG: fprintf(hessFile, "%.20f + ", temp);
               vars[i] = vars[i] - 2*delta; // x_i - delta
-              val = val + f(vars); // val + f(x_i - delta, x_j - delta)
+              temp = f(vars);
+              val = val + temp; // val + f(x_i - delta, x_j - delta)
+              //DEBUG: fprintf(hessFile, "%.20f - ");
               vars[j] = vars[j] + 2*delta; // x_j + delta
-              val = val - f(vars); // val - f(x_i - delta, x_j + delta)
+              temp = f(vars);
+              //DEBUG: fprintf(hessFile, "%.20f  / (4 * %f^2) = ", temp, delta);
+              val = val - temp; // val - f(x_i - delta, x_j + delta)
               vars[i] = vars[i] + delta; // Reset x_i
               vars[j] = vars[j] - delta; // Reset x_j
+              
+              //DEBUG: fprintf(hessFile, "%.20f / (4*del^2) = ", val);
               
               //    f(x_i + del, x_j + del) - f(x_i + del, x_j - del) 
               //       - f(x_i - del, x_j + del) + f(x_i - del, x_j - del)
@@ -290,43 +286,47 @@ void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
           } else { // If i = j
               vars[i] = vars[i] + 2*delta; // x_i + 2 * delta
               val = f(vars); // f(x_i + delta)
-  //            fprintf(hessFile, "%.16f + ", val);
+              //DEBUG: fprintf(hessFile, "%.20f + ", val);
               vars[i] = vars[i] - 4*delta; // x_i - 2 * delta
-              double temp = f(vars);
-  //            fprintf(hessFile, "%.16f - 2*", temp);
+              temp = f(vars);
+              //DEBUG: fprintf(hessFile, "%.20f - 2*", temp);
               val = val + temp; // val + f(x_i - delta)
               vars[i] = vars[i] + 2 * delta; // reset x_i
-  //            fprintf(hessFile, "%.16f / 4 * %f ^ 2 = ", f_x, delta);
+              //DEBUG: fprintf(hessFile, "%.20f / (4 * %f^2) = ", f_x, delta);
               val = val - 2*f_x; // val - 2 * f(vars)
+              
+              //DEBUG: fprintf(hessFile, "%.20f / (4*del^2) = ", val);
               
               //  f(x_i + 2 * delta) + f(x_i - 2 * delta) - 2 * f(x)
               // --------------------------------------------
               //                 4 * delta ^ 2
               sol[i][j] = val / (4*delta * delta);
           }
-  //        fprintf(hessFile, "%.16f\n", sol[i][j]);
+          //DEBUG: fprintf(hessFile, "%.20f\n", sol[i][j]);
        }
      }
-  //   fclose(hessFile);
+     //DEBUG: fclose(hessFile);
 }
 
 
 void NewtonsMethod::printInfo(FILE* out) {
-   fprintf(out, "grad = <");
-   for(int i = 0; i < nDim; i++) {
-     fprintf(out, "%f, ", grad[i]);
-   }
-   fprintf(out, ">\n");
-   
-   fprintf(out, "Hess = \n");
-   for(int i = 0; i < nDim; i++) {
-      fprintf(out, "<");
-      for(int j = 0; j < nDim; j++) {
-           fprintf(out, "%f, ", hess[i][j]);   
-      }
-      fprintf(out, ">\n");
-   }
-   fprintf(out, "\n");
+/*DEBUG:   fprintf(out, "grad = <");
+/*   for(int i = 0; i < nDim; i++) {
+/*     fprintf(out, "%f, ", grad[i]);
+/*   }
+/*   fprintf(out, ">\n");
+/*   
+/*   fprintf(out, "Hess = \n");
+/*   for(int i = 0; i < nDim; i++) {
+/*      fprintf(out, "<");
+/*      for(int j = 0; j < nDim; j++) {
+/*           fprintf(out, "%f, ", hess[i][j]);   
+/*      }
+/*      fprintf(out, ">\n");
+/*   }
+/*   fprintf(out, "\n");
+/*DEBUG*/
+
    if(printFunc != NULL) {
      printFunc(out);
    }
