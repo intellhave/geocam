@@ -21,6 +21,7 @@ public:
          return Radius::At(v)->getValue();
   }
   static void CleanUp();
+  static void print(FILE* out);
   void remove();
 };
 

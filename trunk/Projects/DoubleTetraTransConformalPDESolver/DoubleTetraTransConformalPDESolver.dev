@@ -27,7 +27,7 @@ CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=0000000000001101000000
+CompilerSettings=0000000000000101000000
 
 [Unit1]
 FileName=..\..\Subsystems\Solvers\Newtons_method\NMethod.cpp

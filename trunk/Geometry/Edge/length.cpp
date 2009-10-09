@@ -64,13 +64,16 @@ void Length::CleanUp(){
   Index = NULL;
 }
 
-void Length::Record( char* filename ){
-  FILE* output = fopen( filename, "a+" );
-
+void Length::print(FILE* out) {
   LengthIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    fprintf( output, "%lf ", iter->second->getValue() );
-  fprintf( output, "\n");
-
-  fclose( output );
+  
+  for(iter = Index->begin(); iter != Index->end(); iter++) {
+     fprintf(out, "Length");
+     fprintf(out, "[ " );
+     for(int ii = 0; ii < (iter->first).length; ii++) {
+       fprintf(out, "%d ", (iter->first).pointIDs[ii]);
+     }
+     fprintf(out, "]");
+     fprintf(out, " = % 2.8f\n", iter->second->getValue());
+  }       
 }

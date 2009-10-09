@@ -11,7 +11,6 @@
 #include "curvature3D.h"
 #include "totalcurvature.h"
 #include "totalvolume.h"
-#include "edge_curvature.h"
 #include "total_volume_partial.h"
 #include "volume_length_tetra_partial.h"
 #include "ehr_partial.h"
@@ -70,31 +69,17 @@ void printFunc(FILE* out) {
      map<int, Vertex>::iterator vit;
      map<int, Edge>::iterator eit;
      map<int, Tetra>::iterator tit;
-     fprintf(out, "\n");
      
      // Prints Radii:
-     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-             vit++) {
-        fprintf(out, "Radius %d = %.10f\n", vit->first, Radius::valueAt(vit->second));
-     }
+     Radius::print(out);
      
      // Prints Etas:
-     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-             eit++) {
-        fprintf(out, "Eta %d = %.10f\n", eit->first, Eta::valueAt(eit->second));
-     }
+     Eta::print(out);
+     
      
      // Prints Lengths:
-     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-             eit++) {
-        fprintf(out, "Length %d = %.10f\n", eit->first, Length::valueAt(eit->second));
-     }
+     Length::print(out);
      
-     // Prints Edge Curvatures:
-     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-             eit++) {
-        fprintf(out, "Edge Curvature %d = %.10f\n", eit->first, EdgeCurvature::valueAt(eit->second));
-     }
 //     
 //     // Prints Einstein Ratios and Edge Volumes:
 //     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
@@ -171,18 +156,20 @@ double saddleFinder(double etas[]) {
    
    Newtons_Method(0.00001);
 
-//   FILE* test = fopen("Data/Input_EHR/testFile1.txt", "a");
-//   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-//           eit++, i++) {
-//       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
-//   }
-//   fprintf(test, "\n");
-//   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-//           vit++) {
-//     fprintf(test, "Radius %d: %.12f, ", vit->first, Radius::valueAt(vit->second));
-//   }  
-//   fprintf(test, "\n%.12f\n\n", EHR());
-//   fclose(test);
+/*DEBUG:   FILE* test = fopen("Data/Input_EHR/testFile1.txt", "a");
+/*   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+/*           eit++, i++) {
+/*       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
+/*   }
+/*   fprintf(test, "\n");
+/*   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+/*           vit++) {
+/*     fprintf(test, "Radius %d: %.12f, ", vit->first, Radius::valueAt(vit->second));
+/*   }  
+/*   fprintf(test, "\n%.12f\n\n", EHR());
+/*   fclose(test);
+/*DEBUG*/
+
  
    if(errno) {
       pause("There was an error after Pipelined_NM\n");
@@ -229,19 +216,20 @@ double saddleFinder2(double etas[]) {
       Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
    }
    
-//   FILE* test = fopen("Data/Input_EHR/testFile2.txt", "a");
-//   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-//           eit++, i++) {
-//       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
-//   }
-//   fprintf(test, "\n");
-//   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-//           vit++) {
-//     fprintf(test, "Radius %d: %.12f, ", vit->first, Radius::valueAt(vit->second));
-//   }  
-//   fprintf(test, "\n%.12f\n\n", EHR());
-//   
-//   fclose(test);
+/*DEBUG:   FILE* test = fopen("Data/Input_EHR/testFile2.txt", "a");
+/*   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+/*           eit++, i++) {
+/*       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
+/*   }
+/*   fprintf(test, "\n");
+/*   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+/*           vit++) {
+/*     fprintf(test, "Radius %d: %.12f, ", vit->first, Radius::valueAt(vit->second));
+/*   }  
+/*   fprintf(test, "\n%.12f\n\n", EHR());
+/*   fclose(test);
+/*DEBUG*/
+
 
    
    if(errno) {
@@ -253,7 +241,7 @@ double saddleFinder2(double etas[]) {
 }
 
 void saddleFinderHess(double vals[], double *soln[]) {
-       double f_x = saddleFinder(vals);
+       double f_x = saddleFinder2(vals);
        int size = Triangulation::edgeTable.size();
        double val;
        double delta =  0.00001;
@@ -311,9 +299,8 @@ void runNewtonsMethod(char* outputFile) {
      double etas[edgeSize];
      getEtas(etas);
           
-     NewtonsMethod *nm = new NewtonsMethod(saddleFinder, edgeSize);
+     NewtonsMethod *nm = new NewtonsMethod(saddleFinder2, edgeSize);
      nm->setPrintFunc(printFunc);
-     
      FILE* result = fopen(outputFile, "w");
      if(result == NULL) {
        pause("Error: %s is not a valid file\n", outputFile);

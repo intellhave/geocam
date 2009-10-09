@@ -24,6 +24,7 @@ public:
   static void CleanUp();
   void remove();
   static void Record( char* filename );
+  static void print(FILE* out);
 };
 
 #endif /* ETA_H_ */

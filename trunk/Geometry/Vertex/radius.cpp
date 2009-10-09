@@ -44,3 +44,17 @@ void Radius::CleanUp(){
   delete Index;
   Index = NULL;
 }
+
+void Radius::print(FILE* out) {
+  RadiusIndex::iterator iter;
+  
+  for(iter = Index->begin(); iter != Index->end(); iter++) {
+     fprintf(out, "Radius");
+     fprintf(out, "[ " );
+     for(int ii = 0; ii < (iter->first).length; ii++) {
+       fprintf(out, "%d ", (iter->first).pointIDs[ii]);
+     }
+     fprintf(out, "]");
+     fprintf(out, " = % 2.8f\n", iter->second->getValue());
+  }       
+}
