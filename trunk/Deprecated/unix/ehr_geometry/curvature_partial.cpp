@@ -1,5 +1,5 @@
 #include "curvature_partial.h"
-#include "miscmath.h"
+#include "math/miscmath.h"
 
 #include <utility>
 #include <cstdio>

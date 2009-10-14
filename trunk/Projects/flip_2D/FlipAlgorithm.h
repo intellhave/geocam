@@ -3,7 +3,8 @@
 class FlipAlgorithm {
 
     map<int, Edge>::iterator currEdge;
-    int pausesON;
+    
+    int whichStep;
 
     public:
     FlipAlgorithm(void);
@@ -16,6 +17,8 @@ class FlipAlgorithm {
     void performFlip(void);
 
     int currentEdgeIndex(void);
+    
+    int step(void);
 
     void runFlipAlgorithm(void);
 };

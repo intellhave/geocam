@@ -1,8 +1,9 @@
-#include "new_flip/hinge_flip.h"
-#include "new_flip/TriangulationDisplay.h"
+#include "hinge_flip.h"
+#include "TriangulationDisplay.h"
 #include "delaunay.h"
-#include "new_flip/FlipAlgorithm.h"
-#include "new_flip/Function.h"
+#include "FlipAlgorithm.h"
+#include "Function.h"
+#include "triangulation.h"
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -15,13 +16,17 @@ using namespace std;
 float _dist = -20.0f;
 float _hori = -5.0f;
 float _vert = -5.0f;
-TriangulationDisplay *_triDisp;
-FlipAlgorithm *_flipAlg;
-Function *_vertexF;
+TriangulationDisplay* _triDisp;
+FlipAlgorithm* _flipAlg;
+Function* _vertexF;
+char* input_file;
 
 float _angle = 30.0f;
 float _camera_angle = 0.0f;
 int usingflipalgorithm = 0;
+int _lastFlip = 0;
+
+void setup_view_parameters(void);
 
 void handleKeypress(unsigned char key, int x, int y) {
     bool somethingHappened = true;
@@ -36,42 +41,35 @@ void handleKeypress(unsigned char key, int x, int y) {
         case 93: // ]
             _dist+=.5;
             break;
-        case 97: // a
-	       //_hori -= .5;
-	       break;
         case 100: // d
-            //_hori += .5;
             cout << (isWeightedDelaunay(_triDisp->getCurrentEdge()) ? "Edge is weighted Delaunay\n" : "Edge is NOT weighted Delaunay\n");
             break;
-        case 119: // w
-            //_vert += .5;
-            break;
-        case 115: // s
-            //_vert -= .5;
-            break;
-        case 32: //space bar
+        case ' ': //space bar
             printf("\n%lf\n\n", dirichletEnergy(*_vertexF));
             _triDisp->flipCurrentEdge();
             printf("\n%lf\n\n", dirichletEnergy(*_vertexF));
             break;
-        case 104: //h
+        case 'h': //h
             //_triDisp->previousEdge();
             break;
-        case 108: //l
+        case 'l': //l
             cout << "geoquant length is " << Length::valueAt(Triangulation::edgeTable[_triDisp->getCurrentEdge().getIndex()]) << "\n";
             l = _triDisp->currentEdgeToLine();
             cout << "distance between vertices is " << sqrt(pow(l.getInitialX() - l.getEndingX(),2) + pow(l.getInitialY() - l.getEndingY(),2)) << "\n\n";
             break;
-        case 114: //p
+        case 'p': //p
             _triDisp->showWeights = !(_triDisp->showWeights);
             break;
-        case 44: // ,
+        case ',': // ,
             _triDisp->previousEdge();
             break;
-        case 46: // .
+        case '.': // .
             _triDisp->nextEdge();
             break;
-        case 118: //v
+        case 's':
+            _triDisp->flat = !(_triDisp->flat);
+            break;
+        case 'v': //v
             switch (_triDisp->voronoi) {
                 case 0:
                     _triDisp->voronoi = 1;
@@ -84,11 +82,27 @@ void handleKeypress(unsigned char key, int x, int y) {
                 //    break;
             }
             break;
-        case 110: //n
+        case 'n': //n
             _flipAlg->runFlipAlgorithm();
+            break;
+        case 'm': //m
+            _lastFlip = _flipAlg->step();
+            _triDisp->setCurrentEdge(_lastFlip);
             break;
         case 't':
             cout << isWeightedDelaunay();
+            break;
+        case 'b': // b
+            Triangulation::vertexTable.clear();
+            Triangulation::edgeTable.clear();
+            Triangulation::faceTable.clear();
+            delete _triDisp;
+            delete _flipAlg;
+            delete _vertexF;
+            _triDisp = new TriangulationDisplay (input_file);
+            _flipAlg = new FlipAlgorithm ();
+            _vertexF = new Function("someNumbers.txt", "vertex", Triangulation::vertexTable, true);
+            setup_view_parameters();
             break;
         default:
             somethingHappened = false;
@@ -135,17 +149,27 @@ void handleResize(int w, int h) {
 				   200.0);                //The far z clipping coordinate
 }
 
-//Draws the 3D scene
-void drawScene() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//draws ticks along the edge petween p1 and p2 in the direction of p3
+void drawTicks(double x1, double y1, double x2, double y2, double x3, double y3, int depth) {
+    if (0 == depth) {
+        return;
+    }
+    double avx, avy;
+    avx = (x1 + x2) / 2.0;
+    avy = (y1 + y2) / 2.0;
+    double vecx, vecy;
+    vecx = (x3 - avx)/10.0;
+    vecy = (y3 - avy)/10.0;
+    glBegin(GL_LINES);
+        glVertex3d(avx, avy, 0);
+        glVertex3d(avx + vecx, avy + vecy, 0);
+    glEnd();
+    drawTicks(x1, y1, avx, avy, x3, y3, depth-1);
+    drawTicks(avx, avy, x2, y2, x3, y3, depth-1);
+}
 
-    glMatrixMode(GL_MODELVIEW); //Switch to the drawing perspective
-    glLoadIdentity(); //Reset the drawing perspective
-    glTranslatef(_hori, _vert, _dist);
-
+void drawSceneFlat() {
     vector<triangle_parts> tps;
-
-    _triDisp->update();
     tps = _triDisp->getTriangles();
     vector<triangle_parts>::iterator iter;
     iter = tps.begin();
@@ -154,10 +178,12 @@ void drawScene() {
     while (iter != tps.end()) {
         glBegin(GL_LINE_STRIP);
         //glBegin(GL_TRIANGLES);
-        if (iter->negativity == -1)
-            glColor3d(1, 0, 0);
-        else
+        if (iter->negativity == -1) {
+            //glColor3d(1, 0, 0);
             glColor3d(0, 0, 1);
+        } else {
+            glColor3d(0, 0, 1);
+        }
 
         glVertex3d(iter->coords[0][0],iter->coords[0][1],0);
         glVertex3d(iter->coords[1][0],iter->coords[1][1],0);
@@ -166,7 +192,7 @@ void drawScene() {
         iter++;
         glEnd();
     }
-    
+
     //draw the duals
     if (_triDisp->voronoi == 1) {
         vector<Line> ds;
@@ -205,8 +231,7 @@ void drawScene() {
         }
         glEnd();
     }*/
-    
-    
+
     //draws the weights around the vertices
     if (_triDisp->showWeights) {
         map<int,Vertex>::iterator vit;
@@ -222,9 +247,22 @@ void drawScene() {
             glEnd();
         }
     }
-    
-    
-    
+
+    //draw little tick marks along the inside of each triangle
+    map<int, Face>::iterator fit = Triangulation::faceTable.begin();
+    for (; fit != Triangulation::faceTable.end(); fit++) {
+        vector<int>* verts;
+        verts = (fit->second).getLocalVertices();
+        Point p1, p2, p3;
+        p1 = _triDisp->getPoint((*verts)[0]);
+        p2 = _triDisp->getPoint((*verts)[1]);
+        p3 = _triDisp->getPoint((*verts)[2]);
+
+        drawTicks(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 3);
+        drawTicks(p3.x, p3.y, p1.x, p1.y, p2.x, p2.y, 3);
+        drawTicks(p2.x, p2.y, p3.x, p3.y, p1.x, p1.y, 3);
+    }
+
     //draws the edge that is currently selected
     Line l;
     l = _triDisp->currentEdgeToLine();
@@ -234,8 +272,30 @@ void drawScene() {
     glVertex3d(l.getInitialX(), l.getInitialY(), 0.01);
     glVertex3d(l.getEndingX(), l.getEndingY(), 0.01);
     glEnd();
-    
+
     Edge e = _triDisp->getCurrentEdge();
+}
+
+void drawSceneStacked() {
+
+}
+
+//Draws the 3D scene
+void drawScene() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW); //Switch to the drawing perspective
+    glLoadIdentity(); //Reset the drawing perspective
+    glTranslatef(_hori, _vert, _dist);
+
+    _triDisp->update();
+    
+    if (_triDisp->flat) {
+        drawSceneFlat();
+    } else {
+        drawSceneStacked();
+    }
+    
 
     glutSwapBuffers();
 }
@@ -267,12 +327,12 @@ void setup_view_parameters(void) {
     double centery = sumy / count;
     _hori = 0 - centerx;
     _vert = 0 - centery;
-    
+
     //the screen will be shifted in the positive z direction by _dist
     if (maxx - minx > maxy - miny) {
-        _dist = 0 - abs(maxx - minx) - 2;
+        _dist = 0 - 2 * abs(maxx - minx);
     } else {
-        _dist = 0 - abs(maxy - miny) - 2;
+        _dist = 0 - 2 * abs(maxy - miny);
     }
 }
 
@@ -286,13 +346,13 @@ void setup_view_parameters(void) {
 int main(int argc, char** argv) {
 
     //cout << "starting!\n";
-    //makeTriangulationFile("test_files/weird.lutz", "test_files/weird.txt");
+    //makeTriangulationFile("test_files/toms_triangulation.lutz", "test_files/toms_triangulation.txt");
     //cout << "done!\n";
     //system("PAUSE");
     //exit(0);
 
    /* readTriangulationFile("test_files/non_convex_pair.txt");
-    
+
     map<int, Vertex>::iterator sit;
     sit = Triangulation::vertexTable.begin();
     vector<int> v;
@@ -300,46 +360,46 @@ int main(int argc, char** argv) {
         v.push_back(sit->first);
         cout << sit->first << "\n";
     }
-    
+
     Functional* f;
     f = new Functional("someNumbers.txt", "vertex", v);
     cout << "here\n";
-    
+
     for (sit = Triangulation::vertexTable.begin(); sit != Triangulation::vertexTable.end(); sit++) {
         cout << sit->first << "    " << f->valueOf(sit->first) << "\n";
     }*/
 
 
     //triangulation initializaiton steps
-    char *testFile;
     if (argc <= 1) {
         cout << "ATTENTION: YOU NEED TO SPECIFY A FILE TO BE READ BY GIVING MAIN AN ARGUMENT!!!\n"
              << "READ THE COMMENT ABOVE MAIN's DEFINITION\n\nif you press any key to continue now,"
              << " the file being used will default to test_files/convex_pair.txt\n\n";
             system("PAUSE");
-            testFile = "test_files/convex_pair.txt";
+            input_file = "..\..\Data\flip_test\non_convex_pair.txt";
     } else {
-        testFile = argv[1];
+        input_file = argv[1];
     }
-    char outFile[strlen(testFile)+5];
-    strcpy(outFile, testFile);
-    strcpy(&outFile[strlen(testFile)], ".out");
+    char out_file[strlen(input_file)+5];
+    strcpy(out_file, input_file);
+    strcpy(&out_file[strlen(input_file)], ".out");
 
-    _triDisp = new TriangulationDisplay (testFile);
-    _flipAlg = new FlipAlgorithm ();
+    _triDisp = new TriangulationDisplay(input_file);
+    _flipAlg = new FlipAlgorithm();
     _vertexF = new Function("someNumbers.txt", "vertex", Triangulation::vertexTable, true);
     setup_view_parameters();
 
 	//Initialize GLUT
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(400, 400); //Set the window size
+	glutInitWindowSize(600, 600); //Set the window size
 
 	//Create the window
 	glutCreateWindow("flip algorithm");
 	initRendering(); //Initialize rendering
 
 	//Set handler functions for drawing, keypresses, and window resizes
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(handleKeypress);
 	glutSpecialFunc(handleSpecialKeypress);

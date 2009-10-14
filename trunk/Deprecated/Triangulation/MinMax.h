@@ -1,4 +1,4 @@
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 void getRadii(double*);
 void setRadii(double*);

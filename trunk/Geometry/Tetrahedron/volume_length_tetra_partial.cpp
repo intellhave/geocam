@@ -7,8 +7,8 @@ using namespace std;
 #include "volume_length_tetra_partial.h"
 #include "triposition.h"
 #include "length.h"
-#include "miscmath.h"
-#include "triangulation.h"
+#include "math/miscmath.h"
+#include "triangulation/triangulation.h"
 
 typedef map<TriPosition, VolumeLengthTetraPartial*, TriPositionCompare> VolumeLengthTetraPartialIndex;
 static VolumeLengthTetraPartialIndex* Index = NULL;

@@ -2,9 +2,9 @@
 #include <iostream>
 #include <cstdlib>
 #include "delaunay.h"
-#include "triangulation/triangulationmorph.h"
-#include "triangulation/triangulationInputOutput.h"
-#include "triangulation/TriangulationCoordinateSystem.h"
+#include "triangulationmorph.h"
+#include "triangulationInputOutput.h"
+#include "TriangulationDevelopment.h"
 
 class TriangulationDisplay {
 
@@ -19,6 +19,7 @@ class TriangulationDisplay {
 
     public:
 
+    bool flat;
     bool showWeights;
     int voronoi; // 0 is nothing, 1 is the whole voronoi diagram, 2 is the hinge only
 

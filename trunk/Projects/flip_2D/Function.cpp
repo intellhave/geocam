@@ -1,4 +1,4 @@
-#include "new_flip/Function.h"
+#include "Function.h"
 
 void Function::init(char* fileName, char* nameSpecifier, vector<int> indexList, bool append) {
     appendMoreValues = append;

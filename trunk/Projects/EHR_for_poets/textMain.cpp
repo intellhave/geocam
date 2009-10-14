@@ -28,7 +28,7 @@
 #include <iostream>
 #include <list>
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include "3DInputOutput.h"
 
 #include "textRuns.h"

@@ -3,9 +3,8 @@
 
 #include <cmath>
 #include <iostream>
-#include "triangulation/triangulationmorph.h"
-#include "triangulation/triangulationInputOutput.h"
-#include "triangulation/TriangulationCoordinateSystem.h"
+#include "triangulationInputOutput.h"
+#include "TriangulationDevelopment.h"
 #include "miscmath.h"
 #include "length.h"
 #define PI 	3.141592653589793238

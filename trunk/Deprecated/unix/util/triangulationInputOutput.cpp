@@ -12,7 +12,7 @@ the reading and writing of text files.
 #include <sstream>
 #include <iomanip>
 #include "triangulationInputOutput.h"
-#include "miscmath.h"
+#include "math/miscmath.h"
 
 /*
  * Function to read in a file and build the Triangulation. The 

@@ -1,5 +1,5 @@
 #include "dualareasegment.h"
-#include "miscmath.h"
+#include "math/miscmath.h"
 
 #include <stdio.h>
 

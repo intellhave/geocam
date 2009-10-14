@@ -8,7 +8,7 @@
 #include "3DInputOutput.h"
 #include "triangulationInputOutput.h"
 
-#include "miscmath.h"
+#include "math/miscmath.h"
 
 bool read3DTriangulationFile(char* fileName) 
 {

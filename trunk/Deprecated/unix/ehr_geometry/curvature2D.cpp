@@ -7,7 +7,7 @@ using namespace std;
 #include "curvature2D.h"
 #include "euc_angle.h"
 #include "triposition.h"
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 typedef map<TriPosition, Curvature2D*, TriPositionCompare> Curvature2DIndex;
 static Curvature2DIndex* Index = NULL;

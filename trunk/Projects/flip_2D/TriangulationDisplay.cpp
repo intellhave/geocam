@@ -1,9 +1,10 @@
-#include "new_flip/TriangulationDisplay.h"
-#include "new_flip/hinge_flip.h"
+#include "TriangulationDisplay.h"
+#include "hinge_flip.h"
 
 TriangulationDisplay::TriangulationDisplay(char *f)
 {
     showWeights = false;
+    flat = true;
     voronoi = 0;
     if (readTriangulationFile(f)) {
         fileName = f;

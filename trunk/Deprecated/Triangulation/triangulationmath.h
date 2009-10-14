@@ -9,7 +9,7 @@ calculations on the triangulation.
 #ifndef _TRIANGULATIONMATH_H_
 #define _TRIANGULATIONMATH_H_
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 /*
  * Calculates the angle between two edges of a triangle, where the

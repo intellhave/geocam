@@ -9,7 +9,7 @@ calculations on the triangulation.
 
 #include <cmath>
 #include "triangulationmath.h"
-#include "miscmath.h"
+#include "math/miscmath.h"
 
 double angle(Vertex v, Face f){
   vector<int> sameAs, diff;

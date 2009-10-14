@@ -7,7 +7,7 @@ The Miscellaneous Math file holds the functions that perform
 calculations on Points, Lines, and Circles. All functions are
 done independently of any triangulation.
 **************************************************************/
-#include "miscmath.h"
+#include "math/miscmath.h"
 #include <cstdio>
 
 vector<int> listIntersection(vector<int>* list1, vector<int>* list2){
