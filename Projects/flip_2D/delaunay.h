@@ -7,9 +7,10 @@ The Delaunay file holds all functions that check triangulations
 locally for the condition of being Delaunay or weighted Delaunay.
 **************************************************************/
 
-#include "triangulation/triangulation.h"
+#include "triangulation.h"
 #include <cmath>
-#include "new_flip/Function.h"
+#include "Function.h"
+#include "miscmath.h"
 
 #ifndef delaunay_h
 #define delaunay_h

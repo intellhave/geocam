@@ -3,7 +3,7 @@
 
 #include "geoquant.h"
 #include "triposition.h"
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 #include "length.h"
 

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include "Volume.h"
 /* ==== Include Files ==== */
 #include <cstdlib>

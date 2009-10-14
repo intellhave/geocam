@@ -9,7 +9,7 @@ calculations on the triangulation.
 
 #include <cmath>
 #include "triangulationmath.h"
-#include "miscmath.h"
+#include "math/miscmath.h"
 #define PI 	3.141592653589793238
 
 double angle(double lengthA, double lengthB, double lengthC)

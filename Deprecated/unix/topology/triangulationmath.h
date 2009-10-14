@@ -7,7 +7,7 @@ The Triangulation Math file holds the functions that perform
 calculations on the triangulation.
 **************************************************************/
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 /*
  * Calculates the angle between two edges of a triangle, where the

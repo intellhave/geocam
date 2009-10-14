@@ -1,5 +1,5 @@
 #include "face_height.h"
-#include "miscmath.h"
+#include "math/miscmath.h"
 
 #include <cstdio>
 

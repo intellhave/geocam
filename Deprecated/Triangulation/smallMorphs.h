@@ -7,7 +7,7 @@ The Small Morphs file holds the functions that perform isolated
 morphs on simplices. These functions are then used in morphs on
 a whole Triangulation.
 **************************************************************/
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 
 /*

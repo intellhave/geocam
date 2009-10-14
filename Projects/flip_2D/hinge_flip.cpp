@@ -1,4 +1,4 @@
-#include "new_flip/hinge_flip.h"
+#include "hinge_flip.h"
 
 Edge flip(Edge e) {
 

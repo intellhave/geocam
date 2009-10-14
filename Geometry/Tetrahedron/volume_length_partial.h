@@ -2,7 +2,7 @@
 //#define VOLUMELENGTHPARTIAL_H_
 //
 //#include "geoquant.h"
-//#include "triangulation.h"
+//#include "triangulation/triangulation.h"
 //
 //class VolumeLengthPartial : public virtual GeoQuant {
 //private:

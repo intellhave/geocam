@@ -4,7 +4,7 @@
 #include "triangulationplane.h"
 #include "length.h"
 #include "euc_angle.h"
-#include "miscmath.h"
+#include "math/miscmath.h"
 #include "utilities.h"
 #define PI 	3.141592653589793238
 

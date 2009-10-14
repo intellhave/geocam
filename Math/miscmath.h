@@ -10,8 +10,8 @@ done independently of any triangulation.
 #ifndef MISCMATH_H_
 #define MISCMATH_H_
 
-#include "triangulation.h"
-#include "pointlinecircle.h"
+#include "triangulation/triangulation.h"
+#include "visualization/pointlinecircle.h"
 #include <vector>
 using namespace std;
 

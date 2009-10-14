@@ -7,7 +7,7 @@ The Hyperbolic Math file holds the functions that perform
 calculations on the triangulation under a hyperbolic geometry.
 **************************************************************/
 #include "triangulation/triangulationmath.h"
-#include "miscmath.h"
+#include "math/miscmath.h"
 
 /*
  * Calculates an angle of a hyperbolic triangle given the edge lengths

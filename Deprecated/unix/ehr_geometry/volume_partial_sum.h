@@ -6,7 +6,7 @@
 #include <new>
 using namespace std;
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include "geoquant.h"
 #include "triposition.h"
 

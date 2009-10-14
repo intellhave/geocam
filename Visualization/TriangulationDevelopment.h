@@ -4,8 +4,9 @@ Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: July 28, 2008
 **************************************************************/
 
-#include "triangulation.h"
-#include "delaunay.h"
+#include "triangulation/triangulation.h"
+#include "projects/flip_2d/delaunay.h"
+#include "math/miscmath.h"
 
 #ifndef TRIANGULATIONCOORDINATESYSTEM_H
 #define TRIANGULATIONCOORDINATESYSTEM_H

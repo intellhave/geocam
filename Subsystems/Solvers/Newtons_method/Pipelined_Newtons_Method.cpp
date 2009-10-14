@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <cerrno>
 
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include "Pipelined_Newtons_Method.h"
 #include "utilities.h"
 

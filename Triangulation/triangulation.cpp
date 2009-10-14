@@ -4,7 +4,7 @@ Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: July 16, 2008
 **************************************************************/
 
-#include "triangulation.h" // class's header file
+#include "triangulation/triangulation.h" // class's header file
 #include <cstdlib>
 #include <map>
 #include <algorithm>

@@ -7,7 +7,7 @@
 #include <ctime>
 
 #include "3DInputOutput.h"
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include "Pipelined_Newtons_Method.h"
 
 #include "radius.h"

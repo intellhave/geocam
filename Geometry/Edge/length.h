@@ -8,7 +8,7 @@ using namespace std;
 
 #include "geoquant.h"
 #include "triposition.h"
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 #include "radius.h"
 #include "eta.h"

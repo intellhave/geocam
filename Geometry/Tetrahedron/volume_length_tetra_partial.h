@@ -2,7 +2,7 @@
 #define VOL_LEN_TETRAPARTIAL_H_
 
 #include "geoquant.h"
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 
 class VolumeLengthTetraPartial : public virtual GeoQuant {
 private:

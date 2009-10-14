@@ -1,5 +1,5 @@
 #include "textRuns.h"
-#include "triangulation.h"
+#include "triangulation/triangulation.h"
 #include <map>
 #include <cmath>
 #include <cerrno>
