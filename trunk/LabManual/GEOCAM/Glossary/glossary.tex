@@ -14,17 +14,17 @@ distance $\left\Vert \overline{PX}\right\Vert $ for a line segment $%
 \overline{PX}$ to be negative if the line segment lies entirely within the
 circle, and positive otherwise. \ The \textit{circle power} of $P$ relative
 to $C$, denoted by $pow_{C}\left( P\right) $, is given by:%
-\begin{equation*}
+\[
 pow_{C}\left( P\right) =\left\Vert \overline{PA}\right\Vert \left\Vert 
 \overline{PB}\right\Vert .
-\end{equation*}%
+\]%
 Alternatively, if $C$ is defined implicitly by $\left( x-x_{c}\right)
 ^{2}+\left( y-y_{c}\right) ^{2}=r_{c}^{2}$, then the circle power can be
 expressed as:%
-\begin{equation*}
+\[
 pow_{C}\left( P\right) =\left( x-x_{c}\right) ^{2}+\left( y-y_{c}\right)
 ^{2}-r_{c}^{2}.
-\end{equation*}
+\]
 
 \item[common power point] The point of the plane (or $%
 %TCIMACRO{\U{211d} }%
@@ -45,10 +45,10 @@ the decorated simplex when appropriate.
 \left( M,\mathcal{T},d\right) $, the \textit{edge curvature} along an edge $%
 \left\{ i,j\right\} $, measures how much that edge differs from Euclidean
 space. \ Specifically, the edge curvature $K_{ij}$ is given by 
-\begin{equation*}
+\[
 K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that}  \\ %
 \left\{ i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij},
-\end{equation*}%
+\]%
 where $l_{ij}$ is the edge length, and $\beta _{ij,kl}$ is the dihedral
 angle of the edge $\left\{ i,j\right\} $ of the tetrahedron $\left\{
 i,j,k,l\right\} $. \ In a triangulation of three-dimensional Euclidean space 
@@ -57,19 +57,19 @@ $K_{ij}=0$ for all edges. \
 \item[Einstein constant] For a 3-dimensional piecewise flat manifold $\left(
 M,\mathcal{T},d\right) $, the \textit{Einstein constant} $\lambda $ is given
 by%
-\begin{equation*}
-\lambda =\frac{EHR\left( M,\mathcal{T},d\right) }{3\mathcal{V}},
-\end{equation*}%
-where $EHR\left( M,\mathcal{T},d\right) $ is the Einstein-Hilbert-Regge
-functional and $\mathcal{V}$ is the total volume.
+\[
+\lambda =\frac{\mathcal{EHR}\left( M,\mathcal{T},d\right) }{3\mathcal{V}},
+\]%
+where $\mathcal{EHR}\left( M,\mathcal{T},d\right) $ is the
+Einstein-Hilbert-Regge functional and $\mathcal{V}$ is the total volume.
 
 \item[Einstein metric] Given a 3-dimensional piecewise flat manifold $\left(
 M,\mathcal{T},d\right) $, we say that $d$ is an \textit{Einstein metric}
 provided there exists $\lambda \in \mathbb{R}$ such that for all edges $%
 \left\{ i,j\right\} $ in the triangulation we have:%
-\begin{equation*}
+\[
 K_{ij}=\lambda l_{ij}\frac{\partial \mathcal{V}}{\partial l_{ij}},
-\end{equation*}%
+\]%
 where $K_{ij}$ is the edge curvature, $l_{ij}$ is the edge length, and $%
 \mathcal{V}$ is the total volume. By summing both sides, we see that $%
 \lambda $ is the Einstein constant.
@@ -95,14 +95,14 @@ be isometrically embedded in $%
 edge of length $l_{ij}$ with weight circles of radius $r_{i},r_{j}$ centered
 on its vertices. \ The inversive distance $\eta _{ij}$ of the edge $e_{ij}$
 can be calculated with the formula:%
-\begin{equation*}
+\[
 \eta _{ij}=\frac{l_{ij}^{2}-r_{i}^{2}-r_{j}^{2}}{2r_{i}r_{j}}.
-\end{equation*}%
+\]%
 When the two weight circles intersect with angle $\theta _{ij}$, we have the
 simple formula:%
-\begin{equation*}
+\[
 \eta _{ij}=-\cos \left( \theta _{ij}\right) .
-\end{equation*}%
+\]%
 The former formula was obtained by using the law of cosines and solving for
 the $\cos \left( \theta _{ij}\right) $ term. \ When the weight circles do
 not intersect and do not contain one or the other $\eta _{ij}>1$. \ When the
@@ -144,9 +144,9 @@ to be $1$. \
 
 \item For each vertex $v$, the number of incident edges, faces and
 tetrahedra, $E,F,T$, respectively (including multiple occurrences) satisfy:%
-\begin{equation*}
+\[
 E-F+T=2.
-\end{equation*}
+\]
 \end{itemize}
 
 \item More generally, given a simplicial manifold $M$ of dimension $n$, and
@@ -203,7 +203,11 @@ becomes a decorated simplex. \
 
 \item[constant scalar curvature] 
 
-\item[geometric flow] 
+\item[geometric flow] A geometric flow is a differential equation on a
+geometry (loosely defined) which depends only on geometric quantities
+(usually curvatures). Usual examples are Ricci flow, mean curvature flow,
+and Yamabe flow on Riemannian manifolds. On discrete geometries, there are
+discrete Ricci and Yamabe flows.
 
 \item[curvature flow] 
 
@@ -211,17 +215,39 @@ becomes a decorated simplex. \
 
 \item[normalized total scalar curvature functional] 
 
-\item[Einstein-Hilbert functional] 
+\item[Einstein-Hilbert functional] Given a Riemannian manifold $\left(
+M,g\right) ,$ the Einstein-Hilbert functional $\mathcal{EH}\left( M,g\right) 
+$ is defined by 
+\[
+\mathcal{EH}\left( M,g\right) =\int_{M}RdV
+\]%
+where $R$ is the scalar curvature of $g$ and $dV$ is the volume form of $g.$
+The functional is constant on two-dimensional manifolds, giving $4\pi $
+times the Euler characteristic. In higher dimensions, its critical points
+are Ricci flat (i.e., the Ricci tensor is zero) and critical points
+restricted to metrics of a fixed volume are Einstein manifolds.
 
 \item[Einstein-Hilbert-Regge functional] 
 
-\item[conformal class] 
+\item[conformal class] On a smooth Riemannian manifold $\left( M,g\right) ,$
+the conformal class $\left[ g\right] $ is the equivalence class of all
+Riemannian manifolds $\left( M,e^{f}g\right) ,$ where $f$ is a smooth
+function. On a metrized piecewise flat manifold $\left( M,T,d\right) $, the
+conformal class $\left[ d\right] $ is the equivalence class .....
 
 \item[conformal deformation] 
 
 \item[min-max procedure] 
 
-\item[Yamabe constant] 
+\item[Yamabe constant] On a closed manifold $M,$ the Yamabe constant (also
+called the $\sigma $-constant) is the number 
+\[
+\sigma \left( M^{n}\right) =\sup_{g}\inf_{g^{\prime }\in \left[ g\right] }%
+\frac{\mathcal{EH}\left( M,g^{\prime }\right) }{V\left( M,g^{\prime }\right)
+^{2/n}},
+\]%
+where the $\sup $ is over all metrics and the $\inf $ is over all metrics in
+the same conformal class $\left[ g\right] $ as $g.$
 
 \item[flip] 
 
@@ -236,15 +262,6 @@ becomes a decorated simplex. \
 \item[bone] 
 
 \item[Delaunay triangulation (or hinge)] 
-
-\item[weighted triangulation (or hinge)] A triangulation together with a map 
-$w:V\rightarrow 
-%TCIMACRO{\U{211d} }%
-%BeginExpansion
-\mathbb{R}
-%EndExpansion
-$, where $V$ is the set of vertices of the triangulation. \ Each simplex
-becomes a decorated simplex. \ 
 
 \item[weighted Delaunay triangulation] 
 
