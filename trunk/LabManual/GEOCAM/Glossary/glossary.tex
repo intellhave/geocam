@@ -7,6 +7,8 @@
 \chapter{Glossary}
 
 \begin{description}
+\item[center (of a simplex)] 
+
 \item[circle power] Given a circle $C$ and a point $P$, let $L$ be the line
 through the point $P$ that passes through the center of the circle. \ Let $A$
 and $B$ be the intersection points of $L$ with the circle.\ Define a signed
@@ -46,8 +48,8 @@ the decorated simplex when appropriate.
 \left\{ i,j\right\} $, measures how much that edge differs from Euclidean
 space. \ Specifically, the edge curvature $K_{ij}$ is given by 
 \[
-K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that}  \\ %
-\left\{ i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij},
+K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that} \\ \left\{
+i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij},
 \]%
 where $l_{ij}$ is the edge length, and $\beta _{ij,kl}$ is the dihedral
 angle of the edge $\left\{ i,j\right\} $ of the tetrahedron $\left\{
@@ -162,11 +164,22 @@ three circles, however if the common power point is at infinity, there is a
 line that is orthogonal to the three weight circles which will also be
 identified as the orthocircle.
 
-\item[piecewise flat manifold] A triple $\left( M,\mathcal{T},d\right) $
-where $\left( M,\mathcal{T}\right) $ is a compact triangulated manifold with
-triangulation $\mathcal{T}$, $d$ is a metric on $M$ so that the restriction
-of $d$ to each simplex of $\mathcal{T}$ is isometric to a Euclidean simplex
-of the same dimension. \ 
+\item[piecewise flat manifold] A triple $\left( M,\mathcal{T},\ell \right) $
+where $\left( M,\mathcal{T}\right) $ is a triangulated manifold with
+triangulation $\mathcal{T}$ and $\ell :E\rightarrow \mathbb{R}_{+}$ is a
+function of the edges such that endowing the edges with lengths $\ell $
+gives each simplex the structure of a Euclidean simplex. We sometimes call
+two piecewise flat manifolds $\left( M,\mathcal{T},\ell \right) $ and $%
+\left( M,\mathcal{T}^{\prime },\ell ^{\prime }\right) $ isometric if they
+induce the same metric space structure, or if one can be reached from the
+other by a sequence of metric Pachner moves (flips).\ 
+
+\item[piecewise flat, metrized manifold] A triple $\left( M,\mathcal{T}%
+,d\right) $ where $\left( M,\mathcal{T}\right) $ is a triangulated manifold
+and $d:E^{+}\rightarrow \mathbb{R}$ is a function of oriented edges such
+that if one defines $\ell _{ij}=d_{ij}+d_{ji}$ then $\left( M,\mathcal{T}%
+,\ell \right) $ is a piecewise flat manifold and such that each simplex has
+a uniquely determined center.
 
 \item[triangulation] A collection of $n$-dimensional simplices $\mathcal{T}$
 together with pairwise identifications for the $\left( n-1\right) $%
@@ -193,15 +206,45 @@ $w:V\rightarrow
 $, where $V$ is the set of vertices of the triangulation. \ Each simplex
 becomes a decorated simplex. \ 
 
-\item[dimension] 
+\item[dimension] A manifold has the property that every point has a
+neighborhood homeomorphic to an open subset of $\mathbb{R}^{n}.$ By the
+Invariance of Dimension theorem, $n$ must be locally constant (i.e., every
+point in a given connected component must have the same dimension. We say $n$
+is the dimension of the manifold. For a triangulated manifold, the dimension
+of the manifold is the dimension of the highest-dimensional simplices in the
+triangulation.
 
-\item[metric] 
+\item[metric] Metric can have a number of meanings: (1) a metric can mean a
+distance function for a metric space, (2)\ a Riemannian metric is an inner
+product at each tangent space which varies smoothly with the basepoint. It
+can also be described as a symmetric, positive definite 2-tensor field, (3)
+a Lorenzian metric is a symmetric bilinear form at each tangent space with
+signature +,-,-,...,- or -,+,...+ which varies smoothly with the basepoint.
 
 \item[curvature] 
 
-\item[scalar curvature] 
+\item[scalar curvature] For a Riemannian manifold $\left( M,g\right) $,
+scalar curvature is a function $R:M\rightarrow \mathbb{R}$ gotten from the
+full trace of the Riemannian curvature tensor. For a piecewise flat,
+metrized 3-manifold, the scalar curvature measure $K_{i}$ is defined as 
+\[
+K_{i}=\sum_{j}\frac{K_{ij}}{\ell _{ij}}d_{ij}.
+\]
 
-\item[constant scalar curvature] 
+\item[constant scalar curvature] For a Riemannian manifold $\left(
+M,g\right) $, this means that the scalar curvature function $R:M\rightarrow 
+\mathbb{R}$ is a constant function. For a piecewise flat, metrized
+3-manifold, this means that the scalar curvature measure is a constant
+multiple of the volume measure, i.e., 
+\[
+K_{i}=\lambda V_{i},
+\]%
+for all vertices $i,$ where $K_{i}=\sum_{j}\frac{K_{ij}}{\ell _{ij}}d_{ij}$
+and $V_{i}=\ell _{ij}\frac{\partial \mathcal{V}}{\partial \ell _{ij}}=\frac{1%
+}{3}\sum_{j,k,\ell }h_{ijk,\ell }A_{ijk},$ where $\mathcal{V}$ is the total
+volume, $h_{ijk,\ell }$ is the (signed) height of the center to face $%
+\left\{ i,j,k\right\} $ and $A_{ijk}$ is the area of face $\left\{
+i,j,k\right\} .$
 
 \item[geometric flow] A geometric flow is a differential equation on a
 geometry (loosely defined) which depends only on geometric quantities
@@ -227,7 +270,23 @@ times the Euler characteristic. In higher dimensions, its critical points
 are Ricci flat (i.e., the Ricci tensor is zero) and critical points
 restricted to metrics of a fixed volume are Einstein manifolds.
 
-\item[Einstein-Hilbert-Regge functional] 
+\item[Einstein-Hilbert-Regge functional] Given a piecewise flat manifold $%
+\left( M^{n},\ell \right) $, the Einstein-Hilbert-Regge functional $\mathcal{%
+EHR}\left( M,\ell \right) $ is defined by 
+\[
+\mathcal{EHR}\left( M,\ell \right) =\sum_{\sigma ^{n-2}}K\left( \sigma
+^{n-2}\right) ,
+\]%
+where $K\left( \sigma ^{n-2}\right) $ is $2\pi $ minus the sum of the angles
+at $\sigma ^{n-2}$ times the volume $V\left( \sigma ^{n-2}\right) $ of the
+simplex $\sigma ^{n-2}.$ In particular, for $n=3,$ we have 
+\[
+\mathcal{EHR}\left( M^{3},\ell \right) =\sum_{\left\{ i,j\right\}
+}K_{ij}=\sum_{\left\{ i,j\right\} }\left( 2\pi -\sum_{k,\ell }\beta
+_{ij,k\ell }\right) \ell _{ij},
+\]%
+where $\beta _{ij,k\ell }$ is the dihedral angle at edge $\left\{
+i,j\right\} $ in $\left\{ i,j,k,\ell \right\} .$
 
 \item[conformal class] On a smooth Riemannian manifold $\left( M,g\right) ,$
 the conformal class $\left[ g\right] $ is the equivalence class of all
