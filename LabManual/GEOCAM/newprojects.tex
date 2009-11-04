@@ -1,0 +1,85 @@
+\documentclass{article}%
+\usepackage{amsmath}%
+\setcounter{MaxMatrixCols}{30}%
+\usepackage{amsfonts}%
+\usepackage{amssymb}%
+\usepackage{graphicx}
+%TCIDATA{OutputFilter=latex2.dll}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{CSTFile=40 LaTeX article.cst}
+%TCIDATA{Created=Wednesday, October 07, 2009 14:46:09}
+%TCIDATA{LastRevised=Wednesday, October 07, 2009 15:23:43}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=Manual}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Standard LaTeX\Blank - Standard LaTeX Article">}
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\begin{document}
+\section{Guidelines for starting new projects}
+
+Keep in mind that the main files for the project are in some directory which
+you created to download your subversion. Currently, we are primarily using
+RapidSVN, found at http://rapidsvn.tigris.org/, though any subversion client
+will do. The code is in google code, with address
+https://geocam.googlecode.com/svn/trunk/. To install the subversion, you must
+use the \textquotedblleft Checkout\textquotedblright\ command. We will assume
+the directory . is the main directory the code has been downloaded into.
+
+To start a new project:
+
+\begin{enumerate}
+\item Make a new directory under ./Projects. The name of the directory will
+probably be the name of the project. Any files which are specifically used for
+this project belong somewhere under this new directory. Files which have been
+mostly tested and belong to the project as a whole will be in subdirectories
+of the . directory.
+
+\item Start a new project either with DevC++ or in unix (which means you must
+maintain the makefile). The project will probably be the same name as the new
+directory. Try to avoid using main.cpp as the name of the file with the main
+function. 
+
+\item Try not to use spaces in the file names, class names, etc.; instead, use
+camelCase to separate multiple words. Avoid underscore, as it may be a problem
+with interface with Mathematica. Be consistent with capitalizations, since
+some operating systems distinguish capital letters and some do not.
+
+\item You must adjust the include directories so that they can find the
+necessary files. This can be done in DevC++ or in the Makefile. Try to use
+relative paths when possible (such as ../../Geometry). In each .cpp and .h
+file, includes should not have any paths in them. So, to find these files, the
+project file and makefile must have the paths in it.
+
+\item Style for commenting ???
+\end{enumerate}
+
+Keep in mind that the following files should be maintained in the repository:
+.cpp, .h., .dev, Makefile, .tex, .txt. The following types of files should not
+be in the repository (remove them if they find their way in: .o, .exe (except
+for final code distributions), .aux, .bak, .aaa, .dvi
+
+
+
+
+\end{document}
