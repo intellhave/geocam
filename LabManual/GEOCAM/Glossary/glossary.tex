@@ -18,14 +18,14 @@ circle, and positive otherwise. \ The \textit{circle power} of $P$ relative
 to $C$, denoted by $pow_{C}\left( P\right) $, is given by:%
 \[
 pow_{C}\left( P\right) =\left\Vert \overline{PA}\right\Vert \left\Vert 
-\overline{PB}\right\Vert .
+\overline{PB}\right\Vert . 
 \]%
 Alternatively, if $C$ is defined implicitly by $\left( x-x_{c}\right)
 ^{2}+\left( y-y_{c}\right) ^{2}=r_{c}^{2}$, then the circle power can be
 expressed as:%
 \[
 pow_{C}\left( P\right) =\left( x-x_{c}\right) ^{2}+\left( y-y_{c}\right)
-^{2}-r_{c}^{2}.
+^{2}-r_{c}^{2}. 
 \]
 
 \item[common power point] The point of the plane (or $%
@@ -48,8 +48,8 @@ the decorated simplex when appropriate.
 \left\{ i,j\right\} $, measures how much that edge differs from Euclidean
 space. \ Specifically, the edge curvature $K_{ij}$ is given by 
 \[
-K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that} \\ \left\{
-i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij},
+K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that}  \\ %
+\left\{ i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij}, 
 \]%
 where $l_{ij}$ is the edge length, and $\beta _{ij,kl}$ is the dihedral
 angle of the edge $\left\{ i,j\right\} $ of the tetrahedron $\left\{
@@ -60,7 +60,7 @@ $K_{ij}=0$ for all edges. \
 M,\mathcal{T},d\right) $, the \textit{Einstein constant} $\lambda $ is given
 by%
 \[
-\lambda =\frac{\mathcal{EHR}\left( M,\mathcal{T},d\right) }{3\mathcal{V}},
+\lambda =\frac{\mathcal{EHR}\left( M,\mathcal{T},d\right) }{3\mathcal{V}}, 
 \]%
 where $\mathcal{EHR}\left( M,\mathcal{T},d\right) $ is the
 Einstein-Hilbert-Regge functional and $\mathcal{V}$ is the total volume.
@@ -70,7 +70,7 @@ M,\mathcal{T},d\right) $, we say that $d$ is an \textit{Einstein metric}
 provided there exists $\lambda \in \mathbb{R}$ such that for all edges $%
 \left\{ i,j\right\} $ in the triangulation we have:%
 \[
-K_{ij}=\lambda l_{ij}\frac{\partial \mathcal{V}}{\partial l_{ij}},
+K_{ij}=\lambda l_{ij}\frac{\partial \mathcal{V}}{\partial l_{ij}}, 
 \]%
 where $K_{ij}$ is the edge curvature, $l_{ij}$ is the edge length, and $%
 \mathcal{V}$ is the total volume. By summing both sides, we see that $%
@@ -98,12 +98,12 @@ edge of length $l_{ij}$ with weight circles of radius $r_{i},r_{j}$ centered
 on its vertices. \ The inversive distance $\eta _{ij}$ of the edge $e_{ij}$
 can be calculated with the formula:%
 \[
-\eta _{ij}=\frac{l_{ij}^{2}-r_{i}^{2}-r_{j}^{2}}{2r_{i}r_{j}}.
+\eta _{ij}=\frac{l_{ij}^{2}-r_{i}^{2}-r_{j}^{2}}{2r_{i}r_{j}}. 
 \]%
 When the two weight circles intersect with angle $\theta _{ij}$, we have the
 simple formula:%
 \[
-\eta _{ij}=-\cos \left( \theta _{ij}\right) .
+\eta _{ij}=-\cos \left( \theta _{ij}\right) . 
 \]%
 The former formula was obtained by using the law of cosines and solving for
 the $\cos \left( \theta _{ij}\right) $ term. \ When the weight circles do
@@ -147,7 +147,7 @@ to be $1$. \
 \item For each vertex $v$, the number of incident edges, faces and
 tetrahedra, $E,F,T$, respectively (including multiple occurrences) satisfy:%
 \[
-E-F+T=2.
+E-F+T=2. 
 \]
 \end{itemize}
 
@@ -168,11 +168,12 @@ identified as the orthocircle.
 where $\left( M,\mathcal{T}\right) $ is a triangulated manifold with
 triangulation $\mathcal{T}$ and $\ell :E\rightarrow \mathbb{R}_{+}$ is a
 function of the edges such that endowing the edges with lengths $\ell $
-gives each simplex the structure of a Euclidean simplex. We sometimes call
-two piecewise flat manifolds $\left( M,\mathcal{T},\ell \right) $ and $%
-\left( M,\mathcal{T}^{\prime },\ell ^{\prime }\right) $ isometric if they
-induce the same metric space structure, or if one can be reached from the
-other by a sequence of metric Pachner moves (flips).\ 
+gives each simplex the structure of a nondegenerate Euclidean simplex (this
+is equivalent to positivity of all relevant Cayley-Menger determinants). We
+sometimes call two piecewise flat manifolds $\left( M,\mathcal{T},\ell
+\right) $ and $\left( M,\mathcal{T}^{\prime },\ell ^{\prime }\right) $
+isometric if they induce the same metric space structure, or if one can be
+reached from the other by a sequence of metric Pachner moves (flips).\ 
 
 \item[piecewise flat, metrized manifold] A triple $\left( M,\mathcal{T}%
 ,d\right) $ where $\left( M,\mathcal{T}\right) $ is a triangulated manifold
@@ -209,10 +210,10 @@ becomes a decorated simplex. \
 \item[dimension] A manifold has the property that every point has a
 neighborhood homeomorphic to an open subset of $\mathbb{R}^{n}.$ By the
 Invariance of Dimension theorem, $n$ must be locally constant (i.e., every
-point in a given connected component must have the same dimension. We say $n$
-is the dimension of the manifold. For a triangulated manifold, the dimension
-of the manifold is the dimension of the highest-dimensional simplices in the
-triangulation.
+point in a given connected component must have the same dimension). We say $n
+$ is the dimension of the manifold. For a triangulated manifold, the
+dimension of the manifold is the dimension of the highest-dimensional
+simplices in the triangulation.
 
 \item[metric] Metric can have a number of meanings: (1) a metric can mean a
 distance function for a metric space, (2)\ a Riemannian metric is an inner
@@ -226,16 +227,21 @@ signature +,-,-,...,- or -,+,...+ which varies smoothly with the basepoint.
 \item[scalar curvature] For a Riemannian manifold $\left( M,g\right) $,
 scalar curvature is a function $R:M\rightarrow \mathbb{R}$ gotten from the
 full trace of the Riemannian curvature tensor. For a piecewise flat,
-metrized 3-manifold, the scalar curvature measure $K_{i}$ is defined as 
+metrized 3-manifold $\left( M,\mathcal{T},d\right) $, the scalar curvature
+measure $K_{i}$ is defined as 
 \[
-K_{i}=\sum_{j}\frac{K_{ij}}{\ell _{ij}}d_{ij}.
-\]
+K_{i}=\sum_{j}\frac{K_{ij}}{\ell _{ij}}d_{ij},
+\]%
+where $K_{ij}$ is the edge curvature of edge $\left\{ i,j\right\} .$
+Sometimes we refer to the function $i\rightarrow K_{i}/V_{i}$ as the scalar
+curvature function (see entry on constant scalar curvature).
 
 \item[constant scalar curvature] For a Riemannian manifold $\left(
 M,g\right) $, this means that the scalar curvature function $R:M\rightarrow 
 \mathbb{R}$ is a constant function. For a piecewise flat, metrized
 3-manifold, this means that the scalar curvature measure is a constant
-multiple of the volume measure, i.e., 
+multiple of the volume measure, i.e., there exists $\lambda \in \mathbb{R}$
+such that 
 \[
 K_{i}=\lambda V_{i},
 \]%
@@ -262,7 +268,7 @@ discrete Ricci and Yamabe flows.
 M,g\right) ,$ the Einstein-Hilbert functional $\mathcal{EH}\left( M,g\right) 
 $ is defined by 
 \[
-\mathcal{EH}\left( M,g\right) =\int_{M}RdV
+\mathcal{EH}\left( M,g\right) =\int_{M}RdV 
 \]%
 where $R$ is the scalar curvature of $g$ and $dV$ is the volume form of $g.$
 The functional is constant on two-dimensional manifolds, giving $4\pi $
@@ -275,7 +281,7 @@ restricted to metrics of a fixed volume are Einstein manifolds.
 EHR}\left( M,\ell \right) $ is defined by 
 \[
 \mathcal{EHR}\left( M,\ell \right) =\sum_{\sigma ^{n-2}}K\left( \sigma
-^{n-2}\right) ,
+^{n-2}\right) , 
 \]%
 where $K\left( \sigma ^{n-2}\right) $ is $2\pi $ minus the sum of the angles
 at $\sigma ^{n-2}$ times the volume $V\left( \sigma ^{n-2}\right) $ of the
@@ -283,7 +289,7 @@ simplex $\sigma ^{n-2}.$ In particular, for $n=3,$ we have
 \[
 \mathcal{EHR}\left( M^{3},\ell \right) =\sum_{\left\{ i,j\right\}
 }K_{ij}=\sum_{\left\{ i,j\right\} }\left( 2\pi -\sum_{k,\ell }\beta
-_{ij,k\ell }\right) \ell _{ij},
+_{ij,k\ell }\right) \ell _{ij}, 
 \]%
 where $\beta _{ij,k\ell }$ is the dihedral angle at edge $\left\{
 i,j\right\} $ in $\left\{ i,j,k,\ell \right\} .$
@@ -303,7 +309,7 @@ called the $\sigma $-constant) is the number
 \[
 \sigma \left( M^{n}\right) =\sup_{g}\inf_{g^{\prime }\in \left[ g\right] }%
 \frac{\mathcal{EH}\left( M,g^{\prime }\right) }{V\left( M,g^{\prime }\right)
-^{2/n}},
+^{2/n}}, 
 \]%
 where the $\sup $ is over all metrics and the $\inf $ is over all metrics in
 the same conformal class $\left[ g\right] $ as $g.$
