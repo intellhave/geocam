@@ -1,0 +1,129 @@
+=`TriangulationDisplay`=
+{{{
+class TriangulationDisplay()
+}}}
+
+  ==Keywords==
+ 
+  visualization, triangulation
+
+  ==Authors==
+  Kurt Norwood
+
+  ==Introduction==
+
+  TriangulationDisplay is intended to represent information about what is being displayed on the screen. It is composed of a TriangulationDeveopment object as well as several some other variables such as a list of the triangles being displayed, which edge is currently selected, and flags representing different options the display has.
+  
+  ==Subsidiaries==
+  
+  TriangulationDevelopment
+
+  Functions:
+  {{{
+    void changeFileTo(char * f);
+
+    char* getCurrentFile(void);
+
+    //the line object representing the currently selected edge
+    Line currentEdgeToLine();
+
+    //returns the currently selected edge
+    Edge getCurrentEdge(void);
+
+    void setCurrentEdge(int cei);
+
+    //increments the currently selected edge to another edge in the triangulations
+    Edge nextEdge(void);
+
+    //decrements the currently selected edge, returning to the previously selected edge
+    Edge previousEdge(void);
+
+    //calls the flip function on the currently selected edge
+    void flipCurrentEdge(void);
+
+    //returns a vector of structs containing the information necessary for displaying the triangulation in opengl
+    vector<triangle_parts> getTriangles(void);
+
+    //return a vector of the duals
+    vector<Line> getDuals(void);
+
+    Line getDualAtEdge(int e);
+
+    Point getPoint(int index);
+
+    //updates the underlying coordinateSystem object to represent the current state of the triangulation
+    void update();
+  }}}
+  
+  Global Variables:
+  
+  Local Variables:
+  {{{
+    TriangulationDevelopment coordSystem;
+
+        //this string should be the path to the file that contains the triangulation information
+        char* fileName;
+
+        //coordinates and negativity information for each face in the triangulation
+        vector<triangle_parts> listOfTriangles;
+
+        //which edge is currently selected
+        map<int,Edge>::iterator selectedEdge;
+
+        public:
+
+        //display flat image or 3d stack of triangles
+        bool flat;
+        
+        //toggles circles on the vertices on or off
+        bool showWeights;
+        
+        // 0 is nothing, 1 is the whole voronoi diagram, 2 is the hinge only
+        int voronoi;
+  }}}
+
+  ==Description==
+  
+  TriangulationDisplay provides a place to store all the different state information pertaining to the display of the triangulation. The class does not provide any opengl abilities itself. The class is intended to wrap the functionality of the TriangulationDevelopment class which performs the calculations that determine what coordinates are given to the vertices. That class is fairly general so in an effort to not complicate its definition, TriangulationDisplay was created. TriangulationDisplay calls a couple of the functions in TriangulationDevelopment to get coordinates for the vertices of faces, and to get the dual edge information. It then stores these pieces of information so they are only recomputed when a change is made to the triangulation (i.e. a flip). Some other information is also stored, such as flags which say whether weights, or dual edges should be displayed, also an index which represents which edge is currently selected so that it can be flipped by this class.
+  
+  TriangulationDisplay has several functions. A few of these simply grab information out of the TriangulationDevelopment object such as update(), and getDuals(), getTriangles(). Two functions previousEdge(), and nextEdge() cycles the selectedEdge variable through all the possible edge indices. flipCurrentEdge() calls the flip function on the currently selected edge, and updates the triangulation using the TriangulationDevelopmentObject.
+
+  ==Practicum==
+  {{{
+  //make the TriangulationDisplay object from a file
+  TriangulationDisplay * _triDisp;
+  _triDisp = new TriangulationDisplay("/path/to/triangulation/file.txt");
+  
+  //get the coordinates of triangles
+  vector<triangle_parts> triangles;
+  triangles = _triDisp->getTriangles();
+  
+  //select a different edge
+  _triDisp->nextEdge();
+  
+  //flip that edge
+  _triDisp->flipCurrentEdge();
+  
+  //get the new triangulation info
+  triangles = _trisDisp->getTriangles();
+  
+  }}}
+  ==Limitations==
+
+
+  ==Revisions==
+
+  r890 | kortox | 2009-07-22 11:13:23 -0700 (Wed, 22 Jul 2009) | 2 lines
+
+  Lots of changes to the graphical display of the triangulation, displaying the dual edges works properly now, as well as showing the weights on the vertices. The dirichlet energy computation is included in the delaunay.cpp file and it seems to be working properly. added several files to the new_flip/test_files as examples of how flipping reduces the dirichlet energy which right now is the only info that will be printed while running the new_flip project
+  
+
+  r854 | kortox | 2009-07-07 11:07:22 -0700 (Tue, 07 Jul 2009) | 2 lines
+
+  Got the TriangulationDisplay class working a bit better, also fixed an error in the TriangulationCoordinateSystem class involving an accidental call to getLocalVertices instead of getLocalEdges which had been causing some very strange and difficult to track down behavior
+
+  ==Testing==
+  
+  The class has been used extensively in making a graphical visualization tool with opengl, no other testing has occurred.
+
+  ==Future Work==
