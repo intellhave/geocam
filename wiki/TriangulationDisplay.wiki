@@ -61,25 +61,25 @@ class TriangulationDisplay()
   {{{
     TriangulationDevelopment coordSystem;
 
-        //this string should be the path to the file that contains the triangulation information
-        char* fileName;
+    //this string should be the path to the file that contains the triangulation information
+    char* fileName;
 
-        //coordinates and negativity information for each face in the triangulation
-        vector<triangle_parts> listOfTriangles;
+    //coordinates and negativity information for each face in the triangulation
+    vector<triangle_parts> listOfTriangles;
 
-        //which edge is currently selected
-        map<int,Edge>::iterator selectedEdge;
+    //which edge is currently selected
+    map<int,Edge>::iterator selectedEdge;
 
-        public:
+    public:
 
-        //display flat image or 3d stack of triangles
-        bool flat;
+    //display flat image or 3d stack of triangles
+    bool flat;
         
-        //toggles circles on the vertices on or off
-        bool showWeights;
+    //toggles circles on the vertices on or off
+    bool showWeights;
         
-        // 0 is nothing, 1 is the whole voronoi diagram, 2 is the hinge only
-        int voronoi;
+    // 0 is nothing, 1 is the whole voronoi diagram, 2 is the hinge only
+    int voronoi;
   }}}
 
   ==Description==
