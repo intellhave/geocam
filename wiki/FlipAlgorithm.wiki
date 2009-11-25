@@ -56,7 +56,9 @@ class FlipAlgorithm()
 
   ==Description==
   
-  FlipAlgorithm is a class intended to make the writing of various flip algorithms easier. To do this we write functions which perform a particular action on the triangulation. These actions should be fairly easy to describe, and independent of other actions. There are also a couple other functions which are where the actions are organized into a potential flip algorithm.
+  FlipAlgorithm is a class intended to make the writing and testing of different flip algorithms easier. To do this we write functions which perform a particular action on the triangulation. These actions should be fairly easy to describe, and independent of other actions. There are also a couple other functions which are where the actions are organized into a potential flip algorithm.
+
+  Currently there are two functions describing the actions we would like to perform. The function "flipConvexHinges" will iterate over all the edges and flip any convex hinges having a negative dual edge. The function "function" flipOneNonConvexHinge will iterate over the edges and flip the first nonconvex hinge with a negative dual edge. Each of these functions is considered one step of the algorithm. To keep track of which step we're on, the whichStep variable flips between 0 and 1 so that the function "step" knows which of the other functions to call. The function "runFlipAlgorithm" just calls step over and over again until step says it did nothing.
 
   ==Practicum==
   {{{
