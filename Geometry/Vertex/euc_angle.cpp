@@ -70,13 +70,18 @@ void EuclideanAngle::CleanUp(){
   Index = NULL;
 }
 
-void EuclideanAngle::Record( char* filename ){
-  FILE* output = fopen( filename, "a+" );
-
-  EuclideanAngleIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    fprintf( output, "%lf ", iter->second->getValue() );
-  fprintf( output, "\n");
-
-  fclose( output );
+void EuclideanAngle::print( FILE* out ) {
+  map<int, Vertex>::iterator vit;
+  vector<int>* faces;
+  Face f;
+  
+  fprintf(out, "Euc Angle [ v ][ f ]\n==================\n");
+  for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+     faces = vit->second.getLocalFaces();
+     for(int i = 0; i < faces->size(); i++) {
+        f = Triangulation::faceTable[faces->at(i)];
+        fprintf(out, "Euc Angle [%3d][%3d]\t=", vit->first, f.getIndex());
+        fprintf(out," % 2.8f\n", EuclideanAngle::valueAt(vit->second, f));
+     } 
+  }
 }

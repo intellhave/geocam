@@ -46,15 +46,10 @@ void Radius::CleanUp(){
 }
 
 void Radius::print(FILE* out) {
-  RadiusIndex::iterator iter;
+  map<int, Vertex>::iterator vit;
   
-  for(iter = Index->begin(); iter != Index->end(); iter++) {
-     fprintf(out, "Radius");
-     fprintf(out, "[ " );
-     for(int ii = 0; ii < (iter->first).length; ii++) {
-       fprintf(out, "%d ", (iter->first).pointIDs[ii]);
-     }
-     fprintf(out, "]");
-     fprintf(out, " = % 2.8f\n", iter->second->getValue());
+  fprintf(out, "Radius [ v ]\n=============\n");
+  for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+     fprintf(out, "Radius [%3d]\t= % 2.8f\n", vit->first, Radius::valueAt(vit->second));
   }       
 }

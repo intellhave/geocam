@@ -54,7 +54,6 @@ void Newtons_Method( double stopping_threshold, char* filename ) {
   double negative_gradient[ V ];
 
   double soln[V];  
-  double* matrix;
 
   /*** Initialize Quantities ***/
   map<int, Vertex>::iterator vit, vit2;

@@ -31,7 +31,7 @@ public:
   }
   static void CleanUp();
   void remove();
-  static void Record( char* filename );
+  static void print( FILE* out );
 };
 
 #endif /* EUCLIDEANANGLE_H_ */
