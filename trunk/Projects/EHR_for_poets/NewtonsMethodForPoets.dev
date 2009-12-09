@@ -1,7 +1,7 @@
 [Project]
 FileName=NewtonsMethodForPoets.dev
 Name=NewtonsMethodForPoets
-UnitCount=86
+UnitCount=92
 Type=1
 Ver=1
 ObjFiles=
@@ -830,9 +830,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit87]
-FileName=..\..\InputOutput\3DInputOutput.h
+FileName=..\..\Geometry\Edge\partial_edge_partial.h
 CompileCpp=1
-Folder=InputOutput
+Folder=Geometry/headers
 Compile=1
 Link=1
 Priority=1000
@@ -840,9 +840,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit88]
-FileName=..\..\InputOutput\triangulationInputOutput.cpp
+FileName=..\..\Geometry\Edge\partial_edge_partial.cpp
 CompileCpp=1
-Folder=InputOutput
+Folder=Geometry/source
 Compile=1
 Link=1
 Priority=1000
@@ -850,9 +850,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit89]
-FileName=textRuns.h
+FileName=..\..\Geometry\Edge\dih_angle_partial.h
 CompileCpp=1
-Folder=
+Folder=Geometry/headers
 Compile=1
 Link=1
 Priority=1000
@@ -860,9 +860,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit90]
-FileName=textRuns.cpp
+FileName=..\..\Geometry\Edge\dih_angle_partial.cpp
 CompileCpp=1
-Folder=
+Folder=Geometry/source
 Compile=1
 Link=1
 Priority=1000
@@ -870,7 +870,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit91]
-FileName=textRuns.cpp
+FileName=partials.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -880,9 +880,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit92]
-FileName=Simplex\tetra.h
+FileName=partials.h
 CompileCpp=1
-Folder=NewtonsMethodForPoets
+Folder=
 Compile=1
 Link=1
 Priority=1000

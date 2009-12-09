@@ -65,15 +65,10 @@ void Length::CleanUp(){
 }
 
 void Length::print(FILE* out) {
-  LengthIndex::iterator iter;
+  map<int, Edge>::iterator eit;
   
-  for(iter = Index->begin(); iter != Index->end(); iter++) {
-     fprintf(out, "Length");
-     fprintf(out, "[ " );
-     for(int ii = 0; ii < (iter->first).length; ii++) {
-       fprintf(out, "%d ", (iter->first).pointIDs[ii]);
-     }
-     fprintf(out, "]");
-     fprintf(out, " = % 2.8f\n", iter->second->getValue());
+  fprintf(out, "Length [ e ]\n=============\n");
+  for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+     fprintf(out, "Length [%3d]\t= % 2.8f\n", eit->first, Length::valueAt(eit->second));
   }       
 }

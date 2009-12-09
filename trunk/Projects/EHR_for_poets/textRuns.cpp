@@ -69,38 +69,25 @@ void printFunc(FILE* out) {
      map<int, Vertex>::iterator vit;
      map<int, Edge>::iterator eit;
      map<int, Tetra>::iterator tit;
-     
+       
      // Prints Radii:
      Radius::print(out);
+     fprintf(out, "\n");
      
      // Prints Etas:
      Eta::print(out);
-     
+     fprintf(out, "\n");
      
      // Prints Lengths:
      Length::print(out);
+     fprintf(out, "\n");
      
-//     
-//     // Prints Einstein Ratios and Edge Volumes:
-//     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-//             eit++) {
-//                    double temp=0.0;
-//                    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++) {
-//                            if(eit->second.isAdjTetra(tit->first)){
-//                          temp += VolumeLengthTetraPartial::valueAt(eit->second, tit->second);
-//                          }
-//                    }
-//        fprintf(out, "Einstein Ratio %d = %.10f \t Edge Volume = %.10f\n", eit->first, EdgeCurvature::valueAt(eit->second)/temp, temp);
-//          }
-//          
-//     // Prints The Constant Scalar Curvature Ratio:
-//     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-//             vit++) {
-//          fprintf(out, "CSC Ratio %d = %.10f\n", vit->first, Curvature3D::valueAt(vit->second)/TotalVolumePartial::valueAt(vit->second));
-//     }
+     // Prints Euclidean Angles
+     EuclideanAngle::print(out);
+     fprintf(out, "\n");
      
      // Prints The NEHR Functional:
-     fprintf(out, "EHR: %.10f\n=================================================\n", EHR());
+     fprintf(out, "\nEHR: %.10f\n=================================================\n", EHR());
 }
 
 void setEtas(double etas[]) {

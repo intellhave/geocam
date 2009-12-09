@@ -44,27 +44,11 @@ void Eta::CleanUp(){
   Index = NULL;
 }
 
-void Eta::Record( char* filename ){
-  FILE* output = fopen( filename, "a+" );
-
-  EtaIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    fprintf( output, "%lf ", iter->second->getValue() );
-  fprintf( output, "\n");
-
-  fclose( output );
-}
-
 void Eta::print(FILE* out) {
-  EtaIndex::iterator iter;
+  map<int, Edge>::iterator eit;
   
-  for(iter = Index->begin(); iter != Index->end(); iter++) {
-     fprintf(out, "Eta");
-     fprintf(out, "[ " );
-     for(int ii = 0; ii < (iter->first).length; ii++) {
-       fprintf(out, "%d ", (iter->first).pointIDs[ii]);
-     }
-     fprintf(out, "]");
-     fprintf(out, " = % 2.8f\n", iter->second->getValue());
+  fprintf(out, "Eta [ e ]\n=============\n");
+  for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+     fprintf(out, "Eta [%3d]\t= % 2.8f\n", eit->first, Eta::valueAt(eit->second));
   }       
 }
