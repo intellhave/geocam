@@ -18,6 +18,7 @@ private:
   GeoQuant* lengthA;
   GeoQuant* lengthB;
   GeoQuant* lengthC;
+  Face* fa;
 
 protected:
   EuclideanAngle( Vertex& v, Face& f );
