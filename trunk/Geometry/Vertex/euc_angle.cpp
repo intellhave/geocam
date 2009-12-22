@@ -15,6 +15,8 @@ EuclideanAngle::EuclideanAngle( Vertex& v, Face& f ){
   Edge e2 = Triangulation::edgeTable[sameAs[1]];
   Edge e3 = Triangulation::edgeTable[diff[0]];
   
+  fa = &f;
+  
   lengthA = Length::At( e1 );
   lengthB = Length::At( e2 );
   lengthC = Length::At( e3 );
@@ -39,7 +41,9 @@ void EuclideanAngle::recalculate(){
   double a = lengthA->getValue();
   double b = lengthB->getValue();
   double c = lengthC->getValue();
-  value = acos((a*a + b*b - c*c)/ (2*a*b));
+  if ((*fa).isNegative()){
+    value = -1 * acos((a*a + b*b - c*c)/ (2*a*b));}
+  else {value = acos((a*a + b*b - c*c)/ (2*a*b));};
 }
 
 EuclideanAngle* EuclideanAngle::At( Vertex& v, Face& f ){
