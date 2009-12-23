@@ -7,8 +7,8 @@ Open=0
 Top=0
 [Editors]
 <<<<<<< .mine
-Focused=-1
-Order=-1
+Focused=0
+Order=
 =======
 Focused=90
 Order=2,90,-1,91
@@ -18,7 +18,7 @@ Open=0
 Top=0
 CursorCol=57
 CursorRow=231
-TopLine=28
+TopLine=123
 LeftChar=1
 [Editor_1]
 Open=0
@@ -518,8 +518,8 @@ CursorRow=26
 TopLine=1
 LeftChar=1
 [Editor_73]
-Open=1
-Top=1
+Open=0
+Top=0
 CursorCol=11
 CursorRow=8
 TopLine=94

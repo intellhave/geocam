@@ -11,8 +11,9 @@ the reading and writing of text files.
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-#include "triangulationinputoutput.h"
+#include "triangulationinputoutputgeometric.h"
 #include "length.h"
+#include "radius.h"
 #include "area.h"
 #include "math/miscmath.h"
 
@@ -137,7 +138,6 @@ bool readTriangulationFile(const char* fileName)
          Triangulation::putVertex(indexMapping, v); //Finally add to table.
          //sets the radius to a value that was given, zero if nothing was specified
          Radius::At(Triangulation::vertexTable[indexMapping])->setValue(radius);
-
        } 
        
        else if(simplexName == edgeString) 
@@ -205,7 +205,6 @@ bool readTriangulationFile(const char* fileName)
          Triangulation::putEdge(indexMapping, e);
          //sets the length to a value given, zero if no value was specified
          Length::At(Triangulation::edgeTable[indexMapping])->setValue(len);
-         printf("yo %f\n",Length::valueAt(Triangulation::edgeTable[indexMapping]));
        } 
        
        else if(simplexName == faceString) 
@@ -304,6 +303,8 @@ void writeTriangulationFile(char* newFileName)
                    
              }
              output << "\n";
+             output << Radius::valueAt(vit->second);
+             output <<"\n";
      }
      for(map<int, Edge>::iterator eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
      {
@@ -326,6 +327,8 @@ void writeTriangulationFile(char* newFileName)
                      output << (*(eit->second.getLocalFaces()))[j] << " ";
              }
              output << "\n";
+             output << Length::valueAt(eit->second);
+             output <<"\n";
      }
      
      for(map<int, Face>::iterator fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)

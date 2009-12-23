@@ -3,7 +3,7 @@
 
 TriangulationDisplay::TriangulationDisplay(char *f)
 {
-    showWeights = false;
+    showWeights = true;
     flat = true;
     voronoi = 0;
     if (readTriangulationFile(f)) {

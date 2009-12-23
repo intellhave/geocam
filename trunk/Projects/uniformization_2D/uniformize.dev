@@ -97,37 +97,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit6]
-FileName=..\..\InputOutput\triangulationInputOutput.cpp
-CompileCpp=1
-Folder=uniformize
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit7]
-FileName=..\..\InputOutput\triangulationInputOutput.h
-CompileCpp=1
-Folder=uniformize
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit8]
-FileName=..\..\Geometry\Face\area.h
-CompileCpp=1
-Folder=uniformize
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit9]
 FileName=..\..\Geometry\Face\area.cpp
 CompileCpp=1
 Folder=uniformize
@@ -137,7 +107,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit10]
+[Unit8]
 FileName=..\..\Geometry\Geoquant_general\triposition.h
 CompileCpp=1
 Folder=uniformize
@@ -147,7 +117,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit11]
+[Unit9]
 FileName=..\..\Geometry\Geoquant_general\triposition.cpp
 CompileCpp=1
 Folder=uniformize
@@ -157,7 +127,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit12]
+[Unit10]
 FileName=..\..\Geometry\Edge\length.h
 CompileCpp=1
 Folder=uniformize
@@ -167,7 +137,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit13]
+[Unit11]
 FileName=..\..\Geometry\Edge\length.cpp
 CompileCpp=1
 Folder=uniformize
@@ -177,7 +147,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit14]
+[Unit12]
 FileName=..\..\Triangulation\vertex.h
 CompileCpp=1
 Folder=uniformize
@@ -187,7 +157,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit15]
+[Unit13]
 FileName=..\..\Triangulation\edge.cpp
 CompileCpp=1
 Folder=uniformize
@@ -197,7 +167,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit16]
+[Unit14]
 FileName=..\..\Triangulation\edge.h
 CompileCpp=1
 Folder=uniformize
@@ -207,7 +177,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit17]
+[Unit15]
 FileName=..\..\Triangulation\face.cpp
 CompileCpp=1
 Folder=uniformize
@@ -217,7 +187,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit18]
+[Unit16]
 FileName=..\..\Triangulation\face.h
 CompileCpp=1
 Folder=uniformize
@@ -227,7 +197,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit19]
+[Unit17]
 FileName=..\..\Triangulation\simplex.cpp
 CompileCpp=1
 Folder=uniformize
@@ -237,7 +207,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit20]
+[Unit18]
 FileName=..\..\Triangulation\simplex.h
 CompileCpp=1
 Folder=uniformize
@@ -247,7 +217,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit21]
+[Unit19]
 FileName=..\..\Triangulation\vertex.cpp
 CompileCpp=1
 Folder=uniformize
@@ -257,7 +227,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit22]
+[Unit20]
 FileName=..\..\Triangulation\tetra.h
 CompileCpp=1
 Folder=uniformize
@@ -267,7 +237,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit23]
+[Unit21]
 FileName=..\..\Triangulation\tetra.cpp
 CompileCpp=1
 Folder=uniformize
@@ -277,7 +247,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit24]
+[Unit22]
 FileName=..\..\Math\miscmath.h
 CompileCpp=1
 Folder=uniformize
@@ -287,7 +257,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit25]
+[Unit23]
 FileName=..\..\Math\miscmath.cpp
 CompileCpp=1
 Folder=uniformize
@@ -297,7 +267,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit26]
+[Unit24]
 FileName=..\..\Geometry\Edge\eta.h
 CompileCpp=1
 Folder=uniformize
@@ -307,7 +277,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit27]
+[Unit25]
 FileName=..\..\Geometry\Edge\eta.cpp
 CompileCpp=1
 Folder=uniformize
@@ -317,7 +287,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit28]
+[Unit26]
 FileName=..\..\Visualization\pointlinecircle.h
 CompileCpp=1
 Folder=uniformize
@@ -327,7 +297,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit29]
+[Unit27]
 FileName=..\..\Visualization\pointlinecircle.cpp
 CompileCpp=1
 Folder=uniformize
@@ -337,7 +307,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit30]
+[Unit28]
 FileName=..\..\Subsystems\Solvers\ODE_approximators\eulerApprox.h
 CompileCpp=1
 Folder=uniformize
@@ -347,7 +317,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit31]
+[Unit29]
 FileName=approximatorme.cpp
 CompileCpp=1
 Folder=uniformize
@@ -357,7 +327,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit32]
+[Unit30]
 FileName=approximatorme.h
 CompileCpp=1
 Folder=uniformize
@@ -367,7 +337,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit33]
+[Unit31]
 FileName=..\..\Subsystems\Solvers\ODE_approximators\eulerApprox.cpp
 CompileCpp=1
 Folder=uniformize
@@ -377,7 +347,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit34]
+[Unit32]
 FileName=..\..\Geometry\Tetrahedron\volume.cpp
 CompileCpp=1
 Folder=uniformize
@@ -387,7 +357,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit35]
+[Unit33]
 FileName=..\..\Geometry\Tetrahedron\volume.h
 CompileCpp=1
 Folder=uniformize
@@ -397,17 +367,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit37]
-FileName=curvature2Dwneg.cpp
-CompileCpp=1
-Folder=uniformize
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit36]
+[Unit34]
 FileName=curvature2Dwneg.h
 CompileCpp=1
 Folder=uniformize
@@ -417,8 +377,8 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit38]
-FileName=..\..\Geometry\Geoquant_general\geoquant.h
+[Unit35]
+FileName=curvature2Dwneg.cpp
 CompileCpp=1
 Folder=uniformize
 Compile=1
@@ -427,7 +387,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit39]
+[Unit37]
 FileName=..\..\Geometry\Vertex\euc_angle.h
 CompileCpp=1
 Folder=uniformize
@@ -437,8 +397,68 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit40]
+[Unit36]
+FileName=..\..\Geometry\Geoquant_general\geoquant.h
+CompileCpp=1
+Folder=uniformize
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit38]
 FileName=..\..\Geometry\Vertex\euc_angle.cpp
+CompileCpp=1
+Folder=uniformize
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit40]
+FileName=..\..\InputOutput\triangulationInputOutput.h
+CompileCpp=1
+Folder=uniformize
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit39]
+FileName=..\..\InputOutput\triangulationInputOutput.cpp
+CompileCpp=1
+Folder=uniformize
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit41]
+FileName=..\..\InputOutput\triangulationInputOutput.cpp
+CompileCpp=1
+Folder=uniformize
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit42]
+FileName=..\..\InputOutput\triangulationInputOutput.h
+CompileCpp=1
+Folder=uniformize
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit6]
+FileName=..\..\Geometry\Face\area.h
 CompileCpp=1
 Folder=uniformize
 Compile=1

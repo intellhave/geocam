@@ -371,12 +371,14 @@ int main(int argc, char** argv) {
 
 
     //triangulation initializaiton steps
+
     if (argc <= 1) {
         cout << "ATTENTION: YOU NEED TO SPECIFY A FILE TO BE READ BY GIVING MAIN AN ARGUMENT!!!\n"
              << "READ THE COMMENT ABOVE MAIN's DEFINITION\n\nif you press any key to continue now,"
              << " the file being used will default to test_files/convex_pair.txt\n\n";
             system("PAUSE");
-            input_file = "..\..\Data\flip_test\non_convex_pair.txt";
+            input_file = "../../Data/flip_test/non_convex_pair.txt";
+
     } else {
         input_file = argv[1];
     }
@@ -390,7 +392,9 @@ int main(int argc, char** argv) {
     setup_view_parameters();
 
 	//Initialize GLUT
+
 	glutInit(&argc, argv);
+	
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(600, 600); //Set the window size
 
@@ -404,7 +408,7 @@ int main(int argc, char** argv) {
 	glutKeyboardFunc(handleKeypress);
 	glutSpecialFunc(handleSpecialKeypress);
 	glutReshapeFunc(handleResize);
-
+printf("r is %d",Length::valueAt(Triangulation::edgeTable[2]));
 	glutMainLoop();
 	system("PAUSE"); //This line is never reached
 	return 0;

@@ -17,7 +17,7 @@ void Ricci(double derivs[]){
   int ii = 0;
   for(vit = vBegin; vit != vEnd; ii++, vit++){
     if (vit->first==7 ) {
-       Ki = 2*PI-Curvature2Dwneg::valueAt(vit->second);}
+       Ki = 2*PI - Curvature2Dwneg::valueAt(vit->second);}
     else if ((vit->second).isAdjVertex(7)) {
        Ki =  Curvature2Dwneg::valueAt(vit->second);}
     else {
@@ -80,7 +80,7 @@ int main(int argc, char** argv) {
 
    // Run the flow with precision and accuracy bounds of 0.0001 and stepsize of 0.01
    app->run(100, 0.01);
- writeTriangulationFile("try.txt");
+ writeTriangulationFileWithData("trydata.txt");
    // Print out radii, curvatures and volumes
   printResultsStep("./ODE Result.txt", &(app->radiiHistory), &(app->curvHistory));
    system("Pause");
