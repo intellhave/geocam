@@ -145,6 +145,7 @@ Add classes and functions to the following lists as follows:
 ||printResultsStep||void||Alex||complete||
 ||printResultsVertex||void||Alex||complete||
 ||printResultsVolumes||void||Alex|| ||
+||*readTriangulationFile*||void||Alex|| ||
 ||readEtas||void||Alex || ||
 ||recalculate||void|| || ||
 ||remove||void||Alex|| ||
@@ -158,7 +159,7 @@ Add classes and functions to the following lists as follows:
 ||validateArgs||void|| || ||
 ||write3DTriangulationFile||void||Alex|| ||
 ||writeTriangulationFile||void||Alex|| ||
-||writeTriangulationFileWithData||void||Alex|| ||
+||*writeTriangulationFileWithData*||void||Alex|| ||
 ||Yamabe||void|| || ||
 || || || || ||
 || *constructor functions* || *constructor functions* || || ||
@@ -177,3 +178,5 @@ Add classes and functions to the following lists as follows:
 ||SphericalAngle||constructor|| || ||
 ||TriPosition||constructor|| || ||
 ||Volume||constructor|| || ||
+
+Additional things we need: How to install Dev-C++, How to install glut on Dev-C++.
