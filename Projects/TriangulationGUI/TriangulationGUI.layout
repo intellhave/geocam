@@ -17,7 +17,7 @@ Focused=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Order=0,2,1,-1
+Order=0,2,1
 =======
 Order=0,37,38,1,2,17,18
 >>>>>>> .r670
@@ -45,14 +45,14 @@ Top=1
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=53
-CursorRow=1392
+CursorCol=19
+CursorRow=4
 =======
 <<<<<<< .mine
 CursorCol=39
 CursorRow=339
 <<<<<<< .mine
-TopLine=1
+TopLine=4
 =======
 <<<<<<< .mine
 TopLine=205
