@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include "triangulation.h"
-#include "triangulationInputOutput.h"
+#include "triangulationInputOutputgeometric.h"
 #include "radius.h"
 #include "geoquant.h"
 #include "eta.h"
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
    // Set the radii and alphas
    for(int i = 1; i <= vertSize; i++) {
       Radius::At(Triangulation::vertexTable[i])->setValue(1.0 ) ;        
-      Alpha::At(Triangulation::vertexTable[i])->setValue(0.0 );
+      Alpha::At(Triangulation::vertexTable[i])->setValue(1.0 );
         printf("alph= %f\n",Alpha::valueAt(Triangulation::vertexTable[i]));
    }
    Radius::At(Triangulation::vertexTable[6])->setValue(0.3 ) ;

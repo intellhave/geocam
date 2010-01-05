@@ -11,7 +11,7 @@ the reading and writing of text files.
 #include <fstream>
 #include <sstream>
 #include <iomanip>
-#include "triangulationinputoutputgeometric.h"
+#include "triangulationInputOutputgeometric.h"
 #include "length.h"
 #include "radius.h"
 #include "area.h"
@@ -267,6 +267,243 @@ bool readTriangulationFile(const char* fileName)
     return true; // File read successfully!
 }
 
+bool readTriangulationFileWithData(const char* fileName) 
+{
+    // The three names of simplices.
+    const string vertexString("Vertex");
+    const string edgeString("Edge");
+    const string faceString("Face");
+    const string radiusString("Radius");
+    const string lengthString("Length");
+    const string negativityString("Negativity");
+    const string eofString("EOF");
+    
+    // The file stream.
+    ifstream scanner(fileName);
+    
+    // Name of the simplex to be read in.
+    char paramName[15];
+    int indexMapping;
+    while(scanner.good()) // While there is another simplex to read in...
+    {
+       scanner.getline(paramName, 15, ':'); // ':' is the delimiter.
+printf("%s",paramName);
+       if (paramName == vertexString) 
+       {
+         scanner >> indexMapping;
+         Vertex v(indexMapping);
+         
+         char ignore[5];
+         scanner.getline(ignore, 5); // Used to get to next line.
+         
+         char localVertices[100];
+         char localEdges[100];
+         char localFaces[100];
+         char specifiedradius[100];
+         char specifiedlength[100];
+         char specifiednegativity[100];
+         
+         stringstream vertexStream(stringstream::in | stringstream::out);
+         scanner.getline(localVertices, 100);
+         vertexStream << localVertices;
+         
+         while(vertexStream.good()) // While there's another int...
+         {
+              int index;
+              vertexStream >> index;
+              
+              v.addVertex(index);
+         }
+         
+         stringstream edgeStream(stringstream::in | stringstream::out);
+         scanner.getline(localEdges, 100);
+         edgeStream << localEdges;
+         
+          while(edgeStream.good())
+         {
+              int index;
+              edgeStream >> index;
+              v.addEdge(index);
+         }
+         
+         stringstream faceStream(stringstream::in | stringstream::out);
+         scanner.getline(localFaces, 100);
+         faceStream << localFaces;
+         
+         while(faceStream.good())
+         {
+              int index;
+              faceStream >> index;
+              v.addFace(index);
+         }
+         
+         
+         Triangulation::putVertex(indexMapping, v); //Finally add to table.
+           } 
+       
+       else if (paramName== edgeString) 
+       {
+         scanner >> indexMapping;
+         Edge e(indexMapping);
+         
+         char ignore[5];
+         scanner.getline(ignore, 5);
+         
+         char localVertices[100];
+         char localEdges[100];
+         char localFaces[100];
+         
+         stringstream vertexStream(stringstream::in | stringstream::out);
+         scanner.getline(localVertices, 100);
+         vertexStream << localVertices;
+         
+         while(vertexStream.good())
+         {
+              int index;
+              vertexStream >> index;
+              e.addVertex(index);
+         }
+         
+         stringstream edgeStream(stringstream::in | stringstream::out);
+         scanner.getline(localEdges, 100);
+         edgeStream << localEdges;
+         
+         while(edgeStream.good())
+         {
+              int index;
+              edgeStream >> index;
+              e.addEdge(index);
+         }
+         
+         stringstream faceStream(stringstream::in | stringstream::out);
+         scanner.getline(localFaces, 100);
+         faceStream << localFaces;
+         
+         while(faceStream.good())
+         {
+              int index;
+              faceStream >> index;
+              e.addFace(index);
+         }
+               
+         Triangulation::putEdge(indexMapping, e);
+       } 
+       
+       else if (paramName== faceString) 
+       {
+         scanner >> indexMapping;
+         Face f(indexMapping);
+         
+         char ignore[5];
+         scanner.getline(ignore, 5);
+         
+         char localVertices[100];
+         char localEdges[100];
+         char localFaces[100];
+         
+         stringstream vertexStream(stringstream::in | stringstream::out);
+         scanner.getline(localVertices, 100);
+         vertexStream << localVertices;
+         
+         while(vertexStream.good())
+         {
+              int index;
+              vertexStream >> index;
+              f.addVertex(index);
+         }
+         
+         stringstream edgeStream(stringstream::in | stringstream::out);
+         scanner.getline(localEdges, 100);
+         edgeStream << localEdges;
+         
+          while(edgeStream.good())
+         {
+              int index;
+              edgeStream >> index;
+              f.addEdge(index);
+         }
+         
+         stringstream faceStream(stringstream::in | stringstream::out);
+         scanner.getline(localFaces, 100);
+         faceStream << localFaces;
+         
+          while(faceStream.good())
+         {
+              int index;
+              faceStream >> index;
+              f.addFace(index);
+         }
+         
+         Triangulation::putFace(indexMapping, f);    
+       }
+       else if (paramName== radiusString)
+       {
+         //vertex radius info
+
+         double radius = 0;
+         char specifiedradius[100];
+
+         stringstream radiusStream(stringstream::in | stringstream::out);
+         scanner.getline(specifiedradius, 100, '\n');
+         radiusStream << specifiedradius;
+         while(radiusStream.good())
+         {
+             radiusStream >> radius;
+         }
+         //sets the radius to a value that was given, zero if nothing was specified
+         Radius::At(Triangulation::vertexTable[indexMapping])->setValue(radius);
+       }
+       else if (paramName== lengthString)
+       {
+                     //edge length info
+         double len=0.0;
+         char specifiedlength[100];
+
+         stringstream lengthStream(stringstream::in | stringstream::out);
+         scanner.getline(specifiedlength, 100, '\n');
+         lengthStream << specifiedlength;
+
+         while(lengthStream.good())
+         {
+           lengthStream >> len;
+         }
+                  //sets the length to a value given, zero if no value was specified
+         Length::At(Triangulation::edgeTable[indexMapping])->setValue(len);
+       }
+       
+       else if (paramName== negativityString)
+       {
+                     //negativity info
+         int neg=0;
+         char specifiednegativity[100];
+
+         stringstream negativityStream(stringstream::in | stringstream::out);
+         scanner.getline(specifiednegativity, 100,'\n');
+         negativityStream << specifiednegativity;
+
+         while(negativityStream.good())
+         {
+           negativityStream >> neg;
+         }
+                  //sets the length to a value given, zero if no value was specified
+         if (neg==1) {(Triangulation::faceTable[indexMapping]).setNegativity(true);}
+       }
+       
+       else if (paramName == eofString) 
+       {break;}
+       else
+       {
+ printf("weird paramName bob%sbob\n",paramName);
+            scanner.close();
+            return false; // File read unsuccessful.
+       }
+    } 
+    
+    scanner.close();
+    return true; // File read successfully!
+}
+
+
 //void buildTriangulation(char* filename) {
 //   FILE* file = fopen(filename, "r");
 //   if(file == NULL) {
@@ -363,7 +600,7 @@ void writeTriangulationFileWithData(char* newFileName)
      {
             
              
-             output << "Vertex: " << vit->first <<  "Radius: " << Radius::valueAt(vit->second);
+             output << "Vertex: " << vit->first <<"\n";
              //output << " Angle sum: " << getAngleSum(vit->second) << "\n";
              
              for(int j = 0; j < vit->second.getLocalVertices()->size(); j++)
@@ -384,10 +621,11 @@ void writeTriangulationFileWithData(char* newFileName)
                    
              }
              output << "\n";
+             output <<  "Radius: " << Radius::valueAt(vit->second)<< "\n";
      }
      for(map<int, Edge>::iterator eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++)
      {
-             output << "Edge: " << eit->first  << "Length: " << Length::valueAt(eit->second) << "\n";
+             output << "Edge: " << eit->first  << "\n";
              
              for(int j = 0; j < eit->second.getLocalVertices()->size(); j++)
              {
@@ -405,12 +643,12 @@ void writeTriangulationFileWithData(char* newFileName)
              {
                      output << (*(eit->second.getLocalFaces()))[j] << " ";
              }
-             output << "\n";
+             output << "\n" << "Length: " << Length::valueAt(eit->second) << "\n";
      }
      
      for(map<int, Face>::iterator fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
      {
-             output << "Face: " << fit->first << "Negativity: " << fit->second.isNegative();
+             output << "Face: " << fit->first ;
              output << "\n";
              for(int j = 0; j < fit->second.getLocalVertices()->size(); j++)
              {
@@ -428,9 +666,9 @@ void writeTriangulationFileWithData(char* newFileName)
              {
                      output << (*(fit->second.getLocalFaces()))[j] << " ";
              }
-             output << "\n";
+             output << "\n"<< "Negativity: " << fit->second.isNegative()<<"\n";
      }
-     
+output<<"EOF:";
 }
 
 int Pair::positionOf(vector<Pair>* list)
