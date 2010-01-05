@@ -4,6 +4,7 @@
 #include "radius.h"
 #include "geoquant.h"
 #include "eta.h"
+#include "alpha.h"
 #include "curvature2Dwneg.h"
 #include "approximatorme.h"
 #include "eulerApprox.h"
@@ -54,12 +55,15 @@ int main(int argc, char** argv) {
    int faceSize = Triangulation::faceTable.size();
    
    
-   // Set the radii
+   // Set the radii and alphas
    for(int i = 1; i <= vertSize; i++) {
       Radius::At(Triangulation::vertexTable[i])->setValue(1.0 ) ;        
+      Alpha::At(Triangulation::vertexTable[i])->setValue(0.0 );
+        printf("alph= %f\n",Alpha::valueAt(Triangulation::vertexTable[i]));
    }
-   Radius::At(Triangulation::vertexTable[6])->setValue(2.0 ) ;
+   Radius::At(Triangulation::vertexTable[6])->setValue(0.3 ) ;
    Radius::At(Triangulation::vertexTable[7])->setValue(4.0 ) ;
+   Alpha::At(Triangulation::vertexTable[7])->setValue(1.0 ) ;
    // Set the etas
    for(int i = 1; i <= edgeSize; i++) {
    if ((Triangulation::edgeTable[i]).isAdjVertex(7)) {
