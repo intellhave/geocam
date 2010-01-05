@@ -49,6 +49,8 @@ the reading and writing of text files under a two-dimensional manifold.
  */
 bool readTriangulationFile(const char*);
 
+bool readTriangulationFileWithData(const char*);
+
 /*
  * This function takes the current Triangulation and writes it to a file in
  * the format read in from readTriangulationFile. The file name is given as
