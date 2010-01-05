@@ -12,6 +12,8 @@ Length::Length( Edge& e ){
   radius1 = Radius::At( v1 );
   radius2 = Radius::At( v2 );
   eta = Eta::At( e );
+  alpha1 = Alpha::At( v1);
+  alpha2 = Alpha::At( v2 );
   
   radius1->addDependent( this );
   radius2->addDependent( this );
@@ -21,9 +23,11 @@ Length::Length( Edge& e ){
 void Length::recalculate(){
   double r1 = radius1->getValue();
   double r2 = radius2->getValue();
+  double a1 = alpha1->getValue();
+  double a2 = alpha2->getValue();
   double etaV = eta->getValue();
 
-  value = sqrt( r1*r1 + r2*r2 + 2*r1*r2*etaV );   
+  value = sqrt( a1* r1*r1 + a2 * r2*r2 + 2*r1*r2*etaV );   
 }
 
 void Length::remove() {
