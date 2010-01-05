@@ -1,7 +1,7 @@
 [Project]
 FileName=uniformize.dev
 Name=uniformize
-UnitCount=40
+UnitCount=42
 Type=1
 Ver=1
 ObjFiles=
@@ -268,7 +268,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit24]
-FileName=..\..\Geometry\Edge\eta.h
+FileName=..\..\Geometry\Vertex\alpha.h
 CompileCpp=1
 Folder=uniformize
 Compile=1
@@ -278,7 +278,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit25]
-FileName=..\..\Geometry\Edge\eta.cpp
+FileName=..\..\Geometry\Vertex\alpha.cpp
 CompileCpp=1
 Folder=uniformize
 Compile=1
@@ -438,7 +438,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit41]
-FileName=..\..\InputOutput\triangulationInputOutput.cpp
+FileName=..\..\Geometry\Edge\eta.h
 CompileCpp=1
 Folder=uniformize
 Compile=1
@@ -448,7 +448,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit42]
-FileName=..\..\InputOutput\triangulationInputOutput.h
+FileName=..\..\Geometry\Edge\eta.cpp
 CompileCpp=1
 Folder=uniformize
 Compile=1
