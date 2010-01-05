@@ -10,11 +10,14 @@ using namespace std;
 
 #include "radius.h"
 #include "length.h"
+#include "alpha.h"
 
 class PartialEdge : public virtual GeoQuant {
 private:
   Radius* ri;
   Radius* rj;
+  Alpha* ai;
+  Alpha* aj;
   Length* Lij;
 
 protected:
