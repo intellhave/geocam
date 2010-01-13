@@ -7,7 +7,10 @@ static EtaIndex* Index = NULL;
 
 Eta::Eta( Edge& e ){}
 
-void Eta::recalculate(){}
+void Eta::recalculate(){
+   // DEFAULT
+   value = 1;     
+}
 
 void Eta::remove() {
      deleteDependents();
