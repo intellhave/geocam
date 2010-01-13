@@ -10,10 +10,17 @@ Order=0,5,1,2,9,6,-1
 Focused=-1
 [Editor_0]
 Open=1
+<<<<<<< .mine
+Top=1
+CursorCol=10
+CursorRow=346
+TopLine=338
+=======
 Top=0
 CursorCol=60
 CursorRow=411
 TopLine=380
+>>>>>>> .r1030
 LeftChar=1
 [Editor_1]
 Open=1
@@ -47,7 +54,7 @@ LeftChar=1
 Open=1
 Top=0
 CursorCol=1
-CursorRow=1
+CursorRow=25
 TopLine=1
 LeftChar=1
 [Editor_7]
