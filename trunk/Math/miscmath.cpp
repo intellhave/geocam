@@ -38,6 +38,57 @@ vector<int> listDifference(vector<int>* list1, vector<int>* list2){
   return diff;
 }
 
+vector<int> multiplicityUnion(vector<int> * list1, vector<int> * list2) {
+  vector<int> merge;
+  for (int i = 0; i < list1->size(); i++) {
+    merge.push_back((*list1)[i]);
+  }
+  for (int i = 0; i < list2->size(); i++) {
+    merge.push_back((*list2)[i]);
+  }
+  return merge;
+}
+
+vector<int> multiplicityIntersection(vector<int> * list1, vector<int> * list2) {
+  vector<int> inter;
+
+  map<int, int> indexToQuantity;
+
+  for (int i = 0; i < list1->size(); i++) {
+    indexToQuantity[(*list1)[i]] = indexToQuantity[(*list1)[i]] + 1;
+  }
+
+  for (int i = 0; i < list2->size(); i++) {
+    if (indexToQuantity[(*list2)[i]] > 0) {
+      inter.push_back((*list2)[i]);
+      indexToQuantity[(*list2)[i]] = indexToQuantity[(*list2)[i]] - 1;
+    }
+  }
+
+  return inter;
+}
+
+vector<int> multiplicityDifference(vector<int> * list1, vector<int> * list2) {
+  vector<int> diff;
+
+  map<int, int> indexToQuantity;
+
+  for (int i = 0; i < list2->size(); i++) {
+    indexToQuantity[(*list2)[i]] = indexToQuantity[(*list2)[i]] + 1;
+  }
+
+  for (int i = 0; i < list1->size(); i++) {
+    if (indexToQuantity[(*list1)[i]] > 0) {
+      indexToQuantity[(*list1)[i]] = indexToQuantity[(*list1)[i]] - 1;
+    } else {
+      diff.push_back((*list1)[i]);
+    }
+  }
+
+  return diff;
+
+}
+
 vector<double> quadratic(double a, double b, double c)
 {
    /*                       _________

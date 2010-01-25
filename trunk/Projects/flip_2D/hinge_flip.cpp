@@ -15,7 +15,9 @@ Edge flip(Edge e) {
         flipNN(bucket);
         //note the following || is technically exclusive because the two && cases are checked above
     } else if((Triangulation::faceTable[bucket.f0].isNegative() == true) || (Triangulation::faceTable[bucket.f1].isNegative() == true)) {
-        flipPN(bucket);
+
+      flipPN(bucket);
+
     } else {
         printf("hmm, no case was found\n");
         //just need to escape return e seems sufficient;
@@ -25,6 +27,20 @@ Edge flip(Edge e) {
     return Triangulation::edgeTable[e.getIndex()];
 } //end of flip
 
+//compute the height perpendicular to x
+double perpHeight(double x, double y, double z) {
+  //cout << "x : " << x << "\n";
+  //cout << "y : " << y << "\n";
+  //cout << "z : " << z << "\n";
+  double insideSqrt = -((x-y-z) * (y+x-z) * (x+z-y) * (y+x+z))/(4 * x * x);
+  //cout << "insideSqrt : " << insideSqrt << "\n";
+  if (insideSqrt < 0) {
+    printf("the new length going to be imaginary, this is probably wrong,");
+    printf("something is wrong in perpendicularHeight in hinge_flip.cpp");
+    system("PAUSE");
+  }
+  return sqrt(insideSqrt);
+}
 
 /*
  *      handles both: PP -> PP
@@ -35,7 +51,8 @@ void flipPP(struct simps b) {
   double e_length;
   
   e_length = sqrt( (b.e2_len*b.e2_len) + (b.e3_len * b.e3_len) - (2*b.e2_len*b.e3_len*cos(b.a2)) );
-  
+  //e_length = perpHeight(b.e0_len, b.e2_len, b.e1_len) + perpHeight(b.e0_len, b.e3_len, b.e4_len);
+
   Length::At(Triangulation::edgeTable[b.e0])->setValue(e_length);
 
   //figure out which one is negative
@@ -89,8 +106,8 @@ void swap(double *j, double *k) {
 *   | \        v1
 *   |  \e3     /|
 *   | f1\  e1/  |
-* e4| Neg\ / f0 |e2
-*   |    /\ Pos |
+* e4| Pos\ / f0 |e2
+*   |    /\ Neg |
 *   |  /   \    |
 * v0|/______\___|v2
 *       e0
@@ -103,13 +120,15 @@ void flipPN(struct simps b) {
     alpha = angle(b.e0_len, b.e1_len, b.e2_len);
     beta  = angle(b.e0_len, b.e4_len, b.e3_len);
     e_length = sqrt(b.e4_len * b.e4_len + b.e1_len * b.e1_len - 2 * b.e4_len * b.e1_len * cos(abs(beta - alpha)));
+    //e_length = perpHeight(b.e0_len, b.e2_len, b.e1_len) + perpHeight(b.e0_len, b.e3_len, b.e4_len);
+
     Length::At(Triangulation::edgeTable[b.e0])->setValue(e_length);
     //assignment removed 'cause the rest of procedure is written in terms of the
     //before-flip picture
     //b.e0_len = e_length;
 
-    //flip flop everything so that the negative triangle is f1
-    if (Triangulation::faceTable[b.f0].isNegative()) {
+    //flip flop everything so that the negative triangle is f0
+    if (b.f1neg) {
         swap(&b.v1, &b.v3);
         swap(&b.e1, &b.e4);
         swap(&b.e2, &b.e3);
@@ -124,29 +143,29 @@ void flipPN(struct simps b) {
     //a negative leaning across e1
     if (abs(angle(b.e0_len, b.e1_len, b.e2_len)) < abs(angle(b.e0_len, b.e4_len, b.e3_len)) &&
         abs(angle(b.e0_len, b.e2_len, b.e1_len)) > abs(angle(b.e0_len, b.e3_len, b.e4_len))) { // right case as shown above
-        Triangulation::faceTable[b.f1].setNegativity(false);
-        Triangulation::faceTable[b.f0].setNegativity(true);
+        Triangulation::faceTable[b.f1].setNegativity(true);
+        Triangulation::faceTable[b.f0].setNegativity(false);
     
     //a negative leaning across e2
     } else if (abs(angle(b.e0_len, b.e1_len, b.e2_len)) > abs(angle(b.e0_len, b.e4_len, b.e3_len)) &&
                abs(angle(b.e0_len, b.e2_len, b.e1_len)) < abs(angle(b.e0_len, b.e3_len, b.e4_len))) { //left case... flip across vert of above picture
         //actually setting these shouldn't be necessary but its nice to be explicit
-        Triangulation::faceTable[b.f1].setNegativity(true);
-        Triangulation::faceTable[b.f0].setNegativity(false);
+        Triangulation::faceTable[b.f1].setNegativity(false);
+        Triangulation::faceTable[b.f0].setNegativity(true);
 
     //a negative inside a positie
     } else if (abs(angle(b.e0_len, b.e1_len, b.e2_len)) > abs(angle(b.e0_len, b.e4_len, b.e3_len)) &&
                abs(angle(b.e0_len, b.e2_len, b.e1_len)) > abs(angle(b.e0_len, b.e3_len, b.e4_len))) {
-        Triangulation::faceTable[b.f1].setNegativity(false);
-        Triangulation::faceTable[b.f0].setNegativity(false);
+        Triangulation::faceTable[b.f1].setNegativity(true);
+        Triangulation::faceTable[b.f0].setNegativity(true);
 
     //a positive inside a negative
     } else if (abs(angle(b.e0_len, b.e1_len, b.e2_len)) < abs(angle(b.e0_len, b.e4_len, b.e3_len)) &&
                abs(angle(b.e0_len, b.e2_len, b.e1_len)) < abs(angle(b.e0_len, b.e3_len, b.e4_len))) {
-        Triangulation::faceTable[b.f1].setNegativity(true);
-        Triangulation::faceTable[b.f0].setNegativity(true);
+        Triangulation::faceTable[b.f1].setNegativity(false);
+        Triangulation::faceTable[b.f0].setNegativity(false);
+
     }
-    
 }
 
 /*
@@ -156,6 +175,8 @@ void flipPN(struct simps b) {
 void flipNN(struct simps b) {
     double e_length;
     e_length = sqrt(b.e2_len*b.e2_len + b.e3_len*b.e3_len - 2 * b.e2_len * b.e3_len * cos(b.a2));
+    //e_length = perpHeight(b.e0_len, b.e2_len, b.e1_len) + perpHeight(b.e0_len, b.e3_len, b.e4_len);
+
     Length::At(Triangulation::edgeTable[b.e0])->setValue(e_length);
 
     if (b.a0 > PI || b.a2 > PI) {
@@ -258,9 +279,10 @@ v1  \ f0  | f1  / v3
   Triangulation::vertexTable[bucket.v1].addFace(bucket.f1);
   Triangulation::vertexTable[bucket.v3].addFace(bucket.f0);
 
+  //dup
   //add f1 from v1 and add f0 from v3
-  Triangulation::vertexTable[bucket.v1].addFace(bucket.f1);
-  Triangulation::vertexTable[bucket.v3].addFace(bucket.f0);
+  //Triangulation::vertexTable[bucket.v1].addFace(bucket.f1);
+  //Triangulation::vertexTable[bucket.v3].addFace(bucket.f0);
 
   //remove f1 from v0, and remove f0 from v2
   Triangulation::vertexTable[bucket.v0].removeFace(bucket.f1);
@@ -385,5 +407,9 @@ bool prep_for_flip(Edge e, struct simps * bucket) {
 
   bucket->a0 = a0;
   bucket->a2 = a2;
+
+  bucket->f0neg = (Triangulation::faceTable[bucket->f0]).isNegative();
+  bucket->f1neg = (Triangulation::faceTable[bucket->f1]).isNegative();
+
   return true;
 }

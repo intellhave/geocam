@@ -3,8 +3,9 @@
 
 TriangulationDisplay::TriangulationDisplay(char *f)
 {
-    showWeights = true;
-    flat = true;
+    showWeights = false;
+    flat = 0;
+    tickMarks = false;
     voronoi = 0;
     if (readTriangulationFile(f)) {
         fileName = f;
@@ -32,6 +33,8 @@ TriangulationDisplay::TriangulationDisplay(char *f)
             (vit->second).f = 2 * range * ((double) rand()/RAND_MAX) - range;
         }*/
         
+        //set up the vertex coordinates just this once
+        makePoints();
     } else {
         cout << "BAD FILE NAME!!!\nPerhaps your file ends in a blank line?";
         system("PAUSE");
@@ -45,6 +48,12 @@ TriangulationDisplay::TriangulationDisplay()
 
 TriangulationDisplay::~TriangulationDisplay()
 {
+}
+
+void TriangulationDisplay::reGeneratePlane() {
+  coordSystem.generatePlane();
+  listOfTriangles = coordSystem.getTriangles();
+  selectedEdge = Triangulation::edgeTable.begin();
 }
 
 void TriangulationDisplay::changeFileTo(char* f)
@@ -63,6 +72,19 @@ void TriangulationDisplay::changeFileTo(char* f)
 
         listOfTriangles = coordSystem.getTriangles();
     }
+}
+
+void TriangulationDisplay::makePoints(void) {
+  map<int, Vertex>::iterator vit;
+  vit = Triangulation::vertexTable.begin();
+  for (; vit != Triangulation::vertexTable.end(); vit++) {
+    Point * p = new Point(coordSystem.getPoint(vit->first).x, coordSystem.getPoint(vit->first).y);
+    points.insert(pair<int, Point>(vit->first, *p));
+  }
+}
+
+Point TriangulationDisplay::getVertexCoords(int index) {
+  return points[index];
 }
 
 char * TriangulationDisplay::getCurrentFile()
@@ -123,11 +145,7 @@ vector<triangle_parts> TriangulationDisplay::getTriangles(void) {
 }
 
 vector<Line> TriangulationDisplay::getDuals(void) {
-    //map<int, Edge>::iterator eit;
-    //for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-    //    coordSystem.addDual(eit->second);
-    //}
-    return coordSystem.TriangulationCoordinateSystem::getDuals();
+    return coordSystem.TriangulationDevelopment::getDuals();
 }
 
 Point TriangulationDisplay::getPoint(int index){

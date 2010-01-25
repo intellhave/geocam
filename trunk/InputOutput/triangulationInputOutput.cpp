@@ -10,11 +10,14 @@ the reading and writing of text files.
 #include <set>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 #include <iomanip>
 #include "triangulationinputoutput.h"
 #include "length.h"
 #include "area.h"
 #include "math/miscmath.h"
+
+
 
 
 /*
@@ -66,7 +69,7 @@ bool readTriangulationFile(const char* fileName)
     
     // Name of the simplex to be read in.
     char simplexName[15];
-    
+
     while(scanner.good()) // While there is another simplex to read in...
     {
        scanner.getline(simplexName, 15, ':'); // ':' is the delimiter.
@@ -93,6 +96,12 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               vertexStream >> index;
+
+              //the last simplex added was being duped, now this check for eof/fail
+              //will ensure that no dupes are created during file input
+              // the && ensures it works regardless of trailing whitespace
+              if (vertexStream.fail() && vertexStream.eof())
+                break;
               
               v.addVertex(index);
          }
@@ -105,6 +114,10 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               edgeStream >> index;
+
+              if (edgeStream.fail() && edgeStream.eof())
+                break;
+
               v.addEdge(index);
          }
          
@@ -116,6 +129,10 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               faceStream >> index;
+
+              if (faceStream.fail() && faceStream.eof())
+                break;
+
               v.addFace(index);
          }
          
@@ -162,6 +179,10 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               vertexStream >> index;
+
+              if (vertexStream.fail() && vertexStream.eof())
+                break;
+
               e.addVertex(index);
          }
          
@@ -173,6 +194,10 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               edgeStream >> index;
+
+              if (edgeStream.fail() && edgeStream.eof())
+                break;
+
               e.addEdge(index);
          }
          
@@ -184,6 +209,10 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               faceStream >> index;
+
+              if (faceStream.fail() && faceStream.eof())
+                break;
+
               e.addFace(index);
          }
          
@@ -205,7 +234,7 @@ bool readTriangulationFile(const char* fileName)
          Triangulation::putEdge(indexMapping, e);
          //sets the length to a value given, zero if no value was specified
          Length::At(Triangulation::edgeTable[indexMapping])->setValue(len);
-         printf("yo %f\n",Length::valueAt(Triangulation::edgeTable[indexMapping]));
+         //global_lengths.push_back(len);
        } 
        
        else if(simplexName == faceString) 
@@ -229,6 +258,13 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               vertexStream >> index;
+
+              if (vertexStream.fail() && vertexStream.eof())
+                break;
+
+              //if (f.getIndex() == 1 && index == 3)
+               // cout << vertexStream.fail() << "\t" << vertexStream.eof() << "\n";
+
               f.addVertex(index);
          }
          
@@ -240,6 +276,10 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               edgeStream >> index;
+
+              if (edgeStream.fail() && edgeStream.eof())
+                break;
+
               f.addEdge(index);
          }
          
@@ -251,6 +291,10 @@ bool readTriangulationFile(const char* fileName)
          {
               int index;
               faceStream >> index;
+
+              if (faceStream.fail() && faceStream.eof())
+                break;
+
               f.addFace(index);
          }
          

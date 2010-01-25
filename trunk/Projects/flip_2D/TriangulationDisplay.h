@@ -8,7 +8,7 @@
 
 class TriangulationDisplay {
 
-    TriangulationCoordinateSystem coordSystem;
+    TriangulationDevelopment coordSystem;
 
     //this string should be the path to the file that contains the triangulation information
     char* fileName;
@@ -17,10 +17,13 @@ class TriangulationDisplay {
 
     map<int,Edge>::iterator selectedEdge;
 
+    map<int, Point> points;
+
     public:
 
-    bool flat;
+    int flat;
     bool showWeights;
+    bool tickMarks;
     int voronoi; // 0 is nothing, 1 is the whole voronoi diagram, 2 is the hinge only
 
     TriangulationDisplay(void);
@@ -30,6 +33,8 @@ class TriangulationDisplay {
     //changes the file that the triangulation represents and should reset everything
     //within this class to represent that change (i.e. the coordSystem should be updated)
     void changeFileTo(char * f);
+
+    void reGeneratePlane();
 
     char* getCurrentFile(void);
 
@@ -64,4 +69,10 @@ class TriangulationDisplay {
     //updates the underlying coordinateSystem object to represent the current state
     //of the triangulation
     void update();
+
+        //populates the Points map with index -> Point pairs
+    void makePoints(void);
+
+    Point getVertexCoords(int index);
+
 };

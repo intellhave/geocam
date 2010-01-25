@@ -1,5 +1,5 @@
 /**************************************************************
-Class: TriangulationCoordinateSystem
+Class: TriangulationDevelopment
 Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: July 28, 2008
 **************************************************************/
@@ -8,23 +8,25 @@ Version: July 28, 2008
 #include "projects/flip_2d/delaunay.h"
 #include "math/miscmath.h"
 
-#ifndef TRIANGULATIONCOORDINATESYSTEM_H
-#define TRIANGULATIONCOORDINATESYSTEM_H
+#ifndef TriangulationDevelopment_H
+#define TriangulationDevelopment_H
 
 struct triangle_parts {
+    int faceIndex;
     int negativity;
     float coords[3][2];
+    float weight;
 };
 
 /*
- * A TriangulationCoordinateSystem combines a triangulation with
+ * A TriangulationDevelopment combines a triangulation with
  * points and lines to create a coordinate system that can allow
  * the triangulation to be viewed. It functions very similarly to
  * the Triangulation class, having a pointTable and lineTable.
- * However, TriangulationCoordinateSystem does not have static
+ * However, TriangulationDevelopment does not have static
  * methods. Any methods should be accessed as follows:
  *           
- *          TriangulationCoordinateSystem tcs; // Declaration
+ *          TriangulationDevelopment tcs; // Declaration
  *          tcs.generatePlane();          // Build system
  *          tcs.getPoint(4);
  *            :
@@ -34,7 +36,7 @@ struct triangle_parts {
  * accessed using that vertex's index. Lines are related to edges
  * in the same way. 
  */
-class TriangulationCoordinateSystem
+class TriangulationDevelopment
 {    
      /*
       * Adds a Line to the lineTable.
@@ -56,8 +58,8 @@ class TriangulationCoordinateSystem
       map<int, Point> pointTable;
       vector<Line> dualList;
       public:
-      TriangulationCoordinateSystem();
-      ~TriangulationCoordinateSystem();
+      TriangulationDevelopment();
+      ~TriangulationDevelopment();
       /*
        * Returns true if the coordinate system contains the Line
        * given by its index.
@@ -139,4 +141,4 @@ class TriangulationCoordinateSystem
       void addDuals(Face);
 };
 
-#endif // TRIANGULATIONCOORDINATESYSTEM_H
+#endif // TriangulationDevelopment_H

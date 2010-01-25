@@ -6,21 +6,21 @@
 #include "partial_edge.h"
 #define PI 	3.141592653589793238
 
-TriangulationCoordinateSystem::TriangulationCoordinateSystem()
+TriangulationDevelopment::TriangulationDevelopment()
 {
 }
-TriangulationCoordinateSystem::~TriangulationCoordinateSystem()
+TriangulationDevelopment::~TriangulationDevelopment()
 {
 }
-void TriangulationCoordinateSystem::putLine(int index, Line l)
+void TriangulationDevelopment::putLine(int index, Line l)
 {
     lineTable.insert(pair<int, Line>(index, l));
 }
-void TriangulationCoordinateSystem::putPoint(int index, Point p)
+void TriangulationDevelopment::putPoint(int index, Point p)
 {
      pointTable.insert(pair<int, Point>(index, p));
 }
-bool TriangulationCoordinateSystem::containsLine(int index)
+bool TriangulationDevelopment::containsLine(int index)
 {
      map<int, Line>::iterator lit;
      for(lit = lineTable.begin(); lit != lineTable.end(); lit++)
@@ -30,7 +30,7 @@ bool TriangulationCoordinateSystem::containsLine(int index)
      }
      return false;
 }
-bool TriangulationCoordinateSystem::containsPoint(int index)
+bool TriangulationDevelopment::containsPoint(int index)
 {
      map<int, Point>::iterator pit;
      for(pit = pointTable.begin(); pit != pointTable.end(); pit++)
@@ -40,21 +40,21 @@ bool TriangulationCoordinateSystem::containsPoint(int index)
      }
      return false;
 }
-Point TriangulationCoordinateSystem::getPoint(int index)
+Point TriangulationDevelopment::getPoint(int index)
 {
       return pointTable[index];
 }
-Line TriangulationCoordinateSystem::getLine(int index)
+Line TriangulationDevelopment::getLine(int index)
 {
       return lineTable[index];
 }
-void TriangulationCoordinateSystem::clearSystem()
+void TriangulationDevelopment::clearSystem()
 {
     dualList.clear();
     pointTable.clear();
     lineTable.clear();
 }
-void TriangulationCoordinateSystem::generatePlane()
+void TriangulationDevelopment::generatePlane()
 {
     clearSystem(); // Clear the system first.
     int v1, v2, va, vb, ea1, ea2, eb1, eb2; // Needed references
@@ -166,7 +166,7 @@ void TriangulationCoordinateSystem::generatePlane()
    }
 }
 
-int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
+int TriangulationDevelopment::generatePlaneHelper(Edge e, int edgesAdded)
 {
     // This is the exit condition: if all the edges have been added or this
     // edge is a border (which means all of its info has been added already),
@@ -382,7 +382,7 @@ int TriangulationCoordinateSystem::generatePlaneHelper(Edge e, int edgesAdded)
      return edgesAdded;
 }
 
-void TriangulationCoordinateSystem::update()
+void TriangulationDevelopment::update()
 {
      lineTable.clear();
      map<int, Point>::iterator pit;
@@ -408,7 +408,7 @@ void TriangulationCoordinateSystem::update()
         addDual(eit->second);
     }
 }
-void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
+void TriangulationDevelopment::addHalfDual(Edge e, Face f)
 {
      int v1 = (*(e.getLocalVertices()))[0];
      int v2 = (*(e.getLocalVertices()))[1];
@@ -454,7 +454,7 @@ void TriangulationCoordinateSystem::addHalfDual(Edge e, Face f)
      
 }
 
-void TriangulationCoordinateSystem::addDuals(Face f)
+void TriangulationDevelopment::addDuals(Face f)
 {
      for (int i = 0; i <= 2; i++)
      {
@@ -463,7 +463,7 @@ void TriangulationCoordinateSystem::addDuals(Face f)
      }
 }
 
-void TriangulationCoordinateSystem::addDual(Edge e)
+void TriangulationDevelopment::addDual(Edge e)
 {
      Face f1 = Triangulation::faceTable[(*(e.getLocalFaces()))[0]];
      addHalfDual(e, f1);
@@ -474,7 +474,7 @@ void TriangulationCoordinateSystem::addDual(Edge e)
      }
 }
 
-void TriangulationCoordinateSystem::addDuals(Vertex v)
+void TriangulationDevelopment::addDuals(Vertex v)
 {
      for(int i = 0; i < v.getLocalEdges()->size(); i++)
      {
@@ -483,7 +483,7 @@ void TriangulationCoordinateSystem::addDuals(Vertex v)
      }
 }
 
-void TriangulationCoordinateSystem::printToFile(char* filename)
+void TriangulationDevelopment::printToFile(char* filename)
 {
      ofstream results(filename, ios_base::trunc);
      results << setprecision(6);
@@ -506,7 +506,7 @@ void TriangulationCoordinateSystem::printToFile(char* filename)
      }
 }
 
-vector<triangle_parts> TriangulationCoordinateSystem::getTriangles(void) {
+vector<triangle_parts> TriangulationDevelopment::getTriangles(void) {
     vector<triangle_parts> ts;
     map<int, Face>::iterator fit;
     for(fit = Triangulation::faceTable.begin(); fit != Triangulation::faceTable.end(); fit++)
@@ -528,7 +528,7 @@ vector<triangle_parts> TriangulationCoordinateSystem::getTriangles(void) {
     return ts;
 }
 
-void TriangulationCoordinateSystem::printDuals(char* filename)
+void TriangulationDevelopment::printDuals(char* filename)
 {
      ofstream results(filename, ios_base::trunc);
      results << setprecision(6);
@@ -541,7 +541,7 @@ void TriangulationCoordinateSystem::printDuals(char* filename)
      }
 }
 
-vector<Line> TriangulationCoordinateSystem::getDuals(void)
+vector<Line> TriangulationDevelopment::getDuals(void)
 {
     vector<Line> ds;
     for(int i = 0; i < dualList.size(); i++) {
@@ -550,7 +550,7 @@ vector<Line> TriangulationCoordinateSystem::getDuals(void)
     return ds;
 }
 
-Line TriangulationCoordinateSystem::getDual(int e) {
+Line TriangulationDevelopment::getDual(int e) {
     Line l = dualList[e];
     return l;
 }
