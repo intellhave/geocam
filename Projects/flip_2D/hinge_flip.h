@@ -44,9 +44,10 @@ v1  \    e0     / v3
          v0
 */
 struct simps {
-       int v0, v1, v2, v3, e0, e1, e2, e3, e4, f0, f1;
-       double e0_len, e1_len, e2_len, e3_len, e4_len;
-       double a0, a2;
+      int v0, v1, v2, v3, e0, e1, e2, e3, e4, f0, f1;
+      double e0_len, e1_len, e2_len, e3_len, e4_len;
+      double a0, a2;
+      bool f0neg, f1neg;
 };
 
 //performs a topological flip and determines the geometric configuration

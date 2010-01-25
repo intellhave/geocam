@@ -1,11 +1,15 @@
 [Project]
 FileName=new_flip.dev
 Name=new_flip
-UnitCount=94
+<<<<<<< .mine
+UnitCount=95
+=======
+UnitCount=98
+>>>>>>> .r1030
 Type=1
 Ver=1
 ObjFiles=
-Includes=..\..;..\..\Geometry\Edge;..\..\Geometry\Face;..\..\Geometry\Geoquant_general;..\..\Geometry\Tetrahedron;..\..\Geometry\Triangulation;..\..\Geometry\Vertex;..\..\InputOutput;..\..\Projects\flip_2D;..\..\Math;..\..\Triangulation;..\..\Visualization;..\..\Deprecated\Triangulation
+Includes=..\..;..\..\Geometry\Edge;..\..\Geometry\Face;..\..\Geometry\Geoquant_general;..\..\Geometry\Tetrahedron;..\..\Geometry\Triangulation;..\..\Geometry\Vertex;..\..\InputOutput;..\..\Projects\flip_2D;..\..\Math;..\..\Triangulation;..\..\Visualization;..\..\Deprecated\Triangulation;..\..\Subsystems\GeoquantConversions\EtaGenerator
 Libs=
 PrivateResource=
 ResourceIncludes=
@@ -21,13 +25,13 @@ OverrideOutput=0
 OverrideOutputName=new_flip.exe
 HostApplication=
 Folders=
-CommandLine=..\..\try3.txt
+CommandLine=..\..\Data\flip_test\eight_triangles_redux.txt
 UseCustomMakefile=0
 CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
-CompilerSettings=0000000000000000000000
+CompilerSettings=0000000000000001000000
 
 [Unit1]
 FileName=main.cpp
@@ -938,7 +942,11 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit93]
+<<<<<<< .mine
+FileName=..\..\Geometry\Edge\partial_edge_partial.cpp
+=======
 FileName=..\..\Geometry\Edge\dih_angle_partial.h
+>>>>>>> .r1030
 CompileCpp=1
 Folder=new_flip
 Compile=1
@@ -948,17 +956,11 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit94]
+<<<<<<< .mine
+FileName=..\..\Geometry\Edge\dih_angle_partial.cpp
+=======
 FileName=..\..\Geometry\Edge\partial_edge_partial.cpp
-CompileCpp=1
-Folder=new_flip
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit97]
-FileName=..\Geometry\length.h
+>>>>>>> .r1030
 CompileCpp=1
 Folder=new_flip
 Compile=1
@@ -968,7 +970,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit98]
-FileName=..\Geometry\partial_edge.h
+FileName=..\..\Geometry\Vertex\alpha.cpp
 CompileCpp=1
 Folder=new_flip
 Compile=1
@@ -1159,6 +1161,36 @@ BuildCmd=
 
 [Unit90]
 FileName=..\..\Visualization\TriangulationDevelopment.cpp
+CompileCpp=1
+Folder=new_flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit95]
+FileName=..\..\Subsystems\GeoquantConversions\EtaGenerator\EtaGenerator.h
+CompileCpp=1
+Folder=new_flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit96]
+FileName=..\..\Subsystems\GeoquantConversions\EtaGenerator\EtaGenerator.cpp
+CompileCpp=1
+Folder=new_flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit97]
+FileName=..\..\Geometry\Vertex\alpha.h
 CompileCpp=1
 Folder=new_flip
 Compile=1

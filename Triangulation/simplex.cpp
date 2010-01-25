@@ -8,26 +8,26 @@ Version: June 9, 2008
 #include <algorithm>
 
 void Simplex::addVertex(int vertex){
-  vector<int>::iterator it = find(localVertices.begin(), localVertices.end(), vertex);
-  if(it == localVertices.end())
+  //vector<int>::iterator it = find(localVertices.begin(), localVertices.end(), vertex);
+  //if(it == localVertices.end())
     localVertices.push_back(vertex);
 }
 
 void Simplex::addEdge(int edge){
-  vector<int>::iterator it = find(localEdges.begin(), localEdges.end(), edge);
-  if(it == localEdges.end())
+  //vector<int>::iterator it = find(localEdges.begin(), localEdges.end(), edge);
+  //if(it == localEdges.end())
     localEdges.push_back(edge);
 }
 
 void Simplex::addFace(int face){
-  vector<int>::iterator it = find(localFaces.begin(), localFaces.end(), face);
-  if(it == localFaces.end())
+  //vector<int>::iterator it = find(localFaces.begin(), localFaces.end(), face);
+  //if(it == localFaces.end())
     localFaces.push_back(face);
 }
 
 void Simplex::addTetra(int tetra){
-  vector<int>::iterator it = find(localTetras.begin(), localTetras.end(), tetra);
-  if(it == localTetras.end())
+  //vector<int>::iterator it = find(localTetras.begin(), localTetras.end(), tetra);
+  //if(it == localTetras.end())
     localTetras.push_back(tetra);
 }
 

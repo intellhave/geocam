@@ -27,6 +27,15 @@ vector<int> listIntersection(vector<int>*, vector<int>*);
  */
 vector<int> listDifference(vector<int>*, vector<int>*);
 
+//returns the concatenation of the two vectors in a new vector i.e. {1,2,3} union {2,3} = {1,2,3,2,3}
+vector<int> multiplicityUnion(vector<int> * list1, vector<int> * list2);
+
+//O(n) vector intersection with duplicates i.e. {1,2,2,3} intersect {2,2,3,3,3} = {2,2,3}
+vector<int> multiplicityIntersection(vector<int> * list1, vector<int> * list2);
+
+//O(n) vector difference with duplicates i.e. {1,2,2,3,3,3} - {2,2,3,3} = {1,3}
+vector<int> multiplicityDifference(vector<int> * list1, vector<int> * list2);
+
 /*
  * Returns a set of soultions to the quadratic equation given as
  * quadratic(a, b, c) where:

@@ -30,7 +30,6 @@ int FlipAlgorithm::flipConvexHinges() {
  * return 0 is nothing happened, 1 is something happened
  */
 int FlipAlgorithm::flipOneNonConvexHinge() {
-    bool somethingHappened = false;
     for (currEdge = Triangulation::edgeTable.begin(); currEdge != Triangulation::edgeTable.end(); currEdge++) {
         if (!(currEdge->second).isBorder()  && facesAreTheSame((currEdge->second))
                                             && !isConvexHinge(currEdge->second)
@@ -57,14 +56,10 @@ int FlipAlgorithm::currentEdgeIndex(void)
 
 int FlipAlgorithm::step() {
     int flipped = 0;
-    if (!isWeightedDelaunay()) {
-        if (whichStep == 0) {
-            flipped = flipConvexHinges();
-        } else if (whichStep == 1) {
-            flipped = flipOneNonConvexHinge();
-        }
-    } else {
-        cout << "Triangulation is already weighted Delaunay\n";
+    if (whichStep == 0) {
+      flipped = flipConvexHinges();
+    } else if (whichStep == 1) {
+      flipped = flipOneNonConvexHinge();
     }
     whichStep = (whichStep + 1) % 2;
     return flipped;
@@ -72,13 +67,12 @@ int FlipAlgorithm::step() {
 
 void FlipAlgorithm::runFlipAlgorithm()
 {
-    int count = 0;
+    int step_return = 1;
     //cout << "flip beginning\n";
-    while(!isWeightedDelaunay() && count < 5) {
+    while(step_return ) {
         //cout << "in loop\n";
-        flipConvexHinges();
-        flipOneNonConvexHinge();
-        count++;
+        step_return = step();
+        step_return = step_return + step();
     }
     //cout << "flip loop ending\n";
 }
