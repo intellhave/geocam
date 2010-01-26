@@ -13,8 +13,8 @@ Open=0
 Top=0
 [Editors]
 <<<<<<< .mine
-Order=0,3,1,2
-Focused=2
+Order=0,3,1,2,-1
+Focused=-1
 =======
 Order=0,5,1,2,9,6,-1
 Focused=-1
@@ -48,7 +48,7 @@ TopLine=38
 LeftChar=1
 [Editor_2]
 Open=1
-Top=1
+Top=0
 <<<<<<< .mine
 CursorCol=26
 CursorRow=76
@@ -543,8 +543,8 @@ CursorRow=137
 TopLine=1
 LeftChar=1
 [Editor_79]
-Open=0
-Top=0
+Open=1
+Top=1
 CursorCol=5
 CursorRow=5
 TopLine=5
