@@ -51,6 +51,18 @@ void printStuff(void) {
   for (; vit != Triangulation::vertexTable.end(); vit++) {
     output << "Vertex " << vit->first << "\t" << Radius::valueAt(vit->second) << "\n";
   }
+
+  output << "Triangles\n";
+  map<int, Face>::iterator fit;
+  fit = Triangulation::faceTable.begin();
+  vector<int> * indices;
+  for (; fit != Triangulation::faceTable.end(); fit++) {
+    output << "Face " << fit->first << "\t";
+    indices = (fit->second).getLocalVertices();
+    for (int i = 0; i < indices->size(); i++) {
+      output << (*indices)[i] << " ";
+    }
+  }
 }
 
 void handleKeypress(unsigned char key, int x, int y) {
@@ -595,6 +607,32 @@ void setup_view_parameters(void) {
  *  type the file name containing the triangulation data you want used
  */
 int main(int argc, char** argv) {
+
+    vector<int> l1;
+    vector<int> l2;
+
+    l1.push_back(1);
+    l1.push_back(1);
+    l1.push_back(2);
+    l1.push_back(2);
+    l1.push_back(2);
+    l1.push_back(3);
+    l1.push_back(4);
+
+    l2.push_back(2);
+    l2.push_back(3);
+    l2.push_back(2);
+    l2.push_back(7);
+
+    vector<int> l3;
+
+    l3 = listDifference(&l1, &l2);
+
+    for (int i = 0; i < l3.size(); i++) {
+      cout << l3[i] << " ";
+    }
+
+    system("PAUSE");
 
     //cout << "starting!\n";
     //makeTriangulationFile("test_files/toms_triangulation.lutz", "test_files/toms_triangulation.txt");

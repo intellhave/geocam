@@ -13,28 +13,39 @@ done independently of any triangulation.
 
 vector<int> listIntersection(vector<int>* list1, vector<int>* list2){
   vector<int> sameAs;
-             
-  for(int i = 0; i < (*list1).size(); i++){
-    for(int j = 0; j < (*list2).size(); j++){
-      if((*list1)[i] == (*list2)[j]) {
-	sameAs.push_back((*list1)[i]);
-	break;
-      }
+
+  map<int, bool> indexExists;
+
+  for (int i = 0; i < list1->size(); i++) {
+    indexExists[(*list1)[i]] = true;
+  }
+
+  for (int i = 0; i < list2->size(); i++) {
+    if (indexExists[(*list2)[i]]) {
+      sameAs.push_back((*list2)[i]);
+      indexExists[(*list2)[i]] = false;
     }
   }
+
   return sameAs;
 }
 
 vector<int> listDifference(vector<int>* list1, vector<int>* list2){
   vector<int> diff;
-            
-  for(int i = 0; i < (*list1).size(); i++){
-    for(int j = 0; j < (*list2).size(); j++){
-      if((*list1)[i] == (*list2)[j]) break;
-      if(j == (*list2).size() - 1) 
-	diff.push_back((*list1)[i]);
+
+  map<int, bool> indexExists;
+
+  for (int i = 0; i < list2->size(); i++) {
+    indexExists[(*list2)[i]] = true;
+  }
+
+  for (int i = 0; i < list1->size(); i++) {
+    if (!indexExists[(*list1)[i]]) {
+      diff.push_back((*list1)[i]);
+      indexExists[(*list1)[i]] = true;
     }
   }
+
   return diff;
 }
 

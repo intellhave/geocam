@@ -279,7 +279,7 @@ v1  \ f0  | f1  / v3
   Triangulation::vertexTable[bucket.v1].addFace(bucket.f1);
   Triangulation::vertexTable[bucket.v3].addFace(bucket.f0);
 
-  //dup
+  //accidental dup, too scared to remove for now
   //add f1 from v1 and add f0 from v3
   //Triangulation::vertexTable[bucket.v1].addFace(bucket.f1);
   //Triangulation::vertexTable[bucket.v3].addFace(bucket.f0);
@@ -357,32 +357,38 @@ bool prep_for_flip(Edge e, struct simps * bucket) {
   vector<int> same;
 
   //figure out what v3 is
-  diff = listDifference(Triangulation::faceTable[bucket->f1].getLocalVertices(), e.getLocalVertices());
+  //diff = listDifference(Triangulation::faceTable[bucket->f1].getLocalVertices(), e.getLocalVertices());
+  diff = multiplicityDifference(Triangulation::faceTable[bucket->f1].getLocalVertices(), e.getLocalVertices());
   if (diff.size() == 0) { cout << "v3 couldn't be found"; return false;}
   bucket->v3 = diff[0];
 
   //figure out what v1 is
-  diff = listDifference(Triangulation::faceTable[bucket->f0].getLocalVertices(), e.getLocalVertices());
+  //diff = listDifference(Triangulation::faceTable[bucket->f0].getLocalVertices(), e.getLocalVertices());
+  diff = multiplicityDifference(Triangulation::faceTable[bucket->f0].getLocalVertices(), e.getLocalVertices());
   if (diff.size() == 0) { cout << "v1 couldn't be found"; return false;}
   bucket->v1 = diff[0];
 
   //figure out what e1 is
-  same = listIntersection(Triangulation::vertexTable[bucket->v0].getLocalEdges(), Triangulation::vertexTable[bucket->v1].getLocalEdges());
+  //same = listIntersection(Triangulation::vertexTable[bucket->v0].getLocalEdges(), Triangulation::vertexTable[bucket->v1].getLocalEdges());
+  same = multiplicityIntersection(Triangulation::vertexTable[bucket->v0].getLocalEdges(), Triangulation::vertexTable[bucket->v1].getLocalEdges());
   if (same.size() == 0) { cout << "v0 and v1 had no edge in common, e1 couldn't be found"; return false;}
   bucket->e1 = same[0];
 
   //figure out what e2 is
-  same = listIntersection(Triangulation::vertexTable[bucket->v1].getLocalEdges(), Triangulation::vertexTable[bucket->v2].getLocalEdges());
+  //same = listIntersection(Triangulation::vertexTable[bucket->v1].getLocalEdges(), Triangulation::vertexTable[bucket->v2].getLocalEdges());
+  same = multiplicityIntersection(Triangulation::vertexTable[bucket->v1].getLocalEdges(), Triangulation::vertexTable[bucket->v2].getLocalEdges());
   if (same.size() == 0) { cout << "v1 and v2 had no edge in common, e2 couldn't be found"; return false;}
   bucket->e2 = same[0];
 
   //figure out what e3 is
-  same = listIntersection(Triangulation::vertexTable[bucket->v2].getLocalEdges(), Triangulation::vertexTable[bucket->v3].getLocalEdges());
+  //same = listIntersection(Triangulation::vertexTable[bucket->v2].getLocalEdges(), Triangulation::vertexTable[bucket->v3].getLocalEdges());
+  same = multiplicityIntersection(Triangulation::vertexTable[bucket->v2].getLocalEdges(), Triangulation::vertexTable[bucket->v3].getLocalEdges());
   if (same.size() == 0) { cout << "v2 and v3 had no edge in common, e3 couldn't be found"; return false;}
   bucket->e3 = same[0];
 
   //figure out what e4 is
-  same = listIntersection(Triangulation::vertexTable[bucket->v3].getLocalEdges(), Triangulation::vertexTable[bucket->v0].getLocalEdges());
+  //same = listIntersection(Triangulation::vertexTable[bucket->v3].getLocalEdges(), Triangulation::vertexTable[bucket->v0].getLocalEdges());
+  same = multiplicityIntersection(Triangulation::vertexTable[bucket->v3].getLocalEdges(), Triangulation::vertexTable[bucket->v0].getLocalEdges());
   if (same.size() == 0) { cout << "v3 and v0 had no edge in common, e4 couldn't be found"; return false;}
   bucket->e4 = same[0];
   
