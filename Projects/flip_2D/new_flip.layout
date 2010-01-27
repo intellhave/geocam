@@ -13,8 +13,8 @@ Open=0
 Top=0
 [Editors]
 <<<<<<< .mine
-Order=0,3,1,2,-1
-Focused=-1
+Order=0,3,-1
+Focused=0
 =======
 Order=0,5,1,2,9,6,-1
 Focused=-1
@@ -22,10 +22,10 @@ Focused=-1
 [Editor_0]
 Open=1
 <<<<<<< .mine
-Top=0
-CursorCol=23
-CursorRow=310
-TopLine=303
+Top=1
+CursorCol=24
+CursorRow=629
+TopLine=612
 =======
 Top=0
 CursorCol=60
@@ -34,7 +34,7 @@ TopLine=380
 >>>>>>> .r1030
 LeftChar=1
 [Editor_1]
-Open=1
+Open=0
 Top=0
 <<<<<<< .mine
 CursorCol=55
@@ -47,12 +47,12 @@ TopLine=38
 >>>>>>> .r1030
 LeftChar=1
 [Editor_2]
-Open=1
+Open=0
 Top=0
 <<<<<<< .mine
 CursorCol=26
 CursorRow=76
-TopLine=52
+TopLine=48
 =======
 CursorCol=5
 CursorRow=1
@@ -62,9 +62,9 @@ LeftChar=1
 [Editor_3]
 Open=1
 Top=0
-CursorCol=39
-CursorRow=355
-TopLine=352
+CursorCol=49
+CursorRow=282
+TopLine=271
 LeftChar=1
 [Editor_4]
 Open=0
@@ -223,23 +223,23 @@ LeftChar=1
 [Editor_27]
 Open=0
 Top=0
-CursorCol=5
-CursorRow=20
-TopLine=8
+CursorCol=1
+CursorRow=1
+TopLine=1
 LeftChar=1
 [Editor_28]
 Open=0
 Top=0
-CursorCol=34
+CursorCol=2
 CursorRow=25
-TopLine=10
+TopLine=1
 LeftChar=1
 [Editor_29]
 Open=0
 Top=0
-CursorCol=2
-CursorRow=47
-TopLine=105
+CursorCol=1
+CursorRow=28
+TopLine=1
 LeftChar=1
 [Editor_30]
 Open=0
@@ -478,12 +478,12 @@ CursorRow=1
 TopLine=1
 LeftChar=1
 [Editor_70]
-Open=0
+Open=1
 Top=0
 <<<<<<< .mine
-CursorCol=25
-CursorRow=10
-TopLine=44
+CursorCol=18
+CursorRow=15
+TopLine=14
 =======
 CursorCol=1
 CursorRow=68
@@ -491,11 +491,11 @@ TopLine=31
 >>>>>>> .r1030
 LeftChar=1
 [Editor_71]
-Open=0
+Open=1
 Top=0
-CursorCol=75
-CursorRow=102
-TopLine=288
+CursorCol=38
+CursorRow=45
+TopLine=22
 LeftChar=1
 [Editor_72]
 Open=0
@@ -528,9 +528,9 @@ LeftChar=1
 [Editor_76]
 Open=0
 Top=0
-CursorCol=1
-CursorRow=1
-TopLine=15
+CursorCol=9
+CursorRow=22
+TopLine=5
 LeftChar=1
 [Editor_77]
 Open=0
@@ -543,8 +543,8 @@ CursorRow=137
 TopLine=1
 LeftChar=1
 [Editor_79]
-Open=1
-Top=1
+Open=0
+Top=0
 CursorCol=5
 CursorRow=5
 TopLine=5
@@ -658,14 +658,14 @@ Open=0
 Top=0
 CursorCol=1
 CursorRow=10
-TopLine=4
+TopLine=1
 LeftChar=1
 [Editor_97]
 Open=0
 Top=0
-CursorCol=34
-CursorRow=58
-TopLine=42
+CursorCol=2
+CursorRow=1
+TopLine=1
 LeftChar=1
 [Editor_98]
 Open=0
