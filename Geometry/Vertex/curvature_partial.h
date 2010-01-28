@@ -44,6 +44,7 @@ class CurvaturePartial : public virtual GeoQuant {
   vector<vector<DihedralAnglePartial*>*>* dihPartials;
   vector<PartialEdge*>* dijs;
   PartialEdgePartial* dij_partial;
+  bool local;
   
   double calculateEtaCase();
 

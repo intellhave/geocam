@@ -481,6 +481,50 @@ StdTetra labelTetra(Tetra& t, Face& f){
   return retval;
 }
 
+// Make v1 = v, e12 = e if v is in e, e23 = e if not.
+StdTetra labelTetra( Tetra& t, Vertex& v, Edge& e ){
+  StdTetra retval;
+  
+  vector<int>* local_verts = e.getLocalVertices();
+  vector<int> verts;
+  int vIndex;
+  
+  retval.v1 = v.getIndex();
+  
+  if(e.isAdjVertex(retval.v1)) {
+    if(local_verts->at(0) == retval.v1) {
+      retval.v2 = local_verts->at(1);
+    } else {
+      retval.v2 = local_verts->at(0);
+    }
+    local_verts = t.getLocalVertices();
+    for(int ii = 0; ii < local_verts->size(); ii++) {
+      vIndex = local_verts->at(ii);
+      if(vIndex != retval.v1 && vIndex != retval.v2) {
+        verts.push_back(vIndex);
+      }
+    }
+    retval.v3 = verts[0];
+    retval.v4 = verts[1];
+  } else {
+    retval.v2 = local_verts->at(0);
+    retval.v3 = local_verts->at(1);
+    
+    local_verts = t.getLocalVertices();
+    for(int ii = 0; ii < local_verts->size(); ii++) {
+      vIndex = local_verts->at(ii);
+      if(vIndex != retval.v1 && vIndex != retval.v2 && vIndex != retval.v3) {
+        retval.v4 = vIndex;
+      }
+    }
+  }
+  
+  fixTetraEdges(t, retval);
+  fixTetraFaces(t, retval);
+  
+  return retval;
+} 
+
 StdTetra labelTetra( Tetra& t ){
   Vertex& v = Triangulation::vertexTable[ (*(t.getLocalVertices()))[0] ];
   return labelTetra( t, v );

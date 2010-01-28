@@ -9,27 +9,29 @@ static DihedralAnglePartialIndex* Index = NULL;
 
 DihedralAnglePartial::DihedralAnglePartial( Edge& e1, Edge& e2, Tetra& t ){
   StdTetra st = labelTetra( t, e2 );  
-  ri = Radius::At( Triangulation::vertexTable[ st.v1 ] );
-  rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
-  rk = Radius::At( Triangulation::vertexTable[ st.v3 ] );
-  rl = Radius::At( Triangulation::vertexTable[ st.v4 ] );
-  eij = Eta::At(Triangulation::edgeTable[ st.e12 ] );
-  eik = Eta::At(Triangulation::edgeTable[ st.e13 ] );
-  eil = Eta::At(Triangulation::edgeTable[ st.e14 ] );
-  ejk = Eta::At(Triangulation::edgeTable[ st.e23 ] );
-  ejl = Eta::At(Triangulation::edgeTable[ st.e24 ] );
-  ekl = Eta::At(Triangulation::edgeTable[ st.e34 ] );
+  rad[0] = Radius::At( Triangulation::vertexTable[ st.v1 ] );
+  rad[1] = Radius::At( Triangulation::vertexTable[ st.v2 ] );
+  rad[2] = Radius::At( Triangulation::vertexTable[ st.v3 ] );
+  rad[3] = Radius::At( Triangulation::vertexTable[ st.v4 ] );
+  
+  alpha[0] = Alpha::At( Triangulation::vertexTable[ st.v1 ] );
+  alpha[1] = Alpha::At( Triangulation::vertexTable[ st.v2 ] );
+  alpha[2] = Alpha::At( Triangulation::vertexTable[ st.v3 ] );
+  alpha[3] = Alpha::At( Triangulation::vertexTable[ st.v4 ] );
 
-  ri->addDependent( this );
-  rj->addDependent( this );
-  rk->addDependent( this );
-  rl->addDependent( this );
-  eij->addDependent( this );
-  eik->addDependent( this );
-  eil->addDependent( this );
-  ejk->addDependent( this );
-  ejl->addDependent( this );
-  ekl->addDependent( this );
+  for(int ii = 0; ii < 4; ii++) {
+    rad[ii]->addDependent( this );
+    alpha[ii]->addDependent( this );
+  }
+  
+  eta[0] = Eta::At( Triangulation::edgeTable[ st.e12 ] );
+  eta[1] = Eta::At( Triangulation::edgeTable[ st.e13 ] );
+  eta[2] = Eta::At( Triangulation::edgeTable[ st.e14 ] );
+  eta[3] = Eta::At( Triangulation::edgeTable[ st.e23 ] );
+  eta[4] = Eta::At( Triangulation::edgeTable[ st.e24 ] );
+  eta[5] = Eta::At( Triangulation::edgeTable[ st.e34 ] );
+
+  for(int ii = 0; ii < 6; ii++) eta[ii]->addDependent( this );
   
   if(e1.getIndex() == e2.getIndex()) {
      locality = 0;                 
@@ -43,319 +45,374 @@ DihedralAnglePartial::DihedralAnglePartial( Edge& e1, Edge& e2, Tetra& t ){
 }
 
 void DihedralAnglePartial::recalculate(){
-  double r1 = ri->getValue();
-  double r2 = rj->getValue();
-  double r3 = rk->getValue();
-  double r4 = rl->getValue();
-  double Eta12 = eij->getValue();
-  double Eta13 = eik->getValue();
-  double Eta14 = eil->getValue();
-  double Eta23 = ejk->getValue();
-  double Eta24 = ejl->getValue();
-  double Eta34 = ekl->getValue();
+  double r1, r2, r3, r4, alpha1, alpha2, alpha3, alpha4, 
+         Eta12, Eta13, Eta14, Eta23, Eta24, Eta34;
+       
+  r1 = rad[0]->getValue();
+  r2 = rad[1]->getValue();
+  r3 = rad[2]->getValue();
+  r4 = rad[3]->getValue();
+  
+  alpha1 = alpha[0]->getValue();
+  alpha2 = alpha[1]->getValue();
+  alpha3 = alpha[2]->getValue();
+  alpha4 = alpha[3]->getValue();
+  
+  Eta12 = eta[0]->getValue();  
+  Eta13 = eta[1]->getValue();
+  Eta14 = eta[2]->getValue(); 
+  Eta23 = eta[3]->getValue();
+  Eta24 = eta[4]->getValue();  
+  Eta34 = eta[5]->getValue();
 
+  
   if(locality == 0) {
-    value = (-((-(r1*r2*(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta13*r1*r3 - 2*Eta23*r2*r3))/
-           (2.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) - 
-          (r1*r2*(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-           (2.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) + 
-          (r1*r2*(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
-             (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-           (2.*pow(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2),2)*
-             sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))))/
-        (sqrt(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-             (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-                 pow(r2,2))*
-               (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))
-               ))*sqrt(1 - 
-            pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta14*r1*r4 - 2*Eta24*r2*r4,2)/
-             (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-                 pow(r2,2))*
-               (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))
-               )))) + ((-((r1*r2*
-               (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                 2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-             ((pow(r1,2) + 2*Eta12*r1*r2 + pow(r2,2))*
-               (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))
-               )) + (r1*r2*
-             pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta14*r1*r4 - 2*Eta24*r2*r4,2))/
-           (2.*pow(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2),2)*
-             (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))))
-         *(-((2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
-              (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) + 
-          (2*pow(r1,2) + 2*Eta13*r1*r3 + 
-             2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
-           (2.*sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2)))))/
-      (2.*sqrt(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-             2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))))
-         *pow(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-             2*Eta14*r1*r4 - 2*Eta24*r2*r4,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))),
-         1.5)) + ((-((r1*r2*
-               (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                 2*Eta13*r1*r3 - 2*Eta23*r2*r3))/
-             ((pow(r1,2) + 2*Eta12*r1*r2 + pow(r2,2))*
-               (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))
-               )) + (r1*r2*
-             pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta13*r1*r3 - 2*Eta23*r2*r3,2))/
-           (2.*pow(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2),2)*
-             (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))))
-         *(-((2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
-              (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) + 
-          (2*pow(r1,2) + 2*Eta13*r1*r3 + 
-             2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
-           (2.*sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2)))))/
-      (2.*pow(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-             2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))),
-         1.5)*sqrt(1 - pow(2*pow(r1,2) + 
-             2*Eta12*r1*r2 + 2*Eta14*r1*r4 - 2*Eta24*r2*r4
-             ,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))))
-        ))/sqrt(1 - pow(-((2*pow(r1,2) + 
-              2*Eta12*r1*r2 + 2*Eta13*r1*r3 - 
-              2*Eta23*r2*r3)*
-            (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-              2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-         (4.*(pow(r1,2) + 2*Eta12*r1*r2 + pow(r2,2))*
-           sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-             pow(r3,2))*
-           sqrt(pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))
-           ) + (2*pow(r1,2) + 2*Eta13*r1*r3 + 
-           2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
-         (2.*sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-             pow(r3,2))*
-           sqrt(pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))
-           ),2)/
-      ((1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-             2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))))
-         *(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-             2*Eta14*r1*r4 - 2*Eta24*r2*r4,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))))
-        ));
+    value = (-((-(r1*r2*(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3))/
+          (2.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) -
+          (r1*r2*(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (2.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) +
+          (r1*r2*(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
+          (2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (2.*pow(alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + alpha2*pow(r2,2),2)*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))))/
+          (sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2)))))) +
+          ((-((r1*r2*(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          ((alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2)))) +
+          (r1*r2*pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2))/
+          (2.*pow(alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + alpha2*pow(r2,2),2)*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))))*
+          (-((2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
+          (2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) +
+          (2*alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
+          (2.*sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2)))))/
+          (2.*sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          pow(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))),1.5)) +
+          ((-((r1*r2*(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3))/
+          ((alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2)))) +
+          (r1*r2*pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3,2))/
+          (2.*pow(alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + alpha2*pow(r2,2),2)*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          (-((2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
+          (2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) +
+          (2*alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
+          (2.*sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2)))))/
+          (2.*pow(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))),1.5)*
+          sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))))))/
+          sqrt(1 - pow(-((2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3)*
+          (2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) +
+          (2*alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
+          (2.*sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))),2)/
+          ((1 - pow(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          (1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))))));
   } else if(locality == 1) {
      value = (-(((r1*r3)/
-           (sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) + 
-          (r1*r3*(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
-             (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             pow(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2),1.5)*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) - 
-          (r1*r3*(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-           (2.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) - 
-          (r1*r3*(2*pow(r1,2) + 2*Eta13*r1*r3 + 
-               2*Eta14*r1*r4 - 2*Eta34*r3*r4))/
-           (2.*pow(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2),1.5)*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))))/
-        (sqrt(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-             (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-                 pow(r2,2))*
-               (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))
-               ))*sqrt(1 - 
-            pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta14*r1*r4 - 2*Eta24*r2*r4,2)/
-             (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-                 pow(r2,2))*
-               (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))
-               )))) + (((r1*r3*
-             pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta13*r1*r3 - 2*Eta23*r2*r3,2))/
-           (2.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             pow(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2),2)) - 
-          (r1*r3*(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta13*r1*r3 - 2*Eta23*r2*r3))/
-           ((pow(r1,2) + 2*Eta12*r1*r2 + pow(r2,2))*
-             (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))))
-         *(-((2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
-              (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) + 
-          (2*pow(r1,2) + 2*Eta13*r1*r3 + 
-             2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
-           (2.*sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2)))))/
-      (2.*pow(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-             2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))),
-         1.5)*sqrt(1 - pow(2*pow(r1,2) + 
-             2*Eta12*r1*r2 + 2*Eta14*r1*r4 - 2*Eta24*r2*r4
-             ,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))))
-        ))/sqrt(1 - pow(-((2*pow(r1,2) + 
-              2*Eta12*r1*r2 + 2*Eta13*r1*r3 - 
-              2*Eta23*r2*r3)*
-            (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-              2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-         (4.*(pow(r1,2) + 2*Eta12*r1*r2 + pow(r2,2))*
-           sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-             pow(r3,2))*
-           sqrt(pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))
-           ) + (2*pow(r1,2) + 2*Eta13*r1*r3 + 
-           2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
-         (2.*sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-             pow(r3,2))*
-           sqrt(pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))
-           ),2)/
-      ((1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-             2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))))
-         *(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-             2*Eta14*r1*r4 - 2*Eta24*r2*r4,2)/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))))
-        ));
-  } else if(locality == 2) {
-     value = (r3*r4)/(sqrt(pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))*
-     sqrt(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
+          (sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) +
+          (r1*r3*(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
+          (2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          pow(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2),1.5)*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) -
+          (r1*r3*(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (2.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) -
+          (r1*r3*(2*alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          2*Eta14*r1*r4 - 2*Eta34*r3*r4))/
+          (2.*pow(alpha1*pow(r1,2) +
+          2*Eta13*r1*r3 + alpha3*pow(r3,2),1.5)*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))))/
+          (sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2)))))) +
+          (((r1*r3*pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3,2))/
+          (2.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          pow(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2),2)) -
+          (r1*r3*(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3))/
+          ((alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          (-((2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
+          (2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) +
+          (2*alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
+          (2.*sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2)))))/
+          (2.*pow(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))),1.5)*
+          sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))))))/
+          sqrt(1 - pow(-((2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3)*
+          (2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) +
+          (2*alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
+          (2.*sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))),2)/
+          ((1 - pow(2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
           2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-        (4.*(pow(r1,2) + 2*Eta12*r1*r2 + pow(r2,2))*
-          (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))))*
-     sqrt(pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))*
-     sqrt(1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-          2*Eta14*r1*r4 - 2*Eta24*r2*r4,2)/
-        (4.*(pow(r1,2) + 2*Eta12*r1*r2 + pow(r2,2))*
-          (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))))*
-     sqrt(1 - pow(-((2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta13*r1*r3 - 2*Eta23*r2*r3)*
-              (2*pow(r1,2) + 2*Eta12*r1*r2 + 
-                2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
-           (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-               pow(r2,2))*
-             sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))) + 
-          (2*pow(r1,2) + 2*Eta13*r1*r3 + 
-             2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
-           (2.*sqrt(pow(r1,2) + 2*Eta13*r1*r3 + 
-               pow(r3,2))*
-             sqrt(pow(r1,2) + 2*Eta14*r1*r4 + 
-               pow(r4,2))),2)/
-        ((1 - pow(2*pow(r1,2) + 2*Eta12*r1*r2 + 
-               2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
-             (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-                 pow(r2,2))*
-               (pow(r1,2) + 2*Eta13*r1*r3 + pow(r3,2))
-               ))*(1 - pow(2*pow(r1,2) + 
-               2*Eta12*r1*r2 + 2*Eta14*r1*r4 - 
-               2*Eta24*r2*r4,2)/
-             (4.*(pow(r1,2) + 2*Eta12*r1*r2 + 
-                 pow(r2,2))*
-               (pow(r1,2) + 2*Eta14*r1*r4 + pow(r4,2))
-               )))));       
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          (1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))))));
+  } else if(locality == 2) {
+     value = (r3*r4)/(sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 - 2*Eta23*r2*r3,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))*
+          sqrt(1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 - 2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))))*
+          sqrt(1 - pow(-((2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3)*
+          (2*alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          2*Eta14*r1*r4 - 2*Eta24*r2*r4))/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))) +
+          (2*alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          2*Eta14*r1*r4 - 2*Eta34*r3*r4)/
+          (2.*sqrt(alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))*
+          sqrt(alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2))),2)/
+          ((1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta13*r1*r3 -
+          2*Eta23*r2*r3,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta13*r1*r3 +
+          alpha3*pow(r3,2))))*
+          (1 - pow(2*alpha1*pow(r1,2) +
+          2*Eta12*r1*r2 + 2*Eta14*r1*r4 -
+          2*Eta24*r2*r4,2)/
+          (4.*(alpha1*pow(r1,2) + 2*Eta12*r1*r2 +
+          alpha2*pow(r2,2))*
+          (alpha1*pow(r1,2) + 2*Eta14*r1*r4 +
+          alpha4*pow(r4,2)))))));      
   } else {
      value = 0;       
-  } 
+  }  
 }
 
 void DihedralAnglePartial::remove() {
-    deleteDependents();
-    ri->removeDependent( this );
-    rj->removeDependent( this );
-    rk->removeDependent( this );
-    rl->removeDependent( this );
-    eij->removeDependent( this );
-    eik->removeDependent( this );
-    eil->removeDependent( this );
-    ejk->removeDependent( this );
-    ejl->removeDependent( this );
-    ekl->removeDependent( this );    
-    Index->erase(pos);
-    delete this;
+  deleteDependents();
+  rad[0]->removeDependent(this);
+  rad[1]->removeDependent(this);
+  rad[2]->removeDependent(this);
+  rad[3]->removeDependent(this);
+  
+  alpha[0]->removeDependent(this);
+  alpha[1]->removeDependent(this);
+  alpha[2]->removeDependent(this);
+  alpha[3]->removeDependent(this);
+  
+  eta[0]->removeDependent(this);
+  eta[1]->removeDependent(this);
+  eta[2]->removeDependent(this);
+  eta[3]->removeDependent(this);
+  eta[4]->removeDependent(this);
+  eta[5]->removeDependent(this);    
+  Index->erase(pos);
+  delete this;
 }
 
 DihedralAnglePartial::~DihedralAnglePartial(){}

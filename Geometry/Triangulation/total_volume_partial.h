@@ -9,23 +9,27 @@ using namespace std;
 #include "geoquant.h"
 #include "triposition.h"
 
-#include "face_height.h"
-#include "area.h"
+#include "volume_partial.h"
 
 class TotalVolumePartial : public virtual GeoQuant {
  private:
-  vector<FaceHeight*>* face_heights;
-  vector<Area*>* areas;
+  bool wrtRadius;
+  vector<VolumePartial*>* volume_partials;
 
 protected:
   TotalVolumePartial( Vertex& v );
+  TotalVolumePartial( Edge& e );
   void recalculate();
 
 public:
   ~TotalVolumePartial();
   static TotalVolumePartial* At( Vertex& v );
+  static TotalVolumePartial* At( Edge& e );
   static double valueAt(Vertex& v) {
          return TotalVolumePartial::At(v)->getValue();
+  }
+  static double valueAt(Edge& e) {
+         return TotalVolumePartial::At(e)->getValue();
   }
   void remove();
   static void CleanUp();
