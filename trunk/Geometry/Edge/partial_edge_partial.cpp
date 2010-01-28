@@ -7,7 +7,7 @@ typedef map<TriPosition, PartialEdgePartial*, TriPositionCompare> PartialEdgePar
 static PartialEdgePartialIndex* Index = NULL;
 
 PartialEdgePartial::PartialEdgePartial( Vertex& v, Edge& e ){
-  StdEdge st = labelEdge( e, v );  
+  StdEdge st = labelEdge( e, v );
   ri = Radius::At( v );
   rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
   Lij = Length::At( e );

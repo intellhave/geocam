@@ -67,13 +67,16 @@ CurvaturePartial::CurvaturePartial( Vertex& v, Vertex& w ){
 }
 
 CurvaturePartial::CurvaturePartial( Vertex& v, Edge& e) {
-   wrtRadius = true;
-   if( ! v.isAdjEdge(e.getIndex()) ) return;
    
-   dihPartials = new vector<vector<DihedralAnglePartial*>*>();\
+   local = v.isAdjEdge(e.getIndex());
+   
+   dihPartials = new vector<vector<DihedralAnglePartial*>*>();
    dijs = new vector<PartialEdge*>();
    dihSum = DihedralAngleSum::At(e);
-   dij_partial = PartialEdgePartial::At(v, e);
+   if( local ) {
+       dij_partial = PartialEdgePartial::At(v, e);
+       dij_partial->addDependent(this);
+   }
    
    vector<int> edges = *(v.getLocalEdges());
    vector<int> tetras;
@@ -97,7 +100,6 @@ CurvaturePartial::CurvaturePartial( Vertex& v, Edge& e) {
       dijs->push_back(dij);
    }
    dihSum->addDependent(this);
-   dij_partial->addDependent(this);
    
    wrtRadius = false;
 }
@@ -136,9 +138,14 @@ double CurvaturePartial::calculateAdjCase(){
 }
 
 double CurvaturePartial::calculateEtaCase() {
-  double dih_angle_sum = dihSum->getValue();
-  printf("\tdih_sum = %f\n", dih_angle_sum);
-  double partial = (2 * PI - dih_angle_sum) * dij_partial->getValue();
+  double partial;
+  if( ! local ) {
+    partial = 0;
+  } else {
+    double dih_angle_sum = dihSum->getValue();
+    //printf("\tdih_sum = %f\n", dih_angle_sum);
+    partial = (2 * PI - dih_angle_sum) * dij_partial->getValue();
+  }
   vector<DihedralAnglePartial*>* current_vect;
   double dih_partial_sum;
   for(int i = 0; i < dihPartials->size(); i++) {
@@ -147,7 +154,7 @@ double CurvaturePartial::calculateEtaCase() {
      for(int j = 0; j < current_vect->size(); j++) {
         dih_partial_sum -= current_vect->at(j)->getValue();
      }
-     printf("\tdih_partial_sum %d = %f\n", i, dih_partial_sum); 
+     //printf("\tdih_partial_sum %d = %f\n", i, dih_partial_sum); 
      partial += dih_partial_sum * dijs->at(i)->getValue();
   }
   return partial;
@@ -193,7 +200,9 @@ void CurvaturePartial::remove() {
          dijs->at(i)->removeDependent(this);
       }
       dihSum->removeDependent(this);
-      dij_partial->removeDependent(this);
+      if(local) {
+        dij_partial->removeDependent(this);
+      }
       delete dijs;
       delete dihPartials;
     }

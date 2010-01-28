@@ -10,19 +10,14 @@ using namespace std;
 
 #include "radius.h"
 #include "eta.h"
+#include "alpha.h"
 
 class DihedralAnglePartial : public virtual GeoQuant {
 private:
-  Radius* ri;
-  Radius* rj;
-  Radius* rk;
-  Radius* rl;
-  Eta*    eij;
-  Eta*    eik;
-  Eta*    eil;
-  Eta*    ejk;
-  Eta*    ejl;
-  Eta*    ekl;
+  
+  Radius* rad[4];
+  Alpha* alpha[4];
+  Eta* eta[6];
   int locality;
 
 protected:

@@ -8,46 +8,45 @@ typedef map<TriPosition, TotalVolumePartial*, TriPositionCompare> TotalVolumePar
 static TotalVolumePartialIndex* Index = NULL;
 
 TotalVolumePartial::TotalVolumePartial( Vertex& v ){
+  wrtRadius = true;
   vector<int>* tetraIndicies = v.getLocalTetras();
 
-  face_heights = new vector<FaceHeight*>();
-  areas = new vector<Area*>();
-
-  FaceHeight* fh = NULL;
-  Area* ar = NULL;
+  volume_partials = new vector<VolumePartial*>();
+  VolumePartial* vp = NULL;
 
   for(int ii = 0; ii < tetraIndicies->size(); ii++){
     Tetra& t = Triangulation::tetraTable[tetraIndicies->at(ii)];
-    StdTetra st = labelTetra( t, v );
+    
+    vp = VolumePartial::At( v, t);
+    vp->addDependent(this);
+    volume_partials->push_back( vp );
+  }
+}
 
-    int faceInts[3];
-    faceInts[0] = st.f123;
-    faceInts[1] = st.f124;
-    faceInts[2] = st.f134;
+TotalVolumePartial::TotalVolumePartial( Edge& e ){
+  wrtRadius = false;
+  
+  vector<int>* tetraIndicies = e.getLocalTetras();
 
-    for(int jj = 0; jj < 3; jj++){
-      Face& f = Triangulation::faceTable[ faceInts[jj] ];
+  volume_partials = new vector<VolumePartial*>();
+  VolumePartial* vp = NULL;
 
-      fh = FaceHeight::At(f,t);
-      fh->addDependent( this );
-      face_heights->push_back( fh );
-
-      ar = Area::At(f);
-      ar->addDependent( this );
-      areas->push_back( ar );
-    }
+  for(int ii = 0; ii < tetraIndicies->size(); ii++){
+    Tetra& t = Triangulation::tetraTable[tetraIndicies->at(ii)];
+    
+    vp = VolumePartial::At( e, t);
+    vp->addDependent(this);
+    volume_partials->push_back( vp );
   }
 }
 
 void TotalVolumePartial::remove() {
   deleteDependents();   
-  for(int jj = 0; jj < face_heights->size(); jj++){
-      face_heights->at(jj)->removeDependent(this);
-      areas->at(jj)->removeDependent(this);
+  for(int jj = 0; jj < volume_partials->size(); jj++) {
+      volume_partials->at(jj)->removeDependent(this);
   }
   Index->erase(pos);
-  delete face_heights;
-  delete areas;
+  delete volume_partials;
   delete this;
 }
 
@@ -56,18 +55,11 @@ TotalVolumePartial::~TotalVolumePartial(){
 }
 
 void TotalVolumePartial::recalculate(){
-  value = 0.0;
-
-  FaceHeight* fh = NULL;
-  Area* ar = NULL;
-
-  for(int ii = 0; ii < face_heights->size(); ii++){
-    fh = face_heights->at(ii);
-    ar = areas->at(ii);
-    value += fh->getValue() * ar->getValue();
-  }
-
-  value = (1.0/3.0) * value;
+   double result = 0;
+   for(int i = 0; i < volume_partials->size(); i++) {
+           result += volume_partials->at(i)->getValue();
+   }
+   value = result;
 }
 
 TotalVolumePartial* TotalVolumePartial::At( Vertex& v ){
@@ -77,6 +69,21 @@ TotalVolumePartial* TotalVolumePartial::At( Vertex& v ){
 
   if( iter == Index->end() ){
     TotalVolumePartial* val = new TotalVolumePartial( v );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
+  }
+}
+
+TotalVolumePartial* TotalVolumePartial::At( Edge& e ){
+  TriPosition T( 1, e.getSerialNumber() );
+  if( Index == NULL ) Index = new TotalVolumePartialIndex();
+  TotalVolumePartialIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    TotalVolumePartial* val = new TotalVolumePartial( e );
     val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;

@@ -153,6 +153,9 @@ StdTetra labelTetra(Tetra& t, Vertex& v);
 // Label tetrahedron t with respect to face f.
 StdTetra labelTetra(Tetra& t, Face& f);
 
+// Label tetrahedron t with respect to vertex v and edge e.
+StdTetra labelTetra(Tetra& t, Vertex& v, Edge& e);
+
 // Label tetrahedron t in a consistent way.
 StdTetra labelTetra(Tetra& t);
 
