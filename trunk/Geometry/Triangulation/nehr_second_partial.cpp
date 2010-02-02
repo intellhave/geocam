@@ -74,14 +74,16 @@ void NEHRSecondPartial::recalculate(){
   double ri = rad_i->getValue();
   double rj = rad_j->getValue();
 
-  double VolSumSecondPartial = 0;       
+  double VolSumSecondPartial = 0;
+  
+  int delta_ij = 1 : 0 ? sameVertices;
   for(int ii = 0; ii < volSecPartials->size(); ii++)
     VolSumSecondPartial += volSecPartials->at(ii)->getValue();
 
   value = pow(totV, (-4.0/3.0)) * (1.0 / 3.0);
-  value *= (3 * totV * curvPartial - Ki * VPS_j
-	    - Kj * VPS_i + (4.0/3.0) * ( totK / totV ) *
-	    VPS_i * VPS_j - totK * VolSumSecondPartial);
+  value *= (3 * rj * totV * curvPartial - rj * Ki * VPS_j - ri * Kj * VPS_i
+	    - rj * delta_ij * totK * VPS_i + (4.0/3.0) * ri * rj * ( totK / totV ) *
+	    VPS_i * VPS_j - ri * rj * totK * VolSumSecondPartial);
 }
 
 void NEHRSecondPartial::remove() {
