@@ -1,7 +1,7 @@
 [Project]
 FileName=Tester.dev
 Name=Tester
-UnitCount=90
+UnitCount=94
 Type=1
 Ver=1
 ObjFiles=
@@ -269,8 +269,18 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
+[Unit25]
+FileName=..\..\Geometry\Triangulation\ehr_partial.h
+CompileCpp=1
+Folder=Geometry/Header
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
 [Unit26]
-FileName=..\..\Geometry\Triangulation\total_volume_partial.h
+FileName=..\..\Geometry\Triangulation\ehr_second_partial.h
 CompileCpp=1
 Folder=Geometry/Header
 Compile=1
@@ -280,7 +290,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit27]
-FileName=..\..\Geometry\Triangulation\totalcurvature.h
+FileName=..\..\Geometry\Triangulation\total_volume_partial.h
 CompileCpp=1
 Folder=Geometry/Header
 Compile=1
@@ -290,6 +300,16 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit28]
+FileName=..\..\Geometry\Triangulation\totalcurvature.h
+CompileCpp=1
+Folder=Geometry/Header
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit29]
 FileName=..\..\Geometry\Triangulation\totalvolume.h
 CompileCpp=1
 Folder=Geometry/Header
@@ -300,7 +320,17 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit30]
-FileName=..\..\Geometry\Triangulation\ehr_second_partial.cpp
+FileName=..\..\Geometry\Triangulation\volume_partial_sum.h
+CompileCpp=1
+Folder=Geometry/Header
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit31]
+FileName=..\..\Geometry\Triangulation\volume_second_partial.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -310,7 +340,17 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit32]
-FileName=..\..\Geometry\Triangulation\totalvolume.cpp
+FileName=..\..\Geometry\Triangulation\ehr_partial.cpp
+CompileCpp=1
+Folder=Geometry/Source
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit33]
+FileName=..\..\Geometry\Triangulation\ehr_second_partial.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -320,7 +360,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit35]
-FileName=..\..\Geometry\Edge\dih_angle_partial.cpp
+FileName=..\..\Geometry\Triangulation\totalvolume.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -330,7 +370,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit36]
-FileName=..\..\Geometry\Edge\dih_angle_sum.cpp
+FileName=..\..\Geometry\Triangulation\volume_partial_sum.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -340,7 +380,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit37]
-FileName=..\..\Geometry\Edge\dualarea.cpp
+FileName=..\..\Geometry\Edge\sectional_curvature.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -350,7 +390,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit38]
-FileName=..\..\Geometry\Edge\dualareasegment.cpp
+FileName=..\..\Geometry\Edge\dih_angle.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -360,7 +400,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit39]
-FileName=..\..\Geometry\Edge\edge_height.cpp
+FileName=..\..\Geometry\Edge\dih_angle_partial.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -370,7 +410,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit40]
-FileName=..\..\Geometry\Edge\eta.cpp
+FileName=..\..\Geometry\Edge\dih_angle_sum.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -380,7 +420,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit41]
-FileName=..\..\Geometry\Edge\length.cpp
+FileName=..\..\Geometry\Edge\dualarea.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -390,7 +430,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit42]
-FileName=..\..\Geometry\Edge\partial_edge.cpp
+FileName=..\..\Geometry\Edge\dualareasegment.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -400,7 +440,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit43]
-FileName=..\..\Geometry\Edge\partial_edge_partial.cpp
+FileName=..\..\Geometry\Edge\edge_height.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -410,7 +450,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit44]
-FileName=..\..\Geometry\Vertex\radius.cpp
+FileName=..\..\Geometry\Edge\eta.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -420,7 +460,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit45]
-FileName=..\..\Geometry\Vertex\curvature2D.cpp
+FileName=..\..\Geometry\Edge\length.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -430,7 +470,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit46]
-FileName=..\..\Geometry\Vertex\curvature3D.cpp
+FileName=..\..\Geometry\Edge\partial_edge.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -440,7 +480,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit47]
-FileName=..\..\Geometry\Vertex\curvature_partial.cpp
+FileName=..\..\Geometry\Edge\partial_edge_partial.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -450,7 +490,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit48]
-FileName=..\..\Geometry\Vertex\euc_angle.cpp
+FileName=..\..\Geometry\Vertex\radius.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -460,7 +500,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit49]
-FileName=..\..\Geometry\Face\face_height.cpp
+FileName=..\..\Geometry\Vertex\curvature2D.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -470,7 +510,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit50]
-FileName=..\..\Geometry\Face\area.cpp
+FileName=..\..\Geometry\Vertex\curvature3D.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -480,7 +520,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit51]
-FileName=..\..\Geometry\Tetrahedron\volume_partial.cpp
+FileName=..\..\Geometry\Vertex\curvature_partial.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -490,7 +530,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit52]
-FileName=..\..\Geometry\Tetrahedron\volume.cpp
+FileName=..\..\Geometry\Vertex\euc_angle.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -500,7 +540,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit53]
-FileName=..\..\Geometry\Tetrahedron\volume_length_partial.cpp
+FileName=..\..\Geometry\Face\face_height.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -510,7 +550,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit54]
-FileName=..\..\Geometry\Tetrahedron\volume_length_tetra_partial.cpp
+FileName=..\..\Geometry\Face\area.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -520,6 +560,46 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit55]
+FileName=..\..\Geometry\Tetrahedron\volume_partial.cpp
+CompileCpp=1
+Folder=Geometry/Source
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit56]
+FileName=..\..\Geometry\Tetrahedron\volume.cpp
+CompileCpp=1
+Folder=Geometry/Source
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit57]
+FileName=..\..\Geometry\Tetrahedron\volume_length_partial.cpp
+CompileCpp=1
+Folder=Geometry/Source
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit58]
+FileName=..\..\Geometry\Tetrahedron\volume_length_tetra_partial.cpp
+CompileCpp=1
+Folder=Geometry/Source
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit59]
 FileName=..\..\Geometry\Geoquant_general\triposition.h
 CompileCpp=1
 Folder=Geometry
@@ -529,7 +609,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit56]
+[Unit60]
 FileName=..\..\Geometry\Geoquant_general\geoquant.h
 CompileCpp=1
 Folder=Geometry
@@ -539,7 +619,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit57]
+[Unit61]
 FileName=..\..\Geometry\Geoquant_general\triposition.cpp
 CompileCpp=1
 Folder=Geometry
@@ -549,7 +629,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit58]
+[Unit62]
 FileName=..\..\InputOutput\triangulationInputOutput.h
 CompileCpp=1
 Folder=InputOutput
@@ -559,7 +639,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit59]
+[Unit63]
 FileName=..\..\InputOutput\3DInputOutput.cpp
 CompileCpp=1
 Folder=InputOutput
@@ -569,7 +649,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit60]
+[Unit64]
 FileName=..\..\InputOutput\3DInputOutput.h
 CompileCpp=1
 Folder=InputOutput
@@ -579,7 +659,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit61]
+[Unit65]
 FileName=..\..\InputOutput\triangulationInputOutput.cpp
 CompileCpp=1
 Folder=InputOutput
@@ -589,7 +669,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit62]
+[Unit66]
 FileName=..\..\Triangulation\vertex.h
 CompileCpp=1
 Folder=Triangulation
@@ -599,7 +679,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit63]
+[Unit67]
 FileName=..\..\Triangulation\edge.cpp
 CompileCpp=1
 Folder=Triangulation
@@ -609,7 +689,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit64]
+[Unit68]
 FileName=..\..\Triangulation\edge.h
 CompileCpp=1
 Folder=Triangulation
@@ -619,7 +699,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit65]
+[Unit69]
 FileName=..\..\Triangulation\face.cpp
 CompileCpp=1
 Folder=Triangulation
@@ -629,7 +709,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit66]
+[Unit70]
 FileName=..\..\Triangulation\face.h
 CompileCpp=1
 Folder=Triangulation
@@ -639,7 +719,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit67]
+[Unit71]
 FileName=..\..\Triangulation\simplex.cpp
 CompileCpp=1
 Folder=Triangulation
@@ -649,7 +729,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit68]
+[Unit72]
 FileName=..\..\Triangulation\simplex.h
 CompileCpp=1
 Folder=Triangulation
@@ -659,7 +739,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit69]
+[Unit73]
 FileName=..\..\Triangulation\tetra.cpp
 CompileCpp=1
 Folder=Triangulation
@@ -669,7 +749,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit70]
+[Unit74]
 FileName=..\..\Triangulation\tetra.h
 CompileCpp=1
 Folder=Triangulation
@@ -679,7 +759,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit71]
+[Unit75]
 FileName=..\..\Triangulation\triangulation.cpp
 CompileCpp=1
 Folder=Triangulation
@@ -689,7 +769,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit72]
+[Unit76]
 FileName=..\..\Triangulation\triangulation.h
 CompileCpp=1
 Folder=Triangulation
@@ -699,7 +779,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit73]
+[Unit77]
 FileName=..\..\Triangulation\vertex.cpp
 CompileCpp=1
 Folder=Triangulation
@@ -709,7 +789,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit74]
+[Unit78]
 FileName=..\..\Math\miscmath.h
 CompileCpp=1
 Folder=Misc
@@ -719,7 +799,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit75]
+[Unit79]
 FileName=..\..\Math\miscmath.cpp
 CompileCpp=1
 Folder=Misc
@@ -729,7 +809,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit76]
+[Unit80]
 FileName=..\..\System_utils\utilities.h
 CompileCpp=1
 Folder=Misc
@@ -739,7 +819,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit77]
+[Unit81]
 FileName=..\..\System_utils\utilities.cpp
 CompileCpp=1
 Folder=Misc
@@ -749,50 +829,10 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit78]
+[Unit82]
 FileName=..\..\Visualization\pointlinecircle.h
 CompileCpp=1
 Folder=Misc
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit79]
-FileName=..\..\Visualization\pointlinecircle.cpp
-CompileCpp=1
-Folder=Misc
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit80]
-FileName=..\..\Math\partials.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit81]
-FileName=..\..\Math\partials.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit82]
-FileName=..\..\Geometry\Vertex\alpha.cpp
-CompileCpp=1
-Folder=Geometry/Source
 Compile=1
 Link=1
 Priority=1000
@@ -818,9 +858,9 @@ ProductVersion=
 AutoIncBuildNr=0
 
 [Unit83]
-FileName=..\..\Geometry\Vertex\alpha.h
+FileName=..\..\Visualization\pointlinecircle.cpp
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Misc
 Compile=1
 Link=1
 Priority=1000
@@ -828,9 +868,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit84]
-FileName=..\..\Geometry\Triangulation\nehr_partial.h
+FileName=..\..\Math\partials.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -838,9 +878,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit85]
-FileName=..\..\Geometry\Triangulation\nehr_partial.cpp
+FileName=..\..\Math\partials.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -848,7 +888,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit86]
-FileName=..\..\Geometry\Triangulation\total_volume_partial.cpp
+FileName=..\..\Geometry\Vertex\alpha.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -858,7 +898,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit87]
-FileName=..\..\Geometry\Triangulation\total_volume_second_partial.h
+FileName=..\..\Geometry\Vertex\alpha.h
 CompileCpp=1
 Folder=Geometry/Header
 Compile=1
@@ -868,7 +908,17 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit88]
-FileName=..\..\Geometry\Triangulation\total_volume_second_partial.cpp
+FileName=..\..\Geometry\Triangulation\nehr_partial.h
+CompileCpp=1
+Folder=Geometry/Header
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit89]
+FileName=..\..\Geometry\Triangulation\nehr_partial.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -877,20 +927,10 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit89]
-FileName=..\..\Geometry\Triangulation\nehr_second_partial.h
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit90]
-FileName=..\..\Geometry\Triangulation\nehr_second_partial.cpp
+FileName=..\..\Geometry\Triangulation\total_volume_partial.cpp
 CompileCpp=1
-Folder=
+Folder=Geometry/Source
 Compile=1
 Link=1
 Priority=1000
@@ -898,7 +938,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit34]
-FileName=..\..\Geometry\Edge\dih_angle.cpp
+FileName=..\..\Geometry\Triangulation\totalcurvature.cpp
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -927,40 +967,20 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit25]
-FileName=..\..\Geometry\Triangulation\ehr_second_partial.h
+[Unit93]
+FileName=..\..\Geometry\Triangulation\nehr_second_partial.cpp
+CompileCpp=1
+Folder=Geometry/Source
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit94]
+FileName=..\..\Geometry\Triangulation\nehr_second_partial.h
 CompileCpp=1
 Folder=Geometry/Header
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit29]
-FileName=..\..\Geometry\Triangulation\volume_second_partial.cpp
-CompileCpp=1
-Folder=Geometry/Source
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit31]
-FileName=..\..\Geometry\Triangulation\totalcurvature.cpp
-CompileCpp=1
-Folder=Geometry/Source
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit33]
-FileName=..\..\Geometry\Edge\sectional_curvature.cpp
-CompileCpp=1
-Folder=Geometry/Source
 Compile=1
 Link=1
 Priority=1000
