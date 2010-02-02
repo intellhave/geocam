@@ -13,15 +13,18 @@ NEHRPartial::NEHRPartial( Vertex& v ){
   totCurvature = TotalCurvature::At();
   totCurvature->addDependent( this );
 
+  volPartial = TotalVolumePartial::At( v );
+  volPartial->addDependent( this );
+  
   localCurvature = Curvature3D::At( v );
   localCurvature->addDependent( this );
-
-  vps = VolumePartialSum::At( v );
-  vps->addDependent( this );
+  
+  rad = Radius::At( v );
+  rad->addDependent( this );
 }
 
 NEHRPartial::NEHRPartial( Edge& e ){
-  wrtRadius = true;
+  wrtRadius = false;
   totVolume = TotalVolume::At();
   totCurvature = TotalCurvature::At();
   volPartial = TotalVolumePartial::At(e);
@@ -43,9 +46,19 @@ NEHRPartial::NEHRPartial( Edge& e ){
   }
 }
 
-void NEHRPartial::recalculate(){
-  double totalCurv = totCurvature->getValue();
-  double totalVol = totVolume->getValue();
+double NEHRPartial::calculateRadiusCase() {
+  double totV = totVolume->getValue();
+  double totK = totCurvature->getValue();
+  double K = localCurvature->getValue();
+  double volumePartial = volPartial->getValue();
+  double rad_i = rad->getValue();
+  
+  return pow(totV, -4.0/3.0)*(K*totV - rad_i*totK*volumePartial/3.0); 
+}
+
+double NEHRPartial::calculateEtaCase() {
+  double totV = totVolume->getValue();
+  double totK = totCurvature->getValue();
   double volumePartial = volPartial->getValue();
   
   double curv_partial_sum = 0;
@@ -53,8 +66,15 @@ void NEHRPartial::recalculate(){
     curv_partial_sum += curvPartials->at(i)->getValue();
   }
   
-  value = 1.0/(3 * pow(totalVol, 4.0/3)) * volumePartial * totalCurv
-          + 1.0 / pow(totalVol, 4.0/3) * curv_partial_sum;
+  return pow(totV, -4.0/3.0)*(curv_partial_sum*totV - totK*volumePartial/3.0);
+}
+
+void NEHRPartial::recalculate(){
+  if(wrtRadius) {
+    value = calculateRadiusCase();
+  } else {
+    value = calculateEtaCase();
+  }
 }
 
 void NEHRPartial::remove() {
@@ -64,16 +84,36 @@ void NEHRPartial::remove() {
   totCurvature->removeDependent(this);
   volPartial->removeDependent(this);
   
-  for(int i = 0; i < curvPartials->size(); i++) {
-    curvPartials->at(i)->removeDependent(this);
+  if(wrtRadius) {
+    localCurvature->removeDependent(this);
+    rad->removeDependent(this);
+  } else {
+    for(int i = 0; i < curvPartials->size(); i++) {
+      curvPartials->at(i)->removeDependent(this);
+    }
+    delete curvPartials;
   }
   
-  delete curvPartials;
   Index->erase(pos);
   delete this;
 }
 
 NEHRPartial::~NEHRPartial(){}
+
+NEHRPartial* NEHRPartial::At( Vertex& v ){
+  TriPosition T( 1, v.getSerialNumber() );
+  if( Index == NULL ) Index = new NEHRPartialIndex();
+  NEHRPartialIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    NEHRPartial* val = new NEHRPartial( v );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
+  }
+}
 
 NEHRPartial* NEHRPartial::At( Edge& e ){
   TriPosition T( 1, e.getSerialNumber() );

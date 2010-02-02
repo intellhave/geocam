@@ -10,31 +10,35 @@ PartialEdgePartial::PartialEdgePartial( Vertex& v, Edge& e ){
   StdEdge st = labelEdge( e, v );
   ri = Radius::At( v );
   rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
-  Lij = Length::At( e );
+  ai = Alpha::At( v );
+  aj = Alpha::At( Triangulation::vertexTable[ st.v2 ] );
   eij = Eta::At(e);
 
   ri->addDependent( this );
   rj->addDependent( this );
-  Lij->addDependent( this );
+  ai->addDependent( this );
+  aj->addDependent( this );
   eij->addDependent(this);
 }
 
 void PartialEdgePartial::recalculate(){
-  double length = Lij->getValue();
   double radi = ri->getValue();
   double radj = rj->getValue();
+  double alphi = ai->getValue();
+  double alphj = aj->getValue();
   double eta = eij->getValue();
 
-  value = radi * radj * (length * length - radi * radi - radi * radj * eta) 
-               / (length * length * length);
+  value = radi * pow(radj, 2) * (eta * radi + alphj * radj) 
+     / pow(alphi * pow(radi, 2) + radj * (2*eta*radi + alphj*radj), 1.5);
   
 }
 
 void PartialEdgePartial::remove() {
     deleteDependents();
-    Lij->removeDependent(this);
     ri->removeDependent(this);
     rj->removeDependent(this);
+    ai->removeDependent(this);
+    aj->removeDependent(this);
     eij->removeDependent(this);
     Index->erase(pos);
     delete this;

@@ -16,7 +16,8 @@ class PartialEdgePartial : public virtual GeoQuant {
 private:
   Radius* ri;
   Radius* rj;
-  Length* Lij;
+  Alpha* ai;
+  Alpha* aj;
   Eta* eij;
 
 protected:
