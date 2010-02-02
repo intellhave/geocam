@@ -11,7 +11,7 @@ using namespace std;
 #include "totalvolume.h"
 #include "totalcurvature.h"
 #include "curvature3D.h"
-#include "volume_partial_sum.h"
+#include "total_volume_partial.h"
 #include "volume_second_partial.h"
 #include "curvature_partial.h"
 
@@ -24,8 +24,8 @@ private:
 
   CurvaturePartial* curvPartial_ij;
 
-  VolumePartialSum* vps_i;
-  VolumePartialSum* vps_j;
+  TotalVolumePartial* vps_i;
+  TotalVolumePartial* vps_j;
   vector< VolumeSecondPartial* >* volSecPartials;
   
 protected:

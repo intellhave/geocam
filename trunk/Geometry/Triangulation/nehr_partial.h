@@ -18,15 +18,17 @@ class NEHRPartial : public virtual GeoQuant {
   bool wrtRadius;
   TotalVolume* totVolume;
   TotalCurvature* totCurvature;
-  
+  TotalVolumePartial* volPartial;
   
   // Radius only variables
   Curvature3D* localCurvature;
-  VolumePartialSum* vps;
+  Radius* rad;
   
   // Eta only variables
-  TotalVolumePartial* volPartial;
   vector<CurvaturePartial*>* curvPartials;
+  
+  double calculateRadiusCase();
+  double calculateEtaCase();
   
  protected:
   NEHRPartial( Vertex& v );         

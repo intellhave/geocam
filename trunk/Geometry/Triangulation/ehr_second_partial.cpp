@@ -19,7 +19,7 @@ EHRSecondPartial::EHRSecondPartial( Vertex& v, Vertex& w ){
   curvature_i = Curvature3D::At( v );
   curvature_i->addDependent( this );
 
-  vps_i = VolumePartialSum::At( v );
+  vps_i = TotalVolumePartial::At( v );
   vps_i->addDependent( this );
 
   if( vIndex == wIndex ){
@@ -29,7 +29,7 @@ EHRSecondPartial::EHRSecondPartial( Vertex& v, Vertex& w ){
     curvature_j = Curvature3D::At( w );
     curvature_j->addDependent( this );
 
-    vps_j = VolumePartialSum::At( w );
+    vps_j = TotalVolumePartial::At( w );
     vps_j->addDependent( this );
   }
 

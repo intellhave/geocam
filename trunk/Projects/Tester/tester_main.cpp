@@ -199,12 +199,16 @@ void testCurvaturePartial() {
 }
 
 void testNEHRPartial() {
+    map<int, Vertex>::iterator vit;
     map<int, Edge>::iterator eit;   
     
     FILE* results = fopen("results.txt", "w");
        
     fprintf(results, "\t\tNEHRPartialTest\n\t-----------------------------\n\n");
     
+    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+        fprintf(results, "Vertex %d: %f\n", vit->first, NEHRPartial::valueAt(vit->second));   
+    }    
     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
         fprintf(results, "Eta %d: %f\n", eit->first, NEHRPartial::valueAt(eit->second));   
     }
