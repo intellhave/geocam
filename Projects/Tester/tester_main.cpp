@@ -12,6 +12,7 @@
 #include "total_volume_partial.h"
 #include "total_volume_second_partial.h"
 #include "nehr_partial.h"
+#include "nehr_second_partial.h"
 
 void testPartialEdgePartial();
 void testDihedralAnglePartial();
@@ -265,9 +266,10 @@ void testRadiusPartial() {
     // Build hessian
     for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
       for(vit2 = vit, j = i; vit2 != Triangulation::vertexTable.end(); vit2++, j++) {
-         hessian[j][i] = hessian[i][j] = EHRSecondPartial::valueAt(vit->second, vit2->second);
+         hessian[j][i] = hessian[i][j] = NEHRSecondPartial::valueAt(vit->second, vit2->second);
       }
     }
+
     
     for(i = 0; i < Triangulation::vertexTable.size(); i++) {
           printf("hess[%d][] = <", i);

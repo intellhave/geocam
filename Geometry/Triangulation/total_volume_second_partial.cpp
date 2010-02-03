@@ -7,6 +7,23 @@
 typedef map<TriPosition, TotalVolumeSecondPartial*, TriPositionCompare> TotalVolumeSecondPartialIndex;
 static TotalVolumeSecondPartialIndex* Index = NULL;
 
+TotalVolumeSecondPartial::TotalVolumeSecondPartial( Vertex& v, Vertex& w ){
+  vector<int> tetra_list = *(v.getLocalTetras());
+  
+  volume_partials = new vector<VolumeSecondPartial*>();
+  VolumeSecondPartial* vp = NULL;
+
+  for(int ii = 0; ii < tetra_list.size(); ii++){
+    Tetra& t = Triangulation::tetraTable[tetra_list[ii]];
+    
+    if( t.isAdjVertex(w.getIndex()) ) {
+      vp = VolumeSecondPartial::At( v, w, t);
+      vp->addDependent(this);
+      volume_partials->push_back( vp );
+    }
+  }
+}
+
 TotalVolumeSecondPartial::TotalVolumeSecondPartial( Vertex& v, Edge& e ){
   /* If v is in e, tetra_list = e.localTetras.
    * If v and e form a triangle, tetra_list =/= empty.
@@ -46,6 +63,21 @@ void TotalVolumeSecondPartial::recalculate(){
            result += volume_partials->at(i)->getValue();
    }
    value = result;
+}
+
+TotalVolumeSecondPartial* TotalVolumeSecondPartial::At( Vertex& v, Vertex& w ){
+  TriPosition T( 2, v.getSerialNumber(), w.getSerialNumber() );
+  if( Index == NULL ) Index = new TotalVolumeSecondPartialIndex();
+  TotalVolumeSecondPartialIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    TotalVolumeSecondPartial* val = new TotalVolumeSecondPartial( v, w );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
+  }
 }
 
 TotalVolumeSecondPartial* TotalVolumeSecondPartial::At( Vertex& v, Edge& e ){
