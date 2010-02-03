@@ -18,6 +18,7 @@ class TotalVolumeSecondPartial : public virtual GeoQuant {
 
 protected:
   TotalVolumeSecondPartial( Vertex& v, Edge& e );
+  TotalVolumeSecondPartial( Vertex& v, Vertex& w );
   void recalculate();
 
 public:
@@ -25,6 +26,10 @@ public:
   static TotalVolumeSecondPartial* At( Vertex& v, Edge& e );
   static double valueAt(Vertex& v, Edge& e) {
          return TotalVolumeSecondPartial::At(v, e)->getValue();
+  }
+  static TotalVolumeSecondPartial* At( Vertex& v, Vertex& w );
+  static double valueAt(Vertex& v, Vertex& w) {
+         return TotalVolumeSecondPartial::At(v, w)->getValue();
   }
   void remove();
   static void CleanUp();
