@@ -29,7 +29,7 @@ void PartialEdgePartial::recalculate(){
   double eta = eij->getValue();
 
   value = radi * pow(radj, 2) * (eta * radi + alphj * radj) 
-     / pow(alphi * pow(radi, 2) + radj * (2*eta*radi + alphj*radj), 1.5);
+     / pow(alphi * pow(radi, 2) + alphj * pow(radj, 2) + 2*eta*radi*radj, 1.5);
   
 }
 
