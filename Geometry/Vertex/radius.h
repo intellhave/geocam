@@ -11,7 +11,7 @@ Version: January 5, 2010
 #include <new>
 using namespace std;
 
-#include "triangulation/triangulation.h"
+#include "triangulation.h"
 #include "geoquant.h"
 #include "triposition.h"
 

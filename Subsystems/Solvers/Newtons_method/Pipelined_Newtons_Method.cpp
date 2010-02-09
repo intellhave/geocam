@@ -178,7 +178,6 @@ void Newtons_Method( double stopping_threshold, char* filename ) {
 }
 
 int LinearEquationsSolving(int nDim, double* pfMatr, double* pfVect, double* pfSolution)
-//int LinearEquationsSolving(int nDim, double pfMatr[3][3], double pfVect[3], double pfSolution[3])
 {
   double fMaxElem;
   double fAcc;
@@ -188,13 +187,6 @@ int LinearEquationsSolving(int nDim, double* pfMatr, double* pfVect, double* pfS
 
   for(k=0; k<(nDim-1); k++) // base row of matrix
   {
-//   printf("\nStep %d:\n", k);
-//   for(i = 0; i < nDim; i++) {
-//     for(j = 0; j < nDim; j++) {
-//       printf("%f, ", pfMatr[i*nDim + j]);
-//     }
-//     printf(" | %f\n", pfVect[i]);
-//     }
     // search of line with max element
     fMaxElem = fabs( pfMatr[k*nDim + k] );
     m = k;
@@ -233,14 +225,6 @@ int LinearEquationsSolving(int nDim, double* pfMatr, double* pfVect, double* pfS
       pfVect[j] = pfVect[j] + fAcc*pfVect[k]; // free member recalculation
     }
   }
-
-//  printf("\nAFTER:\n");
-//  for(k = 0; k < nDim; k++) {
-//     for(j = 0; j < nDim; j++) {
-//       printf("%.16f, ", pfMatr[k*nDim + j]);
-//     }
-//     printf(" | %.16f\n", pfVect[k]);
-//  }
 
   for(k=(nDim-1); k>=0; k--)
   {

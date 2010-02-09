@@ -55,6 +55,13 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               vertexStream >> index;
+              
+              //the last simplex added was being duped, now this check for eof/fail
+              //will ensure that no dupes are created during file input
+              // the && ensures it works regardless of trailing whitespace
+              if (vertexStream.fail() && vertexStream.eof())
+                break;
+              
               v.addVertex(index);
          }
          
@@ -66,6 +73,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               edgeStream >> index;
+
+              if (edgeStream.fail() && edgeStream.eof())
+                break;
+              
               v.addEdge(index);
          }
          
@@ -77,6 +88,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               faceStream >> index;
+              
+              if (faceStream.fail() && faceStream.eof())
+                break;
+                
               v.addFace(index);
          }
          
@@ -88,6 +103,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               tetraStream >> index;
+              
+              if (tetraStream.fail() && tetraStream.eof())
+                break;
+                
               v.addTetra(index);
          }
          
@@ -115,6 +134,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               vertexStream >> index;
+              
+              if (vertexStream.fail() && vertexStream.eof())
+                break;
+                
               e.addVertex(index);
          }
          
@@ -126,6 +149,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               edgeStream >> index;
+              
+              if (edgeStream.fail() && edgeStream.eof())
+                break;
+                
               e.addEdge(index);
          }
          
@@ -137,6 +164,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               faceStream >> index;
+              
+              if (faceStream.fail() && faceStream.eof())
+                break;
+                
               e.addFace(index);
          }
          
@@ -148,6 +179,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               tetraStream >> index;
+              
+              if (tetraStream.fail() && tetraStream.eof())
+                break;
+                
               e.addTetra(index);
          }
          
@@ -177,6 +212,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               vertexStream >> index;
+              
+              if (vertexStream.fail() && vertexStream.eof())
+                break;
+                
               f.addVertex(index);
          }
          
@@ -188,6 +227,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               edgeStream >> index;
+              
+              if (edgeStream.fail() && edgeStream.eof())
+                break;
+                
               f.addEdge(index);
          }
          
@@ -199,6 +242,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               faceStream >> index;
+              
+              if (faceStream.fail() && faceStream.eof())
+                break;
+                
               f.addFace(index);
          }
          
@@ -210,6 +257,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               tetraStream >> index;
+              
+              if (tetraStream.fail() && tetraStream.eof())
+                break;
+                
               f.addTetra(index);
          }
          
@@ -237,6 +288,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               vertexStream >> index;
+              
+              if (vertexStream.fail() && vertexStream.eof())
+                break;
+                
               t.addVertex(index);
          }
          
@@ -248,6 +303,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               edgeStream >> index;
+              
+              if (edgeStream.fail() && edgeStream.eof())
+                break;
+                
               t.addEdge(index);
          }
          
@@ -259,6 +318,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               faceStream >> index;
+              
+              if (faceStream.fail() && faceStream.eof())
+                break;
+                
               t.addFace(index);
          }
          
@@ -270,6 +333,10 @@ bool read3DTriangulationFile(char* fileName)
          {
               int index;
               tetraStream >> index;
+              
+              if (tetraStream.fail() && tetraStream.eof())
+                break;
+                
               t.addTetra(index);
          }
          

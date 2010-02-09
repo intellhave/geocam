@@ -8,5 +8,6 @@ void printGradient(double grad[], int size);
 
 void printHessian(double *hess[], int size);
 
+int LinearEquationsSolver(double *matr[], double vect[], double sol[], int nDim);
 
 #endif
