@@ -838,7 +838,11 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit87]
+<<<<<<< .mine
+FileName=..\..\Geometry\Edge\partial_edge_second_partial.h
+=======
 FileName=..\..\Geometry\Vertex\radius_partial.cpp
+>>>>>>> .r1042
 CompileCpp=1
 Folder=Geometry/Source
 Compile=1
@@ -848,29 +852,13 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit88]
+<<<<<<< .mine
+FileName=..\..\Geometry\Edge\partial_edge_second_partial.cpp
+=======
 FileName=..\..\Geometry\Vertex\radius_partial.h
+>>>>>>> .r1042
 CompileCpp=1
 Folder=Geometry/Header
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit89]
-FileName=..\..\Geometry\Vertex\radius_partial.cpp
-CompileCpp=1
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit90]
-FileName=..\..\Geometry\Vertex\radius_partial.h
-CompileCpp=1
-Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -888,9 +876,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit91]
-FileName=..\..\Geometry\Triangulation\total_volume_second_partial.h
+FileName=..\..\Geometry\Edge\dih_angle_second_partial.cpp
 CompileCpp=1
-Folder=Geometry/Header
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -898,9 +886,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit92]
-FileName=..\..\Geometry\Triangulation\total_volume_second_partial.cpp
+FileName=..\..\Geometry\Edge\dih_angle_second_partial.h
 CompileCpp=1
-Folder=Geometry/Source
+Folder=
 Compile=1
 Link=1
 Priority=1000

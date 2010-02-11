@@ -19,17 +19,20 @@ private:
   Radius* rad[4];
   Alpha* alpha[4];
   Eta* eta[6];
-  bool wrtRadius2;
+  int wrt;
   
   // RadiusRadius only variable
   bool sameVertices;
-  double calculateRadRadCase();
-  double calculateRadEtaCase();
   //RadiusEta only variable
   int locality;
+  
+  double calculateRadRadCase();
+  double calculateRadEtaCase();
+  double calculateEtaEtaCase();
 protected:
   VolumeSecondPartial( Vertex& v, Vertex& w, Tetra& t );
   VolumeSecondPartial( Vertex& v, Edge& e, Tetra& t );
+  VolumeSecondPartial( Edge& e, Edge& f, Tetra& t );
   void recalculate();
 
 public:
@@ -42,6 +45,10 @@ public:
   static VolumeSecondPartial* At( Vertex& v, Edge& e, Tetra& t );
   static double valueAt( Vertex& v, Edge& e, Tetra& t ) {
          return VolumeSecondPartial::At( v, e, t)->getValue();
+  }
+  static VolumeSecondPartial* At( Edge& e, Edge& f, Tetra& t );
+  static double valueAt( Edge& e, Edge& f, Tetra& t ) {
+         return VolumeSecondPartial::At( e, f, t)->getValue();
   }
   static void CleanUp();
   static void Record( char* filename );
