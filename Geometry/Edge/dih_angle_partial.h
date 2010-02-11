@@ -21,6 +21,7 @@ private:
   int locality;
 
 protected:
+  /* Dih_Angle At (e2, t), wrt eta_e1 */
   DihedralAnglePartial( Edge& e1, Edge& e2, Tetra& t );
   void recalculate();
 

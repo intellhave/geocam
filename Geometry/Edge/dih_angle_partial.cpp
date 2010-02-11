@@ -35,10 +35,12 @@ DihedralAnglePartial::DihedralAnglePartial( Edge& e1, Edge& e2, Tetra& t ){
   
   if(e1.getIndex() == e2.getIndex()) {
      locality = 0;                 
-  } else if(e2.isAdjEdge(e1.getIndex())) {
-     locality = 1;       
-  } else if(t.isAdjEdge(e1.getIndex())) {
-     locality = 2;
+  } else if( t.isAdjEdge(e1.getIndex()) ) {
+     if( e2.isAdjEdge(e1.getIndex()) ) {
+         locality = 1;    
+     } else {
+         locality = 2;       
+     }
   } else {
      locality = 3;
   }

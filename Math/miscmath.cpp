@@ -523,7 +523,109 @@ StdTetra labelTetra( Tetra& t, Vertex& v, Edge& e ){
   fixTetraFaces(t, retval);
   
   return retval;
-} 
+}
+
+// Make e12 = e, v1 = v if v is in e, v3 = v otherwise
+StdTetra labelTetra( Tetra& t, Edge& e, Vertex& v ){
+  StdTetra retval;
+
+  vector<int>* local_verts = e.getLocalVertices();
+  vector<int> verts;
+  int vIndex;
+
+  if(e.isAdjVertex(v.getIndex())) {
+    retval.v1 = v.getIndex();
+    if(local_verts->at(0) == retval.v1) {
+      retval.v2 = local_verts->at(1);
+    } else {
+      retval.v2 = local_verts->at(0);
+    }
+    
+    local_verts = t.getLocalVertices();
+    for(int ii = 0; ii < local_verts->size(); ii++) {
+      vIndex = local_verts->at(ii);
+      if(vIndex != retval.v1 && vIndex != retval.v2) {
+        verts.push_back(vIndex);
+      }
+    }
+    retval.v3 = verts[0];
+    retval.v4 = verts[1];
+  } else {
+    retval.v1 = local_verts->at(0);
+    retval.v2 = local_verts->at(1);
+    retval.v3 = v.getIndex();
+    
+    local_verts = t.getLocalVertices();
+    for(int ii = 0; ii < local_verts->size(); ii++) {
+      vIndex = local_verts->at(ii);
+      if(vIndex != retval.v1 && vIndex != retval.v2 && vIndex != retval.v3) {
+        retval.v4 = vIndex;
+      }
+    }
+  }
+
+  fixTetraEdges(t, retval);
+  fixTetraFaces(t, retval);
+
+  return retval;
+}
+
+// Make e12 = e, e12 = f if e = f, e13 = f if e and f are adjacent,
+// e34 = f otherwise
+StdTetra labelTetra( Tetra& t, Edge& e, Edge& f ){
+  StdTetra retval;
+
+  vector<int>* local_verts = e.getLocalVertices();
+  vector<int>* local_verts2 = f.getLocalVertices();
+  vector<int> verts;
+  int vIndex;
+
+  if(e.getIndex() == f.getIndex()) {
+    retval.v1 = local_verts->at(0);
+    retval.v2 = local_verts->at(1);
+    local_verts = t.getLocalVertices();
+    for(int ii = 0; ii < local_verts->size(); ii++) {
+      vIndex = local_verts->at(ii);
+      if(vIndex != retval.v1 && vIndex != retval.v2) {
+        verts.push_back(vIndex);
+      }
+    }
+    retval.v3 = verts[0];
+    retval.v4 = verts[1];
+  } else if( e.isAdjEdge(f.getIndex()) ) {
+    if(f.isAdjVertex(local_verts->at(0))) {
+      retval.v1 = local_verts->at(0);
+      retval.v2 = local_verts->at(1);
+    } else {
+      retval.v1 = local_verts->at(1);
+      retval.v2 = local_verts->at(0);
+    }
+    
+    if(local_verts2->at(0) == retval.v1) {
+      retval.v3 = local_verts2->at(1);
+    } else {
+      retval.v3 = local_verts2->at(0);
+    }
+    
+    local_verts = t.getLocalVertices();
+    for(int ii = 0; ii < local_verts->size(); ii++) {
+      vIndex = local_verts->at(ii);
+      if(vIndex != retval.v1 && vIndex != retval.v2 && vIndex != retval.v3) {
+        retval.v4 = vIndex;
+      }
+    }
+  } else {
+    retval.v1 = local_verts->at(0);
+    retval.v2 = local_verts->at(1);
+    retval.v3 = local_verts2->at(0);
+    retval.v4 = local_verts2->at(1);
+  }
+
+  fixTetraEdges(t, retval);
+  fixTetraFaces(t, retval);
+
+  return retval;
+}
 
 StdTetra labelTetra( Tetra& t ){
   Vertex& v = Triangulation::vertexTable[ (*(t.getLocalVertices()))[0] ];
