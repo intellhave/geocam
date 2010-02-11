@@ -1,7 +1,7 @@
 [Project]
-FileName=..\EHR_for_poets\NewtonsMethodForPoets.dev
+FileName=blankproject.dev
 Name=blankproject
-UnitCount=84
+UnitCount=86
 Type=1
 Ver=1
 ObjFiles=
@@ -770,9 +770,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit85]
-FileName=..\..\Geometry\Edge\partial_edge_partial.cpp
+FileName=..\..\Geometry\Vertex\alpha.h
 CompileCpp=1
-Folder=Geometry/source
+Folder=blankproject
 Compile=1
 Link=1
 Priority=1000
@@ -780,9 +780,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit86]
-FileName=..\..\Geometry\Edge\dih_angle_partial.h
+FileName=..\..\Geometry\Vertex\alpha.cpp
 CompileCpp=1
-Folder=Geometry/headers
+Folder=blankproject
 Compile=1
 Link=1
 Priority=1000

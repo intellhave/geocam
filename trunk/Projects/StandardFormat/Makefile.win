@@ -5,8 +5,8 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = LutzToStandard.o ../../InputOutput/3DInputOutput.o ../../Triangulation/triangulation.o $(RES)
-LINKOBJ  = LutzToStandard.o ../../InputOutput/3DInputOutput.o ../../Triangulation/triangulation.o $(RES)
+OBJ  = ../../InputOutput/3DInputOutput.o ../../Triangulation/triangulation.o main.o $(RES)
+LINKOBJ  = ../../InputOutput/3DInputOutput.o ../../Triangulation/triangulation.o main.o $(RES)
 LIBS =  -L"C:/Dev-Cpp/lib"  
 INCS =  -I"C:/Dev-Cpp/include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam/InputOutput"  -I"C:/Dev-Cpp/geocam/Triangulation"  -I"C:/Dev-Cpp/geocam/Geometry/Geoquant_general"  -I"C:/Dev-Cpp/geocam/Math"  -I"C:/Dev-Cpp/geocam/Geometry/Tetrahedron"  -I"C:/Dev-Cpp/geocam/Geometry/Edge"  -I"C:/Dev-Cpp/geocam/Geometry/Vertex"  -I"C:/Dev-Cpp/geocam/Geometry/Face"  -I"C:/Dev-Cpp/geocam/Geometry/Triangulation" 
 CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include"  -I"C:/Dev-Cpp/geocam"  -I"C:/Dev-Cpp/geocam/InputOutput"  -I"C:/Dev-Cpp/geocam/Triangulation"  -I"C:/Dev-Cpp/geocam/Geometry/Geoquant_general"  -I"C:/Dev-Cpp/geocam/Math"  -I"C:/Dev-Cpp/geocam/Geometry/Tetrahedron"  -I"C:/Dev-Cpp/geocam/Geometry/Edge"  -I"C:/Dev-Cpp/geocam/Geometry/Vertex"  -I"C:/Dev-Cpp/geocam/Geometry/Face"  -I"C:/Dev-Cpp/geocam/Geometry/Triangulation" 
@@ -26,11 +26,11 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CPP) $(LINKOBJ) -o "StandardFormatGenerator.exe" $(LIBS)
 
-LutzToStandard.o: LutzToStandard
-	$(CPP) -c LutzToStandard -o LutzToStandard.o $(CXXFLAGS)
-
 ../../InputOutput/3DInputOutput.o: ../../InputOutput/3DInputOutput.cpp
 	$(CPP) -c ../../InputOutput/3DInputOutput.cpp -o ../../InputOutput/3DInputOutput.o $(CXXFLAGS)
 
 ../../Triangulation/triangulation.o: ../../Triangulation/triangulation.cpp
 	$(CPP) -c ../../Triangulation/triangulation.cpp -o ../../Triangulation/triangulation.o $(CXXFLAGS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)

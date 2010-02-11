@@ -29,26 +29,7 @@ SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0000000000000000000000
 
-[Unit1]
-FileName=LutzToStandard
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit2]
-FileName=..\..\InputOutput\3DInputOutput.cpp
-CompileCpp=1
-Folder=StandardFormatGenerator
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit3]
 FileName=..\..\InputOutput\3DInputOutput.h
 CompileCpp=1
 Folder=StandardFormatGenerator
@@ -58,7 +39,7 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit4]
+[Unit3]
 FileName=..\..\Triangulation\triangulation.cpp
 CompileCpp=1
 Folder=StandardFormatGenerator
@@ -68,10 +49,20 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit5]
+[Unit4]
 FileName=..\..\Triangulation\triangulation.h
 CompileCpp=1
 Folder=StandardFormatGenerator
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit5]
+FileName=main.cpp
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000
@@ -95,4 +86,17 @@ OriginalFilename=
 ProductName=
 ProductVersion=
 AutoIncBuildNr=0
+
+[Unit6]
+FileName=main.cpp
+
+[Unit1]
+FileName=..\..\InputOutput\3DInputOutput.cpp
+CompileCpp=1
+Folder=StandardFormatGenerator
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
 
