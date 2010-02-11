@@ -1,9 +1,46 @@
 #include "triangulation.h"
+#include "3DInputOutput.h"
 #include "triangulationInputOutput.h"
 #include "utilities.h"
 
 int main(int argc, char * argv[]) {
-      
+
+     
+     char filename1[] = "Data/3DManifolds/LutzFormat/manifold_3_7_1.txt";
+     char modified1[] = "Data/3DManifolds/StandardFormat/manifold_3_7_1.txt";
+     
+     make3DTriangulationFile(filename1, modified1);
+     read3DTriangulationFile(modified1);
+     
+     char filename2[] = "Data/3DManifolds/LutzFormat/manifold_3_7_2.txt";
+     char modified2[] = "Data/3DManifolds/StandardFormat/manifold_3_7_2.txt";
+     
+     make3DTriangulationFile(filename2, modified2);
+     read3DTriangulationFile(modified2);
+     
+     char filename3[] = "Data/3DManifolds/LutzFormat/manifold_3_7_3.txt";
+     char modified3[] = "Data/3DManifolds/StandardFormat/manifold_3_7_3.txt";
+     
+     make3DTriangulationFile(filename3, modified3);
+     read3DTriangulationFile(modified3);
+     
+     char filename4[] = "Data/3DManifolds/LutzFormat/manifold_3_7_4.txt";
+     char modified4[] = "Data/3DManifolds/StandardFormat/manifold_3_7_4.txt";
+     
+     make3DTriangulationFile(filename4, modified4);
+     read3DTriangulationFile(modified4);
+     
+     char filename5[] = "Data/3DManifolds/LutzFormat/manifold_3_7_5.txt";
+     char modified5[] = "Data/3DManifolds/StandardFormat/manifold_3_7_5.txt";
+     
+     make3DTriangulationFile(filename5, modified5);
+     read3DTriangulationFile(modified5);
+     
+   
+     
+
+/*
+     
      map<int, Vertex>::iterator vit;
      map<int, Edge>::iterator eit;
      map<int, Face>::iterator fit;
@@ -74,10 +111,10 @@ int main(int argc, char * argv[]) {
 //           }
 
 // The following calculation verifies that the edges satisfy the manifold conditions
-   
+*/   
     pause("Done...press enter to exit."); // PAUSE   
     
 
-    
+   return 1;
     
 }

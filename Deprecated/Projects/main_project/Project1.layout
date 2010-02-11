@@ -267,7 +267,7 @@ Focused=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-Order=0,9
+Order=0
 =======
 <<<<<<< .mine
 Order=-1
@@ -575,9 +575,9 @@ Top=0
 <<<<<<< .mine
 <<<<<<< .mine
 <<<<<<< .mine
-CursorCol=48
-CursorRow=228
-TopLine=208
+CursorCol=1
+CursorRow=223
+TopLine=1
 =======
 <<<<<<< .mine
 CursorCol=2
