@@ -1,0 +1,202 @@
+
+\documentclass{article}
+\usepackage{amsmath}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%TCIDATA{OutputFilter=LATEX.DLL}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=Manual}
+%TCIDATA{Created=Monday, February 15, 2010 10:13:06}
+%TCIDATA{LastRevised=Monday, February 15, 2010 11:14:02}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Standard LaTeX\Blank - Standard LaTeX Article">}
+%TCIDATA{Language=American English}
+%TCIDATA{CSTFile=40 LaTeX article.cst}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\input{tcilatex}
+
+\begin{document}
+
+
+bone
+
+Center of a simplex
+
+circle and sphere packing
+
+combinatorial Ricci-flow
+
+conformal deformation
+
+convex hinge
+
+Curvature
+
+Curvature flow
+
+Delaunay triangulation (or hinge)
+
+Dirichlet Energy
+
+Discrete Curvature
+
+dual volume
+
+dual length
+
+dual, Poincare dual
+
+Euclidean Law of Cosines
+
+flip
+
+flip algorithm
+
+min-max procedure
+
+negative triangles
+
+Newton's Method
+
+nonconvex hinge
+
+Normalized total scalar curvature functional
+
+Pachner move
+
+power diagram (or cell)
+
+Runga-Kutta
+
+Schl\"{a}fli formula
+
+solid angle
+
+Spherical Law of Cosines
+
+Voronoi diagram (or cell)
+
+weighted Delaunay triangulation
+
+weighted Voronoi diagram (or cell)
+
+Yamabe Energy
+
+Yamabe Constant
+
+Yamabe Flow
+
+\bigskip 
+
+\subsection{Quantities}
+
+$r_{i}$ (radii, vertex weights)
+
+$\eta _{ij}$ (etas, inversive distance, edge weights)
+
+$\alpha _{i}$ (alphas, vertex weight coefficient)
+
+$d_{ij}$ partial edge
+
+$l_{ij}$ length%
+\begin{eqnarray*}
+l_{ij} &=&\sqrt{\alpha _{i}r_{i}^{2}+\alpha _{j}r_{j}^{2}+2r_{i}r_{j}\eta
+_{ij}} \\
+&=&d_{ij}+d_{ji}
+\end{eqnarray*}
+
+$A_{ijk}$ face area
+
+$V_{ijkl}$ tetrahedron volume
+
+$\gamma _{i,jk}$ face angle
+
+$\beta _{ij,kl}$ dihedral angle (at an edge in a tetrahedron)
+
+$\alpha _{i,jkl}$ solid angle
+
+$h_{ij,k}$ edge height%
+\[
+h_{ij,k}=\frac{d_{ik}-d_{ij}\cos \gamma _{i,jk}}{\sin \gamma _{i,jk}}
+\]
+
+$h_{ijk,l}$ face height%
+\[
+h_{ijk,l}=\frac{h_{ij,l}-h_{ij,k}\cos \beta _{ij,kl}}{\sin \beta _{ij,kl}}
+\]
+
+$A_{ij,kl}$ dual area (of an edge in a tetrahedron)%
+\[
+A_{ij,kl}=\frac{1}{2}\left( h_{ij,k}h_{ijk,l}+h_{ij,l}h_{ijl,k}\right) 
+\]
+
+$l_{ij}^{\ast }$ dual length (2D) or dual area (3D) 
+\begin{eqnarray*}
+2D &:&l_{ij}^{\ast }=h_{ij,k}+h_{ij,l} \\
+3D &:&l_{ij}^{\ast }=\sum_{\substack{ k,l\text{ s.t.} \\ \left\{
+i,j,k,l\right\} \in \mathcal{T}}}A_{ij,kl}
+\end{eqnarray*}
+
+$K_{i}$ vertex curvature (scalar curvature)%
+\begin{eqnarray*}
+2D &:&K_{i}=2\pi -\sum_{\substack{ j,k\text{ s.t.} \\ \left\{ i,j,k\right\}
+\in \mathcal{T}}}\gamma _{i,jk} \\
+3D &:&K_{i}=\sum_{\substack{ j\text{ s.t.} \\ \left\{ i,j\right\} \in E}}%
+\left( 2\pi -\sum_{\substack{ k,l\text{ s.t.} \\ \left\{ i,j,k,l\right\} \in 
+\mathcal{T}}}\beta _{ij,kl}\right) d_{ij}
+\end{eqnarray*}
+
+$K_{ij}$ edge curvature (3D)%
+\[
+K_{ij}=\left( 2\pi -\sum_{\substack{ k,l\text{ s.t.} \\ \left\{
+i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij}
+\]
+
+$\lambda $ Einstein Constant%
+\[
+\lambda =\frac{EHR\left( M,\mathcal{T},l\right) }{3\mathcal{V}\left( M,%
+\mathcal{T},l\right) }
+\]
+
+$EHR\left( M,\mathcal{T},l\right) $ (3D)%
+\begin{eqnarray*}
+EHR\left( M,\mathcal{T},l\right)  &=&\sum_{i}K_{i} \\
+&=&\sum_{\substack{ i,j\text{ s.t.} \\ \left\{ i,j\right\} \in E}}K_{ij}
+\end{eqnarray*}
+
+$V_{i}$ dual volume of a vertex%
+\[
+V_{i}=\sum_{\substack{ j,k,l\text{ s.t.} \\ \left\{ i,j,k,l\right\} \in 
+\mathcal{T}}}h_{ijk,l}A_{ijk}
+\]
+
+$\mathcal{V}$ total volume
+
+$c_{ijk}$ center of a weighted triangle (embedded)
+
+$c_{ijkl}$ center of a weighted tetrahedron (embedded)
+
+\end{document}
