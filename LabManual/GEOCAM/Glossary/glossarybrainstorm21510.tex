@@ -1,6 +1,7 @@
 
 \documentclass{article}
 \usepackage{amsmath}
+\usepackage{amssymb}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %TCIDATA{OutputFilter=LATEX.DLL}
@@ -36,7 +37,7 @@
 \newtheorem{solution}[theorem]{Solution}
 \newtheorem{summary}[theorem]{Summary}
 \newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
-\input{tcilatex}
+%\input{tcilatex}
 
 \begin{document}
 
@@ -45,9 +46,10 @@ bone
 
 Center of a simplex
 
-circle and sphere packing
+circle and sphere packing \newline
 
-combinatorial Ricci-flow
+\textbf{combinatorial Ricci-flow:}
+	A partial differential equation on the curvatures and radii of a two-dimensional manifold. In the Euclidean case, the system is $\frac{\partial r_i }{\partial t} = -K_i * r_i$. However, this can lead to every radius shrinking to zero. We thus use a normalized system, $\frac{\partial r_i }{\partial t} = (\bar{K} - K_i) * r_i$ where $\bar{K}$ is the average curvature. \newline
 
 conformal deformation
 
@@ -79,7 +81,9 @@ min-max procedure
 
 negative triangles
 
-Newton's Method
+\textbf{Newton's Method}: A method for finding the roots of a function. For real-valued functions on $\mathbb{R}$, the n-th step of Newton's Method approximates a root from the previous step as $x_n = x_{n-1} - \frac{f(x_{n-1})}{f'(x_{n-1})}$. That is, we determine the equation of the tangent line at $x_{n-1}$, then set $x_n$ to be the x-intercept of this line. \newline
+
+\noindent We are trying to optimize real-valued functions on $\mathbb{R}^m$, so we want to use Newton's Method to find the points at which $Df(\mathbf{x})$, the gradient of a function $f$, is the zero-vector.
 
 nonconvex hinge
 
