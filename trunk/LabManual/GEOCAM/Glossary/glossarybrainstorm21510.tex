@@ -83,7 +83,7 @@ negative triangles
 
 \textbf{Newton's Method}: A method for finding the roots of a function. For real-valued functions on $\mathbb{R}$, the n-th step of Newton's Method approximates a root from the previous step as $x_n = x_{n-1} - \frac{f(x_{n-1})}{f'(x_{n-1})}$. That is, we determine the equation of the tangent line at $x_{n-1}$, then set $x_n$ to be the x-intercept of this line. \newline
 
-\noindent We are trying to optimize real-valued functions on $\mathbb{R}^m$, so we want to use Newton's Method to find the points at which $Df(\mathbf{x})$, the gradient of a function $f$, is the zero-vector.
+\noindent We are trying to optimize real-valued functions on $\mathbb{R}^m$, so we want to use Newton's Method to find the points at which $Df(\mathbf{x})$, the gradient of a function $f$, is the zero-vector. We therefore need the second derivative, $D^2f(\mathbf{x})$, called the hessian which is an $m$ by $m$ matrix. So a step of the method yields $\mathbf{x_n} = \mathbf{x_{n-1}} - [D^2f(\mathbf{x_{n-1}})]^{-1} * Df(\mathbf{x_{n-1}})$. \newline
 
 nonconvex hinge
 
