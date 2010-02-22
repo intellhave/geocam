@@ -129,7 +129,7 @@ vector<Line> TriangulationDisplay::getDuals(void) {
     //for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
     //    coordSystem.addDual(eit->second);
     //}
-    return coordSystem.TriangulationCoordinateSystem::getDuals();
+    return coordSystem.TriangulationDevelopment::getDuals();
 }
 
 Point TriangulationDisplay::getPoint(int index){

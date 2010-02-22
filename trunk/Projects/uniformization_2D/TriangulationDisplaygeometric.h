@@ -6,9 +6,10 @@
 #include "triangulationInputOutputgeometric.h"
 #include "TriangulationDevelopment.h"
 
+
 class TriangulationDisplay {
 
-    TriangulationCoordinateSystem coordSystem;
+    TriangulationDevelopment coordSystem;
 
     //this string should be the path to the file that contains the triangulation information
     char* fileName;
