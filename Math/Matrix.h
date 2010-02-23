@@ -145,6 +145,7 @@ class Matrix<double>{
 
     Matrix operator+(Matrix& m);
     Matrix operator*(Matrix& m);
+    Matrix transpose();
 
     double * operator[](int i) {return mat[i];}
 
@@ -181,6 +182,16 @@ Matrix<double> Matrix<double>::operator*(Matrix<double>& m) {
       for(int k = 0; k < col; k++) {
         temp[i][j] += mat[i][k] * m[k][j];
       }
+    }
+  }
+  return temp;
+}
+
+Matrix<double> Matrix<double>::transpose() {
+  Matrix temp(col, row);
+  for(int i = 0; i < col; i++) {
+    for(int j = 0; j < row; j++) {
+      temp[i][j] = mat[j][i];
     }
   }
   return temp;
