@@ -295,6 +295,7 @@ bool readTriangulationFile(const char* fileName)
               if (faceStream.fail() && faceStream.eof())
                 break;
 
+
               f.addFace(index);
          }
          
