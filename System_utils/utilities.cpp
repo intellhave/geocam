@@ -52,7 +52,7 @@ void printHessian(double *hess[], int size) {
 // Developer: Henry Guennadi Levkin
 //
 //==============================================================================
-int LinearEquationsSolver(double *pfMatr[], double* pfVect, double* pfSolution, int nDim)
+int LinearEquationsSolver(Matrix<double>& pfMatr, double* pfVect, double* pfSolution, int nDim)
 {
   double maxElem; // Used to determine row with max element.
   double temp; // Just a temp variable for switching

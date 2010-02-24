@@ -2,13 +2,14 @@
 #include <map>
 #include "radius_partial.h"
 #include "nehr_second_partial.h"
+#include "matrix.h"
 #include "utilities.h"
 
 typedef map<TriPosition, RadiusPartial*, TriPositionCompare> RadiusPartialIndex;
 static RadiusPartialIndex* Index = NULL;
 
-static NEHRSecondPartial** nehr_rad_rad = NULL;
-static NEHRSecondPartial** nehr_rad_eta = NULL;
+static Matrix<NEHRSecondPartial*>* nehr_rad_rad = NULL;
+static Matrix<NEHRSecondPartial*>* nehr_rad_eta = NULL;
 
 RadiusPartial::RadiusPartial(Vertex& v, Edge& e) {
   if(nehr_rad_rad == NULL || nehr_rad_eta == NULL) {
@@ -19,14 +20,14 @@ RadiusPartial::RadiusPartial(Vertex& v, Edge& e) {
   int vertSize = Triangulation::vertexTable.size();
   for(ii = 0; ii < vertSize; ii++) {
     for(jj = 0; jj < vertSize; jj++) {
-      nehr_rad_rad[ii*vertSize + jj]->addDependent(this);
+      (*nehr_rad_rad)[ii][jj]->addDependent(this);
     }
   }
   jj = 0;
   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++, jj++) {
     if(eit->first == e.getIndex()) {
       for(ii = 0; ii < vertSize; ii++) {
-        nehr_rad_eta[ii* vertSize + jj]->addDependent(this);
+        (*nehr_rad_eta)[ii][jj]->addDependent(this);
       }
       break;
     }
@@ -44,14 +45,14 @@ void RadiusPartial::remove() {
   int vertSize = Triangulation::vertexTable.size();
   for(ii = 0; ii < vertSize; ii++) {
     for(jj = 0; jj < vertSize; jj++) {
-      nehr_rad_rad[ii*vertSize + jj]->removeDependent(this);
+      (*nehr_rad_rad)[ii][jj]->removeDependent(this);
     }
   }
 
   jj = 0;
   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++, jj++) {
       for(ii = 0; ii < vertSize; ii++) {
-        nehr_rad_eta[ii* vertSize + jj]->removeDependent(this);
+        (*nehr_rad_eta)[ii][jj]->removeDependent(this);
       }
   }
   Index->erase(pos);
@@ -97,29 +98,31 @@ void RadiusPartial::build() {
   int ii, jj;
   ii = 0;
   if(nehr_rad_rad == NULL) {
-    nehr_rad_rad = (NEHRSecondPartial**) malloc(vertSize * vertSize * sizeof(NEHRSecondPartial*));
+    nehr_rad_rad = new Matrix<NEHRSecondPartial*>(vertSize, vertSize);
     for(vit = vBegin; vit != vEnd; vit++, ii++) {
       jj = 0;
       for(vit2 = vBegin; vit2 != vEnd; vit2++, jj++) {
-        nehr_rad_rad[ii*vertSize + jj] = NEHRSecondPartial::At(vit->second, vit2->second);
+        (*nehr_rad_rad)[ii][jj] = NEHRSecondPartial::At(vit->second, vit2->second);
       }
     }
   }
+  
   if(nehr_rad_eta == NULL) {
-    nehr_rad_eta = (NEHRSecondPartial**) malloc(vertSize * edgeSize * sizeof(NEHRSecondPartial*));
+    nehr_rad_eta = new Matrix<NEHRSecondPartial*>(vertSize, edgeSize);
     ii = 0;
+
     for(vit = vBegin; vit != vEnd; vit++, ii++) {
       jj = 0;
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++, jj++) {
-        nehr_rad_eta[ii*edgeSize + jj] = NEHRSecondPartial::At(vit->second, eit->second);
+        (*nehr_rad_eta)[ii][jj] = NEHRSecondPartial::At(vit->second, eit->second);
       }
     }
   }
 }
 
 void RadiusPartial::deconstruct() {
-  free(nehr_rad_rad);
-  free(nehr_rad_eta);
+  delete nehr_rad_rad;
+  delete nehr_rad_eta;
   nehr_rad_eta = nehr_rad_rad = NULL;
 }
 
@@ -134,12 +137,8 @@ void RadiusPartial::calculateRadiiPartials() {
   if(nehr_rad_rad == NULL || nehr_rad_eta == NULL) {
     build();
   }
-  double** nehr_radius_partials;
-  nehr_radius_partials = (double**) malloc(sizeof(double*) * vertSize);
-  for(int i = 0 ; i < vertSize; i++) {
-    nehr_radius_partials[i] = (double*) malloc(sizeof(double) * vertSize);
-  }
-
+  
+  Matrix<double> nehr_radius_partials(vertSize, vertSize);
   double nehr_rad_eta_partials[vertSize];
   double values[vertSize];
   // For each eta, solve the system
@@ -147,12 +146,12 @@ void RadiusPartial::calculateRadiiPartials() {
   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++, jj++) {
     ii = 0;
     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++, ii++) {
-      nehr_rad_eta_partials[ii] = -1 * nehr_rad_eta[ii * edgeSize + jj]->getValue();
+      nehr_rad_eta_partials[ii] = -1 * (*nehr_rad_eta)[ii][jj]->getValue();
     }
     
     for(ii = 0; ii < vertSize; ii++) {
       for(kk = 0; kk < vertSize; kk++) {
-        nehr_radius_partials[ii][kk] = nehr_rad_rad[ii* vertSize + kk]->getValue();
+        nehr_radius_partials[ii][kk] = (*nehr_rad_rad)[ii][kk]->getValue();
       }
     }
     
@@ -167,8 +166,4 @@ void RadiusPartial::calculateRadiiPartials() {
       RadiusPartial::At(vit->second, eit->second)->setValue(values[ii]);
     }
   }
-  for(int i = 0; i < vertSize; i++) {
-    free(nehr_radius_partials[i]);
-  }
-  free(nehr_radius_partials);
 }
