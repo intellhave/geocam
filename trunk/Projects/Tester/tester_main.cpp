@@ -25,6 +25,7 @@ void testTotalVolumeSecondPartial();
 void testNEHRPartial();
 void testNEHRSecondPartial();
 void testNEHRSecondPartialForm2();
+void testMatrix();
 
 int main(int argc, char *argv[])
 {
@@ -54,7 +55,36 @@ int main(int argc, char *argv[])
    // testNEHRPartial();
    // testNEHRSecondPartial();
    // testNEHRSecondPartialForm2();
+    testMatrix();
    pause("Press enter to continue.....");
+}
+
+void matrixScalarMultiply(double** mat, int len, double scalar) {
+  for(int i = 0; i < len; i++) {
+    for(int j = 0; j < len; j++) {
+      mat[i][j] = mat[i][j] * scalar;
+    }
+  }
+}
+
+void testMatrix() {
+  Matrix<double> m(3, 3);
+  m[0][0] = 3.0;
+  m[0][1] = 5.0;
+  m[0][2] = 2.4;
+  m[1][0] = 1.0;
+  m[1][1] = 2.5;
+  m[1][2] = 1.0;
+  m[2][0] = 0;
+  m[2][1] = 4.0;
+  m[2][2] = 0;
+  m.print(stdout);
+  printf("\ndet(m) = %f\n\n", m.determinant());
+  Matrix<double> adj = m.adjoint();
+  adj.print(stdout);
+  printf("\n");
+  Matrix<double> identity = (m * adj) * (1 / m.determinant());
+  identity.print(stdout);
 }
 
 void testVolumePartial() {
@@ -251,40 +281,6 @@ void testNEHRSecondPartial() {
         fprintf(results, "\tEta %d: %f\n", eit->first, NEHRSecondPartial::valueAt(vit->second, eit->second));
       }
     }
-    fclose(results);
-}
-
-void testNEHRSecondPartialForm2() {
-    map<int, Vertex>::iterator vit;
-    map<int, Vertex>::iterator vit2;
-    map<int, Edge>::iterator eit;
-
-    FILE* results = fopen("results.txt", "w");
-
-    fprintf(results, "\t\tNEHRSecondPartials\n\t-----------------------------\n\n");
-    fprintf(results, "d^2NEHR/dri drj = {\n");
-    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-      fprintf(results, "{");
-      for(vit2 = Triangulation::vertexTable.begin(); vit2 != Triangulation::vertexTable.end(); vit2++) {
-        if(vit2->first == 5) {
-          fprintf(results, "%f}\n", NEHRSecondPartial::valueAt(vit->second, vit2->second));
-        } else {
-          fprintf(results, "%f, ", NEHRSecondPartial::valueAt(vit->second, vit2->second));
-        }
-      }
-    }
-    fprintf(results, "}\n\nd^2NEHR/deta_nm dri = {\n");
-    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-      fprintf(results, "{");
-      for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-        if(eit->first == 10) {
-          fprintf(results, "%f}\n", NEHRSecondPartial::valueAt(vit->second, eit->second));
-        } else {
-          fprintf(results, "%f, ", NEHRSecondPartial::valueAt(vit->second, eit->second));
-        }
-      }
-    }
-    fprintf(results, "}");
     fclose(results);
 }
 
