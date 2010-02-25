@@ -48,8 +48,7 @@ Center of a simplex
 
 circle and sphere packing \newline
 
-\textbf{combinatorial Ricci-flow:}
-	A partial differential equation on the curvatures and radii of a two-dimensional manifold. In the Euclidean case, the system is $\frac{\partial r_i }{\partial t} = -K_i * r_i$. However, this can lead to every radius shrinking to zero. We thus use a normalized system, $\frac{\partial r_i }{\partial t} = (\bar{K} - K_i) * r_i$ where $\bar{K}$ is the average curvature. \newline
+\hangindent=1.0cm \textbf{combinatorial Ricci-flow:} A partial differential equation on the curvatures and radii of a two-dimensional manifold. In the Euclidean case, the system is $\frac{\partial r_i }{\partial t} = -K_i * r_i$. However, this can lead to every radius shrinking to zero. We thus use a normalized system, $\frac{\partial r_i }{\partial t} = (\bar{K} - K_i) * r_i$ where $\bar{K}$ is the average curvature. \newline
 
 conformal deformation
 
@@ -81,9 +80,9 @@ min-max procedure
 
 negative triangles
 
-\textbf{Newton's Method}: A method for finding the roots of a function. For real-valued functions on $\mathbb{R}$, the n-th step of Newton's Method approximates a root from the previous step as $x_n = x_{n-1} - \frac{f(x_{n-1})}{f'(x_{n-1})}$. That is, we determine the equation of the tangent line at $x_{n-1}$, then set $x_n$ to be the x-intercept of this line. \newline
+\hangindent=1.0cm \textbf{Newton's Method}: A method for finding the roots of a function. For real-valued functions on $\mathbb{R}$, the n-th step of Newton's Method approximates a root from the previous step as $x_n = x_{n-1} - \frac{f(x_{n-1})}{f'(x_{n-1})}$. That is, we determine the equation of the tangent line at $x_{n-1}$, then set $x_n$ to be the x-intercept of this line. \newline
 
-\noindent We are trying to optimize real-valued functions on $\mathbb{R}^m$, so we want to use Newton's Method to find the points at which $Df(\mathbf{x})$, the gradient of a function $f$, is the zero-vector. We therefore need the second derivative, $D^2f(\mathbf{x})$, called the hessian which is an $m$ by $m$ matrix. So a step of the method yields $\mathbf{x_n} = \mathbf{x_{n-1}} - [D^2f(\mathbf{x_{n-1}})]^{-1} * Df(\mathbf{x_{n-1}})$. \newline
+\hangafter=0 \hangindent=1.0cm \noindent We are trying to optimize real-valued functions on $\mathbb{R}^m$, so we want to use Newton's Method to find the points at which $Df(\mathbf{x})$, the gradient of a function $f$, is the zero-vector. We therefore need the second derivative, $D^2f(\mathbf{x})$, called the hessian which is an $m$ by $m$ matrix. So a step of the method yields $\mathbf{x_n} = \mathbf{x_{n-1}} - [D^2f(\mathbf{x_{n-1}})]^{-1} * Df(\mathbf{x_{n-1}})$. \newline
 
 nonconvex hinge
 
@@ -93,7 +92,16 @@ Pachner move
 
 power diagram (or cell)
 
-Runga-Kutta
+\hangindent=1.0cm \textbf{Runga-Kutta}: Runga-Kutta is a numerical approximation method for a system of ordinary differential equations. It is considered superior to Euler's Method as the size of its error term is orders of magnitude smaller. Given a differential equation $x' = f(t, x)$, a point $(t_n, x_n)$, and a stepsize $h$ the next step $(t_{n+1}, x_{n+1})$ is calculated as follows:
+
+	\begin{enumerate}
+		\item Set $k_1 = f(t_n, x_n)$
+		\item Set $k_2 = f(t_n + \frac{h}{2}, x_n + \frac{h*k_1}{2})$
+		\item Set $k_3 = f(t_n + \frac{h}{2}, x_n + \frac{h*k_2}{2})$
+		\item Set $k_4 = f(t_n + h, x_n + h*k_3)$
+	\end{enumerate}
+\hangafter=0 \hangindent=1.0cm \noindent Then $t_{n+1} = t_n + h$ and $x_{n+1} = x_n + \frac{h}{6}(k_1 + 2*k_2 + 2*k_3 + k_4)$
+\newline
 
 Schl\"{a}fli formula
 
