@@ -1,15 +1,20 @@
+%\input{tcilatex}
+
 
 \documentclass{article}
+\usepackage{amsfonts}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{amsmath}
 \usepackage{amssymb}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{MaxMatrixCols}{10}
 %TCIDATA{OutputFilter=LATEX.DLL}
 %TCIDATA{Version=5.00.0.2606}
 %TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
 %TCIDATA{BibliographyScheme=Manual}
 %TCIDATA{Created=Monday, February 15, 2010 10:13:06}
-%TCIDATA{LastRevised=Monday, February 15, 2010 11:14:02}
+%TCIDATA{LastRevised=Friday, February 26, 2010 11:40:07}
 %TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
 %TCIDATA{<META NAME="DocumentShell" CONTENT="Standard LaTeX\Blank - Standard LaTeX Article">}
 %TCIDATA{Language=American English}
@@ -37,7 +42,7 @@
 \newtheorem{solution}[theorem]{Solution}
 \newtheorem{summary}[theorem]{Summary}
 \newenvironment{proof}[1][Proof]{\noindent\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
-%\input{tcilatex}
+\input{tcilatex}
 
 \begin{document}
 
@@ -48,7 +53,13 @@ Center of a simplex
 
 circle and sphere packing \newline
 
-\hangindent=1.0cm \textbf{combinatorial Ricci-flow:} A partial differential equation on the curvatures and radii of a two-dimensional manifold. In the Euclidean case, the system is $\frac{\partial r_i }{\partial t} = -K_i * r_i$. However, this can lead to every radius shrinking to zero. We thus use a normalized system, $\frac{\partial r_i }{\partial t} = (\bar{K} - K_i) * r_i$ where $\bar{K}$ is the average curvature. \newline
+\hangindent=1.0cm \textbf{combinatorial Ricci-flow:} A partial differential
+equation on radii of a piecewise flat ????decorated two-dimensional
+manifold, originally due to Chow-Luo. In the Euclidean (background) case,
+the system is $\frac{dr_{i}}{dt}=-K_{i}\ast r_{i}$. Often, we use a
+normalized version, $\frac{dr_{i}}{dt}=(\bar{K}-K_{i})\ast r_{i}$ where $%
+\bar{K}$ is the average curvature (which is a topological constant related
+to the Euler characteristic). \newline
 
 conformal deformation
 
@@ -80,9 +91,22 @@ min-max procedure
 
 negative triangles
 
-\hangindent=1.0cm \textbf{Newton's Method}: A method for finding the roots of a function. For real-valued functions on $\mathbb{R}$, the n-th step of Newton's Method approximates a root from the previous step as $x_n = x_{n-1} - \frac{f(x_{n-1})}{f'(x_{n-1})}$. That is, we determine the equation of the tangent line at $x_{n-1}$, then set $x_n$ to be the x-intercept of this line. \newline
+\hangindent=1.0cm \textbf{Newton's Method}: A method for finding the zeroes
+of a function. For real-valued functions on $\mathbb{R}$, the n-th step of
+Newton's Method approximates a zero from the previous step as $x_{n}=x_{n-1}-%
+\frac{f(x_{n-1})}{f^{\prime }(x_{n-1})}$. That is, we determine the equation
+of the tangent line at $x_{n-1}$, then set $x_{n}$ to be the x-intercept of
+this line.\newline
 
-\hangafter=0 \hangindent=1.0cm \noindent We are trying to optimize real-valued functions on $\mathbb{R}^m$, so we want to use Newton's Method to find the points at which $Df(\mathbf{x})$, the gradient of a function $f$, is the zero-vector. We therefore need the second derivative, $D^2f(\mathbf{x})$, called the hessian which is an $m$ by $m$ matrix. So a step of the method yields $\mathbf{x_n} = \mathbf{x_{n-1}} - [D^2f(\mathbf{x_{n-1}})]^{-1} * Df(\mathbf{x_{n-1}})$. \newline
+\hangafter=0 \hangindent=1.0cm \noindent We often want to optimize
+real-valued functions on $\mathbb{R}^{m}$, so we want to use Newton's Method
+to find the points at which $Df(\mathbf{x})$, the gradient of a function $f$%
+, is the zero-vector. We therefore need the second derivative, $D^{2}f(%
+\mathbf{x})$, called the Hessian which is an $m$ by $m$ matrix. So a step of
+the method yields $\mathbf{x_{n}}=\mathbf{x_{n-1}}-[D^{2}f(\mathbf{x_{n-1}}%
+)]^{-1}\ast Df(\mathbf{x_{n-1}})$. Note: we generally do not compute the
+inverse matrix to solve, but use another method such as Gaussian elimination.%
+\newline
 
 nonconvex hinge
 
@@ -92,16 +116,25 @@ Pachner move
 
 power diagram (or cell)
 
-\hangindent=1.0cm \textbf{Runga-Kutta}: Runga-Kutta is a numerical approximation method for a system of ordinary differential equations. It is considered superior to Euler's Method as the size of its error term is orders of magnitude smaller. Given a differential equation $x' = f(t, x)$, a point $(t_n, x_n)$, and a stepsize $h$ the next step $(t_{n+1}, x_{n+1})$ is calculated as follows:
+\hangindent=1.0cm \textbf{Runge-Kutta}: Runge-Kutta is a numerical
+approximation method for a system of ordinary differential equations. It is
+considered superior to Euler's Method as the size of its error term is
+orders of magnitude smaller. Given a differential equation $x^{\prime
+}=f(t,x)$, a point $(t_{n},x_{n})$, and a stepsize $h$ the next step $%
+(t_{n+1},x_{n+1})$ is calculated as follows:
 
-	\begin{enumerate}
-		\item Set $k_1 = f(t_n, x_n)$
-		\item Set $k_2 = f(t_n + \frac{h}{2}, x_n + \frac{h*k_1}{2})$
-		\item Set $k_3 = f(t_n + \frac{h}{2}, x_n + \frac{h*k_2}{2})$
-		\item Set $k_4 = f(t_n + h, x_n + h*k_3)$
-	\end{enumerate}
-\hangafter=0 \hangindent=1.0cm \noindent Then $t_{n+1} = t_n + h$ and $x_{n+1} = x_n + \frac{h}{6}(k_1 + 2*k_2 + 2*k_3 + k_4)$
-\newline
+\begin{enumerate}
+\item Set $k_1 = f(t_n, x_n)$ 
+
+\item Set $k_2 = f(t_n + \frac{h}{2}, x_n + \frac{h*k_1}{2})$ 
+
+\item Set $k_3 = f(t_n + \frac{h}{2}, x_n + \frac{h*k_2}{2})$ 
+
+\item Set $k_4 = f(t_n + h, x_n + h*k_3)$ 
+\end{enumerate}
+
+\hangafter=0 \hangindent=1.0cm \noindent Then $t_{n+1}=t_{n}+h$ and $%
+x_{n+1}=x_{n}+\frac{h}{6}(k_{1}+2\ast k_{2}+2\ast k_{3}+k_{4}).$ \newline
 
 Schl\"{a}fli formula
 
@@ -121,7 +154,7 @@ Yamabe Constant
 
 Yamabe Flow
 
-\bigskip 
+\bigskip
 
 \subsection{Quantities}
 
@@ -151,59 +184,59 @@ $\beta _{ij,kl}$ dihedral angle (at an edge in a tetrahedron)
 $\alpha _{i,jkl}$ solid angle
 
 $h_{ij,k}$ edge height%
-\[
-h_{ij,k}=\frac{d_{ik}-d_{ij}\cos \gamma _{i,jk}}{\sin \gamma _{i,jk}}
-\]
+\begin{equation*}
+h_{ij,k}=\frac{d_{ik}-d_{ij}\cos \gamma _{i,jk}}{\sin \gamma _{i,jk}} 
+\end{equation*}
 
 $h_{ijk,l}$ face height%
-\[
-h_{ijk,l}=\frac{h_{ij,l}-h_{ij,k}\cos \beta _{ij,kl}}{\sin \beta _{ij,kl}}
-\]
+\begin{equation*}
+h_{ijk,l}=\frac{h_{ij,l}-h_{ij,k}\cos \beta _{ij,kl}}{\sin \beta _{ij,kl}} 
+\end{equation*}
 
 $A_{ij,kl}$ dual area (of an edge in a tetrahedron)%
-\[
+\begin{equation*}
 A_{ij,kl}=\frac{1}{2}\left( h_{ij,k}h_{ijk,l}+h_{ij,l}h_{ijl,k}\right) 
-\]
+\end{equation*}
 
 $l_{ij}^{\ast }$ dual length (2D) or dual area (3D) 
 \begin{eqnarray*}
 2D &:&l_{ij}^{\ast }=h_{ij,k}+h_{ij,l} \\
-3D &:&l_{ij}^{\ast }=\sum_{\substack{ k,l\text{ s.t.} \\ \left\{
+3D &:&l_{ij}^{\ast }=\sum_{\substack{ k,l\text{ s.t.}  \\ \left\{
 i,j,k,l\right\} \in \mathcal{T}}}A_{ij,kl}
 \end{eqnarray*}
 
 $K_{i}$ vertex curvature (scalar curvature)%
 \begin{eqnarray*}
-2D &:&K_{i}=2\pi -\sum_{\substack{ j,k\text{ s.t.} \\ \left\{ i,j,k\right\}
+2D &:&K_{i}=2\pi -\sum_{\substack{ j,k\text{ s.t.}  \\ \left\{ i,j,k\right\}
 \in \mathcal{T}}}\gamma _{i,jk} \\
-3D &:&K_{i}=\sum_{\substack{ j\text{ s.t.} \\ \left\{ i,j\right\} \in E}}%
-\left( 2\pi -\sum_{\substack{ k,l\text{ s.t.} \\ \left\{ i,j,k,l\right\} \in 
-\mathcal{T}}}\beta _{ij,kl}\right) d_{ij}
+3D &:&K_{i}=\sum_{\substack{ j\text{ s.t.}  \\ \left\{ i,j\right\} \in E}}%
+\left( 2\pi -\sum_{\substack{ k,l\text{ s.t.}  \\ \left\{ i,j,k,l\right\}
+\in \mathcal{T}}}\beta _{ij,kl}\right) d_{ij}
 \end{eqnarray*}
 
 $K_{ij}$ edge curvature (3D)%
-\[
-K_{ij}=\left( 2\pi -\sum_{\substack{ k,l\text{ s.t.} \\ \left\{
-i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij}
-\]
+\begin{equation*}
+K_{ij}=\left( 2\pi -\sum_{\substack{ k,l\text{ s.t.}  \\ \left\{
+i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij} 
+\end{equation*}
 
 $\lambda $ Einstein Constant%
-\[
+\begin{equation*}
 \lambda =\frac{EHR\left( M,\mathcal{T},l\right) }{3\mathcal{V}\left( M,%
-\mathcal{T},l\right) }
-\]
+\mathcal{T},l\right) } 
+\end{equation*}
 
 $EHR\left( M,\mathcal{T},l\right) $ (3D)%
 \begin{eqnarray*}
-EHR\left( M,\mathcal{T},l\right)  &=&\sum_{i}K_{i} \\
-&=&\sum_{\substack{ i,j\text{ s.t.} \\ \left\{ i,j\right\} \in E}}K_{ij}
+EHR\left( M,\mathcal{T},l\right) &=&\sum_{i}K_{i} \\
+&=&\sum_{\substack{ i,j\text{ s.t.}  \\ \left\{ i,j\right\} \in E}}K_{ij}
 \end{eqnarray*}
 
 $V_{i}$ dual volume of a vertex%
-\[
-V_{i}=\sum_{\substack{ j,k,l\text{ s.t.} \\ \left\{ i,j,k,l\right\} \in 
-\mathcal{T}}}h_{ijk,l}A_{ijk}
-\]
+\begin{equation*}
+V_{i}=\sum_{\substack{ j,k,l\text{ s.t.}  \\ \left\{ i,j,k,l\right\} \in 
+\mathcal{T}}}h_{ijk,l}A_{ijk} 
+\end{equation*}
 
 $\mathcal{V}$ total volume
 
