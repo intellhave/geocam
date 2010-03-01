@@ -1,4 +1,4 @@
-%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{Version=5.00.0.2552}
 %TCIDATA{LaTeXparent=0,0,geocam.tex}
                       
 %TCIDATA{ChildDefaults=chapter:1,page:1}
@@ -8,12 +8,13 @@
 
 \section{Introduction}
 
-Geoquants were developed by Alex Heniges, Joeseph Thomas, and Kurtis Norwood
-during the spring of 2009 as the primary component in streamlining the
-execution of the code during extended optimization routines. \ Geoquants
-perform, organize and optimize the calculations of the geometric quantities
-involved in the project through the use of an invalidation tree to prevent
-uneccesary calcuations.\bigskip
+Geoquants were developed by Alex Henniges, Joeseph Thomas, and Kurtis
+Norwood during the spring of 2009 as the primary component in streamlining
+the execution of the code during extended optimization routines. The purpose
+is to provide easy access to calculations of geometric quantities without
+requiring extraneous calculations of those quantities while they remain the
+same.\ Geoquants achieve this through the use of an invalidation tree to
+prevent uneccesary calcuations.\bigskip 
 
 \section{General Properties}
 
@@ -29,40 +30,58 @@ geoquants output a quantity of geometric nature. \
 
 \subsubsection{Input/Output}
 
-Geoquants recieve as input either topological data (vertex, face,
-tetrahedron), geometric information (radius, length) or both. \ All
-geoquants output double precision values ???. \ The following functions are
-available to all geoquants:
+Geoquants recieve as input topological data (vertex, face, tetrahedron) \
+which serves as a unique identifier among all such quantities of the same
+type across the triangulation. The topological data is composed of zero or
+more of each dimension of simplex. The following functions are available to
+all geoquants:
 
 \begin{itemize}
 \item ExampleGeoQuant::At(input)
 \end{itemize}
 
-\qquad \qquad At accesses ExampleGeoQuant providing access to all its public
-functions.
+\qquad \qquad At returns an instance of the ExampleGeoQuant identified by
+input.
 
 \begin{itemize}
 \item Geoquant::valueAt(input)
 \end{itemize}
 
-\qquad \qquad valueAt returns the value of the geoquant.
+\qquad \qquad valueAt returns the value of the geoquant identified by input
+as a double-precision number.
 
 \begin{itemize}
-\item setValue ???
+\item getValue()
+
+\ getValue returns the value of an already obtained geoquant.
+
+\item setValue(value)
+
+\ setValue will set the value of this geoquant to the specified value and
+subsequently invalidate all dependent geoquants. 
 \end{itemize}
 
 \subsubsection{Invalidation}
 
-Each geoquant contains information about the validity of all subordinate
-geoquants (other geoquants used in its calulation). \ Every time a geoquant
-is changed, all other geoquants that use the changed geoquant are notified
-that they are no longer valid and must be recalculated when called. \ This
-invalidation procedure is carried out by each geoquant using a list of all
-subordinate geoquants. \ Whenever a geoquant is called, it checks the
-validity of these subordinates before returning the value of the geoquant
-stored in memory. \ If any of these parents have changed, the geoquant is
-recalculated and a notification is sent to all of its dependant geoquants
-that one of their parents has changed.
+The value of a geoquant is obtained in one of two ways: it is set by the
+user or it is calculated from other geoquants. In the situation where a
+geoquant B is calculated in part from the value of geoquant A, we refer to A
+as the parent and B as the dependent. When the value of a parent changes,
+the parent notifies all of its dependents that their own value is no longer
+valid. Once a request for the value of an invalid geoquant is made, that
+geoquant requests the value of each of its parents in order to perform the
+recalculation of its own value.
+
+TO BE\ REMOVED(??): Each geoquant contains information about the validity of
+all subordinate geoquants (other geoquants used in its calulation). \ Every
+time a geoquant is changed, all other geoquants that use the changed
+geoquant are notified that they are no longer valid and must be recalculated
+when called. \ This invalidation procedure is carried out by each geoquant
+using a list of all subordinate geoquants. \ Whenever a geoquant is called,
+it checks the validity of these subordinates before returning the value of
+the geoquant stored in memory. \ If any of these parents have changed, the
+geoquant is recalculated and a notification is sent to all of its dependant
+geoquants that one of their parents has changed.
 
 \section{Geoquant Catalog}
 
@@ -97,7 +116,7 @@ CurvaturePartial( Vertex v, Vertex w )
 
 \paragraph{Calculation}
 
-CurvaturePartial(v,w) returns the following partial derifative:%
+CurvaturePartial(v,w) returns the following partial derivative:%
 \begin{equation*}
 CurvaturePartial(v,w)=\frac{\partial K_{v}}{\partial \log r_{w}}.
 \end{equation*}
@@ -128,7 +147,7 @@ where $\theta _{v,t}$ is the angle at vertex $v$ in triangle $t$. \
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: Every angle incident on vertex v.
 
 \subsection{Curvature3D}
 
@@ -148,7 +167,8 @@ i,j\right\}  \\ \text{is an edge}}}K_{ij}d_{ij}.
 
 \paragraph{Invalidation}
 
-\bigskip
+Parents: For every edge of v, the sectional curvature of that edge and its
+partial edge with respect to v.\bigskip 
 
 \subsection{DihedralAngle}
 
@@ -175,9 +195,10 @@ have that:%
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: The face angles incident on vertex $v=i$ and with face $%
+f\in t$.
 
-\subsection{DihedralAngleSum}
+\section{DihedralAngleSum}
 
 \paragraph{Input}
 
