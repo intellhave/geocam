@@ -1,0 +1,398 @@
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=0,0,geocam.tex}
+                      
+%TCIDATA{ChildDefaults=chapter:1,page:1}
+
+
+\chapter{Geoquants}
+
+\section{Introduction}
+
+Geoquants were developed by Alex Heniges, Joeseph Thomas, and Kurtis Norwood
+during the spring of 2009 as the primary component in streamlining the
+execution of the code during extended optimization routines. \ Geoquants
+perform, organize and optimize the calculations of the geometric quantities
+involved in the project through the use of an invalidation tree to prevent
+uneccesary calcuations.\bigskip
+
+\section{General Properties}
+
+Each geoquant contains a calculation of a quantity, invalidation
+information, and input/output functionality. \ Some of these components are
+specific to each geoquant while some are common to all geoquants.
+
+\subsubsection{Calculation}
+
+Each geoquant has a unique calculation yielding a geometric quantity. \ In
+general there are no commonalities among the calculations except that all
+geoquants output a quantity of geometric nature. \ 
+
+\subsubsection{Input/Output}
+
+Geoquants recieve as input either topological data (vertex, face,
+tetrahedron), geometric information (radius, length) or both. \ All
+geoquants output double precision values ???. \ The following functions are
+available to all geoquants:
+
+\begin{itemize}
+\item ExampleGeoQuant::At(input)
+\end{itemize}
+
+\qquad \qquad At accesses ExampleGeoQuant providing access to all its public
+functions.
+
+\begin{itemize}
+\item Geoquant::valueAt(input)
+\end{itemize}
+
+\qquad \qquad valueAt returns the value of the geoquant.
+
+\begin{itemize}
+\item setValue ???
+\end{itemize}
+
+\subsubsection{Invalidation}
+
+Each geoquant contains information about the validity of all subordinate
+geoquants (other geoquants used in its calulation). \ Every time a geoquant
+is changed, all other geoquants that use the changed geoquant are notified
+that they are no longer valid and must be recalculated when called. \ This
+invalidation procedure is carried out by each geoquant using a list of all
+subordinate geoquants. \ Whenever a geoquant is called, it checks the
+validity of these subordinates before returning the value of the geoquant
+stored in memory. \ If any of these parents have changed, the geoquant is
+recalculated and a notification is sent to all of its dependant geoquants
+that one of their parents has changed.
+
+\section{Geoquant Catalog}
+
+\subsection{Area}
+
+\paragraph{Input}
+
+Area( Face f )
+
+\paragraph{Calculation}
+
+Area returns the area of a triangular face (in a triangulation). \ The
+calculation is done using Heron's formula which takes as inputs the lengths
+of the sides of the triangle.%
+\begin{equation*}
+A=\sqrt{s\left( s-a\right) \left( s-b\right) \left( s-c\right) }
+\end{equation*}%
+where%
+\begin{equation*}
+s=\frac{a+b+c}{2}.
+\end{equation*}
+
+\paragraph{Invalidation}
+
+Parents: \ all lengths of edges in the input triangle.
+
+\subsection{CurvaturePartial}
+
+\paragraph{Input}
+
+CurvaturePartial( Vertex v, Vertex w )
+
+\paragraph{Calculation}
+
+CurvaturePartial(v,w) returns the following partial derifative:%
+\begin{equation*}
+CurvaturePartial(v,w)=\frac{\partial K_{v}}{\partial \log r_{w}}.
+\end{equation*}
+
+The calculation of $CurvaturePartial(v,w)$ differes depending on the
+combintorial relationship between $v$ and $w$. \ See ??? for more
+information.
+
+\paragraph{Invalidation}
+
+YIKES!!!
+
+\subsection{Curvature2D}
+
+\paragraph{Input}
+
+Curvature2D( Vertex v )
+
+\paragraph{Calculation}
+
+Curvature2D calculates the discrete curvature at a vertex in a two
+dimensional manifold. \ The calculation is done by:%
+\begin{equation*}
+Curvature2D\left( v\right) =2\pi -\sum\limits_{\substack{ all\text{ }%
+triangles\text{ }t  \\ incident\text{ }to\text{ }v}}\theta _{v,t}
+\end{equation*}%
+where $\theta _{v,t}$ is the angle at vertex $v$ in triangle $t$. \ 
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{Curvature3D}
+
+\paragraph{Input}
+
+Curvature3D( Vertex v )
+
+\paragraph{Calculation}
+
+Curvature3D calculates the curvature at a vertex in a three dimensional
+manifold. \ If we let $K_{ij}$ be the secional curvature at an edge $\left\{
+i,j\right\} $ and let vertex $v$ correspond to $i$, then%
+\begin{equation*}
+Curvature3D\left( v\right) =\sum\limits_{\substack{ j\text{ s.t. }\left\{
+i,j\right\}  \\ \text{is an edge}}}K_{ij}d_{ij}.
+\end{equation*}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{DihedralAngle}
+
+\paragraph{Input}
+
+DihedralAngle( Edge e, Tetra t )
+
+\paragraph{Calculation}
+
+The dihedral angle of an edge in a tetrahedron is calculated using the
+spherical law of cosines. \ Given a geometrically determined tetrahedron,
+the face angles can be computed. \ At a vertex of the tetrahedron, the face
+angles correspond to the sides lengths of a spherical triangle and the
+dihedral angles correspond to the angles of the spherical triangle. \ If we
+denote the dihedral angle at edge $e=\left\{ i,j\right\} $ in tetrahedron $%
+t=\left\{ i,j,k,l\right\} $ by $\beta _{ij,kl}$, and denote the face angle
+at vertex $v=i$ of triangle $\left\{ i,j,k\right\} $ by $\gamma _{i,jk}$ we
+have that:%
+\begin{equation*}
+\beta _{ij,kl}=\arccos \left( \frac{\cos \left( \gamma _{i,kl}\right) -\cos
+\left( \gamma _{i,jk}\right) \cos \left( \gamma _{i,jl}\right) }{\sin \left(
+\gamma _{i,jk}\right) \sin \left( \gamma _{i,jl}\right) }\right)
+\end{equation*}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{DihedralAngleSum}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{DualArea}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{DualAreaSegment}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{EdgeHeight}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{EHRPartial}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{EHRSecondPartial}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{Eta}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{EuclideanAngle}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{FaceHeight}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{Length}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{PartialEdge}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{Radius}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{SectionalCurvature}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{TotalVolumePartial}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{TotalCurvature}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{TotalVolume}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{Volume}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{VolumeLengthPartial}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{VolumeLengthTetraPartial}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{VolumePartial}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{VolumePartialSum}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
+
+\subsection{VolumeSecondPartial}
+
+\paragraph{Input}
+
+\paragraph{Calculation}
+
+\paragraph{Invalidation}
+
+\bigskip
