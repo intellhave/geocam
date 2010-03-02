@@ -1,0 +1,167 @@
+\documentclass{amsart}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{amstext}
+\usepackage{eucal}
+\usepackage{verbatim}
+\usepackage{hyperref}
+\setcounter{MaxMatrixCols}{30}
+
+\providecommand{\U}[1]{\protect\rule{.1in}{.1in}}
+
+\newtheorem{theorem}{Theorem}
+\theoremstyle{plain}
+\newtheorem{acknowledgement}{Acknowledgement}
+\newtheorem{algorithm}{Algorithm}
+\newtheorem{axiom}{Axiom}
+\newtheorem{case}{Case}
+\newtheorem{claim}{Claim}
+\newtheorem{conclusion}{Conclusion}
+\newtheorem{condition}{Condition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{exercise}{Exercise}
+\newtheorem{lemma}{Lemma}
+\newtheorem{notation}{Notation}
+\newtheorem{problem}{Problem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newtheorem{solution}{Solution}
+\newtheorem{summary}{Summary}
+\numberwithin{equation}{section}
+
+\title{Sample Preamble}
+\author{Andrea Young}
+
+\begin{document}
+\maketitle
+
+A variety of different functions have been established in C++ in order to expand our research.  One such function allows us to load a Lutz format triangulation, from \url{http://www.math.tu-berlin.de/diskregeom/stellar/} into the code. First a file is created to store the triangulation.\newline
+
+\begin{verbatim}
+//Store Lutz format triangulation in a file:
+char filename[] = "Data/3DManifolds/LutzFormat/manifold_3_7_1.txt";
+
+\end{verbatim} 
+
+\noindent Another file will be created to store the standard format of the triangulation.\newline
+ 
+\begin{verbatim}
+//Create file to store standard format triangulation:
+char modified[] = "Data/3DManifolds/StandardFormat/manifold_3_7_1.txt";
+
+\end{verbatim} 
+
+\noindent Once the Lutz triangulation is loaded it is necessary to convert it to standard format.  This is done by calling the function \verb=makeTriangulationFile= in the case of 2D triangulations and \verb=make3DTriangulationFile= in the case of 3D triangulations.(taken from wiki practicum)\newline
+
+\begin{verbatim}
+// Convert the tetrahedron written in Lutz format to a file in standard format:
+makeTriangulationFile("./tetra_lutz.txt", "./tetra_standard.txt");
+
+// Now read in the triangulation from standard format:
+readTriangulationFile("./tetra_standard.txt");
+
+\end{verbatim} 
+
+Now that the standard format triangulation is loaded into the code it is possible to find the number of vertices, edges and faces using the Triangulation class.\newline
+
+\begin{verbatim}
+//Determine the number of vertices edges and faces:
+int vertSize = Triangulation::vertexTable.size();
+int edgeSize = Triangulation::edgeTable.size();
+int faceSize = Triangulation::faceTable.size();
+
+\end{verbatim} 
+
+\noindent Using the number of vertices, edges, and faces it is possible to determine the Euler Characteristics.\newline
+
+\begin{verbatim}
+int EulerCharacteristic = vertSize - edgeSize + faceSize;
+
+\end{verbatim} 
+
+\noindent It is also possible to determine the local vertices, edges, or faces using commands from the triangulation class such as \verb=Triangulation::faceTable[i].getLocalEdges()=. Here the local faces of edge \verb=i= will be determined and stored in a pointer as a vector. \newline
+
+\begin{verbatim}
+//Vector to store local faces:
+vector <int>* LF:
+
+//For loop to iterate over all edges of triangulation:
+for(int i = 1; i <= edgeSize; i++) {
+LF = Triangulation::edgeTable[i].getLocalFaces();
+printf("Faces sharing edge %d are:\n", i);
+//for loop to print out each local face that shares the edge i:
+for (int n = 0; n < (*(LF)).size(); n++) {
+printf("%d\n", LF -> at(n));}
+}
+
+\end{verbatim} 
+
+\noindent This prints out the two faces that share edge \verb=i=. The two faces that share the given edge, \verb=i=, are stored in the vector \verb=LF=. \newline
+
+Two other important variables in a triangulation are radii and etas.  It is possible to retrieve the radius of a triangulation at a given vertex.  It is also possible to set the value of the radius.  In this instance the radius will be set to be 2 times the vertex simplex as represented by \verb=j=. The value of the radius will then be retrieved using \verb=valueAt=. \newline
+
+\begin{verbatim}
+//The for loop iterates over all vertices:
+for(int j = 1; j <= vertSize; j++){
+//Sets value of radius at vertex j:
+Radius::At(Triangulation::vertexTable[j]) -> setValue(2 * j);
+//Use valueAt to retrieve value of radius:
+printf("Radius at vertex %d is: %f\n", j, Radius::valueAt(Triangulation::vertexTable[j]));
+}
+
+\end{verbatim} 
+\noindent Although this is effective it is possible that the vertices are stored with simplices 11 through 35 as opposed to 1 through 25.  This would be a problem as the for loop begins at \verb=j==\verb=1=. If the first vertex was not until \verb=j==\verb=11= the first 10 iterations of the for loop would be using information from an unknown location in memory.  The calculated radius would then be invalidated and the for loop would not produce the desired results. \newline
+
+\noindent In order to work around this problem there is a map of the edges, faces, and vertices. The map iterates over all of the edges, faces, or vertices of the given triangulation. \newline
+
+\begin{verbatim}
+//Each map iterates over the given triangulation characteristic:
+map<int, Vertex>::iterator vit;
+map<int, Edge>::iterator eit;
+
+\end{verbatim} 
+
+\noindent In the case of \verb=map<int, Face>::iterator fit;= the first entry of the map, \verb=int=, stores the serial number of the face.  The second entry of the map, \verb=Face=, stores the actual face of the triangulation. \newline
+
+\noindent A more effective way of accomplishing the same task will be applied to determine the values of etas. \newline
+
+\begin{verbatim}             
+int k=1;
+for(eit=Triangulation::edgeTable.begin();eit!=Triangulation::edgeTable.end();eit++,k++){
+//The actual edge of the triangle is used to set the value of Eta:
+Eta::At(eit->second)->setValue(2 * k);
+printf("Eta at edge %d is: %f\n", eit->first, Eta::valueAt(eit->second));
+}
+
+\end{verbatim} 
+
+By being able to set and retrieve values of the radii and etas of any given triangulation these values can be implemented to calculate quantities such as edge lengths.  In this instance the length of the edges of the triangulation will be calculated using the formula \[l_{ij}^2 = r_i^2 + r_j^2 + 2r_i r_j \eta_{ij}.\] \newline
+
+\begin{verbatim}
+//Vector to store local vertices:
+Vector <int>* LV;
+for(eit = Triangulation::edgeTable.begin();eit!=Triangulation::edgeTable.end();eit++){
+double Etaij;
+LV = (eit -> second).getLocalVertices();
+Etaij = Eta::valueAt(eit -> second);
+double ri;
+double rj;
+double temp;
+ri = Radius::valueAt(Triangulation::vertexTable[LV -> at(0)]);
+rj = Radius::valueAt(Triangulation::vertexTable[LV -> at(1)]);
+temp = (ri * ri) + (rj *  rj) + (2 * ri * rj * Etaij);
+temp = sqrt(temp);
+printf("Length at edge %d is: %f\n", eit -> first, temp);
+printf("Geoquant length is: %f\n", Length::valueAt(eit -> second));
+}
+
+\end{verbatim}
+
+\end{document}
