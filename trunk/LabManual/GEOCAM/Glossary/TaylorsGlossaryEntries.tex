@@ -1,0 +1,51 @@
+\documentclass{amsart}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{amstext}
+\usepackage{eucal}
+\usepackage{verbatim}
+\setcounter{MaxMatrixCols}{30}
+
+\providecommand{\U}[1]{\protect\rule{.1in}{.1in}}
+
+\newtheorem{theorem}{Theorem}
+\theoremstyle{plain}
+\newtheorem{acknowledgement}{Acknowledgement}
+\newtheorem{algorithm}{Algorithm}
+\newtheorem{axiom}{Axiom}
+\newtheorem{case}{Case}
+\newtheorem{claim}{Claim}
+\newtheorem{conclusion}{Conclusion}
+\newtheorem{condition}{Condition}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{corollary}{Corollary}
+\newtheorem{criterion}{Criterion}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{exercise}{Exercise}
+\newtheorem{lemma}{Lemma}
+\newtheorem{notation}{Notation}
+\newtheorem{problem}{Problem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+\newtheorem{solution}{Solution}
+\newtheorem{summary}{Summary}
+\numberwithin{equation}{section}
+
+\title{Sample Preamble}
+\author{Andrea Young}
+
+\begin{document}
+\maketitle
+
+Circle and Sphere Packing --- Circle packing is an arrangement of circles such that no two circles overlap and all circles are mutually tangent to one another.  In this instance circle packing is used to assign lengths to triangle edges.  Each vertex functions as the origin of a circle, providing each vertex with a radius as determined by circle packing.  Therefore \[l_{ij} = r_i+r_j.\]  The law of cosines can also be implemented to determine the length of an edge as \[l_{ij}^2 = r_i^2+r_j^2+2r_{ij}\cos(\theta),\] where $\theta$ is the angle opposite the edge of length $l$. Circle packing guarantees that the lengths satisfy the triangle inequality due to circle tangency.  Similarly sphere packing is an arrangement of spheres such that no two spheres overlap.  Sphere packing is most commonly used for tetrahedrons. Each vertex functions as the origin of a sphere, providing each vertex with a radius as determined by sphere packing. The radii are used to determine edge lengths of the given tetrahedron.  Sphere packing does not guarantee that the triangle inequality is satisfied.
+
+Euclidean Law of Cosines --- A triangle with angles $A$, $B$, $C$ has edges directly opposite these angles with lengths $a$, $b$, $c$ respectively. The Euclidean Law of Cosines states that \[ c^2 = a^2 + b^2 – 2ab \cos(C) \] which, rearranged is \[\cos(C) = (a^2 + b^2) / 2ab.\]  Since cosine is a bounded function the triangle inequality is violated when \[(a^2 + b^2) / 2ab > 1\] or when \[(a^2 + b^2) / 2ab < -1.\]
+
+Spherical Law of Cosines --- Given a unit sphere the edges and vertices of a triangle are formed by great circles intersecting on the surface. In this instance the angle $\gamma$ is directly opposite the edge of length $C$. The other edges are of lengths $A$ and $B$ respectively. The spherical law of cosines states that \[\cos(C) = \cos(A) \cos(B) + \sin(A) \sin(B) \cos(\gamma).\]
+
+
+\end{document}
