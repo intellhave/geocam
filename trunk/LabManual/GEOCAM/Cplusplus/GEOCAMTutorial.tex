@@ -1,3 +1,5 @@
+%\input{tcilatex}
+
 
 \documentclass{amsart}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -13,10 +15,9 @@
 
 \setcounter{MaxMatrixCols}{10}
 %TCIDATA{OutputFilter=Latex.dll}
-%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{Version=5.00.0.2552}
 %TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
-%TCIDATA{BibliographyScheme=Manual}
-%TCIDATA{LastRevised=Tuesday, March 02, 2010 16:19:15}
+%TCIDATA{LastRevised=Wednesday, March 03, 2010 13:54:38}
 %TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
 %TCIDATA{Language=American English}
 
@@ -44,95 +45,97 @@
 \newtheorem{solution}{Solution}
 \newtheorem{summary}{Summary}
 \numberwithin{equation}{section}
-
-\input{tcilatex}
+%\input{tcilatex}
 
 \begin{document}
 \title{GEOCAM Tutorial}
-\author{Daniel Champion, Taylor Johnson}
+\author{Daniel Champion, Taylor Johnson, Alex Henniges}
 \maketitle
 
-Welcome to the GEOCAM tutorial. \ This document will guide you through
-several of the fundamental components of the project's code. \ The code that
+Welcome to the GEOCAM tutorial. This document will guide you through
+several of the fundamental components of the project's code. The code that
 appears in this document can be found in the file tutorialcode.cpp in the
-LabManual directory. \ We recommend that the reader executes the relevant
+LabManual directory. We recommend that the reader executes the relevant
 portions of the code while reading through this document to fully utilize
 the tutorial.
 
 A myriad of functions have been created in the project in order to expand
-our research. \ To access these functions (as a developer) it is necessary
+our research. To access these functions (as a developer) it is necessary
 to add them to your project as well as provide all necessary "include"
-statements in your code. \ \texttt{tutorialcode.cpp} contains excellent
-examples of this practice. 
+statements in your code. \texttt{tutorialcode.cpp} contains excellent
+examples of this practice.
+
+\section*{Inputting a Triangulation}
 
 The first function from the project that we will use allows us to load a
-"Lutz" format triangulation. \ These triangulations are available for
+"Lutz" format triangulation. These triangulations are available for
 download at \url{http://www.math.tu-berlin.de/diskregeom/stellar/}; these
 triangulations specify only the top dimensional simplices in a
-triangulation. \ To begin, a file is created to store the triangulation.%
+triangulation. To begin, a file is created to store the triangulation.%
 \newline
 \begin{verbatim}
-//Store Lutz format triangulation in a file:
-char filename[] = "Data/3DManifolds/LutzFormat/manifold_3_7_1.txt";
+   //Store Lutz format triangulation in a file:
+   char filename[] = "Data/3DManifolds/LutzFormat/manifold_3_7_1.txt";
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 Another file will be created to store the standard format version of the
-triangulation. \ The standard format contains a list of all simplices
+triangulation. The standard format contains a list of all simplices
 (including sub-simplices) along with all "local" information for each
 simplex.\newline
 \begin{verbatim}
-//Create file to store standard format triangulation:
-char modified[] = "Data/3DManifolds/StandardFormat/manifold_3_7_1.txt";
+   //Create file to store standard format triangulation:
+   char modified[] = "Data/3DManifolds/StandardFormat/manifold_3_7_1.txt";
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 Once the Lutz triangulation is loaded it is necessary to convert it to
 standard format. In the case of 2D triangulations this is done by calling
 the function \verb|makeTriangulationFile|, in the case of 3D triangulations 
-\verb|make3DTriangulationFile| is used. \ To learn more about these
+\verb|make3DTriangulationFile| is used. To learn more about these
 functions see the wiki entry on \verb|makeTriangulationFile|.\newline
 \begin{verbatim}
-// Convert from Lutz format to standard format:
-makeTriangulationFile("./tetra_lutz.txt", "./tetra_standard.txt");
+   // Convert from Lutz format to standard format:
+   makeTriangulationFile("./tetra_lutz.txt", "./tetra_standard.txt");
  
-// Now read in the triangulation from standard format:
-readTriangulationFile("./tetra_standard.txt");
+   // Now read in the triangulation from standard format:
+   readTriangulationFile("./tetra_standard.txt");
+ 
 \end{verbatim}
 
-\bigskip 
+\section*{Triangulation Access \& Manipulation}
 
 Now that the standard format triangulation is loaded into the code it is
 possible to investigate the combinatorial properties of a triangulation. \
 As an example, we will determine and print out the number of vertices, edges
 and faces using the Triangulation class.\newline
 \begin{verbatim}
-//Determine the number of vertices edges and faces:
-int vertSize = Triangulation::vertexTable.size();
-int edgeSize = Triangulation::edgeTable.size();
-int faceSize = Triangulation::faceTable.size();
+   //Determine the number of vertices edges and faces:
+   int vertSize = Triangulation::vertexTable.size();
+   int edgeSize = Triangulation::edgeTable.size();
+   int faceSize = Triangulation::faceTable.size();
  
-printf("V = %d, E = %d, F = %d\n", vertSize, edgeSize, faceSize);
-pause("press ENTER to continue");
+   printf("V = %d, E = %d, F = %d\n", vertSize, edgeSize, faceSize);
+   pause("press ENTER to continue");
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 Using the number of vertices, edges, and faces it is possible to determine
 the Euler Characteristic of this 2D manifold.\newline
 \begin{verbatim}
-int EulerCharacteristic = vertSize - edgeSize + faceSize;
-printf("Euler Characteristic = %d\n", EulerCharacteristic);
-pause("press ENTER to continue");
+   int EulerCharacteristic = vertSize - edgeSize + faceSize;
+   printf("Euler Characteristic = %d\n", EulerCharacteristic);
+   pause("press ENTER to continue");
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 The triangulation we loaded is just the triangulation of a tetrahedron, and
 hence is topologically equivalent to a sphere (hence the Euler
-characteristic is 2). \ It is also possible to determine the local vertices,
+characteristic is 2). It is also possible to determine the local vertices,
 edges, or faces using commands from the triangulation class using a command
 such as:
 
@@ -141,44 +144,45 @@ such as:
 The next example will find the local faces of each edge in the triangulation
 by storing them as pointers to vectors. \newline
 \begin{verbatim}
-//Vector to store local faces:
-vector <int>* LF:
+   //Vector to store local faces:
+   vector <int>* LF:
  
-//For loop to iterate over all edges of triangulation:
-for(int i = 1; i <= edgeSize; i++) {
-   LF = Triangulation::edgeTable[i].getLocalFaces();
-   printf("Faces sharing edge %d are:\n", i);
-   //for loop to print out each local face that shares the edge i:
+   //For loop to iterate over all edges of triangulation:
+   for(int i = 1; i <= edgeSize; i++) {
+      LF = Triangulation::edgeTable[i].getLocalFaces();
+      printf("Faces sharing edge %d are:\n", i);
+      //for loop to print out each local face that shares the edge i:
       for (int n = 0; n < (*(LF)).size(); n++) {
-      printf("%d\n", LF -> at(n));}
+        printf("%d\n", LF -> at(n));
+      }
    }
-pause("press ENTER to continue");
+   pause("press ENTER to continue");
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 During each iteration of the code written above, the two faces that share
 edge \verb|i| are stored in the vector \verb|LF| and then printed out for
-viewing. \ The astute reader will note that since we are investigation a
+viewing. The astute reader will note that since we are investigating a
 manifold, each edge will have exactly two local faces.
 
 Two important geometric quantities that are given to a triangulation are
-radii and etas. \ For each vertex, it is possible to retrieve and set the
-value of the radius.  In the next example the radii will be set to be 2. \
-The value of the radii will then be retrieved using \verb|valueAt|. \newline
+radii and etas. For each vertex, it is possible to retrieve and set the
+value of the radius. In the next example the radii will be set to 2. The
+value of the radii will then be retrieved using \verb|valueAt|. \newline
 \begin{verbatim}
-//The for loop iterates over all vertices:
-for(int j = 1; j <= vertSize; j++){
-//Sets value of radius at vertex j:
-Radius::At(Triangulation::vertexTable[j]) -> setValue(2);
-//Use valueAt to retrieve value of a radius:
-double tempRadius = Radius::valueAt(Triangulation::vertexTable[j]);
-printf("Radius at vertex %d is: %f\n", j, tempRadius);
-}
-pause("press ENTER to continue");
+   //The for loop iterates over all vertices:
+   for(int j = 1; j <= vertSize; j++){
+     //Sets value of radius at vertex j:
+     Radius::At(Triangulation::vertexTable[j]) -> setValue(2);
+     //Use valueAt to retrieve value of a radius:
+     double tempRadius = Radius::valueAt(Triangulation::vertexTable[j]);
+     printf("Radius at vertex %d is: %f\n", j, tempRadius);
+   }
+   pause("press ENTER to continue");
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 The tetrahedron triangulation we have been using has four vertices. \
 Although in the above example the vertices are stored as the integers
@@ -191,61 +195,62 @@ In order to work around this problem we will create iterators for the edges,
 faces, and vertices. These iterators are maps that iterate over all of the
 edges, faces, or vertices of the given triangulation. \newline
 \begin{verbatim}
-//Each map iterates over the given triangulation characteristic:
-map<int, Vertex>::iterator vit;
-map<int, Edge>::iterator eit;
-pause("press ENTER to continue");
+   //Each map iterates over the given triangulation characteristic:
+   map<int, Vertex>::iterator vit;
+   map<int, Edge>::iterator eit;
+   map<int, Face>::iterator fit;
+   pause("press ENTER to continue");
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 In the case of \verb|map<int, Face>::iterator fit;| the first entry of the
-map, \verb|int|, stores the serial number of the face. The second entry of
-the map, \verb|Face|, stores the actual face of the triangulation. \ As an
-example of the use of these iterators, we will provide a "safer" way of
-accomplishing the same task of setting the radii as above.\newline
+map, \verb|int|, stores the index of the face. The second entry of the map, 
+\verb|Face|, stores the actual face of the triangulation. As an example of
+the use of these iterators, we will provide a "safer" way of accomplishing
+the same task of setting the radii as above.\newline
 \begin{verbatim}
-//We use an iterator to vary over all of the vertices:
-for(vit = Triangulation::vertexTable.begin();
-    vit != Triangulation::vertexTable.end(); vit++){
-//Sets value of radius at vertex j:
-Radius::At(vit->second)-> setValue(2);
-//Use valueAt to retrieve value of a radius:
-double tempRadius = Radius::valueAt(vit->second);
-printf("Radius at vertex %d is: %f\n", j, tempRadius);
-}
-pause("press ENTER to continue");
+   //We use an iterator to vary over all of the vertices:
+   for(vit = Triangulation::vertexTable.begin();
+       vit != Triangulation::vertexTable.end(); vit++){
+     //Sets value of radius at vertex j:
+     Radius::At(vit->second)-> setValue(2);
+     //Use valueAt to retrieve value of a radius:
+     double tempRadius = Radius::valueAt(vit->second);
+     printf("Radius at vertex %d is: %f\n", j, tempRadius);
+   }
+   pause("press ENTER to continue");
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
-Notice that we access the vertices using the code: \texttt{vit-\TEXTsymbol{>}%
+Notice that we access the vertices using the code: \texttt{vit->%
 second} instead of the lengthy code we used earlier: \texttt{%
 Triangulation::vertexTable[j]}. If we wanted to use the lengthy version
 using the iterator, we would use:
 
-\texttt{Triangulation::vertexTable[vit-\TEXTsymbol{>}first]}, where the
-fragment \texttt{vit-\TEXTsymbol{>}first }accesses the correct serial number
-for the vertex. \ 
+\texttt{Triangulation::vertexTable[vit->first]}, where the
+fragment \texttt{vit->first }accesses the correct index for the
+vertex. 
 
 Next, we will use iterators again to load the values of the etas for all of
-the edges. \ So as not to bore the reader, the code below shows how we can
-vary the values of the etas as we index through with the iterator. \ \newline
+the edges. So as not to bore the reader, the code below shows how we can
+vary the values of the etas as we index through with the iterator. \newline
 \begin{verbatim}
-int k=1;
-for(eit=Triangulation::edgeTable.begin();
-    eit!=Triangulation::edgeTable.end(); eit++, k++){
-//The actual edge of the triangle is used to set the value of Eta:
-Eta::At(eit->second)->setValue(2 * k);
-printf("Eta at edge %d is: %f\n", eit->first, Eta::valueAt(eit->second));
-}
-pause("press ENTER to continue");
+   int k=1;
+   for(eit=Triangulation::edgeTable.begin();
+       eit!=Triangulation::edgeTable.end(); eit++, k++){
+     //The actual edge of the triangle is used to set the value of Eta:
+     Eta::At(eit->second)->setValue(2 * k);
+     printf("Eta at edge %d is: %f\n", eit->first, Eta::valueAt(eit->second));
+   }
+   pause("press ENTER to continue");
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 After setting the values of the radii and etas, other geometric quantities
-can be calculated that depend on them. \ As an example, we will calculate
+can be calculated that depend on them. As an example, we will calculate
 the edge lengths using the formula:%
 \begin{equation*}
 l_{ij}^{2}=r_{i}^{2}+r_{j}^{2}+2r_{i}r_{j}\eta _{ij}.
@@ -253,42 +258,150 @@ l_{ij}^{2}=r_{i}^{2}+r_{j}^{2}+2r_{i}r_{j}\eta _{ij}.
 
 The calculation below will explicitly perform the calculation above. \
 However, this calculation has been implemented in the project as a geoquant
-and hence we will compare our calculation to the geoquant value. \ Take note
+and hence we will compare our calculation to the geoquant value. Take note
 of how the geoquant is accessed, it should remind you of how we accessed the
-radii and eta values. \ Indeed, radii and etas are also stored as geoquants
-in the project, as are all geometric quantities. \ \newline
+radii and eta values. Indeed, radii and etas are also stored as geoquants
+in the project, as are all geometric quantities. \newline
 \begin{verbatim}
-//Vector to store local vertices:
-Vector <int>* LV;
-for(eit = Triangulation::edgeTable.begin();
-    eit!=Triangulation::edgeTable.end(); eit++){
-double Etaij;
-LV = (eit -> second).getLocalVertices();
-Etaij = Eta::valueAt(eit -> second);
-double ri;
-double rj;
-double temp;
-ri = Radius::valueAt(Triangulation::vertexTable[LV -> at(0)]);
-rj = Radius::valueAt(Triangulation::vertexTable[LV -> at(1)]);
-temp = (ri * ri) + (rj *  rj) + (2 * ri * rj * Etaij);
-temp = sqrt(temp);
-printf("Length at edge %d is: %f\n", eit -> first, temp);
-printf("Geoquant length is: %f\n", Length::valueAt(eit -> second));
-}
-pause("press ENTER to continue");
+   //Vector to store local vertices:
+   Vector <int>* LV;
+   for(eit = Triangulation::edgeTable.begin();
+       eit!=Triangulation::edgeTable.end(); eit++){
+     double Etaij;
+     LV = (eit -> second).getLocalVertices();
+     Etaij = Eta::valueAt(eit -> second);
+     double ri;
+     double rj;
+     double temp;
+     ri = Radius::valueAt(Triangulation::vertexTable[LV -> at(0)]);
+     rj = Radius::valueAt(Triangulation::vertexTable[LV -> at(1)]);
+     temp = (ri * ri) + (rj *  rj) + (2 * ri * rj * Etaij);
+     temp = sqrt(temp);
+     printf("Length at edge %d is: %f\n", eit -> first, temp);
+     printf("Geoquant length is: %f\n", Length::valueAt(eit -> second));
+   }
+   pause("press ENTER to continue");
 \end{verbatim}
 
-Geoquants are the most commonly used calculations in the project. \ All
+Geoquants are the most commonly used calculations in the project. All
 geoquants can be acquired using the code:\newline
 \begin{verbatim}
-ExampleGeoquant::valueAt(vertex1, edge1, edge2,...);
+   ExampleGeoquant::valueAt(vertex1, edge1, edge2,...);
 \end{verbatim}
 
-\bigskip 
+\bigskip
 
 The objects: \texttt{vertex1, edge1, edge2,...} are different for each
 geoquant, and thus we are not able to provide the exact input in general. \
 For example, we input an edge when calculating length, however we would
-input a face when calculating area. \ 
+input a face when calculating area. 
+
+\section*{Performing Flows \& Optimizations}
+
+We are modeling triangulations because we want to learn more about them. One thing we can do is run a combinatorial Ricci flow on a triangulation.
+Assuming we have a triangulation already in the code and whose radii and etas are set, we can build an \texttt{Approximator} object to run the flow.\newline
+
+\begin{verbatim}
+   Approximator *app = new RungaApprox((sysdiffeq) AdjRicci, "r2");
+\end{verbatim}
+
+\bigskip
+
+There are a several important things we are doing with this one line. First, we are specifying that our approximator for our system of differential equations will use the RungaKutta method at each step. Another option would be Euler's method. The first parameter of our constructor is the name of a function that acts as a system of differential equations. We want to run a Ricci flow that is adjusted to prevent the radii from all shrinking to zero. The second parameter is indicating what quantities we would like our approximator to store at each step. This will become useful after our flow is complete so that we can print and view the results. In this case, we will record radii and two-dimensional curvatures.\newline
+
+At this point we are ready to run a Ricci flow on our triangulation.\newline
+
+\begin{verbatim}
+   app->run(0.0001, 0.01);
+\end{verbatim}
+
+\bigskip
+
+Once again we are specifying several things in one line. The first parameter is the precision bound. This is our ending condition. The flow will not end until the curvature at each vertex is changing by less than $0.0001$ between steps. The second paramter is the stepsize, $dt$.\newline
+
+At this point, the flow has ran, so we want to see the results. Several print functions are available to display the results. For our case, we want to call \newline
+
+\begin{verbatim}
+   printResultsStep("./Data/ODE_Result.txt", 
+                 &(app->radiiHistory), &(app->curvHistory));
+\end{verbatim}
+
+\bigskip
+
+This will print the radii and curvatures of each step to the file ODE\_Result.txt. Recall that the vectors \verb|radiiHistory| and \verb|curvHistory| are populated only because we requested that those values be recorded. \newline
+
+We are also interested in optimizing functions, in particular, functions that are defined on our triangulations. We do so by using Newton's Method to find the zeroes of the derivative. In our example, we will back away from triangulations for a moment and work with functions that are more basic. To run Newton's Method for this purpose, we need both the first and second derivative of the function we wish to optimize. When the function is of several variables, the first derivative is a gradient and the second derivative is a matrix known as a Hessian. \newline
+
+Let us try to find a local maximum for the function $f(x,y) = \sqrt{1-\frac{x^2}{4} - \frac{y^2}{9}}$. To create a \verb|NewtonsMethod| object that will find the maximum, it must have a way to calculate the gradient and Hessian at any point $(x,y)$. We can provide functions that can calculate them explicitly, or the gradient and hessian can be approximated by the \verb|NewtonsMethod| object. Let us start will the latter:\newline
+
+\begin{verbatim}
+   double ellipse(double vars[]) {
+       double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+       return sqrt(val);
+   }
+
+   .......
+   .......
+   .......
+	 
+   // Create the NewtonsMethod object, 2 variables
+   NewtonsMethod *nm = new NewtonsMethod(ellipse, 2);
+   // Build the array that holds the initial values.
+   double initial[] = {1, 1};
+   // Build the array that will hold the final solution.
+   double soln[2];
+   // Run the maximize function
+   nm->maximize(initial, soln);
+
+   // Display the results
+   printf("\nSolution: %.10f, %.10f\n", soln[0], soln[1]);
+\end{verbatim}
+
+\bigskip
+
+The function \verb|ellipse| needs to be defined somewhere in the code and this represents our function $f$. Note that it takes as a parameter an array of values. This array should represent the point at which the function is being evaluated. The function returns a \texttt{double}. The \verb|NewtonsMethod| object, \verb|nm|, is constructed by providing the function we defined above and a number that indicates the dimension of our domain. In our case, $f$ is a function on $\mathbb{R}^2$, so we pass the value $2$. The build an array that is the initial point at which we want to begin our optimization. This point can have considerable impact on the results, so choose wisely. We also create an empty array that will contain our optimal point after the function is complete. The function \verb|maximize| takes the initial and solution points and runs Newtons Method to attempt to find a maximum. \newline
+
+During the maximize step, \verb|nm| is approximating the gradient and Hessian using difference quotients. This may be the best we can do for complicated functions, but in our case we can determine the first and second derivative explicitly: \newline
+
+\begin{verbatim}
+   double ellipse(double vars[]) {
+       double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+       return sqrt(val);
+   }
+   void gradient(double vars[], double sol[]) {
+   		 double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+   		 sol[0] = (-vars[0]/4)/sqrt(val);
+   		 sol[1] = (-vars[1]/4)/sqrt(val);
+   }
+   void hessian(double vars[], double *sol[]) {
+   		double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+   		sol[0][0] = ((-1.0/4)*val - (vars[0]/16)) / pow(val, 3.0/2);
+   		sol[1][1] = ((-1.0/9)*val - (vars[1]/81)) / pow(val, 3.0/2);
+   		sol[0][1] = (-vars[0]/4)*(-vars[1]/9)*(-1) / pow(val, 3.0/2);
+   		sol[1][0] = sol[0][1];
+   }
+
+   .......
+   .......
+   .......
+	 
+   NewtonsMethod *nm = new NewtonsMethod(ellipse, gradient, hessian, 2);
+   double x_n[] = {1, 1};
+   int i = 1;
+   // Continue with the procedure until the length of the gradient is 
+   // less than 0.000001.
+   while(nm->step(x_n) > 0.000001) {
+     fprintf(stdout, "\n***** Step %d *****\n", i++);
+     nm->printInfo(stdout);
+     for(int j = 0; j < 2; j++) {
+       fprintf(stdout, "x_n_%d[%d] = %f\n", i, j, x_n[j]);
+     }
+   }
+   printf("\nSolution: %.10f\n", x_n[0]);
+\end{verbatim}
+
+\bigskip
+
+We now have two new functions \verb|gradient| and \verb|hessian|. Both take an array that represents the point at which we are taking derivatives. The gradient places its partial derivatives in the array \verb|sol|. For the Hessian, \verb|sol| is now a two-dimensional array representing the four second partial derivatives. We are also optimizing our solution a little differently. The array \verb|x_n| represents both the initial point and the optimal point and every point that occurs in between those two as we step through Newtons Method. The function call \verb|step| performs just one step of Newtons Method, updating the array \verb|x_n| and returning the length of the gradient vector. The stopping condition is an upperbound on the length of the gradient. We also use one more function in the \verb|NewtonsMethod| class, \verb|printInfo|. This simply displays the gradient and Hessian of the most recent step.
 
 \end{document}
