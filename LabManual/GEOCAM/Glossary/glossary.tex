@@ -6,8 +6,41 @@
 
 \chapter{Glossary}
 
+\bigskip
+
 \begin{description}
-\item[center (of a simplex)] 
+\item[curvature flow] !!!
+
+\item[Yamabe flow] !!!
+
+\item[normalized total scalar curvature functional] !!!
+
+\item[curvature] !!!
+
+\item[min-max procedure] !!!
+
+\item[dual volume] !!!
+
+\item[power diagram (or cell)] !!!
+
+\item[dual, Poincare dual] !!!
+
+\item[dual length] !!!
+
+\item[Pachner move] !!!
+
+\item[flip algorithm] !!!
+
+\item \bigskip
+\end{description}
+
+\bigskip
+
+\begin{description}
+\item[center (of a decorated simplex)] The weigth spheres of a deocrated
+simplex determine a common power point of an embedding of the simplex. \
+This common power point is referred to as the center of the (decorated)
+simplex.
 
 \item[circle power] Given a circle $C$ and a point $P$, let $L$ be the line
 through the point $P$ that passes through the center of the circle. \ Let $A$
@@ -43,10 +76,11 @@ together with spheres centered at the vertices with radii determined by the
 weights. \ The orthocircle (if one exists) is sometimes considered part of
 the decorated simplex when appropriate.
 
-\item[edge curvature] Given a three-dimensional piecewise flat manifold $%
-\left( M,\mathcal{T},d\right) $, the \textit{edge curvature} along an edge $%
-\left\{ i,j\right\} $, measures how much that edge differs from Euclidean
-space. \ Specifically, the edge curvature $K_{ij}$ is given by 
+\item[edge curvature $\left( K_{ij}\right) $] Given a three-dimensional
+piecewise flat manifold $\left( M,\mathcal{T},d\right) $, the \textit{edge
+curvature} along an edge $\left\{ i,j\right\} $, measures how much that edge
+differs from Euclidean space. \ Specifically, the edge curvature $K_{ij}$ is
+given by 
 \[
 K_{ij}=\left( 2\pi -\sum\limits_{\substack{ k,l\text{, such that}  \\ %
 \left\{ i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij}, 
@@ -76,22 +110,17 @@ where $K_{ij}$ is the edge curvature, $l_{ij}$ is the edge length, and $%
 \mathcal{V}$ is the total volume. By summing both sides, we see that $%
 \lambda $ is the Einstein constant.
 
-\item[hinge] A hinge consists of a pair of triangles that share a single
-edge. \ Often, two adjacent triangles in a simplicial surface are identified
-as a hinge while studying the edge they share. \ Any hinge can be
-isometrically embedding $%
-%TCIMACRO{\U{211d} }%
-%BeginExpansion
-\mathbb{R}
-%EndExpansion
-^{2}$. \ There is a natural generalization to three (and higher) dimensions
-for two tetrahedra sharing a face. \ Similarly, this generalized hinge can
-be isometrically embedded in $%
-%TCIMACRO{\U{211d} }%
-%BeginExpansion
-\mathbb{R}
-%EndExpansion
-^{3}$. \ 
+\item[hinge] A hinge is a pair of triangles that share an edge. We often
+denote a hinge using the vertices of the triangles, for example $\{h,i,j\}$
+and $\{i,j,k\}$ are faces that share the edge $\{i,j\}$ and so together they
+form a hinge. In a two-dimensional manifold, a (non-boundary) edge
+determines a unique hinge, for example $\{i,j\}$ determines the hinge formed
+by $\{h,i,j\}$ and $\{i,j,k\}$. An important point is that a triangle may
+have duplicate edges or vertices, and so a hinge being constructed of
+triangles can also have duplicate edges or vertices. In this case, we would
+need to denote a hinge by $\left\{ f_{1},f_{2},e\right\} ,$ where $f_{1}$
+and $f_{2}$ are triangles, and $e$ is an edge local to both $f_{1}$ and $%
+f_{2}.$
 
 \item[inversive distance] Start with a decorated edge $e_{ij}$, that is, an
 edge of length $l_{ij}$ with weight circles of radius $r_{i},r_{j}$ centered
@@ -210,8 +239,8 @@ becomes a decorated simplex. \
 \item[dimension] A manifold has the property that every point has a
 neighborhood homeomorphic to an open subset of $\mathbb{R}^{n}.$ By the
 Invariance of Dimension theorem, $n$ must be locally constant (i.e., every
-point in a given connected component must have the same dimension). We say $n
-$ is the dimension of the manifold. For a triangulated manifold, the
+point in a given connected component must have the same dimension). We say $%
+n $ is the dimension of the manifold. For a triangulated manifold, the
 dimension of the manifold is the dimension of the highest-dimensional
 simplices in the triangulation.
 
@@ -222,15 +251,13 @@ can also be described as a symmetric, positive definite 2-tensor field, (3)
 a Lorenzian metric is a symmetric bilinear form at each tangent space with
 signature +,-,-,...,- or -,+,...+ which varies smoothly with the basepoint.
 
-\item[curvature] 
-
 \item[scalar curvature] For a Riemannian manifold $\left( M,g\right) $,
 scalar curvature is a function $R:M\rightarrow \mathbb{R}$ gotten from the
 full trace of the Riemannian curvature tensor. For a piecewise flat,
 metrized 3-manifold $\left( M,\mathcal{T},d\right) $, the scalar curvature
 measure $K_{i}$ is defined as 
 \[
-K_{i}=\sum_{j}\frac{K_{ij}}{\ell _{ij}}d_{ij},
+K_{i}=\sum_{j}\frac{K_{ij}}{\ell _{ij}}d_{ij}, 
 \]%
 where $K_{ij}$ is the edge curvature of edge $\left\{ i,j\right\} .$
 Sometimes we refer to the function $i\rightarrow K_{i}/V_{i}$ as the scalar
@@ -243,7 +270,7 @@ M,g\right) $, this means that the scalar curvature function $R:M\rightarrow
 multiple of the volume measure, i.e., there exists $\lambda \in \mathbb{R}$
 such that 
 \[
-K_{i}=\lambda V_{i},
+K_{i}=\lambda V_{i}, 
 \]%
 for all vertices $i,$ where $K_{i}=\sum_{j}\frac{K_{ij}}{\ell _{ij}}d_{ij}$
 and $V_{i}=\ell _{ij}\frac{\partial \mathcal{V}}{\partial \ell _{ij}}=\frac{1%
@@ -255,14 +282,8 @@ i,j,k\right\} .$
 \item[geometric flow] A geometric flow is a differential equation on a
 geometry (loosely defined) which depends only on geometric quantities
 (usually curvatures). Usual examples are Ricci flow, mean curvature flow,
-and Yamabe flow on Riemannian manifolds. On discrete geometries, there are
-discrete Ricci and Yamabe flows.
-
-\item[curvature flow] 
-
-\item[Yamabe flow] 
-
-\item[normalized total scalar curvature functional] 
+and Yamabe flow. On discrete geometries, there are discrete Ricci and Yamabe
+flows.
 
 \item[Einstein-Hilbert functional] Given a Riemannian manifold $\left(
 M,g\right) ,$ the Einstein-Hilbert functional $\mathcal{EH}\left( M,g\right) 
@@ -298,11 +319,10 @@ i,j\right\} $ in $\left\{ i,j,k,\ell \right\} .$
 the conformal class $\left[ g\right] $ is the equivalence class of all
 Riemannian manifolds $\left( M,e^{f}g\right) ,$ where $f$ is a smooth
 function. On a metrized piecewise flat manifold $\left( M,T,d\right) $, the
-conformal class $\left[ d\right] $ is the equivalence class .....
-
-\item[conformal deformation] 
-
-\item[min-max procedure] 
+conformal class $\left[ d\right] $ is the class of $d_{ij}=\frac{\alpha
+_{i}r_{i}^{2}+\eta _{ij}r_{i}r_{j}}{\sqrt{\alpha _{i}r_{i}^{2}+\alpha
+_{j}r_{j}^{2}+2r_{i}r_{j}\eta _{ij}}}$ for fixed $\alpha _{i}$ and $\eta
+_{ij}$ and all $r_{i}$???
 
 \item[Yamabe constant] On a closed manifold $M,$ the Yamabe constant (also
 called the $\sigma $-constant) is the number 
@@ -314,33 +334,268 @@ called the $\sigma $-constant) is the number
 where the $\sup $ is over all metrics and the $\inf $ is over all metrics in
 the same conformal class $\left[ g\right] $ as $g.$
 
-\item[flip] 
+\item[flip] A flip of an edge (or hinge) is an action that changes triangles
+in the triangulation. The $2-2$ flip in (dimension $2$) switches between two
+decompositions of a quadrilateral into two triangles. \ Specifically, the
+triangles $\left\{ i,j,k\right\} ,\left\{ i,j,l\right\} $ flip to become $%
+\left\{ i,k,l\right\} $ and $\left\{ j,k,l\right\} $. We say that the edge $%
+\{i,j\}$ flips to become $\left\{ k,l\right\} .$ \ In general, filps can be
+performed in hinges of any dimension, and are called Pachner moves.
 
-\item[Pachner move] 
+\item[Schl\"{a}fli formula] Let $M_{K}^{n+1}$ be the space of constant
+curvature $K$ and dimension $n+1\geq 2$. \ Consider a smooth one parameter
+family $P\left( t\right) $ of polyhedra in $M^{n+1}$ bounding compact
+regions. \ NOT FINISHED
 
-\item[flip algorithm] 
+\item[convex hinge] Given a (2D) hinge, the boundary of the hinge forms a
+quadrilateral. If all the interior angles of this quadrilateral are less
+than or equal to $\pi $ (radians) then the hinge is called a convex hinge.
 
-\item[convex hinge] 
+\item[nonconvex hinge] A hinge which is not convex is a nonconvex hinge. \
+The hinge forms a nonconvex set in the plane. These hinges cannot flip
+(geometrically) in the usual way.
 
-\item[nonconvex hinge] 
+\item[bone] In a simplicial $n$-manifold, a bone generally refers to a $%
+\left( n-2\right) $-dimensional simplex, so in a $3$-manifold, bones consist
+of (usually interior) edges. Sometimes bone refers to not only the simplex,
+but also all of the $n$-simplices incident on the simplex. This terminology
+is mainly used in the Regge calculus literature.
 
-\item[bone] 
+\item[Delaunay triangulation (or hinge)] If all the hinges of a
+triangulation are Delaunay hinges, then the triangulation is called a
+Delaunay triangulation.
 
-\item[Delaunay triangulation (or hinge)] 
+\item[weighted Delaunay triangulation] If all the hinges in a weighted
+triangulation are weighted Delaunay hinges, then the weighted triangulation
+is called a weighted Delaunay triangulation.
 
-\item[weighted Delaunay triangulation] 
+\item[weighted triangulation] Given a piecewise flat triangulation we can
+assign a weight to each vertex of the triangulation. Each weight can be
+thought of as a radius of a circle around the vertex it is assigned to. A
+triangulation with weights assigned to the vertices is called a weighted
+triangulation. \ Note that each simplex in the triangulation is a decorated
+simplex. \ The weights together with the piecewise-flat structure on a
+manifold determine a piecewise-flat, metrized manifold.
 
-\item[Voronoi diagram (or cell)] 
+\item[weighted Voronoi diagram (or cell)] A weighted Voronoi diagram is all
+of the dual cells of a weighted Delaunay triangulation.
 
-\item[weighted Voronoi diagram (or cell)] 
+\item[combinatorial Ricci flow] A partial differential equation on radii of
+a piecewise flat ????decorated two-dimensional manifold, originally due to
+Chow-Luo. In the Euclidean (background) case, the system is $\frac{dr_{i}}{dt%
+}=-K_{i}\ast r_{i}$. Often, we use a normalized version, $\frac{dr_{i}}{dt}=(%
+\bar{K}-K_{i})\ast r_{i}$ where $\bar{K}$ is the average curvature (which is
+a topological constant related to the Euler characteristic).
 
-\item[power diagram (or cell)] 
+\item[Newton's method] A method for finding the zeroes of a function. For
+real-valued functions on $\mathbb{R}$, the n-th step of Newton's Method
+approximates a zero from the previous step as $x_{n}=x_{n-1}-\frac{f(x_{n-1})%
+}{f^{\prime }(x_{n-1})}$. That is, we determine the equation of the tangent
+line at $x_{n-1}$, then set $x_{n}$ to be the x-intercept of this line.%
+\newline
 
-\item[negative triangles] 
+\item We often want to optimize real-valued functions on $\mathbb{R}^{m}$,
+so we want to use Newton's Method to find the points at which $Df(\mathbf{x}%
+) $, the gradient of a function $f$, is the zero-vector. We therefore need
+the second derivative, $D^{2}f(\mathbf{x})$, called the Hessian which is an $%
+m$ by $m$ matrix. So a step of the method yields $\mathbf{x_{n}}=\mathbf{%
+x_{n-1}}-[D^{2}f(\mathbf{x_{n-1}})]^{-1}\ast Df(\mathbf{x_{n-1}})$. Note: we
+generally do not compute the inverse matrix to solve, but use another method
+such as Gaussian elimination.
 
-\item[dual, Poincare dual] 
-
-\item[dual length] 
-
-\item[dual volume] 
+\item[Runge-Kutta method] A numerical approximation method for a system of
+ordinary differential equations. It is considered superior to Euler's Method
+as the size of its error term is orders of magnitude smaller. \ In
+particular, this method utilizes a fourth order approximation. \ Given a
+differential equation $x^{\prime }=f(t,x)$, a point $(t_{n},x_{n})$, and a
+stepsize $h$ the next step $(t_{n+1},x_{n+1})$ is calculated as follows:
 \end{description}
+
+\begin{enumerate}
+\item Set $k_{1}=f(t_{n},x_{n})$
+
+\item Set $k_{2}=f(t_{n}+\frac{h}{2},x_{n}+\frac{h\ast k_{1}}{2})$
+
+\item Set $k_{3}=f(t_{n}+\frac{h}{2},x_{n}+\frac{h\ast k_{2}}{2})$
+
+\item Set $k_{4}=f(t_{n}+h,x_{n}+h\ast k_{3})$
+\end{enumerate}
+
+\noindent Then $t_{n+1}=t_{n}+h$ and $x_{n+1}=x_{n}+\frac{h}{6}(k_{1}+2\ast
+k_{2}+2\ast k_{3}+k_{4}).$
+
+\begin{description}
+\item[dual edge] Given a triangle $\{i,j,k\}$ in a triangulation with no
+weights, we consider the perpendicular bisector of each edge. These
+bisectors intersect at a single point. We call the line segment that extends
+from an edge to this point of intersection, the dual of that edge.
+
+\item[conformal deformation] In Riemannian geometry, a conformal deformation
+of a Riemannian manifold $\left( M,g\right) $ is a family of metrics $%
+g\left( t\right) ,$ where $t\in \left( -\varepsilon ,\varepsilon \right) $
+for some $\varepsilon >0,$ such that $g\left( 0\right) =0$ and $\frac{%
+\partial }{\partial t}g=fg,$ where $f:M\rightarrow \mathbb{R}_{+}$ is a
+(smooth) positive real-valued function. In piecewise Euclidean geometry,
+there are a number of different definitions of conformal deformation; we
+take the viewpoint that a conformal deformation is a family of functions $%
+f\left( t\right) :V\rightarrow \mathbb{R}$ and a description of the lengths
+in terms of variables $f_{i}$ at the vertices such that $\ell _{ij}=\ell
+_{ij}\left( f_{i},f_{j}\right) ,$ $\frac{\partial }{\partial f_{i}}\ell
+_{ij}=d_{ij},$ and for any simplex $\left\{ i,j,k\right\} ,$ $%
+d_{ij}^{2}+d_{jk}^{2}+d_{ki}^{2}=d_{ji}^{2}+d_{ik}^{2}+d_{kj}^{2}$ (i.e.,
+every simplex has a center, and $d_{ij}$ is the length of the segment from
+vertex $i$ to the projection of the center onto the edge $\left\{
+i,j\right\} $). One example of a conformal deformation is the Yamabe flow
+(and discrete Yamabe flow).
+
+\item[negative triangle] When one tries to flip a nonconvex hinge, the
+nonconvex quadrilateral is decomposed into one large triangle and one
+triangle which should be cut out. The triangle to be cut out is referred to
+as a \textquotedblleft negative triangle.\textquotedblright\ Negative
+triangles have a number of properties which contrast with usual
+(\textquotedblleft positive\textquotedblright ) triangles. When computing
+area, the negative triangle's area should be subtracted. Also, when a
+manifold is developed (unfolded in the plane), when switching from a
+positive to negative (or vice versa) triangle, the triangle should be folded
+backward along the edge adjacent to the two triangles.
+
+\item[circle and sphere packing] Circle packing is an arrangement of circles
+such that no two circles overlap and all circles are mutually tangent to one
+another. \ In this instance circle packing can be used to assign lengths to
+triangle edges. \ Each vertex is the center of a circle, providing each
+vertex with a corresponding radius. \ The lengths of the edges are
+determined by 
+\[
+l_{ij}=r_{i}+r_{j} 
+\]%
+for mutually tangent vertices $i,j$. \ Circle packing guarantees that the
+lengths satisfy the triangle inequality. \ Similarly, a sphere packing is an
+arrangement of spheres such that adjacent spheres are tangent and the
+tangency graph forms a triangulation. Each vertex functions as the origin of
+a sphere, providing each vertex with a corresponding radius as determined by
+sphere packing. \ The radii are used to determine edge lengths. \ Sphere
+packing does not guarantee that the tetrahedra formed in the tangency graph
+have positive volume.\ \ The astute reader will notice that circle and
+sphere packings correspond to conformal structures with $\alpha _{i}=\eta
+_{ij}=1$ for all $i$.
+
+\item[Euclidean law of cosines] A triangle with angles $A$, $B$, $C$ has
+edges directly opposite these angles with lengths $a$, $b$, $c$
+respectively. The Euclidean Law of Cosines states that 
+\[
+c^{2}=a^{2}+b^{2}-2ab\cos (C) 
+\]%
+which, rearranged is 
+\[
+\cos (C)=(a^{2}+b^{2})/2ab. 
+\]%
+Since cosine is a bounded function the triangle inequality is violated when 
+\[
+(a^{2}+b^{2})/2ab>1 
+\]%
+or when 
+\[
+(a^{2}+b^{2})/2ab<-1. 
+\]
+
+\item[spherical law of cosines] Given a unit sphere the edges and vertices
+of a triangle are formed by great circles intersecting on the surface. In
+this instance the angle $\gamma $ is directly opposite the edge of length $C$%
+. The other edges are of lengths $A$ and $B$ respectively. The spherical law
+of cosines states that 
+\[
+\cos (C)=\cos (A)\cos (B)+\sin (A)\sin (B)\cos (\gamma ). 
+\]
+\end{description}
+
+\bigskip
+
+\chapter{Quantities}
+
+\bigskip
+
+$r_{i}$ (radii, vertex weights)
+
+$\eta _{ij}$ (etas, inversive distance, edge weights)
+
+$\alpha _{i}$ (alphas, vertex weight coefficient)
+
+$d_{ij}$ partial edge
+
+$l_{ij}$ length%
+\begin{eqnarray*}
+l_{ij} &=&\sqrt{\alpha _{i}r_{i}^{2}+\alpha _{j}r_{j}^{2}+2r_{i}r_{j}\eta
+_{ij}} \\
+&=&d_{ij}+d_{ji}
+\end{eqnarray*}
+
+$A_{ijk}$ face area
+
+$V_{ijkl}$ tetrahedron volume
+
+$\gamma _{i,jk}$ face angle
+
+$\beta _{ij,kl}$ dihedral angle (at an edge in a tetrahedron)
+
+$\alpha _{i,jkl}$ solid angle
+
+$h_{ij,k}$ edge height%
+\[
+h_{ij,k}=\frac{d_{ik}-d_{ij}\cos \gamma _{i,jk}}{\sin \gamma _{i,jk}} 
+\]
+
+$h_{ijk,l}$ face height%
+\[
+h_{ijk,l}=\frac{h_{ij,l}-h_{ij,k}\cos \beta _{ij,kl}}{\sin \beta _{ij,kl}} 
+\]
+
+$A_{ij,kl}$ dual area (of an edge in a tetrahedron)%
+\[
+A_{ij,kl}=\frac{1}{2}\left( h_{ij,k}h_{ijk,l}+h_{ij,l}h_{ijl,k}\right) 
+\]
+
+$l_{ij}^{\ast }$ dual length (2D) or dual area (3D) 
+\begin{eqnarray*}
+2D &:&l_{ij}^{\ast }=h_{ij,k}+h_{ij,l} \\
+3D &:&l_{ij}^{\ast }=\sum_{\substack{ k,l\text{ s.t.}  \\ \left\{
+i,j,k,l\right\} \in \mathcal{T}}}A_{ij,kl}
+\end{eqnarray*}
+
+$K_{i}$ vertex curvature (scalar curvature)%
+\begin{eqnarray*}
+2D &:&K_{i}=2\pi -\sum_{\substack{ j,k\text{ s.t.}  \\ \left\{ i,j,k\right\}
+\in \mathcal{T}}}\gamma _{i,jk} \\
+3D &:&K_{i}=\sum_{\substack{ j\text{ s.t.}  \\ \left\{ i,j\right\} \in E}}%
+\left( 2\pi -\sum_{\substack{ k,l\text{ s.t.}  \\ \left\{ i,j,k,l\right\}
+\in \mathcal{T}}}\beta _{ij,kl}\right) d_{ij}
+\end{eqnarray*}
+
+$K_{ij}$ edge curvature (3D)%
+\[
+K_{ij}=\left( 2\pi -\sum_{\substack{ k,l\text{ s.t.}  \\ \left\{
+i,j,k,l\right\} \in \mathcal{T}}}\beta _{ij,kl}\right) l_{ij} 
+\]
+
+$\lambda $ Einstein Constant%
+\[
+\lambda =\frac{EHR\left( M,\mathcal{T},l\right) }{3\mathcal{V}\left( M,%
+\mathcal{T},l\right) } 
+\]
+
+$EHR\left( M,\mathcal{T},l\right) $ (3D)%
+\begin{eqnarray*}
+EHR\left( M,\mathcal{T},l\right) &=&\sum_{i}K_{i} \\
+&=&\sum_{\substack{ i,j\text{ s.t.}  \\ \left\{ i,j\right\} \in E}}K_{ij}
+\end{eqnarray*}
+
+$V_{i}$ dual volume of a vertex%
+\[
+V_{i}=\sum_{\substack{ j,k,l\text{ s.t.}  \\ \left\{ i,j,k,l\right\} \in 
+\mathcal{T}}}h_{ijk,l}A_{ijk} 
+\]
+
+$\mathcal{V}$ total volume
+
+$c_{ijk}$ center of a weighted triangle (embedded)
+
+$c_{ijkl}$ center of a weighted tetrahedron (embedded)
