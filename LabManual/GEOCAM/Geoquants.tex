@@ -1,4 +1,4 @@
-%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{Version=5.00.0.2552}
 %TCIDATA{LaTeXparent=0,0,geocam.tex}
                       
 %TCIDATA{ChildDefaults=chapter:1,page:1}
@@ -77,6 +77,21 @@ recalculation of its own value.
 
 \section{Geoquant Catalog}
 
+\subsection{Alpha}
+
+\paragraph{Input}
+
+Alpha(Vertex v)
+
+\paragraph{Calculation}
+
+This geoquant is never calculated, only set by the user. Its value is
+generally 0 or 1.
+
+\paragraph{Invalidation}
+
+Parents: None
+
 \subsection{Area}
 
 \paragraph{Input}
@@ -113,13 +128,15 @@ CurvaturePartial(v,w) returns the following partial derivative:%
 CurvaturePartial(v,w)=\frac{\partial K_{v}}{\partial \log r_{w}}.
 \end{equation*}
 
-The calculation of $CurvaturePartial(v,w)$ differes depending on the
-combintorial relationship between $v$ and $w$. \ See ??? for more
-information.
+The calculation of $CurvaturePartial(v,w)$ differs depending on the
+combintorial relationship between $v$ and $w$. \ See \textbf{Functions: }%
+\texttt{CurvaturePartial::CurvaturePartial} for more information.
 
 \paragraph{Invalidation}
 
-YIKES!!!
+Parents: Radius of v and all radii of vertices adjacent to both v and w, the
+curvature at v, and the dual areas, dihedral angles, and eta of every edge
+adjacent to both v and w.
 
 \subsection{Curvature2D}
 
@@ -194,19 +211,31 @@ f\in t$.
 
 \paragraph{Input}
 
+DihedralAngleSum(Edge e)
+
 \paragraph{Calculation}
+
+This geoquant sums every dihedral angle incident on the given edge.
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: For each tetrahedron containing e, the dihedral angle of
+the tetrahedron incident on e.
 
 \subsection{DualArea}
 
 \paragraph{Input}
 
+DualArea(Edge e)
+
 \paragraph{Calculation}
 
+See \textbf{Functions: }\texttt{DualArea::DualArea} for more information.
+
 \paragraph{Invalidation}
+
+Parents: The DualAreaSegments involving this edge across every tetrahedron
+local to e.
 
 \bigskip
 
@@ -214,9 +243,17 @@ f\in t$.
 
 \paragraph{Input}
 
+DualAreaSegment(Edge e, Tetra t)
+
 \paragraph{Calculation}
 
+See \textbf{Functions: }\texttt{DualAreaSegment::DualAreaSegment} for more
+information.
+
 \paragraph{Invalidation}
+
+Parents: For both faces in t that contain e, the EdgeHeights between those
+faces and e, and the FaceHeights between those faces and t.
 
 \bigskip
 
@@ -224,9 +261,17 @@ f\in t$.
 
 \paragraph{Input}
 
+EdgeHeight(Edge e, Face f)
+
 \paragraph{Calculation}
 
+See \textbf{Functions: }\texttt{EdgeHeight::EdgeHeight} for more information.
+
 \paragraph{Invalidation}
+
+Parents: For one of the two vertices, v,  of e, the EuclideanAngle of f
+incident on v, and the PartialEdges of the edges in f containing v, incident
+on v.
 
 \bigskip
 
@@ -234,9 +279,15 @@ f\in t$.
 
 \paragraph{Input}
 
+EHRPartial(Vertex v)
+
 \paragraph{Calculation}
 
+See \textbf{Functions: }\texttt{EHRPartial::EHRPartial} for more information.
+
 \paragraph{Invalidation}
+
+Parents: 
 
 \bigskip
 
@@ -244,7 +295,12 @@ f\in t$.
 
 \paragraph{Input}
 
+EHRSecondPartial(Vertex v1, Vertex v2)
+
 \paragraph{Calculation}
+
+See \textbf{Functions: }\texttt{EHRSecondPartial::EHRSecondPartial} for more
+information.
 
 \paragraph{Invalidation}
 
@@ -252,11 +308,17 @@ f\in t$.
 
 \subsection{Eta}
 
-\paragraph{Input}
+\paragraph{Input }
+
+Eta(Edge e)
 
 \paragraph{Calculation}
 
+This geoquant is never calculated, only set by the user.
+
 \paragraph{Invalidation}
+
+Parents: None
 
 \bigskip
 
@@ -264,49 +326,86 @@ f\in t$.
 
 \paragraph{Input}
 
+EuclideanAngle(Vertex v, Face f)
+
 \paragraph{Calculation}
+
+The Euclidean angle is calculated usign the Euclidean law of cosines,
+namely, let $v$ be indexed by $i$ and $f=\{i,j,k\}$. Then the angle at
+vertex $i$ is%
+\begin{equation*}
+\cos (\alpha _{i,jk})=\frac{l_{ij}^{2}+l_{ik}^{2}-l_{jk}^{2}}{2l_{ij}l_{jk}}
+\end{equation*}
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: The Lengths corresponding to the three edges of face f.
 
 \subsection{FaceHeight}
 
 \paragraph{Input}
 
+FaceHeight(Face f, Tetra t)
+
 \paragraph{Calculation}
+
+See \textbf{Functions: }\texttt{FaceHeight::FaceHeight} for more information.
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: For one of the two edges, e, of f, the DihedralAngle of t
+incident on e, and the EdgeHeights of the faces in t containing e, incident
+on e.
 
 \subsection{Length}
 
 \paragraph{Input}
 
+Length(Edge e)
+
 \paragraph{Calculation}
+
+Let $\alpha _{i}$, $\alpha _{j}$, $r_{i}$, and $r_{j}$ be the alphas and
+radii at the vertices of edge $e=\{i,j\}$. Let $\eta _{ij}$ be the eta value
+of edge e. Then the length is 
+\begin{equation*}
+l_{ij}^{2}=\alpha _{i}r_{i}^{2}+\alpha _{j}r_{j}^{2}+2r_{i}r_{j}\eta _{ij}
+\end{equation*}
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: The Alpha and Radius values at both vertices of edge e and
+the Eta value at edge e.
 
 \subsection{PartialEdge}
 
 \paragraph{Input}
 
+PartialEdge(Vertex v, Edge e)
+
 \paragraph{Calculation}
+
+See \textbf{Functions: }\texttt{PartialEdge::PartialEdge} for more
+information.
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: The Alpha and Radius values at both vertices of edge e and
+the Length at edge e.
 
 \subsection{Radius}
 
 \paragraph{Input}
 
+Radius(Vertex v)
+
 \paragraph{Calculation}
 
+This geoquant is never calcualted, only set by the user.
+
 \paragraph{Invalidation}
+
+Parents: None
 
 \bigskip
 
@@ -314,21 +413,44 @@ f\in t$.
 
 \paragraph{Input}
 
+SectionalCurvature(Edge e)
+
 \paragraph{Calculation}
+
+SectionalCurvature calculates the discrete curvature at an edge in a three
+dimensional manifold. \ The calculation is done by: 
+\begin{equation*}
+SectionalCurvature(e)=2\pi -\sum_{\substack{ All~tetra~t~ \\ incident~to~e}}%
+\beta _{e,t}
+\end{equation*}%
+Where $\beta _{e,t}$ is the DihedralAngle at edge $e$ in tetra $t$.
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: The DihedralAngles of all tetrahedron containing e,
+incident on e.
 
 \subsection{TotalVolumePartial}
 
 \paragraph{Input}
 
+TotalVolumePartial(Vertex v)
+
+TotalVolumePartial(Edge e)
+
 \paragraph{Calculation}
+
+\begin{itemize}
+\item TotalVolumePartial(Vertex v): This sums up every VolumePartial(v, t)
+over all tetrahedrons t containing v.
+
+\item TotalVolumePartial(Edge e): This sums up every VolumePartial(e, t)
+over all tetrahedrons t containing e.
+\end{itemize}
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: The list of VolumePartials 
 
 \subsection{TotalCurvature}
 
@@ -344,11 +466,16 @@ f\in t$.
 
 \paragraph{Input}
 
+TotalVolume()
+
 \paragraph{Calculation}
+
+See \textbf{Functions: }\texttt{TotalVolume::TotalVolume} for more
+information.
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: The Volume of every tetrahedron in the triangulation.
 
 \subsection{Volume}
 
@@ -384,7 +511,12 @@ f\in t$.
 
 \paragraph{Input}
 
+VolumePartial(Vertex v)
+
 \paragraph{Calculation}
+
+See \textbf{Functions: }\texttt{VolumePartial::VolumePartial} for more
+information.
 
 \paragraph{Invalidation}
 
@@ -404,7 +536,12 @@ f\in t$.
 
 \paragraph{Input}
 
+VolumeSecondPartial(Vertex v1, Vertex v2)
+
 \paragraph{Calculation}
+
+See \textbf{Functions: }\texttt{VolumeSecondPartial::VolumeSecondPartial}
+for more information.
 
 \paragraph{Invalidation}
 
