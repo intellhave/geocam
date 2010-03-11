@@ -119,18 +119,28 @@ Parents: \ all lengths of edges in the input triangle.
 
 \paragraph{Input}
 
-CurvaturePartial( Vertex v, Vertex w )
+\begin{itemize}
+\item CurvaturePartial( Vertex v, Vertex w )
+
+\item CurvaturePartial( Vertex v, Edge e )
+\end{itemize}
 
 \paragraph{Calculation}
 
-CurvaturePartial(v,w) returns the following partial derivative:%
+\begin{itemize}
+\item ( Vertex v, Vertex w ): Returns the following partial derivative:%
 \begin{equation*}
 CurvaturePartial(v,w)=\frac{\partial K_{v}}{\partial \log r_{w}}.
-\end{equation*}
-
+\end{equation*}%
 The calculation of $CurvaturePartial(v,w)$ differs depending on the
 combintorial relationship between $v$ and $w$. \ See \textbf{Functions: }%
 \texttt{CurvaturePartial::CurvaturePartial} for more information.
+
+\item ( Vertex v, Edge e ): Returns the following partial derivative: 
+\begin{equation*}
+CurvaturePartial(v,e)=\frac{\partial K_{v}}{\partial \eta _{e}}
+\end{equation*}
+\end{itemize}
 
 \paragraph{Invalidation}
 
@@ -211,7 +221,7 @@ f\in t$.
 
 \paragraph{Input}
 
-DihedralAngleSum(Edge e)
+DihedralAngleSum( Edge e )
 
 \paragraph{Calculation}
 
@@ -226,7 +236,7 @@ the tetrahedron incident on e.
 
 \paragraph{Input}
 
-DualArea(Edge e)
+DualArea( Edge e )
 
 \paragraph{Calculation}
 
@@ -243,7 +253,7 @@ local to e.
 
 \paragraph{Input}
 
-DualAreaSegment(Edge e, Tetra t)
+DualAreaSegment( Edge e, Tetra t )
 
 \paragraph{Calculation}
 
@@ -261,7 +271,7 @@ faces and e, and the FaceHeights between those faces and t.
 
 \paragraph{Input}
 
-EdgeHeight(Edge e, Face f)
+EdgeHeight( Edge e, Face f )
 
 \paragraph{Calculation}
 
@@ -269,48 +279,94 @@ See \textbf{Functions: }\texttt{EdgeHeight::EdgeHeight} for more information.
 
 \paragraph{Invalidation}
 
-Parents: For one of the two vertices, v,  of e, the EuclideanAngle of f
+Parents: For one of the two vertices, v, of e, the EuclideanAngle of f
 incident on v, and the PartialEdges of the edges in f containing v, incident
 on v.
 
 \bigskip
 
-\subsection{EHRPartial}
+\subsection{NEHRPartial}
 
 \paragraph{Input}
 
-EHRPartial(Vertex v)
+\begin{itemize}
+\item NEHRPartial( Vertex v )
+
+\item NEHRPartial( Edge e )
+\end{itemize}
 
 \paragraph{Calculation}
 
+\begin{itemize}
+\item ( Vertex v ): Returns the following partial derivative: 
+\begin{equation*}
+NEHRPartial(v)=\frac{\partial NEHR}{\partial r_{v}}
+\end{equation*}%
 See \textbf{Functions: }\texttt{EHRPartial::EHRPartial} for more information.
+
+\item ( Edge e ): Returns the following partial derivative: 
+\begin{equation*}
+NEHRPartial(e)=\frac{\partial NEHR}{\partial \eta _{e}}
+\end{equation*}
+\end{itemize}
 
 \paragraph{Invalidation}
 
-Parents: 
+Parents: Both versions use TotalVolume, TotalCurvature, and the
+TotalVolumePartial of vertex v (edge e). The vertex version also depends on
+the Curvature3D at v. The edge version depends on all CurvaturePartials of e.
 
 \bigskip
 
-\subsection{EHRSecondPartial}
+\subsection{NEHRSecondPartial}
 
 \paragraph{Input}
 
-EHRSecondPartial(Vertex v1, Vertex v2)
+\begin{itemize}
+\item NEHRSecondPartial( Vertex v, Vertex w )
+
+\item NEHRSecondPartial( Vertex v, Edge e )
+\end{itemize}
 
 \paragraph{Calculation}
 
+\begin{itemize}
+\item ( Vertex v, Vertex w ): Returns the following second-order partial
+derivative: 
+\begin{equation*}
+NEHRSecPartial(v,w)=\frac{\partial NEHR}{\partial r_{w}\partial r_{v}}
+\end{equation*}%
 See \textbf{Functions: }\texttt{EHRSecondPartial::EHRSecondPartial} for more
 information.
 
+\item ( Vertex v, Edge e ) Returns the following second-order partial
+derivative: 
+\begin{equation*}
+NEHRSecPartial(v,w)=\frac{\partial ^{2}NEHR}{\partial \eta _{e}\partial r_{v}%
+}
+\end{equation*}
+\end{itemize}
+
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: Both versions use TotalVolume, TotalCurvature, and the
+Radius, TotalVolumePartial and Curvature3D at v. 
+
+\begin{itemize}
+\item (v, w): The Curvature3D and TotalVolumePartial of w, the
+CurvaturePartial of v with respect to w, and the TotalVolumeSecondPartial
+with respect to v and w.
+
+\item (v, e): The CurvaturePartials and TotalVolumePartial at e, the
+CurvaturePartial of v with repsect to e, and the TotalVolumeSecondPartial
+with respect to v and e.
+\end{itemize}
 
 \subsection{Eta}
 
-\paragraph{Input }
+\paragraph{Input}
 
-Eta(Edge e)
+Eta( Edge e )
 
 \paragraph{Calculation}
 
@@ -326,7 +382,7 @@ Parents: None
 
 \paragraph{Input}
 
-EuclideanAngle(Vertex v, Face f)
+EuclideanAngle( Vertex v, Face f )
 
 \paragraph{Calculation}
 
@@ -345,7 +401,7 @@ vertex $i$ is%
 
 \paragraph{Input}
 
-FaceHeight(Face f, Tetra t)
+FaceHeight( Face f, Tetra t )
 
 \paragraph{Calculation}
 
@@ -361,7 +417,7 @@ on e.
 
 \paragraph{Input}
 
-Length(Edge e)
+Length( Edge e )
 
 \paragraph{Calculation}
 
@@ -381,7 +437,7 @@ the Eta value at edge e.
 
 \paragraph{Input}
 
-PartialEdge(Vertex v, Edge e)
+PartialEdge( Vertex v, Edge e )
 
 \paragraph{Calculation}
 
@@ -397,7 +453,7 @@ the Length at edge e.
 
 \paragraph{Input}
 
-Radius(Vertex v)
+Radius( Vertex v )
 
 \paragraph{Calculation}
 
@@ -407,20 +463,46 @@ This geoquant is never calcualted, only set by the user.
 
 Parents: None
 
-\bigskip
+\bigskip 
+
+\subsection{RadiusPartial}
+
+\paragraph{Input}
+
+RadiusPartial(Vertex v, Edge e)
+
+\paragraph{Calculation}
+
+This returns the following partial derivative: 
+\begin{equation*}
+RadiusPartial(v,e)=\frac{\partial r_{v}}{\partial \eta _{e}}
+\end{equation*}%
+This quantity is calculated for all radii with $e$ fixed as follows: 
+\begin{equation*}
+\overrightarrow{v}+A\overrightarrow{x}=0
+\end{equation*}%
+where $A$ is a matrix with entries $a_{ij}=\frac{\partial ^{2}NEHR}{\partial
+r_{j}\partial r_{i}}$ and $v_{i}=\frac{\partial ^{2}NEHR}{\partial \eta
+_{e}\partial r_{i}}$, $x_{i}=\frac{\partial r_{i}}{\partial \eta _{e}}$. The
+vector $\overrightarrow{x}$ can then be solved for using Gaussian
+Elimination or other methods.
+
+\paragraph{Invalidation}
+
+Parents: All NEHRPartial and NEHRSecondPartial quantities.
 
 \subsection{SectionalCurvature}
 
 \paragraph{Input}
 
-SectionalCurvature(Edge e)
+SectionalCurvature( Edge e )
 
 \paragraph{Calculation}
 
 SectionalCurvature calculates the discrete curvature at an edge in a three
 dimensional manifold. \ The calculation is done by: 
 \begin{equation*}
-SectionalCurvature(e)=2\pi -\sum_{\substack{ All~tetra~t~ \\ incident~to~e}}%
+SectionalCurvature(e)=2\pi -\sum_{\substack{ All~tetra~t~  \\ incident~to~e}}%
 \beta _{e,t}
 \end{equation*}%
 Where $\beta _{e,t}$ is the DihedralAngle at edge $e$ in tetra $t$.
@@ -430,35 +512,20 @@ Where $\beta _{e,t}$ is the DihedralAngle at edge $e$ in tetra $t$.
 \bigskip Parents: The DihedralAngles of all tetrahedron containing e,
 incident on e.
 
-\subsection{TotalVolumePartial}
-
-\paragraph{Input}
-
-TotalVolumePartial(Vertex v)
-
-TotalVolumePartial(Edge e)
-
-\paragraph{Calculation}
-
-\begin{itemize}
-\item TotalVolumePartial(Vertex v): This sums up every VolumePartial(v, t)
-over all tetrahedrons t containing v.
-
-\item TotalVolumePartial(Edge e): This sums up every VolumePartial(e, t)
-over all tetrahedrons t containing e.
-\end{itemize}
-
-\paragraph{Invalidation}
-
-\bigskip Parents: The list of VolumePartials 
-
 \subsection{TotalCurvature}
 
 \paragraph{Input}
 
+TotalCurvature( )
+
 \paragraph{Calculation}
 
+This is simply the sum of the Curvature3Ds of every vertex of the
+triangulation.
+
 \paragraph{Invalidation}
+
+Parents: The Curvature3Ds of every vertex of the triangulation.
 
 \bigskip
 
@@ -466,7 +533,7 @@ over all tetrahedrons t containing e.
 
 \paragraph{Input}
 
-TotalVolume()
+TotalVolume( )
 
 \paragraph{Calculation}
 
@@ -481,15 +548,84 @@ information.
 
 \paragraph{Input}
 
+Volume(Tetra t)
+
 \paragraph{Calculation}
+
+The volume of a tetrahedron is done by calculating the Cayley Menger
+Determinant, the determinant of a matrix that calculates the volume of a
+simplex of any dimension. For the 3-simplex (tetrahedron) with $t=\{i,j,k,l\}
+$, the volume is given by the formula 
+\begin{equation*}
+288V^{2}=\left\vert 
+\begin{array}{ccccc}
+0 & 1 & 1 & 1 & 1 \\ 
+1 & 0 & l_{ij} & l_{ik} & l_{il} \\ 
+1 & l_{ji} & 0 & l_{jk} & l_{jl} \\ 
+1 & l_{ki} & l_{kj} & 0 & l_{kl} \\ 
+1 & l_{li} & l_{lj} & l_{lk} & 0%
+\end{array}%
+\right\vert 
+\end{equation*}%
+where $l_{ij}$ is the length of edge $\{i,j\}$.
 
 \paragraph{Invalidation}
 
-\bigskip
+\bigskip Parents: The Lengths of the six edges of $t$.
+
+\subsection{TotalVolumePartial}
+
+\paragraph{Input}
+
+\begin{itemize}
+\item TotalVolumePartial( Vertex v )
+
+\item TotalVolumePartial( Edge e )
+\end{itemize}
+
+\paragraph{Calculation}
+
+\begin{itemize}
+\item ( Vertex v ): This sums up every VolumePartial(v, t) over all
+tetrahedrons t containing v.
+
+\item ( Edge e ): This sums up every VolumePartial(e, t) over all
+tetrahedrons t containing e.
+\end{itemize}
+
+\paragraph{Invalidation}
+
+Parents: All VolumePartials involving vertex v (edge e).
+
+\subsection{TotalVolumeSecondPartial}
+
+\paragraph{Input}
+
+\begin{itemize}
+\item TotalVolumePartial( Vertex v , Vertex w )
+
+\item TotalVolumePartial( Vertex v, Edge e )
+\end{itemize}
+
+\paragraph{Calculation}
+
+\begin{itemize}
+\item ( Vertex v , Vertex w ): This sums up every VolumeSecondPartial(v, w,
+t) over all tetrahedrons t containing v and w.
+
+\item ( Vertex v, Edge e ): This sums up every VolumePartial(v, e, t) over
+all tetrahedrons t containing v and e.
+\end{itemize}
+
+\paragraph{Invalidation}
+
+Parents: All VolumeSecondPartials involving vertex v and vertex w (edge e).
 
 \subsection{VolumeLengthPartial}
 
 \paragraph{Input}
+
+THIS GEOQUANT DOES NOT EXIST YET (EVER???)
 
 \paragraph{Calculation}
 
@@ -501,6 +637,9 @@ information.
 
 \paragraph{Input}
 
+THIS GEOQUANT EXISTS, BUT WAS\ INTENDED\ FOR\ USE\ WITH\
+VolumeLengthPartial. 
+
 \paragraph{Calculation}
 
 \paragraph{Invalidation}
@@ -511,20 +650,39 @@ information.
 
 \paragraph{Input}
 
-VolumePartial(Vertex v)
+\begin{itemize}
+\item VolumePartial( Vertex v, Tetra t )
+
+\item VolumePartial( Edge e, Tetra t )
+\end{itemize}
 
 \paragraph{Calculation}
 
+\begin{itemize}
+\item (Vertex v, Tetra t): Returns the following partial derivative: 
+\begin{equation*}
+VolPartial(v,t)=\frac{\partial V_{t}}{\partial r_{v}}
+\end{equation*}%
 See \textbf{Functions: }\texttt{VolumePartial::VolumePartial} for more
 information.
 
+\item (Edge e, Tetra t): Returns the following partial derivative: 
+\begin{equation*}
+VolPartial(e,t)=\frac{\partial V_{t}}{\partial \eta _{e}}
+\end{equation*}
+\end{itemize}
+
 \paragraph{Invalidation}
+
+Parents: The Alphas, Radii, and Etas that are associated with $t$.
 
 \bigskip
 
 \subsection{VolumePartialSum}
 
 \paragraph{Input}
+
+EQUIVALENT\ TO\ TotalVolumePartial... TotalVolumePartial IS UP-TO-DATE.
 
 \paragraph{Calculation}
 
@@ -536,13 +694,42 @@ information.
 
 \paragraph{Input}
 
-VolumeSecondPartial(Vertex v1, Vertex v2)
+\begin{itemize}
+\item VolumeSecondPartial( Vertex v, Vertex w, Tetra t )
+
+\item VolumeSecondPartial( Vertex v, Edge e, Tetra t )
+
+\item VolumeSecondPartial( Edge e, Edge f, Tetra t )
+\end{itemize}
 
 \paragraph{Calculation}
 
+\begin{itemize}
+\item ( Vertex v, Vertex w, Tetra t ): Returns the following second-order
+partial derivative: 
+\begin{equation*}
+VolSecPartial(v,w,t)=\frac{\partial ^{2}V_{t}}{\partial r_{w}\partial r_{v}}
+\end{equation*}%
 See \textbf{Functions: }\texttt{VolumeSecondPartial::VolumeSecondPartial}
 for more information.
 
+\item ( Vertex v, Edge e, Tetra t ): Returns the following second-order
+partial derivative: 
+\begin{equation*}
+VolSecPartial(v,e,t)=\frac{\partial ^{2}V_{t}}{\partial \eta _{e}\partial
+r_{v}}
+\end{equation*}
+
+\item ( Edge e, Edge f, Tetra t ): Returns the following second-order
+partial derivative: 
+\begin{equation*}
+VolSecPartial(e,f,t)=\frac{\partial ^{2}V_{t}}{\partial \eta _{f}\partial
+\eta _{e}}
+\end{equation*}
+\end{itemize}
+
 \paragraph{Invalidation}
+
+Parents: The Alphas, Radii, and Etas that are associated with $t$.
 
 \bigskip
