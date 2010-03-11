@@ -1,30 +1,62 @@
 #include "hinge_flip.h"
 
+
+/*       v2
+         / \
+        /   \
+  e2   /     \ e3
+      /       \
+     /    f1   \
+    /           \
+    -------------
+v1  \    e0     / v3
+     \         /
+      \  f0   /
+  e1   \     / e4
+        \   /
+         \ /
+         v0
+*/
 Edge flip(Edge e) {
 
-    struct simps bucket;
-    if(!prep_for_flip(e, &bucket)) {
-        return e;
-    }
+  struct simps bucket;
+  if(!prep_for_flip(e, &bucket)) {
+    return e;
+  }
 
-    topo_flip(e, bucket);
-    Length::At(e)->remove();
-    if (!Triangulation::faceTable[bucket.f0].isNegative() && !Triangulation::faceTable[bucket.f1].isNegative()) {
-        flipPP(bucket);
-    } else if (Triangulation::faceTable[bucket.f0].isNegative() && Triangulation::faceTable[bucket.f1].isNegative()) {
-        flipNN(bucket);
-        //note the following || is technically exclusive because the two && cases are checked above
-    } else if((Triangulation::faceTable[bucket.f0].isNegative() == true) || (Triangulation::faceTable[bucket.f1].isNegative() == true)) {
+  topo_flip(e, bucket);
 
-      flipPN(bucket);
+   Length::At(e)->remove();
 
-    } else {
-        printf("hmm, no case was found\n");
-        //just need to escape return e seems sufficient;
-        return e;
-    }
+  /*//determine if we are in a degenerate case, and what type
+  //the edge being flipped has length zero
+  if (bucket.e0_len) {
+    degenerateFlippedIsZero(bucket);
+  //on of the other four edges is zero
+  } else if (bucket.e1_len == 0.0 || bucket.e2_len == 0.0 || bucket.e3_len == 0.0 || bucket.e4_len == 0) {
+    degenerateNonFlippedIsZero(bucket);
+  //lengths are good, but angles could still be bad
+  } else if (bucket.e0_len == bucket.e1_len + bucket.e2_len || bucket.e0_len == bucket.e3_len + bucket.e4_len) {
+    degenerateOnlyAngleIsZero(bucket);
 
-    return Triangulation::edgeTable[e.getIndex()];
+  //the hinge in nondegenerate and we should proceed with the old flip code that will handle it well
+  } else*/
+  if (!Triangulation::faceTable[bucket.f0].isNegative() && !Triangulation::faceTable[bucket.f1].isNegative()) {
+    flipPP(bucket);
+  } else if (Triangulation::faceTable[bucket.f0].isNegative() && Triangulation::faceTable[bucket.f1].isNegative()) {
+    flipNN(bucket);
+    //note the following || is technically exclusive because the two && cases are checked above
+  } else if((Triangulation::faceTable[bucket.f0].isNegative() == true) || (Triangulation::faceTable[bucket.f1].isNegative() == true)) {
+
+    flipPN(bucket);
+
+  } else {
+    printf("hmm, no case was found\n");
+    //just need to escape return e seems sufficient;
+    return e;
+  }
+
+  return Triangulation::edgeTable[e.getIndex()];
 } //end of flip
 
 //compute the height perpendicular to x
@@ -49,8 +81,17 @@ double perpHeight(double x, double y, double z) {
 void flipPP(struct simps b) {
   //determine the flipped edges new length after flipping
   double e_length;
+
+  double ang = b.a2;
+  double len2 = b.e2_len;
+  double len3 = b.e3_len;
+  if (ang >= PI) {
+    ang = b.a0;
+    len2 = b.e1_len;
+    len3 = b.e4_len;
+  }
   
-  e_length = sqrt( (b.e2_len*b.e2_len) + (b.e3_len * b.e3_len) - (2*b.e2_len*b.e3_len*cos(b.a2)) );
+  e_length = sqrt( (len2 * len2) + (len3 * len3) - (2 * len2 * len3 * cos(ang)));
   //e_length = perpHeight(b.e0_len, b.e2_len, b.e1_len) + perpHeight(b.e0_len, b.e3_len, b.e4_len);
 
   Length::At(Triangulation::edgeTable[b.e0])->setValue(e_length);
@@ -340,6 +381,7 @@ v1  \    e0     / v3
 
 bool prep_for_flip(Edge e, struct simps * bucket) {
 
+    //check to see if the edge is a border, we can't flip borders, so return false
     if ((*(Triangulation::edgeTable[e.getIndex()].getLocalFaces())).size() <= 1) {
         return false;
     }
@@ -408,8 +450,17 @@ bool prep_for_flip(Edge e, struct simps * bucket) {
   //note that one of these is incorrect and needs to be changed
   //because its at the vertex where the concavity occurs
   //for simplicity i will calculate this later when it is important or not
-  double a0 = angle(e0_len, e1_len, e2_len) + angle(e0_len, e4_len, e3_len);
-  double a2 = angle(e0_len, e2_len, e1_len) + angle(e0_len, e3_len, e4_len);
+  double a0, a2;
+
+  //old method of computing angles prior to geoquants, left in for posterity
+  //a0 = angle(e0_len, e1_len, e2_len) + angle(e0_len, e4_len, e3_len);
+  //a2 = angle(e0_len, e2_len, e1_len) + angle(e0_len, e3_len, e4_len);
+
+  a0 = EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v0], Triangulation::faceTable[bucket->f0])
+        + EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v0], Triangulation::faceTable[bucket->f1]);
+
+  a2 = EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v2], Triangulation::faceTable[bucket->f0])
+        + EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v2], Triangulation::faceTable[bucket->f1]);
 
   bucket->a0 = a0;
   bucket->a2 = a2;
@@ -419,3 +470,46 @@ bool prep_for_flip(Edge e, struct simps * bucket) {
 
   return true;
 }
+
+//beyong here degenerate triangles are handled
+
+void degenerateFlippedIsZero(simps b) {
+  //calling flipPP should work for now, only problem is that it will result in
+  //arbitrary assignment of positive and negative triangles after the flips
+  flipPP(b);
+
+}// end of degenerateFlippedIsZero
+
+void degenerateNonFlippedIsZero(simps b) {
+  int zeroSideIndex, adjacentIndex;
+  double angleAdjacentToZeroEdge;
+
+  //locate a zero length, and the edge that is adjacent to the zero edge and
+  //the edge that is going to be flipped
+  if (0 == b.e1_len) {
+    zeroSideIndex = b.e1;
+    adjacentIndex = b.e4;
+    angleAdjacentToZeroEdge = b.a0;
+  } else if (0 == b.e2_len) {
+    zeroSideIndex = b.e2;
+    adjacentIndex = b.e3;
+    angleAdjacentToZeroEdge = b.a2;
+  } else if (0 == b.e3_len) {
+    zeroSideIndex = b.e3;
+    adjacentIndex = b.e2;
+    angleAdjacentToZeroEdge = b.a2;
+  } else if (0 == b.e4_len) {
+    zeroSideIndex = b.e4;
+    adjacentIndex = b.e1;
+    angleAdjacentToZeroEdge = b.a0;
+  }
+
+
+
+
+}//end of degernateNonFlippedIsZero
+
+void degenerateOnlyAngleIsZero(simps b) {
+
+
+}// end of degenerateOnlyAngleIsZero

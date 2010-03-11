@@ -26,6 +26,8 @@ class FlipAlgorithm {
     //returns the index of the currenly selected edge
     int currentEdgeIndex(void);
 
+    void FlipAlgorithm::resetCurrEdge(void);
+
     //performs a single "step" of the algorithm, by calling either flipConvexHinges, or flipOneNonConvexHinge
     int step(void);
 
