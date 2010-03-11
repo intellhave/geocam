@@ -6,8 +6,11 @@
 #include "triangulationInputOutput.h"
 #include "TriangulationDevelopment.h"
 #include "miscmath.h"
-#include "length.h"
 #define PI 	3.141592653589793238
+
+//geoquants
+#include "length.h"
+#include "euc_angle.h"
 
 //a simps struct is supposed to hold all the important values that are
 //necessary for performing the flip
@@ -77,4 +80,14 @@ topo_flip(Edge, struct simps);
 //helper function that constructs the struct to hold all the important values
 bool
 prep_for_flip(Edge, struct simps*);
+
+//the edge being flipped is zero
+void degenerateFlippedIsZero(simps b);
+
+//the edge being flipped is NONzero but one of the other four edges is zero
+void degenerateNonFlippedIsZero(simps b);
+
+//all the edges have nonzero length, but one of the angles is zero
+void degenerateOnlyAngleIsZero(simps b);
+
 #endif

@@ -5,6 +5,7 @@
 FlipAlgorithm::FlipAlgorithm()
 {
     whichStep = 0;
+    resetCurrEdge();
 }
 FlipAlgorithm::~FlipAlgorithm()
 {
@@ -14,23 +15,25 @@ FlipAlgorithm::~FlipAlgorithm()
  * return 0 is nothing happened, 1 is something happened
  */
 int FlipAlgorithm::flipConvexHinges() {
-    int ret = 0;
-    for (currEdge = Triangulation::edgeTable.begin(); currEdge != Triangulation::edgeTable.end(); currEdge++) {
+    cout << "1\n";
+    //currEdge = Triangulation::edgeTable.begin();
+    for (; currEdge != Triangulation::edgeTable.end(); currEdge++) {
         if (!(currEdge->second).isBorder()          &&  isConvexHinge(currEdge->second) &&
             !isWeightedDelaunay(currEdge->second)   &&  facesAreTheSame(currEdge->second)) {
             flip(currEdge->second);
-            ret = currEdge->first;
-            //return ret;
+            return currEdge->first;
         }
     }
-    return ret;
+    return -1;
 }
 
 /*
- * return 0 is nothing happened, 1 is something happened
+ * return -1 is nothing happened, edge index is something happened
  */
 int FlipAlgorithm::flipOneNonConvexHinge() {
-    for (currEdge = Triangulation::edgeTable.begin(); currEdge != Triangulation::edgeTable.end(); currEdge++) {
+    cout << "2\n";
+    //currEdge = Triangulation::edgeTable.begin();
+    for (; currEdge != Triangulation::edgeTable.end(); currEdge++) {
         if (!(currEdge->second).isBorder()  && facesAreTheSame((currEdge->second))
                                             && !isConvexHinge(currEdge->second)
                                             && !isWeightedDelaunay(currEdge->second)) {
@@ -38,10 +41,10 @@ int FlipAlgorithm::flipOneNonConvexHinge() {
             return currEdge->first;
         }
     }
-    return 0;
+    return -1;
 }
 
-//flips and increments iterator
+//flips
 void FlipAlgorithm::performFlip(void)
 {
     if (currEdge != Triangulation::edgeTable.end()) {
@@ -55,14 +58,23 @@ int FlipAlgorithm::currentEdgeIndex(void)
 }
 
 int FlipAlgorithm::step() {
-    int flipped = 0;
+    int stayOnThisStep = 0;
     if (whichStep == 0) {
-      flipped = flipConvexHinges();
+      stayOnThisStep = flipConvexHinges();
     } else if (whichStep == 1) {
-      flipped = flipOneNonConvexHinge();
+      stayOnThisStep = flipOneNonConvexHinge();
     }
-    whichStep = (whichStep + 1) % 2;
-    return flipped;
+    //cout << stayOnThisStep << "\n";
+    //cout << currEdge->first << "\n\n";
+    if (0 > stayOnThisStep) {
+      whichStep = (whichStep + 1) % 2;
+      currEdge = Triangulation::edgeTable.begin();
+    }
+    return stayOnThisStep;
+}
+
+void FlipAlgorithm::resetCurrEdge(void) {
+  currEdge = Triangulation::edgeTable.begin();
 }
 
 void FlipAlgorithm::runFlipAlgorithm()
