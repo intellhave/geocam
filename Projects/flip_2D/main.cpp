@@ -70,15 +70,33 @@ void printStuff(ostream *output) {
  */
 int main(int argc, char** argv) {
 
-  //cout << "starting!\n";
-  //makeTriangulationFile("test_files/toms_triangulation.lutz", "test_files/toms_triangulation.txt");
-  //cout << "done!\n";
-  //system("PAUSE");
-  //exit(0);
+    //cout << "starting!\n";
+    //makeTriangulationFile("test_files/toms_triangulation.lutz", "test_files/toms_triangulation.txt");
+    //cout << "done!\n";
+    //system("PAUSE");
+    //exit(0);
 
-  //triangulation initializaiton steps
+   /* readTriangulationFile("test_files/non_convex_pair.txt");
 
-  if (argc <= 1) {
+    map<int, Vertex>::iterator sit;
+    sit = Triangulation::vertexTable.begin();
+    vector<int> v;
+    for (; sit != Triangulation::vertexTable.end(); sit++) {
+        v.push_back(sit->first);
+        cout << sit->first << "\n";
+    }
+
+    Functional* f;
+    f = new Functional("someNumbers.txt", "vertex", v);
+    cout << "here\n";
+
+    for (sit = Triangulation::vertexTable.begin(); sit != Triangulation::vertexTable.end(); sit++) {
+        cout << sit->first << "    " << f->valueOf(sit->first) << "\n";
+    }*/
+
+    //triangulation initializaiton steps
+
+    if (argc <= 1) {
         cout << "ATTENTION: YOU NEED TO SPECIFY A FILE TO BE READ BY GIVING MAIN AN ARGUMENT!!!\n"
              << "READ THE COMMENT ABOVE MAIN's DEFINITION\n\nif you press any key to continue now,"
              << " the file being used will default to test_files/convex_pair.txt\n\n";
@@ -102,6 +120,8 @@ int main(int argc, char** argv) {
   //_vertexF = new Function("someNumbers.txt", "vertex", Triangulation::vertexTable, true);
 
 
-  TriangulationDisplay::ShowTriangulation(input_file, argc, argv);
+  //readTriangulationFile(input_file);
+  TriangulationDisplay::ShowTriangulation(input_file);
+  //TriangulationDisplay::ShowTriangulation(input_file, argc, argv);
 	return 0;
 }

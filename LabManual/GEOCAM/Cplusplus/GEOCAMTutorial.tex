@@ -402,6 +402,120 @@ During the maximize step, \verb|nm| is approximating the gradient and Hessian us
 
 \bigskip
 
-We now have two new functions \verb|gradient| and \verb|hessian|. Both take an array that represents the point at which we are taking derivatives. The gradient places its partial derivatives in the array \verb|sol|. For the Hessian, \verb|sol| is now a two-dimensional array representing the four second partial derivatives. We are also optimizing our solution a little differently. The array \verb|x_n| represents both the initial point and the optimal point and every point that occurs in between those two as we step through Newtons Method. The function call \verb|step| performs just one step of Newtons Method, updating the array \verb|x_n| and returning the length of the gradient vector. The stopping condition is an upperbound on the length of the gradient. We also use one more function in the \verb|NewtonsMethod| class, \verb|printInfo|. This simply displays the gradient and Hessian of the most recent step.
+We now have two new functions \verb|gradient| and \verb|hessian|. Both take an array that represents the point at which we are taking derivatives. The gradient places its partial derivatives in the array \verb|sol|. For the Hessian, \verb|sol| is now a two-dimensional array representing the four second partial derivatives. We are also optimizing our solution a little differently. The array \verb|x_n| represents both the initial point and the optimal point and every point that occurs in between those two as we step through Newtons Method. The function call \verb|step| performs just one step of Newtons Method, updating the array \verb|x_n| and returning the length of the gradient vector. The stopping condition is an upperbound on the length of the gradient. We also use one more function in the \verb|NewtonsMethod| class, \verb|printInfo|. This simply displays the gradient and Hessian of the most recent step.\\
+
+\section*{Performing Flips on Triangulations of 2D Manifolds}
+
+We would like to be able to experimentally investigate flip algorithms that will transform weighted triangulations into weighted-Delaunay triangulations. To do this we made a function that can take information describing a hinge and perform a flip on that hinge. This involves changing the combinatorial information of all simplices local to that hinge. The function that can do this for 2D hinges is\\
+
+\begin{verbatim}
+   Edge flip(Edge e);
+\end{verbatim}
+
+\bigskip
+
+This function is located in \verb|hinge_flip.cpp|, to use it we'll need to include \verb|hinge_flip.h|. The function \verb|flip| takes only an \verb|Edge| object, which for 2D manifolds, will fully describe a hinge in our triangulation. Part of performing a flip involves giving the flipped edge a new length so that it fits into the rest of the triangulation. To compute this new edge length we'll need \verb|Length| geoquants associated with the \verb|Edge| objects, and \verb|EuclideanAngle| geoquants associated with \verb|Vertex,Face| pairs. We can achieve this by simply inputing lengths since the \verb|EuclideanAngle| geoquants will compute their values automatically if the \verb|Length|s are valid.
+
+Assigning lengths to edges could be hard coded into your program or collected from the user via a command line prompt one at a time. However hard coding specific geometric information will make it more difficult to switch between triangulations as recompilation of your code will be necessary anytime the triangulation changes. Prompting the user for inputs can become tedious and error prone for triangulations with many edges. The solutions we will use is to modify our input file so that a length value follows an \verb|Edge| entry, for example\\
+
+\begin{verbatim}
+  ...
+  Edge: 6
+  2 5
+  1 3 7 8 
+  3 
+  5
+  Edge: 7
+  ...
+\end{verbatim}
+
+\bigskip
+
+will indicate that \verb|Edge| $6$ has a length of $5$, because the last line of information pertaining to \verb|Edge| $6$ is a $5$. If we specify a length for each edge in our triangulation input file, those lengths will automatically be assigned to \verb|Length| geoquants by the \verb|readTriangulationFile(char *)| function. Another geoquant that is important in our investigations is the \verb|Radius| geoquant which represents the radius of a circle centered at a vertex. We can specify these radius values for vertices in the same way we specify edge lengths, for example\\
+
+\begin{verbatim}
+   ...
+   Vertex: 5
+   2 6 
+   6 8 
+   3
+   Vertex: 6
+   ...
+\end{verbatim}
+
+If we have all of these geoquant values specified in our input file, we can go ahead and try to use the \verb|flip(Edge e)| function, and examine the changes it makes to a triangulation.
+
+\begin{verbatim}
+   ...
+   #include "hinge_flip.h"
+   #include "delaunay.h"
+   ...
+   readTriangulationFile("../../Data/flip_test/eight_triangles_redux.txt");
+
+   map<int, Edge>::iterator eit = Triangulation::edgeTable.begin();
+   while(isBorder(eit->second)) {
+      eit++;
+   }
+   Edge e = eit->second;
+
+   writeTriangulationFile("beforeFlip.txt");
+
+   e = flip(e);
+
+   writeTriangulationFile("afterFlip.txt");
+   
+   cout << e.getIndex();
+   
+   system("PAUSE");
+\end{verbatim}
+
+\bigskip
+
+Notice that we include \verb|hinge_flip.h|, but also include \verb|delaunay.h| which has many functions that are helpful when working on flip algorithms. In particular we plan to use \verb|isBorder(Edge e)|, which returns \verb|true| if the \verb|Edge| has only one local \verb|Face|. The first step after these new include statements is to read in the triangulation using \verb|readTriangulationFile|. The file we specify here has length and radius information which we can expect to be assigned correctly to the \verb|Edge| and \verb|Vertex| objects. The loop iterates over the \verb|edgeTable| to find an interior \verb|Edge|. An \verb|Edge| with one local \verb|Face| cannot be flipped so in this example we avoid these edges to ensure that calling \verb|Flip| has a non-trivial affect on the triangulation. We then write out the triangulation to a file called \verb|"beforeFlip.txt"|. We perform the flip on the edge we found and write out the triangulation again to a different file \verb|"afterFlip.txt"|. We print the index of the flipped \verb|Edge| so we know which \verb|Edge| we flipped. This way we can open up the two files we wrote and verify the combinatorial information has changed.
+
+\section*{Visualizing Triangulations on 2D Manifolds}
+
+Checking each simplex individually to make sure that the combinatorial or geometric information is correct can be a cumbersome task. To simplify this, we created tools to help visualize a triangulation. Currently, we can draw images of 2D triangulations using\\
+
+\begin{verbatim}
+   void ShowTriangulation(char * f) 
+\end{verbatim}
+
+\bigskip
+
+This function is located in the file \verb|TriangulationDisplay.cpp|, so to use it we must include \verb|TriangulationDisplay.h|. The reader should open one of these files in their favorite text editor and notice that all the functions and variables defined within are inside a set of braces labeled \verb|namespace TriangulationDisplay|. A \verb|namespace| is a way of grouping the names of functions, variables, and classes that should be associated with one another and to prevent accidental modification to global variables defined within the namespace. The documentation for \verb|TriangulationDisplay| gives an argument for the use of a \verb|namespace| instead of a \verb|class| for this particular situation.
+
+Assuming you have read in a triangulation file with lengths assigned such that the triangulation is planar, we can easily pop up a window with a picture of the triangulation.\\
+
+\begin{verbatim}
+   #include "TriangulationDisplay.h"
+   ...
+   TriangulationDisplay::ShowTriangulation();
+\end{verbatim}
+
+\bigskip
+
+All we did was include the appropriate header file and call the \verb|ShowTriangulation()| function. Notice that the function name is preceded by \verb|TriangulationDisplay::|. The operator \verb|::| is called the scoping operator in C++, it allows an area of code to access a namespace that is not the same as the current namespace. In this case we are accessing a function in the namespace \verb|TriangulationDisplay|
+
+\verb|ShowTriangulation| is overloaded to handle being called in other ways, such as\\
+
+\begin{verbatim}
+ShowTriangulation(char * f)
+\end{verbatim}
+
+\bigskip
+
+The first argument \verb|f| is a filename you wish to load. The file specified by \verb|f| will be loaded with \verb|readTriangulationFile|, this is to provide the option of showing a triangulation with out having to load the triangulation manually. Be cautious in using this as it will undo any change you had previously made to the triangulation.
+
+Once we've called some variation of \verb|ShowTriangulation(...)| we will be presented with a window which should be displaying whatever triangulation was asked for. Some useful key commands to use while viewing a triangulation follow.
+
+\begin{align*}
+\rightarrow\;\leftarrow\;\uparrow\;\downarrow &- move\;the \;triangulation \;around\\
+[\;] &- \;zoom\; in\; and\; out\\
+,\;. &- \;select\; next\; or\; previous\; edge\; (typically\; on\; the \; same \; keys \; as\; <\; and\; >)\\
+s &- \; toggle \; view \; between\; flat\; and \; stacked\\
+spacebar &- \; flip \; currently\; selected\; edge\\
+r &- \;toggle\;radii\\
+\end{align*}
 
 \end{document}
