@@ -22,10 +22,10 @@ Focused=-1
 [Editor_0]
 Open=0
 <<<<<<< .mine
-Top=0
-CursorCol=3
-CursorRow=124
-TopLine=99
+Top=1
+CursorCol=1
+CursorRow=13
+TopLine=1
 =======
 Top=0
 CursorCol=60
