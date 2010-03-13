@@ -1,0 +1,168 @@
+# Project: Tutorial
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
+WINDRES = windres.exe
+RES  = 
+OBJ  = ../../Geometry/Vertex/curvature2D.o ../../Geometry/Vertex/curvature3D.o ../../Geometry/Vertex/curvature_partial.o ../../Geometry/Vertex/euc_angle.o ../../Geometry/Vertex/radius.o ../../Geometry/Edge/dih_angle.o ../../Geometry/Edge/dih_angle_sum.o ../../Geometry/Edge/dualarea.o ../../Geometry/Edge/dualareasegment.o ../../Geometry/Edge/edge_height.o ../../Geometry/Edge/eta.o ../../Geometry/Edge/length.o ../../Geometry/Edge/partial_edge.o ../../Geometry/Edge/sectional_curvature.o ../../Geometry/Face/area.o ../../Geometry/Face/face_height.o ../../Geometry/Tetrahedron/volume.o ../../Geometry/Tetrahedron/volume_length_partial.o ../../Geometry/Tetrahedron/volume_length_tetra_partial.o ../../Geometry/Tetrahedron/volume_partial.o ../../Geometry/Geoquant_general/triposition.o ../../Geometry/Triangulation/ehr_partial.o ../../Geometry/Triangulation/ehr_second_partial.o ../../Geometry/Triangulation/total_volume_partial.o ../../Geometry/Triangulation/totalcurvature.o ../../Geometry/Triangulation/totalvolume.o ../../Geometry/Triangulation/volume_partial_sum.o ../../Geometry/Triangulation/volume_second_partial.o ../../Triangulation/edge.o ../../Triangulation/face.o ../../Triangulation/simplex.o ../../Triangulation/tetra.o ../../Triangulation/triangulation.o ../../Triangulation/vertex.o ../../System_utils/utilities.o ../../Math/miscmath.o ../../Visualization/pointlinecircle.o ../../InputOutput/3DInputOutput.o ../../InputOutput/triangulationInputOutput.o ../../Geometry/Edge/partial_edge_partial.o ../../Geometry/Edge/dih_angle_partial.o ../../Geometry/Vertex/alpha.o main.o ../../FlipAlgorithm/delaunay.o ../../FlipAlgorithm/FlipAlgorithm.o ../../FlipAlgorithm/Function.o ../../FlipAlgorithm/hinge_flip.o $(RES)
+LINKOBJ  = ../../Geometry/Vertex/curvature2D.o ../../Geometry/Vertex/curvature3D.o ../../Geometry/Vertex/curvature_partial.o ../../Geometry/Vertex/euc_angle.o ../../Geometry/Vertex/radius.o ../../Geometry/Edge/dih_angle.o ../../Geometry/Edge/dih_angle_sum.o ../../Geometry/Edge/dualarea.o ../../Geometry/Edge/dualareasegment.o ../../Geometry/Edge/edge_height.o ../../Geometry/Edge/eta.o ../../Geometry/Edge/length.o ../../Geometry/Edge/partial_edge.o ../../Geometry/Edge/sectional_curvature.o ../../Geometry/Face/area.o ../../Geometry/Face/face_height.o ../../Geometry/Tetrahedron/volume.o ../../Geometry/Tetrahedron/volume_length_partial.o ../../Geometry/Tetrahedron/volume_length_tetra_partial.o ../../Geometry/Tetrahedron/volume_partial.o ../../Geometry/Geoquant_general/triposition.o ../../Geometry/Triangulation/ehr_partial.o ../../Geometry/Triangulation/ehr_second_partial.o ../../Geometry/Triangulation/total_volume_partial.o ../../Geometry/Triangulation/totalcurvature.o ../../Geometry/Triangulation/totalvolume.o ../../Geometry/Triangulation/volume_partial_sum.o ../../Geometry/Triangulation/volume_second_partial.o ../../Triangulation/edge.o ../../Triangulation/face.o ../../Triangulation/simplex.o ../../Triangulation/tetra.o ../../Triangulation/triangulation.o ../../Triangulation/vertex.o ../../System_utils/utilities.o ../../Math/miscmath.o ../../Visualization/pointlinecircle.o ../../InputOutput/3DInputOutput.o ../../InputOutput/triangulationInputOutput.o ../../Geometry/Edge/partial_edge_partial.o ../../Geometry/Edge/dih_angle_partial.o ../../Geometry/Vertex/alpha.o main.o ../../FlipAlgorithm/delaunay.o ../../FlipAlgorithm/FlipAlgorithm.o ../../FlipAlgorithm/Function.o ../../FlipAlgorithm/hinge_flip.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -pg -lglut32 -lglu32 -lopengl32 -lwinmm -lgdi32  -lgmon -pg  -g3 
+INCS =  -I"C:/Dev-Cpp/include"  -I"../.."  -I"../../Triangulation"  -I"../../InputOutput"  -I"../../Subsystems/Solvers/Newtons_method"  -I"../../System_utils"  -I"../../Math"  -I"../../Geometry/Vertex"  -I"../../Geometry/Edge"  -I"../../Geometry/Face"  -I"../../Geometry/Tetrahedron"  -I"../../Geometry/Triangulation"  -I"../../Geometry/Geoquant_general"  -I"../../Geometry/Vertex"  -I"../../Visualization"  -I"../../FlipAlgorithm" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include"  -I"../.."  -I"../../Triangulation"  -I"../../InputOutput"  -I"../../Subsystems/Solvers/Newtons_method"  -I"../../System_utils"  -I"../../Math"  -I"../../Geometry/Vertex"  -I"../../Geometry/Edge"  -I"../../Geometry/Face"  -I"../../Geometry/Tetrahedron"  -I"../../Geometry/Triangulation"  -I"../../Geometry/Geoquant_general"  -I"../../Geometry/Vertex"  -I"../../Visualization"  -I"../../FlipAlgorithm" 
+BIN  = ../../Tutorial.exe
+CXXFLAGS = $(CXXINCS)   -O3 -pg -g3
+CFLAGS = $(INCS)   -O3 -pg -g3
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before ../../Tutorial.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "..\..\Tutorial.exe" $(LIBS)
+
+../../Geometry/Vertex/curvature2D.o: ../../Geometry/Vertex/curvature2D.cpp
+	$(CPP) -c ../../Geometry/Vertex/curvature2D.cpp -o ../../Geometry/Vertex/curvature2D.o $(CXXFLAGS)
+
+../../Geometry/Vertex/curvature3D.o: ../../Geometry/Vertex/curvature3D.cpp
+	$(CPP) -c ../../Geometry/Vertex/curvature3D.cpp -o ../../Geometry/Vertex/curvature3D.o $(CXXFLAGS)
+
+../../Geometry/Vertex/curvature_partial.o: ../../Geometry/Vertex/curvature_partial.cpp
+	$(CPP) -c ../../Geometry/Vertex/curvature_partial.cpp -o ../../Geometry/Vertex/curvature_partial.o $(CXXFLAGS)
+
+../../Geometry/Vertex/euc_angle.o: ../../Geometry/Vertex/euc_angle.cpp
+	$(CPP) -c ../../Geometry/Vertex/euc_angle.cpp -o ../../Geometry/Vertex/euc_angle.o $(CXXFLAGS)
+
+../../Geometry/Vertex/radius.o: ../../Geometry/Vertex/radius.cpp
+	$(CPP) -c ../../Geometry/Vertex/radius.cpp -o ../../Geometry/Vertex/radius.o $(CXXFLAGS)
+
+../../Geometry/Edge/dih_angle.o: ../../Geometry/Edge/dih_angle.cpp
+	$(CPP) -c ../../Geometry/Edge/dih_angle.cpp -o ../../Geometry/Edge/dih_angle.o $(CXXFLAGS)
+
+../../Geometry/Edge/dih_angle_sum.o: ../../Geometry/Edge/dih_angle_sum.cpp
+	$(CPP) -c ../../Geometry/Edge/dih_angle_sum.cpp -o ../../Geometry/Edge/dih_angle_sum.o $(CXXFLAGS)
+
+../../Geometry/Edge/dualarea.o: ../../Geometry/Edge/dualarea.cpp
+	$(CPP) -c ../../Geometry/Edge/dualarea.cpp -o ../../Geometry/Edge/dualarea.o $(CXXFLAGS)
+
+../../Geometry/Edge/dualareasegment.o: ../../Geometry/Edge/dualareasegment.cpp
+	$(CPP) -c ../../Geometry/Edge/dualareasegment.cpp -o ../../Geometry/Edge/dualareasegment.o $(CXXFLAGS)
+
+../../Geometry/Edge/edge_height.o: ../../Geometry/Edge/edge_height.cpp
+	$(CPP) -c ../../Geometry/Edge/edge_height.cpp -o ../../Geometry/Edge/edge_height.o $(CXXFLAGS)
+
+../../Geometry/Edge/eta.o: ../../Geometry/Edge/eta.cpp
+	$(CPP) -c ../../Geometry/Edge/eta.cpp -o ../../Geometry/Edge/eta.o $(CXXFLAGS)
+
+../../Geometry/Edge/length.o: ../../Geometry/Edge/length.cpp
+	$(CPP) -c ../../Geometry/Edge/length.cpp -o ../../Geometry/Edge/length.o $(CXXFLAGS)
+
+../../Geometry/Edge/partial_edge.o: ../../Geometry/Edge/partial_edge.cpp
+	$(CPP) -c ../../Geometry/Edge/partial_edge.cpp -o ../../Geometry/Edge/partial_edge.o $(CXXFLAGS)
+
+../../Geometry/Edge/sectional_curvature.o: ../../Geometry/Edge/sectional_curvature.cpp
+	$(CPP) -c ../../Geometry/Edge/sectional_curvature.cpp -o ../../Geometry/Edge/sectional_curvature.o $(CXXFLAGS)
+
+../../Geometry/Face/area.o: ../../Geometry/Face/area.cpp
+	$(CPP) -c ../../Geometry/Face/area.cpp -o ../../Geometry/Face/area.o $(CXXFLAGS)
+
+../../Geometry/Face/face_height.o: ../../Geometry/Face/face_height.cpp
+	$(CPP) -c ../../Geometry/Face/face_height.cpp -o ../../Geometry/Face/face_height.o $(CXXFLAGS)
+
+../../Geometry/Tetrahedron/volume.o: ../../Geometry/Tetrahedron/volume.cpp
+	$(CPP) -c ../../Geometry/Tetrahedron/volume.cpp -o ../../Geometry/Tetrahedron/volume.o $(CXXFLAGS)
+
+../../Geometry/Tetrahedron/volume_length_partial.o: ../../Geometry/Tetrahedron/volume_length_partial.cpp
+	$(CPP) -c ../../Geometry/Tetrahedron/volume_length_partial.cpp -o ../../Geometry/Tetrahedron/volume_length_partial.o $(CXXFLAGS)
+
+../../Geometry/Tetrahedron/volume_length_tetra_partial.o: ../../Geometry/Tetrahedron/volume_length_tetra_partial.cpp
+	$(CPP) -c ../../Geometry/Tetrahedron/volume_length_tetra_partial.cpp -o ../../Geometry/Tetrahedron/volume_length_tetra_partial.o $(CXXFLAGS)
+
+../../Geometry/Tetrahedron/volume_partial.o: ../../Geometry/Tetrahedron/volume_partial.cpp
+	$(CPP) -c ../../Geometry/Tetrahedron/volume_partial.cpp -o ../../Geometry/Tetrahedron/volume_partial.o $(CXXFLAGS)
+
+../../Geometry/Geoquant_general/triposition.o: ../../Geometry/Geoquant_general/triposition.cpp
+	$(CPP) -c ../../Geometry/Geoquant_general/triposition.cpp -o ../../Geometry/Geoquant_general/triposition.o $(CXXFLAGS)
+
+../../Geometry/Triangulation/ehr_partial.o: ../../Geometry/Triangulation/ehr_partial.cpp
+	$(CPP) -c ../../Geometry/Triangulation/ehr_partial.cpp -o ../../Geometry/Triangulation/ehr_partial.o $(CXXFLAGS)
+
+../../Geometry/Triangulation/ehr_second_partial.o: ../../Geometry/Triangulation/ehr_second_partial.cpp
+	$(CPP) -c ../../Geometry/Triangulation/ehr_second_partial.cpp -o ../../Geometry/Triangulation/ehr_second_partial.o $(CXXFLAGS)
+
+../../Geometry/Triangulation/total_volume_partial.o: ../../Geometry/Triangulation/total_volume_partial.cpp
+	$(CPP) -c ../../Geometry/Triangulation/total_volume_partial.cpp -o ../../Geometry/Triangulation/total_volume_partial.o $(CXXFLAGS)
+
+../../Geometry/Triangulation/totalcurvature.o: ../../Geometry/Triangulation/totalcurvature.cpp
+	$(CPP) -c ../../Geometry/Triangulation/totalcurvature.cpp -o ../../Geometry/Triangulation/totalcurvature.o $(CXXFLAGS)
+
+../../Geometry/Triangulation/totalvolume.o: ../../Geometry/Triangulation/totalvolume.cpp
+	$(CPP) -c ../../Geometry/Triangulation/totalvolume.cpp -o ../../Geometry/Triangulation/totalvolume.o $(CXXFLAGS)
+
+../../Geometry/Triangulation/volume_partial_sum.o: ../../Geometry/Triangulation/volume_partial_sum.cpp
+	$(CPP) -c ../../Geometry/Triangulation/volume_partial_sum.cpp -o ../../Geometry/Triangulation/volume_partial_sum.o $(CXXFLAGS)
+
+../../Geometry/Triangulation/volume_second_partial.o: ../../Geometry/Triangulation/volume_second_partial.cpp
+	$(CPP) -c ../../Geometry/Triangulation/volume_second_partial.cpp -o ../../Geometry/Triangulation/volume_second_partial.o $(CXXFLAGS)
+
+../../Triangulation/edge.o: ../../Triangulation/edge.cpp
+	$(CPP) -c ../../Triangulation/edge.cpp -o ../../Triangulation/edge.o $(CXXFLAGS)
+
+../../Triangulation/face.o: ../../Triangulation/face.cpp
+	$(CPP) -c ../../Triangulation/face.cpp -o ../../Triangulation/face.o $(CXXFLAGS)
+
+../../Triangulation/simplex.o: ../../Triangulation/simplex.cpp
+	$(CPP) -c ../../Triangulation/simplex.cpp -o ../../Triangulation/simplex.o $(CXXFLAGS)
+
+../../Triangulation/tetra.o: ../../Triangulation/tetra.cpp
+	$(CPP) -c ../../Triangulation/tetra.cpp -o ../../Triangulation/tetra.o $(CXXFLAGS)
+
+../../Triangulation/triangulation.o: ../../Triangulation/triangulation.cpp
+	$(CPP) -c ../../Triangulation/triangulation.cpp -o ../../Triangulation/triangulation.o $(CXXFLAGS)
+
+../../Triangulation/vertex.o: ../../Triangulation/vertex.cpp
+	$(CPP) -c ../../Triangulation/vertex.cpp -o ../../Triangulation/vertex.o $(CXXFLAGS)
+
+../../System_utils/utilities.o: ../../System_utils/utilities.cpp
+	$(CPP) -c ../../System_utils/utilities.cpp -o ../../System_utils/utilities.o $(CXXFLAGS)
+
+../../Math/miscmath.o: ../../Math/miscmath.cpp
+	$(CPP) -c ../../Math/miscmath.cpp -o ../../Math/miscmath.o $(CXXFLAGS)
+
+../../Visualization/pointlinecircle.o: ../../Visualization/pointlinecircle.cpp
+	$(CPP) -c ../../Visualization/pointlinecircle.cpp -o ../../Visualization/pointlinecircle.o $(CXXFLAGS)
+
+../../InputOutput/3DInputOutput.o: ../../InputOutput/3DInputOutput.cpp
+	$(CPP) -c ../../InputOutput/3DInputOutput.cpp -o ../../InputOutput/3DInputOutput.o $(CXXFLAGS)
+
+../../InputOutput/triangulationInputOutput.o: ../../InputOutput/triangulationInputOutput.cpp
+	$(CPP) -c ../../InputOutput/triangulationInputOutput.cpp -o ../../InputOutput/triangulationInputOutput.o $(CXXFLAGS)
+
+../../Geometry/Edge/partial_edge_partial.o: ../../Geometry/Edge/partial_edge_partial.cpp
+	$(CPP) -c ../../Geometry/Edge/partial_edge_partial.cpp -o ../../Geometry/Edge/partial_edge_partial.o $(CXXFLAGS)
+
+../../Geometry/Edge/dih_angle_partial.o: ../../Geometry/Edge/dih_angle_partial.cpp
+	$(CPP) -c ../../Geometry/Edge/dih_angle_partial.cpp -o ../../Geometry/Edge/dih_angle_partial.o $(CXXFLAGS)
+
+../../Geometry/Vertex/alpha.o: ../../Geometry/Vertex/alpha.cpp
+	$(CPP) -c ../../Geometry/Vertex/alpha.cpp -o ../../Geometry/Vertex/alpha.o $(CXXFLAGS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+../../FlipAlgorithm/delaunay.o: ../../FlipAlgorithm/delaunay.cpp
+	$(CPP) -c ../../FlipAlgorithm/delaunay.cpp -o ../../FlipAlgorithm/delaunay.o $(CXXFLAGS)
+
+../../FlipAlgorithm/FlipAlgorithm.o: ../../FlipAlgorithm/FlipAlgorithm.cpp
+	$(CPP) -c ../../FlipAlgorithm/FlipAlgorithm.cpp -o ../../FlipAlgorithm/FlipAlgorithm.o $(CXXFLAGS)
+
+../../FlipAlgorithm/Function.o: ../../FlipAlgorithm/Function.cpp
+	$(CPP) -c ../../FlipAlgorithm/Function.cpp -o ../../FlipAlgorithm/Function.o $(CXXFLAGS)
+
+../../FlipAlgorithm/hinge_flip.o: ../../FlipAlgorithm/hinge_flip.cpp
+	$(CPP) -c ../../FlipAlgorithm/hinge_flip.cpp -o ../../FlipAlgorithm/hinge_flip.o $(CXXFLAGS)
