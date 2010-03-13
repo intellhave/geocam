@@ -448,12 +448,11 @@ If we have all of these geoquant values specified in our input file, we can go a
 \begin{verbatim}
    ...
    #include "hinge_flip.h"
-   #include "delaunay.h"
    ...
    readTriangulationFile("../../Data/flip_test/eight_triangles_redux.txt");
 
    map<int, Edge>::iterator eit = Triangulation::edgeTable.begin();
-   while(isBorder(eit->second)) {
+   while(eit != Triangulation::edgeTable.end() && (eit->second).isBorder()) {
       eit++;
    }
    Edge e = eit->second;
@@ -471,7 +470,7 @@ If we have all of these geoquant values specified in our input file, we can go a
 
 \bigskip
 
-Notice that we include \verb|hinge_flip.h|, but also include \verb|delaunay.h| which has many functions that are helpful when working on flip algorithms. In particular we plan to use \verb|isBorder(Edge e)|, which returns \verb|true| if the \verb|Edge| has only one local \verb|Face|. The first step after these new include statements is to read in the triangulation using \verb|readTriangulationFile|. The file we specify here has length and radius information which we can expect to be assigned correctly to the \verb|Edge| and \verb|Vertex| objects. The loop iterates over the \verb|edgeTable| to find an interior \verb|Edge|. An \verb|Edge| with one local \verb|Face| cannot be flipped so in this example we avoid these edges to ensure that calling \verb|Flip| has a non-trivial affect on the triangulation. We then write out the triangulation to a file called \verb|"beforeFlip.txt"|. We perform the flip on the edge we found and write out the triangulation again to a different file \verb|"afterFlip.txt"|. We print the index of the flipped \verb|Edge| so we know which \verb|Edge| we flipped. This way we can open up the two files we wrote and verify the combinatorial information has changed.
+Notice that we include \verb|hinge_flip.h|. The first step after this new include statements is to read in the triangulation using \verb|readTriangulationFile|. The file we specify here has length and radius information which we can expect to be assigned correctly to the \verb|Edge| and \verb|Vertex| objects. The loop iterates over the \verb|edgeTable| to find an interior \verb|Edge|. We use \verb|isBorder()|, which returns \verb|true| if the \verb|Edge| has only one local \verb|Face|. An \verb|Edge| with one local \verb|Face| cannot be flipped so in this example we avoid these edges to ensure that calling \verb|Flip| has a non-trivial affect on the triangulation. We then write out the triangulation to a file called \verb|"beforeFlip.txt"|. We perform the flip on the edge we found and write out the triangulation again to a different file \verb|"afterFlip.txt"|. We print the index of the flipped \verb|Edge| so we know which \verb|Edge| we flipped. This way we can open up the two files we wrote and verify the combinatorial information has changed.
 
 \section*{Visualizing Triangulations on 2D Manifolds}
 
