@@ -34,31 +34,7 @@ bool tickMarks;
 int voronoi; // 0 is nothing, 1 is the whole voronoi diagram, 2 is the hinge only
 
 
-//funcs
-
-void startGLStuff(int argc, char * argv[]) {
-
-  setup_view_parameters();
-
-  //initialize GLUT
-	glutInit(&argc, argv);
-
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(600, 600); //Set the window size
-
-	//create the window
-	glutCreateWindow("flip algorithm");
-	initRendering(); //Initialize rendering
-
-	//set handler functions for drawing, keypresses, and window resizes
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glutDisplayFunc(drawScene);
-	glutKeyboardFunc(handleKeypress);
-	glutSpecialFunc(handleSpecialKeypress);
-	glutReshapeFunc(handleResize);
-
-  glutMainLoop();
-}
+//gl funcs
 
 void handleKeypress(unsigned char key, int x, int y) {
   map<int, Face>::iterator fit;
@@ -147,7 +123,7 @@ void handleKeypress(unsigned char key, int x, int y) {
           _gap_factor -= .1;
           break;
         case 's'://s    switch veiw modes
-            flat = (flat + 1)%3;
+            flat = (flat + 1)%2;
             if (flat == 1 || flat == 2) {
               glMatrixMode(GL_MODELVIEW);
               glLoadIdentity();
@@ -301,6 +277,53 @@ void drawSceneFlatAlt() {
       glVertex3d(p2.x, p2.y, 0.01);
       glEnd();
     }
+    
+    //draw the duals
+    if (voronoi == 1) {
+        vector<Line> ds;
+        ds = getDuals();
+        glBegin(GL_LINES);
+        glColor3d(0, 255, 0);
+        for(int i = 0; i < ds.size(); i++) {
+            glVertex3d(ds[i].getInitialX(),ds[i].getInitialY(),0);
+            glVertex3d(ds[i].getEndingX(),ds[i].getEndingY(),0);
+        }
+        glEnd();
+    }//TODO: need to figure out a good way to display only the duals of the current hinge
+
+    //draws the weights around the vertices
+    if (showWeights) {
+        map<int,Vertex>::iterator vit;
+        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+            Point p;
+            p = getPoint(vit->first);
+            double radius = Radius::valueAt(vit->second);
+            glBegin(GL_LINE_STRIP);
+            glColor3d(255,250,250);
+            for (double i = 0; i <= 2*PI; i+=0.0174532925) {
+                glVertex3d(p.x + cos(i) * radius, p.y + sin(i) * radius, 0);
+            }
+            glEnd();
+        }
+    }
+
+    //draw little tick marks along the inside of each triangle
+    if (tickMarks) {
+      map<int, Face>::iterator fit = Triangulation::faceTable.begin();
+      glColor3d(0, 0, 255);
+      for (; fit != Triangulation::faceTable.end(); fit++) {
+          vector<int>* verts;
+          verts = (fit->second).getLocalVertices();
+          Point p1, p2, p3;
+          p1 = getPoint((*verts)[0]);
+          p2 = getPoint((*verts)[1]);
+          p3 = getPoint((*verts)[2]);
+
+          drawTicks(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 3);
+          drawTicks(p3.x, p3.y, p1.x, p1.y, p2.x, p2.y, 3);
+          drawTicks(p2.x, p2.y, p3.x, p3.y, p1.x, p1.y, 3);
+      }
+    }
 
 }
 
@@ -333,20 +356,6 @@ void drawSceneFlat() {
         iter++;
         glEnd();
     }
-
-    //draw the duals
-    if (voronoi == 1) {
-        vector<Line> ds;
-        ds = getDuals();
-        glBegin(GL_LINES);
-        glColor3d(0, 255, 0);
-        for(int i = 0; i < ds.size(); i++) {
-            glVertex3d(ds[i].getInitialX(),ds[i].getInitialY(),0);
-            glVertex3d(ds[i].getEndingX(),ds[i].getEndingY(),0);
-            iter++;
-        }
-        glEnd();
-    }//TODO: need to figure out a good way to display only the duals of the current hinge
 
     //draws the weights around the vertices
     if (showWeights) {
@@ -491,47 +500,82 @@ void setup_view_parameters(void) {
     }
 }
 
+void startGLStuff(int argc, char * argv[]) {
+
+  _dist = -20.0f;
+  _hori = -5.0f;
+  _vert = -5.0f;
+
+  _angle = 30.0f;
+  _camera_angle_yaw = 0.0f;
+  _camera_angle_pitch = 0.0f;
+  _gap_factor = 1;
+
+  setup_view_parameters();
+
+  //initialize GLUT
+	glutInit(&argc, argv);
+
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitWindowSize(600, 600); //Set the window size
+
+	//create the window
+	glutCreateWindow("flip algorithm");
+	initRendering(); //Initialize rendering
+
+	//set handler functions for drawing, keypresses, and window resizes
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glutDisplayFunc(drawScene);
+	glutKeyboardFunc(handleKeypress);
+	glutSpecialFunc(handleSpecialKeypress);
+	glutReshapeFunc(handleResize);
+
+  glutMainLoop();
+}
+
 //old TriangulationDisplay stuff
 //TriangulationDisplay class defs
 
+void ShowTriangulation() {
+  ShowTriangulation("");
+}
+
+void ShowTriangulation(char * f) {
+  char * row = "nothing";
+  char ** vec = &row;
+  ShowTriangulation(f, 1, vec);
+}
+
 void ShowTriangulation(char *f, int argc, char * argv[])
 {
+    if ((int) strlen(f) > 0l) {
+      if (readTriangulationFile(f)) {
+          fileName = f;
+          //load up the specified file into the maps contained in triangulation.cpp
+      } else {
+          cout << "BAD FILE NAME!!!\nPerhaps your file ends in a blank line?";
+          system("PAUSE");
+      }
+    }
+    
     showWeights = false;
     flat = 0;
     tickMarks = false;
     voronoi = 0;
 
-    //added for consolidation
-    _dist = -20.0f;
-    _hori = -5.0f;
-    _vert = -5.0f;
+    //construct the coordinates
+    coordSystem.generatePlane();
 
-    _angle = 30.0f;
-    _camera_angle_yaw = 0.0f;
-    _camera_angle_pitch = 0.0f;
-    _gap_factor = 1;
-
-    if (readTriangulationFile(f)) {
-        fileName = f;
-        //load up the specified file into the maps contained in triangulation.cpp
-
-        //construct the coordinates
-        coordSystem.generatePlane();
-        
-        //this will be used to display the triangles
-        listOfTriangles = coordSystem.getTriangles();
+    //this will be used to display the triangles
+    listOfTriangles = coordSystem.getTriangles();
     
-        //this will be used to show which edge is currently selected
-        selectedEdge = Triangulation::edgeTable.begin();
-        
-        //set up the vertex coordinates just this once
-        makePoints();
-    } else {
-        cout << "BAD FILE NAME!!!\nPerhaps your file ends in a blank line?";
-        system("PAUSE");
-    }
+    //this will be used to show which edge is currently selected
+    selectedEdge = Triangulation::edgeTable.begin();
 
-  startGLStuff(argc, argv);
+    //set up the vertex coordinates just this once
+    makePoints();
+    
+    startGLStuff(argc, argv);
 }
 
 void reGeneratePlane() {
@@ -540,7 +584,7 @@ void reGeneratePlane() {
   selectedEdge = Triangulation::edgeTable.begin();
 }
 
-void changeFileTo(char* f)
+void setFile(char* f)
 {
     //load up the specified file into the maps contained in triangulation.cpp
     if (readTriangulationFile(f)) {

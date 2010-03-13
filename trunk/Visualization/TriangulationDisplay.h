@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
+#include <string.h>
 #include "delaunay.h"
 #include "triangulationmorph.h"
 #include "triangulationInputOutput.h"
@@ -16,6 +17,26 @@
 #ifndef Display_H
 #define Display_H
 
+/*
+ * TriangulationDisplay is a namespace containing many global variables,
+ *  and function used by opengl, and code using opengl, the design of
+ *  opengl lends itself to a more C style of programming without object
+ *  orientation. To reduce complications of having a class interact and
+ *  be heavily dependent on global state, this namespace has been created
+ *  to allow for a class-like separation of global variables from the std
+ *  namespace where user code typically resides, while keeping the graphics
+ *  code organized in a reasonable way.
+ *
+ *
+ *  Functions of Note:
+ *
+ *    ShowTriangulation()
+ *    ShowTriangulation(char * f)
+ *    ShowTriangulation(char * f, int argc, char * argv[])
+ *
+ *    these can be used to view a 2D triangulation
+ *
+ */
 namespace TriangulationDisplay {
 
 
@@ -35,11 +56,13 @@ void setup_view_parameters(void);
 
 //old TriangulationDisplay area below here
 
+void ShowTriangulation(void);
+void ShowTriangulation(char * f);
 void ShowTriangulation(char* f, int argc, char * argv[]);
 
 //changes the file that the triangulation represents and should reset everything
 //within this class to represent that change (i.e. the coordSystem should be updated)
-void changeFileTo(char * f);
+void setFile(char * f);
 
 void reGeneratePlane();
 
