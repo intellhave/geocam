@@ -10,21 +10,21 @@ LINKOBJ  = ../../Geometry/Vertex/curvature2D.o ../../Geometry/Vertex/curvature3D
 LIBS =  -L"C:/Dev-Cpp/lib" -pg -lglut32 -lglu32 -lopengl32 -lwinmm -lgdi32  -lgmon -pg  -g3 
 INCS =  -I"C:/Dev-Cpp/include"  -I"../.."  -I"../../Triangulation"  -I"../../InputOutput"  -I"../../Subsystems/Solvers/Newtons_method"  -I"../../System_utils"  -I"../../Math"  -I"../../Geometry/Vertex"  -I"../../Geometry/Edge"  -I"../../Geometry/Face"  -I"../../Geometry/Tetrahedron"  -I"../../Geometry/Triangulation"  -I"../../Geometry/Geoquant_general"  -I"../../Geometry/Vertex"  -I"../../Visualization"  -I"../../FlipAlgorithm" 
 CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include"  -I"../.."  -I"../../Triangulation"  -I"../../InputOutput"  -I"../../Subsystems/Solvers/Newtons_method"  -I"../../System_utils"  -I"../../Math"  -I"../../Geometry/Vertex"  -I"../../Geometry/Edge"  -I"../../Geometry/Face"  -I"../../Geometry/Tetrahedron"  -I"../../Geometry/Triangulation"  -I"../../Geometry/Geoquant_general"  -I"../../Geometry/Vertex"  -I"../../Visualization"  -I"../../FlipAlgorithm" 
-BIN  = ../../Tutorial.exe
+BIN  = Tutorial.exe
 CXXFLAGS = $(CXXINCS)   -O3 -pg -g3
 CFLAGS = $(INCS)   -O3 -pg -g3
 RM = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before ../../Tutorial.exe all-after
+all: all-before Tutorial.exe all-after
 
 
 clean: clean-custom
 	${RM} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o "..\..\Tutorial.exe" $(LIBS)
+	$(CPP) $(LINKOBJ) -o "Tutorial.exe" $(LIBS)
 
 ../../Geometry/Vertex/curvature2D.o: ../../Geometry/Vertex/curvature2D.cpp
 	$(CPP) -c ../../Geometry/Vertex/curvature2D.cpp -o ../../Geometry/Vertex/curvature2D.o $(CXXFLAGS)

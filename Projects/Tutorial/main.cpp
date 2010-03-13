@@ -97,6 +97,7 @@ int main(int argc, char * argv[]) {
     //map<int, Edge>::iterator eit;
     eit = Triangulation::edgeTable.begin();
 
+    cout << (eit == Triangulation::edgeTable.end());
     while(eit != Triangulation::edgeTable.end() && (eit->second).isBorder()) {
       eit++;
     }

@@ -11,7 +11,6 @@
 
 using namespace std;
 
-//TriangulationDisplay* _triDisp;
 FlipAlgorithm* _flipAlg;
 Function* _vertexF;
 char* input_file;
