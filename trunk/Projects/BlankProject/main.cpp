@@ -80,18 +80,20 @@ int main(int argc, char * argv[]) {
    vector<int>* ZAM;
    vector<int>* ZUM;
 
-/*
-   for(int i = 1; i <= edgeSize; i++) {
+   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
+           eit++) {
+//   for(int i = 1; i <= edgeSize; i++) {
 
-           ZIM = Triangulation::edgeTable[i].getLocalFaces();
-           printf("Faces sharing edge %d are:\n", i);
+           ZIM = (eit->second).getLocalFaces();
+           printf("Faces sharing edge %d are:\n", eit->first);
+           printf("size of local faces vector = %d\n",(*(ZIM)).size());
            for (int n=0; n < (*(ZIM)).size(); ++n) {
                printf("%d\n", ZIM->at(n));
                }
                pause("press enter to continue");
                }
                pause("press enter to continue, this is the end of local faces checking.");
-*/
+
 /*
     for(int i = 1; i <= vertSize; i++) {
            ZAM = Triangulation::vertexTable[i].getLocalVertices();
