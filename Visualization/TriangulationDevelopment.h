@@ -139,6 +139,7 @@ class TriangulationDevelopment
       void addDual(Edge);
       void addDuals(Vertex);
       void addDuals(Face);
+      void computeDuals(void);
 };
 
 #endif // TriangulationDevelopment_H

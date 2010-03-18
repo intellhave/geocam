@@ -51,6 +51,7 @@ struct simps {
       double e0_len, e1_len, e2_len, e3_len, e4_len;
       double a0, a2;
       bool f0neg, f1neg;
+      double e0_len_after;
 };
 
 //performs a topological flip and determines the geometric configuration
@@ -61,25 +62,28 @@ flip(Edge e);
 //performs the recalculation of the length of edge e for a flip that starts
 //as positive positive
 void
-flipPP(struct simps b);
+flipPP(struct simps &h);
 
 //performs the recalculation of the length of edge e for a flip that starts
 //as positive negative
 void
-flipPN(struct simps b);
+flipPN(struct simps &h);
 
 //performs the recalculation of the length of edge e for a flip that starts
 //as a negative negative
 void
-flipNN(struct simps b);
+flipNN(struct simps &h);
 
 //performas the topological changes for the flip
 void
-topo_flip(Edge, struct simps);
+topoFlip(Edge, struct simps);
 
 //helper function that constructs the struct to hold all the important values
 bool
-prep_for_flip(Edge, struct simps*);
+prepForFlip(Edge, struct simps*);
+
+bool
+notDegenerate(struct simps &h);
 
 //the edge being flipped is zero
 void degenerateFlippedIsZero(simps b);
