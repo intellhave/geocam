@@ -541,6 +541,15 @@ void TriangulationDevelopment::printDuals(char* filename)
      }
 }
 
+void TriangulationDevelopment::computeDuals(void) {
+  dualList.clear();
+  map<int, Edge>::iterator edges;
+  edges = Triangulation::edgeTable.begin();
+  for (; edges != Triangulation::edgeTable.end(); edges++) {
+    addDual(edges->second);
+  }
+}
+
 vector<Line> TriangulationDevelopment::getDuals(void)
 {
     vector<Line> ds;

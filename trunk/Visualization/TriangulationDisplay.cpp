@@ -3,8 +3,8 @@
 
 namespace TriangulationDisplay {
 
-int _lastFlip;
-
+//opengl variables will start with an underscore
+//these variables hold state info pertaining to the camera
 float _dist;
 float _hori;
 float _vert;
@@ -13,11 +13,12 @@ float _angle;
 float _camera_angle_yaw;
 float _camera_angle_pitch;
 float _gap_factor;
-float alpha = 1;
+float _alpha = 1;
 
+
+//triangulation state info
 TriangulationDevelopment coordSystem;
 
-//this string should be the path to the file that contains the triangulation information
 char* fileName;
 
 vector<triangle_parts> listOfTriangles;
@@ -26,8 +27,7 @@ map<int,Edge>::iterator selectedEdge;
 
 map<int, Point> points;
 
-
-
+int lastFlip;
 int flat;
 bool showWeights;
 bool tickMarks;
@@ -69,31 +69,10 @@ void handleKeypress(unsigned char key, int x, int y) {
 
             flipCurrentEdge();
 
-            fit = Triangulation::faceTable.begin();
-            cout << "\n";
-            for (; fit != Triangulation::faceTable.end(); fit++) {
-              cout << "face " << fit->first << "\t" << (fit->second).isNegative() << "  ";
-              localVerts = *((fit->second).getLocalVertices());
-              for (int i = 0; i < localVerts.size(); i++) {
-                cout << localVerts[i] << " ";
-              }
-              cout << "\n";
-            }
-
-            eit = Triangulation::edgeTable.begin();
-            cout << "\n";
-            for (; eit != Triangulation::edgeTable.end(); eit++) {
-              cout << "edge " << eit->first << "\t";
-              localVerts = *((eit->second).getLocalVertices());
-              for (int i = 0; i < localVerts.size(); i++) {
-                cout << localVerts[i] << " ";
-              }
-              cout << "\n";
-            }
             break;
         case 'l': //l
             cout << "geoquant length is " << Length::valueAt(Triangulation::edgeTable[getCurrentEdge().getIndex()]) << "\n";
-            //l = _triDisp->currentEdgeToLine();
+            l = currentEdgeToLine();
             cout << "distance between vertices is " << sqrt(pow(l.getInitialX() - l.getEndingX(),2) + pow(l.getInitialY() - l.getEndingY(),2)) << "\n\n";
             break;
         case 'k':
@@ -174,28 +153,28 @@ void handleSpecialKeypress(int key, int x, int y) {
             if (flat == 0) {
                 _hori -= .5;
             } else {
-                _camera_angle_yaw -= alpha;
+                _camera_angle_yaw -= _alpha;
             }
             break;
 		case GLUT_KEY_RIGHT:
             if (flat == 0) {
                 _hori += .5;
             } else {
-                _camera_angle_yaw += alpha;
+                _camera_angle_yaw += _alpha;
             }
             break;
 		case GLUT_KEY_UP:
             if (flat == 0) {
                 _vert += .5;
             } else {
-                _camera_angle_pitch -= alpha;
+                _camera_angle_pitch -= _alpha;
             }
             break;
         case GLUT_KEY_DOWN:
             if (flat == 0) {
                 _vert -= .5;
             } else {
-               _camera_angle_pitch += alpha;
+               _camera_angle_pitch += _alpha;
             }
             break;
 	}
@@ -238,15 +217,16 @@ void drawTicks(double x1, double y1, double x2, double y2, double x3, double y3,
     drawTicks(avx, avy, x2, y2, x3, y3, depth-1);
 }
 
-void drawSceneFlatAlt() {
+void drawSceneFlat() {
     glLoadIdentity();
     glTranslatef(_hori, _vert, _dist);
 
+    //draws all the edges
     map<int, Edge>::iterator eit;
     eit = Triangulation::edgeTable.begin();
     Point p1, p2;
     glBegin(GL_LINES);
-    glColor3d(0, 0, 1);
+    glColor3d(0, 0, 255);
     for (; eit != Triangulation::edgeTable.end(); eit++) {
       p1 = getVertexCoords((*(eit->second).getLocalVertices())[0]);
       p2 = getVertexCoords((*(eit->second).getLocalVertices())[1]);
@@ -309,109 +289,42 @@ void drawSceneFlatAlt() {
 
     //draw little tick marks along the inside of each triangle
     if (tickMarks) {
-      map<int, Face>::iterator fit = Triangulation::faceTable.begin();
-      glColor3d(0, 0, 255);
-      for (; fit != Triangulation::faceTable.end(); fit++) {
-          vector<int>* verts;
-          verts = (fit->second).getLocalVertices();
-          Point p1, p2, p3;
-          p1 = getPoint((*verts)[0]);
-          p2 = getPoint((*verts)[1]);
-          p3 = getPoint((*verts)[2]);
+        map<int, Face>::iterator fit = Triangulation::faceTable.begin();
+        glColor3d(0, 0, 255);
+        for (; fit != Triangulation::faceTable.end(); fit++) {
 
-          drawTicks(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 3);
-          drawTicks(p3.x, p3.y, p1.x, p1.y, p2.x, p2.y, 3);
-          drawTicks(p2.x, p2.y, p3.x, p3.y, p1.x, p1.y, 3);
-      }
-    }
-
-}
-
-//old function that uses the TriangulationDisplay::getTriangles()
-//which is broken when it comes to degenerate triangles.
-void drawSceneFlat() {
-    glLoadIdentity();
-
-    glTranslatef(_hori, _vert, _dist);
-    vector<triangle_parts> tps;
-    tps = getTriangles();
-    vector<triangle_parts>::iterator iter;
-    iter = tps.begin();
-
-    //draws the triangulation
-    while (iter != tps.end()) {
-        glBegin(GL_LINE_STRIP);
-        //glBegin(GL_TRIANGLES);
-        if (iter->negativity == -1) {
-            //glColor3d(1, 0, 0);
-            glColor3d(0, 0, 1);
-        } else {
-            glColor3d(0, 0, 1);
-        }
-
-        glVertex3d(iter->coords[0][0],iter->coords[0][1],0);
-        glVertex3d(iter->coords[1][0],iter->coords[1][1],0);
-        glVertex3d(iter->coords[2][0],iter->coords[2][1],0);
-        glVertex3d(iter->coords[0][0],iter->coords[0][1],0);
-        iter++;
-        glEnd();
-    }
-
-    //draws the weights around the vertices
-    if (showWeights) {
-        map<int,Vertex>::iterator vit;
-        for (vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-            Point p;
-            p = getPoint(vit->first);
-            double radius = Radius::valueAt(vit->second);
-            glBegin(GL_LINE_STRIP);
-            glColor3d(255,250,250);
-            for (double i = 0; i <= 2*PI; i+=0.0174532925) {
-                glVertex3d(p.x + cos(i) * radius, p.y + sin(i) * radius, 0);
+            if (fit->second.isNegative()) {
+                glColor3d(255,0,0);
+            } else {
+                glColor3d(0,0,255);
             }
-            glEnd();
+
+            vector<int>* verts;
+            verts = (fit->second).getLocalVertices();
+            Point p1, p2, p3;
+            p1 = getPoint((*verts)[0]);
+            p2 = getPoint((*verts)[1]);
+            p3 = getPoint((*verts)[2]);
+
+            drawTicks(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 3);
+            drawTicks(p3.x, p3.y, p1.x, p1.y, p2.x, p2.y, 3);
+            drawTicks(p2.x, p2.y, p3.x, p3.y, p1.x, p1.y, 3);
         }
     }
 
-    //draw little tick marks along the inside of each triangle
-    if (tickMarks) {
-      map<int, Face>::iterator fit = Triangulation::faceTable.begin();
-      glColor3d(0, 0, 255);
-      for (; fit != Triangulation::faceTable.end(); fit++) {
-          vector<int>* verts;
-          verts = (fit->second).getLocalVertices();
-          Point p1, p2, p3;
-          p1 = getPoint((*verts)[0]);
-          p2 = getPoint((*verts)[1]);
-          p3 = getPoint((*verts)[2]);
-
-          drawTicks(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 3);
-          drawTicks(p3.x, p3.y, p1.x, p1.y, p2.x, p2.y, 3);
-          drawTicks(p2.x, p2.y, p3.x, p3.y, p1.x, p1.y, 3);
-      }
-    }
-
-    //draws the edge that is currently selected
-    Line l;
-    l = currentEdgeToLine();
-    //draws the selected edge, should appear on top
-    glBegin(GL_LINE_STRIP);
-    glColor3d(255, 127, 0);
-    glVertex3d(l.getInitialX(), l.getInitialY(), 0.01);
-    glVertex3d(l.getEndingX(), l.getEndingY(), 0.01);
-    glEnd();
-
-    Edge e = getCurrentEdge();
 }
 
 //##################################################################################################
 void drawSceneStacked() {
-    vector<triangle_parts> tps;
-    tps = getTriangles();
-    vector<triangle_parts>::iterator iter;
-    iter = tps.begin();
+    //vector<triangle_parts> tps;
+    //tps = getTriangles();
+    //vector<triangle_parts>::iterator iter;
+    //iter = tps.begin();
 
-    int depth = tps.size();
+    //int depth = tps.size();
+    map<int,Face>::iterator faces;
+    faces = Triangulation::faceTable.begin();
+    int depth = Triangulation::faceTable.size();
 
     glLoadIdentity();
     glTranslatef(0, 0, _dist + (depth * 2 * _gap_factor));
@@ -421,21 +334,23 @@ void drawSceneStacked() {
     glTranslatef(_hori, _vert, 0);
 
     //draws the triangulation
-    while (iter != tps.end()) {
+    vector<int>::iterator edges;
+    Point p1, p2;
+    Edge e;
+    for (; faces != Triangulation::faceTable.end(); faces++) {
+        glColor3d(255, 127, 0);
         glBegin(GL_LINE_STRIP);
-        //glBegin(GL_TRIANGLES);
-        if (iter->negativity == -1) {
-            glColor3d(1, 0, 0);
-            glColor3d(1, 0, 0);
-        } else {
-            glColor3d(0, 0, 1);
+
+        //draws each edge adjacent to a face
+        edges = ((faces->second).getLocalEdges())->begin();
+        for (; edges != ((faces->second).getLocalEdges())->end(); edges++) {
+          e = Triangulation::edgeTable[*edges];
+          p1 = getVertexCoords((*e.getLocalVertices())[0]);
+          p2 = getVertexCoords((*e.getLocalVertices())[1]);
+          glVertex3d(p1.x, p1.y, 0);
+          glVertex3d(p2.x, p2.y, 0);
         }
 
-        glVertex3d(iter->coords[0][0],iter->coords[0][1], 0);
-        glVertex3d(iter->coords[1][0],iter->coords[1][1], 0);
-        glVertex3d(iter->coords[2][0],iter->coords[2][1], 0);
-        glVertex3d(iter->coords[0][0],iter->coords[0][1], 0);
-        iter++;
         glEnd();
 
         glTranslatef(0, 0, (2* _gap_factor));
@@ -451,7 +366,7 @@ void drawScene() {
     //_triDisp->update();
 
     if (flat == 0) {
-        drawSceneFlatAlt();
+        drawSceneFlat();
     } else if (flat == 1) {
         drawSceneStacked();
     }
@@ -533,8 +448,7 @@ void startGLStuff(int argc, char * argv[]) {
   glutMainLoop();
 }
 
-//old TriangulationDisplay stuff
-//TriangulationDisplay class defs
+//TriangulationDisplay stuff
 
 void ShowTriangulation() {
   ShowTriangulation("");
@@ -676,7 +590,8 @@ vector<triangle_parts> getTriangles(void) {
 }
 
 vector<Line> getDuals(void) {
-    return coordSystem.TriangulationDevelopment::getDuals();
+    coordSystem.computeDuals();
+    return coordSystem.getDuals();
 }
 
 Point getPoint(int index){

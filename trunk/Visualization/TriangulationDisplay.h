@@ -40,7 +40,7 @@
 namespace TriangulationDisplay {
 
 
-
+//opengl functions
 void startGLStuff(int argc, char * argv[]);
 void display(void);
 void handleKeypress(unsigned char key, int x, int y);
