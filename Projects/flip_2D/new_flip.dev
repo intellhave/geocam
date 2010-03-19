@@ -4,7 +4,7 @@ Name=new_flip
 <<<<<<< .mine
 UnitCount=95
 =======
-UnitCount=113
+UnitCount=115
 >>>>>>> .r1030
 Type=1
 Ver=1
@@ -25,7 +25,7 @@ OverrideOutput=0
 OverrideOutputName=new_flip.exe
 HostApplication=
 Folders=
-CommandLine=..\..\Data\flip_test\non_convex_pair.txt
+CommandLine=..\..\Data\flip_test\MonsterWithLengths.txt
 UseCustomMakefile=0
 CustomMakefile=
 IncludeVersionInfo=0
@@ -1059,16 +1059,6 @@ Priority=1000
 OverrideBuildCmd=0
 BuildCmd=
 
-[Unit114]
-FileName=Function.cpp
-CompileCpp=1
-Folder=new_flip
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
 [Unit89]
 FileName=..\..\Math\Matrix.h
 CompileCpp=1
@@ -1193,6 +1183,26 @@ BuildCmd=
 FileName=..\..\Geometry\Edge\dualareasegment.h
 CompileCpp=1
 Folder=new_flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit115]
+FileName=flipTests.cpp
+CompileCpp=1
+Folder=new_flip
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit114]
+FileName=flipTests.h
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000

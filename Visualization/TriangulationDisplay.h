@@ -6,6 +6,7 @@
 #include "triangulationmorph.h"
 #include "triangulationInputOutput.h"
 #include "TriangulationDevelopment.h"
+#include "FlipAlgorithm.h"
 
 #ifdef __APPLE__
 #include <OpenGL/OpenGL.h>
@@ -63,6 +64,8 @@ void ShowTriangulation(char* f, int argc, char * argv[]);
 //changes the file that the triangulation represents and should reset everything
 //within this class to represent that change (i.e. the coordSystem should be updated)
 void setFile(char * f);
+
+void setFlipAlgorithm(FlipAlgorithm * f);
 
 void reGeneratePlane();
 

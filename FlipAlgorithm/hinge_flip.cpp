@@ -24,6 +24,10 @@ Edge flip(Edge e) {
         return e;
     }
 
+    if (isDegenerate(hingeInfo)) {
+        return e;
+    }
+
     double lengthAfterFlip;
 
   /*//determine if we are in a degenerate case, and what type
@@ -58,7 +62,7 @@ Edge flip(Edge e) {
         return e;
     }
 
-    if (notDegenerate(hingeInfo)) {
+    if (!isDegenerate(hingeInfo)) {
 
         topoFlip(e, hingeInfo);
 
@@ -406,133 +410,113 @@ bool prepForFlip(Edge e, struct simps * bucket) {
         return false;
     }
 
-  bucket->e0 = e.getIndex();
+    bucket->e0 = e.getIndex();
 
-  bucket->f0 = (*(e.getLocalFaces()))[0];
-  bucket->f1 = (*(e.getLocalFaces()))[1];
+    bucket->f0 = (*(e.getLocalFaces()))[0];
+    bucket->f1 = (*(e.getLocalFaces()))[1];
 
-  bucket->v0 = (*(e.getLocalVertices()))[0];
-  bucket->v2 = (*(e.getLocalVertices()))[1];
+    bucket->v0 = (*(e.getLocalVertices()))[0];
+    bucket->v2 = (*(e.getLocalVertices()))[1];
 
-  //buckets for various set operations
-  vector<int> diff;
-  vector<int> same;
+    //buckets for various set operations
+    vector<int> diff;
+    vector<int> same;
 
-  //figure out what v3 is
-  //diff = listDifference(Triangulation::faceTable[bucket->f1].getLocalVertices(), e.getLocalVertices());
-  diff = multiplicityDifference(Triangulation::faceTable[bucket->f1].getLocalVertices(), e.getLocalVertices());
-  if (diff.size() == 0) { cout << "v3 couldn't be found"; return false;}
-  bucket->v3 = diff[0];
+    //figure out what v3 is
+    //diff = listDifference(Triangulation::faceTable[bucket->f1].getLocalVertices(), e.getLocalVertices());
+    diff = multiplicityDifference(Triangulation::faceTable[bucket->f1].getLocalVertices(), e.getLocalVertices());
+    if (diff.size() == 0) { cout << "v3 couldn't be found"; return false;}
+        bucket->v3 = diff[0];
 
-  //figure out what v1 is
-  //diff = listDifference(Triangulation::faceTable[bucket->f0].getLocalVertices(), e.getLocalVertices());
-  diff = multiplicityDifference(Triangulation::faceTable[bucket->f0].getLocalVertices(), e.getLocalVertices());
-  if (diff.size() == 0) { cout << "v1 couldn't be found"; return false;}
-  bucket->v1 = diff[0];
+    //figure out what v1 is
+    //diff = listDifference(Triangulation::faceTable[bucket->f0].getLocalVertices(), e.getLocalVertices());
+    diff = multiplicityDifference(Triangulation::faceTable[bucket->f0].getLocalVertices(), e.getLocalVertices());
+    if (diff.size() == 0) { cout << "v1 couldn't be found"; return false;}
+        bucket->v1 = diff[0];
 
-  //figure out what e1 is
-  //same = listIntersection(Triangulation::vertexTable[bucket->v0].getLocalEdges(), Triangulation::vertexTable[bucket->v1].getLocalEdges());
-  same = multiplicityIntersection(Triangulation::vertexTable[bucket->v0].getLocalEdges(), Triangulation::vertexTable[bucket->v1].getLocalEdges());
-  if (same.size() == 0) { cout << "v0 and v1 had no edge in common, e1 couldn't be found"; return false;}
-  bucket->e1 = same[0];
+    //figure out what e1 is
+    //same = listIntersection(Triangulation::vertexTable[bucket->v0].getLocalEdges(), Triangulation::vertexTable[bucket->v1].getLocalEdges());
+    same = multiplicityIntersection(Triangulation::vertexTable[bucket->v0].getLocalEdges(), Triangulation::vertexTable[bucket->v1].getLocalEdges());
+    if (same.size() == 0) { cout << "v0 and v1 had no edge in common, e1 couldn't be found"; return false;}
+        bucket->e1 = same[0];
 
-  //figure out what e2 is
-  //same = listIntersection(Triangulation::vertexTable[bucket->v1].getLocalEdges(), Triangulation::vertexTable[bucket->v2].getLocalEdges());
-  same = multiplicityIntersection(Triangulation::vertexTable[bucket->v1].getLocalEdges(), Triangulation::vertexTable[bucket->v2].getLocalEdges());
-  if (same.size() == 0) { cout << "v1 and v2 had no edge in common, e2 couldn't be found"; return false;}
-  bucket->e2 = same[0];
+    //figure out what e2 is
+    //same = listIntersection(Triangulation::vertexTable[bucket->v1].getLocalEdges(), Triangulation::vertexTable[bucket->v2].getLocalEdges());
+    same = multiplicityIntersection(Triangulation::vertexTable[bucket->v1].getLocalEdges(), Triangulation::vertexTable[bucket->v2].getLocalEdges());
+    if (same.size() == 0) { cout << "v1 and v2 had no edge in common, e2 couldn't be found"; return false;}
+        bucket->e2 = same[0];
 
-  //figure out what e3 is
-  //same = listIntersection(Triangulation::vertexTable[bucket->v2].getLocalEdges(), Triangulation::vertexTable[bucket->v3].getLocalEdges());
-  same = multiplicityIntersection(Triangulation::vertexTable[bucket->v2].getLocalEdges(), Triangulation::vertexTable[bucket->v3].getLocalEdges());
-  if (same.size() == 0) { cout << "v2 and v3 had no edge in common, e3 couldn't be found"; return false;}
-  bucket->e3 = same[0];
+    //figure out what e3 is
+    //same = listIntersection(Triangulation::vertexTable[bucket->v2].getLocalEdges(), Triangulation::vertexTable[bucket->v3].getLocalEdges());
+    same = multiplicityIntersection(Triangulation::vertexTable[bucket->v2].getLocalEdges(), Triangulation::vertexTable[bucket->v3].getLocalEdges());
+    if (same.size() == 0) { cout << "v2 and v3 had no edge in common, e3 couldn't be found"; return false;}
+        bucket->e3 = same[0];
 
-  //figure out what e4 is
-  //same = listIntersection(Triangulation::vertexTable[bucket->v3].getLocalEdges(), Triangulation::vertexTable[bucket->v0].getLocalEdges());
-  same = multiplicityIntersection(Triangulation::vertexTable[bucket->v3].getLocalEdges(), Triangulation::vertexTable[bucket->v0].getLocalEdges());
-  if (same.size() == 0) { cout << "v3 and v0 had no edge in common, e4 couldn't be found"; return false;}
-  bucket->e4 = same[0];
+    //figure out what e4 is
+    //same = listIntersection(Triangulation::vertexTable[bucket->v3].getLocalEdges(), Triangulation::vertexTable[bucket->v0].getLocalEdges());
+    same = multiplicityIntersection(Triangulation::vertexTable[bucket->v3].getLocalEdges(), Triangulation::vertexTable[bucket->v0].getLocalEdges());
+    if (same.size() == 0) { cout << "v3 and v0 had no edge in common, e4 couldn't be found"; return false;}
+        bucket->e4 = same[0];
   
-  double e0_len = Length::valueAt(Triangulation::edgeTable[bucket->e0]);
-  double e2_len = Length::valueAt(Triangulation::edgeTable[bucket->e2]);
-  double e3_len = Length::valueAt(Triangulation::edgeTable[bucket->e3]);
-  double e1_len = Length::valueAt(Triangulation::edgeTable[bucket->e1]);
-  double e4_len = Length::valueAt(Triangulation::edgeTable[bucket->e4]);
+    double e0_len = Length::valueAt(Triangulation::edgeTable[bucket->e0]);
+    double e2_len = Length::valueAt(Triangulation::edgeTable[bucket->e2]);
+    double e3_len = Length::valueAt(Triangulation::edgeTable[bucket->e3]);
+    double e1_len = Length::valueAt(Triangulation::edgeTable[bucket->e1]);
+    double e4_len = Length::valueAt(Triangulation::edgeTable[bucket->e4]);
   
-  bucket->e0_len = e0_len;
-  bucket->e1_len = e1_len;
-  bucket->e2_len = e2_len;
-  bucket->e3_len = e3_len;
-  bucket->e4_len = e4_len;
+    bucket->e0_len = e0_len;
+    bucket->e1_len = e1_len;
+    bucket->e2_len = e2_len;
+    bucket->e3_len = e3_len;
+    bucket->e4_len = e4_len;
   
-  //determine the angles associated with v0 and v2
-  //note that one of these is incorrect and needs to be changed
-  //because its at the vertex where the concavity occurs
-  //for simplicity i will calculate this later when it is important or not
-  double a0, a2;
+    //determine the angles associated with v0 and v2
+    //note that one of these is incorrect and needs to be changed
+    //because its at the vertex where the concavity occurs
+    //for simplicity i will calculate this later when it is important or not
+    double a0, a2;
 
-  //old method of computing angles prior to geoquants, left in for posterity
-  //a0 = angle(e0_len, e1_len, e2_len) + angle(e0_len, e4_len, e3_len);
-  //a2 = angle(e0_len, e2_len, e1_len) + angle(e0_len, e3_len, e4_len);
+    //old method of computing angles prior to geoquants, left in for posterity
+    //a0 = angle(e0_len, e1_len, e2_len) + angle(e0_len, e4_len, e3_len);
+    //a2 = angle(e0_len, e2_len, e1_len) + angle(e0_len, e3_len, e4_len);
 
-  a0 = EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v0], Triangulation::faceTable[bucket->f0])
+    a0 = EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v0], Triangulation::faceTable[bucket->f0])
         + EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v0], Triangulation::faceTable[bucket->f1]);
 
-  a2 = EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v2], Triangulation::faceTable[bucket->f0])
+    a2 = EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v2], Triangulation::faceTable[bucket->f0])
         + EuclideanAngle::valueAt(Triangulation::vertexTable[bucket->v2], Triangulation::faceTable[bucket->f1]);
 
-  bucket->a0 = a0;
-  bucket->a2 = a2;
+    bucket->a0 = a0;
+    bucket->a2 = a2;
 
-  bucket->f0neg = (Triangulation::faceTable[bucket->f0]).isNegative();
-  bucket->f1neg = (Triangulation::faceTable[bucket->f1]).isNegative();
+    bucket->f0neg = (Triangulation::faceTable[bucket->f0]).isNegative();
+    bucket->f1neg = (Triangulation::faceTable[bucket->f1]).isNegative();
+
+    bucket->e0_len_after = -1;
 
   return true;
 }
 
-bool notDegenerate(struct simps &h) {
+bool isDegenerate(struct simps &h) {
+    if (0 == h.e0_len_after || 0 == h.e0_len || 0 == h.e1_len || 0 == h.e2_len || 0 == h.e3_len || 0 == h.e4_len) {
+        return true;
+    }
+    if (angle(h.e1_len, h.e2_len, h.e0_len) <= 0 ||
+        angle(h.e0_len, h.e1_len, h.e2_len) <= 0 ||
+        angle(h.e2_len, h.e0_len, h.e1_len) <=  0 ||
 
+        angle(h.e3_len, h.e4_len, h.e0_len) <=  0 ||
+        angle(h.e0_len, h.e3_len, h.e4_len) <=  0 ||
+        angle(h.e4_len, h.e0_len, h.e3_len) <=  0 ||
+
+        angle(h.e0_len, h.e1_len, h.e4_len) <=  0 ||
+        angle(h.e4_len, h.e0_len, h.e1_len) <=  0 ||
+        angle(h.e1_len, h.e4_len, h.e0_len) <=  0 ||
+
+        angle(h.e0_len, h.e3_len, h.e2_len) <= 0 ||
+        angle(h.e2_len, h.e0_len, h.e3_len) <= 0 ||
+        angle(h.e3_len, h.e2_len, h.e0_len) <= 0) {
+            return true;
+    }
+    return false;
 }
-
-//beyong here degenerate triangles are handled
-void degenerateFlippedIsZero(simps b) {
-  //calling flipPP should work for now, only problem is that it will result in
-  //arbitrary assignment of positive and negative triangles after the flips
-  flipPP(b);
-
-}// end of degenerateFlippedIsZero
-
-void degenerateNonFlippedIsZero(simps b) {
-  int zeroSideIndex, adjacentIndex;
-  double angleAdjacentToZeroEdge;
-
-  //locate a zero length, and the edge that is adjacent to the zero edge and
-  //the edge that is going to be flipped
-  if (0 == b.e1_len) {
-    zeroSideIndex = b.e1;
-    adjacentIndex = b.e4;
-    angleAdjacentToZeroEdge = b.a0;
-  } else if (0 == b.e2_len) {
-    zeroSideIndex = b.e2;
-    adjacentIndex = b.e3;
-    angleAdjacentToZeroEdge = b.a2;
-  } else if (0 == b.e3_len) {
-    zeroSideIndex = b.e3;
-    adjacentIndex = b.e2;
-    angleAdjacentToZeroEdge = b.a2;
-  } else if (0 == b.e4_len) {
-    zeroSideIndex = b.e4;
-    adjacentIndex = b.e1;
-    angleAdjacentToZeroEdge = b.a0;
-  }
-
-
-
-
-}//end of degernateNonFlippedIsZero
-
-void degenerateOnlyAngleIsZero(simps b) {
-
-
-}// end of degenerateOnlyAngleIsZero
