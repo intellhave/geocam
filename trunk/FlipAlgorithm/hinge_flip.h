@@ -83,7 +83,7 @@ bool
 prepForFlip(Edge, struct simps*);
 
 bool
-notDegenerate(struct simps &h);
+isDegenerate(struct simps &h);
 
 //the edge being flipped is zero
 void degenerateFlippedIsZero(simps b);

@@ -15,6 +15,10 @@ float _camera_angle_pitch;
 float _gap_factor;
 float _alpha = 1;
 
+//flip algorithm specific variables
+//kinda out of place
+FlipAlgorithm * flipAlg = NULL;
+int lastFlip;
 
 //triangulation state info
 TriangulationDevelopment coordSystem;
@@ -27,7 +31,6 @@ map<int,Edge>::iterator selectedEdge;
 
 map<int, Point> points;
 
-int lastFlip;
 int flat;
 bool showWeights;
 bool tickMarks;
@@ -114,16 +117,24 @@ void handleKeypress(unsigned char key, int x, int y) {
             voronoi = !voronoi;
             break;
         case 'n': //n runs the flipalgorithm
-            //_flipAlg->runFlipAlgorithm();
+            if (flipAlg == NULL) {
+                flipAlg = new FlipAlgorithm();
+            }
+            flipAlg->runFlipAlgorithm();
             break;
         case 'm': //m performs a step of the flip algorithm
-            //_lastFlip = _flipAlg->step();
-            //setCurrentEdge(_lastFlip);
+            if (flipAlg == NULL) {
+                flipAlg = new FlipAlgorithm();
+            }
+            lastFlip = flipAlg->step();
+            setCurrentEdge(lastFlip);
+            cout << "\ngonna draw " << lastFlip;
             break;
         case 't'://t toggles tickmarks in the 2d view
             tickMarks = !tickMarks;
             break;
         case 'b'://b resets the triangulation
+            flipAlg->resetCurrEdge();
             Triangulation::vertexTable.clear();
             Triangulation::edgeTable.clear();
             Triangulation::faceTable.clear();
@@ -136,6 +147,8 @@ void handleKeypress(unsigned char key, int x, int y) {
             selectedEdge = Triangulation::edgeTable.begin();
             makePoints();
             setup_view_parameters();
+            break;
+        case 'c':
             break;
         default:
             somethingHappened = false;
@@ -221,23 +234,29 @@ void drawSceneFlat() {
     glLoadIdentity();
     glTranslatef(_hori, _vert, _dist);
 
+    Edge e;
+    e = getCurrentEdge();
     //draws all the edges
     map<int, Edge>::iterator eit;
     eit = Triangulation::edgeTable.begin();
     Point p1, p2;
     glBegin(GL_LINES);
-    glColor3d(0, 0, 255);
     for (; eit != Triangulation::edgeTable.end(); eit++) {
-      p1 = getVertexCoords((*(eit->second).getLocalVertices())[0]);
-      p2 = getVertexCoords((*(eit->second).getLocalVertices())[1]);
-      glVertex3d(p1.x, p1.y, 0);
-      glVertex3d(p2.x, p2.y, 0);
+
+        if (e.getIndex() == eit->second.getIndex()) {
+            glColor3d(255, 127, 0); //yellow
+        } else {
+            glColor3d(0, 0, 255);
+        }
+
+        p1 = getVertexCoords((*(eit->second).getLocalVertices())[0]);
+        p2 = getVertexCoords((*(eit->second).getLocalVertices())[1]);
+        glVertex3d(p1.x, p1.y, 0);
+        glVertex3d(p2.x, p2.y, 0);
     }
     glEnd();
 
-    //draws the edge that is currently selected
-    Edge e;
-    e = getCurrentEdge();
+    //draw the Edge that is currently selected
     p1 = getVertexCoords((*e.getLocalVertices())[0]);
     p2 = getVertexCoords((*e.getLocalVertices())[1]);
 
@@ -496,6 +515,10 @@ void reGeneratePlane() {
   coordSystem.generatePlane();
   listOfTriangles = coordSystem.getTriangles();
   selectedEdge = Triangulation::edgeTable.begin();
+}
+
+void setFlipAlgorithm(FlipAlgorithm * f) {
+    flipAlg = f;
 }
 
 void setFile(char* f)

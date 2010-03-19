@@ -1,5 +1,8 @@
 #include "hinge_flip.h"
 
+#ifndef FLIPALGORITHM_H
+#define FLIPALGORITHM_H
+
 class FlipAlgorithm {
 
     //points to the currenly selected edge
@@ -34,3 +37,4 @@ class FlipAlgorithm {
     //performs steps until 0 is returned by step
     void runFlipAlgorithm(void);
 };
+#endif
