@@ -1,7 +1,7 @@
 [Project]
 FileName=NewtonsMethodForPoets.dev
 Name=NewtonsMethodForPoets
-UnitCount=90
+UnitCount=92
 Type=1
 Ver=1
 ObjFiles=
@@ -870,9 +870,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit91]
-FileName=textRuns.cpp
+FileName=..\..\Geometry\Vertex\alpha.h
 CompileCpp=1
-Folder=
+Folder=Geometry/headers
 Compile=1
 Link=1
 Priority=1000
@@ -880,9 +880,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit92]
-FileName=Simplex\tetra.h
+FileName=..\..\Geometry\Vertex\alpha.cpp
 CompileCpp=1
-Folder=NewtonsMethodForPoets
+Folder=Geometry/source
 Compile=1
 Link=1
 Priority=1000
