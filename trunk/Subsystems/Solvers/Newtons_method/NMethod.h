@@ -70,7 +70,7 @@ class NewtonsMethod {
    printer printFunc; // instance variable for printing function
    int nDim; // The dimension of our space ( ex. R^n)
    double *grad; // Used to hold the gradient vector
-   double **hess; // Used to hold the hessian vector
+   double **hess; // Used to hold the hessian matrix
    
    // The following are values that are "soft-coded" into NMethod to create
    // consistency in the calculations. They have default values but can all

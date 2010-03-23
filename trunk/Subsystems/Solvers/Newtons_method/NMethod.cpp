@@ -310,22 +310,23 @@ void NewtonsMethod::approxHessian(double vars[], double *sol[]) {
 
 
 void NewtonsMethod::printInfo(FILE* out) {
-/*DEBUG:   fprintf(out, "grad = <");
-/*   for(int i = 0; i < nDim; i++) {
-/*     fprintf(out, "%f, ", grad[i]);
-/*   }
-/*   fprintf(out, ">\n");
-/*   
-/*   fprintf(out, "Hess = \n");
-/*   for(int i = 0; i < nDim; i++) {
-/*      fprintf(out, "<");
-/*      for(int j = 0; j < nDim; j++) {
-/*           fprintf(out, "%f, ", hess[i][j]);   
-/*      }
-/*      fprintf(out, ">\n");
-/*   }
-/*   fprintf(out, "\n");
+  fprintf(out, "grad = <");
+  for(int i = 0; i < nDim; i++) {
+    fprintf(out, "%f, ", grad[i]);
+  }
+  fprintf(out, ">\n");
+
+  fprintf(out, "Hess = \n");
+  for(int i = 0; i < nDim; i++) {
+     fprintf(out, "<");
+     for(int j = 0; j < nDim; j++) {
+          fprintf(out, "%f, ", hess[i][j]);
+     }
+     fprintf(out, ">\n");
+  }
+  fprintf(out, "\n");
 /*DEBUG*/
+
 
    if(printFunc != NULL) {
      printFunc(out);
