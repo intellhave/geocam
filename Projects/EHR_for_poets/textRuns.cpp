@@ -34,7 +34,7 @@ void EHR_Partial(double log_radii[], double grad[]) {
   }
 }
 
-void EHR_Second_Partial(double log_radii[], double *hess[]) {
+void EHR_Second_Partial(double log_radii[], Matrix<double>& hess) {
      map<int, Vertex>::iterator vit1;
      map<int, Vertex>::iterator vit2;
      int i, j;
