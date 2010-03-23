@@ -33,6 +33,7 @@
 /*** HEADERS ***/
 #include <stdlib.h>
 #include <stdio.h>
+#include "Matrix.h"
 
 /*** DEFINITIONS ***/
 #define NMETHOD_MIN 1 // Define the flag for finding a minimum
@@ -52,7 +53,7 @@ typedef void (*gradient)(double vars[], double sol[]);
 // A hessian takes in an array of doubles that represents the
 // base point for the hessian. The n x n matrix of doubles is where
 // the hessian matrix will be placed.
-typedef void (*hessian)(double vars[], double *sol[]);
+typedef void (*hessian)(double vars[], Matrix<double>& sol);
 
 // This defines a function that will print out results. The FILE* 
 // parameter is the file stream that the data will be printed to.
@@ -70,7 +71,7 @@ class NewtonsMethod {
    printer printFunc; // instance variable for printing function
    int nDim; // The dimension of our space ( ex. R^n)
    double *grad; // Used to hold the gradient vector
-   double **hess; // Used to hold the hessian matrix
+   Matrix<double> hess; // Used to hold the hessian matrix
    
    // The following are values that are "soft-coded" into NMethod to create
    // consistency in the calculations. They have default values but can all
@@ -85,9 +86,6 @@ class NewtonsMethod {
    // of the gradient is very nearly 0.0.
    double gradLenCond;
    
-   // This function solves a system of linear equations given the hessian
-   // and gradient to determine the direction and magnitude of the next step.
-   int LinearEquationsSolver(double *matr[], double vect[], double sol[]);
    // This function simply changes the sign of every entry of the gradient vector.
    void negateArray(double arr[]);
    // This function returns the length of a given gradient vector.
@@ -98,7 +96,7 @@ class NewtonsMethod {
    void approxGradient(double vars[], double sol[]);
    // This function approximates a hessian matrix if a hessian function was
    // not provided.
-   void approxHessian(double vars[], double *sol[]);
+   void approxHessian(double vars[], Matrix<double>&);
    
    // This function sets the above parameters to "hard-coded" defaults.
    void setDefaults() {
@@ -142,10 +140,7 @@ class NewtonsMethod {
         // Create space for a gradient vector and hessian matrix to be used
         // during optimization.
         grad = (double*) malloc(sizeof(double) * nDim);
-        hess = (double**) malloc(sizeof(double*) * nDim);
-        for(int i = 0 ; i < nDim; i++) {
-           hess[i] = (double*) malloc(sizeof(double) * nDim);
-        }
+        hess = Matrix<double>(nDim, nDim);
      }
 
      /*=========================================================================
@@ -188,10 +183,7 @@ class NewtonsMethod {
         // Create space for a gradient vector and hessian matrix to be used
         // during optimization.
         grad = (double*) malloc(sizeof(double) * nDim);
-        hess = (double**) malloc(sizeof(double*) * nDim);
-        for(int i = 0 ; i < nDim; i++) {
-           hess[i] = (double*) malloc(sizeof(double) * nDim);
-        }
+        hess = Matrix<double>(nDim, nDim);
      }
 
      /*=========================================================================
@@ -234,10 +226,7 @@ class NewtonsMethod {
         // Create space for a gradient vector and hessian matrix to be used
         // during optimization.
         grad = (double*) malloc(sizeof(double) * nDim);
-        hess = (double**) malloc(sizeof(double*) * nDim);
-        for(int i = 0 ; i < nDim; i++) {
-           hess[i] = (double*) malloc(sizeof(double) * nDim);
-        }
+        hess = Matrix<double>(nDim, nDim);
      }
      
      /*=========================================================================
@@ -286,10 +275,7 @@ class NewtonsMethod {
         // Create space for a gradient vector and hessian matrix to be used
         // during optimization.
         grad = (double*) malloc(sizeof(double) * nDim);
-        hess = (double**) malloc(sizeof(double*) * nDim);
-        for(int i = 0 ; i < nDim; i++) {
-           hess[i] = (double*) malloc(sizeof(double) * nDim);
-        }
+        hess = Matrix<double>(nDim, nDim);
      }
      
      /*
@@ -298,10 +284,6 @@ class NewtonsMethod {
       */
      ~NewtonsMethod() {
         free(grad);
-        for(int i = 0; i < nDim; i++) {
-           free(hess[i]);
-        }
-        free(hess);
      }
      
      /*=========================================================================
