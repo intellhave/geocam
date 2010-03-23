@@ -368,12 +368,12 @@ During the maximize step, \verb|nm| is approximating the gradient and Hessian us
      double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
      return sqrt(val);
    }
-   void gradient(double vars[], double sol[]) {
+   void gradientF(double vars[], double sol[]) {
    	 double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
      sol[0] = (-vars[0]/4)/sqrt(val);
-     sol[1] = (-vars[1]/4)/sqrt(val);
+     sol[1] = (-vars[1]/9)/sqrt(val);
    }
-   void hessian(double vars[], double *sol[]) {
+   void hessianF(double vars[], Matrix<double>& sol) {
      double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
    	 sol[0][0] = ((-1.0/4)*val - (vars[0]/16)) / pow(val, 3.0/2);
    	 sol[1][1] = ((-1.0/9)*val - (vars[1]/81)) / pow(val, 3.0/2);
@@ -385,12 +385,12 @@ During the maximize step, \verb|nm| is approximating the gradient and Hessian us
    .......
    .......
 	 
-   NewtonsMethod *nm = new NewtonsMethod(ellipse, gradient, hessian, 2);
+   NewtonsMethod *nm = new NewtonsMethod(ellipse, gradientF, hessianF, 2);
    double x_n[] = {1, 1};
    int i = 1;
    // Continue with the procedure until the length of the gradient is 
    // less than 0.000001.
-   while(nm->step(x_n) > 0.000001) {
+   while(nm->step(x_n, NMETHOD_MAX) > 0.000001) {
      fprintf(stdout, "\n***** Step %d *****\n", i++);
      nm->printInfo(stdout);
      for(int j = 0; j < 2; j++) {
@@ -402,7 +402,7 @@ During the maximize step, \verb|nm| is approximating the gradient and Hessian us
 
 \bigskip
 
-We now have two new functions \verb|gradient| and \verb|hessian|. Both take an array that represents the point at which we are taking derivatives. The gradient places its partial derivatives in the array \verb|sol|. For the Hessian, \verb|sol| is now a two-dimensional array representing the four second partial derivatives. We are also optimizing our solution a little differently. The array \verb|x_n| represents both the initial point and the optimal point and every point that occurs in between those two as we step through Newtons Method. The function call \verb|step| performs just one step of Newtons Method, updating the array \verb|x_n| and returning the length of the gradient vector. The stopping condition is an upperbound on the length of the gradient. We also use one more function in the \verb|NewtonsMethod| class, \verb|printInfo|. This simply displays the gradient and Hessian of the most recent step.\\
+We now have two new functions \verb|gradient| and \verb|hessian|. Both take an array that represents the point at which we are taking derivatives. The gradient places its partial derivatives in the array \verb|sol|. For the Hessian, \verb|sol| is now a two-by-two matrix representing the four second partial derivatives. We are also optimizing our solution a little differently. The array \verb|x_n| represents both the initial point and the optimal point and every point that occurs in between those two as we step through Newtons Method. The function call \verb|step| performs just one step of Newtons Method, updating the array \verb|x_n| and returning the length of the gradient vector. The stopping condition is an upperbound on the length of the gradient. The constant \verb|NMETHOD_MAX| indicates that we are searching for a maximum, and NewtonsMethod will take extra steps to ensure the critical point we find is actually a maximum. We also use one more function in the \verb|NewtonsMethod| class, \verb|printInfo|. This simply displays the gradient and Hessian of the most recent step.\\
 
 \section*{Performing Flips on Triangulations of 2D Manifolds}
 
