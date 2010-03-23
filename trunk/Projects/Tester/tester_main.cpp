@@ -13,6 +13,7 @@
 #include "nehr_partial.h"
 #include "nehr_second_partial.h"
 #include "radius_partial.h"
+#include "NMethod.h"
 
 void testPartialEdgePartial();
 void testDihedralAnglePartial();
@@ -26,6 +27,7 @@ void testNEHRPartial();
 void testNEHRSecondPartial();
 void testNEHRSecondPartialForm2();
 void testMatrix();
+void testNewtonsMethod();
 
 int main(int argc, char *argv[])
 {
@@ -46,7 +48,7 @@ int main(int argc, char *argv[])
     
    // testVolumePartial();
    // testCurvaturePartial();
-    testRadiusPartial();
+   // testRadiusPartial();
    // testPartialEdgePartial();
    // testDihedralAnglePartial();
    // testVolumeSecondPartial();
@@ -55,7 +57,8 @@ int main(int argc, char *argv[])
    // testNEHRPartial();
    // testNEHRSecondPartial();
    // testNEHRSecondPartialForm2();
-    testMatrix();
+   // testMatrix();
+   testNewtonsMethod();
    pause("Press enter to continue.....");
 }
 
@@ -323,4 +326,57 @@ void testRadiusPartial() {
     }
 
     fclose(results);
+}
+
+double ellipse(double vars[]) {
+  double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+  return sqrt(val);
+}
+
+void gradientF(double vars[], double sol[]) {
+  double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+  sol[0] = (-vars[0]/4)/sqrt(val);
+  sol[1] = (-vars[1]/9)/sqrt(val);
+}
+
+void hessianF(double vars[], double *sol[]) {
+  double val = 1 - pow(vars[0], 2) / 4 - pow(vars[1], 2) / 9;
+  sol[0][0] = ((-1.0/4)*val - (vars[0]/16)) / pow(val, 3.0/2);
+  sol[1][1] = ((-1.0/9)*val - (vars[1]/81)) / pow(val, 3.0/2);
+  sol[0][1] = (-vars[0]/4)*(-vars[1]/9)*(-1) / pow(val, 3.0/2);
+  sol[1][0] = sol[0][1];
+}
+
+void testNewtonsMethod() {
+    // Create the NewtonsMethod object, 2 variables
+   NewtonsMethod *nm1 = new NewtonsMethod(ellipse, 2);
+   double x_n[] = {0.25, 0.25};
+   int i = 1;
+   // Continue with the procedure until the length of the gradient is
+   // less than 0.000001.
+   FILE* results = fopen("results.txt", "w");
+   while(nm1->step(x_n) > 0.000001) {
+     fprintf(results, "\n***** Step %d *****\n", i++);
+     nm1->printInfo(results);
+     for(int j = 0; j < 2; j++) {
+       fprintf(results, "x_n_%d[%d] = %f\n", i, j, x_n[j]);
+     }
+   }
+   fprintf(results, "\nSolution: %.10f\n", x_n[0]);
+   
+   fprintf(results, "\n\n\n");
+   
+   NewtonsMethod *nm2 = new NewtonsMethod(ellipse, gradientF, hessianF, 2);
+   x_n[0] = 0.25; x_n[1] = 0.25;
+   i = 1;
+   while(nm2->step(x_n) > 0.000001) {
+     fprintf(results, "\n***** Step %d *****\n", i++);
+     nm2->printInfo(results);
+     for(int j = 0; j < 2; j++) {
+       fprintf(results, "x_n_%d[%d] = %f\n", i, j, x_n[j]);
+     }
+   }
+   fprintf(results, "\nSolution: %.10f\n", x_n[0]);
+   
+   fclose(results);
 }
