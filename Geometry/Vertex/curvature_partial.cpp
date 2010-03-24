@@ -20,6 +20,9 @@ CurvaturePartial::CurvaturePartial( Vertex& v, Vertex& w ){
   vRadius = Radius::At( v );
   vCurv = Curvature3D::At( v );
 
+  vRadius->addDependent(this);
+  vCurv->addDependent(this);
+
   dualAreas = new vector<DualArea*>();
   dihSums = new vector<DihedralAngleSum*>();
   lengths = new vector<Length*>();
@@ -74,7 +77,7 @@ CurvaturePartial::CurvaturePartial( Vertex& v, Edge& e) {
    dijs = new vector<PartialEdge*>();
    dihSum = DihedralAngleSum::At(e);
    if( local ) {
-       dij_partial = PartialEdgePartial::At(v, e);
+       dij_partial = PartialEdgePartial::At(v, e, e);
        dij_partial->addDependent(this);
    }
    

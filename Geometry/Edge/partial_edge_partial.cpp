@@ -6,7 +6,13 @@
 typedef map<TriPosition, PartialEdgePartial*, TriPositionCompare> PartialEdgePartialIndex;
 static PartialEdgePartialIndex* Index = NULL;
 
-PartialEdgePartial::PartialEdgePartial( Vertex& v, Edge& e ){
+PartialEdgePartial::PartialEdgePartial( Vertex& v, Edge& e, Edge& f ){
+  if(e.getIndex() != f.getIndex()) {
+    equal = false;
+    return;
+  }
+  equal = true;
+  
   StdEdge st = labelEdge( e, v );
   ri = Radius::At( v );
   rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
@@ -22,6 +28,11 @@ PartialEdgePartial::PartialEdgePartial( Vertex& v, Edge& e ){
 }
 
 void PartialEdgePartial::recalculate(){
+  if(!equal) {
+    value = 0;
+    return;
+  }
+
   double radi = ri->getValue();
   double radj = rj->getValue();
   double alphi = ai->getValue();
@@ -35,24 +46,27 @@ void PartialEdgePartial::recalculate(){
 
 void PartialEdgePartial::remove() {
     deleteDependents();
-    ri->removeDependent(this);
-    rj->removeDependent(this);
-    ai->removeDependent(this);
-    aj->removeDependent(this);
-    eij->removeDependent(this);
+    if(equal) {
+      ri->removeDependent(this);
+      rj->removeDependent(this);
+      ai->removeDependent(this);
+      aj->removeDependent(this);
+      eij->removeDependent(this);
+      return;
+    }
     Index->erase(pos);
     delete this;
 }
 
 PartialEdgePartial::~PartialEdgePartial(){}
 
-PartialEdgePartial* PartialEdgePartial::At( Vertex& v, Edge& e ){
-  TriPosition T( 2, v.getSerialNumber(), e.getSerialNumber() );
+PartialEdgePartial* PartialEdgePartial::At( Vertex& v, Edge& e, Edge& f ){
+  TriPosition T( 3, v.getSerialNumber(), e.getSerialNumber(), f.getSerialNumber() );
   if( Index == NULL ) Index = new PartialEdgePartialIndex();
   PartialEdgePartialIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
-    PartialEdgePartial* val = new PartialEdgePartial( v, e );
+    PartialEdgePartial* val = new PartialEdgePartial( v, e, f );
     val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;

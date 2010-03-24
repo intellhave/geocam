@@ -12,6 +12,7 @@ done independently of any triangulation.
 
 #include "triangulation/triangulation.h"
 #include "visualization/pointlinecircle.h"
+#include "matrix.h"
 #include <vector>
 using namespace std;
 
@@ -35,6 +36,10 @@ vector<int> multiplicityIntersection(vector<int> * list1, vector<int> * list2);
 
 //O(n) vector difference with duplicates i.e. {1,2,2,3,3,3} - {2,2,3,3} = {1,3}
 vector<int> multiplicityDifference(vector<int> * list1, vector<int> * list2);
+
+
+
+int LinearEquationsSolver(Matrix<double>& mat, double vect[], double sol[], int nDim);
 
 /*
  * Returns a set of soultions to the quadratic equation given as

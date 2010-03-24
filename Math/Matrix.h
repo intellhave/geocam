@@ -1,3 +1,28 @@
+/*=========================================================================
+ ||Class: Matrix
+ ||Authors: Kurtis Norwood (knorwood@email.arizona.edu)
+ ||         Alex Henniges (henniges@email.arizona.edu)
+ ||
+ ||Description: This file defines the Matrix class as a fixed size
+ ||     two-dimensional array of any generic element T. A user specifies the
+ ||     row and column size and the type that the matrix will contain at
+ ||     construction. The Matrix class serves the purpose of providing a
+ ||     consistent solution to all problems involving fixed-size two-dimensional
+ ||     arrays in a way that "hides" memory allocation and access concerns.
+ ||
+ ||     Once a matrix object, m, is created, access to its elements is the same
+ ||     as access to elements of an array. For example, access to an element
+ ||     at row i and column j is done by m[i][j]. The assignment operator
+ ||     n = m is also granted for every Matrix.
+ ||
+ ||     This class also utilizes what is known as template specialization.
+ ||     The specific case when a matrix is a set of double-precision numbers
+ ||     is specialized to include additional functionality. For example, two
+ ||     matrices of doubles can be added together and the determinant of such
+ ||     a matrix can be calculated.
+ ||
+ ||Bugs/TODO:
+ *=========================================================================*/
 #ifndef MATRIX_H_
 #define MATRIX_H_
 #include <stdlib.h>
@@ -12,10 +37,19 @@ class Matrix{
       for (int i = 0; i < row; i++) {
         free(mat[i]);
       }
-      free(mat);
+      if(mat != NULL) {
+        free(mat);
+        mat = NULL;
+      }
     }
 
   public:
+    Matrix() {
+      row = 0;
+      col = 0;
+      mat = NULL;
+    }
+    
     Matrix(int row, int col) {
       if (row == 0 || col == 0) {
         printf("you need to give positive row and column values\n");
@@ -85,7 +119,10 @@ class Matrix<double>{
       for (int i = 0; i < row; i++) {
         free(mat[i]);
       }
-      free(mat);
+      if(mat != NULL) {
+        free(mat);
+        mat = NULL;
+      }
     }
     
     double subdeterminant(int xrow, int xcol){
@@ -123,6 +160,12 @@ class Matrix<double>{
     }
 
   public:
+    Matrix() {
+      row = 0;
+      col = 0;
+      mat = NULL;
+    }
+    
     Matrix(int row, int col) {
       if (row == 0 || col == 0) {
         printf("you need to give positive row and column values\n");
