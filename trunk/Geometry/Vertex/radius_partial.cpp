@@ -4,6 +4,7 @@
 #include "nehr_second_partial.h"
 #include "matrix.h"
 #include "utilities.h"
+#include "miscmath.h"
 
 typedef map<TriPosition, RadiusPartial*, TriPositionCompare> RadiusPartialIndex;
 static RadiusPartialIndex* Index = NULL;

@@ -19,16 +19,18 @@ private:
   Alpha* ai;
   Alpha* aj;
   Eta* eij;
+  
+  bool equal;
 
 protected:
-  PartialEdgePartial( Vertex& v, Edge& e );
+  PartialEdgePartial( Vertex& v, Edge& e, Edge& f );
   void recalculate();
 
 public:
   ~PartialEdgePartial();
-  static PartialEdgePartial* At( Vertex& v, Edge& e  );
-  static double valueAt(Vertex& v, Edge& e) {
-         return PartialEdgePartial::At(v, e)->getValue();
+  static PartialEdgePartial* At( Vertex& v, Edge& e, Edge& f );
+  static double valueAt( Vertex& v, Edge& e, Edge& f ) {
+         return PartialEdgePartial::At(v, e, f)->getValue();
   }
   static void CleanUp();
   void remove();

@@ -2,6 +2,13 @@
 #include "radius.h"
 #include "rungaApprox.h"
 
+/*
+ * This is a correct implementation of the RK4 approximation method.
+ *
+ * Author: Joe Thomas
+ * Verification: Alex Henniges
+ */
+ 
 void RungaApprox::step(double dt){
     int vertexCount = Triangulation::vertexTable.size();
     

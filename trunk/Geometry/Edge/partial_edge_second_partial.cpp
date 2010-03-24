@@ -6,7 +6,12 @@
 typedef map<TriPosition, PartialEdgeSecondPartial*, TriPositionCompare> PartialEdgeSecondPartialIndex;
 static PartialEdgeSecondPartialIndex* Index = NULL;
 
-PartialEdgeSecondPartial::PartialEdgeSecondPartial( Vertex& v, Edge& e ){
+PartialEdgeSecondPartial::PartialEdgeSecondPartial( Vertex& v, Edge& e, Edge& f, Edge& g ){
+  if(e.getIndex() != f.getIndex() || e.getIndex() != g.getIndex()) {
+    equal = false;
+    return;
+  }
+  equal = true;
   StdEdge st = labelEdge( e, v );
   ri = Radius::At( v );
   rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
@@ -22,6 +27,9 @@ PartialEdgeSecondPartial::PartialEdgeSecondPartial( Vertex& v, Edge& e ){
 }
 
 void PartialEdgeSecondPartial::recalculate(){
+  if(!equal) {
+    value = 0;
+  }
   double r1 = ri->getValue();
   double r2 = rj->getValue();
   double alpha1 = ai->getValue();
@@ -35,24 +43,26 @@ void PartialEdgeSecondPartial::recalculate(){
 
 void PartialEdgeSecondPartial::remove() {
     deleteDependents();
-    ri->removeDependent(this);
-    rj->removeDependent(this);
-    ai->removeDependent(this);
-    aj->removeDependent(this);
-    eij->removeDependent(this);
+    if(equal) {
+      ri->removeDependent(this);
+      rj->removeDependent(this);
+      ai->removeDependent(this);
+      aj->removeDependent(this);
+      eij->removeDependent(this);
+    }
     Index->erase(pos);
     delete this;
 }
 
 PartialEdgeSecondPartial::~PartialEdgeSecondPartial(){}
 
-PartialEdgeSecondPartial* PartialEdgeSecondPartial::At( Vertex& v, Edge& e ){
-  TriPosition T( 2, v.getSerialNumber(), e.getSerialNumber() );
+PartialEdgeSecondPartial* PartialEdgeSecondPartial::At( Vertex& v, Edge& e, Edge& f, Edge& g ){
+  TriPosition T( 4, v.getSerialNumber(), e.getSerialNumber(), f.getSerialNumber(), g.getSerialNumber() );
   if( Index == NULL ) Index = new PartialEdgeSecondPartialIndex();
   PartialEdgeSecondPartialIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
-    PartialEdgeSecondPartial* val = new PartialEdgeSecondPartial( v, e );
+    PartialEdgeSecondPartial* val = new PartialEdgeSecondPartial( v, e, f, g );
     val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;
