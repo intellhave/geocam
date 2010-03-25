@@ -38,7 +38,6 @@ public:
   }
   static void CleanUp();
   void remove();
-  static void Record( char* filename );
 };
 
-#endif /* CURVATURE_SECOND_PARTIAL_H_
+#endif /* CURVATURE_SECOND_PARTIAL_H_ */
