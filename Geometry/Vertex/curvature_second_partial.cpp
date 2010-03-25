@@ -6,8 +6,8 @@
 #include <cstdio>
 
 //static const double PI = 3.1415926;
-
-typedef map<pair<int,int>, CurvatureSecondPartial*> CurvatureSecondPartialIndex;
+class CurvatureSecondPartial;
+typedef map<TriPosition, CurvatureSecondPartial*, TriPositionCompare> CurvatureSecondPartialIndex;
 static CurvatureSecondPartialIndex* Index = NULL;
 
 CurvatureSecondPartial::CurvatureSecondPartial( Vertex& v, Edge& e, Edge& f ){
@@ -66,20 +66,20 @@ CurvatureSecondPartial::CurvatureSecondPartial( Vertex& v, Edge& e, Edge& f ){
       /* DihedralAngleSecondPartial */
       dih_sec_partial = DihedralAngleSecondPartial::At(e, f, ij, t);
       dih_sec_partial->addDependent(this);
-      dih_sec_partials->push_back(dih_sec_partial);
+      dih_sec_partials->at(i)->push_back(dih_sec_partial);
       
       /* DihedralAnglePartial */
       dih_partial = DihedralAnglePartial::At(e, ij, t);
       dih_partial->addDependent(this);
-      dih_partials_e->push_back(dih_partial);
+      dih_partials_e->at(i)->push_back(dih_partial);
       dih_partial = DihedralAnglePartial::At(f, ij, t);
       dih_partial->addDependent(this);
-      dih_partials_f->push_back(dih_partial);
+      dih_partials_f->at(i)->push_back(dih_partial);
       
       /* DihedralAngle */
       dih = DihedralAngle::At(ij, t);
       dih->addDependent(this);
-      dihs->push_back(dih);
+      dihs->at(i)->push_back(dih);
     }
   }
 }
@@ -91,7 +91,7 @@ void CurvatureSecondPartial::recalculate(){
   double dih_partial_e_sum;
   double dih_partial_f_sum;
   double dih_sum;
-  vector<DihedralAngleSecondPartial*>* edge_dih_second_partial;
+  vector<DihedralAngleSecondPartial*>* edge_dih_sec_partial;
   vector<DihedralAnglePartial*>* edge_dih_partial_e;
   vector<DihedralAnglePartial*>* edge_dih_partial_f;
   vector<DihedralAngle*>* edge_dih;
@@ -101,7 +101,7 @@ void CurvatureSecondPartial::recalculate(){
     dih_partial_f_sum = 0;
     dih_sum = 2 * PI;
     
-    edge_dih_second_partial = dih_sec_partials->at(i);
+    edge_dih_sec_partial = dih_sec_partials->at(i);
     edge_dih_partial_e = dih_partials_e->at(i);
     edge_dih_partial_f = dih_partials_f->at(i);
     edge_dih = dihs->at(i);
@@ -161,23 +161,22 @@ void CurvatureSecondPartial::remove() {
   delete dijs;
   
 
-  Index->erase(pairPos);
+  Index->erase(pos);
   delete this;
 }
 
 CurvatureSecondPartial::~CurvatureSecondPartial(){
 }
 
-CurvatureSecondPartial* CurvatureSecondPartial::At( Vertex& v, Vertex& w ){
-  pair<int,int> P( v.getSerialNumber(), w.getSerialNumber() );
-
-  if( Index == NULL) Index = new CurvatureSecondPartialIndex();
-  CurvatureSecondPartialIndex::iterator iter = Index->find( P );
+CurvatureSecondPartial* CurvatureSecondPartial::At( Vertex& v, Edge& e, Edge& f ){
+  TriPosition T( 3, v.getSerialNumber(), e.getSerialNumber(), f.getSerialNumber() );
+  if( Index == NULL ) Index = new CurvatureSecondPartialIndex();
+  CurvatureSecondPartialIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
-    CurvatureSecondPartial* val = new CurvatureSecondPartial( v, w );
-    val->pairPos = P;
-    Index->insert( make_pair( P, val ) );
+    CurvatureSecondPartial* val = new CurvatureSecondPartial( v, e, f );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
     return val;
   } else {
     return iter->second;
@@ -196,13 +195,3 @@ void CurvatureSecondPartial::CleanUp(){
   Index = NULL;
 }
 
-void CurvatureSecondPartial::Record( char* filename ){
-  FILE* output = fopen( filename, "a+" );
-
-  CurvatureSecondPartialIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    fprintf( output, "(%d,%d): %lf\n", iter->first.first, iter->first.second, iter->second->getValue() );
-  fprintf( output, "\n");
-
-  fclose( output );
-}

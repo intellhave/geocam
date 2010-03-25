@@ -7,7 +7,7 @@ typedef map<TriPosition, NEHRSecondPartial*, TriPositionCompare> NEHRSecondParti
 static NEHRSecondPartialIndex* Index = NULL;
 
 NEHRSecondPartial::NEHRSecondPartial( Vertex& v, Vertex& w ){
-  wrtRadius2 = true;
+  form = 0;
   totVolume = TotalVolume::At();
   totVolume->addDependent( this );
 
@@ -51,7 +51,7 @@ NEHRSecondPartial::NEHRSecondPartial( Vertex& v, Vertex& w ){
 }
 
 NEHRSecondPartial::NEHRSecondPartial( Vertex& v, Edge& e ){
-  wrtRadius2 = false;
+  form = 1;
   totVolume = TotalVolume::At();
   totVolume->addDependent( this );
 
@@ -70,7 +70,7 @@ NEHRSecondPartial::NEHRSecondPartial( Vertex& v, Edge& e ){
   vps_nm = TotalVolumePartial::At(e);
   curvPartial_inm = CurvaturePartial::At(v, e);
   vps_inm = TotalVolumeSecondPartial::At(v, e);
-  curvPartials = new vector<CurvaturePartial*>();
+  curvPartials_nm = new vector<CurvaturePartial*>();
   
   map<int, Vertex>::iterator vit = Triangulation::vertexTable.begin();
   
@@ -78,7 +78,7 @@ NEHRSecondPartial::NEHRSecondPartial( Vertex& v, Edge& e ){
   while( vit != Triangulation::vertexTable.end() ){
     cp = CurvaturePartial::At( vit->second, e );
     cp->addDependent( this );
-    curvPartials->push_back( cp );
+    curvPartials_nm->push_back( cp );
     vit++;
   } 
 }
@@ -108,7 +108,7 @@ double NEHRSecondPartial::calculateRadRadCase() {
   result *= (3 * totV * curvPartial - rj * Ki * VPS_j - ri * Kj * VPS_i
 	    - rj * delta_ij * totK * VPS_i + (4.0/3.0) * ri * rj * ( totK / totV ) *
 	    VPS_i * VPS_j - ri * rj * totK * VolSecondPartial);
-	    
+
   return result;
 }
 
@@ -118,13 +118,13 @@ double NEHRSecondPartial::calculateRadEtaCase() {
   double VPS_i = vps_i->getValue();
   double ri = rad_i->getValue();
   double Ki = curvature_i->getValue();
-  
+
   double VPS_nm = vps_nm->getValue();
   double CP_inm = curvPartial_inm->getValue();
   double VolSecondPartial = vps_inm->getValue();
   double curvPartialSum = 0;
-  for(int i = 0; i < curvPartials->size(); i++) {
-    curvPartialSum += curvPartials->at(i)->getValue();
+  for(int i = 0; i < curvPartials_nm->size(); i++) {
+    curvPartialSum += curvPartials_nm->at(i)->getValue();
   }
   
   double result;
@@ -137,11 +137,44 @@ double NEHRSecondPartial::calculateRadEtaCase() {
   return result;
 }
 
+double NEHRSecondPartial::calculateEtaEtaCase() {
+  double totV = totVolume->getValue();
+  double totK = totCurvature->getValue();
+  double VPS_nm = vps_nm->getValue();
+  double VPS_op = vps_op->getValue();
+  double VolSecondPartial = vps_nm_op->getValue();
+
+  double curvPartialSum_nm = 0;
+  for(int i = 0; i < curvPartials_nm->size(); i++) {
+    curvPartialSum_nm += curvPartials_nm->at(i)->getValue();
+  }
+  double curvPartialSum_op = 0;
+  for(int i = 0; i < curvPartials_op->size(); i++) {
+    curvPartialSum_op += curvPartials_op->at(i)->getValue();
+  }
+  double curvSecPartialSum = 0;
+  for(int i = 0; i < curvSecPartials->size(); i++) {
+    curvSecPartialSum +=  curvSecPartials->at(i)->getValue();
+  }
+  
+  double result;
+
+  result = pow(totV, (-4.0/3.0)) * (1.0 / 3.0);
+  result *= (3 * totV * curvSecPartialSum - curvPartialSum_nm * VPS_op
+          - curvPartialSum_op * VPS_nm
+	        + (4.0/3.0) * ( totK / totV ) * VPS_op * VPS_nm
+          - totK * VolSecondPartial);
+
+  return result;
+}
+
 void NEHRSecondPartial::recalculate(){
-  if(wrtRadius2) {
+  if(form == 0) {
     value = calculateRadRadCase();               
-  } else {
+  } else if(form == 1) {
     value = calculateRadEtaCase();       
+  } else {
+    value = calculateEtaEtaCase();
   }
 }
 
@@ -152,20 +185,22 @@ void NEHRSecondPartial::remove() {
      vps_i->removeDependent(this);
      curvature_i->removeDependent(this);
      rad_i->removeDependent(this);
-     if(wrtRadius2) {
+     if(form == 0) {
        vps_j->removeDependent(this);
        vps_ij->removeDependent(this);
        curvature_j->removeDependent(this);
        curvPartial_ij->removeDependent(this);
        rad_j->removeDependent(this);
-     } else {
+     } else if(form == 1) {
        vps_nm->removeDependent(this);
        curvPartial_inm->removeDependent(this);
        vps_inm->removeDependent(this);
-       for(int i = 0; i < curvPartials->size(); i++) {
-        curvPartials->at(i)->removeDependent(this);
+       for(int i = 0; i < curvPartials_nm->size(); i++) {
+        curvPartials_nm->at(i)->removeDependent(this);
        }
-       delete curvPartials;
+       delete curvPartials_nm;
+     } else {
+
      }
      Index->erase(pos);
      delete this;

@@ -20,7 +20,7 @@ ObjectOutput=
 OverrideOutput=0
 OverrideOutputName=Tester.exe
 HostApplication=
-Folders=Geometry,Geometry/Header,Geometry/Source,InputOutput,Misc,Triangulation
+Folders=Geometry,Geometry/Header,Geometry/Header/Partials,Geometry/Header/SecondPartials,Geometry/Source,Geometry/Source/Partials,Geometry/Source/SecondPartials,InputOutput,Misc,Triangulation
 CommandLine=
 UseCustomMakefile=0
 CustomMakefile=
@@ -62,7 +62,7 @@ BuildCmd=
 [Unit4]
 FileName=..\..\Geometry\Edge\dih_angle_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -142,7 +142,7 @@ BuildCmd=
 [Unit12]
 FileName=..\..\Geometry\Edge\partial_edge_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -182,7 +182,7 @@ BuildCmd=
 [Unit16]
 FileName=..\..\Geometry\Vertex\curvature_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -222,7 +222,7 @@ BuildCmd=
 [Unit20]
 FileName=..\..\Geometry\Tetrahedron\volume_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -242,7 +242,7 @@ BuildCmd=
 [Unit22]
 FileName=..\..\Geometry\Tetrahedron\volume_length_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -252,7 +252,7 @@ BuildCmd=
 [Unit23]
 FileName=..\..\Geometry\Tetrahedron\volume_length_tetra_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -262,7 +262,7 @@ BuildCmd=
 [Unit24]
 FileName=..\..\Geometry\Triangulation\volume_second_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -292,7 +292,7 @@ BuildCmd=
 [Unit28]
 FileName=..\..\Geometry\Triangulation\volume_second_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -382,7 +382,7 @@ BuildCmd=
 [Unit41]
 FileName=..\..\Geometry\Edge\partial_edge_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -422,7 +422,7 @@ BuildCmd=
 [Unit45]
 FileName=..\..\Geometry\Vertex\curvature_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -462,7 +462,7 @@ BuildCmd=
 [Unit49]
 FileName=..\..\Geometry\Tetrahedron\volume_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -482,7 +482,7 @@ BuildCmd=
 [Unit51]
 FileName=..\..\Geometry\Tetrahedron\volume_length_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -492,7 +492,7 @@ BuildCmd=
 [Unit52]
 FileName=..\..\Geometry\Tetrahedron\volume_length_tetra_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -752,7 +752,7 @@ BuildCmd=
 [Unit80]
 FileName=..\..\Geometry\Triangulation\nehr_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -762,7 +762,7 @@ BuildCmd=
 [Unit81]
 FileName=..\..\Geometry\Triangulation\nehr_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -772,7 +772,7 @@ BuildCmd=
 [Unit82]
 FileName=..\..\Geometry\Triangulation\total_volume_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -800,7 +800,7 @@ AutoIncBuildNr=0
 [Unit83]
 FileName=..\..\Geometry\Triangulation\total_volume_second_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -810,7 +810,7 @@ BuildCmd=
 [Unit84]
 FileName=..\..\Geometry\Triangulation\total_volume_second_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -820,7 +820,7 @@ BuildCmd=
 [Unit85]
 FileName=..\..\Geometry\Triangulation\nehr_second_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -830,7 +830,7 @@ BuildCmd=
 [Unit86]
 FileName=..\..\Geometry\Triangulation\nehr_second_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -844,7 +844,7 @@ FileName=..\..\Geometry\Edge\partial_edge_second_partial.h
 FileName=..\..\Geometry\Vertex\radius_partial.cpp
 >>>>>>> .r1042
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -858,7 +858,7 @@ FileName=..\..\Geometry\Edge\partial_edge_second_partial.cpp
 FileName=..\..\Geometry\Vertex\radius_partial.h
 >>>>>>> .r1042
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -888,7 +888,7 @@ BuildCmd=
 [Unit33]
 FileName=..\..\Geometry\Edge\dih_angle_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -898,7 +898,7 @@ BuildCmd=
 [Unit25]
 FileName=..\..\Geometry\Triangulation\total_volume_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/Partials
 Compile=1
 Link=1
 Priority=1000
@@ -938,7 +938,7 @@ BuildCmd=
 [Unit89]
 FileName=..\..\Geometry\Edge\dih_angle_second_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -948,7 +948,7 @@ BuildCmd=
 [Unit90]
 FileName=..\..\Geometry\Edge\dih_angle_second_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -968,7 +968,7 @@ BuildCmd=
 [Unit92]
 FileName=..\..\Subsystems\Solvers\Newtons_method\NMethod.h
 CompileCpp=1
-Folder=Tester
+Folder=Misc
 Compile=1
 Link=1
 Priority=1000
@@ -978,7 +978,7 @@ BuildCmd=
 [Unit93]
 FileName=..\..\Subsystems\Solvers\Newtons_method\NMethod.cpp
 CompileCpp=1
-Folder=Tester
+Folder=Misc
 Compile=1
 Link=1
 Priority=1000
@@ -988,7 +988,7 @@ BuildCmd=
 [Unit96]
 FileName=..\..\Geometry\Vertex\curvature_second_partial.cpp
 CompileCpp=1
-Folder=
+Folder=Geometry/Source/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -998,7 +998,7 @@ BuildCmd=
 [Unit97]
 FileName=..\..\Geometry\Vertex\curvature_second_partial.h
 CompileCpp=1
-Folder=
+Folder=Geometry/Header/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -1008,7 +1008,7 @@ BuildCmd=
 [Unit94]
 FileName=..\..\Geometry\Edge\partial_edge_second_partial.cpp
 CompileCpp=1
-Folder=Geometry/Source
+Folder=Geometry/Source/SecondPartials
 Compile=1
 Link=1
 Priority=1000
@@ -1018,7 +1018,7 @@ BuildCmd=
 [Unit95]
 FileName=..\..\Geometry\Edge\partial_edge_second_partial.h
 CompileCpp=1
-Folder=Geometry/Header
+Folder=Geometry/Header/SecondPartials
 Compile=1
 Link=1
 Priority=1000

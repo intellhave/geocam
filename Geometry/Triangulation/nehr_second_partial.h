@@ -18,7 +18,7 @@ using namespace std;
 
 class NEHRSecondPartial : public virtual GeoQuant {
 private:
-  bool wrtRadius2;        
+  int form;
 
   TotalVolume* totVolume;
   TotalCurvature* totCurvature;
@@ -35,16 +35,24 @@ private:
   
   bool sameVertices; /* Vertex only */
   
-  TotalVolumePartial* vps_nm; /* Eta only */
-  CurvaturePartial* curvPartial_inm; /* Eta only */
-  TotalVolumeSecondPartial* vps_inm; /* Eta only */
-  vector<CurvaturePartial*>* curvPartials; /* Eta only */
+  TotalVolumePartial* vps_nm; /* Etas only */
+  TotalVolumePartial* vps_op; /* Eta-Eta only */
+  CurvaturePartial* curvPartial_inm; /* Vertex-Eta only */
+  TotalVolumeSecondPartial* vps_inm; /* Vertex-Eta only */
+  vector<CurvaturePartial*>* curvPartials_nm; /* Etas only */
+  vector<CurvaturePartial*>* curvPartials_op; /* Eta-Eta only */
   
+  TotalVolumSecondPartial* vps_nm_op; /* Eta-Eta only */
+  vector<CurvatureSecondPartial*>* curvSecPartials; /* Eta-Eta only */
+
   double calculateRadRadCase();
-  double calculateRadEtaCase();  
+  double calculateRadEtaCase();
+  double calculateEtaEtaCase();
+  
 protected:
   NEHRSecondPartial( Vertex& v, Vertex& w );
   NEHRSecondPartial( Vertex& v, Edge& e );
+  NEHRSecondPartial( Edge& e, Edge& f );
   void recalculate();
 
 public:
@@ -56,6 +64,10 @@ public:
   static NEHRSecondPartial* At( Vertex& v, Edge& e );
   static double valueAt(Vertex& v, Edge& e) {
          return NEHRSecondPartial::At(v, e)->getValue();
+  }
+  static NEHRSecondPartial* At( Edge& e, Edge& f );
+  static double valueAt( Edge& e, Edge& f ) {
+         return NEHRSecondPartial::At(e, f)->getValue();
   }
   static void CleanUp();
   void remove();
