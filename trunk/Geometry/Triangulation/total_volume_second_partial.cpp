@@ -43,6 +43,22 @@ TotalVolumeSecondPartial::TotalVolumeSecondPartial( Vertex& v, Edge& e ){
   }
 }
 
+TotalVolumeSecondPartial::TotalVolumeSecondPartial( Edge& e, Edge& f ){
+
+  vector<int> tetra_list = listIntersection(e.getLocalTetras(), f.getLocalTetras());
+
+  volume_partials = new vector<VolumeSecondPartial*>();
+  VolumeSecondPartial* vp = NULL;
+
+  for(int ii = 0; ii < tetra_list.size(); ii++){
+    Tetra& t = Triangulation::tetraTable[tetra_list[ii]];
+
+    vp = VolumeSecondPartial::At(e, f, t);
+    vp->addDependent(this);
+    volume_partials->push_back( vp );
+  }
+}
+
 void TotalVolumeSecondPartial::remove() {
   deleteDependents();   
   for(int jj = 0; jj < volume_partials->size(); jj++) {
@@ -95,6 +111,20 @@ TotalVolumeSecondPartial* TotalVolumeSecondPartial::At( Vertex& v, Edge& e ){
   }
 }
 
+TotalVolumeSecondPartial* TotalVolumeSecondPartial::At( Edge& e, Edge& f ){
+  TriPosition T( 2, e.getSerialNumber(), f.getSerialNumber() );
+  if( Index == NULL ) Index = new TotalVolumeSecondPartialIndex();
+  TotalVolumeSecondPartialIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    TotalVolumeSecondPartial* val = new TotalVolumeSecondPartial( e, f );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
+  }
+}
 
 void TotalVolumeSecondPartial::CleanUp(){
   if( Index == NULL ) return;

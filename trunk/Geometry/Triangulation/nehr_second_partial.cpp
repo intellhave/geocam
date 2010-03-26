@@ -83,6 +83,44 @@ NEHRSecondPartial::NEHRSecondPartial( Vertex& v, Edge& e ){
   } 
 }
 
+NEHRSecondPartial::NEHRSecondPartial( Edge& e, Edge& f ){
+  form = 2;
+  totVolume = TotalVolume::At();
+  totVolume->addDependent( this );
+
+  totCurvature = TotalCurvature::At();
+  totVolume->addDependent( this );
+
+  vps_nm = TotalVolumePartial::At(e);
+  vps_nm->addDependent(this);
+  vps_op = TotalVolumePartial::At(f);
+  vps_op->addDependent(this);
+  
+  vps_nm_op = TotalVolumeSecondPartial::At(e, f);
+  
+  curvPartials_nm = new vector<CurvaturePartial*>();
+  curvPartials_op = new vector<CurvaturePartial*>();
+  curvSecPartials = new vector<CurvatureSecondPartial*>();
+  
+  map<int, Vertex>::iterator vit = Triangulation::vertexTable.begin();
+  CurvaturePartial* cp;
+  CurvatureSecondPartial* csp;
+  while( vit != Triangulation::vertexTable.end() ){
+    cp = CurvaturePartial::At( vit->second, e );
+    cp->addDependent( this );
+    curvPartials_nm->push_back( cp );
+    
+    cp = CurvaturePartial::At( vit->second, f );
+    cp->addDependent( this );
+    curvPartials_op->push_back( cp );
+    
+    csp = CurvatureSecondPartial::At( vit->second, e, f );
+    csp->addDependent(this);
+    curvSecPartials->push_back( csp );
+    vit++;
+  }
+}
+
 double NEHRSecondPartial::calculateRadRadCase() {
   // Calculates the second partial of the EHR (with respect to log radii).
   double totV = totVolume->getValue();
@@ -182,16 +220,20 @@ void NEHRSecondPartial::remove() {
      deleteDependents();
      totVolume->removeDependent(this);
      totCurvature->removeDependent(this);
-     vps_i->removeDependent(this);
-     curvature_i->removeDependent(this);
-     rad_i->removeDependent(this);
+
      if(form == 0) {
+       vps_i->removeDependent(this);
+       curvature_i->removeDependent(this);
+       rad_i->removeDependent(this);
        vps_j->removeDependent(this);
        vps_ij->removeDependent(this);
        curvature_j->removeDependent(this);
        curvPartial_ij->removeDependent(this);
        rad_j->removeDependent(this);
      } else if(form == 1) {
+       vps_i->removeDependent(this);
+       curvature_i->removeDependent(this);
+       rad_i->removeDependent(this);
        vps_nm->removeDependent(this);
        curvPartial_inm->removeDependent(this);
        vps_inm->removeDependent(this);
@@ -200,8 +242,19 @@ void NEHRSecondPartial::remove() {
        }
        delete curvPartials_nm;
      } else {
-
+       vps_nm->removeDependent(this);
+       vps_op->removeDependent(this);
+       vps_nm_op->removeDependent(this);
+       for(int i = 0; i < curvPartials_nm->size(); i++) {
+        curvPartials_nm->at(i)->removeDependent(this);
+        curvPartials_op->at(i)->removeDependent(this);
+        curvSecPartials->at(i)->removeDependent(this);
+       }
+       delete curvPartials_nm;
+       delete curvPartials_op;
+       delete curvSecPartials;
      }
+     
      Index->erase(pos);
      delete this;
 }
@@ -231,6 +284,21 @@ NEHRSecondPartial* NEHRSecondPartial::At( Vertex& v, Edge& e ){
 
   if( iter == Index->end() ){
     NEHRSecondPartial* val = new NEHRSecondPartial( v, e );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
+  }
+}
+
+NEHRSecondPartial* NEHRSecondPartial::At( Edge& e, Edge& f ){
+  TriPosition T( 2, e.getSerialNumber(), f.getSerialNumber() );
+  if( Index == NULL ) Index = new NEHRSecondPartialIndex();
+  NEHRSecondPartialIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    NEHRSecondPartial* val = new NEHRSecondPartial( e, f );
     val->pos = T;
     Index->insert( make_pair( T, val ) );
     return val;

@@ -823,6 +823,21 @@ VolumeSecondPartial* VolumeSecondPartial::At( Vertex& v, Edge& e, Tetra& t ){
   }
 }
 
+VolumeSecondPartial* VolumeSecondPartial::At( Edge& e, Edge& f, Tetra& t ){
+  TriPosition T( 3, e.getSerialNumber(), f.getSerialNumber(), t.getSerialNumber() );
+  if( Index == NULL ) Index = new VolumeSecondPartialIndex();
+  VolumeSecondPartialIndex::iterator iter = Index->find( T );
+
+  if( iter == Index->end() ){
+    VolumeSecondPartial* val = new VolumeSecondPartial( e, f, t );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
+    return val;
+  } else {
+    return iter->second;
+  }
+}
+
 void VolumeSecondPartial::CleanUp(){
   if( Index == NULL ) return;
   VolumeSecondPartialIndex::iterator iter;

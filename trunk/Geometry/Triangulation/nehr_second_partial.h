@@ -14,6 +14,7 @@ using namespace std;
 #include "total_volume_partial.h"
 #include "volume_second_partial.h"
 #include "curvature_partial.h"
+#include "curvature_second_partial.h"
 #include "total_volume_second_partial.h"
 
 class NEHRSecondPartial : public virtual GeoQuant {
@@ -42,7 +43,7 @@ private:
   vector<CurvaturePartial*>* curvPartials_nm; /* Etas only */
   vector<CurvaturePartial*>* curvPartials_op; /* Eta-Eta only */
   
-  TotalVolumSecondPartial* vps_nm_op; /* Eta-Eta only */
+  TotalVolumeSecondPartial* vps_nm_op; /* Eta-Eta only */
   vector<CurvatureSecondPartial*>* curvSecPartials; /* Eta-Eta only */
 
   double calculateRadRadCase();
