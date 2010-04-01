@@ -237,6 +237,21 @@ class Matrix<double>{
       return temp;
     }
     
+    Matrix operator-(Matrix& m) {
+      if(m.row != row || m.col != col) {
+        printf("you can only add matrices of the same size\n");
+        system("PAUSE");
+        exit(1);
+      }
+      Matrix<double> temp(row, col);
+      for(int i = 0; i < row; i++) {
+        for(int j = 0; j < col; j++) {
+          temp[i][j] = mat[i][j] - m[i][j];
+        }
+      }
+      return temp;
+    }
+    
     Matrix operator*(Matrix& m) {
       if(col != m.row) {
         printf("the matrix on the right must have the same number of rows as the number of columns");
