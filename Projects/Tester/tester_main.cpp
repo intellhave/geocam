@@ -15,6 +15,9 @@
 #include "radius_partial.h"
 #include "NMethod.h"
 
+void testPartialEdgeSecondPartial();
+void testDihedralAngleSecondPartial();
+void testCurvatureSecondPartial();
 void testPartialEdgePartial();
 void testDihedralAnglePartial();
 void testRadiusPartial();
@@ -58,7 +61,10 @@ int main(int argc, char *argv[])
    // testNEHRSecondPartial();
    // testNEHRSecondPartialForm2();
    // testMatrix();
-   testNewtonsMethod();
+    testDihedralAngleSecondPartial();
+   // testPartialEdgeSecondPartial();
+   // testCurvatureSecondPartial();
+   // testNewtonsMethod();
    pause("Press enter to continue.....");
 }
 
@@ -144,6 +150,7 @@ void testTotalVolumeSecondPartial() {
     map<int, Vertex>::iterator vit;
     map<int, Vertex>::iterator vit2;
     map<int, Edge>::iterator eit;
+    map<int, Edge>::iterator eit2;
     
     FILE* results = fopen("results.txt", "w");
        
@@ -167,6 +174,16 @@ void testTotalVolumeSecondPartial() {
        }
     }
     
+    fprintf(results, "\n");
+
+    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+       fprintf(results, "\nEdge %d:\n", eit->first);
+       for(eit2 = Triangulation::edgeTable.begin(); eit2 != Triangulation::edgeTable.end(); eit2++) {
+          fprintf(results, "\tEdge %d: %f\n", eit2->first,
+                           TotalVolumeSecondPartial::valueAt(eit->second, eit2->second));
+       }
+    }
+    
     fclose(results);
 }
 
@@ -179,7 +196,7 @@ void testVolumeSecondPartial() {
     vector<int> local_edges;
     Tetra t;
     Vertex v;
-    Edge e;
+    Edge e, f;
     FILE* results = fopen("results.txt", "w");
        
     fprintf(results, "\t\tVolumeSecondPartialsTest\n\t-----------------------------\n");
@@ -213,6 +230,20 @@ void testVolumeSecondPartial() {
         }
       }
     }
+    fprintf(results, "\n");
+    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++) {
+      fprintf(results, "\nTetra %d:\n", tit->first);
+      local_edges = *(tit->second.getLocalEdges());
+      for(int i = 0; i < local_edges.size(); i++) {
+        e = Triangulation::edgeTable[local_edges[i]];
+        fprintf(results, "\tEdge %d:\n", e.getIndex());
+        for(int j = 0; j < local_edges.size(); j++) {
+          f = Triangulation::edgeTable[local_edges[j]];
+          fprintf(results, "\t\tEdge %d: %f\n", f.getIndex(),
+                           VolumeSecondPartial::valueAt(e, f, tit->second));
+        }
+      }
+    }
     
     fclose(results);
 }
@@ -230,6 +261,56 @@ void testPartialEdgePartial() {
                                  eit->first, PartialEdgePartial::valueAt(v, eit->second, eit->second));
        }
     }
+}
+
+void testPartialEdgeSecondPartial() {
+  map<int, Edge>::iterator eit;
+  map<int, Vertex>::iterator vit;
+
+  vector<int> local_edges;
+  Edge e;
+
+  FILE* results = fopen("results.txt", "w");
+
+  fprintf(results, "\t\tPartialEdgeSecondPartialsTest\n\t-----------------------------\n");
+
+  for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+    fprintf(results, "\nVertex %d:\n", vit->first);
+    local_edges = *(vit->second.getLocalEdges());
+    for(int i = 0; i < local_edges.size(); i++) {
+      e = Triangulation::edgeTable[local_edges[i]];
+      fprintf(results, "\tEdge %d:\n", e.getIndex());
+      for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+        fprintf(results, "\t\tEdge %d: %f\n", eit->first,
+                    PartialEdgeSecondPartial::valueAt(vit->second, e, e, eit->second));
+      }
+    }
+  }
+  
+  fclose(results);
+}
+
+void testCurvatureSecondPartial() {
+    map<int, Vertex>::iterator vit;
+    map<int, Edge>::iterator eit;
+    map<int, Edge>::iterator eit2;
+
+  FILE* results = fopen("results.txt", "w");
+
+  fprintf(results, "\t\tCurvatureSecondPartialsTest\n\t-----------------------------\n");
+
+  for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+    fprintf(results, "\nVertex %d:\n", vit->first);
+    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+       fprintf(results, "\tEdge %d:\n", eit->first);
+       for(eit2 = Triangulation::edgeTable.begin(); eit2 != Triangulation::edgeTable.end(); eit2++) {
+          fprintf(results, "\t\tEdge %d: %f\n", eit2->first,
+                           CurvatureSecondPartial::valueAt(vit->second, eit->second, eit2->second));
+       }
+    }
+  }
+
+  fclose(results);
 }
 
 void testCurvaturePartial() {
@@ -266,6 +347,7 @@ void testNEHRSecondPartial() {
     map<int, Vertex>::iterator vit;
     map<int, Vertex>::iterator vit2;
     map<int, Edge>::iterator eit;
+    map<int, Edge>::iterator eit2;
 
     FILE* results = fopen("results.txt", "w");
 
@@ -282,6 +364,13 @@ void testNEHRSecondPartial() {
       fprintf(results, "Vertex %d:\n", vit->first);
       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
         fprintf(results, "\tEta %d: %f\n", eit->first, NEHRSecondPartial::valueAt(vit->second, eit->second));
+      }
+    }
+    fprintf(results, "\n");
+    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+      fprintf(results, "Edge %d:\n", eit->first);
+      for(eit2 = Triangulation::edgeTable.begin(); eit2 != Triangulation::edgeTable.end(); eit2++) {
+        fprintf(results, "\tEdge %d: %f\n", eit2->first, NEHRSecondPartial::valueAt(eit->second, eit2->second));
       }
     }
     fclose(results);
@@ -306,6 +395,35 @@ void testDihedralAnglePartial() {
            }
            fprintf(results, "\n");
        }       
+    }
+    fclose(results);
+}
+
+void testDihedralAngleSecondPartial() {
+    map<int, Tetra>::iterator tit;
+    map<int, Edge>::iterator eit;
+    map<int, Edge>::iterator eit2;
+    map<int, Edge>::iterator Begin = Triangulation::edgeTable.begin();
+    map<int, Edge>::iterator End = Triangulation::edgeTable.end();
+    vector<int> local_edges;
+    FILE* results = fopen("results.txt", "w");
+
+    fprintf(results, "\t\tDihedralAngleSecondPartialsTest\n\t-----------------------------\n");
+    for(tit = Triangulation::tetraTable.begin(); tit != Triangulation::tetraTable.end(); tit++) {
+       local_edges = *(tit->second.getLocalEdges());
+       fprintf(results,"Tetra %d:\n", tit->first);
+       for(int i = 0; i < local_edges.size(); i++) {
+           Edge ei = Triangulation::edgeTable[local_edges[i]];
+           fprintf(results, "\tEdge %d:\n", ei.getIndex());
+           for(eit = Begin; eit != End; eit++) {
+              fprintf(results, "\t\tEdge %d:\n", eit->first);
+                for(eit2 = Begin; eit2 != End; eit2++) {
+                  fprintf(results,"\t\t\t Edge % d: %f\n", eit2->first,
+                        DihedralAngleSecondPartial::valueAt(eit->second, eit2->second, ei, tit->second));
+                }
+           }
+           fprintf(results, "\n");
+       }
     }
     fclose(results);
 }
