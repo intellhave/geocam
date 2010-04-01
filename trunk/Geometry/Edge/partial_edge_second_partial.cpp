@@ -9,26 +9,27 @@ static PartialEdgeSecondPartialIndex* Index = NULL;
 PartialEdgeSecondPartial::PartialEdgeSecondPartial( Vertex& v, Edge& e, Edge& f, Edge& g ){
   if(e.getIndex() != f.getIndex() || e.getIndex() != g.getIndex()) {
     equal = false;
-    return;
-  }
-  equal = true;
-  StdEdge st = labelEdge( e, v );
-  ri = Radius::At( v );
-  rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
-  ai = Alpha::At( v );
-  aj = Alpha::At( Triangulation::vertexTable[ st.v2 ] );
-  eij = Eta::At(e);
+  } else {
+    equal = true;
+    StdEdge st = labelEdge( e, v );
+    ri = Radius::At( v );
+    rj = Radius::At( Triangulation::vertexTable[ st.v2 ] );
+    ai = Alpha::At( v );
+    aj = Alpha::At( Triangulation::vertexTable[ st.v2 ] );
+    eij = Eta::At(e);
 
-  ri->addDependent( this );
-  rj->addDependent( this );
-  ai->addDependent( this );
-  aj->addDependent( this );
-  eij->addDependent(this);
+    ri->addDependent( this );
+    rj->addDependent( this );
+    ai->addDependent( this );
+    aj->addDependent( this );
+    eij->addDependent(this);
+  }
 }
 
 void PartialEdgeSecondPartial::recalculate(){
   if(!equal) {
     value = 0;
+    return;
   }
   double r1 = ri->getValue();
   double r2 = rj->getValue();

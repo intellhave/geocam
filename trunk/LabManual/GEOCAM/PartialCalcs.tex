@@ -1,0 +1,59 @@
+\documentclass[12pt]{article}
+\usepackage[pdftex]{graphicx}
+\usepackage{multicol}
+\usepackage{html,makeidx}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage[subfigure]{ccaption}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\parindent 0in
+\parskip 0.1in
+\title{The relationship between geometric quantities on a triangulation}
+\pagestyle{plain}
+\author{Alex Henniges \\ \\ University of Arizona Undergraduate Research Program\\
+Supervisor: Dr. David Glickenstein\\
+}
+\begin{document}
+
+\section{Summary}
+
+This paper describes the calculations of partial derivatives of the Normalized Einstein-Hilbert-Regge functional, hereby refered to as NEHR. The purpose is to illustrate the the sort of calculations involved in studying functionals across conformal classes, and in particular should prove the correctness of the calculations being performed in the geocam project. \\
+
+\section{Notation}
+
+We begin by providing some notation to help the reader. We will denote our triangulation by T, and in general label simplices in index notation. A vertex of T is represented as ${i}$. An edge between vertices ${i}$ and ${j}$ is denoted as ${ij}$ and similarly for faces and tetrahedron. When we are referring to a geometric quantity defined on a particular simplex, we denote it by its representative label and subscript the label with a simplex. For example, curvatures have the label $K$, and thus the curvature at vertex ${i}$ is $K_i$. Sometimes, a geometric quantity is defined on a simplex contained within a simplex of higher dimension. A prime example is a dihedral angle labeled by $\beta$. A dihedral angle is the angle of an edge within a tetrahedron. In this case, we use a comma within or indexing system to distinguish the smaller simplex with the larger one. Thus, the dihedral angle at edge ${ij}$ with tetra ${ijkl}$ is $\beta_{ij,kl}$. We will define our labels once they appear in the paper. \\
+
+\section{The NEHR Functional}
+
+We actually start with the basic Einstein-Hilbert-Regge functional on triangulated manifolds. The functional was chosen to closely mimic the EHR that is defined for smooth surfaces. In particular, we define EHR as the sum of the curvatures,
+
+\begin{equation}
+EHR = \sum_{{i} \in T}{K_i}
+\label{eq.EHR}
+\end{equation}
+
+The normalized form, NEHR, also mimics that of the NEHR for smooth surfaces. In our case, it is
+
+\begin{equation}
+NEHR = \frac{\sum_{{i} \in T}{K_i}}{V^{1/3}}
+\label{eq.NEHR}
+\end{equation}
+
+where $V$ is the total volume of the triangulation. Many of the simplifications we do when calculating the partial derivatives will involve substituting between \ref{eq.EHR} and \ref{eq.NEHR}.
+
+We end this section with a very important key to our calcuations. The following was derived by David Glickenstein in (ref paper):
+
+\begin{equation}
+\frac{\partial EHR}{\partial ln(r_i)} = K_i
+\label{eq.EHR_Part}
+\end{equation}
+
+This states that the partial derivative of EHR with respect to the logarithm of the radius of vertex ${i}$ is simply the curvature at vertex ${i}$.
+
+\end{document}
+
