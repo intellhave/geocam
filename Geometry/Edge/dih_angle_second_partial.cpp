@@ -16,7 +16,7 @@ DihedralAngleSecondPartial::DihedralAngleSecondPartial( Edge& e1, Edge& e2, Edge
   // t = ij,kl
   if(!t.isAdjEdge(nm) || !t.isAdjEdge(op) ) {
     locality = 0;
-    st = labelTetra( t, e3, e1 );
+    st = labelTetra( t, e3);
   } else if(ij == nm) {
     st = labelTetra(t, e1, e2);
     if(nm == op) {
@@ -2784,7 +2784,11 @@ void DihedralAngleSecondPartial::remove() {
 DihedralAngleSecondPartial::~DihedralAngleSecondPartial(){}
 
 DihedralAngleSecondPartial* DihedralAngleSecondPartial::At( Edge& e1, Edge& e2, Edge& e3, Tetra& t ){
-  TriPosition T( 4, e1.getSerialNumber(), e2.getSerialNumber(), e3.getSerialNumber(), t.getSerialNumber());
+  // The additional e3s are to "set it apart" from e1 and e2. This is slightly more complicated
+  // then dih_angle_partial. Now, e1 and e2 can interchange, and we need 3 e3s to make it clear
+  // which is the edge related to the dihedral angle we are taking a partial of.
+  TriPosition T( 6, e1.getSerialNumber(), e2.getSerialNumber(), e3.getSerialNumber(), t.getSerialNumber(),
+                  e3.getSerialNumber(), e3.getSerialNumber());
   if( Index == NULL ) Index = new DihedralAngleSecondPartialIndex();
   DihedralAngleSecondPartialIndex::iterator iter = Index->find( T );
 
