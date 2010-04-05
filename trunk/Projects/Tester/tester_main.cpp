@@ -58,10 +58,10 @@ int main(int argc, char *argv[])
    // testTotalVolumePartial();
    // testTotalVolumeSecondPartial();
    // testNEHRPartial();
-   // testNEHRSecondPartial();
+    testNEHRSecondPartial();
    // testNEHRSecondPartialForm2();
    // testMatrix();
-    testDihedralAngleSecondPartial();
+   // testDihedralAngleSecondPartial();
    // testPartialEdgeSecondPartial();
    // testCurvatureSecondPartial();
    // testNewtonsMethod();

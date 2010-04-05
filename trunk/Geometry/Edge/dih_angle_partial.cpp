@@ -420,7 +420,9 @@ void DihedralAnglePartial::remove() {
 DihedralAnglePartial::~DihedralAnglePartial(){}
 
 DihedralAnglePartial* DihedralAnglePartial::At( Edge& e1, Edge& e2, Tetra& t ){
-  TriPosition T( 3, e1.getSerialNumber(), e2.getSerialNumber(), t.getSerialNumber());
+  // The additional e2 is to "set it apart" from e1. Otherwise, the computer 
+  // would believe d(dih(e1,t))/d(e2) = d(dih(e2,t))/d(e1)
+  TriPosition T( 4, e1.getSerialNumber(), e2.getSerialNumber(), t.getSerialNumber(), e2.getSerialNumber());
   if( Index == NULL ) Index = new DihedralAnglePartialIndex();
   DihedralAnglePartialIndex::iterator iter = Index->find( T );
 

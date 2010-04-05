@@ -32,8 +32,8 @@ CurvatureSecondPartial::CurvatureSecondPartial( Vertex& v, Edge& e, Edge& f ){
   
   vector<int> edges = *(v.getLocalEdges());
   vector<int> tetras;
-  for(int i = 0; i < edges.size(); i++) {
-    Edge ij = Triangulation::edgeTable[edges[i]];
+  for(int j = 0; j < edges.size(); j++) {
+    Edge ij = Triangulation::edgeTable[edges[j]];
     
     /* Dihedral Angles */
     dih_sec_partials->push_back(new vector<DihedralAngleSecondPartial*>());
@@ -66,22 +66,23 @@ CurvatureSecondPartial::CurvatureSecondPartial( Vertex& v, Edge& e, Edge& f ){
       /* DihedralAngleSecondPartial */
       dih_sec_partial = DihedralAngleSecondPartial::At(e, f, ij, t);
       dih_sec_partial->addDependent(this);
-      dih_sec_partials->at(i)->push_back(dih_sec_partial);
+      dih_sec_partials->at(j)->push_back(dih_sec_partial);
       
       /* DihedralAnglePartial */
       dih_partial = DihedralAnglePartial::At(e, ij, t);
       dih_partial->addDependent(this);
-      dih_partials_e->at(i)->push_back(dih_partial);
+      dih_partials_e->at(j)->push_back(dih_partial);
       dih_partial = DihedralAnglePartial::At(f, ij, t);
       dih_partial->addDependent(this);
-      dih_partials_f->at(i)->push_back(dih_partial);
+      dih_partials_f->at(j)->push_back(dih_partial);
       
       /* DihedralAngle */
       dih = DihedralAngle::At(ij, t);
       dih->addDependent(this);
-      dihs->at(i)->push_back(dih);
+      dihs->at(j)->push_back(dih);
     }
   }
+ // printf("%d:(%d, %d) = \n", v.getIndex(), e.getIndex(), f.getIndex());
 }
 
 void CurvatureSecondPartial::recalculate(){
@@ -91,30 +92,33 @@ void CurvatureSecondPartial::recalculate(){
   double dih_partial_e_sum;
   double dih_partial_f_sum;
   double dih_sum;
+  double temp;
   vector<DihedralAngleSecondPartial*>* edge_dih_sec_partial;
   vector<DihedralAnglePartial*>* edge_dih_partial_e;
   vector<DihedralAnglePartial*>* edge_dih_partial_f;
   vector<DihedralAngle*>* edge_dih;
-  for(int i = 0; i < dih_sec_partials->size(); i++) {
+  for(int j = 0; j < dih_sec_partials->size(); j++) {
     dih_sec_partial_sum = 0;
     dih_partial_e_sum = 0;
     dih_partial_f_sum = 0;
     dih_sum = 2 * PI;
     
-    edge_dih_sec_partial = dih_sec_partials->at(i);
-    edge_dih_partial_e = dih_partials_e->at(i);
-    edge_dih_partial_f = dih_partials_f->at(i);
-    edge_dih = dihs->at(i);
+    edge_dih_sec_partial = dih_sec_partials->at(j);
+    edge_dih_partial_e = dih_partials_e->at(j);
+    edge_dih_partial_f = dih_partials_f->at(j);
+    edge_dih = dihs->at(j);
     for(int k = 0; k < edge_dih_sec_partial->size(); k++) {
       dih_sec_partial_sum -= edge_dih_sec_partial->at(k)->getValue();
       dih_partial_e_sum -= edge_dih_partial_e->at(k)->getValue();
       dih_partial_f_sum -= edge_dih_partial_f->at(k)->getValue();
       dih_sum -= edge_dih->at(k)->getValue();
     }
-    value += dih_sec_partial_sum * dijs->at(i)->getValue()
-           + dih_partial_e_sum * dij_partials_f->at(i)->getValue()
-           + dih_partial_f_sum * dij_partials_e->at(i)->getValue()
-           + dih_sum * dij_sec_partials->at(i)->getValue();
+    temp = dih_sec_partial_sum * dijs->at(j)->getValue()
+           + dih_partial_e_sum * dij_partials_f->at(j)->getValue()
+           + dih_partial_f_sum * dij_partials_e->at(j)->getValue()
+           + dih_sum * dij_sec_partials->at(j)->getValue();
+    value += temp;
+   // printf("\t%f\n", temp);
   }
 }
 
