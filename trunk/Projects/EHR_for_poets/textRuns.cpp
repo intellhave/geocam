@@ -335,3 +335,38 @@ void runMin(char* outputFile) {
      fclose(result);     
 }
 
+void gradF(double* vars, double* sol) {
+  // Set Etas
+  // Run Minimization in Radii
+  // Calc NEHR Partial w.r.t Eta into sol[]?
+}
+
+void hessF(double* vars, Matrix<double>& sol) {
+  int i, j;
+  double sum;
+  map<int, Edge>::iterator eit1;
+  map<int, Edge>::iterator eit2;
+  map<int, Vertex>::iterator vit;
+  // Set Etas
+  // Run Minimization in Radii
+  i = 0;
+  for(eit1 = Triangulaiton::edgeTable.begin(); eit1 != Triangulation::edgeTable.end(); eit1++, i++) {
+    j = 0;
+    for(eit2 = Triangulation::edgeTable.being(); eit2 != Triangulation::edgeTable.end(); eit2++, j++) {
+      sum = 0;
+      for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+        sum += NEHRSecondPartial::valueAt(vit->second, eit1->second)*RadiusPartial::At(vit->second, eit2->second);
+      }
+      sol[i][j] = sum + NEHRSecondPartial::valueAt(eit1->second, eit2->second);
+    }
+  }
+}
+
+void run(char* outputFile) {
+     int edgeSize = Triangulation::edgeTable.size();
+     double etas[edgeSize];
+     getEtas(etas);
+     
+     
+}
+
