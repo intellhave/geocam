@@ -112,6 +112,8 @@ Matrix<double> Gram_Schmidt (Matrix<double> u, Matrix<double> v){
   return you;
 } //close GS
 
+
+
 int main(){
 
 //Matrix<double> m(2,2);
@@ -124,7 +126,7 @@ int main(){
 
   srand ( time(NULL) );
 
-  int EYE = 1000;
+  int EYE = 5;
   int tempt = rand();
 
   Matrix<double> mat(EYE,EYE);

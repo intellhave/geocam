@@ -170,4 +170,7 @@ StdTetra labelTetra(Tetra& t, Edge& e, Edge& f);
 // Label tetrahedron t in a consistent way.
 StdTetra labelTetra(Tetra& t);
 
+double magnitude(Matrix<double> vd);
+Matrix<double> projection(Matrix<double> va, Matrix<double> vb);
+Matrix<double> Gram_Schmidt(Matrix<double> u, Matrix<double> v);
 #endif /* MISCMATH_H_ */
