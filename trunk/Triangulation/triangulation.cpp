@@ -4,7 +4,10 @@ Author: Alex Henniges, Tom Williams, Mitch Wilson
 Version: July 16, 2008
 **************************************************************/
 
-#include "triangulation/triangulation.h" // class's header file
+#include "triangulation.h" // class's header file
+#include "triangulationInputOutput.h"
+#include "utilities.h"
+#include <cmath>
 #include <cstdlib>
 #include <map>
 #include <algorithm>
@@ -236,6 +239,95 @@ void Triangulation::eraseTetra(int key)
      tetraTable.erase(key);
 }
 
+bool Triangulation::isManifold()
+{    
+     map<int, Edge>::iterator eit;
+     for(eit = edgeTable.begin(); eit != edgeTable.end(); eit++) {
+        if(eit->second.getLocalFaces()->size() != 2){
+          printf("Edge %d does not have two adjacent faces. \n", eit->second.getIndex());
+          return false;
+        }
+     }
+    
+    map<int, Vertex>::iterator vit;
+    for(vit = vertexTable.begin(); vit != vertexTable.end(); vit++) {
+      if(!isCyclic(vit->second))
+        return false;
+    }
+    return true;
+}
+     
+bool Triangulation::isCyclic(Vertex &v)
+{
+    /* Algorithm:
+      1. Pick a face currentFace adjacent to vertex v
+      2. Set currentFace equal to true in a hash map that keeps track of faces that have 
+         already been visited.
+      3. Pick a face adjacent to currentFace
+      4. For this new face, iterate through the vertices to see if it shares the vertex v.
+         If this face has not been visited AND shares vertex v, 
+            Set this face to true in the hash map and set currentFace equal to this face. 
+            Then go back to step 3.
+         Else 
+            Go on to the next face adjacent to currentFace and start from the beginning of this step. 
+            If there are no more such faces that have not been visited and share vertex v,
+            end the loop.
+      5. If the number of faces visited equals the number of localfaces to v, return true.
+         Else, return false.
+    */
+    
+    vector<int> *faces;
+    faces = v.getLocalFaces(); // Vector of local face indices
+    if(faces->size() == 0){ // Making sure local faces exist
+        return false;
+    }
+    int currentFace = *((*faces).begin()); // Get first face
+    map<int, bool> visited; // Initializes hash map that tells whether or not a face has been visited
+    visited[currentFace] = true;
+    int counted = 1; // Keeps track of how many faces have been visited
+    bool faceFound = true;
+    while(faceFound){
+      faceFound = false;
+      
+      // Gets vector of faces local to currentFace
+      faces = Triangulation::faceTable[currentFace].getLocalFaces(); 
+      
+      // Iterates over local faces to currentFace
+      for (vector<int>::iterator fit =(*faces).begin(); fit != (*faces).end(); fit++) {
+        // Iterates of local vertices to each local face
+          for (vector<int>::iterator vit = (*(Triangulation::faceTable[*fit].getLocalVertices())).begin();
+                vit != (*(Triangulation::faceTable[*fit].getLocalVertices())).end(); vit++) {
+            
+            // If shares vertex and has not been visited
+            if(*vit == v.getIndex() && visited[*fit] == false) {
+              visited[*fit] = true;
+              currentFace = *fit;
+              counted++;
+              faceFound = true;
+              break;
+            }
+          }
+          if(faceFound){
+            break;
+          }
+      }
+    } // End while loop
+    
+    if (counted == v.getLocalFaces()->size()) {
+      printf("Vertex %d:\n Counted: %d, Local: %d\n", v.getIndex(), counted, v.getLocalFaces()->size());
+      return true;
+    } else {
+      map<int, bool>::iterator fs = visited.begin();
+      printf("Fails at Vertex %d: \n ", v.getIndex());
+      printf("Counted: %d, Local: %d. Counted faces are ", counted, v.getLocalFaces()->size());
+      for (; fs != visited.end(); fs++) {
+          printf("%d ", fs->first); 
+      }
+      printf("\n");
+      
+      return false;
+    }  
+}
 void Triangulation::reset()
 {
      vertexTable.clear();

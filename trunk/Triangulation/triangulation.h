@@ -110,8 +110,11 @@ class Triangulation
      */
     static int greatestFace();
 	
-	static int greatestTetra();
-        
+    static int greatestTetra();
+    
+    static bool isManifold();
+    
+    static bool isCyclic(Vertex &v);  
 };
 
 
