@@ -118,6 +118,7 @@ int LinearEquationsSolver(Matrix<double>& pfMatr, double* pfVect, double* pfSolu
   double temp; // Just a temp variable for switching
 
   int i, j, k, m; // indexing variables
+  int singular_matrix = 0;
 
   // For each column in matrix...
   for(k=0; k<(nDim-1); k++)
@@ -154,7 +155,7 @@ int LinearEquationsSolver(Matrix<double>& pfMatr, double* pfVect, double* pfSolu
     }
 
     if( pfMatr[k][k] == 0.0) {
-      return 1; // Matrix has a column of all 0s !!!
+      return 2; // Matrix has a column of all 0s !!!
     }
 
     // Triangulate matrix by turning every value in column k below row k
@@ -173,6 +174,8 @@ int LinearEquationsSolver(Matrix<double>& pfMatr, double* pfVect, double* pfSolu
     }
   }
 
+  //pfMatr.print(stdout);
+
   // For each row beginning with the bottom
   for(k=(nDim-1); k>=0; k--)
   { // Calculate the solution for variable k.
@@ -184,10 +187,52 @@ int LinearEquationsSolver(Matrix<double>& pfMatr, double* pfVect, double* pfSolu
     }
     // If the solution is 0, don't bother dividing.
     if(fabs(pfMatr[k][k]) < 0.000000001) {
-       pfSolution[k] = 0;
+       singular_matrix = 1;
+       break;
     } else {
       pfSolution[k] = pfSolution[k] / pfMatr[k][k];
     }
+  }
+  
+  if(singular_matrix == 1) {
+   // printf("SINGULAR MATRIX:
+
+    double x_0[nDim];
+    double y_0[nDim];
+
+    x_0[nDim - 1] = 1;
+    y_0[nDim - 1] = 1;
+
+    // For each row beginning with the bottom
+    for(k=(nDim-2); k>=0; k--)
+    { // Calculate the solution for variable k.
+      x_0[k] = pfVect[k];
+      y_0[k] = 0;
+      // Adjust solution using variables already known.
+      for(i=(k+1); i<nDim; i++)
+      {
+        x_0[k] -= (pfMatr[k][i]*x_0[i]);
+        y_0[k] -= (pfMatr[k][i]*y_0[i]);
+      }
+      x_0[k] = x_0[k] / pfMatr[k][k];
+      y_0[k] = y_0[k] / pfMatr[k][k];
+    }
+    
+    double xDOTy = 0;
+    double yDOTy = 0;
+    printf("y_0 = {");
+    for(k = 0; k < nDim; k++) {
+      xDOTy += x_0[k] * y_0[k];
+      yDOTy += y_0[k] * y_0[k];
+      printf("%f, ", y_0[k]);
+    }
+    printf("}\n");
+    
+    double t = -xDOTy / yDOTy;
+    for(k = 0; k < nDim; k++) {
+      pfSolution[k] = x_0[k] + t*y_0[k];
+    }
+    return 1; // Singular Matrix warning.
   }
 
   return 0;
