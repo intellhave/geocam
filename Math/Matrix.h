@@ -26,6 +26,7 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 #include <stdlib.h>
+#include "utilities.h"
 
 template<class T>
 class Matrix{
@@ -137,19 +138,21 @@ class Matrix<double>{
         Matrix<double> temp(row - 1, col - 1);
         int k, l;
         for(int i = 0, k = 0; i < row; i++) {
-          if(i != row) {
+          if(i != xrow) {
 	         for(int j = 0, l = 0; j < col; j++) {
-	           if(j != col) {
-	             temp[k][l] = mat[i][j];
+	           if(j != xcol) {
+	             temp.mat[k][l] = mat[i][j];
 	             l++;
 	           }
 	         }
 	         k++;
           }
         }
+
         double result = 0;
+      
         for(int j = 0; j < row - 1; j++) {
-	       result += powM1(j) * temp[0][j] * temp.subdeterminant(0, j);
+	       result += powM1(j) * temp.mat[0][j] * temp.subdeterminant(0, j);
         }
         return result;
       }
@@ -169,7 +172,7 @@ class Matrix<double>{
     Matrix(int row, int col) {
       if (row == 0 || col == 0) {
         printf("you need to give positive row and column values\n");
-        system("PAUSE");
+        pause();
         exit(1);
       }
 
@@ -225,7 +228,7 @@ class Matrix<double>{
     Matrix operator+(Matrix& m) {
       if(m.row != row || m.col != col) {
         printf("you can only add matrices of the same size\n");
-        system("PAUSE");
+        pause();
         exit(1);
       }
       Matrix<double> temp(row, col);
@@ -240,7 +243,7 @@ class Matrix<double>{
     Matrix operator-(Matrix& m) {
       if(m.row != row || m.col != col) {
         printf("you can only add matrices of the same size\n");
-        system("PAUSE");
+        pause();
         exit(1);
       }
       Matrix<double> temp(row, col);
@@ -256,7 +259,7 @@ class Matrix<double>{
       if(col != m.row) {
         printf("the matrix on the right must have the same number of rows as the number of columns");
         printf("of the matrix on the left\n");
-        system("PAUSE");
+        pause();
         exit(1);
       }
       Matrix<double> temp(row, m.col);
@@ -293,7 +296,7 @@ class Matrix<double>{
     Matrix adjoint(){
       if(row != col) {
         printf("the matrix must be a square matrix\n");
-        system("PAUSE");
+        pause();
         exit(1);
       }
       Matrix<double> adj(row, col);
@@ -307,11 +310,13 @@ class Matrix<double>{
     }
     
     double determinant() {
+      
       if(row != col) {
         printf("the matrix must be a square matrix\n");
-        system("PAUSE");
+        pause();
         exit(1);
       }
+      
       if(row == 2) {
         return mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];
       } else {
