@@ -13,28 +13,25 @@
 #include "totalvolume.h"
 #include "total_volume_partial.h"
 #include "volume_length_tetra_partial.h"
-#include "ehr_partial.h"
-#include "ehr_second_partial.h"
+#include "nehr_partial.h"
+#include "nehr_second_partial.h"
+#include "radius_partial.h"
 
 #include "utilities.h"
 
 
-void runPipelinedNewtonsMethod(char* outputFile) {
-     Newtons_Method(0.00001, outputFile);
-}
-
-void EHR_Partial(double log_radii[], double grad[]) {
+void NEHR_Partial(double log_radii[], double grad[]) {
   map<int, Vertex>::iterator vit;
   int i;
   for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
-          Radius::At(vit->second)->setValue(exp(log_radii[i]));        
+          Radius::At(vit->second)->setValue(exp(log_radii[i]));
   }
   for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
-        grad[i] = EHRPartial::valueAt(vit->second);
+        grad[i] = NEHRPartial::valueAt(vit->second)/* / Radius::valueAt(vit->second)*/;
   }
 }
 
-void EHR_Second_Partial(double log_radii[], Matrix<double>& hess) {
+void NEHR_Second_Partial(double log_radii[], Matrix<double>& hess) {
      map<int, Vertex>::iterator vit1;
      map<int, Vertex>::iterator vit2;
      int i, j;
@@ -46,23 +43,24 @@ void EHR_Second_Partial(double log_radii[], Matrix<double>& hess) {
               if(i > j) {
                    hess[i][j] = hess[j][i];
               } else {
-                   hess[i][j] = EHRSecondPartial::valueAt(vit1->second, vit2->second);
+                   hess[i][j] = NEHRSecondPartial::valueAt(vit1->second, vit2->second)
+                                /*/ (Radius::valueAt(vit1->second) * Radius::valueAt(vit2->second))*/;
               }
         }
-     }     
+     }
 }
 
-double EHR() {
-       return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
-}
-
-double EHR(double log_radii[]) {
+double NEHR(double log_radii[]) {
   map<int, Vertex>::iterator vit;
   int i;
   for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
-          Radius::At(vit->second)->setValue(exp(log_radii[i]));        
+          Radius::At(vit->second)->setValue(exp(log_radii[i]));
   }
   return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
+}
+
+double NEHR() {
+       return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
 }
 
 void printFunc(FILE* out) {
@@ -81,13 +79,13 @@ void printFunc(FILE* out) {
      // Prints Lengths:
      Length::print(out);
      fprintf(out, "\n");
-     
-     // Prints Euclidean Angles
-     EuclideanAngle::print(out);
-     fprintf(out, "\n");
+//
+//     // Prints Euclidean Angles
+//     EuclideanAngle::print(out);
+//     fprintf(out, "\n");
      
      // Prints The NEHR Functional:
-     fprintf(out, "\nEHR: %.10f\n=================================================\n", EHR());
+     fprintf(out, "\nNEHR: %.10f\n=================================================\n", NEHR());
 }
 
 void setEtas(double etas[]) {
@@ -126,183 +124,6 @@ void getLogRadii(double log_radii[]) {
    }
 }
 
-double saddleFinder(double etas[]) {
-   // Set Etas
-   map<int, Edge>::iterator eit;
-   map<int, Vertex>::iterator vit;
-   int i = 0;
-
-   setEtas(etas);
-   double radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
-//   double radius_scaling_factor = pow( 1.0/TotalVolume::valueAt(), 1.0/3.0 );
-
-   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-           vit++) {
-     Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
-   }
-   
-   Newtons_Method(0.00001);
-
-/*DEBUG:   FILE* test = fopen("Data/Input_EHR/testFile1.txt", "a");
-/*   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-/*           eit++, i++) {
-/*       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
-/*   }
-/*   fprintf(test, "\n");
-/*   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-/*           vit++) {
-/*     fprintf(test, "Radius %d: %.12f, ", vit->first, Radius::valueAt(vit->second));
-/*   }  
-/*   fprintf(test, "\n%.12f\n\n", EHR());
-/*   fclose(test);
-/*DEBUG*/
-
- 
-   if(errno) {
-      pause("There was an error after Pipelined_NM\n");
-   }
-   double value = EHR();
- 
-   return value;
-}
-
-double saddleFinder2(double etas[]) {
-   // Set Etas
-   map<int, Edge>::iterator eit;
-   map<int, Vertex>::iterator vit;
-   int i = 0;
-
-   setEtas(etas);
-   double radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
-//   double radius_scaling_factor = pow( 1.0/TotalVolume::valueAt(), 1.0/3.0 );
-
-   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-           vit++) {
-     Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
-   }
-
-   
-   int vertSize = Triangulation::vertexTable.size();
-   double log_radii[vertSize];    
-   getLogRadii(log_radii);
-     
-   NewtonsMethod *nm = new NewtonsMethod(EHR, EHR_Partial, EHR_Second_Partial, vertSize);     
-   while(nm->step(log_radii) > 0.000001) {
-     setLogRadii(log_radii);
-     radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
-     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-           vit++) {
-         Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
-     }    
-   }
-   delete nm;
-   setLogRadii(log_radii);
-   radius_scaling_factor = pow( 4.71404520791/TotalVolume::valueAt(), 1.0/3.0 );
-   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-           vit++) {
-      Radius::At(vit->second)->setValue( radius_scaling_factor * Radius::valueAt(vit->second) );
-   }
-   
-/*DEBUG:   FILE* test = fopen("Data/Input_EHR/testFile2.txt", "a");
-/*   for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-/*           eit++, i++) {
-/*       fprintf(test, "Eta %d: %f, ", eit->first, Eta::valueAt(eit->second));       
-/*   }
-/*   fprintf(test, "\n");
-/*   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
-/*           vit++) {
-/*     fprintf(test, "Radius %d: %.12f, ", vit->first, Radius::valueAt(vit->second));
-/*   }  
-/*   fprintf(test, "\n%.12f\n\n", EHR());
-/*   fclose(test);
-/*DEBUG*/
-
-
-   
-   if(errno) {
-      pause("There was an error after Pipelined_NM\n");
-   }
-   double value = EHR();
- 
-   return value;
-}
-
-void saddleFinderHess(double vals[], double *soln[]) {
-       double f_x = saddleFinder2(vals);
-       int size = Triangulation::edgeTable.size();
-       double val;
-       double delta =  0.00001;
-       
-       
-       Eta* Etas[size];
-       map<int, Edge>::iterator eit;
-       int k = 0;
-       for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end();
-           eit++, k++) {
-         Etas[k] = Eta::At(eit->second);        
-       }
-       
-       for(int i = 0; i < size; i++) {
-         for(int j = 0; j < size; j++) {
-         printf("Approximating hessian of %d, %d\n", i, j);
-           if(i > j) {
-             soln[i][j] = soln[j][i];
-           } else if( i != j) {
-              Etas[i]->setValue(vals[i] + delta);
-              Etas[j]->setValue(vals[j] + delta);
-              val = EHR();
-              
-              Etas[j]->setValue(vals[j] - delta);
-              val = val - EHR();
-              
-              Etas[i]->setValue(vals[i] - delta);
-              val = val + EHR();
-              
-              Etas[j]->setValue(vals[j] + delta);
-              val = val - EHR();
-              
-              Etas[i]->setValue(vals[i]);
-              Etas[j]->setValue(vals[j]);
-       
-              soln[i][j] = val / (4 * delta * delta);
-           } else {
-              Etas[i]->setValue(vals[i] + delta);
-              val = EHR();
-              
-              Etas[i]->setValue(vals[i] - delta);
-              val = val + EHR();
-              
-              Etas[i]->setValue(vals[i]);
-              val = val - 2*f_x;
-              
-              soln[i][j] = val / (delta * delta);
-           }            
-         }
-       }
-}
-
-void runNewtonsMethod(char* outputFile) {
-     int edgeSize = Triangulation::edgeTable.size();
-     double etas[edgeSize];
-     getEtas(etas);
-          
-     NewtonsMethod *nm = new NewtonsMethod(saddleFinder2, edgeSize);
-     nm->setPrintFunc(printFunc);
-     FILE* result = fopen(outputFile, "w");
-     if(result == NULL) {
-       pause("Error: %s is not a valid file\n", outputFile);
-       exit(1);
-     }
-     
-     while(nm->step(etas, NMETHOD_MIN) > 0.00001) {
-       setEtas(etas);
-       nm->printInfo(result);     
-     }
-     setEtas(etas);
-     nm->printInfo(result);
-     fclose(result);
-}
-
 void runMin(char* outputFile) {
      int vertSize = Triangulation::vertexTable.size();
      double log_radii[vertSize];
@@ -310,7 +131,7 @@ void runMin(char* outputFile) {
      map<int, Vertex>::iterator vit;    
      getLogRadii(log_radii);
      
-     NewtonsMethod *nm = new NewtonsMethod(EHR, EHR_Partial, EHR_Second_Partial, vertSize);
+     NewtonsMethod *nm = new NewtonsMethod(NEHR, NEHR_Partial, NEHR_Second_Partial, vertSize);
      nm->setPrintFunc(printFunc);
      FILE* result = fopen(outputFile, "w");
      
@@ -335,38 +156,163 @@ void runMin(char* outputFile) {
      fclose(result);     
 }
 
-void gradF(double* vars, double* sol) {
-  // Set Etas
-  // Run Minimization in Radii
-  // Calc NEHR Partial w.r.t Eta into sol[]?
+void MinimizeRadii() {
+  printf("......Minimizing Radii:.......\n");
+  int vertSize = Triangulation::vertexTable.size();
+  double log_radii[vertSize];
+  double radius_scaling_factor;
+  map<int, Vertex>::iterator vit;
+  getLogRadii(log_radii);
+
+  NewtonsMethod *nm = new NewtonsMethod(NEHR, NEHR_Partial, NEHR_Second_Partial, vertSize);
+  //nm->setPrintFunc(printFunc);
+  // FILE* result = fopen(outputFile, "w");
+
+  while(nm->step(log_radii, NMETHOD_MIN) > 0.000001) {
+    setLogRadii(log_radii);
+    //nm->printInfo(result);
+  }
+
+  setLogRadii(log_radii);
+  printf("\n.......Done minimizing......\n");
 }
 
-void hessF(double* vars, Matrix<double>& sol) {
+void NEHR_Eta_Partial(double* vars, double* sol) {
+  map<int, Edge>::iterator eit;
+  int edgeSize = Triangulation::edgeTable.size();
+  int i;
+  // Set Etas
+  setEtas(vars);
+  // Run Minimization in Radii
+  MinimizeRadii();
+  // Calc NEHR Partial w.r.t Eta into sol[]
+
+  for(eit = Triangulation::edgeTable.begin(), i = 0; eit != Triangulation::edgeTable.end(); eit++, i++) {
+    sol[i] = NEHRPartial::valueAt(eit->second);
+  }
+}
+
+void NEHR_Eta_Sec_Partial(double* vars, Matrix<double>& sol) {
   int i, j;
   double sum;
   map<int, Edge>::iterator eit1;
   map<int, Edge>::iterator eit2;
   map<int, Vertex>::iterator vit;
   // Set Etas
+  setEtas(vars);
   // Run Minimization in Radii
+  MinimizeRadii();
+  // Calc NEHR Second Partial
   i = 0;
-  for(eit1 = Triangulaiton::edgeTable.begin(); eit1 != Triangulation::edgeTable.end(); eit1++, i++) {
+  for(eit1 = Triangulation::edgeTable.begin(); eit1 != Triangulation::edgeTable.end(); eit1++, i++) {
     j = 0;
-    for(eit2 = Triangulation::edgeTable.being(); eit2 != Triangulation::edgeTable.end(); eit2++, j++) {
+    for(eit2 = Triangulation::edgeTable.begin(); eit2 != Triangulation::edgeTable.end(); eit2++, j++) {
       sum = 0;
       for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-        sum += NEHRSecondPartial::valueAt(vit->second, eit1->second)*RadiusPartial::At(vit->second, eit2->second);
+        sum += NEHRSecondPartial::valueAt(vit->second, eit1->second)*RadiusPartial::valueAt(vit->second, eit2->second);
       }
       sol[i][j] = sum + NEHRSecondPartial::valueAt(eit1->second, eit2->second);
     }
   }
 }
 
-void run(char* outputFile) {
-     int edgeSize = Triangulation::edgeTable.size();
-     double etas[edgeSize];
-     getEtas(etas);
+double NEHR_Eta(double etas[]) {
+  setEtas(etas);
+  MinimizeRadii();
+  return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
+}
+
+void runEtas(char* outputFile) {
+    int edgeSize = Triangulation::edgeTable.size();
+    double etas[edgeSize];
+    getEtas(etas);
      
-     
+    NewtonsMethod *nm = new NewtonsMethod(NEHR_Eta, NEHR_Eta_Partial, NEHR_Eta_Sec_Partial, edgeSize);
+    
+    nm->setStepRatio(1.0/1000.0);
+    nm->setStoppingGradientLength(0.0001);
+//    nm->setPrintFunc(printFunc);
+//    FILE* result = fopen(outputFile, "w");
+    printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+    while(nm->step(etas) > 0.0001) {
+      printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+      printFunc(stdout);
+    }
+    
+    printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+    printFunc(stdout);
+
+}
+
+void NEHR_Eta_Sec_Partial_2(double* vars, Matrix<double>& sol) {
+  int i, j;
+  double sum;
+  map<int, Edge>::iterator eit1;
+  map<int, Edge>::iterator eit2;
+  map<int, Vertex>::iterator vit;
+  // Set Etas
+  setEtas(vars);
+  // Run Minimization in Radii
+  MinimizeRadii();
+  // Calc NEHR Second Partial
+  i = 0;
+  for(eit1 = Triangulation::edgeTable.begin(); eit1 != Triangulation::edgeTable.end(); eit1++, i++) {
+    j = 0;
+    for(eit2 = Triangulation::edgeTable.begin(); eit2 != Triangulation::edgeTable.end(); eit2++, j++) {
+      sol[i][j] = NEHRSecondPartial::valueAt(eit1->second, eit2->second);
+    }
+  }
+}
+
+void runEtasNEHR(char* outputFile) {
+    int edgeSize = Triangulation::edgeTable.size();
+    double etas[edgeSize];
+    getEtas(etas);
+
+    NewtonsMethod *nm = new NewtonsMethod(NEHR_Eta, NEHR_Eta_Partial, NEHR_Eta_Sec_Partial_2, edgeSize);
+    nm->setStepRatio(1.0/500.0);
+    nm->setStoppingGradientLength(0.0001);
+//    nm->setPrintFunc(printFunc);
+//    FILE* result = fopen(outputFile, "w");
+    printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+    while(nm->step(etas) > 0.000001) {
+      printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+      printFunc(stdout);
+    }
+
+    printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+    printFunc(stdout);
+}
+
+void IDHess(double* vars, Matrix<double>& soln) {
+  int edgeSize = Triangulation::edgeTable.size();
+  for(int i = 0; i < edgeSize; i++) {
+    for(int j = 0; j < edgeSize; j++) {
+      if(i == j) {
+        soln[i][j] = 1;
+      } else {
+        soln[i][j] = 0;
+      }
+    }
+  }
+}
+
+void runEtasGradient(char* outputFile) {
+    int edgeSize = Triangulation::edgeTable.size();
+    double etas[edgeSize];
+    getEtas(etas);
+
+    NewtonsMethod *nm = new NewtonsMethod(NEHR_Eta, NEHR_Eta_Partial, IDHess, edgeSize);
+
+//    nm->setPrintFunc(printFunc);
+//    FILE* result = fopen(outputFile, "w");
+    printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+    while(nm->step(etas) > 0.000001) {
+      printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+      printFunc(stdout);
+    }
+
+    printf("min_r NEHR: %f\n", NEHR_Eta(etas));
+    printFunc(stdout);
 }
 

@@ -1,5 +1,5 @@
 Data/Input_EHR/PentachoronInput3.txt
+Data/Input_EHR/PentachoronInput8128.txt
+Data/Input_EHR/PentachoronInput.txt
 Data/Input_EHR/trial2input.txt
 Data/Input_EHR/trial1input.txt
-Data/Input_EHR/PentachoronInput.txt
-Data/Input_EHR/MinTest2.txt

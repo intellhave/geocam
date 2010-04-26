@@ -67,10 +67,13 @@ void parseInputFile(FILE* input, char* outputFile) {
      
      char radius[] = "radius"; // Fixed string for the word "radius".
      char eta[] = "eta"; // Fixed string for the word "eta".
-     
+     char all[] = "all"; // Fixed string for the word "all".
      char type[20]; // Holds the name of the type of value (radius, eta).
      int index; // Holds the index number of the current value (radius 1, eta 3).
      double value; // Holds the actual value.
+     
+     map<int, Vertex>::iterator vit;
+     map<int, Edge>::iterator eit;
      
      // Get the first line of the input file.
      fgets(line, 1000, input);
@@ -98,6 +101,14 @@ void parseInputFile(FILE* input, char* outputFile) {
         } else if(strcmp(type, eta) == 0) { // If the type is eta...
           //... set the eta at edge given by index with the value given.
           Eta::At(Triangulation::edgeTable[index])->setValue(value);
+        } else if(strcmp(type, all) == 0) {
+          //... set all radii and etas to the value given.
+          for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+            Radius::At(vit->second)->setValue(value);
+          }
+          for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+            Eta::At(eit->second)->setValue(value);
+          }
         } else {
           // ERROR in type field
         }
@@ -213,20 +224,20 @@ int main(int argc, char *argv[])
     
     printf("\n");
     printf("Choose a program from the following list using its numerical key:\n");
-    printf("\t1) Newtons Method on radii\t2) Newtons Method on etas\n");
-    printf("\t3) Yamabe Flow\n");
+    printf("\t1) Newtons Method on radii\t2) Newtons Method on etas (F)\n");
+    printf("\t3) Newtons Method on etas (NEHR)\t4) Gradient flow on etas\n");
     
     printf("Program: ");
     scanf("%d", &program);
     
     if(program == 1) {
-       runPipelinedNewtonsMethod(outputFile);
-    } else if(program == 2) {
-       runNewtonsMethod(outputFile);
-    } else if(program == 3) {
-       printf("Yamabe Flow\n");
-    } else {
        runMin(outputFile);
+    } else if(program == 2) {
+       runEtas(outputFile);
+    } else if(program == 3) {
+       runEtasNEHR(outputFile);
+    } else if(program == 4) {
+       runEtasGradient(outputFile);
     }
     log = fopen("Projects/EHR_for_poets/eventlog.txt", "w");
     logEvents(log, &eventList);

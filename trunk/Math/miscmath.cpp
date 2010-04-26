@@ -186,7 +186,7 @@ int LinearEquationsSolver(Matrix<double>& pfMatr, double* pfVect, double* pfSolu
       pfSolution[k] -= (pfMatr[k][i]*pfSolution[i]);
     }
     // If the solution is 0, don't bother dividing.
-    if(fabs(pfMatr[k][k]) < 0.000000001) {
+    if(fabs(pfMatr[k][k]) < 0.00001) {
        singular_matrix = 1;
        break;
     } else {
@@ -195,7 +195,7 @@ int LinearEquationsSolver(Matrix<double>& pfMatr, double* pfVect, double* pfSolu
   }
   
   if(singular_matrix == 1) {
-   // printf("SINGULAR MATRIX:
+   //printf("SINGULAR MATRIX\n");
 
     double x_0[nDim];
     double y_0[nDim];
@@ -220,13 +220,13 @@ int LinearEquationsSolver(Matrix<double>& pfMatr, double* pfVect, double* pfSolu
     
     double xDOTy = 0;
     double yDOTy = 0;
-    printf("y_0 = {");
+    //printf("y_0 = {");
     for(k = 0; k < nDim; k++) {
       xDOTy += x_0[k] * y_0[k];
       yDOTy += y_0[k] * y_0[k];
-      printf("%f, ", y_0[k]);
+    //  printf("%f, ", y_0[k]);
     }
-    printf("}\n");
+    //printf("}\n");
     
     double t = -xDOTy / yDOTy;
     for(k = 0; k < nDim; k++) {

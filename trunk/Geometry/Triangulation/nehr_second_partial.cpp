@@ -138,14 +138,19 @@ double NEHRSecondPartial::calculateRadRadCase() {
 
   double VolSecondPartial = vps_ij->getValue();
   
-  int delta_ij = 1 ? 0 : sameVertices;
+  int delta_ij;
+  if(sameVertices) {
+    delta_ij = 1;
+  } else {
+    delta_ij = 0;
+  }
 
   double result;
 
   result = pow(totV, (-4.0/3.0)) * (1.0 / 3.0);
-  result *= (3 * totV * curvPartial - rj * Ki * VPS_j - ri * Kj * VPS_i
-	    - rj * delta_ij * totK * VPS_i + (4.0/3.0) * ri * rj * ( totK / totV ) *
-	    VPS_i * VPS_j - ri * rj * totK * VolSecondPartial);
+  result *= (3 * totV * curvPartial - Ki * VPS_j - Kj * VPS_i
+	    + (4.0/3.0) * ( totK / totV ) *
+	    VPS_i * VPS_j - totK * VolSecondPartial);
 
   return result;
 }
@@ -168,9 +173,9 @@ double NEHRSecondPartial::calculateRadEtaCase() {
   double result;
 
   result = pow(totV, (-4.0/3.0)) * (1.0 / 3.0);
-  result *= (3 * totV * CP_inm - Ki * VPS_nm - ri * curvPartialSum * VPS_i
-	    + (4.0/3.0) * ri * ( totK / totV ) * VPS_i * VPS_nm 
-        - ri * totK * VolSecondPartial);
+  result *= (3 * totV * CP_inm - Ki * VPS_nm - curvPartialSum * VPS_i
+	    + (4.0/3.0) * ( totK / totV ) * VPS_i * VPS_nm
+        - totK * VolSecondPartial);
 	    
   return result;
 }

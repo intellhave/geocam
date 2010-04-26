@@ -14,6 +14,7 @@
 #include "nehr_second_partial.h"
 #include "radius_partial.h"
 #include "NMethod.h"
+#include "time.h"
 
 void testPartialEdgeSecondPartial();
 void testDihedralAngleSecondPartial();
@@ -32,23 +33,100 @@ void testNEHRSecondPartialForm2();
 void testMatrix();
 void testNewtonsMethod();
 
+void NEHR_Partial(double log_radii[], double grad[]) {
+  map<int, Vertex>::iterator vit;
+  int i;
+  for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
+          Radius::At(vit->second)->setValue(exp(log_radii[i]));
+  }
+  for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
+        grad[i] = NEHRPartial::valueAt(vit->second);
+  }
+}
+
+void NEHR_Second_Partial(double log_radii[], Matrix<double>& hess) {
+     map<int, Vertex>::iterator vit1;
+     map<int, Vertex>::iterator vit2;
+     int i, j;
+     for(vit1 = Triangulation::vertexTable.begin(), i = 0; vit1 != Triangulation::vertexTable.end(); vit1++, i++) {
+              Radius::At(vit1->second)->setValue(exp(log_radii[i]));
+     }
+     for(vit1 = Triangulation::vertexTable.begin(), i = 0; vit1 != Triangulation::vertexTable.end(); vit1++, i++) {
+        for(vit2 = Triangulation::vertexTable.begin(), j = 0; vit2 != Triangulation::vertexTable.end(); vit2++, j++) {
+            hess[i][j] = NEHRSecondPartial::valueAt(vit1->second, vit2->second);
+        }
+     }
+}
+
+double NEHR(double log_radii[]) {
+  map<int, Vertex>::iterator vit;
+  int i;
+  for(vit = Triangulation::vertexTable.begin(), i = 0; vit != Triangulation::vertexTable.end(); vit++, i++) {
+          Radius::At(vit->second)->setValue(exp(log_radii[i]));
+  }
+  return TotalCurvature::valueAt() / pow(TotalVolume::valueAt(), 1.0/3.0);
+}
+
+void setLogRadii(double log_radii[]) {
+   map<int, Vertex>::iterator vit;
+   int i = 0;
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++, i++) {
+       Radius::At(vit->second)->setValue(exp(log_radii[i]));
+   }
+}
+
+void getLogRadii(double log_radii[]) {
+   map<int, Vertex>::iterator vit;
+   int i = 0;
+   for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end();
+           vit++, i++) {
+       log_radii[i] = log( Radius::At(vit->second)->getValue() );
+   }
+}
+
+void runMin() {
+     int vertSize = Triangulation::vertexTable.size();
+     double log_radii[vertSize];
+     double radius_scaling_factor;
+     map<int, Vertex>::iterator vit;
+     getLogRadii(log_radii);
+
+     NewtonsMethod *nm = new NewtonsMethod(NEHR, NEHR_Partial, NEHR_Second_Partial, vertSize);
+     //nm->setPrintFunc(printFunc);
+    // FILE* result = fopen(outputFile, "w");
+
+     while(nm->step(log_radii) > 0.000001) {
+       setLogRadii(log_radii);
+       //nm->printInfo(result);
+     }
+
+     setLogRadii(log_radii);
+     //nm->printInfo(result);
+     //fclose(result);
+}
+
 int main(int argc, char *argv[])
 {
     map<int, Vertex>::iterator vit;
     map<int, Edge>::iterator eit;    
     map<int, Tetra>::iterator tit;
     
+    srand ( time(NULL) );
+    
     char* triangulation = "../../Data/3DManifolds/StandardFormat/pentachoron.txt";
     read3DTriangulationFile(triangulation);
     
     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-        Radius::At(vit->second)->setValue(1.0);        
+        Radius::At(vit->second)->setValue(1.0);
     }
     //Radius::At(Triangulation::vertexTable[1])->setValue(2.0);
     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-        Eta::At(eit->second)->setValue(1.0);        
+        Eta::At(eit->second)->setValue(1.0);
+        //Eta::At(eit->second)->setValue(0.75 + 0.5*(double)rand() / 32767.001);
+        //printf("Eta %d: %f\n", eit->first, Eta::valueAt(eit->second));
     }
-    
+   // Eta::At(Triangulation::edgeTable[10])->setValue(1.45);
    // testVolumePartial();
    // testCurvaturePartial();
    // testRadiusPartial();
@@ -200,7 +278,7 @@ void testVolumeSecondPartial() {
     FILE* results = fopen("results.txt", "w");
        
     fprintf(results, "\t\tVolumeSecondPartialsTest\n\t-----------------------------\n");
-    
+
     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
        fprintf(results, "\nVertex %d:\n", vit->first);
        local_tetras = *(vit->second.getLocalTetras());
@@ -210,8 +288,8 @@ void testVolumeSecondPartial() {
          local_verts = *(t.getLocalVertices());
          for(int j = 0; j < local_verts.size(); j++) {
              v = Triangulation::vertexTable[local_verts[j]];
-             fprintf(results, "\t\tVertex%d: %f\n", v.getIndex(), 
-                              VolumeSecondPartial::valueAt(vit->second, v, t));      
+             fprintf(results, "\t\tVertex%d: %f\n", v.getIndex(),
+                              VolumeSecondPartial::valueAt(vit->second, v, t));
          }
        }
     }
@@ -315,15 +393,31 @@ void testCurvatureSecondPartial() {
 
 void testCurvaturePartial() {
     map<int, Vertex>::iterator vit;
+    map<int, Vertex>::iterator vit2;
     map<int, Edge>::iterator eit;   
            
-    for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
-        printf("Eta %d:\n", eit->first);
-        for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
-           printf("\t%f\n", CurvaturePartial::valueAt(vit->second, eit->second));
-        }
-        printf("\n");       
+
+    FILE* results = fopen("results.txt", "w");
+
+    fprintf(results, "\t\tCurvaturePartialsTest\n\t-----------------------------\n");
+    
+    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+      fprintf(results, "Vertex %d:\n", vit->first);
+      for(vit2 = Triangulation::vertexTable.begin(); vit2 != Triangulation::vertexTable.end(); vit2++) {
+        fprintf(results, "\tVertex %d: %f\n", vit2->first, CurvaturePartial::valueAt(vit->second, vit2->second));
+      }
+      fprintf(results, "\n");
     }
+    fprintf(results, "\n");
+    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+        fprintf(results, "Vertex %d:\n", vit->first);
+        for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
+           fprintf(results, "\tEdge %d: %f\n", eit->first, CurvaturePartial::valueAt(vit->second, eit->second));
+        }
+        fprintf(results, "\n");
+    }
+    
+    fclose(results);
 }
 
 void testNEHRPartial() {
@@ -337,6 +431,7 @@ void testNEHRPartial() {
     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
         fprintf(results, "Vertex %d: %f\n", vit->first, NEHRPartial::valueAt(vit->second));   
     }    
+    runMin();
     for(eit = Triangulation::edgeTable.begin(); eit != Triangulation::edgeTable.end(); eit++) {
         fprintf(results, "Eta %d: %f\n", eit->first, NEHRPartial::valueAt(eit->second));   
     }
@@ -359,6 +454,7 @@ void testNEHRSecondPartial() {
         fprintf(results, "\tVertex %d: %f\n", vit2->first, NEHRSecondPartial::valueAt(vit->second, vit2->second));
       }
     }
+    runMin();
     fprintf(results, "\n");
     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
       fprintf(results, "Vertex %d:\n", vit->first);
@@ -431,6 +527,13 @@ void testDihedralAngleSecondPartial() {
 void testRadiusPartial() {
     map<int, Vertex>::iterator vit;
     map<int, Edge>::iterator eit;
+
+    runMin();
+    printf("r = {");
+    for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++) {
+      printf("%f, ", Radius::valueAt(vit->second));
+    }
+    printf("}\n");
 
     FILE* results = fopen("results.txt", "w");
 

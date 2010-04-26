@@ -56,6 +56,8 @@ double NewtonsMethod::step(double x_n[]) {
    } else { // Otherwise, get the hessian matrix from a user-defined function.
       d2f(x_n, hess);
    }
+   
+   //printf("Trace = %f\n", hess.trace());
       
    // Calculate the length of the gradient.
    gradLen = getGradientLength(grad);
@@ -70,15 +72,39 @@ double NewtonsMethod::step(double x_n[]) {
    // Set grad[i] = - grad[i] for all i = 1,...,nDim
    negateArray(grad);
    // Use the linear equations solver to fill out values for next[].
-   if(LinearEquationsSolver(hess, grad, next, nDim) == 1) {
+   int retval = LinearEquationsSolver(hess, grad, next, nDim);
+   if(retval == 2) {
      printf("Error with Solver\n");
+     hess.print(stdout);
+     printf("\n");
      return -1;
+   } if(retval== 1) {
+     printf("Singularity\n");
+   } else {
+//     FILE* hessResult = fopen("hess_results.txt", "a");
+//     fprintf(hessResult, "Hessian:\n");
+//     hess.print(hessResult);
+//     fprintf(hessResult, "------------------------------\n\n");
+//     fprintf(hessResult, "Gradient: \n");
+//     for(int i = 0; i < nDim; i++) {
+//        fprintf(hessResult, "%f\t", grad[i]);
+//     }
+//     fprintf(hessResult, "\n------------------------------\n\n");
+//     fprintf(hessResult, "Next-Step:\n");
+//     for(int i = 0; i < nDim; i++) {
+//        fprintf(hessResult, "%f\t", next[i]);
+//     }
+//     fprintf(hessResult, "\n------------------------------\n\n");
+     
    }
 
+   printf("next[] = {");
    // Shift x_n[i] by next[i].
    for(int i = 0; i < nDim; i++) {
-      x_n[i] += next[i];
+      x_n[i] += next[i]*stepRatio;
+      printf("%f, ", next[i]);
    }
+   printf("}\t%f\n", gradLen);
    return gradLen;   
 }
 
@@ -120,7 +146,7 @@ double NewtonsMethod::step(double x_n[], int extremum) {
    negateArray(grad);
    
    // Use the linear equations solver to fill out values for next[].
-   if(LinearEquationsSolver(hess, grad, next, nDim) == 1) {
+   if(LinearEquationsSolver(hess, grad, next, nDim) == 2) {
      printf("Error with Solver\n");
      return -1;
    }

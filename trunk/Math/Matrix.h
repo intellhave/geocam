@@ -337,6 +337,12 @@ class Matrix<double>{
         fprintf(out, "\n");
       }
     }
+    
+//    double trace() {
+//      for(int i = 0; i < row; i++) {
+//
+//      }
+//    }
 
     int getRow() {return row;}
     int getCol() {return col;}

@@ -53,7 +53,7 @@ double NEHRPartial::calculateRadiusCase() {
   double volumePartial = volPartial->getValue();
   double rad_i = rad->getValue();
   
-  return pow(totV, -4.0/3.0)*(K*totV - rad_i*totK*volumePartial/3.0); 
+  return pow(totV, -4.0/3.0)*(K*totV - totK*volumePartial/3.0); 
 }
 
 double NEHRPartial::calculateEtaCase() {
