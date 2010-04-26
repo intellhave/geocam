@@ -14,15 +14,15 @@
 /********** Quantities we explicitly use **********/
 #include "radius.h"
 #include "curvature3D.h"
-#include "ehr_partial.h"
-#include "ehr_second_partial.h"
+#include "nehr_partial.h"
+#include "nehr_second_partial.h"
 
 /**** Quantities we need to examine ****/
 #include "total_volume_partial.h"
 /*****************************************/
 void printFunc(FILE* out);
 
-double EHR();
+double NEHR();
 
 //#define PI = 3.141592653589793238;
 
@@ -47,10 +47,10 @@ void Newtons_Method( double stopping_threshold, char* filename ) {
 
   double log_radii[ V ];
        
-  EHRSecondPartial* hessianGenerator[ V ][ V ];
+  NEHRSecondPartial* hessianGenerator[ V ][ V ];
   double hessian[ V ][ V ];
 
-  EHRPartial* gradientGenerator[ V ];
+  NEHRPartial* gradientGenerator[ V ];
   double negative_gradient[ V ];
 
   double soln[V];  
@@ -66,12 +66,12 @@ void Newtons_Method( double stopping_threshold, char* filename ) {
     Curvatures[ii] = Curvature3D::At( v );
     TVPs[ii] = TotalVolumePartial::At( v );
 
-    gradientGenerator[ii] = EHRPartial::At( v );
+    gradientGenerator[ii] = NEHRPartial::At( v );
     
     int jj = ii;
     for( vit2 = vit; vit2 != Triangulation::vertexTable.end(); vit2++, jj++ ){
       Vertex w = vit2->second;
-      hessianGenerator[ii][jj] = EHRSecondPartial::At( v, w );
+      hessianGenerator[ii][jj] = NEHRSecondPartial::At( v, w );
       hessianGenerator[jj][ii] = hessianGenerator[ii][jj];
     }
   }

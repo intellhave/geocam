@@ -162,6 +162,15 @@ void RadiusPartial::calculateRadiiPartials() {
     
     LinearEquationsSolver(nehr_radius_partials, nehr_rad_eta_partials, values, vertSize);
 
+    double length = 0;
+    for(ii = 0; ii < vertSize; ii++) {
+      length += values[ii] * values[ii];
+    }
+    length = sqrt(length);
+    for(ii = 0; ii < vertSize; ii++) {
+      values[ii] = values[ii] / length;
+    }
+
     ii = 0;
     for(vit = Triangulation::vertexTable.begin(); vit != Triangulation::vertexTable.end(); vit++, ii++) {
       RadiusPartial::At(vit->second, eit->second)->setValue(values[ii]);

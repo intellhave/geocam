@@ -152,7 +152,7 @@ double VolumePartial::calculateRadiusCase() {
         2*Eta23*Eta34) + alpha2*(-(alpha3*alpha4) + pow(Eta34,2)))*
         pow(r2,2))*pow(r3,2))*pow(r4,2)));  
 
-    return result*r1;   /* For log radii */
+    return result * r1;
 
 }
 

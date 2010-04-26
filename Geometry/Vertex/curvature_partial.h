@@ -24,7 +24,6 @@ class CurvaturePartial : public virtual GeoQuant {
          
   /* Vertex, Vertex variables */ 
   bool verticesMatch, verticesAdjacent;
-  pair<int, int> pairPos;
   
   Radius* vRadius;
   Curvature3D* vCurv;
@@ -65,7 +64,6 @@ public:
   }
   static void CleanUp();
   void remove();
-  static void Record( char* filename );
 };
 
 #endif /* CURVATUREPARTIAL_H_ */

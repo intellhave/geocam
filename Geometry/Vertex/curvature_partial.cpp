@@ -7,7 +7,7 @@
 
 //static const double PI = 3.1415926;
 
-typedef map<pair<int,int>, CurvaturePartial*> CurvaturePartialIndex;
+typedef map<TriPosition, CurvaturePartial*, TriPositionCompare> CurvaturePartialIndex;
 static CurvaturePartialIndex* Index = NULL;
 
 CurvaturePartial::CurvaturePartial( Vertex& v, Vertex& w ){
@@ -179,7 +179,7 @@ void CurvaturePartial::recalculate(){
 
 void CurvaturePartial::remove() {
     deleteDependents();
-    if(wrtRadius) {
+    if(wrtRadius && ( verticesMatch || verticesAdjacent )) {
        for(int ii = 0; ii < dualAreas->size(); ii++) {
             dualAreas->at(ii)->removeDependent(this);
             dihSums->at(ii)->removeDependent(this);
@@ -209,7 +209,7 @@ void CurvaturePartial::remove() {
       delete dijs;
       delete dihPartials;
     }
-    Index->erase(pairPos);
+    Index->erase(pos);
     delete this;
 }
 
@@ -217,15 +217,15 @@ CurvaturePartial::~CurvaturePartial(){
 }
 
 CurvaturePartial* CurvaturePartial::At( Vertex& v, Vertex& w ){
-  pair<int,int> P( v.getSerialNumber(), w.getSerialNumber() );
-
+  // The additional w is to "set it apart" from v.
+  TriPosition T( 3, v.getSerialNumber(), w.getSerialNumber(), w.getSerialNumber());
   if( Index == NULL) Index = new CurvaturePartialIndex();
-  CurvaturePartialIndex::iterator iter = Index->find( P );
+  CurvaturePartialIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
     CurvaturePartial* val = new CurvaturePartial( v, w );
-    val->pairPos = P;
-    Index->insert( make_pair( P, val ) );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
     return val;
   } else {
     return iter->second;
@@ -233,15 +233,14 @@ CurvaturePartial* CurvaturePartial::At( Vertex& v, Vertex& w ){
 }
 
 CurvaturePartial* CurvaturePartial::At( Vertex& v, Edge& e ){
-  pair<int,int> P( v.getSerialNumber(), e.getSerialNumber() );
-
+  TriPosition T( 2, v.getSerialNumber(), e.getSerialNumber());
   if( Index == NULL) Index = new CurvaturePartialIndex();
-  CurvaturePartialIndex::iterator iter = Index->find( P );
+  CurvaturePartialIndex::iterator iter = Index->find( T );
 
   if( iter == Index->end() ){
     CurvaturePartial* val = new CurvaturePartial( v, e );
-    val->pairPos = P;
-    Index->insert( make_pair( P, val ) );
+    val->pos = T;
+    Index->insert( make_pair( T, val ) );
     return val;
   } else {
     return iter->second;
@@ -258,15 +257,4 @@ void CurvaturePartial::CleanUp(){
     
   delete Index;
   Index = NULL;
-}
-
-void CurvaturePartial::Record( char* filename ){
-  FILE* output = fopen( filename, "a+" );
-
-  CurvaturePartialIndex::iterator iter;
-  for(iter = Index->begin(); iter != Index->end(); iter++)
-    fprintf( output, "(%d,%d): %lf\n", iter->first.first, iter->first.second, iter->second->getValue() );
-  fprintf( output, "\n");
-
-  fclose( output );
 }

@@ -1,10 +1,20 @@
+
 \documentclass[12pt]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[pdftex]{graphicx}
 \usepackage{multicol}
 \usepackage{html,makeidx}
 \usepackage{amsmath, amsthm}
 \usepackage{amssymb}
 \usepackage[subfigure]{ccaption}
+
+\setcounter{MaxMatrixCols}{10}
+%TCIDATA{OutputFilter=Latex.dll}
+%TCIDATA{Version=5.00.0.2552}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{LastRevised=Monday, April 12, 2010 13:07:17}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -13,47 +23,201 @@
 \newtheorem{conjecture}[theorem]{Conjecture}
 \parindent 0in
 \parskip 0.1in
-\title{The relationship between geometric quantities on a triangulation}
 \pagestyle{plain}
-\author{Alex Henniges \\ \\ University of Arizona Undergraduate Research Program\\
+
+%\input{tcilatex}
+
+\begin{document}
+
+\title{The relationship between geometric quantities on a triangulation}
+\author{Alex Henniges \\
+%EndAName
+\\
+University of Arizona Undergraduate Research Program\\
 Supervisor: Dr. David Glickenstein\\
 }
-\begin{document}
 
 \section{Summary}
 
-This paper describes the calculations of partial derivatives of the Normalized Einstein-Hilbert-Regge functional, hereby refered to as NEHR. The purpose is to illustrate the the sort of calculations involved in studying functionals across conformal classes, and in particular should prove the correctness of the calculations being performed in the geocam project. \\
+This paper describes the calculations of partial derivatives of the
+Normalized Einstein-Hilbert-Regge functional, hereby refered to as NEHR. The
+purpose is to illustrate the the sort of calculations involved in studying
+functionals across conformal classes, and in particular should prove the
+correctness of the calculations being performed in the geocam project. 
+\newline
 
 \section{Notation}
 
-We begin by providing some notation to help the reader. We will denote our triangulation by T, and in general label simplices in index notation. A vertex of T is represented as ${i}$. An edge between vertices ${i}$ and ${j}$ is denoted as ${ij}$ and similarly for faces and tetrahedron. When we are referring to a geometric quantity defined on a particular simplex, we denote it by its representative label and subscript the label with a simplex. For example, curvatures have the label $K$, and thus the curvature at vertex ${i}$ is $K_i$. Sometimes, a geometric quantity is defined on a simplex contained within a simplex of higher dimension. A prime example is a dihedral angle labeled by $\beta$. A dihedral angle is the angle of an edge within a tetrahedron. In this case, we use a comma within or indexing system to distinguish the smaller simplex with the larger one. Thus, the dihedral angle at edge ${ij}$ with tetra ${ijkl}$ is $\beta_{ij,kl}$. We will define our labels once they appear in the paper. \\
+We begin by providing some notation to help the reader. We will denote our
+triangulation by $T$, and in general label simplices in index notation. A
+vertex of T is represented as $\left\{ {i}\right\} $. An edge between
+vertices $\left\{ {i}\right\} $ and $\left\{ {j}\right\} $ is denoted as $%
+\left\{ {i,j}\right\} $ and similarly for faces and tetrahedra. When we are
+referring to a geometric quantity defined on a particular simplex, we denote
+it by its representative label and subscript the label with a simplex. For
+example, curvatures have the label $K$, and thus the curvature at vertex $%
+\left\{ {i}\right\} $ is $K_{i}$. Sometimes, a geometric quantity is defined
+on a simplex contained within a simplex of higher dimension. A prime example
+is a dihedral angle labeled by $\beta $. A dihedral angle is the angle of an
+edge within a tetrahedron. In this case, we use a comma within or indexing
+system to distinguish the smaller simplex with the larger one. Thus, the
+dihedral angle at edge $\left\{ {i,j}\right\} $ with tetra $\left\{ {i,j,k,l}%
+\right\} $ is $\beta _{ij,kl}$. We will define our labels once they appear
+in the paper. \newline
 
 \section{The NEHR Functional}
 
-We actually start with the basic Einstein-Hilbert-Regge functional on triangulated manifolds. The functional was chosen to closely mimic the EHR that is defined for smooth surfaces. In particular, we define EHR as the sum of the curvatures,
+We start with the Einstein-Hilbert-Regge functional for triangulated
+manifolds. The functional was chosen to closely mimic the Einstein-Hilbert
+functional that is defined for smooth manifolds. In particular, we define
+EHR as the sum of the curvatures,
 
 \begin{equation}
-EHR = \sum_{{i} \in T}{K_i}
-\label{eq.EHR}
+EHR = \sum_{{i} \in T}{K_i}  \label{eq.EHR}
 \end{equation}
 
-The normalized form, NEHR, also mimics that of the NEHR for smooth surfaces. In our case, it is
+The normalized form, NEHR, also mimics that of the NEHR for smooth surfaces.
+In our case, it is
 
 \begin{equation}
-NEHR = \frac{\sum_{{i} \in T}{K_i}}{V^{1/3}}
-\label{eq.NEHR}
+NEHR = \frac{\sum_{{i} \in T}{K_i}}{V^{1/3}}  \label{eq.NEHR}
 \end{equation}
 
-where $V$ is the total volume of the triangulation. Many of the simplifications we do when calculating the partial derivatives will involve substituting between \ref{eq.EHR} and \ref{eq.NEHR}.
+where $V$ is the total volume of the triangulation. Many of the
+simplifications we do when calculating the partial derivatives will involve
+substituting between \ref{eq.EHR} and \ref{eq.NEHR}.
 
-We end this section with a very important key to our calcuations. The following was derived by David Glickenstein in (ref paper):
+We end this section with a very important key to our calcuations. The
+following was derived by David Glickenstein in (ref paper):
 
 \begin{equation}
-\frac{\partial EHR}{\partial ln(r_i)} = K_i
-\label{eq.EHR_Part}
+\frac{\partial EHR}{\partial ln(r_i)} = K_i  \label{eq.EHR_Part}
 \end{equation}
 
-This states that the partial derivative of EHR with respect to the logarithm of the radius of vertex ${i}$ is simply the curvature at vertex ${i}$.
+This states that the partial derivative of EHR with respect to the logarithm
+of the radius of vertex ${i}$ is simply the curvature at vertex ${i}$. From
+this point on we set $f_i = ln(r_i)$ and our derivatives are with respect to 
+$f_i$. Switching between $f_i$ and $r_i$ can be done by a simple application
+of the chain rule:
+
+\begin{equation}
+\frac{\partial G}{\partial ln(r_{i})}=\frac{\partial G}{\partial r_{i}}\frac{%
+\partial r_{i}}{\partial ln(r_{i})}=r_{i}\frac{\partial G}{\partial r_{i}}
+\label{eq.log_r}
+\end{equation}
+
+With this, we can begin calculating the partials.
+
+\section{NEHR Partial}
+
+We will first derivate the NEHR function with respect to the log of a
+radius. This uses the product rule.
+
+\begin{align}
+\frac{\partial NEHR}{\partial f_{i}}& =K_{i}V^{-1/3}-\frac{1}{3}EHR\cdot
+V^{-4/3}\frac{\partial V}{\partial f_{i}}  \notag \\
+& =V^{-4/3}(K_{i}V-\frac{1}{3}r_{i}EHR\frac{\partial V}{\partial r_{i}})
+\label{eq.NEHR_Part_f}
+\end{align}
+
+In our simplification, we make use of both a substitution from NEHR to EHR
+and the property given in \ref{eq.log_r}. The derivative of the volume with
+respect to radius $r_i$ is a long calculation that can be computed using the
+equation given by the Cayley Menger Determinant to calculate volume.
+
+We also want to take the derivative of NEHR with respect to the eta value of
+an edge. There is no analog to equation \ref{eq.EHR_Part} and we don't take
+logarithms, but the structure still appears similar. Again, the other
+partials that result in this equation can be computed through large
+calcualtions.
+
+\begin{align}
+\frac{\partial NEHR}{\partial \eta _{nm}}& =\sum_{i}{\frac{\partial K_{i}}{%
+\partial \eta _{nm}}}V^{-1/3}-\frac{1}{3}EHR\cdot V^{-4/3}\frac{\partial V}{%
+\partial \eta _{nm}}  \notag \\
+& =V^{-4/3}\ast (\sum_{i}{\frac{\partial K_{i}}{\partial \eta _{nm}}}V-\frac{%
+1}{3}EHR\frac{\partial V}{\partial \eta _{nm}})  \label{eq.NEHR_Part_eta}
+\end{align}
+
+\section{NEHR Second Partial}
+
+We are also interested in the second derivative of NEHR with respect to
+several variables. We first take the derivative of \ref{eq.NEHR_Part_f} with
+respect to a second vertex, $f_j$.
+
+\begin{align}
+\frac{\partial ^{2}NEHR}{\partial f_{j}\partial f_{i}}& =\frac{\partial }{%
+\partial f_{j}}\left[ K_{i}\cdot V^{-1/3}-\frac{1}{3}\cdot r_{i}\cdot
+NEHR\cdot V^{-1}\cdot \frac{\partial V}{\partial r_{i}}\right]  \\
+& =V^{-1/3}\cdot \frac{\partial K_{i}}{\partial f_{j}}-\frac{1}{3}\cdot
+V^{-4/3}\cdot K_{i}\cdot \frac{\partial V}{\partial f_{j}}  \notag \\
+& \ \ \ \ -\frac{1}{3}\cdot \frac{\partial r_{i}}{\partial f_{j}}NEHR\cdot
+V^{-1}\cdot \frac{\partial V}{\partial r_{i}}  \notag \\
+& \ \ \ \ -\frac{1}{3}\cdot r_{i}\cdot \frac{\partial EHR}{\partial f_{j}}%
+\cdot V^{-4/3}\cdot \frac{\partial V}{\partial r_{i}}  \notag \\
+& \ \ \ \ +\frac{4}{9}\cdot r_{i}\cdot \frac{EHR}{V^{1/3}}\cdot V^{-2}\cdot 
+\frac{\partial V}{\partial f_{j}}\cdot \frac{\partial V}{\partial r_{i}} 
+\notag \\
+& \ \ \ \ -\frac{1}{3}\cdot r_{i}\cdot NEHR\cdot V^{-1}\frac{\partial ^{2}V}{%
+\partial f_{j}\partial r_{i}}  \label{eq.NEHR_Part_f2_pre} \\
+& =\frac{V^{-4/3}}{3}\Big[3\cdot V\cdot r_{j}\cdot \frac{\partial K_{i}}{%
+\partial r_{j}}-r_{j}\cdot K_{i}\cdot \frac{\partial V}{\partial r_{j}} 
+\notag \\
+& \ \ \ \ -r_{j}\cdot \delta _{ij}\cdot EHR\cdot \frac{\partial V}{\partial
+r_{i}}  \notag \\
+& \ \ \ \ -r_{i}\cdot K_{j}\cdot \frac{\partial V}{\partial r_{i}}  \notag \\
+& \ \ \ \ +\frac{4}{3}\cdot r_{i}\cdot r_{j}\cdot EHR\cdot V^{-1}\cdot \frac{%
+\partial V}{\partial r_{j}}\cdot \frac{\partial V}{\partial r_{i}}  \notag \\
+& \ \ \ \ -r_{i}\cdot r_{j}\cdot EHR\cdot \frac{\partial ^{2}V}{\partial
+r_{j}\partial r_{i}}\Big]  \label{eq.NEHR_Part_f2}
+\end{align}
+
+We will attempt to point out as many simplifications as we can to prevent
+confusion and doubt as to the correctness of the equation. In \ref%
+{eq.NEHR_Part_f2_pre}, we choose to break down NEHR into EHR and an extra
+volume term during the product rule. From \ref{eq.NEHR_Part_f2_pre} to \ref%
+{eq.NEHR_Part_f2} we replace all of the appearances of $f_j$ with $r_j$. The 
+$\delta_{ij}$ representing taking the derivative of $r_i$ with respect to $%
+r_j$ and is 1 if $i=j$ and 0 otherwise.
+
+We make no claims that the above formula is easy. Fortunately, the other two
+second partials we will take mirror this equation very closely. Thus, one
+can go through the steps of the above equation to convince themselves of all
+three (plus, its great practice with taking derivatives.
+
+\begin{align}
+\frac{\partial^2 NEHR}{ \partial \eta_{nm} \partial f_i} &= \frac{\partial}{%
+\partial \eta_{nm}}\Big[K_i \cdot V^{-1/3} - \frac{1}{3} \cdot r_i \cdot
+NEHR \cdot V^{-1}\cdot \frac{\partial V}{\partial r_i}\Big] \\
+&=V^{-1/3} \cdot \frac{\partial K_i}{\partial \eta_{nm}} - \frac{1}{3}\cdot
+V^{-4/3} \cdot K_i \cdot \frac{\partial V}{\partial \eta_{nm}}  \notag \\
+&\ \ \ \ - \frac{1}{3} \cdot r_i \cdot \frac{\partial EHR}{\partial \eta_{nm}%
+} \cdot V^{-4/3} \frac{\partial V}{\partial r_i} + \frac{4}{9} \cdot r_i
+\cdot \frac{EHR}{V^{1/3}} \cdot V^{-2} \cdot \frac{\partial V}{\partial
+\eta_{nm}} \cdot \frac{\partial V}{\partial r_i}  \notag \\
+&\ \ \ \ - \frac{1}{3} \cdot r_i\cdot NEHR \cdot V^{-1} \frac{\partial^2 V}{%
+\partial \eta_{nm} \partial r_i}  \label{eq.NEHR_Part_f_eta_pre} \\
+&= \frac{V^{-4/3}}{3} \Big[3 \cdot V \cdot \frac{\partial K_i}{\partial
+\eta_{nm}} - \cdot K_i \cdot \frac{\partial V}{\partial \eta_{nm}}  \notag \\
+&\ \ \ \ - r_i \cdot \sum_{j}{\frac{\partial K_j}{\partial \eta_{nm}}} \cdot 
+\frac{\partial V}{\partial r_i} + \frac{4}{3} \cdot r_i \cdot EHR \cdot
+V^{-1} \cdot \frac{\partial V}{\partial\eta_{nm}} \cdot \frac{\partial V}{%
+\partial r_i}  \notag \\
+&\ \ \ \ - r_i \cdot EHR \cdot \frac{\partial^2 V}{\partial \eta_{nm}
+\partial r_i}\Big]  \label{eq.NEHR_Part_f_eta}
+\end{align}
+
+And $\frac{\partial ^{2}NEHR}{\partial \eta _{op}\partial \eta {nm}}$...
+
+\begin{align}
+\frac{\partial^2 NEHR}{ \partial \eta_{op} \partial \eta{nm} &= \frac{\partial}{\partial \eta_{op}}\Big[\sum_{i}{\frac{\partial K_i}{\partial\eta_{nm}}} * V^{-1/3} - \frac{1}{3} * EHR * V^{-4/3} * \frac{\partial V}{\partial \eta_{nm}}\Big] \\
+						&=V^{-1/3} \cdot \frac{\partial K_i}{\partial \eta_{nm}} - \frac{1}{3}\cdot V^{-4/3} \cdot K_i \cdot \frac{\partial V}{\partial \eta_{nm}}\nonumber \\
+						&\ \ \ \ - \frac{1}{3} \cdot r_i \cdot \frac{\partial EHR}{\partial \eta_{nm}} \cdot V^{-4/3} \frac{\partial V}{\partial r_i} + \frac{4}{9}\cdot r_i \cdot \frac{EHR}{V^{1/3}} \cdot V^{-2} \cdot \frac{\partial V}{\partial \eta_{nm}} \cdot \frac{\partial V}{\partial r_i}\nonumber \\
+%						&\ \ \ \ - \frac{1}{3} \cdot r_i\cdot NEHR \cdot V^{-1} \frac{\partial^2 V}{\partial \eta_{nm} \partial r_i} \label{eq.NEHR_Part_eta2_pre}\\
+%						&= \frac{V^{-4/3}}{3} \Big[3 \cdot  V  \cdot \frac{\partial K_i}{\partial \eta_{nm}} - \cdot  K_i \cdot  \frac{\partial V}{\partial \eta_{nm}} \nonumber \\
+%						&\ \ \ \ - r_i \cdot \sum_{j}{\frac{\partial K_j}{\partial \eta_{nm}}} \cdot  \frac{\partial V}{\partial r_i} + \frac{4}{3} \cdot  r_i \cdot EHR \cdot V^{-1} \cdot  \frac{\partial V}{\partial\eta_{nm}} \cdot  \frac{\partial V}{\partial r_i} \nonumber \\
+%						&\ \ \ \ - r_i \cdot  EHR \cdot \frac{\partial^2 V}{\partial \eta_{nm} \partial r_i}\Big]															
+\label{eq.NEHR_Part_eta2}
+\end{align}
 
 \end{document}
-

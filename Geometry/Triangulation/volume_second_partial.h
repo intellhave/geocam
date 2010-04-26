@@ -13,6 +13,7 @@ using namespace std;
 #include "radius.h"
 #include "eta.h"
 #include "alpha.h"
+#include "volume_partial.h"
 
 class VolumeSecondPartial : public virtual GeoQuant {
 private:
@@ -23,6 +24,7 @@ private:
   
   // RadiusRadius only variable
   bool sameVertices;
+  VolumePartial* volume_partial;
   //RadiusEta only variable
   int locality;
   
