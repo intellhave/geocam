@@ -6,12 +6,13 @@ import java.util.Iterator;
 public abstract class Geoquant {
   protected ArrayList<Geoquant> dependents;
   protected double value;
+  protected TriPosition pos;
   private boolean valid;
 	
   protected abstract void recalculate();
   protected abstract void remove();
 	
-  private Geoquant() {
+  protected Geoquant() {
     dependents = new ArrayList<Geoquant>();
     valid = false;
   }
@@ -23,6 +24,13 @@ public abstract class Geoquant {
   
   protected void removeDependent(Geoquant q) {
     dependents.remove(q);
+  }
+  
+  protected void deleteDependents() {
+    for(Geoquant q: dependents) {
+      q.remove();
+    }
+    dependents.clear();
   }
   
   public double getValue() {
