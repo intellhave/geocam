@@ -26,14 +26,14 @@ public class GeoquantTest {
     }
     for(Edge e : Triangulation.edgeTable.values()) {
       Eta.At(e).setValue(1.0);
-      System.out.println(Eta.At(e) + " at " + e + " = " + Eta.valueAt(e));
     }
   }
   
   private static void testLengths() {
+    Length l;
     for(Edge e: Triangulation.edgeTable.values()) {
-      System.out.println(Eta.At(e) + " at " + e + " = " + Eta.valueAt(e));
-      System.out.println("Length at " + e + " = " + Length.valueAt(e));
+      l = Length.At(e);
+      System.out.println(l + " at " + e + " = " + l.getValue());
     }
   }
 
