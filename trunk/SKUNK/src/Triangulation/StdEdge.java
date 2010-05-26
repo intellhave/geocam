@@ -12,4 +12,8 @@ public class StdEdge {
       }
     }
   }
+  
+  public StdEdge(Edge e) {
+    this(e, e.getLocalVertices().get(0));
+  }
 }
