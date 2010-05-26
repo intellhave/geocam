@@ -1,5 +1,6 @@
 #include "TriangulationDisplay.h"
 #include "hinge_flip.h"
+#include "special_flip.h"
 
 namespace TriangulationDisplay {
 
@@ -28,14 +29,20 @@ char* fileName;
 vector<triangle_parts> listOfTriangles;
 
 map<int,Edge>::iterator selectedEdge;
+map<int, Vertex>::iterator selectedVertex;
 
 map<int, Point> points;
 
 int flat;
+bool showInfo;
 bool showWeights;
 bool tickMarks;
+bool edgesNotVerts = true;
 int voronoi; // 0 is nothing, 1 is the whole voronoi diagram, 2 is the hinge only
 
+//gl vars
+
+int main_window_id;
 
 //gl funcs
 
@@ -69,8 +76,11 @@ void handleKeypress(unsigned char key, int x, int y) {
           //printStuff(&cout);
           break;
         case ' ': //space bar
-
-            flipCurrentEdge();
+            if (edgesNotVerts) {
+                flipCurrentEdge();
+            } else {
+                flip3to1(selectedVertex->second);
+            }
 
             break;
         case 'l': //l
@@ -92,10 +102,18 @@ void handleKeypress(unsigned char key, int x, int y) {
             break;
         //move forward and backward through the list of edges
         case ',': // ,
-            previousEdge();
+            if (edgesNotVerts) {
+                previousEdge();
+            } else {
+                previousVertex();
+            }
             break;
         case '.': // .
-            nextEdge();
+            if (edgesNotVerts) {
+                nextEdge();
+            } else {
+                nextVertex();
+            }
             break;
         //grow of shrink the gaps between triangles in the 3d view
         case '\'':
@@ -115,6 +133,9 @@ void handleKeypress(unsigned char key, int x, int y) {
             break;
         case 'v': //v toggles the dual edges on and off
             voronoi = !voronoi;
+            if (voronoi) {
+                coordSystem.computeDuals();
+            }
             break;
         case 'n': //n runs the flipalgorithm
             if (flipAlg == NULL) {
@@ -133,20 +154,24 @@ void handleKeypress(unsigned char key, int x, int y) {
         case 't'://t toggles tickmarks in the 2d view
             tickMarks = !tickMarks;
             break;
+        case 'x':
+            edgesNotVerts = !edgesNotVerts;
+            break;
         case 'b'://b resets the triangulation
-            flipAlg->resetCurrEdge();
             Triangulation::vertexTable.clear();
             Triangulation::edgeTable.clear();
             Triangulation::faceTable.clear();
             readTriangulationFile(fileName);
             //construct the coordinates
             coordSystem.generatePlane();
-            //this will be used to display the triangles
-            listOfTriangles = coordSystem.getTriangles();
-            //this will be used to show which edge is currently selected
+            //listOfTriangles = coordSystem.getTriangles();
             selectedEdge = Triangulation::edgeTable.begin();
             makePoints();
             setup_view_parameters();
+            flipAlg->resetCurrEdge();
+            break;
+        case 'i': //prints info about triangulation to the screen
+            showInfo = !showInfo;
             break;
         case 'c':
             break;
@@ -164,28 +189,28 @@ void handleSpecialKeypress(int key, int x, int y) {
 	switch (key) {
 		case GLUT_KEY_LEFT:
             if (flat == 0) {
-                _hori -= .5;
+                _hori += .5;
             } else {
                 _camera_angle_yaw -= _alpha;
             }
             break;
 		case GLUT_KEY_RIGHT:
             if (flat == 0) {
-                _hori += .5;
+                _hori -= .5;
             } else {
                 _camera_angle_yaw += _alpha;
             }
             break;
 		case GLUT_KEY_UP:
             if (flat == 0) {
-                _vert += .5;
+                _vert -= .5;
             } else {
                 _camera_angle_pitch -= _alpha;
             }
             break;
         case GLUT_KEY_DOWN:
             if (flat == 0) {
-                _vert -= .5;
+                _vert += .5;
             } else {
                _camera_angle_pitch += _alpha;
             }
@@ -230,6 +255,17 @@ void drawTicks(double x1, double y1, double x2, double y2, double x3, double y3,
     drawTicks(avx, avy, x2, y2, x3, y3, depth-1);
 }
 
+//TODO: THIS IS NEW, TEST IT ADD IT TO .H
+void drawText(float x, float y, string text) {
+        glPushMatrix();
+            glTranslatef(x, y, 0);
+            string::iterator sit = text.begin();
+            for (; sit != text.end(); sit++) {
+                glutStrokeCharacter(GLUT_STROKE_ROMAN, *sit);
+            }
+        glPopMatrix();
+}
+
 void drawSceneFlat() {
     glLoadIdentity();
     glTranslatef(_hori, _vert, _dist);
@@ -244,7 +280,8 @@ void drawSceneFlat() {
     for (; eit != Triangulation::edgeTable.end(); eit++) {
 
         if (e.getIndex() == eit->second.getIndex()) {
-            glColor3d(255, 127, 0); //yellow
+            //glColor3d(255, 127, 0); //yellow
+            glColor3d(0, 0, 255);
         } else {
             glColor3d(0, 0, 255);
         }
@@ -256,25 +293,36 @@ void drawSceneFlat() {
     }
     glEnd();
 
-    //draw the Edge that is currently selected
-    p1 = getVertexCoords((*e.getLocalVertices())[0]);
-    p2 = getVertexCoords((*e.getLocalVertices())[1]);
+    if (edgesNotVerts) {
+        //draw the Edge that is currently selected
+        p1 = getVertexCoords((*e.getLocalVertices())[0]);
+        p2 = getVertexCoords((*e.getLocalVertices())[1]);
 
-    double radius = .2;
-    if (Length::valueAt(e) == 0) {
-      glBegin(GL_LINE_STRIP);
+        double radius = .2;
+        if (Length::valueAt(e) == 0) {
+            glBegin(GL_LINE_STRIP);
             glColor3d(255, 127, 0);
             for (double i = 0; i <= 2*PI; i+=0.0174532925) {
-                glVertex3d(p1.x + cos(i) * radius, p1.y + sin(i) * radius, 0);
+                    glVertex3d(p1.x + cos(i) * radius, p1.y + sin(i) * radius, 0);
             }
             glEnd();
-    } else { // the lines length is greater than zero
-      //draws the selected edge, should appear on top
-      glBegin(GL_LINES);
-      glColor3d(255, 127, 0);
-      glVertex3d(p1.x, p1.y, 0.01);
-      glVertex3d(p2.x, p2.y, 0.01);
-      glEnd();
+        } else { // the lines length is greater than zero
+        //draws the selected edge, should appear on top
+        glBegin(GL_LINES);
+        glColor3d(255, 127, 0);
+        glVertex3d(p1.x, p1.y, 0.01);
+        glVertex3d(p2.x, p2.y, 0.01);
+        glEnd();
+        }
+    } else { //circle the selected vertex
+        p1 = getVertexCoords(selectedVertex->first);
+        double radius = .2;
+        glBegin(GL_LINE_STRIP);
+        glColor3d(255, 127, 0);
+        for (double i = 0; i <= 2*PI; i+=0.0174532925) {
+            glVertex3d(p1.x + cos(i) * radius, p1.y + sin(i) * radius, 0);
+        }
+        glEnd();
     }
     
     //draw the duals
@@ -328,6 +376,31 @@ void drawSceneFlat() {
             drawTicks(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 3);
             drawTicks(p3.x, p3.y, p1.x, p1.y, p2.x, p2.y, 3);
             drawTicks(p2.x, p2.y, p3.x, p3.y, p1.x, p1.y, 3);
+        }
+    }
+
+    if (showInfo) {
+        map<int, Face>::iterator fit = Triangulation::faceTable.begin();
+        for (; fit != Triangulation::faceTable.end(); fit++) {
+            Point p1;
+            int count = 0;
+            vector<int>::iterator vit = fit->second.getLocalVertices()->begin();
+            for (; vit != fit->second.getLocalVertices()->end(); vit++) {
+                count += 1;
+                p1.x += getPoint(*vit).x;
+                p1.y += getPoint(*vit).y;
+                p1.x /= count;
+                p1.y /= count;
+            }
+
+            //build a string holding this number
+            int num = fit->first;
+            string s;
+            while (num) {
+                s.insert(0, 1, (num % 10) + 48);
+                num /= 10;
+            }
+            drawText(p1.x, p2.y, s);
         }
     }
 
@@ -436,25 +509,14 @@ void setup_view_parameters(void) {
 
 void startGLStuff(int argc, char * argv[]) {
 
-  _dist = -20.0f;
-  _hori = -5.0f;
-  _vert = -5.0f;
-
-  _angle = 30.0f;
-  _camera_angle_yaw = 0.0f;
-  _camera_angle_pitch = 0.0f;
-  _gap_factor = 1;
-
-  setup_view_parameters();
-
-  //initialize GLUT
+    //initialize GLUT
 	glutInit(&argc, argv);
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(600, 600); //Set the window size
 
 	//create the window
-	glutCreateWindow("flip algorithm");
+	main_window_id = glutCreateWindow("flip algorithm");
 	initRendering(); //Initialize rendering
 
 	//set handler functions for drawing, keypresses, and window resizes
@@ -464,7 +526,8 @@ void startGLStuff(int argc, char * argv[]) {
 	glutSpecialFunc(handleSpecialKeypress);
 	glutReshapeFunc(handleResize);
 
-  glutMainLoop();
+
+    glutMainLoop();
 }
 
 //TriangulationDisplay stuff
@@ -504,17 +567,30 @@ void ShowTriangulation(char *f, int argc, char * argv[])
     
     //this will be used to show which edge is currently selected
     selectedEdge = Triangulation::edgeTable.begin();
+    selectedVertex = Triangulation::vertexTable.begin();
 
     //set up the vertex coordinates just this once
     makePoints();
     
+    _dist = -20.0f;
+    _hori = -5.0f;
+    _vert = -5.0f;
+
+    _angle = 30.0f;
+    _camera_angle_yaw = 0.0f;
+    _camera_angle_pitch = 0.0f;
+    _gap_factor = 1;
+
+    setup_view_parameters();
+
     startGLStuff(argc, argv);
 }
 
 void reGeneratePlane() {
-  coordSystem.generatePlane();
-  listOfTriangles = coordSystem.getTriangles();
-  selectedEdge = Triangulation::edgeTable.begin();
+    coordSystem.generatePlane();
+    listOfTriangles = coordSystem.getTriangles();
+    selectedEdge = Triangulation::edgeTable.begin();
+    selectedVertex = Triangulation::vertexTable.begin();
 }
 
 void setFlipAlgorithm(FlipAlgorithm * f) {
@@ -523,20 +599,8 @@ void setFlipAlgorithm(FlipAlgorithm * f) {
 
 void setFile(char* f)
 {
-    //load up the specified file into the maps contained in triangulation.cpp
-    if (readTriangulationFile(f)) {
-        fileName = f;
-        //construct a
-        coordSystem.generatePlane();
-
-        listOfTriangles = coordSystem.getTriangles();
-    } else {
-        readTriangulationFile(fileName);
-        //construct a
-        coordSystem.generatePlane();
-
-        listOfTriangles = coordSystem.getTriangles();
-    }
+    //very trustworthy, expects user to have called readTriangulationFile somewhere else
+    fileName = f;
 }
 
 void makePoints(void) {
@@ -602,6 +666,24 @@ Edge previousEdge(void) {
         selectedEdge--;
     }
     return selectedEdge->second;
+}
+
+Vertex nextVertex(void) {
+    selectedVertex++;
+    if (Triangulation::vertexTable.end() == selectedVertex) {
+        selectedVertex = Triangulation::vertexTable.begin();
+    }
+    return selectedVertex->second;
+}
+
+Vertex previousVertex(void) {
+    if (Triangulation::vertexTable.begin() == selectedVertex) {
+        selectedVertex = Triangulation::vertexTable.end();
+        selectedVertex--;
+    } else {
+        selectedVertex--;
+    }
+    return selectedVertex->second;
 }
 
 void flipCurrentEdge() {
