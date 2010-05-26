@@ -7,6 +7,7 @@ import java.util.Set;
 
 import Triangulation.Edge;
 import Triangulation.Face;
+import Triangulation.StdFace;
 import Triangulation.Vertex;
 
 public class Angle extends Geoquant {
@@ -24,21 +25,14 @@ public class Angle extends Geoquant {
     
     int count = 1;
     this.f = f;
-    for(Edge e : f.getLocalEdges()) {
-      if(v.isAdjEdge(e)) {
-        if(count == 1) {
-          lenA = Length.At(e);
-          lenA.addDependent(this);
-          count++;
-        } else {
-          lenB = Length.At(e);
-          lenB.addDependent(this);
-        }
-      } else {
-        lenC = Length.At(e);
-        lenC.addDependent(this);
-      }
-    }
+    StdFace sf = new StdFace(f, v);
+    lenA = Length.At(sf.e12);
+    lenB = Length.At(sf.e13);
+    lenC = Length.At(sf.e23);
+    
+    lenA.addDependent(this);
+    lenB.addDependent(this);
+    lenC.addDependent(this);
   }
   
   protected void recalculate() {

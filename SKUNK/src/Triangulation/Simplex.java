@@ -92,4 +92,11 @@ public abstract class Simplex {
   public boolean isAdjTetra(Tetra t) {
     return localTetras.contains(t);
   }
+  
+  public boolean equals(Object other) {
+    if(other.getClass() != this.getClass()) {
+      return false;
+    }
+    return this.index == ((Simplex) other).index;
+  }
 }
