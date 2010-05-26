@@ -1,16 +1,17 @@
 package Triangulation;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Simplex {
   protected int serialNumber;
   protected int index;
   private static int simplexCounter = 0;
-  protected HashSet<Vertex> localVertices;
-  protected HashSet<Edge> localEdges;
-  protected HashSet<Face> localFaces;
-  protected HashSet<Tetra> localTetras;
+  protected LinkedList<Vertex> localVertices;
+  protected LinkedList<Edge> localEdges;
+  protected LinkedList<Face> localFaces;
+  protected LinkedList<Tetra> localTetras;
   
   public Simplex(int index) {
     this.index = index;
@@ -31,16 +32,16 @@ public abstract class Simplex {
   }
   
   // Local simplices retrieval methods
-  public HashSet<Vertex> getLocalVertices() {
+  public List<Vertex> getLocalVertices() {
     return localVertices;
   }
-  public HashSet<Edge> getLocalEdges() {
+  public List<Edge> getLocalEdges() {
     return localEdges;
   }
-  public HashSet<Face> getLocalFaces() {
+  public List<Face> getLocalFaces() {
     return localFaces;
   }
-  public HashSet<Tetra> getLocalTetras() {
+  public List<Tetra> getLocalTetras() {
     return localTetras;
   }
   

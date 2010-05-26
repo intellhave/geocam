@@ -11,6 +11,10 @@ public class StdFace {
   public Edge e13;
   public Edge e23;
   
+  public StdFace(Face f) {
+    this(f, f.getLocalVertices().get(0));
+  }
+  
   public StdFace(Face f, Vertex v) {
     v1 = v;
 

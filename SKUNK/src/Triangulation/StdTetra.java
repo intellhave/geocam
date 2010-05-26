@@ -20,6 +20,10 @@ public class StdTetra {
   public Face f134;
   public Face f234;
   
+  public StdTetra(Tetra t) {
+    this(t, t.getLocalVertices().get(0));
+  }
+  
   public StdTetra(Tetra t, Vertex v) {
     v1 = v; 
 
@@ -120,6 +124,92 @@ public class StdTetra {
     
     fixTetraEdges(t);
     fixTetraFaces(t);    
+  }
+  
+//Make e12 = e, v1 = v if v is in e, v3 = v otherwise
+  public StdTetra(Tetra t, Edge e, Vertex v) {
+    if(e.isAdjVertex(v)) {
+      v1 = v;
+      for(Vertex w :  e.getLocalVertices()) {
+        if(w != v) {
+          v2 = w;
+        }
+      }
+      Vertex[] verts = new Vertex[2];
+      int count = 0;
+      for(Vertex w : t.getLocalVertices()) {
+        if(w != v1 && w != v2) {
+          verts[count] = w;
+          count++;
+        }
+      }
+      v3 = verts[0];
+      v4 = verts[1];
+    } else {
+      v1 = e.getLocalVertices().get(0);
+      v2 = e.getLocalVertices().get(1);
+      v3 = v;
+      
+      for(Vertex w : t.getLocalVertices()) {
+        if( w != v1 && w != v2 && w != v3) {
+          v4 = w;
+          break;
+        }
+      }
+    }
+
+    fixTetraEdges(t);
+    fixTetraFaces(t);
+  }
+  
+  // Make e12 = e, e12 = f if e = f, e13 = f if e and f are adjacent,
+  // e34 = f otherwise
+  public StdTetra(Tetra t, Edge e, Edge f) {
+    if(e == f) {
+      v1 = e.getLocalVertices().get(0);
+      v2 = e.getLocalVertices().get(1);
+      
+      Vertex[] verts = new Vertex[2];
+      int count = 0;
+      for(Vertex v : t.getLocalVertices()) {
+        if(v != v1 && v != v2) {
+          verts[count] = v;
+          count++;
+        }
+      }
+      v3 = verts[0];
+      v4 = verts[1];
+    } else if( e.isAdjEdge(f) ) {
+      if(f.isAdjVertex(e.getLocalVertices().get(0))) {
+        v1 = e.getLocalVertices().get(0);
+        v2 = e.getLocalVertices().get(1);
+      } else {
+        v1 = e.getLocalVertices().get(1);
+        v2 = e.getLocalVertices().get(0);
+      }
+      
+      for(Vertex v : f.getLocalVertices()) {
+        if(v != v1) {
+          v3 = v;
+          break;
+        }
+      }
+      
+      for(Vertex v : t.getLocalVertices()) {
+        if(v != v1 && v != v2 && v != v3) {
+          v4 = v;
+          break;
+        }
+      }
+    } else {
+      v1 = e.getLocalVertices().get(0);
+      v2 = e.getLocalVertices().get(1);
+      v3 = f.getLocalVertices().get(0);
+      v4 = f.getLocalVertices().get(1);
+    }
+
+    fixTetraEdges(t);
+    fixTetraFaces(t);
   }
   
   public void fixTetraEdges( Tetra t ){
