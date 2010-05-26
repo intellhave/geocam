@@ -85,6 +85,9 @@ Edge nextEdge(void);
 //decrements the currently selected edge, returning to the previously selected edge
 Edge previousEdge(void);
 
+Vertex nextVertex(void);
+Vertex previousVertex(void);
+
 //calls the flip function on the currently selected edge
 void flipCurrentEdge(void);
 

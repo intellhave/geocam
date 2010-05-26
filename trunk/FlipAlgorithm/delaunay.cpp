@@ -59,7 +59,7 @@ bool isWeightedDelaunay(void) {
 
 bool isConvexHinge(Edge e) {
     if (e.isBorder()) {
-        true;
+        return true;
     }
     int f0 = (*(e.getLocalFaces()))[0];
     int f1 = (*(e.getLocalFaces()))[1];
@@ -75,13 +75,13 @@ bool isConvexHinge(Edge e) {
     if (ang0 > PI || ang1 > PI) {
         return false;
     } else {
-        true;
+        return true;
     }
 }
 
 bool facesAreTheSame(Edge e) {
     if (e.isBorder()) {
-        false;
+        return false;
     }
     int f0 = (*(e.getLocalFaces()))[0];
     int f1 = (*(e.getLocalFaces()))[1];
@@ -178,5 +178,5 @@ double dirichletEnergy(Function vertexF) {
         total += (getDual(eit->second)/Length::valueAt(eit->second)) * pow(f_j-f_i, 2);
     }
     total = total / 2;
-return total;
+    return total;
 }
