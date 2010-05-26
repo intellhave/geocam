@@ -41,26 +41,26 @@ public class TriangulationIO {
       type = stringScanner.next();
       index = stringScanner.nextInt();
       
-      if(type.compareTo("Vertex") == 0) {
+      if(type.compareTo("Vertex:") == 0) {
         simplex = Triangulation.vertexTable.get(index);
         if(simplex == null) {
           simplex = new Vertex(index);
           Triangulation.putVertex((Vertex) simplex);
         }
-      } else if(type.compareTo("Edge") == 0) {
+      } else if(type.compareTo("Edge:") == 0) {
           simplex = Triangulation.edgeTable.get(index);
           if(simplex == null) {
             simplex = new Edge(index);
             Triangulation.putEdge((Edge) simplex);
           }       
-      } else if(type.compareTo("Face") == 0) {
+      } else if(type.compareTo("Face:") == 0) {
           simplex = Triangulation.faceTable.get(index);
           if(simplex == null) {
             simplex = new Face(index);
             Triangulation.putFace((Face) simplex);
           }   
       } else {
-        System.err.print("Invald simplex type " + type + ".\n");
+        System.err.print("Invald simplex type " + type + "\n");
         Triangulation.reset();
         return;
       }
