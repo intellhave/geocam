@@ -16,11 +16,7 @@ public class TriPosition implements Comparable<TriPosition>{
   }
   
   public void print(PrintStream out) {
-    out.printf("[ " );
-    for(int point : pointIDs) {
-      out.printf("%d ", point);
-    }
-    out.printf("]");
+    out.print(pointIDs);
   }
 
   public int compareTo(TriPosition y) {
@@ -38,7 +34,13 @@ public class TriPosition implements Comparable<TriPosition>{
     return 0;
   }
   
+  @Override
   public boolean equals(Object other) {
     return compareTo((TriPosition) other) == 0;
+  }
+  
+  @Override
+  public int hashCode() {
+    return pointIDs.hashCode();
   }
 }

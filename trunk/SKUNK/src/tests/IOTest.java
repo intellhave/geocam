@@ -17,10 +17,12 @@ public class IOTest {
       System.out.println(v + ":\n\t" +
           v.getLocalVertices() + "\n\t" + v.getLocalEdges() + "\n\t" + v.getLocalFaces());
     }
+    System.out.println();
     for(Edge e : Triangulation.edgeTable.values()) {
       System.out.println(e + ":\n\t" +
           e.getLocalVertices() + "\n\t" + e.getLocalEdges() + "\n\t" + e.getLocalFaces());
     }
+    System.out.println();
     for(Face f : Triangulation.faceTable.values()) {
       System.out.println(f + ":\n\t" +
           f.getLocalVertices() + "\n\t" + f.getLocalEdges() + "\n\t" + f.getLocalFaces());

@@ -107,6 +107,6 @@ public abstract class Simplex {
   
   public String toString() {
     String type = this.getClass().toString().substring(6);
-    return type + " " + index;
+    return type + " " + index + " " + (serialNumber);
   }
 }

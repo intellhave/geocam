@@ -55,9 +55,8 @@ public abstract class Geoquant {
   }
   
   private void notifyDependents() {
-    Iterator<Geoquant> it = dependents.iterator();
-    while(it.hasNext()) {
-      it.next().invalidate();
+    for(Geoquant g : dependents) {
+      g.invalidate();
     }
   }
 }
