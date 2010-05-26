@@ -17,6 +17,10 @@ public abstract class Simplex {
     this.index = index;
     serialNumber = simplexCounter;
     simplexCounter++;
+    localVertices = new LinkedList<Vertex>();
+    localEdges = new LinkedList<Edge>();
+    localFaces = new LinkedList<Face>();
+    localTetras = new LinkedList<Tetra>();
   }
   
   public int getIndex() {
@@ -99,5 +103,10 @@ public abstract class Simplex {
       return false;
     }
     return this.index == ((Simplex) other).index;
+  }
+  
+  public String toString() {
+    String type = this.getClass().toString().substring(6);
+    return type + " " + index;
   }
 }
