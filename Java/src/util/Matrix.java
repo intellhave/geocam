@@ -1,7 +1,7 @@
 package util;
 
 public class Matrix implements Cloneable{
-  private double[][] m;
+  public double[][] m;
   private int rows;
   private int cols;
   
@@ -21,6 +21,15 @@ public class Matrix implements Cloneable{
     rows = n.rows;
     cols = n.cols;
     this.m = n.m.clone();
+  }
+  
+  public Matrix(double[] vector) {
+    rows = vector.length;
+    cols = 1;
+    m = new double[rows][cols];
+    for(int i = 0; i < rows; i++) {
+      m[i][0] = vector[i];
+    }
   }
   
   public Matrix transpose() {
@@ -62,10 +71,6 @@ public class Matrix implements Cloneable{
       }
     }
     return tmp;
-  }
-  
-  public double at(int row, int col) {
-    return m[row][col];
   }
   
   public Object clone() {
