@@ -37,18 +37,31 @@ public class Matrix implements Cloneable{
     if(this.cols != other.rows) {
       System.err.print("Matrices cannot be multiplied: dimensions don't match.");
       return null;
-    } else {
-      Matrix tmp = new Matrix(this.rows, other.cols);
-      for(int i = 0; i < this.rows; i++) {
-        for(int j = 0; j < other.cols; j++) {
-          tmp.m[i][j] = 0;
-          for(int k = 0; k < this.cols; k++) {
-            tmp.m[i][j] += this.m[i][k] * other.m[k][j];
-          }
+    }
+    Matrix tmp = new Matrix(this.rows, other.cols);
+    for(int i = 0; i < this.rows; i++) {
+      for(int j = 0; j < other.cols; j++) {
+        tmp.m[i][j] = 0;
+        for(int k = 0; k < this.cols; k++) {
+          tmp.m[i][j] += this.m[i][k] * other.m[k][j];
         }
       }
-      return tmp;
     }
+    return tmp;
+  }
+  
+  public Matrix add(Matrix other) {
+    if(this.rows != other.rows || this.cols != other.cols) {
+      System.err.print("Matrices cannot be added: dimensions don't match.");
+      return null;     
+    }
+    Matrix tmp = new Matrix(rows, cols);
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < cols; j++) {
+        tmp.m[i][j] = this.m[i][j] + other.m[i][j];
+      }
+    }
+    return tmp;
   }
   
   public double at(int row, int col) {
