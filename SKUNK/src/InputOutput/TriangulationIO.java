@@ -2,10 +2,13 @@ package InputOutput;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import Geoquant.Length;
 import Geoquant.Radius;
+import Geoquant.TriPosition;
 import Triangulation.*;
 
 public class TriangulationIO {
@@ -103,10 +106,11 @@ public class TriangulationIO {
       
       // Check for radii / lengths
       if(fileScanner.hasNextDouble()) {
+        stringScanner = new Scanner(fileScanner.nextLine());
         if(type.compareTo("Vertex:") == 0) {
-          Radius.At((Vertex) simplex).setValue(fileScanner.nextDouble());
+          Radius.At((Vertex) simplex).setValue(stringScanner.nextDouble());
         } else if(type.compareTo("Edge:") == 0) {
-          Length.At((Edge) simplex).setValue(fileScanner.nextDouble());
+          Length.At((Edge) simplex).setValue(stringScanner.nextDouble());
         }
       }
     }
@@ -229,4 +233,97 @@ public class TriangulationIO {
       }
     }
   }
+  
+  public static void read2DLutzFile(String filename) {
+    read2DLutzFile(new File(filename));
+  }
+  
+  public static void read2DLutzFile(File file) {
+    String faces;
+    Scanner scanner = null;
+    Scanner line;
+    HashMap<TriPosition, Edge> edgeList = new HashMap<TriPosition, Edge>();
+    Vertex v;
+    Edge e;
+    Face f;
+    Vertex[] verts = new Vertex[3];
+    int index;
+    TriPosition T;
+    
+    try {
+      scanner = new Scanner(file);
+    } catch (FileNotFoundException ex) {
+      ex.printStackTrace();
+    }
+    
+    faces = "";
+    while(scanner.hasNextLine()) {
+      faces = faces.concat(scanner.nextLine());
+    }
+    
+    faces = faces.replaceAll("[^0-9],[^0-9]", "\n");
+    faces = faces.replaceAll(",", " ");
+    faces = faces.replaceAll("[^0-9 \n]", "");
+    
+    scanner = new Scanner(faces);
+    while(scanner.hasNextLine()) {
+      line = new Scanner(scanner.nextLine());
+      
+      //Create face;
+      f = new Face(Triangulation.greatestFace() + 1);
+      Triangulation.putFace(f);
+      
+      // Fill out verts, create vertices, add to face
+      for(int i = 0; i < verts.length; i++) {
+        index = line.nextInt();
+        v = Triangulation.vertexTable.get(index);
+        if(v == null) {
+          v = new Vertex(index);
+          Triangulation.putVertex(v);
+        }
+        v.addFace(f);
+        f.addVertex(v);
+        verts[i] = v;
+        // add to other vertices
+        for(int j = 0; j < i; j++) {
+          verts[j].addVertex(v);
+          v.addVertex(verts[j]);
+        }
+      }
+      
+      // Build edges
+      for(int i = 0; i < verts.length; i++) {
+        for(int j = 0; j < i; j++) {
+          T = new TriPosition(verts[i].getIndex(), verts[j].getIndex());
+          e = edgeList.get(T);
+          if(e == null) {
+            e = new Edge(Triangulation.greatestEdge() + 1);
+            Triangulation.putEdge(e);
+            edgeList.put(T, e);
+            for(Edge e2 : verts[i].getLocalEdges()) {
+              e.addEdge(e2);
+              e2.addEdge(e);
+            }
+            for(Edge e2 : verts[j].getLocalEdges()) {
+              e.addEdge(e2);
+              e2.addEdge(e);
+            }
+            verts[i].addEdge(e);
+            verts[j].addEdge(e);
+            e.addVertex(verts[j]);
+            e.addVertex(verts[i]);
+          } else {
+            for(Face f2 : e.getLocalFaces()) {
+              f.addFace(f2);
+              f2.addFace(f);
+            }
+          }
+          e.addFace(f);
+          f.addEdge(e);
+        }
+      }
+    }
+  }
+  
+  
 }
