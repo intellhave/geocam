@@ -261,6 +261,7 @@ public class TriangulationIO {
       faces = faces.concat(scanner.nextLine());
     }
     
+    faces = faces.substring(faces.lastIndexOf("=") + 1);
     faces = faces.replaceAll("[^0-9],[^0-9]", "\n");
     faces = faces.replaceAll(",", " ");
     faces = faces.replaceAll("[^0-9 \n]", "");
@@ -323,6 +324,151 @@ public class TriangulationIO {
         }
       }
     }
+  }
+  
+  public static void read3DLutzFile(String filename) {
+    read3DLutzFile(new File(filename));
+  }
+  
+  public static void read3DLutzFile(File file) {
+    String tetras;
+    Scanner scanner = null;
+    Scanner line;
+    HashMap<TriPosition, Edge> edgeList = new HashMap<TriPosition, Edge>();
+    HashMap<TriPosition, Face> faceList = new HashMap<TriPosition, Face>();
+    Vertex v;
+    Edge e;
+    Face f;
+    Tetra t;
+    Vertex[] verts = new Vertex[4];
+    int index;
+    TriPosition T;
+    
+    try {
+      scanner = new Scanner(file);
+    } catch (FileNotFoundException ex) {
+      ex.printStackTrace();
+    }
+    
+    tetras = "";
+    while(scanner.hasNextLine()) {
+      tetras = tetras.concat(scanner.nextLine());
+    }
+    
+    tetras = tetras.substring(tetras.lastIndexOf("=") + 1);
+    tetras = tetras.replaceAll("[^0-9],[^0-9]", "\n");
+    tetras = tetras.replaceAll(",", " ");
+    tetras = tetras.replaceAll("[^0-9 \n]", "");
+    
+    System.out.println(tetras);
+    
+    scanner = new Scanner(tetras);
+    while(scanner.hasNextLine()) {
+      line = new Scanner(scanner.nextLine());
+    
+      // Create tetra
+      t = new Tetra(Triangulation.greatestTetra() + 1);
+      Triangulation.putTetra(t);
+      
+      // Fill out verts, create vertices, add to face
+      for(int i = 0; i < verts.length; i++) {
+        index = line.nextInt();
+        v = Triangulation.vertexTable.get(index);
+        if(v == null) {
+          v = new Vertex(index);
+          Triangulation.putVertex(v);
+        }
+        v.addTetra(t);
+        t.addVertex(v);
+        verts[i] = v;
+        // add to other vertices
+        for(int j = 0; j < i; j++) {
+          verts[j].addVertex(v);
+          v.addVertex(verts[j]);
+        }
+      }
+      
+      // Build edges
+      for(int i = 0; i < verts.length; i++) {
+        for(int j = 0; j < i; j++) {
+          T = new TriPosition(verts[i].getIndex(), verts[j].getIndex());
+          e = edgeList.get(T);
+          if(e == null) {
+            e = new Edge(Triangulation.greatestEdge() + 1);
+            Triangulation.putEdge(e);
+            edgeList.put(T, e);
+            for(Edge e2 : verts[i].getLocalEdges()) {
+              e.addEdge(e2);
+              e2.addEdge(e);
+            }
+            for(Edge e2 : verts[j].getLocalEdges()) {
+              e.addEdge(e2);
+              e2.addEdge(e);
+            }
+            verts[i].addEdge(e);
+            verts[j].addEdge(e);
+            e.addVertex(verts[j]);
+            e.addVertex(verts[i]);
+          }
+          e.addTetra(t);
+          t.addEdge(e);
+        }
+      }
+      
+      // Build faces
+      Edge eij, eik, ejk;
+      for(int i = 0; i < verts.length; i++) {
+        for(int j = 0; j < i; j++) {
+          for(int k = 0; k < j; k++) {
+            T = new TriPosition(verts[i].getIndex(), verts[j].getIndex(), verts[k].getIndex());
+            f = faceList.get(T);
+            if(f == null) {
+              f = new Face(Triangulation.greatestFace() + 1);
+              Triangulation.putFace(f);
+              faceList.put(T, f);
+              // Vertices
+              f.addVertex(verts[k]);
+              f.addVertex(verts[j]);
+              f.addVertex(verts[i]);
+              verts[i].addFace(f);
+              verts[j].addFace(f);
+              verts[k].addFace(f);
+              
+              //Edges
+              eij = edgeList.get(new TriPosition(verts[i].getIndex(), verts[j].getIndex()));
+              eik = edgeList.get(new TriPosition(verts[i].getIndex(), verts[k].getIndex()));
+              ejk = edgeList.get(new TriPosition(verts[j].getIndex(), verts[k].getIndex()));
+              for(Face f2 : ejk.getLocalFaces()) {
+                f.addFace(f2);
+                f2.addFace(f);
+              }
+              for(Face f2 : eik.getLocalFaces()) {
+                f.addFace(f2);
+                f2.addFace(f);
+              }
+              for(Face f2 : eij.getLocalFaces()) {
+                f.addFace(f2);
+                f2.addFace(f);
+              }
+              eij.addFace(f);
+              eik.addFace(f);
+              ejk.addFace(f);
+              f.addEdge(ejk);
+              f.addEdge(eik);
+              f.addEdge(eij);
+            } else {
+              for(Tetra t2 : f.getLocalTetras()) {
+                t.addTetra(t2);
+                t2.addTetra(t);
+              }
+            }
+            f.addTetra(t);
+            t.addFace(f);
+          }
+        }
+      }     
+    }
+    
   }
   
   

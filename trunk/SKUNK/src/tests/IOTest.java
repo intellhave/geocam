@@ -15,7 +15,7 @@ import Triangulation.Vertex;
 public class IOTest {
 
   public static void main(String[] args) {
-    test2DLutz();
+    test3DLutz();
   }
     
   private static void testReplace() {
@@ -103,6 +103,33 @@ public class IOTest {
       System.out.println(f + ":\n\t" +
           f.getLocalVertices() + "\n\t" + f.getLocalEdges() + "\n\t" + f.getLocalFaces());
     }
+  }
+  
+  private static void test3DLutz() {
+    TriangulationIO.read3DLutzFile("Data/3DManifolds/LutzFormat/pentachoron.txt");
+    for(Vertex v : Triangulation.vertexTable.values()) {
+      System.out.println(v + ":\n\t" +
+          v.getLocalVertices() + "\n\t" + v.getLocalEdges() + "\n\t" + v.getLocalFaces() +
+          "\n\t" + v.getLocalTetras());
+    }
+    System.out.println();
+    for(Edge e : Triangulation.edgeTable.values()) {
+      System.out.println(e + ":\n\t" +
+          e.getLocalVertices() + "\n\t" + e.getLocalEdges() + "\n\t" + e.getLocalFaces() +
+          "\n\t" + e.getLocalTetras());
+    }
+    System.out.println();
+    for(Face f : Triangulation.faceTable.values()) {
+      System.out.println(f + ":\n\t" +
+          f.getLocalVertices() + "\n\t" + f.getLocalEdges() + "\n\t" + f.getLocalFaces() +
+          "\n\t" + f.getLocalTetras());
+    }
+    System.out.println();
+    for(Tetra t : Triangulation.tetraTable.values()) {
+      System.out.println(t + ":\n\t" +
+          t.getLocalVertices() + "\n\t" + t.getLocalEdges() + "\n\t" + t.getLocalFaces() +
+          "\n\t" + t.getLocalTetras());
+    }  
   }
 
 }
