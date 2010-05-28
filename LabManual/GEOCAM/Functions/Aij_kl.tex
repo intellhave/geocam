@@ -1,1 +1,143 @@
-%TCIDATA{LaTeXparent=0,0,functions.tex}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=1,1,functions.tex}
+                      
+
+\section*{\texttt{DualAreaSegment::DualAreaSegment}}
+
+\subsection*{Function Prototype}
+
+\texttt{double DualAreaSegment( Vertex vi, Vertex vj, Vertex vk, Vertex vl)}
+
+\subsection*{Key Words}
+
+Dual area, curvature, partial derivative, Einstein-Hilbert-Regge, geoquant.
+
+\subsection*{Authors}
+
+Daniel Champion
+
+\subsection*{Introduction}
+
+\texttt{DualAreaSegment} calculates the dual area to an edge of a
+tetrahedron. \ 
+
+\subsection*{Subsidiaries}
+
+\textbf{Functions:}
+
+\qquad \texttt{EdgeHeight}
+
+\qquad \qquad \texttt{PartialEdge}
+
+\qquad\qquad\texttt{Geometry::angle}
+
+\qquad \texttt{FaceHeight}
+
+\qquad\qquad\texttt{Geometry::dihedralAngle}
+
+\textbf{Global Variables: \ }radii, etas
+
+\textbf{Local Variables:} \ none.
+
+\subsection*{Description}
+
+\texttt{DualAreaSegment} is calculated with the formula:%
+\begin{equation*}
+\text{\texttt{DualAreaSegment(vi, vj, vk, vl)}}=
+\end{equation*}%
+\begin{equation*}
+\frac{1}{2}\left( 
+\begin{array}{c}
+\text{\texttt{EdgeHeight(vi,vj,vk)}}\cdot \text{\texttt{%
+FaceHeight(vi,vj,vk,vl)}} \\ 
++\text{\texttt{EdgeHeight(vi,vj,vl)}}\cdot \text{\texttt{%
+FaceHeight(vi,vj,vl,vk)}}%
+\end{array}%
+\right) 
+\end{equation*}%
+\texttt{EdgeHeight} and \texttt{FaceHeight} are calculated with the
+following formulae:%
+\begin{align*}
+\text{\texttt{EdgeHeight(vi, vj, vk)}}& =\frac{\left( \text{\texttt{%
+PartialEdge(vi,vk)}}-\text{\texttt{PartialEdge(vi,vj)}}\cos \left( \alpha
+_{i,jk}\right) \right) }{\sin \left( \alpha _{i,jk}\right) } \\
+\text{\texttt{FaceHeight(vi, vj, vk, vl)}}& =\frac{\left( \text{\texttt{%
+EdgeHeight(vi,vj,vl)}}-\text{\texttt{EdgeHeight(vi,vj,vk)}}\cos (\beta
+_{ij,kl})\right) }{\sin \left( \beta _{ij,kl}\right) }
+\end{align*}%
+where $\alpha _{i,jk}$ is the angle at vertex $vi$ of triangle $\left\{
+vi,vj,vk\right\} $, and $\beta _{ij,kl}$ is the dihedral angle along edge $%
+\left\{ vi,vj\right\} $ of tetrahedron $\left\{ vi,vj,vk,vl\right\} $
+(implemented with the functions \texttt{Geometry::angle} and \texttt{%
+Geometry::dihedralAngle} respectively).
+
+\texttt{DualAreaSegment} was created for the calculation performed in the
+function \texttt{DualArea}, which is used in the computation of the partial
+derivatives of curvature. \ These partial derivatives of curvature are used
+in the calculation of the second order partial derivatives of the
+Einstein-Hilbert-Regge functional for use in the optimization of said
+functional using Newton's method. \ 
+
+\subsection*{Practicum}
+
+As an example of the usage of this function, we will calculate the dual area
+to the edge $eij=\left\{ vi,vj\right\} $ (see entry: \texttt{DualArea}). \
+To do this, we will sum the dual areas to each tetrahedron containing the
+edge $eij$. \ 
+
+\bigskip
+
+\texttt{vector\TEXTsymbol{<}int\TEXTsymbol{>} sum\_over =
+*(eij.getLocalTetras());}
+
+\texttt{double sum = 0.0;}
+
+\texttt{vector\TEXTsymbol{<}int\TEXTsymbol{>} T\_vertices, e\_vertices;}
+
+\texttt{Tetra T;}
+
+\texttt{Vertex vi,vj,vk,vl;}
+
+\texttt{for(i=0; i\TEXTsymbol{<}sum\_over.size(); ++i) \{}
+
+\qquad\texttt{T = Triangulation::tetraTable[sum\_over[i]];}
+
+\qquad\texttt{T\_vertices = *(T.getLocalVertices());}
+
+\qquad\texttt{e\_vertices = *(eij.getLocalVertices());}
+
+\qquad\texttt{vi = Triangulation::vertexTable[e\_vertices[0]];}
+
+\qquad\texttt{vj = Triangulation::vertexTable[e\_vertices[1]];}
+
+\qquad\texttt{vk = Triangulation::vertexTable[listDifference(\&T\_vertices,
+\&e\_vertices)[0]];}
+
+\qquad\texttt{vl = Triangulation::vertexTable[listDifference(\&T\_vertices,
+\&e\_vertices)[1]];}
+
+\qquad \texttt{sum += DualAreaSegment(vi, vj, vk, vl);}
+
+\qquad\texttt{\}}
+
+\texttt{return sum;}
+
+\subsection*{Limitations}
+
+\texttt{DualAreaSegment} if fully operational and has no known limitations.
+\ The function will output appropriate values provided it receives as input
+four distinct vertices that define a tetrahedron.
+
+\subsection*{Revisions}
+
+subversion 757, 7/8/09, \texttt{DualAreaSegment} created.
+
+subversion 1055, 3/12/10, \texttt{DualAreaSegment}\ converted to a geoquant.
+
+\subsection*{Testing}
+
+Trials were run and the calculations returned were verified by hand.
+
+\subsection*{Future Work}
+
+No future work planned.

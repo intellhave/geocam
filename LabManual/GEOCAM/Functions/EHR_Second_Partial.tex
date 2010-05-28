@@ -1,1 +1,173 @@
-%TCIDATA{LaTeXparent=0,0,functions.tex}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=1,1,functions.tex}
+                      
+
+\section*{\texttt{EHRSecondPartial::EHRSecondPartial}}
+
+\subsection*{Function Prototype}
+
+\texttt{double EHRSecondPartial (Vertex v\_i, Vertex v\_j)}
+
+\subsection*{Key Words}
+
+Einstein-Hilbert-Regge, functional, partial derivative, Hessian, geoquant.
+
+\subsection*{Authors}
+
+Daniel Champion
+
+\subsection*{Introduction}
+
+\texttt{EHRSecondPartial} calculates the second order partial derivatives of
+the normalized Einstein-Hilbert-Regge functional with respect to log radii.
+\ 
+
+\subsection*{Subsidiaries}
+
+\textbf{Functions:}
+
+\qquad \texttt{CurvaturePartial}
+
+\qquad\qquad\texttt{isAdjVertex}
+
+\qquad \qquad \texttt{DualArea}
+
+\qquad \qquad \qquad \texttt{DualAreaSegment}
+
+\qquad \qquad \qquad \qquad \texttt{FaceHeight}
+
+\qquad \qquad \qquad \qquad \qquad \texttt{EdgeHeight}
+
+\qquad \qquad \qquad \qquad \qquad \qquad \texttt{PartialEdge}
+
+\qquad\qquad\texttt{listDifference}
+
+\qquad\qquad\texttt{listIntersection}
+
+\qquad \texttt{TotalCurvature}
+
+\qquad\qquad\texttt{Geometry::curvature}
+
+\qquad \texttt{TotalVolume}
+
+\qquad\qquad\texttt{Geometry::volume}
+
+\qquad \texttt{VolumePartial}
+
+\qquad\qquad\texttt{listDifference}
+
+\qquad\qquad\texttt{listIntersection.}
+
+\qquad \texttt{VolumeSecondPartial}
+
+\textbf{Global Variables: }\ radii, etas.
+
+\textbf{Local Variables:} \ none.
+
+\subsection*{Description}
+
+The normalized Einstein-Hilbert-Regge functional is given by the expression:%
+\begin{equation*}
+EHR=\frac{\sum\limits_{j}K_{j}}{\sqrt[3]{\sum\limits_{tetra\text{ }t}V_{t}}},
+\end{equation*}
+where $K_{i}$ is the curvature at vertex $j$, and $V_{t}$ is the volume of
+tetrahedron $t$. \ It can be shown (see arXiv:0906.1560v1) that 
+\begin{equation*}
+\frac{\partial}{\partial\log r_{i}}\left( \sum\limits_{j}K_{j}\right) =K_{i},
+\end{equation*}
+hence the partial derivative of the normalized EHR functional simplifies to
+become:%
+\begin{equation*}
+\frac{\partial}{\partial\log r_{i}}EHR=V^{-\frac{4}{3}}\left( K_{i}V-\frac {1%
+}{3}K\sum\limits_{tetra\text{ }t}\frac{\partial V_{t}}{\partial\log r_{i}}%
+\right) ,
+\end{equation*}
+where $V$ is the total volume of all tetrahedra in the triangulation and $K$
+is the sum of the curvatures over all vertices in the triangulation. \
+Differentiating this result with respect to $\log r_{j}$ yields:%
+\begin{equation*}
+\frac{\partial^{2}}{\partial\log r_{i}\partial\log r_{j}}EHR=V^{-\frac{4}{3}%
+}\left( 
+\begin{array}{c}
+V\frac{\partial K_{i}}{\partial\log r_{j}}-\frac{1}{3}K_{i}\sum\limits_{t}%
+\frac{\partial V_{t}}{\partial\log r_{j}}-\frac{1}{3}K_{j}\sum\limits_{t}%
+\frac{\partial V_{t}}{\partial\log r_{i}} \\ 
++\frac{4}{9}KV^{-1}\sum\limits_{t}\frac{\partial V_{t}}{\partial\log r_{j}}%
+\sum\limits_{t}\frac{\partial V_{t}}{\partial\log r_{i}}-\frac{1}{3}%
+K\sum\limits_{t}\frac{\partial^{2}V_{t}}{\partial\log r_{i}\partial\log r_{j}%
+}%
+\end{array}
+\right) .
+\end{equation*}
+
+When called, \texttt{EHRSecondPartial} calculates the formula above, that is:%
+\begin{equation*}
+\text{\texttt{EHR\_Second\_Partial (i,j)}}=\frac{\partial ^{2}}{\partial
+\log r_{i}\partial \log r_{j}}EHR.
+\end{equation*}
+
+The use of this function is in the population of the Hessian matrix for the
+normalized EHR functional. \ This Hessian matrix is used in the optimization
+of the EHR functional using Newton's method.
+
+\subsection*{Practicum}
+
+As an example of the usage of \texttt{EHRSecondPartial}, the Hessian matrix
+of the normalized EHR functional will be populated. \ In this example, the
+Hessian matrix is the array EHRhessian. \ The example reduced computation
+time by only calling \texttt{EHRSecondPartial} for the upper triangular
+portion of the EHRhessian array, and symmetrically copies the entries above
+the diagonal to the corresponding location below the diagonal. \
+Furthermore, in C++ arrays begin indexing at zero, however the vertices of
+the triangulations begin indexing at 1, requiring a shift of one in the
+population step. \ Note that triangulations that do not label the vertices
+consecutively will not be compatible with the following code. \ 
+
+\bigskip
+
+\qquad\texttt{double
+EHRhessian[Triangulation::vertexTable.size()][Triangulation::vertexTable.size()];%
+}
+
+\qquad\texttt{for(int i = 0; i \TEXTsymbol{<}
+Triangulation::vertexTable.size(); ++i) \{}
+
+\qquad \qquad \texttt{for(int j = 0; j \TEXTsymbol{<}
+Triangulation::vertexTable.size(); ++j) \{}
+
+\qquad \qquad \qquad \texttt{Vertex vi = Triangulation::vertexYable[i+1];}
+
+\qquad \qquad \qquad \texttt{Vertex vj = Triangulation::vertexTable[j+1];}
+
+\qquad \qquad \qquad \texttt{if (i \TEXTsymbol{<}= j) \{}
+
+\qquad \qquad \qquad \qquad \texttt{EHRhessian[i][j]=EHRSecondPartial( vi ,
+vj );}
+
+\qquad\qquad\qquad\qquad\texttt{EHRhessian[j][i]=EHRhessian[i][j];}
+
+\qquad\qquad\qquad\qquad\texttt{\}}
+
+\qquad\qquad\qquad\texttt{\}}
+
+\qquad\qquad\texttt{\}}
+
+\subsection*{Limitations}
+
+\texttt{EHRSecondPartial} is fully operational with no known limitations. \
+The function will output appropriate values provided it receives as inputs a
+pair of integers in the vertex table. \ 
+
+\subsection*{Revisions}
+
+subversion 757, 7/7/09, \texttt{EHRSecondPartial} created.
+
+subversion 1055, 3/12/10, \texttt{EHRSecondPartial}\ converted to a geoquant.
+
+\subsection*{Testing}
+
+This function has not been tested.
+
+\subsection*{Future Work}
+
+A testing regime should be instituted for this function. \ 

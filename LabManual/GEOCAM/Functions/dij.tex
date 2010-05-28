@@ -1,1 +1,103 @@
-%TCIDATA{LaTeXparent=0,0,functions.tex}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=1,1,functions.tex}
+                      
+
+\section*{\texttt{PartialEdge::PartialEdge}}
+
+\subsection*{Function Prototype}
+
+\texttt{double PartialEdge( Vertex vi, Vertex vj)}
+
+\subsection*{Key Words}
+
+Partial length, geoquant.
+
+\subsection*{Authors}
+
+Daniel Champion, ???
+
+\subsection*{Introduction}
+
+The function \texttt{PartialEdge} calculates the distance from a vertex to
+the center of an edge (as determined by the center of a decorated triangle).
+
+\subsection*{Subsidiaries}
+
+\textbf{Functions:}
+
+\qquad\texttt{Geometry::length}
+
+\qquad\texttt{listIntersection}
+
+\textbf{Global Variables:} \ radii, etas.
+
+\textbf{Local Variables:} \ Vertex vi, vj.
+
+\subsection*{Description}
+
+The function \texttt{PartialEdge} is calculated with the simple formula:%
+\begin{equation*}
+\mathtt{PartialEdge}\text{\texttt{(vi,vj)}}=\frac{%
+L_{ij}^{2}+r_{i}^{2}-r_{j}^{2}}{2L_{ij}},
+\end{equation*}%
+where $r_{i},r_{j}$ are the radii at vertices \texttt{vi}, and \texttt{vj}
+respectively, and $L_{ij}$ is the length of the edge $\left\{ vi,vj\right\} $%
+. \ Notice that this formula is not symmetric in $i$ and $j$. \ 
+
+This function plays an important role in several areas of the project
+including curvature, Dirichlet energy, and the optimization of the
+Einstein-Hilbert-Regge functional. \ \texttt{PartialEdge} is used in the
+calculation of several quantities used in the implementation of the \texttt{%
+CurvaturePartial} function, which is used in the optimization of the
+normalized Einstein-Hilbert-Regge functional.
+
+\subsection*{Practicum}
+
+An example of the use of this function is in the calculation of the edge
+height function \texttt{EdgeHeight}:
+
+\qquad \texttt{double EdgeHeight( Vertex vi, Vertex vj, Vertex vk) \{}
+
+\qquad\qquad\texttt{Face fijk;}
+
+\qquad\qquad\texttt{vector\TEXTsymbol{<}int\TEXTsymbol{>} temp\_ij = }
+
+\qquad\qquad\qquad\texttt{listIntersection(vi.getLocalFaces(),
+vj.getLocalFaces());}
+
+\qquad\qquad\texttt{vector\TEXTsymbol{<}int\TEXTsymbol{>} temp = }
+
+\qquad\qquad\qquad\texttt{listIntersection( \&temp\_ij, vk.getLocalFaces());}
+
+\qquad\qquad\texttt{fijk = Triangulation::faceTable[temp[0]];}
+
+\qquad \qquad \texttt{double result = (PartialEdge(vi, vk)-PartialEdge(vi,vj)%
+}
+
+\qquad\qquad\qquad\texttt{*cos(Geometry::angle(vi,
+fijk)))/sin(Geometry::angle(vi, fijk));}
+
+\qquad\qquad\texttt{return result;}
+
+\qquad\qquad\texttt{\}}
+
+\subsection*{Limitations}
+
+\texttt{PartialEdge} must receive as input two vertices that define an edge
+in the triangulation. \ \texttt{PartialEdge} returns distinct values for
+each permutation of the input vertices. \ 
+
+\subsection*{Revisions}
+
+subversion 757, 7/13/09, \texttt{PartialEdge} created.
+
+subversion 1055, 3/12/10, \texttt{PartialEdge}\ converted to a geoquant.
+
+\subsection*{Testing}
+
+\texttt{dij} was tested by working out several examples by hand.
+
+\subsection*{Future Work}
+
+This function has been added to the Geometry class geoquants, and thus this
+entry needs to be updated.

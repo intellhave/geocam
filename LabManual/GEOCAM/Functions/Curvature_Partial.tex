@@ -1,1 +1,169 @@
-%TCIDATA{LaTeXparent=0,0,functions.tex}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=1,1,functions.tex}
+                      
+
+\section*{\texttt{CurvaturePartial::CurvaturePartial}}
+
+\subsection*{Function Prototype}
+
+\texttt{double CurvaturePartial( Vertex v\_i, Vertex v\_l )}
+
+\subsection*{Key Words}
+
+Curvature, Einstein-Hilbert-Regge, functional, partial derivative, geoquant.
+
+\subsection*{Authors}
+
+Daniel Champion
+
+\subsection*{Introduction}
+
+CurvaturePartial calculates the partial derivative of the curvature at a
+vertex with respect to the log radius of another (possibly the same) vertex.
+\ 
+
+\subsection*{Subsidiaries}
+
+Functions:
+
+\qquad\texttt{isAdjVertex}
+
+\qquad \texttt{DualArea}
+
+\qquad \qquad \texttt{DualAreaSegment}
+
+\qquad \qquad \qquad \texttt{FaceHeight}
+
+\qquad \qquad \qquad \qquad \texttt{EdgeHeight}
+
+\qquad \qquad \qquad \qquad \qquad \texttt{PartialEdge}
+
+\qquad\texttt{listDifference}
+
+\qquad\texttt{listIntersection}
+
+Global Variables: \ curvature, dihedralAngle, eta, length, radius
+
+Local Variables: none.
+
+\subsection*{Description}
+
+\texttt{CurvaturePartial} receives as inputs two vertices $v_{i}$ and $v_{l}$%
+. \ The first corresponds to the vertex of interest, the second corresponds
+to the vertex of differentiation. \ That is,%
+\begin{equation*}
+\text{\texttt{CurvaturePartial (v\_i, v\_l)}}=\frac{\partial }{\partial \log
+r_{l}}K_{i},
+\end{equation*}%
+where $r_{l}$ is the radius at vertex $v_{l}$, and $K_{i}$ is the curvature
+at vertex $v_{i}$. \ 
+
+The function begins implementation by determining the relationship between $i
+$ and $l$ via the trichotomy $v_{i}=v_{l}$, $v_{i}$ is adjacent to $v_{l}$,
+or $v_{i}$ and $v_{l}$ are not endpoints of any edge. \ Each of the three
+cases are calculated differently. \ The general formula for the variation of
+curvature w.r.t. log radii was calculated by Prof. David Glickenstein and is
+available at arXiv:0906.1560v1:%
+\begin{equation*}
+\delta K_{i}=-\sum_{edges\text{ }\left\{ i,j\right\} }\left( 2\frac{%
+l_{ij}^{\ast }}{l_{ij}}-\frac{r_{i}^{2}r_{j}^{2}\left( 1-\eta
+_{ij}^{2}\right) }{l_{ij}^{2}}K_{ij}\right) \left( \delta f_{j}-\delta
+f_{i}\right) +K_{i}\delta f_{i},
+\end{equation*}%
+where $f_{i}=\log r_{i}$, $l_{ij}$ is the length of the edge $\left\{
+i,j\right\} $, and $l_{ij}^{\ast }$ is the dual area calculated with the
+function \texttt{DualArea}.
+
+When $i=l$, the formula for the partial derivative $\frac{\partial}{%
+\partial\log r_{l}}K_{i}$ becomes:%
+\begin{equation*}
+\frac{\partial}{\partial\log r_{i}}K_{i}=\sum_{edges\text{ }\left\{
+i,j\right\} }\left( 2\frac{l_{ij}^{\ast}}{l_{ij}}-\frac{r_{i}^{2}r_{j}^{2}%
+\left( 1-\eta_{ij}^{2}\right) }{l_{ij}^{2}}K_{ij}\right) +K_{i}.
+\end{equation*}
+
+When $v_{i}$ is adjacent to $v_{l}$ only one term in the sum survives:%
+\begin{equation*}
+\frac{\partial}{\partial\log r_{l}}K_{i}=-\left( 2\frac{l_{il}^{\ast}}{l_{il}%
+}-\frac{r_{i}^{2}r_{l}^{2}\left( 1-\eta_{il}^{2}\right) }{l_{il}^{2}}%
+K_{il}\right) .
+\end{equation*}
+
+When $v_{i}$ and $v_{j}$ are not endpoints of any edge the partial
+derivative is zero. \ 
+
+This function was created to assist in the computation of the second
+derivatives of the normalized Einstein-Hilbert-Regge functional:%
+\begin{equation*}
+EHR=\frac{\sum K_{i}}{\sqrt[3]{\sum\limits_{tetra\text{ }t}Vol(t)}}.
+\end{equation*}
+
+Surprisingly the first derivatives of the normalized $EHR$ functional do not
+require the formula for the partial derivative of curvature since 
+\begin{equation*}
+\frac{\partial EHR}{\partial\log r_{i}}=K_{i}.
+\end{equation*}
+
+However, the second order partial derivatives of $EHR$ certainly require the
+formulas for $\frac{\partial}{\partial\log r_{l}}K_{i}$ given above. \ These
+second order partial derivatives are used to construct a Hessian matrix
+which is then used the optimization of the $EHR$ functional using Newton's
+method (implemented by \texttt{Newtons\_Method}).
+
+\subsection*{Practicum}
+
+When called, \texttt{CurvaturePartial(v\_i, v\_l)} returns the partial
+derivative $\frac{\partial }{\partial \log r_{l}}K_{i}$. \ An example of its
+usage is in the calculation of the second order partial derivatives of the
+normalized $EHR$ functional. \ For this example let 
+\begin{align*}
+\text{\texttt{VolSumPartial\_i}}& =\sum_{tetra\text{ }t}\frac{\partial V_{t}%
+}{\partial \log r_{i}}, \\
+\text{\texttt{VolSumPartial\_j}}& =\sum_{tetra\text{ }t}\frac{\partial V_{t}%
+}{\partial \log r_{j}}, \\
+\text{\texttt{VolSumSecondPartial}}& =\sum_{tetra\text{ }t}\frac{\partial
+^{2}V_{t}}{\partial \log r_{i}\partial \log r_{j}} \\
+K& =\sum_{i}K_{i}, \\
+V& =\sum_{tetra\text{ }t}V_{t}.
+\end{align*}%
+Then the second order partial derivative $\frac{\partial ^{2}EHR}{\partial
+\log r_{i}\partial \log r_{j}}$ is calculated by:
+
+\bigskip
+
+\qquad \texttt{result = pow(V,
+(-4.0/3.0))*(1.0/3.0)*(3*V*CurvaturePartial(i,j)}
+
+\qquad\qquad\qquad \texttt{%
+-Geometry::curvature(Triangulation::vertexTable[i])*VolSumPartial\_j}
+
+\qquad\qquad\qquad \texttt{%
+-Geometry::curvature(Triangulation::vertexTable[j])*VolSumPartial\_i}
+
+\qquad\qquad\qquad\texttt{+(4.0/3.0)*K*pow(V,
+-1.0)*VolSumPartial\_i*VolSumPartial\_j}
+
+\qquad\qquad\qquad\texttt{-K*VolSumSecondPartial);}
+
+\bigskip
+
+\subsection*{Limitations}
+
+The function \texttt{CurvaturePartial} is operational for all pairs of input
+integers $i$ and $l$ that are in the vertex table. \ If one of the arguments
+is not in the vertex table, the function will output zero. \ 
+
+\subsection*{Revisions}
+
+subversion 757, 7/6/09, \texttt{CurvaturePartial} created.
+
+subversion 1055, 3/12/10, \texttt{CurvaturePartial}\ converted to a geoquant.
+
+\subsection*{Testing}
+
+This function has not been tested.
+
+\subsection*{Future Work}
+
+Using the calculation of the partial derivative of curvature in Mathematica,
+it should be compared to the output from \texttt{CurvaturePartial}.

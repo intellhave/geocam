@@ -1,1 +1,117 @@
-%TCIDATA{LaTeXparent=0,0,functions.tex}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=1,1,functions.tex}
+                      
+
+\section*{\texttt{EHRPartial::EHRPartial}}
+
+\subsection*{Function Prototype}
+
+\texttt{double EHRPartial(int i)}
+
+\subsection*{Key Words}
+
+Einstein-Hilbert-Regge, functional, Newton's method, partial derivative,
+geoquant.
+
+\subsection*{Authors}
+
+Daniel Champion
+
+\subsection*{Introduction}
+
+\texttt{EHRPartial} calculates the partial derivative of the normalized
+Einstein-Hilbert-Regge functional with respect to log radii. \ 
+
+\subsection*{Subsidiaries}
+
+\textbf{Functions:}
+
+\qquad \texttt{TotalVolume}
+
+\qquad \texttt{TotalCurvature}
+
+\qquad \texttt{VolumePartial}
+
+\qquad\qquad\texttt{listDifference}
+
+\qquad\qquad\texttt{listIntersection}
+
+\textbf{Global Variables:} radii, etas, curvature, volume
+
+\textbf{Local Variables:} \ none
+
+\subsection*{Description}
+
+The normalized Einstein-Hilbert-Regge functional is given by the expression:%
+\begin{equation*}
+EHR=\frac{\sum\limits_{j}K_{j}}{\sqrt[3]{\sum\limits_{tetra\text{ }t}V_{t}}},
+\end{equation*}%
+where $K_{i}$ is the curvature at vertex $j$, and $V_{t}$ is the volume of
+tetrahedron $t$. \ It can be shown (see arXiv:0906.1560v1) that 
+\begin{equation*}
+\frac{\partial }{\partial \log r_{i}}\left( \sum\limits_{j}K_{j}\right)
+=K_{i},
+\end{equation*}%
+hence the partial derivative of the normalized EHR functional becomes:%
+\begin{align*}
+\frac{\partial }{\partial \log r_{i}}EHR& =\frac{K_{i}\sqrt[3]{%
+\sum\limits_{tetra\text{ }t}V_{t}}-\frac{1}{3}\left( \sum\limits_{tetra\text{
+}t}V_{t}\right) ^{-\frac{2}{3}}\sum\limits_{tetra\text{ }t}\frac{\partial
+V_{t}}{\partial \log r_{i}}\sum\limits_{j}K_{j}}{\left( \sum\limits_{tetra%
+\text{ }t}V_{t}\right) ^{\frac{2}{3}}} \\
+& =V^{-\frac{4}{3}}\left( K_{i}V-\frac{1}{3}K\sum\limits_{tetra\text{ }t}%
+\frac{\partial V_{t}}{\partial \log r_{i}}\right) ,
+\end{align*}%
+where $V$ is the total volume of all tetrahedra in the triangulation and $K$
+is the sum of the curvatures over all vertices in the triangulation. \ 
+\texttt{EHRPartial (v\_i)} calculates $\frac{\partial }{\partial \log r_{i}}%
+EHR$. \ 
+
+The primary use of this function is in the calculation of the negative
+gradient of the EHR functional for use in optimization of the functional
+using Newton's method. \ The formula for $\frac{\partial }{\partial \log
+r_{i}}EHR$ given above was also used in the calculation of the second order
+partial derivatives of the EHR functional, implemented in \texttt{%
+EHRSecondPartial}.
+
+\subsection*{Practicum}
+
+As an example of the use of this function, the calculation of the gradient
+of the EHR functional will be calculated. \ The negative gradient will be
+outputted as the array \texttt{EHRneg\_gradient}.
+
+\bigskip
+
+\qquad\texttt{double EHRneg\_gradient[Triangulation::vertexTable.size()];}
+
+\qquad \texttt{for(int i=0; i \TEXTsymbol{<}
+Triangulation::vertexTable.size(); ++i) \{}
+
+\qquad \qquad \texttt{Vertex v\_i = Triangulation::vertexTable[i+1];}
+
+\qquad \qquad \texttt{EHRneg\_gradient[i] = -1.0*EHRPartial(v\_i);}
+
+\qquad\qquad\texttt{\}}
+
+\subsection*{Limitations}
+
+The function \texttt{EHRPartial} is fully functional with no known
+limitations. \ It will return appropriate values so long as it is called
+with an integer in the vertex table. \ 
+
+\subsection*{Revisions}
+
+List the major revisions to the function with dates and a one sentence
+comment. \ Example:
+
+subversion 757, 7/7/09, \texttt{EHRPartial} created.
+
+subversion 1055, 3/12/10, \texttt{EHRPartial}\ converted to a geoquant.
+
+\subsection*{Testing}
+
+This function has not been tested.
+
+\subsection*{Future Work}
+
+A testing regime should be instituted for this function. \ 
