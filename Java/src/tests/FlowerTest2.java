@@ -39,7 +39,7 @@ public class FlowerTest2 {
     boolean firstTime = true;
     IndexedFaceSetFactory ifsf = null;
     TriangulationIO
-        .read2DTriangulationFile("/Users/knorwood/Documents/research/Geocam/Data/2DManifolds/StandardFormat/icosahedron.txt");
+        .read2DTriangulationFile("Data/2DManifolds/StandardFormat/icosahedron.txt");
 
     for (Edge edge : Triangulation.edgeTable.values()) {
       Length.At(edge).setValue(Math.random() * .5 + .5);
