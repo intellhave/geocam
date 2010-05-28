@@ -15,7 +15,7 @@ import Triangulation.Vertex;
 public class IOTest {
 
   public static void main(String[] args) {
-    test3DLutz();
+    test2DWrite();
   }
     
   private static void testReplace() {
@@ -130,6 +130,11 @@ public class IOTest {
           t.getLocalVertices() + "\n\t" + t.getLocalEdges() + "\n\t" + t.getLocalFaces() +
           "\n\t" + t.getLocalTetras());
     }  
+  }
+  
+  public static void test2DWrite() {
+    TriangulationIO.read2DLutzFile("Data/2DManifolds/LutzFormat/tetrahedron.txt");
+    TriangulationIO.write2DTriangulationFile("Data/2DManifolds/StandardFormat/tetra_test.txt");
   }
 
 }

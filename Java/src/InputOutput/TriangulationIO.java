@@ -2,6 +2,8 @@ package InputOutput;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -265,7 +267,7 @@ public class TriangulationIO {
     faces = faces.replaceAll("[^0-9],[^0-9]", "\n");
     faces = faces.replaceAll(",", " ");
     faces = faces.replaceAll("[^0-9 \n]", "");
-    
+        
     scanner = new Scanner(faces);
     while(scanner.hasNextLine()) {
       line = new Scanner(scanner.nextLine());
@@ -287,8 +289,10 @@ public class TriangulationIO {
         verts[i] = v;
         // add to other vertices
         for(int j = 0; j < i; j++) {
-          verts[j].addVertex(v);
-          v.addVertex(verts[j]);
+          if(!verts[j].isAdjVertex(v)) {
+            verts[j].addVertex(v);
+            v.addVertex(verts[j]);
+          }
         }
       }
       
@@ -359,9 +363,7 @@ public class TriangulationIO {
     tetras = tetras.replaceAll("[^0-9],[^0-9]", "\n");
     tetras = tetras.replaceAll(",", " ");
     tetras = tetras.replaceAll("[^0-9 \n]", "");
-    
-    System.out.println(tetras);
-    
+        
     scanner = new Scanner(tetras);
     while(scanner.hasNextLine()) {
       line = new Scanner(scanner.nextLine());
@@ -383,8 +385,10 @@ public class TriangulationIO {
         verts[i] = v;
         // add to other vertices
         for(int j = 0; j < i; j++) {
-          verts[j].addVertex(v);
-          v.addVertex(verts[j]);
+          if(!verts[j].isAdjVertex(v)) {
+            verts[j].addVertex(v);
+            v.addVertex(verts[j]);
+          }
         }
       }
       
@@ -468,8 +472,62 @@ public class TriangulationIO {
         }
       }     
     }
-    
   }
   
+  public static void write2DTriangulationFile(String filename) {
+    try {
+      write2DTriangulationFile(new PrintStream(filename));
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
   
+  public static void write2DTriangulationFile(PrintStream out) {
+    for(Vertex v : Triangulation.vertexTable.values()) {
+      out.printf(v + ":\n");
+      for(Vertex v2 : v.getLocalVertices()) {
+        out.print(v2.getIndex() + " ");
+      }
+      out.println();
+      for(Edge e2 : v.getLocalEdges()) {
+        out.print(e2.getIndex() + " ");
+      }
+      out.println();
+      for(Face f2 : v.getLocalFaces()) {
+        out.print(f2.getIndex() + " ");
+      }
+      out.println();
+    }
+    for(Edge e : Triangulation.edgeTable.values()) {
+      out.printf(e + ":\n");
+      for(Vertex v2 : e.getLocalVertices()) {
+        out.print(v2.getIndex() + " ");
+      }
+      out.println();
+      for(Edge e2 : e.getLocalEdges()) {
+        out.print(e2.getIndex() + " ");
+      }
+      out.println();
+      for(Face f2 : e.getLocalFaces()) {
+        out.print(f2.getIndex() + " ");
+      }
+      out.println();
+    }
+    for(Face f : Triangulation.faceTable.values()) {
+      out.printf(f + ":\n");
+      for(Vertex v2 : f.getLocalVertices()) {
+        out.print(v2.getIndex() + " ");
+      }
+      out.println();
+      for(Edge e2 : f.getLocalEdges()) {
+        out.print(e2.getIndex() + " ");
+      }
+      out.println();
+      for(Face f2 : f.getLocalFaces()) {
+        out.print(f2.getIndex() + " ");
+      }
+      out.println();
+    }
+    out.close();
+  }
 }
