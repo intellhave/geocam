@@ -1,1 +1,130 @@
-%TCIDATA{LaTeXparent=0,0,functions.tex}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=1,1,functions.tex}
+                      
+
+\section*{\texttt{DualArea::DualArea}}
+
+\subsection*{Function Prototype}
+
+\texttt{double DualArea(Edge e)}
+
+\subsection*{Key Words}
+
+Dual area, curvature, partial derivative, edge, geoquant.
+
+\subsection*{Authors}
+
+Daniel Champion
+
+\subsection*{Introduction}
+
+\texttt{DualArea} calculates the dual area of an edge.
+
+\subsection*{Subsidiaries}
+
+\subsubsection*{Functions: \ }
+
+\qquad \texttt{DualAreaSegment}
+
+\qquad \qquad \texttt{FaceHeight}
+
+\qquad \qquad \qquad \texttt{EdgeHeight}
+
+\qquad \qquad \qquad \qquad \texttt{PartialEdge}
+
+\subsubsection*{Global Variables: \ }
+
+\qquad Only radii and eta values are needed.
+
+\subsubsection*{Local Variables: \ }
+
+\qquad none
+
+\subsection*{Description}
+
+\texttt{DualArea} is defined as:%
+\begin{equation*}
+\text{\texttt{DualArea(edge e\_ij))}}=l_{ij}^{\ast }=\sum_{\substack{ \text{%
+all tetrahedra }(i,j,k,l) \\ \text{containing edge }(i,j)\text{.}}}A_{ij,kl},
+\end{equation*}%
+where $A_{ij,kl}$ is computed with the function \texttt{DualAreaSegment}
+applied to the vertices of the tetrahedron being summed over. \ Note that 
+\texttt{DualAreaSegment} utilizes the functions \texttt{FaceHeight}, \texttt{%
+EdgeHeight}, and \texttt{partialEdge}, however only the radii and eta values
+are needed to calculate all of these quantities. \ 
+
+This function was created for use in the \texttt{CurvaturePartial} function
+which serves an essential role in calculating the second derivatives of the
+Einstein-Hilbert-Regge functional (\texttt{EHRSecondPartial}). \ The second
+order partial derivatives of the EHR functional are used in the optimization
+of the EHR functional using Newton's method. \ \texttt{DualArea} will
+eventually be used in the study of laplacians. \ 
+
+\subsection*{Practicum}
+
+Currently \texttt{DualArea} is only used to calculate the partial derivative
+of curvature with respect to $\log $ radius. \ The following example
+calculates the partial derivative of the curvature at vertex V with respect
+to the $\log $ radius $r_{l}$ corresponding to vertex Vprime (adjacent to V).
+
+\bigskip
+
+\qquad\texttt{double sum = 0.0;}
+
+\qquad\texttt{double dihedral\_sum = 0.0;}
+
+\qquad\texttt{Vprime = Triangulation::vertexTable[l];}
+
+\qquad\texttt{E =
+Triangulation::edgeTable[listIntersection(V.getLocalEdges(),}
+
+\qquad\qquad\texttt{Vprime.getLocalEdges())[0]];}
+
+\qquad\texttt{// This assumes that there is a unique edge between two
+vertices.}
+
+\qquad\texttt{local\_tetra = E.getLocalTetras();}
+
+\qquad\texttt{for (int m=0; m \TEXTsymbol{<} (*(local\_tetra)).size(); ++m)
+\{}
+
+\qquad\qquad\texttt{T = Triangulation::tetraTable[local\_tetra-\TEXTsymbol{>}%
+at(m)];}
+
+\qquad\qquad\texttt{dihedral\_sum += Geometry::dihedralAngle(E,T);}
+
+\qquad\texttt{\}}
+
+\qquad \texttt{result =
+DualArea(E)/(Geometry::Length(E))-(2*PI-dihedral\_sum)}
+
+\qquad \qquad \texttt{*(pow(Geometry::Radius(V),
+2)*pow(Geometry::Radius(Vprime),2)}
+
+\qquad \qquad \texttt{%
+*(1-pow(Geometry::Eta(E),2)))/pow(Geometry::Length(E),3);}
+
+\subsection*{Limitations}
+
+\texttt{DualArea} can operate on any and all edges of a 3D triangulation
+however it is only appropriate for triangulations where tetrahedra have
+distinct edges. \ 
+
+\subsection*{Revisions}
+
+Subversion 676, 5/15/09, \texttt{DualArea} created within \texttt{%
+Newtons\_Method}.
+
+subversion 1055, 3/12/10, \texttt{DualArea}\ converted to a geoquant.
+
+\subsection*{Testing}
+
+\texttt{Lij\_star} has not been tested. \ 
+
+\subsection*{Future Work}
+
+\texttt{Lij\_star} should be moved to a more appropriate section of the
+code. \ A more general volume function should be created that would take any
+simplex object (including a boolean for dual simplices) and return the
+appropriate volume. \ This general volume function would be an excellent
+location for \texttt{Lij\_star}. \ It should be tested some time as well. \ 

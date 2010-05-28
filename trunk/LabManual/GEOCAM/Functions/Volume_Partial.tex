@@ -1,1 +1,118 @@
-%TCIDATA{LaTeXparent=0,0,functions.tex}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=1,1,functions.tex}
+                      
+
+\section*{\texttt{VolumePartial::VolumePartial}}
+
+\subsection*{Function Prototype}
+
+\texttt{double VolumePartial(Vertex v\_i, Tetra t)}
+
+\subsection*{Key Words}
+
+Volume, tetrahedron, vertex, radius, Cayley-Menger determinant, standard
+form, geoquant.
+
+\subsection*{Authors}
+
+Daniel Champion
+
+\subsection*{Introduction}
+
+\texttt{VolumePartial} calculates the partial derivative of the volume of a
+tetrahedron with respect to the logarithm of the radius of a vertex.
+
+\subsection*{Subsidiaries}
+
+\textbf{Functions:} \ 
+
+\texttt{listDifference}
+
+\texttt{listIntersection}
+
+\texttt{Simplex::isAdjVertex}
+
+\textbf{Global Variables:} \ radii, etas.
+
+\textbf{Local Variables:}
+
+\subsection*{Description}
+
+The volume of a tetrahedron only depends on the lengths of its edges as
+calculated from the Cayley-Menger determinant. \ Thus for a given
+tetrahedron $t$, it's partial derivatives with respect to $\log $ radii will
+vanish except for those radii corresponding to the vertices of $t$. \ The
+function \texttt{isAdjVertex} of the simplex class determines this
+condition. \ \texttt{VolumePartial} then proceeds with an initialization
+procedure that labels the vertices and edges (radii and etas) in standard
+form. \ Specifically, \texttt{Volume\_Partial} receives as inputs an integer 
+\texttt{i} corresponding to a vertex (in the vertex table) which is labeled
+vertex v1. \ The remaining vertices are labeled $v2,v3,v4$, and the edges $%
+e12,e13,e14,e23,e24,e34$ are labeled preserving the structure implied by the
+assignment of the vertices. \ The radii $r_{1}$, $r_{2}$,... and eta values $%
+Eta_{12},Eta_{13},$... are assigned to the corresponding vertices and edges.
+\ 
+
+The formula for the partial derivative in terms of these standard form
+variables was calculated in Mathematica using the Cayley-Menger determinant,
+that is:%
+\begin{equation*}
+288V^{2}=\det\left[ 
+\begin{array}{ccccc}
+0 & 1 & 1 & 1 & 1 \\ 
+1 & 0 & L_{12}^{2} & L_{13}^{2} & L_{14}^{2} \\ 
+1 & L_{12}^{2} & 0 & L_{23}^{2} & L_{24}^{2} \\ 
+1 & L_{13}^{2} & L_{23}^{2} & 0 & L_{34}^{2} \\ 
+1 & L_{14}^{2} & L_{24}^{2} & L_{34}^{2} & 0%
+\end{array}
+\right] ,
+\end{equation*}
+where the lengths were determined from the radii and eta values using the
+formula%
+\begin{equation*}
+L_{ij}^{2}=r_{i}^{2}+r_{j}^{2}+2r_{i}r_{j}Eta_{ij}.
+\end{equation*}
+
+The formula obtained from Mathematica was outputted into the C programming
+language using the function CForm. \ 
+
+This function was designed for use in the optimization of the
+Einstein-Hilbert-Regge functional using Newton's method. \ In this procedure
+the gradient of the EHR functional is needed which contains the partial
+derivatives of the volume. \ 
+
+\subsection*{Practicum}
+
+Usage:
+
+\texttt{VolumePartial(Vertex v\_i, Tetra t)}
+
+The integer \texttt{i} corresponds to a vertex in the vertex table, that is%
+\begin{equation*}
+\text{\texttt{VolumePartial (v\_i, t)} }=\frac{\partial }{\partial \log r_{i}%
+}Volume(t).
+\end{equation*}
+
+\subsection*{Limitations}
+
+\texttt{VolumePartial} was designed to output the correct partial derivative
+for any integer $i$ in the vertex table and any tetrahedron $t$ in the
+triangulation. \ 
+
+\subsection*{Revisions}
+
+subversion 757, 7/7/09, \texttt{VolumePartial} created within
+NewtonsMethod.cpp.
+
+subversion 1055, 3/12/10, \texttt{VolumePartial} converted to a geoquant.
+
+\subsection*{Testing}
+
+The partial derivative of volume of several known tetrahedra were calculated
+using \texttt{Volume\_Partial} and verified using Mathematica.
+
+\subsection*{Future Work}
+
+The procedure that initializes the tetrahedron into standard form should be
+removed from this program and placed elsewhere. \ There are several
+occurrences of this type of procedure that should be consolidated. \ 

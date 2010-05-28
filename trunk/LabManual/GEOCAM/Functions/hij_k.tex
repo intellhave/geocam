@@ -1,1 +1,105 @@
-%TCIDATA{LaTeXparent=0,0,functions.tex}
+%TCIDATA{Version=5.00.0.2606}
+%TCIDATA{LaTeXparent=1,1,functions.tex}
+                      
+
+\section*{\texttt{EdgeHeight::EdgeHeight\label{Edge Height FUNCTION}}}
+
+\subsection*{Function Prototype}
+
+\texttt{double EdgeHeight( Vertex vi, Vertex vj, Vertex vk)}
+
+\subsection*{Key Words}
+
+Edge height, partial edge, geoquant.
+
+\subsection*{Authors}
+
+Daniel Champion
+
+\subsection*{Introduction}
+
+The function \texttt{EdgeHeight} calculates the edge height (to the center
+of a triangular face) of an edge in the triangulation. \ 
+
+\subsection*{Subsidiaries}
+
+\textbf{Functions:}
+
+\qquad \texttt{PartialEdge}
+
+\qquad\texttt{Geometry::angle}
+
+\qquad\texttt{listIntersection}
+
+\textbf{Global Variables:} radii, etas.
+
+\textbf{Local Variables:} Vertex vi, vj, vk.
+
+\subsection*{Description}
+
+The calculation of \texttt{EdgeHeight} involves the simple formula:%
+\begin{equation*}
+\text{\texttt{EdgeHeight(vi, vj, vk)}}=
+\end{equation*}%
+\begin{equation*}
+\frac{\left( \text{\texttt{PartialEdge(vi,vk)}}-\text{\texttt{%
+PartialEdge(vi,vj)}}\cos \left( \alpha _{i,jk}\right) \right) }{\sin \left(
+\alpha _{i,jk}\right) }
+\end{equation*}%
+where $\alpha _{i,jk}$ is the angle at vertex $vi$ of triangle $\left\{
+vi,vj,vk\right\} $. \ A geometric interpretation of this quantity is a
+follows. \ Given a decorated triangle (triangle with radii and eta values
+assigned to the vertices and edges respectively), the center of this
+triangle can be calculated as the common power point of its embedding into
+two-dimensional Euclidean space. \ The perpendicular distance from this
+center point to the edge $\left\{ vi,vj\right\} $ is exactly \texttt{%
+EdgeHeight(vi, vj, vk)}. \ Take note that the first two vertices in the
+function call correspond to the preferred edge, and the third vertex in the
+function call identifies the triangle. \ 
+
+A primary use of this function is in the calculation of several quantities
+needed for the \texttt{CurvaturePartial} function used in the optimization
+of the normalized Einstein-Hilbert-Regge functional.
+
+\subsection*{Practicum}
+
+An example of the use of this function is in the calculation of the dual
+areas, \texttt{DualAreaSegment}, to an edge of a three dimensional
+triangulation.
+
+\qquad \texttt{double DualAreaSegment( Vertex vi, Vertex vj, Vertex vk,
+Vertex vl)}
+
+\qquad\qquad\texttt{\{}
+
+\qquad \qquad \texttt{double result =
+0.5*(EdgeHeight(vi,vj,vk)*FaceHeight(vi,vj,vk,vl)}
+
+\qquad \qquad \qquad \texttt{+EdgeHeight(vi,vj,vl)*FaceHeight(vi,vj,vl,vk));}
+
+\qquad\qquad\texttt{return result;}
+
+\qquad\qquad\texttt{\}}
+
+\subsection*{Limitations}
+
+\texttt{EdgeHeight} must receive as input three vertices of a face of the
+triangulation. \ Moreover, the first two vertices in the function call
+identify an edge, and can be in any order, however the third vertex in the
+function call identifies the face and can not be permuted with the other two
+vertices. \ 
+
+\subsection*{Revisions}
+
+subversion 757, 6/8/09, \texttt{EdgeHeight} created.
+
+subversion 1055, 3/12/10, \texttt{EdgeHeight}\ converted to a geoquant.
+
+\subsection*{Testing}
+
+This function was not tested.
+
+\subsection*{Future Work}
+
+This function has been incorporated into the Geometry class geoquants, and
+thus this entry needs to be updated. \ 
