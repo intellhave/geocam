@@ -1,18 +1,14 @@
 package Geoquant;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.LinkedList;
 
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.StdTetra;
-import Triangulation.Tetra;
-import Triangulation.Vertex;
+import Triangulation.*;
 
 public class DihedralAngle extends Geoquant {
 //Index map
   private static HashMap<TriPosition, DihedralAngle> Index = new HashMap<TriPosition, DihedralAngle>();
+  private static Sum sum = null;
   
   // Needed geoquants
   private Angle angleA;
@@ -61,6 +57,46 @@ public class DihedralAngle extends Geoquant {
   
   public static double valueAt(Edge e, Tetra t) {
     return At(e, t).getValue();
+  }
+  
+  public static Geoquant sum() {
+    if(sum == null) {
+      sum = new Sum();
+    }
+    return sum;
+  }
+  
+  public static double getSum() {
+    return sum.getValue();
+  }
+  
+  private static class Sum extends Geoquant {
+    LinkedList<DihedralAngle> angles = new LinkedList<DihedralAngle>();
+    
+    Sum() {
+      super();
+      for(Tetra t : Triangulation.tetraTable.values()) {
+        for(Edge e : t.getLocalEdges()) {
+          DihedralAngle beta = DihedralAngle.At(e, t);
+          beta.addDependent(this);
+          angles.add(beta);
+        }
+      }
+    }
+    protected void recalculate() {
+      value = 0;
+      for(DihedralAngle beta : angles) {
+        value += beta.getValue();
+      }
+    }
+
+    protected void remove() {
+      deleteDependents();
+      for(DihedralAngle beta : angles) {
+        beta.removeDependent(this);
+      }
+      angles.clear();
+    }
   }
 }
 

@@ -1,17 +1,16 @@
 package Geoquant;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
-import Triangulation.Edge;
 import Triangulation.Face;
+import Triangulation.Triangulation;
 import Triangulation.Vertex;
 
 public class Curvature2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, Curvature2D> Index = new HashMap<TriPosition, Curvature2D>();
+  private static Sum sum = null;
   
   // Needed geoquants
   private LinkedList<Angle> angles;
@@ -60,4 +59,42 @@ public class Curvature2D extends Geoquant {
     return At(v).getValue();
   }
 
+  public static Geoquant sum() {
+    if(sum == null) {
+      sum = new Sum();
+    }
+    return sum;
+  }
+  
+  public static double getSum() {
+    return sum.getValue();
+  }
+  
+  private static class Sum extends Geoquant {
+    LinkedList<Curvature2D> curvs = new LinkedList<Curvature2D>();
+    
+    Sum() {
+      super();
+      Curvature2D k;
+      for(Vertex v : Triangulation.vertexTable.values()) {
+        k = Curvature2D.At(v);
+        k.addDependent(this);
+        curvs.add(k);
+      }
+    }
+    protected void recalculate() {
+      value = 0;
+      for(Curvature2D k : curvs) {
+        value += k.getValue();
+      }
+    }
+
+    protected void remove() {
+      deleteDependents();
+      for(Curvature2D k : curvs) {
+        k.removeDependent(this);
+      }
+      curvs.clear();
+    }
+  }
 }

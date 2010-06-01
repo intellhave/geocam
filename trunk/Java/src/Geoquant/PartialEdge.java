@@ -57,6 +57,7 @@ public class PartialEdge extends Geoquant {
     rj.removeDependent(this);
     ai.removeDependent(this);
     aj.removeDependent(this);
+    Index.remove(pos);
   }
   
   public static PartialEdge At(Vertex vertex, Edge edge) {
