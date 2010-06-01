@@ -29,7 +29,7 @@ public class Newton {
 		} else {
 			System.out.println("Failed to find a zero");
 			System.out.println("Changing starting value");
-			x=x-Math.pow(-1.0,i)*((cMax/20)*i);
+			x=x-Math.Math.pow(-1.0,i)*((cMax/20)*i);
 			System.out.println("x is " + x );
 			if (i==20) {
 				x=.9 * cMax;

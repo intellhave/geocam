@@ -244,8 +244,8 @@ public class FlowerTest2 {
       List<Edge> edges = cycleEdges.get(vertex);
       for (int i = 0; i < n - 1; i++) { // first normalize the edge to unit
         // length double mag =
-        double mag = Math.sqrt(Math.pow(v[i][0], 2) + Math.pow(v[i][1], 2)
-            + Math.pow(v[i][2], 2));
+        double mag = Math.sqrt(Math.Math.pow(v[i][0], 2) + Math.Math.pow(v[i][1], 2)
+            + Math.Math.pow(v[i][2], 2));
         v[i][0] = v[i][0] * Length.valueAt(edges.get(i)) / mag;
         v[i][1] = v[i][1] * Length.valueAt(edges.get(i)) / mag;
         v[i][2] = v[i][2] * Length.valueAt(edges.get(i)) / mag;
