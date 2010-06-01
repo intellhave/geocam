@@ -1,11 +1,7 @@
 package Geoquant;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
-import Triangulation.Edge;
 import Triangulation.Face;
 import Triangulation.StdFace;
 import Triangulation.Vertex;
@@ -23,7 +19,6 @@ public class Angle extends Geoquant {
   public Angle(Vertex v, Face f) {
     super();
     
-    int count = 1;
     this.f = f;
     StdFace sf = new StdFace(f, v);
     lenA = Length.At(sf.e12);

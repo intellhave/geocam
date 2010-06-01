@@ -1,0 +1,58 @@
+package Geoquant;
+
+import java.util.HashMap;
+
+import Triangulation.Face;
+import Triangulation.StdTetra;
+import Triangulation.Tetra;
+
+public class FaceHeight extends Geoquant {
+  // Index map
+  private static HashMap<TriPosition, FaceHeight> Index = new HashMap<TriPosition, FaceHeight>();
+  
+  // Needed geoquants
+  private EdgeHeight hij_l;
+  private EdgeHeight hij_k;
+  private DihedralAngle beta_ij_kl;
+  
+  public FaceHeight(Face f, Tetra t) {
+    super();
+    
+    StdTetra st = new StdTetra(t, f);
+    hij_l = EdgeHeight.At(st.e12, st.f123);
+    hij_k = EdgeHeight.At(st.e12, st.f124);
+    beta_ij_kl = DihedralAngle.At(st.e12, t);
+  }
+  
+  protected void recalculate() {
+    double Hij_l = hij_l.getValue();
+    double Hij_k = hij_k.getValue();
+    double angle = beta_ij_kl.getValue();
+
+    value = (Hij_l - Hij_k * Math.cos(angle))/Math.sin(angle);
+  }
+ 
+  protected void remove() {
+    deleteDependents();
+    hij_l.removeDependent(this);
+    hij_k.removeDependent(this);
+    beta_ij_kl.removeDependent(this);
+    Index.remove(pos);
+  }
+  
+  public static FaceHeight At(Face f, Tetra t) {
+    TriPosition T = new TriPosition(f.getSerialNumber(), t.getSerialNumber());
+    FaceHeight q = Index.get(T);
+    if(q == null) {
+      q = new FaceHeight(f, t);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
+  public static double valueAt(Face f, Tetra t) {
+    return At(f, t).getValue();
+  }
+
+}
