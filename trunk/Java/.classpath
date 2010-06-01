@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="jreality/sunflow.jar"/>
 	<classpathentry kind="lib" path="jreality/xpp3.jar"/>
 	<classpathentry kind="lib" path="jreality/xstream.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
