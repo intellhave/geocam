@@ -29,7 +29,7 @@ public class Function {
 		double val = 0;
 		for (int i = 0; i < gamma.length; i++) {
 			val += (4*c - 4*c*Math.cos(gamma[i])) /
-					(2* Math.sqrt(1-.25*Math.Math.pow((-2*c*c+2*(1+c*c) * Math.cos(gamma[i])),2)));
+					(2* Math.sqrt(1-.25*Math.pow((-2*c*c+2*(1+c*c) * Math.cos(gamma[i])),2)));
 		}
 		return val;
 	}
