@@ -116,26 +116,29 @@ public class Delaunay {
   }
 
   /*
-   * Returns the dual of a particular edge.
+   * Returns the dual length of a particular edge.
    */
   double getDual(Edge edge) {
-    return 0;
-    
+    double dualLength = 0;
+    for (Face face : edge.getLocalFaces()) {
+      dualLength += getHeight(face, edge);
+    }
+    return dualLength;
   }
 
   /*
+   * Deprecated: Should use PartialEdge geoquant
    * Returns the portion of an edge from a given vertex to the
    * edge's center.
    */
   double getPartialEdge(Edge edge, Vertex vertex) {
     return 0;
-    
   }
 
   //computes the dirichlet energy of the triangulation
+  //TODO: implement this, need a structure for defining functions on vertices
   double dirichletEnergy() {
     return 0;
-    
   }
 
 }
