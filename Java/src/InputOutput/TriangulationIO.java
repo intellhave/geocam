@@ -530,4 +530,92 @@ public class TriangulationIO {
     }
     out.close();
   }
+  
+  public static void write3DTriangulationFile(String filename) {
+    try {
+      write3DTriangulationFile(new PrintStream(filename));
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  public static void write3DTriangulationFile(PrintStream out) {
+    for(Vertex v : Triangulation.vertexTable.values()) {
+      out.printf(v + ":\n");
+      for(Vertex v2 : v.getLocalVertices()) {
+        out.print(v2.getIndex() + " ");
+      }
+      out.println();
+      for(Edge e2 : v.getLocalEdges()) {
+        out.print(e2.getIndex() + " ");
+      }
+      out.println();
+      for(Face f2 : v.getLocalFaces()) {
+        out.print(f2.getIndex() + " ");
+      }
+      out.println();
+      for(Tetra t2 : v.getLocalTetras()) {
+        out.print(t2.getIndex() + " ");
+      }
+      out.println();
+    }
+    for(Edge e : Triangulation.edgeTable.values()) {
+      out.printf(e + ":\n");
+      for(Vertex v2 : e.getLocalVertices()) {
+        out.print(v2.getIndex() + " ");
+      }
+      out.println();
+      for(Edge e2 : e.getLocalEdges()) {
+        out.print(e2.getIndex() + " ");
+      }
+      out.println();
+      for(Face f2 : e.getLocalFaces()) {
+        out.print(f2.getIndex() + " ");
+      }
+      out.println();
+      for(Tetra t2 : e.getLocalTetras()) {
+        out.print(t2.getIndex() + " ");
+      }
+      out.println();
+    }
+    for(Face f : Triangulation.faceTable.values()) {
+      out.printf(f + ":\n");
+      for(Vertex v2 : f.getLocalVertices()) {
+        out.print(v2.getIndex() + " ");
+      }
+      out.println();
+      for(Edge e2 : f.getLocalEdges()) {
+        out.print(e2.getIndex() + " ");
+      }
+      out.println();
+      for(Face f2 : f.getLocalFaces()) {
+        out.print(f2.getIndex() + " ");
+      }
+      out.println();
+      for(Tetra t2 : f.getLocalTetras()) {
+        out.print(t2.getIndex() + " ");
+      }
+      out.println();
+    }
+    for(Tetra t : Triangulation.tetraTable.values()) {
+      out.printf(t + ":\n");
+      for(Vertex v2 : t.getLocalVertices()) {
+        out.print(v2.getIndex() + " ");
+      }
+      out.println();
+      for(Edge e2 : t.getLocalEdges()) {
+        out.print(e2.getIndex() + " ");
+      }
+      out.println();
+      for(Face f2 : t.getLocalFaces()) {
+        out.print(f2.getIndex() + " ");
+      }
+      out.println();
+      for(Tetra t2 : t.getLocalTetras()) {
+        out.print(t2.getIndex() + " ");
+      }
+      out.println();
+    }
+    out.close();
+  }
 }
