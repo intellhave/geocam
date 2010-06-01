@@ -11,7 +11,6 @@ import Triangulation.Vertex;
 public class Curvature3D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, Curvature3D> Index = new HashMap<TriPosition, Curvature3D>();
-  private static Sum sum = null;
   
   // Needed geoquants
   private LinkedList<SectionalCurvature> sec_curvs;
@@ -68,19 +67,8 @@ public class Curvature3D extends Geoquant {
   public static double valueAt(Vertex v) {
     return At(v).getValue();
   }
-  
-  public static Geoquant sum() {
-    if(sum == null) {
-      sum = new Sum();
-    }
-    return sum;
-  }
-  
-  public static double getSum() {
-    return sum.getValue();
-  }
-  
-  private static class Sum extends Geoquant {
+    
+  public static class Sum extends Geoquant {
     LinkedList<Curvature3D> curvs = new LinkedList<Curvature3D>();
     
     Sum() {

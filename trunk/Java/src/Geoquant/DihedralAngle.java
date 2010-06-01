@@ -8,7 +8,6 @@ import Triangulation.*;
 public class DihedralAngle extends Geoquant {
 //Index map
   private static HashMap<TriPosition, DihedralAngle> Index = new HashMap<TriPosition, DihedralAngle>();
-  private static Sum sum = null;
   
   // Needed geoquants
   private Angle angleA;
@@ -58,19 +57,8 @@ public class DihedralAngle extends Geoquant {
   public static double valueAt(Edge e, Tetra t) {
     return At(e, t).getValue();
   }
-  
-  public static Geoquant sum() {
-    if(sum == null) {
-      sum = new Sum();
-    }
-    return sum;
-  }
-  
-  public static double getSum() {
-    return sum.getValue();
-  }
-  
-  private static class Sum extends Geoquant {
+    
+  public static class Sum extends Geoquant {
     LinkedList<DihedralAngle> angles = new LinkedList<DihedralAngle>();
     
     Sum() {

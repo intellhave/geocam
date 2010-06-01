@@ -10,7 +10,6 @@ import Triangulation.Vertex;
 public class Curvature2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, Curvature2D> Index = new HashMap<TriPosition, Curvature2D>();
-  private static Sum sum = null;
   
   // Needed geoquants
   private LinkedList<Angle> angles;
@@ -58,19 +57,8 @@ public class Curvature2D extends Geoquant {
   public static double valueAt(Vertex v) {
     return At(v).getValue();
   }
-
-  public static Geoquant sum() {
-    if(sum == null) {
-      sum = new Sum();
-    }
-    return sum;
-  }
   
-  public static double getSum() {
-    return sum.getValue();
-  }
-  
-  private static class Sum extends Geoquant {
+  public static class Sum extends Geoquant {
     LinkedList<Curvature2D> curvs = new LinkedList<Curvature2D>();
     
     Sum() {
