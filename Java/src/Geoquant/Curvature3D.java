@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import Geoquant.DihedralAngle.Sum;
 import Triangulation.Edge;
 import Triangulation.Triangulation;
 import Triangulation.Vertex;
@@ -70,8 +71,9 @@ public class Curvature3D extends Geoquant {
     
   public static class Sum extends Geoquant {
     LinkedList<Curvature3D> curvs = new LinkedList<Curvature3D>();
+    private static Sum total = null;
     
-    Sum() {
+    private Sum() {
       super();
       Curvature3D k;
       for(Vertex v : Triangulation.vertexTable.values()) {
@@ -93,6 +95,17 @@ public class Curvature3D extends Geoquant {
         k.removeDependent(this);
       }
       curvs.clear();
+    }
+    
+    public static Sum get() {
+      if(total == null) {
+        total = new Sum();
+      }
+      return total;
+    }
+    
+    public static double getSum() {
+      return total.getValue();
     }
   }
 

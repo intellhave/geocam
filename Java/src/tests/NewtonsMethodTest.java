@@ -12,14 +12,14 @@ public class NewtonsMethodTest {
     class Ellipse extends NewtonsMethod {
 
       public double function(double[] vars) {
-        double val = 1 - Math.pow(vars[0], 2) / 4 - Math.pow(vars[1], 2) / 9;
+        double val = 1 - Math.Math.pow(vars[0], 2) / 4 - Math.Math.pow(vars[1], 2) / 9;
         return Math.sqrt(val);
       }
       
       @Override
       public double[] gradient(double[] vars) {
         double[] sol = new double[vars.length];
-        double val = 1 - Math.pow(vars[0], 2) / 4 - Math.pow(vars[1], 2) / 9;
+        double val = 1 - Math.Math.pow(vars[0], 2) / 4 - Math.Math.pow(vars[1], 2) / 9;
         sol[0] = (-vars[0]/4)/Math.sqrt(val);
         sol[1] = (-vars[1]/9)/Math.sqrt(val);
         return sol;
@@ -28,10 +28,10 @@ public class NewtonsMethodTest {
       @Override
       public Matrix hessian(double[] vars) {
         Matrix sol = new Matrix(vars.length, vars.length);
-        double val = 1 - Math.pow(vars[0], 2) / 4 - Math.pow(vars[1], 2) / 9;
-        sol.m[0][0] = ((-1.0/4)*val - (vars[0]/16)) / Math.pow(val, 3.0/2);
-        sol.m[1][1] = ((-1.0/9)*val - (vars[1]/81)) / Math.pow(val, 3.0/2);
-        sol.m[0][1] = (-vars[0]/4)*(-vars[1]/9)*(-1) / Math.pow(val, 3.0/2);
+        double val = 1 - Math.Math.pow(vars[0], 2) / 4 - Math.Math.pow(vars[1], 2) / 9;
+        sol.m[0][0] = ((-1.0/4)*val - (vars[0]/16)) / Math.Math.pow(val, 3.0/2);
+        sol.m[1][1] = ((-1.0/9)*val - (vars[1]/81)) / Math.Math.pow(val, 3.0/2);
+        sol.m[0][1] = (-vars[0]/4)*(-vars[1]/9)*(-1) / Math.Math.pow(val, 3.0/2);
         sol.m[1][0] = sol.m[0][1];
         return sol;
       }

@@ -89,6 +89,8 @@ public class Delaunay {
   /*
    * Returns the partial dual of a particular edge, as indicated
    * by the given face.
+   * 
+   * NOTE: USE EdgeHeight GEOQUANT INSTEAD
    */
   double getHeight(Face face, Edge edge) {
     

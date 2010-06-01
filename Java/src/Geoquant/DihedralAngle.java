@@ -60,8 +60,9 @@ public class DihedralAngle extends Geoquant {
     
   public static class Sum extends Geoquant {
     LinkedList<DihedralAngle> angles = new LinkedList<DihedralAngle>();
+    private static Sum total = null;
     
-    Sum() {
+    private Sum() {
       super();
       for(Tetra t : Triangulation.tetraTable.values()) {
         for(Edge e : t.getLocalEdges()) {
@@ -84,6 +85,17 @@ public class DihedralAngle extends Geoquant {
         beta.removeDependent(this);
       }
       angles.clear();
+    }
+    
+    public static Sum get() {
+      if(total == null) {
+        total = new Sum();
+      }
+      return total;
+    }
+    
+    public static double getSum() {
+      return total.getValue();
     }
   }
 }
