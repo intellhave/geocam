@@ -3,7 +3,6 @@ package Geoquant;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import Geoquant.DihedralAngle.Sum;
 import Triangulation.Face;
 import Triangulation.Triangulation;
 import Triangulation.Vertex;

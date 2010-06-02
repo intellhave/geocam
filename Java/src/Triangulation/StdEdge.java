@@ -1,8 +1,8 @@
 package Triangulation;
 
 public class StdEdge {
-  Vertex v1;
-  Vertex v2;
+  public Vertex v1;
+  public Vertex v2;
   
   public StdEdge(Edge e, Vertex v) {
     v1 = v;
