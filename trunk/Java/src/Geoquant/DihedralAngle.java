@@ -8,12 +8,12 @@ import Triangulation.*;
 public class DihedralAngle extends Geoquant {
 //Index map
   private static HashMap<TriPosition, DihedralAngle> Index = new HashMap<TriPosition, DihedralAngle>();
-  
+    
   // Needed geoquants
   private Angle angleA;
   private Angle angleB;
   private Angle angleC;
-    
+  
   public DihedralAngle(Edge e, Tetra t) {
     super();
     
@@ -57,46 +57,6 @@ public class DihedralAngle extends Geoquant {
   public static double valueAt(Edge e, Tetra t) {
     return At(e, t).getValue();
   }
-    
-  public static class Sum extends Geoquant {
-    LinkedList<DihedralAngle> angles = new LinkedList<DihedralAngle>();
-    private static Sum total = null;
-    
-    private Sum() {
-      super();
-      for(Tetra t : Triangulation.tetraTable.values()) {
-        for(Edge e : t.getLocalEdges()) {
-          DihedralAngle beta = DihedralAngle.At(e, t);
-          beta.addDependent(this);
-          angles.add(beta);
-        }
-      }
-    }
-    protected void recalculate() {
-      value = 0;
-      for(DihedralAngle beta : angles) {
-        value += beta.getValue();
-      }
-    }
-
-    protected void remove() {
-      deleteDependents();
-      for(DihedralAngle beta : angles) {
-        beta.removeDependent(this);
-      }
-      angles.clear();
-    }
-    
-    public static Sum get() {
-      if(total == null) {
-        total = new Sum();
-      }
-      return total;
-    }
-    
-    public static double getSum() {
-      return total.getValue();
-    }
-  }
+  
 }
 

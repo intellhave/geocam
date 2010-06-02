@@ -67,4 +67,7 @@ public abstract class Geoquant {
     }
     return type;
   }
+  
+  protected enum PartialType{Radius, Eta}
+  protected enum SecondPartialType{RadiusRadius, RadiusEta, EtaEta}
 }

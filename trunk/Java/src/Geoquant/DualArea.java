@@ -10,16 +10,20 @@ import Triangulation.Tetra;
 public class DualArea extends Geoquant {
   //Index map
   private static HashMap<TriPosition, DualArea> Index = new HashMap<TriPosition, DualArea>();
-   
+  private static HashMap<TriPosition, Segment> SegmentIndex;
+  
   // Needed geoquants
   private LinkedList<Segment> segments;
+  private Edge e;
   
   public DualArea(Edge e) {
     super();
+    this.e = e;
+    SegmentIndex = new HashMap<TriPosition, Segment>();
     Segment s;
     segments = new LinkedList<Segment>();
     for(Tetra t : e.getLocalTetras()) {
-      s = Segment.At(e, t);
+      s = this.segment(t);
       s.addDependent(this);
       segments.add(s);
     }
@@ -54,15 +58,25 @@ public class DualArea extends Geoquant {
   public static double valueAt(Edge e) {
     return At(e).getValue();
   }
+  
+  public DualArea.Segment segment(Tetra t) {
+    TriPosition T = new TriPosition(t.getSerialNumber());
+    Segment s = SegmentIndex.get(T);
+    if(s == null) {
+      s = new Segment(t);
+      s.pos = T;
+      SegmentIndex.put(T, s);
+    }
+    return s;
+  }
 
-  public static class Segment extends Geoquant {
-    private static HashMap<TriPosition, Segment> SegmentIndex = new HashMap<TriPosition, Segment>();
+  private class Segment extends Geoquant {
     private EdgeHeight hij_k;
     private EdgeHeight hij_l;
     private FaceHeight hijk_l;
     private FaceHeight hijl_k;
     
-    public Segment(Edge e, Tetra t) {
+    private Segment(Tetra t) {
       StdTetra st = new StdTetra(t, e);
       hij_k = EdgeHeight.At(e, st.f123);
       hij_l = EdgeHeight.At(e, st.f124);
@@ -91,21 +105,6 @@ public class DualArea extends Geoquant {
       hijk_l.removeDependent(this);
       hijl_k.removeDependent(this);
       SegmentIndex.remove(pos);
-    }
-    
-    public static Segment At(Edge e, Tetra t) {
-      TriPosition T = new TriPosition(t.getSerialNumber());
-      Segment s = SegmentIndex.get(T);
-      if(s == null) {
-        s = new Segment(e, t);
-        s.pos = T;
-        SegmentIndex.put(T, s);
-      }
-      return s;
-    }
-    
-    public static double valueAt(Edge e, Tetra t) {
-      return At(e, t).getValue();
     }
   }
 }

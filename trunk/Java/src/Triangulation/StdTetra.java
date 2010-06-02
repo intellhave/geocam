@@ -85,6 +85,40 @@ public class StdTetra {
     fixTetraFaces( t );
   }
   
+  public StdTetra(Tetra t, Vertex v, Vertex w) {
+    Vertex[] verts;
+    int count = 0;
+    
+    if(v == w) {
+      v1 = v;
+      verts = new Vertex[3];
+      for(Vertex u : t.getLocalVertices()) {
+        if(v1 != u) {
+          verts[count] = u;
+          count++;
+        }
+      }
+      v2 = verts[0];
+      v3 = verts[1];
+      v4 = verts[2];
+    } else {
+      v1 = v;
+      v2 = w;
+      verts= new Vertex[2];
+      for(Vertex u : t.getLocalVertices()) {
+        if(v1 != u && v2 != u) {
+          verts[count] = u;
+          count++;
+        }
+      }
+      v3 = verts[0];
+      v4 = verts[1];
+    }
+    
+    fixTetraEdges(t);
+    fixTetraFaces(t);
+  }
+  
   // Make v1 = v, e12 = e if v is in e, e23 = e if not.
   public StdTetra(Tetra t, Vertex v, Edge e) {
     Vertex[] verts = new Vertex[2];
