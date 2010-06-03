@@ -123,7 +123,18 @@ public class Curvature3D extends Geoquant {
     return q;
   }
   
-  private class Partial extends Geoquant {
+  public Curvature3D.Partial partialAt(Edge e) {
+    TriPosition T = new TriPosition(e.getSerialNumber());
+    Partial q = PartialIndex.get(T);
+    if(q == null) {
+      q = new Partial(e);
+      q.pos = T;
+      PartialIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  public class Partial extends Geoquant {
     private PartialType type;
     private int locality;
     /* Radius type variables */

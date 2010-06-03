@@ -63,7 +63,7 @@ public abstract class Geoquant {
   public String toString() {
     String type = this.getClass().toString().substring(6);
     if(type.contains(".")) {
-      type = type.substring(type.lastIndexOf(".") + 1);
+      type = type.substring(type.lastIndexOf("Geoquant.") + 1);
     }
     return type;
   }
