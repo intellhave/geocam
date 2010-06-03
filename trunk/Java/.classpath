@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="jreality/antlr.jar"/>
 	<classpathentry kind="lib" path="jreality/beans.jar"/>
 	<classpathentry kind="lib" path="jreality/bsh.jar"/>
@@ -16,6 +17,5 @@
 	<classpathentry kind="lib" path="jreality/sunflow.jar"/>
 	<classpathentry kind="lib" path="jreality/xpp3.jar"/>
 	<classpathentry kind="lib" path="jreality/xstream.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
