@@ -105,6 +105,10 @@ public abstract class Simplex {
     return this.index == ((Simplex) other).index;
   }
   
+  public int hashCode() {
+    return this.getClass().hashCode() ^ (new Integer(this.index)).hashCode();
+  }
+  
   public String toString() {
     String type = this.getClass().toString().substring(6);
     if(type.contains(".")) {
