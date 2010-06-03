@@ -12,6 +12,8 @@ import Triangulation.Vertex;
 public class Volume extends Geoquant {
   // Index map
   private static HashMap<TriPosition, Volume> Index = new HashMap<TriPosition, Volume>();
+  private static HashMap<TriPosition, PartialSum> PartialSumIndex = new HashMap<TriPosition, PartialSum>();
+  private static HashMap<TriPosition, SecondPartialSum> SecondPartialSumIndex = new HashMap<TriPosition, SecondPartialSum>();
   private static Sum total;
   private HashMap<TriPosition, Partial> PartialIndex;
   private HashMap<TriPosition, SecondPartial> SecondPartialIndex;
@@ -169,7 +171,29 @@ public class Volume extends Geoquant {
     }
     return q;
   }
-    
+  
+  public static Volume.PartialSum partialSumAt(Vertex v) {
+    TriPosition T = new TriPosition(v.getSerialNumber());
+    PartialSum q = PartialSumIndex.get(T);
+    if(q == null) {
+      q = new PartialSum(v);
+      q.pos = T;
+      PartialSumIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  public static Volume.PartialSum partialSumAt(Edge e) {
+    TriPosition T = new TriPosition(e.getSerialNumber());
+    PartialSum q = PartialSumIndex.get(T);
+    if(q == null) {
+      q = new PartialSum(e);
+      q.pos = T;
+      PartialSumIndex.put(T, q);
+    }
+    return q;
+  }
+  
   public class Partial extends Geoquant {  
     private Radius[] radii;
     private Alpha[] alphas;
@@ -419,8 +443,51 @@ public class Volume extends Geoquant {
           
       return result;
     }
+  
   }
 
+  public static class PartialSum extends Geoquant {
+    private LinkedList<Volume.Partial> vol_partials;
+    
+    private PartialSum(Vertex v) {
+      super();
+      vol_partials = new LinkedList<Volume.Partial>();
+      Volume.Partial partial;
+      for(Tetra t2 : v.getLocalTetras()) {
+        partial = Volume.At(t2).partialAt(v);
+        partial.addDependent(this);
+        vol_partials.add(partial);
+      }
+    }
+    
+    private PartialSum(Edge e) {
+      super();
+      vol_partials = new LinkedList<Volume.Partial>();
+      Volume.Partial partial;
+      for(Tetra t2 : e.getLocalTetras()) {
+        partial = Volume.At(t2).partialAt(e);
+        partial.addDependent(this);
+        vol_partials.add(partial);
+      }
+    }
+    
+    protected void recalculate() {
+      value = 0;
+      for(Volume.Partial partial : vol_partials) {
+        value += partial.getValue();
+      }
+    }
+
+    protected void remove() {
+      deleteDependents();
+      for(Volume.Partial partial : vol_partials) {
+        partial.removeDependent(this);
+      }
+      PartialSumIndex.remove(pos);
+    }
+  
+  }
+  
   public Volume.SecondPartial secondPartialAt(Vertex v, Vertex w) {
     TriPosition T = new TriPosition(v.getSerialNumber(), w.getSerialNumber());
     SecondPartial q = SecondPartialIndex.get(T);
@@ -450,6 +517,40 @@ public class Volume extends Geoquant {
       q = new SecondPartial(e, f);
       q.pos = T;
       SecondPartialIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  
+  public static Volume.SecondPartialSum secondPartialSumAt(Vertex v, Vertex w) {
+    TriPosition T = new TriPosition(v.getSerialNumber(), w.getSerialNumber());
+    SecondPartialSum q = SecondPartialSumIndex.get(T);
+    if(q == null) {
+      q = new SecondPartialSum(v, w);
+      q.pos = T;
+      SecondPartialSumIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  public static Volume.SecondPartialSum secondPartialSumAt(Vertex v, Edge e) {
+    TriPosition T = new TriPosition(v.getSerialNumber(), e.getSerialNumber());
+    SecondPartialSum q = SecondPartialSumIndex.get(T);
+    if(q == null) {
+      q = new SecondPartialSum(v, e);
+      q.pos = T;
+      SecondPartialSumIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  public static Volume.SecondPartialSum secondPartialSumAt(Edge e, Edge f) {
+    TriPosition T = new TriPosition(e.getSerialNumber(), f.getSerialNumber());
+    SecondPartialSum q = SecondPartialSumIndex.get(T);
+    if(q == null) {
+      q = new SecondPartialSum(e, f);
+      q.pos = T;
+      SecondPartialSumIndex.put(T, q);
     }
     return q;
   }
@@ -1322,5 +1423,60 @@ public class Volume extends Geoquant {
       SecondPartialIndex.remove(pos);
     }
     
+  }
+
+  public static class SecondPartialSum extends Geoquant {
+    private LinkedList<Volume.SecondPartial> vol_sec_partials;
+    
+    private SecondPartialSum(Vertex v, Vertex w) {
+      super();
+      Volume.SecondPartial partial;
+      for(Tetra t2 : v.getLocalTetras()) {
+        if(w.isAdjTetra(t2)) {
+          partial = Volume.At(t2).secondPartialAt(v, w);
+          partial.addDependent(this);
+          vol_sec_partials.add(partial);
+        }
+      }
+    }
+    
+    private SecondPartialSum(Vertex v, Edge e) {
+      super();
+      Volume.SecondPartial partial;
+      for(Tetra t2 : v.getLocalTetras()) {
+        if(e.isAdjTetra(t2)) {
+          partial = Volume.At(t2).secondPartialAt(v, e);
+          partial.addDependent(this);
+          vol_sec_partials.add(partial);
+        }
+      }
+    }
+    
+    private SecondPartialSum(Edge e, Edge f) {
+      super();
+      Volume.SecondPartial partial;
+      for(Tetra t2 : e.getLocalTetras()) {
+        if(f.isAdjTetra(t2)) {
+          partial = Volume.At(t2).secondPartialAt(e, f);
+          partial.addDependent(this);
+          vol_sec_partials.add(partial);
+        }
+      }
+    }
+
+    protected void recalculate() {
+      value = 0;
+      for(Volume.SecondPartial partial : vol_sec_partials) {
+        value += partial.getValue();
+      }
+    }
+
+    protected void remove() {
+      deleteDependents();
+      for(Volume.SecondPartial partial : vol_sec_partials) {
+        partial.removeDependent(this);
+      }
+      SecondPartialSumIndex.remove(pos);
+    }
   }
 }
