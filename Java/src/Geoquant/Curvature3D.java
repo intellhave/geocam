@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import Triangulation.Edge;
 import Triangulation.StdEdge;
+import Triangulation.Tetra;
 import Triangulation.Triangulation;
 import Triangulation.Vertex;
 
@@ -134,6 +135,13 @@ public class Curvature3D extends Geoquant {
     private Radius vRadius;
     private Curvature3D vCurv;
     
+    
+    /* Eta type variables */
+    private LinkedList<LinkedList<DihedralAngle.Partial>> dih_partials;
+    private LinkedList<PartialEdge> dijs;
+    private ConeAngle dih_sum;
+    private PartialEdge.Partial dij_partial;
+    
     private Partial(Vertex w) {
       super();
       type = PartialType.Radius;
@@ -181,10 +189,47 @@ public class Curvature3D extends Geoquant {
       }
     }
 
+    private Partial(Edge e) {
+      super();
+      type = PartialType.Eta;
+      
+      if(v.isAdjEdge(e)) {
+        locality = 0;
+      } else {
+        locality = 1;
+      }
+      
+      if(locality == 0) {
+        dij_partial = PartialEdge.At(v, e).partialAt(e);
+        dih_sum = ConeAngle.At(e);
+        dij_partial.addDependent(this);
+        dih_sum.addDependent(this);
+      }
+      
+      DihedralAngle.Partial dih_partial;
+      PartialEdge dij;
+      LinkedList<DihedralAngle.Partial> list;
+      for(Edge nm : v.getLocalEdges()) {
+        list = new LinkedList<DihedralAngle.Partial>();
+        for(Tetra t : nm.getLocalTetras()) {
+          dih_partial = DihedralAngle.At(nm, t).partialAt(e);
+          dih_partial.addDependent(this);
+          list.add(dih_partial);
+        }
+        dih_partials.add(list);
+        dij = PartialEdge.At(v, nm);
+        dij.addDependent(this);
+        dijs.add(dij);
+      }
+    }
+    
     protected void recalculate() {
       switch(type) {
         case Radius:
           value = calculateRadiusCase();
+          break;
+        case Eta:
+          value = calculateEtaCase();
           break;
       }
     }
@@ -233,9 +278,66 @@ public class Curvature3D extends Geoquant {
       }
     }
 
+    private double calculateEtaCase() {
+      double partial;
+      if( locality == 1 ) {
+        partial = 0;
+      } else {
+        partial = (2 * Math.PI - dih_sum.getValue()) * dij_partial.getValue();
+      }
+      double dih_partial_sum;
+      Iterator<PartialEdge> dij_it = dijs.iterator();
+      for(LinkedList<DihedralAngle.Partial> list : dih_partials) {
+        dih_partial_sum = 0;
+        for(DihedralAngle.Partial dih_partial : list) {
+          dih_partial_sum -= dih_partial.getValue();
+        }
+        partial += dih_partial_sum * dij_it.next().getValue();
+      }
+      return partial;
+    }
+    
     protected void remove() {
       deleteDependents();
-      
+      switch(type) {
+        case Radius:
+          vRadius.removeDependent(this);
+          vCurv.removeDependent(this);
+          Iterator<DualArea> da_it = duals.iterator();
+          Iterator<ConeAngle> ca_it = angles.iterator();
+          Iterator<Length> l_it = lengths.iterator();
+          Iterator<Eta> eta_it = etas.iterator();
+          Iterator<Radius> r_it = radii.iterator();
+          while(da_it.hasNext()) {
+            da_it.next().removeDependent(this);
+            ca_it.next().removeDependent(this);
+            l_it.next().removeDependent(this);
+            eta_it.next().removeDependent(this);
+            r_it.next().removeDependent(this);
+          }
+          duals.clear();
+          angles.clear();
+          lengths.clear();
+          etas.clear();
+          radii.clear();
+          break;
+        
+        case Eta:
+          if(locality == 0) {
+            dij_partial.removeDependent(this);
+            dih_sum.removeDependent(this);
+          }
+          Iterator<PartialEdge> dij_it = dijs.iterator();
+          for(LinkedList<DihedralAngle.Partial> list : dih_partials) {
+            dij_it.next().removeDependent(this);
+            for(DihedralAngle.Partial dij_partial : list) {
+              dij_partial.removeDependent(this);
+            }
+            list.clear();
+          }
+          dih_partials.clear();
+          break;
+      }
       PartialIndex.remove(pos);
     }
     
