@@ -11,7 +11,7 @@ public class Delaunay {
   /*
    * Indicates whether or not a particular edge is delaunay
    */
-  boolean isDelaunay(Edge edge) {
+  public static boolean isDelaunay(Edge edge) {
     if (edge.isBorder()) {
       return true;
     }
@@ -32,7 +32,7 @@ public class Delaunay {
   /*
    * Indicates whether or not a particular edge is weighted Delaunay.
    */
-  boolean isWeightedDelaunay(Edge edge) {
+  public static boolean isWeightedDelaunay(Edge edge) {
     if (edge.isBorder()) {
       return true;
     }
@@ -42,7 +42,7 @@ public class Delaunay {
   /*
    *  Checks whether the entire triangulation is weighted Delaunay
    */
-  boolean isWeightedDelaunay() {
+  public static boolean isWeightedDelaunay() {
     for (Edge edge : Triangulation.edgeTable.values()) {
       if (!isWeightedDelaunay(edge)) {
         return false;
@@ -54,7 +54,7 @@ public class Delaunay {
   /*
    *  true if the faces are both positive or both negative, otherwise false
    */
-  boolean facesAreTheSame(Edge edge) {
+  public static boolean facesAreTheSame(Edge edge) {
     if (edge.isBorder()) {
       return true;
     }
@@ -68,7 +68,7 @@ public class Delaunay {
   }
 
   //determines whether the hinge is a convex quadrilateral
-  boolean isConvexHinge(Edge edge) {
+  public static boolean isConvexHinge(Edge edge) {
     
     //compute the angle contributed by this hinge at each vertex
     double angle = 0;
@@ -92,7 +92,7 @@ public class Delaunay {
    * 
    * NOTE: USE EdgeHeight GEOQUANT INSTEAD
    */
-  double getHeight(Face face, Edge edge) {
+  public static double getHeight(Face face, Edge edge) {
     
     //grabs an arbitrary vertex next to this edge
     Vertex adjVertex = edge.getLocalVertices().iterator().next();
@@ -118,7 +118,7 @@ public class Delaunay {
   /*
    * Returns the dual length of a particular edge.
    */
-  double getDual(Edge edge) {
+  public static double getDual(Edge edge) {
     double dualLength = 0;
     for (Face face : edge.getLocalFaces()) {
       dualLength += getHeight(face, edge);
@@ -131,13 +131,13 @@ public class Delaunay {
    * Returns the portion of an edge from a given vertex to the
    * edge's center.
    */
-  double getPartialEdge(Edge edge, Vertex vertex) {
+  public static double getPartialEdge(Edge edge, Vertex vertex) {
     return 0;
   }
 
   //computes the dirichlet energy of the triangulation
   //TODO: implement this, need a structure for defining functions on vertices
-  double dirichletEnergy() {
+  public static double dirichletEnergy() {
     return 0;
   }
 
