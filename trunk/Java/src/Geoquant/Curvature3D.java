@@ -15,6 +15,7 @@ public class Curvature3D extends Geoquant {
   private static HashMap<TriPosition, Curvature3D> Index = new HashMap<TriPosition, Curvature3D>();
   private static Sum total = null;
   private HashMap<TriPosition, Partial> PartialIndex;
+  private HashMap<TriPosition, SecondPartial> SecondPartialIndex;
   // Needed geoquants
   private LinkedList<SectionalCurvature> sec_curvs;
   private LinkedList<PartialEdge> partials;
@@ -25,6 +26,7 @@ public class Curvature3D extends Geoquant {
     
     this.v = v;
     PartialIndex = new HashMap<TriPosition, Partial>();
+    SecondPartialIndex = new HashMap<TriPosition, SecondPartial>();
     
     sec_curvs = new LinkedList<SectionalCurvature>();
     partials = new LinkedList<PartialEdge>();
@@ -217,6 +219,7 @@ public class Curvature3D extends Geoquant {
         dih_sum.addDependent(this);
       }
       
+      dih_partials = new LinkedList<LinkedList<DihedralAngle.Partial>>();
       DihedralAngle.Partial dih_partial;
       PartialEdge dij;
       LinkedList<DihedralAngle.Partial> list;
@@ -352,6 +355,198 @@ public class Curvature3D extends Geoquant {
       PartialIndex.remove(pos);
     }
     
+  }
+
+  public Curvature3D.SecondPartial secondPartialAt(Edge e, Edge f) {
+    TriPosition T = new TriPosition(e.getSerialNumber(), f.getSerialNumber());
+    SecondPartial q = SecondPartialIndex.get(T);
+    if(q == null) {
+      q = new SecondPartial(e, f);
+      q.pos = T;
+      SecondPartialIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  public class SecondPartial extends Geoquant {
+    private LinkedList<LinkedList<DihedralAngle.SecondPartial>> dih_sec_partials;
+    private LinkedList<LinkedList<DihedralAngle.Partial>> dih_partials_e;
+    private LinkedList<LinkedList<DihedralAngle.Partial>> dih_partials_f;
+    private LinkedList<LinkedList<DihedralAngle>> dihs;
+    
+    private LinkedList<PartialEdge.SecondPartial> dij_sec_partials;
+    private LinkedList<PartialEdge.Partial> dij_partials_e;
+    private LinkedList<PartialEdge.Partial> dij_partials_f;
+    private LinkedList<PartialEdge> dijs;
+    
+    public SecondPartial(Edge e, Edge f) {
+      super();
+      
+      dih_sec_partials = new LinkedList<LinkedList<DihedralAngle.SecondPartial>>();
+      dih_partials_e = new LinkedList<LinkedList<DihedralAngle.Partial>>();
+      dih_partials_f = new LinkedList<LinkedList<DihedralAngle.Partial>>();
+      dihs = new LinkedList<LinkedList<DihedralAngle>>();
+      
+      dij_sec_partials = new LinkedList<PartialEdge.SecondPartial>();
+      dij_partials_e = new LinkedList<PartialEdge.Partial>();
+      dij_partials_f = new LinkedList<PartialEdge.Partial>();
+      dijs = new LinkedList<PartialEdge>();
+      
+      DihedralAngle.SecondPartial dih_sec_partial;
+      DihedralAngle.Partial dih_partial;
+      DihedralAngle dih;
+      
+      PartialEdge.SecondPartial dij_sec_partial;
+      PartialEdge.Partial dij_partial;
+      PartialEdge dij;
+      
+      LinkedList<DihedralAngle.SecondPartial> dih_sec_list;
+      LinkedList<DihedralAngle.Partial> dih_partial_e_list;
+      LinkedList<DihedralAngle.Partial> dih_partial_f_list;
+      LinkedList<DihedralAngle> dih_list;
+      
+      for(Edge ij : v.getLocalEdges()) {
+        /* Dihedral Angles */
+        dih_sec_list = new LinkedList<DihedralAngle.SecondPartial>();
+        dih_partial_e_list = new LinkedList<DihedralAngle.Partial>();
+        dih_partial_f_list = new LinkedList<DihedralAngle.Partial>();
+        dih_list = new LinkedList<DihedralAngle>();
+        
+        /* PartialEdge */
+        dij = PartialEdge.At(v, ij);
+        dij.addDependent(this);
+        dijs.add(dij);
+        
+        /* PartialEdgeSecondPartial */
+        dij_sec_partial = dij.secondPartialAt(e, f);
+        dij_sec_partial.addDependent(this);
+        dij_sec_partials.add(dij_sec_partial);
+        
+        /* PartialEdgePartial */
+        dij_partial = dij.partialAt(e);
+        dij_partial.addDependent(this);
+        dij_partials_e.add(dij_partial);
+        dij_partial = dij.partialAt(f);
+        dij_partial.addDependent(this);
+        dij_partials_f.add(dij_partial);
+        
+        for(Tetra t : ij.getLocalTetras()) {
+          /* DihedralAngle */
+          dih = DihedralAngle.At(ij, t);
+          dih.addDependent(this);
+          dih_list.add(dih);
+          
+          /* DihedralAngleSecondPartial */
+          dih_sec_partial = dih.secondPartialAt(e, f);
+          dih_sec_partial.addDependent(this);
+          dih_sec_list.add(dih_sec_partial);
+          
+          /* DihedralAnglePartial */
+          dih_partial = dih.partialAt(e);
+          dih_partial.addDependent(this);
+          dih_partial_e_list.add(dih_partial);
+          dih_partial = dih.partialAt(f);
+          dih_partial.addDependent(this);
+          dih_partial_f_list.add(dih_partial);
+        }
+        
+        dih_sec_partials.add(dih_sec_list);
+        dih_partials_e.add(dih_partial_e_list);
+        dih_partials_f.add(dih_partial_f_list);
+        dihs.add(dih_list);
+      }
+    }
+    
+    protected void recalculate() {
+      value = 0;
+      double dih_sec_partial_sum;
+      double dih_partial_e_sum;
+      double dih_partial_f_sum;
+      double dih_sum;
+      double temp;
+      
+      Iterator<LinkedList<DihedralAngle.SecondPartial>> dih_sec_list = dih_sec_partials.iterator();
+      Iterator<LinkedList<DihedralAngle.Partial>> dih_e_list = dih_partials_e.iterator();
+      Iterator<LinkedList<DihedralAngle.Partial>> dih_f_list = dih_partials_f.iterator();
+      Iterator<LinkedList<DihedralAngle>> dih_list = dihs.iterator();
+      Iterator<PartialEdge.SecondPartial> dij_sec_it = dij_sec_partials.iterator();
+      Iterator<PartialEdge.Partial> dij_e_it = dij_partials_e.iterator();
+      Iterator<PartialEdge.Partial> dij_f_it = dij_partials_f.iterator();
+      Iterator<PartialEdge> dij_it = dijs.iterator();
+      
+      
+      Iterator<DihedralAngle.SecondPartial> dih_sec_it;
+      Iterator<DihedralAngle.Partial> dih_e_it;
+      Iterator<DihedralAngle.Partial> dih_f_it;
+      Iterator<DihedralAngle> dih_it;
+      
+      while(dij_it.hasNext()) {
+        dih_sec_partial_sum = 0;
+        dih_partial_e_sum = 0;
+        dih_partial_f_sum = 0;
+        dih_sum = 2 * Math.PI;
+        
+        dih_sec_it = dih_sec_list.next().iterator();
+        dih_e_it = dih_e_list.next().iterator();
+        dih_f_it = dih_f_list.next().iterator();
+        dih_it = dih_list.next().iterator();
+        while(dih_it.hasNext()) {
+          dih_sec_partial_sum -= dih_sec_it.next().getValue();
+          dih_partial_e_sum -= dih_e_it.next().getValue();
+          dih_partial_f_sum -= dih_f_it.next().getValue();
+          dih_sum -= dih_it.next().getValue();          
+        }
+        temp = dih_sec_partial_sum * dij_it.next().getValue()
+          + dih_partial_e_sum * dij_f_it.next().getValue()
+          + dih_partial_f_sum * dij_e_it.next().getValue()
+          + dih_sum * dij_sec_it.next().getValue();
+        value += temp;
+      }      
+    }
+
+    protected void remove() {
+      deleteDependents();
+      Iterator<LinkedList<DihedralAngle.SecondPartial>> dih_sec_list = dih_sec_partials.iterator();
+      Iterator<LinkedList<DihedralAngle.Partial>> dih_e_list = dih_partials_e.iterator();
+      Iterator<LinkedList<DihedralAngle.Partial>> dih_f_list = dih_partials_f.iterator();
+      Iterator<LinkedList<DihedralAngle>> dih_list = dihs.iterator();
+      Iterator<PartialEdge.SecondPartial> dij_sec_it = dij_sec_partials.iterator();
+      Iterator<PartialEdge.Partial> dij_e_it = dij_partials_e.iterator();
+      Iterator<PartialEdge.Partial> dij_f_it = dij_partials_f.iterator();
+      Iterator<PartialEdge> dij_it = dijs.iterator();
+      
+      
+      Iterator<DihedralAngle.SecondPartial> dih_sec_it;
+      Iterator<DihedralAngle.Partial> dih_e_it;
+      Iterator<DihedralAngle.Partial> dih_f_it;
+      Iterator<DihedralAngle> dih_it;
+      
+      while(dij_it.hasNext()) {
+        dih_sec_it = dih_sec_list.next().iterator();
+        dih_e_it = dih_e_list.next().iterator();
+        dih_f_it = dih_f_list.next().iterator();
+        dih_it = dih_list.next().iterator();
+        while(dih_it.hasNext()) {
+          dih_sec_it.next().removeDependent(this);
+          dih_e_it.next().removeDependent(this);
+          dih_f_it.next().removeDependent(this);
+          dih_it.next().removeDependent(this);          
+        }
+        dij_it.next().removeDependent(this);
+        dij_f_it.next().removeDependent(this);
+        dij_e_it.next().removeDependent(this);
+        dij_sec_it.next().removeDependent(this);
+      }
+      dih_sec_partials.clear();
+      dih_partials_e.clear();
+      dih_partials_f.clear();
+      dihs.clear();
+      dij_sec_partials.clear();
+      dij_partials_e.clear();
+      dij_partials_f.clear();
+      dijs.clear();
+      SecondPartialIndex.remove(pos);      
+    }
     
   }
 }
