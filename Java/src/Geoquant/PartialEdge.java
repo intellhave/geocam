@@ -7,6 +7,7 @@ public class PartialEdge extends Geoquant {
   // Index map
   private static HashMap<TriPosition, PartialEdge> Index = new HashMap<TriPosition, PartialEdge>();
   private HashMap<TriPosition, Partial> PartialIndex;
+  private HashMap<TriPosition, SecondPartial> SecondPartialIndex;
   // Needed geoquants
   private Radius ri;
   private Radius rj;
@@ -18,6 +19,7 @@ public class PartialEdge extends Geoquant {
   public PartialEdge(Vertex vertex, Edge edge) {
     super();
     PartialIndex = new HashMap<TriPosition, Partial>();
+    SecondPartialIndex = new HashMap<TriPosition, SecondPartial>();
     
     this.e = edge;
     ri = Radius.At(vertex);
@@ -91,6 +93,7 @@ public class PartialEdge extends Geoquant {
     private Eta eij;
     
     private Partial(Edge f) {
+      super();
       equal = e == f;
       if(equal) {
         ri.addDependent(this);
@@ -130,4 +133,61 @@ public class PartialEdge extends Geoquant {
     
   }
 
+  public PartialEdge.SecondPartial secondPartialAt(Edge f, Edge g) {
+    TriPosition T = new TriPosition(f.getSerialNumber(), g.getSerialNumber());
+    SecondPartial q = SecondPartialIndex.get(T);
+    if(q == null) {
+      q = new SecondPartial(f, g);
+      q.pos = T;
+      SecondPartialIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  public class SecondPartial extends Geoquant {
+    private boolean equal;
+    private Eta eij;
+    
+    private SecondPartial(Edge f, Edge g) {
+      super();
+      equal = e == f;
+      equal = equal && e == g;
+      if(equal) {
+        ri.addDependent(this);
+        rj.addDependent(this);
+        ai.addDependent(this);
+        aj.addDependent(this);
+        eij = Eta.At(e);
+        eij.addDependent(this);
+      }
+    }
+
+    protected void recalculate() {
+      value = 0;
+      if(equal) {
+        double r1 = ri.getValue();
+        double r2 = rj.getValue();
+        double alpha1 = ai.getValue();
+        double alpha2 = aj.getValue();
+        double Eta12 = eij.getValue();
+
+        value = (Math.pow(r1,2)*Math.pow(r2,2)*(alpha1*Math.pow(r1,2) - r2*(Eta12*r1 + 2*alpha2*r2)))/
+          Math.pow(alpha1*Math.pow(r1,2) + r2*(2*Eta12*r1 + alpha2*r2),2.5);
+      }
+    }
+
+    protected void remove() {
+      deleteDependents();
+      if(equal) {
+        ri.removeDependent(this);
+        rj.removeDependent(this);
+        ai.removeDependent(this);
+        aj.removeDependent(this);
+        eij.removeDependent(this);
+      }
+      SecondPartialIndex.remove(pos);
+      
+    }
+    
+  }
 }
