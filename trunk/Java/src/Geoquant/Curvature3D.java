@@ -226,6 +226,7 @@ public class Curvature3D extends Geoquant {
       }
       
       dih_partials = new LinkedList<LinkedList<DihedralAngle.Partial>>();
+      dijs = new LinkedList<PartialEdge>();
       DihedralAngle.Partial dih_partial;
       PartialEdge dij;
       LinkedList<DihedralAngle.Partial> list;
