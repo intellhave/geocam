@@ -574,6 +574,9 @@ public class Volume extends Geoquant {
       } else {
         locality = 1;
       }
+      radii = new Radius[4];
+      alphas = new Alpha[4];
+      etas = new Eta[6];
       StdTetra st = new StdTetra(t, v, w);
       radii[0] = Radius.At(st.v1);
       radii[1] = Radius.At(st.v2);
@@ -611,7 +614,9 @@ public class Volume extends Geoquant {
       } else {
         locality = 1;
       }
-      
+      radii = new Radius[4];
+      alphas = new Alpha[4];
+      etas = new Eta[6];
       StdTetra st = new StdTetra(t, v, e);
       radii[0] = Radius.At(st.v1);
       radii[1] = Radius.At(st.v2);
@@ -651,7 +656,9 @@ public class Volume extends Geoquant {
       } else {
         locality = 2;
       }
-      
+      radii = new Radius[4];
+      alphas = new Alpha[4];
+      etas = new Eta[6];
       StdTetra st = new StdTetra(t, e, f);
       radii[0] = Radius.At(st.v1);
       radii[1] = Radius.At(st.v2);
