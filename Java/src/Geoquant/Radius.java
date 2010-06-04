@@ -136,16 +136,23 @@ public class Radius extends Geoquant {
       }
     }
     
-    @Override
     protected void recalculate() {
-      // TODO Auto-generated method stub
-      
+      calculatePartials();
     }
 
-    @Override
     protected void remove() {
-      // TODO Auto-generated method stub
-      
+      deleteDependents();
+      for(int i = 0; i < nehr_rad_rad.length; i++) {
+        for(int j = 0; j < nehr_rad_rad[i].length; j++) {
+          nehr_rad_rad[i][j].removeDependent(this);
+        }
+      }
+      for(int i = 0; i < nehr_rad_eta.length; i++) {
+        for(int j = 0; j < nehr_rad_eta[i].length; j++) {
+          nehr_rad_eta[i][j].removeDependent(this);
+        }
+      }
+      PartialIndex.remove(pos);
     }
     
   }
