@@ -10,7 +10,6 @@ public class GeoMath {
       return null;
     }
     int nDim = x.length;
-    
     double maxElem; // Used to determine row with max element.
     double temp; // Just a temp variable for switching
 
@@ -64,8 +63,8 @@ public class GeoMath {
         }
       }
     }
-
-    if(singular_matrix || A.m[nDim-1][nDim-1] == 0.0) {
+    
+    if(singular_matrix || Math.abs(A.m[nDim-1][nDim-1]) < 0.0000001) {
       return solveUndeterminedSystem(A, b);
     }
 
@@ -90,7 +89,7 @@ public class GeoMath {
       return null;
     }
     int nDim = x.length;
-    
+        
     int rank = 0;
     int i, j, k, l;
     boolean[] free_vars = new boolean[nDim];
@@ -128,10 +127,10 @@ public class GeoMath {
         j++;
       }
     }
-    
+        
     // Turn spanning set into ortho-normal basis using Gramm-Schmidt
     homo_space = Gram_Schmidt(homo_space.transpose()).transpose();
-    
+        
     // Get initial solution to non-homogeneous system
     double[] non_homo = new double[nDim];
     for(k=(nDim-1); k>=0; k--)
@@ -147,10 +146,13 @@ public class GeoMath {
         non_homo[k] = non_homo[k] / A.m[k][k];
       }
     }
+    
+    System.out.println("Non-homo:\n" + new Matrix(non_homo));
+    
     //Check for correctness
     Matrix test = A.multiply(new Matrix(non_homo));
     for(i = 0; i < nDim; i++) {
-      if(test.m[i][0] != b[i]) {
+      if(Math.abs(test.m[i][0] - b[i]) > 0.000001) {
         System.err.println("Didn't calc non_homogenous solution correctly\n");
         return null;
       }
@@ -170,12 +172,17 @@ public class GeoMath {
       }
     }
     
+    System.out.println("Components:\n" + components);
+    
     // Set solution equal to non_homo - proj
     for(j = 0; j < rank; j++) {
       for(i = 0; i < nDim; i++) {
         non_homo[i] -= components.m[i][j];
       }
     }
+    
+    System.out.println("Solution:\n" + new Matrix(non_homo) +"\n");
+    
     return non_homo;
   }
   
@@ -184,7 +191,7 @@ public class GeoMath {
     for(int i = 0; i < vector.length; i++) {
       sum += vector[i] * vector[i];
     }
-    return sum;
+    return Math.sqrt(sum);
   }
   
   public static void negate(double[] vec) {
@@ -229,7 +236,7 @@ public class GeoMath {
         }
 
         double temp1 = magnitude(vd);
-
+        
         for(int j = 0; j < vd.length; j++) {
           vd[j] = vd[j] * (1 / temp1);
         }

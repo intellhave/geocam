@@ -23,9 +23,9 @@ public class EdgeHeight extends Geoquant {
     dik = PartialEdge.At(sf.v1, sf.e13);
     theta_i = Angle.At(sf.v1, f);
     
-    dij.addDependent(this);
-    dik.addDependent(this);
-    theta_i.addDependent(this);
+    dij.addObserver(this);
+    dik.addObserver(this);
+    theta_i.addObserver(this);
   }
   
   protected void recalculate() {
@@ -38,9 +38,9 @@ public class EdgeHeight extends Geoquant {
  
   protected void remove() {
     deleteDependents();
-    dij.removeDependent(this);
-    dik.removeDependent(this);
-    theta_i.removeDependent(this);
+    dij.deleteObserver(this);
+    dik.deleteObserver(this);
+    theta_i.deleteObserver(this);
     Index.remove(pos);
   }
   

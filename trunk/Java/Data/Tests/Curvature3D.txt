@@ -1,0 +1,5 @@
+Curvature3D@[Vertex 1]=10.361228220629048
+Curvature3D@[Vertex 2]=10.361228220629048
+Curvature3D@[Vertex 3]=10.361228220629048
+Curvature3D@[Vertex 4]=10.361228220629048
+Curvature3D@[Vertex 5]=10.361228220629048

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import Triangulation.Edge;
 import Triangulation.Vertex;
+import Triangulation.Triangulation;
 
 public class NEHR extends Geoquant {
   private Curvature3D.Sum totalK;
@@ -17,8 +18,8 @@ public class NEHR extends Geoquant {
     super();
     totalK = Curvature3D.sum();
     totalV = Volume.sum();
-    totalK.addDependent(this);
-    totalV.addDependent(this);
+    totalK.addObserver(this);
+    totalV.addObserver(this);
   }
   
   protected void recalculate() {
@@ -27,8 +28,8 @@ public class NEHR extends Geoquant {
 
   protected void remove() {
     deleteDependents();
-    totalK.removeDependent(this);
-    totalV.removeDependent(this);
+    totalK.deleteObserver(this);
+    totalV.deleteObserver(this);
   }
   
   public static NEHR getInstance() {
@@ -47,6 +48,17 @@ public class NEHR extends Geoquant {
     NEHR.Partial q = PartialIndex.get(T);
     if(q == null) {
       q = new Partial(v);
+      q.pos = T;
+      PartialIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  public static NEHR.Partial partialAt(Edge e) {
+    TriPosition T = new TriPosition(e.getSerialNumber());
+    NEHR.Partial q = PartialIndex.get(T);
+    if(q == null) {
+      q = new Partial(e);
       q.pos = T;
       PartialIndex.put(T, q);
     }
@@ -73,12 +85,12 @@ public class NEHR extends Geoquant {
       totVolume = Volume.sum();
       totCurvature = Curvature3D.sum();
       volPartial = Volume.partialSumAt(v);
-      totVolume.addDependent(this);
-      totCurvature.addDependent(this);
-      volPartial.addDependent(this);
+      totVolume.addObserver(this);
+      totCurvature.addObserver(this);
+      volPartial.addObserver(this);
       
       localCurv = Curvature3D.At(v);
-      localCurv.addDependent(this);
+      localCurv.addObserver(this);
     }
     
     private Partial(Edge e) {
@@ -88,15 +100,15 @@ public class NEHR extends Geoquant {
       totVolume = Volume.sum();
       totCurvature = Curvature3D.sum();
       volPartial = Volume.partialSumAt(e);
-      totVolume.addDependent(this);
-      totCurvature.addDependent(this);
-      volPartial.addDependent(this);
+      totVolume.addObserver(this);
+      totCurvature.addObserver(this);
+      volPartial.addObserver(this);
       
       curvPartials = new LinkedList<Curvature3D.Partial>();
       Curvature3D.Partial partial;
-      for(Vertex v : e.getLocalVertices()) {
+      for(Vertex v : Triangulation.vertexTable.values()) {
         partial = Curvature3D.At(v).partialAt(e);
-        partial.addDependent(this);
+        partial.addObserver(this);
         curvPartials.add(partial);
       }
     }
@@ -136,16 +148,16 @@ public class NEHR extends Geoquant {
     
     protected void remove() {
       deleteDependents();
-      totVolume.removeDependent(this);
-      totCurvature.removeDependent(this);
-      volPartial.removeDependent(this);
+      totVolume.deleteObserver(this);
+      totCurvature.deleteObserver(this);
+      volPartial.deleteObserver(this);
       switch(type) {
         case Radius:
-          localCurv.removeDependent(this);
+          localCurv.deleteObserver(this);
           break;
         case Eta:
           for(Curvature3D.Partial partial : curvPartials) {
-            partial.removeDependent(this);
+            partial.deleteObserver(this);
           }
           curvPartials.clear();
           break;
@@ -223,19 +235,19 @@ public class NEHR extends Geoquant {
     private LinkedList<Curvature3D.SecondPartial> curvSecPartials;
     
     private SecondPartial(Vertex v, Vertex w) {
-      super();
+      super(v, w);
       type = SecondPartialType.RadiusRadius;
       totVolume = Volume.sum();
-      totVolume.addDependent( this );
+      totVolume.addObserver( this );
 
       totCurvature = Curvature3D.sum();
-      totVolume.addDependent( this );
+      totVolume.addObserver( this );
 
       curvature_i = Curvature3D.At( v );
-      curvature_i.addDependent( this );
+      curvature_i.addObserver( this );
 
       vps_i = Volume.partialSumAt(v);
-      vps_i.addDependent( this );
+      vps_i.addObserver( this );
       
       if( v == w ){
         curvature_j = curvature_i;
@@ -243,70 +255,70 @@ public class NEHR extends Geoquant {
         locality = 0;
       } else {
         curvature_j = Curvature3D.At( w );
-        curvature_j.addDependent( this );
+        curvature_j.addObserver( this );
 
         vps_j = Volume.partialSumAt( w );
-        vps_j.addDependent( this );
+        vps_j.addObserver( this );
         
         locality = 1;
       }
 
       curvPartial_ij = curvature_i.partialAt(w);
-      curvPartial_ij.addDependent( this );
+      curvPartial_ij.addObserver( this );
 
       vps_ij = Volume.secondPartialSumAt(v, w);
-      vps_ij.addDependent(this);
+      vps_ij.addObserver(this);
     }
     
     private SecondPartial(Vertex v, Edge nm) {
-      super();
+      super(v, nm);
       type = SecondPartialType.RadiusEta;
       
       totVolume = Volume.sum();
-      totVolume.addDependent( this );
+      totVolume.addObserver( this );
 
       totCurvature = Curvature3D.sum();
-      totVolume.addDependent( this );
+      totVolume.addObserver( this );
 
       curvature_i = Curvature3D.At( v );
-      curvature_i.addDependent( this );
+      curvature_i.addObserver( this );
 
       vps_i = Volume.partialSumAt(v);
-      vps_i.addDependent( this );
+      vps_i.addObserver( this );
       
       vps_nm = Volume.partialSumAt(nm);
-      vps_nm.addDependent(this);
+      vps_nm.addObserver(this);
       
       curvPartial_inm = curvature_i.partialAt(nm);
-      curvPartial_inm.addDependent(this);
+      curvPartial_inm.addObserver(this);
       
       vps_inm = Volume.secondPartialSumAt(v, nm);
-      vps_inm.addDependent(this);
+      vps_inm.addObserver(this);
       
       curvPartials_nm = new LinkedList<Curvature3D.Partial>();
       
       Curvature3D.Partial cp;
-      for(Vertex w : nm.getLocalVertices()) {
+      for(Vertex w : Triangulation.vertexTable.values()) {
         cp = Curvature3D.At(w).partialAt(nm);
-        cp.addDependent( this );
+        cp.addObserver( this );
         curvPartials_nm.add( cp );
       } 
     }
     
     private SecondPartial(Edge nm, Edge op) {
-      super();
+      super(nm, op);
       type = SecondPartialType.EtaEta;
       
       totVolume = Volume.sum();
-      totVolume.addDependent( this );
+      totVolume.addObserver( this );
 
       totCurvature = Curvature3D.sum();
-      totVolume.addDependent( this );
+      totVolume.addObserver( this );
 
       vps_nm = Volume.partialSumAt(nm);
-      vps_nm.addDependent(this);
+      vps_nm.addObserver(this);
       vps_op = Volume.partialSumAt(op);
-      vps_op.addDependent(this);
+      vps_op.addObserver(this);
       
       vps_nm_op = Volume.secondPartialSumAt(nm, op);
       
@@ -317,21 +329,18 @@ public class NEHR extends Geoquant {
       Curvature3D.Partial cp;
       Curvature3D.SecondPartial csp;
       
-      for(Vertex v : nm.getLocalVertices()) {
+      for(Vertex v : Triangulation.vertexTable.values()) {
         cp = Curvature3D.At(v).partialAt(nm);
-        cp.addDependent( this );
+        cp.addObserver( this );
         curvPartials_nm.add( cp );
         
-        if(op.isAdjVertex(v)) {
-          csp = Curvature3D.At(v).secondPartialAt(nm, op);
-          csp.addDependent(this);
-          curvSecPartials.add( csp );
-        }
-      }
-      for(Vertex v : op.getLocalVertices()) {
         cp = Curvature3D.At(v).partialAt(op);
-        cp.addDependent( this );
+        cp.addObserver( this );
         curvPartials_op.add( cp );
+        
+        csp = Curvature3D.At(v).secondPartialAt(nm, op);
+        csp.addObserver(this);
+        curvSecPartials.add( csp );
       }
     }
     
@@ -431,43 +440,43 @@ public class NEHR extends Geoquant {
     
     protected void remove() {
       deleteDependents();
-      totVolume.removeDependent(this);
-      totCurvature.removeDependent(this);
+      totVolume.deleteObserver(this);
+      totCurvature.deleteObserver(this);
 
       switch(type) {
         case RadiusRadius:
-          vps_i.removeDependent(this);
-          curvature_i.removeDependent(this);
-          vps_ij.removeDependent(this);
-          curvPartial_ij.removeDependent(this);
+          vps_i.deleteObserver(this);
+          curvature_i.deleteObserver(this);
+          vps_ij.deleteObserver(this);
+          curvPartial_ij.deleteObserver(this);
           if(locality == 1) {
-            vps_j.removeDependent(this);
-            curvature_j.removeDependent(this);
+            vps_j.deleteObserver(this);
+            curvature_j.deleteObserver(this);
           }
           break;
         case RadiusEta:
-          vps_i.removeDependent(this);
-          curvature_i.removeDependent(this);
-          vps_nm.removeDependent(this);
-          curvPartial_inm.removeDependent(this);
-          vps_inm.removeDependent(this);
+          vps_i.deleteObserver(this);
+          curvature_i.deleteObserver(this);
+          vps_nm.deleteObserver(this);
+          curvPartial_inm.deleteObserver(this);
+          vps_inm.deleteObserver(this);
           for(Curvature3D.Partial cp : curvPartials_nm) {
-            cp.removeDependent(this);
+            cp.deleteObserver(this);
           }
           curvPartials_nm.clear();
           break;
         case EtaEta:
-          vps_nm.removeDependent(this);
-          vps_op.removeDependent(this);
-          vps_nm_op.removeDependent(this);
+          vps_nm.deleteObserver(this);
+          vps_op.deleteObserver(this);
+          vps_nm_op.deleteObserver(this);
           for(Curvature3D.Partial cp : curvPartials_nm) {
-            cp.removeDependent(this);
+            cp.deleteObserver(this);
           }
           for(Curvature3D.Partial cp : curvPartials_op) {
-            cp.removeDependent(this);
+            cp.deleteObserver(this);
           }
           for(Curvature3D.SecondPartial csp : curvSecPartials) {
-            csp.removeDependent(this);
+            csp.deleteObserver(this);
           }
           curvPartials_nm.clear();
           curvPartials_op.clear();

@@ -25,9 +25,9 @@ public class Angle extends Geoquant {
     lenB = Length.At(sf.e13);
     lenC = Length.At(sf.e23);
     
-    lenA.addDependent(this);
-    lenB.addDependent(this);
-    lenC.addDependent(this);
+    lenA.addObserver(this);
+    lenB.addObserver(this);
+    lenC.addObserver(this);
   }
   
   protected void recalculate() {
@@ -44,9 +44,9 @@ public class Angle extends Geoquant {
  
   protected void remove() {
     deleteDependents();
-    lenA.removeDependent(this);
-    lenB.removeDependent(this);
-    lenC.removeDependent(this);
+    lenA.deleteObserver(this);
+    lenB.deleteObserver(this);
+    lenC.deleteObserver(this);
     Index.remove(pos);
   }
   

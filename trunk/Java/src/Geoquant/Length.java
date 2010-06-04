@@ -25,15 +25,15 @@ public class Length extends Geoquant {
     verts.addAll(e.getLocalVertices());
     
     rad1 = Radius.At(verts.get(0));
-    rad1.addDependent(this);
+    rad1.addObserver(this);
     alpha1 = Alpha.At(verts.get(0));
-    alpha1.addDependent(this);
+    alpha1.addObserver(this);
     rad2 = Radius.At(verts.get(1));
-    rad2.addDependent(this);
+    rad2.addObserver(this);
     alpha2 = Alpha.At(verts.get(1));
-    alpha2.addDependent(this);
+    alpha2.addObserver(this);
     eta = Eta.At(e);
-    eta.addDependent(this);
+    eta.addObserver(this);
   }
   
   protected void recalculate() {
@@ -49,11 +49,11 @@ public class Length extends Geoquant {
  
   protected void remove() {
     deleteDependents();
-    rad1.removeDependent(this);
-    rad2.removeDependent(this);
-    alpha1.removeDependent(this);
-    alpha2.removeDependent(this);
-    eta.removeDependent(this);
+    rad1.deleteObserver(this);
+    rad2.deleteObserver(this);
+    alpha1.deleteObserver(this);
+    alpha2.deleteObserver(this);
+    eta.deleteObserver(this);
     Index.remove(pos);
   }
   

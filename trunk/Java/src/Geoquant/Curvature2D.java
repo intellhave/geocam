@@ -21,7 +21,7 @@ public class Curvature2D extends Geoquant {
     Angle a;
     for(Face f : v.getLocalFaces()) {
       a = Angle.At(v, f);
-      a.addDependent(this);
+      a.addObserver(this);
       angles.add(a);
     }
   }
@@ -37,7 +37,7 @@ public class Curvature2D extends Geoquant {
   protected void remove() {
     deleteDependents();
     for(Angle a : angles) {
-      a.removeDependent(this);
+      a.deleteObserver(this);
     }
     angles.clear();
     Index.remove(pos);
@@ -67,7 +67,7 @@ public class Curvature2D extends Geoquant {
       Curvature2D k;
       for(Vertex v : Triangulation.vertexTable.values()) {
         k = Curvature2D.At(v);
-        k.addDependent(this);
+        k.addObserver(this);
         curvs.add(k);
       }
     }
@@ -81,7 +81,7 @@ public class Curvature2D extends Geoquant {
     protected void remove() {
       deleteDependents();
       for(Curvature2D k : curvs) {
-        k.removeDependent(this);
+        k.deleteObserver(this);
       }
       curvs.clear();
     }

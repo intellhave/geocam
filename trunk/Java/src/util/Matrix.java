@@ -111,4 +111,19 @@ public class Matrix implements Cloneable{
     }
   }
   
+  public String toString() {
+    String s = "";
+    for(int i = 0; i < rows; i++) {
+      s += "[";
+      for(int j = 0; j < cols - 1; j++) {
+        s += m[i][j] + ", ";
+      }
+      s += m[i][cols - 1] + "]";
+      if(i != rows - 1) {
+         s+= "\n";
+      } 
+    }
+    return s;
+  }
+  
 }

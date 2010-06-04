@@ -43,12 +43,12 @@ public class Volume extends Geoquant {
     L_jl = Length.At(st.e24);
     L_kl = Length.At(st.e34);
     
-    L_ij.addDependent(this);
-    L_ik.addDependent(this);
-    L_il.addDependent(this);
-    L_jk.addDependent(this);
-    L_jl.addDependent(this);
-    L_kl.addDependent(this);
+    L_ij.addObserver(this);
+    L_ik.addObserver(this);
+    L_il.addObserver(this);
+    L_jk.addObserver(this);
+    L_jl.addObserver(this);
+    L_kl.addObserver(this);
   }
   
   protected void recalculate() {
@@ -90,12 +90,12 @@ public class Volume extends Geoquant {
 
   protected void remove() {
     deleteDependents();
-    L_ij.removeDependent(this);
-    L_ik.removeDependent(this);
-    L_il.removeDependent(this);
-    L_jk.removeDependent(this);
-    L_jl.removeDependent(this);
-    L_kl.removeDependent(this);
+    L_ij.deleteObserver(this);
+    L_ik.deleteObserver(this);
+    L_il.deleteObserver(this);
+    L_jk.deleteObserver(this);
+    L_jl.deleteObserver(this);
+    L_kl.deleteObserver(this);
     Index.remove(pos);
   }
 
@@ -130,7 +130,7 @@ public class Volume extends Geoquant {
       Volume v;
       for(Tetra t : Triangulation.tetraTable.values()) {
         v = Volume.At(t);
-        v.addDependent(this);
+        v.addObserver(this);
         volumes.add(v);
       }
     }
@@ -144,7 +144,7 @@ public class Volume extends Geoquant {
     protected void remove() {
       deleteDependents();
       for(Volume v : volumes) {
-        v.removeDependent(this);
+        v.deleteObserver(this);
       }
       volumes.clear();
     }
@@ -228,12 +228,12 @@ public class Volume extends Geoquant {
       etas[5] = Eta.At(st.e34);
       
       for(int i = 0; i < 4; i++) {
-        radii[i].addDependent(this);
-        alphas[i].addDependent(this);
+        radii[i].addObserver(this);
+        alphas[i].addObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].addDependent(this);
+        etas[i].addObserver(this);
       }
       
     }
@@ -265,12 +265,12 @@ public class Volume extends Geoquant {
       etas[5] = Eta.At(st.e34);
       
       for(int i = 0; i < 4; i++) {
-        radii[i].addDependent(this);
-        alphas[i].addDependent(this);
+        radii[i].addObserver(this);
+        alphas[i].addObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].addDependent(this);
+        etas[i].addObserver(this);
       }
       
     }
@@ -289,12 +289,12 @@ public class Volume extends Geoquant {
     protected void remove() {
       deleteDependents();
       for(int i = 0; i < 4; i++) {
-        radii[i].removeDependent(this);
-        alphas[i].removeDependent(this);
+        radii[i].deleteObserver(this);
+        alphas[i].deleteObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].removeDependent(this);
+        etas[i].deleteObserver(this);
       }
       PartialIndex.remove(pos);
     }
@@ -458,7 +458,7 @@ public class Volume extends Geoquant {
       Volume.Partial partial;
       for(Tetra t2 : v.getLocalTetras()) {
         partial = Volume.At(t2).partialAt(v);
-        partial.addDependent(this);
+        partial.addObserver(this);
         vol_partials.add(partial);
       }
     }
@@ -469,7 +469,7 @@ public class Volume extends Geoquant {
       Volume.Partial partial;
       for(Tetra t2 : e.getLocalTetras()) {
         partial = Volume.At(t2).partialAt(e);
-        partial.addDependent(this);
+        partial.addObserver(this);
         vol_partials.add(partial);
       }
     }
@@ -484,7 +484,7 @@ public class Volume extends Geoquant {
     protected void remove() {
       deleteDependents();
       for(Volume.Partial partial : vol_partials) {
-        partial.removeDependent(this);
+        partial.deleteObserver(this);
       }
       PartialSumIndex.remove(pos);
     }
@@ -576,7 +576,7 @@ public class Volume extends Geoquant {
       if(v == w) {
         locality = 0;
         volumePartial = partialAt(v);
-        volumePartial.addDependent(this);
+        volumePartial.addObserver(this);
       } else {
         locality = 1;
       }
@@ -602,12 +602,12 @@ public class Volume extends Geoquant {
       etas[5] = Eta.At(st.e34);
       
       for(int i = 0; i < 4; i++) {
-        radii[i].addDependent(this);
-        alphas[i].addDependent(this);
+        radii[i].addObserver(this);
+        alphas[i].addObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].addDependent(this);
+        etas[i].addObserver(this);
       }
     }
     
@@ -642,12 +642,12 @@ public class Volume extends Geoquant {
       etas[5] = Eta.At(st.e34);
       
       for(int i = 0; i < 4; i++) {
-        radii[i].addDependent(this);
-        alphas[i].addDependent(this);
+        radii[i].addObserver(this);
+        alphas[i].addObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].addDependent(this);
+        etas[i].addObserver(this);
       }
     }
     
@@ -684,12 +684,12 @@ public class Volume extends Geoquant {
       etas[5] = Eta.At(st.e34);
       
       for(int i = 0; i < 4; i++) {
-        radii[i].addDependent(this);
-        alphas[i].addDependent(this);
+        radii[i].addObserver(this);
+        alphas[i].addObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].addDependent(this);
+        etas[i].addObserver(this);
       }
     }
     
@@ -1423,15 +1423,15 @@ public class Volume extends Geoquant {
     protected void remove() {
       deleteDependents();
       for(int i = 0; i < 4; i++) {
-        radii[i].removeDependent(this);
-        alphas[i].removeDependent(this);
+        radii[i].deleteObserver(this);
+        alphas[i].deleteObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].removeDependent(this);
+        etas[i].deleteObserver(this);
       }
       if(type == SecondPartialType.RadiusRadius && locality == 0) {
-        volumePartial.removeDependent(this);
+        volumePartial.deleteObserver(this);
       }
       SecondPartialIndex.remove(pos);
     }
@@ -1451,7 +1451,7 @@ public class Volume extends Geoquant {
       for(Tetra t2 : v.getLocalTetras()) {
         if(w.isAdjTetra(t2)) {
           partial = Volume.At(t2).secondPartialAt(v, w);
-          partial.addDependent(this);
+          partial.addObserver(this);
           vol_sec_partials.add(partial);
         }
       }
@@ -1464,7 +1464,7 @@ public class Volume extends Geoquant {
       for(Tetra t2 : v.getLocalTetras()) {
         if(e.isAdjTetra(t2)) {
           partial = Volume.At(t2).secondPartialAt(v, e);
-          partial.addDependent(this);
+          partial.addObserver(this);
           vol_sec_partials.add(partial);
         }
       }
@@ -1477,7 +1477,7 @@ public class Volume extends Geoquant {
       for(Tetra t2 : e.getLocalTetras()) {
         if(f.isAdjTetra(t2)) {
           partial = Volume.At(t2).secondPartialAt(e, f);
-          partial.addDependent(this);
+          partial.addObserver(this);
           vol_sec_partials.add(partial);
         }
       }
@@ -1493,7 +1493,7 @@ public class Volume extends Geoquant {
     protected void remove() {
       deleteDependents();
       for(Volume.SecondPartial partial : vol_sec_partials) {
-        partial.removeDependent(this);
+        partial.deleteObserver(this);
       }
       SecondPartialSumIndex.remove(pos);
     }

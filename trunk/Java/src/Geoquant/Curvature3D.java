@@ -34,9 +34,9 @@ public class Curvature3D extends Geoquant {
     PartialEdge pe;
     for(Edge e : v.getLocalEdges()) {
       sc = SectionalCurvature.At(e);
-      sc.addDependent(this);
+      sc.addObserver(this);
       pe = PartialEdge.At(v, e);
-      pe.addDependent(this);
+      pe.addObserver(this);
       sec_curvs.add(sc);
       partials.add(pe);
     }
@@ -53,10 +53,10 @@ public class Curvature3D extends Geoquant {
   protected void remove() {
     deleteDependents();
     for(SectionalCurvature sc : sec_curvs) {
-      sc.removeDependent(this);
+      sc.deleteObserver(this);
     }
     for(PartialEdge pe : partials) {
-      pe.removeDependent(this);
+      pe.deleteObserver(this);
     }
     sec_curvs.clear();
     partials.clear();
@@ -93,7 +93,7 @@ public class Curvature3D extends Geoquant {
       Curvature3D k;
       for(Vertex v : Triangulation.vertexTable.values()) {
         k = Curvature3D.At(v);
-        k.addDependent(this);
+        k.addObserver(this);
         curvs.add(k);
       }
     }
@@ -107,7 +107,7 @@ public class Curvature3D extends Geoquant {
     protected void remove() {
       deleteDependents();
       for(Curvature3D k : curvs) {
-        k.removeDependent(this);
+        k.deleteObserver(this);
       }
       curvs.clear();
     }
@@ -156,6 +156,7 @@ public class Curvature3D extends Geoquant {
     private PartialEdge.Partial dij_partial;
     
     private Partial(Vertex w) {
+      super(w);
       type = PartialType.Radius;
       if(v == w) {
         locality  = 0;
@@ -164,9 +165,9 @@ public class Curvature3D extends Geoquant {
       }
       
       vRadius = Radius.At(v);
-      vRadius.addDependent(this);
+      vRadius.addObserver(this);
       vCurv = Curvature3D.At(v);
-      vCurv.addDependent(this);
+      vCurv.addObserver(this);
             
       DualArea da;
       ConeAngle ca;
@@ -184,31 +185,31 @@ public class Curvature3D extends Geoquant {
       for(Edge e : v.getLocalEdges()) {
         if(w.isAdjEdge(e)) {
           da = DualArea.At(e);
-          da.addDependent(this);
+          da.addObserver(this);
           duals.add(da);
           
           ca = ConeAngle.At(e);
-          ca.addDependent(this);
+          ca.addObserver(this);
           angles.add(ca);
           
           l = Length.At(e);
-          l.addDependent(this);
+          l.addObserver(this);
           lengths.add(l);
           
           eta = Eta.At(e);
-          eta.addDependent(this);
+          eta.addObserver(this);
           etas.add(eta);
           
           se = new StdEdge(e, v);
           r = Radius.At(se.v2);
-          r.addDependent(this);
+          r.addObserver(this);
           radii.add(r);
         }
       }
     }
 
     private Partial(Edge e) {
-      super();
+      super(e);
       type = PartialType.Eta;
       
       if(v.isAdjEdge(e)) {
@@ -220,8 +221,8 @@ public class Curvature3D extends Geoquant {
       if(locality == 0) {
         dij_partial = PartialEdge.At(v, e).partialAt(e);
         dih_sum = ConeAngle.At(e);
-        dij_partial.addDependent(this);
-        dih_sum.addDependent(this);
+        dij_partial.addObserver(this);
+        dih_sum.addObserver(this);
       }
       
       dih_partials = new LinkedList<LinkedList<DihedralAngle.Partial>>();
@@ -233,12 +234,12 @@ public class Curvature3D extends Geoquant {
         list = new LinkedList<DihedralAngle.Partial>();
         for(Tetra t : nm.getLocalTetras()) {
           dih_partial = DihedralAngle.At(nm, t).partialAt(e);
-          dih_partial.addDependent(this);
+          dih_partial.addObserver(this);
           list.add(dih_partial);
         }
         dih_partials.add(list);
         dij = PartialEdge.At(v, nm);
-        dij.addDependent(this);
+        dij.addObserver(this);
         dijs.add(dij);
       }
     }
@@ -321,19 +322,19 @@ public class Curvature3D extends Geoquant {
       deleteDependents();
       switch(type) {
         case Radius:
-          vRadius.removeDependent(this);
-          vCurv.removeDependent(this);
+          vRadius.deleteObserver(this);
+          vCurv.deleteObserver(this);
           Iterator<DualArea> da_it = duals.iterator();
           Iterator<ConeAngle> ca_it = angles.iterator();
           Iterator<Length> l_it = lengths.iterator();
           Iterator<Eta> eta_it = etas.iterator();
           Iterator<Radius> r_it = radii.iterator();
           while(da_it.hasNext()) {
-            da_it.next().removeDependent(this);
-            ca_it.next().removeDependent(this);
-            l_it.next().removeDependent(this);
-            eta_it.next().removeDependent(this);
-            r_it.next().removeDependent(this);
+            da_it.next().deleteObserver(this);
+            ca_it.next().deleteObserver(this);
+            l_it.next().deleteObserver(this);
+            eta_it.next().deleteObserver(this);
+            r_it.next().deleteObserver(this);
           }
           duals.clear();
           angles.clear();
@@ -344,14 +345,14 @@ public class Curvature3D extends Geoquant {
         
         case Eta:
           if(locality == 0) {
-            dij_partial.removeDependent(this);
-            dih_sum.removeDependent(this);
+            dij_partial.deleteObserver(this);
+            dih_sum.deleteObserver(this);
           }
           Iterator<PartialEdge> dij_it = dijs.iterator();
           for(LinkedList<DihedralAngle.Partial> list : dih_partials) {
-            dij_it.next().removeDependent(this);
+            dij_it.next().deleteObserver(this);
             for(DihedralAngle.Partial dij_partial : list) {
-              dij_partial.removeDependent(this);
+              dij_partial.deleteObserver(this);
             }
             list.clear();
           }
@@ -389,7 +390,7 @@ public class Curvature3D extends Geoquant {
     private LinkedList<PartialEdge> dijs;
     
     public SecondPartial(Edge e, Edge f) {
-      super();
+      super(e, f);
       
       dih_sec_partials = new LinkedList<LinkedList<DihedralAngle.SecondPartial>>();
       dih_partials_e = new LinkedList<LinkedList<DihedralAngle.Partial>>();
@@ -423,39 +424,39 @@ public class Curvature3D extends Geoquant {
         
         /* PartialEdge */
         dij = PartialEdge.At(v, ij);
-        dij.addDependent(this);
+        dij.addObserver(this);
         dijs.add(dij);
         
         /* PartialEdgeSecondPartial */
         dij_sec_partial = dij.secondPartialAt(e, f);
-        dij_sec_partial.addDependent(this);
+        dij_sec_partial.addObserver(this);
         dij_sec_partials.add(dij_sec_partial);
         
         /* PartialEdgePartial */
         dij_partial = dij.partialAt(e);
-        dij_partial.addDependent(this);
+        dij_partial.addObserver(this);
         dij_partials_e.add(dij_partial);
         dij_partial = dij.partialAt(f);
-        dij_partial.addDependent(this);
+        dij_partial.addObserver(this);
         dij_partials_f.add(dij_partial);
         
         for(Tetra t : ij.getLocalTetras()) {
           /* DihedralAngle */
           dih = DihedralAngle.At(ij, t);
-          dih.addDependent(this);
+          dih.addObserver(this);
           dih_list.add(dih);
           
           /* DihedralAngleSecondPartial */
           dih_sec_partial = dih.secondPartialAt(e, f);
-          dih_sec_partial.addDependent(this);
+          dih_sec_partial.addObserver(this);
           dih_sec_list.add(dih_sec_partial);
           
           /* DihedralAnglePartial */
           dih_partial = dih.partialAt(e);
-          dih_partial.addDependent(this);
+          dih_partial.addObserver(this);
           dih_partial_e_list.add(dih_partial);
           dih_partial = dih.partialAt(f);
-          dih_partial.addDependent(this);
+          dih_partial.addObserver(this);
           dih_partial_f_list.add(dih_partial);
         }
         
@@ -536,15 +537,15 @@ public class Curvature3D extends Geoquant {
         dih_f_it = dih_f_list.next().iterator();
         dih_it = dih_list.next().iterator();
         while(dih_it.hasNext()) {
-          dih_sec_it.next().removeDependent(this);
-          dih_e_it.next().removeDependent(this);
-          dih_f_it.next().removeDependent(this);
-          dih_it.next().removeDependent(this);          
+          dih_sec_it.next().deleteObserver(this);
+          dih_e_it.next().deleteObserver(this);
+          dih_f_it.next().deleteObserver(this);
+          dih_it.next().deleteObserver(this);          
         }
-        dij_it.next().removeDependent(this);
-        dij_f_it.next().removeDependent(this);
-        dij_e_it.next().removeDependent(this);
-        dij_sec_it.next().removeDependent(this);
+        dij_it.next().deleteObserver(this);
+        dij_f_it.next().deleteObserver(this);
+        dij_e_it.next().deleteObserver(this);
+        dij_sec_it.next().deleteObserver(this);
       }
       dih_sec_partials.clear();
       dih_partials_e.clear();
