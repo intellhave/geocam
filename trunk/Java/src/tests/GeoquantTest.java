@@ -31,7 +31,7 @@ public class GeoquantTest {
   public static void main(String[] args) {
     initializeQuantities();
     
-    testLengths();
+   /* testLengths();
     testRadii();
     testAlpha();
     testEta();
@@ -54,6 +54,9 @@ public class GeoquantTest {
     testDihedralAngleSecondPartial();
     testCurvature3DPartial();
     testCurvature3DSecondPartial();
+    testRadiiPartial();
+    testNEHRPartial();
+    testNEHRSecondPartial();*/
   }
   
   private static void testInvoker() {
@@ -317,7 +320,7 @@ public class GeoquantTest {
         partial = c.partialAt(w);
         System.out.println(partial + " at " + w + " = " + c.getValue());
       }
-      for (Edge e : Triangulation.edgeTable.values()) {
+      for (Edge e : v.getLocalEdges()) {
         partial = c.partialAt(e);
         System.out.println(partial + " at " + e + " = " + c.getValue());
       }
@@ -328,13 +331,49 @@ public class GeoquantTest {
     Curvature3D.SecondPartial secondPartial;
     for (Vertex v : Triangulation.vertexTable.values()) {
       c = Curvature3D.At(v);
-      for (Edge e : Triangulation.edgeTable.values()) {
-        for (Edge f : Triangulation.edgeTable.values()) {
+      for (Edge e : v.getLocalEdges()) {
+        for (Edge f : v.getLocalEdges()) {
           secondPartial = c.secondPartialAt(e, f);
           System.out.println(secondPartial + " at " + e + ", " + f + " = " + c.getValue());
         }
       }
     }
   }
-  
+  private static void testRadiiPartial() {
+    Radius r;
+    Radius.Partial partial;
+    for (Vertex v : Triangulation.vertexTable.values()){
+      r = Radius.At(v);
+      for (Edge e : v.getLocalEdges()){
+        partial = r.partialAt(e);
+        System.out.println(partial + " at " + e + " = " + r.getValue());
+      }
+    }
+  }
+  private static void testNEHRPartial() {
+    NEHR.Partial partial;
+    for (Vertex  v : Triangulation.vertexTable.values()) {
+      partial = NEHR.partialAt(v);
+      System.out.println(partial + " at " + v + " = " + partial.getValue());
+    }
+  }
+  private static void testNEHRSecondPartial() {
+    NEHR.SecondPartial secondPartial;
+    for (Vertex v : Triangulation.vertexTable.values()) {
+      for (Vertex w : Triangulation.vertexTable.values()) {
+        secondPartial = NEHR.secondPartialAt(v, w);
+        System.out.println(secondPartial + " at " + v + ", " + w + " = " + secondPartial.getValue());
+      }
+      for (Edge e : v.getLocalEdges()) {
+        secondPartial = NEHR.secondPartialAt(v, e);
+        System.out.println(secondPartial + " at " + v + ", " + e + " = " + secondPartial.getValue());
+      }
+    }
+   for (Edge e : Triangulation.edgeTable.values()) {
+     for (Edge f : Triangulation.edgeTable.values()) { 
+       secondPartial = NEHR.secondPartialAt(e, f);
+       System.out.println(secondPartial + " at " + e + ", " + f + " = " + secondPartial.getValue());
+     }
+   }
+  }
 }
