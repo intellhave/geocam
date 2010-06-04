@@ -12,7 +12,7 @@ public class ConeAngle extends Geoquant {
   private LinkedList<DihedralAngle> angles = new LinkedList<DihedralAngle>();
   
   private ConeAngle(Edge e) {
-    super();
+    super(e);
     DihedralAngle beta;
     for(Tetra t : e.getLocalTetras()) {
       beta = DihedralAngle.At(e, t);

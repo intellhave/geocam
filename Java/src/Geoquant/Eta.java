@@ -8,7 +8,7 @@ public class Eta extends Geoquant {
   private static HashMap<TriPosition, Eta> Index = new HashMap<TriPosition, Eta>();
   
   private Eta(Edge e) {
-    super(); // ALWAYS have to call this first
+    super(e); // ALWAYS have to call this first
     
   }
   

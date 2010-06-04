@@ -15,13 +15,15 @@ public class PartialEdge extends Geoquant {
   private Alpha aj;
   private Length Lij;
   private Edge e;
+  private Vertex v;
   
   public PartialEdge(Vertex vertex, Edge edge) {
-    super();
+    super(vertex, edge);
     PartialIndex = new HashMap<TriPosition, Partial>();
     SecondPartialIndex = new HashMap<TriPosition, SecondPartial>();
     
     this.e = edge;
+    this.v = vertex;
     ri = Radius.At(vertex);
     ai = Alpha.At(vertex);
     for (Vertex v : edge.getLocalVertices()) {
@@ -93,7 +95,7 @@ public class PartialEdge extends Geoquant {
     private Eta eij;
     
     private Partial(Edge f) {
-      super();
+      super(f);
       equal = e == f;
       if(equal) {
         ri.addDependent(this);
@@ -131,6 +133,9 @@ public class PartialEdge extends Geoquant {
       PartialIndex.remove(pos);
     }
     
+    public String toString() {
+      return "PartialEdge@[" + v + ", " + e + "]" + "w.r.t" + location + "=" + getValue();
+    }
   }
 
   public PartialEdge.SecondPartial secondPartialAt(Edge f, Edge g) {
@@ -149,7 +154,7 @@ public class PartialEdge extends Geoquant {
     private Eta eij;
     
     private SecondPartial(Edge f, Edge g) {
-      super();
+      super(f, g);
       equal = e == f;
       equal = equal && e == g;
       if(equal) {
@@ -186,7 +191,10 @@ public class PartialEdge extends Geoquant {
         eij.removeDependent(this);
       }
       SecondPartialIndex.remove(pos);
-      
+    }
+    
+    public String toString() {
+      return "PartialEdge@[" + v + ", " + e + "]" + "w.r.t" + location + "=" + getValue();
     }
     
   }

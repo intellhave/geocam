@@ -17,7 +17,7 @@ public class Angle extends Geoquant {
   private Face f;
   
   public Angle(Vertex v, Face f) {
-    super();
+    super(v, f);
     
     this.f = f;
     StdFace sf = new StdFace(f, v);

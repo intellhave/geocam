@@ -19,7 +19,7 @@ public class Length extends Geoquant {
   private Eta eta;
   
   public Length(Edge e) {
-    super();
+    super(e);
     
     List<Vertex> verts = new ArrayList<Vertex>();
     verts.addAll(e.getLocalVertices());
