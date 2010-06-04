@@ -18,7 +18,7 @@ public class DihedralAngle extends Geoquant {
   private Edge e;
   
   public DihedralAngle(Edge e, Tetra t) {
-    super();
+    super(e, t);
     PartialIndex = new HashMap<TriPosition, Partial>();
     SecondPartialIndex = new HashMap<TriPosition, SecondPartial>();
     
@@ -84,7 +84,7 @@ public class DihedralAngle extends Geoquant {
     private int locality;
     
     private Partial(Edge f) {
-      super();
+      super(f);
       
       radii = new Radius[4];
       alphas = new Alpha[4];
@@ -492,6 +492,10 @@ public class DihedralAngle extends Geoquant {
       PartialIndex.remove(pos);
     }
     
+    public String toString() {
+      return "DihedralAngle@[" + e + ", " + t + "]" + "w.r.t" + location + "=" + getValue();
+    }
+    
   }
 
   public DihedralAngle.SecondPartial secondPartialAt(Edge nm, Edge op) {
@@ -512,7 +516,7 @@ public class DihedralAngle extends Geoquant {
     private int locality;
     
     private SecondPartial(Edge nm, Edge op) {
-      super();
+      super(nm, op);
       radii = new Radius[4];
       alphas = new Alpha[4];
       etas = new Eta[6];
@@ -3473,6 +3477,9 @@ alpha4*Math.pow(r4,2)))))));
       SecondPartialIndex.remove(pos);
     }
     
+    public String toString() {
+      return "DihedralAngle@[" + e + ", " + t + "]" + "w.r.t" + location + "=" + getValue();
+    }
   }
 }
 

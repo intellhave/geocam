@@ -22,7 +22,7 @@ public class Curvature3D extends Geoquant {
   private Vertex v;
   
   public Curvature3D(Vertex v) {
-    super();
+    super(v);
     
     this.v = v;
     PartialIndex = new HashMap<TriPosition, Partial>();
@@ -156,7 +156,6 @@ public class Curvature3D extends Geoquant {
     private PartialEdge.Partial dij_partial;
     
     private Partial(Vertex w) {
-      super();
       type = PartialType.Radius;
       if(v == w) {
         locality  = 0;
@@ -362,6 +361,9 @@ public class Curvature3D extends Geoquant {
       PartialIndex.remove(pos);
     }
     
+    public String toString() {
+      return "Curvature3D@[" + v + "]" + "w.r.t" + location + "=" + getValue();
+    }
   }
 
   public Curvature3D.SecondPartial secondPartialAt(Edge e, Edge f) {
@@ -555,5 +557,8 @@ public class Curvature3D extends Geoquant {
       SecondPartialIndex.remove(pos);      
     }
     
+    public String toString() {
+      return "Curvature3D@[" + v + "]" + "w.r.t" + location + "=" + getValue();
+    }
   }
 }

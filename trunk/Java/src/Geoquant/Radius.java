@@ -14,9 +14,11 @@ public class Radius extends Geoquant {
   private static NEHR.SecondPartial[][] nehr_rad_rad;
   private static NEHR.SecondPartial[][] nehr_rad_eta;
   private HashMap<TriPosition, Partial> PartialIndex;
+  private Vertex v;
   
   private Radius(Vertex v) {
-    super(); // ALWAYS have to call this first
+    super(v); // ALWAYS have to call this first
+    this.v = v;
     PartialIndex = new HashMap<TriPosition, Partial>();
   }
   
@@ -121,6 +123,7 @@ public class Radius extends Geoquant {
   public class Partial extends Geoquant {
 
     private Partial(Edge e) {
+      super(e);
       if(nehr_rad_rad == null || nehr_rad_eta == null) {
         buildPartials();
       }
@@ -153,6 +156,10 @@ public class Radius extends Geoquant {
         }
       }
       PartialIndex.remove(pos);
+    }
+    
+    public String toString() {
+      return "Radius@[" + v + "]" + "w.r.t" + location + "=" + getValue();
     }
     
   }

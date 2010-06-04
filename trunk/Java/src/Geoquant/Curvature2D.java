@@ -15,7 +15,7 @@ public class Curvature2D extends Geoquant {
   private LinkedList<Angle> angles;
   
   public Curvature2D(Vertex v) {
-    super();
+    super(v);
     
     angles = new LinkedList<Angle>();
     Angle a;

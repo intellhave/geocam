@@ -8,7 +8,7 @@ public class Alpha extends Geoquant {
   private static HashMap<TriPosition, Alpha> Index = new HashMap<TriPosition, Alpha>();
   
   private Alpha(Vertex v) {
-    super(); // ALWAYS have to call this first
+    super(v); // ALWAYS have to call this first
     value = 1; // default
   }
   

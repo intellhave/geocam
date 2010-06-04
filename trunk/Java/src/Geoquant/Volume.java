@@ -29,7 +29,7 @@ public class Volume extends Geoquant {
   private Tetra t;
   
   public Volume(Tetra t) {
-    super();
+    super(t);
     
     PartialIndex = new HashMap<TriPosition, Partial>();
     SecondPartialIndex = new HashMap<TriPosition, SecondPartial>();
@@ -202,7 +202,7 @@ public class Volume extends Geoquant {
     
     
     private Partial(Vertex v) {
-      super();
+      super(v);
       
       type = PartialType.Radius;
       radii = new Radius[4];
@@ -239,7 +239,7 @@ public class Volume extends Geoquant {
     }
     
     private Partial(Edge e) {
-      super();
+      super(e);
       
       type = PartialType.Eta;
       radii = new Radius[4];
@@ -444,13 +444,16 @@ public class Volume extends Geoquant {
       return result;
     }
   
+    public String toString() {
+      return "Volume@[" + t + "]" + "w.r.t" + location + "=" + getValue();
+    }
   }
 
   public static class PartialSum extends Geoquant {
     private LinkedList<Volume.Partial> vol_partials;
     
     private PartialSum(Vertex v) {
-      super();
+      super(v);
       vol_partials = new LinkedList<Volume.Partial>();
       Volume.Partial partial;
       for(Tetra t2 : v.getLocalTetras()) {
@@ -461,7 +464,7 @@ public class Volume extends Geoquant {
     }
     
     private PartialSum(Edge e) {
-      super();
+      super(e);
       vol_partials = new LinkedList<Volume.Partial>();
       Volume.Partial partial;
       for(Tetra t2 : e.getLocalTetras()) {
@@ -485,7 +488,10 @@ public class Volume extends Geoquant {
       }
       PartialSumIndex.remove(pos);
     }
-  
+    
+    public String toString() {
+      return "Volume$Sum@[]" + "w.r.t" + location + "=" + getValue();
+    }
   }
   
   public Volume.SecondPartial secondPartialAt(Vertex v, Vertex w) {
@@ -565,7 +571,7 @@ public class Volume extends Geoquant {
     int locality;
     
     private SecondPartial(Vertex v, Vertex w) {
-      super();
+      super(v, w);
       type = SecondPartialType.RadiusRadius;
       if(v == w) {
         locality = 0;
@@ -606,7 +612,7 @@ public class Volume extends Geoquant {
     }
     
     private SecondPartial(Vertex v, Edge e) {
-      super();
+      super(v, e);
       type = SecondPartialType.RadiusEta;
       
       if(e.isAdjVertex(v)) {
@@ -646,7 +652,7 @@ public class Volume extends Geoquant {
     }
     
     private SecondPartial(Edge e, Edge f) {
-      super();
+      super(e, f);
       type = SecondPartialType.EtaEta;
       
       if(e == f) {
@@ -1430,13 +1436,16 @@ public class Volume extends Geoquant {
       SecondPartialIndex.remove(pos);
     }
     
+    public String toString() {
+      return "Volume@[" + t + "]" + "w.r.t" + location + "=" + getValue();
+    }
   }
 
   public static class SecondPartialSum extends Geoquant {
     private LinkedList<Volume.SecondPartial> vol_sec_partials;
     
     private SecondPartialSum(Vertex v, Vertex w) {
-      super();
+      super(v, w);
       Volume.SecondPartial partial;
       vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : v.getLocalTetras()) {
@@ -1449,7 +1458,7 @@ public class Volume extends Geoquant {
     }
     
     private SecondPartialSum(Vertex v, Edge e) {
-      super();
+      super(v, e);
       Volume.SecondPartial partial;
       vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : v.getLocalTetras()) {
@@ -1462,7 +1471,7 @@ public class Volume extends Geoquant {
     }
     
     private SecondPartialSum(Edge e, Edge f) {
-      super();
+      super(e, f);
       Volume.SecondPartial partial;
       vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : e.getLocalTetras()) {
@@ -1487,6 +1496,10 @@ public class Volume extends Geoquant {
         partial.removeDependent(this);
       }
       SecondPartialSumIndex.remove(pos);
+    }
+    
+    public String toString() {
+      return "Volume$Sum@[]" + "w.r.t" + location + "=" + getValue();
     }
   }
 }

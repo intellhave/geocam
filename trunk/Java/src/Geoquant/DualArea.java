@@ -17,7 +17,7 @@ public class DualArea extends Geoquant {
   private Edge e;
   
   public DualArea(Edge e) {
-    super();
+    super(e);
     this.e = e;
     SegmentIndex = new HashMap<TriPosition, Segment>();
     Segment s;
@@ -77,6 +77,7 @@ public class DualArea extends Geoquant {
     private FaceHeight hijl_k;
     
     private Segment(Tetra t) {
+      super(t);
       StdTetra st = new StdTetra(t, e);
       hij_k = EdgeHeight.At(e, st.f123);
       hij_l = EdgeHeight.At(e, st.f124);
@@ -105,6 +106,10 @@ public class DualArea extends Geoquant {
       hijk_l.removeDependent(this);
       hijl_k.removeDependent(this);
       SegmentIndex.remove(pos);
+    }
+    
+    public String toString() {
+      return "DualArea@[" + e + "]" + "Segment" + location + "=" + getValue();
     }
   }
 }

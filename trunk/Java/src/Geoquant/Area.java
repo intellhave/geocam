@@ -14,7 +14,7 @@ public class Area extends Geoquant {
   private Length lik;
   
   public Area(Face f) {
-    super();
+    super(f);
     StdFace stdF = new StdFace(f);
     lij = Length.At(stdF.e12);
     ljk = Length.At(stdF.e23);

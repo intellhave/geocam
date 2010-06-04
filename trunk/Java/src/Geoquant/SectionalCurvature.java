@@ -14,7 +14,7 @@ public class SectionalCurvature extends Geoquant{
   private LinkedList<DihedralAngle> dih_angles;
   
   public SectionalCurvature(Edge e) {
-    super();
+    super(e);
     dih_angles = new LinkedList<DihedralAngle>();
     DihedralAngle beta;
     for(Tetra t : e.getLocalTetras()) {

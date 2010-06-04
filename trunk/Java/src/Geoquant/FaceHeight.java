@@ -16,7 +16,7 @@ public class FaceHeight extends Geoquant {
   private DihedralAngle beta_ij_kl;
   
   public FaceHeight(Face f, Tetra t) {
-    super();
+    super(f, t);
     
     StdTetra st = new StdTetra(t, f);
     hij_l = EdgeHeight.At(st.e12, st.f123);

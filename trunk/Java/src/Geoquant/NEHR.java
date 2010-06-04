@@ -67,7 +67,7 @@ public class NEHR extends Geoquant {
     private LinkedList<Curvature3D.Partial> curvPartials;
     
     private Partial(Vertex v) {
-      super();
+      super(v);
       type = PartialType.Radius;
       
       totVolume = Volume.sum();
@@ -82,7 +82,7 @@ public class NEHR extends Geoquant {
     }
     
     private Partial(Edge e) {
-      super();
+      super(e);
       type = PartialType.Eta;
       
       totVolume = Volume.sum();
@@ -151,6 +151,10 @@ public class NEHR extends Geoquant {
           break;
       }
       PartialIndex.remove(pos);
+    }
+  
+    public String toString() {
+      return "NEHR@[]" + "w.r.t" + location + "=" + getValue();
     }
   }
   
@@ -470,6 +474,10 @@ public class NEHR extends Geoquant {
           curvSecPartials.clear();
       }      
       SecondPartialIndex.remove(pos);
+    }
+    
+    public String toString() {
+      return "NEHR@[]" + "w.r.t" + location + "=" + getValue();
     }
   }
 }

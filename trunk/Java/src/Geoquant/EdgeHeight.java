@@ -16,7 +16,7 @@ public class EdgeHeight extends Geoquant {
   private Angle theta_i;
   
   public EdgeHeight(Edge e, Face f) {
-    super();
+    super(e, f);
     
     StdFace sf = new StdFace(f, e);
     dij = PartialEdge.At(sf.v1, sf.e12);
