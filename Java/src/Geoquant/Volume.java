@@ -1438,6 +1438,7 @@ public class Volume extends Geoquant {
     private SecondPartialSum(Vertex v, Vertex w) {
       super();
       Volume.SecondPartial partial;
+      vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : v.getLocalTetras()) {
         if(w.isAdjTetra(t2)) {
           partial = Volume.At(t2).secondPartialAt(v, w);
@@ -1450,6 +1451,7 @@ public class Volume extends Geoquant {
     private SecondPartialSum(Vertex v, Edge e) {
       super();
       Volume.SecondPartial partial;
+      vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : v.getLocalTetras()) {
         if(e.isAdjTetra(t2)) {
           partial = Volume.At(t2).secondPartialAt(v, e);
@@ -1462,6 +1464,7 @@ public class Volume extends Geoquant {
     private SecondPartialSum(Edge e, Edge f) {
       super();
       Volume.SecondPartial partial;
+      vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : e.getLocalTetras()) {
         if(f.isAdjTetra(t2)) {
           partial = Volume.At(t2).secondPartialAt(e, f);
