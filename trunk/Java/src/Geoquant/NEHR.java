@@ -154,6 +154,28 @@ public class NEHR extends Geoquant {
     }
   }
   
+  public static NEHR.SecondPartial secondPartialAt(Vertex v, Vertex w) {
+    TriPosition T = new TriPosition(v.getSerialNumber(), w.getSerialNumber());
+    SecondPartial q = SecondPartialIndex.get(T);
+    if(q == null) {
+      q = new SecondPartial(v, w);
+      q.pos = T;
+      SecondPartialIndex.put(T, q);
+    }
+    return q;
+  }
+  
+  public static NEHR.SecondPartial secondPartialAt(Vertex v, Edge e) {
+    TriPosition T = new TriPosition(v.getSerialNumber(), e.getSerialNumber());
+    SecondPartial q = SecondPartialIndex.get(T);
+    if(q == null) {
+      q = new SecondPartial(v, e);
+      q.pos = T;
+      SecondPartialIndex.put(T, q);
+    }
+    return q;
+  }
+  
   public static NEHR.SecondPartial secondPartialAt(Edge e, Edge f) {
     TriPosition T = new TriPosition(e.getSerialNumber(), f.getSerialNumber());
     SecondPartial q = SecondPartialIndex.get(T);
