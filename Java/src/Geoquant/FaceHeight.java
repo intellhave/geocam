@@ -34,9 +34,9 @@ public class FaceHeight extends Geoquant {
  
   protected void remove() {
     deleteDependents();
-    hij_l.removeDependent(this);
-    hij_k.removeDependent(this);
-    beta_ij_kl.removeDependent(this);
+    hij_l.deleteObserver(this);
+    hij_k.deleteObserver(this);
+    beta_ij_kl.deleteObserver(this);
     Index.remove(pos);
   }
   

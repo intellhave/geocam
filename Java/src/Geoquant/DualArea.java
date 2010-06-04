@@ -24,7 +24,7 @@ public class DualArea extends Geoquant {
     segments = new LinkedList<Segment>();
     for(Tetra t : e.getLocalTetras()) {
       s = this.segment(t);
-      s.addDependent(this);
+      s.addObserver(this);
       segments.add(s);
     }
   }
@@ -39,7 +39,7 @@ public class DualArea extends Geoquant {
   protected void remove() {
     deleteDependents();
     for(Segment s : segments) {
-      s.removeDependent(this);
+      s.deleteObserver(this);
     }
     Index.remove(pos);
   }
@@ -84,10 +84,10 @@ public class DualArea extends Geoquant {
       hijk_l = FaceHeight.At(st.f123, t);
       hijl_k = FaceHeight.At(st.f124, t);
       
-      hij_k.addDependent(this);
-      hij_l.addDependent(this);
-      hijk_l.addDependent(this);
-      hijl_k.addDependent(this);
+      hij_k.addObserver(this);
+      hij_l.addObserver(this);
+      hijk_l.addObserver(this);
+      hijl_k.addObserver(this);
     }
     
     protected void recalculate() {
@@ -101,10 +101,10 @@ public class DualArea extends Geoquant {
 
     protected void remove() {
       deleteDependents();
-      hij_k.removeDependent(this);
-      hij_l.removeDependent(this);
-      hijk_l.removeDependent(this);
-      hijl_k.removeDependent(this);
+      hij_k.deleteObserver(this);
+      hij_l.deleteObserver(this);
+      hijk_l.deleteObserver(this);
+      hijl_k.deleteObserver(this);
       SegmentIndex.remove(pos);
     }
     

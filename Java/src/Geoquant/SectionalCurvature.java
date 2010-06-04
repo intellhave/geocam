@@ -19,7 +19,7 @@ public class SectionalCurvature extends Geoquant{
     DihedralAngle beta;
     for(Tetra t : e.getLocalTetras()) {
       beta = DihedralAngle.At(e, t);
-      beta.addDependent(this);
+      beta.addObserver(this);
       dih_angles.add(beta);
     }
   }
@@ -34,7 +34,7 @@ public class SectionalCurvature extends Geoquant{
   protected void remove() {
     deleteDependents();
     for(DihedralAngle beta : dih_angles) {
-      beta.removeDependent(this);
+      beta.deleteObserver(this);
     }
     dih_angles.clear();
     Index.remove(pos);

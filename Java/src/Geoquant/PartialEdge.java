@@ -36,11 +36,11 @@ public class PartialEdge extends Geoquant {
     
     Lij = Length.At(edge);
     
-    ri.addDependent(this);
-    rj.addDependent(this);
-    ai.addDependent(this);
-    aj.addDependent(this);
-    Lij.addDependent(this);
+    ri.addObserver(this);
+    rj.addObserver(this);
+    ai.addObserver(this);
+    aj.addObserver(this);
+    Lij.addObserver(this);
     
   }
   
@@ -56,11 +56,11 @@ public class PartialEdge extends Geoquant {
  
   protected void remove() {
     deleteDependents();
-    Lij.removeDependent(this);
-    ri.removeDependent(this);
-    rj.removeDependent(this);
-    ai.removeDependent(this);
-    aj.removeDependent(this);
+    Lij.deleteObserver(this);
+    ri.deleteObserver(this);
+    rj.deleteObserver(this);
+    ai.deleteObserver(this);
+    aj.deleteObserver(this);
     Index.remove(pos);
   }
   
@@ -98,12 +98,12 @@ public class PartialEdge extends Geoquant {
       super(f);
       equal = e == f;
       if(equal) {
-        ri.addDependent(this);
-        rj.addDependent(this);
-        ai.addDependent(this);
-        aj.addDependent(this);
+        ri.addObserver(this);
+        rj.addObserver(this);
+        ai.addObserver(this);
+        aj.addObserver(this);
         eij = Eta.At(e);
-        eij.addDependent(this);
+        eij.addObserver(this);
       }
     }
     
@@ -124,11 +124,11 @@ public class PartialEdge extends Geoquant {
     protected void remove() {
       deleteDependents();
       if(equal) {
-        ri.removeDependent(this);
-        rj.removeDependent(this);
-        ai.removeDependent(this);
-        aj.removeDependent(this);
-        eij.removeDependent(this);
+        ri.deleteObserver(this);
+        rj.deleteObserver(this);
+        ai.deleteObserver(this);
+        aj.deleteObserver(this);
+        eij.deleteObserver(this);
       }
       PartialIndex.remove(pos);
     }
@@ -158,12 +158,12 @@ public class PartialEdge extends Geoquant {
       equal = e == f;
       equal = equal && e == g;
       if(equal) {
-        ri.addDependent(this);
-        rj.addDependent(this);
-        ai.addDependent(this);
-        aj.addDependent(this);
+        ri.addObserver(this);
+        rj.addObserver(this);
+        ai.addObserver(this);
+        aj.addObserver(this);
         eij = Eta.At(e);
-        eij.addDependent(this);
+        eij.addObserver(this);
       }
     }
 
@@ -184,11 +184,11 @@ public class PartialEdge extends Geoquant {
     protected void remove() {
       deleteDependents();
       if(equal) {
-        ri.removeDependent(this);
-        rj.removeDependent(this);
-        ai.removeDependent(this);
-        aj.removeDependent(this);
-        eij.removeDependent(this);
+        ri.deleteObserver(this);
+        rj.deleteObserver(this);
+        ai.deleteObserver(this);
+        aj.deleteObserver(this);
+        eij.deleteObserver(this);
       }
       SecondPartialIndex.remove(pos);
     }

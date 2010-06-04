@@ -16,7 +16,7 @@ public class ConeAngle extends Geoquant {
     DihedralAngle beta;
     for(Tetra t : e.getLocalTetras()) {
       beta = DihedralAngle.At(e, t);
-      beta.addDependent(this);
+      beta.addObserver(this);
       angles.add(beta);
     }
   }
@@ -32,7 +32,7 @@ public class ConeAngle extends Geoquant {
   protected void remove() {
     deleteDependents();
     for(DihedralAngle beta : angles) {
-      beta.removeDependent(this);
+      beta.deleteObserver(this);
     }
     Index.remove(pos);
   }

@@ -1,14 +1,11 @@
 package Geoquant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Set;
-
+import java.util.Observer;
+import java.util.Observable;
 import Triangulation.Simplex;
 
 
-public abstract class Geoquant {
+public abstract class Geoquant extends Observable implements Observer{
   protected LinkedList<Geoquant> dependents;
   protected double value;
   protected TriPosition pos;
@@ -33,12 +30,26 @@ public abstract class Geoquant {
     }
   }
 
-  protected void addDependent(Geoquant q) {
-    dependents.add(q);
+  public void addObserver(Observer o) {
+    super.addObserver(o);
+    Geoquant dep;
+    try{
+      dep = (Geoquant) o;
+      dependents.add(dep);
+    } catch(ClassCastException e) {
+      return;
+    }
   }
   
-  protected void removeDependent(Geoquant q) {
-    dependents.remove(q);
+  public void deleteObserver(Observer o) {
+    super.deleteObserver(o);
+    Geoquant dep;
+    try{
+      dep = (Geoquant) o;
+      dependents.remove(dep);
+    } catch(ClassCastException e) {
+      return;
+    }
   }
   
   protected void deleteDependents() {
@@ -65,14 +76,13 @@ public abstract class Geoquant {
   private void invalidate() {
     if(valid){ 
       valid = false;
-      notifyDependents();
+      setChanged();
+      notifyObservers();
     }
   }
-  
-  private void notifyDependents() {
-    for(Geoquant g : dependents) {
-      g.invalidate();
-    }
+    
+  public void update(Observable o, Object args) {
+    invalidate();
   }
   
   public String toString() {

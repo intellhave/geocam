@@ -129,12 +129,12 @@ public class Radius extends Geoquant {
       }
       for(int i = 0; i < nehr_rad_rad.length; i++) {
         for(int j = 0; j < nehr_rad_rad[i].length; j++) {
-          nehr_rad_rad[i][j].addDependent(this);
+          nehr_rad_rad[i][j].addObserver(this);
         }
       }
       for(int i = 0; i < nehr_rad_eta.length; i++) {
         for(int j = 0; j < nehr_rad_eta[i].length; j++) {
-          nehr_rad_eta[i][j].addDependent(this);
+          nehr_rad_eta[i][j].addObserver(this);
         }
       }
     }
@@ -147,12 +147,12 @@ public class Radius extends Geoquant {
       deleteDependents();
       for(int i = 0; i < nehr_rad_rad.length; i++) {
         for(int j = 0; j < nehr_rad_rad[i].length; j++) {
-          nehr_rad_rad[i][j].removeDependent(this);
+          nehr_rad_rad[i][j].deleteObserver(this);
         }
       }
       for(int i = 0; i < nehr_rad_eta.length; i++) {
         for(int j = 0; j < nehr_rad_eta[i].length; j++) {
-          nehr_rad_eta[i][j].removeDependent(this);
+          nehr_rad_eta[i][j].deleteObserver(this);
         }
       }
       PartialIndex.remove(pos);

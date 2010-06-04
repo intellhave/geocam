@@ -20,9 +20,9 @@ public class Area extends Geoquant {
     ljk = Length.At(stdF.e23);
     lik = Length.At(stdF.e13);
     
-    lij.addDependent(this);
-    ljk.addDependent(this);
-    lik.addDependent(this);
+    lij.addObserver(this);
+    ljk.addObserver(this);
+    lik.addObserver(this);
   }
   
   protected void recalculate() {
@@ -37,9 +37,9 @@ public class Area extends Geoquant {
 
   protected void remove() {
     deleteDependents();
-    lij.removeDependent(this);
-    ljk.removeDependent(this);
-    lik.removeDependent(this);
+    lij.deleteObserver(this);
+    ljk.deleteObserver(this);
+    lik.deleteObserver(this);
     Index.remove(pos);
   }
 

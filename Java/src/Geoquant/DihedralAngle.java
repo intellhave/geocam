@@ -31,9 +31,9 @@ public class DihedralAngle extends Geoquant {
     angleB = Angle.At(st.v1, st.f124);
     angleC = Angle.At(st.v1, st.f134);
    
-    angleA.addDependent(this);
-    angleB.addDependent(this);
-    angleC.addDependent(this);
+    angleA.addObserver(this);
+    angleB.addObserver(this);
+    angleC.addObserver(this);
   }
   
   protected void recalculate() {
@@ -45,9 +45,9 @@ public class DihedralAngle extends Geoquant {
  
   protected void remove() {
     deleteDependents();
-    angleA.removeDependent(this);
-    angleB.removeDependent(this);
-    angleC.removeDependent(this);
+    angleA.deleteObserver(this);
+    angleB.deleteObserver(this);
+    angleC.deleteObserver(this);
     Index.remove(pos);
   }
   
@@ -109,12 +109,12 @@ public class DihedralAngle extends Geoquant {
       etas[5] = Eta.At(st.e34);
       
       for(int i = 0; i < 4; i++) {
-        radii[i].addDependent(this);
-        alphas[i].addDependent(this);
+        radii[i].addObserver(this);
+        alphas[i].addObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].addDependent(this);
+        etas[i].addObserver(this);
       }
       
       if(e == f) {
@@ -482,12 +482,12 @@ public class DihedralAngle extends Geoquant {
     protected void remove() {
       deleteDependents();
       for(int i = 0; i < 4; i++) {
-        radii[i].removeDependent(this);
-        alphas[i].removeDependent(this);
+        radii[i].deleteObserver(this);
+        alphas[i].deleteObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].removeDependent(this);
+        etas[i].deleteObserver(this);
       }
       PartialIndex.remove(pos);
     }
@@ -581,12 +581,12 @@ public class DihedralAngle extends Geoquant {
       etas[5] = Eta.At(st.e34);
       
       for(int i = 0; i < 4; i++) {
-        radii[i].addDependent(this);
-        alphas[i].addDependent(this);
+        radii[i].addObserver(this);
+        alphas[i].addObserver(this);
       }
       
       for(int i = 0; i < 6; i++) {
-        etas[i].addDependent(this);
+        etas[i].addObserver(this);
       }
     }
         
@@ -3468,11 +3468,11 @@ alpha4*Math.pow(r4,2)))))));
     protected void remove() {
       deleteDependents();
       for(int i = 0; i < 4; i++) {
-        radii[i].removeDependent(this);
-        alphas[i].removeDependent(this);
+        radii[i].deleteObserver(this);
+        alphas[i].deleteObserver(this);
       }
       for(int i = 0; i < 6; i++) {
-        etas[i].removeDependent(this);
+        etas[i].deleteObserver(this);
       }
       SecondPartialIndex.remove(pos);
     }
