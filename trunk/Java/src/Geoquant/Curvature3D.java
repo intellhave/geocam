@@ -176,6 +176,12 @@ public class Curvature3D extends Geoquant {
       Radius r;
       StdEdge se;
       
+      duals = new LinkedList<DualArea>();
+      angles = new LinkedList<ConeAngle>();
+      lengths = new LinkedList<Length>();
+      etas = new LinkedList<Eta>();
+      radii = new LinkedList<Radius>();
+      
       for(Edge e : v.getLocalEdges()) {
         if(w.isAdjEdge(e)) {
           da = DualArea.At(e);
