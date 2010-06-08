@@ -13,6 +13,8 @@ public class OrientationTest {
     
     for (Face face : Triangulation.faceTable.values()) {
       System.out.println("Face " + face.getIndex() + " : " + StdFace.getOrientedFace(face));
+      StdFace s = StdFace.getOrientedFace(face);
+      System.out.println("\t" + s.e12 + " " + s.e23 + " " + s.e13);
     }
   }
 
