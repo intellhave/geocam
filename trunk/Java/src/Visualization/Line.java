@@ -1,7 +1,7 @@
 package Visualization;
 
 public class Line {
-  Point p,q;
+  public final Point p,q;
   
   public Line(Point p, Point q) {
     this.p = p;
@@ -14,5 +14,9 @@ public class Line {
   
   public int hashCode() {
     return p.hashCode() ^ q.hashCode();
+  }
+  
+  public String toString() {
+    return "(" + p + "," + q + ")";
   }
 }
