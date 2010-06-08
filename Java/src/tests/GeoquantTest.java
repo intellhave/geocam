@@ -102,26 +102,6 @@ public class GeoquantTest {
     for(Edge e : Triangulation.edgeTable.values()) {
       Eta.At(e).setValue(1.0);
     }
-    for (Vertex vertex : Triangulation.vertexTable.values()){
-      Radius.At(vertex).setValue(1.0);
-      Alpha.At(vertex).setValue(1.0);
-    }
-    for (Edge edge : Triangulation.edgeTable.values()){
-      Eta.At(edge).setValue(1.0);
-    }
-    for (Edge f : Triangulation.edgeTable.values()) {
-      Eta.At(f).setValue(1.0);
-    }
-    for (Vertex w : Triangulation.vertexTable.values()) {
-      Radius.At(w).setValue(1.0);
-      Alpha.At(w).setValue(1.0);
-    }
-    for (Edge nm : Triangulation.edgeTable.values()) {
-      Eta.At(nm).setValue(1.0);
-    }
-    for (Edge op : Triangulation.edgeTable.values()) {
-      Eta.At(op).setValue(1.0);
-    }
   }
   
   private static void testLengths() {

@@ -88,7 +88,7 @@ public abstract class NewtonsMethod{
   public void setDefaults() {
     delta = 0.00001;
     stepRatio = 1.0 / 10.0;
-    gradLenCond = 0.000001;
+    gradLenCond = 0.00001;
   }
   
   public NewtonsMethod() {
@@ -107,15 +107,7 @@ public abstract class NewtonsMethod{
   public void setStoppingCondition(double cond) {
     this.gradLenCond = cond;
   }
-    
-  protected double magnitude(double[] vec) {
-    double sum = 0;
-    for(int i = 0; i < vec.length; i++) {
-      sum += vec[i] * vec[i];
-    }
-    return sum;
-  }
-    
+        
   protected double[] buildNext(double[] x_n) {
     double gradLen;        // The length of the gradient vector
     double[] next = new double[x_n.length];  // The array values that x_n will be incremented by.
@@ -144,13 +136,13 @@ public abstract class NewtonsMethod{
     return next;
   }
   
-  public double stepMin(double[] x_n) {
+  public double stepMin(double[] x_n) throws WrongDirectionException {
     double gradLen;        // The length of the gradient vector
     double[] next;  // The array values that x_n will be incremented by.
 
     next = buildNext(x_n);
     
-    gradLen = magnitude(grad);
+    gradLen = GeoMath.magnitude(grad);
     
     if(gradLen < gradLenCond) {
       return gradLen;
@@ -191,8 +183,8 @@ public abstract class NewtonsMethod{
           // If we still couldn't find it, announce that it can't be found
           // (i.e. we were headed towards a maximum) and return -1.
           if(nextVal > curVal) {
-            System.err.println("Wrong Direction!");
-            return -1;
+            System.err.println("Wrong Direction! : " + this.getClass());
+            throw new WrongDirectionException();
           }
           // Else if it was found, we are at the correct point right now, 
           // so return.
@@ -210,13 +202,13 @@ public abstract class NewtonsMethod{
     return gradLen;  
   }
   
-  public double stepMax(double[] x_n) {
+  public double stepMax(double[] x_n) throws WrongDirectionException {
     double gradLen;        // The length of the gradient vector
     double[] next;  // The array values that x_n will be incremented by.
 
     next = buildNext(x_n);
     
-    gradLen = magnitude(grad);
+    gradLen = GeoMath.magnitude(grad);
     
     if(gradLen < gradLenCond) {
       return gradLen;
@@ -229,7 +221,7 @@ public abstract class NewtonsMethod{
     // in the direction of optimization.
     int maxNum = (int) Math.floor( 1 / stepRatio ); 
     
-    // The search is for a minimum
+    // The search is for a maximum
     for(int j = 0; j < maxNum; j++) {
       curVal = nextVal;   // Set current value to next.
       // Increment the point by one unit of next[].      
@@ -256,8 +248,8 @@ public abstract class NewtonsMethod{
           // If we still couldn't find it, announce that it can't be found
           // (i.e. we were headed towards a minimum) and return -1.
           if(nextVal < curVal) {
-            System.err.println("Wrong Direction!");
-            return -1;
+            System.err.println("Wrong Direction! : " + this.getClass());
+            throw new WrongDirectionException();
           }
           // Else if it was found, we are at the correct point right now, 
           // so return.
@@ -281,7 +273,7 @@ public abstract class NewtonsMethod{
 
     next = buildNext(x_n);
     
-    gradLen = magnitude(grad);
+    gradLen = GeoMath.magnitude(grad);
     
     if(gradLen < gradLenCond) {
       return gradLen;
@@ -293,7 +285,7 @@ public abstract class NewtonsMethod{
     return gradLen;
   }
   
-  public double[] minimize(double[] initial) {
+  public double[] minimize(double[] initial) throws WrongDirectionException {
     double[] soln = new double[initial.length];
     // Copy the values of initial to soln.
     for(int i = 0; i < initial.length; i++) {
@@ -308,7 +300,7 @@ public abstract class NewtonsMethod{
     return soln;
   }
   
-  public double[] maximize(double[] initial) {
+  public double[] maximize(double[] initial) throws WrongDirectionException {
     double[] soln = new double[initial.length];
     // Copy the values of initial to soln.
     for(int i = 0; i < initial.length; i++) {

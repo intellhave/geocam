@@ -46,7 +46,7 @@ public class GeoMath {
         b[m] = temp;
       }
 
-      if( A.m[k][k] == 0.0) {
+      if( Math.abs(A.m[k][k]) < 0.0001) {
         singular_matrix = true; // Matrix has a column of all 0s !!!
       } else {
         // Triangulate matrix by turning every value in column k below row k
@@ -64,7 +64,7 @@ public class GeoMath {
       }
     }
     
-    if(singular_matrix || Math.abs(A.m[nDim-1][nDim-1]) < 0.0000001) {
+    if(singular_matrix || Math.abs(A.m[nDim-1][nDim-1]) < 0.0001) {
       return solveUndeterminedSystem(A, b);
     }
 
@@ -88,6 +88,7 @@ public class GeoMath {
       System.err.println("Incorrect dimensions");
       return null;
     }
+        
     int nDim = x.length;
         
     int rank = 0;
@@ -96,7 +97,7 @@ public class GeoMath {
     
     // Determine rank, build bit array of free variables
     for(i = 0; i < nDim; i++) {
-      if(Math.abs(A.m[i][i]) < 0.00001) {
+      if(Math.abs(A.m[i][i]) < 0.0001) {
         rank++;
         free_vars[i] = true;
       } else {
@@ -147,12 +148,10 @@ public class GeoMath {
       }
     }
     
-    System.out.println("Non-homo:\n" + new Matrix(non_homo));
-    
     //Check for correctness
     Matrix test = A.multiply(new Matrix(non_homo));
     for(i = 0; i < nDim; i++) {
-      if(Math.abs(test.m[i][0] - b[i]) > 0.000001) {
+      if(Math.abs(test.m[i][0] - b[i]) > 0.00001) {
         System.err.println("Didn't calc non_homogenous solution correctly\n");
         return null;
       }
@@ -171,18 +170,14 @@ public class GeoMath {
         components.m[i][j] = proj[i];
       }
     }
-    
-    System.out.println("Components:\n" + components);
-    
+        
     // Set solution equal to non_homo - proj
     for(j = 0; j < rank; j++) {
       for(i = 0; i < nDim; i++) {
         non_homo[i] -= components.m[i][j];
       }
     }
-    
-    System.out.println("Solution:\n" + new Matrix(non_homo) +"\n");
-    
+        
     return non_homo;
   }
   
