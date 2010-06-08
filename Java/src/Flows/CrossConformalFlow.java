@@ -27,6 +27,7 @@ public class CrossConformalFlow {
     printArray(radii);
     
     EtaOptNEHR min = new EtaOptNEHR();
+    min.setStepRatio(1.0/2000.0);
     double[] etas = getEtas();
     try {
       while(min.stepMax(etas) > 0.00001) {

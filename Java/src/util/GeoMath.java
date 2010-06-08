@@ -46,7 +46,7 @@ public class GeoMath {
         b[m] = temp;
       }
 
-      if( Math.abs(A.m[k][k]) < 0.0001) {
+      if( Math.abs(A.m[k][k]) < 0.00001) {
         singular_matrix = true; // Matrix has a column of all 0s !!!
       } else {
         // Triangulate matrix by turning every value in column k below row k
@@ -64,7 +64,7 @@ public class GeoMath {
       }
     }
     
-    if(singular_matrix || Math.abs(A.m[nDim-1][nDim-1]) < 0.0001) {
+    if(singular_matrix || Math.abs(A.m[nDim-1][nDim-1]) < 0.00001) {
       return solveUndeterminedSystem(A, b);
     }
 
@@ -97,7 +97,7 @@ public class GeoMath {
     
     // Determine rank, build bit array of free variables
     for(i = 0; i < nDim; i++) {
-      if(Math.abs(A.m[i][i]) < 0.0001) {
+      if(Math.abs(A.m[i][i]) < 0.00001) {
         rank++;
         free_vars[i] = true;
       } else {
