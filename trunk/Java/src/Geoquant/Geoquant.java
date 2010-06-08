@@ -68,6 +68,9 @@ public abstract class Geoquant extends Observable implements Observer{
   }
   
   public void setValue(double val) {
+    if(value == val && valid) {
+      return;
+    }
     value = val; 
     invalidate();
     valid = true;

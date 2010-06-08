@@ -58,7 +58,7 @@ public class Volume extends Geoquant {
     double L14 = L_il.getValue();
     double L23 = L_jk.getValue();
     double L24 = L_jl.getValue();
-    double L34 = L_jk.getValue();
+    double L34 = L_kl.getValue();
      
     CayleyMenger = (-1)*( Math.pow(L12, 4.0)*Math.pow(L34,2.0) + Math.pow(L13, 4.0)*Math.pow(L24,2.0) 
        + Math.pow(L14, 4.0)*Math.pow(L23,2.0) + Math.pow(L23, 4.0)*Math.pow(L14,2.0)
