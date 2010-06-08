@@ -7,18 +7,17 @@ public class FlowerTest {
 
   public static int[][] makeFlower(int n) {
     int[][] flower = new int[n][3];
-
+    
     for (int i = 0; i < n; i++) {
       flower[i][0] = i;
       flower[i][1] = (i + 1) % n;
       flower[i][2] = n;
     }
-
     return flower;
   }
 
   public static void main(String[] args) {
-
+    
     int R = 1;
     double sum;
     //double[] gamma =new double[16];
@@ -57,7 +56,7 @@ public class FlowerTest {
     for (int i = 0; i < n; i++) {
       sum += gamma[i];
     }
-    System.out.println(sum);
+    System.out.println(sum + "what");
 
     double[][] v = new double[n + 1][3];
     // negative curvature

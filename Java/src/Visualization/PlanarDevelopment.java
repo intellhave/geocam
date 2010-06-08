@@ -67,13 +67,9 @@ public class PlanarDevelopment {
       lines.put(stdFace.e23, l23);
       lines.put(stdFace.e13, l13);
       
-      System.err.println("Put Vertex " + stdFace.v1.getIndex() + " at point " + p1.toString());
-      System.err.println("Put Vertex " + stdFace.v2.getIndex() + " at point " + p2.toString());
-      System.err.println("Put Vertex " + stdFace.v3.getIndex() + " at point " + p3.toString());
-      
-      System.err.println("Put Edge " + stdFace.e12.getIndex() + " at points " + l12.toString());
-      System.err.println("Put Edge " + stdFace.e23.getIndex() + " at points " + l23.toString());
-      System.err.println("Put Edge " + stdFace.e13.getIndex() + " at points " + l13.toString());
+      //System.err.println("Put Vertex " + stdFace.v1.getIndex() + " at point " + p1.toString());
+      //System.err.println("Put Vertex " + stdFace.v2.getIndex() + " at point " + p2.toString());
+      //System.err.println("Put Vertex " + stdFace.v3.getIndex() + " at point " + p3.toString());
 
       HashSet<Face> alreadyMapped = new HashSet<Face>();
       LinkedList<Face> facesToMap = new LinkedList<Face>();
@@ -87,7 +83,7 @@ public class PlanarDevelopment {
       
       while (!facesToMap.isEmpty()) {
         currFace = facesToMap.removeFirst();
-        System.err.println("Working on face " + currFace.getIndex());
+        //System.err.println("Working on face " + currFace.getIndex());
         //might as well prep for the next iteration here so we don't forget
         alreadyMapped.add(currFace);
         for (Face f : currFace.getLocalFaces()) {
@@ -119,9 +115,6 @@ public class PlanarDevelopment {
           Point mappedP1, mappedP2;
           mappedP1 = points.get(stdFace.v1);
           mappedP2 = points.get(stdFace.v2);
-          if (mappedP1 == null) {
-            System.err.println("yo currFace " + currFace.getIndex());
-          }
           double angleDiff = p2.subtract(p1).angle() - mappedP2.subtract(mappedP1).angle();
 
           Point thirdPoint = null;
@@ -130,7 +123,7 @@ public class PlanarDevelopment {
           } else {
             thirdPoint = p3.rotate(angleDiff).add(points.get(stdFace.v1));
             points.put(stdFace.v3, thirdPoint);
-            System.err.println("Put Vertex " + stdFace.v3.getIndex() + " at point " + thirdPoint.toString());
+            //System.err.println("Put Vertex " + stdFace.v3.getIndex() + " at point " + thirdPoint.toString());
           }
           if (!lines.containsKey(stdFace.e13)) {
             lines.put(stdFace.e13, new Line(mappedP1, thirdPoint));
@@ -152,7 +145,7 @@ public class PlanarDevelopment {
             // this is tricky
             oddPoint = p1.subtract(p2).rotate(angleDiff).add(points.get(stdFace.v2));
             points.put(stdFace.v1, oddPoint);
-            System.err.println("Put Vertex " + stdFace.v1.getIndex() + " at point " + oddPoint.toString());
+            //System.err.println("Put Vertex " + stdFace.v1.getIndex() + " at point " + oddPoint.toString());
           }
           if (!lines.containsKey(stdFace.e13)) {
             lines.put(stdFace.e13, new Line(oddPoint, mappedP3));
@@ -174,7 +167,7 @@ public class PlanarDevelopment {
             // this is tricky
             oddPoint = p2.rotate(angleDiff).add(points.get(stdFace.v1));
             points.put(stdFace.v2, oddPoint);
-            System.err.println("Put Vertex " + stdFace.v1.getIndex() + " at point " + oddPoint.toString());
+            //System.err.println("Put Vertex " + stdFace.v1.getIndex() + " at point " + oddPoint.toString());
           }
           if (!lines.containsKey(stdFace.e23)) {
             lines.put(stdFace.e23, new Line(oddPoint, mappedP3));

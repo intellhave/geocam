@@ -5,9 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import Geoquant.Length;
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.Vertex;
+import InputOutput.TriangulationIO;
+import Triangulation.*;
+import FlipAlgorithm.Delaunay;
+
 /*          v2
            /|\
           / | \
@@ -25,18 +26,17 @@ import Triangulation.Vertex;
 
 */
 public class DelaunayTest {
-
-  @Test
-  public void isDelaunayTest() {
-    Edge hingeEdge = new Edge(11);
+  
+  public static void setUpHinge(Vertex[] vertices, Edge[] edges, Face[] faces) {
+   /* Edge hingeEdge = new Edge(11);
     Length.At(hingeEdge).setValue(20.134);
 
-    Edge[] boundEdges = new Edge[4];
+    Edge[] edges = new Edge[4];
 
     for (int i = 0; i < 4; i++) {
-      boundEdges[i] = new Edge(i);
+      edges[i] = new Edge(i);
       //each edge is a little different in length
-      Length.At(boundEdges[i]).setValue(20 + i);
+      Length.At(edges[i]).setValue(20 + i);
     }
     
     Face[] faces = new Face[2];
@@ -48,6 +48,67 @@ public class DelaunayTest {
     for (int i = 0; i < 4; i++) {
       vertices[i] = new Vertex(i);
     }
+
+    //vertex 0
+    vertices[0].addVertex(vertices[1]);
+    vertices[0].addVertex(vertices[3]);
+    
+    vertices[0].addEdge(edges[0]);
+    vertices[0].addEdge(edges[1]);
+    vertices[0].addEdge(edges[4]);
+    
+    vertices[0].addFace(faces[0]);
+    vertices[0].addFace(faces[1]);
+    
+    //vertex 1
+    vertices[1].addVertex(vertices[0]);
+    vertices[1].addVertex(vertices[2]);
+   
+    vertices[1].addEdge(edges[1]);
+    vertices[1].addEdge(edges[2]);
+    
+    vertices[1].addFace(faces[0]);
+
+    //vertex 2
+    vertices[2].addVertex(vertices[1]);
+    vertices[2].addVertex(vertices[3]);
+    
+    vertices[2].addEdge(edges[0]);
+    vertices[2].addEdge(edges[2]);
+    vertices[2].addEdge(edges[3]);
+    
+    vertices[2].addFace(faces[0]);
+    vertices[2].addFace(faces[1]);
+    
+    //vertex 3
+    vertices[3].addVertex(vertices[0]);
+    vertices[3].addVertex(vertices[2]);
+   
+    vertices[3].addEdge(edges[3]);
+    vertices[3].addEdge(edges[4]);
+    
+    vertices[3].addFace(faces[1]);
+    
+    //set edge adjacencies
+    for (int i = 0; i < 4; i++) {
+      
+    }*/
+  }
+
+  @Test
+  public void isDelaunayTest() {
+    TriangulationIO.read2DTriangulationFile("Data/flip_test/convex_pair.txt");
+    
+    Edge hingeEdge = null;
+    for (Edge edge : Triangulation.edgeTable.values()) {
+      if (edge.getLocalFaces().size() > 1) {
+        hingeEdge = edge;
+        break;
+      }
+    }
+    
+    assertTrue(Delaunay.isDelaunay(hingeEdge));
+    
     
   }
 
