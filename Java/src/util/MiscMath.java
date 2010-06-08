@@ -5,6 +5,8 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
+import Visualization.Point;
+
 public class MiscMath {
   
   public List<Object> listIntersection(List<Object> l1, List<Object> l2) {
@@ -143,14 +145,14 @@ public class MiscMath {
        
        return solutions;
   }
-  public double distancePoint(Point2D.Double a, Point2D.Double b) {
+  public double distancePoint(Point a, Point b) {
   
      /*         ____________________________             
              _ |           2              2    
        d =    \|(a_x - b_x)  + (a_y - b_y)
      */
     
-     return Math.sqrt((a.getX()-b.getX())*(a.getX()-b.getX())+(a.getY()-b.getY())*(a.getY()-b.getY()));
+     return Math.sqrt((a.x -b.x)*(a.x - b.x)+(a.y -b.y)*(a.y -b.y));
   }
-  
+ 
 }
