@@ -1,8 +1,10 @@
 package Visualization;
 
-import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
+
+import util.GeoMath;
+
 
 public class Circle {
   Point center;
@@ -21,10 +23,14 @@ public class Circle {
     Double tmpDouble = new Double(radius);
     return center.hashCode() ^ tmpDouble.hashCode();
   }
+ 
+
+  
+
   
   public List<Point> circleIntersection(Point center1, double r1, Point center2, double r2) {
     List<Point> solutions = new LinkedList<Point>();
-    if(distancePoint(center1 , center2) > (r1 + r2)) {
+    if(center1.distancePoint(center2) > (r1 + r2)) {
         // No solutions
         return solutions;
     }
@@ -39,7 +45,7 @@ public class Circle {
           return solutions;
        }
     }
-    if(distancePoint(center1, center2) < fabs(r1 - r2)) {
+    if(center1.distancePoint(center2) < Math.abs(r1 - r2)) {
        return solutions;
     }
     // (x-x1)^2 + (y-y1)^2 = r1^2
@@ -66,8 +72,8 @@ public class Circle {
        */    
        double ySol1 = Math.sqrt(r1*r1 - Math.pow((rComp/xComp - center1.x), 2)) + center1.y;
        double ySol2 = (-1)* Math.sqrt(r1*r1 - Math.pow((rComp/xComp - center1.x),2)) + center1.y;
-       Point sol1 = (rComp/xComp, ySol1);
-       Point sol2 = (rComp/xComp, ySol2);
+       Point sol1 = new Point (rComp/xComp, ySol1);
+       Point sol2 = new Point (rComp/xComp, ySol2);
        solutions.add(sol1);
        solutions.add(sol2);
        return solutions;
@@ -79,8 +85,9 @@ public class Circle {
         */
        double xSol1 = Math.sqrt(r1*r1 - Math.pow((rComp/yComp - center1.y), 2)) + center1.x;
        double xSol2 = (-1)* Math.sqrt(r1*r1 - Math.pow((rComp/yComp - center1.y),2)) + center1.x;
-       Point sol1 = (xSol1, rComp/yComp);
-       Point sol2 = (xSol2, rComp/yComp);
+       
+       Point sol1 = new Point(xSol1, rComp/yComp);
+       Point sol2 = new Point (xSol2, rComp/yComp);
        solutions.add(sol1);
        solutions.add(sol2);
        return solutions;
@@ -101,16 +108,25 @@ public class Circle {
     double c = center1.x*center1.x + Math.pow((rComp/yComp - center1.y), 2) - r1*r1;
 
     // Find x solutions using quadratic formula.
-    List<Point2D.Double> quadSol = new LinkedList<Point2D.Double>();
-    List<Point2D.Double> quadSol = quadratic(a, b, c);
+    List<Double> quadSol = GeoMath.quadratic(a, b, c);
     for(int i = 0; i < quadSol.size(); i++) {
         
-        double xSol = quadSol[i];
+        double xSol = quadSol.get(i);
         double ySol = rComp/yComp - xComp/yComp*xSol;
 
-        Point sol = (xSol, ySol);
+        Point sol = new Point (xSol, ySol);
         solutions.add(sol);
     }
     return solutions;
 }
+  
+  public List<Point> circleIntersection(Circle circle1, Circle circle2) {
+      Point center1 = circle1.center;
+      Point center2 = circle2.center;
+      double r1 = circle1.radius;
+      double r2 = circle2.radius;              
+      return circleIntersection(center1, r1, center2, r2);
+  }
+  
+  
 }

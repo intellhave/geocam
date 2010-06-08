@@ -1,5 +1,8 @@
 package util;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class GeoMath {
   private GeoMath() {
   }
@@ -275,5 +278,39 @@ public class GeoMath {
     } 
 
     return ortho_basis;
+  }
+  
+  public static List<Double> quadratic(double a, double b, double c){
+    List<Double> solutions = new LinkedList<Double>();
+   
+       /*                       _________
+                         +   _ | 2
+                   -b    -    \|b  - 4*a*c
+             x =  -------------------------
+                             2*a
+       */ 
+       
+       double inside = b*b - 4*a*c; // The value inside the square root
+       if(inside < 0){
+         
+         // No real solutions
+         return solutions;
+       }
+       
+       if(inside == 0){
+         
+         // Only one solution
+         double sol = b * (-1) / (2*a);
+         solutions.add(sol);
+         return solutions;
+       }
+       
+       double sol1 = ((-1)*b + Math.sqrt(inside)) / (2*a);
+       double sol2 = ((-1)*b - Math.sqrt(inside)) / (2*a);
+       
+       solutions.add(sol1);
+       solutions.add(sol2);
+       
+       return solutions;
   }
 }

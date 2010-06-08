@@ -1,5 +1,6 @@
 package Visualization;
 
+
 public class Point {
   public final double x,y;
 
@@ -18,6 +19,18 @@ public class Point {
     return new Point(Math.cos(angle) * x - Math.sin(angle) * y,
                       Math.sin(angle) * x + Math.cos(angle) * y);
   }
+  
+  public double distancePoint(Point b) {
+    
+    /*         ____________________________             
+            _ |           2              2    
+      d =    \|(a_x - b_x)  + (a_y - b_y)
+    */
+   
+    return Math.sqrt((x -b.x)*(x - b.x)+(y -b.y)*(y -b.y));
+ }
+ 
+ 
   
   public Point add(Point p) {
     return new Point(x + p.x ,y + p.y);
