@@ -1,9 +1,28 @@
 package Visualization;
 
+import static de.jreality.shader.CommonAttributes.DIFFUSE_COLOR;
+import static de.jreality.shader.CommonAttributes.LINE_SHADER;
+import static de.jreality.shader.CommonAttributes.OPAQUE_TUBES_AND_SPHERES;
+import static de.jreality.shader.CommonAttributes.POINT_RADIUS;
+import static de.jreality.shader.CommonAttributes.POINT_SHADER;
+import static de.jreality.shader.CommonAttributes.POLYGON_SHADER;
+import static de.jreality.shader.CommonAttributes.SMOOTH_SHADING;
+import static de.jreality.shader.CommonAttributes.TRANSPARENCY;
+import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
+import static de.jreality.shader.CommonAttributes.TUBE_RADIUS;
+
+import java.awt.Color;
 import java.util.Hashtable;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
+import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.plugin.JRViewer;
+import de.jreality.scene.Appearance;
+import de.jreality.scene.IndexedFaceSet;
+import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.SceneGraphNode;
+import de.jreality.scene.data.Attribute;
+import de.jreality.scene.data.StorageModel;
 
 import Triangulation.Vertex;
 import Triangulation.Face;
@@ -46,6 +65,7 @@ public class TriangulationDisplay {
       faceIndex += 1;
     }
     
+    //
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
     ifsf.setVertexCount(Triangulation.vertexTable.keySet().size());
     ifsf.setFaceCount(Triangulation.faceTable.keySet().size());
@@ -54,6 +74,18 @@ public class TriangulationDisplay {
     ifsf.setGenerateEdgesFromFaces(true);
     ifsf.setGenerateFaceNormals(true);
     ifsf.update();
-    JRViewer.display(ifsf.getIndexedFaceSet());
+    
+    int numEdges = Triangulation.edgeTable.keySet().size();
+    double[][] colors = new double[numEdges][3];
+    
+    for (int i = 0; i < numEdges; i++) {
+      colors[i][0] = 1;
+      colors[i][1] = 0;
+      colors[i][2] = 0;
+    }
+    IndexedFaceSet ifs = ifsf.getIndexedFaceSet();
+    ifs.setEdgeAttributes(Attribute.COLORS, StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(colors));
+
+    JRViewer.display(ifs);
   }
 }
