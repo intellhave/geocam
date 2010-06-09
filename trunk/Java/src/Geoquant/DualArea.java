@@ -70,7 +70,7 @@ public class DualArea extends Geoquant {
     return s;
   }
 
-  private class Segment extends Geoquant {
+  public class Segment extends Geoquant {
     private EdgeHeight hij_k;
     private EdgeHeight hij_l;
     private FaceHeight hijk_l;

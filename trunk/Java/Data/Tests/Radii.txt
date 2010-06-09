@@ -1,5 +1,5 @@
-Radius@[Vertex 1]=1.0
-Radius@[Vertex 2]=1.0
-Radius@[Vertex 3]=1.0
-Radius@[Vertex 4]=1.0
-Radius@[Vertex 5]=1.0
+Radius@[Vertex 1]=0.990119191434793
+Radius@[Vertex 2]=0.990119191434793
+Radius@[Vertex 3]=1.0066419255426982
+Radius@[Vertex 4]=1.0066419255426982
+Radius@[Vertex 5]=1.0066419255426968

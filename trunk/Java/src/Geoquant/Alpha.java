@@ -1,6 +1,7 @@
 package Geoquant;
 
 import java.util.HashMap;
+
 import Triangulation.Vertex;
 
 public class Alpha extends Geoquant {
@@ -31,7 +32,6 @@ public class Alpha extends Geoquant {
     // This is empty for a alpha
     value = 1;
   }
-
  
   protected void remove() {
     deleteDependents();
