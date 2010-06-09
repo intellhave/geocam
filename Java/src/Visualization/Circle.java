@@ -7,8 +7,8 @@ import util.GeoMath;
 
 
 public class Circle {
-  Point center;
-  double radius;
+  final Point center;
+  final double radius;
   
   public Circle(Point center, double radius) {
     this.center = center;
