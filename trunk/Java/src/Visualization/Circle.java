@@ -15,19 +15,6 @@ public class Circle {
     this.radius = radius;
   }
   
-  public boolean equals(Object obj) {
-    return (obj instanceof Circle && ((Circle) obj).center.equals(center) && ((Circle) obj).radius == radius);
-  }
-  
-  public int hashCode() {
-    Double tmpDouble = new Double(radius);
-    return center.hashCode() ^ tmpDouble.hashCode();
-  }
- 
-
-  
-
-  
   public List<Point> circleIntersection(Point center1, double r1, Point center2, double r2) {
     List<Point> solutions = new LinkedList<Point>();
     if(center1.distancePoint(center2) > (r1 + r2)) {
@@ -128,5 +115,12 @@ public class Circle {
       return circleIntersection(center1, r1, center2, r2);
   }
   
+  public boolean equals(Object obj) {
+    return (obj instanceof Circle && ((Circle) obj).center.equals(center) && ((Circle) obj).radius == radius);
+  }
   
+  public int hashCode() {
+    Double tmpDouble = new Double(radius);
+    return center.hashCode() ^ tmpDouble.hashCode();
+  }  
 }
