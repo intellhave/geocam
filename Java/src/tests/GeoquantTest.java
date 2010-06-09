@@ -6,6 +6,8 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import Flows.CrossConformalFlow;
+import Flows.RadiusOptNEHR;
 import Geoquant.Alpha;
 import Geoquant.Angle;
 import Geoquant.Area;
@@ -24,6 +26,7 @@ import Geoquant.Radius;
 import Geoquant.SectionalCurvature;
 import Geoquant.Volume;
 import InputOutput.TriangulationIO;
+import Solvers.WrongDirectionException;
 import Triangulation.*;
 
 public class GeoquantTest {
@@ -33,6 +36,30 @@ public class GeoquantTest {
    */
   public static void main(String[] args) {
     initializeQuantities();
+        
+    Eta.At(Triangulation.edgeTable.get(1)).setValue(1.1);
+    RadiusOptNEHR minRad = new RadiusOptNEHR();
+    double[] radii = CrossConformalFlow.getLogRadii();
+    
+    minRad.setStoppingCondition(0.0);
+    minRad.setStepRatio(1.0);
+    try {
+      double[] log_radii = CrossConformalFlow.getLogRadii();
+      for(int i = 0; i < 100; i++) {
+        minRad.step(log_radii);
+        CrossConformalFlow.setLogRadii(log_radii);
+      }
+    } catch (Exception e) {
+      return;
+    }
+  
+ 
+  radii = CrossConformalFlow.getLogRadii();
+  for(int i = 0; i < radii.length; i++) {
+    System.out.print(Math.exp(radii[i]) + ", ");
+  }
+  System.out.println();
+    
     
     testLengths();
     testRadii();
