@@ -14,7 +14,7 @@ import Visualization.Point;
 public class VisualizationTests {
 
   @Test
-  public void PointAngelTest() {
+  public void PointAngleTest() {
     
       Point pt = new Point(1, 1/2);
       double a = pt.angle();
