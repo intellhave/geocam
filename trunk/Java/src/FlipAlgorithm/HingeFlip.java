@@ -1,5 +1,6 @@
 package FlipAlgorithm;
 
+import FlipAlgorithm.HingeInfo.HingeType;
 import Geoquant.Angle;
 import Geoquant.Length;
 import Triangulation.Edge;
@@ -40,24 +41,16 @@ v1  \    e0     / v3
          \ /
          v0
 */
-//indices in arrays correspond to labeling above
-private class HingeInfo {
-  Vertex[] vertices = new Vertex[4];
-  Edge[] edges = new Edge[5];
-  Face[] faces = new Face[2];
-}
-  
-private enum HingeType {PositivePositive, PositiveNegative, NegativeNegative};
-
 
 //performs a topological flip and determines the geometric configuration
 //of the adjacent triangles of Edge e so that e's length can be changed appropriately
-Edge flip(Edge edge) {
+public static Edge flip(Edge edge) {
   
   HingeInfo info = new HingeInfo();
   
   if (!prepForFlip(edge, info)) {
     System.err.println("The flip likely failed because prepForFlip did NOT succeed");
+    return null;
   }
   
   HingeType type = determineHingeType(edge);
@@ -72,7 +65,7 @@ Edge flip(Edge edge) {
   return null;
 }
 
-public HingeType determineHingeType(Edge edge) {
+public static HingeType determineHingeType(Edge edge) {
   int numPositive = 0;
   for (Face face : edge.getLocalFaces()) {
     if (face.isNegative()) {
@@ -95,7 +88,7 @@ public HingeType determineHingeType(Edge edge) {
 
 //performs the recalculation of the length of edge e0 for a flip that starts
 //as positive positive
-public void flipPP(HingeInfo info) {
+public static void flipPP(HingeInfo info) {
   
   double ang0 =   Angle.valueAt(info.vertices[0], info.faces[0])
                 + Angle.valueAt(info.vertices[0], info.faces[1]);
@@ -131,7 +124,7 @@ public void flipPP(HingeInfo info) {
 
 //performs the recalculation of the length of edge e0 for a flip that starts
 //as positive negative
-public void flipPN(HingeInfo info) {
+public static void flipPN(HingeInfo info) {
   /*double e_length;
   double alpha, beta;
   alpha = angle(h.e0_len, h.e1_len, h.e2_len);
@@ -187,7 +180,7 @@ public void flipPN(HingeInfo info) {
 
 //performs the recalculation of the length of edge e0 for a flip that starts
 //as a negative negative
-public void flipNN(HingeInfo info) {
+public static void flipNN(HingeInfo info) {
   
   double ang0 =   Angle.valueAt(info.vertices[0], info.faces[0])
                 + Angle.valueAt(info.vertices[0], info.faces[1]);
@@ -239,7 +232,7 @@ v1  \    e0     / v3
           v0
 */
 //performs the topological changes for the flip
-public void topoFlip(HingeInfo info) {
+public static void topoFlip(HingeInfo info) {
   Edge hingeEdge = info.edges[0];
   
   //first we'll remove any adjacent edges and the two adjacent vertices
@@ -340,7 +333,7 @@ public void topoFlip(HingeInfo info) {
 
 //puts the relevant Simplices into the arrays in "info"
 //their indices will match the indices/combinatorics of the above pictures
-public boolean prepForFlip(Edge edge, HingeInfo info) {
+public static boolean prepForFlip(Edge edge, HingeInfo info) {
   
   //can't flip borders
   if (edge.isBorder()) {
