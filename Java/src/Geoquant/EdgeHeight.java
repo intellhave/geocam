@@ -36,7 +36,7 @@ public class EdgeHeight extends Geoquant {
     value = (d_ik - d_ij * Math.cos(theta))/Math.sin(theta);
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     dij.deleteObserver(this);
     dik.deleteObserver(this);

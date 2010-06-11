@@ -31,7 +31,7 @@ public class SectionalCurvature extends Geoquant{
     }
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     for(DihedralAngle beta : dih_angles) {
       beta.deleteObserver(this);

@@ -13,7 +13,7 @@ public abstract class Geoquant extends Observable implements Observer{
 	protected LinkedList<Simplex> location;
   
   protected abstract void recalculate();
-  protected abstract void remove();
+  public abstract void remove();
 	
   protected Geoquant() {
     dependents = new LinkedList<Geoquant>();

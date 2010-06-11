@@ -55,7 +55,7 @@ public class PartialEdge extends Geoquant {
     value = (length*length + alphai*radi*radi - alphaj*radj*radj) / (2 * length);
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     Lij.deleteObserver(this);
     ri.deleteObserver(this);
@@ -122,7 +122,7 @@ public class PartialEdge extends Geoquant {
       }
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       if(equal) {
         ri.deleteObserver(this);
@@ -182,7 +182,7 @@ public class PartialEdge extends Geoquant {
       }
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       if(equal) {
         ri.deleteObserver(this);

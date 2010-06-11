@@ -42,7 +42,7 @@ public class Angle extends Geoquant {
     }
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     lenA.deleteObserver(this);
     lenB.deleteObserver(this);

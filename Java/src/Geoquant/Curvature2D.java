@@ -34,7 +34,7 @@ public class Curvature2D extends Geoquant {
     }
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     for(Angle a : angles) {
       a.deleteObserver(this);
@@ -78,7 +78,7 @@ public class Curvature2D extends Geoquant {
       }
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(Curvature2D k : curvs) {
         k.deleteObserver(this);

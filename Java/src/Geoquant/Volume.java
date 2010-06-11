@@ -88,7 +88,7 @@ public class Volume extends Geoquant {
 
   }
 
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     L_ij.deleteObserver(this);
     L_ik.deleteObserver(this);
@@ -141,7 +141,7 @@ public class Volume extends Geoquant {
       }
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(Volume v : volumes) {
         v.deleteObserver(this);
@@ -286,7 +286,7 @@ public class Volume extends Geoquant {
       }
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(int i = 0; i < 4; i++) {
         radii[i].deleteObserver(this);
@@ -481,7 +481,7 @@ public class Volume extends Geoquant {
       }
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(Volume.Partial partial : vol_partials) {
         partial.deleteObserver(this);
@@ -1420,7 +1420,7 @@ public class Volume extends Geoquant {
       return result;
     }
     
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(int i = 0; i < 4; i++) {
         radii[i].deleteObserver(this);
@@ -1490,7 +1490,7 @@ public class Volume extends Geoquant {
       }
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(Volume.SecondPartial partial : vol_sec_partials) {
         partial.deleteObserver(this);
