@@ -134,6 +134,7 @@ public class StdFace {
     if (Triangulation.faceTable.isEmpty()) {
       return;
     }
+    orientation.clear();
 
     Face firstFace = Triangulation.faceTable.values().iterator().next();
     Vertex firstVert = firstFace.getLocalVertices().iterator().next();
