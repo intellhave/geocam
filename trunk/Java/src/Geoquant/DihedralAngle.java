@@ -43,7 +43,7 @@ public class DihedralAngle extends Geoquant {
     value =  Math.acos( (Math.cos(c)-Math.cos(a)*Math.cos(b)) / (Math.sin(a)*Math.sin(b)) );
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     angleA.deleteObserver(this);
     angleB.deleteObserver(this);
@@ -479,7 +479,7 @@ public class DihedralAngle extends Geoquant {
       
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(int i = 0; i < 4; i++) {
         radii[i].deleteObserver(this);
@@ -3465,7 +3465,7 @@ alpha4*Math.pow(r4,2)))))));
                             (alpha1*Math.pow(r1,2) + 2*Eta14*r1*r4 + alpha4*Math.pow(r4,2))))));
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(int i = 0; i < 4; i++) {
         radii[i].deleteObserver(this);

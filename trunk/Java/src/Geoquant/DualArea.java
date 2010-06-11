@@ -36,7 +36,7 @@ public class DualArea extends Geoquant {
     }
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     for(Segment s : segments) {
       s.deleteObserver(this);
@@ -99,7 +99,7 @@ public class DualArea extends Geoquant {
       value = 0.5*(Hij_k * Hijk_l + Hij_l * Hijl_k);
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       hij_k.deleteObserver(this);
       hij_l.deleteObserver(this);

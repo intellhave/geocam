@@ -26,7 +26,7 @@ public class NEHR extends Geoquant {
     value = totalK.getValue() / Math.pow(totalV.getValue(), 1.0/3.0);
   }
 
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     totalK.deleteObserver(this);
     totalV.deleteObserver(this);
@@ -146,7 +146,7 @@ public class NEHR extends Geoquant {
       return Math.pow(totV, -4.0/3.0)*(curv_partial_sum*totV - totK*volumePartial/3.0);
     }
     
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       totVolume.deleteObserver(this);
       totCurvature.deleteObserver(this);
@@ -438,7 +438,7 @@ public class NEHR extends Geoquant {
       return result;
     }
     
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       totVolume.deleteObserver(this);
       totCurvature.deleteObserver(this);

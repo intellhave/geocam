@@ -29,7 +29,7 @@ public class ConeAngle extends Geoquant {
 
   }
 
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     for(DihedralAngle beta : angles) {
       beta.deleteObserver(this);

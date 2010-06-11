@@ -35,7 +35,7 @@ public class Area extends Geoquant {
 
   }
 
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     lij.deleteObserver(this);
     ljk.deleteObserver(this);

@@ -47,7 +47,7 @@ public class Length extends Geoquant {
 
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     rad1.deleteObserver(this);
     rad2.deleteObserver(this);

@@ -33,7 +33,7 @@ public class Alpha extends Geoquant {
     value = 1;
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     Index.remove(pos);
   }

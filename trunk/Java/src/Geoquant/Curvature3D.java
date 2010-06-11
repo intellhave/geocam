@@ -50,7 +50,7 @@ public class Curvature3D extends Geoquant {
     }
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     for(SectionalCurvature sc : sec_curvs) {
       sc.deleteObserver(this);
@@ -104,7 +104,7 @@ public class Curvature3D extends Geoquant {
       }
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(Curvature3D k : curvs) {
         k.deleteObserver(this);
@@ -318,7 +318,7 @@ public class Curvature3D extends Geoquant {
       return partial;
     }
     
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       switch(type) {
         case Radius:
@@ -514,7 +514,7 @@ public class Curvature3D extends Geoquant {
       }      
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       Iterator<LinkedList<DihedralAngle.SecondPartial>> dih_sec_list = dih_sec_partials.iterator();
       Iterator<LinkedList<DihedralAngle.Partial>> dih_e_list = dih_partials_e.iterator();

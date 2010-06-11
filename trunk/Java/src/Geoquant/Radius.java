@@ -42,7 +42,7 @@ public class Radius extends Geoquant {
   }
 
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     Index.remove(pos);
   }
@@ -143,7 +143,7 @@ public class Radius extends Geoquant {
       calculatePartials();
     }
 
-    protected void remove() {
+    public void remove() {
       deleteDependents();
       for(int i = 0; i < nehr_rad_rad.length; i++) {
         for(int j = 0; j < nehr_rad_rad[i].length; j++) {

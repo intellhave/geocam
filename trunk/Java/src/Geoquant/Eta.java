@@ -32,7 +32,7 @@ public class Eta extends Geoquant {
   }
 
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     Index.remove(pos);
   }

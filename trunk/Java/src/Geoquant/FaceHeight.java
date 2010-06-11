@@ -32,7 +32,7 @@ public class FaceHeight extends Geoquant {
     value = (Hij_l - Hij_k * Math.cos(angle))/Math.sin(angle);
   }
  
-  protected void remove() {
+  public void remove() {
     deleteDependents();
     hij_l.deleteObserver(this);
     hij_k.deleteObserver(this);
