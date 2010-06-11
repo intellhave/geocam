@@ -571,6 +571,7 @@ public class GeoquantViewer extends javax.swing.JFrame {
       }
       Edge s = (Edge) EdgeListModel.getElementAt(index);
       double length = Length.valueAt(s);
+      
     }
   }
 }

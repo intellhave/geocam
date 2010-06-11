@@ -53,7 +53,9 @@ public abstract class Geoquant extends Observable implements Observer{
   }
   
   protected void deleteDependents() {
-    for(Geoquant q: dependents) {
+    LinkedList<Geoquant> list = new LinkedList<Geoquant>();
+    list.addAll(dependents);
+    for(Geoquant q: list) {
       q.remove();
     }
     dependents.clear();
