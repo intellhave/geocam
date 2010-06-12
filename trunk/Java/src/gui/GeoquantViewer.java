@@ -2,6 +2,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -68,7 +70,7 @@ import Triangulation.Vertex;
 public class GeoquantViewer extends javax.swing.JFrame {
   private JList EdgeList;
   private AbstractAction importAction;
-  private EdgeDisplayPanel edgeDisplayPanel;
+  private JPanel edgeDisplayPanel;
   private JRadioButton circlePackRadioButton;
   private ButtonGroup alphaButtonGroup;
   private JRadioButton perpBisectorRadioButton;
@@ -337,51 +339,46 @@ public class GeoquantViewer extends javax.swing.JFrame {
         .addContainerGap()
         .addGroup(quantityModPanelLayout.createParallelGroup()
             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
+                .addComponent(getEdgeDisplayPanel(), 0, 353, Short.MAX_VALUE)
+                .addGap(9))
+            .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                 .addGroup(quantityModPanelLayout.createParallelGroup()
                     .addGroup(quantityModPanelLayout.createSequentialGroup()
                         .addGroup(quantityModPanelLayout.createParallelGroup()
                             .addComponent(getCirclePackRadioButton(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
+                                .addComponent(etaSetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+                                .addGap(14))
+                            .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                                 .addComponent(rad2SetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
                                 .addGap(14))
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                                .addComponent(etaSetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-                                .addGap(14)))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(getEdgeDisplayPanel(), rad1SetLabel, LayoutStyle.ComponentPlacement.INDENT)
+                                .addComponent(rad1SetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(quantityModPanelLayout.createParallelGroup()
-                            .addComponent(getPerpBisectorRadioButton(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                                .addComponent(rad2SetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(etaSetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                                 .addGap(7))
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                                 .addComponent(rad1SetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                                 .addGap(7))
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                                .addComponent(etaSetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
-                                .addGap(7))))
-                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                        .addComponent(etaSlider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-                        .addGap(19))
-                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                        .addComponent(rad1Slider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-                        .addGap(19))
+                                .addComponent(rad2SetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+                                .addGap(7))
+                            .addComponent(getPerpBisectorRadioButton(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
                     .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                         .addComponent(rad2Slider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-                        .addGap(19)))
+                        .addGap(13))
+                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
+                        .addComponent(rad1Slider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+                        .addGap(13))
+                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
+                        .addComponent(etaSlider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+                        .addGap(13)))
                 .addComponent(getEdgeListScrollPane(), GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(quantityModPanelLayout.createSequentialGroup()
-                .addPreferredGap(getCirclePackRadioButton(), rad1SetLabel, LayoutStyle.ComponentPlacement.INDENT)
-                .addGroup(quantityModPanelLayout.createParallelGroup()
-                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                        .addComponent(rad1SetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 251, Short.MAX_VALUE))
-                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                        .addGap(28)
-                        .addComponent(getEdgeDisplayPanel(), GroupLayout.PREFERRED_SIZE, 306, GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(22)))
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED));
+                .addGap(0, 0, Short.MAX_VALUE)))
+        .addContainerGap());
       quantityModPanelLayout.setVerticalGroup(quantityModPanelLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(quantityModPanelLayout.createParallelGroup()
@@ -393,8 +390,8 @@ public class GeoquantViewer extends javax.swing.JFrame {
                 .addComponent(etaSlider, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                 .addGap(19)
                 .addGroup(quantityModPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(rad1SetField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rad1SetLabel, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(rad1SetLabel, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rad1SetField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rad1Slider, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                 .addGap(22)
@@ -409,9 +406,9 @@ public class GeoquantViewer extends javax.swing.JFrame {
                     .addComponent(getPerpBisectorRadioButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
                 .addGap(12))
             .addComponent(getEdgeListScrollPane(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE))
-        .addGap(41)
-        .addComponent(getEdgeDisplayPanel(), GroupLayout.PREFERRED_SIZE, 203, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(22, Short.MAX_VALUE));
+        .addGap(20)
+        .addComponent(getEdgeDisplayPanel(), GroupLayout.PREFERRED_SIZE, 228, GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(18, Short.MAX_VALUE));
     }
     return quantityModPanel;
   }
@@ -466,9 +463,35 @@ public class GeoquantViewer extends javax.swing.JFrame {
     return alphaButtonGroup;
   }
   
-  private EdgeDisplayPanel getEdgeDisplayPanel() {
+  private JPanel getEdgeDisplayPanel() {
     if(edgeDisplayPanel == null) {
-      edgeDisplayPanel = new EdgeDisplayPanel();
+      edgeDisplayPanel = new JPanel() {
+        protected void paintComponent(Graphics g) {
+          super.paintComponent(g);
+          g.setColor(Color.BLACK);
+          Dimension size = this.getSize();
+          g.drawLine(size.width / 3, size.height / 2, 2 * size.width / 3, size.height / 2);
+          int index = EdgeList.getSelectedIndex();
+          if(index == -1) {
+            return;
+          }
+          Edge s = (Edge) EdgeListModel.getElementAt(index);
+          Vertex v1 = s.getLocalVertices().get(0);
+          Vertex v2 = s.getLocalVertices().get(1);
+          double length = Length.valueAt(s);
+          double rad1 = Radius.valueAt(v1);
+          double rad2 = Radius.valueAt(v2);
+          int lineLength = size.width / 3;
+          int arcLength = (int) (rad1*lineLength / length);
+          g.drawArc(size.width / 3 - arcLength, size.height/2 - arcLength, arcLength * 2, 
+              arcLength * 2, 0, 360);
+          arcLength = (int) (rad2*lineLength / length);
+          g.drawArc(2 *size.width / 3 - arcLength, size.height/2 - arcLength, arcLength * 2, 
+              arcLength * 2, 0, 360);
+        }
+      };
+      edgeDisplayPanel.setBackground(new java.awt.Color(255,255,255));
+      edgeDisplayPanel.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
     }
     return edgeDisplayPanel;
   }
@@ -503,7 +526,8 @@ public class GeoquantViewer extends javax.swing.JFrame {
           rad2SetLabel.setText("Radius " + v2.getIndex() + ":");
           rad2SetField.setText("" + Radius.valueAt(v2));
           etaSetField.setText("" + Eta.valueAt(s));
-          System.out.println("Alpha: " + Alpha.valueAt(v1));
+          
+          getEdgeDisplayPanel().repaint();
         }
       }
     }
@@ -553,25 +577,5 @@ public class GeoquantViewer extends javax.swing.JFrame {
       
     }
     
-  }
-  
-  class EdgeDisplayPanel extends JPanel {
-    public EdgeDisplayPanel() {
-      super();
-      setBorder(BorderFactory.createLineBorder(Color.black));
-      setBackground(Color.WHITE);
-    }
-    
-    protected void paintComponent(Graphics g) {
-      super.paintComponent(g);
-      g.setColor(Color.WHITE);
-      int index = EdgeList.getSelectedIndex();
-      if(index == -1) {
-        return;
-      }
-      Edge s = (Edge) EdgeListModel.getElementAt(index);
-      double length = Length.valueAt(s);
-      
-    }
   }
 }
