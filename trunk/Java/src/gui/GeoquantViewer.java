@@ -4,8 +4,12 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -17,6 +21,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -32,6 +37,8 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
 import javax.swing.SwingConstants;
 
 import javax.swing.WindowConstants;
@@ -47,7 +54,9 @@ import javax.swing.SwingUtilities;
 import Geoquant.Alpha;
 import Geoquant.Eta;
 import Geoquant.Geometry;
+import Geoquant.Geoquant;
 import Geoquant.Length;
+import Geoquant.NEHR;
 import Geoquant.Radius;
 import InputOutput.TriangulationIO;
 import Triangulation.Edge;
@@ -72,6 +81,17 @@ public class GeoquantViewer extends javax.swing.JFrame {
   private AbstractAction importAction;
   private JPanel edgeDisplayPanel;
   private JRadioButton circlePackRadioButton;
+  private JPanel geoPolygonPanel;
+  private JCheckBox curv2DCheck;
+  private JCheckBox curv3DCheck;
+  private JCheckBox areaCheck;
+  private JCheckBox partialEdgeCheck;
+  private JCheckBox nehrCheck;
+  private JCheckBox dihAngleCheck;
+  private JCheckBox volumeCheck;
+  private JCheckBox lengthCheck;
+  private JPanel geoSelectPanel;
+  private ButtonGroup geoCheckBoxGroup;
   private ButtonGroup alphaButtonGroup;
   private JRadioButton perpBisectorRadioButton;
   private JLabel rad2SetLabel;
@@ -93,7 +113,7 @@ public class GeoquantViewer extends javax.swing.JFrame {
   private JTextField etaSetField;
   private ListModel EdgeListModel;
   private Hashtable<Integer, JLabel> labelTable;
-
+  
   /**
   * Auto-generated main method to display this JFrame
   */
@@ -119,10 +139,22 @@ public class GeoquantViewer extends javax.swing.JFrame {
       getContentPane().setLayout(thisLayout);
         thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
           .addContainerGap()
-          .addComponent(getQuantityModPanel(), 0, 576, Short.MAX_VALUE)
+          .addGroup(thisLayout.createParallelGroup()
+              .addComponent(getQuantityModPanel(), GroupLayout.Alignment.LEADING, 0, 576, Short.MAX_VALUE)
+              .addGroup(GroupLayout.Alignment.LEADING, thisLayout.createSequentialGroup()
+                  .addGap(9)
+                  .addComponent(getGeoPolygonPanel(), GroupLayout.PREFERRED_SIZE, 358, GroupLayout.PREFERRED_SIZE)
+                  .addGap(0, 19, Short.MAX_VALUE)
+                  .addComponent(getGeoSelectPanel(), GroupLayout.PREFERRED_SIZE, 190, GroupLayout.PREFERRED_SIZE)))
           .addContainerGap());
         thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
-          .addContainerGap(520, 520)
+          .addContainerGap(49, 49)
+          .addGroup(thisLayout.createParallelGroup()
+              .addComponent(getGeoSelectPanel(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 447, GroupLayout.PREFERRED_SIZE)
+              .addGroup(GroupLayout.Alignment.LEADING, thisLayout.createSequentialGroup()
+                  .addComponent(getGeoPolygonPanel(), GroupLayout.PREFERRED_SIZE, 441, GroupLayout.PREFERRED_SIZE)
+                  .addGap(6)))
+          .addGap(24)
           .addComponent(getQuantityModPanel(), GroupLayout.PREFERRED_SIZE, 389, GroupLayout.PREFERRED_SIZE)
           .addContainerGap(19, Short.MAX_VALUE));
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -199,6 +231,7 @@ public class GeoquantViewer extends javax.swing.JFrame {
           rad2SetField.setText("" + value);
           Radius.At(s.getLocalVertices().get(1)).setValue(value);
         }
+        getEdgeDisplayPanel().repaint();
       } 
     }
     
@@ -468,13 +501,19 @@ public class GeoquantViewer extends javax.swing.JFrame {
       edgeDisplayPanel = new JPanel() {
         protected void paintComponent(Graphics g) {
           super.paintComponent(g);
-          g.setColor(Color.BLACK);
-          Dimension size = this.getSize();
-          g.drawLine(size.width / 3, size.height / 2, 2 * size.width / 3, size.height / 2);
+        
           int index = EdgeList.getSelectedIndex();
           if(index == -1) {
             return;
           }
+          
+          // Draw Line
+          g.setColor(Color.BLACK);
+          Dimension size = this.getSize();
+          g.drawLine(size.width / 3, size.height / 2, 2 * size.width / 3, size.height / 2);
+
+          // Draw Circles
+          g.setColor(Color.BLUE);
           Edge s = (Edge) EdgeListModel.getElementAt(index);
           Vertex v1 = s.getLocalVertices().get(0);
           Vertex v2 = s.getLocalVertices().get(1);
@@ -483,17 +522,191 @@ public class GeoquantViewer extends javax.swing.JFrame {
           double rad2 = Radius.valueAt(v2);
           int lineLength = size.width / 3;
           int arcLength = (int) (rad1*lineLength / length);
-          g.drawArc(size.width / 3 - arcLength, size.height/2 - arcLength, arcLength * 2, 
-              arcLength * 2, 0, 360);
+          g.drawOval(size.width / 3 - arcLength, size.height/2 - arcLength, arcLength * 2, 
+              arcLength * 2);
           arcLength = (int) (rad2*lineLength / length);
-          g.drawArc(2 *size.width / 3 - arcLength, size.height/2 - arcLength, arcLength * 2, 
-              arcLength * 2, 0, 360);
+          g.drawOval(2 *size.width / 3 - arcLength, size.height/2 - arcLength, arcLength * 2, 
+              arcLength * 2);
         }
       };
       edgeDisplayPanel.setBackground(new java.awt.Color(255,255,255));
       edgeDisplayPanel.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
+      edgeDisplayPanel.addMouseMotionListener(new EdgePanelMouseListener());
     }
     return edgeDisplayPanel;
+  }
+  
+  private ButtonGroup getGeoCheckBoxGroup() {
+    if(geoCheckBoxGroup == null) {
+      geoCheckBoxGroup = new ButtonGroup();
+    }
+    return geoCheckBoxGroup;
+  }
+  
+  private JPanel getGeoSelectPanel() {
+    if(geoSelectPanel == null) {
+      geoSelectPanel = new JPanel();
+      GroupLayout geoSelectPanelLayout = new GroupLayout((JComponent)geoSelectPanel);
+      geoSelectPanel.setLayout(geoSelectPanelLayout);
+      geoSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
+      geoSelectPanelLayout.setHorizontalGroup(geoSelectPanelLayout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(geoSelectPanelLayout.createParallelGroup()
+            .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
+                .addComponent(getLengthCheck(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(getVolumeCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(getDihAngleCheck(), GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
+                .addComponent(getNehrCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 0, Short.MAX_VALUE)
+                .addComponent(getAreaCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
+                .addGap(28)
+                .addComponent(getPartialEdgeCheck(), GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(getCurv3DCheck(), GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(getCurv2DCheck(), GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)))
+        .addContainerGap(23, 23));
+      geoSelectPanelLayout.setVerticalGroup(geoSelectPanelLayout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+            .addComponent(getLengthCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getVolumeCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getDihAngleCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getNehrCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getAreaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
+        .addGap(23)
+        .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+            .addComponent(getCurv2DCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getPartialEdgeCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getCurv3DCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(115, 115));
+    }
+    return geoSelectPanel;
+  }
+  
+  private JCheckBox getLengthCheck() {
+    if(lengthCheck == null) {
+      lengthCheck = new JCheckBox();
+      lengthCheck.setText("Length");
+      getGeoCheckBoxGroup().add(lengthCheck);
+    }
+    return lengthCheck;
+  }
+  
+  private JCheckBox getVolumeCheck() {
+    if(volumeCheck == null) {
+      volumeCheck = new JCheckBox();
+      volumeCheck.setText("Volume");
+      getGeoCheckBoxGroup().add(volumeCheck);
+    }
+    return volumeCheck;
+  }
+  
+  private JCheckBox getDihAngleCheck() {
+    if(dihAngleCheck == null) {
+      dihAngleCheck = new JCheckBox();
+      dihAngleCheck.setText("Dihedral Angle");
+      getGeoCheckBoxGroup().add(dihAngleCheck);
+    }
+    return dihAngleCheck;
+  }
+  
+  private JCheckBox getNehrCheck() {
+    if(nehrCheck == null) {
+      nehrCheck = new JCheckBox();
+      nehrCheck.setText("NEHR");
+      getGeoCheckBoxGroup().add(nehrCheck);
+    }
+    return nehrCheck;
+  }
+  
+  private JCheckBox getPartialEdgeCheck() {
+    if(partialEdgeCheck == null) {
+      partialEdgeCheck = new JCheckBox();
+      partialEdgeCheck.setText("Partial Edge");
+      getGeoCheckBoxGroup().add(partialEdgeCheck);
+    }
+    return partialEdgeCheck;
+  }
+  
+  private JCheckBox getAreaCheck() {
+    if(areaCheck == null) {
+      areaCheck = new JCheckBox();
+      areaCheck.setText("Area");
+      getGeoCheckBoxGroup().add(areaCheck);
+    }
+    return areaCheck;
+  }
+  
+  private JCheckBox getCurv3DCheck() {
+    if(curv3DCheck == null) {
+      curv3DCheck = new JCheckBox();
+      curv3DCheck.setText("Curvature(3D)");
+      getGeoCheckBoxGroup().add(curv3DCheck);
+    }
+    return curv3DCheck;
+  }
+  
+  private JCheckBox getCurv2DCheck() {
+    if(curv2DCheck == null) {
+      curv2DCheck = new JCheckBox();
+      curv2DCheck.setText("Curvature(2D)");
+      getGeoCheckBoxGroup().add(curv2DCheck);
+    }
+    return curv2DCheck;
+  }
+  
+  private JPanel getGeoPolygonPanel() {
+    if(geoPolygonPanel == null) {
+      geoPolygonPanel = new JPanel() {
+        protected void paintComponent(Graphics g) {
+          super.paintComponent(g);
+          LinkedList<Geoquant> geoList = populateList();
+          int size = geoList.size();
+          int[] xpoints = new int[size];
+          int[] ypoints = new int[size];
+          double angleStep = 360 / size;
+          int height = this.getHeight();
+          
+        }
+        private LinkedList<Geoquant> populateList() {
+          LinkedList<Geoquant> geoList = new LinkedList<Geoquant>();
+          if(getLengthCheck().isSelected()) {
+            geoList.addAll(Geometry.getLengths());
+          }
+          if(getVolumeCheck().isSelected()) {
+            geoList.addAll(Geometry.getVolumes());
+          }
+          if(getAreaCheck().isSelected()) {
+            geoList.addAll(Geometry.getAreas());
+          }
+          if(getDihAngleCheck().isSelected()) {
+            geoList.addAll(Geometry.getDihedralAngles());
+          }
+          if(getNehrCheck().isSelected()) {
+            geoList.add(NEHR.getInstance());
+          }
+          if(getPartialEdgeCheck().isSelected()) {
+            geoList.addAll(Geometry.getPartialEdges());
+          }
+          if(getCurv3DCheck().isSelected()) {
+            geoList.addAll(Geometry.getCurvature3D());
+          }
+          if(getCurv2DCheck().isSelected()) {
+            geoList.addAll(Geometry.getCurvature2D());
+          }
+          
+          return geoList;
+        }
+      };
+      geoPolygonPanel.setBackground(new java.awt.Color(255,255,255));
+      geoPolygonPanel.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
+    }
+    return geoPolygonPanel;
   }
 
   class EdgeListSelectionListener implements ListSelectionListener {
@@ -553,6 +766,7 @@ public class GeoquantViewer extends javax.swing.JFrame {
         } else if(name.equals("rad2SetField")) {
           Radius.At(s.getLocalVertices().get(1)).setValue(value);
         }
+        getEdgeDisplayPanel().repaint();
       } catch (NumberFormatException exc) {
         return;
       } catch (ClassCastException exc) {
@@ -571,11 +785,74 @@ public class GeoquantViewer extends javax.swing.JFrame {
         for(Alpha a : Geometry.getAlphas()) {
           a.setValue(value);
         }
+        getEdgeDisplayPanel().repaint();
       } catch(NumberFormatException exc) {
         return;
       }
       
     }
     
+  }
+  
+  class EdgePanelMouseListener extends MouseAdapter {
+    private JLabel message;
+    private Popup edgeDisplayPopup;
+    private int x;
+    private int y;
+    private JPanel edgeDisplay;
+    
+    public EdgePanelMouseListener() {
+      super();
+
+      message = new JLabel();
+      message.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
+    }
+    
+    public void mouseMoved(MouseEvent e) {
+      x = e.getX();
+      y = e.getY();
+      edgeDisplay = getEdgeDisplayPanel();
+      int width = edgeDisplay.getWidth();
+      int height = edgeDisplay.getHeight();
+      int epsilon = 20;
+      
+      if(x > (width / 3 - epsilon) && x < (2 * width / 3 + epsilon)
+          && y > (height / 2 - epsilon) && y < (height/2 + epsilon)) {
+        
+        int index = EdgeList.getSelectedIndex();
+        if(index == -1) {
+          return;
+        }
+        if(edgeDisplayPopup != null){
+          edgeDisplayPopup.hide();
+        }
+        Edge s = (Edge) EdgeListModel.getElementAt(index); 
+        message.setText("" + Length.At(s));
+        PopupFactory factory = PopupFactory.getSharedInstance();
+        edgeDisplayPopup = factory.getPopup(GeoquantViewer.this, message, 
+              (int) edgeDisplay.getLocationOnScreen().getX() + x, 
+              (int) edgeDisplay.getLocationOnScreen().getY() + y - 15);
+        edgeDisplayPopup.show();
+      } else if(edgeDisplayPopup != null){
+        edgeDisplayPopup.hide();
+      }
+    }
+
+  }
+  
+  class GeoPolygon extends Polygon {
+    private HashMap<Point, Geoquant> geoMap;
+    public GeoPolygon(int[] xpoints, int[] ypoints, int npoints, Geoquant[] geos) {
+      super(xpoints, ypoints, npoints);
+      geoMap = new HashMap<Point, Geoquant>();
+      Point p;
+      for(int i = 0; i < geos.length; i++) {
+        p = new Point(xpoints[i], ypoints[i]);
+        geoMap.put(p, geos[i]);
+      }
+    }
+    public Geoquant getVertex(int x, int y) {
+      return geoMap.get(new Point(x, y));
+    }
   }
 }
