@@ -83,6 +83,16 @@ import Triangulation.Vertex;
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
 public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
+
+	{
+		//Set Look & Feel
+		try {
+			javax.swing.UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
   private JList EdgeList;
   private AbstractAction importAction;
   private JPanel edgeDisplayPanel;
@@ -152,7 +162,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   * Auto-generated main method to display this JFrame
   */
   public static void main(String[] args) {
-    TriangulationIO.read3DTriangulationFile("Data/3DManifolds/StandardFormat/pentachoron.txt");
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         GeoquantViewer inst = new GeoquantViewer();
@@ -180,16 +189,17 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
                   .addComponent(getGeoPolygonPanel(), GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE)
                   .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                   .addComponent(getJTabbedPane1(), GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)))
-          .addContainerGap(12, Short.MAX_VALUE));
+          .addContainerGap(20, Short.MAX_VALUE));
         thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
           .addContainerGap()
           .addGroup(thisLayout.createParallelGroup()
               .addComponent(getGeoPolygonPanel(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 487, GroupLayout.PREFERRED_SIZE)
-              .addComponent(getJTabbedPane1(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 487, GroupLayout.PREFERRED_SIZE))
+              .addComponent(getJTabbedPane1(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 485, GroupLayout.PREFERRED_SIZE))
           .addGap(21)
           .addComponent(getQuantityModPanel(), GroupLayout.PREFERRED_SIZE, 389, GroupLayout.PREFERRED_SIZE)
-          .addContainerGap(19, Short.MAX_VALUE));
+          .addContainerGap(25, Short.MAX_VALUE));
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+      this.setResizable(false);
       {
         mainMenuBar = new JMenuBar();
         setJMenuBar(mainMenuBar);
@@ -347,16 +357,19 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         etaSetField = new JTextField();
         etaSetField.setHorizontalAlignment(SwingConstants.TRAILING);
         etaSetField.setName("etaSetField");
+        etaSetField.setEnabled(false);
         etaSetField.addActionListener(new SetValueListener());
         
         rad1SetField = new JTextField();
         rad1SetField.setHorizontalAlignment(SwingConstants.TRAILING);
         rad1SetField.setName("rad1SetField");
+        rad1SetField.setEnabled(false);
         rad1SetField.addActionListener(new SetValueListener());
         
         rad2SetField = new JTextField();
         rad2SetField.setHorizontalAlignment(SwingConstants.TRAILING);
         rad2SetField.setName("rad2SetField");
+        rad2SetField.setEnabled(false);
         rad2SetField.addActionListener(new SetValueListener());
       }
       {
@@ -378,6 +391,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         etaSlider.setLabelTable(labelTable);
         etaSlider.setPaintLabels(true);
         etaSlider.setName("etaSlider");
+        etaSlider.setEnabled(false);
         etaSlider.addChangeListener(new SliderListener());
         
         rad1Slider = new JSlider();
@@ -389,6 +403,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         rad1Slider.setPaintLabels(true);
         rad1Slider.setPaintTicks(true);
         rad1Slider.setName("rad1Slider");
+        rad1Slider.setEnabled(false);
         rad1Slider.addChangeListener(new SliderListener());
         
         rad2Slider = new JSlider();
@@ -400,82 +415,80 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         rad2Slider.setPaintLabels(true);
         rad2Slider.setPaintTicks(true);
         rad2Slider.setName("rad2Slider");
+        rad2Slider.setEnabled(false);
         rad2Slider.addChangeListener(new SliderListener());
       }
       quantityModPanelLayout.setHorizontalGroup(quantityModPanelLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(quantityModPanelLayout.createParallelGroup()
             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                .addComponent(getEdgeDisplayPanel(), 0, 353, Short.MAX_VALUE)
-                .addGap(9))
-            .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                 .addGroup(quantityModPanelLayout.createParallelGroup()
                     .addGroup(quantityModPanelLayout.createSequentialGroup()
                         .addGroup(quantityModPanelLayout.createParallelGroup()
                             .addComponent(getCirclePackRadioButton(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                                .addComponent(etaSetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
-                                .addGap(14))
-                            .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                                 .addComponent(rad2SetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
                                 .addGap(14))
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                                .addPreferredGap(getEdgeDisplayPanel(), rad1SetLabel, LayoutStyle.ComponentPlacement.INDENT)
-                                .addComponent(rad1SetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(rad1SetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+                                .addGap(14))
+                            .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
+                                .addComponent(etaSetLabel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+                                .addGap(14)))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(quantityModPanelLayout.createParallelGroup()
+                            .addComponent(getPerpBisectorRadioButton(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                                .addComponent(etaSetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rad2SetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                                 .addGap(7))
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                                 .addComponent(rad1SetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
                                 .addGap(7))
                             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                                .addComponent(rad2SetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
-                                .addGap(7))
-                            .addComponent(getPerpBisectorRadioButton(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                        .addComponent(rad2Slider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-                        .addGap(13))
-                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-                        .addComponent(rad1Slider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-                        .addGap(13))
+                                .addComponent(etaSetField, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+                                .addGap(7))))
                     .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                         .addComponent(etaSlider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-                        .addGap(13)))
+                        .addGap(14))
+                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
+                        .addComponent(rad1Slider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+                        .addGap(14))
+                    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
+                        .addComponent(rad2Slider, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
+                        .addGap(14)))
                 .addComponent(getEdgeListScrollPane(), GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(0, 10, Short.MAX_VALUE))
+            .addComponent(getEdgeDisplayPanel(), GroupLayout.Alignment.LEADING, 0, 373, Short.MAX_VALUE))
         .addContainerGap());
       quantityModPanelLayout.setVerticalGroup(quantityModPanelLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(quantityModPanelLayout.createParallelGroup()
             .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
                 .addGroup(quantityModPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(etaSetField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(etaSetLabel, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(etaSetField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(etaSetLabel, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
                 .addComponent(etaSlider, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                 .addGap(19)
                 .addGroup(quantityModPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(rad1SetLabel, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rad1SetField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(rad1SetLabel, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rad1SetField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
                 .addComponent(rad1Slider, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                 .addGap(22)
                 .addGroup(quantityModPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(rad2SetField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rad2SetLabel, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(rad2SetField, GroupLayout.Alignment.BASELINE, 0, 27, Short.MAX_VALUE)
+                    .addComponent(rad2SetLabel, GroupLayout.Alignment.BASELINE, 0, 27, Short.MAX_VALUE))
                 .addComponent(rad2Slider, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
                 .addGap(22)
                 .addGroup(quantityModPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(getCirclePackRadioButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(getCirclePackRadioButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(getPerpBisectorRadioButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
                 .addGap(12))
-            .addComponent(getEdgeListScrollPane(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE))
+            .addGroup(quantityModPanelLayout.createSequentialGroup()
+                .addComponent(getEdgeListScrollPane(), GroupLayout.PREFERRED_SIZE, 294, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)))
         .addGap(20)
         .addComponent(getEdgeDisplayPanel(), GroupLayout.PREFERRED_SIZE, 228, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(18, Short.MAX_VALUE));
+        .addContainerGap(24, 24));
     }
     return quantityModPanel;
   }
@@ -575,26 +588,37 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       basicSelectPanel = new JPanel();
       GroupLayout geoSelectPanelLayout = new GroupLayout((JComponent)basicSelectPanel);
       basicSelectPanel.setLayout(geoSelectPanelLayout);
+      basicSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
       geoSelectPanelLayout.setHorizontalGroup(geoSelectPanelLayout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(getCurv3DCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getCurv2DCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getAlphaCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getAngleCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getAreaCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getConeAngleCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
-        .addGap(38)
         .addGroup(geoSelectPanelLayout.createParallelGroup()
             .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-                .addComponent(getFaceHeightCheck(), GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
-                .addGap(18))
+                .addComponent(getConeAngleCheck(), GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+                .addGap(23))
+            .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
+                .addComponent(getAreaCheck(), GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+                .addGap(37))
+            .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
+                .addComponent(getAngleCheck(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+                .addGap(42))
+            .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
+                .addComponent(getAlphaCheck(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+                .addGap(42))
+            .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
+                .addComponent(getCurv3DCheck(), GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED))
+            .addComponent(getCurv2DCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
+        .addGap(34)
+        .addGroup(geoSelectPanelLayout.createParallelGroup()
+            .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
+                .addComponent(getFaceHeightCheck(), GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
+                .addGap(15))
             .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
                 .addComponent(getLengthCheck(), GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
                 .addGap(19))
             .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-                .addComponent(getEtaCheck(), GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)
-                .addGap(41))
+                .addComponent(getEtaCheck(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+                .addGap(40))
             .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
                 .addComponent(getDualAreaCheck(), GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
                 .addGap(36))
@@ -606,53 +630,52 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         .addGroup(geoSelectPanelLayout.createParallelGroup()
             .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
                 .addComponent(getRadiusCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 67, Short.MAX_VALUE))
+                .addGap(0, 68, Short.MAX_VALUE))
             .addGroup(geoSelectPanelLayout.createSequentialGroup()
-                .addComponent(getSectionalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
+                .addComponent(getSectionalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-                .addComponent(getVolumeCheck(), GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 71, Short.MAX_VALUE))
+                .addComponent(getVolumeCheck(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 69, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
                 .addComponent(getPartialEdgeCheck(), GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
+                .addGap(0, 41, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
                 .addComponent(getNehrCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 67, Short.MAX_VALUE)))
-        .addContainerGap(25, 25));
+                .addGap(0, 68, Short.MAX_VALUE)))
+        .addContainerGap(29, 29));
       geoSelectPanelLayout.setVerticalGroup(geoSelectPanelLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getNehrCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getDihAngleCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getAlphaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(getNehrCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getDihAngleCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getAlphaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getPartialEdgeCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getDualAreaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getAngleCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(getPartialEdgeCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getDualAreaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getAngleCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getRadiusCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getEdgeHeightCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getAreaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-        .addGap(15)
+            .addComponent(getRadiusCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getEdgeHeightCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getAreaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getSectionalCurvatureCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getEtaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getConeAngleCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-        .addGap(13)
+            .addComponent(getSectionalCurvatureCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getEtaCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getConeAngleCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getVolumeCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getFaceHeightCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getCurv2DCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(getVolumeCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getFaceHeightCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getCurv2DCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getLengthCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getCurv3DCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-        .addContainerGap());
-      geoSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getAlphaCheck(), getAngleCheck(), getAreaCheck(), getConeAngleCheck(), getCurv2DCheck(), getCurv3DCheck()});
-      geoSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getDihAngleCheck(), getDualAreaCheck(), getEdgeHeightCheck(), getEtaCheck(), getFaceHeightCheck(), getLengthCheck(), getNehrCheck(), getPartialEdgeCheck(), getRadiusCheck(), getSectionalCurvatureCheck(), getVolumeCheck()});
+            .addComponent(getLengthCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getCurv3DCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(30, 30));
+      geoSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getRadiusCheck(), getDihAngleCheck(), getAlphaCheck(), getAngleCheck(), getDualAreaCheck(), getNehrCheck(), getPartialEdgeCheck(), getEdgeHeightCheck(), getAreaCheck(), getConeAngleCheck(), getEtaCheck(), getSectionalCurvatureCheck(), getVolumeCheck(), getFaceHeightCheck(), getLengthCheck(), getCurv3DCheck(), getCurv2DCheck()});
     }
     return basicSelectPanel;
   }
@@ -891,7 +914,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           rad1SetField.setEnabled(false);
           rad1Slider.setEnabled(false);
           rad2SetField.setEnabled(false);
-          rad2SetField.setEnabled(false);
+          rad2Slider.setEnabled(false);
 
         } else {
           // selection, enable text field, slider, change label name
@@ -900,7 +923,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           rad1SetField.setEnabled(true);
           rad1Slider.setEnabled(true);
           rad2SetField.setEnabled(true);
-          rad2SetField.setEnabled(true);
+          rad2Slider.setEnabled(true);
           Edge s = (Edge) EdgeListModel.getElementAt(EdgeList.getSelectedIndex());
           Vertex v1 = s.getLocalVertices().get(0);
           Vertex v2 = s.getLocalVertices().get(1);
@@ -1149,15 +1172,17 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       partialSelectPanel = new JPanel();
       GroupLayout partialSelectPanelLayout = new GroupLayout((JComponent)partialSelectPanel);
       partialSelectPanel.setLayout(partialSelectPanelLayout);
+      partialSelectPanel.setPreferredSize(new java.awt.Dimension(485, 158));
+      partialSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
       partialSelectPanelLayout.setHorizontalGroup(partialSelectPanelLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(partialSelectPanelLayout.createParallelGroup()
             .addGroup(partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getPartialEdgePartialCheck(), GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
+                .addComponent(getPartialEdgePartialCheck(), GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, partialSelectPanelLayout.createSequentialGroup()
                 .addComponent(getNehrPartialCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 47, Short.MAX_VALUE))
+                .addGap(0, 48, Short.MAX_VALUE))
             .addGroup(partialSelectPanelLayout.createSequentialGroup()
                 .addComponent(getCurvPartialCheck(), GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1165,26 +1190,27 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
                 .addComponent(getDihAnglePartialCheck(), GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getRadiusPartialCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 47, Short.MAX_VALUE))
+                .addComponent(getRadiusPartialCheck(), GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 45, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 47, Short.MAX_VALUE)))
-        .addContainerGap(349, 349));
+                .addComponent(getVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 44, Short.MAX_VALUE)))
+        .addContainerGap(353, 353));
       partialSelectPanelLayout.setVerticalGroup(partialSelectPanelLayout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(getCurvPartialCheck(), GroupLayout.PREFERRED_SIZE, 12, GroupLayout.PREFERRED_SIZE)
-        .addGap(11)
-        .addComponent(getDihAnglePartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addGap(11)
-        .addComponent(getNehrPartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addGap(11)
-        .addComponent(getPartialEdgePartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addGap(11)
-        .addComponent(getRadiusPartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(getVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+        .addComponent(getCurvPartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(getDihAnglePartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(getNehrPartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(getPartialEdgePartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 0, GroupLayout.PREFERRED_SIZE)
+        .addComponent(getRadiusPartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(getVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(23, 23));
+      partialSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getVolumePartialCheck(), getRadiusPartialCheck(), getPartialEdgePartialCheck(), getNehrPartialCheck(), getDihAnglePartialCheck(), getCurvPartialCheck()});
     }
     return partialSelectPanel;
   }
@@ -1194,6 +1220,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       secondPartialSelectPanel = new JPanel();
       GroupLayout seconPartialSelectPanelLayout = new GroupLayout((JComponent)secondPartialSelectPanel);
       secondPartialSelectPanel.setLayout(seconPartialSelectPanelLayout);
+      secondPartialSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
       seconPartialSelectPanelLayout.setHorizontalGroup(seconPartialSelectPanelLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(seconPartialSelectPanelLayout.createParallelGroup()
@@ -1220,6 +1247,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         .addGap(11)
         .addComponent(getVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
         .addContainerGap(31, Short.MAX_VALUE));
+      seconPartialSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getCurvatureSecondPartialCheck(), getDihAngleSecondPartialCheck(), getNehrSecondPartialCheck(), getPartialEdgeSecondPartialCheck(), getVolumeSecondPartialCheck()});
     }
     return secondPartialSelectPanel;
   }
@@ -1328,32 +1356,34 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       totalSelectPanel = new JPanel();
       GroupLayout totalSelectPanelLayout = new GroupLayout((JComponent)totalSelectPanel);
       totalSelectPanel.setLayout(totalSelectPanelLayout);
+      totalSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
       totalSelectPanelLayout.setHorizontalGroup(totalSelectPanelLayout.createSequentialGroup()
         .addContainerGap()
         .addGroup(totalSelectPanelLayout.createParallelGroup()
+            .addGroup(totalSelectPanelLayout.createSequentialGroup()
+                .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-                .addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+                .addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 37, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
                 .addComponent(getTotalVolumeCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 37, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-                .addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 37, Short.MAX_VALUE))
-            .addGroup(totalSelectPanelLayout.createSequentialGroup()
-                .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)))
-        .addContainerGap(277, 277));
+                .addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 37, Short.MAX_VALUE)))
+        .addContainerGap(286, 286));
       totalSelectPanelLayout.setVerticalGroup(totalSelectPanelLayout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, 1, Short.MAX_VALUE)
-        .addComponent(getTotalVolumeCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(61, 61));
+        .addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(getTotalVolumeCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(54, Short.MAX_VALUE));
+      totalSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getTotalCurvatureCheck(), getTotalVolumeCheck(), getTotalVolumePartialCheck(), getTotalVolumeSecondPartialCheck()});
     }
     return totalSelectPanel;
   }

@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="jreality/sunflow.jar"/>
 	<classpathentry kind="lib" path="jreality/xpp3.jar"/>
 	<classpathentry kind="lib" path="jreality/xstream.jar"/>
+	<classpathentry kind="lib" path="lib/looks-2.1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
