@@ -142,7 +142,7 @@ public class Geometry {
     return list;
   }
   
-  public static List<EdgeHeight> getEdgeHeight() {
+  public static List<EdgeHeight> getEdgeHeights() {
     LinkedList<EdgeHeight> list = new LinkedList<EdgeHeight>();
     EdgeHeight eh;
     for (Face f : Triangulation.faceTable.values()){
@@ -154,7 +154,7 @@ public class Geometry {
     return list;
   }
   
-  public static List<FaceHeight> getFaceHeight() {
+  public static List<FaceHeight> getFaceHeights() {
     LinkedList<FaceHeight> list = new LinkedList<FaceHeight>();
     FaceHeight fh;
     for (Tetra t : Triangulation.tetraTable.values()){
@@ -218,6 +218,8 @@ public class Geometry {
         partial = c.partialAt(w);
         list.add(partial);
       }
+    }
+    for(Curvature3D c : getCurvature3D()) {
       for(Edge e : Triangulation.edgeTable.values()) {
         partial = c.partialAt(e);
         list.add(partial);
@@ -274,6 +276,9 @@ public class Geometry {
        partial = vol.partialAt(v); 
        list.add(partial);
       }
+    }
+    for(Tetra t : Triangulation.tetraTable.values()){
+      vol = Volume.At(t);
       for (Edge e : t.getLocalEdges()){
         partial = vol.partialAt(e);
         list.add(partial);
@@ -346,6 +351,8 @@ public class Geometry {
         secondPartial = NEHR.secondPartialAt(v, w);
         list.add(secondPartial);
       }
+    }
+    for (Vertex v : Triangulation.vertexTable.values()) {
       for (Edge e : Triangulation.edgeTable.values()) {
         secondPartial = NEHR.secondPartialAt(v, e);
         list.add(secondPartial);
@@ -371,11 +378,19 @@ public class Geometry {
           secondPartial = vol.secondPartialAt(v, w);
           list.add(secondPartial);
         }
+      }
+    }
+    for (Tetra t : Triangulation.tetraTable.values()){
+      vol = Volume.At(t);
+      for (Vertex v : t.getLocalVertices()){
         for (Edge e : t.getLocalEdges()){
           secondPartial = vol.secondPartialAt(v, e);
           list.add(secondPartial);
         }
       }
+    }
+    for (Tetra t : Triangulation.tetraTable.values()){
+      vol = Volume.At(t);
       for (Edge e : t.getLocalEdges()){
         for (Edge f : t.getLocalEdges()){
           secondPartial = vol.secondPartialAt(e, f);
@@ -394,6 +409,8 @@ public class Geometry {
         secondPartial = Volume.secondPartialSumAt(v, w);
         list.add(secondPartial);
       }
+    }
+    for (Vertex v : Triangulation.vertexTable.values()){
       for (Edge e : Triangulation.edgeTable.values()){
         secondPartial = Volume.secondPartialSumAt(v, e);
         list.add(secondPartial);
