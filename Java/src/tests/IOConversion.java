@@ -15,14 +15,16 @@ import Triangulation.Vertex;
 
 public class IOConversion {
 
+  static int total;
+  static int vertices;
   
   public static void main(String[] args){
-    writeFiles();
-    convertFiles();
+    for(int j = 4; j <= 8; j++){
+      vertices = j;
+      writeFiles();
+      convertFiles();
+    }
   }
-  
-  static int total;
-  static int vertices = 7;
   
   public static void writeFiles()
   {
@@ -38,14 +40,25 @@ public class IOConversion {
     }
     while(scanner.hasNextLine()) {
       String line = scanner.nextLine().trim();
-      int j = line.indexOf("=");
       
       if(line.contains("=")){
         s = line.substring(line.indexOf("="));
+        if(line.contains("]]")){
+          String filename = "Data/Conversion/lutz_n" + vertices + "_" + i + ".txt";
+          PrintStream file = null;
+          try {
+            file = new PrintStream(new File(filename));
+          } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          file.print(s);
+          file.close();
+          i++;
+        }
       }
       else if(line.contains("]]"))
       {
-        s = s.concat(line);
         String filename = "Data/Conversion/lutz_n" + vertices + "_" + i + ".txt";
         PrintStream file = null;
         try {
