@@ -17,6 +17,12 @@
 	<classpathentry kind="lib" path="jreality/sunflow.jar"/>
 	<classpathentry kind="lib" path="jreality/xpp3.jar"/>
 	<classpathentry kind="lib" path="jreality/xstream.jar"/>
-	<classpathentry kind="lib" path="lib/looks-2.1.4.jar"/>
+	<classpathentry kind="lib" path="xml/bcel-5.2.jar"/>
+	<classpathentry kind="lib" path="xml/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="xml/serializer.jar"/>
+	<classpathentry kind="lib" path="xml/xalan.jar"/>
+	<classpathentry kind="lib" path="xml/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="xml/xml-apis.jar"/>
+	<classpathentry kind="lib" path="xml/xsltc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
