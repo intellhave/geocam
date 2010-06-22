@@ -19,11 +19,12 @@ public class IOConversion {
   static int vertices;
   
   public static void main(String[] args){
-    for(int j = 4; j <= 8; j++){
-      vertices = j;
-      writeFiles();
-      convertFiles();
-    }
+//    for(int j = 4; j <= 8; j++){
+//      vertices = j;
+//      writeFiles();
+//      convertFiles();
+//    }
+    convert3DLutzToXML("Data/3DManifolds/LutzFormat/3-torus.txt");
   }
   
   public static void writeFiles()
@@ -87,5 +88,33 @@ public class IOConversion {
       TriangulationIO.write2DTriangulationFile("Data/Conversion/standard_n" + vertices + "_" + i + ".txt");
       Triangulation.reset();
     }
+  }
+  
+  public static void convert2DStandardToXML(String standardPath) {
+    TriangulationIO.read2DTriangulationFile(standardPath);
+    String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
+                                         standardPath.lastIndexOf('.'));
+    TriangulationIO.writeTriangulationXML("Data/Triangulations/2DManifolds/" + name + ".xml");
+  }
+  
+  public static void convert2DLutzToXML(String standardPath) {
+    TriangulationIO.read2DLutzFile(standardPath);
+    String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
+                                         standardPath.lastIndexOf('.'));
+    TriangulationIO.writeTriangulationXML("Data/Triangulations/2DManifolds/" + name + ".xml");
+  }
+  
+  public static void convert3DStandardToXML(String standardPath) {
+    TriangulationIO.read3DTriangulationFile(standardPath);
+    String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
+                                         standardPath.lastIndexOf('.'));
+    TriangulationIO.writeTriangulationXML("Data/Triangulations/3DManifolds/" + name + ".xml");
+  }
+  
+  public static void convert3DLutzToXML(String standardPath) {
+    TriangulationIO.read3DLutzFile(standardPath);
+    String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
+                                         standardPath.lastIndexOf('.'));
+    TriangulationIO.writeTriangulationXML("Data/Triangulations/2DManifolds/" + name + ".xml");
   }
 }
