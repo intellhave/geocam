@@ -29,6 +29,8 @@ import Triangulation.*;
 
 public class TriangulationIO {
   private static Schema triangulationSchema = null;
+  private static String namespace = "http://code.google.com/p/geocam";
+  private static String schemaLoc = "/Data/Triangulations/TriangulationSchema.xsd";
   
   private TriangulationIO() {
     
@@ -652,7 +654,7 @@ public class TriangulationIO {
     try {
       if(triangulationSchema == null) {
         String schemaDir = System.getProperty("user.dir");
-        schemaDir = schemaDir.replaceAll("\\\\", "/") + "/Data/xml/TriangulationSchema.xsd";
+        schemaDir = schemaDir.replaceAll("\\\\", "/") + schemaLoc;
         SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
         triangulationSchema = sf.newSchema(new File(schemaDir));
       }
@@ -1004,7 +1006,7 @@ public class TriangulationIO {
   }
   
   public static void writeTriangulationXML(String filename) {
-    Document triangulationDoc = XMLParser.createDocument("http://code.google.com/p/geocam",
+    Document triangulationDoc = XMLParser.createDocument(namespace,
         "Triangulation");
     Element triangulation = triangulationDoc.getDocumentElement();
     Element simplex;

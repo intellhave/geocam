@@ -138,12 +138,11 @@ public class IOTest {
   }
   
   public static void testXMLReader() {
-    TriangulationIO.readTriangulationXML("Data/xml/3DManifolds/pentachoron_small.xml");
+    TriangulationIO.readTriangulationXML("Data/Triangulations/2DManifolds/tetrahedron.xml");
     for(Vertex v : Triangulation.vertexTable.values()) {
       System.out.println(v + ":\n\t" +
           v.getLocalVertices() + "\n\t" + v.getLocalEdges() + "\n\t" + v.getLocalFaces() +
           "\n\t" + v.getLocalTetras());
-      System.out.println(Radius.At(v));
     }
     System.out.println();
     for(Edge e : Triangulation.edgeTable.values()) {
