@@ -15,7 +15,7 @@ import Triangulation.Vertex;
 public class IOTest {
 
   public static void main(String[] args) {
-    test2DWrite();
+    testXMLReader();
   }
     
   private static void testReplace() {
@@ -136,5 +136,38 @@ public class IOTest {
     TriangulationIO.read2DLutzFile("Data/2DManifolds/LutzFormat/tetrahedron.txt");
     TriangulationIO.write2DTriangulationFile("Data/2DManifolds/StandardFormat/tetra_test.txt");
   }
+  
+  public static void testXMLReader() {
+    TriangulationIO.readTriangulationXML("Data/xml/3DManifolds/pentachoron_small.xml");
+    for(Vertex v : Triangulation.vertexTable.values()) {
+      System.out.println(v + ":\n\t" +
+          v.getLocalVertices() + "\n\t" + v.getLocalEdges() + "\n\t" + v.getLocalFaces() +
+          "\n\t" + v.getLocalTetras());
+      System.out.println(Radius.At(v));
+    }
+    System.out.println();
+    for(Edge e : Triangulation.edgeTable.values()) {
+      System.out.println(e + ":\n\t" +
+          e.getLocalVertices() + "\n\t" + e.getLocalEdges() + "\n\t" + e.getLocalFaces() +
+          "\n\t" + e.getLocalTetras());
+    }
+    System.out.println();
+    for(Face f : Triangulation.faceTable.values()) {
+      System.out.println(f + ":\n\t" +
+          f.getLocalVertices() + "\n\t" + f.getLocalEdges() + "\n\t" + f.getLocalFaces() +
+          "\n\t" + f.getLocalTetras());
+    }
+    System.out.println();
+    for(Tetra t : Triangulation.tetraTable.values()) {
+      System.out.println(t + ":\n\t" +
+          t.getLocalVertices() + "\n\t" + t.getLocalEdges() + "\n\t" + t.getLocalFaces() +
+          "\n\t" + t.getLocalTetras());
+    }  
+  }
 
+  public static void testXMLWriter() {
+    TriangulationIO.readTriangulationXML("Data/xml/3DManifolds/pentachoron_regular.xml");
+    Radius.At(Triangulation.vertexTable.get(1)).setValue(2.0);
+    TriangulationIO.writeTriangulationXML("Data/xml/3DManifolds/pentachoron_mod.xml");
+  }
 }

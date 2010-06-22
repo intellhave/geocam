@@ -3,17 +3,33 @@ package InputOutput;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
+import org.apache.xerces.xni.XMLString;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import Geoquant.Alpha;
+import Geoquant.Eta;
 import Geoquant.Length;
 import Geoquant.Radius;
 import Geoquant.TriPosition;
 import Triangulation.*;
 
 public class TriangulationIO {
+  private static Schema triangulationSchema = null;
+  
   private TriangulationIO() {
     
   }
@@ -23,6 +39,7 @@ public class TriangulationIO {
   }
   
   public static void read2DTriangulationFile(File file) {
+    Triangulation.reset();
     Scanner fileScanner;
     Scanner stringScanner;
     String type;
@@ -123,6 +140,7 @@ public class TriangulationIO {
   }
   
   public static void read3DTriangulationFile(File file) {
+    Triangulation.reset();
     Scanner fileScanner;
     Scanner stringScanner;
     String type;
@@ -241,6 +259,7 @@ public class TriangulationIO {
   }
   
   public static void read2DLutzFile(File file) {
+    Triangulation.reset();
     String faces;
     Scanner scanner = null;
     Scanner line;
@@ -335,6 +354,7 @@ public class TriangulationIO {
   }
   
   public static void read3DLutzFile(File file) {
+    Triangulation.reset();
     String tetras;
     Scanner scanner = null;
     Scanner line;
@@ -369,17 +389,13 @@ public class TriangulationIO {
       line = new Scanner(scanner.nextLine());
     
       // Create tetra
-      t = new Tetra(Triangulation.greatestTetra() + 1);
+      t = getTetra(Triangulation.greatestTetra() + 1);
       Triangulation.putTetra(t);
       
       // Fill out verts, create vertices, add to face
       for(int i = 0; i < verts.length; i++) {
         index = line.nextInt();
-        v = Triangulation.vertexTable.get(index);
-        if(v == null) {
-          v = new Vertex(index);
-          Triangulation.putVertex(v);
-        }
+        v = getVertex(index);
         v.addTetra(t);
         t.addVertex(v);
         verts[i] = v;
@@ -618,4 +634,630 @@ public class TriangulationIO {
     }
     out.close();
   }
+  
+  public static void readTriangulationXML(String fileName) {
+    Triangulation.reset();
+    Document triangulationDoc = XMLParser.parseDocument(fileName);
+    HashMap<TriPosition, Edge> edgeList = new HashMap<TriPosition, Edge>();
+    HashMap<TriPosition, Face> faceList = new HashMap<TriPosition, Face>();
+    TriPosition T;
+    Vertex[] verts = new Vertex[0];
+    Edge[] edges = new Edge[0];
+    Face[] faces = new Face[0];
+    Tetra[] tetras = new Tetra[0];
+    if(triangulationDoc == null) {
+      return;
+    }
+    
+    try {
+      if(triangulationSchema == null) {
+        String schemaDir = System.getProperty("user.dir");
+        schemaDir = schemaDir.replaceAll("\\\\", "/") + "/Data/xml/TriangulationSchema.xsd";
+        SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+        triangulationSchema = sf.newSchema(new File(schemaDir));
+      }
+      triangulationSchema.newValidator().validate(new DOMSource(triangulationDoc));
+    } catch (SAXException e) {
+      System.err.println("Document did not validate against TriangulationSchema.");
+      return;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    NodeList simplexList = triangulationDoc.getElementsByTagName("Vertex");
+    NodeList localList;
+    Element simplexNode;
+    Element localSimplices;
+    Scanner localScanner;
+    Vertex v;
+    for(int i = 0; i < simplexList.getLength(); i++) {
+      simplexNode = (Element) simplexList.item(i);
+      v = getVertex(Integer.parseInt(simplexNode.getAttribute("index")));
+      localList = simplexNode.getElementsByTagName("Vertices");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Vertex v2;
+        while(localScanner.hasNextInt()) {
+          v2 = getVertex(localScanner.nextInt());
+          v.addUniqueVertex(v2);
+          v2.addUniqueVertex(v);
+        }
+      }
+      localList = simplexNode.getElementsByTagName("Edges");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Edge e2;
+        while(localScanner.hasNextInt()) {
+          e2 = getEdge(localScanner.nextInt());
+          v.addUniqueEdge(e2);
+          e2.addUniqueVertex(v);
+        }
+      }
+      localList = simplexNode.getElementsByTagName("Faces");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Face f2;
+        while(localScanner.hasNextInt()) {
+          f2 = getFace(localScanner.nextInt());
+          v.addUniqueFace(f2);
+          f2.addUniqueVertex(v);
+        }
+      }
+      localList = simplexNode.getElementsByTagName("Tetras");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Tetra t2;
+        while(localScanner.hasNextInt()) {
+          t2 = getTetra(localScanner.nextInt());
+          v.addUniqueTetra(t2);
+          t2.addUniqueVertex(v);
+        }
+      }
+      String radius = simplexNode.getAttribute("radius");
+      if(radius.length() != 0) {
+        Radius.At(v).setValue(Double.parseDouble(radius));
+      }
+      String alpha = simplexNode.getAttribute("alpha");
+      if(alpha.length() != 0) {
+        Alpha.At(v).setValue(Double.parseDouble(alpha));
+      }
+    }
+    
+    Edge e;
+    simplexList = triangulationDoc.getElementsByTagName("Edge");
+    for(int i = 0; i < simplexList.getLength(); i++) {
+      simplexNode = (Element) simplexList.item(i);
+      e = getEdge(Integer.parseInt(simplexNode.getAttribute("index")));
+      localList = simplexNode.getElementsByTagName("Vertices");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Vertex v2;
+        while(localScanner.hasNextInt()) {
+          v2 = getVertex(localScanner.nextInt());
+          e.addUniqueVertex(v2);
+          v2.addUniqueEdge(e);
+        }
+      }
+      T = new TriPosition(e.getLocalVertices().get(0).getIndex(),
+                          e.getLocalVertices().get(1).getIndex());
+      edgeList.put(T, e);
+      localList = simplexNode.getElementsByTagName("Edges");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Edge e2;
+        while(localScanner.hasNextInt()) {
+          e2 = getEdge(localScanner.nextInt());
+          e.addUniqueEdge(e2);
+          e2.addUniqueEdge(e2);
+        }
+      }
+      localList = simplexNode.getElementsByTagName("Faces");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Face f2;
+        while(localScanner.hasNextInt()) {
+          f2 = getFace(localScanner.nextInt());
+          e.addUniqueFace(f2);
+          f2.addUniqueEdge(e);
+        }
+      }
+      localList = simplexNode.getElementsByTagName("Tetras");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Tetra t2;
+        while(localScanner.hasNextInt()) {
+          t2 = getTetra(localScanner.nextInt());
+          e.addUniqueTetra(t2);
+          t2.addUniqueEdge(e);
+        }
+      }
+      String eta = simplexNode.getAttribute("eta");
+      if(eta.length() != 0) {
+        Eta.At(e).setValue(Double.parseDouble(eta));
+      }
+    }
+    
+    Face f;
+    simplexList = triangulationDoc.getElementsByTagName("Face");
+    for(int i = 0; i < simplexList.getLength(); i++) {
+      simplexNode = (Element) simplexList.item(i);
+      f = getFace(Integer.parseInt(simplexNode.getAttribute("index")));
+      localList = simplexNode.getElementsByTagName("Vertices");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Vertex v2;
+        while(localScanner.hasNextInt()) {
+          v2 = getVertex(localScanner.nextInt());
+          f.addUniqueVertex(v2);
+          v2.addUniqueFace(f);
+        }
+      }
+      verts = f.getLocalVertices().toArray(verts);
+      T = new TriPosition(verts[0].getIndex(),
+                          verts[1].getIndex(),
+                          verts[2].getIndex());
+      faceList.put(T, f);      
+      
+      localList = simplexNode.getElementsByTagName("Edges");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Edge e2;
+        while(localScanner.hasNextInt()) {
+          e2 = getEdge(localScanner.nextInt());
+          f.addUniqueEdge(e2);
+          e2.addUniqueFace(f);
+        }
+      }
+      Edge e2;
+      for(int j = 0; j < verts.length; j++) {
+        for(int k = j + 1; k < verts.length; k++) {
+          T = new TriPosition(verts[j].getIndex(), verts[k].getIndex());
+          e2 = edgeList.get(T);
+          if(e2 == null) {
+            e2 = getEdge(Triangulation.greatestEdge() + 1);
+            edgeList.put(T, e2);
+            e2.addUniqueVertex(verts[j]);
+            e2.addUniqueVertex(verts[k]);
+            verts[j].addUniqueEdge(e2);
+            verts[k].addUniqueEdge(e2);
+          }
+          f.addUniqueEdge(e2);
+          e2.addUniqueFace(f);
+        }
+      }
+      
+      localList = simplexNode.getElementsByTagName("Faces");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Face f2;
+        while(localScanner.hasNextInt()) {
+          f2 = getFace(localScanner.nextInt());
+          f.addUniqueFace(f2);
+          f2.addUniqueFace(f);
+        }
+      }
+      localList = simplexNode.getElementsByTagName("Tetras");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Tetra t2;
+        while(localScanner.hasNextInt()) {
+          t2 = getTetra(localScanner.nextInt());
+          f.addUniqueTetra(t2);
+          t2.addUniqueFace(f);
+        }
+      }
+    }
+    
+    Tetra t;
+    simplexList = triangulationDoc.getElementsByTagName("Tetra");
+    for(int i = 0; i < simplexList.getLength(); i++) {
+      simplexNode = (Element) simplexList.item(i);
+      t = getTetra(Integer.parseInt(simplexNode.getAttribute("index")));
+      localList = simplexNode.getElementsByTagName("Vertices");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Vertex v2;
+        while(localScanner.hasNextInt()) {
+          v2 = getVertex(localScanner.nextInt());
+          t.addUniqueVertex(v2);
+          v2.addUniqueTetra(t);
+        }
+      }
+      localList = simplexNode.getElementsByTagName("Edges");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Edge e2;
+        while(localScanner.hasNextInt()) {
+          e2 = getEdge(localScanner.nextInt());
+          t.addUniqueEdge(e2);
+          e2.addUniqueTetra(t);
+        }
+      }
+      verts = t.getLocalVertices().toArray(verts);
+      Edge e2;
+      for(int j = 0; j < verts.length; j++) {
+        for(int k = j + 1; k < verts.length; k++) {
+          T = new TriPosition(verts[j].getIndex(), verts[k].getIndex());
+          e2 = edgeList.get(T);
+          if(e2 == null) {
+            e2 = getEdge(Triangulation.greatestEdge() + 1);
+            edgeList.put(T, e2);
+            e2.addUniqueVertex(verts[j]);
+            e2.addUniqueVertex(verts[k]);
+            verts[j].addUniqueEdge(e2);
+            verts[k].addUniqueEdge(e2);
+          }
+          t.addUniqueEdge(e2);
+          e2.addUniqueTetra(t);
+        }
+      }
+      
+      localList = simplexNode.getElementsByTagName("Faces");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Face f2;
+        while(localScanner.hasNextInt()) {
+          f2 = getFace(localScanner.nextInt());
+          t.addUniqueFace(f2);
+          f2.addUniqueTetra(t);
+        }
+      }
+      Face f2;
+      Edge ejk, ejl, ekl;
+      for(int j = 0; j < verts.length; j++) {
+        for(int k = j + 1; k < verts.length; k++) {
+          for(int l = k + 1; l < verts.length; l++) {
+           T = new TriPosition(verts[j].getIndex(), verts[k].getIndex(), verts[l].getIndex());
+           f2 = faceList.get(T);
+           if(f2 == null) {
+             f2 = getFace(Triangulation.greatestFace() + 1);
+             faceList.put(T, f2);
+             f2.addUniqueVertex(verts[j]);
+             f2.addUniqueVertex(verts[k]);
+             f2.addUniqueVertex(verts[l]);
+             verts[j].addUniqueFace(f2);
+             verts[k].addUniqueFace(f2);
+             verts[l].addUniqueFace(f2);
+           }
+           ejk = edgeList.get(new TriPosition(verts[j].getIndex(), verts[k].getIndex()));
+           ejl = edgeList.get(new TriPosition(verts[j].getIndex(), verts[l].getIndex()));
+           ekl = edgeList.get(new TriPosition(verts[k].getIndex(), verts[l].getIndex()));
+           f2.addUniqueEdge(ejk);
+           f2.addUniqueEdge(ejl);
+           f2.addUniqueEdge(ekl);
+           ejk.addUniqueFace(f2);
+           ejl.addUniqueFace(f2);
+           ekl.addUniqueFace(f2);
+           
+           t.addUniqueFace(f2);
+           f2.addUniqueTetra(t);
+          }
+        }
+      }
+      
+      localList = simplexNode.getElementsByTagName("Tetras");
+      if(localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Tetra t2;
+        while(localScanner.hasNextInt()) {
+          t2 = getTetra(localScanner.nextInt());
+          t.addUniqueTetra(t2);
+          t2.addUniqueTetra(t);
+        }
+      }
+    }
+    
+    for(Vertex v2 : Triangulation.vertexTable.values()) {
+      edges = v2.getLocalEdges().toArray(edges);
+      for(int i = 0; i < edges.length; i++) {
+        for(int j = i + 1; j < edges.length; j++) {
+          edges[i].addUniqueEdge(edges[j]);
+          edges[j].addUniqueEdge(edges[i]);
+        }
+      }
+    }
+    
+    for(Edge e2 : Triangulation.edgeTable.values()) {
+      faces = e2.getLocalFaces().toArray(faces);
+      for(int i = 0; i < faces.length; i++) {
+        for(int j = i + 1; j < faces.length; j++) {
+          faces[i].addUniqueFace(faces[j]);
+          faces[j].addUniqueFace(faces[i]);
+        }
+      }
+    }
+    for(Face f2 : Triangulation.faceTable.values()) {
+      tetras = f2.getLocalTetras().toArray(tetras);
+      for(int i = 0; i < tetras.length; i++) {
+        for(int j = i + 1; j < tetras.length; j++) {
+          tetras[i].addUniqueTetra(tetras[j]);
+          tetras[j].addUniqueTetra(tetras[i]);
+        }
+      }
+    }
+    for(Tetra t2 : Triangulation.tetraTable.values()) {
+      verts = t2.getLocalVertices().toArray(verts);
+      for(int i = 0; i < verts.length; i++) {
+        for(int j = i + 1; j < verts.length; j++) {
+          verts[i].addUniqueVertex(verts[j]);
+          verts[j].addUniqueVertex(verts[i]);
+        }
+      }
+    }
+  }
+  
+  public static void writeTriangulationXML(String filename) {
+    Document triangulationDoc = XMLParser.createDocument("http://code.google.com/p/geocam",
+        "Triangulation");
+    Element triangulation = triangulationDoc.getDocumentElement();
+    Element simplex;
+    Element localSimplex;
+    String local;
+    
+    // Vertices
+    for(Vertex v : Triangulation.vertexTable.values()) {
+      simplex = triangulationDoc.createElement("Vertex");
+      simplex.setAttribute("index", "" + v.getIndex());
+      simplex.setAttribute("radius", "" + Radius.valueAt(v));
+      simplex.setAttribute("alpha", "" + Alpha.valueAt(v));
+      
+      // Local Vertices
+      localSimplex = triangulationDoc.createElement("Vertices");
+      local = "";
+      for(Vertex v2 : v.getLocalVertices()) {
+        local += "" + v2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Edges
+      localSimplex = triangulationDoc.createElement("Edges");
+      local = "";
+      for(Edge e2 : v.getLocalEdges()) {
+        local += "" + e2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Faces
+      localSimplex = triangulationDoc.createElement("Faces");
+      local = "";
+      for(Face f2 : v.getLocalFaces()) {
+        local += "" + f2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Tetras
+      localSimplex = triangulationDoc.createElement("Tetras");
+      local = "";
+      for(Tetra t2 : v.getLocalTetras()) {
+        local += "" + t2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      triangulation.appendChild(simplex);
+    }
+    
+    // Edges
+    for(Edge e : Triangulation.edgeTable.values()) {
+      simplex = triangulationDoc.createElement("Edge");
+      simplex.setAttribute("index", "" + e.getIndex());
+      simplex.setAttribute("eta", "" + Eta.valueAt(e));
+      
+      // Local Vertices
+      localSimplex = triangulationDoc.createElement("Vertices");
+      local = "";
+      for(Vertex v2 : e.getLocalVertices()) {
+        local += "" + v2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Edges
+      localSimplex = triangulationDoc.createElement("Edges");
+      local = "";
+      for(Edge e2 : e.getLocalEdges()) {
+        local += "" + e2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Faces
+      localSimplex = triangulationDoc.createElement("Faces");
+      local = "";
+      for(Face f2 : e.getLocalFaces()) {
+        local += "" + f2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Tetras
+      localSimplex = triangulationDoc.createElement("Tetras");
+      local = "";
+      for(Tetra t2 : e.getLocalTetras()) {
+        local += "" + t2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      triangulation.appendChild(simplex);
+    }
+    
+    // Faces
+    for(Face f : Triangulation.faceTable.values()) {
+      simplex = triangulationDoc.createElement("Face");
+      simplex.setAttribute("index", "" + f.getIndex());
+      
+      // Local Vertices
+      localSimplex = triangulationDoc.createElement("Vertices");
+      local = "";
+      for(Vertex v2 : f.getLocalVertices()) {
+        local += "" + v2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Edges
+      localSimplex = triangulationDoc.createElement("Edges");
+      local = "";
+      for(Edge e2 : f.getLocalEdges()) {
+        local += "" + e2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Faces
+      localSimplex = triangulationDoc.createElement("Faces");
+      local = "";
+      for(Face f2 : f.getLocalFaces()) {
+        local += "" + f2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Tetras
+      localSimplex = triangulationDoc.createElement("Tetras");
+      local = "";
+      for(Tetra t2 : f.getLocalTetras()) {
+        local += "" + t2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      triangulation.appendChild(simplex);
+    }
+    
+    // Tetras
+    for(Tetra t : Triangulation.tetraTable.values()) {
+      simplex = triangulationDoc.createElement("Tetra");
+      simplex.setAttribute("index", "" + t.getIndex());
+      
+      // Local Vertices
+      localSimplex = triangulationDoc.createElement("Vertices");
+      local = "";
+      for(Vertex v2 : t.getLocalVertices()) {
+        local += "" + v2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Edges
+      localSimplex = triangulationDoc.createElement("Edges");
+      local = "";
+      for(Edge e2 : t.getLocalEdges()) {
+        local += "" + e2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Faces
+      localSimplex = triangulationDoc.createElement("Faces");
+      local = "";
+      for(Face f2 : t.getLocalFaces()) {
+        local += "" + f2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      // Local Tetras
+      localSimplex = triangulationDoc.createElement("Tetras");
+      local = "";
+      for(Tetra t2 : t.getLocalTetras()) {
+        local += "" + t2.getIndex() + " ";
+      }
+      if(local.length() > 0) {
+        localSimplex.setTextContent(local);
+        simplex.appendChild(localSimplex);
+      }
+      
+      triangulation.appendChild(simplex);
+    }
+    
+    XMLParser.writeDocument(triangulationDoc, filename);
+  }
+  
+  public static Vertex getVertex(int index) {
+    Vertex v = Triangulation.vertexTable.get(index);
+    if(v == null) {
+      v = new Vertex(index);
+      Triangulation.vertexTable.put(index, v);
+    }
+    return v;
+  }
+  public static Edge getEdge(int index) {
+    Edge e = Triangulation.edgeTable.get(index);
+    if(e == null) {
+      e = new Edge(index);
+      Triangulation.edgeTable.put(index, e);
+    }
+    return e;
+  }
+  public static Face getFace(int index) {
+    Face f = Triangulation.faceTable.get(index);
+    if(f == null) {
+      f = new Face(index);
+      Triangulation.faceTable.put(index, f);
+    }
+    return f;
+  }
+  public static Tetra getTetra(int index) {
+    Tetra t = Triangulation.tetraTable.get(index);
+    if(t == null) {
+      t = new Tetra(index);
+      Triangulation.tetraTable.put(index, t);
+    }
+    return t;
+  }
+  
+  
+  
 }
