@@ -26,6 +26,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -38,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.LayoutStyle;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
@@ -53,6 +55,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.SwingUtilities;
 
 import Geoquant.Alpha;
@@ -130,7 +133,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JSlider rad1Slider;
   private JScrollPane edgeListScrollPane;
   private JPanel quantityModPanel;
-  private AbstractAction import2DAction;
   private JCheckBox totalVolumeSecondPartialCheck;
   private JCheckBox totalVolumePartialCheck;
   private JCheckBox totalVolumeCheck;
@@ -146,7 +148,15 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox partialEdgePartialCheck;
   private JCheckBox nehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
-  private JMenuItem jMenuItem1;
+  private AbstractAction saveAction;
+  private JPanel nmQuantPanel;
+  private ButtonGroup nmQuantButtonGroup;
+  private JButton runButtonNM;
+  private JButton cancelButtonNM;
+  private JDialog nMethodDialog;
+  private JMenuItem nmMenuItem;
+  private JMenu runMenu;
+  private JMenuItem saveMenu;
   private JFileChooser triangulationFileChooser;
   private JMenuItem importMenuItem;
   private JMenu jMenu1;
@@ -207,12 +217,13 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         {
           jMenu1 = new JMenu();
           mainMenuBar.add(jMenu1);
+          mainMenuBar.add(getRunMenu());
           jMenu1.setText("File");
           {
             importMenuItem = new JMenuItem();
-            jMenu1.add(getJMenuItem1());
             jMenu1.add(importMenuItem);
-            importMenuItem.setText("Import 3D Triangulation");
+            jMenu1.add(getSaveMenu());
+            importMenuItem.setText("Import Triangulation");
             importMenuItem.setAction(getImportAction());
           }
         }
@@ -227,7 +238,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   
   private AbstractAction getImportAction() {
     if(importAction == null) {
-      importAction = new AbstractAction("Import 3D Triangulation", null) {
+      importAction = new AbstractAction("Import Triangulation", null) {
         public void actionPerformed(ActionEvent e) {
           //Handle open button action.
           getTriangulationFileChooser();
@@ -235,14 +246,33 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           
           if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = getTriangulationFileChooser().getSelectedFile();
-            Triangulation.reset();
-            TriangulationIO.read3DTriangulationFile(file);
+            TriangulationIO.readTriangulationXML(file.getAbsolutePath());
             newTriangulation();
+            getSaveMenu().setEnabled(true);
           }
         }
       };
+      importAction.putValue(javax.swing.Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl pressed I"));
     }
     return importAction;
+  }
+  
+  private AbstractAction getSaveAction() {
+    if(saveAction == null) {
+      saveAction = new AbstractAction("Save Triangulation", null) {
+        public void actionPerformed(ActionEvent e) {
+          // Handle Save Button Action
+          int returnVal = getTriangulationFileChooser().showSaveDialog(GeoquantViewer.this);
+          
+          if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = getTriangulationFileChooser().getSelectedFile();
+            TriangulationIO.writeTriangulationXML(file.getAbsolutePath());
+          }
+        }
+      };
+      saveAction.putValue(javax.swing.Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("ctrl pressed S"));
+    }
+    return saveAction;
   }
   
   private HashMap<JCheckBox, Color> getGeoColorTable() {
@@ -254,7 +284,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   
   private JFileChooser getTriangulationFileChooser() {
     if(triangulationFileChooser == null) {
-      triangulationFileChooser = new JFileChooser("Data");
+      triangulationFileChooser = new JFileChooser("Data/Triangulations");
+      triangulationFileChooser.setFileFilter(new TriangulationFilter());
     }
     return triangulationFileChooser;
   }
@@ -293,46 +324,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     EdgeListModel = 
       new DefaultComboBoxModel(Triangulation.edgeTable.values().toArray());
     EdgeList.setModel(EdgeListModel);
-    for(Radius r : Geometry.getRadii()) {
-      r.setValue(1.0);
-    }
-    for(Alpha a : Geometry.getAlphas()) {
-      a.setValue(1.0);
-    }
-    for(Eta e : Geometry.getEtas()) {
-      e.setValue(1.0);
-    }
     getGeoPolygonPanel().repaint();
-  }
-  
-  private JMenuItem getJMenuItem1() {
-    if(jMenuItem1 == null) {
-      jMenuItem1 = new JMenuItem();
-      jMenuItem1.setText("jMenuItem1");
-      jMenuItem1.setAction(getImport2DAction());
-    }
-    return jMenuItem1;
-  }
-  
-  private AbstractAction getImport2DAction() {
-    if(import2DAction == null) {
-      import2DAction = new AbstractAction("Import 2D Triangulation", null) {
-        public void actionPerformed(ActionEvent evt) {
-          //Handle open button action.
-          getTriangulationFileChooser();
-          int returnVal = getTriangulationFileChooser().showOpenDialog(GeoquantViewer.this);
-          
-          if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = getTriangulationFileChooser().getSelectedFile();
-            //This is where a real application would open the file.
-            Triangulation.reset();
-            TriangulationIO.read2DTriangulationFile(file);
-            newTriangulation();
-          }
-        }
-      };
-    }
-    return import2DAction;
   }
   
   private JPanel getQuantityModPanel() {
@@ -1703,5 +1695,109 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       totalVolumeSecondPartialCheck.addItemListener(this);
     }
     return totalVolumeSecondPartialCheck;
+  }
+  
+  private JMenuItem getSaveMenu() {
+    if(saveMenu == null) {
+      saveMenu = new JMenuItem();
+      saveMenu.setText("Save Triangulation");
+      saveMenu.setAction(getSaveAction());
+      saveMenu.setEnabled(false);
+    }
+    return saveMenu;
+  }
+  
+  private JMenu getRunMenu() {
+    if(runMenu == null) {
+      runMenu = new JMenu();
+      runMenu.setText("Run");
+      runMenu.add(getNmMenuItem());
+    }
+    return runMenu;
+  }
+  
+  private JMenuItem getNmMenuItem() {
+    if(nmMenuItem == null) {
+      nmMenuItem = new JMenuItem();
+      nmMenuItem.setText("Newton's Method");
+    }
+    return nmMenuItem;
+  }
+  
+  private JDialog getNMethodDialog() {
+    if(nMethodDialog == null) {
+      nMethodDialog = new JDialog(this);
+      GroupLayout nMethodDialogLayout = new GroupLayout((JComponent)nMethodDialog.getContentPane());
+      nMethodDialog.setLayout(nMethodDialogLayout);
+      nMethodDialog.setSize(560, 327);
+      nMethodDialogLayout.setHorizontalGroup(nMethodDialogLayout.createSequentialGroup()
+        .addContainerGap(40, 40)
+        .addComponent(getNmQuantPanel(), GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+        .addGap(0, 134, Short.MAX_VALUE)
+        .addComponent(getRunButtonNM(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(getCancelButtonNM(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+        .addContainerGap());
+      nMethodDialogLayout.setVerticalGroup(nMethodDialogLayout.createSequentialGroup()
+        .addContainerGap(32, 32)
+        .addComponent(getNmQuantPanel(), GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+        .addGap(98)
+        .addGroup(nMethodDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+            .addComponent(getRunButtonNM(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getCancelButtonNM(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+        .addContainerGap());
+    }
+    return nMethodDialog;
+  }
+  
+  private JButton getCancelButtonNM() {
+    if(cancelButtonNM == null) {
+      cancelButtonNM = new JButton();
+      cancelButtonNM.setText("Cancel");
+    }
+    return cancelButtonNM;
+  }
+  
+  private JButton getRunButtonNM() {
+    if(runButtonNM == null) {
+      runButtonNM = new JButton();
+      runButtonNM.setText("Run");
+    }
+    return runButtonNM;
+  }
+  
+  private ButtonGroup getNmQuantButtonGroup() {
+    if(nmQuantButtonGroup == null) {
+      nmQuantButtonGroup = new ButtonGroup();
+    }
+    return nmQuantButtonGroup;
+  }
+  
+  private JPanel getNmQuantPanel() {
+    if(nmQuantPanel == null) {
+      nmQuantPanel = new JPanel();
+    }
+    return nmQuantPanel;
+  }
+
+  class TriangulationFilter extends FileFilter {
+    public boolean accept(File f) {
+      if (f.isDirectory()) {
+        return true;
+      }
+      
+      String extension = f.getName();
+      int index = extension.lastIndexOf('.');
+      if(index < 0) {
+        return false;
+      }
+
+      extension = extension.substring(index).toLowerCase();
+      return extension.equals(".xml");
+    }
+    public String getDescription() {
+      return "XML (.xml)";
+    }
+    
   }
 }

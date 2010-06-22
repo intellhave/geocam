@@ -24,7 +24,7 @@ public class IOConversion {
 //      writeFiles();
 //      convertFiles();
 //    }
-    convert3DLutzToXML("Data/3DManifolds/LutzFormat/3-torus.txt");
+    convert3DLutzToXML("Data/3DManifolds/LutzFormat/weber-seifert.txt");
   }
   
   public static void writeFiles()
@@ -115,6 +115,6 @@ public class IOConversion {
     TriangulationIO.read3DLutzFile(standardPath);
     String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
                                          standardPath.lastIndexOf('.'));
-    TriangulationIO.writeTriangulationXML("Data/Triangulations/2DManifolds/" + name + ".xml");
+    TriangulationIO.writeTriangulationXML("Data/Triangulations/3DManifolds/" + name + ".xml");
   }
 }
