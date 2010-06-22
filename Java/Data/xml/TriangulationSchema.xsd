@@ -2,17 +2,34 @@
 <xs:schema 	targetNamespace="http://code.google.com/p/geocam"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
 			xmlns="http://code.google.com/p/geocam"
+			xmlns:ts="http://code.google.com/p/geocam"
 			elementFormDefault="qualified">
     <xs:element name="Triangulation">
         <xs:complexType>
             <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="Vertex"/>
-                <xs:element maxOccurs="unbounded" ref="Edge"/>
-                <xs:element maxOccurs="unbounded" ref="Face"/>
-                <xs:element maxOccurs="unbounded" ref="Tetra"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="Vertex"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="Edge"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="Face"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="Tetra"/>
             </xs:sequence>
             <xs:attribute name="name" use="optional" type="xs:NCName"/>
         </xs:complexType>
+        <xs:unique name="uniqueVertexId">
+        	<xs:selector xpath="ts:Vertex"/>
+            <xs:field xpath="@index"/>
+        </xs:unique>
+        <xs:unique name="uniqueEdgeId">
+        	<xs:selector xpath="ts:Edge"/>
+            <xs:field xpath="@index"/>
+        </xs:unique>
+        <xs:unique name="uniqueFaceId">
+        	<xs:selector xpath="ts:Face"/>
+            <xs:field xpath="@index"/>
+        </xs:unique>
+        <xs:unique name="uniqueTetraId">
+        	<xs:selector xpath="ts:Tetra"/>
+            <xs:field xpath="@index"/>
+        </xs:unique>
     </xs:element>
     <xs:element name="Vertex">
         <xs:complexType>

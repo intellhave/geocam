@@ -156,7 +156,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JTextField etaSetField;
   private ListModel EdgeListModel;
   private Hashtable<Integer, JLabel> labelTable;
-  private GeoPolygon poly;
+  private HashMap<GeoPoint, Geoquant> geoMap;
+  private HashMap<JCheckBox, Color> geoColorTable;
   
   /**
   * Auto-generated main method to display this JFrame
@@ -242,6 +243,13 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       };
     }
     return importAction;
+  }
+  
+  private HashMap<JCheckBox, Color> getGeoColorTable() {
+    if(geoColorTable == null) {
+      geoColorTable = new HashMap<JCheckBox, Color>();
+    }
+    return geoColorTable;
   }
   
   private JFileChooser getTriangulationFileChooser() {
@@ -680,114 +688,240 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     return basicSelectPanel;
   }
   
-  private JCheckBox getLengthCheck() {
-    if(lengthCheck == null) {
-      lengthCheck = new JCheckBox();
-      lengthCheck.setText("Length");
-      lengthCheck.addItemListener(this);
-    }
-    return lengthCheck;
-  }
   
-  private JCheckBox getVolumeCheck() {
-    if(volumeCheck == null) {
-      volumeCheck = new JCheckBox();
-      volumeCheck.setText("Volume");
-      volumeCheck.addItemListener(this);
-    }
-    return volumeCheck;
-  }
-  
-  private JCheckBox getDihAngleCheck() {
-    if(dihAngleCheck == null) {
-      dihAngleCheck = new JCheckBox();
-      dihAngleCheck.setText("Dihedral Angle");
-      dihAngleCheck.addItemListener(this);
-    }
-    return dihAngleCheck;
-  }
-  
-  private JCheckBox getNehrCheck() {
-    if(nehrCheck == null) {
-      nehrCheck = new JCheckBox();
-      nehrCheck.setText("NEHR");
-      nehrCheck.addItemListener(this);
-    }
-    return nehrCheck;
-  }
-  
-  private JCheckBox getPartialEdgeCheck() {
-    if(partialEdgeCheck == null) {
-      partialEdgeCheck = new JCheckBox();
-      partialEdgeCheck.setText("Partial Edge");
-      partialEdgeCheck.addItemListener(this);
-    }
-    return partialEdgeCheck;
-  }
-  
-  private JCheckBox getAreaCheck() {
-    if(areaCheck == null) {
-      areaCheck = new JCheckBox();
-      areaCheck.setText("Area");
-      areaCheck.addItemListener(this);
-    }
-    return areaCheck;
-  }
-  
-  private JCheckBox getCurv3DCheck() {
-    if(curv3DCheck == null) {
-      curv3DCheck = new JCheckBox();
-      curv3DCheck.setText("Curvature(3D)");
-      curv3DCheck.addItemListener(this);
-    }
-    return curv3DCheck;
-  }
-  
-  private JCheckBox getCurv2DCheck() {
-    if(curv2DCheck == null) {
-      curv2DCheck = new JCheckBox();
-      curv2DCheck.setText("Curvature(2D)");
-      curv2DCheck.addItemListener(this);
-    }
-    return curv2DCheck;
-  }
   
   private JPanel getGeoPolygonPanel() {
     if(geoPolygonPanel == null) {
       geoPolygonPanel = new JPanel() {
         protected void paintComponent(Graphics g) {
           super.paintComponent(g);
-          LinkedList<Geoquant> geoList = populateList();
+          LinkedList<Geoquant> geoList = new LinkedList<Geoquant>();
+          int halfHeight = this.getHeight() / 2;
+          int halfWidth = this.getWidth() / 2;
+          int radius;
+
+          if(geoMap != null) {
+            geoMap.clear();
+          }
+
+          g.setColor(new Color(0, 150, 0));
+          // Draw 0-oval
+          radius = (halfHeight / 2);
+          g.drawOval(halfWidth - radius, halfHeight - radius, 
+                     2 * radius, 2 * radius);
+          g.drawString("0", (int) ( radius * Math.cos(Math.PI/4) + halfWidth),
+                            (int) (halfHeight - radius * Math.sin(Math.PI/4)));
+          // Draw Infinity-oval
+          radius = (halfHeight);
+          g.drawOval(halfWidth - radius, halfHeight - radius, 
+                     2 * radius, 2 * radius);
+          
+          g.drawString("Infty", (int) ( radius * Math.cos(Math.PI/4) + halfWidth),
+              (int) (halfHeight - radius * Math.sin(Math.PI/4)));
+          
+
+          // Draw Polygons
+          if(getAlphaCheck().isSelected()) {
+            geoList.addAll(Geometry.getAlphas());
+            drawPolygon(geoList, g, geoColorTable.get(getAlphaCheck()));
+            geoList.clear();
+          }
+          if(getAngleCheck().isSelected()) {
+            geoList.addAll(Geometry.getAngles());
+            drawPolygon(geoList, g, geoColorTable.get(getAngleCheck()));
+            geoList.clear();
+          }
+          if(getAreaCheck().isSelected()) {
+            geoList.addAll(Geometry.getAreas());
+            drawPolygon(geoList, g, geoColorTable.get(getAreaCheck()));
+            geoList.clear();
+          }
+          if(getConeAngleCheck().isSelected()) {
+            geoList.addAll(Geometry.getConeAngles());
+            drawPolygon(geoList, g, geoColorTable.get(getConeAngleCheck()));
+            geoList.clear();
+          }
+          if(getCurv2DCheck().isSelected()) {
+            geoList.addAll(Geometry.getCurvature2D());
+            drawPolygon(geoList, g, geoColorTable.get(getCurv2DCheck()));
+            geoList.clear();
+          }
+          if(getCurv3DCheck().isSelected()) {
+            geoList.addAll(Geometry.getCurvature3D());
+            drawPolygon(geoList, g, geoColorTable.get(getCurv3DCheck()));
+            geoList.clear();
+          }
+          if(getDihAngleCheck().isSelected()) {
+            geoList.addAll(Geometry.getDihedralAngles());
+            drawPolygon(geoList, g, geoColorTable.get(getDihAngleCheck()));
+            geoList.clear();
+          }
+          if(getDualAreaCheck().isSelected()) {
+            geoList.addAll(Geometry.getDualAreas());
+            drawPolygon(geoList, g, geoColorTable.get(getDualAreaCheck()));
+            geoList.clear();
+          }
+          if(getEdgeHeightCheck().isSelected()) {
+            geoList.addAll(Geometry.getEdgeHeights());
+            drawPolygon(geoList, g, geoColorTable.get(getEdgeHeightCheck()));
+            geoList.clear();
+          }
+          if(getEtaCheck().isSelected()) {
+            geoList.addAll(Geometry.getEtas());
+            drawPolygon(geoList, g, geoColorTable.get(getEtaCheck()));
+            geoList.clear();
+          }
+          if(getFaceHeightCheck().isSelected()) {
+            geoList.addAll(Geometry.getFaceHeights());
+            drawPolygon(geoList, g, geoColorTable.get(getFaceHeightCheck()));
+            geoList.clear();
+          }
+          if(getLengthCheck().isSelected()) {
+            geoList.addAll(Geometry.getLengths());
+            drawPolygon(geoList, g, geoColorTable.get(getLengthCheck()));
+            geoList.clear();
+          }
+          if(getNehrCheck().isSelected()) {
+            geoList.add(NEHR.getInstance());
+            drawPolygon(geoList, g, geoColorTable.get(getNehrCheck()));
+            geoList.clear();
+          }
+          if(getPartialEdgeCheck().isSelected()) {
+            geoList.addAll(Geometry.getPartialEdges());
+            drawPolygon(geoList, g, geoColorTable.get(getPartialEdgeCheck()));
+            geoList.clear();
+          }
+          if(getRadiusCheck().isSelected()) {
+            geoList.addAll(Geometry.getRadii());
+            drawPolygon(geoList, g, geoColorTable.get(getRadiusCheck()));
+            geoList.clear();
+          }
+          if(getSectionalCurvatureCheck().isSelected()) {
+            geoList.addAll(Geometry.getSectionalCurvatures());
+            drawPolygon(geoList, g, geoColorTable.get(getSectionalCurvatureCheck()));
+            geoList.clear();
+          }
+          if(getVolumeCheck().isSelected()) {
+            geoList.addAll(Geometry.getVolumes());
+            drawPolygon(geoList, g, geoColorTable.get(getVolumeCheck()));
+            geoList.clear();
+          }
+          
+          // Partials
+          if(getCurvPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getCurvaturePartials());
+            drawPolygon(geoList, g, geoColorTable.get(getCurvPartialCheck()));
+            geoList.clear();
+          }
+          if(getDihAnglePartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getDihedralAnglePartials());
+            drawPolygon(geoList, g, geoColorTable.get(getDihAnglePartialCheck()));
+            geoList.clear();
+          }
+          if(getNehrPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getNEHRPartials());
+            drawPolygon(geoList, g, geoColorTable.get(getNehrPartialCheck()));
+            geoList.clear();
+          }
+          if(getPartialEdgePartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getPartialEdgePartials());
+            drawPolygon(geoList, g, geoColorTable.get(getPartialEdgePartialCheck()));
+            geoList.clear();
+          }
+          if(getRadiusPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getRadiusPartials());
+            drawPolygon(geoList, g, geoColorTable.get(getRadiusPartialCheck()));
+            geoList.clear();
+          }
+          if(getVolumePartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getVolumePartials());
+            drawPolygon(geoList, g, geoColorTable.get(getVolumePartialCheck()));
+            geoList.clear();
+          }
+          
+          // Second Partials
+          if(getCurvatureSecondPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getCurvatureSecondPartials());
+            drawPolygon(geoList, g, geoColorTable.get(getCurvatureSecondPartialCheck()));
+            geoList.clear();
+          }
+          if(getDihAngleSecondPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getDihedralAngleSecondPartials());
+            drawPolygon(geoList, g, geoColorTable.get(getDihAngleSecondPartialCheck()));
+            geoList.clear();
+          }
+          if(getNehrSecondPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getNEHRSecondPartials());
+            drawPolygon(geoList, g, geoColorTable.get(getNehrSecondPartialCheck()));
+            geoList.clear();
+          }
+          if(getPartialEdgeSecondPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getPartialEdgeSecondPartials());
+            drawPolygon(geoList, g, geoColorTable.get(getPartialEdgeSecondPartialCheck()));
+            geoList.clear();
+          }
+          if(getVolumeSecondPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getVolumeSecondPartials());
+            drawPolygon(geoList, g, geoColorTable.get(getVolumeSecondPartialCheck()));
+            geoList.clear();
+          }
+          
+          // Sums
+          if(getTotalCurvatureCheck().isSelected()) {
+            geoList.add(Curvature3D.sum());
+            drawPolygon(geoList, g, geoColorTable.get(getTotalCurvatureCheck()));
+            geoList.clear();
+          }
+          if(getTotalVolumeCheck().isSelected()) {
+            geoList.add(Volume.sum());
+            drawPolygon(geoList, g, geoColorTable.get(getTotalVolumeCheck()));
+            geoList.clear();
+          }
+          if(getTotalVolumePartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getVolumePartialSums());
+            drawPolygon(geoList, g, geoColorTable.get(getTotalVolumePartialCheck()));
+            geoList.clear();
+          }
+          if(getTotalVolumeSecondPartialCheck().isSelected()) {
+            geoList.addAll(Geometry.getVolumeSecondPartialSums());
+            drawPolygon(geoList, g, geoColorTable.get(getTotalVolumeSecondPartialCheck()));
+            geoList.clear();
+          }
+        }
+        
+        private void drawPolygon(LinkedList<Geoquant> geoList, Graphics g, Color c) {
           int size = geoList.size();
-          poly = null;
           if(size == 0) {
             return;
           }
+          int halfHeight = this.getHeight() / 2;
+          int halfWidth = this.getWidth() / 2;
+          double radius;
           int[] xpoints = new int[size];
           int[] ypoints = new int[size];
           double angleStep = 2 * Math.PI / size;
-          int halfHeight = this.getHeight() / 2;
-          int halfWidth = this.getWidth() / 2;
+
+          // Draw Polygon
+          g.setColor(Color.BLACK);
           int i = 0;
           double angle = 0;
-          double radius;
           for(Geoquant q : geoList) {
-            radius = (int) (halfHeight / Math.PI) * (Math.atan(q.getValue()) + Math.PI / 2);
+            radius = (halfHeight / Math.PI) * (Math.atan(q.getValue()) + Math.PI / 2);
             xpoints[i] = (int) (radius * Math.cos(angle) + halfWidth);
             ypoints[i] = (int) (-1 * radius * Math.sin(angle) + halfHeight);
             i++;
             angle += angleStep;
           }
-          poly = new GeoPolygon(xpoints, ypoints, size, geoList.toArray());
-          g.drawPolygon(poly);
+          g.drawPolygon(new GeoPolygon(xpoints, ypoints, size, geoList.toArray()));
           
-          g.setColor(Color.RED);
+          g.setColor(c);
           int circDiam = 5;
           for(int j = 0; j < xpoints.length; j++) {
             g.fillOval(xpoints[j] - circDiam / 2, ypoints[j] - circDiam / 2, 
                   circDiam, circDiam);
-          }          
+          }  
         }
+        
         private LinkedList<Geoquant> populateList() {
           LinkedList<Geoquant> geoList = new LinkedList<Geoquant>();
           if(getAlphaCheck().isSelected()) {
@@ -980,6 +1114,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           a.setValue(value);
         }
         getEdgeDisplayPanel().repaint();
+        getGeoPolygonPanel().repaint();
       } catch(NumberFormatException exc) {
         return;
       }
@@ -1055,19 +1190,17 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     }
   }
   
-  class GeoPolygon extends Polygon {
-    private HashMap<GeoPoint, Geoquant> geoMap;
+  private class GeoPolygon extends Polygon {
     public GeoPolygon(int[] xpoints, int[] ypoints, int npoints, Object[] geos) {
       super(xpoints, ypoints, npoints);
-      geoMap = new HashMap<GeoPoint, Geoquant>();
+      if(geoMap == null) {
+        geoMap = new HashMap<GeoPoint, Geoquant>();
+      }
       GeoPoint p;
       for(int i = 0; i < geos.length; i++) {
         p = new GeoPoint(xpoints[i], ypoints[i]);
         geoMap.put(p, (Geoquant) geos[i]);
       }
-    }
-    public Geoquant getVertex(int x, int y) {
-      return geoMap.get(new GeoPoint(x, y));
     }
   }
 
@@ -1075,86 +1208,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     getGeoPolygonPanel().repaint();
   }
   
-  private JCheckBox getAlphaCheck() {
-    if(alphaCheck == null) {
-      alphaCheck = new JCheckBox();
-      alphaCheck.setText("Alpha");
-      alphaCheck.addItemListener(this);
-    }
-    return alphaCheck;
-  }
   
-  private JCheckBox getAngleCheck() {
-    if(angleCheck == null) {
-      angleCheck = new JCheckBox();
-      angleCheck.setText("Angle");
-      angleCheck.addItemListener(this);
-    }
-    return angleCheck;
-  }
-  
-  private JCheckBox getConeAngleCheck() {
-    if(coneAngleCheck == null) {
-      coneAngleCheck = new JCheckBox();
-      coneAngleCheck.setText("Cone Angle");
-      coneAngleCheck.addItemListener(this);
-    }
-    return coneAngleCheck;
-  }
-  
-  private JCheckBox getDualAreaCheck() {
-    if(dualAreaCheck == null) {
-      dualAreaCheck = new JCheckBox();
-      dualAreaCheck.setText("Dual Area");
-      dualAreaCheck.addItemListener(this);
-    }
-    return dualAreaCheck;
-  }
-  
-  private JCheckBox getEdgeHeightCheck() {
-    if(edgeHeightCheck == null) {
-      edgeHeightCheck = new JCheckBox();
-      edgeHeightCheck.setText("Edge Height");
-      edgeHeightCheck.addItemListener(this);
-    }
-    return edgeHeightCheck;
-  }
-  
-  private JCheckBox getEtaCheck() {
-    if(etaCheck == null) {
-      etaCheck = new JCheckBox();
-      etaCheck.setText("Eta");
-      etaCheck.addItemListener(this);
-    }
-    return etaCheck;
-  }
-  
-  private JCheckBox getFaceHeightCheck() {
-    if(faceHeightCheck == null) {
-      faceHeightCheck = new JCheckBox();
-      faceHeightCheck.setText("Face Height");
-      faceHeightCheck.addItemListener(this);
-    }
-    return faceHeightCheck;
-  }
-  
-  private JCheckBox getRadiusCheck() {
-    if(radiusCheck == null) {
-      radiusCheck = new JCheckBox();
-      radiusCheck.setText("Radius");
-      radiusCheck.addItemListener(this);
-    }
-    return radiusCheck;
-  }
-  
-  private JCheckBox getSectionalCurvatureCheck() {
-    if(sectionalCurvatureCheck == null) {
-      sectionalCurvatureCheck = new JCheckBox();
-      sectionalCurvatureCheck.setText("Sectional Curvature");
-      sectionalCurvatureCheck.addItemListener(this);
-    }
-    return sectionalCurvatureCheck;
-  }
   
   private JTabbedPane getJTabbedPane1() {
     if(geoSelectTabbedPane == null) {
@@ -1252,104 +1306,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     return secondPartialSelectPanel;
   }
   
-  private JCheckBox getCurvPartialCheck() {
-    if(curvPartialCheck == null) {
-      curvPartialCheck = new JCheckBox();
-      curvPartialCheck.setText("Curvature(3D)");
-      curvPartialCheck.addItemListener(this);
-    }
-    return curvPartialCheck;
-  }
   
-  private JCheckBox getDihAnglePartialCheck() {
-    if(dihAnglePartialCheck == null) {
-      dihAnglePartialCheck = new JCheckBox();
-      dihAnglePartialCheck.setText("Dihedral Angle");
-      dihAnglePartialCheck.addItemListener(this);
-    }
-    return dihAnglePartialCheck;
-  }
-  
-  private JCheckBox getNehrPartialCheck() {
-    if(nehrPartialCheck == null) {
-      nehrPartialCheck = new JCheckBox();
-      nehrPartialCheck.setText("NEHR");
-      nehrPartialCheck.addItemListener(this);
-    }
-    return nehrPartialCheck;
-  }
-  
-  private JCheckBox getPartialEdgePartialCheck() {
-    if(partialEdgePartialCheck == null) {
-      partialEdgePartialCheck = new JCheckBox();
-      partialEdgePartialCheck.setText("Partial Edge");
-      partialEdgePartialCheck.addItemListener(this);
-    }
-    return partialEdgePartialCheck;
-  }
-  
-  private JCheckBox getRadiusPartialCheck() {
-    if(radiusPartialCheck == null) {
-      radiusPartialCheck = new JCheckBox();
-      radiusPartialCheck.setText("Radius");
-      radiusPartialCheck.addItemListener(this);
-    }
-    return radiusPartialCheck;
-  }
-  
-  private JCheckBox getVolumePartialCheck() {
-    if(volumePartialCheck == null) {
-      volumePartialCheck = new JCheckBox();
-      volumePartialCheck.setText("Volume");
-      volumePartialCheck.addItemListener(this);
-    }
-    return volumePartialCheck;
-  }
-  
-  private JCheckBox getCurvatureSecondPartialCheck() {
-    if(curvatureSecondPartialCheck == null) {
-      curvatureSecondPartialCheck = new JCheckBox();
-      curvatureSecondPartialCheck.setText("Curvature(3D)");
-      curvatureSecondPartialCheck.addItemListener(this);
-    }
-    return curvatureSecondPartialCheck;
-  }
-  
-  private JCheckBox getDihAngleSecondPartialCheck() {
-    if(dihAngleSecondPartialCheck == null) {
-      dihAngleSecondPartialCheck = new JCheckBox();
-      dihAngleSecondPartialCheck.setText("Dihedral Angle");
-      dihAngleSecondPartialCheck.addItemListener(this);
-    }
-    return dihAngleSecondPartialCheck;
-  }
-  
-  private JCheckBox getNehrSecondPartialCheck() {
-    if(nehrSecondPartialCheck == null) {
-      nehrSecondPartialCheck = new JCheckBox();
-      nehrSecondPartialCheck.setText("NEHR");
-      nehrSecondPartialCheck.addItemListener(this);
-    }
-    return nehrSecondPartialCheck;
-  }
-  
-  private JCheckBox getPartialEdgeSecondPartialCheck() {
-    if(partialEdgeSecondPartialCheck == null) {
-      partialEdgeSecondPartialCheck = new JCheckBox();
-      partialEdgeSecondPartialCheck.setText("Partial Edge");
-      partialEdgeSecondPartialCheck.addItemListener(this);
-    }
-    return partialEdgeSecondPartialCheck;
-  }
-  
-  private JCheckBox getVolumeSecondPartialCheck() {
-    if(volumeSecondPartialCheck == null) {
-      volumeSecondPartialCheck = new JCheckBox();
-      volumeSecondPartialCheck.setText("Volume");
-      volumeSecondPartialCheck.addItemListener(this);
-    }
-    return volumeSecondPartialCheck;
-  }
   
   private JPanel getTotalSelectPanel() {
     if(totalSelectPanel == null) {
@@ -1388,41 +1345,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     return totalSelectPanel;
   }
   
-  private JCheckBox getTotalCurvatureCheck() {
-    if(totalCurvatureCheck == null) {
-      totalCurvatureCheck = new JCheckBox();
-      totalCurvatureCheck.setText("Total Curvature(3D)");
-      totalCurvatureCheck.addItemListener(this);
-    }
-    return totalCurvatureCheck;
-  }
   
-  private JCheckBox getTotalVolumeCheck() {
-    if(totalVolumeCheck == null) {
-      totalVolumeCheck = new JCheckBox();
-      totalVolumeCheck.setText("Total Volume");
-      totalVolumeCheck.addItemListener(this);
-    }
-    return totalVolumeCheck;
-  }
-  
-  private JCheckBox getTotalVolumePartialCheck() {
-    if(totalVolumePartialCheck == null) {
-      totalVolumePartialCheck = new JCheckBox();
-      totalVolumePartialCheck.setText("Total Volume Partial");
-      totalVolumePartialCheck.addItemListener(this);
-    }
-    return totalVolumePartialCheck;
-  }
-  
-  private JCheckBox getTotalVolumeSecondPartialCheck() {
-    if(totalVolumeSecondPartialCheck == null) {
-      totalVolumeSecondPartialCheck = new JCheckBox();
-      totalVolumeSecondPartialCheck.setText("Total Volume Second Partial");
-      totalVolumeSecondPartialCheck.addItemListener(this);
-    }
-    return totalVolumeSecondPartialCheck;
-  }
 
   class GeoPolygonMouseListener extends MouseAdapter {
     private JLabel message;
@@ -1441,12 +1364,12 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       if(geoDisplayPopup != null) {
         geoDisplayPopup.hide();
       }
-      if(poly == null) {
+      if(geoMap == null) {
         return;
       }
       x = e.getX();
       y = e.getY();
-      Geoquant q = poly.getVertex(x, y);
+      Geoquant q = geoMap.get(new GeoPoint(x, y));
       if(q == null) {
         return;
       }
@@ -1458,5 +1381,327 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
             (int) geoPanel.getLocationOnScreen().getY() + y - 15);
       geoDisplayPopup.show();
     }
+  }
+  
+
+  
+  private JCheckBox getAlphaCheck() {
+    if(alphaCheck == null) {
+      alphaCheck = new JCheckBox();
+      alphaCheck.setText("Alpha");
+      getGeoColorTable().put(alphaCheck, new Color(255, 0, 0));
+      alphaCheck.addItemListener(this);
+    }
+    return alphaCheck;
+  }
+  
+  private JCheckBox getAngleCheck() {
+    if(angleCheck == null) {
+      angleCheck = new JCheckBox();
+      angleCheck.setText("Angle");
+      getGeoColorTable().put(angleCheck, new Color(240, 15, 0));
+      angleCheck.addItemListener(this);
+    }
+    return angleCheck;
+  }
+  
+  private JCheckBox getAreaCheck() {
+    if(areaCheck == null) {
+      areaCheck = new JCheckBox();
+      areaCheck.setText("Area");
+      getGeoColorTable().put(areaCheck, new Color(225, 30, 0));
+      areaCheck.addItemListener(this);
+    }
+    return areaCheck;
+  }  
+  
+  private JCheckBox getConeAngleCheck() {
+    if(coneAngleCheck == null) {
+      coneAngleCheck = new JCheckBox();
+      coneAngleCheck.setText("Cone Angle");
+      getGeoColorTable().put(coneAngleCheck, new Color(210, 45, 0));
+      coneAngleCheck.addItemListener(this);
+    }
+    return coneAngleCheck;
+  }
+
+  private JCheckBox getCurv2DCheck() {
+    if(curv2DCheck == null) {
+      curv2DCheck = new JCheckBox();
+      curv2DCheck.setText("Curvature(2D)");
+      getGeoColorTable().put(curv2DCheck, new Color(195, 60, 0));
+      curv2DCheck.addItemListener(this);
+    }
+    return curv2DCheck;
+  }
+  
+  private JCheckBox getCurv3DCheck() {
+    if(curv3DCheck == null) {
+      curv3DCheck = new JCheckBox();
+      curv3DCheck.setText("Curvature(3D)");
+      getGeoColorTable().put(curv3DCheck, new Color(180, 75, 0));
+      curv3DCheck.addItemListener(this);
+    }
+    return curv3DCheck;
+  }
+  
+  private JCheckBox getDihAngleCheck() {
+    if(dihAngleCheck == null) {
+      dihAngleCheck = new JCheckBox();
+      dihAngleCheck.setText("Dihedral Angle");
+      getGeoColorTable().put(dihAngleCheck, new Color(165, 90, 0));
+      dihAngleCheck.addItemListener(this);
+    }
+    return dihAngleCheck;
+  }
+  
+  private JCheckBox getDualAreaCheck() {
+    if(dualAreaCheck == null) {
+      dualAreaCheck = new JCheckBox();
+      dualAreaCheck.setText("Dual Area");
+      getGeoColorTable().put(dualAreaCheck, new Color(150, 105, 0));
+      dualAreaCheck.addItemListener(this);
+    }
+    return dualAreaCheck;
+  }
+
+  private JCheckBox getEdgeHeightCheck() {
+    if(edgeHeightCheck == null) {
+      edgeHeightCheck = new JCheckBox();
+      edgeHeightCheck.setText("Edge Height");
+      getGeoColorTable().put(edgeHeightCheck, new Color(135, 120, 0));
+      edgeHeightCheck.addItemListener(this);
+    }
+    return edgeHeightCheck;
+  }
+  
+  private JCheckBox getEtaCheck() {
+    if(etaCheck == null) {
+      etaCheck = new JCheckBox();
+      etaCheck.setText("Eta");
+      getGeoColorTable().put(etaCheck, new Color(120, 135, 0));
+      etaCheck.addItemListener(this);
+    }
+    return etaCheck;
+  }
+  
+  private JCheckBox getFaceHeightCheck() {
+    if(faceHeightCheck == null) {
+      faceHeightCheck = new JCheckBox();
+      faceHeightCheck.setText("Face Height");
+      getGeoColorTable().put(faceHeightCheck, new Color(105, 150, 0));
+      faceHeightCheck.addItemListener(this);
+    }
+    return faceHeightCheck;
+  }
+  
+  private JCheckBox getLengthCheck() {
+    if(lengthCheck == null) {
+      lengthCheck = new JCheckBox();
+      lengthCheck.setText("Length");
+      getGeoColorTable().put(lengthCheck, new Color(90, 165, 0));
+      lengthCheck.addItemListener(this);
+    }
+    return lengthCheck;
+  }
+
+  private JCheckBox getNehrCheck() {
+    if(nehrCheck == null) {
+      nehrCheck = new JCheckBox();
+      nehrCheck.setText("NEHR");
+      getGeoColorTable().put(nehrCheck, new Color(75, 180, 0));
+      nehrCheck.addItemListener(this);
+    }
+    return nehrCheck;
+  }
+  
+  private JCheckBox getPartialEdgeCheck() {
+    if(partialEdgeCheck == null) {
+      partialEdgeCheck = new JCheckBox();
+      partialEdgeCheck.setText("Partial Edge");
+      getGeoColorTable().put(partialEdgeCheck, new Color(60, 195, 0));
+      partialEdgeCheck.addItemListener(this);
+    }
+    return partialEdgeCheck;
+  }
+  
+  private JCheckBox getRadiusCheck() {
+    if(radiusCheck == null) {
+      radiusCheck = new JCheckBox();
+      radiusCheck.setText("Radius");
+      getGeoColorTable().put(radiusCheck, new Color(45, 210, 0));
+      radiusCheck.addItemListener(this);
+    }
+    return radiusCheck;
+  }
+  
+  private JCheckBox getSectionalCurvatureCheck() {
+    if(sectionalCurvatureCheck == null) {
+      sectionalCurvatureCheck = new JCheckBox();
+      sectionalCurvatureCheck.setText("Sectional Curvature");
+      getGeoColorTable().put(sectionalCurvatureCheck, new Color(30, 225, 0));
+      sectionalCurvatureCheck.addItemListener(this);
+    }
+    return sectionalCurvatureCheck;
+  }
+  
+  private JCheckBox getVolumeCheck() {
+    if(volumeCheck == null) {
+      volumeCheck = new JCheckBox();
+      volumeCheck.setText("Volume");
+      getGeoColorTable().put(volumeCheck, new Color(15, 240, 0));
+      volumeCheck.addItemListener(this);
+    }
+    return volumeCheck;
+  }
+  
+  private JCheckBox getCurvPartialCheck() {
+    if(curvPartialCheck == null) {
+      curvPartialCheck = new JCheckBox();
+      curvPartialCheck.setText("Curvature(3D)");
+      getGeoColorTable().put(curvPartialCheck, new Color(0, 255, 0));
+      curvPartialCheck.addItemListener(this);
+    }
+    return curvPartialCheck;
+  }
+  
+  private JCheckBox getDihAnglePartialCheck() {
+    if(dihAnglePartialCheck == null) {
+      dihAnglePartialCheck = new JCheckBox();
+      dihAnglePartialCheck.setText("Dihedral Angle");
+      getGeoColorTable().put(dihAnglePartialCheck, new Color(0, 240, 15));
+      dihAnglePartialCheck.addItemListener(this);
+    }
+    return dihAnglePartialCheck;
+  }
+  
+  private JCheckBox getNehrPartialCheck() {
+    if(nehrPartialCheck == null) {
+      nehrPartialCheck = new JCheckBox();
+      nehrPartialCheck.setText("NEHR");
+      getGeoColorTable().put(nehrPartialCheck, new Color(0, 225, 30));
+      nehrPartialCheck.addItemListener(this);
+    }
+    return nehrPartialCheck;
+  }
+  
+  private JCheckBox getPartialEdgePartialCheck() {
+    if(partialEdgePartialCheck == null) {
+      partialEdgePartialCheck = new JCheckBox();
+      partialEdgePartialCheck.setText("Partial Edge");
+      getGeoColorTable().put(partialEdgePartialCheck, new Color(0, 210, 45));
+      partialEdgePartialCheck.addItemListener(this);
+    }
+    return partialEdgePartialCheck;
+  }
+  
+  private JCheckBox getRadiusPartialCheck() {
+    if(radiusPartialCheck == null) {
+      radiusPartialCheck = new JCheckBox();
+      radiusPartialCheck.setText("Radius");
+      getGeoColorTable().put(radiusPartialCheck, new Color(0, 195, 60));
+      radiusPartialCheck.addItemListener(this);
+    }
+    return radiusPartialCheck;
+  }
+  
+  private JCheckBox getVolumePartialCheck() {
+    if(volumePartialCheck == null) {
+      volumePartialCheck = new JCheckBox();
+      volumePartialCheck.setText("Volume");
+      getGeoColorTable().put(volumePartialCheck, new Color(0, 180, 75));
+      volumePartialCheck.addItemListener(this);
+    }
+    return volumePartialCheck;
+  }
+  
+  private JCheckBox getCurvatureSecondPartialCheck() {
+    if(curvatureSecondPartialCheck == null) {
+      curvatureSecondPartialCheck = new JCheckBox();
+      curvatureSecondPartialCheck.setText("Curvature(3D)");
+      getGeoColorTable().put(curvatureSecondPartialCheck, new Color(0, 165, 90));
+      curvatureSecondPartialCheck.addItemListener(this);
+    }
+    return curvatureSecondPartialCheck;
+  }
+  
+  private JCheckBox getDihAngleSecondPartialCheck() {
+    if(dihAngleSecondPartialCheck == null) {
+      dihAngleSecondPartialCheck = new JCheckBox();
+      dihAngleSecondPartialCheck.setText("Dihedral Angle");
+      getGeoColorTable().put(dihAngleSecondPartialCheck, new Color(0, 150, 105));
+      dihAngleSecondPartialCheck.addItemListener(this);
+    }
+    return dihAngleSecondPartialCheck;
+  }
+  
+  private JCheckBox getNehrSecondPartialCheck() {
+    if(nehrSecondPartialCheck == null) {
+      nehrSecondPartialCheck = new JCheckBox();
+      nehrSecondPartialCheck.setText("NEHR");
+      getGeoColorTable().put(nehrSecondPartialCheck, new Color(0, 135, 120));
+      nehrSecondPartialCheck.addItemListener(this);
+    }
+    return nehrSecondPartialCheck;
+  }
+  
+  private JCheckBox getPartialEdgeSecondPartialCheck() {
+    if(partialEdgeSecondPartialCheck == null) {
+      partialEdgeSecondPartialCheck = new JCheckBox();
+      partialEdgeSecondPartialCheck.setText("Partial Edge");
+      getGeoColorTable().put(partialEdgeSecondPartialCheck, new Color(0, 120, 135));
+      partialEdgeSecondPartialCheck.addItemListener(this);
+    }
+    return partialEdgeSecondPartialCheck;
+  }
+  
+  private JCheckBox getVolumeSecondPartialCheck() {
+    if(volumeSecondPartialCheck == null) {
+      volumeSecondPartialCheck = new JCheckBox();
+      volumeSecondPartialCheck.setText("Volume");
+      getGeoColorTable().put(volumeSecondPartialCheck, new Color(0, 105, 150));
+      volumeSecondPartialCheck.addItemListener(this);
+    }
+    return volumeSecondPartialCheck;
+  }
+  
+  private JCheckBox getTotalCurvatureCheck() {
+    if(totalCurvatureCheck == null) {
+      totalCurvatureCheck = new JCheckBox();
+      totalCurvatureCheck.setText("Total Curvature(3D)");
+      getGeoColorTable().put(totalCurvatureCheck, new Color(0, 90, 165));
+      totalCurvatureCheck.addItemListener(this);
+    }
+    return totalCurvatureCheck;
+  }
+  
+  private JCheckBox getTotalVolumeCheck() {
+    if(totalVolumeCheck == null) {
+      totalVolumeCheck = new JCheckBox();
+      totalVolumeCheck.setText("Total Volume");
+      getGeoColorTable().put(totalVolumeCheck, new Color(0, 75, 180));
+      totalVolumeCheck.addItemListener(this);
+    }
+    return totalVolumeCheck;
+  }
+  
+  private JCheckBox getTotalVolumePartialCheck() {
+    if(totalVolumePartialCheck == null) {
+      totalVolumePartialCheck = new JCheckBox();
+      totalVolumePartialCheck.setText("Total Volume Partial");
+      getGeoColorTable().put(totalVolumePartialCheck, new Color(0, 60, 195));
+      totalVolumePartialCheck.addItemListener(this);
+    }
+    return totalVolumePartialCheck;
+  }
+  
+  private JCheckBox getTotalVolumeSecondPartialCheck() {
+    if(totalVolumeSecondPartialCheck == null) {
+      totalVolumeSecondPartialCheck = new JCheckBox();
+      totalVolumeSecondPartialCheck.setText("Total Volume Second Partial");
+      getGeoColorTable().put(totalVolumeSecondPartialCheck, new Color(0, 45, 210));
+      totalVolumeSecondPartialCheck.addItemListener(this);
+    }
+    return totalVolumeSecondPartialCheck;
   }
 }

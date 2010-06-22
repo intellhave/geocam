@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Triangulation xmlns="http://code.google.com/p/geocam"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://code.google.com/p/geocam
-                                    TriangulationSchema.xsd"
 				name="Pentachoron">
 	<Vertex index="1" radius="1.0" alpha = "1.0">
 		<Vertices>2 3 4 5</Vertices>

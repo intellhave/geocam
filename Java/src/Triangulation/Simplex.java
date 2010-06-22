@@ -62,7 +62,27 @@ public abstract class Simplex {
   public void addTetra(Tetra t) {
     localTetras.add(t);
   }
-  
+  // Adding local simplices, no duplicate
+  public void addUniqueVertex(Vertex v) {
+    if(!localVertices.contains(v)) {
+      localVertices.add(v);
+    }
+  }
+  public void addUniqueEdge(Edge e) {
+    if(!localEdges.contains(e)) {
+      localEdges.add(e);
+    }
+  }
+  public void addUniqueFace(Face f) {
+    if(!localFaces.contains(f)) {
+      localFaces.add(f);
+    }
+  }
+  public void addUniqueTetra(Tetra t) {
+    if(!localTetras.contains(t)) {
+      localTetras.add(t);
+    }
+  }
   
   // Removing local simplices
   public void removeVertex(Vertex v) {
