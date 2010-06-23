@@ -162,6 +162,8 @@ public class Curvature3D extends Geoquant {
         locality  = 0;
       } else if(v.isAdjVertex(w)){
         locality = 1;
+      } else {
+        locality = 2;
       }
       
       vRadius = Radius.At(v);
@@ -278,7 +280,7 @@ public class Curvature3D extends Geoquant {
           rW = r_it.next().getValue();
         
           sum += 2.0*Lij_star/len - (2*Math.PI - dih_sum)* Math.pow(rV,2) 
-            * Math.pow(rW,2) * (1 - Math.pow(eta,2)) / Math.pow(len,3);
+            * Math.pow(rW,2) * (Math.pow(eta,2) - 1) / Math.pow(len,3);
         }
 
         sum += curv;
@@ -293,7 +295,7 @@ public class Curvature3D extends Geoquant {
         double eta = etas.get(0).getValue();
                       
         return -2*Lvw_star/l_vw + (2*Math.PI - dih_sum)*(Math.pow(vr,2)*Math.pow(wr,2)
-            *(1-Math.pow(eta,2))/Math.pow(l_vw, 3)); 
+            *(Math.pow(eta,2) - 1)/Math.pow(l_vw, 3)); 
       } else {
         return 0;
       }

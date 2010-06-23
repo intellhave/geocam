@@ -14,9 +14,14 @@ import static de.jreality.shader.CommonAttributes.TUBE_RADIUS;
 import java.awt.Color;
 import java.util.Hashtable;
 
+import javax.swing.JFrame;
+
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.JRViewer.ContentType;
+import de.jreality.plugin.basic.Inspector;
+import de.jreality.plugin.content.ContentTools;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.SceneGraphComponent;
@@ -24,6 +29,9 @@ import de.jreality.scene.SceneGraphNode;
 import de.jreality.scene.Viewer;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
+import de.jreality.scene.tool.Tool;
+import de.jreality.tools.EncompassTool;
+import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
 import Triangulation.Vertex;
 import Triangulation.Face;
@@ -33,7 +41,7 @@ import Visualization.PlanarDevelopment;
 public class TriangulationDisplay {
   
 static IndexedFaceSetFactory ifsf;
-static Viewer viewer;
+static  Viewer viewer;
 
   public static void showTriangulation() {
     
@@ -151,5 +159,6 @@ static Viewer viewer;
      ifs.setEdgeAttributes(Attribute.COLORS, StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(colors));
      
      viewer.render();
+     //type lower-case 'e' in the JReality window and the new image will be centered and resized 
   }
 }

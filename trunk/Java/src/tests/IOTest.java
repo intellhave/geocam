@@ -138,7 +138,7 @@ public class IOTest {
   }
   
   public static void testXMLReader() {
-    TriangulationIO.readTriangulationXML("Data/Triangulations/2DManifolds/tetrahedron.xml");
+    TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_test.xml");
     for(Vertex v : Triangulation.vertexTable.values()) {
       System.out.println(v + ":\n\t" +
           v.getLocalVertices() + "\n\t" + v.getLocalEdges() + "\n\t" + v.getLocalFaces() +
@@ -165,8 +165,8 @@ public class IOTest {
   }
 
   public static void testXMLWriter() {
-    TriangulationIO.readTriangulationXML("Data/xml/3DManifolds/pentachoron_regular.xml");
+    TriangulationIO.readTriangulation("Data/xml/3DManifolds/pentachoron_regular.xml");
     Radius.At(Triangulation.vertexTable.get(1)).setValue(2.0);
-    TriangulationIO.writeTriangulationXML("Data/xml/3DManifolds/pentachoron_mod.xml");
+    TriangulationIO.writeTriangulation("Data/xml/3DManifolds/pentachoron_mod.xml");
   }
 }

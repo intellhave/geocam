@@ -94,27 +94,27 @@ public class IOConversion {
     TriangulationIO.read2DTriangulationFile(standardPath);
     String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
                                          standardPath.lastIndexOf('.'));
-    TriangulationIO.writeTriangulationXML("Data/Triangulations/2DManifolds/" + name + ".xml");
+    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/" + name + ".xml");
   }
   
   public static void convert2DLutzToXML(String standardPath) {
     TriangulationIO.read2DLutzFile(standardPath);
     String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
                                          standardPath.lastIndexOf('.'));
-    TriangulationIO.writeTriangulationXML("Data/Triangulations/2DManifolds/" + name + ".xml");
+    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/" + name + ".xml");
   }
   
   public static void convert3DStandardToXML(String standardPath) {
     TriangulationIO.read3DTriangulationFile(standardPath);
     String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
                                          standardPath.lastIndexOf('.'));
-    TriangulationIO.writeTriangulationXML("Data/Triangulations/3DManifolds/" + name + ".xml");
+    TriangulationIO.writeTriangulation("Data/Triangulations/3DManifolds/" + name + ".xml");
   }
   
   public static void convert3DLutzToXML(String standardPath) {
     TriangulationIO.read3DLutzFile(standardPath);
     String name = standardPath.substring(standardPath.lastIndexOf('/') + 1, 
                                          standardPath.lastIndexOf('.'));
-    TriangulationIO.writeTriangulationXML("Data/Triangulations/3DManifolds/" + name + ".xml");
+    TriangulationIO.writeTriangulation("Data/Triangulations/3DManifolds/" + name + ".xml");
   }
 }
