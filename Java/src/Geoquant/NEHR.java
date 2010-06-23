@@ -373,12 +373,11 @@ public class NEHR extends Geoquant {
       double VolSecondPartial = vps_ij.getValue();
       
       double result;
-
+      
       result = Math.pow(totV, (-4.0/3.0)) * (1.0 / 3.0);
-      result *= (3 * totV * curvPartial - Ki * VPS_j - Kj * VPS_i
-          + (4.0/3.0) * ( totK / totV ) *
-          VPS_i * VPS_j - totK * VolSecondPartial);
-
+      result = result*(3 * totV * curvPartial - Ki * VPS_j - Kj * VPS_i
+          + (4.0/3.0) * ( totK / totV ) * VPS_i * VPS_j 
+          - totK * VolSecondPartial);
       return result;
     }
     

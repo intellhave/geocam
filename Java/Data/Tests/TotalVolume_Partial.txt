@@ -1,0 +1,15 @@
+Volume$Sum@[]w.r.t[Vertex 1]=4.171288206763541
+Volume$Sum@[]w.r.t[Vertex 2]=4.149069924857979
+Volume$Sum@[]w.r.t[Vertex 3]=3.7707279903082354
+Volume$Sum@[]w.r.t[Vertex 4]=4.0476636674374795
+Volume$Sum@[]w.r.t[Vertex 5]=4.209888576859334
+Volume$Sum@[]w.r.t[Edge 1]=0.625383201173557
+Volume$Sum@[]w.r.t[Edge 2]=0.5099570639855825
+Volume$Sum@[]w.r.t[Edge 3]=0.5617217117777825
+Volume$Sum@[]w.r.t[Edge 4]=0.4066015020701115
+Volume$Sum@[]w.r.t[Edge 5]=0.46732310904171603
+Volume$Sum@[]w.r.t[Edge 6]=0.35154931830630787
+Volume$Sum@[]w.r.t[Edge 7]=0.5778171846801571
+Volume$Sum@[]w.r.t[Edge 8]=0.5885305719020024
+Volume$Sum@[]w.r.t[Edge 9]=0.4118380490922709
+Volume$Sum@[]w.r.t[Edge 10]=0.523901445541289

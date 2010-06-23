@@ -246,7 +246,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           
           if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = getTriangulationFileChooser().getSelectedFile();
-            TriangulationIO.readTriangulationXML(file.getAbsolutePath());
+            TriangulationIO.readTriangulation(file.getAbsolutePath());
             newTriangulation();
             getSaveMenu().setEnabled(true);
           }
@@ -266,7 +266,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           
           if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = getTriangulationFileChooser().getSelectedFile();
-            TriangulationIO.writeTriangulationXML(file.getAbsolutePath());
+            TriangulationIO.writeTriangulation(file.getAbsolutePath());
           }
         }
       };
