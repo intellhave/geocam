@@ -147,8 +147,7 @@ public class Curvature3D extends Geoquant {
     private LinkedList<Radius> radii;
     private Radius vRadius;
     private Curvature3D vCurv;
-    
-    
+        
     /* Eta type variables */
     private LinkedList<LinkedList<DihedralAngle.Partial>> dih_partials;
     private LinkedList<PartialEdge> dijs;
@@ -213,7 +212,7 @@ public class Curvature3D extends Geoquant {
     private Partial(Edge e) {
       super(e);
       type = PartialType.Eta;
-      
+            
       if(v.isAdjEdge(e)) {
         locality = 0;
       } else {
@@ -232,15 +231,15 @@ public class Curvature3D extends Geoquant {
       DihedralAngle.Partial dih_partial;
       PartialEdge dij;
       LinkedList<DihedralAngle.Partial> list;
-      for(Edge nm : v.getLocalEdges()) {
+      for(Edge ij : v.getLocalEdges()) {
         list = new LinkedList<DihedralAngle.Partial>();
-        for(Tetra t : nm.getLocalTetras()) {
-          dih_partial = DihedralAngle.At(nm, t).partialAt(e);
+        for(Tetra t : ij.getLocalTetras()) {
+          dih_partial = DihedralAngle.At(ij, t).partialAt(e);
           dih_partial.addObserver(this);
           list.add(dih_partial);
         }
         dih_partials.add(list);
-        dij = PartialEdge.At(v, nm);
+        dij = PartialEdge.At(v, ij);
         dij.addObserver(this);
         dijs.add(dij);
       }
@@ -309,13 +308,15 @@ public class Curvature3D extends Geoquant {
         partial = (2 * Math.PI - dih_sum.getValue()) * dij_partial.getValue();
       }
       double dih_partial_sum;
+      double dij_val;
       Iterator<PartialEdge> dij_it = dijs.iterator();
       for(LinkedList<DihedralAngle.Partial> list : dih_partials) {
         dih_partial_sum = 0;
         for(DihedralAngle.Partial dih_partial : list) {
           dih_partial_sum -= dih_partial.getValue();
         }
-        partial += dih_partial_sum * dij_it.next().getValue();
+        dij_val = dij_it.next().getValue();
+        partial += dih_partial_sum * dij_val;
       }
       return partial;
     }

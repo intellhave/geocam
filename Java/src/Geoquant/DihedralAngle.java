@@ -90,7 +90,20 @@ public class DihedralAngle extends Geoquant {
       alphas = new Alpha[4];
       etas = new Eta[6];
       
-      StdTetra st = new StdTetra(t, e);
+      if(e == f) {
+        locality = 0;
+      } else if(t.isAdjEdge(f)) {
+        if(e.isAdjEdge(f)) {
+          locality = 1;
+        } else {
+          locality = 2;
+        }
+      } else {
+        locality = 3;
+        return;
+      }
+      
+      StdTetra st = new StdTetra(t, e, f);
       radii[0] = Radius.At(st.v1);
       radii[1] = Radius.At(st.v2);
       radii[2] = Radius.At(st.v3);
@@ -116,24 +129,17 @@ public class DihedralAngle extends Geoquant {
       for(int i = 0; i < 6; i++) {
         etas[i].addObserver(this);
       }
-      
-      if(e == f) {
-        locality = 0;
-      } else if(t.isAdjEdge(f)) {
-        if(e.isAdjEdge(f)) {
-          locality = 1;
-        } else {
-          locality = 2;
-        }
-      } else {
-        locality = 3;
-      }
     }
     
     protected void recalculate() {
       double r1, r2, r3, r4, alpha1, alpha2, alpha3, alpha4, 
       Eta12, Eta13, Eta14, Eta23, Eta24, Eta34;
     
+      if(locality == 3) {
+        value = 0;
+        return;
+      }
+      
       r1 = radii[0].getValue();
       r2 = radii[1].getValue();
       r3 = radii[2].getValue();
