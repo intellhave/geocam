@@ -14,6 +14,79 @@ public class Geometry {
   private Geometry() {
   }
   
+  public static List<Geoquant> getGeoquants(Class<? extends Geoquant> c) {
+    List<Geoquant> list = new LinkedList<Geoquant>();
+    if(c.isAssignableFrom(Alpha.class)) {
+      list.addAll(getAlphas());
+    } else if(c.isAssignableFrom(Angle.class)) {
+      list.addAll(getAngles());
+    } else if(c.isAssignableFrom(ConeAngle.class)) { 
+      list.addAll(getConeAngles());
+    } else if(c.isAssignableFrom(Curvature2D.class)) {
+      list.addAll(getCurvature2D());
+    } else if(c.isAssignableFrom(Curvature3D.class)) {
+      list.addAll(getCurvature3D());
+    } else if(c.isAssignableFrom(Curvature3D.Sum.class)) {
+      list.add(Curvature3D.sum());
+    } else if(c.isAssignableFrom(DihedralAngle.class)) {
+      list.addAll(getDihedralAngles());
+    } else if(c.isAssignableFrom(DualArea.class)) {
+      list.addAll(getDualAreas());
+    } else if(c.isAssignableFrom(DualArea.Segment.class)){
+      list.addAll(getDualAreaSegments());
+    } else if(c.isAssignableFrom(EdgeHeight.class)) {
+      list.addAll(getEdgeHeights());
+    } else if(c.isAssignableFrom(Eta.class)) {
+      list.addAll(getEtas());
+    } else if(c.isAssignableFrom(FaceHeight.class)) {
+      list.addAll(getFaceHeights());
+    } else if(c.isAssignableFrom(Length.class)) {
+      list.addAll(getLengths());
+    } else if(c.isAssignableFrom(NEHR.class)) {
+      list.add(NEHR.getInstance());
+    } else if(c.isAssignableFrom(PartialEdge.class)) {
+      list.addAll(getPartialEdges());
+    } else if(c.isAssignableFrom(Radius.class)) {
+      list.addAll(getRadii());
+    } else if(c.isAssignableFrom(SectionalCurvature.class)) {
+      list.addAll(getSectionalCurvatures());
+    } else if(c.isAssignableFrom(Volume.class)) {
+      list.addAll(getVolumes());
+    } else if(c.isAssignableFrom(Volume.Sum.class)) {
+      list.add(Volume.sum());
+    } else if(c.isAssignableFrom(Curvature3D.Partial.class)) {
+      list.addAll(getCurvaturePartials());
+    } else if(c.isAssignableFrom(DihedralAngle.Partial.class)) {
+      list.addAll(getDihedralAnglePartials());
+    } else if(c.isAssignableFrom(NEHR.Partial.class)) {
+      list.addAll(getNEHRPartials());
+    } else if(c.isAssignableFrom(PartialEdge.Partial.class)) {
+      list.addAll(getPartialEdgePartials());
+    } else if(c.isAssignableFrom(Radius.Partial.class)) {
+      list.addAll(getRadiusPartials());
+    } else if(c.isAssignableFrom(Volume.Partial.class)) {
+      list.addAll(getVolumePartials());
+    } else if(c.isAssignableFrom(Volume.PartialSum.class)) {
+      list.addAll(getVolumePartialSums());
+    } else if(c.isAssignableFrom(Curvature3D.SecondPartial.class)) {
+      list.addAll(getCurvatureSecondPartials());
+    } else if(c.isAssignableFrom(DihedralAngle.SecondPartial.class)) {
+      list.addAll(getDihedralAngleSecondPartials());
+    } else if(c.isAssignableFrom(NEHR.SecondPartial.class)) {
+      list.addAll(getNEHRSecondPartials());
+    } else if(c.isAssignableFrom(PartialEdge.SecondPartial.class)) {
+      list.addAll(getPartialEdgeSecondPartials());
+    } else if(c.isAssignableFrom(Volume.SecondPartial.class)) {
+      list.addAll(getVolumeSecondPartials());
+    } else if(c.isAssignableFrom(Volume.SecondPartialSum.class)) {
+      list.addAll(getVolumeSecondPartialSums());
+    } else {
+      return null;
+    }
+      
+    return list;
+  }
+  
   public static List<Radius> getRadii() {
     LinkedList<Radius> list = new LinkedList<Radius>();
     Radius r;
