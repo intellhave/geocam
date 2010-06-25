@@ -142,7 +142,7 @@ public class Triangulation {
     }
      
     Face currentFace = faceList.get(0);
-    HashMap<Face, Boolean> visited = new HashMap();
+    HashMap<Face, Boolean> visited = new HashMap<Face, Boolean>();
     visited.put(currentFace, true);
     int counted = 1;
     boolean faceFound = true;
