@@ -202,6 +202,7 @@ public class Curvature3D extends Geoquant {
           etas.add(eta);
           
           se = new StdEdge(e, v);
+          
           r = Radius.At(se.v2);
           r.addObserver(this);
           radii.add(r);

@@ -172,6 +172,8 @@ public class GeoMath {
       }
     }
     
+   // System.out.println("\n" + A);
+    
     if(singular_matrix || Math.abs(A.m[nDim-1][nDim-1]) < 0.00001) {
       return solveUndeterminedSystem(A, b);
     }
