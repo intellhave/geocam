@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Triangulation xmlns="http://code.google.com/p/geocam"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				name="Pentachoron">
+	<Vertex index="1" radius="1.049863308365356635953711" alpha = "1.0">
+	</Vertex>
+	<Vertex index="2" radius="1.016196063229850274569923" alpha = "1.0">
+	</Vertex>
+	<Vertex index="3" radius="0.9192201291435489634244328" alpha = "1.0">
+	</Vertex>
+	<Vertex index="4" radius="1.006626644962058337254879" alpha = "1.0">
+	</Vertex>
+	<Vertex index="5" radius="1.008106650388770808282253" alpha = "1.0">
+	</Vertex>
+	<Edge index="1" eta="1.1774614858613512">
+		<Vertices>1 2</Vertices>	
+	</Edge>
+	<Edge index="2" eta="1.0057338253415458">
+		<Vertices>1 3</Vertices>	
+	</Edge>
+	<Edge index="3" eta="0.95671467050313606">
+		<Vertices>1 4</Vertices>		
+	</Edge>
+	<Edge index="4" eta="0.95341503391890805">
+		<Vertices>1 5</Vertices>	
+	</Edge>
+	<Edge index="5" eta="0.97175528033905984">
+		<Vertices>2 3</Vertices>	
+	</Edge>
+	<Edge index="6" eta="0.99705502433976038">
+		<Vertices>2 4</Vertices>
+	</Edge>
+	<Edge index="7" eta="1.1416102573396619">
+		<Vertices>2 5</Vertices>		
+	</Edge>
+	<Edge index="8" eta="0.94558984779313783">
+		<Vertices>3 4</Vertices>	
+	</Edge>
+	<Edge index="9" eta="1.0693812318301895">
+		<Vertices>3 5</Vertices>	
+	</Edge>
+	<Edge index="10" eta="1.1455986331879951">
+		<Vertices>4 5</Vertices>	
+	</Edge>
+	<Tetra index="1">
+		<Vertices>1 2 3 4</Vertices>	
+	</Tetra>
+	<Tetra index="2">
+		<Vertices>1 2 3 5</Vertices>	
+	</Tetra>
+	<Tetra index="3">
+		<Vertices>1 2 4 5</Vertices>	
+	</Tetra>
+	<Tetra index="4">
+		<Vertices>1 3 4 5</Vertices>		
+	</Tetra>
+	<Tetra index="5">
+		<Vertices>2 3 4 5</Vertices>	
+	</Tetra>
+</Triangulation>

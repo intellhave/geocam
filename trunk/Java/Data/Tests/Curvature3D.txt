@@ -1,5 +1,5 @@
-Curvature3D@[Vertex 1]=12.054920407989453
-Curvature3D@[Vertex 2]=11.766341170498624
-Curvature3D@[Vertex 3]=11.12807294721867
-Curvature3D@[Vertex 4]=11.737847695263298
-Curvature3D@[Vertex 5]=11.734287931981362
+Curvature3D@[Vertex 1]=14.234702531463697
+Curvature3D@[Vertex 2]=14.234702531463697
+Curvature3D@[Vertex 3]=14.234702531463697
+Curvature3D@[Vertex 4]=14.2347025314637
+Curvature3D@[Vertex 5]=14.234702531463679

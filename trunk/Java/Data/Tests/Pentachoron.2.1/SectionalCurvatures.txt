@@ -1,0 +1,10 @@
+SectionalCurvature@[Edge 1]=2.590307055157262
+SectionalCurvature@[Edge 2]=2.590307055157262
+SectionalCurvature@[Edge 3]=2.590307055157262
+SectionalCurvature@[Edge 4]=2.590307055157262
+SectionalCurvature@[Edge 5]=2.590307055157262
+SectionalCurvature@[Edge 6]=2.590307055157262
+SectionalCurvature@[Edge 7]=2.590307055157262
+SectionalCurvature@[Edge 8]=2.590307055157262
+SectionalCurvature@[Edge 9]=2.590307055157262
+SectionalCurvature@[Edge 10]=2.590307055157262

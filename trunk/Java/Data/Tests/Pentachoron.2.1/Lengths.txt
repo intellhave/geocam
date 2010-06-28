@@ -1,0 +1,10 @@
+Length@[Edge 1]=4.0
+Length@[Edge 2]=4.0
+Length@[Edge 3]=4.0
+Length@[Edge 4]=4.0
+Length@[Edge 5]=4.0
+Length@[Edge 6]=4.0
+Length@[Edge 7]=4.0
+Length@[Edge 8]=4.0
+Length@[Edge 9]=4.0
+Length@[Edge 10]=4.0

@@ -97,7 +97,7 @@ public class Radius extends Geoquant {
           nehr_rad_partials.m[i][k]= nehr_rad_rad[i][k].getValue();
         }
       }
-            
+      
       values = GeoMath.LinearEquationsSolver(nehr_rad_partials, nehr_eta_partials);
       
       i = 0;

@@ -1,0 +1,5 @@
+Radius@[Vertex 1]=2.0
+Radius@[Vertex 2]=2.0
+Radius@[Vertex 3]=2.0
+Radius@[Vertex 4]=2.0
+Radius@[Vertex 5]=2.0

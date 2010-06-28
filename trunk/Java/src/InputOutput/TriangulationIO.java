@@ -204,7 +204,7 @@ public class TriangulationIO {
           v2.addUniqueFace(f);
         }
       }
-      verts = f.getLocalVertices().toArray(verts);
+      verts = f.getLocalVertices().toArray(new Vertex[0]);
       T = new TriPosition(verts[0].getIndex(),
                           verts[1].getIndex(),
                           verts[2].getIndex());
@@ -290,7 +290,7 @@ public class TriangulationIO {
           e2.addUniqueTetra(t);
         }
       }
-      verts = t.getLocalVertices().toArray(verts);
+      verts = t.getLocalVertices().toArray(new Vertex[0]);
       Edge e2;
       for(int j = 0; j < verts.length; j++) {
         for(int k = j + 1; k < verts.length; k++) {
@@ -367,17 +367,22 @@ public class TriangulationIO {
     }
     
     for(Vertex v2 : Triangulation.vertexTable.values()) {
-      edges = v2.getLocalEdges().toArray(edges);
+      edges = v2.getLocalEdges().toArray(new Edge[0]);
       for(int i = 0; i < edges.length; i++) {
         for(int j = i + 1; j < edges.length; j++) {
           edges[i].addUniqueEdge(edges[j]);
-          edges[j].addUniqueEdge(edges[i]);
-        }
+          try{
+            edges[j].addUniqueEdge(edges[i]);
+          } catch(NullPointerException exc) {
+            System.err.println("Null Pointer Exception\n"
+                                + v2 + "\nEdges = " + edges.length);
+          }
+         }
       }
     }
     
     for(Edge e2 : Triangulation.edgeTable.values()) {
-      faces = e2.getLocalFaces().toArray(faces);
+      faces = e2.getLocalFaces().toArray(new Face[0]);
       for(int i = 0; i < faces.length; i++) {
         for(int j = i + 1; j < faces.length; j++) {
           faces[i].addUniqueFace(faces[j]);
@@ -386,7 +391,7 @@ public class TriangulationIO {
       }
     }
     for(Face f2 : Triangulation.faceTable.values()) {
-      tetras = f2.getLocalTetras().toArray(tetras);
+      tetras = f2.getLocalTetras().toArray(new Tetra[0]);
       for(int i = 0; i < tetras.length; i++) {
         for(int j = i + 1; j < tetras.length; j++) {
           tetras[i].addUniqueTetra(tetras[j]);
@@ -395,7 +400,7 @@ public class TriangulationIO {
       }
     }
     for(Tetra t2 : Triangulation.tetraTable.values()) {
-      verts = t2.getLocalVertices().toArray(verts);
+      verts = t2.getLocalVertices().toArray(new Vertex[0]);
       for(int i = 0; i < verts.length; i++) {
         for(int j = i + 1; j < verts.length; j++) {
           verts[i].addUniqueVertex(verts[j]);

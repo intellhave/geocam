@@ -6,6 +6,9 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import util.GeoMath;
+import util.Matrix;
+
 import Flows.CrossConformalFlow;
 import Flows.RadiusOptNEHR;
 import Geoquant.Alpha;
@@ -39,43 +42,49 @@ public class GeoquantTest {
     initializeQuantities();
         
     RadiusOptNEHR minRad = new RadiusOptNEHR();
-    double[] radii = CrossConformalFlow.getLogRadii();
-    
+     
     minRad.setStoppingCondition(0.0);
     minRad.setStepRatio(1.0);
     try {
       double[] log_radii = CrossConformalFlow.getLogRadii();
-      for(int i = 0; i < 100; i++) {
+      for(int i = 0; i < 1000; i++) {
         minRad.step(log_radii);
         CrossConformalFlow.setLogRadii(log_radii);
       }
+      CrossConformalFlow.setLogRadii(log_radii);
     } catch (Exception e) {
       return;
     }
-  
  
-  radii = CrossConformalFlow.getLogRadii();
-  for(int i = 0; i < radii.length; i++) {
-    System.out.print(Math.exp(radii[i]) + ", ");
-  }
-  System.out.println();
-//    
-  
-  double sum;
-  System.out.print("{");
-  for(Edge e1: Triangulation.edgeTable.values()) {
-    System.out.print("{");
-    for(Edge e2: Triangulation.edgeTable.values()) {
-      sum = 0;
-      for(Vertex v : Triangulation.vertexTable.values()) {
-        sum += NEHR.secondPartialAt(v, e1).getValue() * Radius.At(v).partialAt(e2).getValue();
-        sum += NEHR.secondPartialAt(v, e2).getValue() * Radius.At(v).partialAt(e1).getValue();
-      }
-      System.out.print(sum + NEHR.secondPartialAt(e1, e2).getValue() + ", ");
+    for(Radius r : Geometry.getRadii()) {
+      System.out.printf("%.16f, ", r.getValue());
     }
-    System.out.println("},");
-  }
-  System.out.println("}");
+    System.out.println("\n");
+//    for(Radius r : Geometry.getRadii()) {
+//      r.setValue(1.0);
+//      System.out.printf("%.16f, ", r.getValue());
+//    }
+//    System.out.println("\n");
+    
+  
+    double sum;
+    Matrix mat = new Matrix(Triangulation.edgeTable.size(), Triangulation.edgeTable.size());
+
+    int i = 0;
+    int j;
+    for(Edge e1: Triangulation.edgeTable.values()) {
+      j = 0;
+      for(Edge e2: Triangulation.edgeTable.values()) {
+        sum = 0;
+        for(Vertex v : Triangulation.vertexTable.values()) {
+          sum += NEHR.secondPartialAt(v, e1).getValue() * Radius.At(v).partialAt(e2).getValue();
+        }
+        mat.m[i][j] = sum + NEHR.secondPartialAt(e1, e2).getValue();
+        j++;
+      }
+      i++;
+    }
+    System.out.println(mat); 
     
     testLengths();
     testRadii();
@@ -107,13 +116,22 @@ public class GeoquantTest {
     testNEHRSecondPartial();
     testTotalVolumeSecondPartial();
     testTotalVolumePartial();
+    
+    for(Radius r : Geometry.getRadii()) {
+      System.out.printf("%.16f, ", r.getValue());
+    }
+    System.out.println("\n");
   }
     
   private static void initializeQuantities() {
     TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_test.xml");
-//    for(Eta e : Geometry.getEtas()) {
-//      e.setValue(1.0);
+    for(Eta e : Geometry.getEtas()) {
+      e.setValue(2.0);
+    }
+//    for(Radius r : Geometry.getRadii()) {
+//      r.setValue(1.1217382437656340);
 //    }
+//    Radius.At(Triangulation.vertexTable.get(1)).setValue(1.1217382437656336);
   }
   
   private static void testLengths() {
@@ -124,9 +142,7 @@ public class GeoquantTest {
       return;
     }
     
-    Length l;
-    for(Edge e : Triangulation.edgeTable.values()) {
-      l = Length.At(e);
+    for(Length l : Geometry.getLengths()) {
       out.println(l);
     }
   }
@@ -139,9 +155,7 @@ public class GeoquantTest {
       return;
     }
     
-    Radius r;
-    for (Vertex v : Triangulation.vertexTable.values()){
-      r = Radius.At(v);
+    for (Radius r : Geometry.getRadii()){
       out.println(r);
     }
   }
