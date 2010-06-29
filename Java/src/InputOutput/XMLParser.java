@@ -96,11 +96,12 @@ public class XMLParser {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2" );
 
-        DOMSource source = new DOMSource(doc);          
-        StreamResult result = new StreamResult(new FileOutputStream(path));  
+        DOMSource source = new DOMSource(doc);
+        FileOutputStream stream = new FileOutputStream(path);
+        StreamResult result = new StreamResult(stream);  
         transformer.transform(source, result);
-
-      
+        stream.close();
+        
       } catch (Exception e) {
         e.printStackTrace();
       }
