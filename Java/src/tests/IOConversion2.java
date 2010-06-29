@@ -23,7 +23,7 @@ public class IOConversion2 {
     String name = "";
     
     try {
-      scanner = new Scanner(new File("Data/Conversion/3DManifolds/homology_3spheres.txt"));
+      scanner = new Scanner(new File(""));
     } catch (FileNotFoundException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

@@ -23,7 +23,7 @@ public class IOConversion1 {
     String name = "";
     
     try {
-      scanner = new Scanner(new File("Data/Conversion/3DManifolds/3_manifolds_all.txt"));
+      scanner = new Scanner(new File("Data/Conversion/3DManifolds/simplicial_small_valence.txt"));
     } catch (FileNotFoundException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
