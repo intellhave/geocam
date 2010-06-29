@@ -1,0 +1,1982 @@
+<?xml version="1.0" encoding="UTF-8"?><Triangulation xmlns="http://code.google.com/p/geocam">
+  <Vertex alpha="1.0" index="1" radius="0.0">
+    <Vertices>2 3 4 15 14 6 13 9 8 11 12 5 </Vertices>
+    <Edges>1 2 4 7 10 14 17 21 24 26 29 34 </Edges>
+    <Faces>1 2 3 5 6 8 9 11 13 14 16 17 19 21 22 24 25 26 28 29 31 33 35 36 38 39 41 43 46 48 </Faces>
+    <Tetras>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="2" radius="0.0">
+    <Vertices>1 3 4 15 14 5 7 10 9 12 13 6 </Vertices>
+    <Edges>1 3 5 8 11 43 47 51 54 55 56 59 </Edges>
+    <Faces>1 2 4 5 7 8 10 12 51 52 54 56 57 59 61 62 64 65 66 67 68 69 71 73 74 75 76 78 80 83 </Faces>
+    <Tetras>1 2 3 4 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="3" radius="0.0">
+    <Vertices>1 2 4 15 6 13 5 8 11 10 14 7 </Vertices>
+    <Edges>2 3 6 9 15 18 44 66 69 71 72 73 </Edges>
+    <Faces>1 3 4 6 7 13 15 16 18 20 51 53 55 86 88 89 91 93 94 96 97 98 99 100 102 103 104 105 107 109 </Faces>
+    <Tetras>1 2 5 6 7 21 22 37 38 39 40 41 42 43 44 45 46 47 48 49 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="4" radius="0.0">
+    <Vertices>1 2 3 14 6 9 8 11 12 5 7 15 </Vertices>
+    <Edges>4 5 6 12 16 22 25 27 30 45 48 81 </Edges>
+    <Faces>2 3 4 9 10 14 15 21 23 24 25 27 28 30 32 34 52 53 56 58 60 87 113 115 117 119 120 121 122 124 </Faces>
+    <Tetras>1 3 5 8 9 10 11 12 21 23 24 37 50 51 52 53 54 55 56 57 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="5" radius="0.0">
+    <Vertices>1 8 12 13 9 2 3 4 15 7 10 6 </Vertices>
+    <Edges>34 35 36 37 39 43 44 45 46 49 52 65 </Edges>
+    <Faces>35 36 37 38 40 41 42 44 51 52 53 54 55 57 58 61 63 64 65 67 70 72 86 87 88 90 92 114 126 128 </Faces>
+    <Tetras>13 14 15 16 21 22 23 25 26 27 28 29 37 38 39 50 58 59 60 61 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="6" radius="0.0">
+    <Vertices>1 3 4 13 9 2 14 10 5 8 11 7 </Vertices>
+    <Edges>14 15 16 19 23 59 60 62 65 67 70 78 </Edges>
+    <Faces>13 14 15 17 18 22 23 45 73 74 75 77 78 79 81 86 87 89 90 93 95 96 98 101 113 114 116 127 131 133 </Faces>
+    <Tetras>5 6 8 17 30 31 32 33 37 38 40 41 42 43 50 51 58 62 63 64 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="7" radius="0.0">
+    <Vertices>2 4 5 14 10 3 15 11 6 9 12 8 </Vertices>
+    <Edges>47 48 49 50 53 73 74 76 78 79 80 82 </Edges>
+    <Faces>56 57 58 59 60 62 63 82 102 103 104 106 107 108 110 113 114 115 116 117 118 119 120 123 126 127 129 132 136 138 </Faces>
+    <Tetras>23 24 25 34 44 45 46 47 50 51 52 53 54 55 58 59 62 65 66 67 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="8" radius="0.0">
+    <Vertices>1 4 11 12 5 13 3 6 15 7 10 9 </Vertices>
+    <Edges>24 25 28 31 35 38 66 67 68 82 83 84 </Edges>
+    <Faces>24 26 27 29 30 35 37 39 40 47 88 89 90 91 92 94 95 111 124 125 126 127 128 129 130 131 132 134 137 141 </Faces>
+    <Tetras>9 10 13 14 18 38 39 40 48 56 57 58 59 60 61 62 63 65 68 69 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="9" radius="0.0">
+    <Vertices>1 4 6 12 5 13 2 14 7 8 11 10 </Vertices>
+    <Edges>21 22 23 32 39 40 54 61 79 84 85 86 </Edges>
+    <Faces>21 22 23 31 32 41 42 43 44 45 64 66 68 73 76 77 84 115 116 118 131 132 133 134 135 136 137 139 142 144 </Faces>
+    <Tetras>8 11 15 16 17 26 27 30 31 35 51 52 62 63 64 65 66 68 70 71 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="10" radius="0.0">
+    <Vertices>2 5 7 13 6 14 3 15 8 9 12 11 </Vertices>
+    <Edges>51 52 53 57 62 63 71 75 83 86 87 88 </Edges>
+    <Faces>61 62 63 69 70 78 79 80 81 82 96 97 99 102 105 106 112 128 129 130 136 137 138 139 140 141 142 143 145 147 </Faces>
+    <Tetras>25 28 32 33 34 41 42 44 45 49 59 60 65 66 67 68 69 70 72 73 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="11" radius="0.0">
+    <Vertices>1 4 8 14 13 3 6 7 15 9 10 12 </Vertices>
+    <Edges>26 27 28 33 41 69 70 76 77 85 88 89 </Edges>
+    <Faces>25 26 27 33 34 46 47 49 93 94 95 100 101 107 108 109 110 111 119 121 133 134 135 141 142 143 144 145 146 148 </Faces>
+    <Tetras>9 12 18 19 40 43 46 47 48 53 54 56 63 64 68 69 70 71 72 74 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="12" radius="0.0">
+    <Vertices>1 4 8 9 5 2 15 14 7 10 11 13 </Vertices>
+    <Edges>29 30 31 32 36 55 58 64 80 87 89 90 </Edges>
+    <Faces>28 29 30 31 32 36 37 42 65 66 71 72 83 84 85 117 118 122 123 125 138 139 140 144 145 146 147 148 149 150 </Faces>
+    <Tetras>10 11 13 15 26 29 35 36 52 55 57 61 66 67 70 71 72 73 74 75 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="13" radius="0.0">
+    <Vertices>1 3 6 15 5 8 9 11 14 2 10 12 </Vertices>
+    <Edges>17 18 19 20 37 38 40 41 42 56 57 90 </Edges>
+    <Faces>16 17 18 19 20 38 39 40 43 44 45 46 47 48 49 50 67 68 69 70 74 79 97 112 130 143 147 148 149 150 </Faces>
+    <Tetras>6 7 14 16 17 18 19 20 27 28 30 32 41 49 60 69 72 73 74 75 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="14" radius="0.0">
+    <Vertices>1 2 4 15 11 13 7 6 9 10 12 3 </Vertices>
+    <Edges>10 11 12 13 33 42 50 60 61 63 64 72 </Edges>
+    <Faces>8 9 10 11 12 33 34 48 49 50 59 60 75 76 77 80 81 82 83 84 85 98 99 100 101 103 108 135 146 150 </Faces>
+    <Tetras>3 4 12 19 20 24 31 33 34 35 36 42 43 44 46 53 64 71 74 75 </Tetras>
+  </Vertex>
+  <Vertex alpha="1.0" index="15" radius="0.0">
+    <Vertices>1 2 3 14 13 5 12 8 7 10 11 4 </Vertices>
+    <Edges>7 8 9 13 20 46 58 68 74 75 77 81 </Edges>
+    <Faces>5 6 7 11 12 19 20 50 54 55 71 72 85 91 92 104 105 106 109 110 111 112 120 121 122 123 124 125 140 149 </Faces>
+    <Tetras>2 4 7 20 22 29 36 39 45 47 48 49 54 55 56 57 61 67 73 75 </Tetras>
+  </Vertex>
+  <Edge eta="0.0" index="1">
+    <Vertices>1 2 </Vertices>
+    <Edges>2 3 4 5 7 8 10 11 14 17 21 24 26 29 34 43 47 51 54 55 56 59 </Edges>
+    <Faces>1 2 5 8 </Faces>
+    <Tetras>1 2 3 4 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="2">
+    <Vertices>1 3 </Vertices>
+    <Edges>1 3 4 6 7 9 10 14 15 17 18 21 24 26 29 34 44 66 69 71 72 73 </Edges>
+    <Faces>1 3 6 13 16 </Faces>
+    <Tetras>1 2 5 6 7 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="3">
+    <Vertices>2 3 </Vertices>
+    <Edges>2 1 5 6 8 9 11 15 18 43 44 47 51 54 55 56 59 66 69 71 72 73 </Edges>
+    <Faces>1 4 7 51 </Faces>
+    <Tetras>1 2 21 22 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="4">
+    <Vertices>1 4 </Vertices>
+    <Edges>1 2 5 6 7 10 12 14 16 17 21 22 24 25 26 27 29 30 34 45 48 81 </Edges>
+    <Faces>2 3 9 14 21 24 25 28 </Faces>
+    <Tetras>1 3 5 8 9 10 11 12 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="5">
+    <Vertices>2 4 </Vertices>
+    <Edges>4 1 3 6 8 11 12 16 22 25 27 30 43 45 47 48 51 54 55 56 59 81 </Edges>
+    <Faces>2 4 10 52 56 </Faces>
+    <Tetras>1 3 21 23 24 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="6">
+    <Vertices>3 4 </Vertices>
+    <Edges>4 5 2 3 9 12 15 16 18 22 25 27 30 44 45 48 66 69 71 72 73 81 </Edges>
+    <Faces>3 4 15 53 </Faces>
+    <Tetras>1 5 21 37 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="7">
+    <Vertices>1 15 </Vertices>
+    <Edges>1 2 4 8 9 10 13 14 17 20 21 24 26 29 34 46 58 68 74 75 77 81 </Edges>
+    <Faces>5 6 11 19 </Faces>
+    <Tetras>2 4 7 20 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="8">
+    <Vertices>2 15 </Vertices>
+    <Edges>7 1 3 5 9 11 13 20 43 46 47 51 54 55 56 58 59 68 74 75 77 81 </Edges>
+    <Faces>5 7 12 54 71 </Faces>
+    <Tetras>2 4 22 29 36 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="9">
+    <Vertices>3 15 </Vertices>
+    <Edges>7 8 2 3 6 13 15 18 20 44 46 58 66 68 69 71 72 73 74 75 77 81 </Edges>
+    <Faces>6 7 20 55 91 104 105 109 </Faces>
+    <Tetras>2 7 22 39 45 47 48 49 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="10">
+    <Vertices>1 14 </Vertices>
+    <Edges>1 2 4 7 11 12 13 14 17 21 24 26 29 33 34 42 50 60 61 63 64 72 </Edges>
+    <Faces>8 9 11 33 48 </Faces>
+    <Tetras>3 4 12 19 20 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="11">
+    <Vertices>2 14 </Vertices>
+    <Edges>10 1 3 5 8 12 13 33 42 43 47 50 51 54 55 56 59 60 61 63 64 72 </Edges>
+    <Faces>8 10 12 59 75 76 80 83 </Faces>
+    <Tetras>3 4 24 31 33 34 35 36 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="12">
+    <Vertices>4 14 </Vertices>
+    <Edges>10 11 4 5 6 13 16 22 25 27 30 33 42 45 48 50 60 61 63 64 72 81 </Edges>
+    <Faces>9 10 34 60 </Faces>
+    <Tetras>3 12 24 53 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="13">
+    <Vertices>14 15 </Vertices>
+    <Edges>7 8 9 10 11 12 20 33 42 46 50 58 60 61 63 64 68 72 74 75 77 81 </Edges>
+    <Faces>11 12 50 85 </Faces>
+    <Tetras>4 20 36 75 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="14">
+    <Vertices>1 6 </Vertices>
+    <Edges>1 2 4 7 10 15 16 17 19 21 23 24 26 29 34 59 60 62 65 67 70 78 </Edges>
+    <Faces>13 14 17 22 </Faces>
+    <Tetras>5 6 8 17 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="15">
+    <Vertices>3 6 </Vertices>
+    <Edges>14 2 3 6 9 16 18 19 23 44 59 60 62 65 66 67 69 70 71 72 73 78 </Edges>
+    <Faces>13 15 18 86 89 93 96 98 </Faces>
+    <Tetras>5 6 37 38 40 41 42 43 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="17">
+    <Vertices>1 13 </Vertices>
+    <Edges>1 2 4 7 10 14 18 19 20 21 24 26 29 34 37 38 40 41 42 56 57 90 </Edges>
+    <Faces>16 17 19 38 39 43 46 48 </Faces>
+    <Tetras>6 7 14 16 17 18 19 20 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="16">
+    <Vertices>4 6 </Vertices>
+    <Edges>14 15 4 5 6 12 19 22 23 25 27 30 45 48 59 60 62 65 67 70 78 81 </Edges>
+    <Faces>14 15 23 87 113 </Faces>
+    <Tetras>5 8 37 50 51 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="19">
+    <Vertices>6 13 </Vertices>
+    <Edges>17 18 14 15 16 20 23 37 38 40 41 42 56 57 59 60 62 65 67 70 78 90 </Edges>
+    <Faces>17 18 45 74 79 </Faces>
+    <Tetras>6 17 30 32 41 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="18">
+    <Vertices>3 13 </Vertices>
+    <Edges>17 2 3 6 9 15 19 20 37 38 40 41 42 44 56 57 66 69 71 72 73 90 </Edges>
+    <Faces>16 18 20 97 </Faces>
+    <Tetras>6 7 41 49 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="21">
+    <Vertices>1 9 </Vertices>
+    <Edges>1 2 4 7 10 14 17 22 23 24 26 29 32 34 39 40 54 61 79 84 85 86 </Edges>
+    <Faces>21 22 31 41 43 </Faces>
+    <Tetras>8 11 15 16 17 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="20">
+    <Vertices>13 15 </Vertices>
+    <Edges>7 8 9 13 17 18 19 37 38 40 41 42 46 56 57 58 68 74 75 77 81 90 </Edges>
+    <Faces>19 20 50 112 149 </Faces>
+    <Tetras>7 20 49 73 75 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="23">
+    <Vertices>6 9 </Vertices>
+    <Edges>21 22 14 15 16 19 32 39 40 54 59 60 61 62 65 67 70 78 79 84 85 86 </Edges>
+    <Faces>22 23 45 73 77 116 131 133 </Faces>
+    <Tetras>8 17 30 31 51 62 63 64 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="22">
+    <Vertices>4 9 </Vertices>
+    <Edges>21 4 5 6 12 16 23 25 27 30 32 39 40 45 48 54 61 79 81 84 85 86 </Edges>
+    <Faces>21 23 32 115 </Faces>
+    <Tetras>8 11 51 52 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="25">
+    <Vertices>4 8 </Vertices>
+    <Edges>24 4 5 6 12 16 22 27 28 30 31 35 38 45 48 66 67 68 81 82 83 84 </Edges>
+    <Faces>24 27 30 124 </Faces>
+    <Tetras>9 10 56 57 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="24">
+    <Vertices>1 8 </Vertices>
+    <Edges>1 2 4 7 10 14 17 21 25 26 28 29 31 34 35 38 66 67 68 82 83 84 </Edges>
+    <Faces>24 26 29 35 39 </Faces>
+    <Tetras>9 10 13 14 18 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="27">
+    <Vertices>4 11 </Vertices>
+    <Edges>26 4 5 6 12 16 22 25 28 30 33 41 45 48 69 70 76 77 81 85 88 89 </Edges>
+    <Faces>25 27 34 119 121 </Faces>
+    <Tetras>9 12 53 54 56 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="26">
+    <Vertices>1 11 </Vertices>
+    <Edges>1 2 4 7 10 14 17 21 24 27 28 29 33 34 41 69 70 76 77 85 88 89 </Edges>
+    <Faces>25 26 33 46 </Faces>
+    <Tetras>9 12 18 19 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="29">
+    <Vertices>1 12 </Vertices>
+    <Edges>1 2 4 7 10 14 17 21 24 26 30 31 32 34 36 55 58 64 80 87 89 90 </Edges>
+    <Faces>28 29 31 36 </Faces>
+    <Tetras>10 11 13 15 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="28">
+    <Vertices>8 11 </Vertices>
+    <Edges>26 27 24 25 31 33 35 38 41 66 67 68 69 70 76 77 82 83 84 85 88 89 </Edges>
+    <Faces>26 27 47 94 95 111 134 141 </Faces>
+    <Tetras>9 18 40 48 56 63 68 69 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="31">
+    <Vertices>8 12 </Vertices>
+    <Edges>29 30 24 25 28 32 35 36 38 55 58 64 66 67 68 80 82 83 84 87 89 90 </Edges>
+    <Faces>29 30 37 125 </Faces>
+    <Tetras>10 13 57 61 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="30">
+    <Vertices>4 12 </Vertices>
+    <Edges>29 4 5 6 12 16 22 25 27 31 32 36 45 48 55 58 64 80 81 87 89 90 </Edges>
+    <Faces>28 30 32 117 122 </Faces>
+    <Tetras>10 11 52 55 57 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="34">
+    <Vertices>1 5 </Vertices>
+    <Edges>1 2 4 7 10 14 17 21 24 26 29 35 36 37 39 43 44 45 46 49 52 65 </Edges>
+    <Faces>35 36 38 41 </Faces>
+    <Tetras>13 14 15 16 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="35">
+    <Vertices>5 8 </Vertices>
+    <Edges>24 25 28 31 34 36 37 38 39 43 44 45 46 49 52 65 66 67 68 82 83 84 </Edges>
+    <Faces>35 37 40 88 90 92 126 128 </Faces>
+    <Tetras>13 14 38 39 58 59 60 61 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="32">
+    <Vertices>9 12 </Vertices>
+    <Edges>29 30 31 21 22 23 36 39 40 54 55 58 61 64 79 80 84 85 86 87 89 90 </Edges>
+    <Faces>31 32 42 66 84 118 139 144 </Faces>
+    <Tetras>11 15 26 35 52 66 70 71 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="33">
+    <Vertices>11 14 </Vertices>
+    <Edges>10 11 12 13 26 27 28 41 42 50 60 61 63 64 69 70 72 76 77 85 88 89 </Edges>
+    <Faces>33 34 49 100 101 108 135 146 </Faces>
+    <Tetras>12 19 43 46 53 64 71 74 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="38">
+    <Vertices>8 13 </Vertices>
+    <Edges>17 18 19 20 37 24 25 28 31 35 40 41 42 56 57 66 67 68 82 83 84 90 </Edges>
+    <Faces>39 40 47 130 </Faces>
+    <Tetras>14 18 60 69 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="39">
+    <Vertices>5 9 </Vertices>
+    <Edges>21 22 23 32 34 35 36 37 40 43 44 45 46 49 52 54 61 65 79 84 85 86 </Edges>
+    <Faces>41 42 44 64 </Faces>
+    <Tetras>15 16 26 27 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="36">
+    <Vertices>5 12 </Vertices>
+    <Edges>29 30 31 32 34 35 37 39 43 44 45 46 49 52 55 58 64 65 80 87 89 90 </Edges>
+    <Faces>36 37 42 65 72 </Faces>
+    <Tetras>13 15 26 29 61 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="37">
+    <Vertices>5 13 </Vertices>
+    <Edges>17 18 19 20 34 35 36 38 39 40 41 42 43 44 45 46 49 52 56 57 65 90 </Edges>
+    <Faces>38 40 44 67 70 </Faces>
+    <Tetras>14 16 27 28 60 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="42">
+    <Vertices>13 14 </Vertices>
+    <Edges>10 11 12 13 33 17 18 19 20 37 38 40 41 50 56 57 60 61 63 64 72 90 </Edges>
+    <Faces>48 49 50 150 </Faces>
+    <Tetras>19 20 74 75 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="43">
+    <Vertices>2 5 </Vertices>
+    <Edges>34 35 36 37 39 1 3 5 8 11 44 45 46 47 49 51 52 54 55 56 59 65 </Edges>
+    <Faces>51 52 54 57 61 64 65 67 </Faces>
+    <Tetras>21 22 23 25 26 27 28 29 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="40">
+    <Vertices>9 13 </Vertices>
+    <Edges>17 18 19 20 37 38 21 22 23 32 39 41 42 54 56 57 61 79 84 85 86 90 </Edges>
+    <Faces>43 44 45 68 </Faces>
+    <Tetras>16 17 27 30 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="41">
+    <Vertices>11 13 </Vertices>
+    <Edges>17 18 19 20 37 38 40 26 27 28 33 42 56 57 69 70 76 77 85 88 89 90 </Edges>
+    <Faces>46 47 49 143 148 </Faces>
+    <Tetras>18 19 69 72 74 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="46">
+    <Vertices>5 15 </Vertices>
+    <Edges>7 8 9 13 20 34 35 36 37 39 43 44 45 49 52 58 65 68 74 75 77 81 </Edges>
+    <Faces>54 55 72 92 </Faces>
+    <Tetras>22 29 39 61 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="47">
+    <Vertices>2 7 </Vertices>
+    <Edges>1 3 5 8 11 43 48 49 50 51 53 54 55 56 59 73 74 76 78 79 80 82 </Edges>
+    <Faces>56 57 59 62 </Faces>
+    <Tetras>23 24 25 34 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="44">
+    <Vertices>3 5 </Vertices>
+    <Edges>34 35 36 37 39 43 2 3 6 9 15 18 45 46 49 52 65 66 69 71 72 73 </Edges>
+    <Faces>51 53 55 86 88 </Faces>
+    <Tetras>21 22 37 38 39 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="45">
+    <Vertices>4 5 </Vertices>
+    <Edges>34 35 36 37 39 43 44 4 5 6 12 16 22 25 27 30 46 48 49 52 65 81 </Edges>
+    <Faces>52 53 58 87 </Faces>
+    <Tetras>21 23 37 50 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="51">
+    <Vertices>2 10 </Vertices>
+    <Edges>1 3 5 8 11 43 47 52 53 54 55 56 57 59 62 63 71 75 83 86 87 88 </Edges>
+    <Faces>61 62 69 78 80 </Faces>
+    <Tetras>25 28 32 33 34 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="50">
+    <Vertices>7 14 </Vertices>
+    <Edges>10 11 12 13 33 42 47 48 49 53 60 61 63 64 72 73 74 76 78 79 80 82 </Edges>
+    <Faces>59 60 82 103 108 </Faces>
+    <Tetras>24 34 44 46 53 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="49">
+    <Vertices>5 7 </Vertices>
+    <Edges>47 48 34 35 36 37 39 43 44 45 46 50 52 53 65 73 74 76 78 79 80 82 </Edges>
+    <Faces>57 58 63 114 126 </Faces>
+    <Tetras>23 25 50 58 59 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="48">
+    <Vertices>4 7 </Vertices>
+    <Edges>47 4 5 6 12 16 22 25 27 30 45 49 50 53 73 74 76 78 79 80 81 82 </Edges>
+    <Faces>56 58 60 113 115 117 119 120 </Faces>
+    <Tetras>23 24 50 51 52 53 54 55 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="55">
+    <Vertices>2 12 </Vertices>
+    <Edges>29 30 31 32 36 1 3 5 8 11 43 47 51 54 56 58 59 64 80 87 89 90 </Edges>
+    <Faces>65 66 71 83 </Faces>
+    <Tetras>26 29 35 36 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="54">
+    <Vertices>2 9 </Vertices>
+    <Edges>21 22 23 32 39 40 1 3 5 8 11 43 47 51 55 56 59 61 79 84 85 86 </Edges>
+    <Faces>64 66 68 73 76 </Faces>
+    <Tetras>26 27 30 31 35 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="53">
+    <Vertices>7 10 </Vertices>
+    <Edges>51 52 47 48 49 50 57 62 63 71 73 74 75 76 78 79 80 82 83 86 87 88 </Edges>
+    <Faces>62 63 82 102 106 129 136 138 </Faces>
+    <Tetras>25 34 44 45 59 65 66 67 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="52">
+    <Vertices>5 10 </Vertices>
+    <Edges>51 34 35 36 37 39 43 44 45 46 49 53 57 62 63 65 71 75 83 86 87 88 </Edges>
+    <Faces>61 63 70 128 </Faces>
+    <Tetras>25 28 59 60 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="59">
+    <Vertices>2 6 </Vertices>
+    <Edges>14 15 16 19 23 1 3 5 8 11 43 47 51 54 55 56 60 62 65 67 70 78 </Edges>
+    <Faces>73 74 75 78 </Faces>
+    <Tetras>30 31 32 33 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="58">
+    <Vertices>12 15 </Vertices>
+    <Edges>7 8 9 13 20 46 29 30 31 32 36 55 64 68 74 75 77 80 81 87 89 90 </Edges>
+    <Faces>71 72 85 122 123 125 140 149 </Faces>
+    <Tetras>29 36 55 57 61 67 73 75 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="57">
+    <Vertices>10 13 </Vertices>
+    <Edges>17 18 19 20 37 38 40 41 42 56 51 52 53 62 63 71 75 83 86 87 88 90 </Edges>
+    <Faces>69 70 79 97 112 130 143 147 </Faces>
+    <Tetras>28 32 41 49 60 69 72 73 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="56">
+    <Vertices>2 13 </Vertices>
+    <Edges>17 18 19 20 37 38 40 41 42 1 3 5 8 11 43 47 51 54 55 57 59 90 </Edges>
+    <Faces>67 68 69 74 </Faces>
+    <Tetras>27 28 30 32 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="63">
+    <Vertices>10 14 </Vertices>
+    <Edges>10 11 12 13 33 42 50 60 61 51 52 53 57 62 64 71 72 75 83 86 87 88 </Edges>
+    <Faces>80 81 82 99 </Faces>
+    <Tetras>33 34 42 44 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="62">
+    <Vertices>6 10 </Vertices>
+    <Edges>51 52 53 57 14 15 16 19 23 59 60 63 65 67 70 71 75 78 83 86 87 88 </Edges>
+    <Faces>78 79 81 96 </Faces>
+    <Tetras>32 33 41 42 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="61">
+    <Vertices>9 14 </Vertices>
+    <Edges>10 11 12 13 33 42 50 60 21 22 23 32 39 40 54 63 64 72 79 84 85 86 </Edges>
+    <Faces>76 77 84 135 </Faces>
+    <Tetras>31 35 64 71 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="60">
+    <Vertices>6 14 </Vertices>
+    <Edges>10 11 12 13 33 42 50 14 15 16 19 23 59 61 62 63 64 65 67 70 72 78 </Edges>
+    <Faces>75 77 81 98 101 </Faces>
+    <Tetras>31 33 42 43 64 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="68">
+    <Vertices>8 15 </Vertices>
+    <Edges>7 8 9 13 20 46 58 24 25 28 31 35 38 66 67 74 75 77 81 82 83 84 </Edges>
+    <Faces>91 92 111 124 125 </Faces>
+    <Tetras>39 48 56 57 61 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="69">
+    <Vertices>3 11 </Vertices>
+    <Edges>26 27 28 33 41 2 3 6 9 15 18 44 66 70 71 72 73 76 77 85 88 89 </Edges>
+    <Faces>93 94 100 107 109 </Faces>
+    <Tetras>40 43 46 47 48 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="70">
+    <Vertices>6 11 </Vertices>
+    <Edges>26 27 28 33 41 69 14 15 16 19 23 59 60 62 65 67 76 77 78 85 88 89 </Edges>
+    <Faces>93 95 101 133 </Faces>
+    <Tetras>40 43 63 64 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="71">
+    <Vertices>3 10 </Vertices>
+    <Edges>51 52 53 57 62 63 2 3 6 9 15 18 44 66 69 72 73 75 83 86 87 88 </Edges>
+    <Faces>96 97 99 102 105 </Faces>
+    <Tetras>41 42 44 45 49 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="64">
+    <Vertices>12 14 </Vertices>
+    <Edges>10 11 12 13 33 42 50 60 61 63 29 30 31 32 36 55 58 72 80 87 89 90 </Edges>
+    <Faces>83 84 85 146 150 </Faces>
+    <Tetras>35 36 71 74 75 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="65">
+    <Vertices>5 6 </Vertices>
+    <Edges>14 15 16 19 23 59 60 62 34 35 36 37 39 43 44 45 46 49 52 67 70 78 </Edges>
+    <Faces>86 87 90 114 </Faces>
+    <Tetras>37 38 50 58 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="66">
+    <Vertices>3 8 </Vertices>
+    <Edges>24 25 28 31 35 38 2 3 6 9 15 18 44 67 68 69 71 72 73 82 83 84 </Edges>
+    <Faces>88 89 91 94 </Faces>
+    <Tetras>38 39 40 48 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="67">
+    <Vertices>6 8 </Vertices>
+    <Edges>24 25 28 31 35 38 66 14 15 16 19 23 59 60 62 65 68 70 78 82 83 84 </Edges>
+    <Faces>89 90 95 127 131 </Faces>
+    <Tetras>38 40 58 62 63 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="76">
+    <Vertices>7 11 </Vertices>
+    <Edges>26 27 28 33 41 69 70 47 48 49 50 53 73 74 77 78 79 80 82 85 88 89 </Edges>
+    <Faces>107 108 110 119 </Faces>
+    <Tetras>46 47 53 54 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="77">
+    <Vertices>11 15 </Vertices>
+    <Edges>7 8 9 13 20 46 58 68 74 75 26 27 28 33 41 69 70 76 81 85 88 89 </Edges>
+    <Faces>109 110 111 121 </Faces>
+    <Tetras>47 48 54 56 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="78">
+    <Vertices>6 7 </Vertices>
+    <Edges>47 48 49 50 53 73 74 76 14 15 16 19 23 59 60 62 65 67 70 79 80 82 </Edges>
+    <Faces>113 114 116 127 </Faces>
+    <Tetras>50 51 58 62 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="79">
+    <Vertices>7 9 </Vertices>
+    <Edges>21 22 23 32 39 40 54 61 47 48 49 50 53 73 74 76 78 80 82 84 85 86 </Edges>
+    <Faces>115 116 118 132 136 </Faces>
+    <Tetras>51 52 62 65 66 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="72">
+    <Vertices>3 14 </Vertices>
+    <Edges>10 11 12 13 33 42 50 60 61 63 64 2 3 6 9 15 18 44 66 69 71 73 </Edges>
+    <Faces>98 99 100 103 </Faces>
+    <Tetras>42 43 44 46 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="73">
+    <Vertices>3 7 </Vertices>
+    <Edges>47 48 49 50 53 2 3 6 9 15 18 44 66 69 71 72 74 76 78 79 80 82 </Edges>
+    <Faces>102 103 104 107 </Faces>
+    <Tetras>44 45 46 47 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="74">
+    <Vertices>7 15 </Vertices>
+    <Edges>7 8 9 13 20 46 58 68 47 48 49 50 53 73 75 76 77 78 79 80 81 82 </Edges>
+    <Faces>104 106 110 120 123 </Faces>
+    <Tetras>45 47 54 55 67 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="75">
+    <Vertices>10 15 </Vertices>
+    <Edges>7 8 9 13 20 46 58 68 74 51 52 53 57 62 63 71 77 81 83 86 87 88 </Edges>
+    <Faces>105 106 112 140 </Faces>
+    <Tetras>45 49 67 73 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="85">
+    <Vertices>9 11 </Vertices>
+    <Edges>26 27 28 33 41 69 70 76 77 21 22 23 32 39 40 54 61 79 84 86 88 89 </Edges>
+    <Faces>133 134 135 142 144 </Faces>
+    <Tetras>63 64 68 70 71 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="84">
+    <Vertices>8 9 </Vertices>
+    <Edges>21 22 23 32 39 40 54 61 79 24 25 28 31 35 38 66 67 68 82 83 85 86 </Edges>
+    <Faces>131 132 134 137 </Faces>
+    <Tetras>62 63 65 68 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="87">
+    <Vertices>10 12 </Vertices>
+    <Edges>29 30 31 32 36 55 58 64 80 51 52 53 57 62 63 71 75 83 86 88 89 90 </Edges>
+    <Faces>138 139 140 145 147 </Faces>
+    <Tetras>66 67 70 72 73 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="86">
+    <Vertices>9 10 </Vertices>
+    <Edges>51 52 53 57 62 63 71 75 83 21 22 23 32 39 40 54 61 79 84 85 87 88 </Edges>
+    <Faces>136 137 139 142 </Faces>
+    <Tetras>65 66 68 70 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="81">
+    <Vertices>4 15 </Vertices>
+    <Edges>7 8 9 13 20 46 58 68 74 75 77 4 5 6 12 16 22 25 27 30 45 48 </Edges>
+    <Faces>120 121 122 124 </Faces>
+    <Tetras>54 55 56 57 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="80">
+    <Vertices>7 12 </Vertices>
+    <Edges>29 30 31 32 36 55 58 64 47 48 49 50 53 73 74 76 78 79 82 87 89 90 </Edges>
+    <Faces>117 118 123 138 </Faces>
+    <Tetras>52 55 66 67 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="83">
+    <Vertices>8 10 </Vertices>
+    <Edges>51 52 53 57 62 63 71 75 24 25 28 31 35 38 66 67 68 82 84 86 87 88 </Edges>
+    <Faces>128 129 130 137 141 </Faces>
+    <Tetras>59 60 65 68 69 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="82">
+    <Vertices>7 8 </Vertices>
+    <Edges>24 25 28 31 35 38 66 67 68 47 48 49 50 53 73 74 76 78 79 80 83 84 </Edges>
+    <Faces>126 127 129 132 </Faces>
+    <Tetras>58 59 62 65 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="89">
+    <Vertices>11 12 </Vertices>
+    <Edges>29 30 31 32 36 55 58 64 80 87 26 27 28 33 41 69 70 76 77 85 88 90 </Edges>
+    <Faces>144 145 146 148 </Faces>
+    <Tetras>70 71 72 74 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="88">
+    <Vertices>10 11 </Vertices>
+    <Edges>26 27 28 33 41 69 70 76 77 85 51 52 53 57 62 63 71 75 83 86 87 89 </Edges>
+    <Faces>141 142 143 145 </Faces>
+    <Tetras>68 69 70 72 </Tetras>
+  </Edge>
+  <Edge eta="0.0" index="90">
+    <Vertices>12 13 </Vertices>
+    <Edges>17 18 19 20 37 38 40 41 42 56 57 29 30 31 32 36 55 58 64 80 87 89 </Edges>
+    <Faces>147 148 149 150 </Faces>
+    <Tetras>72 73 74 75 </Tetras>
+  </Edge>
+  <Face index="1">
+    <Vertices>1 2 3 </Vertices>
+    <Edges>1 2 3 </Edges>
+    <Faces>2 3 4 5 6 7 8 13 16 51 </Faces>
+    <Tetras>1 2 </Tetras>
+  </Face>
+  <Face index="2">
+    <Vertices>1 2 4 </Vertices>
+    <Edges>1 4 5 </Edges>
+    <Faces>1 3 4 5 8 9 10 14 21 24 25 28 52 56 </Faces>
+    <Tetras>1 3 </Tetras>
+  </Face>
+  <Face index="3">
+    <Vertices>1 3 4 </Vertices>
+    <Edges>2 4 6 </Edges>
+    <Faces>1 2 4 6 9 13 14 15 16 21 24 25 28 53 </Faces>
+    <Tetras>1 5 </Tetras>
+  </Face>
+  <Face index="4">
+    <Vertices>2 3 4 </Vertices>
+    <Edges>3 5 6 </Edges>
+    <Faces>1 2 3 7 10 15 51 52 53 56 </Faces>
+    <Tetras>1 21 </Tetras>
+  </Face>
+  <Face index="5">
+    <Vertices>1 2 15 </Vertices>
+    <Edges>1 7 8 </Edges>
+    <Faces>1 2 6 7 8 11 12 19 54 71 </Faces>
+    <Tetras>2 4 </Tetras>
+  </Face>
+  <Face index="6">
+    <Vertices>1 3 15 </Vertices>
+    <Edges>2 7 9 </Edges>
+    <Faces>1 3 5 7 11 13 16 19 20 55 91 104 105 109 </Faces>
+    <Tetras>2 7 </Tetras>
+  </Face>
+  <Face index="7">
+    <Vertices>2 3 15 </Vertices>
+    <Edges>3 8 9 </Edges>
+    <Faces>1 4 5 6 12 20 51 54 55 71 91 104 105 109 </Faces>
+    <Tetras>2 22 </Tetras>
+  </Face>
+  <Face index="8">
+    <Vertices>1 2 14 </Vertices>
+    <Edges>1 10 11 </Edges>
+    <Faces>1 2 5 9 10 11 12 33 48 59 75 76 80 83 </Faces>
+    <Tetras>3 4 </Tetras>
+  </Face>
+  <Face index="9">
+    <Vertices>1 4 14 </Vertices>
+    <Edges>4 10 12 </Edges>
+    <Faces>2 3 8 10 11 14 21 24 25 28 33 34 48 60 </Faces>
+    <Tetras>3 12 </Tetras>
+  </Face>
+  <Face index="10">
+    <Vertices>2 4 14 </Vertices>
+    <Edges>5 11 12 </Edges>
+    <Faces>2 4 8 9 12 34 52 56 59 60 75 76 80 83 </Faces>
+    <Tetras>3 24 </Tetras>
+  </Face>
+  <Face index="11">
+    <Vertices>1 14 15 </Vertices>
+    <Edges>10 7 13 </Edges>
+    <Faces>8 9 5 6 12 19 33 48 50 85 </Faces>
+    <Tetras>4 20 </Tetras>
+  </Face>
+  <Face index="12">
+    <Vertices>2 14 15 </Vertices>
+    <Edges>11 8 13 </Edges>
+    <Faces>8 10 5 7 11 50 54 59 71 75 76 80 83 85 </Faces>
+    <Tetras>4 36 </Tetras>
+  </Face>
+  <Face index="13">
+    <Vertices>1 3 6 </Vertices>
+    <Edges>2 14 15 </Edges>
+    <Faces>1 3 6 14 15 16 17 18 22 86 89 93 96 98 </Faces>
+    <Tetras>5 6 </Tetras>
+  </Face>
+  <Face index="14">
+    <Vertices>1 4 6 </Vertices>
+    <Edges>4 14 16 </Edges>
+    <Faces>2 3 9 13 15 17 21 22 23 24 25 28 87 113 </Faces>
+    <Tetras>5 8 </Tetras>
+  </Face>
+  <Face index="15">
+    <Vertices>3 4 6 </Vertices>
+    <Edges>6 15 16 </Edges>
+    <Faces>3 4 13 14 18 23 53 86 87 89 93 96 98 113 </Faces>
+    <Tetras>5 37 </Tetras>
+  </Face>
+  <Face index="17">
+    <Vertices>1 6 13 </Vertices>
+    <Edges>14 17 19 </Edges>
+    <Faces>13 14 16 18 19 22 38 39 43 45 46 48 74 79 </Faces>
+    <Tetras>6 17 </Tetras>
+  </Face>
+  <Face index="16">
+    <Vertices>1 3 13 </Vertices>
+    <Edges>2 17 18 </Edges>
+    <Faces>1 3 6 13 17 18 19 20 38 39 43 46 48 97 </Faces>
+    <Tetras>6 7 </Tetras>
+  </Face>
+  <Face index="19">
+    <Vertices>1 13 15 </Vertices>
+    <Edges>17 7 20 </Edges>
+    <Faces>16 17 5 6 11 20 38 39 43 46 48 50 112 149 </Faces>
+    <Tetras>7 20 </Tetras>
+  </Face>
+  <Face index="18">
+    <Vertices>3 6 13 </Vertices>
+    <Edges>15 18 19 </Edges>
+    <Faces>13 15 16 17 20 45 74 79 86 89 93 96 97 98 </Faces>
+    <Tetras>6 41 </Tetras>
+  </Face>
+  <Face index="21">
+    <Vertices>1 4 9 </Vertices>
+    <Edges>4 21 22 </Edges>
+    <Faces>2 3 9 14 22 23 24 25 28 31 32 41 43 115 </Faces>
+    <Tetras>8 11 </Tetras>
+  </Face>
+  <Face index="20">
+    <Vertices>3 13 15 </Vertices>
+    <Edges>18 9 20 </Edges>
+    <Faces>16 18 6 7 19 50 55 91 97 104 105 109 112 149 </Faces>
+    <Tetras>7 49 </Tetras>
+  </Face>
+  <Face index="23">
+    <Vertices>4 6 9 </Vertices>
+    <Edges>16 22 23 </Edges>
+    <Faces>14 15 21 22 32 45 73 77 87 113 115 116 131 133 </Faces>
+    <Tetras>8 51 </Tetras>
+  </Face>
+  <Face index="22">
+    <Vertices>1 6 9 </Vertices>
+    <Edges>14 21 23 </Edges>
+    <Faces>13 14 17 21 23 31 41 43 45 73 77 116 131 133 </Faces>
+    <Tetras>8 17 </Tetras>
+  </Face>
+  <Face index="25">
+    <Vertices>1 4 11 </Vertices>
+    <Edges>4 26 27 </Edges>
+    <Faces>2 3 9 14 21 24 26 27 28 33 34 46 119 121 </Faces>
+    <Tetras>9 12 </Tetras>
+  </Face>
+  <Face index="24">
+    <Vertices>1 4 8 </Vertices>
+    <Edges>4 24 25 </Edges>
+    <Faces>2 3 9 14 21 25 26 27 28 29 30 35 39 124 </Faces>
+    <Tetras>9 10 </Tetras>
+  </Face>
+  <Face index="27">
+    <Vertices>4 8 11 </Vertices>
+    <Edges>25 27 28 </Edges>
+    <Faces>24 25 26 30 34 47 94 95 111 119 121 124 134 141 </Faces>
+    <Tetras>9 56 </Tetras>
+  </Face>
+  <Face index="26">
+    <Vertices>1 8 11 </Vertices>
+    <Edges>24 26 28 </Edges>
+    <Faces>24 25 27 29 33 35 39 46 47 94 95 111 134 141 </Faces>
+    <Tetras>9 18 </Tetras>
+  </Face>
+  <Face index="29">
+    <Vertices>1 8 12 </Vertices>
+    <Edges>24 29 31 </Edges>
+    <Faces>24 26 28 30 31 35 36 37 39 125 </Faces>
+    <Tetras>10 13 </Tetras>
+  </Face>
+  <Face index="28">
+    <Vertices>1 4 12 </Vertices>
+    <Edges>4 29 30 </Edges>
+    <Faces>2 3 9 14 21 24 25 29 30 31 32 36 117 122 </Faces>
+    <Tetras>10 11 </Tetras>
+  </Face>
+  <Face index="31">
+    <Vertices>1 9 12 </Vertices>
+    <Edges>21 29 32 </Edges>
+    <Faces>21 22 28 29 32 36 41 42 43 66 84 118 139 144 </Faces>
+    <Tetras>11 15 </Tetras>
+  </Face>
+  <Face index="30">
+    <Vertices>4 8 12 </Vertices>
+    <Edges>25 30 31 </Edges>
+    <Faces>24 27 28 29 32 37 117 122 124 125 </Faces>
+    <Tetras>10 57 </Tetras>
+  </Face>
+  <Face index="34">
+    <Vertices>4 11 14 </Vertices>
+    <Edges>27 12 33 </Edges>
+    <Faces>25 27 9 10 33 49 60 100 101 108 119 121 135 146 </Faces>
+    <Tetras>12 53 </Tetras>
+  </Face>
+  <Face index="35">
+    <Vertices>1 5 8 </Vertices>
+    <Edges>34 24 35 </Edges>
+    <Faces>24 26 29 36 37 38 39 40 41 88 90 92 126 128 </Faces>
+    <Tetras>13 14 </Tetras>
+  </Face>
+  <Face index="32">
+    <Vertices>4 9 12 </Vertices>
+    <Edges>22 30 32 </Edges>
+    <Faces>21 23 28 30 31 42 66 84 115 117 118 122 139 144 </Faces>
+    <Tetras>11 52 </Tetras>
+  </Face>
+  <Face index="33">
+    <Vertices>1 11 14 </Vertices>
+    <Edges>26 10 33 </Edges>
+    <Faces>25 26 8 9 11 34 46 48 49 100 101 108 135 146 </Faces>
+    <Tetras>12 19 </Tetras>
+  </Face>
+  <Face index="38">
+    <Vertices>1 5 13 </Vertices>
+    <Edges>34 17 37 </Edges>
+    <Faces>35 36 16 17 19 39 40 41 43 44 46 48 67 70 </Faces>
+    <Tetras>14 16 </Tetras>
+  </Face>
+  <Face index="39">
+    <Vertices>1 8 13 </Vertices>
+    <Edges>24 17 38 </Edges>
+    <Faces>24 26 29 35 16 17 19 38 40 43 46 47 48 130 </Faces>
+    <Tetras>14 18 </Tetras>
+  </Face>
+  <Face index="36">
+    <Vertices>1 5 12 </Vertices>
+    <Edges>34 29 36 </Edges>
+    <Faces>35 28 29 31 37 38 41 42 65 72 </Faces>
+    <Tetras>13 15 </Tetras>
+  </Face>
+  <Face index="37">
+    <Vertices>5 8 12 </Vertices>
+    <Edges>35 36 31 </Edges>
+    <Faces>35 36 29 30 40 42 65 72 88 90 92 125 126 128 </Faces>
+    <Tetras>13 61 </Tetras>
+  </Face>
+  <Face index="42">
+    <Vertices>5 9 12 </Vertices>
+    <Edges>39 36 32 </Edges>
+    <Faces>41 36 37 31 32 44 64 65 66 72 84 118 139 144 </Faces>
+    <Tetras>15 26 </Tetras>
+  </Face>
+  <Face index="43">
+    <Vertices>1 9 13 </Vertices>
+    <Edges>21 17 40 </Edges>
+    <Faces>21 22 31 41 16 17 19 38 39 44 45 46 48 68 </Faces>
+    <Tetras>16 17 </Tetras>
+  </Face>
+  <Face index="40">
+    <Vertices>5 8 13 </Vertices>
+    <Edges>35 37 38 </Edges>
+    <Faces>35 37 38 39 44 47 67 70 88 90 92 126 128 130 </Faces>
+    <Tetras>14 60 </Tetras>
+  </Face>
+  <Face index="41">
+    <Vertices>1 5 9 </Vertices>
+    <Edges>34 21 39 </Edges>
+    <Faces>35 36 38 21 22 31 42 43 44 64 </Faces>
+    <Tetras>15 16 </Tetras>
+  </Face>
+  <Face index="46">
+    <Vertices>1 11 13 </Vertices>
+    <Edges>26 17 41 </Edges>
+    <Faces>25 26 33 16 17 19 38 39 43 47 48 49 143 148 </Faces>
+    <Tetras>18 19 </Tetras>
+  </Face>
+  <Face index="47">
+    <Vertices>8 11 13 </Vertices>
+    <Edges>28 38 41 </Edges>
+    <Faces>26 27 39 40 46 49 94 95 111 130 134 141 143 148 </Faces>
+    <Tetras>18 69 </Tetras>
+  </Face>
+  <Face index="44">
+    <Vertices>5 9 13 </Vertices>
+    <Edges>39 37 40 </Edges>
+    <Faces>41 42 38 40 43 45 64 67 68 70 </Faces>
+    <Tetras>16 27 </Tetras>
+  </Face>
+  <Face index="45">
+    <Vertices>6 9 13 </Vertices>
+    <Edges>23 19 40 </Edges>
+    <Faces>22 23 17 18 43 44 68 73 74 77 79 116 131 133 </Faces>
+    <Tetras>17 30 </Tetras>
+  </Face>
+  <Face index="51">
+    <Vertices>2 3 5 </Vertices>
+    <Edges>3 43 44 </Edges>
+    <Faces>1 4 7 52 53 54 55 57 61 64 65 67 86 88 </Faces>
+    <Tetras>21 22 </Tetras>
+  </Face>
+  <Face index="50">
+    <Vertices>13 14 15 </Vertices>
+    <Edges>42 20 13 </Edges>
+    <Faces>48 49 19 20 11 12 85 112 149 150 </Faces>
+    <Tetras>20 75 </Tetras>
+  </Face>
+  <Face index="49">
+    <Vertices>11 13 14 </Vertices>
+    <Edges>41 33 42 </Edges>
+    <Faces>46 47 33 34 48 50 100 101 108 135 143 146 148 150 </Faces>
+    <Tetras>19 74 </Tetras>
+  </Face>
+  <Face index="48">
+    <Vertices>1 13 14 </Vertices>
+    <Edges>17 10 42 </Edges>
+    <Faces>16 17 19 38 39 43 46 8 9 11 33 49 50 150 </Faces>
+    <Tetras>19 20 </Tetras>
+  </Face>
+  <Face index="55">
+    <Vertices>3 5 15 </Vertices>
+    <Edges>44 9 46 </Edges>
+    <Faces>51 53 6 7 20 54 72 86 88 91 92 104 105 109 </Faces>
+    <Tetras>22 39 </Tetras>
+  </Face>
+  <Face index="54">
+    <Vertices>2 5 15 </Vertices>
+    <Edges>43 8 46 </Edges>
+    <Faces>51 52 5 7 12 55 57 61 64 65 67 71 72 92 </Faces>
+    <Tetras>22 29 </Tetras>
+  </Face>
+  <Face index="53">
+    <Vertices>3 4 5 </Vertices>
+    <Edges>6 44 45 </Edges>
+    <Faces>3 4 15 51 52 55 58 86 87 88 </Faces>
+    <Tetras>21 37 </Tetras>
+  </Face>
+  <Face index="52">
+    <Vertices>2 4 5 </Vertices>
+    <Edges>5 43 45 </Edges>
+    <Faces>2 4 10 51 53 54 56 57 58 61 64 65 67 87 </Faces>
+    <Tetras>21 23 </Tetras>
+  </Face>
+  <Face index="59">
+    <Vertices>2 7 14 </Vertices>
+    <Edges>47 11 50 </Edges>
+    <Faces>56 57 8 10 12 60 62 75 76 80 82 83 103 108 </Faces>
+    <Tetras>24 34 </Tetras>
+  </Face>
+  <Face index="58">
+    <Vertices>4 5 7 </Vertices>
+    <Edges>45 48 49 </Edges>
+    <Faces>52 53 56 57 60 63 87 113 114 115 117 119 120 126 </Faces>
+    <Tetras>23 50 </Tetras>
+  </Face>
+  <Face index="57">
+    <Vertices>2 5 7 </Vertices>
+    <Edges>43 47 49 </Edges>
+    <Faces>51 52 54 56 58 59 61 62 63 64 65 67 114 126 </Faces>
+    <Tetras>23 25 </Tetras>
+  </Face>
+  <Face index="56">
+    <Vertices>2 4 7 </Vertices>
+    <Edges>5 47 48 </Edges>
+    <Faces>2 4 10 52 57 58 59 60 62 113 115 117 119 120 </Faces>
+    <Tetras>23 24 </Tetras>
+  </Face>
+  <Face index="63">
+    <Vertices>5 7 10 </Vertices>
+    <Edges>49 52 53 </Edges>
+    <Faces>57 58 61 62 70 82 102 106 114 126 128 129 136 138 </Faces>
+    <Tetras>25 59 </Tetras>
+  </Face>
+  <Face index="62">
+    <Vertices>2 7 10 </Vertices>
+    <Edges>47 51 53 </Edges>
+    <Faces>56 57 59 61 63 69 78 80 82 102 106 129 136 138 </Faces>
+    <Tetras>25 34 </Tetras>
+  </Face>
+  <Face index="61">
+    <Vertices>2 5 10 </Vertices>
+    <Edges>43 51 52 </Edges>
+    <Faces>51 52 54 57 62 63 64 65 67 69 70 78 80 128 </Faces>
+    <Tetras>25 28 </Tetras>
+  </Face>
+  <Face index="60">
+    <Vertices>4 7 14 </Vertices>
+    <Edges>48 12 50 </Edges>
+    <Faces>56 58 9 10 34 59 82 103 108 113 115 117 119 120 </Faces>
+    <Tetras>24 53 </Tetras>
+  </Face>
+  <Face index="68">
+    <Vertices>2 9 13 </Vertices>
+    <Edges>54 56 40 </Edges>
+    <Faces>64 66 67 43 44 45 69 73 74 76 </Faces>
+    <Tetras>27 30 </Tetras>
+  </Face>
+  <Face index="69">
+    <Vertices>2 10 13 </Vertices>
+    <Edges>51 56 57 </Edges>
+    <Faces>61 62 67 68 70 74 78 79 80 97 112 130 143 147 </Faces>
+    <Tetras>28 32 </Tetras>
+  </Face>
+  <Face index="70">
+    <Vertices>5 10 13 </Vertices>
+    <Edges>52 37 57 </Edges>
+    <Faces>61 63 38 40 44 67 69 79 97 112 128 130 143 147 </Faces>
+    <Tetras>28 60 </Tetras>
+  </Face>
+  <Face index="71">
+    <Vertices>2 12 15 </Vertices>
+    <Edges>55 8 58 </Edges>
+    <Faces>65 66 5 7 12 54 72 83 85 122 123 125 140 149 </Faces>
+    <Tetras>29 36 </Tetras>
+  </Face>
+  <Face index="64">
+    <Vertices>2 5 9 </Vertices>
+    <Edges>43 54 39 </Edges>
+    <Faces>51 52 54 57 61 41 42 44 65 66 67 68 73 76 </Faces>
+    <Tetras>26 27 </Tetras>
+  </Face>
+  <Face index="65">
+    <Vertices>2 5 12 </Vertices>
+    <Edges>43 55 36 </Edges>
+    <Faces>51 52 54 57 61 64 36 37 42 66 67 71 72 83 </Faces>
+    <Tetras>26 29 </Tetras>
+  </Face>
+  <Face index="66">
+    <Vertices>2 9 12 </Vertices>
+    <Edges>54 55 32 </Edges>
+    <Faces>64 65 31 32 42 68 71 73 76 83 84 118 139 144 </Faces>
+    <Tetras>26 35 </Tetras>
+  </Face>
+  <Face index="67">
+    <Vertices>2 5 13 </Vertices>
+    <Edges>43 56 37 </Edges>
+    <Faces>51 52 54 57 61 64 65 38 40 44 68 69 70 74 </Faces>
+    <Tetras>27 28 </Tetras>
+  </Face>
+  <Face index="76">
+    <Vertices>2 9 14 </Vertices>
+    <Edges>54 11 61 </Edges>
+    <Faces>64 66 68 73 8 10 12 59 75 77 80 83 84 135 </Faces>
+    <Tetras>31 35 </Tetras>
+  </Face>
+  <Face index="77">
+    <Vertices>6 9 14 </Vertices>
+    <Edges>23 60 61 </Edges>
+    <Faces>22 23 45 73 75 76 81 84 98 101 116 131 133 135 </Faces>
+    <Tetras>31 64 </Tetras>
+  </Face>
+  <Face index="78">
+    <Vertices>2 6 10 </Vertices>
+    <Edges>59 51 62 </Edges>
+    <Faces>73 74 75 61 62 69 79 80 81 96 </Faces>
+    <Tetras>32 33 </Tetras>
+  </Face>
+  <Face index="79">
+    <Vertices>6 10 13 </Vertices>
+    <Edges>62 19 57 </Edges>
+    <Faces>78 17 18 45 74 69 70 81 96 97 112 130 143 147 </Faces>
+    <Tetras>32 41 </Tetras>
+  </Face>
+  <Face index="72">
+    <Vertices>5 12 15 </Vertices>
+    <Edges>36 46 58 </Edges>
+    <Faces>36 37 42 65 54 55 71 85 92 122 123 125 140 149 </Faces>
+    <Tetras>29 61 </Tetras>
+  </Face>
+  <Face index="73">
+    <Vertices>2 6 9 </Vertices>
+    <Edges>59 54 23 </Edges>
+    <Faces>64 66 68 22 23 45 74 75 76 77 78 116 131 133 </Faces>
+    <Tetras>30 31 </Tetras>
+  </Face>
+  <Face index="74">
+    <Vertices>2 6 13 </Vertices>
+    <Edges>59 56 19 </Edges>
+    <Faces>73 67 68 69 17 18 45 75 78 79 </Faces>
+    <Tetras>30 32 </Tetras>
+  </Face>
+  <Face index="75">
+    <Vertices>2 6 14 </Vertices>
+    <Edges>59 11 60 </Edges>
+    <Faces>73 74 8 10 12 59 76 77 78 80 81 83 98 101 </Faces>
+    <Tetras>31 33 </Tetras>
+  </Face>
+  <Face index="85">
+    <Vertices>12 14 15 </Vertices>
+    <Edges>64 58 13 </Edges>
+    <Faces>83 84 71 72 11 12 50 122 123 125 140 146 149 150 </Faces>
+    <Tetras>36 75 </Tetras>
+  </Face>
+  <Face index="84">
+    <Vertices>9 12 14 </Vertices>
+    <Edges>32 61 64 </Edges>
+    <Faces>31 32 42 66 76 77 83 85 118 135 139 144 146 150 </Faces>
+    <Tetras>35 71 </Tetras>
+  </Face>
+  <Face index="87">
+    <Vertices>4 5 6 </Vertices>
+    <Edges>45 16 65 </Edges>
+    <Faces>52 53 58 14 15 23 86 90 113 114 </Faces>
+    <Tetras>37 50 </Tetras>
+  </Face>
+  <Face index="86">
+    <Vertices>3 5 6 </Vertices>
+    <Edges>44 15 65 </Edges>
+    <Faces>51 53 55 13 15 18 87 88 89 90 93 96 98 114 </Faces>
+    <Tetras>37 38 </Tetras>
+  </Face>
+  <Face index="81">
+    <Vertices>6 10 14 </Vertices>
+    <Edges>62 60 63 </Edges>
+    <Faces>78 79 75 77 80 82 96 98 99 101 </Faces>
+    <Tetras>33 42 </Tetras>
+  </Face>
+  <Face index="80">
+    <Vertices>2 10 14 </Vertices>
+    <Edges>51 11 63 </Edges>
+    <Faces>61 62 69 78 8 10 12 59 75 76 81 82 83 99 </Faces>
+    <Tetras>33 34 </Tetras>
+  </Face>
+  <Face index="83">
+    <Vertices>2 12 14 </Vertices>
+    <Edges>55 11 64 </Edges>
+    <Faces>65 66 71 8 10 12 59 75 76 80 84 85 146 150 </Faces>
+    <Tetras>35 36 </Tetras>
+  </Face>
+  <Face index="82">
+    <Vertices>7 10 14 </Vertices>
+    <Edges>53 50 63 </Edges>
+    <Faces>62 63 59 60 80 81 99 102 103 106 108 129 136 138 </Faces>
+    <Tetras>34 44 </Tetras>
+  </Face>
+  <Face index="93">
+    <Vertices>3 6 11 </Vertices>
+    <Edges>15 69 70 </Edges>
+    <Faces>13 15 18 86 89 94 95 96 98 100 101 107 109 133 </Faces>
+    <Tetras>40 43 </Tetras>
+  </Face>
+  <Face index="92">
+    <Vertices>5 8 15 </Vertices>
+    <Edges>35 46 68 </Edges>
+    <Faces>35 37 40 88 90 54 55 72 91 111 124 125 126 128 </Faces>
+    <Tetras>39 61 </Tetras>
+  </Face>
+  <Face index="95">
+    <Vertices>6 8 11 </Vertices>
+    <Edges>67 70 28 </Edges>
+    <Faces>89 90 93 26 27 47 94 101 111 127 131 133 134 141 </Faces>
+    <Tetras>40 63 </Tetras>
+  </Face>
+  <Face index="94">
+    <Vertices>3 8 11 </Vertices>
+    <Edges>66 69 28 </Edges>
+    <Faces>88 89 91 93 26 27 47 95 100 107 109 111 134 141 </Faces>
+    <Tetras>40 48 </Tetras>
+  </Face>
+  <Face index="89">
+    <Vertices>3 6 8 </Vertices>
+    <Edges>15 66 67 </Edges>
+    <Faces>13 15 18 86 88 90 91 93 94 95 96 98 127 131 </Faces>
+    <Tetras>38 40 </Tetras>
+  </Face>
+  <Face index="88">
+    <Vertices>3 5 8 </Vertices>
+    <Edges>44 66 35 </Edges>
+    <Faces>51 53 55 86 35 37 40 89 90 91 92 94 126 128 </Faces>
+    <Tetras>38 39 </Tetras>
+  </Face>
+  <Face index="91">
+    <Vertices>3 8 15 </Vertices>
+    <Edges>66 9 68 </Edges>
+    <Faces>88 89 6 7 20 55 92 94 104 105 109 111 124 125 </Faces>
+    <Tetras>39 48 </Tetras>
+  </Face>
+  <Face index="90">
+    <Vertices>5 6 8 </Vertices>
+    <Edges>65 35 67 </Edges>
+    <Faces>86 87 35 37 40 88 89 92 95 114 126 127 128 131 </Faces>
+    <Tetras>38 58 </Tetras>
+  </Face>
+  <Face index="102">
+    <Vertices>3 7 10 </Vertices>
+    <Edges>73 71 53 </Edges>
+    <Faces>96 97 99 62 63 82 103 104 105 106 107 129 136 138 </Faces>
+    <Tetras>44 45 </Tetras>
+  </Face>
+  <Face index="103">
+    <Vertices>3 7 14 </Vertices>
+    <Edges>73 72 50 </Edges>
+    <Faces>102 98 99 100 59 60 82 104 107 108 </Faces>
+    <Tetras>44 46 </Tetras>
+  </Face>
+  <Face index="100">
+    <Vertices>3 11 14 </Vertices>
+    <Edges>69 72 33 </Edges>
+    <Faces>93 94 98 99 33 34 49 101 103 107 108 109 135 146 </Faces>
+    <Tetras>43 46 </Tetras>
+  </Face>
+  <Face index="101">
+    <Vertices>6 11 14 </Vertices>
+    <Edges>70 60 33 </Edges>
+    <Faces>93 95 75 77 81 98 33 34 49 100 108 133 135 146 </Faces>
+    <Tetras>43 64 </Tetras>
+  </Face>
+  <Face index="98">
+    <Vertices>3 6 14 </Vertices>
+    <Edges>15 72 60 </Edges>
+    <Faces>13 15 18 86 89 93 96 75 77 81 99 100 101 103 </Faces>
+    <Tetras>42 43 </Tetras>
+  </Face>
+  <Face index="99">
+    <Vertices>3 10 14 </Vertices>
+    <Edges>71 72 63 </Edges>
+    <Faces>96 97 98 80 81 82 100 102 103 105 </Faces>
+    <Tetras>42 44 </Tetras>
+  </Face>
+  <Face index="96">
+    <Vertices>3 6 10 </Vertices>
+    <Edges>15 71 62 </Edges>
+    <Faces>13 15 18 86 89 93 78 79 81 97 98 99 102 105 </Faces>
+    <Tetras>41 42 </Tetras>
+  </Face>
+  <Face index="97">
+    <Vertices>3 10 13 </Vertices>
+    <Edges>71 18 57 </Edges>
+    <Faces>96 16 18 20 69 70 79 99 102 105 112 130 143 147 </Faces>
+    <Tetras>41 49 </Tetras>
+  </Face>
+  <Face index="110">
+    <Vertices>7 11 15 </Vertices>
+    <Edges>76 74 77 </Edges>
+    <Faces>107 108 104 106 109 111 119 120 121 123 </Faces>
+    <Tetras>47 54 </Tetras>
+  </Face>
+  <Face index="111">
+    <Vertices>8 11 15 </Vertices>
+    <Edges>28 68 77 </Edges>
+    <Faces>26 27 47 94 95 91 92 109 110 121 124 125 134 141 </Faces>
+    <Tetras>48 56 </Tetras>
+  </Face>
+  <Face index="108">
+    <Vertices>7 11 14 </Vertices>
+    <Edges>76 50 33 </Edges>
+    <Faces>107 59 60 82 103 33 34 49 100 101 110 119 135 146 </Faces>
+    <Tetras>46 53 </Tetras>
+  </Face>
+  <Face index="109">
+    <Vertices>3 11 15 </Vertices>
+    <Edges>69 9 77 </Edges>
+    <Faces>93 94 100 107 6 7 20 55 91 104 105 110 111 121 </Faces>
+    <Tetras>47 48 </Tetras>
+  </Face>
+  <Face index="106">
+    <Vertices>7 10 15 </Vertices>
+    <Edges>53 74 75 </Edges>
+    <Faces>62 63 82 102 104 105 110 112 120 123 129 136 138 140 </Faces>
+    <Tetras>45 67 </Tetras>
+  </Face>
+  <Face index="107">
+    <Vertices>3 7 11 </Vertices>
+    <Edges>73 69 76 </Edges>
+    <Faces>102 103 104 93 94 100 108 109 110 119 </Faces>
+    <Tetras>46 47 </Tetras>
+  </Face>
+  <Face index="104">
+    <Vertices>3 7 15 </Vertices>
+    <Edges>73 9 74 </Edges>
+    <Faces>102 103 6 7 20 55 91 105 106 107 109 110 120 123 </Faces>
+    <Tetras>45 47 </Tetras>
+  </Face>
+  <Face index="105">
+    <Vertices>3 10 15 </Vertices>
+    <Edges>71 9 75 </Edges>
+    <Faces>96 97 99 102 6 7 20 55 91 104 106 109 112 140 </Faces>
+    <Tetras>45 49 </Tetras>
+  </Face>
+  <Face index="119">
+    <Vertices>4 7 11 </Vertices>
+    <Edges>48 27 76 </Edges>
+    <Faces>56 58 60 113 115 117 25 27 34 107 108 110 120 121 </Faces>
+    <Tetras>53 54 </Tetras>
+  </Face>
+  <Face index="118">
+    <Vertices>7 9 12 </Vertices>
+    <Edges>79 80 32 </Edges>
+    <Faces>115 116 117 31 32 42 66 84 123 132 136 138 139 144 </Faces>
+    <Tetras>52 66 </Tetras>
+  </Face>
+  <Face index="117">
+    <Vertices>4 7 12 </Vertices>
+    <Edges>48 30 80 </Edges>
+    <Faces>56 58 60 113 115 28 30 32 118 119 120 122 123 138 </Faces>
+    <Tetras>52 55 </Tetras>
+  </Face>
+  <Face index="116">
+    <Vertices>6 7 9 </Vertices>
+    <Edges>78 23 79 </Edges>
+    <Faces>113 114 22 23 45 73 77 115 118 127 131 132 133 136 </Faces>
+    <Tetras>51 62 </Tetras>
+  </Face>
+  <Face index="115">
+    <Vertices>4 7 9 </Vertices>
+    <Edges>48 22 79 </Edges>
+    <Faces>56 58 60 113 21 23 32 116 117 118 119 120 132 136 </Faces>
+    <Tetras>51 52 </Tetras>
+  </Face>
+  <Face index="114">
+    <Vertices>5 6 7 </Vertices>
+    <Edges>65 49 78 </Edges>
+    <Faces>86 87 90 57 58 63 113 116 126 127 </Faces>
+    <Tetras>50 58 </Tetras>
+  </Face>
+  <Face index="113">
+    <Vertices>4 6 7 </Vertices>
+    <Edges>16 48 78 </Edges>
+    <Faces>14 15 23 87 56 58 60 114 115 116 117 119 120 127 </Faces>
+    <Tetras>50 51 </Tetras>
+  </Face>
+  <Face index="112">
+    <Vertices>10 13 15 </Vertices>
+    <Edges>57 75 20 </Edges>
+    <Faces>69 70 79 97 105 106 19 20 50 130 140 143 147 149 </Faces>
+    <Tetras>49 73 </Tetras>
+  </Face>
+  <Face index="127">
+    <Vertices>6 7 8 </Vertices>
+    <Edges>78 67 82 </Edges>
+    <Faces>113 114 116 89 90 95 126 129 131 132 </Faces>
+    <Tetras>58 62 </Tetras>
+  </Face>
+  <Face index="126">
+    <Vertices>5 7 8 </Vertices>
+    <Edges>49 35 82 </Edges>
+    <Faces>57 58 63 114 35 37 40 88 90 92 127 128 129 132 </Faces>
+    <Tetras>58 59 </Tetras>
+  </Face>
+  <Face index="125">
+    <Vertices>8 12 15 </Vertices>
+    <Edges>31 68 58 </Edges>
+    <Faces>29 30 37 91 92 111 124 71 72 85 122 123 140 149 </Faces>
+    <Tetras>57 61 </Tetras>
+  </Face>
+  <Face index="124">
+    <Vertices>4 8 15 </Vertices>
+    <Edges>25 81 68 </Edges>
+    <Faces>24 27 30 120 121 122 91 92 111 125 </Faces>
+    <Tetras>56 57 </Tetras>
+  </Face>
+  <Face index="123">
+    <Vertices>7 12 15 </Vertices>
+    <Edges>80 74 58 </Edges>
+    <Faces>117 118 104 106 110 120 71 72 85 122 125 138 140 149 </Faces>
+    <Tetras>55 67 </Tetras>
+  </Face>
+  <Face index="122">
+    <Vertices>4 12 15 </Vertices>
+    <Edges>30 81 58 </Edges>
+    <Faces>28 30 32 117 120 121 71 72 85 123 124 125 140 149 </Faces>
+    <Tetras>55 57 </Tetras>
+  </Face>
+  <Face index="121">
+    <Vertices>4 11 15 </Vertices>
+    <Edges>27 81 77 </Edges>
+    <Faces>25 27 34 119 120 109 110 111 122 124 </Faces>
+    <Tetras>54 56 </Tetras>
+  </Face>
+  <Face index="120">
+    <Vertices>4 7 15 </Vertices>
+    <Edges>48 81 74 </Edges>
+    <Faces>56 58 60 113 115 117 119 104 106 110 121 122 123 124 </Faces>
+    <Tetras>54 55 </Tetras>
+  </Face>
+  <Face index="137">
+    <Vertices>8 9 10 </Vertices>
+    <Edges>84 83 86 </Edges>
+    <Faces>131 132 134 128 129 130 136 139 141 142 </Faces>
+    <Tetras>65 68 </Tetras>
+  </Face>
+  <Face index="136">
+    <Vertices>7 9 10 </Vertices>
+    <Edges>79 53 86 </Edges>
+    <Faces>115 116 118 132 62 63 82 102 106 129 137 138 139 142 </Faces>
+    <Tetras>65 66 </Tetras>
+  </Face>
+  <Face index="139">
+    <Vertices>9 10 12 </Vertices>
+    <Edges>86 32 87 </Edges>
+    <Faces>136 137 31 32 42 66 84 118 138 140 142 144 145 147 </Faces>
+    <Tetras>66 70 </Tetras>
+  </Face>
+  <Face index="138">
+    <Vertices>7 10 12 </Vertices>
+    <Edges>53 80 87 </Edges>
+    <Faces>62 63 82 102 106 129 136 117 118 123 139 140 145 147 </Faces>
+    <Tetras>66 67 </Tetras>
+  </Face>
+  <Face index="141">
+    <Vertices>8 10 11 </Vertices>
+    <Edges>83 28 88 </Edges>
+    <Faces>128 129 130 137 26 27 47 94 95 111 134 142 143 145 </Faces>
+    <Tetras>68 69 </Tetras>
+  </Face>
+  <Face index="140">
+    <Vertices>10 12 15 </Vertices>
+    <Edges>87 75 58 </Edges>
+    <Faces>138 139 105 106 112 71 72 85 122 123 125 145 147 149 </Faces>
+    <Tetras>67 73 </Tetras>
+  </Face>
+  <Face index="143">
+    <Vertices>10 11 13 </Vertices>
+    <Edges>88 57 41 </Edges>
+    <Faces>141 142 69 70 79 97 112 130 46 47 49 145 147 148 </Faces>
+    <Tetras>69 72 </Tetras>
+  </Face>
+  <Face index="142">
+    <Vertices>9 10 11 </Vertices>
+    <Edges>86 85 88 </Edges>
+    <Faces>136 137 139 133 134 135 141 143 144 145 </Faces>
+    <Tetras>68 70 </Tetras>
+  </Face>
+  <Face index="129">
+    <Vertices>7 8 10 </Vertices>
+    <Edges>82 53 83 </Edges>
+    <Faces>126 127 62 63 82 102 106 128 130 132 136 137 138 141 </Faces>
+    <Tetras>59 65 </Tetras>
+  </Face>
+  <Face index="128">
+    <Vertices>5 8 10 </Vertices>
+    <Edges>35 52 83 </Edges>
+    <Faces>35 37 40 88 90 92 126 61 63 70 129 130 137 141 </Faces>
+    <Tetras>59 60 </Tetras>
+  </Face>
+  <Face index="131">
+    <Vertices>6 8 9 </Vertices>
+    <Edges>67 23 84 </Edges>
+    <Faces>89 90 95 127 22 23 45 73 77 116 132 133 134 137 </Faces>
+    <Tetras>62 63 </Tetras>
+  </Face>
+  <Face index="130">
+    <Vertices>8 10 13 </Vertices>
+    <Edges>83 38 57 </Edges>
+    <Faces>128 129 39 40 47 69 70 79 97 112 137 141 143 147 </Faces>
+    <Tetras>60 69 </Tetras>
+  </Face>
+  <Face index="133">
+    <Vertices>6 9 11 </Vertices>
+    <Edges>23 70 85 </Edges>
+    <Faces>22 23 45 73 77 116 131 93 95 101 134 135 142 144 </Faces>
+    <Tetras>63 64 </Tetras>
+  </Face>
+  <Face index="132">
+    <Vertices>7 8 9 </Vertices>
+    <Edges>82 79 84 </Edges>
+    <Faces>126 127 129 115 116 118 131 134 136 137 </Faces>
+    <Tetras>62 65 </Tetras>
+  </Face>
+  <Face index="135">
+    <Vertices>9 11 14 </Vertices>
+    <Edges>85 61 33 </Edges>
+    <Faces>133 134 76 77 84 33 34 49 100 101 108 142 144 146 </Faces>
+    <Tetras>64 71 </Tetras>
+  </Face>
+  <Face index="134">
+    <Vertices>8 9 11 </Vertices>
+    <Edges>84 28 85 </Edges>
+    <Faces>131 132 26 27 47 94 95 111 133 135 137 141 142 144 </Faces>
+    <Tetras>63 68 </Tetras>
+  </Face>
+  <Face index="144">
+    <Vertices>9 11 12 </Vertices>
+    <Edges>85 32 89 </Edges>
+    <Faces>133 134 135 142 31 32 42 66 84 118 139 145 146 148 </Faces>
+    <Tetras>70 71 </Tetras>
+  </Face>
+  <Face index="145">
+    <Vertices>10 11 12 </Vertices>
+    <Edges>88 87 89 </Edges>
+    <Faces>141 142 143 138 139 140 144 146 147 148 </Faces>
+    <Tetras>70 72 </Tetras>
+  </Face>
+  <Face index="146">
+    <Vertices>11 12 14 </Vertices>
+    <Edges>89 33 64 </Edges>
+    <Faces>144 145 33 34 49 100 101 108 135 83 84 85 148 150 </Faces>
+    <Tetras>71 74 </Tetras>
+  </Face>
+  <Face index="147">
+    <Vertices>10 12 13 </Vertices>
+    <Edges>87 57 90 </Edges>
+    <Faces>138 139 140 145 69 70 79 97 112 130 143 148 149 150 </Faces>
+    <Tetras>72 73 </Tetras>
+  </Face>
+  <Face index="148">
+    <Vertices>11 12 13 </Vertices>
+    <Edges>89 41 90 </Edges>
+    <Faces>144 145 146 46 47 49 143 147 149 150 </Faces>
+    <Tetras>72 74 </Tetras>
+  </Face>
+  <Face index="149">
+    <Vertices>12 13 15 </Vertices>
+    <Edges>90 58 20 </Edges>
+    <Faces>147 148 71 72 85 122 123 125 140 19 20 50 112 150 </Faces>
+    <Tetras>73 75 </Tetras>
+  </Face>
+  <Face index="150">
+    <Vertices>12 13 14 </Vertices>
+    <Edges>90 64 42 </Edges>
+    <Faces>147 148 149 83 84 85 146 48 49 50 </Faces>
+    <Tetras>74 75 </Tetras>
+  </Face>
+  <Tetra index="1">
+    <Vertices>1 2 3 4 </Vertices>
+    <Edges>1 2 3 4 5 6 </Edges>
+    <Faces>1 2 3 4 </Faces>
+    <Tetras>2 3 5 21 </Tetras>
+  </Tetra>
+  <Tetra index="2">
+    <Vertices>1 2 3 15 </Vertices>
+    <Edges>1 2 3 7 8 9 </Edges>
+    <Faces>1 5 6 7 </Faces>
+    <Tetras>1 4 7 22 </Tetras>
+  </Tetra>
+  <Tetra index="3">
+    <Vertices>1 2 4 14 </Vertices>
+    <Edges>1 4 5 10 11 12 </Edges>
+    <Faces>2 8 9 10 </Faces>
+    <Tetras>1 4 12 24 </Tetras>
+  </Tetra>
+  <Tetra index="4">
+    <Vertices>1 2 14 15 </Vertices>
+    <Edges>1 10 11 7 8 13 </Edges>
+    <Faces>8 5 11 12 </Faces>
+    <Tetras>3 2 20 36 </Tetras>
+  </Tetra>
+  <Tetra index="5">
+    <Vertices>1 3 4 6 </Vertices>
+    <Edges>2 4 6 14 15 16 </Edges>
+    <Faces>3 13 14 15 </Faces>
+    <Tetras>1 6 8 37 </Tetras>
+  </Tetra>
+  <Tetra index="6">
+    <Vertices>1 3 6 13 </Vertices>
+    <Edges>2 14 15 17 18 19 </Edges>
+    <Faces>13 16 17 18 </Faces>
+    <Tetras>5 7 17 41 </Tetras>
+  </Tetra>
+  <Tetra index="7">
+    <Vertices>1 3 13 15 </Vertices>
+    <Edges>2 17 18 7 9 20 </Edges>
+    <Faces>16 6 19 20 </Faces>
+    <Tetras>6 2 20 49 </Tetras>
+  </Tetra>
+  <Tetra index="8">
+    <Vertices>1 4 6 9 </Vertices>
+    <Edges>4 14 16 21 22 23 </Edges>
+    <Faces>14 21 22 23 </Faces>
+    <Tetras>5 11 17 51 </Tetras>
+  </Tetra>
+  <Tetra index="9">
+    <Vertices>1 4 8 11 </Vertices>
+    <Edges>4 24 25 26 27 28 </Edges>
+    <Faces>24 25 26 27 </Faces>
+    <Tetras>10 12 18 56 </Tetras>
+  </Tetra>
+  <Tetra index="10">
+    <Vertices>1 4 8 12 </Vertices>
+    <Edges>4 24 25 29 30 31 </Edges>
+    <Faces>24 28 29 30 </Faces>
+    <Tetras>9 11 13 57 </Tetras>
+  </Tetra>
+  <Tetra index="11">
+    <Vertices>1 4 9 12 </Vertices>
+    <Edges>4 21 22 29 30 32 </Edges>
+    <Faces>21 28 31 32 </Faces>
+    <Tetras>8 10 15 52 </Tetras>
+  </Tetra>
+  <Tetra index="12">
+    <Vertices>1 4 11 14 </Vertices>
+    <Edges>4 26 27 10 12 33 </Edges>
+    <Faces>25 9 33 34 </Faces>
+    <Tetras>9 3 19 53 </Tetras>
+  </Tetra>
+  <Tetra index="13">
+    <Vertices>1 5 8 12 </Vertices>
+    <Edges>34 24 35 29 36 31 </Edges>
+    <Faces>35 36 29 37 </Faces>
+    <Tetras>10 14 15 61 </Tetras>
+  </Tetra>
+  <Tetra index="14">
+    <Vertices>1 5 8 13 </Vertices>
+    <Edges>34 24 35 17 37 38 </Edges>
+    <Faces>35 38 39 40 </Faces>
+    <Tetras>13 16 18 60 </Tetras>
+  </Tetra>
+  <Tetra index="15">
+    <Vertices>1 5 9 12 </Vertices>
+    <Edges>34 21 39 29 36 32 </Edges>
+    <Faces>41 36 31 42 </Faces>
+    <Tetras>13 11 16 26 </Tetras>
+  </Tetra>
+  <Tetra index="17">
+    <Vertices>1 6 9 13 </Vertices>
+    <Edges>14 21 23 17 19 40 </Edges>
+    <Faces>22 17 43 45 </Faces>
+    <Tetras>8 6 16 30 </Tetras>
+  </Tetra>
+  <Tetra index="16">
+    <Vertices>1 5 9 13 </Vertices>
+    <Edges>34 21 39 17 37 40 </Edges>
+    <Faces>41 38 43 44 </Faces>
+    <Tetras>15 14 17 27 </Tetras>
+  </Tetra>
+  <Tetra index="19">
+    <Vertices>1 11 13 14 </Vertices>
+    <Edges>26 17 41 10 33 42 </Edges>
+    <Faces>46 33 48 49 </Faces>
+    <Tetras>18 12 20 74 </Tetras>
+  </Tetra>
+  <Tetra index="18">
+    <Vertices>1 8 11 13 </Vertices>
+    <Edges>24 26 28 17 38 41 </Edges>
+    <Faces>26 39 46 47 </Faces>
+    <Tetras>9 14 19 69 </Tetras>
+  </Tetra>
+  <Tetra index="21">
+    <Vertices>2 3 4 5 </Vertices>
+    <Edges>3 5 6 43 44 45 </Edges>
+    <Faces>4 51 52 53 </Faces>
+    <Tetras>1 22 23 37 </Tetras>
+  </Tetra>
+  <Tetra index="20">
+    <Vertices>1 13 14 15 </Vertices>
+    <Edges>17 10 42 7 20 13 </Edges>
+    <Faces>48 19 11 50 </Faces>
+    <Tetras>19 7 4 75 </Tetras>
+  </Tetra>
+  <Tetra index="23">
+    <Vertices>2 4 5 7 </Vertices>
+    <Edges>5 43 45 47 48 49 </Edges>
+    <Faces>52 56 57 58 </Faces>
+    <Tetras>21 24 25 50 </Tetras>
+  </Tetra>
+  <Tetra index="22">
+    <Vertices>2 3 5 15 </Vertices>
+    <Edges>3 43 44 8 9 46 </Edges>
+    <Faces>51 7 54 55 </Faces>
+    <Tetras>21 2 29 39 </Tetras>
+  </Tetra>
+  <Tetra index="25">
+    <Vertices>2 5 7 10 </Vertices>
+    <Edges>43 47 49 51 52 53 </Edges>
+    <Faces>57 61 62 63 </Faces>
+    <Tetras>23 28 34 59 </Tetras>
+  </Tetra>
+  <Tetra index="24">
+    <Vertices>2 4 7 14 </Vertices>
+    <Edges>5 47 48 11 12 50 </Edges>
+    <Faces>56 10 59 60 </Faces>
+    <Tetras>23 3 34 53 </Tetras>
+  </Tetra>
+  <Tetra index="27">
+    <Vertices>2 5 9 13 </Vertices>
+    <Edges>43 54 39 56 37 40 </Edges>
+    <Faces>64 67 68 44 </Faces>
+    <Tetras>26 16 28 30 </Tetras>
+  </Tetra>
+  <Tetra index="26">
+    <Vertices>2 5 9 12 </Vertices>
+    <Edges>43 54 39 55 36 32 </Edges>
+    <Faces>64 65 66 42 </Faces>
+    <Tetras>15 27 29 35 </Tetras>
+  </Tetra>
+  <Tetra index="29">
+    <Vertices>2 5 12 15 </Vertices>
+    <Edges>43 55 36 8 46 58 </Edges>
+    <Faces>65 54 71 72 </Faces>
+    <Tetras>26 22 36 61 </Tetras>
+  </Tetra>
+  <Tetra index="28">
+    <Vertices>2 5 10 13 </Vertices>
+    <Edges>43 51 52 56 37 57 </Edges>
+    <Faces>61 67 69 70 </Faces>
+    <Tetras>25 27 32 60 </Tetras>
+  </Tetra>
+  <Tetra index="31">
+    <Vertices>2 6 9 14 </Vertices>
+    <Edges>59 54 23 11 60 61 </Edges>
+    <Faces>73 75 76 77 </Faces>
+    <Tetras>30 33 35 64 </Tetras>
+  </Tetra>
+  <Tetra index="30">
+    <Vertices>2 6 9 13 </Vertices>
+    <Edges>59 54 23 56 19 40 </Edges>
+    <Faces>73 74 68 45 </Faces>
+    <Tetras>27 17 31 32 </Tetras>
+  </Tetra>
+  <Tetra index="34">
+    <Vertices>2 7 10 14 </Vertices>
+    <Edges>47 51 53 11 50 63 </Edges>
+    <Faces>62 59 80 82 </Faces>
+    <Tetras>25 24 33 44 </Tetras>
+  </Tetra>
+  <Tetra index="35">
+    <Vertices>2 9 12 14 </Vertices>
+    <Edges>54 55 32 11 61 64 </Edges>
+    <Faces>66 76 83 84 </Faces>
+    <Tetras>26 31 36 71 </Tetras>
+  </Tetra>
+  <Tetra index="32">
+    <Vertices>2 6 10 13 </Vertices>
+    <Edges>59 51 62 56 19 57 </Edges>
+    <Faces>78 74 69 79 </Faces>
+    <Tetras>30 28 33 41 </Tetras>
+  </Tetra>
+  <Tetra index="33">
+    <Vertices>2 6 10 14 </Vertices>
+    <Edges>59 51 62 11 60 63 </Edges>
+    <Faces>78 75 80 81 </Faces>
+    <Tetras>32 31 34 42 </Tetras>
+  </Tetra>
+  <Tetra index="38">
+    <Vertices>3 5 6 8 </Vertices>
+    <Edges>44 15 65 66 35 67 </Edges>
+    <Faces>86 88 89 90 </Faces>
+    <Tetras>37 39 40 58 </Tetras>
+  </Tetra>
+  <Tetra index="39">
+    <Vertices>3 5 8 15 </Vertices>
+    <Edges>44 66 35 9 46 68 </Edges>
+    <Faces>88 55 91 92 </Faces>
+    <Tetras>38 22 48 61 </Tetras>
+  </Tetra>
+  <Tetra index="36">
+    <Vertices>2 12 14 15 </Vertices>
+    <Edges>55 11 64 8 58 13 </Edges>
+    <Faces>83 71 12 85 </Faces>
+    <Tetras>35 29 4 75 </Tetras>
+  </Tetra>
+  <Tetra index="37">
+    <Vertices>3 4 5 6 </Vertices>
+    <Edges>6 44 45 15 16 65 </Edges>
+    <Faces>53 15 86 87 </Faces>
+    <Tetras>21 5 38 50 </Tetras>
+  </Tetra>
+  <Tetra index="42">
+    <Vertices>3 6 10 14 </Vertices>
+    <Edges>15 71 62 72 60 63 </Edges>
+    <Faces>96 98 99 81 </Faces>
+    <Tetras>41 33 43 44 </Tetras>
+  </Tetra>
+  <Tetra index="43">
+    <Vertices>3 6 11 14 </Vertices>
+    <Edges>15 69 70 72 60 33 </Edges>
+    <Faces>93 98 100 101 </Faces>
+    <Tetras>40 42 46 64 </Tetras>
+  </Tetra>
+  <Tetra index="40">
+    <Vertices>3 6 8 11 </Vertices>
+    <Edges>15 66 67 69 70 28 </Edges>
+    <Faces>89 93 94 95 </Faces>
+    <Tetras>38 43 48 63 </Tetras>
+  </Tetra>
+  <Tetra index="41">
+    <Vertices>3 6 10 13 </Vertices>
+    <Edges>15 71 62 18 19 57 </Edges>
+    <Faces>96 18 97 79 </Faces>
+    <Tetras>6 32 42 49 </Tetras>
+  </Tetra>
+  <Tetra index="46">
+    <Vertices>3 7 11 14 </Vertices>
+    <Edges>73 69 76 72 50 33 </Edges>
+    <Faces>107 103 100 108 </Faces>
+    <Tetras>44 43 47 53 </Tetras>
+  </Tetra>
+  <Tetra index="47">
+    <Vertices>3 7 11 15 </Vertices>
+    <Edges>73 69 76 9 74 77 </Edges>
+    <Faces>107 104 109 110 </Faces>
+    <Tetras>46 45 48 54 </Tetras>
+  </Tetra>
+  <Tetra index="44">
+    <Vertices>3 7 10 14 </Vertices>
+    <Edges>73 71 53 72 50 63 </Edges>
+    <Faces>102 103 99 82 </Faces>
+    <Tetras>42 34 45 46 </Tetras>
+  </Tetra>
+  <Tetra index="45">
+    <Vertices>3 7 10 15 </Vertices>
+    <Edges>73 71 53 9 74 75 </Edges>
+    <Faces>102 104 105 106 </Faces>
+    <Tetras>44 47 49 67 </Tetras>
+  </Tetra>
+  <Tetra index="51">
+    <Vertices>4 6 7 9 </Vertices>
+    <Edges>16 48 78 22 23 79 </Edges>
+    <Faces>113 23 115 116 </Faces>
+    <Tetras>50 8 52 62 </Tetras>
+  </Tetra>
+  <Tetra index="50">
+    <Vertices>4 5 6 7 </Vertices>
+    <Edges>45 16 65 48 49 78 </Edges>
+    <Faces>87 58 113 114 </Faces>
+    <Tetras>37 23 51 58 </Tetras>
+  </Tetra>
+  <Tetra index="49">
+    <Vertices>3 10 13 15 </Vertices>
+    <Edges>71 18 57 9 75 20 </Edges>
+    <Faces>97 105 20 112 </Faces>
+    <Tetras>41 45 7 73 </Tetras>
+  </Tetra>
+  <Tetra index="48">
+    <Vertices>3 8 11 15 </Vertices>
+    <Edges>66 69 28 9 68 77 </Edges>
+    <Faces>94 91 109 111 </Faces>
+    <Tetras>40 39 47 56 </Tetras>
+  </Tetra>
+  <Tetra index="55">
+    <Vertices>4 7 12 15 </Vertices>
+    <Edges>48 30 80 81 74 58 </Edges>
+    <Faces>117 120 122 123 </Faces>
+    <Tetras>52 54 57 67 </Tetras>
+  </Tetra>
+  <Tetra index="54">
+    <Vertices>4 7 11 15 </Vertices>
+    <Edges>48 27 76 81 74 77 </Edges>
+    <Faces>119 120 121 110 </Faces>
+    <Tetras>53 47 55 56 </Tetras>
+  </Tetra>
+  <Tetra index="53">
+    <Vertices>4 7 11 14 </Vertices>
+    <Edges>48 27 76 12 50 33 </Edges>
+    <Faces>119 60 34 108 </Faces>
+    <Tetras>24 12 46 54 </Tetras>
+  </Tetra>
+  <Tetra index="52">
+    <Vertices>4 7 9 12 </Vertices>
+    <Edges>48 22 79 30 80 32 </Edges>
+    <Faces>115 117 32 118 </Faces>
+    <Tetras>51 11 55 66 </Tetras>
+  </Tetra>
+  <Tetra index="59">
+    <Vertices>5 7 8 10 </Vertices>
+    <Edges>49 35 82 52 53 83 </Edges>
+    <Faces>126 63 128 129 </Faces>
+    <Tetras>58 25 60 65 </Tetras>
+  </Tetra>
+  <Tetra index="58">
+    <Vertices>5 6 7 8 </Vertices>
+    <Edges>65 49 78 35 67 82 </Edges>
+    <Faces>114 90 126 127 </Faces>
+    <Tetras>50 38 59 62 </Tetras>
+  </Tetra>
+  <Tetra index="57">
+    <Vertices>4 8 12 15 </Vertices>
+    <Edges>25 30 31 81 68 58 </Edges>
+    <Faces>30 124 122 125 </Faces>
+    <Tetras>10 56 55 61 </Tetras>
+  </Tetra>
+  <Tetra index="56">
+    <Vertices>4 8 11 15 </Vertices>
+    <Edges>25 27 28 81 68 77 </Edges>
+    <Faces>27 124 121 111 </Faces>
+    <Tetras>9 54 48 57 </Tetras>
+  </Tetra>
+  <Tetra index="63">
+    <Vertices>6 8 9 11 </Vertices>
+    <Edges>67 23 84 70 28 85 </Edges>
+    <Faces>131 95 133 134 </Faces>
+    <Tetras>62 40 64 68 </Tetras>
+  </Tetra>
+  <Tetra index="62">
+    <Vertices>6 7 8 9 </Vertices>
+    <Edges>78 67 82 23 79 84 </Edges>
+    <Faces>127 116 131 132 </Faces>
+    <Tetras>58 51 63 65 </Tetras>
+  </Tetra>
+  <Tetra index="61">
+    <Vertices>5 8 12 15 </Vertices>
+    <Edges>35 36 31 46 68 58 </Edges>
+    <Faces>37 92 72 125 </Faces>
+    <Tetras>13 39 29 57 </Tetras>
+  </Tetra>
+  <Tetra index="60">
+    <Vertices>5 8 10 13 </Vertices>
+    <Edges>35 52 83 37 38 57 </Edges>
+    <Faces>128 40 70 130 </Faces>
+    <Tetras>59 14 28 69 </Tetras>
+  </Tetra>
+  <Tetra index="68">
+    <Vertices>8 9 10 11 </Vertices>
+    <Edges>84 83 86 28 85 88 </Edges>
+    <Faces>137 134 141 142 </Faces>
+    <Tetras>65 63 69 70 </Tetras>
+  </Tetra>
+  <Tetra index="69">
+    <Vertices>8 10 11 13 </Vertices>
+    <Edges>83 28 88 38 57 41 </Edges>
+    <Faces>141 130 47 143 </Faces>
+    <Tetras>68 60 18 72 </Tetras>
+  </Tetra>
+  <Tetra index="70">
+    <Vertices>9 10 11 12 </Vertices>
+    <Edges>86 85 88 32 87 89 </Edges>
+    <Faces>142 139 144 145 </Faces>
+    <Tetras>68 66 71 72 </Tetras>
+  </Tetra>
+  <Tetra index="71">
+    <Vertices>9 11 12 14 </Vertices>
+    <Edges>85 32 89 61 33 64 </Edges>
+    <Faces>144 135 84 146 </Faces>
+    <Tetras>70 64 35 74 </Tetras>
+  </Tetra>
+  <Tetra index="64">
+    <Vertices>6 9 11 14 </Vertices>
+    <Edges>23 70 85 60 61 33 </Edges>
+    <Faces>133 77 101 135 </Faces>
+    <Tetras>63 31 43 71 </Tetras>
+  </Tetra>
+  <Tetra index="65">
+    <Vertices>7 8 9 10 </Vertices>
+    <Edges>82 79 84 53 83 86 </Edges>
+    <Faces>132 129 136 137 </Faces>
+    <Tetras>62 59 66 68 </Tetras>
+  </Tetra>
+  <Tetra index="66">
+    <Vertices>7 9 10 12 </Vertices>
+    <Edges>79 53 86 80 32 87 </Edges>
+    <Faces>136 118 138 139 </Faces>
+    <Tetras>65 52 67 70 </Tetras>
+  </Tetra>
+  <Tetra index="67">
+    <Vertices>7 10 12 15 </Vertices>
+    <Edges>53 80 87 74 75 58 </Edges>
+    <Faces>138 106 123 140 </Faces>
+    <Tetras>66 45 55 73 </Tetras>
+  </Tetra>
+  <Tetra index="72">
+    <Vertices>10 11 12 13 </Vertices>
+    <Edges>88 87 89 57 41 90 </Edges>
+    <Faces>145 143 147 148 </Faces>
+    <Tetras>70 69 73 74 </Tetras>
+  </Tetra>
+  <Tetra index="73">
+    <Vertices>10 12 13 15 </Vertices>
+    <Edges>87 57 90 75 58 20 </Edges>
+    <Faces>147 140 112 149 </Faces>
+    <Tetras>72 67 49 75 </Tetras>
+  </Tetra>
+  <Tetra index="74">
+    <Vertices>11 12 13 14 </Vertices>
+    <Edges>89 41 90 33 64 42 </Edges>
+    <Faces>148 146 49 150 </Faces>
+    <Tetras>72 71 19 75 </Tetras>
+  </Tetra>
+  <Tetra index="75">
+    <Vertices>12 13 14 15 </Vertices>
+    <Edges>90 64 42 58 20 13 </Edges>
+    <Faces>150 149 85 50 </Faces>
+    <Tetras>74 73 36 20 </Tetras>
+  </Tetra>
+</Triangulation>
