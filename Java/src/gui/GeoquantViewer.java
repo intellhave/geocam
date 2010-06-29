@@ -149,6 +149,12 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox nehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
   private AbstractAction saveAction;
+  private ButtonGroup nmDirectionButtonGroup;
+  private JCheckBox maxFlowCheckBox;
+  private JCheckBox minFlowCheckBox;
+  private JPanel nmDirectionPanel;
+  private JRadioButton etaFlowButton;
+  private JRadioButton radFlowButton;
   private JPanel nmQuantPanel;
   private ButtonGroup nmQuantButtonGroup;
   private JButton runButtonNM;
@@ -1729,23 +1735,37 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       nMethodDialog = new JDialog(this);
       GroupLayout nMethodDialogLayout = new GroupLayout((JComponent)nMethodDialog.getContentPane());
       nMethodDialog.setLayout(nMethodDialogLayout);
-      nMethodDialog.setSize(560, 327);
+      nMethodDialog.setPreferredSize(new java.awt.Dimension(374, 178));
+      nMethodDialog.setSize(374, 178);
       nMethodDialogLayout.setHorizontalGroup(nMethodDialogLayout.createSequentialGroup()
-        .addContainerGap(40, 40)
-        .addComponent(getNmQuantPanel(), GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-        .addGap(0, 134, Short.MAX_VALUE)
-        .addComponent(getRunButtonNM(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(getCancelButtonNM(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap());
+      	.addContainerGap()
+      	.addComponent(getNmQuantPanel(), GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+      	.addGap(36)
+      	.addGroup(nMethodDialogLayout.createParallelGroup()
+      	    .addGroup(nMethodDialogLayout.createSequentialGroup()
+      	        .addComponent(getNmDirectionPanel(), GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 0, Short.MAX_VALUE))
+      	    .addGroup(GroupLayout.Alignment.LEADING, nMethodDialogLayout.createSequentialGroup()
+      	        .addPreferredGap(getNmDirectionPanel(), getRunButtonNM(), LayoutStyle.ComponentPlacement.INDENT)
+      	        .addComponent(getRunButtonNM(), GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+      	        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+      	        .addComponent(getCancelButtonNM(), GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)))
+      	.addContainerGap(18, 18));
+      nMethodDialogLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {getNmDirectionPanel(), getNmQuantPanel()});
       nMethodDialogLayout.setVerticalGroup(nMethodDialogLayout.createSequentialGroup()
-        .addContainerGap(32, 32)
-        .addComponent(getNmQuantPanel(), GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
-        .addGap(98)
-        .addGroup(nMethodDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getRunButtonNM(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getCancelButtonNM(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-        .addContainerGap());
+      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+      	
+      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+      	.addGroup(nMethodDialogLayout.createParallelGroup()
+      	    .addComponent(getNmDirectionPanel(), GroupLayout.Alignment.LEADING, 0, 103, Short.MAX_VALUE)
+      	    .addGroup(nMethodDialogLayout.createSequentialGroup()
+      	        .addComponent(getNmQuantPanel(), GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 0, Short.MAX_VALUE)))
+      	.addGroup(nMethodDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+      	    .addComponent(getRunButtonNM(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getCancelButtonNM(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+      	.addContainerGap());
+      nMethodDialogLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getNmQuantPanel(), getNmDirectionPanel()});
     }
     return nMethodDialog;
   }
@@ -1776,8 +1796,93 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JPanel getNmQuantPanel() {
     if(nmQuantPanel == null) {
       nmQuantPanel = new JPanel();
+      GroupLayout nmQuantPanelLayout = new GroupLayout((JComponent)nmQuantPanel);
+      nmQuantPanel.setLayout(nmQuantPanelLayout);
+      nmQuantPanel.setBorder(BorderFactory.createTitledBorder("Choose Flow"));
+      nmQuantPanelLayout.setHorizontalGroup(nmQuantPanelLayout.createSequentialGroup()
+      	.addContainerGap()
+      	.addGroup(nmQuantPanelLayout.createParallelGroup()
+      	    .addGroup(GroupLayout.Alignment.LEADING, nmQuantPanelLayout.createSequentialGroup()
+      	        .addComponent(getRadFlowButton(), GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 36, Short.MAX_VALUE))
+      	    .addGroup(GroupLayout.Alignment.LEADING, nmQuantPanelLayout.createSequentialGroup()
+      	        .addComponent(getEtaFlowButton(), GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 0, Short.MAX_VALUE)))
+      	.addContainerGap(44, 44));
+      nmQuantPanelLayout.setVerticalGroup(nmQuantPanelLayout.createSequentialGroup()
+      	.addComponent(getRadFlowButton(), GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+      	.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+      	.addComponent(getEtaFlowButton(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+      	.addContainerGap(41, Short.MAX_VALUE));
     }
     return nmQuantPanel;
+  }
+  
+  private JRadioButton getRadFlowButton() {
+	  if(radFlowButton == null) {
+		  radFlowButton = new JRadioButton();
+		  radFlowButton.setText("Radius");
+		  radFlowButton.setSelected(true);
+		  getNmQuantButtonGroup().add(radFlowButton);
+	  }
+	  return radFlowButton;
+  }
+  
+  private JRadioButton getEtaFlowButton() {
+	  if(etaFlowButton == null) {
+		  etaFlowButton = new JRadioButton();
+		  etaFlowButton.setText("Eta");
+		  getNmQuantButtonGroup().add(etaFlowButton);
+	  }
+	  return etaFlowButton;
+  }
+  
+  private JPanel getNmDirectionPanel() {
+	  if(nmDirectionPanel == null) {
+		  nmDirectionPanel = new JPanel();
+		  GroupLayout nmDirectionPanelLayout = new GroupLayout((JComponent)nmDirectionPanel);
+		  nmDirectionPanel.setLayout(nmDirectionPanelLayout);
+		  nmDirectionPanel.setBorder(BorderFactory.createTitledBorder("Choose Direction"));
+		  nmDirectionPanelLayout.setHorizontalGroup(nmDirectionPanelLayout.createSequentialGroup()
+		  	.addContainerGap()
+		  	.addGroup(nmDirectionPanelLayout.createParallelGroup()
+		  	    .addGroup(nmDirectionPanelLayout.createSequentialGroup()
+		  	        .addComponent(getMinFlowCheckBox(), GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE))
+		  	    .addGroup(GroupLayout.Alignment.LEADING, nmDirectionPanelLayout.createSequentialGroup()
+		  	        .addComponent(getMaxFlowCheckBox(), GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)))
+		  	.addContainerGap(32, Short.MAX_VALUE));
+		  nmDirectionPanelLayout.setVerticalGroup(nmDirectionPanelLayout.createSequentialGroup()
+		  	.addComponent(getMinFlowCheckBox(), GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+		  	.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+		  	.addComponent(getMaxFlowCheckBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		  	.addContainerGap(11, Short.MAX_VALUE));
+	  }
+	  return nmDirectionPanel;
+  }
+  
+  private JCheckBox getMinFlowCheckBox() {
+	  if(minFlowCheckBox == null) {
+		  minFlowCheckBox = new JCheckBox();
+		  minFlowCheckBox.setText("Minimize");
+		  getNmDirectionButtonGroup().add(minFlowCheckBox);
+	  }
+	  return minFlowCheckBox;
+  }
+  
+  private JCheckBox getMaxFlowCheckBox() {
+	  if(maxFlowCheckBox == null) {
+		  maxFlowCheckBox = new JCheckBox();
+		  maxFlowCheckBox.setText("Maximize");
+		  getNmDirectionButtonGroup().add(maxFlowCheckBox);
+	  }
+	  return maxFlowCheckBox;
+  }
+  
+  private ButtonGroup getNmDirectionButtonGroup() {
+	  if(nmDirectionButtonGroup == null) {
+		  nmDirectionButtonGroup = new ButtonGroup();
+	  }
+	  return nmDirectionButtonGroup;
   }
 
   class TriangulationFilter extends FileFilter {
