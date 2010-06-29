@@ -43,28 +43,30 @@ public class GeoquantTest {
         
     RadiusOptNEHR minRad = new RadiusOptNEHR();
      
-    minRad.setStoppingCondition(0.0);
-    minRad.setStepRatio(1.0);
+//    minRad.setStoppingCondition(0.0);
+//    minRad.setStepRatio(1.0);
+//    try {
+//      double[] log_radii = CrossConformalFlow.getLogRadii();
+//      for(int i = 0; i < 1000; i++) {
+//        minRad.step(log_radii);
+//        CrossConformalFlow.setLogRadii(log_radii);
+//      }
+//      CrossConformalFlow.setLogRadii(log_radii);
+//    } catch (Exception e) {
+//      return;
+//    }
+    
     try {
-      double[] log_radii = CrossConformalFlow.getLogRadii();
-      for(int i = 0; i < 1000; i++) {
-        minRad.step(log_radii);
-        CrossConformalFlow.setLogRadii(log_radii);
-      }
-      CrossConformalFlow.setLogRadii(log_radii);
-    } catch (Exception e) {
-      return;
+      CrossConformalFlow.setLogRadii(minRad.minimize(CrossConformalFlow.getLogRadii()));
+    } catch (WrongDirectionException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
  
     for(Radius r : Geometry.getRadii()) {
       System.out.printf("%.16f, ", r.getValue());
     }
     System.out.println("\n");
-//    for(Radius r : Geometry.getRadii()) {
-//      r.setValue(1.0);
-//      System.out.printf("%.16f, ", r.getValue());
-//    }
-//    System.out.println("\n");
     
   
     double sum;
@@ -117,6 +119,7 @@ public class GeoquantTest {
     testTotalVolumeSecondPartial();
     testTotalVolumePartial();
     
+    System.out.println("\n");
     for(Radius r : Geometry.getRadii()) {
       System.out.printf("%.16f, ", r.getValue());
     }
@@ -124,13 +127,13 @@ public class GeoquantTest {
   }
     
   private static void initializeQuantities() {
-    TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_test.xml");
-    for(Eta e : Geometry.getEtas()) {
-      e.setValue(2.0);
-    }
-//    for(Radius r : Geometry.getRadii()) {
-//      r.setValue(1.1217382437656340);
+    TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_test2.xml");
+//    for(Eta e : Geometry.getEtas()) {
+//      e.setValue(2.0);
 //    }
+    for(Radius r : Geometry.getRadii()) {
+      r.setValue(1.0);
+    }
 //    Radius.At(Triangulation.vertexTable.get(1)).setValue(1.1217382437656336);
   }
   
