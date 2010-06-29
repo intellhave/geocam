@@ -173,6 +173,10 @@ public class GeoMath {
     }
     
    // System.out.println("\n" + A);
+    if(A.getNumRows() == 10) {
+      double y = 3;
+      y++;
+    }
     
     if(singular_matrix || Math.abs(A.m[nDim-1][nDim-1]) < 0.00001) {
       return solveUndeterminedSystem(A, b);
@@ -261,7 +265,7 @@ public class GeoMath {
     //Check for correctness
     Matrix test = A.multiply(new Matrix(non_homo));
     for(i = 0; i < nDim; i++) {
-      if(Math.abs(test.m[i][0] - b[i]) > 0.00001) {
+      if(Math.abs(test.m[i][0] - b[i]) > 0.0001) {
         System.err.println("Didn't calc non_homogenous solution correctly\n");
         return null;
       }

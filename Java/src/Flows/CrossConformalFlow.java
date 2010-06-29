@@ -2,6 +2,7 @@ package Flows;
 
 import Geoquant.Alpha;
 import Geoquant.Eta;
+import Geoquant.Geometry;
 import Geoquant.NEHR;
 import Geoquant.Radius;
 import InputOutput.TriangulationIO;
@@ -14,70 +15,22 @@ import Triangulation.Vertex;
 public class CrossConformalFlow {
   public static void main(String[] args) {
     initializeQuantities();
-    
-    RadiusOptNEHR minRad = new RadiusOptNEHR();
-    double[] radii = getLogRadii();
-//    minRad.setStoppingCondition(0.0);
-//    minRad.setStepRatio(1.0);
-//    try {
-//      double[] log_radii = getLogRadii();
-//      for(int i = 0; i < 10; i++) {
-//        minRad.step(log_radii);
-//        setLogRadii(log_radii);
-//      }
-//    } catch (Exception e) {
-//      return;
-//    }
-    
-   
-//    radii = getLogRadii();
-//    for(int i = 0; i < radii.length; i++) {
-//      System.out.print(Math.exp(radii[i]) + ", ");
-//    }
-//    System.out.println();
-    
-    minRad.setDefaults();
-    minRad.setStoppingCondition(0.0000001);
-    radii = getLogRadii();
-    try {
-      radii = minRad.minimize(radii);
-    } catch (WrongDirectionException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
-    }
-    
-    System.out.println(NEHR.value());
-    
-    
-    for(int i = 0; i < radii.length; i++) {
-      System.out.print(Math.exp(radii[i]) + ", ");
-    }
-    System.out.println();
-    
+        
     EtaOptNEHR min = new EtaOptNEHR();
-   // min.setStoppingCondition(0.0);
     double[] etas = getEtas();
-    try {
-      while(min.stepMin(etas) > 0.00001) {
-        printArray(etas);
-      }
-    } catch (WrongDirectionException e) {
-      return;
+    while(min.step(etas) > 0.00001) {
+      printArray(etas);
     }
     printArray(etas);
+    System.out.println("DONE!");
   }
    
   public static void initializeQuantities() {
-    TriangulationIO.read3DTriangulationFile("Data/3DManifolds/StandardFormat/pentachoron.txt");
- 
-    for(Vertex v : Triangulation.vertexTable.values()) {
-      Radius.At(v).setValue(1.0);
-      Alpha.At(v).setValue(1.0);
+    TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_test.xml");
+    for(Eta e : Geometry.getEtas()) {
+      e.setValue(1.0);
     }
-    for(Edge e : Triangulation.edgeTable.values()) {
-      Eta.At(e).setValue(1.0);
-    }
-    Eta.At(Triangulation.edgeTable.get(1)).setValue(1.1);
+    Eta.At(Triangulation.edgeTable.get(1)).setValue(1.01);
   }
   
   public static void printArray(double[] arr) {

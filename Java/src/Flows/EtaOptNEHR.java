@@ -31,8 +31,6 @@ public class EtaOptNEHR extends NewtonsMethod {
     radius_partials = new Radius.Partial[vertSize][edgeSize];
     
     minRadii = new RadiusOptNEHR();
-    minRadii.setStoppingCondition(0.0);
-    minRadii.setStepRatio(1.0);
     
     int i = 0;
     int j;
@@ -82,13 +80,20 @@ public class EtaOptNEHR extends NewtonsMethod {
   public double function(double[] vars) {
     setEtas(vars);
     try {
-     double[] log_radii = getLogRadii();
-      for(int i = 0; i < 10; i++) {
-        minRadii.step(log_radii);
-        setLogRadii(log_radii);
-      }
+     setLogRadii(minRadii.minimize(getLogRadii()));
       
     } catch (Exception e) {
+      double radii[] = getLogRadii();
+      System.err.print("\nRadii=");
+      for(int i =0; i < radii.length; i++) {
+        System.err.print(Math.exp(radii[i]) + ", ");
+      }
+      System.err.println();
+      System.err.print("\nEta=");
+      for(int i =0; i < vars.length; i++) {
+        System.err.print(vars[i] + ", ");
+      }
+      System.err.println();
       return -1;
     }
     return nehr.getValue();
@@ -98,12 +103,19 @@ public class EtaOptNEHR extends NewtonsMethod {
   public double[] gradient(double[] vars) {
     setEtas(vars);
     try {
-      double[] log_radii = getLogRadii();
-      for(int i = 0; i < 10; i++) {
-        minRadii.step(log_radii);
-        setLogRadii(log_radii);
-      }
+      setLogRadii(minRadii.minimize(getLogRadii()));
     } catch (Exception e) {
+      double radii[] = getLogRadii();
+      System.err.print("\nRadii=");
+      for(int i =0; i < radii.length; i++) {
+        System.err.print(Math.exp(radii[i]) + ", ");
+      }
+      System.err.println();
+      System.err.print("\nEta=");
+      for(int i =0; i < vars.length; i++) {
+        System.err.print(vars[i] + ", ");
+      }
+      System.err.println();
     }
     double[] gradient = new double[nehr_eta_partials.length];
     for(int i = 0; i < gradient.length; i++) {
@@ -116,12 +128,19 @@ public class EtaOptNEHR extends NewtonsMethod {
   public Matrix hessian(double[] vars) {
     setEtas(vars);
     try {
-      double[] log_radii = getLogRadii();
-      for(int i = 0; i < 10; i++) {
-        minRadii.step(log_radii);
-        setLogRadii(log_radii);
-      }
+      setLogRadii(minRadii.minimize(getLogRadii()));
     } catch (Exception e) {
+      double radii[] = getLogRadii();
+      System.err.print("\nRadii=");
+      for(int i =0; i < radii.length; i++) {
+        System.err.print(Math.exp(radii[i]) + ", ");
+      }
+      System.err.println();
+      System.err.print("\nEta=");
+      for(int i =0; i < vars.length; i++) {
+        System.err.print(vars[i] + ", ");
+      }
+      System.err.println();
     }
     int e_length = etas.length;
     int v_length = radius_partials.length;
