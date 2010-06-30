@@ -100,6 +100,7 @@ public class XMLParser {
         FileOutputStream stream = new FileOutputStream(path);
         StreamResult result = new StreamResult(stream);  
         transformer.transform(source, result);
+
         stream.close();
         
       } catch (Exception e) {
