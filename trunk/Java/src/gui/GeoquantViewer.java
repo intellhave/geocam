@@ -95,7 +95,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 			e.printStackTrace();
 		}
 	}
-
+	
   private JList EdgeList;
   private AbstractAction importAction;
   private JPanel edgeDisplayPanel;
@@ -149,6 +149,22 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox nehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
   private AbstractAction saveAction;
+  private AbstractAction showEtaDialog;
+  private JDialog setEtaDialog;
+  private AbstractAction showSetRadiiDialog;
+  private AbstractAction closeSetRadiiDialogAction;
+  private JLabel setRadiiLabel;
+  private JLabel setEtaLabel;
+  private JTextField setRadiiTextField;
+  private JTextField setEtaTextField;
+  private JButton okButton_SR;
+  private JButton okButton_SE;
+  private JButton cancelButton_SR;
+  private JButton cancelButton_SE;
+  private JDialog setRadiiDialog;
+  private JMenuItem setEtaMenuItem;
+  private JMenuItem setRadiiMenuItem;
+  private JMenu editMenu;
   private ButtonGroup nmDirectionButtonGroup;
   private JCheckBox maxFlowCheckBox;
   private JCheckBox minFlowCheckBox;
@@ -165,7 +181,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JMenuItem saveMenu;
   private JFileChooser triangulationFileChooser;
   private JMenuItem importMenuItem;
-  private JMenu jMenu1;
+  private JMenu fileMenu;
   private JMenuBar mainMenuBar;
   private JSlider etaSlider;
   private JLabel etaSetLabel;
@@ -221,14 +237,15 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         mainMenuBar = new JMenuBar();
         setJMenuBar(mainMenuBar);
         {
-          jMenu1 = new JMenu();
-          mainMenuBar.add(jMenu1);
+          fileMenu = new JMenu();
+          mainMenuBar.add(fileMenu);
+          mainMenuBar.add(getEditMenu());
           mainMenuBar.add(getRunMenu());
-          jMenu1.setText("File");
+          fileMenu.setText("File");
           {
             importMenuItem = new JMenuItem();
-            jMenu1.add(importMenuItem);
-            jMenu1.add(getSaveMenu());
+            fileMenu.add(importMenuItem);
+            fileMenu.add(getSaveMenu());
             importMenuItem.setText("Import Triangulation");
             importMenuItem.setAction(getImportAction());
           }
@@ -1736,6 +1753,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       GroupLayout nMethodDialogLayout = new GroupLayout((JComponent)nMethodDialog.getContentPane());
       nMethodDialog.setLayout(nMethodDialogLayout);
       nMethodDialog.setPreferredSize(new java.awt.Dimension(374, 178));
+      nMethodDialog.setTitle("Newton's Method");
       nMethodDialog.setSize(374, 178);
       nMethodDialogLayout.setHorizontalGroup(nMethodDialogLayout.createSequentialGroup()
       	.addContainerGap()
@@ -1884,6 +1902,196 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  }
 	  return nmDirectionButtonGroup;
   }
+  
+  private JMenu getEditMenu() {
+	  if(editMenu == null) {
+		  editMenu = new JMenu();
+		  editMenu.setText("Edit");
+		  editMenu.add(getSetRadiiMenuItem());
+		  editMenu.add(getSetEtaMenuItem());
+	  }
+	  return editMenu;
+  }
+  
+  private JMenuItem getSetRadiiMenuItem() {
+	  if(setRadiiMenuItem == null) {
+		  setRadiiMenuItem = new JMenuItem();
+		  setRadiiMenuItem.setText("Set Radii...");
+		  setRadiiMenuItem.setAction(getShowSetRadiiDialog());
+	  }
+	  return setRadiiMenuItem;
+  }
+  
+  private JMenuItem getSetEtaMenuItem() {
+	  if(setEtaMenuItem == null) {
+		  setEtaMenuItem = new JMenuItem();
+		  setEtaMenuItem.setText("Set Etas...");
+		  setEtaMenuItem.setAction(getShowEtaDialog());
+	  }
+	  return setEtaMenuItem;
+  }
+  
+  private JDialog getSetRadiiDialog() {
+	  if(setRadiiDialog == null) {
+		  setRadiiDialog = new JDialog(this);
+		  GroupLayout setRadiiDialogLayout = new GroupLayout((JComponent)setRadiiDialog.getContentPane());
+		  setRadiiDialog.getContentPane().setLayout(setRadiiDialogLayout);
+		  setRadiiDialog.setTitle("Set Radii");
+		  setRadiiDialog.setResizable(false);
+		  setRadiiDialog.setPreferredSize(new java.awt.Dimension(279, 133));
+		  setRadiiDialog.setSize(279, 133);
+		  setRadiiDialogLayout.setHorizontalGroup(setRadiiDialogLayout.createSequentialGroup()
+		  	.addContainerGap()
+		  	.addComponent(getSetRadiiLabel(), GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+		  	.addGroup(setRadiiDialogLayout.createParallelGroup()
+		  	    .addGroup(GroupLayout.Alignment.LEADING, setRadiiDialogLayout.createSequentialGroup()
+		  	        .addComponent(getOkButton_SR(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+		  	        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+		  	        .addComponent(getCancelButton_SR(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+		  	    .addGroup(GroupLayout.Alignment.LEADING, setRadiiDialogLayout.createSequentialGroup()
+		  	        .addPreferredGap(getOkButton_SR(), getSetRadiiTextField(), LayoutStyle.ComponentPlacement.INDENT)
+		  	        .addComponent(getSetRadiiTextField(), GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)))
+		  	.addContainerGap(6, Short.MAX_VALUE));
+		  setRadiiDialogLayout.setVerticalGroup(setRadiiDialogLayout.createSequentialGroup()
+		  	.addContainerGap()
+		  	.addGroup(setRadiiDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+		  	    .addComponent(getSetRadiiTextField(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		  	    .addComponent(getSetRadiiLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		  	.addGap(29)
+		  	.addGroup(setRadiiDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+		  	    .addComponent(getOkButton_SR(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+		  	    .addComponent(getCancelButton_SR(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+		  	.addContainerGap());
+	  }
+	  return setRadiiDialog;
+  }
+  
+  private JButton getCancelButton_SR() {
+	  if(cancelButton_SR == null) {
+		  cancelButton_SR = new JButton();
+		  cancelButton_SR.setText("Cancel");
+		  cancelButton_SR.setAction(new CloseSetRadiiDialog("Cancel"));
+	  }
+	  return cancelButton_SR;
+  }
+  
+  private JButton getCancelButton_SE() {
+    if(cancelButton_SE == null) {
+      cancelButton_SE = new JButton();
+      cancelButton_SE.setText("Cancel");
+      cancelButton_SE.setAction(new CloseSetEtaDialog("Cancel"));
+    }
+    return cancelButton_SE;
+  }
+  
+  private JButton getOkButton_SR() {
+	  if(okButton_SR == null) {
+		  okButton_SR = new JButton();
+		  okButton_SR.setText("OK");
+		  okButton_SR.setAction(new CloseSetRadiiDialog("OK"));
+	  }
+	  return okButton_SR;
+  }
+  
+  private JButton getOkButton_SE() {
+    if(okButton_SE == null) {
+      okButton_SE = new JButton();
+      okButton_SE.setText("OK");
+      okButton_SE.setAction(new CloseSetEtaDialog("OK"));
+    }
+    return okButton_SE;
+  }
+  
+  private JTextField getSetRadiiTextField() {
+	  if(setRadiiTextField == null) {
+		  setRadiiTextField = new JTextField();
+	  }
+	  return setRadiiTextField;
+  }
+  
+  private JTextField getSetEtaTextField() {
+    if(setEtaTextField == null) {
+      setEtaTextField = new JTextField();
+    }
+    return setEtaTextField;
+  }
+  
+  private JLabel getSetRadiiLabel() {
+	  if(setRadiiLabel == null) {
+		  setRadiiLabel = new JLabel();
+		  setRadiiLabel.setText("Set all radii to:");
+	  }
+	  return setRadiiLabel;
+  }
+    
+  private JLabel getSetEtaLabel() {
+    if(setEtaLabel == null) {
+      setEtaLabel = new JLabel();
+      setEtaLabel.setText("Set all eta to:");
+    }
+    return setEtaLabel;
+  }
+  
+  private AbstractAction getShowSetRadiiDialog() {
+	  if(showSetRadiiDialog == null) {
+		  showSetRadiiDialog = new AbstractAction("Set Radii...", null) {
+			  public void actionPerformed(ActionEvent evt) {
+			    getSetRadiiDialog().pack();
+			    getSetRadiiDialog().setLocationRelativeTo(null);
+			    getSetRadiiDialog().setVisible(true);
+			  }
+		  };
+	  }
+	  return showSetRadiiDialog;
+  }
+  
+  private JDialog getSetEtaDialog() {
+	  if(setEtaDialog == null) {
+	    setEtaDialog = new JDialog(this);
+      GroupLayout setEtaDialogLayout = new GroupLayout((JComponent)setEtaDialog.getContentPane());
+      setEtaDialog.getContentPane().setLayout(setEtaDialogLayout);
+      setEtaDialog.setTitle("Set Eta");
+      setEtaDialog.setResizable(false);
+      setEtaDialog.setPreferredSize(new java.awt.Dimension(279, 133));
+      setEtaDialog.setSize(279, 133);
+      setEtaDialogLayout.setHorizontalGroup(setEtaDialogLayout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(getSetEtaLabel(), GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+        .addGroup(setEtaDialogLayout.createParallelGroup()
+            .addGroup(GroupLayout.Alignment.LEADING, setEtaDialogLayout.createSequentialGroup()
+                .addComponent(getOkButton_SE(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(getCancelButton_SE(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
+            .addGroup(GroupLayout.Alignment.LEADING, setEtaDialogLayout.createSequentialGroup()
+                .addPreferredGap(getOkButton_SE(), getSetEtaTextField(), LayoutStyle.ComponentPlacement.INDENT)
+                .addComponent(getSetEtaTextField(), GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)))
+        .addContainerGap(6, Short.MAX_VALUE));
+      setEtaDialogLayout.setVerticalGroup(setEtaDialogLayout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(setEtaDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+            .addComponent(getSetEtaTextField(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getSetEtaLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+        .addGap(29)
+        .addGroup(setEtaDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+            .addComponent(getOkButton_SE(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+            .addComponent(getCancelButton_SE(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+        .addContainerGap());
+	  }
+	  return setEtaDialog;
+  }
+  
+  private AbstractAction getShowEtaDialog() {
+	  if(showEtaDialog == null) {
+		  showEtaDialog = new AbstractAction("Set Etas...", null) {
+			  public void actionPerformed(ActionEvent evt) {
+	         getSetEtaDialog().pack();
+	         getSetEtaDialog().setLocationRelativeTo(null);
+	         getSetEtaDialog().setVisible(true);
+			  }
+		  };
+	  }
+	  return showEtaDialog;
+  }
 
   class TriangulationFilter extends FileFilter {
     public boolean accept(File f) {
@@ -1905,4 +2113,43 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     }
     
   }
+  
+  class CloseSetRadiiDialog extends AbstractAction {
+    public CloseSetRadiiDialog(String text) {
+      super(text, null);
+    }
+    public void actionPerformed(ActionEvent evt) {
+      if(getOkButton_SR().equals(evt.getSource())) {
+        try{
+          double rad_value = Double.parseDouble(getSetRadiiTextField().getText());
+          for(Radius r : Geometry.getRadii()) {
+            r.setValue(rad_value);
+          }
+          getGeoPolygonPanel().repaint();
+        } catch(NumberFormatException e) {
+        }
+      }
+      getSetRadiiDialog().dispose();
+    }
+  }
+  
+  class CloseSetEtaDialog extends AbstractAction {
+    public CloseSetEtaDialog(String text) {
+      super(text, null);
+    }
+    public void actionPerformed(ActionEvent evt) {
+      if(getOkButton_SE().equals(evt.getSource())) {
+        try{
+          double eta_value = Double.parseDouble(getSetEtaTextField().getText());
+          for(Eta e : Geometry.getEtas()) {
+            e.setValue(eta_value);
+          }
+          getGeoPolygonPanel().repaint();
+        } catch(NumberFormatException e) {
+        }
+      }
+      getSetEtaDialog().dispose();
+    }
+  }
 }
+
