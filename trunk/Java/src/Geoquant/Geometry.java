@@ -11,6 +11,10 @@ import Triangulation.Vertex;
 
 public class Geometry {
   
+  public static enum Dimension{
+    twoD, threeD;
+  }
+  
   private Geometry() {
   }
   

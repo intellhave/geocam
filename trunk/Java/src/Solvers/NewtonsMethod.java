@@ -107,10 +107,14 @@ public abstract class NewtonsMethod{
   public void setStoppingCondition(double cond) {
     this.gradLenCond = cond;
   }
+  
+  public double getStoppingCondition() {
+    return gradLenCond;
+  }
         
   protected double[] buildNext(double[] x_n) {
     double gradLen;        // The length of the gradient vector
-    double[] next = new double[x_n.length];  // The array values that x_n will be incremented by.
+    double[] next;  // The array values that x_n will be incremented by.
     
     grad = gradient(x_n);
     hess = hessian(x_n);
@@ -129,6 +133,9 @@ public abstract class NewtonsMethod{
     GeoMath.negate(grad);
     
     next = GeoMath.LinearEquationsSolver(hess, grad);
+    if(next == null) {
+      return null;
+    }
     // Modify the next[] array by scaling it by stepRatio.
     for(int i = 0; i < next.length; i++) {
        next[i] = stepRatio * next[i];
@@ -147,7 +154,9 @@ public abstract class NewtonsMethod{
     if(gradLen < gradLenCond) {
       return gradLen;
     }   
-
+    if(next == null) {
+      return -1;
+    }
 
     double curVal;           // The current function value.
     double nextVal = function(x_n); // The next function value.
@@ -213,7 +222,10 @@ public abstract class NewtonsMethod{
     if(gradLen < gradLenCond) {
       return gradLen;
     }   
-
+    if(next == null) {
+      return -1;
+    }
+    
     double curVal;           // The current function value.
     double nextVal = function(x_n); // The next function value.
        
@@ -277,6 +289,9 @@ public abstract class NewtonsMethod{
     
     if(gradLen < gradLenCond) {
       return gradLen;
+    }
+    if(next == null) {
+      return -1;
     }
     
     for(int i = 0; i < next.length; i++) {

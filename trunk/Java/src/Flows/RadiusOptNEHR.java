@@ -36,12 +36,20 @@ public class RadiusOptNEHR extends NewtonsMethod {
     }
   }
   
-  private void setLogRadii(double[] vars) {
+  public void setLogRadii(double[] vars) {
     for(int i = 0; i < vars.length; i++) {
       radii[i].setValue(Math.exp(vars[i]));
     }
   }
-    
+  
+  public double[] getLogRadii() {
+    double[] log_radii = new double[radii.length];
+    for(int i = 0; i < log_radii.length; i++) {
+      log_radii[i] = Math.log(radii[i].getValue());
+    }
+    return log_radii;
+  }
+      
   public double function(double[] vars) {
     setLogRadii(vars);
     return nehr.getValue();
