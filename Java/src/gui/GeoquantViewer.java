@@ -58,15 +58,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.SwingUtilities;
 
-import Geoquant.Alpha;
-import Geoquant.Curvature3D;
-import Geoquant.Eta;
-import Geoquant.Geometry;
-import Geoquant.Geoquant;
-import Geoquant.Length;
-import Geoquant.NEHR;
-import Geoquant.Radius;
-import Geoquant.Volume;
+import Geoquant.*;
 import InputOutput.TriangulationIO;
 import Triangulation.Edge;
 import Triangulation.Simplex;
@@ -149,10 +141,10 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox nehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
   private AbstractAction saveAction;
+  private AbstractAction showNehrFlowDialog;
   private AbstractAction showEtaDialog;
   private JDialog setEtaDialog;
   private AbstractAction showSetRadiiDialog;
-  private AbstractAction closeSetRadiiDialogAction;
   private JLabel setRadiiLabel;
   private JLabel setEtaLabel;
   private JTextField setRadiiTextField;
@@ -165,18 +157,14 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JMenuItem setEtaMenuItem;
   private JMenuItem setRadiiMenuItem;
   private JMenu editMenu;
-  private ButtonGroup nmDirectionButtonGroup;
-  private JCheckBox maxFlowCheckBox;
-  private JCheckBox minFlowCheckBox;
-  private JPanel nmDirectionPanel;
-  private JRadioButton etaFlowButton;
-  private JRadioButton radFlowButton;
-  private JPanel nmQuantPanel;
-  private ButtonGroup nmQuantButtonGroup;
-  private JButton runButtonNM;
-  private JButton cancelButtonNM;
-  private JDialog nMethodDialog;
-  private JMenuItem nmMenuItem;
+  private NEHRFlowDialog nehrFlowDialog;
+  private YamabeFlowDialog yamabe2DDialog;
+  private YamabeFlowDialog yamabe3DDialog;
+  private JMenuItem nehrFlowMenuItem;
+  private AbstractAction showYamabe3DDialog;
+  private JMenuItem yamabe3DMenuItem;
+  private AbstractAction showYamabe2DDialog;
+  private JMenuItem yamabe2DMenuItem;
   private JMenu runMenu;
   private JMenuItem saveMenu;
   private JFileChooser triangulationFileChooser;
@@ -347,6 +335,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     EdgeListModel = 
       new DefaultComboBoxModel(Triangulation.edgeTable.values().toArray());
     EdgeList.setModel(EdgeListModel);
+    getNehrFlowMenuItem().setEnabled(true);
     getGeoPolygonPanel().repaint();
   }
   
@@ -705,7 +694,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   
   
   
-  private JPanel getGeoPolygonPanel() {
+  protected JPanel getGeoPolygonPanel() {
     if(geoPolygonPanel == null) {
       geoPolygonPanel = new JPanel() {
         protected void paintComponent(Graphics g) {
@@ -935,113 +924,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
             g.fillOval(xpoints[j] - circDiam / 2, ypoints[j] - circDiam / 2, 
                   circDiam, circDiam);
           }  
-        }
-        
-        private LinkedList<Geoquant> populateList() {
-          LinkedList<Geoquant> geoList = new LinkedList<Geoquant>();
-          if(getAlphaCheck().isSelected()) {
-            geoList.addAll(Geometry.getAlphas());
-          }
-          if(getAngleCheck().isSelected()) {
-            geoList.addAll(Geometry.getAngles());
-          }
-          if(getAreaCheck().isSelected()) {
-            geoList.addAll(Geometry.getAreas());
-          }
-          if(getConeAngleCheck().isSelected()) {
-            geoList.addAll(Geometry.getConeAngles());
-          }
-          if(getCurv2DCheck().isSelected()) {
-            geoList.addAll(Geometry.getCurvature2D());
-          }
-          if(getCurv3DCheck().isSelected()) {
-            geoList.addAll(Geometry.getCurvature3D());
-          }
-          if(getDihAngleCheck().isSelected()) {
-            geoList.addAll(Geometry.getDihedralAngles());
-          }
-          if(getDualAreaCheck().isSelected()) {
-            geoList.addAll(Geometry.getDualAreas());
-          }
-          if(getEdgeHeightCheck().isSelected()) {
-            geoList.addAll(Geometry.getEdgeHeights());
-          }
-          if(getEtaCheck().isSelected()) {
-            geoList.addAll(Geometry.getEtas());
-          }
-          if(getFaceHeightCheck().isSelected()) {
-            geoList.addAll(Geometry.getFaceHeights());
-          }
-          if(getLengthCheck().isSelected()) {
-            geoList.addAll(Geometry.getLengths());
-          }
-          if(getNehrCheck().isSelected()) {
-            geoList.add(NEHR.getInstance());
-          }
-          if(getPartialEdgeCheck().isSelected()) {
-            geoList.addAll(Geometry.getPartialEdges());
-          }
-          if(getRadiusCheck().isSelected()) {
-            geoList.addAll(Geometry.getRadii());
-          }
-          if(getSectionalCurvatureCheck().isSelected()) {
-            geoList.addAll(Geometry.getSectionalCurvatures());
-          }
-          if(getVolumeCheck().isSelected()) {
-            geoList.addAll(Geometry.getVolumes());
-          }
-          
-          // Partials
-          if(getCurvPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getCurvaturePartials());
-          }
-          if(getDihAnglePartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getDihedralAnglePartials());
-          }
-          if(getNehrPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getNEHRPartials());
-          }
-          if(getPartialEdgePartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getPartialEdgePartials());
-          }
-          if(getRadiusPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getRadiusPartials());
-          }
-          if(getVolumePartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getVolumePartials());
-          }
-          
-          // Second Partials
-          if(getCurvatureSecondPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getCurvatureSecondPartials());
-          }
-          if(getDihAngleSecondPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getDihedralAngleSecondPartials());
-          }
-          if(getNehrSecondPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getNEHRSecondPartials());
-          }
-          if(getPartialEdgeSecondPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getPartialEdgeSecondPartials());
-          }
-          if(getVolumeSecondPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getVolumeSecondPartials());
-          }
-          
-          // Sums
-          if(getTotalCurvatureCheck().isSelected()) {
-            geoList.add(Curvature3D.sum());
-          }
-          if(getTotalVolumeCheck().isSelected()) {
-            geoList.add(Volume.sum());
-          }
-          if(getTotalVolumePartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getVolumePartialSums());
-          }
-          if(getTotalVolumeSecondPartialCheck().isSelected()) {
-            geoList.addAll(Geometry.getVolumeSecondPartialSums());
-          }
-          return geoList;
         }
       };
       geoPolygonPanel.setBackground(new java.awt.Color(255,255,255));
@@ -1734,173 +1616,42 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(runMenu == null) {
       runMenu = new JMenu();
       runMenu.setText("Run");
-      runMenu.add(getNmMenuItem());
+      runMenu.add(getNehrFlowMenuItem());
+      runMenu.add(getYamabe2DMenuItem());
+      runMenu.add(getYamabe3DMenuItem());
     }
     return runMenu;
   }
   
-  private JMenuItem getNmMenuItem() {
-    if(nmMenuItem == null) {
-      nmMenuItem = new JMenuItem();
-      nmMenuItem.setText("Newton's Method");
+  private JMenuItem getNehrFlowMenuItem() {
+    if(nehrFlowMenuItem == null) {
+      nehrFlowMenuItem = new JMenuItem();
+      nehrFlowMenuItem.setText("NEHR Flow");
+      nehrFlowMenuItem.setAction(getShowNehrFlowDialog());
+      nehrFlowMenuItem.setEnabled(false);
     }
-    return nmMenuItem;
+    return nehrFlowMenuItem;
   }
   
-  private JDialog getNMethodDialog() {
-    if(nMethodDialog == null) {
-      nMethodDialog = new JDialog(this);
-      GroupLayout nMethodDialogLayout = new GroupLayout((JComponent)nMethodDialog.getContentPane());
-      nMethodDialog.setLayout(nMethodDialogLayout);
-      nMethodDialog.setPreferredSize(new java.awt.Dimension(374, 178));
-      nMethodDialog.setTitle("Newton's Method");
-      nMethodDialog.setSize(374, 178);
-      nMethodDialogLayout.setHorizontalGroup(nMethodDialogLayout.createSequentialGroup()
-      	.addContainerGap()
-      	.addComponent(getNmQuantPanel(), GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
-      	.addGap(36)
-      	.addGroup(nMethodDialogLayout.createParallelGroup()
-      	    .addGroup(nMethodDialogLayout.createSequentialGroup()
-      	        .addComponent(getNmDirectionPanel(), GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 0, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, nMethodDialogLayout.createSequentialGroup()
-      	        .addPreferredGap(getNmDirectionPanel(), getRunButtonNM(), LayoutStyle.ComponentPlacement.INDENT)
-      	        .addComponent(getRunButtonNM(), GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-      	        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	        .addComponent(getCancelButtonNM(), GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)))
-      	.addContainerGap(18, 18));
-      nMethodDialogLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {getNmDirectionPanel(), getNmQuantPanel()});
-      nMethodDialogLayout.setVerticalGroup(nMethodDialogLayout.createSequentialGroup()
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addGroup(nMethodDialogLayout.createParallelGroup()
-      	    .addComponent(getNmDirectionPanel(), GroupLayout.Alignment.LEADING, 0, 103, Short.MAX_VALUE)
-      	    .addGroup(nMethodDialogLayout.createSequentialGroup()
-      	        .addComponent(getNmQuantPanel(), GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 0, Short.MAX_VALUE)))
-      	.addGroup(nMethodDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-      	    .addComponent(getRunButtonNM(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getCancelButtonNM(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-      	.addContainerGap());
-      nMethodDialogLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getNmQuantPanel(), getNmDirectionPanel()});
+  private NEHRFlowDialog getNehrFlowDialog() {
+    if(nehrFlowDialog == null) {
+      nehrFlowDialog = new NEHRFlowDialog(this);
     }
-    return nMethodDialog;
+    return nehrFlowDialog;
   }
   
-  private JButton getCancelButtonNM() {
-    if(cancelButtonNM == null) {
-      cancelButtonNM = new JButton();
-      cancelButtonNM.setText("Cancel");
+  private YamabeFlowDialog getYamabe2DDialog() {
+    if(yamabe2DDialog == null) {
+      yamabe2DDialog = new YamabeFlowDialog(this, Geometry.Dimension.twoD);
     }
-    return cancelButtonNM;
+    return yamabe2DDialog;
   }
   
-  private JButton getRunButtonNM() {
-    if(runButtonNM == null) {
-      runButtonNM = new JButton();
-      runButtonNM.setText("Run");
+  private YamabeFlowDialog getYamabe3DDialog() {
+    if(yamabe3DDialog == null) {
+      yamabe3DDialog = new YamabeFlowDialog(this, Geometry.Dimension.threeD);
     }
-    return runButtonNM;
-  }
-  
-  private ButtonGroup getNmQuantButtonGroup() {
-    if(nmQuantButtonGroup == null) {
-      nmQuantButtonGroup = new ButtonGroup();
-    }
-    return nmQuantButtonGroup;
-  }
-  
-  private JPanel getNmQuantPanel() {
-    if(nmQuantPanel == null) {
-      nmQuantPanel = new JPanel();
-      GroupLayout nmQuantPanelLayout = new GroupLayout((JComponent)nmQuantPanel);
-      nmQuantPanel.setLayout(nmQuantPanelLayout);
-      nmQuantPanel.setBorder(BorderFactory.createTitledBorder("Choose Flow"));
-      nmQuantPanelLayout.setHorizontalGroup(nmQuantPanelLayout.createSequentialGroup()
-      	.addContainerGap()
-      	.addGroup(nmQuantPanelLayout.createParallelGroup()
-      	    .addGroup(GroupLayout.Alignment.LEADING, nmQuantPanelLayout.createSequentialGroup()
-      	        .addComponent(getRadFlowButton(), GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 36, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, nmQuantPanelLayout.createSequentialGroup()
-      	        .addComponent(getEtaFlowButton(), GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 0, Short.MAX_VALUE)))
-      	.addContainerGap(44, 44));
-      nmQuantPanelLayout.setVerticalGroup(nmQuantPanelLayout.createSequentialGroup()
-      	.addComponent(getRadFlowButton(), GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-      	.addComponent(getEtaFlowButton(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-      	.addContainerGap(41, Short.MAX_VALUE));
-    }
-    return nmQuantPanel;
-  }
-  
-  private JRadioButton getRadFlowButton() {
-	  if(radFlowButton == null) {
-		  radFlowButton = new JRadioButton();
-		  radFlowButton.setText("Radius");
-		  radFlowButton.setSelected(true);
-		  getNmQuantButtonGroup().add(radFlowButton);
-	  }
-	  return radFlowButton;
-  }
-  
-  private JRadioButton getEtaFlowButton() {
-	  if(etaFlowButton == null) {
-		  etaFlowButton = new JRadioButton();
-		  etaFlowButton.setText("Eta");
-		  getNmQuantButtonGroup().add(etaFlowButton);
-	  }
-	  return etaFlowButton;
-  }
-  
-  private JPanel getNmDirectionPanel() {
-	  if(nmDirectionPanel == null) {
-		  nmDirectionPanel = new JPanel();
-		  GroupLayout nmDirectionPanelLayout = new GroupLayout((JComponent)nmDirectionPanel);
-		  nmDirectionPanel.setLayout(nmDirectionPanelLayout);
-		  nmDirectionPanel.setBorder(BorderFactory.createTitledBorder("Choose Direction"));
-		  nmDirectionPanelLayout.setHorizontalGroup(nmDirectionPanelLayout.createSequentialGroup()
-		  	.addContainerGap()
-		  	.addGroup(nmDirectionPanelLayout.createParallelGroup()
-		  	    .addGroup(nmDirectionPanelLayout.createSequentialGroup()
-		  	        .addComponent(getMinFlowCheckBox(), GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE))
-		  	    .addGroup(GroupLayout.Alignment.LEADING, nmDirectionPanelLayout.createSequentialGroup()
-		  	        .addComponent(getMaxFlowCheckBox(), GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)))
-		  	.addContainerGap(32, Short.MAX_VALUE));
-		  nmDirectionPanelLayout.setVerticalGroup(nmDirectionPanelLayout.createSequentialGroup()
-		  	.addComponent(getMinFlowCheckBox(), GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-		  	.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-		  	.addComponent(getMaxFlowCheckBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-		  	.addContainerGap(11, Short.MAX_VALUE));
-	  }
-	  return nmDirectionPanel;
-  }
-  
-  private JCheckBox getMinFlowCheckBox() {
-	  if(minFlowCheckBox == null) {
-		  minFlowCheckBox = new JCheckBox();
-		  minFlowCheckBox.setText("Minimize");
-		  getNmDirectionButtonGroup().add(minFlowCheckBox);
-	  }
-	  return minFlowCheckBox;
-  }
-  
-  private JCheckBox getMaxFlowCheckBox() {
-	  if(maxFlowCheckBox == null) {
-		  maxFlowCheckBox = new JCheckBox();
-		  maxFlowCheckBox.setText("Maximize");
-		  getNmDirectionButtonGroup().add(maxFlowCheckBox);
-	  }
-	  return maxFlowCheckBox;
-  }
-  
-  private ButtonGroup getNmDirectionButtonGroup() {
-	  if(nmDirectionButtonGroup == null) {
-		  nmDirectionButtonGroup = new ButtonGroup();
-	  }
-	  return nmDirectionButtonGroup;
+    return yamabe3DDialog;
   }
   
   private JMenu getEditMenu() {
@@ -2092,6 +1843,63 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  }
 	  return showEtaDialog;
   }
+  
+  private AbstractAction getShowNehrFlowDialog() {
+	  if(showNehrFlowDialog == null) {
+		  showNehrFlowDialog = new AbstractAction("NEHR Flow", null) {
+			  public void actionPerformed(ActionEvent evt) {
+			    getNehrFlowDialog().pack();
+			    getNehrFlowDialog().setLocationRelativeTo(null);
+			    getNehrFlowDialog().setVisible(true);
+			  }
+		  };
+	  }
+	  return showNehrFlowDialog;
+  }
+  
+  private JMenuItem getYamabe2DMenuItem() {
+	  if(yamabe2DMenuItem == null) {
+		  yamabe2DMenuItem = new JMenuItem();
+		  yamabe2DMenuItem.setText("2D Yamabe Flow");
+		  yamabe2DMenuItem.setAction(getShowYamabe2DDialog());
+	  }
+	  return yamabe2DMenuItem;
+  }
+  
+  private AbstractAction getShowYamabe2DDialog() {
+	  if(showYamabe2DDialog == null) {
+		  showYamabe2DDialog = new AbstractAction("2D Yamabe Flow", null) {
+			  public void actionPerformed(ActionEvent evt) {
+			    getYamabe2DDialog().pack();
+			    getYamabe2DDialog().setLocationRelativeTo(null);
+			    getYamabe2DDialog().setVisible(true);
+			  }
+		  };
+	  }
+	  return showYamabe2DDialog;
+  }
+  
+  private JMenuItem getYamabe3DMenuItem() {
+	  if(yamabe3DMenuItem == null) {
+		  yamabe3DMenuItem = new JMenuItem();
+		  yamabe3DMenuItem.setText("3D Yamabe Flow");
+		  yamabe3DMenuItem.setAction(getShowYamabe3DDialog());
+	  }
+	  return yamabe3DMenuItem;
+  }
+  
+  private AbstractAction getShowYamabe3DDialog() {
+	  if(showYamabe3DDialog == null) {
+		  showYamabe3DDialog = new AbstractAction("3D Yamabe Flow", null) {
+			  public void actionPerformed(ActionEvent evt) {
+          getYamabe3DDialog().pack();
+          getYamabe3DDialog().setLocationRelativeTo(null);
+          getYamabe3DDialog().setVisible(true);
+			  }
+		  };
+	  }
+	  return showYamabe3DDialog;
+  }
 
   class TriangulationFilter extends FileFilter {
     public boolean accept(File f) {
@@ -2150,6 +1958,118 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       }
       getSetEtaDialog().dispose();
     }
+  }
+  
+  protected GeoRecorder getRecorder() {
+    GeoRecorder rec = new GeoRecorder();
+    if(getAlphaCheck().isSelected()) {
+      rec.addGeoquant(Alpha.class);
+    }
+    if(getAngleCheck().isSelected()) {
+      rec.addGeoquant(Angle.class);
+    }
+    if(getAreaCheck().isSelected()) {
+      rec.addGeoquant(Area.class);
+    }
+    if(getConeAngleCheck().isSelected()) {
+      rec.addGeoquant(ConeAngle.class);
+    }
+    if(getCurv2DCheck().isSelected()) {
+      rec.addGeoquant(Curvature2D.class);
+    }
+    if(getCurv3DCheck().isSelected()) {
+      rec.addGeoquant(Curvature3D.class);
+    }
+    if(getDihAngleCheck().isSelected()) {
+      rec.addGeoquant(DihedralAngle.class);
+    }
+    if(getDualAreaCheck().isSelected()) {
+      rec.addGeoquant(DualArea.class);
+    }
+    if(getEdgeHeightCheck().isSelected()) {
+      rec.addGeoquant(EdgeHeight.class);
+    }
+    if(getEtaCheck().isSelected()) {
+      rec.addGeoquant(Eta.class);
+    }
+    if(getFaceHeightCheck().isSelected()) {
+      rec.addGeoquant(FaceHeight.class);
+    }
+    if(getLengthCheck().isSelected()) {
+      rec.addGeoquant(Length.class);
+    }
+    if(getNehrCheck().isSelected()) {
+      rec.addGeoquant(NEHR.class);
+    }
+    if(getPartialEdgeCheck().isSelected()) {
+      rec.addGeoquant(PartialEdge.class);
+    }
+    if(getRadiusCheck().isSelected()) {
+      rec.addGeoquant(Radius.class);
+    }
+    if(getSectionalCurvatureCheck().isSelected()) {
+      rec.addGeoquant(SectionalCurvature.class);
+    }
+    if(getVolumeCheck().isSelected()) {
+      rec.addGeoquant(Volume.class);
+    }
+    
+    // Partials
+    if(getCurvPartialCheck().isSelected()) {
+      rec.addGeoquant(Curvature3D.Partial.class);
+    }
+    if(getDihAnglePartialCheck().isSelected()) {
+      rec.addGeoquant(DihedralAngle.Partial.class);
+    }
+    if(getNehrPartialCheck().isSelected()) {
+      rec.addGeoquant(NEHR.Partial.class);
+    }
+    if(getPartialEdgePartialCheck().isSelected()) {
+      rec.addGeoquant(PartialEdge.Partial.class);
+    }
+    if(getRadiusPartialCheck().isSelected()) {
+      rec.addGeoquant(Radius.Partial.class);
+    }
+    if(getVolumePartialCheck().isSelected()) {
+      rec.addGeoquant(Volume.Partial.class);
+    }
+    
+    // Second Partials
+    if(getCurvatureSecondPartialCheck().isSelected()) {
+      rec.addGeoquant(Curvature3D.SecondPartial.class);
+    }
+    if(getDihAngleSecondPartialCheck().isSelected()) {
+      rec.addGeoquant(DihedralAngle.SecondPartial.class);
+    }
+    if(getNehrSecondPartialCheck().isSelected()) {
+      rec.addGeoquant(NEHR.SecondPartial.class);
+    }
+    if(getPartialEdgeSecondPartialCheck().isSelected()) {
+      rec.addGeoquant(PartialEdge.SecondPartial.class);
+    }
+    if(getVolumeSecondPartialCheck().isSelected()) {
+      rec.addGeoquant(Volume.SecondPartial.class);
+    }
+    
+    // Sums
+    if(getTotalCurvatureCheck().isSelected()) {
+      rec.addGeoquant(Curvature3D.Sum.class);
+    }
+    if(getTotalVolumeCheck().isSelected()) {
+      rec.addGeoquant(Volume.Sum.class);
+    }
+    if(getTotalVolumePartialCheck().isSelected()) {
+      rec.addGeoquant(Volume.PartialSum.class);
+    }
+    if(getTotalVolumeSecondPartialCheck().isSelected()) {
+      rec.addGeoquant(Volume.SecondPartialSum.class);
+    }
+    return rec;
+  }
+  
+  
+  protected void showGeoquantHistory(GeoRecorder rec) {
+    
   }
 }
 

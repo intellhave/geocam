@@ -395,7 +395,7 @@ public class Curvature3D extends Geoquant {
     
     public SecondPartial(Edge e, Edge f) {
       super(e, f);
-      
+            
       dih_sec_partials = new LinkedList<LinkedList<DihedralAngle.SecondPartial>>();
       dih_partials_e = new LinkedList<LinkedList<DihedralAngle.Partial>>();
       dih_partials_f = new LinkedList<LinkedList<DihedralAngle.Partial>>();

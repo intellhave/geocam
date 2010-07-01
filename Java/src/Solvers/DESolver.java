@@ -1,6 +1,8 @@
 package Solvers;
 
-public abstract class DESolver {
+import java.util.Observable;
+
+public abstract class DESolver extends Observable{
 
   protected DESystem system;
   
@@ -18,6 +20,8 @@ public abstract class DESolver {
     
     for(int i = 0; i < numSteps; i++){
       x = step(x, stepsize);
+      setChanged();
+      notifyObservers(x);
     }
 
     return x;

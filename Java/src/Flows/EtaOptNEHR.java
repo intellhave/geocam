@@ -52,38 +52,28 @@ public class EtaOptNEHR extends NewtonsMethod {
     }
   }
   
-  private void setEtas(double[] vars) {
+  public void setEtas(double[] vars) {
     for(int i = 0; i < vars.length; i++) {
       etas[i].setValue(vars[i]);
     }
   }
   
-  private double[] getLogRadii() {
-    double[] values = new double[Triangulation.vertexTable.size()];
-    int i = 0;
-    for(Vertex v : Triangulation.vertexTable.values()) {
-      values[i] = Math.log(Radius.valueAt(v));
-      i++;
+  public double[] getEtas() {
+    double[] eta_vals = new double[etas.length];
+    for(int i = 0; i< etas.length; i++) {
+      eta_vals[i] = etas[i].getValue();
     }
-    return values;
+    return eta_vals;
   }
-  
-  private void setLogRadii(double[] vars) {
-    int i = 0;
-    for(Vertex v : Triangulation.vertexTable.values()) {
-      Radius.At(v).setValue(Math.exp(vars[i]));
-      i++;
-    }
-  }
-  
+    
   @Override
   public double function(double[] vars) {
     setEtas(vars);
     try {
-     setLogRadii(minRadii.minimize(getLogRadii()));
+     minRadii.setLogRadii(minRadii.minimize(minRadii.getLogRadii()));
       
     } catch (Exception e) {
-      double radii[] = getLogRadii();
+      double radii[] = minRadii.getLogRadii();
       System.err.print("\nRadii=");
       for(int i =0; i < radii.length; i++) {
         System.err.print(Math.exp(radii[i]) + ", ");
@@ -103,9 +93,9 @@ public class EtaOptNEHR extends NewtonsMethod {
   public double[] gradient(double[] vars) {
     setEtas(vars);
     try {
-      setLogRadii(minRadii.minimize(getLogRadii()));
+      minRadii.setLogRadii(minRadii.minimize(minRadii.getLogRadii()));
     } catch (Exception e) {
-      double radii[] = getLogRadii();
+      double radii[] = minRadii.getLogRadii();
       System.err.print("\nRadii=");
       for(int i =0; i < radii.length; i++) {
         System.err.print(Math.exp(radii[i]) + ", ");
@@ -128,9 +118,9 @@ public class EtaOptNEHR extends NewtonsMethod {
   public Matrix hessian(double[] vars) {
     setEtas(vars);
     try {
-      setLogRadii(minRadii.minimize(getLogRadii()));
+      minRadii.setLogRadii(minRadii.minimize(minRadii.getLogRadii()));
     } catch (Exception e) {
-      double radii[] = getLogRadii();
+      double radii[] = minRadii.getLogRadii();
       System.err.print("\nRadii=");
       for(int i =0; i < radii.length; i++) {
         System.err.print(Math.exp(radii[i]) + ", ");

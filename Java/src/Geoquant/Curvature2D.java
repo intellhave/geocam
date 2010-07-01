@@ -3,6 +3,7 @@ package Geoquant;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import Geoquant.Curvature3D.Sum;
 import Triangulation.Face;
 import Triangulation.Triangulation;
 import Triangulation.Vertex;
@@ -10,7 +11,7 @@ import Triangulation.Vertex;
 public class Curvature2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, Curvature2D> Index = new HashMap<TriPosition, Curvature2D>();
-  
+  private static Sum total = null;
   // Needed geoquants
   private LinkedList<Angle> angles;
   
@@ -56,6 +57,13 @@ public class Curvature2D extends Geoquant {
   
   public static double valueAt(Vertex v) {
     return At(v).getValue();
+  }
+  
+  public static Sum sum() {
+    if(total == null) {
+      total = new Sum();
+    }
+    return total;
   }
   
   public static class Sum extends Geoquant {

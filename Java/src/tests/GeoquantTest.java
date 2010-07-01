@@ -40,54 +40,7 @@ public class GeoquantTest {
    */
   public static void main(String[] args) {
     initializeQuantities();
-        
-    RadiusOptNEHR minRad = new RadiusOptNEHR();
-     
-//    minRad.setStoppingCondition(0.0);
-//    minRad.setStepRatio(1.0);
-//    try {
-//      double[] log_radii = CrossConformalFlow.getLogRadii();
-//      for(int i = 0; i < 1000; i++) {
-//        minRad.step(log_radii);
-//        CrossConformalFlow.setLogRadii(log_radii);
-//      }
-//      CrossConformalFlow.setLogRadii(log_radii);
-//    } catch (Exception e) {
-//      return;
-//    }
-    
-    try {
-      CrossConformalFlow.setLogRadii(minRad.minimize(CrossConformalFlow.getLogRadii()));
-    } catch (WrongDirectionException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
- 
-    for(Radius r : Geometry.getRadii()) {
-      System.out.printf("%.16f, ", r.getValue());
-    }
-    System.out.println("\n");
-    
-  
-    double sum;
-    Matrix mat = new Matrix(Triangulation.edgeTable.size(), Triangulation.edgeTable.size());
-
-    int i = 0;
-    int j;
-    for(Edge e1: Triangulation.edgeTable.values()) {
-      j = 0;
-      for(Edge e2: Triangulation.edgeTable.values()) {
-        sum = 0;
-        for(Vertex v : Triangulation.vertexTable.values()) {
-          sum += NEHR.secondPartialAt(v, e1).getValue() * Radius.At(v).partialAt(e2).getValue();
-        }
-        mat.m[i][j] = sum + NEHR.secondPartialAt(e1, e2).getValue();
-        j++;
-      }
-      i++;
-    }
-    System.out.println(mat); 
-    
+   
     testLengths();
     testRadii();
     testAlpha();
@@ -113,24 +66,18 @@ public class GeoquantTest {
     testPartialEdgeSecondPartial();
     testCurvature3DPartial();
     testCurvature3DSecondPartial();
-    testRadiiPartial();
+   // testRadiiPartial();
     testNEHRPartial();
     testNEHRSecondPartial();
     testTotalVolumeSecondPartial();
     testTotalVolumePartial();
-    
-    System.out.println("\n");
-    for(Radius r : Geometry.getRadii()) {
-      System.out.printf("%.16f, ", r.getValue());
-    }
-    System.out.println("\n");
   }
     
   private static void initializeQuantities() {
-    TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_test2.xml");
-//    for(Eta e : Geometry.getEtas()) {
-//      e.setValue(2.0);
-//    }
+    TriangulationIO.readTriangulation("Data/Conversion/VertexTransitiveTriangulations/3_manifolds/manifold_3_10_1_1.xml");
+    for(Eta e : Geometry.getEtas()) {
+      e.setValue(1.0);
+    }
     for(Radius r : Geometry.getRadii()) {
       r.setValue(1.0);
     }
@@ -148,6 +95,8 @@ public class GeoquantTest {
     for(Length l : Geometry.getLengths()) {
       out.println(l);
     }
+    out.close();
+    System.out.println("Done with Lengths.");
   }
 
   private static void testRadii() {
@@ -161,6 +110,8 @@ public class GeoquantTest {
     for (Radius r : Geometry.getRadii()){
       out.println(r);
     }
+    out.close();
+    System.out.println("Done with Radii.");
   }
   private static void testAlpha() {
     PrintStream out = null;
@@ -175,6 +126,8 @@ public class GeoquantTest {
       al = Alpha. At(v);
       out.println(al);
     }
+    out.close();
+    System.out.println("Done with Alphas.");
   }
   private static void testEta() {
     PrintStream out = null;
@@ -189,6 +142,8 @@ public class GeoquantTest {
       et = Eta.At(e);
       out.println(et);
     }
+    out.close();
+    System.out.println("Done with Etas.");
   }
   private static void testAngle() {
     PrintStream out = null;
@@ -205,6 +160,8 @@ public class GeoquantTest {
         out.println(a);
       }
     }
+    out.close();
+    System.out.println("Done with Angles.");
   }
   private static void testArea() {
     PrintStream out = null;
@@ -219,6 +176,8 @@ public class GeoquantTest {
       ar = Area.At(f);
       out.println(ar);
     }
+    out.close();
+    System.out.println("Done with Areas.");
   }
   private static void testConeAngle() {
     PrintStream out = null;
@@ -233,6 +192,8 @@ public class GeoquantTest {
       c = ConeAngle.At(e);
       out.println(c);
     }
+    out.close();
+    System.out.println("Done with ConeAngles.");
   }
   private static void testCurvature2D() {
     PrintStream out = null;
@@ -247,6 +208,8 @@ public class GeoquantTest {
       cu2 = Curvature2D.At(v);
       out.println(cu2);
     }
+    out.close();
+    System.out.println("Done with Curvature2Ds.");
   }
   private static void testCurvature3D() {
     PrintStream out = null;
@@ -261,6 +224,8 @@ public class GeoquantTest {
       cu3 = Curvature3D.At(v);
       out.println(cu3);
     }
+    out.close();
+    System.out.println("Done with Curvature3Ds.");
   }
   private static void testDihedralAngle() {
     PrintStream out = null;
@@ -277,6 +242,9 @@ public class GeoquantTest {
       out.println(d);
     }
    }
+
+    out.close();
+    System.out.println("Done with DihedralAngles.");
   }
   private static void testDualArea() {
     PrintStream out = null;
@@ -291,6 +259,8 @@ public class GeoquantTest {
       du = DualArea.At(e);
       out.println(du);
     }
+    out.close();
+    System.out.println("Done with DualAreas.");
   }
   
   private static void testEdgeHeight() {
@@ -308,6 +278,8 @@ public class GeoquantTest {
         out.println(eh);
       }
     }
+    out.close();
+    System.out.println("Done with EdgeHeights.");
   }
   private static void testFaceHeight() {
     PrintStream out = null;
@@ -324,6 +296,8 @@ public class GeoquantTest {
         out.println(fh);
       }
     }
+    out.close();
+    System.out.println("Done with FaceHeights.");
   }
   private static void testSectionalCurvature(){
     PrintStream out = null;
@@ -337,6 +311,8 @@ public class GeoquantTest {
       sc = SectionalCurvature.At(e);
       out.println(sc);
     }
+    out.close();
+    System.out.println("Done with SectionalCurvatures.");
   }
   private static void testVolume() {
     PrintStream out = null;
@@ -351,6 +327,8 @@ public class GeoquantTest {
       vol = Volume.At(t);
       out.println(vol);
     }
+    out.close();
+    System.out.println("Done with Volumes.");
   }
   private static void testPartialEdge() {
     PrintStream out = null;
@@ -367,6 +345,8 @@ public class GeoquantTest {
         out.println(pe);
       }
     }
+    out.close();
+    System.out.println("Done with PartialEdges.");
   }
   
   private static void testNEHR() {
@@ -378,6 +358,8 @@ public class GeoquantTest {
     }
     
     out.println(NEHR.getInstance());
+    out.close();
+    System.out.println("Done with NEHR.");
   }
   
   private static void testVolumePartial() {
@@ -401,6 +383,8 @@ public class GeoquantTest {
         out.println(partial);
       }
     }
+    out.close();
+    System.out.println("Done with VolumePartials.");
   }
   private static void testVolumeSecondPartial() {
     PrintStream out = null;
@@ -431,6 +415,8 @@ public class GeoquantTest {
         }
       }
     }
+    out.close();
+    System.out.println("Done with VolumeSecondPartials.");
   }
   private static void testDihedralAnglePartial() {
     PrintStream out = null;
@@ -451,6 +437,8 @@ public class GeoquantTest {
        }
      }
    }
+    out.close();
+    System.out.println("Done with DihedralAnglePartials.");
   }
   private static void testDihedralAngleSecondPartial() {
     PrintStream out = null;
@@ -473,6 +461,8 @@ public class GeoquantTest {
         }
       }
     }
+    out.close();
+    System.out.println("Done with DihedralAngleSecondPartials.");
   }
   
 
@@ -495,6 +485,8 @@ public class GeoquantTest {
         }
       }
     }
+    out.close();
+    System.out.println("Done with PartialEdgePartials.");
   }
   
   private static void testPartialEdgeSecondPartial() {
@@ -514,6 +506,8 @@ public class GeoquantTest {
         out.println(secondPartial);
       }
     }
+    out.close();
+    System.out.println("Done with PartialEdgeSecondPartials.");
   }
   
   private static void testCurvature3DPartial() {
@@ -537,6 +531,8 @@ public class GeoquantTest {
         out.println(partial);
       }
     }
+    out.close();
+    System.out.println("Done with CurvaturePartials.");
   }
   private static void testCurvature3DSecondPartial() {
     PrintStream out = null;
@@ -550,13 +546,15 @@ public class GeoquantTest {
     Curvature3D.SecondPartial secondPartial;
     for (Vertex v : Triangulation.vertexTable.values()) {
       c = Curvature3D.At(v);
-      for (Edge e : Triangulation.edgeTable.values()) {
-        for (Edge f : Triangulation.edgeTable.values()) {
+      for(Edge e : Triangulation.edgeTable.values()) {
+        for(Edge f : Triangulation.edgeTable.values()) {
           secondPartial = c.secondPartialAt(e, f);
           out.println(secondPartial);
         }
       }
     }
+    out.close();
+    System.out.println("Done with CurvatureSecondPartials.");
   }
   private static void testRadiiPartial() {
     PrintStream out = null;
@@ -574,6 +572,8 @@ public class GeoquantTest {
         out.println(partial);
       }
     }
+    out.close();
+    System.out.println("Done with RadiiPartials.");
   }
   private static void testNEHRPartial() {
     PrintStream out = null;
@@ -592,6 +592,8 @@ public class GeoquantTest {
       partial = NEHR.partialAt(e);
       out.println(partial);
     }
+    out.close();
+    System.out.println("Done with NEHRPartials.");
   }
   
   private static void testNEHRSecondPartial() {
@@ -618,6 +620,8 @@ public class GeoquantTest {
        out.println(secondPartial);
      }
    }
+   out.close();
+   System.out.println("Done with NEHRSecondPartials.");
   }
   
   private static void testTotalVolumeSecondPartial() {
@@ -630,6 +634,8 @@ public class GeoquantTest {
     for(Volume.SecondPartialSum p : Geometry.getVolumeSecondPartialSums()) {
       out.println(p);
     }
+    out.close();
+    System.out.println("Done with TotalVolumeSecondPartials.");
   }
   
   private static void testTotalVolumePartial() {
@@ -642,5 +648,8 @@ public class GeoquantTest {
     for(Volume.PartialSum p : Geometry.getVolumePartialSums()) {
       out.println(p);
     }
+    out.close();
+    System.out.println("Done with TotalVolumePartials.");
   }
+  
 }
