@@ -129,5 +129,4 @@
     <Edges>8 9 12 </Edges>
     <Faces>4 5 7 </Faces>
   </Face>
-  <Face index="9"/>
 </Triangulation>

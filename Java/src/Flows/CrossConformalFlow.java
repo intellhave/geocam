@@ -15,22 +15,18 @@ import Triangulation.Vertex;
 public class CrossConformalFlow {
   public static void main(String[] args) {
     initializeQuantities();
-        
-    EtaOptNEHR min = new EtaOptNEHR();
-    double[] etas = getEtas();
-    while(min.step(etas) > 0.00001) {
-      printArray(etas);
-    }
-    printArray(etas);
-    System.out.println("DONE!");
+    
+    // Comment out all others but desired
+    runMinRadii();
+//    runMaxRadii();
+//    runRadii();
+//    runMinEtas();
+//    runMaxEtas();
+//    runEtas();
   }
    
   public static void initializeQuantities() {
     TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_test.xml");
-    for(Eta e : Geometry.getEtas()) {
-      e.setValue(1.0);
-    }
-    Eta.At(Triangulation.edgeTable.get(1)).setValue(1.01);
   }
   
   public static void printArray(double[] arr) {
@@ -67,5 +63,77 @@ public class CrossConformalFlow {
       i++;
     }
     return values;
+  }
+  
+  public static void runMinRadii() {
+    RadiusOptNEHR flow = new RadiusOptNEHR();
+    double[] log_radii = flow.getLogRadii();
+    try {
+      while(flow.stepMin(log_radii) > 0.00001) {
+        printArray(log_radii);
+      }
+    } catch (WrongDirectionException e) {
+    }
+    printArray(log_radii);
+    System.out.println("DONE!");
+  }
+  
+  public static void runMaxRadii() {
+    RadiusOptNEHR flow = new RadiusOptNEHR();
+    double[] log_radii = flow.getLogRadii();
+    try {
+      while(flow.stepMax(log_radii) > 0.00001) {
+        printArray(log_radii);
+      }
+    } catch (WrongDirectionException e) {
+    }
+    printArray(log_radii);
+    System.out.println("DONE!");
+  }
+  
+  public static void runRadii() {
+    RadiusOptNEHR flow = new RadiusOptNEHR();
+    double[] log_radii = flow.getLogRadii();
+      while(flow.step(log_radii) > 0.00001) {
+        printArray(log_radii);
+      }
+    printArray(log_radii);
+    System.out.println("DONE!");
+  }
+  
+  public static void runMinEtas() {
+    EtaOptNEHR flow = new EtaOptNEHR();
+    double[] etas = flow.getEtas();
+    try {
+      while(flow.stepMin(etas) > 0.00001) {
+        printArray(etas);
+      }
+    } catch (WrongDirectionException e) {
+    }
+    printArray(etas);
+    System.out.println("DONE!");
+  }
+  
+  public static void runMaxEtas() {
+    EtaOptNEHR flow = new EtaOptNEHR();
+    double[] etas = flow.getEtas();
+    try {
+      while(flow.stepMax(etas) > 0.00001) {
+        printArray(etas);
+      }
+    } catch (WrongDirectionException e) {
+    }
+    printArray(etas);
+    System.out.println("DONE!");
+  }
+  
+  public static void runEtas() {
+    EtaOptNEHR flow = new EtaOptNEHR();
+    double[] etas = flow.getEtas();
+      while(flow.step(etas) > 0.00001) {
+        printArray(etas);
+      }
+    printArray(etas);
+    System.out.println("DONE!");
   }
 }
