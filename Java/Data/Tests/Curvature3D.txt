@@ -1,10 +1,5 @@
-Curvature3D@[Vertex 1]=4.848372236303737
-Curvature3D@[Vertex 2]=4.848372236303737
-Curvature3D@[Vertex 3]=4.848372236303737
-Curvature3D@[Vertex 4]=4.848372236303737
-Curvature3D@[Vertex 5]=4.848372236303737
-Curvature3D@[Vertex 6]=4.848372236303737
-Curvature3D@[Vertex 7]=4.848372236303737
-Curvature3D@[Vertex 8]=4.848372236303737
-Curvature3D@[Vertex 9]=4.848372236303737
-Curvature3D@[Vertex 10]=4.848372236303737
+Curvature3D@[Vertex 1]=10.361228220629048
+Curvature3D@[Vertex 2]=10.361228220629048
+Curvature3D@[Vertex 3]=10.361228220629048
+Curvature3D@[Vertex 4]=10.361228220629048
+Curvature3D@[Vertex 5]=10.361228220629048

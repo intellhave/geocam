@@ -1,7 +1,12 @@
 package gui;
+
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -18,10 +23,12 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import Geoquant.GeoRecorder;
 import Geoquant.Geometry;
+import Geoquant.Geoquant;
 import Geoquant.Radius;
 import Geoquant.Geometry.Dimension;
 import Solvers.*;
@@ -50,13 +57,17 @@ public class YamabeFlowDialog extends JDialog {
 	private JButton runButton;
 	private GeoquantViewer owner;
 	private Dimension dim;
+	private JPanel historyPanel;
 	private JLabel stepsizeLabel;
 	private JTextField stepsizeTextField;
+	private int currentStep = 0;
+	private static GeoRecorder rec;
 
 	public YamabeFlowDialog(GeoquantViewer owner, Dimension dim) {
 	  super(owner);
 	  this.owner = owner;
 	  this.dim = dim;
+	  rec = new GeoRecorder();
 	  initGUI();
 	}
 	private void initGUI() {
@@ -111,14 +122,16 @@ public class YamabeFlowDialog extends JDialog {
 				}
 			thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
 				.addContainerGap()
-				.addComponent(stoppingCondPanel, 0, 87, Short.MAX_VALUE)
+				.addComponent(stoppingCondPanel, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 				    .addComponent(cancelButton, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 				    .addComponent(stepsizeTextField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 				    .addComponent(runButton, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 				    .addComponent(getStepsizeLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(23, 23));
+				.addGap(19)
+				.addComponent(getHistoryPanel(), GroupLayout.PREFERRED_SIZE, 298, GroupLayout.PREFERRED_SIZE)
+				.addContainerGap(35, Short.MAX_VALUE));
 			thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
 				.addContainerGap()
 				.addGroup(thisLayout.createParallelGroup()
@@ -128,34 +141,44 @@ public class YamabeFlowDialog extends JDialog {
 				        .addComponent(stepsizeTextField, GroupLayout.PREFERRED_SIZE, 136, GroupLayout.PREFERRED_SIZE)
 				        .addGap(28)
 				        .addComponent(runButton, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
-				        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED))
-				    .addComponent(stoppingCondPanel, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 343, GroupLayout.PREFERRED_SIZE))
-				.addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(35, Short.MAX_VALUE));
+				        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+				        .addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+				        .addGap(0, 6, Short.MAX_VALUE))
+				    .addGroup(GroupLayout.Alignment.LEADING, thisLayout.createSequentialGroup()
+				        .addComponent(stoppingCondPanel, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
+				        .addGap(0, 6, Short.MAX_VALUE))
+				    .addGroup(GroupLayout.Alignment.LEADING, thisLayout.createSequentialGroup()
+				        .addPreferredGap(getStepsizeLabel(), getHistoryPanel(), LayoutStyle.ComponentPlacement.INDENT)
+				        .addComponent(getHistoryPanel(), GroupLayout.PREFERRED_SIZE, 419, GroupLayout.PREFERRED_SIZE)
+				        .addGap(0, 0, Short.MAX_VALUE)))
+				.addContainerGap(29, 29));
 			thisLayout.linkSize(SwingConstants.VERTICAL, new Component[] {stepsizeTextField, runButton});
 			thisLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {cancelButton, runButton});
 				jPanel1Layout.setHorizontalGroup(jPanel1Layout.createSequentialGroup()
-					.addGroup(jPanel1Layout.createParallelGroup()
-					    .addComponent(numStepsTextField, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE)
-					    .addComponent(numStepsButton, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE))
-					.addGap(37)
-					.addGroup(jPanel1Layout.createParallelGroup()
-					    .addGroup(jPanel1Layout.createSequentialGroup()
-					        .addComponent(precisionTextField, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE))
-					    .addGroup(GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-					        .addComponent(precisionButton, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(136, Short.MAX_VALUE));
+				.addGroup(jPanel1Layout.createParallelGroup()
+				    .addComponent(numStepsTextField, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
+				    .addComponent(numStepsButton, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE))
+				.addGap(44)
+				.addGroup(jPanel1Layout.createParallelGroup()
+				    .addGroup(jPanel1Layout.createSequentialGroup()
+				        .addComponent(precisionButton, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE)
+				        .addGap(0, 0, Short.MAX_VALUE))
+				    .addGroup(jPanel1Layout.createSequentialGroup()
+				        .addGap(0, 0, Short.MAX_VALUE)
+				        .addComponent(precisionTextField, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)))
+				.addContainerGap());
 				jPanel1Layout.setVerticalGroup(jPanel1Layout.createSequentialGroup()
-					.addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-					    .addComponent(precisionButton, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-					    .addComponent(numStepsButton, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(14)
-					.addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-					    .addComponent(precisionTextField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-					    .addComponent(numStepsTextField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)));
+				.addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				    .addComponent(precisionButton, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+				    .addComponent(numStepsButton, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+				.addGap(14)
+				.addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+				    .addComponent(precisionTextField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+				    .addComponent(numStepsTextField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED));
 			}
 			{
-				this.setSize(488, 195);
+				this.setSize(488, 525);
 				switch(dim) {
 				case twoD :
 				  this.setTitle("Yamabe2DFlow");
@@ -184,6 +207,48 @@ public class YamabeFlowDialog extends JDialog {
 		}
 		return stepsizeLabel;
 	}
+	
+	private JPanel getHistoryPanel() {
+		if(historyPanel == null) {
+			historyPanel = new JPanel(){
+			  protected void paintComponent(Graphics g) {
+			    super.paintComponent(g);
+			    
+			    for(List<List<Double>> list : rec.getAll()) {
+			      if(list.size() < currentStep) {
+			        
+			      } else {
+			        // draw polygon for this geoquant at currentStep
+			        List<Double> curList = list.get(currentStep);
+			        int size = curList.size();
+	            int halfHeight = this.getHeight() / 2;
+	            int halfWidth = this.getWidth() / 2;
+	            double radius;
+	            int[] xpoints = new int[size];
+	            int[] ypoints = new int[size];
+	            double angleStep = 2 * Math.PI / size;
+
+	            // Draw Polygon
+	            g.setColor(Color.BLACK);
+	            int i = 0;
+	            double angle = 0;
+	            for(Double d : curList) {
+	              radius = (halfHeight / Math.PI) * (Math.atan(d) + Math.PI / 2);
+	              xpoints[i] = (int) (radius * Math.cos(angle) + halfWidth);
+	              ypoints[i] = (int) (-1 * radius * Math.sin(angle) + halfHeight);
+	              i++;
+	              angle += angleStep;
+	            }
+	            g.drawPolygon(new Polygon(xpoints, ypoints, size));
+			      }
+			    }
+			  }
+			};
+			historyPanel.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
+			historyPanel.setBackground(new java.awt.Color(255,255,255));
+		}
+		return historyPanel;
+	}
 
 	private class StoppingCondListener implements ActionListener {
     public void actionPerformed(ActionEvent evt) {
@@ -204,7 +269,7 @@ public class YamabeFlowDialog extends JDialog {
     }    
     public void actionPerformed(ActionEvent evt) {
       if(evt.getSource().equals(runButton)) {
-        YamabeFlowDialog.this.setVisible(false);
+
         DESystem sys = null;
         switch(dim) {
         case twoD:
@@ -226,10 +291,15 @@ public class YamabeFlowDialog extends JDialog {
           try{
             int numSteps = Integer.parseInt(numStepsTextField.getText());
             double stepsize = Double.parseDouble(stepsizeTextField.getText());
-            GeoRecorder rec = owner.getRecorder();
+            rec = owner.getRecorder();
             solver.addObserver(rec);
             solver.run(radii, stepsize, numSteps);
-            owner.getGeoPolygonPanel().repaint();
+            solver.deleteObserver(rec);
+            
+            for(currentStep = 0; currentStep < numSteps -1 ; currentStep++) {
+              getHistoryPanel().repaint();
+            }
+            return;
           } catch(NumberFormatException ex) {
             
           }
