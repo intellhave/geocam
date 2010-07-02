@@ -87,13 +87,6 @@ public class GeoquantTest {
   private static void initializeQuantities() {
     //TriangulationIO.readTriangulation("Data/Conversion/VertexTransitiveTriangulations/3_manifolds/manifold_3_10_1_1.xml");
     TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_regular.xml");
-    for(Eta e : Geometry.getEtas()) {
-      e.setValue(1.0);
-    }
-    for(Radius r : Geometry.getRadii()) {
-      r.setValue(1.0);
-    }
-//    Radius.At(Triangulation.vertexTable.get(1)).setValue(1.1217382437656336);
   }
   
   private static void testLengths() {
