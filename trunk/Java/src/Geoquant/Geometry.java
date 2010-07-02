@@ -501,4 +501,50 @@ public class Geometry {
     }
     return list;
   }
+  
+  public static List<LCSC> getLCSC() {
+    LinkedList<LCSC> list = new LinkedList<LCSC>();
+    LCSC l;
+    for(Vertex v : Triangulation.vertexTable.values()) {
+      l = LCSC.At(v);
+      list.add(l);
+    }
+    return list;
+  }
+  
+  public static List<VCSC> getVCSC() {
+    LinkedList<VCSC> list = new LinkedList<VCSC>();
+    VCSC vc;
+    for(Vertex v : Triangulation.vertexTable.values()) {
+      vc = VCSC.At(v);
+      list.add(vc);
+    }
+    return list;
+  }
+  
+  public static List<LEinstein> getLEinsteins() {
+    LinkedList<LEinstein> list = new LinkedList<LEinstein>();
+    LEinstein le;
+    for(Edge e : Triangulation.edgeTable.values()) {
+      le = LEinstein.At(e);
+      list.add(le);
+    }
+    return list;
+  }
+  
+  public static List<VEinstein> getVEinsteins() {
+    LinkedList<VEinstein> list = new LinkedList<VEinstein>();
+    VEinstein ve;
+    for(Edge e : Triangulation.edgeTable.values()) {
+      ve = VEinstein.At(e);
+      list.add(ve);
+    }
+    return list;
+  }
+  
+  public static List<LEHR> getLEHR() {
+    LinkedList<LEHR> list = new LinkedList<LEHR>();
+    list.add(LEHR.getInstance());
+    return list;
+  }
 }

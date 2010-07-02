@@ -1,0 +1,10 @@
+LEinstein@[Edge 1]=0.0
+LEinstein@[Edge 2]=0.0
+LEinstein@[Edge 3]=0.0
+LEinstein@[Edge 4]=0.0
+LEinstein@[Edge 5]=0.0
+LEinstein@[Edge 6]=0.0
+LEinstein@[Edge 7]=0.0
+LEinstein@[Edge 8]=0.0
+LEinstein@[Edge 9]=0.0
+LEinstein@[Edge 10]=0.0

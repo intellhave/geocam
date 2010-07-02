@@ -1,10 +1,12 @@
 package Geoquant;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Set;
 
+import Geoquant.Volume.Sum;
 import Triangulation.*;
 
 public class Length extends Geoquant {
@@ -17,6 +19,7 @@ public class Length extends Geoquant {
   private Alpha alpha1;
   private Alpha alpha2;
   private Eta eta;
+  private static Sum total;
   
   public Length(Edge e) {
     super(e);
@@ -70,6 +73,41 @@ public class Length extends Geoquant {
   
   public static double valueAt(Edge e) {
     return At(e).getValue();
+  }
+  
+  public static Sum sum() {
+    if(total == null) {
+      total = new Sum();
+    }
+    return total;
+  }
+  
+  public static class Sum extends Geoquant {
+    LinkedList<Length> lengths = new LinkedList<Length>();
+    
+    private Sum() {
+      super();
+      Length l;
+      for(Edge e : Triangulation.edgeTable.values()) {
+        l = Length.At(e);
+        l.addObserver(this);
+        lengths.add(l);
+      }
+    }
+    protected void recalculate() {
+      value = 0;
+      for(Length l : lengths) {
+        value += l.getValue();
+      }
+    }
+
+    public void remove() {
+      deleteDependents();
+      for(Length l : lengths) {
+        l.deleteObserver(this);
+      }
+      lengths.clear();
+    }
   }
 
 }

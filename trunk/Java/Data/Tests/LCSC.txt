@@ -1,0 +1,5 @@
+LCSC@[Vertex 1]=0.0
+LCSC@[Vertex 2]=0.0
+LCSC@[Vertex 3]=0.0
+LCSC@[Vertex 4]=0.0
+LCSC@[Vertex 5]=0.0

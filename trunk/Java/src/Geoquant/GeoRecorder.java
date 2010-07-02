@@ -49,4 +49,8 @@ public class GeoRecorder implements Observer{
       valueList.put(c, new LinkedList<List<Double>>());
     }
   }
+  
+  public Collection<List<List<Double>>> getAll() {
+    return valueList.values();
+  }
 }

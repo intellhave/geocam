@@ -23,11 +23,16 @@ import Geoquant.EdgeHeight;
 import Geoquant.Eta;
 import Geoquant.FaceHeight;
 import Geoquant.Geometry;
+import Geoquant.LCSC;
+import Geoquant.LEHR;
+import Geoquant.LEinstein;
 import Geoquant.Length;
 import Geoquant.NEHR;
 import Geoquant.PartialEdge;
 import Geoquant.Radius;
 import Geoquant.SectionalCurvature;
+import Geoquant.VCSC;
+import Geoquant.VEinstein;
 import Geoquant.Volume;
 import InputOutput.TriangulationIO;
 import Solvers.WrongDirectionException;
@@ -71,10 +76,17 @@ public class GeoquantTest {
     testNEHRSecondPartial();
     testTotalVolumeSecondPartial();
     testTotalVolumePartial();
-  }
     
+    testLCSC();
+    testVCSC();
+    testLEinstein();
+    testVEinstein();
+    testLEHR();
+  }
+
   private static void initializeQuantities() {
-    TriangulationIO.readTriangulation("Data/Conversion/VertexTransitiveTriangulations/3_manifolds/manifold_3_10_1_1.xml");
+    //TriangulationIO.readTriangulation("Data/Conversion/VertexTransitiveTriangulations/3_manifolds/manifold_3_10_1_1.xml");
+    TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_regular.xml");
     for(Eta e : Geometry.getEtas()) {
       e.setValue(1.0);
     }
@@ -650,6 +662,70 @@ public class GeoquantTest {
     }
     out.close();
     System.out.println("Done with TotalVolumePartials.");
+  }
+  
+  private static void testLEHR() {
+    PrintStream out = null;
+    try {
+      out = new PrintStream(new File("Data/Tests/LEHR.txt"));
+    } catch (FileNotFoundException e1) {
+      return;
+    }
+    out.println(LEHR.getInstance());
+    out.close();
+  }
+
+  private static void testVEinstein() {
+    PrintStream out = null;
+    try {
+      out = new PrintStream(new File("Data/Tests/VEinstein.txt"));
+    } catch (FileNotFoundException e1) {
+      return;
+    }
+    for(LEinstein le : Geometry.getLEinsteins()) {
+      out.println(le);
+    }
+    out.close(); 
+  }
+
+  private static void testLEinstein() {
+    PrintStream out = null;
+    try {
+      out = new PrintStream(new File("Data/Tests/LEinstein.txt"));
+    } catch (FileNotFoundException e1) {
+      return;
+    }
+    for(VEinstein ve : Geometry.getVEinsteins()) {
+      out.println(ve);
+    }
+    out.close();
+  }
+
+  private static void testVCSC() {
+    PrintStream out = null;
+    try {
+      out = new PrintStream(new File("Data/Tests/VCSC.txt"));
+    } catch (FileNotFoundException e1) {
+      return;
+    }
+    for(VCSC vcsc : Geometry.getVCSC()) {
+      out.println(vcsc);
+    }
+    out.close(); 
+  }
+
+  private static void testLCSC() {
+    PrintStream out = null;
+    try {
+      out = new PrintStream(new File("Data/Tests/LCSC.txt"));
+    } catch (FileNotFoundException e1) {
+      return;
+    }
+    for(LCSC lcsc : Geometry.getLCSC()) {
+      out.println(lcsc);
+    }
+    
+    out.close();
   }
   
 }

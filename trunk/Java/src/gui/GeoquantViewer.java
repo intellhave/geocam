@@ -14,6 +14,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -161,6 +163,13 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private YamabeFlowDialog yamabe2DDialog;
   private YamabeFlowDialog yamabe3DDialog;
   private JMenuItem nehrFlowMenuItem;
+  private JCheckBox vEinsteinCheck;
+  private JCheckBox lEinsteinCheck;
+  private JCheckBox vcscCheck;
+  private JCheckBox lcscCheck;
+  private JCheckBox lehrCheck;
+  private AbstractAction saveGeoquantAction;
+  private JMenuItem saveGeoquantsMenuItem;
   private AbstractAction showYamabe3DDialog;
   private JMenuItem yamabe3DMenuItem;
   private AbstractAction showYamabe2DDialog;
@@ -234,6 +243,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
             importMenuItem = new JMenuItem();
             fileMenu.add(importMenuItem);
             fileMenu.add(getSaveMenu());
+            fileMenu.add(getSaveGeoquantsMenuItem());
             importMenuItem.setText("Import Triangulation");
             importMenuItem.setAction(getImportAction());
           }
@@ -891,6 +901,32 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
             drawPolygon(geoList, g, geoColorTable.get(getTotalVolumeSecondPartialCheck()));
             geoList.clear();
           }
+          
+          if(getLehrCheck().isSelected()) {
+            geoList.addAll(Geometry.getLEHR());
+            drawPolygon(geoList, g, geoColorTable.get(getLehrCheck()));
+            geoList.clear();
+          }
+          if(getLcscCheck().isSelected()) {
+            geoList.addAll(Geometry.getLCSC());
+            drawPolygon(geoList, g, geoColorTable.get(getLcscCheck()));
+            geoList.clear();
+          }
+          if(getVcscCheck().isSelected()) {
+            geoList.addAll(Geometry.getVCSC());
+            drawPolygon(geoList, g, geoColorTable.get(getVcscCheck()));
+            geoList.clear();
+          }
+          if(getLEinsteinCheck().isSelected()) {
+            geoList.addAll(Geometry.getLEinsteins());
+            drawPolygon(geoList, g, geoColorTable.get(getLEinsteinCheck()));
+            geoList.clear();
+          }
+          if(getVEinsteinCheck().isSelected()) {
+            geoList.addAll(Geometry.getVEinsteins());
+            drawPolygon(geoList, g, geoColorTable.get(getVEinsteinCheck()));
+            geoList.clear();
+          }
         }
         
         private void drawPolygon(LinkedList<Geoquant> geoList, Graphics g, Color c) {
@@ -1212,31 +1248,50 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       totalSelectPanel.setLayout(totalSelectPanelLayout);
       totalSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
       totalSelectPanelLayout.setHorizontalGroup(totalSelectPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(totalSelectPanelLayout.createParallelGroup()
-            .addGroup(totalSelectPanelLayout.createSequentialGroup()
-                .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-                .addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 37, Short.MAX_VALUE))
-            .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-                .addComponent(getTotalVolumeCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 37, Short.MAX_VALUE))
-            .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-                .addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 37, Short.MAX_VALUE)))
-        .addContainerGap(286, 286));
+      	.addContainerGap()
+      	.addGroup(totalSelectPanelLayout.createParallelGroup()
+      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(37))
+      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getTotalVolumeCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(37))
+      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(37))
+      	    .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE))
+      	.addGroup(totalSelectPanelLayout.createParallelGroup()
+      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getLehrCheck(), GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(17))
+      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getLcscCheck(), GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(17))
+      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getVcscCheck(), GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(17))
+      	    .addComponent(getLEinsteinCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
+      	.addComponent(getVEinsteinCheck(), GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
+      	.addContainerGap(54, Short.MAX_VALUE));
       totalSelectPanelLayout.setVerticalGroup(totalSelectPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(getTotalVolumeCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(54, Short.MAX_VALUE));
+      	.addContainerGap()
+      	.addGroup(totalSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+      	    .addComponent(getTotalCurvatureCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getLehrCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getVEinsteinCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 18, GroupLayout.PREFERRED_SIZE))
+      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+      	.addGroup(totalSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+      	    .addComponent(getTotalVolumeCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getLcscCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+      	.addGroup(totalSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+      	    .addComponent(getTotalVolumePartialCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getVcscCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+      	.addGroup(totalSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+      	    .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getLEinsteinCheck(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+      	.addContainerGap(44, 44));
       totalSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getTotalCurvatureCheck(), getTotalVolumeCheck(), getTotalVolumePartialCheck(), getTotalVolumeSecondPartialCheck()});
     }
     return totalSelectPanel;
@@ -1600,6 +1655,56 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       totalVolumeSecondPartialCheck.addItemListener(this);
     }
     return totalVolumeSecondPartialCheck;
+  }
+  
+  private JCheckBox getLehrCheck() {
+    if(lehrCheck == null) {
+      lehrCheck = new JCheckBox();
+      lehrCheck.setText("LEHR");
+      getGeoColorTable().put(lehrCheck, new Color(0, 0, 0));
+      lehrCheck.addItemListener(this);
+    }
+    return lehrCheck;
+  }
+  
+  private JCheckBox getLcscCheck() {
+    if(lcscCheck == null) {
+      lcscCheck = new JCheckBox();
+      lcscCheck.setText("LCSC");
+      getGeoColorTable().put(lcscCheck, new Color(0, 0, 0));
+      lcscCheck.addItemListener(this);
+    }
+    return lcscCheck;
+  }
+  
+  private JCheckBox getVcscCheck() {
+    if(vcscCheck == null) {
+      vcscCheck = new JCheckBox();
+      vcscCheck.setText("VCSC");
+      getGeoColorTable().put(vcscCheck, new Color(0, 0, 0));
+      vcscCheck.addItemListener(this);
+    }
+    return vcscCheck;
+  }
+  
+  private JCheckBox getLEinsteinCheck() {
+    if(lEinsteinCheck == null) {
+      lEinsteinCheck = new JCheckBox();
+      lEinsteinCheck.setText("LEinstein");
+      getGeoColorTable().put(lEinsteinCheck, new Color(0, 0, 0));
+      lEinsteinCheck.addItemListener(this);
+    }
+    return lEinsteinCheck;
+  }
+  
+  private JCheckBox getVEinsteinCheck() {
+    if(vEinsteinCheck == null) {
+      vEinsteinCheck = new JCheckBox();
+      vEinsteinCheck.setText("VEinstein");
+      getGeoColorTable().put(vEinsteinCheck, new Color(0, 0, 0));
+      vEinsteinCheck.addItemListener(this);
+    }
+    return vEinsteinCheck;
   }
   
   private JMenuItem getSaveMenu() {
@@ -2064,6 +2169,22 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(getTotalVolumeSecondPartialCheck().isSelected()) {
       rec.addGeoquant(Volume.SecondPartialSum.class);
     }
+    
+    if(getLehrCheck().isSelected()) {
+      rec.addGeoquant(LEHR.class);
+    }
+    if(getLcscCheck().isSelected()) {
+      rec.addGeoquant(LCSC.class);
+    }
+    if(getVcscCheck().isSelected()) {
+      rec.addGeoquant(VCSC.class);
+    }
+    if(getLEinsteinCheck().isSelected()) {
+      rec.addGeoquant(LEinstein.class);
+    }
+    if(getVEinsteinCheck().isSelected()) {
+      rec.addGeoquant(VEinstein.class);
+    }
     return rec;
   }
   
@@ -2071,5 +2192,227 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   protected void showGeoquantHistory(GeoRecorder rec) {
     
   }
+  
+  private JMenuItem getSaveGeoquantsMenuItem() {
+	  if(saveGeoquantsMenuItem == null) {
+		  saveGeoquantsMenuItem = new JMenuItem();
+		  saveGeoquantsMenuItem.setText("Save Geoquants");
+		  saveGeoquantsMenuItem.setAction(getSaveGeoquantAction());
+	  }
+	  return saveGeoquantsMenuItem;
+  }
+  
+  private AbstractAction getSaveGeoquantAction() {
+	  if(saveGeoquantAction == null) {
+		  saveGeoquantAction = new AbstractAction("Save Geoquants", null) {
+        public void actionPerformed(ActionEvent e) {
+          // Handle Save Button Action
+          int returnVal = getTriangulationFileChooser().showSaveDialog(GeoquantViewer.this);
+          
+          if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = getTriangulationFileChooser().getSelectedFile();
+            PrintStream out = null;
+            try {
+              out = new PrintStream(file);
+            } catch (FileNotFoundException e1) {
+              return;
+            }
+            saveQuantities(out);
+            out.close();
+          }
+        }
+		  };
+	  }
+	  return saveGeoquantAction;
+  }
+  
+  private void saveQuantities(PrintStream out) {
+    if(getAlphaCheck().isSelected()) {
+      for(Alpha q : Geometry.getAlphas()) {
+        out.println(q);
+      }
+    }
+    if(getAngleCheck().isSelected()) {
+      for(Angle q : Geometry.getAngles()) {
+        out.println(q);
+      }
+    }
+    if(getAreaCheck().isSelected()) {
+      for(Area q : Geometry.getAreas()) {
+        out.println(q);
+      }
+    }
+    if(getConeAngleCheck().isSelected()) {
+      for(ConeAngle q : Geometry.getConeAngles()) {
+        out.println(q);
+      }
+    }
+    if(getCurv2DCheck().isSelected()) {
+      for(Curvature2D q : Geometry.getCurvature2D()) {
+        out.println(q);
+      }
+    }
+    if(getCurv3DCheck().isSelected()) {
+      for(Curvature3D q : Geometry.getCurvature3D()) {
+        out.println(q);
+      }
+    }
+    if(getDihAngleCheck().isSelected()) {
+      for(DihedralAngle q : Geometry.getDihedralAngles()) {
+        out.println(q);
+      }
+    }
+    if(getDualAreaCheck().isSelected()) {
+      for(DualArea q : Geometry.getDualAreas()) {
+        out.println(q);
+      }
+    }
+    if(getEdgeHeightCheck().isSelected()) {
+      for(EdgeHeight q : Geometry.getEdgeHeights()) {
+        out.println(q);
+      }
+    }
+    if(getEtaCheck().isSelected()) {
+      for(Eta q : Geometry.getEtas()) {
+        out.println(q);
+      }
+    }
+    if(getFaceHeightCheck().isSelected()) {
+      for(FaceHeight q : Geometry.getFaceHeights()) {
+        out.println(q);
+      }
+    }
+    if(getLengthCheck().isSelected()) {
+      for(Length q : Geometry.getLengths()) {
+        out.println(q);
+      }
+    }
+    if(getNehrCheck().isSelected()) {
+      out.println(NEHR.getInstance());
+    }
+    if(getPartialEdgeCheck().isSelected()) {
+      for(PartialEdge q : Geometry.getPartialEdges()) {
+        out.println(q);
+      }
+    }
+    if(getRadiusCheck().isSelected()) {
+      for(Radius q : Geometry.getRadii()) {
+        out.println(q);
+      }
+    }
+    if(getSectionalCurvatureCheck().isSelected()) {
+      for(SectionalCurvature q : Geometry.getSectionalCurvatures()) {
+        out.println(q);
+      }
+    }
+    if(getVolumeCheck().isSelected()) {
+      for(Volume q : Geometry.getVolumes()) {
+        out.println(q);
+      }
+    }
+    
+    // Partials
+    if(getCurvPartialCheck().isSelected()) {
+      for(Curvature3D.Partial q : Geometry.getCurvaturePartials()) {
+        out.println(q);
+      }
+    }
+    if(getDihAnglePartialCheck().isSelected()) {
+      for(DihedralAngle.Partial q : Geometry.getDihedralAnglePartials()) {
+        out.println(q);
+      }
+    }
+    if(getNehrPartialCheck().isSelected()) {
+      for(NEHR.Partial q : Geometry.getNEHRPartials()) {
+        out.println(q);
+      }
+    }
+    if(getPartialEdgePartialCheck().isSelected()) {
+      for(PartialEdge.Partial q : Geometry.getPartialEdgePartials()) {
+        out.println(q);
+      }
+    }
+    if(getRadiusPartialCheck().isSelected()) {
+      for(Radius.Partial q : Geometry.getRadiusPartials()) {
+        out.println(q);
+      }
+    }
+    if(getVolumePartialCheck().isSelected()) {
+      for(Volume.Partial q : Geometry.getVolumePartials()) {
+        out.println(q);
+      }
+    }
+    
+    // Second Partials
+    if(getCurvatureSecondPartialCheck().isSelected()) {
+      for(Curvature3D.SecondPartial q : Geometry.getCurvatureSecondPartials()) {
+        out.println(q);
+      }
+    }
+    if(getDihAngleSecondPartialCheck().isSelected()) {
+      for(DihedralAngle.SecondPartial q : Geometry.getDihedralAngleSecondPartials()) {
+        out.println(q);
+      }
+    }
+    if(getNehrSecondPartialCheck().isSelected()) {
+      for(NEHR.SecondPartial q : Geometry.getNEHRSecondPartials()) {
+        out.println(q);
+      }
+    }
+    if(getPartialEdgeSecondPartialCheck().isSelected()) {
+      for(PartialEdge.SecondPartial q : Geometry.getPartialEdgeSecondPartials()) {
+        out.println(q);
+      }
+    }
+    if(getVolumeSecondPartialCheck().isSelected()) {
+      for(Volume.SecondPartial q : Geometry.getVolumeSecondPartials()) {
+        out.println(q);
+      }
+    }
+    
+    // Sums
+    if(getTotalCurvatureCheck().isSelected()) {
+      out.println(Curvature3D.sum());
+    }
+    if(getTotalVolumeCheck().isSelected()) {
+      out.println(Volume.sum());
+    }
+    if(getTotalVolumePartialCheck().isSelected()) {
+      for(Volume.PartialSum q : Geometry.getVolumePartialSums()) {
+        out.println(q);
+      }
+    }
+    if(getTotalVolumeSecondPartialCheck().isSelected()) {
+      for(Volume.SecondPartialSum q : Geometry.getVolumeSecondPartialSums()) {
+        out.println(q);
+      }
+    }
+    
+    if(getLehrCheck().isSelected()) {
+      out.println(LEHR.getInstance());
+    }
+    if(getLcscCheck().isSelected()) {
+      for(LCSC lcsc : Geometry.getLCSC()) {
+        out.println(lcsc);
+      }
+    }
+    if(getVcscCheck().isSelected()) {
+      for(VCSC vcsc : Geometry.getVCSC()) {
+        out.println(vcsc);
+      }
+    }
+    if(getLEinsteinCheck().isSelected()) {
+      for(LEinstein le : Geometry.getLEinsteins()) {
+        out.println(le);
+      }
+    }
+    if(getVEinsteinCheck().isSelected()) {
+      for(VEinstein ve : Geometry.getVEinsteins()) {
+        out.println(ve);
+      }
+    }
+  }
+  
+  
 }
 
