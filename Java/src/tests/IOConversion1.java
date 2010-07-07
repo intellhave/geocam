@@ -23,7 +23,7 @@ public class IOConversion1 {
     String name = "";
     
     try {
-      scanner = new Scanner(new File("Data/Conversion/3DManifolds/simplicial_small_valence.txt"));
+      scanner = new Scanner(new File("Data/Conversion/Surfaces/manifolds_lex_d2_n9.txt"));
     } catch (FileNotFoundException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -35,7 +35,7 @@ public class IOConversion1 {
         s = line.substring(line.indexOf("="));
         name = line.substring(0, line.indexOf("="));
         if(line.contains("]]")){
-          String standardPath = "Data/Conversion/" + name + ".txt";
+          String standardPath = "Data/Conversion/" + name + ".xml";
           String lutzPath = "Data/Conversion/~lutz_" + name + ".txt";
           PrintStream lutzFile = null;
           try {
@@ -48,7 +48,7 @@ public class IOConversion1 {
           lutzFile.print(s);
           lutzFile.close();
           
-          TriangulationIO.read3DLutzFile(lutzPath);
+          TriangulationIO.read2DLutzFile(lutzPath);
           TriangulationIO.writeTriangulation(standardPath);
           Triangulation.reset();
         }
@@ -69,7 +69,7 @@ public class IOConversion1 {
         lutzFile.print(s);
         lutzFile.close();
         
-        TriangulationIO.read3DLutzFile(lutzPath);
+        TriangulationIO.read2DLutzFile(lutzPath);
         TriangulationIO.writeTriangulation(standardPath);
         Triangulation.reset();
       }
