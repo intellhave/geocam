@@ -30,6 +30,10 @@ public class Vector {
 	    result += ")";
 	    return result.toString();
 	}
+	
+	public void setComponent(int k, double val){
+		components_[k] = val;
+	}
 
 	public double getComponent(int k){
 		return components_[k];
