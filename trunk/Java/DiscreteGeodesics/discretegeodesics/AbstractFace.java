@@ -3,6 +3,7 @@ package discretegeodesics;
 import java.lang.Math;
 import java.lang.Exception;
 //import java.util.HashMap;
+import java.util.Arrays;
 import java.util.TreeMap;
 import java.util.ArrayList;
 import de.jreality.math.Rn;
@@ -518,21 +519,34 @@ public class AbstractFace {
 		//--------------------------------------
 		public Frustum2d(double[] source){ 
 			//make a full frustum
-			source_ = source; 
+			source_ = Arrays.copyOf(source,2); 
 			isFull = true; isEmpty = false;
 		}
 		
 		public Frustum2d(double[] source, double[] left_ray, double[] right_ray){
 			//make a frustum, if either ray is null, it will be made empty
-			source_ = source; 
+			source_ = Arrays.copyOf(source,2);
 			isFull = false; 
 			if((left_ray == null) || (right_ray == null)){ 
 				isEmpty = true; 
 				left_ray_ = null; right_ray_ = null;
 			}else{
 				isEmpty = false;
-				left_ray_ = left_ray; right_ray_ = right_ray;
+				left_ray_ = Arrays.copyOf(left_ray,2);
+				right_ray_ = Arrays.copyOf(right_ray,2);
 			}
+		}
+		
+		public Frustum2d(Frustum2d original){
+		  
+		  source_ = Arrays.copyOf(original.source_,2);
+		   if(original.isFull){ 
+		     isFull = true; isEmpty = false;
+		   }else{
+		     if(original.left_ray_ != null){ left_ray_ = Arrays.copyOf(original.left_ray_,2); }
+		     if(original.right_ray_ != null){ right_ray_ = Arrays.copyOf(original.right_ray_,2); }
+		     isFull = original.isFull; isEmpty = original.isEmpty;
+		   }
 		}
 		
 		public double[] getSource(){ return source_; }
@@ -568,41 +582,40 @@ public class AbstractFace {
 		public Frustum2d clipFrustum(Frustum2d that){
 			
 			//returns intersection of this frustum with another (NOTE: assumed to be from the same source point)
-			if(this.isEmpty){ return this; }else if(this.isFull){ return that; }
-			if(that.isEmpty){ return that; }else if(that.isFull){ return this; }
+			if(this.isEmpty){ return new Frustum2d(this); }else if(this.isFull){ return new Frustum2d(that); }
+			if(that.isEmpty){ return new Frustum2d(that); }else if(that.isFull){ return new Frustum2d(this); }
 			
 			//start from this.right, check if inside or outside that
 			if(that.containsVector(this.right_ray_)){
 				//the right edge of the intersection is this.right
 				if(this.containsVector(that.left_ray_)){
-					//the left edge of the intersection is that.left
-					Frustum2d retfrustum = new Frustum2d(source_, that.left_ray_, this.right_ray_);
-					return retfrustum;
+					//the left edge of the intersection is that.left 
+					return new Frustum2d(source_, that.left_ray_, this.right_ray_);
 				}
-				else{ return this; } //this is completely contained in that
+				else{ return new Frustum2d(this); } //this is completely contained in that
 				
 			}else{
 				if(this.containsVector(that.right_ray_)){
 					//the right edge of the intersection is that.right
 					if(that.containsVector(this.left_ray_)){
 						//the left edge of the intersection is this.left
-						Frustum2d retfrustum = new Frustum2d(source_, this.left_ray_, that.right_ray_);
-						return retfrustum;
+						return new Frustum2d(source_, this.left_ray_, that.right_ray_);
 					}
-					else{ return that; } //that is completely contained in this	
+					else{ return new Frustum2d(that); } //that is completely contained in this	
 				}
 				else{
 					//the intersection is empty
-					Frustum2d retfrustum = new Frustum2d(source_, null, null);
-					return retfrustum;
+					return new Frustum2d(source_, null, null);
 				}
 			}
 		}
 		
 		public double[][] clipFace(double[][] faceverts, boolean[] edgevisible){
 			
-			//given vertices in CCW order, clip this face and produce new list of vertices, or return false if face is obscured completely
-			//many optimizations can be made to this, as it works as is for arbitrary (eg possibly concave) faces
+			//given vertices in CCW order, clip this face and produce new list 
+		  // of vertices, or return null if face is obscured completely
+			//many optimizations can be made to this, as it works as is for 
+		  // arbitrary (eg possibly concave) faces
 			//edgevisible assumed to be already initialized
 			
 			int nverts = faceverts.length;
@@ -627,15 +640,10 @@ public class AbstractFace {
 			
 			//see which vertices are inside frustum
 			boolean[] keepverts = new boolean[nverts];
-			boolean foundtrue = false;
 			for(int i=0; i<nverts; i++){
-				if(containsPoint(faceverts[i])){
-					keepverts[i] = true;
-					foundtrue = true;
-				}
+				if(containsPoint(faceverts[i])){ keepverts[i] = true; }
 				else{ keepverts[i] = false; }
 			}
-			if(foundtrue == false){ return null; }
 			
 			//now walk around faceverts, adding vertices as necessary
 			ArrayList<double[]> newverts = new ArrayList<double[]>();
@@ -672,14 +680,15 @@ public class AbstractFace {
 					if(keepverts[i] && keepverts[(i+1)%nverts]){
 						//both verts in frustum, then visible
 						edgevisible[i] = true;
-					}else if(keepverts[i] || keepverts[(i+1)%nverts]){
+					}else{ 
 						//just one vert in frustum, then must have an interior hit
 						edgevisible[i] = hitleft || hitright;
 					}
 				}
 			}
 			
-			return newverts.toArray(new double[0][0]);
+			if(newverts.isEmpty()){ return null; }
+			else{ return newverts.toArray(new double[0][0]); }
 		}
 	};
 	
