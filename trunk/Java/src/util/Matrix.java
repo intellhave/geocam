@@ -2,8 +2,8 @@ package util;
 
 public class Matrix implements Cloneable{
   public double[][] m;
-  private int rows;
-  private int cols;
+  protected int rows;
+  protected int cols;
   
   public Matrix() {
     rows = 0;
@@ -31,6 +31,23 @@ public class Matrix implements Cloneable{
       m[i][0] = vector[i];
     }
   }
+  
+  public int numRows(){
+    return rows;
+  }
+  
+  public int numCols(){
+    return cols;
+  }
+  
+  public double getEntry(int i, int j){
+    return m[i][j];
+  }
+  
+  public void setEntry(int i, int j, double k){
+    m[i][j] = k;
+  }
+  
   
   public Matrix transpose() {
     Matrix t = new Matrix(cols, rows);
