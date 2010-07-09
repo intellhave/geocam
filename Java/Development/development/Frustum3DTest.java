@@ -10,7 +10,7 @@ import de.jreality.tools.RotateTool;
 public class Frustum3DTest {
   public static void main(String[] args) {
     Frustum3D f1 = new Frustum3D(new Vector3D(0, 0, 1), new Vector3D(1, 0, 0), new Vector3D(0, 1, 0));
-    Frustum3D f2 = new Frustum3D(new Vector3D(1, 1, 1), new Vector3D(1, 0, 1), new Vector3D(1, 1, -1));
+    Frustum3D f2 = new Frustum3D(new Vector3D(1, 1, 1), new Vector3D(1, -.5, 1), new Vector3D(1, 1, -1));
     
     Frustum3D f3 = null;
     try {
@@ -20,11 +20,23 @@ public class Frustum3DTest {
       e.printStackTrace();
     }
     
-    double[][] allVectors = new double[f1.getNumberVectors()+1][3];
+    if(f3 == null) System.out.println("no intersection");
+    double[][] allVectors = new double[f1.getNumberVectors()+1+f2.getNumberVectors()+1][3];
     allVectors[0] = new double[]{0, 0, 0};
-    for(int i = 1; i < f1.getNumberVectors()+1; i++) {
-      allVectors[i] = f1.getVectorAt(i-1).getVectorAsArray();
+    int count = 1;
+    for(int i = 0; i < f1.getNumberVectors(); i++) {
+      allVectors[count] = f1.getVectorAt(i).getVectorAsArray();
+      count++;
     }
+    for(int i = 0; i < f2.getNumberVectors(); i++) {
+      allVectors[count] = f2.getVectorAt(i).getVectorAsArray();
+      count++;
+    }
+//    for(int i = 0; i < f3.getNumberVectors(); i++) {
+//      allVectors[count] = f3.getVectorAt(i).getVectorAsArray();
+//      count++;
+//    }
+    
     
 //    ArrayList<Vector3D> vectors = f3.getVectors();
 //    for(int i = 0; i < vectors.size(); i++ ){
@@ -36,7 +48,10 @@ public class Frustum3DTest {
 //    }
         
     double[][] ifsf_verts = allVectors;
-    int[][] ifsf_faces = { {0, 1, 2}, {0, 2, 3}, {0, 3, 1} };
+    int[][] ifsf_faces = { 
+                          {0, 1, 2}, {0, 2, 3}, {0, 3, 1}, 
+                          {0, 4, 5}, {0, 5, 6}, {0, 6, 4}
+                          };
     
     SceneGraphComponent sgc_root = new SceneGraphComponent();
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
