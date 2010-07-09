@@ -6,7 +6,7 @@ import development.Point;
 
 public class Vector {
   
-  private double[] components_;
+  protected double[] components_;
   
   //constructors
   public Vector(double[] components){
@@ -78,6 +78,10 @@ public class Vector {
     }
   }
   
+  public double[] getVectorAsArray() {
+    return Arrays.copyOf(components_, components_.length);
+  }
+  
   static public double dot(Vector a, Vector b) throws Exception{
 
     if(a.getDimension() != b.getDimension()){
@@ -105,19 +109,11 @@ public class Vector {
 
   }
   
-  static public Vector cross(Vector a, Vector b) throws Exception{
-    
-    if((a.getDimension() != 3) || (b.getDimension() != 3)){ 
-      throw new Exception("Dimension must be 3");
-    }else{
-      return new Vector(
-          a.components_[1]*b.components_[2]-a.components_[2]*b.components_[1], 
-          -a.components_[0]*b.components_[2]+a.components_[2]*b.components_[0], 
-          a.components_[0]*b.components_[1]-a.components_[1]*b.components_[0]
-      );
-    }
+  static public double distance(Vector v1, Vector v2) throws Exception {
+    v1.subtract(v2);
+    return Math.sqrt(v1.lengthSquared());
   }
-  
+
   public double lengthSquared(){
     
     double result = 0;
