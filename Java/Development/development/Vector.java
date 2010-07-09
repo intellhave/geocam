@@ -17,6 +17,10 @@ public class Vector {
     components_ = new double[] { x, y };
   }
   
+  public Vector(int dimension){
+    components_ = new double[dimension];
+  }
+  
   public Vector(double x, double y, double z){
     components_ = new double[] { x, y, z };
   }
@@ -113,6 +117,22 @@ public class Vector {
     v1.subtract(v2);
     return Math.sqrt(v1.lengthSquared());
   }
+  
+  public static Vector add(Vector v1, Vector v2) {
+    Vector sum = new Vector(v1.getDimension());
+    for(int i = 0; i < v1.getDimension(); i++) {
+      sum.setComponent(i, v1.getComponent(i)+v2.getComponent(i));
+    }
+    return sum;
+  }
+  
+  public static Vector subtract(Vector v1, Vector v2) {
+    Vector sum = new Vector(v1.getDimension());
+    for(int i = 0; i < v1.getDimension(); i++) {
+      sum.setComponent(i, v1.getComponent(i)-v2.getComponent(i));
+    }
+    return sum;
+  }
 
   public double lengthSquared(){
     
@@ -123,11 +143,22 @@ public class Vector {
     return result;
   }
   
+  public double length() {
+    return Math.sqrt(lengthSquared());
+  }
+  
   public void normalize(){
     
     double len = Math.sqrt(lengthSquared());
     for(int i=0; i<components_.length; i++){
       components_[i] /= len;
     }
+  }
+  
+  public boolean isZero() {
+    for(int i = 0; i < this.getDimension(); i++) {
+      if(this.getComponent(i) != 0) return false;
+    }
+    return true;
   }
 }
