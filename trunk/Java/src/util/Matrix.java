@@ -32,6 +32,16 @@ public class Matrix implements Cloneable{
     }
   }
   
+  public Matrix scaleMatrix(double c){
+    Matrix temp = new Matrix(rows, cols);
+    for(int i=0; i < rows; i++){
+      for(int j=0; j< cols; j++){
+        temp.setEntry(i, j, c*getEntry(i,j));
+      }
+    }
+    return temp;
+  }
+  
   public int numRows(){
     return rows;
   }
@@ -88,6 +98,83 @@ public class Matrix implements Cloneable{
       }
     }
     return tmp;
+  }
+  
+  
+  public Matrix matrixMinor(int i, int j){
+    if((rows == 1) && (cols == 1)){
+      Matrix simple = new Matrix(1,1);
+      simple.setEntry(0,0,1);
+      return simple; 
+    }
+    else{
+    Matrix T = new Matrix(rows-1, cols-1);
+    for(int s = 0; s < rows-1; s++){
+      for(int t = 0; t < cols-1; t++){
+        if(s < i){
+          if(t < j){
+            T.setEntry(s,t, getEntry(s,t));
+          }
+          else{
+            T.setEntry(s,t, getEntry(s,t+1));
+          }
+        }
+        else{
+          if(t < j){
+            T.setEntry(s,t, getEntry(s+1,t));
+          }
+          else{
+            T.setEntry(s,t, getEntry(s+1,t+1));
+          }
+        }
+      }
+    }
+    return T;
+  }
+  }
+  
+  
+  
+  public double determinant(){
+    double result = 0;
+    if(rows > 1){
+    for(int j=0; j < rows; j++){
+      Matrix temp = matrixMinor(0,j);
+      result = result + Math.pow(-1,j)*getEntry(0, j)*temp.determinant();
+      
+    }
+    }
+    else{
+      result = getEntry(0,0);
+    }
+    return result;
+    }
+    
+    //3 x 3 case
+    /*return m[1][1]*m[2][2]*m[3][3]+m[1][2]*m[3][1]*m[2][3]+m[1][3]*m[2][1]*m[3][2]-
+    m[1][1]*m[3][2]*m[2][3]-m[1][2]*m[2][1]*m[3][3]-m[1][3]*m[3][1]*m[2][2];
+  }*/
+  
+
+  public Matrix inverse() throws Exception{
+    if((rows == 1) && (cols == 1)){
+      Matrix temp = new Matrix(1,1);
+      temp.setEntry(0,0, Math.pow(getEntry(0,0),-1));
+      return temp;
+    }
+    else if(determinant() == 0){
+      throw new Exception("Matrix must be invertible");
+    }
+    else{
+    Matrix C = new Matrix(rows, cols);
+    for(int i=0; i < rows; i++){
+      for(int j=0; j < cols; j++){
+        C.setEntry(i, j, Math.pow(-1, i+j)*matrixMinor(i,j).determinant());
+      }
+    }
+    C = C.transpose();
+    return C.scaleMatrix(Math.pow(determinant(),-1));
+  }
   }
   
   public Object clone() {

@@ -19,6 +19,7 @@ public class DevelopmentApp {
       System.err.print(e.getMessage());
     }*/
     
+    /*
     Point p = new Point(new double[] {1,1});
     Vector v = new Vector(new double[] {1,1});
     Vector c = new Vector(new double[] {0,1});
@@ -27,15 +28,31 @@ public class DevelopmentApp {
     t.setEntry(0,1,-1);
     t.setEntry(1,0,1);
     t.setEntry(1,1,0);
+    */
+    
+    //Matrix testing
+    Matrix t = new Matrix(3,3);
+    t.setEntry(0,0,1);
+    t.setEntry(0,1,2);
+    t.setEntry(0,2,3);
+    t.setEntry(1,0,2);
+    t.setEntry(1,1,0);
+    t.setEntry(1,2,-2);
+    t.setEntry(2,0,-2);
+    t.setEntry(2,1,-2);
+    t.setEntry(2,2,-1);
+    
+    
     try{
       //AffineTransformation s = new AffineTransformation(t,c);
       //AffineTransformation s = new AffineTransformation(t);
-      AffineTransformation s = new AffineTransformation(c);
-      Point q = new Point(s.affineTransPoint(p));
+      //AffineTransformation s = new AffineTransformation(c);
+      //Point q = new Point(s.affineTransPoint(p));
       //Vector q = new Vector(s.affineTransVector(v));
-      System.out.print(s);
+      System.out.print(t);
       //System.out.print(q);
-      System.out.print(q);
+      System.out.print(t.inverse());
+      System.out.print(t.multiply(t.inverse()));
     }catch(Exception e){
       e.printStackTrace();
     
