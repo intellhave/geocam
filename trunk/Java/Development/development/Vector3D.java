@@ -12,4 +12,15 @@ public class Vector3D extends Vector {
         + a.components_[2] * b.components_[0], a.components_[0]
         * b.components_[1] - a.components_[1] * b.components_[0]);
   }
+
+  public static double dot(Vector3D a, Vector3D b) {
+    return a.getComponent(0) * b.getComponent(0) + a.getComponent(1)
+        * b.getComponent(1) + a.getComponent(2) * b.getComponent(2);
+  }
+
+  public static Vector3D subtract(Vector3D a, Vector3D b) {
+    return new Vector3D(a.getComponent(0) - b.getComponent(0), a
+        .getComponent(1)
+        - b.getComponent(1), a.getComponent(2) - b.getComponent(2));
+  }
 }
