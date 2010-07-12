@@ -6,30 +6,24 @@ package development;
 import java.util.Iterator;
 
 import InputOutput.TriangulationIO;
-import Triangulation.Triangulation;
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.Vertex;
-import Triangulation.StdFace;
-import Geoquant.Length;
-import Geoquant.Area;
+import Triangulation.*;
+import Geoquant.*;
 
 public class GeocamTest {
 
   public static void main(String[] args){
     
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/tetrahedron.xml");
+    TriangulationIO.readTriangulation("Data/Triangulations/3DManifolds/3-torus.xml");
 
-    Integer key = 0;
     Iterator i = null;
     
     //print some edge info
     System.out.printf("\n\nEDGE INFO\n");
     System.out.printf("Edge count: %d\n",Triangulation.edgeTable.size());
-  
+    
     i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
-      key = (Integer)i.next();
+      Integer key = (Integer)i.next();
       Edge e = Triangulation.edgeTable.get(key);
       Length.At(e).setValue(1);
       
@@ -42,16 +36,43 @@ public class GeocamTest {
     System.out.printf("\n\nFACE INFO\n");
     System.out.printf("Face count: %d\n",Triangulation.faceTable.size());
 
+    /*
     i = Triangulation.faceTable.keySet().iterator();
     while(i.hasNext()){
-      key = (Integer)i.next();
+      Integer key = (Integer)i.next();
       Face f = Triangulation.faceTable.get(key);
       
       System.out.printf("Face %d: \n",key);
       System.out.printf("   Num local faces: %d\n", f.getLocalFaces().size());
       System.out.printf("   Area: %f\n",Area.valueAt(f)); 
-    }
+      
+      //coords
+      System.out.printf("   Coords: ");
+      Iterator j = f.getLocalVertices().iterator();
+      while(j.hasNext()){
+        Vertex v = (Vertex)j.next();
+        System.out.print(Coord2D.coordAt(v,f));
+      }
+      System.out.printf("\n");*/
     
+      i = Triangulation.tetraTable.keySet().iterator();
+      while(i.hasNext()){
+      Integer key = (Integer)i.next();
+      Tetra t = Triangulation.tetraTable.get(key);
+      
+      System.out.printf("Tetra %d: \n",key);
+      System.out.printf("   Num local tetras: %d\n", t.getLocalTetras().size());
+      System.out.printf("   Volume: %f\n",Volume.valueAt(t)); 
+      
+      //coords
+      System.out.printf("   Coords: ");
+      Iterator j = t.getLocalVertices().iterator();
+      while(j.hasNext()){
+        Vertex v = (Vertex)j.next();
+        System.out.print(Coord3D.coordAt(v,t));
+      }
+      System.out.printf("\n");
+    }
     
   }
 }
