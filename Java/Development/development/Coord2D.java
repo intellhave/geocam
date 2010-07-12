@@ -7,6 +7,8 @@ import Triangulation.Vertex;
 import Triangulation.StdFace;
 import Geoquant.*;
 
+//note that the coordinates this geoquant gives do not take orientation into account
+
 public class Coord2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, Coord2D> Index = new HashMap<TriPosition, Coord2D>();
@@ -16,11 +18,8 @@ public class Coord2D extends Geoquant {
   private Length lik;
   private Angle ai;
 
-  //fix an ordering (the one from stdface)
-  //coords computed differently depending on the index in this ordering (stdFIndex)
-  private int stdFIndex; 
-  //2d point holding coords for this vertex/face pair
-  private Point coord;
+  private int stdFIndex; //coordinate computed differently depending on index
+  private Point coord; //2d point holding coords for this vertex/face pair
   
   public Coord2D(Vertex v, Face f) {
     super(v,f);
@@ -30,9 +29,10 @@ public class Coord2D extends Geoquant {
     lik = Length.At(stdF.e13);
     ai = Angle.At(stdF.v1, f);
     
-    if(stdF.v1 == v){ stdFIndex = 0; }
-    else if(stdF.v2 == v){ stdFIndex = 1; }
-    else if(stdF.v3 == v){ stdFIndex = 2; }
+    //figure out index of v in stdFace vertex list
+    if(v == stdF.v1){ stdFIndex = 0; }
+    else if(v == stdF.v2){ stdFIndex = 1; }
+    else if(v == stdF.v3){ stdFIndex = 2; }
     
     lij.addObserver(this);
     ljk.addObserver(this);
