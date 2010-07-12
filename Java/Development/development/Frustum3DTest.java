@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -39,15 +40,8 @@ public class Frustum3DTest {
     f2 = new Frustum3D(f2a, f2b, f2c);
     f2_initial = new Frustum3D(f2a, f2b, f2c);
 
-    System.out.println(f1.checkInterior(new Vector(new double[] { 1, 1, 1 })));
-
-    f3 = null;
-    try {
-      f3 = Frustum3D.intersect(f1, f2);
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    f3 = Frustum3D.intersect(f1, f2);
+ 
 
     if (f3 == null)
       System.out.println("no intersection");
@@ -63,7 +57,7 @@ public class Frustum3DTest {
     sgc_root.addChild(sgcf2);
 
     sgcf3 = new SceneGraphComponent();
-    sgcf3.setGeometry(getGeometry(f3, Color.red));
+    sgcf3.setGeometry(getIntersectionGeometry(f3, Color.red));
     sgc_root.addChild(sgcf3);
 
     sgc_root.addTool(new RotateTool());
@@ -71,6 +65,7 @@ public class Frustum3DTest {
     // set up the main JRViewer
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
+    jrv.setShowPanelSlots(true, false, false, false); // show left panel only
     jrv.registerPlugin(new UIPanel_Model());
     jrv.setContent(sgc_root);
     jrv.startup();
@@ -83,7 +78,8 @@ public class Frustum3DTest {
 
   }
   
-  public static void updateOrientation(double angle) throws Exception {
+  // rotate by angle (in radians) about z axis
+  public static void updateOrientation(double angle) {
     Matrix Rz = new Matrix( Math.cos(angle),  Math.sin(angle),  0, 0, 
                         -Math.sin(angle), Math.cos(angle), 0, 0,
                         0, 0, 1, 0,
@@ -99,7 +95,7 @@ public class Frustum3DTest {
     f2 = new Frustum3D(newVectors);
     f3 = Frustum3D.intersect(f1, f2);
     sgcf2.setGeometry(getGeometry(f2, Color.green));
-    sgcf3.setGeometry(getGeometry(f3, Color.red));
+    sgcf3.setGeometry(getIntersectionGeometry(f3, Color.red));
 
   }
 
@@ -198,15 +194,16 @@ public class Frustum3DTest {
       box3 = new JCheckBox();
       box3.addActionListener(new BoxListener(3));
       
+      shrinkPanel.add(new JLabel("Hide blue frustum"));
       shrinkPanel.add(box1);
+      shrinkPanel.add(new JLabel("Hide green frustum"));
       shrinkPanel.add(box2);
+      shrinkPanel.add(new JLabel("Hide red intersection"));
       shrinkPanel.add(box3);
 
 
       // specify layout
-      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6)); // a
-                                                                          // little
-                                                                          // padding
+      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));       
       shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),
           BoxLayout.Y_AXIS));
     }

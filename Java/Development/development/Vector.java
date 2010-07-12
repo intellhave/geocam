@@ -99,8 +99,7 @@ public class Vector {
     }
   }
   
-  static public double dot(Vector v, Point p) throws Exception {
-
+  static public double dot(Vector v, Point p) throws Exception{
     if(v.getDimension() != p.getDimension()){
       throw new Exception("Dimension mismatch");
     }else{
@@ -110,7 +109,6 @@ public class Vector {
       }
       return result;
     }
-
   }
   
   static public double distance(Vector v1, Vector v2) throws Exception {
