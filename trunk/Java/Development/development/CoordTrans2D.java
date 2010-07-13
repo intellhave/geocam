@@ -59,7 +59,14 @@ public class CoordTrans2D extends Geoquant {
 
     //COMPUTE THE MATRIX affineTrans HERE
     //affineTrans = new AffineTransformation(ci,cj)
-    affineTrans = null;
+    Point[] P = new Point[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
+    Point[] Q = new Point[] {cv1f2.getCoord(), cv2f2.getCoord(), cw2.getCoord()};
+    try {
+      affineTrans = AffineTransformation.MatchTriTrans(P,Q);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     
     value = 0; //unused
   }

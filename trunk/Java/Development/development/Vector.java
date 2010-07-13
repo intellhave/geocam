@@ -159,4 +159,94 @@ public class Vector {
     }
     return true;
   }
+  
+  
+  //Mark and Taylor
+  public static Vector pointToVector(Point P){
+    double[] temp = new double[P.getDimension()];
+    for(int i=0; i < P.getDimension(); i++){
+      temp[i] = P.getComponent(i);
+    }
+    Vector result = new Vector(temp);
+    return result;
+  }
+  
+  public static Point translatePoint(Point p, Vector c){
+    Point result = new Point(new double[c.getDimension()]);
+    for(int i=0; i < c.getDimension(); i++){
+      result.setComponent(i, p.getComponent(i)+ c.getComponent(i));
+    }
+    return result;
+  }
+  
+  public static Vector add_better(Vector a, Vector b){
+    Vector c = new Vector(new double[a.getDimension()]);
+    for(int i=0; i < a.getDimension(); i++){
+      c.setComponent(i, a.getComponent(i) + b.getComponent(i));
+    }
+    return c;
+    
+  }
+  
+  public Vector scale_better(double factor){
+    //scale this by factor
+      Vector result = new Vector(new double[components_.length]);
+      for(int i=0; i<components_.length; i++){
+        result.setComponent(i, components_[i]*factor);
+      }
+      return result;
+    }
+  
+  static public Vector cross(Vector a, Vector b) throws Exception{
+    
+    if((a.getDimension() != 3) || (b.getDimension() != 3)){ 
+      throw new Exception("Dimension must be 3");
+    }else{
+      return new Vector(
+          a.components_[1]*b.components_[2]-a.components_[2]*b.components_[1], 
+          -a.components_[0]*b.components_[2]+a.components_[2]*b.components_[0], 
+          a.components_[0]*b.components_[1]-a.components_[1]*b.components_[0]
+      );
+    }
+  }
+  
+  
+  public static double findAngle2D(Vector u, Vector v) throws Exception{
+    Vector u3d = new Vector(new double[] {u.getComponent(0), u.getComponent(1), 0});
+    Vector v3d = new Vector(new double[] {v.getComponent(0), v.getComponent(1), 0});
+    Vector c = cross(u3d, v3d);
+    if(c.getComponent(2) >= 0 ){ //will return a positive angle
+      double cos_theta = (dot(u3d,v3d))/(Math.sqrt(u3d.lengthSquared()* v3d.lengthSquared()));
+      if(cos_theta < 0){
+        double minus_cos_theta = (-1)*cos_theta;
+        double theta = Math.acos(minus_cos_theta);
+        theta = Math.PI - theta;
+        return theta;
+      }
+      else{ //case cos_theta >= 0
+        double theta = Math.acos(cos_theta);
+        return theta;
+      }
+    }
+    else{
+      double cos_theta = (dot(u3d,v3d))/(Math.sqrt(u3d.lengthSquared()* v3d.lengthSquared()));
+      if(cos_theta < 0){
+        double minus_cos_theta = (-1)*cos_theta;
+        double theta = Math.acos(minus_cos_theta);
+        theta = Math.PI - theta;
+        return (-1)*theta;
+      }
+      else{ //case cos_theta >= 0
+        double theta = Math.acos(cos_theta);
+        return (-1)*theta;
+      
+    }
+  }
+  
+  
+}
+  
+  
+  
+  
 }
