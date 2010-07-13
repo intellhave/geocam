@@ -28,7 +28,7 @@ public class Vector {
   public Vector(Vector copy){
     components_ = Arrays.copyOf(copy.components_,copy.components_.length);
   }
-  
+    
   //methods
   @Override 
   public String toString() {

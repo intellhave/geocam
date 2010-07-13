@@ -14,6 +14,10 @@ public class Point {
     components_ = Arrays.copyOf(copy.components_,copy.components_.length);
   }
   
+  public Point(double x, double y) {
+    components_ = new double[]{x, y};
+  }
+
   //methods
   @Override 
   public String toString() {
