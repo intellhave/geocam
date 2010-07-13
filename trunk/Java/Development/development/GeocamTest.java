@@ -3,11 +3,21 @@
 
 package development;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
+
+import de.jreality.geometry.IndexedFaceSetFactory;
+import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.content.ContentAppearance;
+import de.jreality.plugin.content.ContentLoader;
+import de.jreality.plugin.content.ContentTools;
+import de.jreality.scene.Appearance;
+import de.jreality.scene.proxy.scene.SceneGraphComponent;
+import de.jreality.shader.CommonAttributes;
 
 import InputOutput.TriangulationIO;
 import Triangulation.*;
@@ -21,56 +31,21 @@ public class GeocamTest {
     
     Iterator i = null;
     
-    //print some edge info
-    System.out.printf("\n\nEDGE INFO\n");
-    System.out.printf("Edge count: %d\n",Triangulation.edgeTable.size());
-    
+    //set edge lengths to 1
     i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = (Integer)i.next();
       Edge e = Triangulation.edgeTable.get(key);
-      Length.At(e).setValue(1);
-      
-      System.out.printf("Edge %d: \n",key);
-      System.out.printf("   Num local faces: %d\n", e.getLocalFaces().size());
-      System.out.printf("   Length: %f\n",Length.valueAt(e)); 
+      Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
     }
     
-    //print some face info
-    System.out.printf("\n\nFACE INFO\n");
-    System.out.printf("Face count: %d\n",Triangulation.faceTable.size());
-    
-    Tetra t1 = null;
-    Tetra t2 = null;
-    int ind = 0;
-    
-    
-   /* i = Triangulation.faceTable.keySet().iterator();
-    while(i.hasNext()){
-      Integer key = (Integer)i.next();
-      Face f = Triangulation.faceTable.get(key);
-      
-      System.out.printf("Face %d: \n",key);
-      System.out.printf("   Num local faces: %d\n", f.getLocalFaces().size());
-      System.out.printf("   Area: %f\n",Area.valueAt(f)); 
-      
-      //coords
-      System.out.printf("   Coords: ");
-      Iterator j = f.getLocalVertices().iterator();
-      while(j.hasNext()){
-        Vertex v = (Vertex)j.next();
-        System.out.print(Coord2D.coordAt(v,f));
-      }
-      System.out.printf("\n");*/
+    //print some tetra info
+    System.out.printf("\n\nTOP DIM SIMPLEX INFO\n");
     
     i = Triangulation.tetraTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = (Integer)i.next();
       Tetra t = Triangulation.tetraTable.get(key);
-      
-      if(ind == 0){ t1 = t; }
-      else if(ind == 1){ t2 = t; }
-      ind++;
       
       System.out.printf("Tetra %d: \n",key);
       System.out.printf("   Num local tetras: %d\n", t.getLocalTetras().size());
@@ -81,30 +56,72 @@ public class GeocamTest {
       Iterator j = t.getLocalVertices().iterator();
       while(j.hasNext()){
         Vertex v = (Vertex)j.next();
-        System.out.printf("(i%d)",v.getIndex());
+        System.out.printf("[v%d: (",v.getIndex());
         System.out.print(Coord3D.coordAt(v,t));
+        System.out.print(")]");
       }
       System.out.printf("\n");
     }
     
-    //get list of common vertices
-    LinkedList<Vertex> vertscommon = new LinkedList<Vertex>(t1.getLocalVertices());
-    vertscommon.retainAll(t2.getLocalVertices());
-    //get non-common vertex on tetra 1
-    LinkedList<Vertex> leftover1 = new LinkedList<Vertex>(t1.getLocalVertices());
-    leftover1.removeAll(vertscommon);
-    Vertex w1 = leftover1.get(0);
-    //get non-common vertex on tetra 2
-    LinkedList<Vertex> leftover2 = new LinkedList<Vertex>(t2.getLocalVertices());
-    leftover2.removeAll(vertscommon);
-    Vertex w2 = leftover2.get(0);
+    //pick some arbitrary tetra
+    i = Triangulation.tetraTable.keySet().iterator();
+    Tetra tetra = Triangulation.tetraTable.get((Integer)i.next());
+
+    //create a sgc for the tetra
+    SceneGraphComponent sgc_tetra = new SceneGraphComponent();
+    Appearance app_tetra = new Appearance();
+    app_tetra.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app_tetra.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app_tetra.setAttribute(CommonAttributes.TUBES_DRAW, false);
+    app_tetra.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
+    app_tetra.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    //app_tetra.setAttribute(CommonAttributes.TRANSPARENCY, 0.7d);
+    sgc_tetra.setAppearance(app_tetra);
+
+    double[][] vertlist = new double[4][3];
+    double[] offset = new double[] {5, 0, 0};
     
-    System.out.printf("(Leftover 1: %d)",w1.getIndex());
-    System.out.printf("(Leftover 2: %d)",w2.getIndex());
-    System.out.print("(Common:");
-    for(int k=0; k<vertscommon.size(); k++){
-      System.out.printf(" %d",vertscommon.get(k).getIndex());
+    int count = 0;
+    Iterator j = tetra.getLocalVertices().iterator();
+    
+    while(j.hasNext()){
+      Vertex v = (Vertex)j.next();
+      Point vpoint = Coord3D.coordAt(v,tetra);
+
+      vertlist[count] = new double[] {
+          vpoint.getComponent(0) + offset[0], 
+          vpoint.getComponent(1) + offset[1], 
+          vpoint.getComponent(2) + offset[2] };
+      count++;
     }
-    System.out.print(")");
+    
+    int[][] facelist = new int[4][3];
+    facelist[0] = new int[] {0,2,1};
+    facelist[1] = new int[] {0,2,3};
+    facelist[2] = new int[] {2,1,3};
+    facelist[3] = new int[] {1,0,3};
+    
+    IndexedFaceSetFactory ifsf_tetra = new IndexedFaceSetFactory();
+    ifsf_tetra.setVertexCount(4);
+    ifsf_tetra.setVertexCoordinates(vertlist);
+    ifsf_tetra.setFaceCount(4);
+    ifsf_tetra.setFaceIndices(facelist);
+    ifsf_tetra.update();
+    sgc_tetra.setGeometry(ifsf_tetra.getGeometry());
+    
+    //root sgc
+    SceneGraphComponent sgc_root = new SceneGraphComponent();
+    sgc_root.addChild(sgc_tetra);
+    //sgc_root.addChild(sgc_frust);
+    //sgc_root.addChild(sgc_intpoints);
+    
+    //jrviewer
+    JRViewer jrv = new JRViewer();
+    jrv.addBasicUI();
+    jrv.setContent(sgc_root);
+    jrv.registerPlugin(new ContentAppearance());
+    jrv.registerPlugin(new ContentLoader());
+    jrv.registerPlugin(new ContentTools());
+    jrv.startup();
   }
 }
