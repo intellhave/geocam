@@ -65,7 +65,7 @@ public class DevelopmentApp {
     Point[] U = new Point[] {P0,P1,P2};
     Point[] V = new Point[] {Q0,Q1,Q2};
     */
-    //MatchTetraTrans TEST2
+    /*MatchTetraTrans TEST2
     Point P0 = new Point(new double[] {-2,-4,-1});
     Point P1 = new Point(new double[] {-1,-4,-1});
     Point P2 = new Point(new double[] {-2,-4,-3});
@@ -74,7 +74,25 @@ public class DevelopmentApp {
     Point Q2 = new Point(new double[] {3,3,0});
     Point[] U = new Point[] {P0,P1,P2};
     Point[] V = new Point[] {Q0,Q1,Q2};
-    
+    */
+    /*findNormal Test
+    Point P0 = new Point(new double[] {0,0,0});
+    Point P1 = new Point(new double[] {1,0,0});
+    Point P2 = new Point(new double[] {0,1,0});
+    Point[] P = new Point[] {P0,P1,P2};
+    */
+    //findAngle2D Test
+    //Vector u = new Vector(new double[] {1,0});
+    //Vector v = new Vector(new double[] {-1,0});
+    //MatchTriTrans Test
+    Point P0 = new Point(new double[] {-2,1});
+    Point P1 = new Point(new double[] {-3,2});
+    Point P2 = new Point(new double[] {-4,1});
+    Point Q0 = new Point(new double[] {3,2});
+    Point Q1 = new Point(new double[] {4,3});
+    Point Q2 = new Point(new double[] {5,1});
+    Point[] p = new Point[] {P1,P0,P2};
+    Point[] q = new Point[] {Q0,Q1,Q2};
     
     
     /*try {
@@ -98,7 +116,10 @@ public class DevelopmentApp {
       //System.out.print(t.inverse());
       //System.out.print(t.multiply(t.inverse()));
       //System.out.print(t.transformVector(c));
-      System.out.print(MatchTetraTrans.MatchTetraTrans(U,V));
+      //System.out.print(MatchTetraTrans.MatchTetraTrans(U,V));
+      //System.out.print(MatchTriTrans.findNormal(P,2,1));
+      //System.out.print(Vector.findAngle2D(v,u));
+      System.out.print(MatchTriTrans.MatchTriTrans(p, q));
     }catch(Exception e){
       e.printStackTrace();
     
