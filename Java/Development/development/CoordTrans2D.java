@@ -13,10 +13,6 @@ public class CoordTrans2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, CoordTrans2D> Index = new HashMap<TriPosition, CoordTrans2D>();
 
-  //ex: vi f1 and vi f2 refer to the same vertex in the manifold
-  //the w points are the vertices not shared between faces, which must
-  //be used to make sure the orientation of the affine transformation is correct
-  
   //the common edge between faces f1 and f2 has vertices v1 and v2
   //this gives matrix moving face f1 onto its common edge with f2
   //to get the orientation right, we need the non-common vertices, w1 and w2
