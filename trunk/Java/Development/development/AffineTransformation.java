@@ -90,6 +90,8 @@ public AffineTransformation(Vector b){
     Vector finalVector = new Vector(result);
     return finalVector;
   }
+ 
+  
    
   
   

@@ -1,5 +1,8 @@
 package util;
 
+import development.Vector;
+
+
 public class Matrix implements Cloneable{
   public double[][] m;
   protected int rows;
@@ -67,6 +70,23 @@ public class Matrix implements Cloneable{
       }
     }
     return t;
+  }
+  
+  public Vector transformVector(Vector c){
+    if(cols != c.getDimension()){
+      System.err.print("Matrix and vector dimensions incompatible");
+      return null;
+    }
+    double[] temp = new double[c.getDimension()];
+    for(int i=0; i < c.getDimension(); i++){
+      double result = 0;
+      for(int j=0; j< c.getDimension(); j++){
+        result += m[i][j]*c.getComponent(j);
+      }
+      temp[i] = result;
+    }
+    Vector vectTemp = new Vector(temp);
+    return vectTemp;
   }
   
   public Matrix multiply(Matrix other) {

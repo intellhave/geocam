@@ -31,6 +31,7 @@ public class DevelopmentApp {
     */
     
     //Matrix testing
+    /*
     Matrix t = new Matrix(3,3);
     t.setEntry(0,0,1);
     t.setEntry(0,1,2);
@@ -41,6 +42,49 @@ public class DevelopmentApp {
     t.setEntry(2,0,-2);
     t.setEntry(2,1,-2);
     t.setEntry(2,2,-1);
+    Matrix T = new Matrix(2,2);
+    T.setEntry(0,0,2);
+    T.setEntry(0,1,0);
+    T.setEntry(1,0,0);
+    T.setEntry(1,1,1);
+    Vector u1 = new Vector(new double[] {1/Math.pow(2,.5),1/Math.pow(2,.5)});
+    Vector u2 = new Vector(new double[] {-1/Math.pow(2,.5),1/Math.pow(2,.5)});
+    Vector w1 = new Vector(new double[] {1,0});
+    Vector w2 = new Vector(new double[] {0,1});
+    Vector[] U = new Vector[] {u1,u2};
+    Vector[] W = new Vector[] {w1,w2};
+    Matrix S = new Matrix(2,2);
+    */
+    /*MatchTetraTrans TEST1
+    Point P0 = new Point(new double[] {0,0,0});
+    Point P1 = new Point(new double[] {1,0,0});
+    Point P2 = new Point(new double[] {0,1,0});
+    Point Q0 = new Point(new double[] {2,0,1});
+    Point Q1 = new Point(new double[] {2,0,0});
+    Point Q2 = new Point(new double[] {2,1,1});
+    Point[] U = new Point[] {P0,P1,P2};
+    Point[] V = new Point[] {Q0,Q1,Q2};
+    */
+    //MatchTetraTrans TEST2
+    Point P0 = new Point(new double[] {-2,-4,-1});
+    Point P1 = new Point(new double[] {-1,-4,-1});
+    Point P2 = new Point(new double[] {-2,-4,-3});
+    Point Q0 = new Point(new double[] {3,1,0});
+    Point Q1 = new Point(new double[] {4,1,0});
+    Point Q2 = new Point(new double[] {3,3,0});
+    Point[] U = new Point[] {P0,P1,P2};
+    Point[] V = new Point[] {Q0,Q1,Q2};
+    
+    
+    
+    /*try {
+      S = MatchTetraTrans.changeBasis(T, U, W);
+    } catch (Exception e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    */
+    Vector c = new Vector(new double[] {0,1});
     
     
     try{
@@ -49,10 +93,12 @@ public class DevelopmentApp {
       //AffineTransformation s = new AffineTransformation(c);
       //Point q = new Point(s.affineTransPoint(p));
       //Vector q = new Vector(s.affineTransVector(v));
-      System.out.print(t);
+      //System.out.print(S);
       //System.out.print(q);
-      System.out.print(t.inverse());
-      System.out.print(t.multiply(t.inverse()));
+      //System.out.print(t.inverse());
+      //System.out.print(t.multiply(t.inverse()));
+      //System.out.print(t.transformVector(c));
+      System.out.print(MatchTetraTrans.MatchTetraTrans(U,V));
     }catch(Exception e){
       e.printStackTrace();
     
