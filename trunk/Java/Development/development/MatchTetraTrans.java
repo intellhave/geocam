@@ -81,10 +81,6 @@ public class MatchTetraTrans extends Matrix {
       // a vector to create affineTransformation. We made a
       // note to write a procedure that applies matrices to vectors
       // within the vector class
-      
-      // c as a matrix
-      //  c -> Tc (as a vector)
-      // then return AffineTransformation(T, Tc)
       AffineTransformation result = new AffineTransformation(trans, finalTranslate);
       return result;
     }
