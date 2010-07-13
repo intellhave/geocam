@@ -67,6 +67,7 @@ public class Frustum3DTest {
     jrv.addBasicUI();
     jrv.setShowPanelSlots(true, false, false, false); // show left panel only
     jrv.registerPlugin(new UIPanel_Model());
+    jrv.setShowPanelSlots(true,false,false,false);
     jrv.setContent(sgc_root);
     jrv.startup();
   }
