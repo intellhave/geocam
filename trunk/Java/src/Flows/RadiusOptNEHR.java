@@ -1,7 +1,7 @@
 package Flows;
 
 import util.Matrix;
-import Geoquant.NEHR;
+import Geoquant.VEHR;
 import Geoquant.Radius;
 import Solvers.NewtonsMethod;
 import Triangulation.Vertex;
@@ -9,9 +9,9 @@ import Triangulation.Triangulation;
 
 public class RadiusOptNEHR extends NewtonsMethod {
   private Radius[] radii;
-  private NEHR nehr;
-  private NEHR.Partial[] partials;
-  private NEHR.SecondPartial[][] secondPartials;
+  private VEHR nehr;
+  private VEHR.Partial[] partials;
+  private VEHR.SecondPartial[][] secondPartials;
   
   public RadiusOptNEHR() {
     super();
@@ -19,17 +19,17 @@ public class RadiusOptNEHR extends NewtonsMethod {
     int i = 0;
     int j;
     int length = Triangulation.vertexTable.size();
-    nehr = NEHR.getInstance();
+    nehr = VEHR.getInstance();
     radii = new Radius[length];
-    partials = new NEHR.Partial[length];
-    secondPartials = new NEHR.SecondPartial[length][length];
+    partials = new VEHR.Partial[length];
+    secondPartials = new VEHR.SecondPartial[length][length];
     
     for(Vertex v : Triangulation.vertexTable.values()) {
       radii[i] = Radius.At(v);
-      partials[i] = NEHR.partialAt(v);
+      partials[i] = VEHR.partialAt(v);
       j = 0;
       for(Vertex w : Triangulation.vertexTable.values()) {
-        secondPartials[i][j] = NEHR.secondPartialAt(v, w);
+        secondPartials[i][j] = VEHR.secondPartialAt(v, w);
         j++;
       }
       i++;

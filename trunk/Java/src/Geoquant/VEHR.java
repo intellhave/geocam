@@ -7,14 +7,14 @@ import Triangulation.Edge;
 import Triangulation.Vertex;
 import Triangulation.Triangulation;
 
-public class NEHR extends Geoquant {
+public class VEHR extends Geoquant {
   private Curvature3D.Sum totalK;
   private Volume.Sum totalV;
-  private static NEHR instance = null; 
+  private static VEHR instance = null; 
   private static HashMap<TriPosition, Partial> PartialIndex = new HashMap<TriPosition, Partial>();
   private static HashMap<TriPosition, SecondPartial> SecondPartialIndex = new HashMap<TriPosition, SecondPartial>();
   
-  private NEHR() {
+  private VEHR() {
     super();
     totalK = Curvature3D.sum();
     totalV = Volume.sum();
@@ -32,9 +32,9 @@ public class NEHR extends Geoquant {
     totalV.deleteObserver(this);
   }
   
-  public static NEHR getInstance() {
+  public static VEHR getInstance() {
     if(instance == null) {
-      instance = new NEHR();
+      instance = new VEHR();
     }
     return instance;
   }
@@ -43,9 +43,9 @@ public class NEHR extends Geoquant {
     return getInstance().getValue();
   }
 
-  public static NEHR.Partial partialAt(Vertex v) {
+  public static VEHR.Partial partialAt(Vertex v) {
     TriPosition T = new TriPosition(v.getSerialNumber());
-    NEHR.Partial q = PartialIndex.get(T);
+    VEHR.Partial q = PartialIndex.get(T);
     if(q == null) {
       q = new Partial(v);
       q.pos = T;
@@ -54,9 +54,9 @@ public class NEHR extends Geoquant {
     return q;
   }
   
-  public static NEHR.Partial partialAt(Edge e) {
+  public static VEHR.Partial partialAt(Edge e) {
     TriPosition T = new TriPosition(e.getSerialNumber());
-    NEHR.Partial q = PartialIndex.get(T);
+    VEHR.Partial q = PartialIndex.get(T);
     if(q == null) {
       q = new Partial(e);
       q.pos = T;
@@ -170,7 +170,7 @@ public class NEHR extends Geoquant {
     }
   }
   
-  public static NEHR.SecondPartial secondPartialAt(Vertex v, Vertex w) {
+  public static VEHR.SecondPartial secondPartialAt(Vertex v, Vertex w) {
     TriPosition T = new TriPosition(v.getSerialNumber(), w.getSerialNumber());
     SecondPartial q = SecondPartialIndex.get(T);
     if(q == null) {
@@ -181,7 +181,7 @@ public class NEHR extends Geoquant {
     return q;
   }
   
-  public static NEHR.SecondPartial secondPartialAt(Vertex v, Edge e) {
+  public static VEHR.SecondPartial secondPartialAt(Vertex v, Edge e) {
     TriPosition T = new TriPosition(v.getSerialNumber(), e.getSerialNumber());
     SecondPartial q = SecondPartialIndex.get(T);
     if(q == null) {
@@ -192,7 +192,7 @@ public class NEHR extends Geoquant {
     return q;
   }
   
-  public static NEHR.SecondPartial secondPartialAt(Edge e, Edge f) {
+  public static VEHR.SecondPartial secondPartialAt(Edge e, Edge f) {
     TriPosition T = new TriPosition(e.getSerialNumber(), f.getSerialNumber());
     SecondPartial q = SecondPartialIndex.get(T);
     if(q == null) {

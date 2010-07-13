@@ -27,7 +27,7 @@ import Geoquant.LCSC;
 import Geoquant.LEHR;
 import Geoquant.LEinstein;
 import Geoquant.Length;
-import Geoquant.NEHR;
+import Geoquant.VEHR;
 import Geoquant.PartialEdge;
 import Geoquant.Radius;
 import Geoquant.SectionalCurvature;
@@ -362,7 +362,7 @@ public class GeoquantTest {
       return;
     }
     
-    out.println(NEHR.getInstance());
+    out.println(VEHR.getInstance());
     out.close();
     System.out.println("Done with NEHR.");
   }
@@ -588,13 +588,13 @@ public class GeoquantTest {
       return;
     }
     
-    NEHR.Partial partial;
+    VEHR.Partial partial;
     for (Vertex  v : Triangulation.vertexTable.values()) {
-      partial = NEHR.partialAt(v);
+      partial = VEHR.partialAt(v);
       out.println(partial);
     }
     for (Edge e : Triangulation.edgeTable.values()) {
-      partial = NEHR.partialAt(e);
+      partial = VEHR.partialAt(e);
       out.println(partial);
     }
     out.close();
@@ -608,20 +608,20 @@ public class GeoquantTest {
     } catch (FileNotFoundException e1) {
       return;
     }
-    NEHR.SecondPartial secondPartial;
+    VEHR.SecondPartial secondPartial;
     for (Vertex v : Triangulation.vertexTable.values()) {
       for (Vertex w : Triangulation.vertexTable.values()) {
-        secondPartial = NEHR.secondPartialAt(v, w);
+        secondPartial = VEHR.secondPartialAt(v, w);
         out.println(secondPartial);
       }
       for (Edge e : Triangulation.edgeTable.values()) {
-        secondPartial = NEHR.secondPartialAt(v, e);
+        secondPartial = VEHR.secondPartialAt(v, e);
         out.println(secondPartial);
       }
     }
    for (Edge e : Triangulation.edgeTable.values()) {
      for (Edge f : Triangulation.edgeTable.values()) { 
-       secondPartial = NEHR.secondPartialAt(e, f);
+       secondPartial = VEHR.secondPartialAt(e, f);
        out.println(secondPartial);
      }
    }
