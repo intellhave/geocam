@@ -13,33 +13,50 @@ public class CoordTrans2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, CoordTrans2D> Index = new HashMap<TriPosition, CoordTrans2D>();
 
+  //ex: vi f1 and vi f2 refer to the same vertex in the manifold
+  //the w points are the vertices not shared between faces, which must
+  //be used to make sure the orientation of the affine transformation is correct
+  
   //the common edge between faces f1 and f2 has vertices v1 and v2
   //this gives matrix moving face f1 onto its common edge with f2
-  private Coord2D cv1f1;
-  private Coord2D cv1f2;
-  private Coord2D cv2f1;
-  private Coord2D cv2f2;
-
+  //to get the orientation right, we need the non-common vertices, w1 and w2
+  private Coord2D cv1f1,cv2f1,cw1;
+  private Coord2D cv1f2,cv2f2,cw2;
+  
   private AffineTransformation affineTrans; 
   
   public CoordTrans2D(Face f1, Face f2) {
     super(f1,f2);
+   
+    //get list of common vertices
+    LinkedList<Vertex> vertscommon = new LinkedList<Vertex>(f1.getLocalVertices());
+    vertscommon.retainAll(f2.getLocalVertices());
+    Vertex v1 = vertscommon.get(0);
+    Vertex v2 = vertscommon.get(1);
     
-    //find common verts, must have retlist.size()==2
-    LinkedList<Vertex> retlist = new LinkedList<Vertex>(f1.getLocalVertices());
-    retlist.retainAll(f2.getLocalVertices());
-    Vertex v1 = retlist.get(0);
-    Vertex v2 = retlist.get(1);
+    //get non-common vertex on face 1
+    LinkedList<Vertex> leftover1 = new LinkedList<Vertex>(f1.getLocalVertices());
+    leftover1.removeAll(vertscommon);
+    Vertex w1 = leftover1.get(0);
+    
+    //get non-common vertex on face 2
+    LinkedList<Vertex> leftover2 = new LinkedList<Vertex>(f2.getLocalVertices());
+    leftover2.removeAll(vertscommon);
+    Vertex w2 = leftover2.get(0);
     
     cv1f1 = Coord2D.At(v1, f1);
     cv2f1 = Coord2D.At(v2, f1);
     cv1f2 = Coord2D.At(v1, f2);
     cv2f2 = Coord2D.At(v2, f2);
+    cw1 = Coord2D.At(w1, f1);
+    cw2 = Coord2D.At(w2, f2);
     
     cv1f1.addObserver(this);
     cv1f2.addObserver(this);
     cv2f1.addObserver(this);
     cv2f2.addObserver(this);
+    cw1.addObserver(this);
+    cw2.addObserver(this);
   }
   
   protected void recalculate() {
@@ -57,6 +74,8 @@ public class CoordTrans2D extends Geoquant {
     cv1f2.deleteObserver(this);
     cv2f1.deleteObserver(this);
     cv2f2.deleteObserver(this);
+    cw1.deleteObserver(this);
+    cw2.deleteObserver(this);
     Index.remove(pos);
   }
   
