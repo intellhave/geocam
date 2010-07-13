@@ -1,11 +1,34 @@
 package development;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 
 public class ConvexHull3D {
   private static final double epsilon = Math.pow(10, -6);
   private ArrayList<Face> faces = new ArrayList<Face>();
+  
+//  public static void main(String[] args) {
+//    Vector3D v1 = new Vector3D(-1, 0, 0);
+//    Vector3D v2 = new Vector3D(0, 1, 0);
+//    Vector3D v3 = new Vector3D(1, 0, 0);
+//    Vector3D v4 = new Vector3D(0, 0, 1);
+//
+//    Face f1 = new Face(v1, v2, v3);
+//    Face f2 = new Face(v3, v2, v4);
+//    Face f3 = new Face(v4, v2, v1);
+//    Face f4 = new Face(v1, v3, v4);
+//
+//    ArrayList<Face> faces = new ArrayList<Face>();
+//    faces.add(f1);
+//    faces.add(f2);
+//    faces.add(f3);
+//    faces.add(f4);
+//    ArrayList<Vector3D[]> badPairs = getBadEdges(faces);
+//    for(int i =0 ; i < badPairs.size(); i++) {
+//      System.out.println(badPairs.get(i)[0].toString() + " and " + badPairs.get(i)[1].toString());
+//    }
+//  }
 
   public ConvexHull3D(ArrayList<Vector3D> unsortedVectors) {
     findHull(unsortedVectors);
@@ -33,22 +56,6 @@ public class ConvexHull3D {
     unsorted.remove(2);
     unsorted.remove(i);
 
-    f1.addAdjacency(f2, 0);
-    f1.addAdjacency(f3, 1);
-    f1.addAdjacency(f4, 2);
-
-    f2.addAdjacency(f1, 0);
-    f2.addAdjacency(f3, 2);
-    f2.addAdjacency(f4, 1);
-
-    f3.addAdjacency(f1, 0);
-    f3.addAdjacency(f4, 1);
-    f3.addAdjacency(f2, 2);
-
-    f4.addAdjacency(f1, 0);
-    f4.addAdjacency(f3, 1);
-    f4.addAdjacency(f2, 2);
-
     faces.add(f1);
     faces.add(f2);
     faces.add(f3);
@@ -58,6 +65,8 @@ public class ConvexHull3D {
   }
 
   private void addPoint(Vector3D v) {
+    ArrayList<Face> visibleFaces = new ArrayList<Face>();
+    
     for (int i = 0; i < faces.size(); i++) {
       double dot = Vector3D.dot(faces.get(i).getNormal(), Vector3D.subtract(v, faces
           .get(i).getVectorAt(0)));
@@ -65,7 +74,31 @@ public class ConvexHull3D {
         ArrayList<Vector3D> vectors = faces.get(i).getVectors();
         vectors.add(v);
       }
+      else if(dot >= epsilon) {
+        visibleFaces.add(faces.get(i));
+      }
     }
+    
+    ArrayList<HashSet<Vector3D>> badEdges = getBadEdges(visibleFaces);
+  }
+  
+  public static ArrayList<HashSet<Vector3D>> getBadEdges(ArrayList<Face> faces) {
+    ArrayList<HashSet<Vector3D>> pairs = new ArrayList<HashSet<Vector3D>>();
+    for(int i = 0; i < faces.size(); i++) {
+      Face cur = faces.get(i);
+      for(int j = 0; j < cur.getNumberVertices(); j++) {
+        for(int k = i+1; k < faces.size(); k++) {
+          Face next = faces.get(k);
+          if(next.contains(cur.getVectorAt(j)) && next.contains(cur.getVectorAt((j+1)%cur.getNumberVertices()))){
+            HashSet<Vector3D> HashSet = new HashSet<Vector3D>();
+            HashSet.add(cur.getVectorAt(j));
+            HashSet.add(cur.getVectorAt((j+1)%cur.getNumberVertices()));
+            pairs.add(HashSet);
+          }
+        }
+      }
+    }
+    return pairs;
   }
 
   private boolean coplanar(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
@@ -75,50 +108,5 @@ public class ConvexHull3D {
     return result.isZero();
   }
 
-  private class Face {
-    private Vector3D[] vectors_;
-    private Vector3D normal_;
-    private Face[] adjacencies_;
 
-    // expects vectors in counter-clockwise order
-    public Face(ArrayList<Vector3D> v) {
-      vectors_ = (Vector3D[]) v.toArray();
-      findNormal();
-    }
-
-    public Face(Vector3D... vectors) {
-      vectors_ = vectors;
-      findNormal();
-    }
-    
-    public ArrayList<Vector3D> getVectors() {
-      ArrayList<Vector3D> vectors = new ArrayList<Vector3D>();
-      for(int i = 0; i < vectors_.length; i++) {
-        vectors.add(vectors_[i]);
-      }
-      return vectors;
-    }
-    
-    public Vector3D[] getVectorsAsArray() {
-      return Arrays.copyOf(vectors_, vectors_.length);
-    }
-
-    public Vector3D getVectorAt(int index) {
-      return vectors_[index];
-    }
-
-    public void addAdjacency(Face face, int i) {
-      adjacencies_[i] = face;
-    }
-
-    private void findNormal() {
-      Vector3D v1 = Vector3D.subtract(vectors_[1], vectors_[0]);
-      Vector3D v2 = Vector3D.subtract(vectors_[2], vectors_[1]);
-      normal_ = Vector3D.cross(v1, v2);
-    }
-
-    public Vector3D getNormal() {
-      return normal_;
-    }
-  }
 }
