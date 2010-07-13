@@ -35,7 +35,7 @@ public class Vector {
       String result = new String("");
       result += "(" + components_[0];
       for(int i=1; i<components_.length; i++){
-        result += "," + components_[i];
+        result += ", " + components_[i];
       }
       result += ")";
       return result.toString();
