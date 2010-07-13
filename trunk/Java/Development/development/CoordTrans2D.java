@@ -13,7 +13,7 @@ public class CoordTrans2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, CoordTrans2D> Index = new HashMap<TriPosition, CoordTrans2D>();
 
-  //the common edge between faces f1 and f2 is the edge with vertices v1 and v2
+  //the common edge between faces f1 and f2 has vertices v1 and v2
   //this gives matrix moving face f1 onto its common edge with f2
   private Coord2D cv1f1;
   private Coord2D cv1f2;
@@ -32,9 +32,9 @@ public class CoordTrans2D extends Geoquant {
     Vertex v2 = retlist.get(1);
     
     cv1f1 = Coord2D.At(v1, f1);
-    cv1f1 = Coord2D.At(v2, f1);
-    cv1f1 = Coord2D.At(v1, f2);
-    cv1f1 = Coord2D.At(v2, f2);
+    cv2f1 = Coord2D.At(v2, f1);
+    cv1f2 = Coord2D.At(v1, f2);
+    cv2f2 = Coord2D.At(v2, f2);
     
     cv1f1.addObserver(this);
     cv1f2.addObserver(this);
@@ -45,7 +45,8 @@ public class CoordTrans2D extends Geoquant {
   protected void recalculate() {
 
     //COMPUTE THE MATRIX affineTrans HERE
-    //affineTrans = new AffineTransformation(ci,cj) or whatever
+    //affineTrans = new AffineTransformation(ci,cj)
+    affineTrans = null;
     
     value = 0; //unused
   }
@@ -83,8 +84,5 @@ public class CoordTrans2D extends Geoquant {
   public static AffineTransformation affineTransAt(Face f1, Face f2) {
     return At(f1,f2).getAffineTrans();
   }
-  
-  
-  
 
 }
