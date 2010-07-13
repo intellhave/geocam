@@ -3,6 +3,10 @@
 
 package development;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Iterator;
 
 import InputOutput.TriangulationIO;
@@ -14,7 +18,7 @@ public class GeocamTest {
   public static void main(String[] args){
     
     TriangulationIO.readTriangulation("Data/Triangulations/3DManifolds/3-torus.xml");
-
+    
     Iterator i = null;
     
     //print some edge info
@@ -35,9 +39,13 @@ public class GeocamTest {
     //print some face info
     System.out.printf("\n\nFACE INFO\n");
     System.out.printf("Face count: %d\n",Triangulation.faceTable.size());
-
-    /*
-    i = Triangulation.faceTable.keySet().iterator();
+    
+    Tetra t1 = null;
+    Tetra t2 = null;
+    int ind = 0;
+    
+    
+   /* i = Triangulation.faceTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = (Integer)i.next();
       Face f = Triangulation.faceTable.get(key);
@@ -55,10 +63,14 @@ public class GeocamTest {
       }
       System.out.printf("\n");*/
     
-      i = Triangulation.tetraTable.keySet().iterator();
-      while(i.hasNext()){
+    i = Triangulation.tetraTable.keySet().iterator();
+    while(i.hasNext()){
       Integer key = (Integer)i.next();
       Tetra t = Triangulation.tetraTable.get(key);
+      
+      if(ind == 0){ t1 = t; }
+      else if(ind == 1){ t2 = t; }
+      ind++;
       
       System.out.printf("Tetra %d: \n",key);
       System.out.printf("   Num local tetras: %d\n", t.getLocalTetras().size());
@@ -69,10 +81,30 @@ public class GeocamTest {
       Iterator j = t.getLocalVertices().iterator();
       while(j.hasNext()){
         Vertex v = (Vertex)j.next();
+        System.out.printf("(i%d)",v.getIndex());
         System.out.print(Coord3D.coordAt(v,t));
       }
       System.out.printf("\n");
     }
     
+    //get list of common vertices
+    LinkedList<Vertex> vertscommon = new LinkedList<Vertex>(t1.getLocalVertices());
+    vertscommon.retainAll(t2.getLocalVertices());
+    //get non-common vertex on tetra 1
+    LinkedList<Vertex> leftover1 = new LinkedList<Vertex>(t1.getLocalVertices());
+    leftover1.removeAll(vertscommon);
+    Vertex w1 = leftover1.get(0);
+    //get non-common vertex on tetra 2
+    LinkedList<Vertex> leftover2 = new LinkedList<Vertex>(t2.getLocalVertices());
+    leftover2.removeAll(vertscommon);
+    Vertex w2 = leftover2.get(0);
+    
+    System.out.printf("(Leftover 1: %d)",w1.getIndex());
+    System.out.printf("(Leftover 2: %d)",w2.getIndex());
+    System.out.print("(Common:");
+    for(int k=0; k<vertscommon.size(); k++){
+      System.out.printf(" %d",vertscommon.get(k).getIndex());
+    }
+    System.out.print(")");
   }
 }
