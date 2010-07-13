@@ -10,7 +10,7 @@ public class Alpha extends Geoquant {
   
   private Alpha(Vertex v) {
     super(v); // ALWAYS have to call this first
-    value = 1; // default
+    value = 0; // default
   }
   
   public static Alpha At(Vertex v) {
@@ -30,7 +30,7 @@ public class Alpha extends Geoquant {
   
   protected void recalculate() {
     // This is empty for a alpha
-    value = 1;
+    value = 0;
   }
  
   public void remove() {

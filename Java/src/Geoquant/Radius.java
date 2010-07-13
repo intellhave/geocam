@@ -11,8 +11,8 @@ import Triangulation.Triangulation;
 
 public class Radius extends Geoquant {
   private static HashMap<TriPosition, Radius> Index = new HashMap<TriPosition, Radius>();
-  private static NEHR.SecondPartial[][] nehr_rad_rad;
-  private static NEHR.SecondPartial[][] nehr_rad_eta;
+  private static VEHR.SecondPartial[][] nehr_rad_rad;
+  private static VEHR.SecondPartial[][] nehr_rad_eta;
   private HashMap<TriPosition, Partial> PartialIndex;
   private Vertex v;
   
@@ -53,12 +53,12 @@ public class Radius extends Geoquant {
     int i, j;
     
     if(nehr_rad_rad == null) {
-      nehr_rad_rad = new NEHR.SecondPartial[vertSize][vertSize];
+      nehr_rad_rad = new VEHR.SecondPartial[vertSize][vertSize];
       i = 0;
       for(Vertex v1 : Triangulation.vertexTable.values()) {
         j = 0;
         for(Vertex v2 : Triangulation.vertexTable.values()) {
-          nehr_rad_rad[i][j] = NEHR.secondPartialAt(v1, v2);
+          nehr_rad_rad[i][j] = VEHR.secondPartialAt(v1, v2);
           j++;
         }
         i++;
@@ -66,12 +66,12 @@ public class Radius extends Geoquant {
     }
     
     if(nehr_rad_eta == null) {
-      nehr_rad_eta = new NEHR.SecondPartial[vertSize][edgeSize];
+      nehr_rad_eta = new VEHR.SecondPartial[vertSize][edgeSize];
       i = 0;
       for(Vertex v1 : Triangulation.vertexTable.values()) {
         j = 0;
         for(Edge e1 : Triangulation.edgeTable.values()) {
-          nehr_rad_eta[i][j] = NEHR.secondPartialAt(v1, e1);
+          nehr_rad_eta[i][j] = VEHR.secondPartialAt(v1, e1);
           j++;
         }
         i++;

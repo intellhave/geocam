@@ -34,7 +34,7 @@ import Solvers.WrongDirectionException;
 * THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
-public class NEHRFlowDialog extends JDialog {
+public class VEHRFlowDialog extends JDialog {
   private JButton runButton;
   private JButton cancelButton;
   private JRadioButton maxFlowButton;
@@ -48,7 +48,7 @@ public class NEHRFlowDialog extends JDialog {
   private JRadioButton etaFlowButton;
   private GeoquantViewer owner;
   
-  public NEHRFlowDialog(GeoquantViewer owner) {
+  public VEHRFlowDialog(GeoquantViewer owner) {
     super(owner);
     this.owner = owner;
     GroupLayout nMethodDialogLayout = new GroupLayout((JComponent)this.getContentPane());
@@ -223,7 +223,7 @@ public class NEHRFlowDialog extends JDialog {
     @Override
     public void actionPerformed(ActionEvent evt) {
       if(evt.getSource().equals(getRunButton())) {
-        NEHRFlowDialog.this.setVisible(false);
+        VEHRFlowDialog.this.setVisible(false);
         if(getRadFlowButton().isSelected()) {
           RadiusOptNEHR radNM = new RadiusOptNEHR();
           double[] log_radii;
@@ -294,7 +294,7 @@ public class NEHRFlowDialog extends JDialog {
           }
         }
       }
-      NEHRFlowDialog.this.dispose();
+      VEHRFlowDialog.this.dispose();
     }
     
   }

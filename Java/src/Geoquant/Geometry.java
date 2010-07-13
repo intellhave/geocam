@@ -30,6 +30,8 @@ public class Geometry {
       list.addAll(getCurvature2D());
     } else if(c.isAssignableFrom(Curvature3D.class)) {
       list.addAll(getCurvature3D());
+    } else if(c.isAssignableFrom(EdgeCurvature.class)) {
+      list.addAll(getEdgeCurvatures());
     } else if(c.isAssignableFrom(Curvature3D.Sum.class)) {
       list.add(Curvature3D.sum());
     } else if(c.isAssignableFrom(DihedralAngle.class)) {
@@ -46,8 +48,8 @@ public class Geometry {
       list.addAll(getFaceHeights());
     } else if(c.isAssignableFrom(Length.class)) {
       list.addAll(getLengths());
-    } else if(c.isAssignableFrom(NEHR.class)) {
-      list.add(NEHR.getInstance());
+    } else if(c.isAssignableFrom(VEHR.class)) {
+      list.add(VEHR.getInstance());
     } else if(c.isAssignableFrom(PartialEdge.class)) {
       list.addAll(getPartialEdges());
     } else if(c.isAssignableFrom(Radius.class)) {
@@ -62,8 +64,8 @@ public class Geometry {
       list.addAll(getCurvaturePartials());
     } else if(c.isAssignableFrom(DihedralAngle.Partial.class)) {
       list.addAll(getDihedralAnglePartials());
-    } else if(c.isAssignableFrom(NEHR.Partial.class)) {
-      list.addAll(getNEHRPartials());
+    } else if(c.isAssignableFrom(VEHR.Partial.class)) {
+      list.addAll(getVEHRPartials());
     } else if(c.isAssignableFrom(PartialEdge.Partial.class)) {
       list.addAll(getPartialEdgePartials());
     } else if(c.isAssignableFrom(Radius.Partial.class)) {
@@ -76,14 +78,24 @@ public class Geometry {
       list.addAll(getCurvatureSecondPartials());
     } else if(c.isAssignableFrom(DihedralAngle.SecondPartial.class)) {
       list.addAll(getDihedralAngleSecondPartials());
-    } else if(c.isAssignableFrom(NEHR.SecondPartial.class)) {
-      list.addAll(getNEHRSecondPartials());
+    } else if(c.isAssignableFrom(VEHR.SecondPartial.class)) {
+      list.addAll(getVEHRSecondPartials());
     } else if(c.isAssignableFrom(PartialEdge.SecondPartial.class)) {
       list.addAll(getPartialEdgeSecondPartials());
     } else if(c.isAssignableFrom(Volume.SecondPartial.class)) {
       list.addAll(getVolumeSecondPartials());
     } else if(c.isAssignableFrom(Volume.SecondPartialSum.class)) {
       list.addAll(getVolumeSecondPartialSums());
+    } else if(c.isAssignableFrom(LCSC.class)) {
+      list.addAll(getLCSC());
+    } else if(c.isAssignableFrom(VCSC.class)) {
+      list.addAll(getVCSC());
+    } else if(c.isAssignableFrom(LEinstein.class)) {
+      list.addAll(getLEinsteins());
+    } else if(c.isAssignableFrom(VEinstein.class)) {
+      list.addAll(getVEinsteins());
+    } else if(c.isAssignableFrom(LEHR.class)) {
+      list.add(LEHR.getInstance());
     } else {
       return null;
     }
@@ -179,6 +191,16 @@ public class Geometry {
     for (Vertex v : Triangulation.vertexTable.values()){
       cu3 = Curvature3D.At(v);
       list.add(cu3);
+    }
+    return list;
+  }
+  
+  public static List<EdgeCurvature> getEdgeCurvatures() {
+    LinkedList<EdgeCurvature> list = new LinkedList<EdgeCurvature>();
+    EdgeCurvature c;
+    for (Edge e : Triangulation.edgeTable.values()){
+      c = EdgeCurvature.At(e);
+      list.add(c);
     }
     return list;
   }
@@ -317,15 +339,15 @@ public class Geometry {
     return list;
   }
   
-  public static List<NEHR.Partial> getNEHRPartials() {
-    LinkedList<NEHR.Partial> list = new LinkedList<NEHR.Partial>();
-    NEHR.Partial partial;
+  public static List<VEHR.Partial> getVEHRPartials() {
+    LinkedList<VEHR.Partial> list = new LinkedList<VEHR.Partial>();
+    VEHR.Partial partial;
     for(Vertex v : Triangulation.vertexTable.values()) {
-      partial = NEHR.partialAt(v);
+      partial = VEHR.partialAt(v);
       list.add(partial);
     }
     for(Edge e : Triangulation.edgeTable.values()) {
-      partial = NEHR.partialAt(e);
+      partial = VEHR.partialAt(e);
       list.add(partial);
     }
     return list;
@@ -420,24 +442,24 @@ public class Geometry {
     return list;
   }
   
-  public static List<NEHR.SecondPartial> getNEHRSecondPartials() {
-    LinkedList<NEHR.SecondPartial> list = new LinkedList<NEHR.SecondPartial>();
-    NEHR.SecondPartial secondPartial;
+  public static List<VEHR.SecondPartial> getVEHRSecondPartials() {
+    LinkedList<VEHR.SecondPartial> list = new LinkedList<VEHR.SecondPartial>();
+    VEHR.SecondPartial secondPartial;
     for (Vertex v : Triangulation.vertexTable.values()) {
       for (Vertex w : Triangulation.vertexTable.values()) {
-        secondPartial = NEHR.secondPartialAt(v, w);
+        secondPartial = VEHR.secondPartialAt(v, w);
         list.add(secondPartial);
       }
     }
     for (Vertex v : Triangulation.vertexTable.values()) {
       for (Edge e : Triangulation.edgeTable.values()) {
-        secondPartial = NEHR.secondPartialAt(v, e);
+        secondPartial = VEHR.secondPartialAt(v, e);
         list.add(secondPartial);
       }
     }
    for (Edge e : Triangulation.edgeTable.values()) {
      for (Edge f : Triangulation.edgeTable.values()) { 
-       secondPartial = NEHR.secondPartialAt(e, f);
+       secondPartial = VEHR.secondPartialAt(e, f);
        list.add(secondPartial);
      }
    }

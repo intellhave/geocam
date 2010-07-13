@@ -10,10 +10,10 @@ import Triangulation.Vertex;
 
 public class EtaOptNEHR extends NewtonsMethod {
   private Eta[] etas;
-  private NEHR nehr;
-  private NEHR.Partial[] nehr_eta_partials;
-  private NEHR.SecondPartial[][] nehr_eta_eta_partials;
-  private NEHR.SecondPartial[][] nehr_rad_eta_partials;
+  private VEHR nehr;
+  private VEHR.Partial[] nehr_eta_partials;
+  private VEHR.SecondPartial[][] nehr_eta_eta_partials;
+  private VEHR.SecondPartial[][] nehr_rad_eta_partials;
   private Radius.Partial[][] radius_partials;
   private RadiusOptNEHR minRadii;
   
@@ -23,11 +23,11 @@ public class EtaOptNEHR extends NewtonsMethod {
     int vertSize = Triangulation.vertexTable.size();
     int edgeSize = Triangulation.edgeTable.size();
     
-    nehr = NEHR.getInstance();
+    nehr = VEHR.getInstance();
     etas = new Eta[edgeSize];
-    nehr_eta_partials = new NEHR.Partial[edgeSize];
-    nehr_eta_eta_partials = new NEHR.SecondPartial[edgeSize][edgeSize];
-    nehr_rad_eta_partials = new NEHR.SecondPartial[vertSize][edgeSize];
+    nehr_eta_partials = new VEHR.Partial[edgeSize];
+    nehr_eta_eta_partials = new VEHR.SecondPartial[edgeSize][edgeSize];
+    nehr_rad_eta_partials = new VEHR.SecondPartial[vertSize][edgeSize];
     radius_partials = new Radius.Partial[vertSize][edgeSize];
     
     minRadii = new RadiusOptNEHR();
@@ -36,16 +36,16 @@ public class EtaOptNEHR extends NewtonsMethod {
     int j;
     for(Edge e : Triangulation.edgeTable.values()) {
       etas[i] = Eta.At(e);
-      nehr_eta_partials[i] = NEHR.partialAt(e);
+      nehr_eta_partials[i] = VEHR.partialAt(e);
       j = 0;
       for(Vertex v : Triangulation.vertexTable.values()) {
         radius_partials[j][i] = Radius.At(v).partialAt(e);
-        nehr_rad_eta_partials[j][i] = NEHR.secondPartialAt(v, e);
+        nehr_rad_eta_partials[j][i] = VEHR.secondPartialAt(v, e);
         j++;
       }
       j = 0;
       for(Edge f : Triangulation.edgeTable.values()) {
-        nehr_eta_eta_partials[i][j] = NEHR.secondPartialAt(e, f);
+        nehr_eta_eta_partials[i][j] = VEHR.secondPartialAt(e, f);
         j++;
       }
       i++;

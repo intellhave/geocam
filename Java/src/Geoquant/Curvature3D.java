@@ -110,8 +110,8 @@ public class Curvature3D extends Geoquant {
         k.deleteObserver(this);
       }
       curvs.clear();
+      total = null;
     }
-        
   }
 
   public Curvature3D.Partial partialAt(Vertex w) {
