@@ -107,7 +107,7 @@
   <Face index="4">
     <Vertices>1 2 5 </Vertices>
     <Edges>1 4 8 </Edges>
-    <Faces>1 3 9 </Faces>
+    <Faces>1 3 8 </Faces>
   </Face>
   <Face index="5">
     <Vertices>2 3 6 </Vertices>
