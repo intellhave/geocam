@@ -136,7 +136,7 @@ public AffineTransformation(Vector b){
           R.getComponent(1)-S.getComponent(1));
       Vector n = new Vector(u.getComponent(1),(-1)*u.getComponent(0));
       if(Vector.dot(v,n) > 0){
-        return n.scale(-1);
+        return n.scale_better(-1);
       }
       else{
         return n;
@@ -174,9 +174,9 @@ public AffineTransformation(Vector b){
           Q0.getComponent(1)-P0.getComponent(1));
       Vector d = new Vector(new double[P0.getDimension()]);
       d = Vector.pointToVector(P0);
-      Vector minus_d = d.scale(-1);
+      Vector minus_d = d.scale_better(-1);
       Vector e = new Vector(new double[Q0.getDimension()]);
-      Vector minus_e = e.scale(-1);
+      Vector minus_e = e.scale_better(-1);
       P0 = Vector.translatePoint(P0, minus_d);
       P1 = Vector.translatePoint(P1, minus_d);
       P2 = Vector.translatePoint(P2, minus_d);
@@ -227,7 +227,7 @@ public AffineTransformation(Vector b){
         Vector e1 = new Vector(new double[] {1,0});
         Vector e2 = new Vector(new double[] {0,1});
         Vector[] stdBasis = new Vector[] {e1,e2};
-        trans = MatchTetraTrans.changeBasis(trans, U, stdBasis);
+        trans = changeBasis(trans, U, stdBasis);
         System.out.print(trans);
         //Find angle between u1 and v1. get rotation transformation, then compose
         u1 = trans.transformVector(u1);
@@ -272,9 +272,9 @@ public AffineTransformation(Vector b){
      //Translate triangles P and Q to origin
       Vector d = new Vector(new double[P0.getDimension()]);
       d = Vector.pointToVector(P0);
-      Vector minus_d = d.scale(-1);
+      Vector minus_d = d.scale_better(-1);
       Vector e = new Vector(new double[Q0.getDimension()]);
-      Vector minus_e = e.scale(-1);
+      Vector minus_e = e.scale_better(-1);
       e = Vector.pointToVector(Q0);
      P0 = Vector.translatePoint(P0, minus_d);
      P1 = Vector.translatePoint(P1, minus_d);
@@ -320,11 +320,11 @@ public AffineTransformation(Vector b){
       }
       else{
       if(dot_test1 > 0){
-        u3 = u3.scale(-1);
+        u3 = u3.scale_better(-1);
       }
       
       if(dot_test2 > 0){
-        v3 = v3.scale(-1);
+        v3 = v3.scale_better(-1);
       }
       
       //System.out.print(v3);
