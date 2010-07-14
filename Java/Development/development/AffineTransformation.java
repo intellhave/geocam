@@ -23,8 +23,10 @@ public class AffineTransformation extends Matrix {
   
   //Private method used by all constructors
   private void setData(Matrix a, Vector b){
+    
     rows = b.getDimension()+1;
     cols = b.getDimension()+1;
+    
     m = new double[rows][cols];
     for(int i = 0; i < b.getDimension(); i++){
       for(int j = 0; j < b.getDimension(); j++){
@@ -42,6 +44,7 @@ public class AffineTransformation extends Matrix {
   
   //General constructor
   public AffineTransformation(Matrix a, Vector b) throws Exception{
+    
     if ((a.numRows()!= b.getDimension())
         || (a.numRows() != a.numCols())){
       throw new Exception("Dimension Mismatch");
@@ -49,63 +52,86 @@ public class AffineTransformation extends Matrix {
     setData(a,b);
   }
 
-//Create linear transformation as special case above
-public AffineTransformation(Matrix a){
-  double[] temp = new double[a.numRows()];
-  Vector b = new Vector(temp);
-  setData(a,b);
-}
-
-//Create translation as special case of above
-public AffineTransformation(Vector b){
-  Matrix temp = new Matrix(b.getDimension(), b.getDimension());
-  for (int i=0; i< temp.numRows(); i++){
-    temp.setEntry(i,i,1);
+  //Create linear transformation as special case above
+  public AffineTransformation(Matrix a){
+    
+    double[] temp = new double[a.numRows()];
+    Vector b = new Vector(temp);
+    setData(a,b);
   }
-  setData(temp,b);
-}
+
+  //Create translation as special case of above
+  public AffineTransformation(Vector b){
+    
+    int n = b.getDimension();
+    Matrix id = new Matrix(n,n);
+    for(int i=0; i<n; i++){
+      for(int j=0; j<n; j++){
+        if(i == j){ id.setEntry(i,j,1); }
+        else{ id.setEntry(i,j,0); }
+      }
+    }
+    setData(id,b);
+  }
       
       
-//Applies affine transformation to points
+  //Applies affine transformation to points
   public Point affineTransPoint(Point p) throws Exception{
-    if (numRows()-1 != p.getDimension()){
+    
+    //check dimension
+    int d = p.getDimension();
+    if (numRows()-1 != d){
       throw new Exception("Dimension Mismatch");
     }
-    Matrix n = new Matrix(p.getDimension()+1,1);
-    for(int i=0; i < p.getDimension(); i++){
+    
+    //store point as a matrix
+    Matrix n = new Matrix(d+1,1);
+    for(int i=0; i<d; i++){
       n.setEntry(i,0,p.getComponent(i));
     }
-    n.setEntry(n.numRows()-1,0,1);
+    n.setEntry(d,0,1);
+    
+    //multiply matrices
     Matrix np = multiply(n);
-    double[] result = new double[p.getDimension()];
-    for(int i=0; i < p.getDimension(); i++){
+    
+    //convert product back to point
+    double[] result = new double[d];
+    for(int i=0; i<d; i++){
       result[i] = np.getEntry(i,0);
     }
-    Point finalPoint = new Point(result);
-    return finalPoint;
+    return new Point(result);
     
   }
   
-//Applies affine transformation to vectors
-  public Vector affineTransVector(Vector c) throws Exception{
-    if (numRows()-1 != c.getDimension()){
+  //Applies affine transformation to vectors
+  public Vector affineTransPoint(Vector v) throws Exception{
+    
+    //check dimension
+    int d = v.getDimension();
+    if (numRows()-1 != d){
       throw new Exception("Dimension Mismatch");
     }
-    Matrix n = new Matrix(c.getDimension()+1,1);
-    for(int i=0; i < c.getDimension(); i++){
-      n.setEntry(i,0,c.getComponent(i));
+    
+    //store point as a matrix
+    Matrix n = new Matrix(d+1,1);
+    for(int i=0; i<d; i++){
+      n.setEntry(i,0,v.getComponent(i));
     }
-    n.setEntry(n.numRows()-1,0,0);
-    Matrix newVector = multiply(n);
-    double[] result = new double[c.getDimension()];
-    for(int i=0; i < c.getDimension(); i++){
-      result[i] = newVector.getEntry(i,0);
+    n.setEntry(d,0,0);
+    
+    //multiply matrices
+    Matrix np = multiply(n);
+    
+    //convert product back to point
+    double[] result = new double[d];
+    for(int i=0; i<d; i++){
+      result[i] = np.getEntry(i,0);
     }
-    Vector finalVector = new Vector(result);
-    return finalVector;
+    return new Vector(result);
+    
   }
   
-//Change basis
+  //Change basis
   public static Matrix changeBasis(Matrix T, Vector[] U, Vector[] W) throws Exception{
     if ((T.determinant() == 0) || (U.length != W.length) || (T.numRows() != T.numCols()) || (T.numCols() != U.length)){
       throw new Exception("Dimension mismatch");
