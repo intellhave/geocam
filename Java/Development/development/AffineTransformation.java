@@ -315,10 +315,6 @@ public AffineTransformation(Vector b){
           Q3.getComponent(2)-Q0.getComponent(2));
       double dot_test1 = Vector.dot(u3, test1);
       double dot_test2 = Vector.dot(v3, test2);
-      if(dot_test1*dot_test2 > 0){
-        throw new Exception("Cannot connect the tetrahedra without overlap despite having isometric faces");
-      }
-      else{
       if(dot_test1 > 0){
         u3 = u3.scale_better(-1);
       }
@@ -363,7 +359,6 @@ public AffineTransformation(Vector b){
       // within the vector class
       AffineTransformation result = new AffineTransformation(trans, finalTranslate);
       return result;
-    }
     }
   }
   
