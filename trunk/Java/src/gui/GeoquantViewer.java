@@ -124,11 +124,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JSlider rad1Slider;
   private JScrollPane edgeListScrollPane;
   private JPanel quantityModPanel;
-  private JCheckBox totalVolumeSecondPartialCheck;
-  private JCheckBox totalVolumePartialCheck;
-  private JCheckBox totalVolumeCheck;
-  private JCheckBox totalCurvatureCheck;
-  private JPanel totalSelectPanel;
   private JCheckBox volumeSecondPartialCheck;
   private JCheckBox partialEdgeSecondPartialCheck;
   private JCheckBox nehrSecondPartialCheck;
@@ -140,10 +135,14 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox nehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
   private AbstractAction saveAction;
+  private JCheckBox totalVolumeSecondPartialCheck;
+  private JCheckBox totalVolumePartialCheck;
+  private JCheckBox coneAngleCheck;
+  private JCheckBox totalVolumeCheck;
+  private JCheckBox totalCurvatureCheck;
   private JSlider lengthSlider;
   private JLabel lengthSetLabel;
   private JCheckBox edgeCurvatureCheck;
-  private JCheckBox coneAngleCheck;
   private AbstractAction showVehrFlowDialog;
   private AbstractAction showEtaDialog;
   private JDialog setEtaDialog;
@@ -622,107 +621,32 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JPanel getBasicSelectPanel() {
     if(basicSelectPanel == null) {
       basicSelectPanel = new JPanel();
-      GroupLayout geoSelectPanelLayout = new GroupLayout((JComponent)basicSelectPanel);
-      basicSelectPanel.setLayout(geoSelectPanelLayout);
+      basicSelectPanel.setLayout(null);
       basicSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
       basicSelectPanel.setPreferredSize(new java.awt.Dimension(487, 206));
-      geoSelectPanelLayout.setHorizontalGroup(geoSelectPanelLayout.createSequentialGroup()
-      	.addContainerGap()
-      	.addGroup(geoSelectPanelLayout.createParallelGroup()
-      	    .addComponent(getEdgeCurvatureCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getLengthCheck(), GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(28))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getEtaCheck(), GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(65))
-      	    .addComponent(getCurv3DCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getCurv2DCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getRadiusCheck(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(59))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getPartialEdgeCheck(), GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(49))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getEdgeHeightCheck(), GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(47)))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-      	.addGroup(geoSelectPanelLayout.createParallelGroup()
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getVolumeCheck(), GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(8))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getAreaCheck(), GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-      	        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getFaceHeightCheck(), GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(44))
-      	    .addComponent(getAngleCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getDualAreaCheck(), GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(67))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getDihAngleCheck(), GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(31)))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addGroup(geoSelectPanelLayout.createParallelGroup()
-      	    .addGroup(geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getVEinsteinCheck(), GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 0, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getLEinsteinCheck(), GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 20, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getVcscCheck(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 36, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getLcscCheck(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 36, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getLehrCheck(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 36, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, geoSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getVehrCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 48, Short.MAX_VALUE)))
-      	.addContainerGap(38, 38));
-      geoSelectPanelLayout.setVerticalGroup(geoSelectPanelLayout.createSequentialGroup()
-      	.addContainerGap()
-      	.addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-      	    .addComponent(getVehrCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getDihAngleCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getRadiusCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-      	    .addComponent(getLehrCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getDualAreaCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getCurv2DCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-      	    .addComponent(getLcscCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getAngleCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getCurv3DCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-      	    .addComponent(getVcscCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getFaceHeightCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getEtaCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 0, GroupLayout.PREFERRED_SIZE)
-      	.addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-      	    .addComponent(getLEinsteinCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getAreaCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getLengthCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 0, GroupLayout.PREFERRED_SIZE)
-      	.addGroup(geoSelectPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-      	    .addComponent(getVEinsteinCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getVolumeCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getEdgeCurvatureCheck(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addComponent(getPartialEdgeCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addComponent(getEdgeHeightCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-      	.addContainerGap(28, Short.MAX_VALUE));
-      geoSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getVEinsteinCheck(), getVolumeCheck(), getEdgeCurvatureCheck(), getLEinsteinCheck(), getAreaCheck(), getLengthCheck(), getVcscCheck(), getFaceHeightCheck(), getEtaCheck(), getLcscCheck(), getAngleCheck(), getCurv3DCheck(), getLehrCheck(), getDualAreaCheck(), getCurv2DCheck(), getVehrCheck(), getDihAngleCheck(), getRadiusCheck(), getPartialEdgeCheck(), getEdgeHeightCheck()});
+      basicSelectPanel.add(getLEinsteinCheck());
+      basicSelectPanel.add(getVcscCheck());
+      basicSelectPanel.add(getVEinsteinCheck());
+      basicSelectPanel.add(getLcscCheck());
+      basicSelectPanel.add(getTotalCurvatureCheck());
+      basicSelectPanel.add(getLehrCheck());
+      basicSelectPanel.add(getVehrCheck());
+      basicSelectPanel.add(getDihAngleCheck());
+      basicSelectPanel.add(getFaceHeightCheck());
+      basicSelectPanel.add(getDualAreaCheck());
+      basicSelectPanel.add(getAreaCheck());
+      basicSelectPanel.add(getVolumeCheck());
+      basicSelectPanel.add(getTotalVolumeCheck());
+      basicSelectPanel.add(getAngleCheck());
+      basicSelectPanel.add(getConeAngleCheck());
+      basicSelectPanel.add(getEdgeHeightCheck());
+      basicSelectPanel.add(getCurv3DCheck());
+      basicSelectPanel.add(getRadiusCheck());
+      basicSelectPanel.add(getEtaCheck());
+      basicSelectPanel.add(getLengthCheck());
+      basicSelectPanel.add(getPartialEdgeCheck());
+      basicSelectPanel.add(getEdgeCurvatureCheck());
+      basicSelectPanel.add(getCurv2DCheck());
     }
     return basicSelectPanel;
   }
@@ -1132,7 +1056,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 
   }
   
-  class GeoPoint extends Point {
+  private class GeoPoint extends Point {
     public GeoPoint(int x, int y) {
       super(x, y);
     }
@@ -1179,7 +1103,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       geoSelectTabbedPane.addTab("Basic Quantities", null, getBasicSelectPanel(), null);
       geoSelectTabbedPane.addTab("Partials", null, getPartialSelectPanel(), null);
       geoSelectTabbedPane.addTab("Second Partials", null, getSecondPartialSelectPanel(), null);
-      geoSelectTabbedPane.addTab("Sums", null, getTotalSelectPanel(), null);
     }
     return geoSelectTabbedPane;
   }
@@ -1187,47 +1110,16 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JPanel getPartialSelectPanel() {
     if(partialSelectPanel == null) {
       partialSelectPanel = new JPanel();
-      GroupLayout partialSelectPanelLayout = new GroupLayout((JComponent)partialSelectPanel);
-      partialSelectPanel.setLayout(partialSelectPanelLayout);
+      partialSelectPanel.setLayout(null);
       partialSelectPanel.setPreferredSize(new java.awt.Dimension(485, 158));
       partialSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
-      partialSelectPanelLayout.setHorizontalGroup(partialSelectPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(partialSelectPanelLayout.createParallelGroup()
-            .addGroup(partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getPartialEdgePartialCheck(), GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(GroupLayout.Alignment.LEADING, partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getNehrPartialCheck(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 48, Short.MAX_VALUE))
-            .addGroup(partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getCurvPartialCheck(), GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getDihAnglePartialCheck(), GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(GroupLayout.Alignment.LEADING, partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getRadiusPartialCheck(), GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 45, Short.MAX_VALUE))
-            .addGroup(GroupLayout.Alignment.LEADING, partialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 44, Short.MAX_VALUE)))
-        .addContainerGap(353, 353));
-      partialSelectPanelLayout.setVerticalGroup(partialSelectPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(getCurvPartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(getDihAnglePartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(getNehrPartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(getPartialEdgePartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 0, GroupLayout.PREFERRED_SIZE)
-        .addComponent(getRadiusPartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(getVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(23, 23));
-      partialSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getVolumePartialCheck(), getRadiusPartialCheck(), getPartialEdgePartialCheck(), getNehrPartialCheck(), getDihAnglePartialCheck(), getCurvPartialCheck()});
+      partialSelectPanel.add(getTotalVolumePartialCheck());
+      partialSelectPanel.add(getPartialEdgePartialCheck());
+      partialSelectPanel.add(getNehrPartialCheck());
+      partialSelectPanel.add(getCurvPartialCheck());
+      partialSelectPanel.add(getDihAnglePartialCheck());
+      partialSelectPanel.add(getRadiusPartialCheck());
+      partialSelectPanel.add(getVolumePartialCheck());
     }
     return partialSelectPanel;
   }
@@ -1239,81 +1131,50 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       secondPartialSelectPanel.setLayout(seconPartialSelectPanelLayout);
       secondPartialSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
       seconPartialSelectPanelLayout.setHorizontalGroup(seconPartialSelectPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(seconPartialSelectPanelLayout.createParallelGroup()
-            .addGroup(seconPartialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getDihAngleSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
-            .addGroup(seconPartialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getCurvatureSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
-            .addGroup(seconPartialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getNehrSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
-            .addGroup(seconPartialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getPartialEdgeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
-            .addGroup(seconPartialSelectPanelLayout.createSequentialGroup()
-                .addComponent(getVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)))
-        .addContainerGap(359, Short.MAX_VALUE));
+      	.addContainerGap()
+      	.addGroup(seconPartialSelectPanelLayout.createParallelGroup()
+      	    .addGroup(seconPartialSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 0, Short.MAX_VALUE))
+      	    .addGroup(GroupLayout.Alignment.LEADING, seconPartialSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getDihAngleSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 82, Short.MAX_VALUE))
+      	    .addGroup(seconPartialSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getCurvatureSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 0, Short.MAX_VALUE))
+      	    .addGroup(GroupLayout.Alignment.LEADING, seconPartialSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getNehrSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 82, Short.MAX_VALUE))
+      	    .addGroup(GroupLayout.Alignment.LEADING, seconPartialSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getPartialEdgeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 34, Short.MAX_VALUE))
+      	    .addGroup(GroupLayout.Alignment.LEADING, seconPartialSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 159, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 34, Short.MAX_VALUE)))
+      	.addContainerGap(282, 282));
       seconPartialSelectPanelLayout.setVerticalGroup(seconPartialSelectPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(getCurvatureSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addGap(11)
-        .addComponent(getDihAngleSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addGap(11)
-        .addComponent(getNehrSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addGap(11)
-        .addComponent(getPartialEdgeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addGap(11)
-        .addComponent(getVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap(31, Short.MAX_VALUE));
-      seconPartialSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getCurvatureSecondPartialCheck(), getDihAngleSecondPartialCheck(), getNehrSecondPartialCheck(), getPartialEdgeSecondPartialCheck(), getVolumeSecondPartialCheck()});
+      	.addContainerGap()
+      	.addGroup(seconPartialSelectPanelLayout.createParallelGroup()
+      	    .addGroup(GroupLayout.Alignment.LEADING, seconPartialSelectPanelLayout.createSequentialGroup()
+      	        .addComponent(getCurvatureSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(16)
+      	        .addComponent(getNehrSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(19)
+      	        .addComponent(getVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 24, Short.MAX_VALUE))
+      	    .addGroup(GroupLayout.Alignment.LEADING, seconPartialSelectPanelLayout.createSequentialGroup()
+      	        .addGap(20)
+      	        .addComponent(getDihAngleSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(17)
+      	        .addComponent(getPartialEdgeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(22)
+      	        .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 0, Short.MAX_VALUE)))
+      	.addContainerGap(58, 58));
+      seconPartialSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getCurvatureSecondPartialCheck(), getDihAngleSecondPartialCheck(), getNehrSecondPartialCheck(), getPartialEdgeSecondPartialCheck(), getVolumeSecondPartialCheck(), getTotalVolumeSecondPartialCheck()});
     }
     return secondPartialSelectPanel;
   }
-  
-  
-  
-  private JPanel getTotalSelectPanel() {
-    if(totalSelectPanel == null) {
-      totalSelectPanel = new JPanel();
-      GroupLayout totalSelectPanelLayout = new GroupLayout((JComponent)totalSelectPanel);
-      totalSelectPanel.setLayout(totalSelectPanelLayout);
-      totalSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
-      totalSelectPanelLayout.setHorizontalGroup(totalSelectPanelLayout.createSequentialGroup()
-      	.addContainerGap()
-      	.addGroup(totalSelectPanelLayout.createParallelGroup()
-      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getTotalVolumeCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 37, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getConeAngleCheck(), GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 45, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 37, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, totalSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 37, Short.MAX_VALUE))
-      	    .addGroup(totalSelectPanelLayout.createSequentialGroup()
-      	        .addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 193, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 0, Short.MAX_VALUE)))
-      	.addContainerGap(282, 282));
-      totalSelectPanelLayout.setVerticalGroup(totalSelectPanelLayout.createSequentialGroup()
-      	.addContainerGap()
-      	.addComponent(getTotalCurvatureCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addComponent(getTotalVolumeCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addComponent(getTotalVolumePartialCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addComponent(getTotalVolumeSecondPartialCheck(), GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addComponent(getConeAngleCheck(), GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-      	.addContainerGap(61, Short.MAX_VALUE));
-      totalSelectPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getTotalCurvatureCheck(), getTotalVolumeCheck(), getTotalVolumePartialCheck(), getTotalVolumeSecondPartialCheck()});
-    }
-    return totalSelectPanel;
-  }
-  
-  
 
   class GeoPolygonMouseListener extends MouseAdapter {
     private JLabel message;
@@ -1355,6 +1216,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(angleCheck == null) {
       angleCheck = new JCheckBox();
       angleCheck.setText("Face Angle");
+      angleCheck.setBounds(161, 48, 148, 16);
       getGeoColorTable().put(angleCheck, new Color(240, 15, 0));
       angleCheck.addItemListener(this);
     }
@@ -1365,6 +1227,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(areaCheck == null) {
       areaCheck = new JCheckBox();
       areaCheck.setText("Face Area");
+      areaCheck.setBounds(161, 88, 148, 16);
       getGeoColorTable().put(areaCheck, new Color(225, 30, 0));
       areaCheck.addItemListener(this);
     }
@@ -1375,6 +1238,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(curv2DCheck == null) {
       curv2DCheck = new JCheckBox();
       curv2DCheck.setText("Vertex Curvature (2D)");
+      curv2DCheck.setBounds(8, 27, 148, 16);
       getGeoColorTable().put(curv2DCheck, new Color(195, 60, 0));
       curv2DCheck.addItemListener(this);
     }
@@ -1385,6 +1249,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(curv3DCheck == null) {
       curv3DCheck = new JCheckBox();
       curv3DCheck.setText("Vertex Curvature (3D)");
+      curv3DCheck.setBounds(8, 47, 148, 16);
       getGeoColorTable().put(curv3DCheck, new Color(180, 75, 0));
       curv3DCheck.addItemListener(this);
     }
@@ -1395,6 +1260,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(dihAngleCheck == null) {
       dihAngleCheck = new JCheckBox();
       dihAngleCheck.setText("Dihedral Angle");
+      dihAngleCheck.setBounds(161, 8, 148, 16);
       getGeoColorTable().put(dihAngleCheck, new Color(165, 90, 0));
       dihAngleCheck.addItemListener(this);
     }
@@ -1405,6 +1271,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(dualAreaCheck == null) {
       dualAreaCheck = new JCheckBox();
       dualAreaCheck.setText("Dual Area");
+      dualAreaCheck.setBounds(161, 28, 148, 16);
       getGeoColorTable().put(dualAreaCheck, new Color(150, 105, 0));
       dualAreaCheck.addItemListener(this);
     }
@@ -1415,6 +1282,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(edgeHeightCheck == null) {
       edgeHeightCheck = new JCheckBox();
       edgeHeightCheck.setText("Edge Height");
+      edgeHeightCheck.setBounds(8, 146, 148, 16);
       getGeoColorTable().put(edgeHeightCheck, new Color(135, 120, 0));
       edgeHeightCheck.addItemListener(this);
     }
@@ -1425,6 +1293,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(etaCheck == null) {
       etaCheck = new JCheckBox();
       etaCheck.setText("Eta");
+      etaCheck.setBounds(8, 67, 148, 16);
       getGeoColorTable().put(etaCheck, new Color(120, 135, 0));
       etaCheck.addItemListener(this);
     }
@@ -1435,6 +1304,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(faceHeightCheck == null) {
       faceHeightCheck = new JCheckBox();
       faceHeightCheck.setText("Face Height");
+      faceHeightCheck.setBounds(161, 68, 146, 16);
       getGeoColorTable().put(faceHeightCheck, new Color(105, 150, 0));
       faceHeightCheck.addItemListener(this);
     }
@@ -1445,6 +1315,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(lengthCheck == null) {
       lengthCheck = new JCheckBox();
       lengthCheck.setText("Edge Length");
+      lengthCheck.setBounds(8, 86, 148, 16);
       getGeoColorTable().put(lengthCheck, new Color(90, 165, 0));
       lengthCheck.addItemListener(this);
     }
@@ -1455,6 +1326,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(vehrCheck == null) {
       vehrCheck = new JCheckBox();
       vehrCheck.setText("VEHR");
+      vehrCheck.setBounds(324, 129, 148, 16);
       getGeoColorTable().put(vehrCheck, new Color(75, 180, 0));
       vehrCheck.addItemListener(this);
     }
@@ -1464,7 +1336,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getPartialEdgeCheck() {
     if(partialEdgeCheck == null) {
       partialEdgeCheck = new JCheckBox();
-      partialEdgeCheck.setText("Partial Edge");
+      partialEdgeCheck.setText("Pre-Metric Length");
+      partialEdgeCheck.setBounds(8, 126, 148, 16);
       getGeoColorTable().put(partialEdgeCheck, new Color(60, 195, 0));
       partialEdgeCheck.addItemListener(this);
     }
@@ -1475,6 +1348,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(radiusCheck == null) {
       radiusCheck = new JCheckBox();
       radiusCheck.setText("Radius");
+      radiusCheck.setBounds(8, 8, 148, 16);
       getGeoColorTable().put(radiusCheck, new Color(45, 210, 0));
       radiusCheck.addItemListener(this);
     }
@@ -1485,6 +1359,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(volumeCheck == null) {
       volumeCheck = new JCheckBox();
       volumeCheck.setText("Tetra Volume");
+      volumeCheck.setBounds(161, 108, 148, 16);
       getGeoColorTable().put(volumeCheck, new Color(15, 240, 0));
       volumeCheck.addItemListener(this);
     }
@@ -1494,7 +1369,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getCurvPartialCheck() {
     if(curvPartialCheck == null) {
       curvPartialCheck = new JCheckBox();
-      curvPartialCheck.setText("Curvature(3D)");
+      curvPartialCheck.setText("Vertex Curvature (3D)");
+      curvPartialCheck.setBounds(8, 8, 156, 23);
       getGeoColorTable().put(curvPartialCheck, new Color(0, 255, 0));
       curvPartialCheck.addItemListener(this);
     }
@@ -1505,6 +1381,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(dihAnglePartialCheck == null) {
       dihAnglePartialCheck = new JCheckBox();
       dihAnglePartialCheck.setText("Dihedral Angle");
+      dihAnglePartialCheck.setBounds(8, 29, 121, 23);
       getGeoColorTable().put(dihAnglePartialCheck, new Color(0, 240, 15));
       dihAnglePartialCheck.addItemListener(this);
     }
@@ -1514,7 +1391,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getNehrPartialCheck() {
     if(nehrPartialCheck == null) {
       nehrPartialCheck = new JCheckBox();
-      nehrPartialCheck.setText("NEHR");
+      nehrPartialCheck.setText("VEHR");
+      nehrPartialCheck.setBounds(8, 50, 74, 23);
       getGeoColorTable().put(nehrPartialCheck, new Color(0, 225, 30));
       nehrPartialCheck.addItemListener(this);
     }
@@ -1524,7 +1402,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getPartialEdgePartialCheck() {
     if(partialEdgePartialCheck == null) {
       partialEdgePartialCheck = new JCheckBox();
-      partialEdgePartialCheck.setText("Partial Edge");
+      partialEdgePartialCheck.setText("Pre-Metric Length");
+      partialEdgePartialCheck.setBounds(8, 71, 122, 23);
       getGeoColorTable().put(partialEdgePartialCheck, new Color(0, 210, 45));
       partialEdgePartialCheck.addItemListener(this);
     }
@@ -1535,6 +1414,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(radiusPartialCheck == null) {
       radiusPartialCheck = new JCheckBox();
       radiusPartialCheck.setText("Radius");
+      radiusPartialCheck.setBounds(8, 92, 77, 23);
       getGeoColorTable().put(radiusPartialCheck, new Color(0, 195, 60));
       radiusPartialCheck.addItemListener(this);
     }
@@ -1544,7 +1424,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getVolumePartialCheck() {
     if(volumePartialCheck == null) {
       volumePartialCheck = new JCheckBox();
-      volumePartialCheck.setText("Volume");
+      volumePartialCheck.setText("Tetra Volume");
+      volumePartialCheck.setBounds(8, 113, 122, 23);
       getGeoColorTable().put(volumePartialCheck, new Color(0, 180, 75));
       volumePartialCheck.addItemListener(this);
     }
@@ -1554,7 +1435,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getCurvatureSecondPartialCheck() {
     if(curvatureSecondPartialCheck == null) {
       curvatureSecondPartialCheck = new JCheckBox();
-      curvatureSecondPartialCheck.setText("Curvature(3D)");
+      curvatureSecondPartialCheck.setText("Vertex Curvature (3D)");
       getGeoColorTable().put(curvatureSecondPartialCheck, new Color(0, 165, 90));
       curvatureSecondPartialCheck.addItemListener(this);
     }
@@ -1574,7 +1455,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getNehrSecondPartialCheck() {
     if(nehrSecondPartialCheck == null) {
       nehrSecondPartialCheck = new JCheckBox();
-      nehrSecondPartialCheck.setText("NEHR");
+      nehrSecondPartialCheck.setText("VEHR");
       getGeoColorTable().put(nehrSecondPartialCheck, new Color(0, 135, 120));
       nehrSecondPartialCheck.addItemListener(this);
     }
@@ -1584,7 +1465,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getPartialEdgeSecondPartialCheck() {
     if(partialEdgeSecondPartialCheck == null) {
       partialEdgeSecondPartialCheck = new JCheckBox();
-      partialEdgeSecondPartialCheck.setText("Partial Edge");
+      partialEdgeSecondPartialCheck.setText("Pre-Metric Length");
       getGeoColorTable().put(partialEdgeSecondPartialCheck, new Color(0, 120, 135));
       partialEdgeSecondPartialCheck.addItemListener(this);
     }
@@ -1594,51 +1475,11 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox getVolumeSecondPartialCheck() {
     if(volumeSecondPartialCheck == null) {
       volumeSecondPartialCheck = new JCheckBox();
-      volumeSecondPartialCheck.setText("Volume");
+      volumeSecondPartialCheck.setText("Tetra Volume");
       getGeoColorTable().put(volumeSecondPartialCheck, new Color(0, 105, 150));
       volumeSecondPartialCheck.addItemListener(this);
     }
     return volumeSecondPartialCheck;
-  }
-  
-  private JCheckBox getTotalCurvatureCheck() {
-    if(totalCurvatureCheck == null) {
-      totalCurvatureCheck = new JCheckBox();
-      totalCurvatureCheck.setText("Total Curvature(3D)");
-      getGeoColorTable().put(totalCurvatureCheck, new Color(0, 90, 165));
-      totalCurvatureCheck.addItemListener(this);
-    }
-    return totalCurvatureCheck;
-  }
-  
-  private JCheckBox getTotalVolumeCheck() {
-    if(totalVolumeCheck == null) {
-      totalVolumeCheck = new JCheckBox();
-      totalVolumeCheck.setText("Total Volume");
-      getGeoColorTable().put(totalVolumeCheck, new Color(0, 75, 180));
-      totalVolumeCheck.addItemListener(this);
-    }
-    return totalVolumeCheck;
-  }
-  
-  private JCheckBox getTotalVolumePartialCheck() {
-    if(totalVolumePartialCheck == null) {
-      totalVolumePartialCheck = new JCheckBox();
-      totalVolumePartialCheck.setText("Total Volume Partial");
-      getGeoColorTable().put(totalVolumePartialCheck, new Color(0, 60, 195));
-      totalVolumePartialCheck.addItemListener(this);
-    }
-    return totalVolumePartialCheck;
-  }
-  
-  private JCheckBox getTotalVolumeSecondPartialCheck() {
-    if(totalVolumeSecondPartialCheck == null) {
-      totalVolumeSecondPartialCheck = new JCheckBox();
-      totalVolumeSecondPartialCheck.setText("Total Volume Second Partial");
-      getGeoColorTable().put(totalVolumeSecondPartialCheck, new Color(0, 45, 210));
-      totalVolumeSecondPartialCheck.addItemListener(this);
-    }
-    return totalVolumeSecondPartialCheck;
   }
 
   private JMenuItem getSaveMenu() {
@@ -2339,20 +2180,12 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       }
     }
   }
-  private JCheckBox getConeAngleCheck() {
-	  if(coneAngleCheck == null) {
-		  coneAngleCheck = new JCheckBox();
-		  coneAngleCheck.setText("Dihedral Angle Sum");
-		  getGeoColorTable().put(coneAngleCheck, new Color(210, 45, 0));
-		  coneAngleCheck.addItemListener(this);
-	  }
-	  return coneAngleCheck;
-  }
-  
+
   private JCheckBox getEdgeCurvatureCheck() {
 	  if(edgeCurvatureCheck == null) {
 		  edgeCurvatureCheck = new JCheckBox();
 		  edgeCurvatureCheck.setText("Edge Curvature");
+		  edgeCurvatureCheck.setBounds(8, 106, 148, 16);
       getGeoColorTable().put(edgeCurvatureCheck, new Color(0, 0, 0));
       edgeCurvatureCheck.addItemListener(this);
 	  }
@@ -2362,6 +2195,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  if(lehrCheck == null) {
 		  lehrCheck = new JCheckBox();
 		  lehrCheck.setText("LEHR");
+		  lehrCheck.setBounds(324, 108, 148, 16);
 		  getGeoColorTable().put(lehrCheck, new Color(0, 0, 0));
 		  lehrCheck.addItemListener(this);
 	  }
@@ -2371,6 +2205,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  if(lcscCheck == null) {
 		  lcscCheck = new JCheckBox();
 		  lcscCheck.setText("LCSC");
+		  lcscCheck.setBounds(324, 48, 148, 16);
 		  getGeoColorTable().put(lcscCheck, new Color(0, 0, 0));
 		  lcscCheck.addItemListener(this);
 	  }
@@ -2380,6 +2215,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  if(vcscCheck == null) {
 		  vcscCheck = new JCheckBox();
 		  vcscCheck.setText("VCSC");
+		  vcscCheck.setBounds(324, 68, 148, 16);
 		  getGeoColorTable().put(vcscCheck, new Color(0, 0, 0));
 		  vcscCheck.addItemListener(this);
 	  }
@@ -2389,6 +2225,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  if(lEinsteinCheck == null) {
 		  lEinsteinCheck = new JCheckBox();
 		  lEinsteinCheck.setText("LEinstein");
+		  lEinsteinCheck.setBounds(324, 8, 148, 16);
 		  getGeoColorTable().put(lEinsteinCheck, new Color(0, 0, 0));
 		  lEinsteinCheck.addItemListener(this);
 	  }
@@ -2398,6 +2235,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  if(vEinsteinCheck == null) {
 		  vEinsteinCheck = new JCheckBox();
 		  vEinsteinCheck.setText("VEinstein");
+		  vEinsteinCheck.setBounds(324, 28, 148, 16);
 		  getGeoColorTable().put(vEinsteinCheck, new Color(0, 0, 0));
 		  vEinsteinCheck.addItemListener(this);
 	  }
@@ -2443,6 +2281,55 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  String s = "2.0";
 	  }
 	  return lengthSlider;
+  }
+  private JCheckBox getTotalCurvatureCheck() {
+	  if(totalCurvatureCheck == null) {
+		  totalCurvatureCheck = new JCheckBox();
+		  totalCurvatureCheck.setText("EHR");
+		  totalCurvatureCheck.setBounds(324, 88, 148, 16);
+		  getGeoColorTable().put(totalCurvatureCheck, new Color(0, 90, 165));
+		  totalCurvatureCheck.addItemListener(this);
+	  }
+	  return totalCurvatureCheck;
+  }
+  private JCheckBox getTotalVolumeCheck() {
+	  if(totalVolumeCheck == null) {
+		  totalVolumeCheck = new JCheckBox();
+		  totalVolumeCheck.setText("Total Volume");
+		  totalVolumeCheck.setBounds(161, 128, 148, 16);
+		  getGeoColorTable().put(totalVolumeCheck, new Color(0, 75, 180));
+		  totalVolumeCheck.addItemListener(this);
+	  }
+	  return totalVolumeCheck;
+  }
+  private JCheckBox getConeAngleCheck() {
+	  if(coneAngleCheck == null) {
+		  coneAngleCheck = new JCheckBox();
+		  coneAngleCheck.setText("Dihedral Angle Sum");
+		  coneAngleCheck.setBounds(161, 148, 148, 16);
+		  getGeoColorTable().put(coneAngleCheck, new Color(210, 45, 0));
+		  coneAngleCheck.addItemListener(this);
+	  }
+	  return coneAngleCheck;
+  }
+  private JCheckBox getTotalVolumePartialCheck() {
+	  if(totalVolumePartialCheck == null) {
+		  totalVolumePartialCheck = new JCheckBox();
+		  totalVolumePartialCheck.setText("Total Volume");
+		  totalVolumePartialCheck.setBounds(8, 134, 156, 23);
+		  getGeoColorTable().put(totalVolumePartialCheck, new Color(0, 60, 195));
+		  totalVolumePartialCheck.addItemListener(this);
+	  }
+	  return totalVolumePartialCheck;
+  }
+  private JCheckBox getTotalVolumeSecondPartialCheck() {
+	  if(totalVolumeSecondPartialCheck == null) {
+		  totalVolumeSecondPartialCheck = new JCheckBox();
+		  totalVolumeSecondPartialCheck.setText("Total Volume");
+		  getGeoColorTable().put(totalVolumeSecondPartialCheck, new Color(0, 45, 210));
+		  totalVolumeSecondPartialCheck.addItemListener(this);
+	  }
+	  return totalVolumeSecondPartialCheck;
   }
 
 }
