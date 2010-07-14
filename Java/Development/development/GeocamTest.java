@@ -18,6 +18,10 @@ import de.jreality.plugin.content.ContentTools;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.proxy.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
+import de.jreality.shader.DefaultGeometryShader;
+import de.jreality.shader.DefaultLineShader;
+import de.jreality.shader.DefaultPolygonShader;
+import de.jreality.shader.ShaderUtility;
 
 import InputOutput.TriangulationIO;
 import Triangulation.*;
@@ -67,50 +71,9 @@ public class GeocamTest {
     i = Triangulation.tetraTable.keySet().iterator();
     Tetra tetra = Triangulation.tetraTable.get((Integer)i.next());
 
-    //create a sgc for the tetra
-    SceneGraphComponent sgc_tetra = new SceneGraphComponent();
-    Appearance app_tetra = new Appearance();
-    app_tetra.setAttribute(CommonAttributes.EDGE_DRAW, true);
-    app_tetra.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    app_tetra.setAttribute(CommonAttributes.TUBES_DRAW, false);
-    app_tetra.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
-    app_tetra.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
-    //app_tetra.setAttribute(CommonAttributes.TRANSPARENCY, 0.7d);
-    sgc_tetra.setAppearance(app_tetra);
-
-    double[][] vertlist = new double[4][3];
-    double[] offset = new double[] {5, 0, 0};
-    
-    int count = 0;
-    Iterator j = tetra.getLocalVertices().iterator();
-    
-    while(j.hasNext()){
-      Vertex v = (Vertex)j.next();
-      Point vpoint = Coord3D.coordAt(v,tetra);
-
-      vertlist[count] = new double[] {
-          vpoint.getComponent(0) + offset[0], 
-          vpoint.getComponent(1) + offset[1], 
-          vpoint.getComponent(2) + offset[2] };
-      count++;
-    }
-    
-    int[][] facelist = new int[4][3];
-    facelist[0] = new int[] {0,2,1};
-    facelist[1] = new int[] {0,2,3};
-    facelist[2] = new int[] {2,1,3};
-    facelist[3] = new int[] {1,0,3};
-    
-    IndexedFaceSetFactory ifsf_tetra = new IndexedFaceSetFactory();
-    ifsf_tetra.setVertexCount(4);
-    ifsf_tetra.setVertexCoordinates(vertlist);
-    ifsf_tetra.setFaceCount(4);
-    ifsf_tetra.setFaceIndices(facelist);
-    ifsf_tetra.update();
-    sgc_tetra.setGeometry(ifsf_tetra.getGeometry());
-    
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
+    SceneGraphComponent sgc_tetra = sgcFromTetra(tetra);
     sgc_root.addChild(sgc_tetra);
     //sgc_root.addChild(sgc_frust);
     //sgc_root.addChild(sgc_intpoints);
@@ -123,5 +86,85 @@ public class GeocamTest {
     jrv.registerPlugin(new ContentLoader());
     jrv.registerPlugin(new ContentTools());
     jrv.startup();
+  }
+  
+  public static SceneGraphComponent sgcFromTetra(Tetra tetra){
+    
+    //create a sgc for the tetra
+    SceneGraphComponent sgc_tetra = new SceneGraphComponent();
+    
+    //create appearance
+    Appearance app_tetra = new Appearance();
+    
+    //set some basic attributes
+    app_tetra.setAttribute(CommonAttributes.FACE_DRAW, true);
+    app_tetra.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app_tetra.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app_tetra.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app_tetra.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    
+    //set shaders
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_tetra, true);
+    
+    //line shader
+    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+    dls.setTubeDraw(false);
+    dls.setDiffuseColor(Color.BLACK);
+    
+    //polygon shader
+    DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
+    dps.setDiffuseColor(Color.WHITE);
+    dps.setTransparency(0.6d);
+    
+    //set appearance
+    sgc_tetra.setAppearance(app_tetra);
+
+    //create list of verts
+    double[][] vertlist = new double[4][3];
+    
+    int count = 0;
+    Iterator j = tetra.getLocalVertices().iterator();
+    
+    while(j.hasNext()){
+      Vertex v = (Vertex)j.next();
+      Point vpoint = Coord3D.coordAt(v,tetra);
+
+      vertlist[count] = new double[] {
+          vpoint.getComponent(0), 
+          vpoint.getComponent(1), 
+          vpoint.getComponent(2)};
+      count++;
+    }
+    
+    //set combinatorics
+    int[][] facelist = new int[4][3];
+    facelist[0] = new int[] {0,2,1};
+    facelist[1] = new int[] {0,2,3};
+    facelist[2] = new int[] {2,1,3};
+    facelist[3] = new int[] {1,0,3};
+    
+    int[][] edgelist = new int[6][2];
+    edgelist[0] = new int[] {0,2};
+    edgelist[1] = new int[] {2,1};
+    edgelist[2] = new int[] {1,0};
+    edgelist[3] = new int[] {0,3};
+    edgelist[4] = new int[] {1,3};
+    edgelist[5] = new int[] {2,3};
+    
+    //use face factory to create geometry
+    IndexedFaceSetFactory ifsf_tetra = new IndexedFaceSetFactory();
+    ifsf_tetra.setVertexCount(4);
+    ifsf_tetra.setVertexCoordinates(vertlist);
+    ifsf_tetra.setFaceCount(4);
+    ifsf_tetra.setFaceIndices(facelist);
+    ifsf_tetra.setEdgeCount(6);
+    ifsf_tetra.setEdgeIndices(edgelist);
+    ifsf_tetra.update();
+    
+    //set geometry
+    sgc_tetra.setGeometry(ifsf_tetra.getGeometry());
+    
+    //return
+    return sgc_tetra;
   }
 }
