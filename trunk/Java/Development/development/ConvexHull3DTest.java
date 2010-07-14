@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.jreality.plugin.JRViewer;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.tools.RotateTool;
 import development.Frustum3DTest.UIPanel_Model;
 
 public class ConvexHull3DTest {
@@ -15,7 +16,7 @@ public class ConvexHull3DTest {
     list.add(new Vector3D(1, 0, 0));
     list.add(new Vector3D(0, 1, 0));
     list.add(new Vector3D(0, 0, 1));
-    list.add(new Vector3D(0, 0, 0));
+    list.add(new Vector3D(1, 1, 1));
 //    list.add(new Vector3D(0, -1, 0));
  //   list.add(new Vector3D(0, 0, -1));
  //   list.add(new Vector3D(.75, .75, .75));
@@ -29,6 +30,7 @@ public class ConvexHull3DTest {
       sgc.setGeometry(hull.getFaceAt(i).getGeometry());
       sgc_root.addChild(sgc);
     }
+    sgc_root.addTool(new RotateTool());
     
  // set up the main JRViewer
     JRViewer jrv = new JRViewer();

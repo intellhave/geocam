@@ -28,8 +28,10 @@ public class ConvexHull3D {
   private void findHull(ArrayList<Vector3D> unsorted) {
     int i = 3;
     System.out.println("unsorted.size() = " + unsorted.size());
-    while (coplanar(unsorted.get(0), unsorted.get(1), unsorted.get(2), unsorted
-        .get(i))) {
+    Vector3D v1 = Vector3D.subtract(unsorted.get(1), unsorted.get(0));
+    Vector3D v2 = Vector3D.subtract(unsorted.get(2), unsorted.get(0));
+
+    while (coplanar(v1, v2, Vector3D.subtract(unsorted.get(i), unsorted.get(0)))) {
       System.out.println("coplanar with " + i);
       i++;
     }
@@ -65,7 +67,8 @@ public class ConvexHull3D {
     faces.add(f3);
     faces.add(f4);
 
-    addPoint(unsorted.get(0));
+    while(!unsorted.isEmpty())
+      addPoint(unsorted.get(0));
   }
 
   public ArrayList<Vector3D> testAddPoint(ArrayList<Face> faces, Vector3D point) {
@@ -209,9 +212,9 @@ public class ConvexHull3D {
     return pairs;
   }
 
-  private boolean coplanar(Vector3D v1, Vector3D v2, Vector3D v3, Vector3D v4) {
+  private boolean coplanar(Vector3D v1, Vector3D v2, Vector3D v3) {
     Vector3D cross1 = Vector3D.cross(v1, v2);
-    Vector3D cross2 = Vector3D.cross(v3, v4);
+    Vector3D cross2 = Vector3D.cross(v2, v3);
     Vector3D result = Vector3D.cross(cross1, cross2);
     return result.isZero();
   }
