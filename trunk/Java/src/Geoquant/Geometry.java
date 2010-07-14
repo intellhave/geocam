@@ -24,7 +24,9 @@ public class Geometry {
       list.addAll(getAlphas());
     } else if(c.isAssignableFrom(Angle.class)) {
       list.addAll(getAngles());
-    } else if(c.isAssignableFrom(ConeAngle.class)) { 
+    } else if(c.isAssignableFrom(Area.class)){
+      list.addAll(getAreas());
+    }else if(c.isAssignableFrom(ConeAngle.class)) { 
       list.addAll(getConeAngles());
     } else if(c.isAssignableFrom(Curvature2D.class)) {
       list.addAll(getCurvature2D());
