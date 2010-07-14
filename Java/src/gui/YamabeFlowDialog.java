@@ -217,7 +217,7 @@ public class YamabeFlowDialog extends JDialog {
 			  protected void paintComponent(Graphics g) {
 			    super.paintComponent(g);
 			    
-			    for(List<List<Double>> list : rec.getAll()) {
+			    for(List<List<Double>> list : rec.getAllValues()) {
 			      if(list.size() < currentStep) {
 			        
 			      } else {

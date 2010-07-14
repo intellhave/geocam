@@ -52,12 +52,12 @@ public class DiffEqTest {
     radii = solver.run(radii, 0.1, 50);
     
     System.out.println("RADII:");
-    for(List<Double> values : rec.getGeoquantHistory(Radius.class)) {
+    for(List<Double> values : rec.getValueHistory(Radius.class)) {
       System.out.println(values);
     }
     
     System.out.println("CURVATURES:");
-    for(List<Double> values : rec.getGeoquantHistory(Curvature2D.class)) {
+    for(List<Double> values : rec.getValueHistory(Curvature2D.class)) {
       System.out.println(values);
     }
   }
