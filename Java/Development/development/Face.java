@@ -69,16 +69,16 @@ public class Face {
   }
   
   public Geometry getGeometry() {
-    double[][] ifsf_verts = new double[getNumberVertices() + 1][3];
+    double[][] ifsf_verts = new double[getNumberVertices()][3];
     int[][] ifsf_faces = new int[getNumberVertices()][3];
-    ifsf_verts[0] = new double[] { 0, 0, 0 };
+    //ifsf_verts[0] = new double[] { 0, 0, 0 };
 
-    for (int i = 1; i < getNumberVertices() + 1; i++) {
-      ifsf_verts[i] = getVectorAt(i - 1).getVectorAsArray();
-      if (i - 1 == getNumberVertices() - 1)
+    for (int i = 0; i < getNumberVertices(); i++) {
+      ifsf_verts[i] = getVectorAt(i).getVectorAsArray();
+      if (i == getNumberVertices() - 1)
         ifsf_faces[i - 1] = new int[] { 0, i, 1 };
       else
-        ifsf_faces[i - 1] = new int[] { 0, i, i + 1 };
+        ifsf_faces[i] = new int[] { 0, i, i + 1 };
     }
 
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
