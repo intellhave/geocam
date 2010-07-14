@@ -6,6 +6,20 @@ import util.Matrix;
 //Creates Matrix representing affine transformation
 public class AffineTransformation extends Matrix {
   
+  public AffineTransformation(int n){ 
+    //creates (n+1)x(n+1) identity matrix (i.e., identity n-dimension affine trans)
+    
+    m = new double[n+1][n+1];
+    for(int i=0; i<=n; i++){
+      for(int j=0; j<=n; j++){
+        if(i == j){ m[i][j] = 1; }
+        else{ m[i][j] = 0; }
+      }
+    }
+    rows = n+1;
+    cols = n+1;
+  }
+  
   
   //Private method used by all constructors
   private void setData(Matrix a, Vector b){
