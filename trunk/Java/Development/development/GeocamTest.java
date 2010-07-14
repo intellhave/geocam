@@ -4,10 +4,6 @@
 package development;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Iterator;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
