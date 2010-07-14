@@ -72,15 +72,21 @@ public class GeocamTest {
     //pick some arbitrary tetra
     i = Triangulation.tetraTable.keySet().iterator();
     Tetra tetra = Triangulation.tetraTable.get((Integer)i.next());
-    AffineTransformation T = new AffineTransformation(new Vector(-10,0,0));
-    
+
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
-    SceneGraphComponent sgc_tetra = sgcFromTetra(tetra,T);
+    SceneGraphComponent sgc_tetra1 = sgcFromTetra(tetra, new AffineTransformation(3), Color.RED);
     SceneGraphComponent sgc_points = sgcFromPoints(new Vector(0,0,0));
-    sgc_root.addChild(sgc_tetra);
-    sgc_root.addChild(sgc_tetra);
+    sgc_root.addChild(sgc_tetra1);
     sgc_root.addChild(sgc_points);
+    
+    //loop through tetra's neighbors, adding them in the right place
+    i = tetra.getLocalTetras().iterator();
+    while(i.hasNext()){
+      Tetra tetra2 = (Tetra)i.next();
+      AffineTransformation atTrans12 = CoordTrans3D.affineTransAt(tetra2,tetra);
+      sgc_root.addChild(sgcFromTetra(tetra2, atTrans12, Color.WHITE));
+    }
     
     //jrviewer
     JRViewer jrv = new JRViewer();
@@ -133,7 +139,7 @@ public class GeocamTest {
     return sgc_points;
   }
   
-  public static SceneGraphComponent sgcFromTetra(Tetra tetra, AffineTransformation affineTrans){
+  public static SceneGraphComponent sgcFromTetra(Tetra tetra, AffineTransformation affineTrans, Color color){
     
     //create a sgc for the tetra, after applying specified affine transformation
     SceneGraphComponent sgc_tetra = new SceneGraphComponent();
@@ -158,7 +164,7 @@ public class GeocamTest {
     
     //polygon shader
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
-    dps.setDiffuseColor(Color.WHITE);
+    dps.setDiffuseColor(color);
     dps.setTransparency(0.6d);
     
     //set appearance

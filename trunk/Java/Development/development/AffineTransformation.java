@@ -289,10 +289,88 @@ public class AffineTransformation extends Matrix {
       }
   }
   
+  public void leftMultiply(AffineTransformation lhs){
+    
+    //assumes this and lhs are both nxn matrices
+    int n = rows;
+    if((cols != n) || (lhs.rows != n) || (lhs.cols != n)){
+      System.err.print("Matrices cannot be multiplied: dimensions don't match.");
+      return;
+    }
+    
+    //multiply
+    double[][] newm = new double[n][n];
+    for(int i=0; i<n; i++){
+      for(int j=0; j<n; j++){
+        newm[i][j] = 0; 
+        for(int k=0; k<n; k++){
+          newm[i][j] += lhs.getEntry(i,k) * this.getEntry(k,j);
+        }
+      }
+    }
+    m = newm;
+  }
+  
+  public static AffineTransformation MatchTetraTrans(Point[] p, Point[] q) throws Exception{
+
+    //convert all to vectors
+    Vector[] p_vect = new Vector[3]; 
+    Vector[] q_vect = new Vector[3]; 
+    for(int i=0; i<3; i++){ 
+      p_vect[i] = Vector.pointToVector(p[i]); 
+      q_vect[i] = Vector.pointToVector(q[i]); 
+    }
+    
+    //call vector version
+    return MatchTetraTrans(p_vect,q_vect);
+  }
+  
+  public static AffineTransformation MatchTetraTrans(Vector[] p, Vector[] q) throws Exception{
+
+    //get vectors for change of basis
+    Vector[] U = new Vector[3];
+    U[0] = Vector.subtract(p[1], p[0]);
+    U[1] = Vector.subtract(p[2], p[0]);
+    U[2] = Vector.cross(U[0],U[1]);
+    
+    Vector[] V = new Vector[3];
+    V[0] = Vector.subtract(q[1], q[0]);
+    V[1] = Vector.subtract(q[2], q[0]);
+    V[2] = Vector.cross(V[0],V[1]);
+    
+    //adjust normals
+    Vector Un = Vector.subtract(p[3], p[0]);
+    if(Vector.dot(Un,U[2]) < 0){ U[2].scale(-1); } //face U[2] toward 4th point
+    U[2].normalize();
+    
+    Vector Vn = Vector.subtract(q[3], q[0]);
+    if(Vector.dot(Vn,V[2]) > 0){ V[2].scale(-1); } //face V[2] away from 4th point
+    V[2].normalize();
+    
+    //changes of basis
+    Matrix std_to_U = new Matrix(3,3);
+    Matrix std_to_V = new Matrix(3,3);
+    for(int i=0; i<3; i++){
+      for(int j=0; j<3; j++){
+        std_to_U.setEntry(i, j, U[j].getComponent(i));
+        std_to_V.setEntry(i, j, V[j].getComponent(i));
+      }
+    }
+    Matrix U_to_std = std_to_U.inverse();
+    
+    //compose and return
+    AffineTransformation ret = new AffineTransformation(3); //identity transformation on R^3
+    ret.leftMultiply(new AffineTransformation(p[0].scale_better(-1))); //move p[0] to origin
+    ret.leftMultiply(new AffineTransformation(U_to_std)); //U -> standard basis
+    ret.leftMultiply(new AffineTransformation(std_to_V)); //standard basis -> V
+    ret.leftMultiply(new AffineTransformation(q[0])); //move origin to q[0]
+    return ret;
+  }
+  
 //Make this a constructor in affine transformation. Update 'this'
   //The array of points has length 4. THE FIRST THREE POINTS CORRESPONDS TO THE
   //TRIANGULAR FACES THAT WE WANT TO MATCH UP (WITH VERTICES IN CORRESPONDING ORDER).
-  public static AffineTransformation MatchTetraTrans(Point[] p, Point[] q) throws Exception{
+  public static AffineTransformation MatchTetraTrans_Oldver(Point[] p, Point[] q) throws Exception{
     if ((p.length != 4) || (q.length != 4)){
       throw new Exception("Need four vertices for each tetrahedron");
     } 
