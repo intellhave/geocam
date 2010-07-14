@@ -22,10 +22,10 @@ public class ConvexHull2D {
     System.out.println(hull.getPointAt(hull.getNumPoints()-1));
   }
   
-  public ConvexHull2D(ArrayList<Point2D> unsortedPoints) throws Exception {
+  public ConvexHull2D(ArrayList<Point2D> unsortedPoints) {
     findHull(unsortedPoints);
   }
-  
+
   public Point2D getPointAt(int i) {
     return points.get(i);
   }
@@ -38,7 +38,7 @@ public class ConvexHull2D {
     return points.isEmpty();
   }
   
-  private void findHull(ArrayList<Point2D> unsortedPoints) throws Exception {
+  private void findHull(ArrayList<Point2D> unsortedPoints) {
     points = new ArrayList<Point2D>();
     
     int startIndex = findHighestPoint(unsortedPoints);    
@@ -63,12 +63,17 @@ public class ConvexHull2D {
     }
   }
   
-  private ArrayList<Vector2D> getVectors(Point2D start, ArrayList<Point2D> pts) throws Exception {
+  private ArrayList<Vector2D> getVectors(Point2D start, ArrayList<Point2D> pts) {
     ArrayList<Vector2D> vectors = new ArrayList<Vector2D>();
     Vector2D startV = new Vector2D(start);
     for(int i = 0; i < pts.size(); i++) {
       Vector2D v = new Vector2D(pts.get(i));
-      v.subtract(startV);
+      try {
+        v.subtract(startV);
+      } catch (Exception e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
       vectors.add((Vector2D) Vector2D.subtract(v, startV));
     }
     return vectors;
@@ -84,5 +89,9 @@ public class ConvexHull2D {
       }
     }
     return index;
+  }
+
+  public ArrayList<Point2D> getPoints() {
+    return points;
   }
 }

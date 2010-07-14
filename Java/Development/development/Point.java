@@ -18,6 +18,10 @@ public class Point {
     components_ = new double[]{x, y};
   }
 
+  public Point(double x, double y, double z) {
+    components_ = new double[]{x, y, z};
+  }
+
   //methods
   @Override 
   public String toString() {
