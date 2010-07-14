@@ -314,10 +314,12 @@ public class AffineTransformation extends Matrix {
   public static AffineTransformation MatchTetraTrans(Point[] p, Point[] q) throws Exception{
 
     //convert all to vectors
-    Vector[] p_vect = new Vector[3]; 
-    Vector[] q_vect = new Vector[3]; 
-    for(int i=0; i<3; i++){ 
+    Vector[] p_vect = new Vector[p.length]; 
+    Vector[] q_vect = new Vector[q.length]; 
+    for(int i=0; i<p.length; i++){ 
       p_vect[i] = Vector.pointToVector(p[i]); 
+    }
+    for(int i=0; i<q.length; i++){
       q_vect[i] = Vector.pointToVector(q[i]); 
     }
     
