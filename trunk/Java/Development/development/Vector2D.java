@@ -1,5 +1,7 @@
 package development;
 
+import java.util.ArrayList;
+
 public class Vector2D extends Vector {
 
   public Vector2D(double x, double y) {
@@ -23,5 +25,13 @@ public class Vector2D extends Vector {
     return new Vector2D(v1.getComponent(0) - v2.getComponent(0), v1
         .getComponent(1)
         - v2.getComponent(1));
+  }
+
+  public static ArrayList<Vector2D> getVectors(ArrayList<Point2D> points) {
+    ArrayList<Vector2D> vectors = new ArrayList<Vector2D>();
+    for(int i =0 ; i < points.size(); i++) {
+      vectors.add(new Vector2D(points.get(i).getX(), points.get(i).getY()));
+    }
+    return null;
   }
 }
