@@ -3,13 +3,11 @@ package development;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Stack;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
@@ -19,7 +17,7 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 
 public class ConvexHull3DTest {
-  private static SceneGraphComponent sgc_root, sgcf1, sgcf2, sgcf3;
+  private static SceneGraphComponent sgc_root;
   private static ConvexHull3D hull;
   private static Stack<ConvexHull3D> done = new Stack<ConvexHull3D>();
   private static Stack<ConvexHull3D> undone = new Stack<ConvexHull3D>();
@@ -32,15 +30,46 @@ public class ConvexHull3DTest {
 //    list.add(new Vector3D(-1, 0, 0));
 //    list.add(new Vector3D(0, -1, 0));
 //    list.add(new Vector3D(0, 0, -.5));
-    list.add(new Vector3D(1, 0, 0));
-    list.add(new Vector3D(0, 1, 0));
-    list.add(new Vector3D(0, 0, 1));
-    list.add(new Vector3D(0, 0, 0));
-    list.add(new Vector3D(1, 1, 0));
-    list.add(new Vector3D(0, 1, 1));
-    list.add(new Vector3D(1, 0, 1));
+    
+// dodecahedron    
+    double p = (1+Math.sqrt(5))/2;
+
+    list.add(new Vector3D(-1/p, -p, 0));
+    list.add(new Vector3D(1, -1, -1));
+    list.add(new Vector3D(-1, -1, 1));
+    list.add(new Vector3D(1/p, p, 0));
+
+    
+    list.add(new Vector3D(0, -1/p, p));
+    list.add(new Vector3D(0, -1/p, -p));
+    list.add(new Vector3D(-1, -1, -1));
+    list.add(new Vector3D(-1, 1, -1));
+    list.add(new Vector3D(0, 1/p, p));
+    list.add(new Vector3D(-1, 1, 1));
+    list.add(new Vector3D(p, 0, -1/p));
+    list.add(new Vector3D(0, 1/p, -p));
+    list.add(new Vector3D(-1/p, p, 0));
+    list.add(new Vector3D(-p, 0, 1/p));
+    list.add(new Vector3D(-p, 0, -1/p));
+    list.add(new Vector3D(1/p, -p, 0));
+    list.add(new Vector3D(p, 0, 1/p));
+    list.add(new Vector3D(1, -1, 1));
+    list.add(new Vector3D(1, 1, -1));
     list.add(new Vector3D(1, 1, 1));
-    list.add(new Vector3D(.5, .5, 2));
+
+     
+    // cube with hat
+//    list.add(new Vector3D(0, 1, 1));
+//    list.add(new Vector3D(1, 1, 0));
+//    list.add(new Vector3D(0, 1, 0));
+//    list.add(new Vector3D(.5, .5, 2));
+//    list.add(new Vector3D(0, 0, 1));
+//    list.add(new Vector3D(0, 0, 0));
+//    list.add(new Vector3D(1, 0, 1));
+//    list.add(new Vector3D(1, 1, 1));
+//    list.add(new Vector3D(1, 0, 0));
+    
+//    Collections.shuffle(list);
 
     sgc_root = new SceneGraphComponent();
     sgc_root.addTool(new RotateTool());

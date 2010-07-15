@@ -1,7 +1,6 @@
 package development;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 import de.jreality.plugin.JRViewer;
 import de.jreality.scene.SceneGraphComponent;
@@ -22,10 +21,6 @@ public class ConvexHull2DTest {
     sgc_root = new SceneGraphComponent();
     sgc_root.addTool(new RotateTool());
     hull = new ConvexHull2D(list);
-    
-    for(int i =0 ; i < hull.getNumPoints(); i++) {
-      System.out.println(hull.getPointAt(i).toString());
-    }
 
     Face f = hull.getAsFace();
     sgc_root.setGeometry(f.getGeometry());

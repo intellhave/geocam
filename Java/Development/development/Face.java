@@ -1,8 +1,6 @@
 package development;
 
-import java.awt.Color;
 import java.util.ArrayList;
-
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
 
@@ -32,23 +30,14 @@ public class Face {
     findNormal();
   }
 
+  private void findNormal() {
+    Vector3D v1 = Vector3D.subtract(vectors_.get(1), vectors_.get(0));
+    Vector3D v2 = Vector3D.subtract(vectors_.get(2), vectors_.get(1));
+    normal_ = Vector3D.cross(v1, v2);
+  }
+
   public int getNumberVertices() {
     return vectors_.size();
-  }
-  
-  public void addVertex(Vector3D v) {
-    vectors_.add(v);
-  }
-  
-  public int indexOf(Vector3D v) {
-    return vectors_.indexOf(v);
-  }
-  
-  public boolean contains(Vector3D v) {
-    for(int i =0 ; i < vectors_.size(); i++) {
-      if(vectors_.get(i).equals(v)) return true;
-    }
-    return false;
   }
   
   public ArrayList<Vector3D> getVectors() {
@@ -65,12 +54,6 @@ public class Face {
 
   public Vector3D getVectorAt(int index) {
     return vectors_.get(index);
-  }
-
-  private void findNormal() {
-    Vector3D v1 = Vector3D.subtract(vectors_.get(1), vectors_.get(0));
-    Vector3D v2 = Vector3D.subtract(vectors_.get(2), vectors_.get(1));
-    normal_ = Vector3D.cross(v1, v2);
   }
 
   public Vector3D getNormal() {
@@ -92,17 +75,28 @@ public class Face {
     ifsf.setFaceCount(ifsf_faces.length);
     ifsf.setFaceIndices(ifsf_faces);
     ifsf.setGenerateEdgesFromFaces(true);
-//    Color[] colors = new Color[ifsf_faces.length];
-//    for (int i = 0; i < ifsf_faces.length; i++)
-//      colors[i] = color;
-//    ifsf.setFaceColors(colors);
     ifsf.update();
     return ifsf.getGeometry();
+  }
+  
+  
+  public void addVertex(Vector3D v) {
+    vectors_.add(v);
+  }
+  
+  public int indexOf(Vector3D v) {
+    return vectors_.indexOf(v);
+  }
+  
+  public boolean contains(Vector3D v) {
+    for(int i =0 ; i < vectors_.size(); i++) {
+      if(vectors_.get(i).equals(v)) return true;
+    }
+    return false;
   }
 
   public boolean sharesEdgeWith(Face face) {
     int count = 0;
-    ArrayList<Vector3D> vectors = face.getVectors();
     for(int i = 0; i < face.getNumberVertices(); i++) {
       if(vectors_.contains(face.getVectorAt(i)))
         count++;
