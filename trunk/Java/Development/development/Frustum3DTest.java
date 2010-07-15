@@ -80,7 +80,7 @@ public class Frustum3DTest {
   }
   
   // rotate by angle (in radians) about z axis
-  public static void updateOrientation(double angle) {
+  public static void updateOrientation(double angle) throws Exception {
     Matrix Rz = new Matrix( Math.cos(angle),  Math.sin(angle),  0, 0, 
                         -Math.sin(angle), Math.cos(angle), 0, 0,
                         0, 0, 1, 0,
