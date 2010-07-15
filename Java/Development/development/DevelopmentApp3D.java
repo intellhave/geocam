@@ -1,6 +1,3 @@
-// Just a little app to play around with loading triangulations and using geoquants
-// and eventually test the coordinate and coordinate transform geoquants
-
 package development;
 
 import java.awt.Color;
@@ -31,12 +28,12 @@ public class DevelopmentApp3D {
     
     TriangulationIO.readTriangulation("Data/Triangulations/3DManifolds/3-torus.xml");
     
-    Iterator i = null;
+    Iterator<Integer> i = null;
     
     //set edge lengths to 1
     i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
-      Integer key = (Integer)i.next();
+      Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
       Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
     }
@@ -46,7 +43,7 @@ public class DevelopmentApp3D {
     
     i = Triangulation.tetraTable.keySet().iterator();
     while(i.hasNext()){
-      Integer key = (Integer)i.next();
+      Integer key = i.next();
       Tetra t = Triangulation.tetraTable.get(key);
       
       System.out.printf("Tetra %d: \n",key);
@@ -55,9 +52,9 @@ public class DevelopmentApp3D {
       
       //coords
       System.out.printf("   Coords: ");
-      Iterator j = t.getLocalVertices().iterator();
+      Iterator<Vertex> j = t.getLocalVertices().iterator();
       while(j.hasNext()){
-        Vertex v = (Vertex)j.next();
+        Vertex v = j.next();
         System.out.printf("[v%d: (",v.getIndex());
         System.out.print(Coord3D.coordAt(v,t));
         System.out.print(")]");
@@ -67,8 +64,8 @@ public class DevelopmentApp3D {
     
     //pick some arbitrary tetra
     i = Triangulation.tetraTable.keySet().iterator();
-    Tetra tetra = Triangulation.tetraTable.get((Integer)i.next());
-
+    Tetra tetra = Triangulation.tetraTable.get(i.next());
+    
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
     SceneGraphComponent sgc_tetra1 = sgcFromTetra(tetra, new AffineTransformation(3), Color.RED);
@@ -77,9 +74,9 @@ public class DevelopmentApp3D {
     sgc_root.addChild(sgc_points);
     
     //loop through tetra's neighbors, adding them in the right place
-    i = tetra.getLocalTetras().iterator();
-    while(i.hasNext()){
-      Tetra tetra2 = (Tetra)i.next();
+    Iterator<Tetra> k = tetra.getLocalTetras().iterator();
+    while(k.hasNext()){
+      Tetra tetra2 = k.next();
       AffineTransformation atTrans12 = CoordTrans3D.affineTransAt(tetra2,tetra);
       sgc_root.addChild(sgcFromTetra(tetra2, atTrans12, Color.WHITE));
     }

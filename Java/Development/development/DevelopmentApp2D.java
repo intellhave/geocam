@@ -1,6 +1,3 @@
-// Just a little app to play around with loading triangulations and using geoquants
-// and eventually test the coordinate and coordinate transform geoquants
-
 package development;
 
 import java.awt.Color;
@@ -32,12 +29,12 @@ public class DevelopmentApp2D {
     
     TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
     
-    Iterator i = null;
+    Iterator<Integer> i = null;
     
     //set edge lengths to 1
     i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
-      Integer key = (Integer)i.next();
+      Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
       Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
     }
@@ -47,7 +44,7 @@ public class DevelopmentApp2D {
     
     i = Triangulation.faceTable.keySet().iterator();
     while(i.hasNext()){
-      Integer key = (Integer)i.next();
+      Integer key = i.next();
       Face f = Triangulation.faceTable.get(key);
       
       System.out.printf("Face %d: \n",key);
@@ -56,9 +53,9 @@ public class DevelopmentApp2D {
       
       //coords
       System.out.printf("   Coords: ");
-      Iterator j = f.getLocalVertices().iterator();
+      Iterator<Vertex> j = f.getLocalVertices().iterator();
       while(j.hasNext()){
-        Vertex v = (Vertex)j.next();
+        Vertex v = j.next();
         System.out.printf("[v%d: (",v.getIndex());
         System.out.print(Coord2D.coordAt(v,f));
         System.out.print(")]");
@@ -68,7 +65,7 @@ public class DevelopmentApp2D {
     
     //pick some arbitrary face
     i = Triangulation.faceTable.keySet().iterator();
-    Face face = Triangulation.faceTable.get((Integer)i.next());
+    Face face = Triangulation.faceTable.get(i.next());
 
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
@@ -78,9 +75,9 @@ public class DevelopmentApp2D {
     sgc_root.addChild(sgc_points);
     
     //loop through tetra's neighbors, adding them in the right place
-    i = face.getLocalFaces().iterator();
+    Iterator<Face> k = face.getLocalFaces().iterator();
     while(i.hasNext()){
-      Face face2 = (Face)i.next();
+      Face face2 = k.next();
       AffineTransformation atTrans12 = CoordTrans2D.affineTransAt(face2,face);
       sgc_root.addChild(sgcFromFace(face2, atTrans12, Color.WHITE));
     }
