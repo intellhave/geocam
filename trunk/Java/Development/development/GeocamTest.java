@@ -175,7 +175,7 @@ public class GeocamTest {
     while(i.hasNext()){
       Vertex v = i.next();
       
-      Point pt = null;
+      Vector pt = null;
       try { pt = affineTrans.affineTransPoint(Coord3D.coordAt(v,tetra)); } 
       catch (Exception e) { e.printStackTrace(); }
       

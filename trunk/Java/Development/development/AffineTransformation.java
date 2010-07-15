@@ -6,21 +6,6 @@ import util.Matrix;
 //Creates Matrix representing affine transformation
 public class AffineTransformation extends Matrix {
   
-  public AffineTransformation(int n){ 
-    //creates (n+1)x(n+1) identity matrix (i.e., identity n-dimension affine trans)
-    
-    m = new double[n+1][n+1];
-    for(int i=0; i<=n; i++){
-      for(int j=0; j<=n; j++){
-        if(i == j){ m[i][j] = 1; }
-        else{ m[i][j] = 0; }
-      }
-    }
-    rows = n+1;
-    cols = n+1;
-  }
-  
-  
   //Private method used by all constructors
   private void setData(Matrix a, Vector b){
     
@@ -42,6 +27,20 @@ public class AffineTransformation extends Matrix {
     setEntry(b.getDimension(),b.getDimension(),1);
   }
   
+  //creates (n+1)x(n+1) identity matrix (i.e., identity n-dimension affine trans)
+  public AffineTransformation(int n){ 
+    
+    m = new double[n+1][n+1];
+    for(int i=0; i<=n; i++){
+      for(int j=0; j<=n; j++){
+        if(i == j){ m[i][j] = 1; }
+        else{ m[i][j] = 0; }
+      }
+    }
+    rows = n+1;
+    cols = n+1;
+  }
+
   //General constructor
   public AffineTransformation(Matrix a, Vector b) throws Exception{
     
@@ -73,51 +72,22 @@ public class AffineTransformation extends Matrix {
     }
     setData(id,b);
   }
-      
-      
-  //Applies affine transformation to points
-  public Point affineTransPoint(Point p) throws Exception{
-    
-    //check dimension
-    int d = p.getDimension();
-    if (numRows()-1 != d){
-      throw new Exception("Dimension Mismatch");
-    }
-    
-    //store point as a matrix
-    Matrix n = new Matrix(d+1,1);
-    for(int i=0; i<d; i++){
-      n.setEntry(i,0,p.getComponent(i));
-    }
-    n.setEntry(d,0,1);
-    
-    //multiply matrices
-    Matrix np = multiply(n);
-    
-    //convert product back to point
-    double[] result = new double[d];
-    for(int i=0; i<d; i++){
-      result[i] = np.getEntry(i,0);
-    }
-    return new Point(result);
-    
-  }
   
-  //Applies affine transformation to vectors
-  public Vector affineTransPoint(Vector v) throws Exception{
-    
+  //Applies affine transform with specified w value
+  private Vector affineTransProjective(Vector v, double w) throws Exception{
+
     //check dimension
     int d = v.getDimension();
     if (numRows()-1 != d){
       throw new Exception("Dimension Mismatch");
     }
     
-    //store point as a matrix
+    //store point as a matrix, with last entry = w
     Matrix n = new Matrix(d+1,1);
     for(int i=0; i<d; i++){
       n.setEntry(i,0,v.getComponent(i));
     }
-    n.setEntry(d,0,0);
+    n.setEntry(d,0,w);
     
     //multiply matrices
     Matrix np = multiply(n);
@@ -128,53 +98,159 @@ public class AffineTransformation extends Matrix {
       result[i] = np.getEntry(i,0);
     }
     return new Vector(result);
-    
+  }
+      
+      
+  //Applies affine transformation to points
+  public Vector affineTransPoint(Vector v) throws Exception{
+    return affineTransProjective(v,1);
   }
   
-  //Change basis
-  public static Matrix changeBasis(Matrix T, Vector[] U, Vector[] W) throws Exception{
-    if ((T.determinant() == 0) || (U.length != W.length) || (T.numRows() != T.numCols()) || (T.numCols() != U.length)){
-      throw new Exception("Dimension mismatch");
-      //Don't for get to check linear independence by taking determinant
+  //Applies affine transformation to vectors
+  public Vector affineTransVector(Vector v) throws Exception{
+    return affineTransProjective(v,0);
+  }
+  
+  //Creates a matrix from a list of Vectors
+  //should really be in Matrix class, but Matrix/Vector are in different packages...
+  public static Matrix createMatrixFromColumnVectors(Vector[] U){
+    
+    int rows = U[0].getDimension();
+    int cols = U.length;
+    
+    Matrix M = new Matrix(rows,cols);
+    for(int i=0; i<rows; i++){
+      for(int j=0; j<cols; j++){
+        M.setEntry(i,j,U[j].getComponent(i));
+      }
     }
-    else{
-      Matrix A = new Matrix(U.length,U.length);
-      for(int i=0; i < U.length; i++){
-        for(int j=0; j< U.length; j++){
-          A.setEntry(i, j, U[j].getComponent(i));
+    
+    return M;
+  }
+  
+  public void leftMultiply(AffineTransformation lhs){
+    
+    //assumes this and lhs are both nxn matrices
+    int n = rows;
+    if((cols != n) || (lhs.rows != n) || (lhs.cols != n)){
+      System.err.print("Matrices cannot be multiplied: dimensions don't match.");
+      return;
+    }
+    
+    //multiply
+    double[][] newm = new double[n][n];
+    for(int i=0; i<n; i++){
+      for(int j=0; j<n; j++){
+        newm[i][j] = 0; 
+        for(int k=0; k<n; k++){
+          newm[i][j] += lhs.getEntry(i,k) * this.getEntry(k,j);
         }
       }
-      Matrix B = new Matrix(U.length ,U.length);
-      for(int i=0; i < U.length; i++){
-        for(int j=0; j < U.length; j++){
-          B.setEntry(i, j, W[j].getComponent(i));
-        } 
-      }
-      if(A.determinant()*B.determinant() == 0){
-        throw new Exception("Vectors in one of the bases are not linearly independent");
-      }
+    }
+    m = newm;
+  }
+
+  private static void setLastNormal(Vector[] U) throws Exception{
+    
+    //should receive a list of d vectors of dimension d
+    //the first d-1 vectors span a subspace S
+    //set the last entry in U to be a unit normal vector to S
+    //compute by special cases for 2d and 3d for now, since that is all we need
+    //(can use the generalized 'cross product determinant' for any dimension)
+    
+    int d = U[0].getDimension();
+    if(d == 2){
+      U[1] = new Vector(U[0].getComponent(1), -U[0].getComponent(0));
+    }else if(d == 3){
+      U[2] = Vector.cross(U[0], U[1]);
+    }
+    U[d-1].normalize();
+  }
+  
+  public static AffineTransformation MatchSimplexTrans(Vector[] p, Vector[] q) throws Exception{
+
+    //p and q are points making up a simplex with n vertices
+    //should produce an affine transformation taking p[i] -> q[i], for i = 0 to d-2
+    //and p[d-1], q[d-1] are the points not contained in the common sub-simplex
+    //assumes that p,q consist of vectors all of dim d, and p.length == q.length == d+1
+    int d = p[0].getDimension();
+    
+    //get vectors for change of basis
+    Vector[] U = new Vector[d];
+    Vector[] V = new Vector[d];
+    for(int i=0; i<d-1; i++){
+      U[i] = Vector.subtract(p[i+1], p[0]);
+      V[i] = Vector.subtract(q[i+1], q[0]);
+    }
+    //make the last element of the bases (U[d-1] and V[d-1]) normal to the common subsimplex
+    //generated by the vectors U[0] up to U[d-2]
+    setLastNormal(U);
+    setLastNormal(V);
+    
+    //adjust normals to common face to point in the correct direction
+    Vector Un = Vector.subtract(p[d], p[0]);
+    Vector Vn = Vector.subtract(q[d], q[0]);
+    if(Vector.dot(Un,U[d-1]) < 0){ U[d-1].scale(-1); } //face U[d-1] toward non-common point
+    if(Vector.dot(Vn,V[d-1]) > 0){ V[d-1].scale(-1); } //face V[d-1] away from non-common point
+    
+    //changes of basis
+    Matrix std_to_U = createMatrixFromColumnVectors(U);
+    Matrix std_to_V = createMatrixFromColumnVectors(V);
+    Matrix U_to_std = std_to_U.inverse();
+    
+    //compose and return
+    AffineTransformation ret = new AffineTransformation(d); //identity transformation on R^d
+    ret.leftMultiply(new AffineTransformation(p[0].scale_better(-1))); //move p[0] to origin
+    ret.leftMultiply(new AffineTransformation(U_to_std)); //U -> standard basis
+    ret.leftMultiply(new AffineTransformation(std_to_V)); //standard basis -> V
+    ret.leftMultiply(new AffineTransformation(q[0])); //move origin to q[0]
+    return ret;
+  }
+  
+  
+
+  //DEPRECATED CODE
+  
+  //Change basis
+  /*public static Matrix changeBasis(Matrix T, Vector[] U, Vector[] W) throws Exception{
+    
+    if ((U.length != W.length) || (T.numRows() != T.numCols()) || (T.numCols() != U.length)){
+      throw new Exception("Dimension mismatch");
+    }
+    
+    else{
+      Matrix A = createMatrixFromColumnVectors(U);
+      Matrix B = createMatrixFromColumnVectors(W);
+
+      //don't compute B.determinant, for performance reasons
+      //let A.inverse() throw the exception if there is one
+      //if((A.determinant() == 0) || (B.determinant() == 0)){
+      //  throw new Exception("Vectors in one of the bases are not linearly independent");
+      //}
+      
       Matrix C = new Matrix(U.length, U.length);
       C = T.multiply(A.inverse());
       C = B.inverse().multiply(C.multiply(B));
       return C;
-      }
-  }
+    }
+  }*/
   
-//Method to find normal to a triangle along edge with vertices indexed locally by
+  // Method to find normal to a triangle along edge with vertices indexed locally by
   // i and j. Our convention is to have the normal pointing away from the triangle.
-  public static Vector findNormal(Point[] p, int i, int j) throws Exception{
+  
+  // moved to setLastNormal 
+  
+  /*public static Vector findNormal(Vector[] p, int i, int j) throws Exception{
     if ((p.length != 3)){
       throw new Exception("Must specify a triangle and an edge");
     }
     else{
-      Point S = p[i];
-      Point T = p[j];
-      Point R = p[findOtherLocalIndex(i,j)];
-      Vector u = new Vector(T.getComponent(0)-S.getComponent(0),
-          T.getComponent(1)-S.getComponent(1));
-      Vector v = new Vector(R.getComponent(0)-S.getComponent(0),
-          R.getComponent(1)-S.getComponent(1));
-      Vector n = new Vector(u.getComponent(1),(-1)*u.getComponent(0));
+      Vector S = p[i];
+      Vector T = p[j];
+      Vector R = p[findOtherLocalIndex(i,j)];
+      Vector u = Vector.subtract(T,S);
+      Vector v = Vector.subtract(R,S);
+      Vector n = new Vector(u.getComponent(1),-u.getComponent(0));
       if(Vector.dot(v,n) > 0){
         return n.scale_better(-1);
       }
@@ -185,8 +261,7 @@ public class AffineTransformation extends Matrix {
       
     }
   }
-  
-  
+ 
   public static int findOtherLocalIndex(int i, int j){
     int k = 0;
     if(i+j == 1){
@@ -197,8 +272,9 @@ public class AffineTransformation extends Matrix {
     }
     return k;
 
-    }
+    }*/
   
+  /*
   public static AffineTransformation MatchTriTrans(Point[] p, Point[] q) throws Exception{
     if ((p.length != 3) || (q.length != 3)){
       throw new Exception("Need two vertices for each edge of the triangles");
@@ -287,12 +363,12 @@ public class AffineTransformation extends Matrix {
         }
         
       }
-  }
+  }*/
   
 //Make this a constructor in affine transformation. Update 'this'
   //The array of points has length 4. THE FIRST THREE POINTS CORRESPONDS TO THE
   //TRIANGULAR FACES THAT WE WANT TO MATCH UP (WITH VERTICES IN CORRESPONDING ORDER).
-  public static AffineTransformation MatchTetraTrans_Oldver(Point[] p, Point[] q) throws Exception{
+  /*public static AffineTransformation MatchTetraTrans_Oldver(Point[] p, Point[] q) throws Exception{
     if ((p.length != 4) || (q.length != 4)){
       throw new Exception("Need four vertices for each tetrahedron");
     } 
@@ -400,160 +476,6 @@ public class AffineTransformation extends Matrix {
       AffineTransformation result = new AffineTransformation(trans, finalTranslate);
       return result;
     }
-  }
-  
-
-  public void leftMultiply(AffineTransformation lhs){
-    
-    //assumes this and lhs are both nxn matrices
-    int n = rows;
-    if((cols != n) || (lhs.rows != n) || (lhs.cols != n)){
-      System.err.print("Matrices cannot be multiplied: dimensions don't match.");
-      return;
-    }
-    
-    //multiply
-    double[][] newm = new double[n][n];
-    for(int i=0; i<n; i++){
-      for(int j=0; j<n; j++){
-        newm[i][j] = 0; 
-        for(int k=0; k<n; k++){
-          newm[i][j] += lhs.getEntry(i,k) * this.getEntry(k,j);
-        }
-      }
-    }
-    m = newm;
-  }
-  
-  public static AffineTransformation MatchTetraTrans(Point[] p, Point[] q) throws Exception{
-
-    //convert all to vectors
-    Vector[] p_vect = new Vector[p.length]; 
-    Vector[] q_vect = new Vector[q.length]; 
-    for(int i=0; i<p.length; i++){ 
-      p_vect[i] = Vector.pointToVector(p[i]); 
-    }
-    for(int i=0; i<q.length; i++){
-      q_vect[i] = Vector.pointToVector(q[i]); 
-    }
-    
-    //call vector version
-    return MatchTetraTrans(p_vect,q_vect);
-  }
-  
-  public static AffineTransformation MatchTetraTrans(Vector[] p, Vector[] q) throws Exception{
-
-    //get vectors for change of basis
-    Vector[] U = new Vector[3];
-    U[0] = Vector.subtract(p[1], p[0]);
-    U[1] = Vector.subtract(p[2], p[0]);
-    U[2] = Vector.cross(U[0],U[1]);
-    
-    Vector[] V = new Vector[3];
-    V[0] = Vector.subtract(q[1], q[0]);
-    V[1] = Vector.subtract(q[2], q[0]);
-    V[2] = Vector.cross(V[0],V[1]);
-    
-    //adjust normals
-    Vector Un = Vector.subtract(p[3], p[0]);
-    if(Vector.dot(Un,U[2]) < 0){ U[2].scale(-1); } //face U[2] toward 4th point
-    U[2].normalize();
-    
-    Vector Vn = Vector.subtract(q[3], q[0]);
-    if(Vector.dot(Vn,V[2]) > 0){ V[2].scale(-1); } //face V[2] away from 4th point
-    V[2].normalize();
-    
-    //changes of basis
-    Matrix std_to_U = new Matrix(3,3);
-    Matrix std_to_V = new Matrix(3,3);
-    for(int i=0; i<3; i++){
-      for(int j=0; j<3; j++){
-        std_to_U.setEntry(i, j, U[j].getComponent(i));
-        std_to_V.setEntry(i, j, V[j].getComponent(i));
-      }
-    }
-    Matrix U_to_std = std_to_U.inverse();
-    
-    //compose and return
-    AffineTransformation ret = new AffineTransformation(3); //identity transformation on R^3
-    ret.leftMultiply(new AffineTransformation(p[0].scale_better(-1))); //move p[0] to origin
-    ret.leftMultiply(new AffineTransformation(U_to_std)); //U -> standard basis
-    ret.leftMultiply(new AffineTransformation(std_to_V)); //standard basis -> V
-    ret.leftMultiply(new AffineTransformation(q[0])); //move origin to q[0]
-    return ret;
-  }
-  
-  public static AffineTransformation MatchSimplexTrans(Point[] p, Point[] q) throws Exception{
-
-    //convert all to vectors
-    Vector[] p_vect = new Vector[p.length]; 
-    Vector[] q_vect = new Vector[q.length]; 
-    for(int i=0; i<p.length; i++){ 
-      p_vect[i] = Vector.pointToVector(p[i]); 
-    }
-    for(int i=0; i<q.length; i++){
-      q_vect[i] = Vector.pointToVector(q[i]); 
-    }
-    
-    //call vector version
-    return MatchTetraTrans(p_vect,q_vect);
-  }
-  
-  public static AffineTransformation MatchSimplexTrans(Vector[] p, Vector[] q) throws Exception{
-
-    //p and q are points making up a simplex with n vertices
-    //should produce an affine transformation taking p[i] -> q[i], for i = 0 to n-2
-    //and p[n-1], q[n-1] should be on opposite sides of the common sub-simplex
-    //assumes that p,q consist of vectors all of dim n, and p.length == q.length == n+1
-    
-    int d = p.length-1; //dimension of vectors
-    
-    //get vectors for change of basis
-    Vector[] U = new Vector[d];
-    Vector[] V = new Vector[d];
-    for(int i=0; i<d-1; i++){
-      U[i] = Vector.subtract(U[i+1], U[0]);
-      V[i] = Vector.subtract(V[i+1], V[0]);
-    }
-    //make the last element of the bases (U[d-1] and V[d-1]) normal to the common subsimplex
-    //the cross product 'determinant' generalizes
-    //   [   |    |        |  ] }
-    //   [ u[0] u[1] ... u[n] ]  > n-1 vectors
-    //   [   |    |        |  ] }
-    //   [  e_1  e_2      e_n ]
-    U[d-1] = null;
-    V[d-1] = null;
-    
-    //adjust normals to common face
-    Vector Un = Vector.subtract(p[d], p[0]);
-    if(Vector.dot(Un,U[d-1]) < 0){ U[d-1].scale(-1); } //face U[d-1] toward non-common point
-    U[d-1].normalize();
-    
-    Vector Vn = Vector.subtract(q[d], q[0]);
-    if(Vector.dot(Vn,V[d-1]) > 0){ V[d-1].scale(-1); } //face V[d-1] away from non-common point
-    V[d-1].normalize();
-    
-    //changes of basis
-    Matrix std_to_U = new Matrix(d,d);
-    Matrix std_to_V = new Matrix(d,d);
-    for(int i=0; i<d; i++){
-      for(int j=0; j<d; j++){
-        std_to_U.setEntry(i, j, U[j].getComponent(i));
-        std_to_V.setEntry(i, j, V[j].getComponent(i));
-      }
-    }
-    Matrix U_to_std = std_to_U.inverse();
-    
-    //compose and return
-    AffineTransformation ret = new AffineTransformation(d); //identity transformation on R^d
-    ret.leftMultiply(new AffineTransformation(p[0].scale_better(-1))); //move p[0] to origin
-    ret.leftMultiply(new AffineTransformation(U_to_std)); //U -> standard basis
-    ret.leftMultiply(new AffineTransformation(std_to_V)); //standard basis -> V
-    ret.leftMultiply(new AffineTransformation(q[0])); //move origin to q[0]
-    return ret;
-  }
-  
-  
-   
+  }*/
  
 }
