@@ -19,7 +19,7 @@ public class Coord2D extends Geoquant {
   private Angle ai;
 
   private int stdFIndex; //coordinate computed differently depending on index
-  private Point coord; //2d point holding coords for this vertex/face pair
+  private Vector coord; //2d point holding coords for this vertex/face pair
   
   public Coord2D(Vertex v, Face f) {
     super(v,f);
@@ -44,18 +44,18 @@ public class Coord2D extends Geoquant {
 
     if(stdFIndex == 0){
       
-      coord = new Point(new double[] {0, 0});
+      coord = new Vector(new double[] {0, 0});
       
     }else if(stdFIndex == 1){
       
       double l1 = lij.getValue();
-      coord = new Point(new double[] {l1, 0});
+      coord = new Vector(new double[] {l1, 0});
       
     }else if(stdFIndex == 2){
       
       double l3 = lik.getValue();
       double t = ai.getValue();
-      coord = new Point(new double[] {l3*Math.cos(t), l3*Math.sin(t)});
+      coord = new Vector(new double[] {l3*Math.cos(t), l3*Math.sin(t)});
     }
     
     value = 0; //unused
@@ -86,12 +86,12 @@ public class Coord2D extends Geoquant {
   }
   
   //like getValue(), but returns coordinate point
-  public Point getCoord() {
+  public Vector getCoord() {
     double d = getValue(); //used to invoke recalculate if invalid
     return coord; 
   }
   //like valueAt(), but returns coordinate point
-  public static Point coordAt(Vertex v, Face f) {
+  public static Vector coordAt(Vertex v, Face f) {
     return At(v,f).getCoord();
   }
   

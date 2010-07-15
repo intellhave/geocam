@@ -24,7 +24,7 @@ public class Coord3D extends Geoquant {
   private DihedralAngle D_ij; 
 
   private int stdTIndex; //coordinate computed differently depending on index
-  private Point coord; //3d point holding coords for this vertex/tetra pair
+  private Vector coord; //3d point holding coords for this vertex/tetra pair
   
   public Coord3D(Vertex v, Tetra t) {
     super(v,t);
@@ -60,25 +60,25 @@ public class Coord3D extends Geoquant {
     
     if(stdTIndex == 0){
       
-      coord = new Point(new double[] {0, 0, 0});
+      coord = new Vector(new double[] {0, 0, 0});
      
     }else if(stdTIndex == 1){
       
       double L = L_ij.getValue();
-      coord = new Point(new double[] {L, 0, 0});
+      coord = new Vector(new double[] {L, 0, 0});
       
     }else if(stdTIndex == 2){
       
       double L = L_ik.getValue();
       double t = A_jik.getValue();
-      coord = new Point(new double[] {L*Math.cos(t), L*Math.sin(t), 0});
+      coord = new Vector(new double[] {L*Math.cos(t), L*Math.sin(t), 0});
       
     }else if(stdTIndex == 3){
       
       double L = L_il.getValue();
       double a = A_jil.getValue();
       double b = D_ij.getValue();
-      coord = new Point(new double[] {L*Math.cos(a), L*Math.sin(a)*Math.cos(b), L*Math.sin(a)*Math.sin(b)});
+      coord = new Vector(new double[] {L*Math.cos(a), L*Math.sin(a)*Math.cos(b), L*Math.sin(a)*Math.sin(b)});
     }
 
     value = 0; //unused
@@ -114,12 +114,12 @@ public class Coord3D extends Geoquant {
   }
   
   //like getValue(), but returns coordinate point
-  public Point getCoord() {
+  public Vector getCoord() {
     double d = getValue(); //used to invoke recalculate if invalid
     return coord; 
   }
   //like valueAt(), but returns coordinate point
-  public static Point coordAt(Vertex v, Tetra t) {
+  public static Vector coordAt(Vertex v, Tetra t) {
     return At(v,t).getCoord();
   }
   
