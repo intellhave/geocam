@@ -1,5 +1,6 @@
 package development;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
@@ -60,13 +61,18 @@ public class Face {
     return normal_;
   }
   
-  public Geometry getGeometry() {
+  public Geometry getGeometry(Color color) {
     double[][] ifsf_verts = new double[getNumberVertices()][3];
     int[][] ifsf_faces = new int[1][getNumberVertices()];
 
     for (int i = 0; i < getNumberVertices(); i++) {
       ifsf_verts[i] = getVectorAt(i).getVectorAsArray();
       ifsf_faces[0][i] = i;
+    }
+    
+    Color[] colors = new Color[ifsf_faces.length];
+    for(int i = 0; i < ifsf_faces.length; i++) {
+      colors[i] = color;
     }
 
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
@@ -75,6 +81,7 @@ public class Face {
     ifsf.setFaceCount(ifsf_faces.length);
     ifsf.setFaceIndices(ifsf_faces);
     ifsf.setGenerateEdgesFromFaces(true);
+    ifsf.setFaceColors(colors);
     ifsf.update();
     return ifsf.getGeometry();
   }

@@ -71,7 +71,7 @@ public class Frustum3D {
     return vectors.get(index);
   }
 
-  public static Frustum3D intersect(Frustum3D frustum1, Frustum3D frustum2) {
+  public static Frustum3D intersect(Frustum3D frustum1, Frustum3D frustum2) throws Exception {
 
     if (frustum1.contains(frustum2))
       return frustum2;
@@ -164,7 +164,7 @@ public class Frustum3D {
     return false;
   }
 
-  private static boolean closeTogether(Vector3D v1, Vector3D v2) {
+  private static boolean closeTogether(Vector3D v1, Vector3D v2) throws Exception {
     Vector difference = Vector.subtract(v1, v2);
     double cos = (v1.lengthSquared() + v2.lengthSquared() - difference
         .lengthSquared())

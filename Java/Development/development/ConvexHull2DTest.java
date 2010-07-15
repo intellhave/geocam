@@ -1,5 +1,6 @@
 package development;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import de.jreality.plugin.JRViewer;
@@ -23,7 +24,7 @@ public class ConvexHull2DTest {
     hull = new ConvexHull2D(list);
 
     Face f = hull.getAsFace();
-    sgc_root.setGeometry(f.getGeometry());
+    sgc_root.setGeometry(f.getGeometry(Color.blue));
 
     // set up the main JRViewer
     JRViewer jrv = new JRViewer();
