@@ -62,12 +62,10 @@ public class CoordTrans3D extends Geoquant {
   
   protected void recalculate() {
 
-    //COMPUTE THE MATRIX affineTrans HERE
-    //affineTrans = new AffineTransformation(ci,cj)
     Vector[] P = new Vector[] {cv1t1.getCoord(), cv2t1.getCoord(), cv3t1.getCoord(), cw1.getCoord()};
     Vector[] Q = new Vector[] {cv1t2.getCoord(), cv2t2.getCoord(), cv3t2.getCoord(), cw2.getCoord()};
     try {
-      affineTrans = AffineTransformation.MatchSimplexTrans(P,Q);
+      affineTrans = new AffineTransformation(P,Q);
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

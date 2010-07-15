@@ -76,7 +76,7 @@ public class DevelopmentApp2D {
     
     //loop through tetra's neighbors, adding them in the right place
     Iterator<Face> k = face.getLocalFaces().iterator();
-    while(i.hasNext()){
+    while(k.hasNext()){
       Face face2 = k.next();
       AffineTransformation atTrans12 = CoordTrans2D.affineTransAt(face2,face);
       sgc_root.addChild(sgcFromFace(face2, atTrans12, Color.WHITE));

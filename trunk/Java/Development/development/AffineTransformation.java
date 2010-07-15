@@ -1,5 +1,4 @@
 package development;
-import java.lang.reflect.Array;
 
 import util.Matrix;
 
@@ -28,7 +27,7 @@ public class AffineTransformation extends Matrix {
   }
   
   //creates (n+1)x(n+1) identity matrix (i.e., identity n-dimension affine trans)
-  public AffineTransformation(int n){ 
+  private void setAsIdentity(int n){
     
     m = new double[n+1][n+1];
     for(int i=0; i<=n; i++){
@@ -39,6 +38,10 @@ public class AffineTransformation extends Matrix {
     }
     rows = n+1;
     cols = n+1;
+  }
+  
+  public AffineTransformation(int n){ 
+    setAsIdentity(n);
   }
 
   //General constructor
@@ -167,13 +170,14 @@ public class AffineTransformation extends Matrix {
     U[d-1].normalize();
   }
   
-  public static AffineTransformation MatchSimplexTrans(Vector[] p, Vector[] q) throws Exception{
+  public AffineTransformation(Vector[] p, Vector[] q) throws Exception{
 
     //p and q are points making up a simplex with n vertices
     //should produce an affine transformation taking p[i] -> q[i], for i = 0 to d-2
     //and p[d-1], q[d-1] are the points not contained in the common sub-simplex
     //assumes that p,q consist of vectors all of dim d, and p.length == q.length == d+1
     int d = p[0].getDimension();
+    setAsIdentity(d); //identity transformation on R^d
     
     //get vectors for change of basis
     Vector[] U = new Vector[d];
@@ -199,12 +203,10 @@ public class AffineTransformation extends Matrix {
     Matrix U_to_std = std_to_U.inverse();
     
     //compose and return
-    AffineTransformation ret = new AffineTransformation(d); //identity transformation on R^d
-    ret.leftMultiply(new AffineTransformation(Vector.scale(p[0],-1))); //move p[0] to origin
-    ret.leftMultiply(new AffineTransformation(U_to_std)); //U -> standard basis
-    ret.leftMultiply(new AffineTransformation(std_to_V)); //standard basis -> V
-    ret.leftMultiply(new AffineTransformation(q[0])); //move origin to q[0]
-    return ret;
+    leftMultiply(new AffineTransformation(Vector.scale(p[0],-1))); //move p[0] to origin
+    leftMultiply(new AffineTransformation(U_to_std)); //U -> standard basis
+    leftMultiply(new AffineTransformation(std_to_V)); //standard basis -> V
+    leftMultiply(new AffineTransformation(q[0])); //move origin to q[0]
   }
   
   
