@@ -6,27 +6,13 @@ import java.util.HashMap;
 
 
 public class ConvexHull2D {
-  private ArrayList<Point2D> points;
+  private ArrayList<Vector2D> points;
   
-  public static void main(String[] args) throws Exception {
-    ArrayList<Point2D> list = new ArrayList<Point2D>();
-    list.add(new Point2D(0, 0));
-    list.add(new Point2D(0, 1));
-    list.add(new Point2D(-.5, .5));
-    list.add(new Point2D(.5, .5));
-    list.add(new Point2D(-.25, -.25));
-    ConvexHull2D hull = new ConvexHull2D(list);
-    for(int i = 0; i < hull.getNumPoints()-1; i++) {
-      System.out.print(hull.getPointAt(i) + ", " );
-    }
-    System.out.println(hull.getPointAt(hull.getNumPoints()-1));
-  }
-  
-  public ConvexHull2D(ArrayList<Point2D> unsortedPoints) {
+  public ConvexHull2D(ArrayList<Vector2D> unsortedPoints) {
     findHull(unsortedPoints);
   }
 
-  public Point2D getPointAt(int i) {
+  public Vector2D getPointAt(int i) {
     return points.get(i);
   }
   
@@ -38,11 +24,11 @@ public class ConvexHull2D {
     return points.isEmpty();
   }
   
-  private void findHull(ArrayList<Point2D> unsortedPoints) {
-    points = new ArrayList<Point2D>();
+  private void findHull(ArrayList<Vector2D> unsortedPoints) {
+    points = new ArrayList<Vector2D>();
     
     int startIndex = findHighestPoint(unsortedPoints);    
-    Point2D start = unsortedPoints.get(startIndex);
+    Vector2D start = unsortedPoints.get(startIndex);
     unsortedPoints.remove(startIndex);
     points.add(start);
     
@@ -63,35 +49,37 @@ public class ConvexHull2D {
     }
   }
   
-  private ArrayList<Vector2D> getVectors(Point2D start, ArrayList<Point2D> pts) {
+  private ArrayList<Vector2D> getVectors(Vector2D start, ArrayList<Vector2D> pts) {
     ArrayList<Vector2D> vectors = new ArrayList<Vector2D>();
-    Vector2D startV = new Vector2D(start);
     for(int i = 0; i < pts.size(); i++) {
-      Vector2D v = new Vector2D(pts.get(i));
-      try {
-        v.subtract(startV);
-      } catch (Exception e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-      vectors.add((Vector2D) Vector2D.subtract(v, startV));
+      vectors.add((Vector2D) Vector2D.subtract(pts.get(i), start));
     }
     return vectors;
   }
   
-  private int findHighestPoint(ArrayList<Point2D> points) {
-    double max_y = points.get(0).getY();
+  private int findHighestPoint(ArrayList<Vector2D> points) {
+    double max_y = points.get(0).getComponent(1);
     int index = 0;
     for(int i = 1; i < points.size(); i++) {
-      if(points.get(i).getY() > max_y) {
-        max_y = points.get(i).getY();
+      if(points.get(i).getComponent(1) > max_y) {
+        max_y = points.get(i).getComponent(1);
         index = i;
       }
     }
     return index;
   }
 
-  public ArrayList<Point2D> getPoints() {
+  public ArrayList<Vector2D> getPoints() {
     return points;
+  }
+
+  public Face getAsFace() {
+    Vector3D[] vectors = new Vector3D[points.size()];
+    for(int i = 0; i < vectors.length; i++) {
+      Vector2D point = points.get(i);
+      vectors[i] = new Vector3D(point.getComponent(0), point.getComponent(1), 0);
+      System.out.println(vectors[i].toString());
+    }
+    return new Face(vectors);
   }
 }

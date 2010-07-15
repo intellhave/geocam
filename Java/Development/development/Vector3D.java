@@ -6,6 +6,10 @@ public class Vector3D extends Vector {
     super(x, y, z);
   }
 
+  public Vector3D(Vector3D original) {
+    super(original.getComponent(0), original.getComponent(1), original.getComponent(2));
+  }
+
   static public Vector3D cross(Vector3D a, Vector3D b) {
     return new Vector3D(a.components_[1] * b.components_[2] - a.components_[2]
         * b.components_[1], -a.components_[0] * b.components_[2]

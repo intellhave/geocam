@@ -23,6 +23,15 @@ public class Face {
     findNormal();
   }
   
+  public Face(Face face) {
+    vectors_ = new ArrayList<Vector3D>();
+    ArrayList<Vector3D> oldVectors = face.getVectors();
+    for(int i = 0; i < oldVectors.size(); i++) {
+      vectors_.add(new Vector3D(oldVectors.get(i)));
+    }
+    findNormal();
+  }
+
   public int getNumberVertices() {
     return vectors_.size();
   }
@@ -70,15 +79,11 @@ public class Face {
   
   public Geometry getGeometry() {
     double[][] ifsf_verts = new double[getNumberVertices()][3];
-    int[][] ifsf_faces = new int[getNumberVertices()][3];
-    //ifsf_verts[0] = new double[] { 0, 0, 0 };
+    int[][] ifsf_faces = new int[1][getNumberVertices()];
 
     for (int i = 0; i < getNumberVertices(); i++) {
       ifsf_verts[i] = getVectorAt(i).getVectorAsArray();
-      if (i == getNumberVertices() - 1)
-        ifsf_faces[i - 1] = new int[] { 0, i, 1 };
-      else
-        ifsf_faces[i] = new int[] { 0, i, i + 1 };
+      ifsf_faces[0][i] = i;
     }
 
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
