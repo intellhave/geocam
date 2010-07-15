@@ -23,14 +23,13 @@ import de.jreality.shader.ShaderUtility;
 
 import InputOutput.TriangulationIO;
 import Triangulation.*;
-import Triangulation.Face;
 import Geoquant.*;
 
-public class DevelopmentApp2D {
+public class DevelopmentApp3D {
 
   public static void main(String[] args){
     
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
+    TriangulationIO.readTriangulation("Data/Triangulations/3DManifolds/3-torus.xml");
     
     Iterator i = null;
     
@@ -42,47 +41,47 @@ public class DevelopmentApp2D {
       Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
     }
     
-    //print some face info
-    System.out.printf("\n\nFACE INFO\n");
+    //print some tetra info
+    System.out.printf("\n\nTOP DIM SIMPLEX INFO\n");
     
-    i = Triangulation.faceTable.keySet().iterator();
+    i = Triangulation.tetraTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = (Integer)i.next();
-      Face f = Triangulation.faceTable.get(key);
+      Tetra t = Triangulation.tetraTable.get(key);
       
-      System.out.printf("Face %d: \n",key);
-      System.out.printf("   Num local faces: %d\n", f.getLocalFaces().size());
-      System.out.printf("   Area: %f\n",Area.valueAt(f)); 
+      System.out.printf("Tetra %d: \n",key);
+      System.out.printf("   Num local tetras: %d\n", t.getLocalTetras().size());
+      System.out.printf("   Volume: %f\n",Volume.valueAt(t)); 
       
       //coords
       System.out.printf("   Coords: ");
-      Iterator j = f.getLocalVertices().iterator();
+      Iterator j = t.getLocalVertices().iterator();
       while(j.hasNext()){
         Vertex v = (Vertex)j.next();
         System.out.printf("[v%d: (",v.getIndex());
-        System.out.print(Coord2D.coordAt(v,f));
+        System.out.print(Coord3D.coordAt(v,t));
         System.out.print(")]");
       }
       System.out.printf("\n");
     }
     
-    //pick some arbitrary face
-    i = Triangulation.faceTable.keySet().iterator();
-    Face face = Triangulation.faceTable.get((Integer)i.next());
+    //pick some arbitrary tetra
+    i = Triangulation.tetraTable.keySet().iterator();
+    Tetra tetra = Triangulation.tetraTable.get((Integer)i.next());
 
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
-    SceneGraphComponent sgc_face1 = sgcFromFace(face, new AffineTransformation(2), Color.RED);
-    SceneGraphComponent sgc_points = sgcFromPoints(new Vector(0,0));
-    sgc_root.addChild(sgc_face1);
+    SceneGraphComponent sgc_tetra1 = sgcFromTetra(tetra, new AffineTransformation(3), Color.RED);
+    SceneGraphComponent sgc_points = sgcFromPoints(new Vector(0,0,0));
+    sgc_root.addChild(sgc_tetra1);
     sgc_root.addChild(sgc_points);
     
     //loop through tetra's neighbors, adding them in the right place
-    i = face.getLocalFaces().iterator();
+    i = tetra.getLocalTetras().iterator();
     while(i.hasNext()){
-      Face face2 = (Face)i.next();
-      AffineTransformation atTrans12 = CoordTrans2D.affineTransAt(face2,face);
-      sgc_root.addChild(sgcFromFace(face2, atTrans12, Color.WHITE));
+      Tetra tetra2 = (Tetra)i.next();
+      AffineTransformation atTrans12 = CoordTrans3D.affineTransAt(tetra2,tetra);
+      sgc_root.addChild(sgcFromTetra(tetra2, atTrans12, Color.WHITE));
     }
     
     //jrviewer
@@ -120,7 +119,7 @@ public class DevelopmentApp2D {
     //set vertlist
     double[][] vertlist = new double[points.length][3];
     for(int i=0; i<points.length; i++){
-      vertlist[i] = new double[]{ points[i].getComponent(0), points[i].getComponent(1), 0 };
+      vertlist[i] = new double[]{ points[i].getComponent(0), points[i].getComponent(1), points[i].getComponent(2) };
     }
     
     //create geometry with pointsetfactory
@@ -136,23 +135,23 @@ public class DevelopmentApp2D {
     return sgc_points;
   }
   
-  public static SceneGraphComponent sgcFromFace(Face face, AffineTransformation affineTrans, Color color){
+  public static SceneGraphComponent sgcFromTetra(Tetra tetra, AffineTransformation affineTrans, Color color){
     
-    //create a sgc for the face, after applying specified affine transformation
-    SceneGraphComponent sgc_face = new SceneGraphComponent();
+    //create a sgc for the tetra, after applying specified affine transformation
+    SceneGraphComponent sgc_tetra = new SceneGraphComponent();
     
     //create appearance
-    Appearance app_face = new Appearance();
+    Appearance app_tetra = new Appearance();
     
     //set some basic attributes
-    app_face.setAttribute(CommonAttributes.FACE_DRAW, true);
-    app_face.setAttribute(CommonAttributes.EDGE_DRAW, true);
-    app_face.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    app_face.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
-    app_face.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    app_tetra.setAttribute(CommonAttributes.FACE_DRAW, true);
+    app_tetra.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app_tetra.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app_tetra.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app_tetra.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
     
     //set shaders
-    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_face, true);
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_tetra, true);
     
     //line shader
     DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
@@ -165,48 +164,52 @@ public class DevelopmentApp2D {
     dps.setTransparency(0.6d);
     
     //set appearance
-    sgc_face.setAppearance(app_face);
+    sgc_tetra.setAppearance(app_tetra);
 
     //create list of verts
-    double[][] vertlist = new double[3][3];
+    double[][] vertlist = new double[4][3];
     
     int count = 0;
-    Iterator<Vertex> i = face.getLocalVertices().iterator();
+    Iterator<Vertex> i = tetra.getLocalVertices().iterator();
     
     while(i.hasNext()){
       Vertex v = i.next();
       
       Vector pt = null;
-      try { pt = affineTrans.affineTransPoint(Coord2D.coordAt(v,face)); } 
+      try { pt = affineTrans.affineTransPoint(Coord3D.coordAt(v,tetra)); } 
       catch (Exception e) { e.printStackTrace(); }
       
-      vertlist[count] = new double[] { pt.getComponent(0), pt.getComponent(1), 0 };
+      vertlist[count] = new double[] { pt.getComponent(0), pt.getComponent(1), pt.getComponent(2)};
       count++;
     }
     
     //set combinatorics
-    int[][] facelist = new int[][] { new int[] {0,1,2} };
+    int[][] facelist = new int[][] {
+        new int[] {0,2,1}, new int[] {0,2,3},
+        new int[] {2,1,3}, new int[] {1,0,3}};
     
-    int[][] edgelist = new int[][] { new int[] {0,1}, new int[] {1,2}, new int[] {2,0} };
+    int[][] edgelist = new int[][] {
+        new int[] {0,2}, new int[] {2,1}, new int[] {1,0},
+        new int[] {0,3}, new int[] {1,3}, new int[] {2,3}};
     
     //use face factory to create geometry
-    IndexedFaceSetFactory ifsf_face = new IndexedFaceSetFactory();
+    IndexedFaceSetFactory ifsf_tetra = new IndexedFaceSetFactory();
     
-    ifsf_face.setVertexCount(3);
-    ifsf_face.setVertexCoordinates(vertlist);
+    ifsf_tetra.setVertexCount(4);
+    ifsf_tetra.setVertexCoordinates(vertlist);
     
-    ifsf_face.setFaceCount(1);
-    ifsf_face.setFaceIndices(facelist);
+    ifsf_tetra.setFaceCount(4);
+    ifsf_tetra.setFaceIndices(facelist);
     
-    ifsf_face.setEdgeCount(3);
-    ifsf_face.setEdgeIndices(edgelist);
+    ifsf_tetra.setEdgeCount(6);
+    ifsf_tetra.setEdgeIndices(edgelist);
     
-    ifsf_face.update();
+    ifsf_tetra.update();
     
     //set geometry
-    sgc_face.setGeometry(ifsf_face.getGeometry());
+    sgc_tetra.setGeometry(ifsf_tetra.getGeometry());
     
     //return
-    return sgc_face;
+    return sgc_tetra;
   }
 }
