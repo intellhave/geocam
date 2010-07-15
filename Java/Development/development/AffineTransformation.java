@@ -200,7 +200,7 @@ public class AffineTransformation extends Matrix {
     
     //compose and return
     AffineTransformation ret = new AffineTransformation(d); //identity transformation on R^d
-    ret.leftMultiply(new AffineTransformation(p[0].scale_better(-1))); //move p[0] to origin
+    ret.leftMultiply(new AffineTransformation(Vector.scale(p[0],-1))); //move p[0] to origin
     ret.leftMultiply(new AffineTransformation(U_to_std)); //U -> standard basis
     ret.leftMultiply(new AffineTransformation(std_to_V)); //standard basis -> V
     ret.leftMultiply(new AffineTransformation(q[0])); //move origin to q[0]
