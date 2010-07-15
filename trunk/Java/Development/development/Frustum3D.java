@@ -49,15 +49,7 @@ public class Frustum3D {
     return normals;
   }
 
-  // checkInterior methods assume normals are normalized
-  public boolean checkInterior(Point point) throws Exception {
-    for (int i = 0; i < normals.size(); i++) {
-      if (Vector3D.dot(normals.get(i), point) < -epsilon)
-        return false;
-    }
-    return true;
-  }
-
+  // checkInterior assumes normals are normalized
   public boolean checkInterior(Vector3D vector) {
     for (int i = 0; i < normals.size(); i++) {
       if (Vector3D.dot(normals.get(i), vector) < -epsilon)

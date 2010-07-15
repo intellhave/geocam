@@ -50,12 +50,6 @@ public class Frustum2D {
     return true;
   }
   
-  public boolean checkInterior(Point point) throws Exception {
-    if(Vector2D.dot(leftNormal, point) < -epsilon) return false;
-    if(Vector2D.dot(rightNormal, point) < -epsilon) return false;
-    return true;
-  }
-  
   public static Frustum2D intersect(Frustum2D frustum1, Frustum2D frustum2) {
     if(frustum1.checkInterior(frustum2.getLeft())) {
       if(frustum1.checkInterior(frustum2.getRight()))

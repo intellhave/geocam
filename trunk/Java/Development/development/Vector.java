@@ -2,8 +2,6 @@ package development;
 
 import java.util.Arrays;
 
-import development.Point;
-
 public class Vector {
   
   protected double[] components_;
@@ -94,18 +92,6 @@ public class Vector {
       double result = 0;
       for(int i=0; i<a.getDimension(); i++){
         result += a.components_[i]*b.components_[i];
-      }
-      return result;
-    }
-  }
-  
-  static public double dot(Vector v, Point p) throws Exception{
-    if(v.getDimension() != p.getDimension()){
-      throw new Exception("Dimension mismatch");
-    }else{
-      double result = 0;
-      for(int i=0; i<v.getDimension(); i++){
-        result += v.getComponent(i)*p.getComponent(i);
       }
       return result;
     }
