@@ -232,10 +232,10 @@ public class VEHRFlowDialog extends JDialog {
               log_radii = radNM.getLogRadii();
               while(radNM.stepMax(log_radii) > radNM.getStoppingCondition()) {
                 radNM.setLogRadii(log_radii);
-                owner.getCurrentGeoPanel().repaint();
+                owner.getPolygonPanel().repaint();
               }
               radNM.setLogRadii(log_radii);
-              owner.getCurrentGeoPanel().repaint();
+              owner.getPolygonPanel().repaint();
             } catch (WrongDirectionException e) {
             }
           } else if(getMinFlowButton().isSelected()) {
@@ -243,20 +243,20 @@ public class VEHRFlowDialog extends JDialog {
               log_radii = radNM.getLogRadii();
               while(radNM.stepMin(log_radii) > radNM.getStoppingCondition()) {
                 radNM.setLogRadii(log_radii);
-                owner.getCurrentGeoPanel().repaint();
+                owner.getPolygonPanel().repaint();
               }
               radNM.setLogRadii(log_radii);
-              owner.getCurrentGeoPanel().repaint();
+              owner.getPolygonPanel().repaint();
             } catch (WrongDirectionException e) {
             }
           } else {
               log_radii = radNM.getLogRadii();
               while(radNM.step(log_radii) > radNM.getStoppingCondition()) {
                 radNM.setLogRadii(log_radii);
-                owner.getCurrentGeoPanel().repaint();
+                owner.getPolygonPanel().repaint();
               }
               radNM.setLogRadii(log_radii);
-              owner.getCurrentGeoPanel().repaint();
+              owner.getPolygonPanel().repaint();
           }
         } else {
           EtaOptNEHR etaNM = new EtaOptNEHR();
@@ -266,10 +266,10 @@ public class VEHRFlowDialog extends JDialog {
               etas = etaNM.getEtas();
               while(etaNM.stepMax(etas) > etaNM.getStoppingCondition()) {
                 etaNM.setEtas(etas);
-                owner.getCurrentGeoPanel().repaint();
+                owner.getPolygonPanel().repaint();
               }
               etaNM.setEtas(etas);
-              owner.getCurrentGeoPanel().repaint();
+              owner.getPolygonPanel().repaint();
             } catch (WrongDirectionException e) {
             }
           } else if(getMinFlowButton().isSelected()) {
@@ -277,20 +277,20 @@ public class VEHRFlowDialog extends JDialog {
               etas = etaNM.getEtas();
               while(etaNM.stepMin(etas) > etaNM.getStoppingCondition()) {
                 etaNM.setEtas(etas);
-                owner.getCurrentGeoPanel().repaint();
+                owner.getPolygonPanel().repaint();
               }
               etaNM.setEtas(etas);
-              owner.getCurrentGeoPanel().repaint();
+              owner.getPolygonPanel().repaint();
             } catch (WrongDirectionException e) {
             }
           } else {
             etas = etaNM.getEtas();
             while(etaNM.step(etas) > etaNM.getStoppingCondition()) {
               etaNM.setEtas(etas);
-              owner.getCurrentGeoPanel().repaint();
+              owner.getPolygonPanel().repaint();
             }
             etaNM.setEtas(etas);
-            owner.getCurrentGeoPanel().repaint();
+            owner.getPolygonPanel().repaint();
           }
         }
       }
