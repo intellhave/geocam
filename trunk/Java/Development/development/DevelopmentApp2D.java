@@ -185,7 +185,34 @@ public class DevelopmentApp2D {
     }
     
     //make sgc_embedded
+    sgc_embedded = new SceneGraphComponent();
     
+    //create appearance
+    Appearance app_embedded = new Appearance();
+    
+    //set some basic attributes
+    app_embedded.setAttribute(CommonAttributes.FACE_DRAW, true);
+    app_embedded.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app_embedded.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app_embedded.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app_embedded.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    
+    //set shaders
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_embedded, true);
+    
+    //line shader
+    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+    dls.setTubeDraw(false);
+    dls.setDiffuseColor(Color.BLACK);
+    
+    //polygon shader
+    DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
+    dps.setDiffuseColor(Color.BLUE);
+    dps.setTransparency(0.6d);
+    
+    //set appearance
+    sgc_embedded.setAppearance(app_embedded);
+    sgc_embedded.setGeometry(geom);
     
     //get the geometry data
     DataList dl_faceindices = geom.getAttributes(Geometry.CATEGORY_FACE,Attribute.INDICES);
@@ -366,13 +393,13 @@ public class DevelopmentApp2D {
     
     Iterator<Integer> i = null;
     
-    //set edge lengths to 1
-    i = Triangulation.edgeTable.keySet().iterator();
+    //set edge lengths randomly from [2,3)
+    /*i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
-      //Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
-    }
+      Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
+    }*/
     
     //print some face info
     System.out.printf("\n\nFACE INFO\n");
@@ -399,7 +426,7 @@ public class DevelopmentApp2D {
     }
     
     //get points using EmbeddedMfldData
-    i = Triangulation.faceTable.keySet().iterator();
+    /*i = Triangulation.faceTable.keySet().iterator();
     
     ArrayList<Vector> temp = new ArrayList<Vector>();
     while(i.hasNext()){
@@ -417,7 +444,7 @@ public class DevelopmentApp2D {
     for(int k=0; k<temp.size(); k++){
       temp2[k] = temp.get(k);
     }
-    SceneGraphComponent sgc_mfld = sgcFromPoints3D( temp2 );
+    SceneGraphComponent sgc_mfld = sgcFromPoints3D( temp2 );*/
     
     //pick some arbitrary face
     i = Triangulation.faceTable.keySet().iterator();
@@ -429,7 +456,8 @@ public class DevelopmentApp2D {
     SceneGraphComponent sgc_points = sgcFromPoints2D(new Vector(0,0));
     sgc_root.addChild(sgc_face1);
     sgc_root.addChild(sgc_points);
-    sgc_root.addChild(sgc_mfld);
+    //sgc_root.addChild(sgc_mfld);
+    sgc_root.addChild(sgc_embedded);
     
     //loop through tetra's neighbors, adding them in the right place
     Iterator<Face> k = face.getLocalFaces().iterator();
