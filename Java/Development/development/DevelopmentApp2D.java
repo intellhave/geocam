@@ -1,7 +1,10 @@
 package development;
 
 import java.awt.Color;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
@@ -9,7 +12,11 @@ import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
+import de.jreality.reader.Readers;
 import de.jreality.scene.Appearance;
+import de.jreality.scene.Geometry;
+import de.jreality.scene.data.Attribute;
+import de.jreality.scene.data.DataList;
 import de.jreality.scene.proxy.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
@@ -17,6 +24,7 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import de.jreality.util.Input;
 
 import InputOutput.TriangulationIO;
 import Triangulation.*;
@@ -24,10 +32,270 @@ import Triangulation.Face;
 import Geoquant.*;
 
 public class DevelopmentApp2D {
+  
+  //this is data associated to a Face in the case of embedded manifolds
+  //-------------------------------------
+  private static class EmbeddedFace{
+    Vector origin;
+    Vector tangent_x;
+    Vector tangent_y;
+  };
+  static boolean isEmbedded = false;
+  static HashMap<Face,EmbeddedFace> EmbeddedManifoldData = null;
+  static SceneGraphComponent sgc_embedded = null;
+  //-------------------------------------
+  
+  private static void printTriangulationData(){
+    
+    Iterator<Integer> i = null;
 
+    //print localSimplices for each Vertex
+    System.out.print("\n");
+    i = Triangulation.vertexTable.keySet().iterator();
+    while(i.hasNext()){
+      Vertex v = Triangulation.vertexTable.get(i.next());
+      
+      System.out.printf("Vertex %d", v.getIndex());
+      
+      System.out.printf("\n   Local vertices: ");
+      Iterator<Vertex> vi = v.getLocalVertices().iterator();
+      while(vi.hasNext()){
+        Vertex v2 = vi.next();
+        System.out.printf(" %d", v2.getIndex());
+      }
+      
+      System.out.printf("\n   Local edges: ");
+      Iterator<Edge> ei = v.getLocalEdges().iterator();
+      while(ei.hasNext()){
+        Edge e2 = ei.next();
+        System.out.printf(" %d", e2.getIndex());
+      }
+      
+      System.out.printf("\n   Local faces: ");
+      Iterator<Face> fi = v.getLocalFaces().iterator();
+      while(fi.hasNext()){
+        Face f2 = fi.next();
+        System.out.printf(" %d", f2.getIndex());
+      }
+      
+      System.out.printf("\n");
+    }
+    
+
+    //print localSimplices for each Edge
+    System.out.print("\n");
+    i = Triangulation.edgeTable.keySet().iterator();
+    while(i.hasNext()){
+      Edge e = Triangulation.edgeTable.get(i.next());
+      
+      System.out.printf("Edge %d", e.getIndex());
+      
+      System.out.printf("\n   Local vertices: ");
+      Iterator<Vertex> vi = e.getLocalVertices().iterator();
+      while(vi.hasNext()){
+        Vertex v2 = vi.next();
+        System.out.printf(" %d", v2.getIndex());
+      }
+      
+      System.out.printf("\n   Local edges: ");
+      Iterator<Edge> ei = e.getLocalEdges().iterator();
+      while(ei.hasNext()){
+        Edge e2 = ei.next();
+        System.out.printf(" %d", e2.getIndex());
+      }
+      
+      System.out.printf("\n   Local faces: ");
+      Iterator<Face> fi = e.getLocalFaces().iterator();
+      while(fi.hasNext()){
+        Face f2 = fi.next();
+        System.out.printf(" %d", f2.getIndex());
+      }
+      
+      System.out.printf("\n");
+    }
+    
+    //print localSimplices for each Face
+    System.out.print("\n");
+    i = Triangulation.faceTable.keySet().iterator();
+    while(i.hasNext()){
+      Face f = Triangulation.faceTable.get(i.next());
+      
+      System.out.printf("Face %d", f.getIndex());
+      
+      System.out.printf("\n   Local vertices: ");
+      Iterator<Vertex> vi = f.getLocalVertices().iterator();
+      while(vi.hasNext()){
+        Vertex v2 = vi.next();
+        System.out.printf(" %d", v2.getIndex());
+      }
+      
+      System.out.printf("\n   Local edges: ");
+      Iterator<Edge> ei = f.getLocalEdges().iterator();
+      while(ei.hasNext()){
+        Edge e2 = ei.next();
+        System.out.printf(" %d", e2.getIndex());
+      }
+      
+      System.out.printf("\n   Local faces: ");
+      Iterator<Face> fi = f.getLocalFaces().iterator();
+      while(fi.hasNext()){
+        Face f2 = fi.next();
+        System.out.printf(" %d", f2.getIndex());
+      }
+      
+      System.out.printf("\n");
+    }
+    
+  }
+  
+  private static void readEmbeddedSurface(String filename, boolean verbose){
+    
+    //1) reads in a file containing an embedded surface
+    //2) populates Triangulation class
+    //3) sets length geoquants for each edge
+    //4) determines origin/tangents from coord geoquants
+    
+    //Note: assumes faces of embedded surface are convex, but not necessarily triangles
+    
+    //read the data file
+    Geometry geom = null;
+    try{
+      Input input = Input.getInput(filename);
+      geom = Readers.read(input).getGeometry();
+    }catch(IOException e){
+      e.printStackTrace();
+      return;
+    }
+    
+    //get the geometry data
+    DataList dl_faceindices = geom.getAttributes(Geometry.CATEGORY_FACE,Attribute.INDICES);
+    //DataList dl_facenormals = geom.getAttributes(Geometry.CATEGORY_FACE,Attribute.NORMALS);
+    DataList dl_edgeindices = geom.getAttributes(Geometry.CATEGORY_EDGE,Attribute.INDICES);
+    DataList dl_vertcoords = geom.getAttributes(Geometry.CATEGORY_VERTEX,Attribute.COORDINATES);
+    
+    int nfaces = dl_faceindices.size();
+    int nedges = dl_edgeindices.size();
+    int nverts = dl_vertcoords.size();
+    
+    if(verbose){ System.out.printf("%d verts, %d edges, %d faces\n", nverts,nedges,nfaces); }
+    
+    //clear Triangulation
+    Triangulation.reset();
+    
+    //first create the Vertex, Edge, and Face objects
+    for(int i=0; i<nfaces; i++){ Triangulation.putFace(new Face(i)); }
+    for(int i=0; i<nedges; i++){ Triangulation.putEdge(new Edge(i)); }
+    for(int i=0; i<nverts; i++){ Triangulation.putVertex(new Vertex(i)); }
+    
+    //determine localVertices for each face and localFaces for each vertex
+    for(int i=0; i<nfaces; i++){
+      Face f = Triangulation.faceTable.get(i);
+      
+      int[] vi = dl_faceindices.item(i).toIntArray(null);
+      for(int j=0; j<vi.length; j++){
+        Vertex v = Triangulation.vertexTable.get(vi[j]);
+        v.addFace(f);
+        f.addVertex(v);
+      }
+    }
+
+    //determine localVertices for each edge, localEdges/localVerts for each vertex
+    for(int i=0; i<nedges; i++){
+      Edge e = Triangulation.edgeTable.get(i);
+      
+      int[] vi = dl_edgeindices.item(i).toIntArray(null);
+      Vertex v0 = Triangulation.vertexTable.get(vi[0]);
+      Vertex v1 = Triangulation.vertexTable.get(vi[1]);
+      v0.addVertex(v1);  v0.addEdge(e);  e.addVertex(v0);
+      v1.addVertex(v0);  v1.addEdge(e);  e.addVertex(v1);
+    }
+    
+    //determine localFaces for each edge and localEdges for each face
+    for(int i=0; i<nedges; i++){
+      
+      Edge e = Triangulation.edgeTable.get(i);
+      int[] ei = dl_edgeindices.item(i).toIntArray(null);
+
+      //loop through each face
+      for(int j=0; j<nfaces; j++){
+        //reference to face and its vertex indices
+        Face f = Triangulation.faceTable.get(j);
+        int[] fi = dl_faceindices.item(j).toIntArray(null);
+        
+        for(int k=0; k<fi.length; k++){
+          //vertex indices for each edge along the face's boundary
+          int f0 = fi[k];
+          int f1 = fi[(k+1)%fi.length];
+          if(((ei[0] == f0) && (ei[1] == f1)) || ((ei[1] == f0) && (ei[0] == f1))){
+            e.addFace(f);
+            f.addEdge(e);
+          }
+        }
+      }
+    }
+    
+    //determine localFaces for each face
+    for(int i=0; i<nfaces; i++){
+      Face f = Triangulation.faceTable.get(i);
+      
+      Iterator<Edge> ei = f.getLocalEdges().iterator();
+      while(ei.hasNext()){
+        Edge e = ei.next();
+        //loop through faces of edge, add if not current face
+        Iterator<Face> fi = e.getLocalFaces().iterator();
+        while(fi.hasNext()){
+          Face f2 = fi.next();
+          if(f2 != f){ f.addFace(f2); }
+        }
+      }
+    }
+    
+    //determine localEdges for each edge
+    for(int i=0; i<nedges; i++){
+      Edge e = Triangulation.edgeTable.get(i);
+      
+      Iterator<Vertex> vi = e.getLocalVertices().iterator();
+      while(vi.hasNext()){
+        Vertex v = vi.next();
+        //loop through edges of vertex, add if not current edge
+        Iterator<Edge> ei = v.getLocalEdges().iterator();
+        while(ei.hasNext()){
+          Edge e2 = ei.next();
+          if(e2 != e){ e.addEdge(e2); }
+        }
+      }
+    }
+    
+    //print all the determined local simplices
+    if(verbose){ printTriangulationData(); }
+    
+    //determine lengths and set geoquants
+    for(int i=0; i<nedges; i++){
+      
+      Edge e = Triangulation.edgeTable.get(i);
+      
+      int[] vi = dl_edgeindices.item(i).toIntArray(null);
+      Vector v0 = new Vector(dl_vertcoords.item(vi[0]).toDoubleArray(null)); //3d coords for first vertex
+      Vector v1 = new Vector(dl_vertcoords.item(vi[1]).toDoubleArray(null)); //3d coords for next vertex
+      
+      double edgelength = 1;
+      try { edgelength = Vector.distance(v0,v1); }
+      catch (Exception e1) { e1.printStackTrace(); }
+      
+      Length.At(e).setValue(edgelength);
+    }
+    
+    //determine origin, tangent_x, tangent_y using Coord geoquants
+
+    //set flag that this triangulation is embedded
+    isEmbedded = true;
+  }
+  
+  
   public static void main(String[] args){
     
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
+    readEmbeddedSurface("models/cone.off",true);
+    //TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
     
     Iterator<Integer> i = null;
     
@@ -36,7 +304,7 @@ public class DevelopmentApp2D {
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
-      Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
+      //Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
     }
     
     //print some face info
@@ -206,4 +474,6 @@ public class DevelopmentApp2D {
     //return
     return sgc_face;
   }
+  
+  
 }
