@@ -58,7 +58,6 @@ public class YamabeFlowDialog extends JDialog {
 	private JButton runButton;
 	private GeoquantViewer owner;
 	private Dimension dim;
-	private JPanel historyPanel;
 	private JLabel stepsizeLabel;
 	private JTextField stepsizeTextField;
 	private int currentStep = 0;
@@ -125,16 +124,14 @@ public class YamabeFlowDialog extends JDialog {
 				}
 			thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
 				.addContainerGap()
-				.addComponent(stoppingCondPanel, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+				.addComponent(stoppingCondPanel, 0, 99, Short.MAX_VALUE)
 				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 				.addGroup(thisLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
 				    .addComponent(cancelButton, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
 				    .addComponent(stepsizeTextField, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 				    .addComponent(runButton, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 				    .addComponent(getStepsizeLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(19)
-				.addComponent(getHistoryPanel(), GroupLayout.PREFERRED_SIZE, 298, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(35, Short.MAX_VALUE));
+				.addContainerGap(15, 15));
 			thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
 				.addContainerGap()
 				.addGroup(thisLayout.createParallelGroup()
@@ -145,16 +142,10 @@ public class YamabeFlowDialog extends JDialog {
 				        .addGap(28)
 				        .addComponent(runButton, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
 				        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				        .addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
-				        .addGap(0, 6, Short.MAX_VALUE))
-				    .addGroup(GroupLayout.Alignment.LEADING, thisLayout.createSequentialGroup()
-				        .addComponent(stoppingCondPanel, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
-				        .addGap(0, 6, Short.MAX_VALUE))
-				    .addGroup(GroupLayout.Alignment.LEADING, thisLayout.createSequentialGroup()
-				        .addPreferredGap(getStepsizeLabel(), getHistoryPanel(), LayoutStyle.ComponentPlacement.INDENT)
-				        .addComponent(getHistoryPanel(), GroupLayout.PREFERRED_SIZE, 419, GroupLayout.PREFERRED_SIZE)
-				        .addGap(0, 0, Short.MAX_VALUE)))
-				.addContainerGap(29, 29));
+				        .addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
+				    .addGroup(thisLayout.createSequentialGroup()
+				        .addComponent(stoppingCondPanel, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)))
+				.addContainerGap(35, Short.MAX_VALUE));
 			thisLayout.linkSize(SwingConstants.VERTICAL, new Component[] {stepsizeTextField, runButton});
 			thisLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {cancelButton, runButton});
 				jPanel1Layout.setHorizontalGroup(jPanel1Layout.createSequentialGroup()
@@ -181,7 +172,7 @@ public class YamabeFlowDialog extends JDialog {
 				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED));
 			}
 			{
-				this.setSize(488, 525);
+				this.setSize(488, 200);
 				switch(dim) {
 				case twoD :
 				  this.setTitle("Yamabe2DFlow");
@@ -209,48 +200,6 @@ public class YamabeFlowDialog extends JDialog {
 			stepsizeLabel.setText("Stepsize:");
 		}
 		return stepsizeLabel;
-	}
-	
-	private JPanel getHistoryPanel() {
-		if(historyPanel == null) {
-			historyPanel = new JPanel(){
-			  protected void paintComponent(Graphics g) {
-			    super.paintComponent(g);
-			    
-			    for(List<List<Double>> list : rec.getAllValues()) {
-			      if(list.size() < currentStep) {
-			        
-			      } else {
-			        // draw polygon for this geoquant at currentStep
-			        List<Double> curList = list.get(currentStep);
-			        int size = curList.size();
-	            int halfHeight = this.getHeight() / 2;
-	            int halfWidth = this.getWidth() / 2;
-	            double radius;
-	            int[] xpoints = new int[size];
-	            int[] ypoints = new int[size];
-	            double angleStep = 2 * Math.PI / size;
-
-	            // Draw Polygon
-	            g.setColor(Color.BLACK);
-	            int i = 0;
-	            double angle = 0;
-	            for(Double d : curList) {
-	              radius = (halfHeight / Math.PI) * (Math.atan(d) + Math.PI / 2);
-	              xpoints[i] = (int) (radius * Math.cos(angle) + halfWidth);
-	              ypoints[i] = (int) (-1 * radius * Math.sin(angle) + halfHeight);
-	              i++;
-	              angle += angleStep;
-	            }
-	            g.drawPolygon(new Polygon(xpoints, ypoints, size));
-			      }
-			    }
-			  }
-			};
-			historyPanel.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
-			historyPanel.setBackground(new java.awt.Color(255,255,255));
-		}
-		return historyPanel;
 	}
 
 	private class StoppingCondListener implements ActionListener {
@@ -299,10 +248,12 @@ public class YamabeFlowDialog extends JDialog {
             solver.run(radii, stepsize, numSteps);
             solver.deleteObserver(rec);
             
-            timer = new Timer(300, new TimerListener());
-            timer.setInitialDelay(1000);
-            timer.start();
-            return;
+            owner.getPolygonPanel().setRecorder(rec);
+            owner.getShowFlowButton().setEnabled(true);
+//            timer = new Timer(300, new TimerListener());
+//            timer.setInitialDelay(1000);
+//            timer.start();
+            owner.getPolygonPanel().repaint();
           } catch(NumberFormatException ex) {
             
           }
@@ -318,7 +269,7 @@ public class YamabeFlowDialog extends JDialog {
     public void actionPerformed(ActionEvent evt) {
       currentStep++;
       if(currentStep < numSteps - 1) {
-        getHistoryPanel().repaint();
+        //getHistoryPanel().repaint();
       } else {
         currentStep = 0;
         timer.stop();

@@ -25,6 +25,9 @@ public class StepGeoPanel extends GeoPolygonPanel {
     List<List<String>> descLists;
     List<Double> pointList;
     List<String> descList;
+    if(recorder == null) {
+      return polyList;
+    }
     for(Class<? extends Geoquant> c : owner.getSelectedList()) {
       pointLists = recorder.getValueHistory(c);
       descLists = recorder.getPrintableHistory(c);
@@ -60,6 +63,7 @@ public class StepGeoPanel extends GeoPolygonPanel {
   
   public void setRecorder(GeoRecorder rec) {
     recorder = rec;
+    currentStep = 0;
   }
   
   public void setStep(int step) {

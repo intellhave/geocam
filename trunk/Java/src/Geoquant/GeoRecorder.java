@@ -10,11 +10,13 @@ public class GeoRecorder implements Observer{
   private List<List<Geoquant>> geoList;
   private HashMap<Class<? extends Geoquant>, List<List<Double>>> valueList;
   private HashMap<Class<? extends Geoquant>, List<List<String>>> descriptionList;
+  private int numSteps;
   
   public GeoRecorder() {
     geoList = new LinkedList<List<Geoquant>>();
     valueList = new HashMap<Class<? extends Geoquant>, List<List<Double>>>();
     descriptionList = new HashMap<Class<? extends Geoquant>, List<List<String>>>();
+    numSteps = 0;
   }
   
   public GeoRecorder(List<Class<? extends Geoquant>> recordList) {
@@ -43,6 +45,7 @@ public class GeoRecorder implements Observer{
          descriptionList.get(c).add(descs);
        }
      }
+     numSteps++;
   }
   
   public List<List<Double>> getValueHistory(Class<? extends Geoquant> c) {
@@ -69,5 +72,9 @@ public class GeoRecorder implements Observer{
   
   public Collection<List<List<String>>> getAllDescriptions() {
     return descriptionList.values();
+  }
+  
+  public int getNumSteps() {
+    return numSteps;
   }
 }

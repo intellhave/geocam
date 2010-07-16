@@ -3,8 +3,12 @@ package gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,14 +18,30 @@ import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.border.LineBorder;
 
-public abstract class GeoPolygonPanel extends JPanel {
+import Geoquant.GeoRecorder;
+import Geoquant.Geometry;
+import Geoquant.Geoquant;
+
+public class GeoPolygonPanel extends JPanel {
   protected List<GeoPoint> geoPoints;
   protected GeoquantViewer owner;
-    
+  private HashMap<Class<? extends Geoquant>, List<Geoquant>> geoList;
+  private GeoRecorder recorder;
+  private int currentStep;
+  
+  protected enum Form{
+    geo, step
+  }
+  private Form currentForm;
+  
+  
   public GeoPolygonPanel() {
     super();
     geoPoints = new LinkedList<GeoPoint>();
     addMouseMotionListener(new GeoPolygonMouseListener());
+    
+    geoList = new HashMap<Class<? extends Geoquant>, List<Geoquant>>();
+    currentForm = Form.geo;
   }
   
   public void paintComponent(Graphics g) {
@@ -46,8 +66,15 @@ public abstract class GeoPolygonPanel extends JPanel {
     g.drawString("Infty", (int) ( radius * Math.cos(Math.PI/4) + halfWidth),
         (int) (halfHeight - radius * Math.sin(Math.PI/4)));
     
+    // Draw StepNum, if applicable
+    if(currentForm == Form.step) {
+      g.drawString("Step: " + currentStep, this.getWidth() - 50, 20);
+    }
     // Draw Polygons
     List<Polygon> polygons = generatePolygons();
+    if(polygons == null) {
+      return;
+    }
     int num = polygons.size();
     int i = 0;
     for(Polygon p : polygons) {
@@ -64,9 +91,18 @@ public abstract class GeoPolygonPanel extends JPanel {
     }
   }
   
-  protected abstract List<Polygon> generatePolygons();
+  protected List<Polygon> generatePolygons() {
+    switch(currentForm) {
+    case geo:
+      return generateCurrentPolygons();
+    case step:
+      return generateStepPolygons();
+    default:
+      return null;
+    }
+  }
   
-  class GeoPolygonMouseListener extends MouseAdapter {
+  protected class GeoPolygonMouseListener extends MouseAdapter {
     private JLabel message;
     private Popup geoDisplayPopup;
     private int x;
@@ -113,7 +149,130 @@ public abstract class GeoPolygonPanel extends JPanel {
     }
   }
   
-  public void setOwner(GeoquantViewer owner) {
+  protected void setForm(Form form) {
+    currentForm = form;
+  }
+  
+  protected void setOwner(GeoquantViewer owner) {
     this.owner = owner;
   }
+  
+  private List<Polygon> generateCurrentPolygons() {
+    geoPoints.clear();
+    int halfHeight = this.getHeight() / 2;
+    int halfWidth = this.getWidth() / 2;
+    List<Polygon> polyList = new LinkedList<Polygon>();
+    double radius, angle, angleStep;
+    int[] xpoints;
+    int[] ypoints;
+    int i;
+    for(List<Geoquant> list : geoList.values()) {
+      int size = list.size();
+      if(size != 0) {
+        xpoints = new int[size];
+        ypoints = new int[size];
+        angleStep = 2 * Math.PI / size;
+
+        i = 0;
+        angle = 0;
+        for(Geoquant q : list) {
+          radius = (halfHeight / Math.PI) * (Math.atan(q.getValue()) + Math.PI / 2);
+          xpoints[i] = (int) (radius * Math.cos(angle) + halfWidth);
+          ypoints[i] = (int) (-1 * radius * Math.sin(angle) + halfHeight);
+
+          geoPoints.add(new GeoPoint(xpoints[i], ypoints[i], q.toString()));
+          
+          i++;
+          angle += angleStep; 
+        }
+        polyList.add(new Polygon(xpoints, ypoints, size));
+      }
+    }
+    
+    return polyList;
+  }
+  
+  protected List<Polygon> generateStepPolygons() {
+    geoPoints.clear();
+    int halfHeight = this.getHeight() / 2;
+    int halfWidth = this.getWidth() / 2;
+    List<Polygon> polyList = new LinkedList<Polygon>();
+    double radius, angle, angleStep;
+    int[] xpoints;
+    int[] ypoints;
+    int i;
+    List<List<Double>> pointLists;
+    List<List<String>> descLists;
+    List<Double> pointList;
+    List<String> descList;
+    if(recorder == null) {
+      return polyList;
+    }
+    for(Class<? extends Geoquant> c : owner.getSelectedList()) {
+      pointLists = recorder.getValueHistory(c);
+      descLists = recorder.getPrintableHistory(c);
+      if(pointLists != null) {
+        pointList = pointLists.get(currentStep);
+        descList = descLists.get(currentStep);
+        int size = pointList.size();
+        if(size != 0) {
+          xpoints = new int[size];
+          ypoints = new int[size];
+          angleStep = 2 * Math.PI / size;
+
+          i = 0;
+          angle = 0;
+          Iterator<String> stringIt = descList.iterator();
+          for(Double d : pointList) {
+            radius = (halfHeight / Math.PI) * (Math.atan(d) + Math.PI / 2);
+            xpoints[i] = (int) (radius * Math.cos(angle) + halfWidth);
+            ypoints[i] = (int) (-1 * radius * Math.sin(angle) + halfHeight);
+
+            geoPoints.add(new GeoPoint(xpoints[i], ypoints[i], stringIt.next()));
+          
+            i++;
+            angle += angleStep; 
+          }
+          polyList.add(new Polygon(xpoints, ypoints, size));
+        }
+      }
+    }
+    
+    return polyList;
+  }
+  
+  protected void addGeoquant(Class<? extends Geoquant> c) {
+    if(geoList.get(c) == null) {
+      geoList.put(c, Geometry.getGeoquants(c));
+      this.repaint();
+    }
+  }
+  
+  protected void removeGeoquant(Class<? extends Geoquant> c) {
+    if(geoList.remove(c) != null) {
+      this.repaint();
+    }
+  }
+  
+  protected void setRecorder(GeoRecorder rec) {
+    recorder = rec;
+    currentStep = 0;
+  }
+  
+  protected GeoRecorder getRecorder() {
+    return recorder;
+  }
+  
+  protected void setStep(int step) {
+    this.currentStep = step;
+  }
+  
+  protected int getCurrentStep() {
+    return currentStep;
+  }
+  
+  protected Form getForm() {
+    return currentForm;
+  }
+
 }

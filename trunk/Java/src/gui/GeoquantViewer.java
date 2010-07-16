@@ -1,4 +1,6 @@
 package gui;
+import gui.GeoPolygonPanel.Form;
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -24,10 +26,12 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -49,6 +53,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
@@ -135,6 +140,12 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox vehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
   private AbstractAction saveAction;
+  private JLabel stepLabel;
+  private JComboBox stepComboBox;
+  private JLabel delayLabel;
+  private JTextField delayField;
+  private JButton animateButton;
+  private JButton showFlowButton;
   private JCheckBox totalVolumeSecondPartialCheck;
   private JCheckBox totalVolumePartialCheck;
   private JCheckBox coneAngleCheck;
@@ -187,7 +198,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private ListModel EdgeListModel;
   private Hashtable<Integer, JLabel> labelTable;
   private HashMap<JCheckBox, Class<? extends Geoquant>> geoCheckTable;
-  private CurrentGeoPanel currentGeoPanel;
+  private GeoPolygonPanel currentGeoPanel;
   private List<Class<? extends Geoquant>> selectedList;
   
   /**
@@ -213,23 +224,23 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     	GroupLayout thisLayout = new GroupLayout((JComponent)getContentPane());
       getContentPane().setLayout(thisLayout);
         thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
-        	.addContainerGap()
+        	.addContainerGap(16, 16)
         	.addGroup(thisLayout.createParallelGroup()
         	    .addGroup(GroupLayout.Alignment.LEADING, thisLayout.createSequentialGroup()
-        	        .addComponent(getCurrentGeoPanel(), GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE)
+        	        .addGap(0, 0, Short.MAX_VALUE)
+        	        .addComponent(getPolygonPanel(), GroupLayout.PREFERRED_SIZE, 375, GroupLayout.PREFERRED_SIZE)
         	        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-        	        .addComponent(getJTabbedPane1(), GroupLayout.PREFERRED_SIZE, 232, GroupLayout.PREFERRED_SIZE))
-        	    .addGroup(thisLayout.createSequentialGroup()
-        	        .addComponent(getQuantityModPanel(), GroupLayout.PREFERRED_SIZE, 622, GroupLayout.PREFERRED_SIZE)))
-        	.addContainerGap(36, Short.MAX_VALUE));
+        	        .addComponent(getJTabbedPane1(), GroupLayout.PREFERRED_SIZE, 228, GroupLayout.PREFERRED_SIZE))
+        	    .addComponent(getQuantityModPanel(), GroupLayout.Alignment.LEADING, 0, 615, Short.MAX_VALUE))
+        	.addContainerGap(20, 20));
         thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
-      	.addContainerGap()
-      	.addGroup(thisLayout.createParallelGroup()
-      	    .addComponent(getCurrentGeoPanel(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 485, GroupLayout.PREFERRED_SIZE)
-      	    .addComponent(getJTabbedPane1(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 485, GroupLayout.PREFERRED_SIZE))
-      	.addGap(23)
-      	.addComponent(getQuantityModPanel(), GroupLayout.PREFERRED_SIZE, 438, GroupLayout.PREFERRED_SIZE)
-      	.addContainerGap(25, Short.MAX_VALUE));
+        	.addContainerGap()
+        	.addGroup(thisLayout.createParallelGroup()
+        	    .addComponent(getPolygonPanel(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 486, GroupLayout.PREFERRED_SIZE)
+        	    .addComponent(getJTabbedPane1(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 487, GroupLayout.PREFERRED_SIZE))
+        	.addGap(21)
+        	.addComponent(getQuantityModPanel(), GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE)
+        	.addContainerGap(23, Short.MAX_VALUE));
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
       this.setResizable(false);
       {
@@ -252,7 +263,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         }
       }
       pack();
-      this.setSize(983, 713);
+      this.setSize(983, 700);
     } catch (Exception e) {
         //add your error handling code here
       e.printStackTrace();
@@ -342,7 +353,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           Length.At(s).setValue(value);
         }
         getEdgeDisplayPanel().repaint();
-        getCurrentGeoPanel().repaint();
+        getPolygonPanel().repaint();
       } 
     }
     
@@ -354,7 +365,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       new DefaultComboBoxModel(Triangulation.edgeTable.values().toArray());
     EdgeList.setModel(EdgeListModel);
     getNehrFlowMenuItem().setEnabled(true);
-    getCurrentGeoPanel().repaint();
+    getPolygonPanel().repaint();
   }
   
   private JPanel getQuantityModPanel() {
@@ -481,14 +492,13 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       	                .addGap(0, 0, Short.MAX_VALUE))
       	            .addComponent(getLengthSlider(), GroupLayout.Alignment.LEADING, 0, 241, Short.MAX_VALUE)
       	            .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-      	                .addGap(25)
+      	                .addGap(23)
       	                .addComponent(getCirclePackRadioButton(), GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
-      	                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, 1, Short.MAX_VALUE)
-      	                .addComponent(getPerpBisectorRadioButton(), GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)
-      	                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
+      	                .addGap(0, 16, Short.MAX_VALUE)
+      	                .addComponent(getPerpBisectorRadioButton(), GroupLayout.PREFERRED_SIZE, 105, GroupLayout.PREFERRED_SIZE)))
       	        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
       	        .addComponent(getEdgeListScrollPane(), GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
-      	    .addComponent(getEdgeDisplayPanel(), GroupLayout.Alignment.LEADING, 0, 422, Short.MAX_VALUE))
+      	    .addComponent(getEdgeDisplayPanel(), GroupLayout.Alignment.LEADING, 0, 421, Short.MAX_VALUE))
       	.addContainerGap());
       quantityModPanelLayout.setVerticalGroup(quantityModPanelLayout.createSequentialGroup()
       	.addContainerGap()
@@ -514,16 +524,14 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       	            .addComponent(getLengthSetField(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
       	            .addComponent(getLengthSetLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
       	        .addComponent(getLengthSlider(), GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-      	        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, 1, Short.MAX_VALUE)
-      	        .addGroup(quantityModPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-      	            .addComponent(getCirclePackRadioButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-      	            .addComponent(getPerpBisectorRadioButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
-      	    .addGroup(GroupLayout.Alignment.LEADING, quantityModPanelLayout.createSequentialGroup()
-      	        .addComponent(getEdgeListScrollPane(), GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 15, Short.MAX_VALUE)))
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-      	.addComponent(getEdgeDisplayPanel(), GroupLayout.PREFERRED_SIZE, 228, GroupLayout.PREFERRED_SIZE)
-      	.addContainerGap(19, 19));
+      	        .addGap(18))
+      	    .addComponent(getEdgeListScrollPane(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE))
+      	.addGroup(quantityModPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+      	    .addComponent(getCirclePackRadioButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getPerpBisectorRadioButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
+      	.addGap(0, 23, Short.MAX_VALUE)
+      	.addComponent(getEdgeDisplayPanel(), GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+      	.addContainerGap(13, 13));
     }
     return quantityModPanel;
   }
@@ -652,13 +660,57 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     return basicSelectPanel;
   }
     
-  protected CurrentGeoPanel getCurrentGeoPanel() {
+  protected GeoPolygonPanel getPolygonPanel() {
     if(currentGeoPanel == null) {
-      currentGeoPanel = new CurrentGeoPanel();
+    	currentGeoPanel = new GeoPolygonPanel();
+    	GroupLayout currentGeoPanelLayout1 = new GroupLayout((JComponent)currentGeoPanel);
+    	currentGeoPanel.setLayout(currentGeoPanelLayout1);
+      GroupLayout currentGeoPanelLayout = new GroupLayout((JComponent)currentGeoPanel);
       currentGeoPanel.setOwner(this);
       currentGeoPanel.setBackground(new Color(255,255,255));
       currentGeoPanel.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
       currentGeoPanel.setSize(378, 378);
+      currentGeoPanelLayout.setVerticalGroup(currentGeoPanelLayout.createSequentialGroup());
+      currentGeoPanelLayout.setHorizontalGroup(currentGeoPanelLayout.createSequentialGroup());
+    	currentGeoPanelLayout1.setHorizontalGroup(currentGeoPanelLayout1.createSequentialGroup()
+      	.addContainerGap()
+      	.addGroup(currentGeoPanelLayout1.createParallelGroup()
+      	    .addGroup(GroupLayout.Alignment.LEADING, currentGeoPanelLayout1.createSequentialGroup()
+      	        .addComponent(getShowFlowButton(), GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(14))
+      	    .addGroup(GroupLayout.Alignment.LEADING, currentGeoPanelLayout1.createSequentialGroup()
+      	        .addPreferredGap(getShowFlowButton(), getAnimateButton(), LayoutStyle.ComponentPlacement.INDENT)
+      	        .addGroup(currentGeoPanelLayout1.createParallelGroup()
+      	            .addComponent(getAnimateButton(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+      	            .addGroup(GroupLayout.Alignment.LEADING, currentGeoPanelLayout1.createSequentialGroup()
+      	                .addPreferredGap(getAnimateButton(), getDelayLabel(), LayoutStyle.ComponentPlacement.INDENT)
+      	                .addComponent(getDelayLabel(), GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+      	                .addGap(6)))
+      	        .addComponent(getDelayField(), GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)))
+      	.addGap(260)
+      	.addGroup(currentGeoPanelLayout1.createParallelGroup()
+      	    .addGroup(currentGeoPanelLayout1.createSequentialGroup()
+      	        .addGap(0, 0, Short.MAX_VALUE)
+      	        .addComponent(getStepComboBox(), GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
+      	    .addGroup(GroupLayout.Alignment.LEADING, currentGeoPanelLayout1.createSequentialGroup()
+      	        .addPreferredGap(getStepComboBox(), getStepLabel(), LayoutStyle.ComponentPlacement.INDENT)
+      	        .addComponent(getStepLabel(), GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
+      	        .addGap(0, 38, Short.MAX_VALUE)))
+      	.addContainerGap());
+    	currentGeoPanelLayout1.setVerticalGroup(currentGeoPanelLayout1.createSequentialGroup()
+      	.addContainerGap()
+      	.addComponent(getShowFlowButton(), GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+      	.addGap(273)
+      	.addGroup(currentGeoPanelLayout1.createParallelGroup(GroupLayout.Alignment.BASELINE)
+      	    .addComponent(getAnimateButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getStepLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+      	.addGroup(currentGeoPanelLayout1.createParallelGroup(GroupLayout.Alignment.BASELINE)
+      	    .addComponent(getStepComboBox(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getDelayLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+      	    .addComponent(getDelayField(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+      	.addContainerGap());
+    	currentGeoPanelLayout1.linkSize(SwingConstants.VERTICAL, new Component[] {getStepLabel(), getDelayLabel()});
     }
     return currentGeoPanel;
   }
@@ -732,7 +784,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         }
         getEdgeDisplayPanel().repaint();
         System.out.println("About to repaint");
-        getCurrentGeoPanel().repaint();
+        getPolygonPanel().repaint();
       } catch (NumberFormatException exc) {
         return;
       } catch (ClassCastException exc) {
@@ -752,7 +804,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           a.setValue(value);
         }
         getEdgeDisplayPanel().repaint();
-        getCurrentGeoPanel().repaint();
+        getPolygonPanel().repaint();
       } catch(NumberFormatException exc) {
         return;
       }
@@ -847,10 +899,10 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       JCheckBox selector = (JCheckBox) e.getSource();
       Class<? extends Geoquant> c = getGeoCheckTable().get(selector);
       if(selector.isSelected()) {
-        getCurrentGeoPanel().addGeoquant(c);
+        getPolygonPanel().addGeoquant(c);
         getSelectedList().add(c);
       } else {
-        getCurrentGeoPanel().removeGeoquant(c);
+        getPolygonPanel().removeGeoquant(c);
         getSelectedList().remove(c);
       }
     } catch(ClassCastException exc) {
@@ -1576,7 +1628,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           for(Radius r : Geometry.getRadii()) {
             r.setValue(rad_value);
           }
-          getCurrentGeoPanel().repaint();
+          getPolygonPanel().repaint();
         } catch(NumberFormatException e) {
         }
       }
@@ -1595,7 +1647,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           for(Eta e : Geometry.getEtas()) {
             e.setValue(eta_value);
           }
-          getCurrentGeoPanel().repaint();
+          getPolygonPanel().repaint();
         } catch(NumberFormatException e) {
         }
       }
@@ -2102,5 +2154,152 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     return selectedList;
   }
   
+  protected JButton getShowFlowButton() {
+	  if(showFlowButton == null) {
+		  showFlowButton = new JButton();
+		  showFlowButton.setText("Latest Flow");
+		  showFlowButton.setEnabled(false);
+		  showFlowButton.addActionListener(new ActionListener() {
+
+        public void actionPerformed(ActionEvent evt) {
+          switch(getPolygonPanel().getForm()) {
+          case geo:
+            getPolygonPanel().setForm(Form.step);
+            getPolygonPanel().setStep(0);
+            showFlowButton.setText("Show Current");
+            
+            getAnimateButton().setVisible(true);
+            getDelayField().setVisible(true);
+            getDelayLabel().setVisible(true);
+            getStepLabel().setVisible(true);
+            getStepComboBox().setVisible(true);
+            buildStepComboBox();
+            break;
+          case step:
+            getPolygonPanel().setForm(Form.geo);
+            showFlowButton.setText("Latest Flow");
+            
+            getAnimateButton().setVisible(false);
+            getDelayField().setVisible(false);
+            getDelayLabel().setVisible(false);
+            getStepLabel().setVisible(false);
+            getStepComboBox().setVisible(false);
+            break;
+          }
+          getPolygonPanel().repaint();
+        }
+		    
+		  });
+	  }
+	  return showFlowButton;
+  }
+  
+  private JButton getAnimateButton() {
+	  if(animateButton == null) {
+		  animateButton = new JButton();
+		  animateButton.setText("Animate");
+		  animateButton.setVisible(false);
+		  animateButton.addActionListener(new ActionListener(){
+		    private Timer timer;
+        public void actionPerformed(ActionEvent evt) {
+          
+          int delay = 100;
+          try{
+            delay = Integer.parseInt(getDelayField().getText());
+          }catch(NumberFormatException exc) {}
+          timer = new Timer(delay, new GeoTimerListener());
+          timer.setInitialDelay(1000);
+          timer.start();
+        }
+		    
+		  });
+	  }
+	  return animateButton;
+  }
+  
+  private JTextField getDelayField() {
+	  if(delayField == null) {
+		  delayField = new JTextField();
+		  delayField.setText("100");
+		  delayField.setHorizontalAlignment(SwingConstants.TRAILING);
+		  delayField.setVisible(false);
+	  }
+	  return delayField;
+  }
+  
+  private JLabel getDelayLabel() {
+	  if(delayLabel == null) {
+		  delayLabel = new JLabel();
+		  delayLabel.setText("Delay (ms):");
+		  delayLabel.setFont(new java.awt.Font("SansSerif",1,12));
+		  delayLabel.setVisible(false);
+	  }
+	  return delayLabel;
+  }
+  
+  private JComboBox getStepComboBox() {
+	  if(stepComboBox == null) {
+		  ComboBoxModel stepComboBoxModel = 
+			  new DefaultComboBoxModel(
+					  new String[] { "Step"});
+		  stepComboBox = new JComboBox();
+		  stepComboBox.setModel(stepComboBoxModel);
+		  stepComboBox.setVisible(false);
+		  stepComboBox.setEditable(true);
+		  stepComboBox.addActionListener(new ActionListener() {
+
+        public void actionPerformed(ActionEvent evt) {
+          String stepName = (String) stepComboBox.getSelectedItem();
+          int step = getPolygonPanel().getCurrentStep();
+          try{
+            step = Integer.parseInt(stepName);
+          } catch(NumberFormatException e) { }
+          
+          if(step < getPolygonPanel().getRecorder().getNumSteps()) {
+            getPolygonPanel().setStep(step);
+            getPolygonPanel().repaint();
+          }
+        }
+		    
+		  });
+	  }
+	  return stepComboBox;
+  }
+  
+  private JLabel getStepLabel() {
+	  if(stepLabel == null) {
+		  stepLabel = new JLabel();
+		  stepLabel.setText("Step:");
+		  stepLabel.setFont(new java.awt.Font("SansSerif",1,12));
+		  stepLabel.setVisible(false);
+	  }
+	  return stepLabel;
+  }
+  
+  private void buildStepComboBox() {
+    int numSteps = getPolygonPanel().getRecorder().getNumSteps();
+    String[] stepList = new String[numSteps];
+    
+    for(int i = 0; i < numSteps; i++) {
+      stepList[i] = "" + i;
+    }
+    
+    ComboBoxModel stepComboBoxModel = 
+      new DefaultComboBoxModel(stepList);
+    getStepComboBox().setModel(stepComboBoxModel);
+  }
+  
+  private class GeoTimerListener implements ActionListener {
+
+    public void actionPerformed(ActionEvent evt) {
+      int currentStep = getPolygonPanel().getCurrentStep() + 1;
+      if(currentStep < getPolygonPanel().getRecorder().getNumSteps()) {
+        getPolygonPanel().setStep(currentStep);
+        getPolygonPanel().repaint();
+      }
+    }
+  }
+
+  //private class Animate
 }
 
