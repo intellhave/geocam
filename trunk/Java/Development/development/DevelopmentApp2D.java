@@ -2,9 +2,12 @@ package development;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import util.Matrix;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
@@ -36,9 +39,22 @@ public class DevelopmentApp2D {
   //this is data associated to a Face in the case of embedded manifolds
   //-------------------------------------
   private static class EmbeddedFace{
-    Vector origin;
-    Vector tangent_x;
-    Vector tangent_y;
+    private Vector origin_;
+    private Vector tx_;
+    private Vector ty_;
+    
+    public EmbeddedFace(Vector origin, Vector tx, Vector ty){
+      origin_ = new Vector(origin);
+      tx_ = new Vector(tx);
+      ty_ = new Vector(ty);
+    }
+    
+    public Vector getCoords3D(Vector v){
+      Vector ret = new Vector(origin_);
+      try { ret.add(Vector.scale(tx_, v.getComponent(0))); } catch (Exception e) {}
+      try { ret.add(Vector.scale(ty_, v.getComponent(1))); } catch (Exception e) {}
+      return ret;
+    }
   };
   static boolean isEmbedded = false;
   static HashMap<Face,EmbeddedFace> EmbeddedManifoldData = null;
@@ -151,9 +167,10 @@ public class DevelopmentApp2D {
   private static void readEmbeddedSurface(String filename, boolean verbose){
     
     //1) reads in a file containing an embedded surface
-    //2) populates Triangulation class
-    //3) sets length geoquants for each edge
-    //4) determines origin/tangents from coord geoquants
+    //2) creates sgc_embedded for drawing
+    //3) populates Triangulation class
+    //4) sets length geoquants for each edge
+    //5) populates EmbeddedManifoldData for going from abstract -> embedding
     
     //Note: assumes faces of embedded surface are convex, but not necessarily triangles
     
@@ -166,6 +183,9 @@ public class DevelopmentApp2D {
       e.printStackTrace();
       return;
     }
+    
+    //make sgc_embedded
+    
     
     //get the geometry data
     DataList dl_faceindices = geom.getAttributes(Geometry.CATEGORY_FACE,Attribute.INDICES);
@@ -271,7 +291,6 @@ public class DevelopmentApp2D {
     
     //determine lengths and set geoquants
     for(int i=0; i<nedges; i++){
-      
       Edge e = Triangulation.edgeTable.get(i);
       
       int[] vi = dl_edgeindices.item(i).toIntArray(null);
@@ -285,12 +304,60 @@ public class DevelopmentApp2D {
       Length.At(e).setValue(edgelength);
     }
     
-    //determine origin, tangent_x, tangent_y using Coord geoquants
+    //determine origin, tangent_x, tangent_y using Coord geoquants:
+    //[ |  |  | ]   [ |  |  |  ][x0 x1 x2]-1
+    //[ tx ty o ] = [ p0 p1 p2 ][y0 y1 y2]
+    //[ |  |  | ]   [ |  |  |  ][ 1  1  1]
+    //where face vertex i has 3d coords pi and 2d coords (xi,yi)
+    EmbeddedManifoldData = new HashMap<Face,EmbeddedFace>();
+    
+    for(int i=0; i<nfaces; i++){
+      Face f = Triangulation.faceTable.get(i);
+      
+      int[] vi = dl_faceindices.item(i).toIntArray(null);
+      
+      //matrix of 3d points
+      Vector[] pts3d = new Vector[] {
+          new Vector(dl_vertcoords.item(vi[0]).toDoubleArray(null)),
+          new Vector(dl_vertcoords.item(vi[1]).toDoubleArray(null)),
+          new Vector(dl_vertcoords.item(vi[2]).toDoubleArray(null))
+      };
+      Matrix P = AffineTransformation.createMatrixFromColumnVectors(pts3d);
+      
+      //matrix of 2d points
+      Vector[] pts2d = new Vector[] {
+          new Vector(Coord2D.coordAt(Triangulation.vertexTable.get(vi[0]), f), 1),
+          new Vector(Coord2D.coordAt(Triangulation.vertexTable.get(vi[1]), f), 1),
+          new Vector(Coord2D.coordAt(Triangulation.vertexTable.get(vi[2]), f), 1)
+      };
+      Matrix X = AffineTransformation.createMatrixFromColumnVectors(pts2d);
+      
+      //get origin, tx, and ty
+      Matrix A = null;
+      try { A = P.multiply(X.inverse()); }
+      catch (Exception e) { e.printStackTrace(); }
+      Vector tx = new Vector(A.getEntry(0, 0), A.getEntry(1, 0), A.getEntry(2, 0));
+      Vector ty = new Vector(A.getEntry(0, 1), A.getEntry(1, 1), A.getEntry(2, 1));
+      Vector or = new Vector(A.getEntry(0, 2), A.getEntry(1, 2), A.getEntry(2, 2));
+      
+      //make embeddedface
+      EmbeddedFace eFace = new EmbeddedFace(or,tx,ty);
+      EmbeddedManifoldData.put(f, eFace);
+      
+      if(verbose){
+        System.out.printf("\n\nFace %d", f.getIndex());
+        System.out.print("\nColumn matrix of 3D pts:\n");
+        System.out.print(P); System.out.print("\n");
+        System.out.print("\nColumn matrix of 2D pts -> w=1:\n");
+        System.out.print(X); System.out.print("\n");
+        System.out.print("\nColumn matrix tanx|tany|origin:\n");
+        System.out.print(A); System.out.print("\n");
+      }
+    }
 
-    //set flag that this triangulation is embedded
+    //set flag that this triangulation is embedded, once finished
     isEmbedded = true;
   }
-  
   
   public static void main(String[] args){
     
@@ -331,6 +398,27 @@ public class DevelopmentApp2D {
       System.out.printf("\n");
     }
     
+    //get points using EmbeddedMfldData
+    i = Triangulation.faceTable.keySet().iterator();
+    
+    ArrayList<Vector> temp = new ArrayList<Vector>();
+    while(i.hasNext()){
+      Integer key = i.next();
+      Face f = Triangulation.faceTable.get(key);
+      EmbeddedFace ef = EmbeddedManifoldData.get(f);
+      Iterator<Vertex> j = f.getLocalVertices().iterator();
+      while(j.hasNext()){
+        Vertex v = j.next();
+        temp.add( ef.getCoords3D(Coord2D.coordAt(v,f)) );
+      }
+    }
+    
+    Vector[] temp2 = new Vector[temp.size()];
+    for(int k=0; k<temp.size(); k++){
+      temp2[k] = temp.get(k);
+    }
+    SceneGraphComponent sgc_mfld = sgcFromPoints3D( temp2 );
+    
     //pick some arbitrary face
     i = Triangulation.faceTable.keySet().iterator();
     Face face = Triangulation.faceTable.get(i.next());
@@ -338,9 +426,10 @@ public class DevelopmentApp2D {
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
     SceneGraphComponent sgc_face1 = sgcFromFace(face, new AffineTransformation(2), Color.RED);
-    SceneGraphComponent sgc_points = sgcFromPoints(new Vector(0,0));
+    SceneGraphComponent sgc_points = sgcFromPoints2D(new Vector(0,0));
     sgc_root.addChild(sgc_face1);
     sgc_root.addChild(sgc_points);
+    sgc_root.addChild(sgc_mfld);
     
     //loop through tetra's neighbors, adding them in the right place
     Iterator<Face> k = face.getLocalFaces().iterator();
@@ -359,8 +448,8 @@ public class DevelopmentApp2D {
     jrv.registerPlugin(new ContentTools());
     jrv.startup();
   }
-  
-  public static SceneGraphComponent sgcFromPoints(Vector...points){
+
+  public static SceneGraphComponent sgcFromPoints2D(Vector...points){
     
     //create the sgc
     SceneGraphComponent sgc_points = new SceneGraphComponent();
@@ -386,6 +475,48 @@ public class DevelopmentApp2D {
     double[][] vertlist = new double[points.length][3];
     for(int i=0; i<points.length; i++){
       vertlist[i] = new double[]{ points[i].getComponent(0), points[i].getComponent(1), 0 };
+    }
+    
+    //create geometry with pointsetfactory
+    PointSetFactory psf = new PointSetFactory();
+    psf.setVertexCount(points.length);
+    psf.setVertexCoordinates(vertlist);
+    psf.update();
+    
+    //set geometry
+    sgc_points.setGeometry(psf.getGeometry());
+    
+    //return
+    return sgc_points;
+  }
+  
+
+  public static SceneGraphComponent sgcFromPoints3D(Vector...points){
+    
+    //create the sgc
+    SceneGraphComponent sgc_points = new SceneGraphComponent();
+    
+    //create appearance
+    Appearance app_points = new Appearance();
+    
+    //set some basic attributes
+    app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
+    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    
+    //set point shader
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_points, true);
+    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
+    dps.setSpheresDraw(true);
+    dps.setPointRadius(0.05);
+    dps.setDiffuseColor(Color.BLUE);
+    
+    //set appearance
+    sgc_points.setAppearance(app_points);
+    
+    //set vertlist
+    double[][] vertlist = new double[points.length][3];
+    for(int i=0; i<points.length; i++){
+      vertlist[i] = new double[]{ points[i].getComponent(0), points[i].getComponent(1), points[i].getComponent(2) };
     }
     
     //create geometry with pointsetfactory

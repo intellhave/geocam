@@ -11,6 +11,15 @@ public class Vector {
     components_ = Arrays.copyOf(components,components.length);
   }
   
+  public Vector(Vector v, double w){
+    //create new vector augmenting v with specified w value
+    components_ = new double[v.getDimension()+1];
+    for(int i=0; i<v.getDimension(); i++){
+      components_[i] = v.getComponent(i);
+    }
+    components_[v.getDimension()] = w;
+  }
+  
   public Vector(double x, double y){
     components_ = new double[] { x, y };
   }
