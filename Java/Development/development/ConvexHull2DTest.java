@@ -13,7 +13,7 @@ public class ConvexHull2DTest {
   private static ConvexHull2D hull;
 
   public static void main(String[] args) {
-    ArrayList<Vector2D> list = new ArrayList<Vector2D>();
+    ArrayList<Vector> list = new ArrayList<Vector>();
     list.add(new Vector2D(1, 0));
     list.add(new Vector2D(0, 1));
     list.add(new Vector2D(-1, 0));

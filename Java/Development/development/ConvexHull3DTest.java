@@ -33,7 +33,7 @@ public class ConvexHull3DTest {
   private static Stack<List<SceneGraphComponent>> undone = new Stack<List<SceneGraphComponent>>();
 
   public static void main(String[] args) {
-    ArrayList<Vector3D> list = new ArrayList<Vector3D>();
+    ArrayList<Vector> list = new ArrayList<Vector>();
     // list.add(new Vector3D(1, 0, 0));
     // list.add(new Vector3D(0, 1, 0));
     // list.add(new Vector3D(0, 0, 1));
@@ -44,52 +44,52 @@ public class ConvexHull3DTest {
     // dodecahedron
     double p = (1 + Math.sqrt(5)) / 2;
     // order matters:
-    // list.add(new Vector3D(-1/p, -p, 0));
-    // list.add(new Vector3D(1, -1, -1));
-    // list.add(new Vector3D(-1, -1, 1));
-    // list.add(new Vector3D(1/p, p, 0));
-    //    
-    //        
-    // list.add(new Vector3D(0, -1/p, p));
-    // list.add(new Vector3D(0, -1/p, -p));
-    // list.add(new Vector3D(-1, -1, -1));
-    // list.add(new Vector3D(-1, 1, -1));
-    // list.add(new Vector3D(0, 1/p, p));
-    // list.add(new Vector3D(-1, 1, 1));
-    // list.add(new Vector3D(p, 0, -1/p));
-    // list.add(new Vector3D(0, 1/p, -p));
-    // list.add(new Vector3D(-1/p, p, 0));
-    // list.add(new Vector3D(-p, 0, 1/p));
-    // list.add(new Vector3D(-p, 0, -1/p));
-    // list.add(new Vector3D(1/p, -p, 0));
-    // list.add(new Vector3D(p, 0, 1/p));
-    // list.add(new Vector3D(1, -1, 1));
-    // list.add(new Vector3D(1, 1, -1));
-    // list.add(new Vector3D(1, 1, 1));
+     list.add(new Vector3D(-1/p, -p, 0));
+     list.add(new Vector3D(1, -1, -1));
+     list.add(new Vector3D(-1, -1, 1));
+     list.add(new Vector3D(1/p, p, 0));
+        
+            
+     list.add(new Vector3D(0, -1/p, p));
+     list.add(new Vector3D(0, -1/p, -p));
+     list.add(new Vector3D(-1, -1, -1));
+     list.add(new Vector3D(-1, 1, -1));
+     list.add(new Vector3D(0, 1/p, p));
+     list.add(new Vector3D(-1, 1, 1));
+     list.add(new Vector3D(p, 0, -1/p));
+     list.add(new Vector3D(0, 1/p, -p));
+     list.add(new Vector3D(-1/p, p, 0));
+     list.add(new Vector3D(-p, 0, 1/p));
+     list.add(new Vector3D(-p, 0, -1/p));
+     list.add(new Vector3D(1/p, -p, 0));
+     list.add(new Vector3D(p, 0, 1/p));
+     list.add(new Vector3D(1, -1, 1));
+     list.add(new Vector3D(1, 1, -1));
+     list.add(new Vector3D(1, 1, 1));
 
-    list.add(new Vector3D(1, -1, -1));
-    list.add(new Vector3D(1, -1, 1));
-    list.add(new Vector3D(1, 1, -1));
-    list.add(new Vector3D(1, 1, 1));
-    list.add(new Vector3D(-1, -1, 1));
-    list.add(new Vector3D(-1, -1, -1));
-    list.add(new Vector3D(-1, 1, -1));
-    list.add(new Vector3D(-1, 1, 1));
-
-    list.add(new Vector3D(-1 / p, -p, 0));
-    list.add(new Vector3D(1 / p, p, 0));
-    list.add(new Vector3D(-1 / p, p, 0));
-    list.add(new Vector3D(1 / p, -p, 0));
-
-    list.add(new Vector3D(0, -1 / p, p));
-    list.add(new Vector3D(0, -1 / p, -p));
-    list.add(new Vector3D(0, 1 / p, p));
-    list.add(new Vector3D(0, 1 / p, -p));
-
-    list.add(new Vector3D(-p, 0, -1 / p));
-    list.add(new Vector3D(-p, 0, 1 / p));
-    list.add(new Vector3D(p, 0, -1 / p));
-    list.add(new Vector3D(p, 0, 1 / p));
+//    list.add(new Vector3D(1, -1, -1));
+//    list.add(new Vector3D(1, -1, 1));
+//    list.add(new Vector3D(1, 1, -1));
+//    list.add(new Vector3D(1, 1, 1));
+//    list.add(new Vector3D(-1, -1, 1));
+//    list.add(new Vector3D(-1, -1, -1));
+//    list.add(new Vector3D(-1, 1, -1));
+//    list.add(new Vector3D(-1, 1, 1));
+//
+//    list.add(new Vector3D(-1 / p, -p, 0));
+//    list.add(new Vector3D(1 / p, p, 0));
+//    list.add(new Vector3D(-1 / p, p, 0));
+//    list.add(new Vector3D(1 / p, -p, 0));
+//
+//    list.add(new Vector3D(0, -1 / p, p));
+//    list.add(new Vector3D(0, -1 / p, -p));
+//    list.add(new Vector3D(0, 1 / p, p));
+//    list.add(new Vector3D(0, 1 / p, -p));
+//
+//    list.add(new Vector3D(-p, 0, -1 / p));
+//    list.add(new Vector3D(-p, 0, 1 / p));
+//    list.add(new Vector3D(p, 0, -1 / p));
+//    list.add(new Vector3D(p, 0, 1 / p));
 
     // cube with hat
     // list.add(new Vector3D(0, 0, 0));
@@ -140,34 +140,11 @@ public class ConvexHull3DTest {
         finished = true;
       }
     }
-    sgc.addChild(sgc_point);
-    //setupCoordinates();
-  }
-  
-  private static void setupCoordinates() {
-    factory = new CoordinateSystemFactory(sgc_root);
-    // SET PROPERTIES:
-    double axisScale = 2.0;
-    Font font = new Font("TimesRoman", Font.PLAIN, 80);
-    factory.setAxisScale(axisScale);
-    factory.setLabelScale(0.01);
-    factory.showAxesArrows(true);
-    factory.showLabels(true);
-    factory.setLabelColor(Color.DARK_GRAY);
-    factory.setLabelFont(font);
-    factory.setColor(Color.BLUE);
-
-    // display axes/box/grid
-    factory.showAxes(true);
-    // coords.showBox(true);
-    factory.showGrid(false);
-
-    // beautify box
-    factory.beautify(true);
   }
 
   public static void drawHull(ConvexHull3D hull) {
     removeChildren(sgc_root);
+    sgc_root.addChild(sgc_point);
 
     for (int i = 0; i < hull.getNumberFaces(); i++) {
       SceneGraphComponent sgc = new SceneGraphComponent();
@@ -181,6 +158,7 @@ public class ConvexHull3DTest {
     ArrayList<Face> visibleFaces = hull.getVisibleFaces();
 
     removeChildren(sgc_root);
+    sgc_root.addChild(sgc_point);
 
     for (int i = 0; i < hiddenFaces.size(); i++) {
       SceneGraphComponent sgc = new SceneGraphComponent();
@@ -199,6 +177,7 @@ public class ConvexHull3DTest {
     ArrayList<Face> newFaces = hull.getNewFaces();
 
     removeChildren(sgc_root);
+    sgc_root.addChild(sgc_point);
 
     for (int i = 0; i < hiddenFaces.size(); i++) {
       SceneGraphComponent sgc = new SceneGraphComponent();
@@ -282,9 +261,9 @@ public class ConvexHull3DTest {
           }
         }
 
-        private Geometry getLineGeometry(Vector3D nextPoint) {
-          ArrayList<Vector3D> vertices = hull.getVertices();
-          vertices.add(0, nextPoint);
+        private Geometry getLineGeometry(Vector vector) {
+          ArrayList<Vector> vertices = hull.getVertices();
+          vertices.add(0, vector);
           double[][] ilsf_verts = new double[vertices.size()][3];
           int[][] ilsf_edges = new int[vertices.size() - 1][2];
 

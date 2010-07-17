@@ -6,13 +6,13 @@ import java.util.HashMap;
 
 
 public class ConvexHull2D {
-  private ArrayList<Vector2D> points;
+  private ArrayList<Vector> points;
   
-  public ConvexHull2D(ArrayList<Vector2D> unsortedPoints) {
-    findHull(unsortedPoints);
+  public ConvexHull2D(ArrayList<Vector> vertices) {
+    findHull(vertices);
   }
 
-  public Vector2D getPointAt(int i) {
+  public Vector getPointAt(int i) {
     return points.get(i);
   }
   
@@ -24,21 +24,21 @@ public class ConvexHull2D {
     return points.isEmpty();
   }
   
-  private void findHull(ArrayList<Vector2D> unsortedPoints) {
-    points = new ArrayList<Vector2D>();
+  private void findHull(ArrayList<Vector> unsortedPoints) {
+    points = new ArrayList<Vector>();
     
     int startIndex = findHighestPoint(unsortedPoints);    
-    Vector2D start = unsortedPoints.get(startIndex);
+    Vector start = unsortedPoints.get(startIndex);
     unsortedPoints.remove(startIndex);
     points.add(start);
     
-    ArrayList<Vector2D> vectors = getVectors(start, unsortedPoints);
-    Vector2D baseLine = new Vector2D(-1, 0);
+    ArrayList<Vector> vectors = getVectors(start, unsortedPoints);
+    Vector baseLine = new Vector(-1, 0);
     
     HashMap<Double, Integer> angleMap = new HashMap<Double, Integer>();
     ArrayList<Double> cosines = new ArrayList<Double>();
     for(int i = 0; i < vectors.size(); i++) {
-      double result = Vector2D.dot(baseLine, vectors.get(i))/vectors.get(i).length();
+      double result = Vector.dot(baseLine, vectors.get(i))/vectors.get(i).length();
       cosines.add(result);
       angleMap.put(result, i);
     }
@@ -49,15 +49,15 @@ public class ConvexHull2D {
     }
   }
   
-  private ArrayList<Vector2D> getVectors(Vector2D start, ArrayList<Vector2D> pts) {
-    ArrayList<Vector2D> vectors = new ArrayList<Vector2D>();
+  private ArrayList<Vector> getVectors(Vector start, ArrayList<Vector> pts) {
+    ArrayList<Vector> vectors = new ArrayList<Vector>();
     for(int i = 0; i < pts.size(); i++) {
-      vectors.add((Vector2D) Vector2D.subtract(pts.get(i), start));
+      vectors.add((Vector) Vector.subtract(pts.get(i), start));
     }
     return vectors;
   }
   
-  private int findHighestPoint(ArrayList<Vector2D> points) {
+  private int findHighestPoint(ArrayList<Vector> points) {
     double max_y = points.get(0).getComponent(1);
     int index = 0;
     for(int i = 1; i < points.size(); i++) {
@@ -69,14 +69,14 @@ public class ConvexHull2D {
     return index;
   }
 
-  public ArrayList<Vector2D> getPoints() {
+  public ArrayList<Vector> getPoints() {
     return points;
   }
 
   public Face getAsFace() {
     Vector3D[] vectors = new Vector3D[points.size()];
     for(int i = 0; i < vectors.length; i++) {
-      Vector2D point = points.get(i);
+      Vector point = points.get(i);
       vectors[i] = new Vector3D(point.getComponent(0), point.getComponent(1), 0);
       System.out.println(vectors[i].toString());
     }

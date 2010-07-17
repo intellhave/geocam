@@ -6,58 +6,58 @@ import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
 
 public class Face {
-  private ArrayList<Vector3D> vectors_;
-  private Vector3D normal_;
+  private ArrayList<Vector> vectors_;
+  private Vector normal_;
 
   // expects vectors in counter-clockwise order
-  public Face(ArrayList<Vector3D> v) {
+  public Face(ArrayList<Vector> v) {
     vectors_ = v;
     findNormal();
   }
 
-  public Face(Vector3D... vectors) {
-    vectors_ = new ArrayList<Vector3D>();
+  public Face(Vector... vectors) {
+    vectors_ = new ArrayList<Vector>();
     for(int i = 0; i < vectors.length; i++)
       vectors_.add(vectors[i]);
     findNormal();
   }
   
   public Face(Face face) {
-    vectors_ = new ArrayList<Vector3D>();
-    ArrayList<Vector3D> oldVectors = face.getVectors();
+    vectors_ = new ArrayList<Vector>();
+    ArrayList<Vector> oldVectors = face.getVectors();
     for(int i = 0; i < oldVectors.size(); i++) {
-      vectors_.add(new Vector3D(oldVectors.get(i)));
+      vectors_.add(new Vector(oldVectors.get(i)));
     }
     findNormal();
   }
 
   private void findNormal() {
-    Vector3D v1 = Vector3D.subtract(vectors_.get(1), vectors_.get(0));
-    Vector3D v2 = Vector3D.subtract(vectors_.get(2), vectors_.get(1));
-    normal_ = Vector3D.cross(v1, v2);
+    Vector v1 = Vector.subtract(vectors_.get(1), vectors_.get(0));
+    Vector v2 = Vector.subtract(vectors_.get(2), vectors_.get(1));
+    normal_ = Vector.cross(v1, v2);
   }
 
   public int getNumberVertices() {
     return vectors_.size();
   }
   
-  public ArrayList<Vector3D> getVectors() {
-    ArrayList<Vector3D> vectors = new ArrayList<Vector3D>();
+  public ArrayList<Vector> getVectors() {
+    ArrayList<Vector> vectors = new ArrayList<Vector>();
     for(int i = 0; i < vectors_.size(); i++) {
       vectors.add(vectors_.get(i));
     }
     return vectors;
   }
   
-  public ArrayList<Vector3D> getVectorsAsArray() {
+  public ArrayList<Vector> getVectorsAsArray() {
     return vectors_;
   }
 
-  public Vector3D getVectorAt(int index) {
+  public Vector getVectorAt(int index) {
     return vectors_.get(index);
   }
 
-  public Vector3D getNormal() {
+  public Vector getNormal() {
     return normal_;
   }
   
@@ -66,7 +66,11 @@ public class Face {
     int[][] ifsf_faces = new int[1][getNumberVertices()];
 
     for (int i = 0; i < getNumberVertices(); i++) {
-      ifsf_verts[i] = getVectorAt(i).getVectorAsArray();
+      if(getVectorAt(i).getDimension() == 3)
+        ifsf_verts[i] = getVectorAt(i).getVectorAsArray();
+      else {
+        ifsf_verts[i] = new double[]{getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1), 0};
+      }
       ifsf_faces[0][i] = i;
     }
     
@@ -87,15 +91,15 @@ public class Face {
   }
   
   
-  public void addVertex(Vector3D v) {
+  public void addVertex(Vector v) {
     vectors_.add(v);
   }
   
-  public int indexOf(Vector3D v) {
+  public int indexOf(Vector v) {
     return vectors_.indexOf(v);
   }
   
-  public boolean contains(Vector3D v) {
+  public boolean hasVertex(Vector v) {
     for(int i =0 ; i < vectors_.size(); i++) {
       if(vectors_.get(i).equals(v)) return true;
     }
