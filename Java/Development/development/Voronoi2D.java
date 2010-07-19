@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Voronoi2D {
 
   private ArrayList<Vector> points_;
-  private Face[] cells_; //cells_[i] is the voronoi cell of points_[i], intersected with face
+  private Face[] cells_; //cells_[i] is the voronoi cell of points_[i], intersected with bounding_face_
   private Face bounding_face_;
   
   public Voronoi2D(Face bounding_face, ArrayList<Vector> points) {
@@ -58,10 +58,8 @@ public class Voronoi2D {
         Frustum2D fi = new Frustum2D(ui,uj);
         Frustum2D fj = new Frustum2D(uj,ui);
         
-        //intersect cell_i - x with fi, add x
-        
-        //intersect cell_j - x with fj, add x
-        
+        //cells_[i] = fi.clipFace(cells_[i] - x) + x;  
+        //cells_[j] = fj.clipFace(cells_[j] - x) + x;
       }
     }
   }
