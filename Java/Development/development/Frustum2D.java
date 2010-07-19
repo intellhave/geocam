@@ -74,12 +74,8 @@ public class Frustum2D {
   public Face clipFace(Face toClip) {
     ArrayList<Vector> vertices = new ArrayList<Vector>();
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
-      System.out.println("checking interior: " + toClip.getVectorAt(i));
-      if (this.checkInterior(toClip.getVectorAt(i))) {
+      if (this.checkInterior(toClip.getVectorAt(i))) 
         vertices.add(new Vector(toClip.getVectorAt(i)));
-        System.out.println("true");
-      } else
-        System.out.println("false");
     }
     if (vertices.size() == toClip.getNumberVertices())
       return new Face(toClip); // all vertices contained in frustum
@@ -88,24 +84,18 @@ public class Frustum2D {
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
       Vector a = toClip.getVectorAt(i);
       Vector b = toClip.getVectorAt((i + 1) % toClip.getNumberVertices());
-      System.out.println("checking edge " + i);
+      
       Vector v = findIntersection(a, b, this.right);
       if (v != null && notTooCloseToAnyOf(vertices, v))
         intersections.add(v);
-      else
-        System.out.println("doesn't contain right");
+
       v = findIntersection(a, b, this.left);
       if (v != null && notTooCloseToAnyOf(vertices, v))
         intersections.add(v);
-      else
-        System.out.println("doesn't contain left");
     }
+    
     vertices.addAll(intersections);
-    System.out.println("found these intersections");
-    for (int i = 0; i < intersections.size(); i++) {
-      System.out.println(intersections.get(i));
-    }
-    System.out.println();
+
     if (vertices.isEmpty())
       return null;
     ConvexHull2D hull = new ConvexHull2D(vertices);
@@ -116,19 +106,16 @@ public class Frustum2D {
    * returns true if the coordinates of the given vector v are between the
    * coordinates of v1 and v2
    */
-  private boolean isContained(Vector v1, Vector v2, Vector v) {
+  private static boolean isContained(Vector v1, Vector v2, Vector v) {
     double x = v.getComponent(0);
-    double y = v.getComponent(1);
     double x1 = v1.getComponent(0);
-    double y1 = v1.getComponent(1);
     double x2 = v2.getComponent(0);
-    double y2 = v2.getComponent(1);
 
-    return (between(x1, x2, x) && between(y1, y2, y));
+    return (between(x1, x2, x));
   }
 
   // true if c is between a and b
-  private boolean between(double a, double b, double c) {
+  private static boolean between(double a, double b, double c) {
     if ((a - epsilon > c && b - epsilon > c)
         || (a + epsilon < c && b + epsilon < c))
       return false;
@@ -139,10 +126,8 @@ public class Frustum2D {
    * Returns the intersection of the line formed by points a and b with the line
    * through v and the origin. ( y1 = (w2/w1)(x-s) + t, y2 = (v2/v1)x )
    */
-  private Vector findIntersection(Vector a, Vector b, Vector v) {
+  public static Vector findIntersection(Vector a, Vector b, Vector v) {
     Vector w = Vector.subtract(b, a);
-    System.out.println("v = " + v);
-    System.out.println("w = " + w);
     double w1 = w.getComponent(0);
     double w2 = w.getComponent(1);
     double s = a.getComponent(0);
@@ -167,25 +152,17 @@ public class Frustum2D {
     }
 
     Vector intersection = new Vector(x, y);
-    System.out.println("found intersection at " + intersection
-        + " -- on edge? ");
-    if (isContained(a, b, intersection)) {
-      System.out.println("yes");
-      System.out.println();
+
+    if (isContained(a, b, intersection)) 
       return intersection;
-    } else {
-      System.out.println("no");
-      System.out.println();
+    else 
       return null;
-    }
   }
 
   private boolean notTooCloseToAnyOf(ArrayList<Vector> vectors, Vector v) {
     for (int i = 0; i < vectors.size(); i++) {
-      if (closeTogether(vectors.get(i), v)) {
-        System.out.println("too close to " + vectors.get(i));
+      if (closeTogether(vectors.get(i), v)) 
         return false;
-      }
     }
     return true;
   }
