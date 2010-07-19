@@ -16,16 +16,27 @@ public class RandomPentachoron {
     PrintStream output1 = new PrintStream("src/Experiments/output1.txt");
     output1.println("Vertex Curvature");
     
-    for(int a = 1; a < 1000; a++)
+    for(int a = 1; a < 10; a++)
     {
     TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_regular.xml");
     
     double[][] vertices = new double[5][4];
+    double radius = 0;
     Random generator = new Random();
     
     for(int i=0; i < 5; i++){
       for(int j=0; j < 4; j++){
-        vertices[i][j] = generator.nextDouble();
+        vertices[i][j] = generator.nextGaussian();
+      }
+      
+      for(int j=0; j < 4; j++){
+        radius += Math.pow(vertices[i][j], 2);
+      }
+      
+      radius = Math.pow(radius, .5);
+      
+      for(int j=0; j < 4; j++){
+        vertices[i][j] = vertices[i][j]/radius;
       }
     }
       for(int n = 1; n <= 5; n++){
