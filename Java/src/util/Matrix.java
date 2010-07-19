@@ -35,6 +35,12 @@ public class Matrix implements Cloneable{
     }
   }
   
+  public Matrix(double[][] matrix) {
+    rows = matrix.length;
+    cols = matrix[0].length;
+    m = matrix;
+  }
+
   public Matrix scaleMatrix(double c){
     Matrix temp = new Matrix(rows, cols);
     for(int i=0; i < rows; i++){
