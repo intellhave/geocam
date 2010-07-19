@@ -72,10 +72,15 @@ public class Frustum2D {
   }
 
   public Face clipFace(Face toClip) {
+    int left_intersections = 0;
     ArrayList<Vector> vertices = new ArrayList<Vector>();
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
-      if (this.checkInterior(toClip.getVectorAt(i))) 
+      System.out.println("checking interior: " + toClip.getVectorAt(i));
+      if (this.checkInterior(toClip.getVectorAt(i))) {
         vertices.add(new Vector(toClip.getVectorAt(i)));
+        System.out.println("true");
+      } else
+        System.out.println("false");
     }
     if (vertices.size() == toClip.getNumberVertices())
       return new Face(toClip); // all vertices contained in frustum
@@ -84,18 +89,27 @@ public class Frustum2D {
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
       Vector a = toClip.getVectorAt(i);
       Vector b = toClip.getVectorAt((i + 1) % toClip.getNumberVertices());
-      
+      System.out.println("checking edge " + i);
       Vector v = findIntersection(a, b, this.right);
       if (v != null && notTooCloseToAnyOf(vertices, v))
         intersections.add(v);
-
+      else
+        System.out.println("doesn't contain right");
       v = findIntersection(a, b, this.left);
-      if (v != null && notTooCloseToAnyOf(vertices, v))
+      if (v != null && notTooCloseToAnyOf(vertices, v)) {
+        left_intersections++;
         intersections.add(v);
+      }
+      else
+        System.out.println("doesn't contain left");
     }
-    
     vertices.addAll(intersections);
-
+    if(left_intersections == 1) vertices.add(new Vector(0, 0));
+    System.out.println("found these intersections");
+    for (int i = 0; i < intersections.size(); i++) {
+      System.out.println(intersections.get(i));
+    }
+    System.out.println();
     if (vertices.isEmpty())
       return null;
     ConvexHull2D hull = new ConvexHull2D(vertices);
@@ -104,14 +118,17 @@ public class Frustum2D {
 
   /*
    * returns true if the coordinates of the given vector v are between the
-   * coordinates of v1 and v2
+   * coordinates of v1 and v2 and contained in frustum f
    */
-  private static boolean isContained(Vector v1, Vector v2, Vector v) {
+  private boolean isContained(Frustum2D f, Vector v1, Vector v2, Vector v) {
     double x = v.getComponent(0);
+    double y = v.getComponent(1);
     double x1 = v1.getComponent(0);
+    double y1 = v1.getComponent(1);
     double x2 = v2.getComponent(0);
+    double y2 = v2.getComponent(1);
 
-    return (between(x1, x2, x));
+    return (between(x1, x2, x) && between(y1, y2, y) && f.checkInterior(v));
   }
 
   // true if c is between a and b
@@ -123,10 +140,10 @@ public class Frustum2D {
   }
 
   /*
-   * Returns the intersection of the line formed by points a and b with the line
-   * through v and the origin. ( y1 = (w2/w1)(x-s) + t, y2 = (v2/v1)x )
+   * Returns the intersection of the line formed by points a and b with the ray
+   * from the origin through v. ( ( y1 = (w2/w1)(x-s) + t, y2 = (v2/v1)x )
    */
-  public static Vector findIntersection(Vector a, Vector b, Vector v) {
+  public Vector findIntersection(Vector a, Vector b, Vector v) {
     Vector w = Vector.subtract(b, a);
     double w1 = w.getComponent(0);
     double w2 = w.getComponent(1);
@@ -134,15 +151,15 @@ public class Frustum2D {
     double t = a.getComponent(1);
     double v1 = v.getComponent(0);
     double v2 = v.getComponent(1);
-
-    if ((w2 / w1) == (v2 / v1)) { // slopes equal => parallel
+    
+    if((w1 == 0 && v1 == 0) || (w2 / w1) == (v2 / v1)) { // slopes equal => parallel
       return null;
     }
 
     double x, y;
     if (w1 == 0) {
-      x = 0;
-      y = 0;
+      x = s;
+      y = (v2/v1)*s;
     } else if (v1 == 0) {
       x = 0;
       y = (w2 / w1) * (0 - s) + t;
@@ -153,15 +170,15 @@ public class Frustum2D {
 
     Vector intersection = new Vector(x, y);
 
-    if (isContained(a, b, intersection)) 
+    if (isContained(this, a, b, intersection))
       return intersection;
-    else 
+    else
       return null;
   }
 
   private boolean notTooCloseToAnyOf(ArrayList<Vector> vectors, Vector v) {
     for (int i = 0; i < vectors.size(); i++) {
-      if (closeTogether(vectors.get(i), v)) 
+      if (closeTogether(vectors.get(i), v))
         return false;
     }
     return true;

@@ -30,8 +30,8 @@ public class Frustum2DTest {
   public static void main(String[] args) {
     frustum = new Frustum2D(new Vector(0, 4), new Vector(4, 4));
     frustum_initial = new Frustum2D(frustum);
-    face_initial = new Face(new Vector(0, 1), new Vector(2, 1),
-        new Vector(1, 2));
+    face_initial = new Face(new Vector(1, 1), new Vector(-1, 1),
+        new Vector(-1, -1), new Vector(1, -1));
     face = frustum.clipFace(face_initial);
 
     sgc_face = new SceneGraphComponent();
