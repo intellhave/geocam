@@ -181,9 +181,10 @@ public class EmbeddedTriangulation{
     
     //1) reads in a file containing an embedded surface
     //2) creates sgc_embedded for drawing
-    //3) populates Triangulation class
-    //4) sets length geoquants for each edge
-    //5) populates EmbeddedManifoldData for going from abstract -> embedding
+    //3) Todo: triangulate?
+    //4) populates Triangulation class
+    //5) sets length geoquants for each edge
+    //6) populates EmbeddedManifoldData for going from abstract -> embedding
     
     //read the data file
     Geometry geom = null;
@@ -234,6 +235,15 @@ public class EmbeddedTriangulation{
     int nfaces = dl_faceindices.size();
     int nedges = dl_edgeindices.size();
     int nverts = dl_vertcoords.size();
+    
+    //replace face and edge lists with a triangulated version of the manifold
+    //int faceindices[][] = new int[nfaces][3];
+    //int edgeindices[][] = new int[nedges][2];
+    //Vector vertcoords[] = new Vector[nverts];
+    
+    //for(int i=0; i<nverts; i++){
+    //  vertcoords[i] = dl_vertcoords.get(index)
+    //}             
     
     if(verbose){ System.out.printf("%d verts, %d edges, %d faces\n", nverts,nedges,nfaces); }
     
