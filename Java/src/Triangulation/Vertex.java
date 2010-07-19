@@ -11,6 +11,9 @@ public class Vertex extends Simplex {
   }
   
   public Edge getEdge(Vertex v){
+    if(this.equals(v)){
+      return null;
+    }
     Edge e = null;
       for(Edge e1 : this.getLocalEdges()){
         for(Edge e2 : v.getLocalEdges()){
