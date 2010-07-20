@@ -91,7 +91,7 @@ public class DevelopmentApp2D {
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
     SceneGraphComponent sgc_face1 = sgcFromFace(face, new AffineTransformation(2), Color.RED);
-    SceneGraphComponent sgc_points = sgcFromPoints2D(new Vector(0,0));
+    SceneGraphComponent sgc_points = sgcFromPoints2D(new Vector[] { new Vector(0,0) });
     sgc_root.addChild(sgc_face1);
     sgc_root.addChild(sgc_points);
     //sgc_root.addChild(sgc_mfld);
@@ -115,7 +115,7 @@ public class DevelopmentApp2D {
     jrv.startup();
   }
 
-  public static SceneGraphComponent sgcFromPoints2D(Vector...points){
+  public static SceneGraphComponent sgcFromPoints2D(Vector[] points){
     
     //create the sgc
     SceneGraphComponent sgc_points = new SceneGraphComponent();

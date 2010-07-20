@@ -14,6 +14,15 @@ public class Voronoi2D {
     cells_ = new Face[points_.size()];
     computeCells();
   }
+  public Voronoi2D(Face bounding_face, Vector[] points) {
+    points_ = new ArrayList<Vector>();
+    for(int i=0; i<points.length; i++){
+      points_.add(points[i]);
+    }
+    bounding_face_ = bounding_face;
+    cells_ = new Face[points_.size()];
+    computeCells();
+  }
   
   public Vector getPointAt(int i){
     return points_.get(i);
@@ -58,8 +67,13 @@ public class Voronoi2D {
         Frustum2D fi = new Frustum2D(ui,uj);
         Frustum2D fj = new Frustum2D(uj,ui);
         
-        //cells_[i] = fi.clipFace(cells_[i] - x) + x;  
-        //cells_[j] = fj.clipFace(cells_[j] - x) + x;
+        cells_[i].shift(Vector.scale(x, -1));
+        cells_[i] = fi.clipFace(cells_[i]);
+        cells_[i].shift(x);
+        
+        cells_[j].shift(Vector.scale(x, -1));
+        cells_[j] = fj.clipFace(cells_[j]);
+        cells_[j].shift(x);
       }
     }
   }
