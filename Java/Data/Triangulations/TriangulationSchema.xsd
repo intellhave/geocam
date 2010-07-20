@@ -39,21 +39,22 @@
                 <xs:element ref="Faces" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="Tetras" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
-            <xs:attribute name="alpha" use="optional" type="xs:decimal"/>
-            <xs:attribute name="index" use="required" type="xs:integer"/>
+            <xs:attribute name="index" use="required" type="xs:integer" />
+            <xs:attribute name="alpha" use="optional" type="xs:decimal"/>
             <xs:attribute name="radius" use="optional" type="xs:decimal"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="Edge">
         <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="Vertices" minOccurs="1" maxOccurs="1"/>
-                <xs:element ref="Edges" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="Faces" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="Tetras" minOccurs="0" maxOccurs="1"/>
-            </xs:sequence>
-            <xs:attribute name="eta" use="optional" type="xs:decimal"/>
-            <xs:attribute name="index" use="required" type="xs:integer"/>
+        	<xs:sequence>
+        		<xs:element ref="Vertices" minOccurs="1" maxOccurs="1" />
+        		<xs:element ref="Edges" minOccurs="0" maxOccurs="1" />
+        		<xs:element ref="Faces" minOccurs="0" maxOccurs="1" />
+        		<xs:element ref="Tetras" minOccurs="0" maxOccurs="1" />
+        	</xs:sequence>
+            <xs:attribute name="index" use="required" type="xs:integer" />
+            <xs:attribute name="eta" use="optional" type="xs:decimal" />
+        	<xs:attribute name="length" type="xs:decimal" use="optional"></xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="Face">

@@ -68,7 +68,7 @@ public class GeoPolygonPanel extends JPanel {
     
     // Draw StepNum, if applicable
     if(currentForm == Form.step) {
-      g.drawString("Step: " + currentStep, this.getWidth() - 50, 20);
+      g.drawString("Step: " + currentStep, this.getWidth() - 75, 20);
     }
     // Draw Polygons
     List<Polygon> polygons = generatePolygons();

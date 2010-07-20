@@ -1,9 +1,11 @@
 package Solvers;
 
+import java.util.Observable;
+
 import util.GeoMath;
 import util.Matrix;
 
-public abstract class NewtonsMethod{
+public abstract class NewtonsMethod extends Observable{
   // The value used for approximating derivatives.
   protected double delta;
   // The value used for advancing along the gradient, indicates the amount
@@ -309,7 +311,9 @@ public abstract class NewtonsMethod{
     double len;
     do {
       // Step through NewtonsMethod, updating soln, until len < gradLenCond
-      len = stepMin(soln);   
+      len = stepMin(soln);
+      setChanged();
+      notifyObservers(soln);
     }
     while(len >= gradLenCond);
     return soln;
@@ -324,7 +328,9 @@ public abstract class NewtonsMethod{
     double len;
     do {
       // Step through NewtonsMethod, updating soln, until len < gradLenCond
-      len = stepMax(soln);   
+      len = stepMax(soln);  
+      setChanged();
+      notifyObservers(soln);
     }
     while(len >= gradLenCond);
     return soln;
@@ -339,7 +345,9 @@ public abstract class NewtonsMethod{
     double len;
     do {
       // Step through NewtonsMethod, updating soln, until len < gradLenCond
-      len = step(soln);   
+      len = step(soln);
+      setChanged();
+      notifyObservers(soln);
     }
     while(len >= gradLenCond);
     return soln;

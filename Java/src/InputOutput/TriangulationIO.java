@@ -186,6 +186,10 @@ public class TriangulationIO {
       if(eta.length() != 0) {
         Eta.At(e).setValue(Double.parseDouble(eta));
       }
+      String length = simplexNode.getAttribute("length");
+      if(length.length() != 0) {
+        Length.At(e).setValue(Double.parseDouble(length));
+      }
     }
     
     Face f;
@@ -477,6 +481,7 @@ public class TriangulationIO {
       simplex = triangulationDoc.createElement("Edge");
       simplex.setAttribute("index", "" + e.getIndex());
       simplex.setAttribute("eta", "" + Eta.valueAt(e));
+      simplex.setAttribute("length", "" + Length.valueAt(e));
       
       // Local Vertices
       localSimplex = triangulationDoc.createElement("Vertices");

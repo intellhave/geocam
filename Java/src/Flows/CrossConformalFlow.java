@@ -1,5 +1,8 @@
 package Flows;
 
+import Triangulation.Edge;
+import Triangulation.Triangulation;
+import Triangulation.Vertex;
 import Geoquant.Alpha;
 import Geoquant.Eta;
 import Geoquant.Geometry;
@@ -7,9 +10,6 @@ import Geoquant.VEHR;
 import Geoquant.Radius;
 import InputOutput.TriangulationIO;
 import Solvers.WrongDirectionException;
-import Triangulation.Triangulation;
-import Triangulation.Edge;
-import Triangulation.Vertex;
 
 
 public class CrossConformalFlow {

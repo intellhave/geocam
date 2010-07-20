@@ -66,12 +66,13 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.SwingUtilities;
 
-import Geoquant.*;
-import InputOutput.TriangulationIO;
 import Triangulation.Edge;
 import Triangulation.Simplex;
 import Triangulation.Triangulation;
 import Triangulation.Vertex;
+
+import Geoquant.*;
+import InputOutput.TriangulationIO;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo
@@ -140,6 +141,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox vehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
   private AbstractAction saveAction;
+  private AbstractAction saveFlowAction;
+  private JMenuItem saveFlowMenuItem;
   private JLabel stepLabel;
   private JComboBox stepComboBox;
   private JLabel delayLabel;
@@ -200,6 +203,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private HashMap<JCheckBox, Class<? extends Geoquant>> geoCheckTable;
   private GeoPolygonPanel currentGeoPanel;
   private List<Class<? extends Geoquant>> selectedList;
+  private Timer timer;
   
   /**
   * Auto-generated main method to display this JFrame
@@ -257,6 +261,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
             fileMenu.add(importMenuItem);
             fileMenu.add(getSaveMenu());
             fileMenu.add(getSaveGeoquantsMenuItem());
+            fileMenu.add(getSaveFlowMenuItem());
             importMenuItem.setText("Import Triangulation");
             importMenuItem.setAction(getImportAction());
           }
@@ -275,7 +280,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       importAction = new AbstractAction("Import Triangulation", null) {
         public void actionPerformed(ActionEvent e) {
           //Handle open button action.
-          getTriangulationFileChooser();
+          getTriangulationFileChooser().setFileFilter(XMLFilter.getFilter());
           int returnVal = getTriangulationFileChooser().showOpenDialog(GeoquantViewer.this);
           
           if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -296,6 +301,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       saveAction = new AbstractAction("Save Triangulation", null) {
         public void actionPerformed(ActionEvent e) {
           // Handle Save Button Action
+          getTriangulationFileChooser().setFileFilter(XMLFilter.getFilter());
           int returnVal = getTriangulationFileChooser().showSaveDialog(GeoquantViewer.this);
           
           if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -319,7 +325,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JFileChooser getTriangulationFileChooser() {
     if(triangulationFileChooser == null) {
       triangulationFileChooser = new JFileChooser("Data/Triangulations");
-      triangulationFileChooser.setFileFilter(new TriangulationFilter());
+      triangulationFileChooser.setFileFilter(XMLFilter.getFilter());
     }
     return triangulationFileChooser;
   }
@@ -364,7 +370,24 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     EdgeListModel = 
       new DefaultComboBoxModel(Triangulation.edgeTable.values().toArray());
     EdgeList.setModel(EdgeListModel);
+    
     getNehrFlowMenuItem().setEnabled(true);
+    getYamabe2DMenuItem().setEnabled(true);
+    getYamabe3DMenuItem().setEnabled(true);
+    getSetRadiiMenuItem().setEnabled(true);
+    getSetEtaMenuItem().setEnabled(true);
+    getSaveGeoquantsMenuItem().setEnabled(true);
+    getSaveMenu().setEnabled(true);
+    
+    for(Alpha a : Geometry.getAlphas()) {
+      a.setValue(0.0);
+    }
+    
+    for(Class<? extends Geoquant> c : getSelectedList()) {
+      getPolygonPanel().removeGeoquant(c);
+      getPolygonPanel().addGeoquant(c);
+    }
+    
     getPolygonPanel().repaint();
   }
   
@@ -1364,6 +1387,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  setRadiiMenuItem = new JMenuItem();
 		  setRadiiMenuItem.setText("Set Radii...");
 		  setRadiiMenuItem.setAction(getShowSetRadiiDialog());
+		  setRadiiMenuItem.setEnabled(false);
 	  }
 	  return setRadiiMenuItem;
   }
@@ -1373,6 +1397,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  setEtaMenuItem = new JMenuItem();
 		  setEtaMenuItem.setText("Set Etas...");
 		  setEtaMenuItem.setAction(getShowEtaDialog());
+		  setEtaMenuItem.setEnabled(false);
 	  }
 	  return setEtaMenuItem;
   }
@@ -1557,6 +1582,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  yamabe2DMenuItem = new JMenuItem();
 		  yamabe2DMenuItem.setText("2D Yamabe Flow");
 		  yamabe2DMenuItem.setAction(getShowYamabe2DDialog());
+		  yamabe2DMenuItem.setEnabled(false);
 	  }
 	  return yamabe2DMenuItem;
   }
@@ -1579,6 +1605,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  yamabe3DMenuItem = new JMenuItem();
 		  yamabe3DMenuItem.setText("3D Yamabe Flow");
 		  yamabe3DMenuItem.setAction(getShowYamabe3DDialog());
+		  yamabe3DMenuItem.setEnabled(false);
 	  }
 	  return yamabe3DMenuItem;
   }
@@ -1594,27 +1621,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  };
 	  }
 	  return showYamabe3DDialog;
-  }
-
-  class TriangulationFilter extends FileFilter {
-    public boolean accept(File f) {
-      if (f.isDirectory()) {
-        return true;
-      }
-      
-      String extension = f.getName();
-      int index = extension.lastIndexOf('.');
-      if(index < 0) {
-        return false;
-      }
-
-      extension = extension.substring(index).toLowerCase();
-      return extension.equals(".xml");
-    }
-    public String getDescription() {
-      return "XML (.xml)";
-    }
-    
   }
   
   class CloseSetRadiiDialog extends AbstractAction {
@@ -1657,134 +1663,18 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   
   protected GeoRecorder getRecorder() {
     GeoRecorder rec = new GeoRecorder();
-    if(getAngleCheck().isSelected()) {
-      rec.addGeoquant(Angle.class);
-    }
-    if(getAreaCheck().isSelected()) {
-      rec.addGeoquant(Area.class);
-    }
-    if(getConeAngleCheck().isSelected()) {
-      rec.addGeoquant(ConeAngle.class);
-    }
-    if(getCurv2DCheck().isSelected()) {
-      rec.addGeoquant(Curvature2D.class);
-    }
-    if(getCurv3DCheck().isSelected()) {
-      rec.addGeoquant(Curvature3D.class);
-    }
-    if(getDihAngleCheck().isSelected()) {
-      rec.addGeoquant(DihedralAngle.class);
-    }
-    if(getDualAreaCheck().isSelected()) {
-      rec.addGeoquant(DualArea.class);
-    }
-    if(getEdgeHeightCheck().isSelected()) {
-      rec.addGeoquant(EdgeHeight.class);
-    }
-    if(getEtaCheck().isSelected()) {
-      rec.addGeoquant(Eta.class);
-    }
-    if(getFaceHeightCheck().isSelected()) {
-      rec.addGeoquant(FaceHeight.class);
-    }
-    if(getLengthCheck().isSelected()) {
-      rec.addGeoquant(Length.class);
-    }
-    if(getVehrCheck().isSelected()) {
-      rec.addGeoquant(VEHR.class);
-    }
-    if(getPartialEdgeCheck().isSelected()) {
-      rec.addGeoquant(PartialEdge.class);
-    }
-    if(getRadiusCheck().isSelected()) {
-      rec.addGeoquant(Radius.class);
-    }
-    if(getVolumeCheck().isSelected()) {
-      rec.addGeoquant(Volume.class);
-    }
-    
-    // Partials
-    if(getCurvPartialCheck().isSelected()) {
-      rec.addGeoquant(Curvature3D.Partial.class);
-    }
-    if(getDihAnglePartialCheck().isSelected()) {
-      rec.addGeoquant(DihedralAngle.Partial.class);
-    }
-    if(getVehrPartialCheck().isSelected()) {
-      rec.addGeoquant(VEHR.Partial.class);
-    }
-    if(getPartialEdgePartialCheck().isSelected()) {
-      rec.addGeoquant(PartialEdge.Partial.class);
-    }
-    if(getRadiusPartialCheck().isSelected()) {
-      rec.addGeoquant(Radius.Partial.class);
-    }
-    if(getVolumePartialCheck().isSelected()) {
-      rec.addGeoquant(Volume.Partial.class);
-    }
-    
-    // Second Partials
-    if(getCurvatureSecondPartialCheck().isSelected()) {
-      rec.addGeoquant(Curvature3D.SecondPartial.class);
-    }
-    if(getDihAngleSecondPartialCheck().isSelected()) {
-      rec.addGeoquant(DihedralAngle.SecondPartial.class);
-    }
-    if(getVehrSecondPartialCheck().isSelected()) {
-      rec.addGeoquant(VEHR.SecondPartial.class);
-    }
-    if(getPartialEdgeSecondPartialCheck().isSelected()) {
-      rec.addGeoquant(PartialEdge.SecondPartial.class);
-    }
-    if(getVolumeSecondPartialCheck().isSelected()) {
-      rec.addGeoquant(Volume.SecondPartial.class);
-    }
-    
-    // Sums
-    if(getTotalCurvatureCheck().isSelected()) {
-      rec.addGeoquant(Curvature3D.Sum.class);
-    }
-    if(getTotalVolumeCheck().isSelected()) {
-      rec.addGeoquant(Volume.Sum.class);
-    }
-    if(getTotalVolumePartialCheck().isSelected()) {
-      rec.addGeoquant(Volume.PartialSum.class);
-    }
-    if(getTotalVolumeSecondPartialCheck().isSelected()) {
-      rec.addGeoquant(Volume.SecondPartialSum.class);
-    }
-    
-    if(getLehrCheck().isSelected()) {
-      rec.addGeoquant(LEHR.class);
-    }
-    if(getLcscCheck().isSelected()) {
-      rec.addGeoquant(LCSC.class);
-    }
-    if(getVcscCheck().isSelected()) {
-      rec.addGeoquant(VCSC.class);
-    }
-    if(getLEinsteinCheck().isSelected()) {
-      rec.addGeoquant(LEinstein.class);
-    }
-    if(getVEinsteinCheck().isSelected()) {
-      rec.addGeoquant(VEinstein.class);
-    }
-    if(getEdgeCurvatureCheck().isSelected()) {
-      rec.addGeoquant(EdgeCurvature.class);
+    for(Class<? extends Geoquant> c : getSelectedList()) {
+      rec.addGeoquant(c);
     }
     return rec;
   }
-  
-  
-  protected void showGeoquantHistory(GeoRecorder rec) {
     
-  }
-  
   private JMenuItem getSaveGeoquantsMenuItem() {
 	  if(saveGeoquantsMenuItem == null) {
 		  saveGeoquantsMenuItem = new JMenuItem();
 		  saveGeoquantsMenuItem.setText("Save Geoquants");
 		  saveGeoquantsMenuItem.setAction(getSaveGeoquantAction());
+		  saveGeoquantsMenuItem.setEnabled(false);
 	  }
 	  return saveGeoquantsMenuItem;
   }
@@ -1794,6 +1684,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  saveGeoquantAction = new AbstractAction("Save Geoquants", null) {
         public void actionPerformed(ActionEvent e) {
           // Handle Save Button Action
+          getTriangulationFileChooser().setFileFilter(TXTFilter.getFilter());
           int returnVal = getTriangulationFileChooser().showSaveDialog(GeoquantViewer.this);
           
           if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -1814,184 +1705,9 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   }
   
   private void saveQuantities(PrintStream out) {
-
-    if(getAngleCheck().isSelected()) {
-      for(Angle q : Geometry.getAngles()) {
+    for(Class<? extends Geoquant> c : getSelectedList()) {
+      for(Geoquant q : Geometry.getGeoquants(c)) {
         out.println(q);
-      }
-    }
-    if(getAreaCheck().isSelected()) {
-      for(Area q : Geometry.getAreas()) {
-        out.println(q);
-      }
-    }
-    if(getConeAngleCheck().isSelected()) {
-      for(ConeAngle q : Geometry.getConeAngles()) {
-        out.println(q);
-      }
-    }
-    if(getCurv2DCheck().isSelected()) {
-      for(Curvature2D q : Geometry.getCurvature2D()) {
-        out.println(q);
-      }
-    }
-    if(getCurv3DCheck().isSelected()) {
-      for(Curvature3D q : Geometry.getCurvature3D()) {
-        out.println(q);
-      }
-    }
-    if(getDihAngleCheck().isSelected()) {
-      for(DihedralAngle q : Geometry.getDihedralAngles()) {
-        out.println(q);
-      }
-    }
-    if(getDualAreaCheck().isSelected()) {
-      for(DualArea q : Geometry.getDualAreas()) {
-        out.println(q);
-      }
-    }
-    if(getEdgeHeightCheck().isSelected()) {
-      for(EdgeHeight q : Geometry.getEdgeHeights()) {
-        out.println(q);
-      }
-    }
-    if(getEtaCheck().isSelected()) {
-      for(Eta q : Geometry.getEtas()) {
-        out.println(q);
-      }
-    }
-    if(getFaceHeightCheck().isSelected()) {
-      for(FaceHeight q : Geometry.getFaceHeights()) {
-        out.println(q);
-      }
-    }
-    if(getLengthCheck().isSelected()) {
-      for(Length q : Geometry.getLengths()) {
-        out.println(q);
-      }
-    }
-    if(getVehrCheck().isSelected()) {
-      out.println(VEHR.getInstance());
-    }
-    if(getPartialEdgeCheck().isSelected()) {
-      for(PartialEdge q : Geometry.getPartialEdges()) {
-        out.println(q);
-      }
-    }
-    if(getRadiusCheck().isSelected()) {
-      for(Radius q : Geometry.getRadii()) {
-        out.println(q);
-      }
-    }
-    if(getVolumeCheck().isSelected()) {
-      for(Volume q : Geometry.getVolumes()) {
-        out.println(q);
-      }
-    }
-    
-    // Partials
-    if(getCurvPartialCheck().isSelected()) {
-      for(Curvature3D.Partial q : Geometry.getCurvaturePartials()) {
-        out.println(q);
-      }
-    }
-    if(getDihAnglePartialCheck().isSelected()) {
-      for(DihedralAngle.Partial q : Geometry.getDihedralAnglePartials()) {
-        out.println(q);
-      }
-    }
-    if(getVehrPartialCheck().isSelected()) {
-      for(VEHR.Partial q : Geometry.getVEHRPartials()) {
-        out.println(q);
-      }
-    }
-    if(getPartialEdgePartialCheck().isSelected()) {
-      for(PartialEdge.Partial q : Geometry.getPartialEdgePartials()) {
-        out.println(q);
-      }
-    }
-    if(getRadiusPartialCheck().isSelected()) {
-      for(Radius.Partial q : Geometry.getRadiusPartials()) {
-        out.println(q);
-      }
-    }
-    if(getVolumePartialCheck().isSelected()) {
-      for(Volume.Partial q : Geometry.getVolumePartials()) {
-        out.println(q);
-      }
-    }
-    
-    // Second Partials
-    if(getCurvatureSecondPartialCheck().isSelected()) {
-      for(Curvature3D.SecondPartial q : Geometry.getCurvatureSecondPartials()) {
-        out.println(q);
-      }
-    }
-    if(getDihAngleSecondPartialCheck().isSelected()) {
-      for(DihedralAngle.SecondPartial q : Geometry.getDihedralAngleSecondPartials()) {
-        out.println(q);
-      }
-    }
-    if(getVehrSecondPartialCheck().isSelected()) {
-      for(VEHR.SecondPartial q : Geometry.getVEHRSecondPartials()) {
-        out.println(q);
-      }
-    }
-    if(getPartialEdgeSecondPartialCheck().isSelected()) {
-      for(PartialEdge.SecondPartial q : Geometry.getPartialEdgeSecondPartials()) {
-        out.println(q);
-      }
-    }
-    if(getVolumeSecondPartialCheck().isSelected()) {
-      for(Volume.SecondPartial q : Geometry.getVolumeSecondPartials()) {
-        out.println(q);
-      }
-    }
-    
-    // Sums
-    if(getTotalCurvatureCheck().isSelected()) {
-      out.println(Curvature3D.sum());
-    }
-    if(getTotalVolumeCheck().isSelected()) {
-      out.println(Volume.sum());
-    }
-    if(getTotalVolumePartialCheck().isSelected()) {
-      for(Volume.PartialSum q : Geometry.getVolumePartialSums()) {
-        out.println(q);
-      }
-    }
-    if(getTotalVolumeSecondPartialCheck().isSelected()) {
-      for(Volume.SecondPartialSum q : Geometry.getVolumeSecondPartialSums()) {
-        out.println(q);
-      }
-    }
-    
-    if(getLehrCheck().isSelected()) {
-      out.println(LEHR.getInstance());
-    }
-    if(getLcscCheck().isSelected()) {
-      for(LCSC lcsc : Geometry.getLCSC()) {
-        out.println(lcsc);
-      }
-    }
-    if(getVcscCheck().isSelected()) {
-      for(VCSC vcsc : Geometry.getVCSC()) {
-        out.println(vcsc);
-      }
-    }
-    if(getLEinsteinCheck().isSelected()) {
-      for(LEinstein le : Geometry.getLEinsteins()) {
-        out.println(le);
-      }
-    }
-    if(getVEinsteinCheck().isSelected()) {
-      for(VEinstein ve : Geometry.getVEinsteins()) {
-        out.println(ve);
-      }
-    }
-    if(getEdgeCurvatureCheck().isSelected()) {
-      for(EdgeCurvature c : Geometry.getEdgeCurvatures()) {
-        out.println(c);
       }
     }
   }
@@ -2194,22 +1910,29 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  return showFlowButton;
   }
   
+  private Timer getTimer() {
+    if(timer == null) {
+      timer = new Timer(100, new GeoTimerListener());
+    }
+    return timer;
+  }
+  
   private JButton getAnimateButton() {
 	  if(animateButton == null) {
 		  animateButton = new JButton();
 		  animateButton.setText("Animate");
 		  animateButton.setVisible(false);
 		  animateButton.addActionListener(new ActionListener(){
-		    private Timer timer;
+		    
         public void actionPerformed(ActionEvent evt) {
-          
-          int delay = 100;
-          try{
-            delay = Integer.parseInt(getDelayField().getText());
-          }catch(NumberFormatException exc) {}
-          timer = new Timer(delay, new GeoTimerListener());
-          timer.setInitialDelay(1000);
-          timer.start();
+          if(animateButton.getText().equals("Animate")) {
+            animateButton.setText("Stop");
+            getPolygonPanel().setStep(0);
+            getTimer().start();
+          } else {
+            animateButton.setText("Animate");
+            getTimer().stop();
+          }
         }
 		    
 		  });
@@ -2223,6 +1946,17 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  delayField.setText("100");
 		  delayField.setHorizontalAlignment(SwingConstants.TRAILING);
 		  delayField.setVisible(false);
+		  delayField.addActionListener(new ActionListener() {
+
+        public void actionPerformed(ActionEvent evt) {
+          int delay = getTimer().getDelay();
+          try{
+            delay = Integer.parseInt(delayField.getText());
+          } catch(NumberFormatException exc) {   }
+          getTimer().setDelay(delay);
+        }
+		    
+		  });
 	  }
 	  return delayField;
   }
@@ -2249,6 +1983,9 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  stepComboBox.addActionListener(new ActionListener() {
 
         public void actionPerformed(ActionEvent evt) {
+          if(getTimer().isRunning()) {
+            return;
+          }
           String stepName = (String) stepComboBox.getSelectedItem();
           int step = getPolygonPanel().getCurrentStep();
           try{
@@ -2289,17 +2026,76 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     getStepComboBox().setModel(stepComboBoxModel);
   }
   
+  private JMenuItem getSaveFlowMenuItem() {
+	  if(saveFlowMenuItem == null) {
+		  saveFlowMenuItem = new JMenuItem();
+		  saveFlowMenuItem.setText("Save Flow");
+		  saveFlowMenuItem.setAction(getSaveFlowAction());
+		  saveFlowMenuItem.setEnabled(false);
+	  }
+	  return saveFlowMenuItem;
+  }
+  
+  private AbstractAction getSaveFlowAction() {
+	  if(saveFlowAction == null) {
+		  saveFlowAction = new AbstractAction("Save Flow", null) {
+			  public void actionPerformed(ActionEvent evt) {
+          // Handle Save Button Action
+          getTriangulationFileChooser().setFileFilter(TXTFilter.getFilter());
+          int returnVal = getTriangulationFileChooser().showSaveDialog(GeoquantViewer.this);
+          
+          if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = getTriangulationFileChooser().getSelectedFile();
+            PrintStream out = null;
+            try {
+              out = new PrintStream(file);
+            } catch (FileNotFoundException e1) {
+              return;
+            }
+            saveFlow(out);
+            out.close();
+          }
+			  }
+		  };
+	  }
+	  return saveFlowAction;
+  }
+
+  private void saveFlow(PrintStream out) {
+    GeoRecorder rec = getPolygonPanel().getRecorder();
+    for(int i = 0; i < rec.getNumSteps(); i++) {
+      out.println("Step " + i + ":\n-----------------------");
+      for(Class<? extends Geoquant> c : selectedList) {
+        List<List<String>> lists = rec.getPrintableHistory(c);
+        if(lists != null && i < lists.size()) {
+          List<String> list = lists.get(i);
+          for(String desc : list) {
+            out.println(desc);
+          }
+        }
+      }
+      out.println();
+    }
+  }
+  
   private class GeoTimerListener implements ActionListener {
 
     public void actionPerformed(ActionEvent evt) {
       int currentStep = getPolygonPanel().getCurrentStep() + 1;
-      if(currentStep < getPolygonPanel().getRecorder().getNumSteps()) {
+      if(currentStep < getPolygonPanel().getRecorder().getNumSteps()
+          && getPolygonPanel().getForm() == Form.step) {
         getPolygonPanel().setStep(currentStep);
         getPolygonPanel().repaint();
+      } else {
+        getAnimateButton().doClick();
       }
     }
   }
 
-  //private class Animate
+  protected void newFlow() {
+    getShowFlowButton().setEnabled(true);
+    getSaveFlowMenuItem().setEnabled(true);
+  }
+
 }
 
