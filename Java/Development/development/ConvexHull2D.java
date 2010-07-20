@@ -73,13 +73,13 @@ public class ConvexHull2D {
     return points;
   }
 
-  public Face getAsFace() {
+  public EmbeddedFace getAsFace() {
     Vector3D[] vectors = new Vector3D[points.size()];
     for(int i = 0; i < vectors.length; i++) {
       Vector point = points.get(i);
       vectors[i] = new Vector3D(point.getComponent(0), point.getComponent(1), 0);
       System.out.println(vectors[i].toString());
     }
-    return new Face(vectors);
+    return new EmbeddedFace(vectors);
   }
 }

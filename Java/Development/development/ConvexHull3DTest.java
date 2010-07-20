@@ -154,8 +154,8 @@ public class ConvexHull3DTest {
   }
 
   public static void colorVisible(ConvexHull3D hull) {
-    ArrayList<Face> hiddenFaces = hull.getHiddenFaces();
-    ArrayList<Face> visibleFaces = hull.getVisibleFaces();
+    ArrayList<EmbeddedFace> hiddenFaces = hull.getHiddenFaces();
+    ArrayList<EmbeddedFace> visibleFaces = hull.getVisibleFaces();
 
     removeChildren(sgc_root);
     sgc_root.addChild(sgc_point);
@@ -173,8 +173,8 @@ public class ConvexHull3DTest {
   }
 
   public static void colorNewFaces(ConvexHull3D hull) {
-    ArrayList<Face> hiddenFaces = hull.getHiddenFaces();
-    ArrayList<Face> newFaces = hull.getNewFaces();
+    ArrayList<EmbeddedFace> hiddenFaces = hull.getHiddenFaces();
+    ArrayList<EmbeddedFace> newFaces = hull.getNewFaces();
 
     removeChildren(sgc_root);
     sgc_root.addChild(sgc_point);

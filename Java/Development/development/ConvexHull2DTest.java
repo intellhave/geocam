@@ -23,7 +23,7 @@ public class ConvexHull2DTest {
     sgc_root.addTool(new RotateTool());
     hull = new ConvexHull2D(list);
 
-    Face f = hull.getAsFace();
+    EmbeddedFace f = hull.getAsFace();
     sgc_root.setGeometry(f.getGeometry(Color.blue));
 
     // set up the main JRViewer
