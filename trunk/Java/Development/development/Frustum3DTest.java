@@ -27,7 +27,7 @@ public class Frustum3DTest {
   private static Frustum3D f1, f2, f3, f2_initial;
   private static SceneGraphComponent sgc_root, sgcf1, sgcf2, sgcf3;
   
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
     Vector3D f1a = new Vector3D(1, 1, 1);
     Vector3D f1b = new Vector3D(-1, 1, 1);
     Vector3D f1c = new Vector3D(-1, -1, 1);
@@ -85,8 +85,8 @@ public class Frustum3DTest {
                         -Math.sin(angle), Math.cos(angle), 0, 0,
                         0, 0, 1, 0,
                         0, 0, 0, 1 );
-    ArrayList<Vector3D> newVectors = new ArrayList<Vector3D>();
-    for(int i = 0; i < f2.getNumberVectors(); i++) {
+    ArrayList<Vector> newVectors = new ArrayList<Vector>();
+    for(int i = 0; i < f2.getNumberRays(); i++) {
       double[] vector = f2_initial.getVectorAt(i).getVectorAsArray();
       Rz.transformVector(vector);
       Vector3D normalized = new Vector3D(vector[0], vector[1], vector[2]);
@@ -101,13 +101,13 @@ public class Frustum3DTest {
   }
 
   private static Geometry getGeometry(Frustum3D f, Color color) {
-    double[][] ifsf_verts = new double[f.getNumberVectors() + 1][3];
-    int[][] ifsf_faces = new int[f.getNumberVectors()][3];
+    double[][] ifsf_verts = new double[f.getNumberRays() + 1][3];
+    int[][] ifsf_faces = new int[f.getNumberRays()][3];
     ifsf_verts[0] = new double[] { 0, 0, 0 };
 
-    for (int i = 1; i < f.getNumberVectors() + 1; i++) {
+    for (int i = 1; i < f.getNumberRays() + 1; i++) {
       ifsf_verts[i] = f.getVectorAt(i - 1).getVectorAsArray();
-      if (i - 1 == f.getNumberVectors() - 1)
+      if (i - 1 == f.getNumberRays() - 1)
         ifsf_faces[i - 1] = new int[] { 0, i, 1 };
       else
         ifsf_faces[i - 1] = new int[] { 0, i, i + 1 };
@@ -128,15 +128,15 @@ public class Frustum3DTest {
   }
 
   private static Geometry getIntersectionGeometry(Frustum3D f, Color color) {
-    double[][] ifsf_verts = new double[f.getNumberVectors() + 1][3];
-    int[][] ifsf_faces = new int[1][f.getNumberVectors() + 1];
-    ifsf_verts = new double[f.getNumberVectors()][3];
+    double[][] ifsf_verts = new double[f.getNumberRays() + 1][3];
+    int[][] ifsf_faces = new int[1][f.getNumberRays() + 1];
+    ifsf_verts = new double[f.getNumberRays()][3];
 
-    for (int i = 0; i < f.getNumberVectors(); i++) {
+    for (int i = 0; i < f.getNumberRays(); i++) {
       ifsf_verts[i] = f.getVectorAt(i).getVectorAsArray();
       ifsf_faces[0][i] = i;
     }
-    ifsf_faces[0][f.getNumberVectors()] = 0;
+    ifsf_faces[0][f.getNumberRays()] = 0;
 
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
     ifsf.setVertexCount(ifsf_verts.length);

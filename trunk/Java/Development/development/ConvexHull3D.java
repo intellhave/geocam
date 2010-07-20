@@ -5,11 +5,11 @@ import java.util.HashSet;
 
 public class ConvexHull3D {
   private static final double epsilon = Math.pow(10, -6);
-  private ArrayList<Face> faces = new ArrayList<Face>();
+  private ArrayList<EmbeddedFace> faces = new ArrayList<EmbeddedFace>();
   private ArrayList<Vector> unsorted;
-  private ArrayList<Face> visible = new ArrayList<Face>();
-  private ArrayList<Face> hiddenFaces = new ArrayList<Face>();
-  private ArrayList<Face> newF = new ArrayList<Face>();
+  private ArrayList<EmbeddedFace> visible = new ArrayList<EmbeddedFace>();
+  private ArrayList<EmbeddedFace> hiddenFaces = new ArrayList<EmbeddedFace>();
+  private ArrayList<EmbeddedFace> newF = new ArrayList<EmbeddedFace>();
   private ArrayList<Vector> vertices = new ArrayList<Vector>();
   private Vector lastPoint = null;
 
@@ -27,11 +27,11 @@ public class ConvexHull3D {
   }
 
   public ConvexHull3D(ConvexHull3D original) {
-    faces = new ArrayList<Face>();
+    faces = new ArrayList<EmbeddedFace>();
     unsorted = new ArrayList<Vector>();
 
     for (int i = 0; i < original.getNumberFaces(); i++) {
-      faces.add(new Face(original.getFaceAt(i)));
+      faces.add(new EmbeddedFace(original.getFaceAt(i)));
     }
     ArrayList<Vector> oldUnsorted = original.getUnsorted();
     for (int i = 0; i < oldUnsorted.size(); i++) {
@@ -47,14 +47,14 @@ public class ConvexHull3D {
     return faces.size();
   }
   
-  public Face getFaceAt(int i) {
+  public EmbeddedFace getFaceAt(int i) {
     return faces.get(i);
   }
   
-  public ArrayList<Face> getFaces() {
-    ArrayList<Face> list = new ArrayList<Face>();
+  public ArrayList<EmbeddedFace> getFaces() {
+    ArrayList<EmbeddedFace> list = new ArrayList<EmbeddedFace>();
     for(int i = 0; i < faces.size(); i++)
-      list.add(new Face(faces.get(i)));
+      list.add(new EmbeddedFace(faces.get(i)));
     return list;
   }
   
@@ -63,15 +63,15 @@ public class ConvexHull3D {
     return lastPoint;
   }
 
-  public ArrayList<Face> getHiddenFaces() {
+  public ArrayList<EmbeddedFace> getHiddenFaces() {
     return hiddenFaces;
   }
   
-  public ArrayList<Face> getVisibleFaces() {
+  public ArrayList<EmbeddedFace> getVisibleFaces() {
     return visible;
   }
   
-  public ArrayList<Face> getNewFaces() {
+  public ArrayList<EmbeddedFace> getNewFaces() {
     return newF;
   }
   
@@ -97,17 +97,17 @@ public class ConvexHull3D {
       i++;
     }
 
-    Face f1 = new Face(unsorted.get(0), unsorted.get(1), unsorted.get(2));
+    EmbeddedFace f1 = new EmbeddedFace(unsorted.get(0), unsorted.get(1), unsorted.get(2));
     double dot = Vector.dot(f1.getNormal(), Vector.subtract(
         unsorted.get(i), unsorted.get(0)));
     if (dot > 0) { // change order
-      f1 = new Face(unsorted.get(0), unsorted.get(2), unsorted.get(1));
+      f1 = new EmbeddedFace(unsorted.get(0), unsorted.get(2), unsorted.get(1));
     }
 
     // complete initial tetrahedron
-    Face f2 = new Face(f1.getVectorAt(1), f1.getVectorAt(0), unsorted.get(i));
-    Face f3 = new Face(f1.getVectorAt(2), f1.getVectorAt(1), unsorted.get(i));
-    Face f4 = new Face(f1.getVectorAt(0), f1.getVectorAt(2), unsorted.get(i));
+    EmbeddedFace f2 = new EmbeddedFace(f1.getVectorAt(1), f1.getVectorAt(0), unsorted.get(i));
+    EmbeddedFace f3 = new EmbeddedFace(f1.getVectorAt(2), f1.getVectorAt(1), unsorted.get(i));
+    EmbeddedFace f4 = new EmbeddedFace(f1.getVectorAt(0), f1.getVectorAt(2), unsorted.get(i));
 
     unsorted.remove(i);
     unsorted.remove(2);
@@ -153,8 +153,8 @@ public class ConvexHull3D {
     visible.clear();
     hiddenFaces.clear();
     System.out.println("adding point: " + v);
-    ArrayList<Face> visibleFaces = new ArrayList<Face>();
-    ArrayList<Face> coplanarFaces = new ArrayList<Face>();
+    ArrayList<EmbeddedFace> visibleFaces = new ArrayList<EmbeddedFace>();
+    ArrayList<EmbeddedFace> coplanarFaces = new ArrayList<EmbeddedFace>();
 
     for (int i = 0; i < faces.size(); i++) {
       double dot = Vector.dot(faces.get(i).getNormal(), Vector.subtract(v,
@@ -181,12 +181,12 @@ public class ConvexHull3D {
       System.out.println(vertices.get(i));
     }
 
-    ArrayList<Face> newFaces = getNewFaces(vertices, v);
+    ArrayList<EmbeddedFace> newFaces = getNewFaces(vertices, v);
 
     System.out.println("coplanarFaces.size() = " + coplanarFaces.size());
     for (int i = 0; i < coplanarFaces.size(); i++) {
-      Face coplanarFace = coplanarFaces.get(i);
-      Face newFace = null;
+      EmbeddedFace coplanarFace = coplanarFaces.get(i);
+      EmbeddedFace newFace = null;
       for (int j = 0; j < newFaces.size(); j++) {
         if (newFaces.get(j).sharesEdgeWith(coplanarFace)) {
           newFace = newFaces.get(j);
@@ -211,9 +211,9 @@ public class ConvexHull3D {
    * on to the next face containing the current vertex. Continues until it finds
    * a good edge ending at the start vertex.
    */
-  private ArrayList<Vector> findAttachmentLoop(ArrayList<Face> visibleFaces,
+  private ArrayList<Vector> findAttachmentLoop(ArrayList<EmbeddedFace> visibleFaces,
       ArrayList<HashSet<Vector>> badEdges) {
-    Face cur_face = visibleFaces.get(0);
+    EmbeddedFace cur_face = visibleFaces.get(0);
     Vector start = cur_face.getVectorAt(0);
     Vector cur_vec = cur_face.getVectorAt(0);
     Vector next_vec = cur_face.getVectorAt(1);
@@ -272,7 +272,7 @@ public class ConvexHull3D {
    * before the non-shared vertex. Then adds from oldFace in ccw order
    * between the last and first added from newFace.
    */
-  private void mergeFaces(Face oldFace, Face newFace) {
+  private void mergeFaces(EmbeddedFace oldFace, EmbeddedFace newFace) {
     System.out.println("merging faces: ");
     System.out.println("oldFace");
     for(int i = 0; i < oldFace.getNumberVertices(); i++) {
@@ -331,7 +331,7 @@ public class ConvexHull3D {
     }
     System.out.println();
 
-    faces.add(new Face(vectors));
+    faces.add(new EmbeddedFace(vectors));
   }
 
   /*
@@ -339,18 +339,18 @@ public class ConvexHull3D {
    * list. Assumes vertices are in counter-clockwise order, looking in; creates
    * new faces similarly counter-clockwise.
    */
-  private ArrayList<Face> getNewFaces(ArrayList<Vector> vertices,
+  private ArrayList<EmbeddedFace> getNewFaces(ArrayList<Vector> vertices,
       Vector point) {
-    ArrayList<Face> newFaces = new ArrayList<Face>();
+    ArrayList<EmbeddedFace> newFaces = new ArrayList<EmbeddedFace>();
     newF.clear();
     for (int i = 0; i < vertices.size() - 1; i++) {
-      newFaces.add(new Face(vertices.get(i), vertices.get(i + 1), point));
-      newF.add(new Face(vertices.get(i), vertices.get(i + 1), point)); // TODO for testing
+      newFaces.add(new EmbeddedFace(vertices.get(i), vertices.get(i + 1), point));
+      newF.add(new EmbeddedFace(vertices.get(i), vertices.get(i + 1), point)); // TODO for testing
 
     }
-    newFaces.add(new Face(vertices.get(vertices.size() - 1), vertices.get(0),
+    newFaces.add(new EmbeddedFace(vertices.get(vertices.size() - 1), vertices.get(0),
         point));
-    newF.add(new Face(vertices.get(vertices.size() - 1), vertices.get(0),
+    newF.add(new EmbeddedFace(vertices.get(vertices.size() - 1), vertices.get(0),
         point)); // TODO for testing
     
     return newFaces;
@@ -360,13 +360,13 @@ public class ConvexHull3D {
    * Returns a list of all pairs of vertices contained in more than one face in
    * the given list.
    */
-  private ArrayList<HashSet<Vector>> getBadEdges(ArrayList<Face> faces) {
+  private ArrayList<HashSet<Vector>> getBadEdges(ArrayList<EmbeddedFace> faces) {
     ArrayList<HashSet<Vector>> pairs = new ArrayList<HashSet<Vector>>();
     for (int i = 0; i < faces.size(); i++) {
-      Face cur = faces.get(i);
+      EmbeddedFace cur = faces.get(i);
       for (int j = 0; j < cur.getNumberVertices(); j++) {
         for (int k = i + 1; k < faces.size(); k++) {
-          Face next = faces.get(k);
+          EmbeddedFace next = faces.get(k);
           if (next.hasVertex(cur.getVectorAt(j))
               && next.hasVertex(cur.getVectorAt((j + 1)
                   % cur.getNumberVertices()))) {

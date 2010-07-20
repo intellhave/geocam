@@ -2,29 +2,27 @@ package development;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
 
-public class Face {
+public class EmbeddedFace {
   private ArrayList<Vector> vectors_;
   private Vector normal_;
 
   // expects vectors in counter-clockwise order
-  public Face(ArrayList<Vector> v) {
+  public EmbeddedFace(ArrayList<Vector> v) {
     vectors_ = v;
     findNormal();
   }
 
-  public Face(Vector... vectors) {
+  public EmbeddedFace(Vector... vectors) {
     vectors_ = new ArrayList<Vector>();
     for(int i = 0; i < vectors.length; i++)
       vectors_.add(vectors[i]);
     findNormal();
   }
   
-  public Face(Face face) {
+  public EmbeddedFace(EmbeddedFace face) {
     vectors_ = new ArrayList<Vector>();
     ArrayList<Vector> oldVectors = face.getVectors();
     for(int i = 0; i < oldVectors.size(); i++) {
@@ -108,7 +106,7 @@ public class Face {
     return false;
   }
 
-  public boolean sharesEdgeWith(Face face) {
+  public boolean sharesEdgeWith(EmbeddedFace face) {
     int count = 0;
     for(int i = 0; i < face.getNumberVertices(); i++) {
       if(vectors_.contains(face.getVectorAt(i)))
@@ -118,11 +116,11 @@ public class Face {
     return count > 1;
   }
   
-  public void shift(Vector t){
-    Iterator<Vector> i = vectors_.iterator();
-    while(i.hasNext()){
-      Vector v = i.next();
-      v.add(t);
+  public String toString() {
+    String result = "";
+    for(int i = 0; i < this.getNumberVertices(); i++) {
+      result += this.getVectorAt(i) + "\n";
     }
+    return result;
   }
 }

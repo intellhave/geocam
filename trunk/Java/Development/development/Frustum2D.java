@@ -71,7 +71,7 @@ public class Frustum2D {
     return null; // no intersection
   }
 
-  public Face clipFace(Face toClip) {
+  public EmbeddedFace clipFace(EmbeddedFace toClip) {
     int left_intersections = 0;
     ArrayList<Vector> vertices = new ArrayList<Vector>();
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
@@ -83,7 +83,7 @@ public class Frustum2D {
         System.out.println("false");
     }
     if (vertices.size() == toClip.getNumberVertices())
-      return new Face(toClip); // all vertices contained in frustum
+      return new EmbeddedFace(toClip); // all vertices contained in frustum
 
     ArrayList<Vector> intersections = new ArrayList<Vector>();
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
@@ -93,27 +93,20 @@ public class Frustum2D {
       Vector v = findIntersection(a, b, this.right);
       if (v != null && notTooCloseToAnyOf(vertices, v))
         intersections.add(v);
-      else
-        System.out.println("doesn't contain right");
+
       v = findIntersection(a, b, this.left);
       if (v != null && notTooCloseToAnyOf(vertices, v)) {
         left_intersections++;
         intersections.add(v);
       }
-      else
-        System.out.println("doesn't contain left");
     }
     vertices.addAll(intersections);
     if(left_intersections == 1) vertices.add(new Vector(0, 0));
-    System.out.println("found these intersections");
-    for (int i = 0; i < intersections.size(); i++) {
-      System.out.println(intersections.get(i));
-    }
-    System.out.println();
+
     if (vertices.isEmpty())
       return null;
     ConvexHull2D hull = new ConvexHull2D(vertices);
-    return new Face(hull.getPoints());
+    return new EmbeddedFace(hull.getPoints());
   }
 
   /*
@@ -143,7 +136,7 @@ public class Frustum2D {
    * Returns the intersection of the line formed by points a and b with the ray
    * from the origin through v. ( ( y1 = (w2/w1)(x-s) + t, y2 = (v2/v1)x )
    */
-  public Vector findIntersection(Vector a, Vector b, Vector v) {
+  private Vector findIntersection(Vector a, Vector b, Vector v) {
     Vector w = Vector.subtract(b, a);
     double w1 = w.getComponent(0);
     double w2 = w.getComponent(1);

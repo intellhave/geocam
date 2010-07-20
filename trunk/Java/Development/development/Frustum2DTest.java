@@ -25,12 +25,12 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 public class Frustum2DTest {
   private static SceneGraphComponent sgc_root, sgc_face, sgc_frustum, sgc_initial_face;
   private static Frustum2D frustum, frustum_initial;
-  private static Face face_initial, face;
+  private static EmbeddedFace face_initial, face;
 
   public static void main(String[] args) {
     frustum = new Frustum2D(new Vector(0, 4), new Vector(4, 4));
     frustum_initial = new Frustum2D(frustum);
-    face_initial = new Face(new Vector(1, 1), new Vector(-1, 1),
+    face_initial = new EmbeddedFace(new Vector(1, 1), new Vector(-1, 1),
         new Vector(-1, -1), new Vector(1, -1));
     face = frustum.clipFace(face_initial);
 
