@@ -1,6 +1,7 @@
 package development;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -10,6 +11,7 @@ import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.scene.Appearance;
+import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
@@ -20,7 +22,6 @@ import de.jreality.shader.ShaderUtility;
 
 import InputOutput.TriangulationIO;
 import Triangulation.*;
-import Triangulation.Face;
 import Geoquant.*;
 
 public class DevelopmentApp2D {
@@ -86,23 +87,32 @@ public class DevelopmentApp2D {
     
     //pick some arbitrary face
     i = Triangulation.faceTable.keySet().iterator();
-    Face face = Triangulation.faceTable.get(i.next());
+    Face source_face = Triangulation.faceTable.get(i.next());
+
+    Vector source = new Vector(0,0);
+    Iterator<Vertex> iv = source_face.getLocalVertices().iterator();
+    while(iv.hasNext()){
+      source.add(Coord2D.coordAt(iv.next(), source_face));
+    }
+    source.scale(1/3);
+    //get initial affine transformation moving source to the origin
+    AffineTransformation T = new AffineTransformation(Vector.scale(source,-1));
 
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
-    SceneGraphComponent sgc_face1 = sgcFromFace(face, new AffineTransformation(2), Color.RED);
+    SceneGraphComponent sgc_face1 = sgcFromFace(source_face, T, Color.RED);
     SceneGraphComponent sgc_points = sgcFromPoints2D(new Vector[] { new Vector(0,0) });
     sgc_root.addChild(sgc_face1);
     sgc_root.addChild(sgc_points);
     //sgc_root.addChild(sgc_mfld);
     //sgc_root.addChild(EmbeddedTriangulation.getSGC());
     
-    //loop through tetra's neighbors, adding them in the right place
-    Iterator<Face> k = face.getLocalFaces().iterator();
-    while(k.hasNext()){
-      Face face2 = k.next();
-      AffineTransformation atTrans12 = CoordTrans2D.affineTransAt(face2,face);
-      sgc_root.addChild(sgcFromFace(face2, atTrans12, Color.WHITE));
+    //find 'development edge info' for this face, and iterate development
+    ArrayList<DevelopmentEdgeInfo> deInfoList = getDevelopmentEdgeInfo(source_face, T);
+    for(int j=0; j<deInfoList.size(); j++){
+      DevelopmentEdgeInfo deInfo = deInfoList.get(j);
+      Frustum2D frust = new Frustum2D(deInfo.vect0_,deInfo.vect1_);
+      iterateDevelopment(sgc_root,deInfo.F_,source_face,frust,T);
     }
     
     //jrviewer
@@ -113,6 +123,118 @@ public class DevelopmentApp2D {
     jrv.registerPlugin(new ContentLoader());
     jrv.registerPlugin(new ContentTools());
     jrv.startup();
+    
+    
+    JRViewer jrv_embedded = new JRViewer();
+    jrv_embedded.addBasicUI();
+    jrv_embedded.registerPlugin(new ContentTools());
+    jrv_embedded.setContent(EmbeddedTriangulation.getSGC());
+    //jrv_embedded.startup();
+    
+  }
+  
+  //struct holding info necc to develop off an edge
+  private static class DevelopmentEdgeInfo{
+    public Vector vect0_,vect1_;
+    public Vertex vert0_,vert1_;
+    Face F_;
+
+    public DevelopmentEdgeInfo(Vertex vert0, Vertex vert1, Vector vect0, Vector vect1, Face F){
+      vect0_ = vect0; vect1_ = vect1;
+      vert0_ = vert0; vert1_ = vert1;
+      F_ = F;
+    }
+  };
+  
+  public static ArrayList<DevelopmentEdgeInfo> getDevelopmentEdgeInfo(Face F, AffineTransformation T){
+    ArrayList<DevelopmentEdgeInfo> retinfo = new ArrayList<DevelopmentEdgeInfo>();
+    
+    //get verts
+    Vertex[] vert = new Vertex[3];
+    Iterator<Vertex> iv = F.getLocalVertices().iterator();
+    for(int i=0; i<3; i++){
+      vert[i] = iv.next();
+    }
+    
+    //get vects
+    Vector[] vect = new Vector[3];
+    for(int i=0; i<3; i++){
+      try { vect[i] = T.affineTransPoint(Coord2D.coordAt(vert[i], F)); }
+      catch (Exception e) { e.printStackTrace(); }
+    }
+    
+    //get faces
+    Face[] face = new Face[3];
+    Iterator<Face> fi = F.getLocalFaces().iterator();
+    while(fi.hasNext()){
+      Face ftemp = fi.next();
+      //see which verts are in common with F
+      boolean[] vmatch = new boolean[3];
+      vmatch[0] = false; vmatch[1] = false; vmatch[2] = false;
+      Iterator<Vertex> vi = ftemp.getLocalVertices().iterator();
+      while(vi.hasNext()){
+        Vertex vtemp = vi.next();
+        if(vtemp == vert[0]){ vmatch[0] = true; }
+        if(vtemp == vert[1]){ vmatch[1] = true; }
+        if(vtemp == vert[2]){ vmatch[2] = true; }
+      }
+      //now figure out based on vmatch which order to list the incident faces
+      //we want face[k] to be the one sharing vert[k] and vert[(k+1)%3]
+      if(vmatch[0] == false){ face[1] = ftemp; }
+      if(vmatch[1] == false){ face[2] = ftemp; }
+      if(vmatch[2] == false){ face[0] = ftemp; }
+    }
+    
+    //see if CCW
+    Vector u = Vector.subtract(vect[1], vect[0]);
+    Vector v = Vector.subtract(vect[2], vect[0]);
+    double z = u.getComponent(0)*v.getComponent(1) - u.getComponent(1)*v.getComponent(0);
+    if(z < 0){ //flip orientation
+      Vertex tempvert = vert[2];
+      Vector tempvect = vect[2];
+      Face tempface = face[2];
+      vert[2] = vert[1];
+      vect[2] = vect[1];
+      face[2] = face[1];
+      vert[1] = tempvert;
+      vect[1] = tempvect;
+      face[1] = tempface;
+    }
+    
+    //add to return list
+    retinfo.add(new DevelopmentEdgeInfo(vert[0],vert[1],vect[0],vect[1],face[0]));
+    retinfo.add(new DevelopmentEdgeInfo(vert[1],vert[2],vect[1],vect[2],face[1]));
+    retinfo.add(new DevelopmentEdgeInfo(vert[2],vert[0],vect[2],vect[0],face[2]));
+    
+    return retinfo;
+  }
+  
+  public static void iterateDevelopment(SceneGraphComponent sgc_root, Face new_face, Face source_face, Frustum2D current_frustum, AffineTransformation current_trans){
+    
+    AffineTransformation new_trans = new AffineTransformation(CoordTrans2D.affineTransAt(new_face, source_face));
+    new_trans.leftMultiply(current_trans);
+    
+    //get transformed points from new_face
+    ArrayList<Vector> efpts = new ArrayList<Vector>();
+    Iterator<Vertex> i = new_face.getLocalVertices().iterator();
+    while(i.hasNext()){
+      Vertex vert = i.next();
+      Vector pt = Coord2D.coordAt(vert, new_face);
+      try{ new_trans.affineTransPoint(pt); }catch(Exception e1){ e1.printStackTrace(); }
+      efpts.add(pt);
+    }
+    
+    //make embeddedface
+    /*EmbeddedFace ef = new EmbeddedFace(efpts);
+    
+    //add clipped face to display
+    Geometry g = current_frustum.clipFace(ef).getGeometry(Color.WHITE);
+    SceneGraphComponent sgc_new_face = new SceneGraphComponent();
+    sgc_new_face.setGeometry(g);
+    sgc_root.addChild(sgc_new_face);*/
+    
+    //see which faces to continue developing on
+    
   }
 
   public static SceneGraphComponent sgcFromPoints2D(Vector[] points){
