@@ -26,4 +26,28 @@ public abstract class DESolver extends Observable{
 
     return x;
   }
+  
+  public double[] run(double[] initial, double stepsize, double precision) {
+    double[] curr = new double[initial.length];
+    double[] next = new double[initial.length];
+    for(int i = 0; i < initial.length; i++){
+      curr[i] = initial[i];
+    }
+    
+    double currentPrecision = 0;
+    do{
+      next = step(curr, stepsize);
+      currentPrecision = 0;
+      for(int i = 0; i < initial.length; i++) {
+        currentPrecision += Math.pow(next[i] - curr[i], 2);
+      }
+      currentPrecision = Math.sqrt(currentPrecision);
+      curr = next;
+      setChanged();
+      notifyObservers(curr);
+    } while(currentPrecision > precision);
+    
+    return curr;
+    
+  }
 }

@@ -27,13 +27,14 @@ import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import Triangulation.Triangulation;
+
 import Geoquant.GeoRecorder;
 import Geoquant.Geometry;
 import Geoquant.Geoquant;
 import Geoquant.Radius;
 import Geoquant.Geometry.Dimension;
 import Solvers.*;
-import Triangulation.Triangulation;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo
@@ -60,10 +61,8 @@ public class YamabeFlowDialog extends JDialog {
 	private Dimension dim;
 	private JLabel stepsizeLabel;
 	private JTextField stepsizeTextField;
-	private int currentStep = 0;
 	private static GeoRecorder rec;
 	private int numSteps;
-	private Timer timer;
 
 	public YamabeFlowDialog(GeoquantViewer owner, Dimension dim) {
 	  super(owner);
@@ -249,10 +248,22 @@ public class YamabeFlowDialog extends JDialog {
             solver.deleteObserver(rec);
             
             owner.getPolygonPanel().setRecorder(rec);
-            owner.getShowFlowButton().setEnabled(true);
-//            timer = new Timer(300, new TimerListener());
-//            timer.setInitialDelay(1000);
-//            timer.start();
+            owner.newFlow();
+            owner.getPolygonPanel().repaint();
+          } catch(NumberFormatException ex) {
+            
+          }
+        } else {
+          try{
+            double precision = Double.parseDouble(precisionTextField.getText());
+            double stepsize = Double.parseDouble(stepsizeTextField.getText());
+            rec = owner.getRecorder();
+            solver.addObserver(rec);
+            solver.run(radii, stepsize, precision);
+            solver.deleteObserver(rec);
+            
+            owner.getPolygonPanel().setRecorder(rec);
+            owner.newFlow();
             owner.getPolygonPanel().repaint();
           } catch(NumberFormatException ex) {
             
@@ -260,20 +271,6 @@ public class YamabeFlowDialog extends JDialog {
         }
       }
       YamabeFlowDialog.this.dispose();
-    }
-	  
-	}
-	
-	private class TimerListener implements ActionListener {
-
-    public void actionPerformed(ActionEvent evt) {
-      currentStep++;
-      if(currentStep < numSteps - 1) {
-        //getHistoryPanel().repaint();
-      } else {
-        currentStep = 0;
-        timer.stop();
-      }
     }
 	  
 	}

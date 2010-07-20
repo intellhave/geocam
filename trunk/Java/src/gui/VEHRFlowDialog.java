@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 
 import Flows.EtaOptNEHR;
 import Flows.RadiusOptNEHR;
+import Geoquant.GeoRecorder;
 import Solvers.WrongDirectionException;
 
 
@@ -226,72 +227,49 @@ public class VEHRFlowDialog extends JDialog {
         VEHRFlowDialog.this.setVisible(false);
         if(getRadFlowButton().isSelected()) {
           RadiusOptNEHR radNM = new RadiusOptNEHR();
-          double[] log_radii;
+          GeoRecorder rec = owner.getRecorder();
+          radNM.addObserver(rec);
+          double[] log_radii = radNM.getLogRadii();
           if(getMaxFlowButton().isSelected()) {
             try {
-              log_radii = radNM.getLogRadii();
-              while(radNM.stepMax(log_radii) > radNM.getStoppingCondition()) {
-                radNM.setLogRadii(log_radii);
-                owner.getPolygonPanel().repaint();
-              }
-              radNM.setLogRadii(log_radii);
-              owner.getPolygonPanel().repaint();
+              radNM.setLogRadii(radNM.maximize(log_radii));
             } catch (WrongDirectionException e) {
             }
           } else if(getMinFlowButton().isSelected()) {
             try {
-              log_radii = radNM.getLogRadii();
-              while(radNM.stepMin(log_radii) > radNM.getStoppingCondition()) {
-                radNM.setLogRadii(log_radii);
-                owner.getPolygonPanel().repaint();
-              }
-              radNM.setLogRadii(log_radii);
-              owner.getPolygonPanel().repaint();
+              radNM.setLogRadii(radNM.minimize(log_radii));
             } catch (WrongDirectionException e) {
             }
           } else {
-              log_radii = radNM.getLogRadii();
-              while(radNM.step(log_radii) > radNM.getStoppingCondition()) {
-                radNM.setLogRadii(log_radii);
-                owner.getPolygonPanel().repaint();
-              }
-              radNM.setLogRadii(log_radii);
-              owner.getPolygonPanel().repaint();
+            radNM.setLogRadii(radNM.optimize(log_radii));
           }
+          radNM.deleteObserver(rec);
+          owner.getPolygonPanel().setRecorder(rec);
+          owner.newFlow();
+          owner.getPolygonPanel().repaint();
         } else {
           EtaOptNEHR etaNM = new EtaOptNEHR();
-          double[] etas;
+          GeoRecorder rec = owner.getRecorder();
+          etaNM.addObserver(rec);
+          double[] etas = etaNM.getEtas();
+
           if(getMaxFlowButton().isSelected()) {
             try {
-              etas = etaNM.getEtas();
-              while(etaNM.stepMax(etas) > etaNM.getStoppingCondition()) {
-                etaNM.setEtas(etas);
-                owner.getPolygonPanel().repaint();
-              }
-              etaNM.setEtas(etas);
-              owner.getPolygonPanel().repaint();
+              etaNM.setEtas(etaNM.maximize(etas));
             } catch (WrongDirectionException e) {
             }
           } else if(getMinFlowButton().isSelected()) {
             try {
-              etas = etaNM.getEtas();
-              while(etaNM.stepMin(etas) > etaNM.getStoppingCondition()) {
-                etaNM.setEtas(etas);
-                owner.getPolygonPanel().repaint();
-              }
-              etaNM.setEtas(etas);
-              owner.getPolygonPanel().repaint();
+              etaNM.setEtas(etaNM.minimize(etas));
             } catch (WrongDirectionException e) {
             }
           } else {
-            etas = etaNM.getEtas();
-            while(etaNM.step(etas) > etaNM.getStoppingCondition()) {
-              etaNM.setEtas(etas);
-              owner.getPolygonPanel().repaint();
-            }
-            etaNM.setEtas(etas);
-            owner.getPolygonPanel().repaint();
+            etaNM.setEtas(etaNM.optimize(etas));
           }
+          etaNM.deleteObserver(rec);
+          owner.getPolygonPanel().setRecorder(rec);
+          owner.newFlow();
+          owner.getPolygonPanel().repaint();
         }
       }
       VEHRFlowDialog.this.dispose();
