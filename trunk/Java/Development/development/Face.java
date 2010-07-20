@@ -2,6 +2,8 @@ package development;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
 
@@ -114,5 +116,13 @@ public class Face {
     }
 
     return count > 1;
+  }
+  
+  public void shift(Vector t){
+    Iterator<Vector> i = vectors_.iterator();
+    while(i.hasNext()){
+      Vector v = i.next();
+      v.add(t);
+    }
   }
 }
