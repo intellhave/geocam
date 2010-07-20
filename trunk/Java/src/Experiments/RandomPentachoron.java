@@ -41,15 +41,6 @@ public class RandomPentachoron {
       }
     }
     
-    double length = 0;
-    for(int i=0; i < 5; i++){
-      for(int j=0; j < 4; j++){
-        length = length + Math.pow(vertices[i][j], 2);
-      }
-      System.out.println(Math.pow(length, .5));
-      length = 0;
-    }
-    
       for(int n = 1; n <= 5; n++){
         for(int m = 1; m <= 5; m++){
           Vertex v = Triangulation.vertexTable.get(n);
