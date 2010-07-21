@@ -1,4 +1,4 @@
-package exper;
+package experiments;
 import geoquant.Curvature3D;
 import geoquant.Length;
 import inputOutput.TriangulationIO;
