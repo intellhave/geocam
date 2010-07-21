@@ -2,7 +2,7 @@
 
 package tests;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,5 +1,5 @@
 package Experiments;
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;

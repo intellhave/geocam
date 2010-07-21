@@ -1,7 +1,7 @@
 package tests;
 
 import static org.junit.Assert.*;
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package tests;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import java.lang.Thread;
 import java.util.Hashtable;
