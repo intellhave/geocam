@@ -1,12 +1,13 @@
 package gui;
 
+import geo.GeoRecorder;
+import geo.Geoquant;
+
 import java.awt.Polygon;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import Geoquant.GeoRecorder;
-import Geoquant.Geoquant;
 
 public class StepGeoPanel extends GeoPolygonPanel {
   private GeoRecorder recorder;

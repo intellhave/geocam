@@ -1,14 +1,14 @@
 package Flows;
 
+import geo.Alpha;
+import geo.Eta;
+import geo.Geometry;
+import geo.Radius;
+import geo.VEHR;
 import inputOutput.TriangulationIO;
 import triangulation.Edge;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import Geoquant.Alpha;
-import Geoquant.Eta;
-import Geoquant.Geometry;
-import Geoquant.VEHR;
-import Geoquant.Radius;
 import Solvers.WrongDirectionException;
 
 

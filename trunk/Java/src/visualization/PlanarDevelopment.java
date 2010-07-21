@@ -1,5 +1,9 @@
 package visualization;
 
+import geo.Angle;
+import geo.Curvature2D;
+import geo.Length;
+
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -11,9 +15,6 @@ import triangulation.StdFace;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 
-import Geoquant.Angle;
-import Geoquant.Curvature2D;
-import Geoquant.Length;
 
 public class PlanarDevelopment {
 

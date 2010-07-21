@@ -1,11 +1,11 @@
 package FlipAlgorithm;
 
+import geo.Angle;
+import geo.PartialEdge;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import Geoquant.Angle;
-import Geoquant.PartialEdge;
 
 public class Delaunay {
   /*

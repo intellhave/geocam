@@ -1,5 +1,9 @@
 package gui;
 
+import geo.GeoRecorder;
+import geo.Geometry;
+import geo.Geoquant;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
@@ -18,9 +22,6 @@ import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.border.LineBorder;
 
-import Geoquant.GeoRecorder;
-import Geoquant.Geometry;
-import Geoquant.Geoquant;
 
 public class GeoPolygonPanel extends JPanel {
   protected List<GeoPoint> geoPoints;

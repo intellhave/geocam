@@ -1,5 +1,28 @@
 package tests;
 
+import geo.Alpha;
+import geo.Angle;
+import geo.Area;
+import geo.ConeAngle;
+import geo.Curvature2D;
+import geo.Curvature3D;
+import geo.DihedralAngle;
+import geo.DualArea;
+import geo.EdgeHeight;
+import geo.Eta;
+import geo.FaceHeight;
+import geo.Geometry;
+import geo.LCSC;
+import geo.LEHR;
+import geo.LEinstein;
+import geo.Length;
+import geo.PartialEdge;
+import geo.Radius;
+import geo.SectionalCurvature;
+import geo.VCSC;
+import geo.VEHR;
+import geo.VEinstein;
+import geo.Volume;
 import inputOutput.TriangulationIO;
 
 import java.io.File;
@@ -14,29 +37,6 @@ import util.Matrix;
 
 import Flows.CrossConformalFlow;
 import Flows.RadiusOptNEHR;
-import Geoquant.Alpha;
-import Geoquant.Angle;
-import Geoquant.Area;
-import Geoquant.ConeAngle;
-import Geoquant.Curvature2D;
-import Geoquant.Curvature3D;
-import Geoquant.DihedralAngle;
-import Geoquant.DualArea;
-import Geoquant.EdgeHeight;
-import Geoquant.Eta;
-import Geoquant.FaceHeight;
-import Geoquant.Geometry;
-import Geoquant.LCSC;
-import Geoquant.LEHR;
-import Geoquant.LEinstein;
-import Geoquant.Length;
-import Geoquant.VEHR;
-import Geoquant.PartialEdge;
-import Geoquant.Radius;
-import Geoquant.SectionalCurvature;
-import Geoquant.VCSC;
-import Geoquant.VEinstein;
-import Geoquant.Volume;
 import Solvers.WrongDirectionException;
 
 public class GeoquantTest {

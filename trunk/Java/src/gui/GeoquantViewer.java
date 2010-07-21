@@ -1,4 +1,5 @@
 package gui;
+import geo.*;
 import gui.GeoPolygonPanel.Form;
 
 import inputOutput.TriangulationIO;
@@ -74,7 +75,6 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 
 
-import Geoquant.*;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo

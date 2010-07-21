@@ -1,5 +1,11 @@
 package inputOutput;
 
+import geo.Alpha;
+import geo.Eta;
+import geo.Length;
+import geo.Radius;
+import geo.TriPosition;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -22,11 +28,6 @@ import org.xml.sax.SAXException;
 
 import triangulation.*;
 
-import Geoquant.Alpha;
-import Geoquant.Eta;
-import Geoquant.Length;
-import Geoquant.Radius;
-import Geoquant.TriPosition;
 
 public class TriangulationIO {
   private static Schema triangulationSchema = null;

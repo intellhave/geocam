@@ -1,5 +1,8 @@
 package gui;
 
+import geo.Geometry;
+import geo.Geoquant;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
@@ -7,8 +10,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import Geoquant.Geometry;
-import Geoquant.Geoquant;
 
 public class CurrentGeoPanel extends GeoPolygonPanel {
   private HashMap<Class<? extends Geoquant>, List<Geoquant>> geoList;

@@ -1,5 +1,6 @@
 package tests;
 
+import geo.Radius;
 import inputOutput.TriangulationIO;
 
 import java.io.File;
@@ -12,7 +13,6 @@ import triangulation.Tetra;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 
-import Geoquant.Radius;
 
 public class IOTest {
 

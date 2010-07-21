@@ -1,5 +1,11 @@
 package gui;
 
+import geo.GeoRecorder;
+import geo.Geometry;
+import geo.Geoquant;
+import geo.Radius;
+import geo.Geometry.Dimension;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -30,11 +36,6 @@ import javax.swing.border.TitledBorder;
 import triangulation.Triangulation;
 
 
-import Geoquant.GeoRecorder;
-import Geoquant.Geometry;
-import Geoquant.Geoquant;
-import Geoquant.Radius;
-import Geoquant.Geometry.Dimension;
 import Solvers.*;
 
 /**

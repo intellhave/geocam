@@ -1,8 +1,8 @@
 package Solvers;
 
-import Geoquant.Curvature2D;
-import Geoquant.Geometry;
-import Geoquant.Radius;
+import geo.Curvature2D;
+import geo.Geometry;
+import geo.Radius;
 
 public class Yamabe2DFlow implements DESystem{
 

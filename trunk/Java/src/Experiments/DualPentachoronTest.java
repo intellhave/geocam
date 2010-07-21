@@ -1,5 +1,12 @@
 package Experiments;
 
+import geo.Alpha;
+import geo.Angle;
+import geo.DihedralAngle;
+import geo.FaceHeight;
+import geo.Geometry;
+import geo.Length;
+import geo.Radius;
 import inputOutput.TriangulationIO;
 
 import java.io.File;
@@ -11,13 +18,6 @@ import triangulation.Face;
 import triangulation.StdEdge;
 import triangulation.Triangulation;
 
-import Geoquant.Alpha;
-import Geoquant.Angle;
-import Geoquant.DihedralAngle;
-import Geoquant.FaceHeight;
-import Geoquant.Geometry;
-import Geoquant.Length;
-import Geoquant.Radius;
 
 public class DualPentachoronTest {
 

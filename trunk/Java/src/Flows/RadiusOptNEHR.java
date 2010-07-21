@@ -1,10 +1,10 @@
 package Flows;
 
+import geo.Radius;
+import geo.VEHR;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
-import Geoquant.VEHR;
-import Geoquant.Radius;
 import Solvers.NewtonsMethod;
 
 public class RadiusOptNEHR extends NewtonsMethod {

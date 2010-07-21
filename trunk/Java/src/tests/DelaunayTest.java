@@ -1,13 +1,13 @@
 package tests;
 
 import static org.junit.Assert.*;
+import geo.Length;
 import inputOutput.TriangulationIO;
 
 import org.junit.Test;
 
 import triangulation.*;
 
-import Geoquant.Length;
 import FlipAlgorithm.Delaunay;
 
 /*          v2

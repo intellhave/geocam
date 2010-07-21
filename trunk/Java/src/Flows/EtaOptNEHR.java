@@ -1,10 +1,10 @@
 package Flows;
 
+import geo.*;
 import triangulation.Edge;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
-import Geoquant.*;
 import Solvers.NewtonsMethod;
 import Solvers.WrongDirectionException;
 
