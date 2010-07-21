@@ -1,4 +1,4 @@
-package Visualization;
+package visual;
 
 
 public class Point {

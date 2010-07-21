@@ -3,9 +3,9 @@ package tests;
 import java.util.HashSet;
 
 import triangulation.Face;
+import visual.PlanarDevelopment;
 
 import InputOutput.TriangulationIO;
-import Visualization.PlanarDevelopment;
 
 public class PlanarDevelopmentTest {
 

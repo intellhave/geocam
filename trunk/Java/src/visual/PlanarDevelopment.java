@@ -1,4 +1,4 @@
-package Visualization;
+package visual;
 
 import java.util.HashSet;
 import java.util.Hashtable;
