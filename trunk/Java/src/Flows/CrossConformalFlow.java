@@ -1,5 +1,6 @@
 package Flows;
 
+import io.TriangulationIO;
 import triangulation.Edge;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -8,7 +9,6 @@ import Geoquant.Eta;
 import Geoquant.Geometry;
 import Geoquant.VEHR;
 import Geoquant.Radius;
-import InputOutput.TriangulationIO;
 import Solvers.WrongDirectionException;
 
 

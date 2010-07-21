@@ -1,5 +1,7 @@
 package Experiments;
 
+import io.TriangulationIO;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -16,7 +18,6 @@ import Geoquant.FaceHeight;
 import Geoquant.Geometry;
 import Geoquant.Length;
 import Geoquant.Radius;
-import InputOutput.TriangulationIO;
 
 public class DualPentachoronTest {
 

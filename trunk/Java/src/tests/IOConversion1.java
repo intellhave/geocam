@@ -2,6 +2,8 @@
 
 package tests;
 
+import io.TriangulationIO;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -9,7 +11,6 @@ import java.util.Scanner;
 
 import triangulation.Triangulation;
 
-import InputOutput.TriangulationIO;
 
 public class IOConversion1 {
   
