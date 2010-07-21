@@ -31,9 +31,9 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import solver.CrossConformalFlow;
-import solver.RadiusOptNEHR;
-import solver.WrongDirectionException;
+import solvers.CrossConformalFlow;
+import solvers.RadiusOptNEHR;
+import solvers.WrongDirectionException;
 import triangulation.*;
 import util.GeoMath;
 import util.Matrix;
