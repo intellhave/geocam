@@ -29,64 +29,20 @@ public class DevelopmentApp2D {
   
   public static void main(String[] args){
     
-    EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
-    //TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
+    //EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
+    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/icosahedron.xml");
     
     Iterator<Integer> i = null;
     
     //set edge lengths randomly from [2,3)
-    /*i = Triangulation.edgeTable.keySet().iterator();
+    i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
-      Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
-    }*/
-    
-    //print some face info
-    /*System.out.printf("\n\nFACE INFO\n");
-    
-    i = Triangulation.faceTable.keySet().iterator();
-    while(i.hasNext()){
-      Integer key = i.next();
-      Face f = Triangulation.faceTable.get(key);
-      
-      System.out.printf("Face %d: \n",key);
-      System.out.printf("   Num local faces: %d\n", f.getLocalFaces().size());
-      System.out.printf("   Area: %f\n",Area.valueAt(f)); 
-      
-      //coords
-      System.out.printf("   Coords: ");
-      Iterator<Vertex> j = f.getLocalVertices().iterator();
-      while(j.hasNext()){
-        Vertex v = j.next();
-        System.out.printf("[v%d: (",v.getIndex());
-        System.out.print(Coord2D.coordAt(v,f));
-        System.out.print(")]");
-      }
-      System.out.printf("\n");
-    }*/
-    
-    //get points using EmbeddedMfldData
-    /*i = Triangulation.faceTable.keySet().iterator();
-    
-    ArrayList<Vector> temp = new ArrayList<Vector>();
-    while(i.hasNext()){
-      Integer key = i.next();
-      Face f = Triangulation.faceTable.get(key);
-      Iterator<Vertex> j = f.getLocalVertices().iterator();
-      while(j.hasNext()){
-        Vertex v = j.next();
-        temp.add( EmbeddedTriangulation.getCoords3D(f,Coord2D.coordAt(v,f)) );
-      }
+      Length.At(e).setValue(1);//2+Math.random()); //random return value is in [0,1)
     }
     
-    Vector[] temp2 = new Vector[temp.size()];
-    for(int k=0; k<temp.size(); k++){
-      temp2[k] = temp.get(k);
-    }
-    SceneGraphComponent sgc_mfld = sgcFromPoints3D( temp2 );*/
-    
-    //pick some arbitrary face
+    //pick some arbitrary face and source point
     i = Triangulation.faceTable.keySet().iterator();
     Face source_face = Triangulation.faceTable.get(i.next());
 
@@ -95,7 +51,8 @@ public class DevelopmentApp2D {
     while(iv.hasNext()){
       source.add(Coord2D.coordAt(iv.next(), source_face));
     }
-    source.scale(0.3333333333333333333333);
+    source.scale(1.0f/3.0f);
+    
     //get initial affine transformation moving source to the origin
     AffineTransformation T = new AffineTransformation(Vector.scale(source,-1));
 
@@ -105,41 +62,11 @@ public class DevelopmentApp2D {
     SceneGraphComponent sgc_points = sgcFromPoints2D(new Vector[] { new Vector(0,0) });
     sgc_root.addChild(sgc_face1);
     sgc_root.addChild(sgc_points);
-    //sgc_root.addChild(sgc_mfld);
-    //sgc_root.addChild(EmbeddedTriangulation.getSGC());
-    
-    //create appearance for developed faces
-    Appearance app_face = new Appearance();
-    
-    //set some basic attributes
-    app_face.setAttribute(CommonAttributes.FACE_DRAW, true);
-    app_face.setAttribute(CommonAttributes.EDGE_DRAW, true);
-    app_face.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    app_face.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
-    app_face.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
-    
-    //set shaders
-    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_face, true);
-    
-    //line shader
-    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
-    dls.setTubeDraw(false);
-    dls.setDiffuseColor(Color.BLACK);
-    
-    //polygon shader
-    DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
-    dps.setDiffuseColor(Color.WHITE);
-    dps.setTransparency(0.6d);
     
     //find 'development edge info' for this face, and iterate development
-    ArrayList<DevelopmentEdgeInfo> deInfoList = getDevelopmentEdgeInfo(source_face, T);
-    for(int j=0; j<deInfoList.size(); j++){
-      DevelopmentEdgeInfo deInfo = deInfoList.get(j);
-      Frustum2D frust = new Frustum2D(deInfo.vect0_,deInfo.vect1_);
-      iterateDevelopment(sgc_root,app_face,deInfo.F_,source_face,frust,T);
-    }
+    iterateDevelopment(0,3,sgc_root,source_face,null,null,T);
     
-    //jrviewer
+    //jrviewer(s)
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
     jrv.setContent(sgc_root);
@@ -148,16 +75,15 @@ public class DevelopmentApp2D {
     jrv.registerPlugin(new ContentTools());
     jrv.startup();
     
-    
-    JRViewer jrv_embedded = new JRViewer();
+    /*JRViewer jrv_embedded = new JRViewer();
     jrv_embedded.addBasicUI();
     jrv_embedded.registerPlugin(new ContentTools());
     jrv_embedded.setContent(EmbeddedTriangulation.getSGC());
-    //jrv_embedded.startup();
+    jrv_embedded.startup();*/
     
   }
   
-  //struct holding info necc to develop off an edge
+  //struct holding info neccessary to develop off an edge
   private static class DevelopmentEdgeInfo{
     public Vector vect0_,vect1_;
     public Vertex vert0_,vert1_;
@@ -170,15 +96,12 @@ public class DevelopmentApp2D {
     }
   };
   
-  public static ArrayList<DevelopmentEdgeInfo> getDevelopmentEdgeInfo(Face F, AffineTransformation T){
-    ArrayList<DevelopmentEdgeInfo> retinfo = new ArrayList<DevelopmentEdgeInfo>();
+  public static ArrayList<DevelopmentEdgeInfo> getDevelopmentEdgeInfo(Face F, Face source_face, AffineTransformation T){
     
     //get verts
     Vertex[] vert = new Vertex[3];
     Iterator<Vertex> iv = F.getLocalVertices().iterator();
-    for(int i=0; i<3; i++){
-      vert[i] = iv.next();
-    }
+    for(int i=0; i<3; i++){ vert[i] = iv.next(); }
     
     //get vects
     Vector[] vect = new Vector[3];
@@ -226,16 +149,22 @@ public class DevelopmentApp2D {
     }
     
     //add to return list
-    retinfo.add(new DevelopmentEdgeInfo(vert[0],vert[1],vect[0],vect[1],face[0]));
-    retinfo.add(new DevelopmentEdgeInfo(vert[1],vert[2],vect[1],vect[2],face[1]));
-    retinfo.add(new DevelopmentEdgeInfo(vert[2],vert[0],vect[2],vect[0],face[2]));
-    
+    ArrayList<DevelopmentEdgeInfo> retinfo = new ArrayList<DevelopmentEdgeInfo>();
+    if(source_face != face[0]){ retinfo.add(new DevelopmentEdgeInfo(vert[0],vert[1],vect[0],vect[1],face[0])); }
+    if(source_face != face[1]){ retinfo.add(new DevelopmentEdgeInfo(vert[1],vert[2],vect[1],vect[2],face[1])); }
+    if(source_face != face[2]){ retinfo.add(new DevelopmentEdgeInfo(vert[2],vert[0],vect[2],vect[0],face[2])); }
     return retinfo;
   }
   
-  public static void iterateDevelopment(SceneGraphComponent sgc_root, Appearance app, Face new_face, Face source_face, Frustum2D current_frustum, AffineTransformation current_trans){
+  public static void iterateDevelopment(int depth, int maxdepth, SceneGraphComponent sgc_root, Face new_face, Face source_face, Frustum2D current_frustum, AffineTransformation current_trans){
     
-    AffineTransformation new_trans = new AffineTransformation(CoordTrans2D.affineTransAt(new_face, source_face));
+    //note: source_face and current_frustum may be null
+    
+    //get new affine transformation
+    AffineTransformation new_trans = new AffineTransformation(2);
+    if(source_face != null){
+      new_trans.leftMultiply(CoordTrans2D.affineTransAt(new_face, source_face));
+    }
     new_trans.leftMultiply(current_trans);
     
     //get transformed points from new_face
@@ -243,25 +172,79 @@ public class DevelopmentApp2D {
     Iterator<Vertex> i = new_face.getLocalVertices().iterator();
     while(i.hasNext()){
       Vertex vert = i.next();
-      Vector pt = Coord2D.coordAt(vert, new_face);
+      Vector pt = new Vector(Coord2D.coordAt(vert, new_face));
       try{ pt = new_trans.affineTransPoint(pt); }catch(Exception e1){ e1.printStackTrace(); }
       efpts.add(pt);
     }
-
+    
     //make embeddedface
-    EmbeddedFace ef = new EmbeddedFace(efpts);
+    EmbeddedFace origface = new EmbeddedFace(efpts);
+    //EmbeddedFace clipface = current_frustum.clipFace(origface);
     
     //add clipped face to display
-    Geometry g = ef.getGeometry(Color.WHITE);//current_frustum.clipFace(ef).getGeometry(Color.WHITE);
-    SceneGraphComponent sgc_new_face = new SceneGraphComponent();
-    sgc_new_face.setGeometry(g);
-    
-    //add to sgc_root
-    sgc_new_face.setAppearance(app);
-    sgc_root.addChild(sgc_new_face);
+    //if(clipface != null){
+    //if((depth == maxdepth) || (depth == maxdepth-1)){
+    //if(depth == maxdepth-2){
+      SceneGraphComponent sgc_new_face = new SceneGraphComponent();
+      Color color = Color.getHSBColor((float)depth/(float)maxdepth, 1.0f, 0.5f);
+      sgc_new_face.setGeometry(origface.getGeometry(color));
+      
+      //add to sgc_root
+      sgc_new_face.setAppearance(getFaceAppearance(0.6f));
+      sgc_root.addChild(sgc_new_face);
+    //}
     
     //see which faces to continue developing on
+    if(depth >= maxdepth){ return; }
     
+    /*ArrayList<DevelopmentEdgeInfo> deInfoList = getDevelopmentEdgeInfo(new_face, source_face, new_trans);
+    
+    for(int j=0; j<deInfoList.size(); j++){
+    
+      DevelopmentEdgeInfo deInfo = deInfoList.get(j);
+      if(deInfo.F_ != source_face){ //note, fine even when source_face == null
+        Frustum2D frust = new Frustum2D(deInfo.vect1_,deInfo.vect0_);
+        //Frustum2D new_frust = Frustum2D.intersect(frust, current_frustum);
+        iterateDevelopment(depth+1, maxdepth, sgc_root, deInfo.F_, new_face, frust, new_trans);
+      }
+    }*/
+    
+    Iterator<Face> fi = new_face.getLocalFaces().iterator();
+    while(fi.hasNext()){
+      Face ftemp = fi.next();
+      if(ftemp != source_face){
+        iterateDevelopment(depth+1, maxdepth, sgc_root, ftemp, new_face, null, new_trans);
+      }
+    }
+    
+  }
+  
+  public static Appearance getFaceAppearance(double transparency){
+    
+  //create appearance for developed faces
+    Appearance app_face = new Appearance();
+    
+    //set some basic attributes
+    app_face.setAttribute(CommonAttributes.FACE_DRAW, true);
+    app_face.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app_face.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app_face.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app_face.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    
+    //set shaders
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_face, true);
+    
+    //line shader
+    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+    dls.setTubeDraw(false);
+    dls.setDiffuseColor(Color.BLACK);
+    
+    //polygon shader
+    DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
+    dps.setDiffuseColor(Color.WHITE);
+    dps.setTransparency(transparency);
+    
+    return app_face;
   }
 
   public static SceneGraphComponent sgcFromPoints2D(Vector[] points){
