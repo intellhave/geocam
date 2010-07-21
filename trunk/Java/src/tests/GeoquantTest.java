@@ -31,13 +31,13 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import solver.CrossConformalFlow;
+import solver.RadiusOptNEHR;
+import solver.WrongDirectionException;
 import triangulation.*;
 import util.GeoMath;
 import util.Matrix;
 
-import Solvers.CrossConformalFlow;
-import Solvers.RadiusOptNEHR;
-import Solvers.WrongDirectionException;
 
 public class GeoquantTest {
 

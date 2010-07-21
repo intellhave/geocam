@@ -1,4 +1,4 @@
-package Solvers;
+package solver;
 
 import geoquant.*;
 import triangulation.Edge;

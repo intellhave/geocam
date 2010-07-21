@@ -1,4 +1,4 @@
-package Solvers;
+package solver;
 
 public class RungeKuttaSolver {
 
