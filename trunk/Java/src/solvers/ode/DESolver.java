@@ -1,4 +1,4 @@
-package solvers;
+package solvers.ode;
 
 import java.util.Observable;
 

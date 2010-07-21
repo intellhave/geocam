@@ -34,6 +34,10 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import solvers.*;
+import solvers.ode.DESystem;
+import solvers.ode.EulerSolver;
+import solvers.ode.yamabeFlow.Yamabe2DFlow;
+import solvers.ode.yamabeFlow.Yamabe3DFlow;
 import triangulation.Triangulation;
 
 

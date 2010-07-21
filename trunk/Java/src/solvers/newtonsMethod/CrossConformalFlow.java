@@ -1,4 +1,4 @@
-package solvers;
+package solvers.newtonsMethod;
 
 import geoquant.Alpha;
 import geoquant.Eta;

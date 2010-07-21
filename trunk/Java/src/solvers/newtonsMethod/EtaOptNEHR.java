@@ -1,4 +1,4 @@
-package solvers;
+package solvers.newtonsMethod;
 
 import geoquant.*;
 import triangulation.Edge;

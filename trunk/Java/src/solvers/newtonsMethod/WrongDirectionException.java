@@ -1,4 +1,4 @@
-package solvers;
+package solvers.newtonsMethod;
 
 public class WrongDirectionException extends Exception {
 
