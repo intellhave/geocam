@@ -1,6 +1,6 @@
 package Experiments;
-import geo.Curvature3D;
-import geo.Length;
+import geoquant.Curvature3D;
+import geoquant.Length;
 import inputOutput.TriangulationIO;
 
 import java.io.FileNotFoundException;

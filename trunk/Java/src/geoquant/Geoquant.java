@@ -1,4 +1,4 @@
-package geo;
+package geoquant;
 import java.util.LinkedList;
 import java.util.Observer;
 import java.util.Observable;

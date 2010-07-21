@@ -1,8 +1,8 @@
 package tests;
 
-import geo.Angle;
-import geo.Geoquant;
-import geo.Length;
+import geoquant.Angle;
+import geoquant.Geoquant;
+import geoquant.Length;
 import inputOutput.TriangulationIO;
 
 import java.lang.Thread;

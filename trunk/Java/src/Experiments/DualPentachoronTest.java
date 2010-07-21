@@ -1,12 +1,12 @@
 package Experiments;
 
-import geo.Alpha;
-import geo.Angle;
-import geo.DihedralAngle;
-import geo.FaceHeight;
-import geo.Geometry;
-import geo.Length;
-import geo.Radius;
+import geoquant.Alpha;
+import geoquant.Angle;
+import geoquant.DihedralAngle;
+import geoquant.FaceHeight;
+import geoquant.Geometry;
+import geoquant.Length;
+import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
 import java.io.File;

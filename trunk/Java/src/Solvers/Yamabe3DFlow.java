@@ -1,12 +1,12 @@
 package Solvers;
 
-import geo.Curvature2D;
-import geo.Curvature3D;
-import geo.Eta;
-import geo.Geometry;
-import geo.Length;
-import geo.Radius;
-import geo.Volume;
+import geoquant.Curvature2D;
+import geoquant.Curvature3D;
+import geoquant.Eta;
+import geoquant.Geometry;
+import geoquant.Length;
+import geoquant.Radius;
+import geoquant.Volume;
 import triangulation.StdTetra;
 import triangulation.Tetra;
 import triangulation.Triangulation;

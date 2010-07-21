@@ -1,10 +1,10 @@
 package inputOutput;
 
-import geo.Alpha;
-import geo.Eta;
-import geo.Length;
-import geo.Radius;
-import geo.TriPosition;
+import geoquant.Alpha;
+import geoquant.Eta;
+import geoquant.Length;
+import geoquant.Radius;
+import geoquant.TriPosition;
 
 import java.io.File;
 import java.io.FileNotFoundException;

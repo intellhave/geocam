@@ -1,4 +1,4 @@
-package geo;
+package geoquant;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.ArrayList;

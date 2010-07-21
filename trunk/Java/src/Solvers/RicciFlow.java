@@ -1,8 +1,8 @@
 package Solvers;
 
-import geo.Curvature2D;
-import geo.Geometry;
-import geo.Radius;
+import geoquant.Curvature2D;
+import geoquant.Geometry;
+import geoquant.Radius;
 
 public class RicciFlow implements DESystem{
   public double[] calcSlopes(double[] x)

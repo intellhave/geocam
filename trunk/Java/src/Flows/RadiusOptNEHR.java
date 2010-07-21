@@ -1,7 +1,7 @@
 package Flows;
 
-import geo.Radius;
-import geo.VEHR;
+import geoquant.Radius;
+import geoquant.VEHR;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;

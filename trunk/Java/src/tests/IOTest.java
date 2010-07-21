@@ -1,6 +1,6 @@
 package tests;
 
-import geo.Radius;
+import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
 import java.io.File;

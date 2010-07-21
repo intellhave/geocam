@@ -1,6 +1,6 @@
 package gui;
 
-import geo.GeoRecorder;
+import geoquant.GeoRecorder;
 
 import java.awt.Component;
 import java.awt.Frame;

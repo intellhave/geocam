@@ -1,5 +1,5 @@
 package gui;
-import geo.*;
+import geoquant.*;
 import gui.GeoPolygonPanel.Form;
 
 import inputOutput.TriangulationIO;

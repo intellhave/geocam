@@ -1,6 +1,6 @@
 package development;
 
-import geo.*;
+import geoquant.*;
 import inputOutput.TriangulationIO;
 
 import java.awt.Color;
