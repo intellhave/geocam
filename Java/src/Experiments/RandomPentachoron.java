@@ -3,12 +3,13 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Random;
 
+import triangulation.Edge;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 import Geoquant.Curvature3D;
 import Geoquant.Length;
 import InputOutput.TriangulationIO;
-import Triangulation.Edge;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
 
 public class RandomPentachoron {
   

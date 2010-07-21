@@ -66,10 +66,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.SwingUtilities;
 
-import Triangulation.Edge;
-import Triangulation.Simplex;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.Simplex;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 
 import Geoquant.*;
 import InputOutput.TriangulationIO;

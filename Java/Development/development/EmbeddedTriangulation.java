@@ -7,10 +7,10 @@ import java.util.Iterator;
 
 import util.Matrix;
 import Geoquant.Length;
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 import de.jreality.reader.Readers;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.Geometry;

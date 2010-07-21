@@ -3,9 +3,10 @@ package Geoquant;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import Triangulation.Edge;
-import Triangulation.Vertex;
-import Triangulation.Triangulation;
+import triangulation.Edge;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 
 public class VEHR extends Geoquant {
   private Curvature3D.Sum totalK;

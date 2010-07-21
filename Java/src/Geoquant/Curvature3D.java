@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Triangulation.Edge;
-import Triangulation.StdEdge;
-import Triangulation.Tetra;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.StdEdge;
+import triangulation.Tetra;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 
 public class Curvature3D extends Geoquant {
   // Index map

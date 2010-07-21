@@ -3,11 +3,12 @@ package Geoquant;
 import java.util.LinkedList;
 import java.util.List;
 
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.Tetra;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Tetra;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 
 public class Geometry {
   

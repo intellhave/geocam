@@ -3,8 +3,9 @@ package Geoquant;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import Triangulation.Edge;
-import Triangulation.Tetra;
+import triangulation.Edge;
+import triangulation.Tetra;
+
 
 public class SectionalCurvature extends Geoquant{
   //Index map

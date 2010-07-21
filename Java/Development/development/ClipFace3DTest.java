@@ -40,10 +40,10 @@ import development.Frustum3DTest.UIPanel_Model;
 
 import Geoquant.Length;
 import InputOutput.TriangulationIO;
-import Triangulation.Edge;
-import Triangulation.Tetra;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.Tetra;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 
 public class ClipFace3DTest {
   private static SceneGraphComponent sgc_root, sgc_frustum, sgc_result;

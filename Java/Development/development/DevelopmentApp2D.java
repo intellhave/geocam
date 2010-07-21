@@ -21,7 +21,7 @@ import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 
 import InputOutput.TriangulationIO;
-import Triangulation.*;
+import triangulation.*;
 import Geoquant.*;
 
 public class DevelopmentApp2D {

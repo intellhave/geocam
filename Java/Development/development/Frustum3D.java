@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import util.Matrix;
-import Triangulation.Edge;
-import Triangulation.Tetra;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Tetra;
+import triangulation.Vertex;
 
 public class Frustum3D {
 
@@ -392,9 +393,9 @@ public class Frustum3D {
       edgeCoords.put(edges.get(i), points);
     }
 
-    HashMap<Triangulation.Face, EmbeddedFace> faces = new HashMap<Triangulation.Face, EmbeddedFace>();
-    List<Triangulation.Face> faceList = tetra.getLocalFaces();
-    for (Triangulation.Face face : faceList) {
+    HashMap<Face, EmbeddedFace> faces = new HashMap<Face, EmbeddedFace>();
+    List<Face> faceList = tetra.getLocalFaces();
+    for (Face face : faceList) {
       List<Vertex> vs = face.getLocalVertices();
       ArrayList<Vector> vectors = new ArrayList<Vector>();
       for (int i = 0; i < vs.size(); i++) {
@@ -408,7 +409,7 @@ public class Frustum3D {
 
     ArrayList<Vertex> omitVerts = new ArrayList<Vertex>();
     ArrayList<Edge> omitEdgesRay = new ArrayList<Edge>();
-    ArrayList<Triangulation.Face> omitFacesRay = new ArrayList<Triangulation.Face>();
+    ArrayList<Face> omitFacesRay = new ArrayList<Face>();
 
     ArrayList<ArrayList<Vertex>> omitVertsSector = new ArrayList<ArrayList<Vertex>>();
     ArrayList<ArrayList<Edge>> omitEdgesSector = new ArrayList<ArrayList<Edge>>();
@@ -472,7 +473,7 @@ public class Frustum3D {
 //          System.out.println("omitted");
       }
 
-      for (Triangulation.Face face : tetra.getLocalFaces()) {
+      for (Face face : tetra.getLocalFaces()) {
         System.out.println("checking face: \n" + faces.get(face));
         System.out.print("adding? ");
         if (!omitFacesRay.contains(face)) {

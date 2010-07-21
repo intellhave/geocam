@@ -3,6 +3,8 @@ package tests;
 import java.util.LinkedList;
 import java.util.List;
 
+import triangulation.Triangulation;
+
 import Geoquant.Curvature2D;
 import Geoquant.Eta;
 import Geoquant.GeoRecorder;
@@ -13,7 +15,6 @@ import InputOutput.TriangulationIO;
 import Solvers.DESystem;
 import Solvers.EulerSolver;
 import Solvers.Yamabe2DFlow;
-import Triangulation.Triangulation;
 
 public class DiffEqTest {
 

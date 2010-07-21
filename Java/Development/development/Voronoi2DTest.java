@@ -17,7 +17,7 @@ public class Voronoi2DTest {
     vlist.add(new Vector(1,-1));
     vlist.add(new Vector(1,1));
     vlist.add(new Vector(-1,1));
-    Face f = new Face(vlist);
+    EmbeddedFace f = new EmbeddedFace(vlist);
     Geometry g = f.getGeometry(Color.RED);
     
     SceneGraphComponent sgc_face = new SceneGraphComponent();

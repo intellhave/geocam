@@ -1,5 +1,8 @@
 package Solvers;
 
+import triangulation.StdTetra;
+import triangulation.Tetra;
+import triangulation.Triangulation;
 import Geoquant.Curvature2D;
 import Geoquant.Curvature3D;
 import Geoquant.Eta;
@@ -7,9 +10,6 @@ import Geoquant.Geometry;
 import Geoquant.Length;
 import Geoquant.Radius;
 import Geoquant.Volume;
-import Triangulation.StdTetra;
-import Triangulation.Tetra;
-import Triangulation.Triangulation;
 
 public class Yamabe3DFlow implements DESystem{
 

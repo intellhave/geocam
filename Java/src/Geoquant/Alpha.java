@@ -2,7 +2,8 @@ package Geoquant;
 
 import java.util.HashMap;
 
-import Triangulation.Vertex;
+import triangulation.Vertex;
+
 
 public class Alpha extends Geoquant {
 

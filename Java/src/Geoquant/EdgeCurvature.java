@@ -2,7 +2,8 @@ package Geoquant;
 
 import java.util.HashMap;
 
-import Triangulation.Edge;
+import triangulation.Edge;
+
 
 public class EdgeCurvature extends Geoquant {
   private static HashMap<TriPosition, EdgeCurvature> Index = new HashMap<TriPosition, EdgeCurvature>();

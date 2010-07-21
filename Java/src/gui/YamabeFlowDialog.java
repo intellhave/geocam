@@ -27,7 +27,8 @@ import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import Triangulation.Triangulation;
+import triangulation.Triangulation;
+
 
 import Geoquant.GeoRecorder;
 import Geoquant.Geometry;

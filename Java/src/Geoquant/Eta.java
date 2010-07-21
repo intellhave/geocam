@@ -2,7 +2,8 @@ package Geoquant;
 
 import java.util.HashMap;
 
-import Triangulation.Edge;
+import triangulation.Edge;
+
 
 public class Eta extends Geoquant {
   private static HashMap<TriPosition, Eta> Index = new HashMap<TriPosition, Eta>();

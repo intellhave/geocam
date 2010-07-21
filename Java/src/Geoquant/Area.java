@@ -2,8 +2,9 @@ package Geoquant;
 
 import java.util.HashMap;
 
-import Triangulation.Face;
-import Triangulation.StdFace;
+import triangulation.Face;
+import triangulation.StdFace;
+
 
 public class Area extends Geoquant {
   // Index map

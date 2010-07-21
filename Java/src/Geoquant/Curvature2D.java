@@ -3,10 +3,11 @@ package Geoquant;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import triangulation.Face;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 import Geoquant.Curvature3D.Sum;
-import Triangulation.Face;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
 
 public class Curvature2D extends Geoquant {
   // Index map

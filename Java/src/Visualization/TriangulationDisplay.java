@@ -16,6 +16,10 @@ import java.util.Hashtable;
 
 import javax.swing.JFrame;
 
+import triangulation.Face;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.plugin.JRViewer;
@@ -33,9 +37,6 @@ import de.jreality.scene.tool.Tool;
 import de.jreality.tools.EncompassTool;
 import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
-import Triangulation.Vertex;
-import Triangulation.Face;
-import Triangulation.Triangulation;
 import Visualization.PlanarDevelopment;
 
 public class TriangulationDisplay {
@@ -69,9 +70,9 @@ static  Viewer viewer;
     int[][] combinatorics = new int[numFaces][3];
     int faceIndex = 0; //keeps track of which face we're on
     //note that it doesn't matter if this index relates to the face's index in any way
-    for (Face face : Triangulation.faceTable.values()) {
+    for (Face embeddedFace : Triangulation.faceTable.values()) {
       int vertIndex = 0;
-      for (Vertex vertex : face.getLocalVertices()) {
+      for (Vertex vertex : embeddedFace.getLocalVertices()) {
         combinatorics[faceIndex][vertIndex] = labeling.get(vertex);
         vertIndex += 1;
       }
@@ -128,9 +129,9 @@ static  Viewer viewer;
     int[][] combinatorics = new int[numFaces][3];
     int faceIndex = 0; //keeps track of which face we're on
     //note that it doesn't matter if this index relates to the face's index in any way
-    for (Face face : Triangulation.faceTable.values()) {
+    for (Face embeddedFace : Triangulation.faceTable.values()) {
       int vertIndex = 0;
-      for (Vertex vertex : face.getLocalVertices()) {
+      for (Vertex vertex : embeddedFace.getLocalVertices()) {
         combinatorics[faceIndex][vertIndex] = labeling.get(vertex);
         vertIndex += 1;
       }

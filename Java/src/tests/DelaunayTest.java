@@ -4,9 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import triangulation.*;
+
 import Geoquant.Length;
 import InputOutput.TriangulationIO;
-import Triangulation.*;
 import FlipAlgorithm.Delaunay;
 
 /*          v2

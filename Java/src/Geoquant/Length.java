@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Set;
 
+import triangulation.*;
+
 import Geoquant.Volume.Sum;
-import Triangulation.*;
 
 public class Length extends Geoquant {
   // Index map

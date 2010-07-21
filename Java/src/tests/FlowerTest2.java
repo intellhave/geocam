@@ -6,15 +6,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Simplex;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 import Geoquant.Geoquant;
 import Geoquant.Angle;
 import Geoquant.Length;
 import InputOutput.TriangulationIO;
-import Triangulation.Simplex;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
-import Triangulation.Edge;
-import Triangulation.Face;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.plugin.JRViewer;
 import de.jreality.scene.*;
@@ -122,9 +123,9 @@ public class FlowerTest2 {
       
       // move on to the gamma computation using the facelist
       gamma = new double[vertex.getLocalFaces().size()];
-      List<Face> faces = cycleFaces.get(vertex);
-      for (int i = 0; i < faces.size(); i++) {
-        gamma[i] = Angle.valueAt(vertex, faces.get(i));
+      List<Face> embeddedFaces = cycleFaces.get(vertex);
+      for (int i = 0; i < embeddedFaces.size(); i++) {
+        gamma[i] = Angle.valueAt(vertex, embeddedFaces.get(i));
       }
 
       int R = 1;
