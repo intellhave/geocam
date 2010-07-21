@@ -1,4 +1,6 @@
 package Experiments;
+import io.TriangulationIO;
+
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Random;
@@ -9,7 +11,6 @@ import triangulation.Vertex;
 
 import Geoquant.Curvature3D;
 import Geoquant.Length;
-import InputOutput.TriangulationIO;
 
 public class RandomPentachoron {
   

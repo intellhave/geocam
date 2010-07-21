@@ -1,6 +1,8 @@
 package gui;
 import gui.GeoPolygonPanel.Form;
 
+import io.TriangulationIO;
+
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -73,7 +75,6 @@ import triangulation.Vertex;
 
 
 import Geoquant.*;
-import InputOutput.TriangulationIO;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo

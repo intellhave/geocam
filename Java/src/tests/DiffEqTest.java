@@ -1,5 +1,7 @@
 package tests;
 
+import io.TriangulationIO;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +13,6 @@ import Geoquant.GeoRecorder;
 import Geoquant.Geometry;
 import Geoquant.Geoquant;
 import Geoquant.Radius;
-import InputOutput.TriangulationIO;
 import Solvers.DESystem;
 import Solvers.EulerSolver;
 import Solvers.Yamabe2DFlow;

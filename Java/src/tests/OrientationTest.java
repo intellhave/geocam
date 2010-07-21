@@ -1,9 +1,9 @@
 package tests;
 
+import io.TriangulationIO;
 import triangulation.Face;
 import triangulation.StdFace;
 import triangulation.Triangulation;
-import InputOutput.TriangulationIO;
 
 public class OrientationTest {
   

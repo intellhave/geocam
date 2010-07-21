@@ -3,8 +3,9 @@
 
 package development;
 
+import io.TriangulationIO;
+
 import java.util.Iterator;
-import InputOutput.TriangulationIO;
 import triangulation.*;
 import Geoquant.*;
 

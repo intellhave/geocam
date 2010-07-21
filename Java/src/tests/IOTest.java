@@ -1,5 +1,7 @@
 package tests;
 
+import io.TriangulationIO;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -11,7 +13,6 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 
 import Geoquant.Radius;
-import InputOutput.TriangulationIO;
 
 public class IOTest {
 

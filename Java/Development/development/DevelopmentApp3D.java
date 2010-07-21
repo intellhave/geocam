@@ -1,5 +1,7 @@
 package development;
 
+import io.TriangulationIO;
+
 import java.awt.Color;
 import java.util.Iterator;
 
@@ -18,7 +20,6 @@ import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 
-import InputOutput.TriangulationIO;
 import triangulation.*;
 import Geoquant.*;
 

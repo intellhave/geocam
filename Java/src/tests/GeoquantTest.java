@@ -1,5 +1,7 @@
 package tests;
 
+import io.TriangulationIO;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -35,7 +37,6 @@ import Geoquant.SectionalCurvature;
 import Geoquant.VCSC;
 import Geoquant.VEinstein;
 import Geoquant.Volume;
-import InputOutput.TriangulationIO;
 import Solvers.WrongDirectionException;
 
 public class GeoquantTest {

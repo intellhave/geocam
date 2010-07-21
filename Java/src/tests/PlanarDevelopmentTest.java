@@ -1,11 +1,12 @@
 package tests;
 
+import io.TriangulationIO;
+
 import java.util.HashSet;
 
 import triangulation.Face;
 import visualization.PlanarDevelopment;
 
-import InputOutput.TriangulationIO;
 
 public class PlanarDevelopmentTest {
 
