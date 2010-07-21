@@ -1,4 +1,4 @@
-package FlipAlgorithm;
+package flipalg;
 
 import triangulation.Edge;
 import triangulation.Face;
