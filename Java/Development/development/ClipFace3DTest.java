@@ -361,7 +361,6 @@ public class ClipFace3DTest {
   // http://www3.math.tu-berlin.de/jreality/api/de/jreality/plugin/basic/ViewShrinkPanelPlugin.html
   // ===========================================================================================
   static class UIPanel_Model extends ViewShrinkPanelPlugin {
-    private JCheckBox box1, box2, box3;
     private JSlider slider;
 
     private void makeUIComponents() {
