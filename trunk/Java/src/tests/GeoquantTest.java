@@ -1,5 +1,7 @@
 package tests;
 
+import flow.CrossConformalFlow;
+import flow.RadiusOptNEHR;
 import geoquant.Alpha;
 import geoquant.Angle;
 import geoquant.Area;
@@ -35,8 +37,6 @@ import triangulation.*;
 import util.GeoMath;
 import util.Matrix;
 
-import Flows.CrossConformalFlow;
-import Flows.RadiusOptNEHR;
 import Solvers.WrongDirectionException;
 
 public class GeoquantTest {
