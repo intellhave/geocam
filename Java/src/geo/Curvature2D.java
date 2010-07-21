@@ -1,4 +1,6 @@
-package Geoquant;
+package geo;
+
+import geo.Curvature3D.Sum;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,7 +9,6 @@ import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 
-import Geoquant.Curvature3D.Sum;
 
 public class Curvature2D extends Geoquant {
   // Index map

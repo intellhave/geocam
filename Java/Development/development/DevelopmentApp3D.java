@@ -1,5 +1,6 @@
 package development;
 
+import geo.*;
 import inputOutput.TriangulationIO;
 
 import java.awt.Color;
@@ -21,7 +22,6 @@ import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 
 import triangulation.*;
-import Geoquant.*;
 
 public class DevelopmentApp3D {
 

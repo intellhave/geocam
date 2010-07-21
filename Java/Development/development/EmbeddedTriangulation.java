@@ -1,12 +1,13 @@
 package development;
 
+import geo.Length;
+
 import java.awt.Color;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import util.Matrix;
-import Geoquant.Length;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;

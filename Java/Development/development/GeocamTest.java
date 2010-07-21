@@ -3,11 +3,11 @@
 
 package development;
 
+import geo.*;
 import inputOutput.TriangulationIO;
 
 import java.util.Iterator;
 import triangulation.*;
-import Geoquant.*;
 
 public class GeocamTest {
 

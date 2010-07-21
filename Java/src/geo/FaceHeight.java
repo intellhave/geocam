@@ -1,4 +1,4 @@
-package Geoquant;
+package geo;
 
 import java.util.HashMap;
 

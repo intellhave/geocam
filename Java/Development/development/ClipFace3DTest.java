@@ -2,6 +2,7 @@ package development;
 
 import static org.junit.Assert.assertEquals;
 
+import geo.Length;
 import inputOutput.TriangulationIO;
 
 import java.awt.Color;
@@ -40,7 +41,6 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Frustum3DTest.UIPanel_Model;
 
-import Geoquant.Length;
 import triangulation.Edge;
 import triangulation.Tetra;
 import triangulation.Triangulation;

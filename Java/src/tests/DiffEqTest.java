@@ -1,5 +1,11 @@
 package tests;
 
+import geo.Curvature2D;
+import geo.Eta;
+import geo.GeoRecorder;
+import geo.Geometry;
+import geo.Geoquant;
+import geo.Radius;
 import inputOutput.TriangulationIO;
 
 import java.util.LinkedList;
@@ -7,12 +13,6 @@ import java.util.List;
 
 import triangulation.Triangulation;
 
-import Geoquant.Curvature2D;
-import Geoquant.Eta;
-import Geoquant.GeoRecorder;
-import Geoquant.Geometry;
-import Geoquant.Geoquant;
-import Geoquant.Radius;
 import Solvers.DESystem;
 import Solvers.EulerSolver;
 import Solvers.Yamabe2DFlow;

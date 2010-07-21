@@ -1,4 +1,6 @@
-package Geoquant;
+package geo;
+
+import geo.Volume.Sum;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,7 +10,6 @@ import java.util.Set;
 
 import triangulation.*;
 
-import Geoquant.Volume.Sum;
 
 public class Length extends Geoquant {
   // Index map

@@ -1,5 +1,8 @@
 package tests;
 
+import geo.Angle;
+import geo.Geoquant;
+import geo.Length;
 import inputOutput.TriangulationIO;
 
 import java.lang.Thread;
@@ -14,9 +17,6 @@ import triangulation.Simplex;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 
-import Geoquant.Geoquant;
-import Geoquant.Angle;
-import Geoquant.Length;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.plugin.JRViewer;
 import de.jreality.scene.*;
