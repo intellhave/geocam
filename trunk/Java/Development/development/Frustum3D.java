@@ -205,18 +205,18 @@ public class Frustum3D {
     Vector v2 = this.getVectorAt((index + 1) % this.getNumberRays());
     Vector v3 = new Vector(0, 0, 0);
     Vector intersection = findIntersection(v1, v2, v3, a, b);
-    System.out.println();
-    System.out.println("found intersection between sector at "
-        + this.getVectorAt(index) + " and "
-        + this.getVectorAt((index + 1) % this.getNumberRays())
-        + " with line through " + a + " and " + b);
-    System.out.println("it is: " + intersection);
-    if (intersection != null) {
-      System.out.println("contained in sector? "
-          + sectorContainsVector(index, intersection));
-      System.out.println("contained in edge? "
-          + isContained(a, b, intersection) + "\n");
-    }
+//    System.out.println();
+//    System.out.println("found intersection between sector at "
+//        + this.getVectorAt(index) + " and "
+//        + this.getVectorAt((index + 1) % this.getNumberRays())
+//        + " with line through " + a + " and " + b);
+//    System.out.println("it is: " + intersection);
+//    if (intersection != null) {
+//      System.out.println("contained in sector? "
+//          + sectorContainsVector(index, intersection));
+//      System.out.println("contained in edge? "
+//          + isContained(a, b, intersection) + "\n");
+//    }
     if (intersection == null
         || (isContained(a, b, intersection) && sectorContainsVector(index,
             intersection)))
@@ -376,7 +376,7 @@ public class Frustum3D {
 
     HashMap<Vertex, Vector> vertexCoords = new HashMap<Vertex, Vector>();
     List<Vertex> vertices = tetra.getLocalVertices();
-    System.out.println("vertices: " + vertices.get(0).equals(vertices.get(1)));
+//    System.out.println("vertices: " + vertices.get(0).equals(vertices.get(1)));
     vertexCoords.put(vertices.get(0), Coord3D.coordAt(vertices.get(0), tetra));
     vertexCoords.put(vertices.get(1), Coord3D.coordAt(vertices.get(1), tetra));
     vertexCoords.put(vertices.get(2), Coord3D.coordAt(vertices.get(2), tetra));
@@ -419,9 +419,9 @@ public class Frustum3D {
 
     // rays
     for (int rayIndex = 0; rayIndex < this.getNumberRays(); rayIndex++) {
-      System.out.println();
-      System.out.println("checking ray index " + rayIndex + ": "
-          + rays.get(rayIndex));
+//      System.out.println();
+//      System.out.println("checking ray index " + rayIndex + ": "
+//          + rays.get(rayIndex));
       Vector ray = rays.get(rayIndex);
       // ray's local sectors are at rayIndex and rayIndex-1
       int prevIndex = (rayIndex - 1 + getNumberRays()) % getNumberRays();
@@ -451,41 +451,39 @@ public class Frustum3D {
       }
 
       for (Edge edge : tetra.getLocalEdges()) {
-        System.out.println("checking edge :" + edgeCoords.get(edge)[0] + " to "
-            + edgeCoords.get(edge)[1]);
-        System.out.print("adding? ");
+//        System.out.println("checking edge :" + edgeCoords.get(edge)[0] + " to "
+//            + edgeCoords.get(edge)[1]);
+//        System.out.print("adding? ");
         if (!omitEdgesRay.contains(edge)) {
           Vector intersection = findIntersection(edgeCoords.get(edge)[0],
               edgeCoords.get(edge)[1], ray);
-          if (intersection != null && isContained(edgeCoords.get(edge)[0],
-              edgeCoords.get(edge)[1], intersection) && this.checkInterior(intersection)) {
-            System.out.println(intersection);
+          if (intersection != null
+              && isContained(edgeCoords.get(edge)[0], edgeCoords.get(edge)[1],
+                  intersection) && this.checkInterior(intersection)) {
+//            System.out.println(intersection);
             hullPoints.add(intersection);
             omitFacesRay.addAll(edge.getLocalFaces());
 
             omitEdgesSector.get(rayIndex).add(edge);
             omitEdgesSector.get(prevIndex).add(edge);
+          } else;
+//            System.out.println("no");
+        } else;
+//          System.out.println("omitted");
+      }
+
+      for (Triangulation.Face face : tetra.getLocalFaces()) {
+        System.out.println("checking face: \n" + faces.get(face));
+        System.out.print("adding? ");
+        if (!omitFacesRay.contains(face)) {
+          Vector intersection = findIntersectionWithFace(faces.get(face), ray);
+          if (intersection != null && this.checkInterior(intersection)) {
+            System.out.println(intersection);
+            hullPoints.add(intersection);
           } else
             System.out.println("no");
         } else
           System.out.println("omitted");
-      }
-
-      for (Triangulation.Face face : tetra.getLocalFaces()) {
-        // System.out.println("checking face: \n" + faces.get(face));
-        // System.out.print("adding? ");
-        if (!omitFacesRay.contains(face)) {
-          Vector intersection = findIntersectionWithFace(faces.get(face), ray);
-          Frustum3D frustum = new Frustum3D(faces.get(face).getVectors());
-          if (intersection != null && frustum.checkInterior(intersection)) {
-            // System.out.println(intersection);
-            hullPoints.add(intersection);
-          } else
-            ;
-          // System.out.println("no");
-        } else
-          ;
-        // System.out.println("omitted");
       }
     } // end rays
 
@@ -510,22 +508,22 @@ public class Frustum3D {
 
       // System.out.println("\nwith edges: ");
       for (Edge edge : tetra.getLocalEdges()) {
-        // System.out.println("checking edge: " + edgeCoords.get(edge)[0] +
-        // " to "
-        // + edgeCoords.get(edge)[1]);
-        // System.out.print("adding? ");
+//         System.out.println("checking edge: " + edgeCoords.get(edge)[0] +
+//         " to "
+//         + edgeCoords.get(edge)[1]);
+//         System.out.print("adding? ");
         if (!omitEdgesSector.get(sectorIndex).contains(edge)) {
           Vector intersection = findSectorIntersection(edgeCoords.get(edge)[0],
               edgeCoords.get(edge)[1], sectorIndex);
           if (intersection != null) {
             hullPoints.add(intersection);
-            // System.out.println(intersection);
+//             System.out.println(intersection);
           } else
             ;
-          // System.out.println("no");
+//           System.out.println("no");
         } else
           ;
-        // System.out.println("omitted");
+//         System.out.println("omitted");
       }
     } // end sectors
 
