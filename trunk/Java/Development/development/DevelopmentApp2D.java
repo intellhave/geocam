@@ -87,14 +87,14 @@ public class DevelopmentApp2D {
     
     //pick some arbitrary face
     i = Triangulation.faceTable.keySet().iterator();
-    EmbeddedFace source_face = Triangulation.faceTable.get(i.next());
+    Face source_face = Triangulation.faceTable.get(i.next());
 
     Vector source = new Vector(0,0);
     Iterator<Vertex> iv = source_face.getLocalVertices().iterator();
     while(iv.hasNext()){
       source.add(Coord2D.coordAt(iv.next(), source_face));
     }
-    source.scale(1/3);
+    source.scale(0.3333333333333333333333);
     //get initial affine transformation moving source to the origin
     AffineTransformation T = new AffineTransformation(Vector.scale(source,-1));
 
@@ -107,12 +107,35 @@ public class DevelopmentApp2D {
     //sgc_root.addChild(sgc_mfld);
     //sgc_root.addChild(EmbeddedTriangulation.getSGC());
     
+    //create appearance for developed faces
+    Appearance app_face = new Appearance();
+    
+    //set some basic attributes
+    app_face.setAttribute(CommonAttributes.FACE_DRAW, true);
+    app_face.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app_face.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app_face.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app_face.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    
+    //set shaders
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_face, true);
+    
+    //line shader
+    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+    dls.setTubeDraw(false);
+    dls.setDiffuseColor(Color.BLACK);
+    
+    //polygon shader
+    DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
+    dps.setDiffuseColor(Color.WHITE);
+    dps.setTransparency(0.6d);
+    
     //find 'development edge info' for this face, and iterate development
     ArrayList<DevelopmentEdgeInfo> deInfoList = getDevelopmentEdgeInfo(source_face, T);
     for(int j=0; j<deInfoList.size(); j++){
       DevelopmentEdgeInfo deInfo = deInfoList.get(j);
       Frustum2D frust = new Frustum2D(deInfo.vect0_,deInfo.vect1_);
-      iterateDevelopment(sgc_root,deInfo.F_,source_face,frust,T);
+      iterateDevelopment(sgc_root,app_face,deInfo.F_,source_face,frust,T);
     }
     
     //jrviewer
@@ -137,16 +160,16 @@ public class DevelopmentApp2D {
   private static class DevelopmentEdgeInfo{
     public Vector vect0_,vect1_;
     public Vertex vert0_,vert1_;
-    EmbeddedFace F_;
+    Face F_;
 
-    public DevelopmentEdgeInfo(Vertex vert0, Vertex vert1, Vector vect0, Vector vect1, EmbeddedFace F){
+    public DevelopmentEdgeInfo(Vertex vert0, Vertex vert1, Vector vect0, Vector vect1, Face F){
       vect0_ = vect0; vect1_ = vect1;
       vert0_ = vert0; vert1_ = vert1;
       F_ = F;
     }
   };
   
-  public static ArrayList<DevelopmentEdgeInfo> getDevelopmentEdgeInfo(EmbeddedFace F, AffineTransformation T){
+  public static ArrayList<DevelopmentEdgeInfo> getDevelopmentEdgeInfo(Face F, AffineTransformation T){
     ArrayList<DevelopmentEdgeInfo> retinfo = new ArrayList<DevelopmentEdgeInfo>();
     
     //get verts
@@ -164,10 +187,10 @@ public class DevelopmentApp2D {
     }
     
     //get faces
-    EmbeddedFace[] face = new EmbeddedFace[3];
-    Iterator<EmbeddedFace> fi = F.getLocalFaces().iterator();
+    Face[] face = new Face[3];
+    Iterator<Face> fi = F.getLocalFaces().iterator();
     while(fi.hasNext()){
-      EmbeddedFace ftemp = fi.next();
+      Face ftemp = fi.next();
       //see which verts are in common with F
       boolean[] vmatch = new boolean[3];
       vmatch[0] = false; vmatch[1] = false; vmatch[2] = false;
@@ -175,14 +198,14 @@ public class DevelopmentApp2D {
       while(vi.hasNext()){
         Vertex vtemp = vi.next();
         if(vtemp == vert[0]){ vmatch[0] = true; }
-        if(vtemp == vert[1]){ vmatch[1] = true; }
-        if(vtemp == vert[2]){ vmatch[2] = true; }
+        else if(vtemp == vert[1]){ vmatch[1] = true; }
+        else if(vtemp == vert[2]){ vmatch[2] = true; }
       }
       //now figure out based on vmatch which order to list the incident faces
       //we want face[k] to be the one sharing vert[k] and vert[(k+1)%3]
       if(vmatch[0] == false){ face[1] = ftemp; }
-      if(vmatch[1] == false){ face[2] = ftemp; }
-      if(vmatch[2] == false){ face[0] = ftemp; }
+      else if(vmatch[1] == false){ face[2] = ftemp; }
+      else if(vmatch[2] == false){ face[0] = ftemp; }
     }
     
     //see if CCW
@@ -192,7 +215,7 @@ public class DevelopmentApp2D {
     if(z < 0){ //flip orientation
       Vertex tempvert = vert[2];
       Vector tempvect = vect[2];
-      EmbeddedFace tempface = face[2];
+      Face tempface = face[2];
       vert[2] = vert[1];
       vect[2] = vect[1];
       face[2] = face[1];
@@ -209,7 +232,7 @@ public class DevelopmentApp2D {
     return retinfo;
   }
   
-  public static void iterateDevelopment(SceneGraphComponent sgc_root, EmbeddedFace new_face, EmbeddedFace source_face, Frustum2D current_frustum, AffineTransformation current_trans){
+  public static void iterateDevelopment(SceneGraphComponent sgc_root, Appearance app, Face new_face, Face source_face, Frustum2D current_frustum, AffineTransformation current_trans){
     
     AffineTransformation new_trans = new AffineTransformation(CoordTrans2D.affineTransAt(new_face, source_face));
     new_trans.leftMultiply(current_trans);
@@ -220,18 +243,21 @@ public class DevelopmentApp2D {
     while(i.hasNext()){
       Vertex vert = i.next();
       Vector pt = Coord2D.coordAt(vert, new_face);
-      try{ new_trans.affineTransPoint(pt); }catch(Exception e1){ e1.printStackTrace(); }
+      try{ pt = new_trans.affineTransPoint(pt); }catch(Exception e1){ e1.printStackTrace(); }
       efpts.add(pt);
     }
-    
+
     //make embeddedface
-    /*EmbeddedFace ef = new EmbeddedFace(efpts);
+    EmbeddedFace ef = new EmbeddedFace(efpts);
     
     //add clipped face to display
-    Geometry g = current_frustum.clipFace(ef).getGeometry(Color.WHITE);
+    Geometry g = ef.getGeometry(Color.WHITE);//current_frustum.clipFace(ef).getGeometry(Color.WHITE);
     SceneGraphComponent sgc_new_face = new SceneGraphComponent();
     sgc_new_face.setGeometry(g);
-    sgc_root.addChild(sgc_new_face);*/
+    
+    //add to sgc_root
+    sgc_new_face.setAppearance(app);
+    sgc_root.addChild(sgc_new_face);
     
     //see which faces to continue developing on
     
@@ -278,7 +304,7 @@ public class DevelopmentApp2D {
     return sgc_points;
   }
   
-  public static SceneGraphComponent sgcFromFace(EmbeddedFace face, AffineTransformation affineTrans, Color color){
+  public static SceneGraphComponent sgcFromFace(Face face, AffineTransformation affineTrans, Color color){
     
     //create a sgc for the face, after applying specified affine transformation
     SceneGraphComponent sgc_face = new SceneGraphComponent();

@@ -132,7 +132,7 @@ public class DevelopmentApp {
       //System.out.print(AffineTransformation.MatchTetraTrans(U,V));
       //System.out.print(AffineTransformation.findNormal(P,2,1));
       //System.out.print(Vector.findAngle2D(v,u));
-      System.out.print(AffineTransformation.MatchSimplexTrans(P, Q));
+      System.out.print(new AffineTransformation(P, Q));
     }catch(Exception e){
       e.printStackTrace();
     
