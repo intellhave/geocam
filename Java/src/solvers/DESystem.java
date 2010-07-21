@@ -1,4 +1,4 @@
-package solver;
+package solvers;
 
 public interface DESystem {
 

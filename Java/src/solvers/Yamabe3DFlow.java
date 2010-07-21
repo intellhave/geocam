@@ -1,4 +1,4 @@
-package solver;
+package solvers;
 
 import geoquant.Curvature2D;
 import geoquant.Curvature3D;

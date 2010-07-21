@@ -1,4 +1,4 @@
-package solver;
+package solvers;
 
 public class WrongDirectionException extends Exception {
 

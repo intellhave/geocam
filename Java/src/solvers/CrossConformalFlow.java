@@ -1,4 +1,4 @@
-package solver;
+package solvers;
 
 import geoquant.Alpha;
 import geoquant.Eta;

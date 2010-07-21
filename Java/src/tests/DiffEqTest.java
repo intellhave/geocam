@@ -11,9 +11,9 @@ import inputOutput.TriangulationIO;
 import java.util.LinkedList;
 import java.util.List;
 
-import solver.DESystem;
-import solver.EulerSolver;
-import solver.Yamabe2DFlow;
+import solvers.DESystem;
+import solvers.EulerSolver;
+import solvers.Yamabe2DFlow;
 import triangulation.Triangulation;
 
 
