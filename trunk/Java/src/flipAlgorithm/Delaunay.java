@@ -1,4 +1,4 @@
-package flipalg;
+package flipAlgorithm;
 
 import geoquant.Angle;
 import geoquant.PartialEdge;

@@ -1,6 +1,6 @@
-package flipalg;
+package flipAlgorithm;
 
-import flipalg.HingeInfo.HingeType;
+import flipAlgorithm.HingeInfo.HingeType;
 import geoquant.Angle;
 import geoquant.Length;
 import triangulation.Edge;
