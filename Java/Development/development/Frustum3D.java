@@ -205,7 +205,21 @@ public class Frustum3D {
     Vector v2 = this.getVectorAt((index + 1) % this.getNumberRays());
     Vector v3 = new Vector(0, 0, 0);
     Vector intersection = findIntersection(v1, v2, v3, a, b);
-    if (intersection == null || sectorContainsVector(index, intersection))
+    System.out.println();
+    System.out.println("found intersection between sector at "
+        + this.getVectorAt(index) + " and "
+        + this.getVectorAt((index + 1) % this.getNumberRays())
+        + " with line through " + a + " and " + b);
+    System.out.println("it is: " + intersection);
+    if (intersection != null) {
+      System.out.println("contained in sector? "
+          + sectorContainsVector(index, intersection));
+      System.out.println("contained in edge? "
+          + isContained(a, b, intersection) + "\n");
+    }
+    if (intersection == null
+        || (isContained(a, b, intersection) && sectorContainsVector(index,
+            intersection)))
       return intersection;
     return null;
   }
@@ -286,7 +300,7 @@ public class Frustum3D {
       else
         t = -a2 / w2;
 
-      if (Math.abs(w2 * t + a2) > epsilon || Math.abs(w1 * t + a1) > epsilon) 
+      if (Math.abs(w2 * t + a2) > epsilon || Math.abs(w1 * t + a1) > epsilon)
         // not zero => no intersection
         return null;
       double z = w3 * t + a3;
@@ -358,18 +372,18 @@ public class Frustum3D {
     return true;
   }
 
-  public ArrayList<Vector> clipFace(Tetra polyhedron) {
+  public ArrayList<Vector> clipFace(Tetra tetra) {
 
     HashMap<Vertex, Vector> vertexCoords = new HashMap<Vertex, Vector>();
-    List<Vertex> vertices = polyhedron.getLocalVertices();
+    List<Vertex> vertices = tetra.getLocalVertices();
     System.out.println("vertices: " + vertices.get(0).equals(vertices.get(1)));
-    vertexCoords.put(vertices.get(0), new Vector(-1, 0, 0));
-    vertexCoords.put(vertices.get(1), new Vector(0, 0, 1));
-    vertexCoords.put(vertices.get(2), new Vector(-1, -1, 0));
-    vertexCoords.put(vertices.get(3), new Vector(0, 1, 0));
+    vertexCoords.put(vertices.get(0), Coord3D.coordAt(vertices.get(0), tetra));
+    vertexCoords.put(vertices.get(1), Coord3D.coordAt(vertices.get(1), tetra));
+    vertexCoords.put(vertices.get(2), Coord3D.coordAt(vertices.get(2), tetra));
+    vertexCoords.put(vertices.get(3), Coord3D.coordAt(vertices.get(3), tetra));
 
     HashMap<Edge, Vector[]> edgeCoords = new HashMap<Edge, Vector[]>();
-    List<Edge> edges = polyhedron.getLocalEdges();
+    List<Edge> edges = tetra.getLocalEdges();
     for (int i = 0; i < edges.size(); i++) {
       List<Vertex> ends = edges.get(i).getLocalVertices();
       Vector[] points = new Vector[2];
@@ -379,7 +393,7 @@ public class Frustum3D {
     }
 
     HashMap<Triangulation.Face, EmbeddedFace> faces = new HashMap<Triangulation.Face, EmbeddedFace>();
-    List<Triangulation.Face> faceList = polyhedron.getLocalFaces();
+    List<Triangulation.Face> faceList = tetra.getLocalFaces();
     for (Triangulation.Face face : faceList) {
       List<Vertex> vs = face.getLocalVertices();
       ArrayList<Vector> vectors = new ArrayList<Vector>();
@@ -406,7 +420,8 @@ public class Frustum3D {
     // rays
     for (int rayIndex = 0; rayIndex < this.getNumberRays(); rayIndex++) {
       System.out.println();
-      System.out.println("checking ray index 0 (" + rays.get(rayIndex));
+      System.out.println("checking ray index " + rayIndex + ": "
+          + rays.get(rayIndex));
       Vector ray = rays.get(rayIndex);
       // ray's local sectors are at rayIndex and rayIndex-1
       int prevIndex = (rayIndex - 1 + getNumberRays()) % getNumberRays();
@@ -414,11 +429,11 @@ public class Frustum3D {
       omitEdgesRay.clear();
       omitFacesRay.clear();
 
-      for (Vertex vertex : polyhedron.getLocalVertices()) {
-        System.out.println("*checking vertex: " + vertexCoords.get(vertex));
-        System.out.print("adding? ");
+      for (Vertex vertex : tetra.getLocalVertices()) {
+        // System.out.println("*checking vertex: " + vertexCoords.get(vertex));
+        // System.out.print("adding? ");
         if (closeTogether(vertexCoords.get(vertex), ray)) {
-          System.out.println("yes");
+          // System.out.println("yes");
           hullPoints.add(vertexCoords.get(vertex));
 
           omitEdgesRay.addAll(vertex.getLocalEdges());
@@ -431,17 +446,19 @@ public class Frustum3D {
           omitVertsSector.get(rayIndex).add(vertex);
           omitVertsSector.get(prevIndex).add(vertex);
         } else
-          System.out.println("no");
+          ;
+        // System.out.println("no");
       }
 
-      for (Edge edge : polyhedron.getLocalEdges()) {
+      for (Edge edge : tetra.getLocalEdges()) {
         System.out.println("checking edge :" + edgeCoords.get(edge)[0] + " to "
             + edgeCoords.get(edge)[1]);
         System.out.print("adding? ");
         if (!omitEdgesRay.contains(edge)) {
           Vector intersection = findIntersection(edgeCoords.get(edge)[0],
               edgeCoords.get(edge)[1], ray);
-          if (intersection != null) {
+          if (intersection != null && isContained(edgeCoords.get(edge)[0],
+              edgeCoords.get(edge)[1], intersection) && this.checkInterior(intersection)) {
             System.out.println(intersection);
             hullPoints.add(intersection);
             omitFacesRay.addAll(edge.getLocalFaces());
@@ -450,60 +467,69 @@ public class Frustum3D {
             omitEdgesSector.get(prevIndex).add(edge);
           } else
             System.out.println("no");
-        }
-        else System.out.println("omitted");
+        } else
+          System.out.println("omitted");
       }
 
-      for (Triangulation.Face face : polyhedron.getLocalFaces()) {
-        System.out.println("checking face: \n" + faces.get(face));
-        System.out.print("adding? ");
+      for (Triangulation.Face face : tetra.getLocalFaces()) {
+        // System.out.println("checking face: \n" + faces.get(face));
+        // System.out.print("adding? ");
         if (!omitFacesRay.contains(face)) {
           Vector intersection = findIntersectionWithFace(faces.get(face), ray);
           Frustum3D frustum = new Frustum3D(faces.get(face).getVectors());
           if (intersection != null && frustum.checkInterior(intersection)) {
-            System.out.println(intersection);
+            // System.out.println(intersection);
             hullPoints.add(intersection);
           } else
-            System.out.println("no");
-        } else System.out.println("omitted");
+            ;
+          // System.out.println("no");
+        } else
+          ;
+        // System.out.println("omitted");
       }
     } // end rays
 
     // sectors
     System.out.println();
     for (int sectorIndex = 0; sectorIndex < this.getNumberRays(); sectorIndex++) {
-      System.out.println("checking sector index " + sectorIndex);
-      for (Vertex vertex : polyhedron.getLocalVertices()) {
-        System.out.println("*checking vertex: " + vertexCoords.get(vertex));
-        System.out.print("adding? ");
+      // System.out.println("\nchecking sector index " + sectorIndex);
+      // System.out.println("with vertices:");
+      for (Vertex vertex : tetra.getLocalVertices()) {
+        // System.out.println("*checking vertex: " + vertexCoords.get(vertex));
+        // System.out.print("adding? ");
         if (!omitVerts.contains(vertex)
             && sectorContainsVector(sectorIndex, vertexCoords.get(vertex))) {
-          System.out.println("yes");
+          // System.out.println("yes");
           hullPoints.add(vertexCoords.get(vertex));
           omitEdgesSector.get(sectorIndex).addAll(vertex.getLocalEdges());
           omitVerts.add(vertex);
         } else
-          System.out.println("no");
+          ;
+        // System.out.println("no");
       }
 
-      for (Edge edge : polyhedron.getLocalEdges()) {
-        System.out.println("checking edge: " + edgeCoords.get(edge)[0] + " to "
-            + edgeCoords.get(edge)[1]);
-        System.out.print("adding? ");
+      // System.out.println("\nwith edges: ");
+      for (Edge edge : tetra.getLocalEdges()) {
+        // System.out.println("checking edge: " + edgeCoords.get(edge)[0] +
+        // " to "
+        // + edgeCoords.get(edge)[1]);
+        // System.out.print("adding? ");
         if (!omitEdgesSector.get(sectorIndex).contains(edge)) {
           Vector intersection = findSectorIntersection(edgeCoords.get(edge)[0],
               edgeCoords.get(edge)[1], sectorIndex);
           if (intersection != null) {
             hullPoints.add(intersection);
-            System.out.println(intersection);
+            // System.out.println(intersection);
           } else
-            System.out.println("no");
+            ;
+          // System.out.println("no");
         } else
-          System.out.println("omitted");
+          ;
+        // System.out.println("omitted");
       }
     } // end sectors
 
-    for (Vertex vertex : polyhedron.getLocalVertices()) {
+    for (Vertex vertex : tetra.getLocalVertices()) {
       if (!omitVerts.contains(vertex)
           && this.checkInterior(vertexCoords.get(vertex)))
         hullPoints.add(vertexCoords.get(vertex));
