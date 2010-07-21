@@ -1,4 +1,4 @@
-package Flows;
+package flow;
 
 import geoquant.Radius;
 import geoquant.VEHR;

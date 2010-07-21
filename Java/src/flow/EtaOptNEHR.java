@@ -1,4 +1,4 @@
-package Flows;
+package flow;
 
 import geoquant.*;
 import triangulation.Edge;
