@@ -1,4 +1,4 @@
-package visual;
+package visualization;
 
 import java.util.LinkedList;
 import java.util.List;

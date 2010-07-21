@@ -1,4 +1,4 @@
-package visual;
+package visualization;
 
 import static de.jreality.shader.CommonAttributes.DIFFUSE_COLOR;
 import static de.jreality.shader.CommonAttributes.LINE_SHADER;
@@ -19,7 +19,7 @@ import javax.swing.JFrame;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import visual.PlanarDevelopment;
+import visualization.PlanarDevelopment;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedFaceSetUtility;
