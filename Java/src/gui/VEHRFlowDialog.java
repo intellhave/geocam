@@ -1,7 +1,5 @@
 package gui;
 
-import flow.EtaOptNEHR;
-import flow.RadiusOptNEHR;
 import geoquant.GeoRecorder;
 
 import java.awt.Component;
@@ -21,6 +19,8 @@ import javax.swing.JRadioButton;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 
+import Solvers.EtaOptNEHR;
+import Solvers.RadiusOptNEHR;
 import Solvers.WrongDirectionException;
 
 

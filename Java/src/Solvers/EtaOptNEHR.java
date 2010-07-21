@@ -1,12 +1,10 @@
-package flow;
+package Solvers;
 
 import geoquant.*;
 import triangulation.Edge;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
-import Solvers.NewtonsMethod;
-import Solvers.WrongDirectionException;
 
 public class EtaOptNEHR extends NewtonsMethod {
   private Eta[] etas;
