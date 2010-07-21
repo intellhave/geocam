@@ -1,8 +1,8 @@
 package tests;
 
+import solver.NewtonsMethod;
+import solver.WrongDirectionException;
 import util.Matrix;
-import Solvers.NewtonsMethod;
-import Solvers.WrongDirectionException;
 
 public class NewtonsMethodTest {
   public static void main(String[] args) {

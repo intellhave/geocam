@@ -33,10 +33,10 @@ import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import solver.*;
 import triangulation.Triangulation;
 
 
-import Solvers.*;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo

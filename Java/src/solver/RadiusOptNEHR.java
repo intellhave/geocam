@@ -1,4 +1,4 @@
-package Solvers;
+package solver;
 
 import geoquant.Radius;
 import geoquant.VEHR;

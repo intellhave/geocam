@@ -11,11 +11,11 @@ import inputOutput.TriangulationIO;
 import java.util.LinkedList;
 import java.util.List;
 
+import solver.DESystem;
+import solver.EulerSolver;
+import solver.Yamabe2DFlow;
 import triangulation.Triangulation;
 
-import Solvers.DESystem;
-import Solvers.EulerSolver;
-import Solvers.Yamabe2DFlow;
 
 public class DiffEqTest {
 
