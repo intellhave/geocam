@@ -1,7 +1,7 @@
 package gui;
 import gui.GeoPolygonPanel.Form;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;

@@ -1,6 +1,6 @@
 package development;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import java.awt.Color;
 import java.util.ArrayList;

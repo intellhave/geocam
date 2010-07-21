@@ -2,7 +2,7 @@ package development;
 
 import static org.junit.Assert.assertEquals;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;

@@ -3,7 +3,7 @@
 
 package development;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import java.util.Iterator;
 import triangulation.*;

@@ -1,6 +1,6 @@
 package tests;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 import triangulation.Face;
 import triangulation.StdFace;
 import triangulation.Triangulation;

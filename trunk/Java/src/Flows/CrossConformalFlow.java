@@ -1,6 +1,6 @@
 package Flows;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 import triangulation.Edge;
 import triangulation.Triangulation;
 import triangulation.Vertex;

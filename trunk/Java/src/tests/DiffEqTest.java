@@ -1,6 +1,6 @@
 package tests;
 
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package tests;
 
 //import Geoquant.Length;
-import io.TriangulationIO;
+import inputOutput.TriangulationIO;
 import triangulation.Triangulation;
 import visualization.TriangulationDisplay;
 
