@@ -1,4 +1,4 @@
-package Experiments;
+package exper;
 
 import geoquant.Alpha;
 import geoquant.Angle;
