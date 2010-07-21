@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import visual.Circle;
-import visual.Line;
-import visual.Point;
+import visualization.Circle;
+import visualization.Line;
+import visualization.Point;
 
 
 public class VisualizationTests {

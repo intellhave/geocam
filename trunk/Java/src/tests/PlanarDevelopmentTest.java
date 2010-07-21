@@ -3,7 +3,7 @@ package tests;
 import java.util.HashSet;
 
 import triangulation.Face;
-import visual.PlanarDevelopment;
+import visualization.PlanarDevelopment;
 
 import InputOutput.TriangulationIO;
 
