@@ -1,6 +1,6 @@
 package tests;
 
-import flipalg.HingeFlip;
+import flipAlgorithm.HingeFlip;
 import inputOutput.TriangulationIO;
 import triangulation.Edge;
 import triangulation.StdFace;
