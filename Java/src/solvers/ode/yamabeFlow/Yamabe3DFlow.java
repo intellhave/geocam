@@ -1,4 +1,4 @@
-package solvers;
+package solvers.ode.yamabeFlow;
 
 import geoquant.Curvature2D;
 import geoquant.Curvature3D;
@@ -7,6 +7,7 @@ import geoquant.Geometry;
 import geoquant.Length;
 import geoquant.Radius;
 import geoquant.Volume;
+import solvers.ode.DESystem;
 import triangulation.StdTetra;
 import triangulation.Tetra;
 import triangulation.Triangulation;

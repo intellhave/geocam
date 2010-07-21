@@ -1,4 +1,4 @@
-package solvers;
+package solvers.newtonsMethod;
 
 import geoquant.Radius;
 import geoquant.VEHR;

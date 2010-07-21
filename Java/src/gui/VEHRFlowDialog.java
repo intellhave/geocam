@@ -19,9 +19,9 @@ import javax.swing.JRadioButton;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 
-import solvers.EtaOptNEHR;
-import solvers.RadiusOptNEHR;
-import solvers.WrongDirectionException;
+import solvers.newtonsMethod.EtaOptNEHR;
+import solvers.newtonsMethod.RadiusOptNEHR;
+import solvers.newtonsMethod.WrongDirectionException;
 
 
 
