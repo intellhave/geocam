@@ -1,11 +1,11 @@
 package tests;
 
+import flipalg.HingeFlip;
 import inputOutput.TriangulationIO;
 import triangulation.Edge;
 import triangulation.StdFace;
 import triangulation.Triangulation;
 import visualization.TriangulationDisplay;
-import FlipAlgorithm.HingeFlip;
 
 public class flipTest {
   public static void main(String[] args) throws InterruptedException {
