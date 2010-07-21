@@ -43,6 +43,19 @@ public class AffineTransformation extends Matrix {
   public AffineTransformation(int n){ 
     setAsIdentity(n);
   }
+  
+  //copy constructor
+  public AffineTransformation(AffineTransformation T){
+    
+    rows = T.rows;
+    cols = T.cols;
+    m = new double[rows][cols];
+    for(int i=0; i<rows; i++){
+      for(int j=0; j<cols; j++){
+        m[i][j] = T.m[i][j];
+      }
+    }
+  }
 
   //General constructor
   public AffineTransformation(Matrix a, Vector b) throws Exception{
