@@ -5,14 +5,15 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.StdFace;
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 import Geoquant.Angle;
 import Geoquant.Curvature2D;
 import Geoquant.Length;
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
-import Triangulation.StdFace;
 
 public class PlanarDevelopment {
 

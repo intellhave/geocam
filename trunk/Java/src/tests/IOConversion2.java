@@ -7,8 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+import triangulation.Triangulation;
+
 import InputOutput.TriangulationIO;
-import Triangulation.Triangulation;
 
 public class IOConversion2 {
 

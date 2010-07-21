@@ -1,8 +1,8 @@
 package Flows;
 
-import Triangulation.Edge;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 import Geoquant.Alpha;
 import Geoquant.Eta;
 import Geoquant.Geometry;

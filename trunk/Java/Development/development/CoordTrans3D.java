@@ -3,8 +3,8 @@ package development;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import Triangulation.Tetra;
-import Triangulation.Vertex;
+import triangulation.Tetra;
+import triangulation.Vertex;
 import Geoquant.*;
 
 //note that the coordinates this geoquant gives do not take orientation into account

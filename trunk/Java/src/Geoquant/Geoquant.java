@@ -2,7 +2,8 @@ package Geoquant;
 import java.util.LinkedList;
 import java.util.Observer;
 import java.util.Observable;
-import Triangulation.Simplex;
+
+import triangulation.Simplex;
 
 /**
  * The Geoquant class serves as an abstract description of a geometric quantity that

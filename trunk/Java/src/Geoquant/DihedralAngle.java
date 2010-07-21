@@ -3,7 +3,8 @@ package Geoquant;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import Triangulation.*;
+import triangulation.*;
+
 
 public class DihedralAngle extends Geoquant {
   //Index map

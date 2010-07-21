@@ -2,9 +2,9 @@ package development;
 
 import java.util.HashMap;
 
-import Triangulation.Face;
-import Triangulation.Vertex;
-import Triangulation.StdFace;
+import triangulation.Face;
+import triangulation.Vertex;
+import triangulation.StdFace;
 import Geoquant.*;
 
 //note that the coordinates this geoquant gives do not take orientation into account

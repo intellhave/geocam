@@ -3,9 +3,10 @@ package Geoquant;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import Triangulation.Edge;
-import Triangulation.StdTetra;
-import Triangulation.Tetra;
+import triangulation.Edge;
+import triangulation.StdTetra;
+import triangulation.Tetra;
+
 
 public class DualArea extends Geoquant {
   //Index map

@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.StdEdge;
+import triangulation.Triangulation;
+
 import Geoquant.Alpha;
 import Geoquant.Angle;
 import Geoquant.DihedralAngle;
@@ -12,10 +17,6 @@ import Geoquant.Geometry;
 import Geoquant.Length;
 import Geoquant.Radius;
 import InputOutput.TriangulationIO;
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.StdEdge;
-import Triangulation.Triangulation;
 
 public class DualPentachoronTest {
 

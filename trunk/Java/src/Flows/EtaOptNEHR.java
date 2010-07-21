@@ -1,8 +1,8 @@
 package Flows;
 
-import Triangulation.Edge;
-import Triangulation.Triangulation;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 import util.Matrix;
 import Geoquant.*;
 import Solvers.NewtonsMethod;

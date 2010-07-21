@@ -1,9 +1,9 @@
 package tests;
 
+import triangulation.Face;
+import triangulation.StdFace;
+import triangulation.Triangulation;
 import InputOutput.TriangulationIO;
-import Triangulation.Face;
-import Triangulation.StdFace;
-import Triangulation.Triangulation;
 
 public class OrientationTest {
   
@@ -11,9 +11,9 @@ public class OrientationTest {
     TriangulationIO.read2DTriangulationFile("Data/flip_test/eight_triangles_redux.txt");
     StdFace.generateOrientation();
     
-    for (Face face : Triangulation.faceTable.values()) {
-      System.out.println("Face " + face.getIndex() + " : " + StdFace.getOrientedFace(face));
-      StdFace s = StdFace.getOrientedFace(face);
+    for (Face embeddedFace : Triangulation.faceTable.values()) {
+      System.out.println("Face " + embeddedFace.getIndex() + " : " + StdFace.getOrientedFace(embeddedFace));
+      StdFace s = StdFace.getOrientedFace(embeddedFace);
       System.out.println("\t" + s.e12 + " " + s.e23 + " " + s.e13);
     }
   }

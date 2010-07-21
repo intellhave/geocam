@@ -2,9 +2,10 @@ package Geoquant;
 
 import java.util.HashMap;
 
-import Triangulation.Face;
-import Triangulation.StdFace;
-import Triangulation.Vertex;
+import triangulation.Face;
+import triangulation.StdFace;
+import triangulation.Vertex;
+
 
 public class Angle extends Geoquant {
   // Index map

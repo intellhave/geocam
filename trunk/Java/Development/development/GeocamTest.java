@@ -5,7 +5,7 @@ package development;
 
 import java.util.Iterator;
 import InputOutput.TriangulationIO;
-import Triangulation.*;
+import triangulation.*;
 import Geoquant.*;
 
 public class GeocamTest {

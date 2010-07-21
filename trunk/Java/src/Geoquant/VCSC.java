@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Set;
 
-import Triangulation.*;
+import triangulation.*;
+
 
 public class VCSC extends Geoquant {
   // Index map

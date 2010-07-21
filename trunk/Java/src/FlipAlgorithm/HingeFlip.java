@@ -1,11 +1,11 @@
 package FlipAlgorithm;
 
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Vertex;
 import FlipAlgorithm.HingeInfo.HingeType;
 import Geoquant.Angle;
 import Geoquant.Length;
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.Vertex;
 
 public class HingeFlip {
 
@@ -47,8 +47,8 @@ public class HingeFlip {
 
   public static HingeType determineHingeType(Edge edge) {
     int numPositive = 0;
-    for (Face face : edge.getLocalFaces()) {
-      if (face.isNegative()) {
+    for (Face embeddedFace : edge.getLocalFaces()) {
+      if (embeddedFace.isNegative()) {
         // don't increment
       } else {
         numPositive += 1;
@@ -71,11 +71,11 @@ public class HingeFlip {
   // as positive positive
   public static void flipPP(HingeInfo info) {
 
-    double ang0 = Angle.valueAt(info.vertices[0], info.faces[0])
-        + Angle.valueAt(info.vertices[0], info.faces[1]);
+    double ang0 = Angle.valueAt(info.vertices[0], info.embeddedFaces[0])
+        + Angle.valueAt(info.vertices[0], info.embeddedFaces[1]);
 
-    double ang2 = Angle.valueAt(info.vertices[2], info.faces[0])
-        + Angle.valueAt(info.vertices[2], info.faces[1]);
+    double ang2 = Angle.valueAt(info.vertices[2], info.embeddedFaces[0])
+        + Angle.valueAt(info.vertices[2], info.embeddedFaces[1]);
 
     double len1, len4;
     len1 = Length.valueAt(info.edges[1]);
@@ -101,9 +101,9 @@ public class HingeFlip {
     Length.At(info.edges[0]).setValue(edgeLength);
 
     if (ang0 > Math.PI) {
-      info.faces[0].setNegativity(true);
+      info.embeddedFaces[0].setNegativity(true);
     } else if (ang2 > Math.PI) {
-      info.faces[1].setNegativity(true);
+      info.embeddedFaces[1].setNegativity(true);
     }
   }
 
@@ -120,8 +120,8 @@ public class HingeFlip {
      * h.e0_len_after = e_length;
      */
     double alpha, beta;
-    alpha = Angle.valueAt(info.vertices[0], info.faces[0]);
-    beta = Angle.valueAt(info.vertices[0], info.faces[1]);
+    alpha = Angle.valueAt(info.vertices[0], info.embeddedFaces[0]);
+    beta = Angle.valueAt(info.vertices[0], info.embeddedFaces[1]);
 
     double len1 = Length.valueAt(info.edges[1]);
     double len4 = Length.valueAt(info.edges[4]);
@@ -131,11 +131,11 @@ public class HingeFlip {
 
     Face negFace = null;
     Face posFace = null;
-    for (Face face : info.edges[0].getLocalFaces()) {
-      if (face.isNegative()) {
-        negFace = face;
+    for (Face embeddedFace : info.edges[0].getLocalFaces()) {
+      if (embeddedFace.isNegative()) {
+        negFace = embeddedFace;
       } else {
-        posFace = face;
+        posFace = embeddedFace;
       }
     }
 
@@ -149,12 +149,12 @@ public class HingeFlip {
     if (Angle.valueAt(v0, negFace) < Angle.valueAt(v0, posFace)
         && Angle.valueAt(v2, negFace) < Angle.valueAt(v2, posFace)) {
       // negative face is inside the positive face
-      info.faces[0].setNegativity(false);
-      info.faces[1].setNegativity(false);
+      info.embeddedFaces[0].setNegativity(false);
+      info.embeddedFaces[1].setNegativity(false);
     } else if (Angle.valueAt(v0, negFace) > Angle.valueAt(v0, posFace)
         && Angle.valueAt(v2, negFace) > Angle.valueAt(v2, posFace)) {
-      info.faces[0].setNegativity(true);
-      info.faces[1].setNegativity(true);
+      info.embeddedFaces[0].setNegativity(true);
+      info.embeddedFaces[1].setNegativity(true);
     } else if (Angle.valueAt(v0, negFace) > Angle.valueAt(v0, posFace)
         && Angle.valueAt(v2, negFace) < Angle.valueAt(v2, posFace)) {
       // they stay the same... for now
@@ -168,11 +168,11 @@ public class HingeFlip {
   // as a negative negative
   public static void flipNN(HingeInfo info) {
 
-    double ang0 = Angle.valueAt(info.vertices[0], info.faces[0])
-        + Angle.valueAt(info.vertices[0], info.faces[1]);
+    double ang0 = Angle.valueAt(info.vertices[0], info.embeddedFaces[0])
+        + Angle.valueAt(info.vertices[0], info.embeddedFaces[1]);
 
-    double ang2 = Angle.valueAt(info.vertices[2], info.faces[0])
-        + Angle.valueAt(info.vertices[2], info.faces[1]);
+    double ang2 = Angle.valueAt(info.vertices[2], info.embeddedFaces[0])
+        + Angle.valueAt(info.vertices[2], info.embeddedFaces[1]);
 
     double len1, len4;
     len1 = Length.valueAt(info.edges[1]);
@@ -197,9 +197,9 @@ public class HingeFlip {
     Length.At(info.edges[0]).setValue(edgeLength);
 
     if (ang0 > Math.PI) {
-      info.faces[0].setNegativity(false);
+      info.embeddedFaces[0].setNegativity(false);
     } else if (ang2 > Math.PI) {
-      info.faces[1].setNegativity(false);
+      info.embeddedFaces[1].setNegativity(false);
     }
   }
 
@@ -255,76 +255,76 @@ public class HingeFlip {
     info.vertices[2].removeVertex(info.vertices[0]);
 
     Face e2AdjFace = null;
-    for (Face face : info.edges[2].getLocalFaces()) {
-      if (!face.equals(info.faces[0])) {
-        e2AdjFace = face;
+    for (Face embeddedFace : info.edges[2].getLocalFaces()) {
+      if (!embeddedFace.equals(info.embeddedFaces[0])) {
+        e2AdjFace = embeddedFace;
         break;
       }
     }
 
     Face e4AdjFace = null;
-    for (Face face : info.edges[4].getLocalFaces()) {
-      if (!face.equals(info.faces[1])) {
-        e4AdjFace = face;
+    for (Face embeddedFace : info.edges[4].getLocalFaces()) {
+      if (!embeddedFace.equals(info.embeddedFaces[1])) {
+        e4AdjFace = embeddedFace;
         break;
       }
     }
 
     // remove e2 v2 with f0
     // also e2's adj face
-    info.edges[2].removeFace(info.faces[0]);
-    info.vertices[2].removeFace(info.faces[0]);
+    info.edges[2].removeFace(info.embeddedFaces[0]);
+    info.vertices[2].removeFace(info.embeddedFaces[0]);
     if (e2AdjFace != null) {
-      e2AdjFace.removeFace(info.faces[0]);
+      e2AdjFace.removeFace(info.embeddedFaces[0]);
     }
 
-    info.faces[0].removeEdge(info.edges[2]);
-    info.faces[0].removeVertex(info.vertices[2]);
+    info.embeddedFaces[0].removeEdge(info.edges[2]);
+    info.embeddedFaces[0].removeVertex(info.vertices[2]);
     if (e2AdjFace != null) {
-      info.faces[0].removeFace(e2AdjFace);
+      info.embeddedFaces[0].removeFace(e2AdjFace);
     }
 
     // remove e4 v0 with f1
     // also e4's adj face
-    info.edges[4].removeFace(info.faces[1]);
-    info.vertices[0].removeFace(info.faces[1]);
+    info.edges[4].removeFace(info.embeddedFaces[1]);
+    info.vertices[0].removeFace(info.embeddedFaces[1]);
     if (e4AdjFace != null) {
-      e4AdjFace.removeFace(info.faces[1]);
+      e4AdjFace.removeFace(info.embeddedFaces[1]);
     }
 
-    info.faces[1].removeEdge(info.edges[4]);
-    info.faces[1].removeVertex(info.vertices[0]);
+    info.embeddedFaces[1].removeEdge(info.edges[4]);
+    info.embeddedFaces[1].removeVertex(info.vertices[0]);
     if (e4AdjFace != null) {
-      info.faces[1].removeFace(e4AdjFace);
+      info.embeddedFaces[1].removeFace(e4AdjFace);
     }
 
     // add e2 v1 with f1 (NOTE v1 not v2 since v2 is already adjacent to f1)
     // this same rule applies to f0's case later
     // also e2's adj face
-    info.edges[2].addFace(info.faces[1]);
-    info.vertices[1].addFace(info.faces[1]);
+    info.edges[2].addFace(info.embeddedFaces[1]);
+    info.vertices[1].addFace(info.embeddedFaces[1]);
     if (e2AdjFace != null) {
-      e2AdjFace.addFace(info.faces[1]);
+      e2AdjFace.addFace(info.embeddedFaces[1]);
     }
 
-    info.faces[1].addEdge(info.edges[2]);
-    info.faces[1].addVertex(info.vertices[1]);
+    info.embeddedFaces[1].addEdge(info.edges[2]);
+    info.embeddedFaces[1].addVertex(info.vertices[1]);
     if (e2AdjFace != null) {
-      info.faces[1].addFace(e2AdjFace);
+      info.embeddedFaces[1].addFace(e2AdjFace);
     }
 
     // add e4 v3 with f0
     // also e4's adj face
-    info.edges[4].addFace(info.faces[0]);
-    info.vertices[3].addFace(info.faces[0]);
+    info.edges[4].addFace(info.embeddedFaces[0]);
+    info.vertices[3].addFace(info.embeddedFaces[0]);
     if (e4AdjFace != null) {
-      e4AdjFace.addFace(info.faces[0]);
+      e4AdjFace.addFace(info.embeddedFaces[0]);
     }
 
-    info.faces[0].addEdge(info.edges[4]);
-    info.faces[0].addVertex(info.vertices[3]);
+    info.embeddedFaces[0].addEdge(info.edges[4]);
+    info.embeddedFaces[0].addVertex(info.vertices[3]);
     if (e4AdjFace != null) {
-      info.faces[0].addFace(e4AdjFace);
+      info.embeddedFaces[0].addFace(e4AdjFace);
     }
 
     // add e0 with v1 and v3 and all of their adjacent edges
@@ -365,8 +365,8 @@ public class HingeFlip {
     info.edges[0] = edge;
 
     int index = 0; // just a counter, gonna use it all over the place
-    for (Face face : edge.getLocalFaces()) {
-      info.faces[index] = face;
+    for (Face embeddedFace : edge.getLocalFaces()) {
+      info.embeddedFaces[index] = embeddedFace;
       index += 1;
     }
 
@@ -378,7 +378,7 @@ public class HingeFlip {
 
     // grab vertices 1 and 3
     for (int i = 0; i < 2; i++) {
-      for (Vertex vertex : info.faces[i].getLocalVertices()) {
+      for (Vertex vertex : info.embeddedFaces[i].getLocalVertices()) {
         if (vertex.equals(info.vertices[0]) || vertex.equals(info.vertices[2])) {
           continue; // we already have these assigned so skip 'em
         } else if (i == 0) {
@@ -392,7 +392,7 @@ public class HingeFlip {
     // grab the remaining 4 edges
     index = 0;
     for (int i = 0; i < 2; i++) {
-      for (Edge e : info.faces[i].getLocalEdges()) {
+      for (Edge e : info.embeddedFaces[i].getLocalEdges()) {
         if (e.equals(edge)) {
           continue;
         } else if (i == 0 && e.isAdjVertex(info.vertices[0])) { // next to f_0
@@ -426,7 +426,7 @@ public class HingeFlip {
       }
     }
     for (int i = 0; i < 2; i++) {
-      if (info.faces[i] == null) {
+      if (info.embeddedFaces[i] == null) {
         System.err.println("face " + i + "was never found!");
         success = false;
       }
@@ -443,7 +443,7 @@ public class HingeFlip {
     }
     for (int i = 0; i < 2; i++) {
       System.out.println("hingeface " + i + " is face "
-          + info.faces[i].getIndex());
+          + info.embeddedFaces[i].getIndex());
     }
 
     return success;

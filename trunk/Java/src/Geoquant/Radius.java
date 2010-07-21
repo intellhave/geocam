@@ -2,12 +2,12 @@ package Geoquant;
 
 import java.util.HashMap;
 
+import triangulation.Edge;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 import util.GeoMath;
 import util.Matrix;
 
-import Triangulation.Edge;
-import Triangulation.Vertex;
-import Triangulation.Triangulation;
 
 public class Radius extends Geoquant {
   private static HashMap<TriPosition, Radius> Index = new HashMap<TriPosition, Radius>();

@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import triangulation.*;
 import util.GeoMath;
 import util.Matrix;
 
@@ -36,7 +37,6 @@ import Geoquant.VEinstein;
 import Geoquant.Volume;
 import InputOutput.TriangulationIO;
 import Solvers.WrongDirectionException;
-import Triangulation.*;
 
 public class GeoquantTest {
 

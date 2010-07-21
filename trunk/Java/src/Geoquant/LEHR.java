@@ -2,9 +2,10 @@ package Geoquant;
 
 import java.util.HashMap;
 
-import Triangulation.Face;
-import Triangulation.StdTetra;
-import Triangulation.Tetra;
+import triangulation.Face;
+import triangulation.StdTetra;
+import triangulation.Tetra;
+
 
 public class LEHR extends Geoquant {
   // Index map

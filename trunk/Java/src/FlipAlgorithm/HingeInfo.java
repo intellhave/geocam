@@ -1,8 +1,8 @@
 package FlipAlgorithm;
 
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.Vertex;
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Vertex;
 
 
 //the names of the various values correspond to the pictures below
@@ -44,5 +44,5 @@ public class HingeInfo {
   
   Vertex[] vertices = new Vertex[4];
   Edge[] edges = new Edge[5];
-  Face[] faces = new Face[2];
+  Face[] embeddedFaces = new Face[2];
 }

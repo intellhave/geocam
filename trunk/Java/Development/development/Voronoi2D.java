@@ -5,22 +5,22 @@ import java.util.ArrayList;
 public class Voronoi2D {
 
   private ArrayList<Vector> points_;
-  private Face[] cells_; //cells_[i] is the voronoi cell of points_[i], intersected with bounding_face_
-  private Face bounding_face_;
+  private EmbeddedFace[] cells_; //cells_[i] is the voronoi cell of points_[i], intersected with bounding_face_
+  private EmbeddedFace bounding_face_;
   
-  public Voronoi2D(Face bounding_face, ArrayList<Vector> points) {
+  public Voronoi2D(EmbeddedFace bounding_face, ArrayList<Vector> points) {
     points_ = points;
     bounding_face_ = bounding_face;
-    cells_ = new Face[points_.size()];
+    cells_ = new EmbeddedFace[points_.size()];
     computeCells();
   }
-  public Voronoi2D(Face bounding_face, Vector[] points) {
+  public Voronoi2D(EmbeddedFace bounding_face, Vector[] points) {
     points_ = new ArrayList<Vector>();
     for(int i=0; i<points.length; i++){
       points_.add(points[i]);
     }
     bounding_face_ = bounding_face;
-    cells_ = new Face[points_.size()];
+    cells_ = new EmbeddedFace[points_.size()];
     computeCells();
   }
   
@@ -28,7 +28,7 @@ public class Voronoi2D {
     return points_.get(i);
   }
   
-  public Face getCellAt(int i){
+  public EmbeddedFace getCellAt(int i){
     return cells_[i];
   }
   
@@ -50,10 +50,10 @@ public class Voronoi2D {
     
     int n = points_.size();
     
-    cells_[0] = new Face(bounding_face_);
+    cells_[0] = new EmbeddedFace(bounding_face_);
     for(int i=1; i<n; i++){
       
-      cells_[i] = new Face(bounding_face_);
+      cells_[i] = new EmbeddedFace(bounding_face_);
       
       for(int j=0; j<i; j++){
         Vector pi = new Vector(points_.get(i));

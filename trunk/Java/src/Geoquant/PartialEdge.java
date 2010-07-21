@@ -2,7 +2,8 @@ package Geoquant;
 
 import java.util.HashMap;
 
-import Triangulation.*;
+import triangulation.*;
+
 
 public class PartialEdge extends Geoquant {
   // Index map

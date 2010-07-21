@@ -2,9 +2,10 @@ package Geoquant;
 
 import java.util.HashMap;
 
-import Triangulation.Edge;
-import Triangulation.Face;
-import Triangulation.StdFace;
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.StdFace;
+
 
 public class EdgeHeight extends Geoquant {
   // Index map

@@ -20,12 +20,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import triangulation.*;
+
 import Geoquant.Alpha;
 import Geoquant.Eta;
 import Geoquant.Length;
 import Geoquant.Radius;
 import Geoquant.TriPosition;
-import Triangulation.*;
 
 public class TriangulationIO {
   private static Schema triangulationSchema = null;
