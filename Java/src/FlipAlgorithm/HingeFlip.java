@@ -1,7 +1,7 @@
 package FlipAlgorithm;
 
-import geo.Angle;
-import geo.Length;
+import geoquant.Angle;
+import geoquant.Length;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;

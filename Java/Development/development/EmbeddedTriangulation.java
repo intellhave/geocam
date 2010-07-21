@@ -1,6 +1,6 @@
 package development;
 
-import geo.Length;
+import geoquant.Length;
 
 import java.awt.Color;
 import java.io.IOException;

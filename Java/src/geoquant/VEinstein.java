@@ -1,4 +1,4 @@
-package geo;
+package geoquant;
 
 import java.util.ArrayList;
 import java.util.Iterator;

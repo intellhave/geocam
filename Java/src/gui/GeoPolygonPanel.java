@@ -1,8 +1,8 @@
 package gui;
 
-import geo.GeoRecorder;
-import geo.Geometry;
-import geo.Geoquant;
+import geoquant.GeoRecorder;
+import geoquant.Geometry;
+import geoquant.Geoquant;
 
 import java.awt.Color;
 import java.awt.Graphics;

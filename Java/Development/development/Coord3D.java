@@ -1,6 +1,6 @@
 package development;
 
-import geo.*;
+import geoquant.*;
 
 import java.util.HashMap;
 

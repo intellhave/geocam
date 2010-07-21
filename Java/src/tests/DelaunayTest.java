@@ -1,7 +1,7 @@
 package tests;
 
 import static org.junit.Assert.*;
-import geo.Length;
+import geoquant.Length;
 import inputOutput.TriangulationIO;
 
 import org.junit.Test;

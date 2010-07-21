@@ -1,7 +1,7 @@
 package gui;
 
-import geo.GeoRecorder;
-import geo.Geoquant;
+import geoquant.GeoRecorder;
+import geoquant.Geoquant;
 
 import java.awt.Polygon;
 import java.util.Iterator;

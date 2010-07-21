@@ -1,10 +1,10 @@
 package gui;
 
-import geo.GeoRecorder;
-import geo.Geometry;
-import geo.Geoquant;
-import geo.Radius;
-import geo.Geometry.Dimension;
+import geoquant.GeoRecorder;
+import geoquant.Geometry;
+import geoquant.Geoquant;
+import geoquant.Radius;
+import geoquant.Geometry.Dimension;
 
 import java.awt.Color;
 import java.awt.Component;

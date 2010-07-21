@@ -1,8 +1,8 @@
 package visualization;
 
-import geo.Angle;
-import geo.Curvature2D;
-import geo.Length;
+import geoquant.Angle;
+import geoquant.Curvature2D;
+import geoquant.Length;
 
 import java.util.HashSet;
 import java.util.Hashtable;

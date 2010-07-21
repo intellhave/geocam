@@ -1,6 +1,6 @@
-package geo;
+package geoquant;
 
-import geo.Curvature3D.Sum;
+import geoquant.Curvature3D.Sum;
 
 import java.util.HashMap;
 import java.util.LinkedList;

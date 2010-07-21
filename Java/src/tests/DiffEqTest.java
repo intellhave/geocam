@@ -1,11 +1,11 @@
 package tests;
 
-import geo.Curvature2D;
-import geo.Eta;
-import geo.GeoRecorder;
-import geo.Geometry;
-import geo.Geoquant;
-import geo.Radius;
+import geoquant.Curvature2D;
+import geoquant.Eta;
+import geoquant.GeoRecorder;
+import geoquant.Geometry;
+import geoquant.Geoquant;
+import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
 import java.util.LinkedList;

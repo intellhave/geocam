@@ -1,6 +1,6 @@
 package Flows;
 
-import geo.*;
+import geoquant.*;
 import triangulation.Edge;
 import triangulation.Triangulation;
 import triangulation.Vertex;

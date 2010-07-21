@@ -1,10 +1,10 @@
 package Flows;
 
-import geo.Alpha;
-import geo.Eta;
-import geo.Geometry;
-import geo.Radius;
-import geo.VEHR;
+import geoquant.Alpha;
+import geoquant.Eta;
+import geoquant.Geometry;
+import geoquant.Radius;
+import geoquant.VEHR;
 import inputOutput.TriangulationIO;
 import triangulation.Edge;
 import triangulation.Triangulation;

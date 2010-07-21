@@ -1,6 +1,6 @@
-package geo;
+package geoquant;
 
-import geo.Volume.Sum;
+import geoquant.Volume.Sum;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
