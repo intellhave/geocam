@@ -3,7 +3,7 @@ package tests;
 import triangulation.Edge;
 import triangulation.StdFace;
 import triangulation.Triangulation;
-import Visualization.TriangulationDisplay;
+import visual.TriangulationDisplay;
 import FlipAlgorithm.HingeFlip;
 import InputOutput.TriangulationIO;
 

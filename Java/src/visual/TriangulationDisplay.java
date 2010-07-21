@@ -1,4 +1,4 @@
-package Visualization;
+package visual;
 
 import static de.jreality.shader.CommonAttributes.DIFFUSE_COLOR;
 import static de.jreality.shader.CommonAttributes.LINE_SHADER;
@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
+import visual.PlanarDevelopment;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedFaceSetUtility;
@@ -37,7 +38,6 @@ import de.jreality.scene.tool.Tool;
 import de.jreality.tools.EncompassTool;
 import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
-import Visualization.PlanarDevelopment;
 
 public class TriangulationDisplay {
   
