@@ -33,7 +33,7 @@ public class DevelopmentApp2D {
     TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/icosahedron.xml");
     
     Iterator<Integer> i = null;
-    
+
     //set edge lengths randomly from [2,3)
     i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
@@ -42,13 +42,18 @@ public class DevelopmentApp2D {
       Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
     }
     
+    //print some debug data
+    EmbeddedTriangulation.printTriangulationData();
+    EmbeddedTriangulation.printGeometricData();
+    EmbeddedTriangulation.printGeometricData();
+    
     //pick some arbitrary face and source point
     i = Triangulation.faceTable.keySet().iterator();
     Face source_face = null;
     for(int k=0; k<5; k++){
       source_face = Triangulation.faceTable.get(i.next());
     }
-
+    
     Vector source = new Vector(0,0);
     Iterator<Vertex> iv = source_face.getLocalVertices().iterator();
     while(iv.hasNext()){
@@ -58,16 +63,16 @@ public class DevelopmentApp2D {
     
     //get initial affine transformation moving source to the origin
     AffineTransformation T = new AffineTransformation(Vector.scale(source,-1));
-
+    
     //root sgc
     SceneGraphComponent sgc_root = new SceneGraphComponent();
-    SceneGraphComponent sgc_face1 = sgcFromFace(source_face, T, Color.RED);
-    SceneGraphComponent sgc_points = sgcFromPoints2D(new Vector[] { new Vector(0,0) });
-    sgc_root.addChild(sgc_face1);
-    sgc_root.addChild(sgc_points);
+    //SceneGraphComponent sgc_face1 = sgcFromFace(source_face, T, Color.RED);
+    //SceneGraphComponent sgc_points = sgcFromPoints2D(new Vector[] { new Vector(0,0) });
+    //sgc_root.addChild(sgc_face1);
+    //sgc_root.addChild(sgc_points);
     
     //find 'development edge info' for this face, and iterate development
-    iterateDevelopment(0,3,sgc_root,source_face,null,null,T);
+    iterateDevelopment("", 0,3,sgc_root,source_face,null,null,T);
     
     //jrviewer(s)
     JRViewer jrv = new JRViewer();
@@ -87,7 +92,7 @@ public class DevelopmentApp2D {
   }
   
   //struct holding info neccessary to develop off an edge
-  private static class DevelopmentEdgeInfo{
+  /*private static class DevelopmentEdgeInfo{
     public Vector vect0_,vect1_;
     public Vertex vert0_,vert1_;
     Face F_;
@@ -157,27 +162,46 @@ public class DevelopmentApp2D {
     if(source_face != face[1]){ retinfo.add(new DevelopmentEdgeInfo(vert[1],vert[2],vect[1],vect[2],face[1])); }
     if(source_face != face[2]){ retinfo.add(new DevelopmentEdgeInfo(vert[2],vert[0],vect[2],vect[0],face[2])); }
     return retinfo;
-  }
+  }*/
   
-  public static void iterateDevelopment(int depth, int maxdepth, SceneGraphComponent sgc_root, Face new_face, Face source_face, Frustum2D current_frustum, AffineTransformation current_trans){
+  public static void iterateDevelopment(String output, int depth, int maxdepth, SceneGraphComponent sgc_root, Face new_face, Face source_face, Frustum2D current_frustum, AffineTransformation current_trans){
     
     //note: source_face and current_frustum may be null
+    
+    String newoutput = new String(output);
+    newoutput += " " + new_face.getIndex();
+    
+    System.out.print("\n\n\n");
+    
+    System.out.print("Current trans:\n");
+    System.out.print(current_trans);
+    System.out.print("\n");
     
     //get new affine transformation
     AffineTransformation new_trans = new AffineTransformation(2);
     if(source_face != null){
-      new_trans.leftMultiply(CoordTrans2D.affineTransAt(new_face, source_face));
+      AffineTransformation coord_trans = CoordTrans2D.affineTransAt(new_face, source_face);
+      new_trans.leftMultiply(coord_trans);
+      
+      System.out.print("Coord trans:\n");
+      System.out.print(new_trans);
+      System.out.print("\n");
     }
     new_trans.leftMultiply(current_trans);
     
+    System.out.print("New trans:\n");
+    System.out.print(new_trans);
+    System.out.print("\n");
+    
     //get transformed points from new_face
     ArrayList<Vector> efpts = new ArrayList<Vector>();
+    
     Iterator<Vertex> i = new_face.getLocalVertices().iterator();
     while(i.hasNext()){
       Vertex vert = i.next();
-      Vector pt = new Vector(Coord2D.coordAt(vert, new_face));
-      try{ pt = new_trans.affineTransPoint(pt); }catch(Exception e1){ e1.printStackTrace(); }
-      efpts.add(pt);
+      Vector pt = Coord2D.coordAt(vert, new_face);
+      try{ efpts.add(new_trans.affineTransPoint(pt)); }
+      catch(Exception e1){ e1.printStackTrace(); }
     }
     
     //make embeddedface
@@ -196,6 +220,10 @@ public class DevelopmentApp2D {
       //add to sgc_root
       sgc_new_face.setAppearance(getFaceAppearance(0.6f));
       sgc_root.addChild(sgc_new_face);
+      
+      System.out.print("Face sequence:");
+      System.out.print(newoutput);
+      System.out.print("\n");
     //}
     
     //see which faces to continue developing on
@@ -214,16 +242,11 @@ public class DevelopmentApp2D {
     }*/
     
     Iterator<Face> fi = new_face.getLocalFaces().iterator();
-    int count = 0;
+    
     while(fi.hasNext()){
       Face ftemp = fi.next();
       if(ftemp != source_face){
-        
-        boolean dothis = true;
-        if(depth == 0){ dothis = false; if(count != 0){ dothis = true; }}
-        
-        if(dothis){ iterateDevelopment(depth+1, maxdepth, sgc_root, ftemp, new_face, null, new_trans); }
-        count++;
+        iterateDevelopment(newoutput, depth+1, maxdepth, sgc_root, ftemp, new_face, null, new_trans); 
       }
     }
     
@@ -231,7 +254,7 @@ public class DevelopmentApp2D {
   
   public static Appearance getFaceAppearance(double transparency){
     
-  //create appearance for developed faces
+    //create appearance for developed faces
     Appearance app_face = new Appearance();
     
     //set some basic attributes
@@ -257,6 +280,7 @@ public class DevelopmentApp2D {
     return app_face;
   }
 
+  /*
   public static SceneGraphComponent sgcFromPoints2D(Vector[] points){
     
     //create the sgc
@@ -370,7 +394,7 @@ public class DevelopmentApp2D {
     
     //return
     return sgc_face;
-  }
+  }*/
   
   
 }
