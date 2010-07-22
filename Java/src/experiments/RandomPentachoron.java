@@ -15,11 +15,12 @@ import triangulation.Vertex;
 public class RandomPentachoron {
   
   public static void main(String[] args) throws FileNotFoundException{
-    PrintStream output1 = new PrintStream("src/Experiments/output1.txt");
-    output1.println("Curvature");
+    String quantity = "curvature";
+    PrintStream output = new PrintStream("src/Experiments/" + quantity + "_data.txt");
+    output.println(quantity);
     TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_regular.xml");
     
-    for(int a = 1; a < 100; a++)
+    for(int a = 1; a < 10000; a++)
     {
     
     
@@ -61,7 +62,7 @@ public class RandomPentachoron {
       }
  
       for(Vertex v: Triangulation.vertexTable.values()){
-        output1.println(Curvature3D.At(v).getValue());
+        output.println(Curvature3D.At(v).getValue());
       }
   }
   }
