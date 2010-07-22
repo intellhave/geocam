@@ -39,12 +39,15 @@ public class DevelopmentApp2D {
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
-      Length.At(e).setValue(1);//2+Math.random()); //random return value is in [0,1)
+      Length.At(e).setValue(2+Math.random()); //random return value is in [0,1)
     }
     
     //pick some arbitrary face and source point
     i = Triangulation.faceTable.keySet().iterator();
-    Face source_face = Triangulation.faceTable.get(i.next());
+    Face source_face = null;
+    for(int k=0; k<5; k++){
+      source_face = Triangulation.faceTable.get(i.next());
+    }
 
     Vector source = new Vector(0,0);
     Iterator<Vertex> iv = source_face.getLocalVertices().iterator();
@@ -187,6 +190,7 @@ public class DevelopmentApp2D {
     //if(depth == maxdepth-2){
       SceneGraphComponent sgc_new_face = new SceneGraphComponent();
       Color color = Color.getHSBColor((float)depth/(float)maxdepth, 1.0f, 0.5f);
+      //Color color = Color.getHSBColor((float)new_face.getIndex()/(float)Triangulation.faceTable.size(), 1.0f, 0.5f);
       sgc_new_face.setGeometry(origface.getGeometry(color));
       
       //add to sgc_root
@@ -210,10 +214,16 @@ public class DevelopmentApp2D {
     }*/
     
     Iterator<Face> fi = new_face.getLocalFaces().iterator();
+    int count = 0;
     while(fi.hasNext()){
       Face ftemp = fi.next();
       if(ftemp != source_face){
-        iterateDevelopment(depth+1, maxdepth, sgc_root, ftemp, new_face, null, new_trans);
+        
+        boolean dothis = true;
+        if(depth == 0){ dothis = false; if(count != 0){ dothis = true; }}
+        
+        if(dothis){ iterateDevelopment(depth+1, maxdepth, sgc_root, ftemp, new_face, null, new_trans); }
+        count++;
       }
     }
     
