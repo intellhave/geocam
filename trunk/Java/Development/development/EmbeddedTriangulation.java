@@ -71,7 +71,7 @@ public class EmbeddedTriangulation{
     return sgc_embedded;
   }
   
-  private static void printTriangulationData(){
+  public static void printTriangulationData(){
     
     Iterator<Integer> i = null;
 
@@ -172,6 +172,25 @@ public class EmbeddedTriangulation{
       System.out.printf("\n");
     }
     
+  }
+  
+  public static void printGeometricData(){
+
+    Iterator<Integer> iter_f1 = Triangulation.faceTable.keySet().iterator();
+    while(iter_f1.hasNext()){
+      Integer key = iter_f1.next();
+      Face f1 = Triangulation.faceTable.get(key);
+      
+      Iterator<Face> iter_f2 = f1.getLocalFaces().iterator();
+      while(iter_f2.hasNext()){
+        Face f2 = iter_f2.next();
+        
+        System.out.printf("\n\nTransition %d-%d\n", f1.getIndex(), f2.getIndex());
+        System.out.print(CoordTrans2D.affineTransAt(f1,f2));
+        //System.out.print(new AffineTransformation(2));
+        System.out.print("\n");
+      }
+    }
   }
   
   public static void readEmbeddedSurface(String filename){

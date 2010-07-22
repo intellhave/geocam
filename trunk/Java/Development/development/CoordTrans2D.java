@@ -93,7 +93,7 @@ public class CoordTrans2D extends Geoquant {
   }
   
   public static double valueAt(Face f1, Face f2) {
-    return At(f1, f2).getValue();
+    return At(f1,f2).getValue();
   }
   
   //like getValue(), but returns affine transformation
