@@ -1,6 +1,8 @@
 package experiments;
 import geoquant.Curvature3D;
+import geoquant.LEHR;
 import geoquant.Length;
+import geoquant.VEHR;
 import inputOutput.TriangulationIO;
 
 import java.io.FileNotFoundException;
@@ -15,9 +17,14 @@ import triangulation.Vertex;
 public class RandomPentachoron {
   
   public static void main(String[] args) throws FileNotFoundException{
-    String quantity = "curvature";
-    PrintStream output = new PrintStream("src/Experiments/" + quantity + "_data.txt");
-    output.println(quantity);
+    PrintStream vcurvature = new PrintStream("src/Experiments/vcurvature_data.txt");
+    PrintStream lehr = new PrintStream("src/Experiments/lehr_data.txt");
+    PrintStream vehr = new PrintStream("src/Experiments/vehr_data.txt");
+    
+    vcurvature.println("curvature");
+    lehr.println("lehr");
+    vehr.println("vehr");
+    
     TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_regular.xml");
     
     for(int a = 1; a < 10000; a++)
@@ -62,8 +69,11 @@ public class RandomPentachoron {
       }
  
       for(Vertex v: Triangulation.vertexTable.values()){
-        output.println(Curvature3D.At(v).getValue());
+        vcurvature.println(Curvature3D.At(v).getValue());
       }
+      
+      lehr.println(LEHR.value());
+      vehr.println(VEHR.value());
   }
   }
 }
