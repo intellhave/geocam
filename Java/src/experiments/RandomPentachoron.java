@@ -17,10 +17,11 @@ public class RandomPentachoron {
   public static void main(String[] args) throws FileNotFoundException{
     PrintStream output1 = new PrintStream("src/Experiments/output1.txt");
     output1.println("Curvature");
-    
-    for(int a = 1; a < 10; a++)
-    {
     TriangulationIO.readTriangulation("Data/Triangulations/CommonManifolds/pentachoron_regular.xml");
+    
+    for(int a = 1; a < 100; a++)
+    {
+    
     
     double[][] vertices = new double[5][4];
     double distance;
