@@ -117,17 +117,20 @@ public class Volume extends Geoquant {
   
   
   public static Volume.Sum sum() {
-    if(total == null) {
+    if(total == null || 
+        total.id != Triangulation.getTriangulationID()) {
       total = new Sum();
     }
     return total;
   }
     
   public static class Sum extends Geoquant {
-    LinkedList<Volume> volumes = new LinkedList<Volume>();
+    private LinkedList<Volume> volumes = new LinkedList<Volume>();
+    private int id;
     
     private Sum() {
       super();
+      id = Triangulation.getTriangulationID();
       Volume v;
       for(Tetra t : Triangulation.tetraTable.values()) {
         v = Volume.At(t);

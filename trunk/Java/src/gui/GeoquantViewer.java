@@ -175,10 +175,10 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JMenuItem setEtaMenuItem;
   private JMenuItem setRadiiMenuItem;
   private JMenu editMenu;
-  private VEHRFlowDialog nehrFlowDialog;
+  private VEHRFlowDialog vehrFlowDialog;
   private YamabeFlowDialog yamabe2DDialog;
   private YamabeFlowDialog yamabe3DDialog;
-  private JMenuItem nehrFlowMenuItem;
+  private JMenuItem vehrFlowMenuItem;
   private JTextField lengthSetField;
   private JCheckBox vEinsteinCheck;
   private JCheckBox lEinsteinCheck;
@@ -373,7 +373,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       new DefaultComboBoxModel(Triangulation.edgeTable.values().toArray());
     EdgeList.setModel(EdgeListModel);
     
-    getNehrFlowMenuItem().setEnabled(true);
+    getVehrFlowMenuItem().setEnabled(true);
     getYamabe2DMenuItem().setEnabled(true);
     getYamabe3DMenuItem().setEnabled(true);
     getSetRadiiMenuItem().setEnabled(true);
@@ -808,7 +808,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           Length.At(s).setValue(value);
         }
         getEdgeDisplayPanel().repaint();
-        System.out.println("About to repaint");
         getPolygonPanel().repaint();
       } catch (NumberFormatException exc) {
         return;
@@ -1336,28 +1335,28 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(runMenu == null) {
       runMenu = new JMenu();
       runMenu.setText("Run");
-      runMenu.add(getNehrFlowMenuItem());
+      runMenu.add(getVehrFlowMenuItem());
       runMenu.add(getYamabe2DMenuItem());
       runMenu.add(getYamabe3DMenuItem());
     }
     return runMenu;
   }
   
-  private JMenuItem getNehrFlowMenuItem() {
-    if(nehrFlowMenuItem == null) {
-      nehrFlowMenuItem = new JMenuItem();
-      nehrFlowMenuItem.setText("NEHR Flow");
-      nehrFlowMenuItem.setAction(getShowVehrFlowDialog());
-      nehrFlowMenuItem.setEnabled(false);
+  private JMenuItem getVehrFlowMenuItem() {
+    if(vehrFlowMenuItem == null) {
+      vehrFlowMenuItem = new JMenuItem();
+      vehrFlowMenuItem.setText("VEHR Flow");
+      vehrFlowMenuItem.setAction(getShowVehrFlowDialog());
+      vehrFlowMenuItem.setEnabled(false);
     }
-    return nehrFlowMenuItem;
+    return vehrFlowMenuItem;
   }
   
-  private VEHRFlowDialog getNehrFlowDialog() {
-    if(nehrFlowDialog == null) {
-      nehrFlowDialog = new VEHRFlowDialog(this);
+  private VEHRFlowDialog getVehrFlowDialog() {
+    if(vehrFlowDialog == null) {
+      vehrFlowDialog = new VEHRFlowDialog(this);
     }
-    return nehrFlowDialog;
+    return vehrFlowDialog;
   }
   
   private YamabeFlowDialog getYamabe2DDialog() {
@@ -1570,9 +1569,9 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  if(showVehrFlowDialog == null) {
 		  showVehrFlowDialog = new AbstractAction("NEHR Flow", null) {
 			  public void actionPerformed(ActionEvent evt) {
-			    getNehrFlowDialog().pack();
-			    getNehrFlowDialog().setLocationRelativeTo(null);
-			    getNehrFlowDialog().setVisible(true);
+			    getVehrFlowDialog().pack();
+			    getVehrFlowDialog().setLocationRelativeTo(null);
+			    getVehrFlowDialog().setVisible(true);
 			  }
 		  };
 	  }

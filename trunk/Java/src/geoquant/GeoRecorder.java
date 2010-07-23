@@ -6,6 +6,25 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * The GeoRecorder class records changes in geoquants, most notably during flows.
+ * A GeoRecorder maintains lists of doubles and string descriptions for every
+ * geoquant in the currently loaded triangulation that have been added to this
+ * recorder.
+ * 
+ * Before recording, a GeoRecorder should either be given a list of Geoquant classes
+ * to record, or those classes should be added to the recorder one at a time.
+ * 
+ * A GeoRecorder records information at "steps" that are triggered by its update
+ * function via the Observer/Observable pattern. At such a step, the recorder
+ * iterates through its list of marked geoquants, adding their values and string
+ * forms to a new step.
+ * 
+ * Access to the steps are available a geoquant at a time or all at once.
+ * 
+ * @author Alex Henniges
+ *
+ */
 public class GeoRecorder implements Observer{
   private List<List<Geoquant>> geoList;
   private HashMap<Class<? extends Geoquant>, List<List<Double>>> valueList;

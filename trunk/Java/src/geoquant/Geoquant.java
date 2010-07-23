@@ -115,7 +115,7 @@ public abstract class Geoquant extends Observable implements Observer{
    * hence if other geoquants depend on this one, they will become invalid.
    * 
    * WARNING: If this geoquant depends on others, setting the values of those
-   *          geoquants will make this set invalid.
+   *          geoquants will make the value from this method invalid.
    * @param val
    */
   public void setValue(double val) {
@@ -138,6 +138,7 @@ public abstract class Geoquant extends Observable implements Observer{
   public void update(Observable o, Object args) {
     invalidate();
   }
+  
   
   public String toString() {
     String type = this.getClass().toString().substring(6);
