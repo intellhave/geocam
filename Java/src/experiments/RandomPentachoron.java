@@ -2,6 +2,7 @@ package experiments;
 import geoquant.Curvature3D;
 import geoquant.LEHR;
 import geoquant.Length;
+import geoquant.SectionalCurvature;
 import geoquant.VEHR;
 import inputOutput.TriangulationIO;
 
@@ -17,11 +18,13 @@ import triangulation.Vertex;
 public class RandomPentachoron {
   
   public static void main(String[] args) throws FileNotFoundException{
+    PrintStream ecurvature = new PrintStream("src/Experiments/ecurvature_data.txt");
     PrintStream vcurvature = new PrintStream("src/Experiments/vcurvature_data.txt");
     PrintStream lehr = new PrintStream("src/Experiments/lehr_data.txt");
     PrintStream vehr = new PrintStream("src/Experiments/vehr_data.txt");
     
-    vcurvature.println("curvature");
+    ecurvature.println("ecurvature");
+    vcurvature.println("vcurvature");
     lehr.println("lehr");
     vehr.println("vehr");
     
@@ -67,7 +70,11 @@ public class RandomPentachoron {
           }
         }
       }
- 
+
+      for(Edge e: Triangulation.edgeTable.values()){
+        ecurvature.println(SectionalCurvature.At(e).getValue());
+      }
+      
       for(Vertex v: Triangulation.vertexTable.values()){
         vcurvature.println(Curvature3D.At(v).getValue());
       }
