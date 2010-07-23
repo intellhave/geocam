@@ -27,8 +27,9 @@ public class RandomCyclicPolytope {
       for (int j = i + 1; j <= n; j++) {
         for (int k = j + 1; k <= n; k++) {
           for (int l = k + 1; l <= n; l++) {
-            // Implements Gale's evenness condition: order the vertices in a cycle, then the edges 
-            // on the outer cycle form a tetrahedron iff they are not local to each other.
+            // Implements Gale's evenness condition: order the vertices in a cycle, then 
+            // a pair of edges on the outer cycle form a tetrahedron iff they are not 
+            // local to each other.
             if((((i+1)%n == j%n) && (j%n != k%n) && ((k+1)%n == l%n) && (l%n != i%n)) || 
                (((j+1)%n == k%n) && (k%n != l%n) && ((l+1)%n == i%n) && (i%n != j%n))) {
               tetra = doc.createElement("Tetra");
