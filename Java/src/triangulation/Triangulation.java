@@ -10,11 +10,16 @@ public class Triangulation {
   public static HashMap<Integer, Edge> edgeTable = new HashMap<Integer, Edge>();
   public static HashMap<Integer, Face> faceTable = new HashMap<Integer, Face>();
   public static HashMap<Integer, Tetra> tetraTable = new HashMap<Integer, Tetra>();
-
+  private static int id = 0;
+  
   private Triangulation() {
 
   }
 
+  public static int getTriangulationID() {
+    return id;
+  }
+  
   // Put methods
   public static void putVertex(Vertex v) {
     vertexTable.put(v.getIndex(), v);
@@ -177,5 +182,6 @@ public class Triangulation {
     edgeTable.clear();
     faceTable.clear();
     tetraTable.clear();
+    id++;
   }
 }

@@ -62,7 +62,7 @@ public class Curvature2D extends Geoquant {
   }
   
   public static Sum sum() {
-    if(total == null) {
+    if(total == null || total.id != Triangulation.getTriangulationID()) {
       total = new Sum();
     }
     return total;
@@ -70,10 +70,11 @@ public class Curvature2D extends Geoquant {
   
   public static class Sum extends Geoquant {
     LinkedList<Curvature2D> curvs = new LinkedList<Curvature2D>();
-    private static Sum total = null;
+    private int id;
     
     private Sum() {
       super();
+      id = Triangulation.getTriangulationID();
       Curvature2D k;
       for(Vertex v : Triangulation.vertexTable.values()) {
         k = Curvature2D.At(v);

@@ -157,7 +157,7 @@ public abstract class NewtonsMethod extends Observable{
       return gradLen;
     }   
     if(next == null) {
-      return -1;
+      throw new WrongDirectionException();
     }
 
     double curVal;           // The current function value.

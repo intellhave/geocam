@@ -42,13 +42,6 @@ public class TriangulationIO {
   public static void readTriangulation(String fileName) {
     Triangulation.reset();
     Document triangulationDoc = XMLParser.parseDocument(fileName);
-    HashMap<TriPosition, Edge> edgeList = new HashMap<TriPosition, Edge>();
-    HashMap<TriPosition, Face> faceList = new HashMap<TriPosition, Face>();
-    TriPosition T;
-    Vertex[] verts = new Vertex[0];
-    Edge[] edges = new Edge[0];
-    Face[] faces = new Face[0];
-    Tetra[] tetras = new Tetra[0];
     if(triangulationDoc == null) {
       return;
     }
@@ -69,6 +62,18 @@ public class TriangulationIO {
       return;
     }
 
+    readTriangulation(triangulationDoc);
+  }
+  
+  public static void readTriangulation(Document triangulationDoc) {
+    HashMap<TriPosition, Edge> edgeList = new HashMap<TriPosition, Edge>();
+    HashMap<TriPosition, Face> faceList = new HashMap<TriPosition, Face>();
+    TriPosition T;
+    Vertex[] verts = new Vertex[0];
+    Edge[] edges = new Edge[0];
+    Face[] faces = new Face[0];
+    Tetra[] tetras = new Tetra[0];
+    
     NodeList simplexList = triangulationDoc.getElementsByTagName("Vertex");
     NodeList localList;
     Element simplexNode;

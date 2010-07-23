@@ -9,9 +9,28 @@ import triangulation.Tetra;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 
-
+/**
+ * The Geometry class is a static class that serves as a medium between geoquants
+ * and the currently loaded triangulation.
+ * 
+ * Given a particular geoquant, the Geometry class returns a List of all matching
+ * geoquants that exist on the triangulation. Notably, if for example the angle
+ * of a vertex v incident on a face f within the triangulation has not yet been 
+ * created, the request getAngles() will ultimately create that angle geoquant.
+ * 
+ * Specifying the desired geoquant can be done either through its specific method,
+ * (ex. getDihedralAngles()) or by passing the class of the geoquant into the
+ * method getGeoquants().
+ * 
+ * @author Alex Henniges
+ *
+ */
 public class Geometry {
   
+  /**
+   * The Dimension enum provides a way to pass information about the dimension in
+   * use through methods and classes. Specifies to values: twoD and threeD.
+   */
   public static enum Dimension{
     twoD, threeD;
   }
@@ -19,6 +38,15 @@ public class Geometry {
   private Geometry() {
   }
   
+  /**
+   * Returns a list of geoquants that exists on the triangulation. The type of
+   * geoquant is specified by the user. This method will lead to the construction
+   * of the geoquants if they do not already exist in the program.
+   * 
+   * @param c The Class of the desired geoquant. (Ex. Radius.class)
+   * @return A List of the specified geoquants that exist on the 
+   *        currently loaded triangulation.
+   */
   public static List<Geoquant> getGeoquants(Class<? extends Geoquant> c) {
     List<Geoquant> list = new LinkedList<Geoquant>();
     if(c.isAssignableFrom(Alpha.class)) {
