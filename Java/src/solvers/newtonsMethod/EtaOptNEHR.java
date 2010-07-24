@@ -13,7 +13,7 @@ public class EtaOptNEHR extends NewtonsMethod {
   private VEHR.SecondPartial[][] nehr_eta_eta_partials;
   private VEHR.SecondPartial[][] nehr_rad_eta_partials;
   private Radius.Partial[][] radius_partials;
-  private RadiusOptNEHR minRadii;
+  protected RadiusOptNEHR minRadii;
   
   public EtaOptNEHR() {
     super();

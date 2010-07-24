@@ -1,5 +1,6 @@
 package solvers.ode.yamabeFlow;
 
+import geoquant.Alpha;
 import geoquant.Curvature2D;
 import geoquant.Curvature3D;
 import geoquant.Eta;
@@ -62,68 +63,74 @@ public class Yamabe3DFlow implements DESystem{
     double  R2 =  Radius.valueAt(st.v2);
     double  R3 =  Radius.valueAt(st.v3);
     double  R4 =  Radius.valueAt(st.v4);
+    
+    double A1 = Alpha.valueAt(st.v1);
+    double A2 = Alpha.valueAt(st.v2);
+    double A3 = Alpha.valueAt(st.v3);
+    double A4 = Alpha.valueAt(st.v4);
+    
 
-    result=(((Eta12* K2* Math.pow(L13, 2)* Math.pow(L23, 2)* R1 - Eta12* K2* Math.pow(L14, 2)* Math.pow(L23, 2)* R1 +
-       K1* Math.pow(L23, 4)* R1 - Eta12* K2* Math.pow(L13, 2)* Math.pow(L24, 2)* R1 +
-       Eta12* K2* Math.pow(L14, 2)* Math.pow(L24, 2)* R1 - 2* K1* Math.pow(L23, 2)* Math.pow(L24, 2)* R1 +
-       K1* Math.pow(L24, 4)* R1 + 2* Eta12* K2* Math.pow(L12, 2)* Math.pow(L34, 2)* R1 -
-       Eta12* K2* Math.pow(L13, 2)* Math.pow(L34, 2)* R1 - Eta12* K2* Math.pow(L14, 2)* Math.pow(L34, 2)* R1
+    result=(((Eta12* K2* Math.pow(L13, 2)* Math.pow(L23, 2)* A1*R1 - Eta12* K2* Math.pow(L14, 2)* Math.pow(L23, 2)* A1*R1 +
+       K1* Math.pow(L23, 4)* A1*R1 - Eta12* K2* Math.pow(L13, 2)* Math.pow(L24, 2)* A1*R1 +
+       Eta12* K2* Math.pow(L14, 2)* Math.pow(L24, 2)* A1*R1 - 2* K1* Math.pow(L23, 2)* Math.pow(L24, 2)* A1*R1 +
+       K1* Math.pow(L24, 4)* A1*R1 + 2* Eta12* K2* Math.pow(L12, 2)* Math.pow(L34, 2)* A1*R1 -
+       Eta12* K2* Math.pow(L13, 2)* Math.pow(L34, 2)* A1*R1 - Eta12* K2* Math.pow(L14, 2)* Math.pow(L34, 2)* A1*R1
 -
-       2* K1* Math.pow(L23, 2)* Math.pow(L34, 2)* R1 - Eta12* K2* Math.pow(L23, 2)* Math.pow(L34, 2)* R1 -
-       2* K1* Math.pow(L24, 2)* Math.pow(L34, 2)* R1 - Eta12* K2* Math.pow(L24, 2)* Math.pow(L34, 2)* R1 +
-       K1* Math.pow(L34, 4)* R1 + Eta12* K2* Math.pow(L34, 4)* R1 +
-       Eta23* K3* Math.pow(L12, 2)* Math.pow(L13, 2)* R2 - Eta24* K4* Math.pow(L12, 2)* Math.pow(L13, 2)* R2
+       2* K1* Math.pow(L23, 2)* Math.pow(L34, 2)* A1*R1 - Eta12* K2* Math.pow(L23, 2)* Math.pow(L34, 2)* A1*R1 -
+       2* K1* Math.pow(L24, 2)* Math.pow(L34, 2)* A1*R1 - Eta12* K2* Math.pow(L24, 2)* Math.pow(L34, 2)* A1*R1 +
+       K1* Math.pow(L34, 4)* A1*R1 + Eta12* K2* Math.pow(L34, 4)* A1*R1 +
+       Eta23* K3* Math.pow(L12, 2)* Math.pow(L13, 2)* A2*R2 - Eta24* K4* Math.pow(L12, 2)* Math.pow(L13, 2)* A2*R2
 +
-       K2* Math.pow(L13, 4)* R2 + Eta24* K4* Math.pow(L13, 4)* R2 -
-       Eta23* K3* Math.pow(L12, 2)* Math.pow(L14, 2)* R2 + Eta24* K4* Math.pow(L12, 2)* Math.pow(L14, 2)* R2
+       K2* Math.pow(L13, 4)* A2*R2 + Eta24* K4* Math.pow(L13, 4)* A2*R2 -
+       Eta23* K3* Math.pow(L12, 2)* Math.pow(L14, 2)* A2*R2 + Eta24* K4* Math.pow(L12, 2)* Math.pow(L14, 2)* A2*R2
 -
-       2* K2* Math.pow(L13, 2)* Math.pow(L14, 2)* R2 - Eta23* K3* Math.pow(L13, 2)* Math.pow(L14, 2)* R2 -
-       Eta24* K4* Math.pow(L13, 2)* Math.pow(L14, 2)* R2 + K2* Math.pow(L14, 4)* R2 +
-       Eta23* K3* Math.pow(L14, 4)* R2 + Eta12* K1* Math.pow(L13, 2)* Math.pow(L23, 2)* R2 -
-       Eta24* K4* Math.pow(L13, 2)* Math.pow(L23, 2)* R2 - Eta12* K1* Math.pow(L14, 2)* Math.pow(L23, 2)* R2
+       2* K2* Math.pow(L13, 2)* Math.pow(L14, 2)* A2*R2 - Eta23* K3* Math.pow(L13, 2)* Math.pow(L14, 2)* A2*R2 -
+       Eta24* K4* Math.pow(L13, 2)* Math.pow(L14, 2)* A2*R2 + K2* Math.pow(L14, 4)* A2*R2 +
+       Eta23* K3* Math.pow(L14, 4)* A2*R2 + Eta12* K1* Math.pow(L13, 2)* Math.pow(L23, 2)* A2*R2 -
+       Eta24* K4* Math.pow(L13, 2)* Math.pow(L23, 2)* A2*R2 - Eta12* K1* Math.pow(L14, 2)* Math.pow(L23, 2)* A2*R2
 +
-       2* Eta23* K3* Math.pow(L14, 2)* Math.pow(L23, 2)* R2 - Eta24* K4* Math.pow(L14, 2)* Math.pow(L23, 2)*
-R2 -
-       Eta12* K1* Math.pow(L13, 2)* Math.pow(L24, 2)* R2 - Eta23* K3* Math.pow(L13, 2)* Math.pow(L24, 2)* R2
+       2* Eta23* K3* Math.pow(L14, 2)* Math.pow(L23, 2)* A2*R2 - Eta24* K4* Math.pow(L14, 2)* Math.pow(L23, 2)*
+A2*R2 -
+       Eta12* K1* Math.pow(L13, 2)* Math.pow(L24, 2)* A2*R2 - Eta23* K3* Math.pow(L13, 2)* Math.pow(L24, 2)* A2*R2
 +
-       2* Eta24* K4* Math.pow(L13, 2)* Math.pow(L24, 2)* R2 + Eta12* K1* Math.pow(L14, 2)* Math.pow(L24, 2)*
-R2 -
-       Eta23* K3* Math.pow(L14, 2)* Math.pow(L24, 2)* R2 + 2* Eta12* K1* Math.pow(L12, 2)* Math.pow(L34, 2)*
-R2 -
-       Eta23* K3* Math.pow(L12, 2)* Math.pow(L34, 2)* R2 - Eta24* K4* Math.pow(L12, 2)* Math.pow(L34, 2)* R2
+       2* Eta24* K4* Math.pow(L13, 2)* Math.pow(L24, 2)* A2*R2 + Eta12* K1* Math.pow(L14, 2)* Math.pow(L24, 2)*
+A2*R2 -
+       Eta23* K3* Math.pow(L14, 2)* Math.pow(L24, 2)* A2*R2 + 2* Eta12* K1* Math.pow(L12, 2)* Math.pow(L34, 2)*
+A2*R2 -
+       Eta23* K3* Math.pow(L12, 2)* Math.pow(L34, 2)* A2*R2 - Eta24* K4* Math.pow(L12, 2)* Math.pow(L34, 2)* A2*R2
 -
-       Eta12* K1* Math.pow(L13, 2)* Math.pow(L34, 2)* R2 - 2* K2* Math.pow(L13, 2)* Math.pow(L34, 2)* R2 -
-       Eta24* K4* Math.pow(L13, 2)* Math.pow(L34, 2)* R2 - Eta12* K1* Math.pow(L14, 2)* Math.pow(L34, 2)* R2
+       Eta12* K1* Math.pow(L13, 2)* Math.pow(L34, 2)* A2*R2 - 2* K2* Math.pow(L13, 2)* Math.pow(L34, 2)* A2*R2 -
+       Eta24* K4* Math.pow(L13, 2)* Math.pow(L34, 2)* A2*R2 - Eta12* K1* Math.pow(L14, 2)* Math.pow(L34, 2)* A2*R2
 -
-       2* K2* Math.pow(L14, 2)* Math.pow(L34, 2)* R2 - Eta23* K3* Math.pow(L14, 2)* Math.pow(L34, 2)* R2 -
-       Eta12* K1* Math.pow(L23, 2)* Math.pow(L34, 2)* R2 + Eta24* K4* Math.pow(L23, 2)* Math.pow(L34, 2)* R2
+       2* K2* Math.pow(L14, 2)* Math.pow(L34, 2)* A2*R2 - Eta23* K3* Math.pow(L14, 2)* Math.pow(L34, 2)* A2*R2 -
+       Eta12* K1* Math.pow(L23, 2)* Math.pow(L34, 2)* A2*R2 + Eta24* K4* Math.pow(L23, 2)* Math.pow(L34, 2)* A2*R2
 -
-       Eta12* K1* Math.pow(L24, 2)* Math.pow(L34, 2)* R2 + Eta23* K3* Math.pow(L24, 2)* Math.pow(L34, 2)* R2
+       Eta12* K1* Math.pow(L24, 2)* Math.pow(L34, 2)* A2*R2 + Eta23* K3* Math.pow(L24, 2)* Math.pow(L34, 2)* A2*R2
 +
-       Eta12* K1* Math.pow(L34, 4)* R2 + K2* Math.pow(L34, 4)* R2 + K3* Math.pow(L12, 4)* R3 +
-       Eta34* K4* Math.pow(L12, 4)* R3 + Eta23* K2* Math.pow(L12, 2)* Math.pow(L13, 2)* R3 -
-       Eta34* K4* Math.pow(L12, 2)* Math.pow(L13, 2)* R3 - Eta23* K2* Math.pow(L12, 2)* Math.pow(L14, 2)* R3
+       Eta12* K1* Math.pow(L34, 4)* A2*R2 + K2* Math.pow(L34, 4)* A2*R2 + K3* Math.pow(L12, 4)* A3*R3 +
+       Eta34* K4* Math.pow(L12, 4)* A3*R3 + Eta23* K2* Math.pow(L12, 2)* Math.pow(L13, 2)* A3*R3 -
+       Eta34* K4* Math.pow(L12, 2)* Math.pow(L13, 2)* A3*R3 - Eta23* K2* Math.pow(L12, 2)* Math.pow(L14, 2)* A3*R3
 -
-       2* K3* Math.pow(L12, 2)* Math.pow(L14, 2)* R3 - Eta34* K4* Math.pow(L12, 2)* Math.pow(L14, 2)* R3 -
-       Eta23* K2* Math.pow(L13, 2)* Math.pow(L14, 2)* R3 + Eta34* K4* Math.pow(L13, 2)* Math.pow(L14, 2)* R3
+       2* K3* Math.pow(L12, 2)* Math.pow(L14, 2)* A3*R3 - Eta34* K4* Math.pow(L12, 2)* Math.pow(L14, 2)* A3*R3 -
+       Eta23* K2* Math.pow(L13, 2)* Math.pow(L14, 2)* A3*R3 + Eta34* K4* Math.pow(L13, 2)* Math.pow(L14, 2)* A3*R3
 +
-       Eta23* K2* Math.pow(L14, 4)* R3 + K3* Math.pow(L14, 4)* R3 -
-       Eta34* K4* Math.pow(L12, 2)* Math.pow(L23, 2)* R3 + 2* Eta23* K2* Math.pow(L14, 2)* Math.pow(L23, 2)*
-R3 -
-       Eta34* K4* Math.pow(L14, 2)* Math.pow(L23, 2)* R3 - 2* K3* Math.pow(L12, 2)* Math.pow(L24, 2)* R3 -
-       Eta34* K4* Math.pow(L12, 2)* Math.pow(L24, 2)* R3 - Eta23* K2* Math.pow(L13, 2)* Math.pow(L24, 2)* R3
+       Eta23* K2* Math.pow(L14, 4)* A3*R3 + K3* Math.pow(L14, 4)* A3*R3 -
+       Eta34* K4* Math.pow(L12, 2)* Math.pow(L23, 2)* A3*R3 + 2* Eta23* K2* Math.pow(L14, 2)* Math.pow(L23, 2)*
+A3*R3 -
+       Eta34* K4* Math.pow(L14, 2)* Math.pow(L23, 2)* A3*R3 - 2* K3* Math.pow(L12, 2)* Math.pow(L24, 2)* A3*R3 -
+       Eta34* K4* Math.pow(L12, 2)* Math.pow(L24, 2)* A3*R3 - Eta23* K2* Math.pow(L13, 2)* Math.pow(L24, 2)* A3*R3
 -
-       Eta34* K4* Math.pow(L13, 2)* Math.pow(L24, 2)* R3 - Eta23* K2* Math.pow(L14, 2)* Math.pow(L24, 2)* R3
+       Eta34* K4* Math.pow(L13, 2)* Math.pow(L24, 2)* A3*R3 - Eta23* K2* Math.pow(L14, 2)* Math.pow(L24, 2)* A3*R3
 -
-       2* K3* Math.pow(L14, 2)* Math.pow(L24, 2)* R3 + Eta34* K4* Math.pow(L23, 2)* Math.pow(L24, 2)* R3 +
-       K3* Math.pow(L24, 4)* R3 - Eta23* K2* Math.pow(L12, 2)* Math.pow(L34, 2)* R3 +
-       2* Eta34* K4* Math.pow(L12, 2)* Math.pow(L34, 2)* R3 - Eta23* K2* Math.pow(L14, 2)* Math.pow(L34, 2)*
-R3 +
-       Eta23* K2* Math.pow(L24, 2)* Math.pow(L34, 2)* R3 +
+       2* K3* Math.pow(L14, 2)* Math.pow(L24, 2)* A3*R3 + Eta34* K4* Math.pow(L23, 2)* Math.pow(L24, 2)* A3*R3 +
+       K3* Math.pow(L24, 4)* A3*R3 - Eta23* K2* Math.pow(L12, 2)* Math.pow(L34, 2)* A3*R3 +
+       2* Eta34* K4* Math.pow(L12, 2)* Math.pow(L34, 2)* A3*R3 - Eta23* K2* Math.pow(L14, 2)* Math.pow(L34, 2)*
+A3*R3 +
+       Eta23* K2* Math.pow(L24, 2)* Math.pow(L34, 2)* A3*R3 +
        Eta13* ((Math.pow(L12, 2)* ((Math.pow(L23, 2) - Math.pow(L24, 2) - Math.pow(L34, 2))) +
              Math.pow(L24, 2)* ((2* Math.pow(L13, 2) - Math.pow(L23, 2) + Math.pow(L24, 2) - Math.pow(L34, 2))) -
-             Math.pow(L14, 2)* ((Math.pow(L23, 2) + Math.pow(L24, 2) - Math.pow(L34, 2)))))* ((K3* R1 +
-             K1* R3)) + ((K4* ((L12 - L13 - L23))* ((L12 + L13 -
+             Math.pow(L14, 2)* ((Math.pow(L23, 2) + Math.pow(L24, 2) - Math.pow(L34, 2)))))* ((K3* A1*R1 +
+             K1* A3*R3)) + ((K4* ((L12 - L13 - L23))* ((L12 + L13 -
                    L23))* ((L12 - L13 + L23))* ((L12 + L13 + L23)) +
              Eta34* K3* ((Math.pow(L12, 4) + ((L13 - L23))* ((L13 +
                          L23))* ((L14 - L24))* ((L14 + L24)) -
@@ -132,12 +139,12 @@ R3 +
              Eta24* K2* ((Math.pow(L13, 4) + Math.pow(L23, 2)* (((-Math.pow(L14, 2)) + Math.pow(L34, 2))) -
                    Math.pow(L12, 2)* ((Math.pow(L13, 2) - Math.pow(L14, 2) + Math.pow(L34, 2))) -
                    Math.pow(L13, 2)* ((Math.pow(L14, 2) + Math.pow(L23, 2) - 2* Math.pow(L24, 2) +
-                         Math.pow(L34, 2)))))))* R4 -
+                         Math.pow(L34, 2)))))))* A4*R4 -
        Eta14* ((Math.pow(L13, 2)* ((Math.pow(L23, 2) + Math.pow(L24, 2) - Math.pow(L34, 2))) +
              Math.pow(L12, 2)* ((Math.pow(L23, 2) - Math.pow(L24, 2) + Math.pow(L34, 2))) +
              Math.pow(L23, 2)* (((-2)* Math.pow(L14, 2) - Math.pow(L23, 2) + Math.pow(L24, 2) +
-                   Math.pow(L34, 2)))))* ((K4* R1 +
-             K1* R4))))/((12* Math.sqrt(((-Math.pow(L13, 4))* Math.pow(L24, 2) -
+                   Math.pow(L34, 2)))))* ((K4* A1*R1 +
+             K1* A4*R4))))/((12* Math.sqrt(((-Math.pow(L13, 4))* Math.pow(L24, 2) -
              Math.pow(L12, 4)* Math.pow(L34, 2) +
              Math.pow(L12, 2)* (((((-Math.pow(L13, 2)) + Math.pow(L14, 2)))* ((L23 -
                          L24))* ((L23 + L24)) + ((Math.pow(L13, 2) + Math.pow(L14, 2) +
