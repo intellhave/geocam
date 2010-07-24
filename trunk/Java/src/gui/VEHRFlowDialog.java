@@ -20,7 +20,9 @@ import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 
 import solvers.newtonsMethod.EtaOptNEHR;
+import solvers.newtonsMethod.EtaVEHRGradient;
 import solvers.newtonsMethod.RadiusOptNEHR;
+import solvers.newtonsMethod.RadiusVEHRGradient;
 import solvers.newtonsMethod.WrongDirectionException;
 
 
@@ -60,38 +62,41 @@ public class VEHRFlowDialog extends JDialog {
     this.owner = owner;
     GroupLayout nMethodDialogLayout = new GroupLayout((JComponent)this.getContentPane());
     this.setLayout(nMethodDialogLayout);
-    nMethodDialogLayout.setVerticalGroup(nMethodDialogLayout.createParallelGroup()
-    	.addGroup(GroupLayout.Alignment.LEADING, nMethodDialogLayout.createSequentialGroup()
-    	    .addComponent(getDirectionPanel(), GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
-    	    .addGap(26)
-    	    .addGroup(nMethodDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-    	        .addComponent(getCancelButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-    	        .addComponent(getRunButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)))
-    	.addGroup(GroupLayout.Alignment.LEADING, nMethodDialogLayout.createSequentialGroup()
-    	    .addComponent(getQuantPanel(), GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
-    	    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-    	    .addComponent(getMethodPanel(), 0, 69, Short.MAX_VALUE)));
+    nMethodDialogLayout.setVerticalGroup(nMethodDialogLayout.createSequentialGroup()
+    	.addGroup(nMethodDialogLayout.createParallelGroup()
+    	    .addGroup(GroupLayout.Alignment.LEADING, nMethodDialogLayout.createSequentialGroup()
+    	        .addComponent(getDirectionPanel(), GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE)
+    	        .addGap(38)
+    	        .addGroup(nMethodDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+    	            .addComponent(getRunButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+    	            .addComponent(getCancelButton(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)))
+    	    .addGroup(GroupLayout.Alignment.LEADING, nMethodDialogLayout.createSequentialGroup()
+    	        .addComponent(getQuantPanel(), GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+    	        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+    	        .addComponent(getMethodPanel(), 0, 84, Short.MAX_VALUE)))
+    	.addContainerGap(22, 22));
     nMethodDialogLayout.setHorizontalGroup(nMethodDialogLayout.createSequentialGroup()
     	.addContainerGap()
     	.addGroup(nMethodDialogLayout.createParallelGroup()
     	    .addComponent(getQuantPanel(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
     	    .addComponent(getMethodPanel(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE))
-    	.addGap(36)
+    	.addGap(30)
     	.addGroup(nMethodDialogLayout.createParallelGroup()
-    	    .addGroup(nMethodDialogLayout.createSequentialGroup()
-    	        .addComponent(getDirectionPanel(), GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE))
     	    .addGroup(GroupLayout.Alignment.LEADING, nMethodDialogLayout.createSequentialGroup()
-    	        .addComponent(getRunButton(), GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-    	        .addGap(19)
-    	        .addComponent(getCancelButton(), GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)))
-    	.addContainerGap(12, Short.MAX_VALUE));
-    nMethodDialogLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getMethodPanel(), getQuantPanel()});
+    	        .addComponent(getRunButton(), GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)
+    	        .addGap(18)
+    	        .addComponent(getCancelButton(), GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE))
+    	    .addGroup(nMethodDialogLayout.createSequentialGroup()
+    	        .addComponent(getDirectionPanel(), GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)))
+    	.addContainerGap(22, Short.MAX_VALUE));
     nMethodDialogLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getCancelButton(), getRunButton()});
+    nMethodDialogLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getMethodPanel(), getQuantPanel()});
+    nMethodDialogLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {getDirectionPanel(), getMethodPanel(), getQuantPanel()});
     nMethodDialogLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {getCancelButton(), getRunButton()});
-    this.setPreferredSize(new java.awt.Dimension(382, 186));
+    this.setPreferredSize(new java.awt.Dimension(377, 222));
     this.setTitle("VEHR Flow");
     this.setResizable(false);
-    this.setSize(382, 186);
+    this.setSize(377, 222);
 
   }
   
@@ -160,24 +165,10 @@ public class VEHRFlowDialog extends JDialog {
     if(quantPanel == null) {
       quantPanel = new JPanel();
       GroupLayout nmQuantPanelLayout = new GroupLayout((JComponent)quantPanel);
-      quantPanel.setLayout(nmQuantPanelLayout);
+      quantPanel.setLayout(null);
       quantPanel.setBorder(BorderFactory.createTitledBorder("Choose Flow"));
-      nmQuantPanelLayout.setHorizontalGroup(nmQuantPanelLayout.createSequentialGroup()
-      	.addContainerGap()
-      	.addGroup(nmQuantPanelLayout.createParallelGroup()
-      	    .addGroup(GroupLayout.Alignment.LEADING, nmQuantPanelLayout.createSequentialGroup()
-      	        .addComponent(getEtaFlowButton(), GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 0, Short.MAX_VALUE))
-      	    .addGroup(GroupLayout.Alignment.LEADING, nmQuantPanelLayout.createSequentialGroup()
-      	        .addComponent(getRadFlowButton(), GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-      	        .addGap(0, 35, Short.MAX_VALUE)))
-      	.addContainerGap(31, 31));
-      nmQuantPanelLayout.setVerticalGroup(nmQuantPanelLayout.createSequentialGroup()
-      	.addComponent(getRadFlowButton(), GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-      	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-      	.addComponent(getEtaFlowButton(), GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-      	.addContainerGap(44, Short.MAX_VALUE));
-      nmQuantPanelLayout.linkSize(SwingConstants.VERTICAL, new Component[] {getEtaFlowButton(), getRadFlowButton()});
+      quantPanel.add(getRadFlowButton());
+      quantPanel.add(getEtaFlowButton());
     }
     return quantPanel;
   }
@@ -187,6 +178,7 @@ public class VEHRFlowDialog extends JDialog {
       radFlowButton = new JRadioButton();
       radFlowButton.setText("Radius");
       radFlowButton.setSelected(true);
+      radFlowButton.setBounds(17, 21, 65, 20);
       getQuantButtonGroup().add(radFlowButton);
     }
     return radFlowButton;
@@ -196,6 +188,7 @@ public class VEHRFlowDialog extends JDialog {
     if(etaFlowButton == null) {
       etaFlowButton = new JRadioButton();
       etaFlowButton.setText("Eta");
+      etaFlowButton.setBounds(17, 42, 100, 21);
       getQuantButtonGroup().add(etaFlowButton);
     }
     return etaFlowButton;
@@ -240,22 +233,10 @@ public class VEHRFlowDialog extends JDialog {
 	  if(methodPanel == null) {
 		  methodPanel = new JPanel();
 		  GroupLayout methodPanelLayout = new GroupLayout((JComponent)methodPanel);
-		  methodPanel.setLayout(methodPanelLayout);
+		  methodPanel.setLayout(null);
 		  methodPanel.setBorder(BorderFactory.createTitledBorder("Choose Method"));
-		  methodPanelLayout.setHorizontalGroup(methodPanelLayout.createSequentialGroup()
-		  	.addContainerGap()
-		  	.addGroup(methodPanelLayout.createParallelGroup()
-		  	    .addGroup(methodPanelLayout.createSequentialGroup()
-		  	        .addComponent(getNmButton(), GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
-		  	        .addGap(0, 0, Short.MAX_VALUE))
-		  	    .addGroup(GroupLayout.Alignment.LEADING, methodPanelLayout.createSequentialGroup()
-		  	        .addComponent(getGradientButton(), GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-		  	        .addGap(0, 22, Short.MAX_VALUE)))
-		  	.addContainerGap(16, 16));
-		  methodPanelLayout.setVerticalGroup(methodPanelLayout.createSequentialGroup()
-		  	.addComponent(getNmButton(), GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-		  	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-		  	.addComponent(getGradientButton(), GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		  methodPanel.add(getGradientButton());
+		  methodPanel.add(getNmButton());
 	  }
 	  return methodPanel;
   }
@@ -265,6 +246,7 @@ public class VEHRFlowDialog extends JDialog {
 		  nmButton = new JRadioButton();
 		  nmButton.setText("Newton's Method");
 		  nmButton.setSelected(true);
+		  nmButton.setBounds(17, 21, 124, 20);
 		  getMethodButtonGroup().add(nmButton);
 	  }
 	  return nmButton;
@@ -274,6 +256,7 @@ public class VEHRFlowDialog extends JDialog {
 	  if(gradientButton == null) {
 		  gradientButton = new JRadioButton();
 		  gradientButton.setText("Gradient Flow");
+		  gradientButton.setBounds(17, 42, 124, 21);
 		  getMethodButtonGroup().add(gradientButton);
 	  }
 	  return gradientButton;
@@ -292,6 +275,7 @@ public class VEHRFlowDialog extends JDialog {
           if(getRadFlowButton().isSelected()) {
             RadiusOptNEHR radNM = new RadiusOptNEHR();
             GeoRecorder rec = owner.getRecorder();
+            rec.update(radNM, null);
             radNM.addObserver(rec);
             double[] log_radii = radNM.getLogRadii();
             if(getMaxFlowButton().isSelected()) {
@@ -314,6 +298,7 @@ public class VEHRFlowDialog extends JDialog {
           } else {
             EtaOptNEHR etaNM = new EtaOptNEHR();
             GeoRecorder rec = owner.getRecorder();
+            rec.update(etaNM, null);
             etaNM.addObserver(rec);
             double[] etas = etaNM.getEtas();
 
@@ -357,7 +342,75 @@ public class VEHRFlowDialog extends JDialog {
             owner.getPolygonPanel().repaint();
           }
         } else if(getGradientButton().isSelected()) {
-          
+          if(getRadFlowButton().isSelected()) {
+            RadiusVEHRGradient radNM = new RadiusVEHRGradient();
+            GeoRecorder rec = owner.getRecorder();
+            rec.update(radNM, null);
+            radNM.addObserver(rec);
+            double[] log_radii = radNM.getLogRadii();
+            if(getMaxFlowButton().isSelected()) {
+              try {
+                radNM.setLogRadii(radNM.maximize(log_radii));
+              } catch (WrongDirectionException e) {
+              }
+            } else if(getMinFlowButton().isSelected()) {
+              try {
+                radNM.setLogRadii(radNM.minimize(log_radii));
+              } catch (WrongDirectionException e) {
+              }
+            } else {
+              radNM.setLogRadii(radNM.optimize(log_radii));
+            }
+            radNM.deleteObserver(rec);
+            owner.getPolygonPanel().setRecorder(rec);
+            owner.newFlow();
+            owner.getPolygonPanel().repaint();
+          } else {
+            EtaVEHRGradient etaNM = new EtaVEHRGradient();
+            GeoRecorder rec = owner.getRecorder();
+            rec.update(etaNM, null);
+            etaNM.addObserver(rec);
+            double[] etas = etaNM.getEtas();
+
+            if(getMaxFlowButton().isSelected()) {
+              try {
+                etaNM.setEtas(etaNM.maximize(etas));
+              } catch (WrongDirectionException e) {
+              }
+            } else if(getMinFlowButton().isSelected()) {
+              try {
+                etaNM.setEtas(etaNM.minimize(etas));
+              } catch (WrongDirectionException e) {
+              }
+            } else {
+              for(int i = 0; i < 10; i++) {
+                etaNM.setEtas(etaNM.optimize(etas));
+                double max = 0;
+                for(int j = 0; j < etas.length; j++) {
+                  if(max < etas[j]) {
+                    max = etas[j];
+                  }
+                }
+                for(int j = 0; j < etas.length; j++) {
+                  etas[j] = etas[j] / max;
+                }
+              }
+              double max = 0;
+              for(int j = 0; j < etas.length; j++) {
+                if(max < etas[j]) {
+                  max = etas[j];
+                }
+              }
+              for(int j = 0; j < etas.length; j++) {
+                etas[j] = etas[j] / max;
+              }
+              etaNM.setEtas(etas);
+            }
+            etaNM.deleteObserver(rec);
+            owner.getPolygonPanel().setRecorder(rec);
+            owner.newFlow();
+            owner.getPolygonPanel().repaint();
+          }
         }
       }
       VEHRFlowDialog.this.dispose();

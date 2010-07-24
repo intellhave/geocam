@@ -80,17 +80,18 @@ public class Curvature3D extends Geoquant {
   }
   
   public static Curvature3D.Sum sum() {
-    if(total == null) {
+    if(total == null || total.id != Triangulation.getTriangulationID()) {
       total = new Sum();
     }
     return total;
   }
    
   public static class Sum extends Geoquant {
-    LinkedList<Curvature3D> curvs = new LinkedList<Curvature3D>();
-       
+    private LinkedList<Curvature3D> curvs = new LinkedList<Curvature3D>();
+    private int id;
     private Sum() {
       super();
+      id = Triangulation.getTriangulationID();
       Curvature3D k;
       for(Vertex v : Triangulation.vertexTable.values()) {
         k = Curvature3D.At(v);

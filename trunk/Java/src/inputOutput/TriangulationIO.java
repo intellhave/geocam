@@ -40,7 +40,6 @@ public class TriangulationIO {
   
 
   public static void readTriangulation(String fileName) {
-    Triangulation.reset();
     Document triangulationDoc = XMLParser.parseDocument(fileName);
     if(triangulationDoc == null) {
       return;
@@ -66,6 +65,7 @@ public class TriangulationIO {
   }
   
   public static void readTriangulation(Document triangulationDoc) {
+    Triangulation.reset();
     HashMap<TriPosition, Edge> edgeList = new HashMap<TriPosition, Edge>();
     HashMap<TriPosition, Face> faceList = new HashMap<TriPosition, Face>();
     TriPosition T;

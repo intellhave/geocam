@@ -1567,11 +1567,11 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   
   private AbstractAction getShowVehrFlowDialog() {
 	  if(showVehrFlowDialog == null) {
-		  showVehrFlowDialog = new AbstractAction("NEHR Flow", null) {
+		  showVehrFlowDialog = new AbstractAction("VEHR Flow", null) {
 			  public void actionPerformed(ActionEvent evt) {
-			    getVehrFlowDialog().pack();
-			    getVehrFlowDialog().setLocationRelativeTo(null);
-			    getVehrFlowDialog().setVisible(true);
+				  getVehrFlowDialog().pack();
+				  getVehrFlowDialog().setLocationRelativeTo(null);
+				  getVehrFlowDialog().setVisible(true);
 			  }
 		  };
 	  }

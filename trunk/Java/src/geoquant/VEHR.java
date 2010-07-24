@@ -1,5 +1,7 @@
 package geoquant;
 
+import inputOutput.TriangulationIO;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -14,9 +16,11 @@ public class VEHR extends Geoquant {
   private static VEHR instance = null; 
   private static HashMap<TriPosition, Partial> PartialIndex = new HashMap<TriPosition, Partial>();
   private static HashMap<TriPosition, SecondPartial> SecondPartialIndex = new HashMap<TriPosition, SecondPartial>();
+  private int id;
   
   private VEHR() {
     super();
+    id = Triangulation.getTriangulationID();
     totalK = Curvature3D.sum();
     totalV = Volume.sum();
     totalK.addObserver(this);
@@ -34,7 +38,7 @@ public class VEHR extends Geoquant {
   }
   
   public static VEHR getInstance() {
-    if(instance == null) {
+    if(instance == null || instance.id != Triangulation.getTriangulationID()) {
       instance = new VEHR();
     }
     return instance;
@@ -167,7 +171,7 @@ public class VEHR extends Geoquant {
     }
   
     public String toString() {
-      return "NEHR@[]" + "w.r.t" + location + "=" + getValue();
+      return "VEHR@[]" + "w.r.t" + location + "=" + getValue();
     }
   }
   
@@ -486,7 +490,7 @@ public class VEHR extends Geoquant {
     }
     
     public String toString() {
-      return "NEHR@[]" + "w.r.t" + location + "=" + getValue();
+      return "VEHR@[]" + "w.r.t" + location + "=" + getValue();
     }
   }
 }

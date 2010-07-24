@@ -5,12 +5,14 @@ import java.util.HashMap;
 import triangulation.Face;
 import triangulation.StdTetra;
 import triangulation.Tetra;
+import triangulation.Triangulation;
 
 
 public class LEHR extends Geoquant {
   // Index map
   private static HashMap<TriPosition, LEHR> Index = new HashMap<TriPosition, LEHR>();
-  private static LEHR instance = null; 
+  private static LEHR instance = null;
+  private int id;
   // Needed geoquants
   
 
@@ -23,6 +25,7 @@ public class LEHR extends Geoquant {
   
   public LEHR() {
     super();
+    id = Triangulation.getTriangulationID();
     totalK = Curvature3D.sum();
     totalK.addObserver(this);
     totalL = Length.sum();
@@ -45,7 +48,7 @@ public class LEHR extends Geoquant {
   }
 
   public static LEHR getInstance() {
-    if(instance == null) {
+    if(instance == null || instance.id != Triangulation.getTriangulationID()) {
       instance = new LEHR();
     }
     return instance;
