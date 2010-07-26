@@ -3,9 +3,11 @@ package development;
 import geoquant.*;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import triangulation.Face;
+import triangulation.Edge;
 import triangulation.Vertex;
 
 //note that the coordinates this geoquant gives do not take orientation into account
@@ -22,30 +24,35 @@ public class CoordTrans2D extends Geoquant {
   
   private AffineTransformation affineTrans; 
   
-  public CoordTrans2D(Face f1, Face f2) {
-    super(f1,f2);
+  public CoordTrans2D(Face f, Edge e) {
+    super(f,e);
    
-    //get list of common vertices
-    LinkedList<Vertex> vertscommon = new LinkedList<Vertex>(f1.getLocalVertices());
-    vertscommon.retainAll(f2.getLocalVertices());
-    Vertex v1 = vertscommon.get(0);
-    Vertex v2 = vertscommon.get(1);
+    //find face incident to f along edge e
+    Iterator<Face> fi = e.getLocalFaces().iterator();
+    Face f2 = fi.next();
+    if(f2 == f){ f2 = fi.next(); }
+    
+    //get shared vertices of f and f2
+    Iterator<Vertex> ei = e.getLocalVertices().iterator();
+    Vertex v1 = ei.next();
+    Vertex v2 = ei.next();
     
     //get non-common vertex on face 1
-    LinkedList<Vertex> leftover1 = new LinkedList<Vertex>(f1.getLocalVertices());
-    leftover1.removeAll(vertscommon);
+    LinkedList<Vertex> leftover1 = new LinkedList<Vertex>(f.getLocalVertices());
+    leftover1.removeAll(e.getLocalVertices());
     Vertex w1 = leftover1.get(0);
     
     //get non-common vertex on face 2
     LinkedList<Vertex> leftover2 = new LinkedList<Vertex>(f2.getLocalVertices());
-    leftover2.removeAll(vertscommon);
+    leftover2.removeAll(e.getLocalVertices());
     Vertex w2 = leftover2.get(0);
     
-    cv1f1 = Coord2D.At(v1, f1);
-    cv2f1 = Coord2D.At(v2, f1);
+    //set up geoquant dependencies
+    cv1f1 = Coord2D.At(v1, f);
+    cv2f1 = Coord2D.At(v2, f);
     cv1f2 = Coord2D.At(v1, f2);
     cv2f2 = Coord2D.At(v2, f2);
-    cw1 = Coord2D.At(w1, f1);
+    cw1 = Coord2D.At(w1, f);
     cw2 = Coord2D.At(w2, f2);
     
     cv1f1.addObserver(this);
@@ -81,19 +88,19 @@ public class CoordTrans2D extends Geoquant {
     Index.remove(pos);
   }
   
-  public static CoordTrans2D At(Face f1, Face f2) {
-    TriPosition T = new TriPosition(f1.getSerialNumber(), f2.getSerialNumber());
+  public static CoordTrans2D At(Face f, Edge e) {
+    TriPosition T = new TriPosition(f.getSerialNumber(), e.getSerialNumber());
     CoordTrans2D q = Index.get(T);
     if(q == null) {
-      q = new CoordTrans2D(f1, f2);
+      q = new CoordTrans2D(f, e);
       q.pos = T;
       Index.put(T, q);
     }
     return q;
   }
   
-  public static double valueAt(Face f1, Face f2) {
-    return At(f1,f2).getValue();
+  public static double valueAt(Face f, Edge e) {
+    return At(f,e).getValue();
   }
   
   //like getValue(), but returns affine transformation
@@ -101,9 +108,10 @@ public class CoordTrans2D extends Geoquant {
     double d = getValue(); //used to invoke recalculate if invalid
     return affineTrans; 
   }
+  
   //like valueAt(), but returns affine transformation
-  public static AffineTransformation affineTransAt(Face f1, Face f2) {
-    return At(f1,f2).getAffineTrans();
+  public static AffineTransformation affineTransAt(Face f, Edge e) {
+    return At(f,e).getAffineTrans();
   }
 
 }
