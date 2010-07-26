@@ -56,6 +56,17 @@ public class DualArea extends Geoquant {
     return p;
   }
   
+  public static DualArea At(Edge e) {
+    TriPosition T = new TriPosition(e.getSerialNumber());
+    DualArea p = Index.get(T);
+    if (p == null) {
+      p = new DualArea(e);
+      p.pos = T;
+      Index.put(T, p);
+    }
+    return p;
+  }
+  
   public static double valueAt(Edge e) {
     return at(e).getValue();
   }

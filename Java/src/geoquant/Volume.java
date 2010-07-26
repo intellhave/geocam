@@ -111,6 +111,17 @@ public class Volume extends Geoquant {
     return q;
   }
   
+  public static Volume At(Tetra t) {
+    TriPosition T = new TriPosition(t.getSerialNumber());
+    Volume q = Index.get(T);
+    if(q == null) {
+      q = new Volume(t);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Tetra t) {
     return at(t).getValue();
   }

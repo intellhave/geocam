@@ -55,6 +55,17 @@ public class FaceHeight extends Geoquant {
     return q;
   }
   
+  public static FaceHeight At(Face f, Tetra t) {
+    TriPosition T = new TriPosition(f.getSerialNumber(), t.getSerialNumber());
+    FaceHeight q = Index.get(T);
+    if(q == null) {
+      q = new FaceHeight(f, t);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Face f, Tetra t) {
     return at(f, t).getValue();
   }

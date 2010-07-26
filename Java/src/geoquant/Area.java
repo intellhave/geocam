@@ -55,6 +55,17 @@ public class Area extends Geoquant {
     return q;
   }
   
+  public static Area At(Face f) {
+    TriPosition T = new TriPosition(f.getSerialNumber());
+    Area q = Index.get(T);
+    if(q == null) {
+      q = new Area(f);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Face f) {
     return at(f).getValue();
   }

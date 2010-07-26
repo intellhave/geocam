@@ -77,6 +77,17 @@ public class PartialEdge extends Geoquant {
     return p;
   }
   
+  public static PartialEdge At(Vertex vertex, Edge edge) {
+    TriPosition T = new TriPosition(vertex.getSerialNumber(), edge.getSerialNumber());
+    PartialEdge p = Index.get(T);
+    if (p == null) {
+      p = new PartialEdge(vertex, edge);
+      p.pos = T;
+      Index.put(T, p);
+    }
+    return p;
+  }
+  
   public static double valueAt(Vertex vertex, Edge edge) {
     return at(vertex, edge).getValue();
   }

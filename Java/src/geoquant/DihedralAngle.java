@@ -63,6 +63,17 @@ public class DihedralAngle extends Geoquant {
     return q;
   }
   
+  public static DihedralAngle At(Edge e, Tetra t) {
+    TriPosition T = new TriPosition(e.getSerialNumber(), t.getSerialNumber());
+    DihedralAngle q = Index.get(T);
+    if(q == null) {
+      q = new DihedralAngle(e, t);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Edge e, Tetra t) {
     return at(e, t).getValue();
   }

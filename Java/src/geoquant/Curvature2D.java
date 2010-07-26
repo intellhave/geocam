@@ -57,6 +57,17 @@ public class Curvature2D extends Geoquant {
     return q;
   }
   
+  public static Curvature2D At(Vertex v) {
+    TriPosition T = new TriPosition(v.getSerialNumber());
+    Curvature2D q = Index.get(T);
+    if(q == null) {
+      q = new Curvature2D(v);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Vertex v) {
     return at(v).getValue();
   }
