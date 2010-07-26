@@ -404,7 +404,7 @@ public class EmbeddedTriangulation{
       Radius.At(vert0).setValue(1);
       Radius.At(vert1).setValue(1);
       Eta.At(e).setValue(edgelength);*/
-      Length.At(e).setValue(edgelength);
+      Length.at(e).setValue(edgelength);
     }
     
     //determine origin, tangent_x, tangent_y using Coord geoquants:
