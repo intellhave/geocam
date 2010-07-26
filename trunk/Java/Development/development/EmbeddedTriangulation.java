@@ -1,11 +1,16 @@
 package development;
 
+import geoquant.Alpha;
+import geoquant.Eta;
 import geoquant.Length;
+import geoquant.Radius;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import util.Matrix;
 import triangulation.Edge;
@@ -174,19 +179,39 @@ public class EmbeddedTriangulation{
     
   }
   
+  public static void printCoordinateData(){
+    
+    Iterator<Integer> iter_f = Triangulation.faceTable.keySet().iterator();
+    while(iter_f.hasNext()){
+      Integer key = iter_f.next();
+      Face f = Triangulation.faceTable.get(key);
+      
+      System.out.printf("\n\nFace %d:\n   ", f.getIndex());
+      
+      Iterator<Vertex> iter_v = f.getLocalVertices().iterator();
+      while(iter_v.hasNext()){
+        Vertex v = iter_v.next();
+        
+        System.out.printf(" v%d ", v.getIndex());
+        System.out.print(Coord2D.coordAt(v,f));
+      }
+    }
+  }
+  
   public static void printGeometricData(){
 
-    Iterator<Integer> iter_f1 = Triangulation.faceTable.keySet().iterator();
-    while(iter_f1.hasNext()){
-      Integer key = iter_f1.next();
-      Face f1 = Triangulation.faceTable.get(key);
+    Iterator<Integer> iter_f = Triangulation.faceTable.keySet().iterator();
+    while(iter_f.hasNext()){
+      Integer key = iter_f.next();
+      Face f = Triangulation.faceTable.get(key);
       
-      Iterator<Face> iter_f2 = f1.getLocalFaces().iterator();
-      while(iter_f2.hasNext()){
-        Face f2 = iter_f2.next();
+      Iterator<Edge> iter_e = f.getLocalEdges().iterator();
+      while(iter_e.hasNext()){
+        Edge e = iter_e.next();
         
-        System.out.printf("\n\nTransition %d-%d\n", f1.getIndex(), f2.getIndex());
-        System.out.print(CoordTrans2D.affineTransAt(f1,f2));
+        System.out.printf("\n\nTransition f%d -> e%d\n", f.getIndex(), e.getIndex());
+        System.out.print(CoordTrans2D.affineTransAt(f,e));
+        //AffineTransformation temp = new AffineTransformation(CoordTrans2D.affineTransAt(f1,f2));
         //System.out.print(new AffineTransformation(2));
         System.out.print("\n");
       }
@@ -369,7 +394,17 @@ public class EmbeddedTriangulation{
       try { edgelength = Vector.distance(v0,v1); }
       catch (Exception e1) { e1.printStackTrace(); }
       
-      Length.at(e).setValue(edgelength);
+      //len = a1*r1*r1 + a2*r2*r2 + 2*r1*r2*etaV
+      //set alphas to 0, radii to 1, eta to the length
+      /*Iterator<Vertex> iter_v = e.getLocalVertices().iterator();
+      Vertex vert0 = iter_v.next();
+      Vertex vert1 = iter_v.next();
+      Alpha.At(vert0).setValue(0);
+      Alpha.At(vert1).setValue(0);
+      Radius.At(vert0).setValue(1);
+      Radius.At(vert1).setValue(1);
+      Eta.At(e).setValue(edgelength);*/
+      Length.At(e).setValue(edgelength);
     }
     
     //determine origin, tangent_x, tangent_y using Coord geoquants:

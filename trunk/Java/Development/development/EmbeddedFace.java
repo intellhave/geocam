@@ -60,7 +60,7 @@ public class EmbeddedFace {
   public Vector getNormal() {
     return normal_;
   }
-  
+
   public Geometry getGeometry(Color color) {
     double[][] ifsf_verts = new double[getNumberVertices()][3];
     int[][] ifsf_faces = new int[1][getNumberVertices()];
@@ -70,6 +70,36 @@ public class EmbeddedFace {
         ifsf_verts[i] = getVectorAt(i).getVectorAsArray();
       else {
         ifsf_verts[i] = new double[]{getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1), 0};
+      }
+      ifsf_faces[0][i] = i;
+    }
+    
+    Color[] colors = new Color[ifsf_faces.length];
+    for(int i = 0; i < ifsf_faces.length; i++) {
+      colors[i] = color;
+    }
+
+    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+    ifsf.setVertexCount(ifsf_verts.length);
+    ifsf.setVertexCoordinates(ifsf_verts);
+    ifsf.setFaceCount(ifsf_faces.length);
+    ifsf.setFaceIndices(ifsf_faces);
+    ifsf.setGenerateEdgesFromFaces(true);
+    ifsf.setFaceColors(colors);
+    ifsf.update();
+    return ifsf.getGeometry();
+  }
+  
+
+  public Geometry getGeometry(Color color, double z) {
+    double[][] ifsf_verts = new double[getNumberVertices()][3];
+    int[][] ifsf_faces = new int[1][getNumberVertices()];
+
+    for (int i = 0; i < getNumberVertices(); i++) {
+      if(getVectorAt(i).getDimension() == 3)
+        ifsf_verts[i] = getVectorAt(i).getVectorAsArray();
+      else {
+        ifsf_verts[i] = new double[]{getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1),z};
       }
       ifsf_faces[0][i] = i;
     }

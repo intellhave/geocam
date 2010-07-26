@@ -29,23 +29,24 @@ public class DevelopmentApp2D {
   
   public static void main(String[] args){
     
-    //EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/icosahedron.xml");
+    EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
+    //TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/icosahedron.xml");
     
     Iterator<Integer> i = null;
-
+    
     //set edge lengths randomly from [2,3)
-    i = Triangulation.edgeTable.keySet().iterator();
+    /*i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
-      Length.at(e).setValue(2+Math.random()); //random return value is in [0,1)
-    }
+      double rand = Math.random();
+      Length.At(e).setValue(2+rand); //random return value is in [0,1)
+    }*/
     
     //print some debug data
-    EmbeddedTriangulation.printTriangulationData();
-    EmbeddedTriangulation.printGeometricData();
-    EmbeddedTriangulation.printGeometricData();
+    //EmbeddedTriangulation.printTriangulationData();
+    //EmbeddedTriangulation.printCoordinateData();
+    //EmbeddedTriangulation.printGeometricData();
     
     //pick some arbitrary face and source point
     i = Triangulation.faceTable.keySet().iterator();
@@ -72,7 +73,7 @@ public class DevelopmentApp2D {
     //sgc_root.addChild(sgc_points);
     
     //find 'development edge info' for this face, and iterate development
-    iterateDevelopment("", 0,3,sgc_root,source_face,null,null,T);
+    iterateDevelopment(0,2,sgc_root,source_face,null,null,T);
     
     //jrviewer(s)
     JRViewer jrv = new JRViewer();
@@ -92,52 +93,32 @@ public class DevelopmentApp2D {
   }
   
   //struct holding info neccessary to develop off an edge
-  /*private static class DevelopmentEdgeInfo{
+  private static class DevelopmentEdgeInfo{
     public Vector vect0_,vect1_;
     public Vertex vert0_,vert1_;
-    Face F_;
+    Edge next_source_edge_;
+    Face next_face_;
 
-    public DevelopmentEdgeInfo(Vertex vert0, Vertex vert1, Vector vect0, Vector vect1, Face F){
+    public DevelopmentEdgeInfo(Vertex vert0, Vertex vert1, Vector vect0, Vector vect1, Face next_face, Edge next_source_edge){
       vect0_ = vect0; vect1_ = vect1;
       vert0_ = vert0; vert1_ = vert1;
-      F_ = F;
+      next_source_edge_ = next_source_edge;
+      next_face_ = next_face;
     }
   };
   
-  public static ArrayList<DevelopmentEdgeInfo> getDevelopmentEdgeInfo(Face F, Face source_face, AffineTransformation T){
+  public static ArrayList<DevelopmentEdgeInfo> getDevelopmentEdgeInfo(Face cur_face, Edge source_edge, AffineTransformation T){
     
     //get verts
     Vertex[] vert = new Vertex[3];
-    Iterator<Vertex> iv = F.getLocalVertices().iterator();
+    Iterator<Vertex> iv = cur_face.getLocalVertices().iterator();
     for(int i=0; i<3; i++){ vert[i] = iv.next(); }
     
-    //get vects
+    //apply T to coordinates
     Vector[] vect = new Vector[3];
     for(int i=0; i<3; i++){
-      try { vect[i] = T.affineTransPoint(Coord2D.coordAt(vert[i], F)); }
+      try { vect[i] = T.affineTransPoint(Coord2D.coordAt(vert[i], cur_face)); }
       catch (Exception e) { e.printStackTrace(); }
-    }
-    
-    //get faces
-    Face[] face = new Face[3];
-    Iterator<Face> fi = F.getLocalFaces().iterator();
-    while(fi.hasNext()){
-      Face ftemp = fi.next();
-      //see which verts are in common with F
-      boolean[] vmatch = new boolean[3];
-      vmatch[0] = false; vmatch[1] = false; vmatch[2] = false;
-      Iterator<Vertex> vi = ftemp.getLocalVertices().iterator();
-      while(vi.hasNext()){
-        Vertex vtemp = vi.next();
-        if(vtemp == vert[0]){ vmatch[0] = true; }
-        else if(vtemp == vert[1]){ vmatch[1] = true; }
-        else if(vtemp == vert[2]){ vmatch[2] = true; }
-      }
-      //now figure out based on vmatch which order to list the incident faces
-      //we want face[k] to be the one sharing vert[k] and vert[(k+1)%3]
-      if(vmatch[0] == false){ face[1] = ftemp; }
-      else if(vmatch[1] == false){ face[2] = ftemp; }
-      else if(vmatch[2] == false){ face[0] = ftemp; }
     }
     
     //see if CCW
@@ -147,107 +128,103 @@ public class DevelopmentApp2D {
     if(z < 0){ //flip orientation
       Vertex tempvert = vert[2];
       Vector tempvect = vect[2];
-      Face tempface = face[2];
       vert[2] = vert[1];
       vect[2] = vect[1];
-      face[2] = face[1];
       vert[1] = tempvert;
       vect[1] = tempvect;
-      face[1] = tempface;
     }
     
-    //add to return list
+    //get edges
     ArrayList<DevelopmentEdgeInfo> retinfo = new ArrayList<DevelopmentEdgeInfo>();
-    if(source_face != face[0]){ retinfo.add(new DevelopmentEdgeInfo(vert[0],vert[1],vect[0],vect[1],face[0])); }
-    if(source_face != face[1]){ retinfo.add(new DevelopmentEdgeInfo(vert[1],vert[2],vect[1],vect[2],face[1])); }
-    if(source_face != face[2]){ retinfo.add(new DevelopmentEdgeInfo(vert[2],vert[0],vect[2],vect[0],face[2])); }
+    
+    Iterator<Edge> ie = cur_face.getLocalEdges().iterator();
+    while(ie.hasNext()){
+      Edge e = ie.next();
+      //don't do anything with source_edge
+      if(e == source_edge){ continue; }
+      
+      //find incident face
+      Iterator<Face> eif = e.getLocalFaces().iterator();
+      Face next_face = eif.next();
+      if(next_face == cur_face){ next_face = eif.next(); }
+      
+      //see which verts this edge belongs to
+      Iterator<Vertex> eiv = e.getLocalVertices().iterator();
+      Vertex v0 = eiv.next();
+      Vertex v1 = eiv.next();
+      
+      //see which vertices these are in terms of the CCW ones above
+      int n = 0;
+      if((vert[0] == v0) && (vert[1] == v1)){ n=0; }
+      else if((vert[0] == v1) && (vert[1] == v0)){ n=0; }
+      else if((vert[1] == v0) && (vert[2] == v1)){ n=1; }
+      else if((vert[1] == v1) && (vert[2] == v0)){ n=1; }
+      else if((vert[2] == v0) && (vert[0] == v1)){ n=2; }
+      else if((vert[2] == v1) && (vert[0] == v0)){ n=2; }
+      retinfo.add(new DevelopmentEdgeInfo(vert[n],vert[(n+1)%3],vect[n],vect[(n+1)%3],next_face,e));
+    }
+    
     return retinfo;
-  }*/
+  }
   
-  public static void iterateDevelopment(String output, int depth, int maxdepth, SceneGraphComponent sgc_root, Face new_face, Face source_face, Frustum2D current_frustum, AffineTransformation current_trans){
+  public static void iterateDevelopment(int depth, int maxdepth, SceneGraphComponent sgc_root, Face cur_face, Edge source_edge, Frustum2D current_frustum, AffineTransformation current_trans){
     
     //note: source_face and current_frustum may be null
     
-    String newoutput = new String(output);
-    newoutput += " " + new_face.getIndex();
-    
-    System.out.print("\n\n\n");
-    
-    System.out.print("Current trans:\n");
-    System.out.print(current_trans);
-    System.out.print("\n");
-    
     //get new affine transformation
     AffineTransformation new_trans = new AffineTransformation(2);
-    if(source_face != null){
-      AffineTransformation coord_trans = CoordTrans2D.affineTransAt(new_face, source_face);
+    if(source_edge != null){
+      AffineTransformation coord_trans = CoordTrans2D.affineTransAt(cur_face, source_edge);
       new_trans.leftMultiply(coord_trans);
-      
-      System.out.print("Coord trans:\n");
-      System.out.print(new_trans);
-      System.out.print("\n");
     }
     new_trans.leftMultiply(current_trans);
-    
-    System.out.print("New trans:\n");
-    System.out.print(new_trans);
-    System.out.print("\n");
     
     //get transformed points from new_face
     ArrayList<Vector> efpts = new ArrayList<Vector>();
     
-    Iterator<Vertex> i = new_face.getLocalVertices().iterator();
+    Iterator<Vertex> i = cur_face.getLocalVertices().iterator();
     while(i.hasNext()){
       Vertex vert = i.next();
-      Vector pt = Coord2D.coordAt(vert, new_face);
+      Vector pt = Coord2D.coordAt(vert, cur_face);
       try{ efpts.add(new_trans.affineTransPoint(pt)); }
       catch(Exception e1){ e1.printStackTrace(); }
     }
     
-    //make embeddedface
+    //make clipped embeddedface
     EmbeddedFace origface = new EmbeddedFace(efpts);
-    //EmbeddedFace clipface = current_frustum.clipFace(origface);
+    EmbeddedFace clipface = null;
+    if(current_frustum != null){ clipface = current_frustum.clipFace(origface); }
+    else{ clipface = origface; }
+    
+    //quit if face is completely obscured
+    if(clipface == null){ return; }
     
     //add clipped face to display
-    //if(clipface != null){
-    //if((depth == maxdepth) || (depth == maxdepth-1)){
-    //if(depth == maxdepth-2){
-      SceneGraphComponent sgc_new_face = new SceneGraphComponent();
-      Color color = Color.getHSBColor((float)depth/(float)maxdepth, 1.0f, 0.5f);
-      //Color color = Color.getHSBColor((float)new_face.getIndex()/(float)Triangulation.faceTable.size(), 1.0f, 0.5f);
-      sgc_new_face.setGeometry(origface.getGeometry(color));
-      
-      //add to sgc_root
-      sgc_new_face.setAppearance(getFaceAppearance(0.6f));
-      sgc_root.addChild(sgc_new_face);
-      
-      System.out.print("Face sequence:");
-      System.out.print(newoutput);
-      System.out.print("\n");
-    //}
+    SceneGraphComponent sgc_new_face = new SceneGraphComponent();
+    Color color = Color.getHSBColor((float)depth/(float)maxdepth, 1.0f, 0.5f);
+    //Color color = Color.getHSBColor((float)new_face.getIndex()/(float)Triangulation.faceTable.size(), 1.0f, 0.5f);
+    sgc_new_face.setGeometry(clipface.getGeometry(color));//, Math.random()));
+    sgc_new_face.setAppearance(getFaceAppearance(0.6f));
+    sgc_root.addChild(sgc_new_face);
     
     //see which faces to continue developing on
     if(depth >= maxdepth){ return; }
     
-    /*ArrayList<DevelopmentEdgeInfo> deInfoList = getDevelopmentEdgeInfo(new_face, source_face, new_trans);
+    
+    ArrayList<DevelopmentEdgeInfo> deInfoList = getDevelopmentEdgeInfo(cur_face, source_edge, new_trans);
     
     for(int j=0; j<deInfoList.size(); j++){
-    
       DevelopmentEdgeInfo deInfo = deInfoList.get(j);
-      if(deInfo.F_ != source_face){ //note, fine even when source_face == null
-        Frustum2D frust = new Frustum2D(deInfo.vect1_,deInfo.vect0_);
-        //Frustum2D new_frust = Frustum2D.intersect(frust, current_frustum);
-        iterateDevelopment(depth+1, maxdepth, sgc_root, deInfo.F_, new_face, frust, new_trans);
-      }
-    }*/
-    
-    Iterator<Face> fi = new_face.getLocalFaces().iterator();
-    
-    while(fi.hasNext()){
-      Face ftemp = fi.next();
-      if(ftemp != source_face){
-        iterateDevelopment(newoutput, depth+1, maxdepth, sgc_root, ftemp, new_face, null, new_trans); 
-      }
+      
+      //intersect frustums
+      Frustum2D frust = new Frustum2D(deInfo.vect1_,deInfo.vect0_);
+      Frustum2D new_frust = null;
+      if(current_frustum == null){ new_frust = frust; }
+      else{ new_frust = Frustum2D.intersect(frust, current_frustum); }
+      if(new_frust == null){ continue; }
+      
+      //iterate
+      iterateDevelopment(depth+1, maxdepth, sgc_root, deInfo.next_face_, deInfo.next_source_edge_, new_frust, new_trans);
     }
     
   }
