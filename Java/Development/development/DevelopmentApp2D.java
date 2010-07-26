@@ -73,7 +73,7 @@ public class DevelopmentApp2D {
     //sgc_root.addChild(sgc_points);
     
     //find 'development edge info' for this face, and iterate development
-    iterateDevelopment(0,2,sgc_root,source_face,null,null,T);
+    iterateDevelopment(0,8,sgc_root,source_face,null,null,T);
     
     //jrviewer(s)
     JRViewer jrv = new JRViewer();
@@ -108,6 +108,9 @@ public class DevelopmentApp2D {
   };
   
   public static ArrayList<DevelopmentEdgeInfo> getDevelopmentEdgeInfo(Face cur_face, Edge source_edge, AffineTransformation T){
+    
+    //gets collection of DevelopmentEdgeInfos, which give the info necessary to
+    //develop an additional information out of a given face
     
     //get verts
     Vertex[] vert = new Vertex[3];
@@ -167,6 +170,25 @@ public class DevelopmentApp2D {
     return retinfo;
   }
   
+  private static boolean isOutsideBoundingBox(ArrayList<Vector> ptlist, double min_x, double max_x, double min_y, double max_y){
+    
+    boolean outside_x_max = true;
+    boolean outside_x_min = true;
+    boolean outside_y_max = true;
+    boolean outside_y_min = true;
+    
+    Iterator<Vector> iv = ptlist.iterator();
+    while(iv.hasNext()){
+      Vector v = iv.next();
+      if(v.getComponent(0) <= max_x){ outside_x_max = false; }
+      if(v.getComponent(0) >= min_x){ outside_x_min = false; }
+      if(v.getComponent(1) <= max_y){ outside_y_max = false; }
+      if(v.getComponent(1) >= min_y){ outside_y_min = false; }
+    }
+    
+    return (outside_x_max || outside_x_min || outside_y_max || outside_y_min);
+  }
+  
   public static void iterateDevelopment(int depth, int maxdepth, SceneGraphComponent sgc_root, Face cur_face, Edge source_edge, Frustum2D current_frustum, AffineTransformation current_trans){
     
     //note: source_face and current_frustum may be null
@@ -190,6 +212,9 @@ public class DevelopmentApp2D {
       catch(Exception e1){ e1.printStackTrace(); }
     }
     
+    //make sure we are within bounding box
+    if(isOutsideBoundingBox(efpts, -4.0,4.0, -4.0,4.0)){ return; }
+    
     //make clipped embeddedface
     EmbeddedFace origface = new EmbeddedFace(efpts);
     EmbeddedFace clipface = null;
@@ -199,13 +224,23 @@ public class DevelopmentApp2D {
     //quit if face is completely obscured
     if(clipface == null){ return; }
     
+    double z = 0; //Math.random() / 2.0;
+    
     //add clipped face to display
     SceneGraphComponent sgc_new_face = new SceneGraphComponent();
     Color color = Color.getHSBColor((float)depth/(float)maxdepth, 1.0f, 0.5f);
     //Color color = Color.getHSBColor((float)new_face.getIndex()/(float)Triangulation.faceTable.size(), 1.0f, 0.5f);
-    sgc_new_face.setGeometry(clipface.getGeometry(color));//, Math.random()));
+    sgc_new_face.setGeometry(clipface.getGeometry(color, z));
     sgc_new_face.setAppearance(getFaceAppearance(0.6f));
     sgc_root.addChild(sgc_new_face);
+    
+    //add frustum to display
+    if(current_frustum != null){
+      SceneGraphComponent sgc_frust = new SceneGraphComponent();
+      sgc_frust.setGeometry(current_frustum.getGeometry(Color.WHITE, z));
+      sgc_frust.setAppearance(getFaceAppearance(0.6f));
+      //sgc_root.addChild(sgc_frust);
+    }
     
     //see which faces to continue developing on
     if(depth >= maxdepth){ return; }
@@ -247,13 +282,14 @@ public class DevelopmentApp2D {
     //line shader
     DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
     dls.setTubeDraw(false);
+    dls.setLineWidth(0.0);
     dls.setDiffuseColor(Color.BLACK);
     
     //polygon shader
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
     dps.setDiffuseColor(Color.WHITE);
     dps.setTransparency(transparency);
-    
+
     return app_face;
   }
 
