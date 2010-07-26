@@ -68,7 +68,7 @@ public class DualPentachoronTest {
     
     i = 0;
     for(Edge e : Triangulation.edgeTable.values()) {
-      Length.At(e).setValue(lengths[i]);
+      Length.at(e).setValue(lengths[i]);
       i++;
     }
     

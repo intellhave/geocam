@@ -129,7 +129,7 @@ public class GeoquantTest {
     
     Alpha al;
     for (Vertex v: Triangulation.vertexTable.values()){
-      al = Alpha. At(v);
+      al = Alpha. at(v);
       out.println(al);
     }
     out.close();
@@ -145,7 +145,7 @@ public class GeoquantTest {
     
     Eta et;
     for (Edge e : Triangulation.edgeTable.values()){
-      et = Eta.At(e);
+      et = Eta.at(e);
       out.println(et);
     }
     out.close();
@@ -162,7 +162,7 @@ public class GeoquantTest {
     Angle a;
     for (Face f : Triangulation.faceTable.values()){
       for (Vertex v : f.getLocalVertices()) {
-        a = Angle.At(v, f);
+        a = Angle.at(v, f);
         out.println(a);
       }
     }
@@ -179,7 +179,7 @@ public class GeoquantTest {
     
     Area ar;
     for (Face f : Triangulation.faceTable.values()){
-      ar = Area.At(f);
+      ar = Area.at(f);
       out.println(ar);
     }
     out.close();
@@ -195,7 +195,7 @@ public class GeoquantTest {
     
     ConeAngle c;
     for (Edge e : Triangulation.edgeTable.values()){
-      c = ConeAngle.At(e);
+      c = ConeAngle.at(e);
       out.println(c);
     }
     out.close();
@@ -211,7 +211,7 @@ public class GeoquantTest {
     
     Curvature2D cu2;
     for (Vertex v : Triangulation.vertexTable.values()){
-      cu2 = Curvature2D.At(v);
+      cu2 = Curvature2D.at(v);
       out.println(cu2);
     }
     out.close();
@@ -227,7 +227,7 @@ public class GeoquantTest {
     
     Curvature3D cu3;
     for (Vertex v : Triangulation.vertexTable.values()){
-      cu3 = Curvature3D.At(v);
+      cu3 = Curvature3D.at(v);
       out.println(cu3);
     }
     out.close();
@@ -244,7 +244,7 @@ public class GeoquantTest {
     DihedralAngle d;
     for (Tetra t : Triangulation.tetraTable.values()){
       for (Edge e : t.getLocalEdges()) {
-      d = DihedralAngle.At(e, t);
+      d = DihedralAngle.at(e, t);
       out.println(d);
     }
    }
@@ -262,7 +262,7 @@ public class GeoquantTest {
     
     DualArea du;
     for (Edge e : Triangulation.edgeTable.values()){
-      du = DualArea.At(e);
+      du = DualArea.at(e);
       out.println(du);
     }
     out.close();
@@ -280,7 +280,7 @@ public class GeoquantTest {
     EdgeHeight eh;
     for (Face f : Triangulation.faceTable.values()){
       for (Edge e : f.getLocalEdges()) {
-        eh = EdgeHeight.At(e, f);
+        eh = EdgeHeight.at(e, f);
         out.println(eh);
       }
     }
@@ -298,7 +298,7 @@ public class GeoquantTest {
     FaceHeight fh;
     for (Tetra t : Triangulation.tetraTable.values()){
       for (Face f : t.getLocalFaces()) {
-        fh = FaceHeight.At(f, t);
+        fh = FaceHeight.at(f, t);
         out.println(fh);
       }
     }
@@ -314,7 +314,7 @@ public class GeoquantTest {
     }    
     SectionalCurvature sc;
     for (Edge e : Triangulation.edgeTable.values()){
-      sc = SectionalCurvature.At(e);
+      sc = SectionalCurvature.at(e);
       out.println(sc);
     }
     out.close();
@@ -330,7 +330,7 @@ public class GeoquantTest {
     
     Volume vol;
     for (Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       out.println(vol);
     }
     out.close();
@@ -347,7 +347,7 @@ public class GeoquantTest {
     PartialEdge pe;
     for (Edge edge : Triangulation.edgeTable.values()){
       for (Vertex vertex : edge.getLocalVertices()) {
-        pe = PartialEdge.At(vertex, edge);
+        pe = PartialEdge.at(vertex, edge);
         out.println(pe);
       }
     }
@@ -379,7 +379,7 @@ public class GeoquantTest {
     Volume vol;
     Volume.Partial partial;
     for(Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       for (Vertex v : t.getLocalVertices()){
        partial = vol.partialAt(v); 
        out.println(partial);
@@ -403,7 +403,7 @@ public class GeoquantTest {
     Volume vol;
     Volume.SecondPartial secondPartial;
     for (Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       for (Vertex v : t.getLocalVertices()){
         for (Vertex w : t.getLocalVertices()){
           secondPartial = vol.secondPartialAt(v, w);
@@ -436,7 +436,7 @@ public class GeoquantTest {
     DihedralAngle.Partial partial;
     for (Tetra t : Triangulation.tetraTable.values()){
       for (Edge e : t.getLocalEdges()) {
-        d = DihedralAngle.At(e, t);
+        d = DihedralAngle.at(e, t);
         for (Edge f : Triangulation.edgeTable.values()) {
           partial = d.partialAt(f);
           out.println(partial);
@@ -458,7 +458,7 @@ public class GeoquantTest {
     DihedralAngle.SecondPartial secondPartial;
     for (Tetra t : Triangulation.tetraTable.values()){
       for (Edge e : t.getLocalEdges()) {
-        d = DihedralAngle.At(e, t);
+        d = DihedralAngle.at(e, t);
         for (Edge nm : t.getLocalEdges()) {
           for (Edge op : t.getLocalEdges()) {
             secondPartial = d.secondPartialAt(nm, op);
@@ -484,7 +484,7 @@ public class GeoquantTest {
     PartialEdge.Partial partial;
     for(Edge e : Triangulation.edgeTable.values()) {
       for(Vertex v : e.getLocalVertices()) {
-        pe = PartialEdge.At(v, e);
+        pe = PartialEdge.at(v, e);
         for(Edge f: Triangulation.edgeTable.values()) {
           partial = pe.partialAt(f);
           out.println(partial);
@@ -507,7 +507,7 @@ public class GeoquantTest {
     PartialEdge.SecondPartial secondPartial;
     for(Edge e : Triangulation.edgeTable.values()) {
       for(Vertex v : e.getLocalVertices()) {
-        pe = PartialEdge.At(v, e);
+        pe = PartialEdge.at(v, e);
         secondPartial = pe.secondPartialAt(e, e);
         out.println(secondPartial);
       }
@@ -527,7 +527,7 @@ public class GeoquantTest {
     Curvature3D c;
     Curvature3D.Partial partial;
     for (Vertex v : Triangulation.vertexTable.values()){
-      c = Curvature3D.At(v);
+      c = Curvature3D.at(v);
       for (Vertex w : Triangulation.vertexTable.values()) {
         partial = c.partialAt(w);
         out.println(partial);
@@ -551,7 +551,7 @@ public class GeoquantTest {
     Curvature3D c;
     Curvature3D.SecondPartial secondPartial;
     for (Vertex v : Triangulation.vertexTable.values()) {
-      c = Curvature3D.At(v);
+      c = Curvature3D.at(v);
       for(Edge e : Triangulation.edgeTable.values()) {
         for(Edge f : Triangulation.edgeTable.values()) {
           secondPartial = c.secondPartialAt(e, f);
@@ -572,7 +572,7 @@ public class GeoquantTest {
     Radius r;
     Radius.Partial partial;
     for (Vertex v : Triangulation.vertexTable.values()){
-      r = Radius.At(v);
+      r = Radius.at(v);
       for (Edge e : Triangulation.edgeTable.values()){
         partial = r.partialAt(e);
         out.println(partial);

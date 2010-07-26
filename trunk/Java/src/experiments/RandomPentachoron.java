@@ -66,17 +66,17 @@ public class RandomPentachoron {
                 + Math.pow(vertices[m-1][1] - vertices[n-1][1], 2)
                 + Math.pow(vertices[m-1][2] - vertices[n-1][2], 2)
                 + Math.pow(vertices[m-1][3] - vertices[n-1][3], 2));
-              Length.At(e).setValue(dist);
+              Length.at(e).setValue(dist);
           }
         }
       }
 
       for(Edge e: Triangulation.edgeTable.values()){
-        ecurvature.println(SectionalCurvature.At(e).getValue());
+        ecurvature.println(SectionalCurvature.at(e).getValue());
       }
       
       for(Vertex v: Triangulation.vertexTable.values()){
-        vcurvature.println(Curvature3D.At(v).getValue());
+        vcurvature.println(Curvature3D.at(v).getValue());
       }
       
       lehr.println(LEHR.value());

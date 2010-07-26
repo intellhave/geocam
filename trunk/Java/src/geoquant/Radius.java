@@ -22,7 +22,7 @@ public class Radius extends Geoquant {
     PartialIndex = new HashMap<TriPosition, Partial>();
   }
   
-  public static Radius At(Vertex v) {
+  public static Radius at(Vertex v) {
     TriPosition T = new TriPosition( v.getSerialNumber() );
     Radius q = Index.get(T);
     if(q == null) {
@@ -34,7 +34,7 @@ public class Radius extends Geoquant {
   }
   
   public static double valueAt(Vertex v) {
-    return At(v).getValue();
+    return at(v).getValue();
   }
   
   protected void recalculate() {
@@ -102,7 +102,7 @@ public class Radius extends Geoquant {
       
       i = 0;
       for(Vertex v : Triangulation.vertexTable.values()) {
-        Radius.At(v).partialAt(e).setValue(values[i]);
+        Radius.at(v).partialAt(e).setValue(values[i]);
         i++;
       }
       j++;

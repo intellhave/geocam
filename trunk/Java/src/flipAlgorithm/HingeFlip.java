@@ -85,7 +85,7 @@ public class HingeFlip {
     // computation
     double ang = ang0;
     if (ang == Math.PI) { // if the edges are colinear
-      Length.At(info.edges[0]).setValue(len1 + len4);
+      Length.at(info.edges[0]).setValue(len1 + len4);
       return;
     } else if (ang0 > Math.PI) { // this can happen when flipping a non-convex
       // hinge
@@ -97,8 +97,8 @@ public class HingeFlip {
     double edgeLength = Math.sqrt((len1 * len1) + (len4 * len4)
         - (2 * len1 * len4 * Math.cos(ang)));
 
-    Length.At(info.edges[0]).remove();
-    Length.At(info.edges[0]).setValue(edgeLength);
+    Length.at(info.edges[0]).remove();
+    Length.at(info.edges[0]).setValue(edgeLength);
 
     if (ang0 > Math.PI) {
       info.embeddedFaces[0].setNegativity(true);
@@ -182,7 +182,7 @@ public class HingeFlip {
     // computation
     double ang = ang0;
     if (ang == Math.PI) { // if the edges are colinear
-      Length.At(info.edges[0]).setValue(len1 + len4);
+      Length.at(info.edges[0]).setValue(len1 + len4);
       return;
     } else if (ang0 > Math.PI) { // this can happen when flipping a non-convex
       // hinge
@@ -194,7 +194,7 @@ public class HingeFlip {
     double edgeLength = Math.sqrt((len1 * len1) + (len4 * len4)
         - (2 * len1 * len4 * Math.cos(ang)));
 
-    Length.At(info.edges[0]).setValue(edgeLength);
+    Length.at(info.edges[0]).setValue(edgeLength);
 
     if (ang0 > Math.PI) {
       info.embeddedFaces[0].setNegativity(false);

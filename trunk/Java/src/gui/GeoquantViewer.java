@@ -346,19 +346,19 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         Edge s = (Edge) EdgeListModel.getElementAt(index);
         if(name.equals("etaSlider")) {
           etaSetField.setText("" + value);
-          Eta.At((Edge)s).setValue(value);   
+          Eta.at((Edge)s).setValue(value);   
           getLengthSetField().setText("" + Length.valueAt(s));
         } else if(name.equals("rad1Slider")) {
           rad1SetField.setText("" + value);
-          Radius.At(s.getLocalVertices().get(0)).setValue(value);
+          Radius.at(s.getLocalVertices().get(0)).setValue(value);
           getLengthSetField().setText("" + Length.valueAt(s));
         } else if(name.equals("rad2Slider")) {
           rad2SetField.setText("" + value);
-          Radius.At(s.getLocalVertices().get(1)).setValue(value);
+          Radius.at(s.getLocalVertices().get(1)).setValue(value);
           getLengthSetField().setText("" + Length.valueAt(s));
         } else if(name.equals("lengthSlider")){
           getLengthSetField().setText("" + value);
-          Length.At(s).setValue(value);
+          Length.at(s).setValue(value);
         }
         getEdgeDisplayPanel().repaint();
         getPolygonPanel().repaint();
@@ -796,16 +796,16 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         String name = setField.getName();
         Edge s = (Edge) EdgeListModel.getElementAt(index);
         if(name.equals("etaSetField")) {
-          Eta.At(s).setValue(value);
+          Eta.at(s).setValue(value);
           getLengthSetField().setText("" + Length.valueAt(s));
         } else if(name.equals("rad1SetField")) {
-          Radius.At(s.getLocalVertices().get(0)).setValue(value);
+          Radius.at(s.getLocalVertices().get(0)).setValue(value);
           getLengthSetField().setText("" + Length.valueAt(s));
         } else if(name.equals("rad2SetField")) {
-          Radius.At(s.getLocalVertices().get(1)).setValue(value);
+          Radius.at(s.getLocalVertices().get(1)).setValue(value);
           getLengthSetField().setText("" + Length.valueAt(s));
         } else if(name.equals("lengthSetField")) {
-          Length.At(s).setValue(value);
+          Length.at(s).setValue(value);
         }
         getEdgeDisplayPanel().repaint();
         getPolygonPanel().repaint();
@@ -870,7 +870,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
           edgeDisplayPopup.hide();
         }
         Edge s = (Edge) EdgeListModel.getElementAt(index); 
-        message.setText("" + Length.At(s));
+        message.setText("" + Length.at(s));
         PopupFactory factory = PopupFactory.getSharedInstance();
         edgeDisplayPopup = factory.getPopup(GeoquantViewer.this, message, 
               (int) edgeDisplay.getLocationOnScreen().getX() + x, 

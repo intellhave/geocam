@@ -96,7 +96,7 @@ public class Delaunay {
     
     //grabs an arbitrary vertex next to this edge
     Vertex adjVertex = edge.getLocalVertices().iterator().next();
-    Angle angle = Angle.At(adjVertex, embeddedFace);
+    Angle angle = Angle.at(adjVertex, embeddedFace);
     
     //find the Edge that is next to adjVertex, but is not the edge given
     //as a parameter

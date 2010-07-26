@@ -21,7 +21,7 @@ public class VCSC extends Geoquant {
   public VCSC(Vertex v) {
     super(v);
     
-    Curv = Curvature3D.At(v);
+    Curv = Curvature3D.at(v);
     Curv.addObserver(this);
     totalK = Curvature3D.sum();
     totalK.addObserver(this);
@@ -51,7 +51,7 @@ public class VCSC extends Geoquant {
     Index.remove(pos);
   }
   
-  public static VCSC At(Vertex v) {
+  public static VCSC at(Vertex v) {
     TriPosition T = new TriPosition(v.getSerialNumber());
     VCSC q = Index.get(T);
     if(q == null) {
@@ -63,7 +63,7 @@ public class VCSC extends Geoquant {
   }
   
   public static double valueAt(Vertex v) {
-    return At(v).getValue();
+    return at(v).getValue();
   }
 
 }

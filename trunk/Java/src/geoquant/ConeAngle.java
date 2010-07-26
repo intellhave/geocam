@@ -16,7 +16,7 @@ public class ConeAngle extends Geoquant {
     super(e);
     DihedralAngle beta;
     for(Tetra t : e.getLocalTetras()) {
-      beta = DihedralAngle.At(e, t);
+      beta = DihedralAngle.at(e, t);
       beta.addObserver(this);
       angles.add(beta);
     }
@@ -38,7 +38,7 @@ public class ConeAngle extends Geoquant {
     Index.remove(pos);
   }
   
-  public static ConeAngle At(Edge e) {
+  public static ConeAngle at(Edge e) {
     TriPosition T = new TriPosition(e.getSerialNumber());
     ConeAngle q = Index.get(T);
     if(q == null) {
@@ -50,6 +50,6 @@ public class ConeAngle extends Geoquant {
   }
 
   public static double valueAt(Edge e) {
-    return At(e).getValue();
+    return at(e).getValue();
   }
 }

@@ -37,12 +37,12 @@ public class Volume extends Geoquant {
     this.t = t;
     
     StdTetra st = new StdTetra(t);
-    L_ij = Length.At(st.e12);
-    L_ik = Length.At(st.e13);
-    L_il = Length.At(st.e14);
-    L_jk = Length.At(st.e23);
-    L_jl = Length.At(st.e24);
-    L_kl = Length.At(st.e34);
+    L_ij = Length.at(st.e12);
+    L_ik = Length.at(st.e13);
+    L_il = Length.at(st.e14);
+    L_jk = Length.at(st.e23);
+    L_jl = Length.at(st.e24);
+    L_kl = Length.at(st.e34);
     
     L_ij.addObserver(this);
     L_ik.addObserver(this);
@@ -100,7 +100,7 @@ public class Volume extends Geoquant {
     Index.remove(pos);
   }
 
-  public static Volume At(Tetra t) {
+  public static Volume at(Tetra t) {
     TriPosition T = new TriPosition(t.getSerialNumber());
     Volume q = Index.get(T);
     if(q == null) {
@@ -112,7 +112,7 @@ public class Volume extends Geoquant {
   }
   
   public static double valueAt(Tetra t) {
-    return At(t).getValue();
+    return at(t).getValue();
   }
   
   
@@ -133,7 +133,7 @@ public class Volume extends Geoquant {
       id = Triangulation.getTriangulationID();
       Volume v;
       for(Tetra t : Triangulation.tetraTable.values()) {
-        v = Volume.At(t);
+        v = Volume.at(t);
         v.addObserver(this);
         volumes.add(v);
       }
@@ -214,22 +214,22 @@ public class Volume extends Geoquant {
       etas = new Eta[6];
       
       StdTetra st = new StdTetra(t, v);
-      radii[0] = Radius.At(st.v1);
-      radii[1] = Radius.At(st.v2);
-      radii[2] = Radius.At(st.v3);
-      radii[3] = Radius.At(st.v4);
+      radii[0] = Radius.at(st.v1);
+      radii[1] = Radius.at(st.v2);
+      radii[2] = Radius.at(st.v3);
+      radii[3] = Radius.at(st.v4);
       
-      alphas[0] = Alpha.At(st.v1);
-      alphas[1] = Alpha.At(st.v2);
-      alphas[2] = Alpha.At(st.v3);
-      alphas[3] = Alpha.At(st.v4); 
+      alphas[0] = Alpha.at(st.v1);
+      alphas[1] = Alpha.at(st.v2);
+      alphas[2] = Alpha.at(st.v3);
+      alphas[3] = Alpha.at(st.v4); 
       
-      etas[0] = Eta.At(st.e12);
-      etas[1] = Eta.At(st.e13);
-      etas[2] = Eta.At(st.e14);
-      etas[3] = Eta.At(st.e23);
-      etas[4] = Eta.At(st.e24);
-      etas[5] = Eta.At(st.e34);
+      etas[0] = Eta.at(st.e12);
+      etas[1] = Eta.at(st.e13);
+      etas[2] = Eta.at(st.e14);
+      etas[3] = Eta.at(st.e23);
+      etas[4] = Eta.at(st.e24);
+      etas[5] = Eta.at(st.e34);
       
       for(int i = 0; i < 4; i++) {
         radii[i].addObserver(this);
@@ -251,22 +251,22 @@ public class Volume extends Geoquant {
       etas = new Eta[6];
       
       StdTetra st = new StdTetra(t, e);
-      radii[0] = Radius.At(st.v1);
-      radii[1] = Radius.At(st.v2);
-      radii[2] = Radius.At(st.v3);
-      radii[3] = Radius.At(st.v4);
+      radii[0] = Radius.at(st.v1);
+      radii[1] = Radius.at(st.v2);
+      radii[2] = Radius.at(st.v3);
+      radii[3] = Radius.at(st.v4);
       
-      alphas[0] = Alpha.At(st.v1);
-      alphas[1] = Alpha.At(st.v2);
-      alphas[2] = Alpha.At(st.v3);
-      alphas[3] = Alpha.At(st.v4); 
+      alphas[0] = Alpha.at(st.v1);
+      alphas[1] = Alpha.at(st.v2);
+      alphas[2] = Alpha.at(st.v3);
+      alphas[3] = Alpha.at(st.v4); 
       
-      etas[0] = Eta.At(st.e12);
-      etas[1] = Eta.At(st.e13);
-      etas[2] = Eta.At(st.e14);
-      etas[3] = Eta.At(st.e23);
-      etas[4] = Eta.At(st.e24);
-      etas[5] = Eta.At(st.e34);
+      etas[0] = Eta.at(st.e12);
+      etas[1] = Eta.at(st.e13);
+      etas[2] = Eta.at(st.e14);
+      etas[3] = Eta.at(st.e23);
+      etas[4] = Eta.at(st.e24);
+      etas[5] = Eta.at(st.e34);
       
       for(int i = 0; i < 4; i++) {
         radii[i].addObserver(this);
@@ -461,7 +461,7 @@ public class Volume extends Geoquant {
       vol_partials = new LinkedList<Volume.Partial>();
       Volume.Partial partial;
       for(Tetra t2 : v.getLocalTetras()) {
-        partial = Volume.At(t2).partialAt(v);
+        partial = Volume.at(t2).partialAt(v);
         partial.addObserver(this);
         vol_partials.add(partial);
       }
@@ -472,7 +472,7 @@ public class Volume extends Geoquant {
       vol_partials = new LinkedList<Volume.Partial>();
       Volume.Partial partial;
       for(Tetra t2 : e.getLocalTetras()) {
-        partial = Volume.At(t2).partialAt(e);
+        partial = Volume.at(t2).partialAt(e);
         partial.addObserver(this);
         vol_partials.add(partial);
       }
@@ -588,22 +588,22 @@ public class Volume extends Geoquant {
       alphas = new Alpha[4];
       etas = new Eta[6];
       StdTetra st = new StdTetra(t, v, w);
-      radii[0] = Radius.At(st.v1);
-      radii[1] = Radius.At(st.v2);
-      radii[2] = Radius.At(st.v3);
-      radii[3] = Radius.At(st.v4);
+      radii[0] = Radius.at(st.v1);
+      radii[1] = Radius.at(st.v2);
+      radii[2] = Radius.at(st.v3);
+      radii[3] = Radius.at(st.v4);
       
-      alphas[0] = Alpha.At(st.v1);
-      alphas[1] = Alpha.At(st.v2);
-      alphas[2] = Alpha.At(st.v3);
-      alphas[3] = Alpha.At(st.v4); 
+      alphas[0] = Alpha.at(st.v1);
+      alphas[1] = Alpha.at(st.v2);
+      alphas[2] = Alpha.at(st.v3);
+      alphas[3] = Alpha.at(st.v4); 
       
-      etas[0] = Eta.At(st.e12);
-      etas[1] = Eta.At(st.e13);
-      etas[2] = Eta.At(st.e14);
-      etas[3] = Eta.At(st.e23);
-      etas[4] = Eta.At(st.e24);
-      etas[5] = Eta.At(st.e34);
+      etas[0] = Eta.at(st.e12);
+      etas[1] = Eta.at(st.e13);
+      etas[2] = Eta.at(st.e14);
+      etas[3] = Eta.at(st.e23);
+      etas[4] = Eta.at(st.e24);
+      etas[5] = Eta.at(st.e34);
       
       for(int i = 0; i < 4; i++) {
         radii[i].addObserver(this);
@@ -628,22 +628,22 @@ public class Volume extends Geoquant {
       alphas = new Alpha[4];
       etas = new Eta[6];
       StdTetra st = new StdTetra(t, v, e);
-      radii[0] = Radius.At(st.v1);
-      radii[1] = Radius.At(st.v2);
-      radii[2] = Radius.At(st.v3);
-      radii[3] = Radius.At(st.v4);
+      radii[0] = Radius.at(st.v1);
+      radii[1] = Radius.at(st.v2);
+      radii[2] = Radius.at(st.v3);
+      radii[3] = Radius.at(st.v4);
       
-      alphas[0] = Alpha.At(st.v1);
-      alphas[1] = Alpha.At(st.v2);
-      alphas[2] = Alpha.At(st.v3);
-      alphas[3] = Alpha.At(st.v4); 
+      alphas[0] = Alpha.at(st.v1);
+      alphas[1] = Alpha.at(st.v2);
+      alphas[2] = Alpha.at(st.v3);
+      alphas[3] = Alpha.at(st.v4); 
       
-      etas[0] = Eta.At(st.e12);
-      etas[1] = Eta.At(st.e13);
-      etas[2] = Eta.At(st.e14);
-      etas[3] = Eta.At(st.e23);
-      etas[4] = Eta.At(st.e24);
-      etas[5] = Eta.At(st.e34);
+      etas[0] = Eta.at(st.e12);
+      etas[1] = Eta.at(st.e13);
+      etas[2] = Eta.at(st.e14);
+      etas[3] = Eta.at(st.e23);
+      etas[4] = Eta.at(st.e24);
+      etas[5] = Eta.at(st.e34);
       
       for(int i = 0; i < 4; i++) {
         radii[i].addObserver(this);
@@ -670,22 +670,22 @@ public class Volume extends Geoquant {
       alphas = new Alpha[4];
       etas = new Eta[6];
       StdTetra st = new StdTetra(t, e, f);
-      radii[0] = Radius.At(st.v1);
-      radii[1] = Radius.At(st.v2);
-      radii[2] = Radius.At(st.v3);
-      radii[3] = Radius.At(st.v4);
+      radii[0] = Radius.at(st.v1);
+      radii[1] = Radius.at(st.v2);
+      radii[2] = Radius.at(st.v3);
+      radii[3] = Radius.at(st.v4);
       
-      alphas[0] = Alpha.At(st.v1);
-      alphas[1] = Alpha.At(st.v2);
-      alphas[2] = Alpha.At(st.v3);
-      alphas[3] = Alpha.At(st.v4); 
+      alphas[0] = Alpha.at(st.v1);
+      alphas[1] = Alpha.at(st.v2);
+      alphas[2] = Alpha.at(st.v3);
+      alphas[3] = Alpha.at(st.v4); 
       
-      etas[0] = Eta.At(st.e12);
-      etas[1] = Eta.At(st.e13);
-      etas[2] = Eta.At(st.e14);
-      etas[3] = Eta.At(st.e23);
-      etas[4] = Eta.At(st.e24);
-      etas[5] = Eta.At(st.e34);
+      etas[0] = Eta.at(st.e12);
+      etas[1] = Eta.at(st.e13);
+      etas[2] = Eta.at(st.e14);
+      etas[3] = Eta.at(st.e23);
+      etas[4] = Eta.at(st.e24);
+      etas[5] = Eta.at(st.e34);
       
       for(int i = 0; i < 4; i++) {
         radii[i].addObserver(this);
@@ -1454,7 +1454,7 @@ public class Volume extends Geoquant {
       vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : v.getLocalTetras()) {
         if(w.isAdjTetra(t2)) {
-          partial = Volume.At(t2).secondPartialAt(v, w);
+          partial = Volume.at(t2).secondPartialAt(v, w);
           partial.addObserver(this);
           vol_sec_partials.add(partial);
         }
@@ -1467,7 +1467,7 @@ public class Volume extends Geoquant {
       vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : v.getLocalTetras()) {
         if(e.isAdjTetra(t2)) {
-          partial = Volume.At(t2).secondPartialAt(v, e);
+          partial = Volume.at(t2).secondPartialAt(v, e);
           partial.addObserver(this);
           vol_sec_partials.add(partial);
         }
@@ -1480,7 +1480,7 @@ public class Volume extends Geoquant {
       vol_sec_partials = new LinkedList<Volume.SecondPartial>();
       for(Tetra t2 : e.getLocalTetras()) {
         if(f.isAdjTetra(t2)) {
-          partial = Volume.At(t2).secondPartialAt(e, f);
+          partial = Volume.at(t2).secondPartialAt(e, f);
           partial.addObserver(this);
           vol_sec_partials.add(partial);
         }

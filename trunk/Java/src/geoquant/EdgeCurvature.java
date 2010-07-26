@@ -13,9 +13,9 @@ public class EdgeCurvature extends Geoquant {
   private EdgeCurvature(Edge e) {
     super(e);
     
-    sc = SectionalCurvature.At(e);
+    sc = SectionalCurvature.at(e);
     sc.addObserver(this);
-    len = Length.At(e);
+    len = Length.at(e);
     len.addObserver(this);
   }
   
@@ -30,7 +30,7 @@ public class EdgeCurvature extends Geoquant {
     Index.remove(pos);
   }
   
-  public static EdgeCurvature At(Edge e) {
+  public static EdgeCurvature at(Edge e) {
     TriPosition T = new TriPosition(e.getSerialNumber());
     EdgeCurvature q = Index.get(T);
     if(q == null) {
@@ -42,7 +42,7 @@ public class EdgeCurvature extends Geoquant {
   }
   
   public static double valueAt(Edge e) {
-    return At(e).getValue();
+    return at(e).getValue();
   }
 
 }

@@ -26,17 +26,17 @@ public class PartialEdge extends Geoquant {
     
     this.e = edge;
     this.v = vertex;
-    ri = Radius.At(vertex);
-    ai = Alpha.At(vertex);
+    ri = Radius.at(vertex);
+    ai = Alpha.at(vertex);
     for (Vertex v : edge.getLocalVertices()) {
       if (!v.equals(vertex)) {
-        rj = Radius.At(v);
-        aj = Alpha.At(v);
+        rj = Radius.at(v);
+        aj = Alpha.at(v);
         break;
       }
     }
     
-    Lij = Length.At(edge);
+    Lij = Length.at(edge);
     
     ri.addObserver(this);
     rj.addObserver(this);
@@ -66,7 +66,7 @@ public class PartialEdge extends Geoquant {
     Index.remove(pos);
   }
   
-  public static PartialEdge At(Vertex vertex, Edge edge) {
+  public static PartialEdge at(Vertex vertex, Edge edge) {
     TriPosition T = new TriPosition(vertex.getSerialNumber(), edge.getSerialNumber());
     PartialEdge p = Index.get(T);
     if (p == null) {
@@ -78,7 +78,7 @@ public class PartialEdge extends Geoquant {
   }
   
   public static double valueAt(Vertex vertex, Edge edge) {
-    return At(vertex, edge).getValue();
+    return at(vertex, edge).getValue();
   }
   
   public PartialEdge.Partial partialAt(Edge f) {
@@ -104,7 +104,7 @@ public class PartialEdge extends Geoquant {
         rj.addObserver(this);
         ai.addObserver(this);
         aj.addObserver(this);
-        eij = Eta.At(e);
+        eij = Eta.at(e);
         eij.addObserver(this);
       }
     }
@@ -164,7 +164,7 @@ public class PartialEdge extends Geoquant {
         rj.addObserver(this);
         ai.addObserver(this);
         aj.addObserver(this);
-        eij = Eta.At(e);
+        eij = Eta.at(e);
         eij.addObserver(this);
       }
     }

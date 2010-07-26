@@ -129,11 +129,11 @@ public class TriangulationIO {
       }
       String radius = simplexNode.getAttribute("radius");
       if(radius.length() != 0) {
-        Radius.At(v).setValue(Double.parseDouble(radius));
+        Radius.at(v).setValue(Double.parseDouble(radius));
       }
       String alpha = simplexNode.getAttribute("alpha");
       if(alpha.length() != 0) {
-        Alpha.At(v).setValue(Double.parseDouble(alpha));
+        Alpha.at(v).setValue(Double.parseDouble(alpha));
       }
     }
     
@@ -191,11 +191,11 @@ public class TriangulationIO {
       }
       String eta = simplexNode.getAttribute("eta");
       if(eta.length() != 0) {
-        Eta.At(e).setValue(Double.parseDouble(eta));
+        Eta.at(e).setValue(Double.parseDouble(eta));
       }
       String length = simplexNode.getAttribute("length");
       if(length.length() != 0) {
-        Length.At(e).setValue(Double.parseDouble(length));
+        Length.at(e).setValue(Double.parseDouble(length));
       }
     }
     
@@ -772,9 +772,9 @@ public class TriangulationIO {
       if(fileScanner.hasNextDouble()) {
         stringScanner = new Scanner(fileScanner.nextLine());
         if(type.compareTo("Vertex:") == 0) {
-          Radius.At((Vertex) simplex).setValue(stringScanner.nextDouble());
+          Radius.at((Vertex) simplex).setValue(stringScanner.nextDouble());
         } else if(type.compareTo("Edge:") == 0) {
-          Length.At((Edge) simplex).setValue(stringScanner.nextDouble());
+          Length.at((Edge) simplex).setValue(stringScanner.nextDouble());
         }
       }
     }
@@ -893,9 +893,9 @@ public class TriangulationIO {
       // Check for radii / lengths
       if(fileScanner.hasNextDouble()) {
         if(type.compareTo("Vertex:") == 0) {
-          Radius.At((Vertex) simplex).setValue(fileScanner.nextDouble());
+          Radius.at((Vertex) simplex).setValue(fileScanner.nextDouble());
         } else if(type.compareTo("Edge:") == 0) {
-          Length.At((Edge) simplex).setValue(fileScanner.nextDouble());
+          Length.at((Edge) simplex).setValue(fileScanner.nextDouble());
         }
       }
     }

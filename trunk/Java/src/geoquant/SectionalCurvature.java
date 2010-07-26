@@ -19,7 +19,7 @@ public class SectionalCurvature extends Geoquant{
     dih_angles = new LinkedList<DihedralAngle>();
     DihedralAngle beta;
     for(Tetra t : e.getLocalTetras()) {
-      beta = DihedralAngle.At(e, t);
+      beta = DihedralAngle.at(e, t);
       beta.addObserver(this);
       dih_angles.add(beta);
     }
@@ -41,7 +41,7 @@ public class SectionalCurvature extends Geoquant{
     Index.remove(pos);
   }
   
-  public static SectionalCurvature At(Edge e) {
+  public static SectionalCurvature at(Edge e) {
     TriPosition T = new TriPosition(e.getSerialNumber());
     SectionalCurvature p = Index.get(T);
     if (p == null) {
@@ -53,7 +53,7 @@ public class SectionalCurvature extends Geoquant{
   }
   
   public static double valueAt(Edge e) {
-    return At(e).getValue();
+    return at(e).getValue();
   }
 
 }

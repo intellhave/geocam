@@ -20,11 +20,11 @@ public class FaceHeight extends Geoquant {
     super(f, t);
     
     StdTetra st = new StdTetra(t, f);
-    hij_k = EdgeHeight.At(st.e12, st.f123);
+    hij_k = EdgeHeight.at(st.e12, st.f123);
     hij_k.addObserver(this);
-    hij_l = EdgeHeight.At(st.e12, st.f124);
+    hij_l = EdgeHeight.at(st.e12, st.f124);
     hij_l.addObserver(this);
-    beta_ij_kl = DihedralAngle.At(st.e12, t);
+    beta_ij_kl = DihedralAngle.at(st.e12, t);
     beta_ij_kl.addObserver(this);
   }
   
@@ -44,7 +44,7 @@ public class FaceHeight extends Geoquant {
     Index.remove(pos);
   }
   
-  public static FaceHeight At(Face f, Tetra t) {
+  public static FaceHeight at(Face f, Tetra t) {
     TriPosition T = new TriPosition(f.getSerialNumber(), t.getSerialNumber());
     FaceHeight q = Index.get(T);
     if(q == null) {
@@ -56,7 +56,7 @@ public class FaceHeight extends Geoquant {
   }
   
   public static double valueAt(Face f, Tetra t) {
-    return At(f, t).getValue();
+    return at(f, t).getValue();
   }
 
 }

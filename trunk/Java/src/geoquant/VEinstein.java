@@ -27,22 +27,22 @@ public class VEinstein extends Geoquant {
     
     dihs = new LinkedList<DihedralAngle>();
     lengths = new LinkedList<Length>();
-    Curv = SectionalCurvature.At(e);
+    Curv = SectionalCurvature.at(e);
     Curv.addObserver(this);
     totalK = Curvature3D.sum();
     totalK.addObserver(this);
     totalV = Volume.sum();
     totalV.addObserver(this);
-    leng = Length.At(e);
+    leng = Length.at(e);
     leng.addObserver(this);
     DihedralAngle dih;
     Length L34;
     for(Tetra t : e.getLocalTetras()) {
       StdTetra st = new StdTetra(t, e);
-      L34 = Length.At(st.e34);
+      L34 = Length.at(st.e34);
       L34.addObserver(this);
       lengths.add(L34);
-      dih = DihedralAngle.At(e, t);
+      dih = DihedralAngle.at(e, t);
       dih.addObserver(this);
       dihs.add(dih);
     }
@@ -83,7 +83,7 @@ public class VEinstein extends Geoquant {
     Index.remove(pos);
   }
   
-  public static VEinstein At(Edge e) {
+  public static VEinstein at(Edge e) {
     TriPosition T = new TriPosition(e.getSerialNumber());
     VEinstein q = Index.get(T);
     if(q == null) {
@@ -95,7 +95,7 @@ public class VEinstein extends Geoquant {
   }
   
   public static double valueAt(Edge e) {
-    return At(e).getValue();
+    return at(e).getValue();
   }
 
 }

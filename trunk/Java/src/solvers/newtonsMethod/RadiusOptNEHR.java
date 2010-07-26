@@ -24,7 +24,7 @@ public class RadiusOptNEHR extends NewtonsMethod {
     secondPartials = new VEHR.SecondPartial[length][length];
     
     for(Vertex v : Triangulation.vertexTable.values()) {
-      radii[i] = Radius.At(v);
+      radii[i] = Radius.at(v);
       partials[i] = VEHR.partialAt(v);
       j = 0;
       for(Vertex w : Triangulation.vertexTable.values()) {
