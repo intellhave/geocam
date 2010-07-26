@@ -87,7 +87,7 @@ public class ClipFace3DTest {
     Iterator<Edge> ie = tetra.getLocalEdges().iterator();
     while (ie.hasNext()) {
       Edge e = ie.next();
-      Length.At(e).setValue(2);
+      Length.at(e).setValue(2);
     }
 
     Vector v1 = new Vector(0, 0, 1);

@@ -25,10 +25,10 @@ public class Coord2D extends Geoquant {
   public Coord2D(Vertex v, Face f) {
     super(v,f);
     StdFace stdF = new StdFace(f);
-    lij = Length.At(stdF.e12);
-    ljk = Length.At(stdF.e23);
-    lik = Length.At(stdF.e13);
-    ai = Angle.At(stdF.v1, f);
+    lij = Length.at(stdF.e12);
+    ljk = Length.at(stdF.e23);
+    lik = Length.at(stdF.e13);
+    ai = Angle.at(stdF.v1, f);
     
     //figure out index of v in stdFace vertex list
     if(v == stdF.v1){ stdFIndex = 0; }

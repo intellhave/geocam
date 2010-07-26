@@ -30,15 +30,15 @@ public class Coord3D extends Geoquant {
   public Coord3D(Vertex v, Tetra t) {
     super(v,t);
     StdTetra st = new StdTetra(t);
-    L_ij = Length.At(st.e12);
-    L_ik = Length.At(st.e13);
-    L_il = Length.At(st.e14);
-    L_jk = Length.At(st.e23);
-    L_jl = Length.At(st.e24);
-    L_kl = Length.At(st.e34);
-    A_jik = Angle.At(st.v1, st.f123);
-    A_jil = Angle.At(st.v1, st.f124);
-    D_ij = DihedralAngle.At(st.e12, t);
+    L_ij = Length.at(st.e12);
+    L_ik = Length.at(st.e13);
+    L_il = Length.at(st.e14);
+    L_jk = Length.at(st.e23);
+    L_jl = Length.at(st.e24);
+    L_kl = Length.at(st.e34);
+    A_jik = Angle.at(st.v1, st.f123);
+    A_jil = Angle.at(st.v1, st.f124);
+    D_ij = DihedralAngle.at(st.e12, t);
         
     //figure out index of v in stdTetra vertex list
     if(v == st.v1){ stdTIndex = 0; }

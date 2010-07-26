@@ -369,7 +369,7 @@ public class EmbeddedTriangulation{
       try { edgelength = Vector.distance(v0,v1); }
       catch (Exception e1) { e1.printStackTrace(); }
       
-      Length.At(e).setValue(edgelength);
+      Length.at(e).setValue(edgelength);
     }
     
     //determine origin, tangent_x, tangent_y using Coord geoquants:
