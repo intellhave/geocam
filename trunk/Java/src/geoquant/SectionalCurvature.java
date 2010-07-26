@@ -52,6 +52,17 @@ public class SectionalCurvature extends Geoquant{
     return p;
   }
   
+  public static SectionalCurvature At(Edge e) {
+    TriPosition T = new TriPosition(e.getSerialNumber());
+    SectionalCurvature p = Index.get(T);
+    if (p == null) {
+      p = new SectionalCurvature(e);
+      p.pos = T;
+      Index.put(T, p);
+    }
+    return p;
+  }
+  
   public static double valueAt(Edge e) {
     return at(e).getValue();
   }

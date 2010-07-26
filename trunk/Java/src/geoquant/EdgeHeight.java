@@ -56,6 +56,17 @@ public class EdgeHeight extends Geoquant {
     return q;
   }
   
+  public static EdgeHeight At(Edge e, Face f) {
+    TriPosition T = new TriPosition(e.getSerialNumber(), f.getSerialNumber());
+    EdgeHeight q = Index.get(T);
+    if(q == null) {
+      q = new EdgeHeight(e, f);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Edge e, Face f) {
     return at(e, f).getValue();
   }

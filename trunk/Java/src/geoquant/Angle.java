@@ -62,6 +62,17 @@ public class Angle extends Geoquant {
     return q;
   }
   
+  public static Angle At(Vertex v, Face f) {
+    TriPosition T = new TriPosition(v.getSerialNumber(), f.getSerialNumber());
+    Angle q = Index.get(T);
+    if(q == null) {
+      q = new Angle(v, f);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Vertex v, Face f) {
     return at(v, f).getValue();
   }

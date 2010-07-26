@@ -49,6 +49,17 @@ public class ConeAngle extends Geoquant {
     return q;
   }
 
+  public static ConeAngle At(Edge e) {
+    TriPosition T = new TriPosition(e.getSerialNumber());
+    ConeAngle q = Index.get(T);
+    if(q == null) {
+      q = new ConeAngle(e);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Edge e) {
     return at(e).getValue();
   }

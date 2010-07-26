@@ -33,6 +33,17 @@ public class Radius extends Geoquant {
     return q;
   }
   
+  public static Radius At(Vertex v) {
+    TriPosition T = new TriPosition( v.getSerialNumber() );
+    Radius q = Index.get(T);
+    if(q == null) {
+      q = new Radius(v);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Vertex v) {
     return at(v).getValue();
   }

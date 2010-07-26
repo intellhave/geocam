@@ -94,6 +94,17 @@ public class VEinstein extends Geoquant {
     return q;
   }
   
+  public static VEinstein At(Edge e) {
+    TriPosition T = new TriPosition(e.getSerialNumber());
+    VEinstein q = Index.get(T);
+    if(q == null) {
+      q = new VEinstein(e);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Edge e) {
     return at(e).getValue();
   }

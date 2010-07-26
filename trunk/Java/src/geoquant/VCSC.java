@@ -62,6 +62,17 @@ public class VCSC extends Geoquant {
     return q;
   }
   
+  public static VCSC At(Vertex v) {
+    TriPosition T = new TriPosition(v.getSerialNumber());
+    VCSC q = Index.get(T);
+    if(q == null) {
+      q = new VCSC(v);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Vertex v) {
     return at(v).getValue();
   }

@@ -73,6 +73,17 @@ public class Length extends Geoquant {
     return q;
   }
   
+  public static Length At(Edge e) {
+    TriPosition T = new TriPosition(e.getSerialNumber());
+    Length q = Index.get(T);
+    if(q == null) {
+      q = new Length(e);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Edge e) {
     return at(e).getValue();
   }

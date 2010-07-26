@@ -75,6 +75,17 @@ public class Curvature3D extends Geoquant {
     return q;
   }
   
+  public static Curvature3D At(Vertex v) {
+    TriPosition T = new TriPosition(v.getSerialNumber());
+    Curvature3D q = Index.get(T);
+    if(q == null) {
+      q = new Curvature3D(v);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Vertex v) {
     return at(v).getValue();
   }

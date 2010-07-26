@@ -69,6 +69,17 @@ public class LCSC extends Geoquant {
     return q;
   }
   
+  public static LCSC At(Vertex v) {
+    TriPosition T = new TriPosition(v.getSerialNumber());
+    LCSC q = Index.get(T);
+    if(q == null) {
+      q = new LCSC(v);
+      q.pos = T;
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   public static double valueAt(Vertex v) {
     return at(v).getValue();
   }

@@ -51,6 +51,23 @@ public class Alpha extends Geoquant {
     return q;
   }
   
+  public static Alpha At(Vertex v) {
+    // The TriPosition is created with serial numbers.
+    // Note that serial numbers are unique across all simplices.
+    TriPosition T = new TriPosition( v.getSerialNumber() );
+    // Attempt to get the geoquant from the construction map.
+    // If it does not yet exist, the map will return null.
+    Alpha q = Index.get(T);
+    if(q == null) {
+      // Create the geoquant since it does not yet exist.
+      q = new Alpha(v);
+      q.pos = T;
+      // Add the geoquant to the map.
+      Index.put(T, q);
+    }
+    return q;
+  }
+  
   /**
    * This method is a shorthand way to both access the Alpha geoquant 
    * and retrieve its value. In other words, this method is equivalent
@@ -71,10 +88,14 @@ public class Alpha extends Geoquant {
   }
   
   protected void recalculate() {
-    // This is empty for a alpha
+    // This is empty for an alpha
     value = 0;
   }
- 
+  
+  /**
+   * Removes an Alpha geoquant from the map and from existence. This
+   * requires that all geoquants dependent on this alpha are also removed.
+   */
   public void remove() {
     deleteDependents();
     Index.remove(pos);
