@@ -34,9 +34,9 @@ public class Curvature3D extends Geoquant {
     SectionalCurvature sc;
     PartialEdge pe;
     for(Edge e : v.getLocalEdges()) {
-      sc = SectionalCurvature.At(e);
+      sc = SectionalCurvature.at(e);
       sc.addObserver(this);
-      pe = PartialEdge.At(v, e);
+      pe = PartialEdge.at(v, e);
       pe.addObserver(this);
       sec_curvs.add(sc);
       partials.add(pe);
@@ -64,7 +64,7 @@ public class Curvature3D extends Geoquant {
     Index.remove(pos);
   }
   
-  public static Curvature3D At(Vertex v) {
+  public static Curvature3D at(Vertex v) {
     TriPosition T = new TriPosition(v.getSerialNumber());
     Curvature3D q = Index.get(T);
     if(q == null) {
@@ -76,7 +76,7 @@ public class Curvature3D extends Geoquant {
   }
   
   public static double valueAt(Vertex v) {
-    return At(v).getValue();
+    return at(v).getValue();
   }
   
   public static Curvature3D.Sum sum() {
@@ -94,7 +94,7 @@ public class Curvature3D extends Geoquant {
       id = Triangulation.getTriangulationID();
       Curvature3D k;
       for(Vertex v : Triangulation.vertexTable.values()) {
-        k = Curvature3D.At(v);
+        k = Curvature3D.at(v);
         k.addObserver(this);
         curvs.add(k);
       }
@@ -167,9 +167,9 @@ public class Curvature3D extends Geoquant {
         locality = 2;
       }
       
-      vRadius = Radius.At(v);
+      vRadius = Radius.at(v);
       vRadius.addObserver(this);
-      vCurv = Curvature3D.At(v);
+      vCurv = Curvature3D.at(v);
       vCurv.addObserver(this);
             
       DualArea da;
@@ -187,25 +187,25 @@ public class Curvature3D extends Geoquant {
       
       for(Edge e : v.getLocalEdges()) {
         if(w.isAdjEdge(e)) {
-          da = DualArea.At(e);
+          da = DualArea.at(e);
           da.addObserver(this);
           duals.add(da);
           
-          ca = ConeAngle.At(e);
+          ca = ConeAngle.at(e);
           ca.addObserver(this);
           angles.add(ca);
           
-          l = Length.At(e);
+          l = Length.at(e);
           l.addObserver(this);
           lengths.add(l);
           
-          eta = Eta.At(e);
+          eta = Eta.at(e);
           eta.addObserver(this);
           etas.add(eta);
           
           se = new StdEdge(e, v);
           
-          r = Radius.At(se.v2);
+          r = Radius.at(se.v2);
           r.addObserver(this);
           radii.add(r);
         }
@@ -223,8 +223,8 @@ public class Curvature3D extends Geoquant {
       }
       
       if(locality == 0) {
-        dij_partial = PartialEdge.At(v, e).partialAt(e);
-        dih_sum = ConeAngle.At(e);
+        dij_partial = PartialEdge.at(v, e).partialAt(e);
+        dih_sum = ConeAngle.at(e);
         dij_partial.addObserver(this);
         dih_sum.addObserver(this);
       }
@@ -237,12 +237,12 @@ public class Curvature3D extends Geoquant {
       for(Edge ij : v.getLocalEdges()) {
         list = new LinkedList<DihedralAngle.Partial>();
         for(Tetra t : ij.getLocalTetras()) {
-          dih_partial = DihedralAngle.At(ij, t).partialAt(e);
+          dih_partial = DihedralAngle.at(ij, t).partialAt(e);
           dih_partial.addObserver(this);
           list.add(dih_partial);
         }
         dih_partials.add(list);
-        dij = PartialEdge.At(v, ij);
+        dij = PartialEdge.at(v, ij);
         dij.addObserver(this);
         dijs.add(dij);
       }
@@ -429,7 +429,7 @@ public class Curvature3D extends Geoquant {
         dih_list = new LinkedList<DihedralAngle>();
         
         /* PartialEdge */
-        dij = PartialEdge.At(v, ij);
+        dij = PartialEdge.at(v, ij);
         dij.addObserver(this);
         dijs.add(dij);
         
@@ -448,7 +448,7 @@ public class Curvature3D extends Geoquant {
         
         for(Tetra t : ij.getLocalTetras()) {
           /* DihedralAngle */
-          dih = DihedralAngle.At(ij, t);
+          dih = DihedralAngle.at(ij, t);
           dih.addObserver(this);
           dih_list.add(dih);
           

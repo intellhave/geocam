@@ -17,9 +17,9 @@ public class Area extends Geoquant {
   public Area(Face f) {
     super(f);
     StdFace stdF = new StdFace(f);
-    lij = Length.At(stdF.e12);
-    ljk = Length.At(stdF.e23);
-    lik = Length.At(stdF.e13);
+    lij = Length.at(stdF.e12);
+    ljk = Length.at(stdF.e23);
+    lik = Length.at(stdF.e13);
     
     lij.addObserver(this);
     ljk.addObserver(this);
@@ -44,7 +44,7 @@ public class Area extends Geoquant {
     Index.remove(pos);
   }
 
-  public static Area At(Face f) {
+  public static Area at(Face f) {
     TriPosition T = new TriPosition(f.getSerialNumber());
     Area q = Index.get(T);
     if(q == null) {
@@ -56,6 +56,6 @@ public class Area extends Geoquant {
   }
   
   public static double valueAt(Face f) {
-    return At(f).getValue();
+    return at(f).getValue();
   }
 }

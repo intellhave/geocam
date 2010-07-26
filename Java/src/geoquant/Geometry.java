@@ -138,7 +138,7 @@ public class Geometry {
     LinkedList<Radius> list = new LinkedList<Radius>();
     Radius r;
     for (Vertex v : Triangulation.vertexTable.values()){
-      r = Radius.At(v);
+      r = Radius.at(v);
       list.add(r);
     }
     return list;
@@ -148,7 +148,7 @@ public class Geometry {
     LinkedList<Alpha> list = new LinkedList<Alpha>();
     Alpha al;
     for (Vertex v: Triangulation.vertexTable.values()){
-      al = Alpha. At(v);
+      al = Alpha. at(v);
       list.add(al);
     }
     return list;
@@ -158,7 +158,7 @@ public class Geometry {
     LinkedList<Eta> list = new LinkedList<Eta>();
     Eta et;
     for (Edge e : Triangulation.edgeTable.values()){
-      et = Eta.At(e);
+      et = Eta.at(e);
       list.add(et);
     }
     return list;
@@ -168,7 +168,7 @@ public class Geometry {
     LinkedList<Length> list = new LinkedList<Length>();
     Length l;
     for(Edge e : Triangulation.edgeTable.values()) {
-      l = Length.At(e);
+      l = Length.at(e);
       list.add(l);
     }
     return list;
@@ -179,7 +179,7 @@ public class Geometry {
     Angle a;
     for (Face f : Triangulation.faceTable.values()){
       for (Vertex v : f.getLocalVertices()) {
-        a = Angle.At(v, f);
+        a = Angle.at(v, f);
         list.add(a);
       }
     }
@@ -190,7 +190,7 @@ public class Geometry {
     LinkedList<Area> list = new LinkedList<Area>();
     Area ar;
     for (Face f : Triangulation.faceTable.values()){
-      ar = Area.At(f);
+      ar = Area.at(f);
       list.add(ar);
     }
     return list;
@@ -200,7 +200,7 @@ public class Geometry {
     LinkedList<ConeAngle> list = new LinkedList<ConeAngle>();
     ConeAngle c;
     for (Edge e : Triangulation.edgeTable.values()){
-      c = ConeAngle.At(e);
+      c = ConeAngle.at(e);
       list.add(c);
     }
     return list;
@@ -210,7 +210,7 @@ public class Geometry {
     LinkedList<Curvature2D> list = new LinkedList<Curvature2D>();
     Curvature2D cu2;
     for (Vertex v : Triangulation.vertexTable.values()){
-      cu2 = Curvature2D.At(v);
+      cu2 = Curvature2D.at(v);
       list.add(cu2);
     }
     return list;
@@ -220,7 +220,7 @@ public class Geometry {
     LinkedList<Curvature3D> list = new LinkedList<Curvature3D>();
     Curvature3D cu3;
     for (Vertex v : Triangulation.vertexTable.values()){
-      cu3 = Curvature3D.At(v);
+      cu3 = Curvature3D.at(v);
       list.add(cu3);
     }
     return list;
@@ -230,7 +230,7 @@ public class Geometry {
     LinkedList<EdgeCurvature> list = new LinkedList<EdgeCurvature>();
     EdgeCurvature c;
     for (Edge e : Triangulation.edgeTable.values()){
-      c = EdgeCurvature.At(e);
+      c = EdgeCurvature.at(e);
       list.add(c);
     }
     return list;
@@ -241,7 +241,7 @@ public class Geometry {
     DihedralAngle d;
     for (Tetra t : Triangulation.tetraTable.values()){
       for (Edge e : t.getLocalEdges()) {
-        d = DihedralAngle.At(e, t);
+        d = DihedralAngle.at(e, t);
         list.add(d);
       }
     }
@@ -252,7 +252,7 @@ public class Geometry {
     LinkedList<DualArea> list = new LinkedList<DualArea>();
     DualArea du;
     for (Edge e : Triangulation.edgeTable.values()){
-      du = DualArea.At(e);
+      du = DualArea.at(e);
       list.add(du);
     }
     return list;
@@ -263,7 +263,7 @@ public class Geometry {
     DualArea da;
     DualArea.Segment s;
     for(Edge e : Triangulation.edgeTable.values()) {
-      da = DualArea.At(e);
+      da = DualArea.at(e);
       for(Tetra t : e.getLocalTetras()) {
         s = da.segment(t);
         list.add(s);
@@ -277,7 +277,7 @@ public class Geometry {
     EdgeHeight eh;
     for (Face f : Triangulation.faceTable.values()){
       for (Edge e : f.getLocalEdges()) {
-        eh = EdgeHeight.At(e, f);
+        eh = EdgeHeight.at(e, f);
         list.add(eh);
       }
     }
@@ -289,7 +289,7 @@ public class Geometry {
     FaceHeight fh;
     for (Tetra t : Triangulation.tetraTable.values()){
       for (Face f : t.getLocalFaces()) {
-        fh = FaceHeight.At(f, t);
+        fh = FaceHeight.at(f, t);
         list.add(fh);
       }
     }
@@ -301,7 +301,7 @@ public class Geometry {
     PartialEdge pe;
     for (Edge edge : Triangulation.edgeTable.values()){
       for (Vertex vertex : edge.getLocalVertices()) {
-        pe = PartialEdge.At(vertex, edge);
+        pe = PartialEdge.at(vertex, edge);
         list.add(pe);
       }
     }
@@ -312,7 +312,7 @@ public class Geometry {
     LinkedList<SectionalCurvature> list = new LinkedList<SectionalCurvature>();
     SectionalCurvature sc;
     for (Edge e : Triangulation.edgeTable.values()){
-      sc = SectionalCurvature.At(e);
+      sc = SectionalCurvature.at(e);
       list.add(sc);
     }
     return list;
@@ -322,7 +322,7 @@ public class Geometry {
     LinkedList<Volume> list = new LinkedList<Volume>();
     Volume vol;
     for (Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       list.add(vol);
     }
     return list;
@@ -401,14 +401,14 @@ public class Geometry {
     Volume vol;
     Volume.Partial partial;
     for(Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       for (Vertex v : t.getLocalVertices()){
        partial = vol.partialAt(v); 
        list.add(partial);
       }
     }
     for(Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       for (Edge e : t.getLocalEdges()){
         partial = vol.partialAt(e);
         list.add(partial);
@@ -502,7 +502,7 @@ public class Geometry {
     Volume vol;
     Volume.SecondPartial secondPartial;
     for (Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       for (Vertex v : t.getLocalVertices()){
         for (Vertex w : t.getLocalVertices()){
           secondPartial = vol.secondPartialAt(v, w);
@@ -511,7 +511,7 @@ public class Geometry {
       }
     }
     for (Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       for (Vertex v : t.getLocalVertices()){
         for (Edge e : t.getLocalEdges()){
           secondPartial = vol.secondPartialAt(v, e);
@@ -520,7 +520,7 @@ public class Geometry {
       }
     }
     for (Tetra t : Triangulation.tetraTable.values()){
-      vol = Volume.At(t);
+      vol = Volume.at(t);
       for (Edge e : t.getLocalEdges()){
         for (Edge f : t.getLocalEdges()){
           secondPartial = vol.secondPartialAt(e, f);
@@ -559,7 +559,7 @@ public class Geometry {
     LinkedList<LCSC> list = new LinkedList<LCSC>();
     LCSC l;
     for(Vertex v : Triangulation.vertexTable.values()) {
-      l = LCSC.At(v);
+      l = LCSC.at(v);
       list.add(l);
     }
     return list;
@@ -569,7 +569,7 @@ public class Geometry {
     LinkedList<VCSC> list = new LinkedList<VCSC>();
     VCSC vc;
     for(Vertex v : Triangulation.vertexTable.values()) {
-      vc = VCSC.At(v);
+      vc = VCSC.at(v);
       list.add(vc);
     }
     return list;
@@ -579,7 +579,7 @@ public class Geometry {
     LinkedList<LEinstein> list = new LinkedList<LEinstein>();
     LEinstein le;
     for(Edge e : Triangulation.edgeTable.values()) {
-      le = LEinstein.At(e);
+      le = LEinstein.at(e);
       list.add(le);
     }
     return list;
@@ -589,7 +589,7 @@ public class Geometry {
     LinkedList<VEinstein> list = new LinkedList<VEinstein>();
     VEinstein ve;
     for(Edge e : Triangulation.edgeTable.values()) {
-      ve = VEinstein.At(e);
+      ve = VEinstein.at(e);
       list.add(ve);
     }
     return list;

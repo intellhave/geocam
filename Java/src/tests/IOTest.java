@@ -168,7 +168,7 @@ public class IOTest {
 
   public static void testXMLWriter() {
     TriangulationIO.readTriangulation("Data/xml/3DManifolds/pentachoron_regular.xml");
-    Radius.At(Triangulation.vertexTable.get(1)).setValue(2.0);
+    Radius.at(Triangulation.vertexTable.get(1)).setValue(2.0);
     TriangulationIO.writeTriangulation("Data/xml/3DManifolds/pentachoron_mod.xml");
   }
 }

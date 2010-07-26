@@ -20,9 +20,9 @@ public class EdgeHeight extends Geoquant {
     super(e, f);
     
     StdFace sf = new StdFace(f, e);
-    dij = PartialEdge.At(sf.v1, sf.e12);
-    dik = PartialEdge.At(sf.v1, sf.e13);
-    theta_i = Angle.At(sf.v1, f);
+    dij = PartialEdge.at(sf.v1, sf.e12);
+    dik = PartialEdge.at(sf.v1, sf.e13);
+    theta_i = Angle.at(sf.v1, f);
     
     dij.addObserver(this);
     dik.addObserver(this);
@@ -45,7 +45,7 @@ public class EdgeHeight extends Geoquant {
     Index.remove(pos);
   }
   
-  public static EdgeHeight At(Edge e, Face f) {
+  public static EdgeHeight at(Edge e, Face f) {
     TriPosition T = new TriPosition(e.getSerialNumber(), f.getSerialNumber());
     EdgeHeight q = Index.get(T);
     if(q == null) {
@@ -57,7 +57,7 @@ public class EdgeHeight extends Geoquant {
   }
   
   public static double valueAt(Edge e, Face f) {
-    return At(e, f).getValue();
+    return at(e, f).getValue();
   }
   
 }

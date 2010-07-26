@@ -45,7 +45,7 @@ public class DualArea extends Geoquant {
     Index.remove(pos);
   }
   
-  public static DualArea At(Edge e) {
+  public static DualArea at(Edge e) {
     TriPosition T = new TriPosition(e.getSerialNumber());
     DualArea p = Index.get(T);
     if (p == null) {
@@ -57,7 +57,7 @@ public class DualArea extends Geoquant {
   }
   
   public static double valueAt(Edge e) {
-    return At(e).getValue();
+    return at(e).getValue();
   }
   
   public DualArea.Segment segment(Tetra t) {
@@ -80,10 +80,10 @@ public class DualArea extends Geoquant {
     private Segment(Tetra t) {
       super(t);
       StdTetra st = new StdTetra(t, e);
-      hij_k = EdgeHeight.At(e, st.f123);
-      hij_l = EdgeHeight.At(e, st.f124);
-      hijk_l = FaceHeight.At(st.f123, t);
-      hijl_k = FaceHeight.At(st.f124, t);
+      hij_k = EdgeHeight.at(e, st.f123);
+      hij_l = EdgeHeight.at(e, st.f124);
+      hijk_l = FaceHeight.at(st.f123, t);
+      hijl_k = FaceHeight.at(st.f124, t);
       
       hij_k.addObserver(this);
       hij_l.addObserver(this);

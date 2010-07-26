@@ -13,7 +13,7 @@ public class Eta extends Geoquant {
     
   }
   
-  public static Eta At(Edge e) {
+  public static Eta at(Edge e) {
     TriPosition T = new TriPosition( e.getSerialNumber() );
     Eta q = Index.get(T);
     if(q == null) {
@@ -25,7 +25,7 @@ public class Eta extends Geoquant {
   }
   
   public static double valueAt(Edge e) {
-    return At(e).getValue();
+    return at(e).getValue();
   }
   
   protected void recalculate() {

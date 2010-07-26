@@ -29,15 +29,15 @@ public class Length extends Geoquant {
     List<Vertex> verts = new ArrayList<Vertex>();
     verts.addAll(e.getLocalVertices());
     
-    rad1 = Radius.At(verts.get(0));
+    rad1 = Radius.at(verts.get(0));
     rad1.addObserver(this);
-    alpha1 = Alpha.At(verts.get(0));
+    alpha1 = Alpha.at(verts.get(0));
     alpha1.addObserver(this);
-    rad2 = Radius.At(verts.get(1));
+    rad2 = Radius.at(verts.get(1));
     rad2.addObserver(this);
-    alpha2 = Alpha.At(verts.get(1));
+    alpha2 = Alpha.at(verts.get(1));
     alpha2.addObserver(this);
-    eta = Eta.At(e);
+    eta = Eta.at(e);
     eta.addObserver(this);
   }
   
@@ -62,7 +62,7 @@ public class Length extends Geoquant {
     Index.remove(pos);
   }
   
-  public static Length At(Edge e) {
+  public static Length at(Edge e) {
     TriPosition T = new TriPosition(e.getSerialNumber());
     Length q = Index.get(T);
     if(q == null) {
@@ -74,7 +74,7 @@ public class Length extends Geoquant {
   }
   
   public static double valueAt(Edge e) {
-    return At(e).getValue();
+    return at(e).getValue();
   }
   
   public static Sum sum() {
@@ -91,7 +91,7 @@ public class Length extends Geoquant {
       super();
       Length l;
       for(Edge e : Triangulation.edgeTable.values()) {
-        l = Length.At(e);
+        l = Length.at(e);
         l.addObserver(this);
         lengths.add(l);
       }

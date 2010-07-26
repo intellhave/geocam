@@ -49,7 +49,7 @@ public class CrossConformalFlow {
   public static void setLogRadii(double[] vars) {
     int i = 0;
     for(Vertex v : Triangulation.vertexTable.values()) {
-      Radius.At(v).setValue(Math.exp(vars[i]));
+      Radius.at(v).setValue(Math.exp(vars[i]));
       i++;
     }
   }

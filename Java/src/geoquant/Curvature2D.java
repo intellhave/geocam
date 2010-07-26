@@ -23,7 +23,7 @@ public class Curvature2D extends Geoquant {
     angles = new LinkedList<Angle>();
     Angle a;
     for(Face f : v.getLocalFaces()) {
-      a = Angle.At(v, f);
+      a = Angle.at(v, f);
       a.addObserver(this);
       angles.add(a);
     }
@@ -46,7 +46,7 @@ public class Curvature2D extends Geoquant {
     Index.remove(pos);
   }
   
-  public static Curvature2D At(Vertex v) {
+  public static Curvature2D at(Vertex v) {
     TriPosition T = new TriPosition(v.getSerialNumber());
     Curvature2D q = Index.get(T);
     if(q == null) {
@@ -58,7 +58,7 @@ public class Curvature2D extends Geoquant {
   }
   
   public static double valueAt(Vertex v) {
-    return At(v).getValue();
+    return at(v).getValue();
   }
   
   public static Sum sum() {
@@ -77,7 +77,7 @@ public class Curvature2D extends Geoquant {
       id = Triangulation.getTriangulationID();
       Curvature2D k;
       for(Vertex v : Triangulation.vertexTable.values()) {
-        k = Curvature2D.At(v);
+        k = Curvature2D.at(v);
         k.addObserver(this);
         curvs.add(k);
       }

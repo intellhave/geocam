@@ -33,11 +33,11 @@ public class EtaOptNEHR extends NewtonsMethod {
     int i = 0;
     int j;
     for(Edge e : Triangulation.edgeTable.values()) {
-      etas[i] = Eta.At(e);
+      etas[i] = Eta.at(e);
       nehr_eta_partials[i] = VEHR.partialAt(e);
       j = 0;
       for(Vertex v : Triangulation.vertexTable.values()) {
-        radius_partials[j][i] = Radius.At(v).partialAt(e);
+        radius_partials[j][i] = Radius.at(v).partialAt(e);
         nehr_rad_eta_partials[j][i] = VEHR.secondPartialAt(v, e);
         j++;
       }

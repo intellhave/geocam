@@ -94,7 +94,7 @@ public class VEHR extends Geoquant {
       totCurvature.addObserver(this);
       volPartial.addObserver(this);
       
-      localCurv = Curvature3D.At(v);
+      localCurv = Curvature3D.at(v);
       localCurv.addObserver(this);
     }
     
@@ -112,7 +112,7 @@ public class VEHR extends Geoquant {
       curvPartials = new LinkedList<Curvature3D.Partial>();
       Curvature3D.Partial partial;
       for(Vertex v : Triangulation.vertexTable.values()) {
-        partial = Curvature3D.At(v).partialAt(e);
+        partial = Curvature3D.at(v).partialAt(e);
         partial.addObserver(this);
         curvPartials.add(partial);
       }
@@ -248,7 +248,7 @@ public class VEHR extends Geoquant {
       totCurvature = Curvature3D.sum();
       totVolume.addObserver( this );
 
-      curvature_i = Curvature3D.At( v );
+      curvature_i = Curvature3D.at( v );
       curvature_i.addObserver( this );
 
       vps_i = Volume.partialSumAt(v);
@@ -259,7 +259,7 @@ public class VEHR extends Geoquant {
         vps_j = vps_i;
         locality = 0;
       } else {
-        curvature_j = Curvature3D.At( w );
+        curvature_j = Curvature3D.at( w );
         curvature_j.addObserver( this );
 
         vps_j = Volume.partialSumAt( w );
@@ -285,7 +285,7 @@ public class VEHR extends Geoquant {
       totCurvature = Curvature3D.sum();
       totVolume.addObserver( this );
 
-      curvature_i = Curvature3D.At( v );
+      curvature_i = Curvature3D.at( v );
       curvature_i.addObserver( this );
 
       vps_i = Volume.partialSumAt(v);
@@ -304,7 +304,7 @@ public class VEHR extends Geoquant {
       
       Curvature3D.Partial cp;
       for(Vertex w : Triangulation.vertexTable.values()) {
-        cp = Curvature3D.At(w).partialAt(nm);
+        cp = Curvature3D.at(w).partialAt(nm);
         cp.addObserver( this );
         curvPartials_nm.add( cp );
       } 
@@ -335,15 +335,15 @@ public class VEHR extends Geoquant {
       Curvature3D.SecondPartial csp;
       
       for(Vertex v : Triangulation.vertexTable.values()) {
-        cp = Curvature3D.At(v).partialAt(nm);
+        cp = Curvature3D.at(v).partialAt(nm);
         cp.addObserver( this );
         curvPartials_nm.add( cp );
         
-        cp = Curvature3D.At(v).partialAt(op);
+        cp = Curvature3D.at(v).partialAt(op);
         cp.addObserver( this );
         curvPartials_op.add( cp );
         
-        csp = Curvature3D.At(v).secondPartialAt(nm, op);
+        csp = Curvature3D.at(v).secondPartialAt(nm, op);
         csp.addObserver(this);
         curvSecPartials.add( csp );
       }

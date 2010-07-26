@@ -23,13 +23,13 @@ public class LCSC extends Geoquant {
     
     lengthList = new LinkedList<Length>();
     
-    Curv = Curvature3D.At(v);
+    Curv = Curvature3D.at(v);
     Curv.addObserver(this);
     LEHRtemp1 = LEHR.getInstance();
     LEHRtemp1.addObserver(this);
     Length l;
     for(Edge e : v.getLocalEdges()) {
-      l = Length.At(e);
+      l = Length.at(e);
       l.addObserver(this);
       lengthList.add(l);
     }
@@ -58,7 +58,7 @@ public class LCSC extends Geoquant {
     Index.remove(pos);
   }
   
-  public static LCSC At(Vertex v) {
+  public static LCSC at(Vertex v) {
     TriPosition T = new TriPosition(v.getSerialNumber());
     LCSC q = Index.get(T);
     if(q == null) {
@@ -70,7 +70,7 @@ public class LCSC extends Geoquant {
   }
   
   public static double valueAt(Vertex v) {
-    return At(v).getValue();
+    return at(v).getValue();
   }
 
 }

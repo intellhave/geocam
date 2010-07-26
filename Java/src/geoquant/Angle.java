@@ -22,9 +22,9 @@ public class Angle extends Geoquant {
     
     this.f = f;
     StdFace sf = new StdFace(f, v);
-    lenA = Length.At(sf.e12);
-    lenB = Length.At(sf.e13);
-    lenC = Length.At(sf.e23);
+    lenA = Length.at(sf.e12);
+    lenB = Length.at(sf.e13);
+    lenC = Length.at(sf.e23);
     
     lenA.addObserver(this);
     lenB.addObserver(this);
@@ -51,7 +51,7 @@ public class Angle extends Geoquant {
     Index.remove(pos);
   }
   
-  public static Angle At(Vertex v, Face f) {
+  public static Angle at(Vertex v, Face f) {
     TriPosition T = new TriPosition(v.getSerialNumber(), f.getSerialNumber());
     Angle q = Index.get(T);
     if(q == null) {
@@ -63,6 +63,6 @@ public class Angle extends Geoquant {
   }
   
   public static double valueAt(Vertex v, Face f) {
-    return At(v, f).getValue();
+    return at(v, f).getValue();
   }
 }

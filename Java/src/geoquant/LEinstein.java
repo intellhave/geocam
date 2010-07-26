@@ -20,11 +20,11 @@ public class LEinstein extends Geoquant {
   public LEinstein(Edge e) {
     super(e);
     
-    Curv = SectionalCurvature.At(e);
+    Curv = SectionalCurvature.at(e);
     Curv.addObserver(this);
     LEHRtemp1 = LEHR.getInstance();
     LEHRtemp1.addObserver(this);
-    leng = Length.At(e);
+    leng = Length.at(e);
     leng.addObserver(this);
     
   }
@@ -46,7 +46,7 @@ public class LEinstein extends Geoquant {
     Index.remove(pos);
   }
   
-  public static LEinstein At(Edge e) {
+  public static LEinstein at(Edge e) {
     TriPosition T = new TriPosition(e.getSerialNumber());
     LEinstein q = Index.get(T);
     if(q == null) {
@@ -58,7 +58,7 @@ public class LEinstein extends Geoquant {
   }
   
   public static double valueAt(Edge e) {
-    return At(e).getValue();
+    return at(e).getValue();
   }
 
 }

@@ -28,9 +28,9 @@ public class DihedralAngle extends Geoquant {
     
     StdTetra st = new StdTetra(t, e);  
         
-    angleA = Angle.At(st.v1, st.f123);
-    angleB = Angle.At(st.v1, st.f124);
-    angleC = Angle.At(st.v1, st.f134);
+    angleA = Angle.at(st.v1, st.f123);
+    angleB = Angle.at(st.v1, st.f124);
+    angleC = Angle.at(st.v1, st.f134);
    
     angleA.addObserver(this);
     angleB.addObserver(this);
@@ -52,7 +52,7 @@ public class DihedralAngle extends Geoquant {
     Index.remove(pos);
   }
   
-  public static DihedralAngle At(Edge e, Tetra t) {
+  public static DihedralAngle at(Edge e, Tetra t) {
     TriPosition T = new TriPosition(e.getSerialNumber(), t.getSerialNumber());
     DihedralAngle q = Index.get(T);
     if(q == null) {
@@ -64,7 +64,7 @@ public class DihedralAngle extends Geoquant {
   }
   
   public static double valueAt(Edge e, Tetra t) {
-    return At(e, t).getValue();
+    return at(e, t).getValue();
   }
   
   public DihedralAngle.Partial partialAt(Edge f) {
@@ -105,22 +105,22 @@ public class DihedralAngle extends Geoquant {
       }
       
       StdTetra st = new StdTetra(t, e, f);
-      radii[0] = Radius.At(st.v1);
-      radii[1] = Radius.At(st.v2);
-      radii[2] = Radius.At(st.v3);
-      radii[3] = Radius.At(st.v4);
+      radii[0] = Radius.at(st.v1);
+      radii[1] = Radius.at(st.v2);
+      radii[2] = Radius.at(st.v3);
+      radii[3] = Radius.at(st.v4);
       
-      alphas[0] = Alpha.At(st.v1);
-      alphas[1] = Alpha.At(st.v2);
-      alphas[2] = Alpha.At(st.v3);
-      alphas[3] = Alpha.At(st.v4); 
+      alphas[0] = Alpha.at(st.v1);
+      alphas[1] = Alpha.at(st.v2);
+      alphas[2] = Alpha.at(st.v3);
+      alphas[3] = Alpha.at(st.v4); 
       
-      etas[0] = Eta.At(st.e12);
-      etas[1] = Eta.At(st.e13);
-      etas[2] = Eta.At(st.e14);
-      etas[3] = Eta.At(st.e23);
-      etas[4] = Eta.At(st.e24);
-      etas[5] = Eta.At(st.e34);
+      etas[0] = Eta.at(st.e12);
+      etas[1] = Eta.at(st.e13);
+      etas[2] = Eta.at(st.e14);
+      etas[3] = Eta.at(st.e23);
+      etas[4] = Eta.at(st.e24);
+      etas[5] = Eta.at(st.e34);
       
       for(int i = 0; i < 4; i++) {
         radii[i].addObserver(this);
@@ -570,22 +570,22 @@ public class DihedralAngle extends Geoquant {
         }
       }
       
-      radii[0] = Radius.At(st.v1);
-      radii[1] = Radius.At(st.v2);
-      radii[2] = Radius.At(st.v3);
-      radii[3] = Radius.At(st.v4);
+      radii[0] = Radius.at(st.v1);
+      radii[1] = Radius.at(st.v2);
+      radii[2] = Radius.at(st.v3);
+      radii[3] = Radius.at(st.v4);
       
-      alphas[0] = Alpha.At(st.v1);
-      alphas[1] = Alpha.At(st.v2);
-      alphas[2] = Alpha.At(st.v3);
-      alphas[3] = Alpha.At(st.v4); 
+      alphas[0] = Alpha.at(st.v1);
+      alphas[1] = Alpha.at(st.v2);
+      alphas[2] = Alpha.at(st.v3);
+      alphas[3] = Alpha.at(st.v4); 
       
-      etas[0] = Eta.At(st.e12);
-      etas[1] = Eta.At(st.e13);
-      etas[2] = Eta.At(st.e14);
-      etas[3] = Eta.At(st.e23);
-      etas[4] = Eta.At(st.e24);
-      etas[5] = Eta.At(st.e34);
+      etas[0] = Eta.at(st.e12);
+      etas[1] = Eta.at(st.e13);
+      etas[2] = Eta.at(st.e14);
+      etas[3] = Eta.at(st.e23);
+      etas[4] = Eta.at(st.e24);
+      etas[5] = Eta.at(st.e34);
       
       for(int i = 0; i < 4; i++) {
         radii[i].addObserver(this);

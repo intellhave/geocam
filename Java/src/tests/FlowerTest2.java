@@ -44,7 +44,7 @@ public class FlowerTest2 {
         .read2DTriangulationFile("Data/2DManifolds/StandardFormat/icosahedron.txt");
 
     for (Edge edge : Triangulation.edgeTable.values()) {
-      Length.At(edge).setValue(Math.random() * .5 + .5);
+      Length.at(edge).setValue(Math.random() * .5 + .5);
     }
 
     double[] gamma = null;
