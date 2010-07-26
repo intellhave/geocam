@@ -76,16 +76,18 @@ public class Frustum2D {
 
   public EmbeddedFace clipFace(EmbeddedFace toClip) {
     
+    boolean verbose = false;
+    
     int left_intersections = 0;
     ArrayList<Vector> vertices = new ArrayList<Vector>();
     
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
-      System.out.println("checking interior: " + toClip.getVectorAt(i));
+      if(verbose){ System.out.println("checking interior: " + toClip.getVectorAt(i)); }
       if (this.checkInterior(toClip.getVectorAt(i))) {
         vertices.add(new Vector(toClip.getVectorAt(i)));
-        System.out.println("true");
+        if(verbose){ System.out.println("true"); }
       } else
-        System.out.println("false");
+        if(verbose){ System.out.println("false"); }
     }
     if (vertices.size() == toClip.getNumberVertices())
       return new EmbeddedFace(toClip); // all vertices contained in frustum
@@ -94,7 +96,7 @@ public class Frustum2D {
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
       Vector a = toClip.getVectorAt(i);
       Vector b = toClip.getVectorAt((i + 1) % toClip.getNumberVertices());
-      System.out.println("checking edge " + i);
+      if(verbose){ System.out.println("checking edge " + i); }
       Vector v = findIntersection(a, b, this.right);
       if (v != null && notTooCloseToAnyOf(vertices, v))
         intersections.add(v);
