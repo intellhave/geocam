@@ -1,6 +1,9 @@
 package development;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import de.jreality.geometry.IndexedFaceSetFactory;
+import de.jreality.scene.Geometry;
 
 public class Frustum2D {
 
@@ -72,8 +75,10 @@ public class Frustum2D {
   }
 
   public EmbeddedFace clipFace(EmbeddedFace toClip) {
+    
     int left_intersections = 0;
     ArrayList<Vector> vertices = new ArrayList<Vector>();
+    
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
       System.out.println("checking interior: " + toClip.getVectorAt(i));
       if (this.checkInterior(toClip.getVectorAt(i))) {
@@ -101,9 +106,9 @@ public class Frustum2D {
       }
     }
     vertices.addAll(intersections);
-    if(left_intersections == 1) vertices.add(new Vector(0, 0));
+    //if(left_intersections == 1) vertices.add(new Vector(0, 0));
 
-    if (vertices.isEmpty())
+    if (vertices.size() < 3)
       return null;
     ConvexHull2D hull = new ConvexHull2D(vertices);
     return new EmbeddedFace(hull.getPoints());
@@ -181,4 +186,33 @@ public class Frustum2D {
     return (Math.abs(v1.getComponent(0) - v2.getComponent(0)) < epsilon && Math
         .abs(v1.getComponent(1) - v2.getComponent(1)) < epsilon);
   }
+  
+  public Geometry getGeometry(Color color, double z){
+    
+    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+    
+    ifsf.setVertexCount(3);
+    ifsf.setEdgeCount(3);
+    ifsf.setFaceCount(1);
+    
+    ifsf.setVertexCoordinates(new double[][] {
+        new double[]{0,0,z}, 
+        new double[]{right.getComponent(0),right.getComponent(1),z}, 
+        new double[]{left.getComponent(0),left.getComponent(1),z}
+    });
+    
+    ifsf.setEdgeIndices(new int[][] {
+       new int[] {0,1},
+       new int[] {1,2},
+       new int[] {2,0}
+    });
+    
+    ifsf.setFaceIndices(new int[][] {
+       new int[] {0,1,2} 
+    });
+    
+    ifsf.update();
+    return ifsf.getGeometry();
+  }
 }
+
