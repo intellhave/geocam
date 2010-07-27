@@ -16,9 +16,12 @@ public class CoordTrans2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, CoordTrans2D> Index = new HashMap<TriPosition, CoordTrans2D>();
 
-  //the common edge between faces f1 and f2 has vertices v1 and v2
-  //this gives matrix moving face f1 onto its common edge with f2
-  //to get the orientation right, we need the non-common vertices, w1 and w2
+  //geoquant which gives the affine transformation gluing the face f
+  //to the face f2 incident to f along the edge e
+  //i.e., "change of coordinates" from f to f2
+  
+  //cvifj are coordinates for vertex vi on face fj; e.g. cv1f1 -> cv1f2 under 
+  //the returned affine transformation.  cw1 is the non-common vertex in f, cw2 in f2.
   private Coord2D cv1f1,cv2f1,cw1;
   private Coord2D cv1f2,cv2f2,cw2;
   
@@ -33,9 +36,9 @@ public class CoordTrans2D extends Geoquant {
     if(f2 == f){ f2 = fi.next(); }
     
     //get shared vertices of f and f2
-    Iterator<Vertex> ei = e.getLocalVertices().iterator();
-    Vertex v1 = ei.next();
-    Vertex v2 = ei.next();
+    Iterator<Vertex> vi = e.getLocalVertices().iterator();
+    Vertex v1 = vi.next();
+    Vertex v2 = vi.next();
     
     //get non-common vertex on face 1
     LinkedList<Vertex> leftover1 = new LinkedList<Vertex>(f.getLocalVertices());

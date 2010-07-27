@@ -4,11 +4,23 @@ import geoquant.*;
 import inputOutput.TriangulationIO;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JSlider;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
@@ -24,6 +36,8 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import de.jtem.jrworkspace.plugin.Controller;
+import de.jtem.jrworkspace.plugin.PluginInfo;
 
 import triangulation.*;
 import util.Matrix;
@@ -37,16 +51,83 @@ public class DevelopmentApp2D {
   private static Vector source_direction_;
   
   //options
-  private static final int max_recursion_depth_ = 300;
+  private static final int max_max_recursion_depth_ = 200;
+  private static int max_recursion_depth_ = 5;
+  
+  private static final int max_bounding_square_side_length_ = 15;
+  private static int bounding_square_side_length_ = 3;
+  
   private static final double movement_units_per_second_ = 1.0;
   private static final double movement_seconds_per_rotation_ = 2.0;
-  private static final double bounding_square_side_length_ = 4.0;
+  
   
   //data
   private static SceneGraphComponent sgc_root_;  
   private static SceneGraphComponent sgc_devmap_;  
   
-  //TOOLS FOR MOVEMENT
+  //USER INTERFACE
+  //==============================
+  static class UIPanel_Options extends ViewShrinkPanelPlugin {
+
+    TitledBorder border_depth = BorderFactory.createTitledBorder("");
+    TitledBorder border_bounds = BorderFactory.createTitledBorder("");
+    
+    private void makeUIComponents() {
+      
+      //slider for recursion depth
+      ChangeListener cl_recdepth = new ChangeListener(){
+        public void stateChanged(ChangeEvent e) {
+          int val = ((JSlider)e.getSource()).getValue();
+          max_recursion_depth_ = val;
+          border_depth.setTitle(String.format("Max Recursion Depth (%d)",max_recursion_depth_));
+          computeDevelopmentMap();
+        }
+      };
+      JSlider slider_depth = new JSlider(1,max_max_recursion_depth_,max_recursion_depth_);
+      slider_depth.setMaximumSize(new Dimension(400,100));
+      slider_depth.setAlignmentX(0.0f);
+      border_depth.setTitle(String.format("Max Recursion Depth (%d)",max_recursion_depth_));
+      slider_depth.setBorder(border_depth);
+      slider_depth.addChangeListener(cl_recdepth);
+      shrinkPanel.add(slider_depth);
+      
+      //slider for bounding box size
+      ChangeListener cl_boundsize = new ChangeListener(){
+        public void stateChanged(ChangeEvent e) {
+          int val = ((JSlider)e.getSource()).getValue();
+          bounding_square_side_length_ = val;
+          border_bounds.setTitle(String.format("Bounding Box Size (%d)",bounding_square_side_length_));
+          computeDevelopmentMap();
+        }
+      };
+      JSlider slider_bounds = new JSlider(1,max_bounding_square_side_length_,bounding_square_side_length_);
+      slider_bounds.setMaximumSize(new Dimension(400,100));
+      slider_bounds.setAlignmentX(0.0f);
+      border_bounds.setTitle(String.format("Bounding Box Size (%d)",bounding_square_side_length_));
+      slider_bounds.setBorder(border_bounds);
+      slider_bounds.addChangeListener(cl_boundsize);
+      shrinkPanel.add(slider_bounds);
+
+      //specify layout
+      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
+      shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),BoxLayout.Y_AXIS));
+    }
+    
+    @Override
+    public void install(Controller c) throws Exception {
+      makeUIComponents();
+      super.install(c);
+    }
+    
+    @Override
+    public PluginInfo getPluginInfo(){
+      PluginInfo info = new PluginInfo("Options", "");
+      return info;
+    }
+  };
+  
+  
+  //TOOL(S) FOR MOVEMENT
   //==============================
   static class ManifoldMovementTool extends AbstractTool {
     
@@ -129,9 +210,7 @@ public class DevelopmentApp2D {
     
     //pick some arbitrary face and source point
     i = Triangulation.faceTable.keySet().iterator();
-    for(int k=0; k<5; k++){
-      source_face_ = Triangulation.faceTable.get(i.next());
-    }
+    source_face_ = Triangulation.faceTable.get(i.next());
     
     source_point_ = new Vector(0,0);
     Iterator<Vertex> iv = source_face_.getLocalVertices().iterator();
@@ -176,22 +255,23 @@ public class DevelopmentApp2D {
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
     jrv.setContent(sgc_root_);
-    jrv.registerPlugin(new ContentAppearance());
-    jrv.registerPlugin(new ContentLoader());
-    jrv.registerPlugin(new ContentTools());
+    //jrv.registerPlugin(new ContentAppearance());
+    //jrv.registerPlugin(new ContentLoader());
+    //jrv.registerPlugin(new ContentTools());
+    jrv.registerPlugin(new UIPanel_Options());
+    jrv.setShowPanelSlots(true,false,false,false);
     jrv.startup();
     
     JRViewer jrv_embedded = new JRViewer();
     jrv_embedded.addBasicUI();
     jrv_embedded.registerPlugin(new ContentTools());
     jrv_embedded.setContent(EmbeddedTriangulation.getSGC());
-    jrv_embedded.startup();
+    //jrv_embedded.startup();
     
   }
   
   //ALGORITHM
   //==============================
-  
   private static void computeDevelopmentMap(){
 
     //rotation matrix sending dir -> (0,1), rot_cw_pi/2(dir) -> (1,0)
@@ -326,7 +406,7 @@ public class DevelopmentApp2D {
     }
     new_trans.leftMultiply(current_trans);
     
-    //get transformed points from new_face
+    //get transformed points from cur_face
     ArrayList<Vector> efpts = new ArrayList<Vector>();
     
     Iterator<Vertex> i = cur_face.getLocalVertices().iterator();

@@ -4,7 +4,9 @@ import geoquant.*;
 import inputOutput.TriangulationIO;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
@@ -22,12 +24,30 @@ import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 
 import triangulation.*;
+import util.Matrix;
 
 public class DevelopmentApp3D {
-
+  
+  //position info
+  private static Tetra source_tetra_;
+  private static Vector source_point_;
+  //private static Vector source_direction_;
+  
+  //options
+  private static final int max_recursion_depth_ = 3;
+  //private static final double movement_units_per_second_ = 1.0;
+  //private static final double movement_seconds_per_rotation_ = 2.0;
+  //private static final double bounding_cube_side_length_ = 4.0;
+  
+  //data
+  private static SceneGraphComponent sgc_root_; 
+  private static SceneGraphComponent sgc_devmap_;
+  
+  //MAIN
+  //==============================
   public static void main(String[] args){
     
-    TriangulationIO.readTriangulation("Data/Triangulations/3DManifolds/3-torus.xml");
+    TriangulationIO.readTriangulation("Data/Triangulations/3DManifolds/pentachoron.xml");
     
     Iterator<Integer> i = null;
     
@@ -36,10 +56,11 @@ public class DevelopmentApp3D {
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
-      Length.at(e).setValue(2+Math.random()); //random return value is in [0,1)
+      double rand = Math.random(); //random return value is in [0,1)
+      Length.at(e).setValue(2); 
     }
     
-    //print some tetra info
+    /*//print some tetra info
     System.out.printf("\n\nTOP DIM SIMPLEX INFO\n");
     
     i = Triangulation.tetraTable.keySet().iterator();
@@ -61,38 +82,196 @@ public class DevelopmentApp3D {
         System.out.print(")]");
       }
       System.out.printf("\n");
-    }
+    }*/
     
-    //pick some arbitrary tetra
+    //pick some arbitrary tetra and source point
     i = Triangulation.tetraTable.keySet().iterator();
-    Tetra tetra = Triangulation.tetraTable.get(i.next());
+    source_tetra_ = Triangulation.tetraTable.get(i.next());
     
-    //root sgc
-    SceneGraphComponent sgc_root = new SceneGraphComponent();
-    SceneGraphComponent sgc_tetra1 = sgcFromTetra(tetra, new AffineTransformation(3), Color.RED);
-    SceneGraphComponent sgc_points = sgcFromPoints(new Vector(0,0,0));
-    sgc_root.addChild(sgc_tetra1);
-    sgc_root.addChild(sgc_points);
-    
-    //loop through tetra's neighbors, adding them in the right place
-    Iterator<Tetra> k = tetra.getLocalTetras().iterator();
-    while(k.hasNext()){
-      Tetra tetra2 = k.next();
-      AffineTransformation atTrans12 = CoordTrans3D.affineTransAt(tetra2,tetra);
-      sgc_root.addChild(sgcFromTetra(tetra2, atTrans12, Color.WHITE));
+    source_point_ = new Vector(0,0,0);
+    Iterator<Vertex> iv = source_tetra_.getLocalVertices().iterator();
+    while(iv.hasNext()){
+      source_point_.add(Coord3D.coordAt(iv.next(), source_tetra_));
     }
+    source_point_.scale(1.0f/4.0f);
     
+    //set up sgc_root
+    sgc_root_ = new SceneGraphComponent();
+    //sgc_root_.addTool(new ManifoldMovementTool());
+    //sgc_root_.addChild(sgc_origin);
+    
+    //compute geometry
+    computeDevelopmentMap();
+
     //jrviewer
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
-    jrv.setContent(sgc_root);
+    jrv.setContent(sgc_root_);
     jrv.registerPlugin(new ContentAppearance());
     jrv.registerPlugin(new ContentLoader());
     jrv.registerPlugin(new ContentTools());
     jrv.startup();
   }
   
-  public static SceneGraphComponent sgcFromPoints(Vector...points){
+  //ALGORITHM
+  //==============================
+  private static void computeDevelopmentMap(){
+
+    //rotation matrix sending dir -> (0,1), rot_cw_pi/2(dir) -> (1,0)
+    //double x = source_direction_.getComponent(0);
+    //double y = source_direction_.getComponent(1);
+    //Matrix M = new Matrix(new double[][]{ new double[] {y,-x}, new double[] {x,y} });
+    AffineTransformation T = new AffineTransformation(Vector.scale(source_point_,-1));
+    //T.leftMultiply(new AffineTransformation(M));
+    
+    sgc_root_.removeChild(sgc_devmap_);
+    sgc_devmap_ = new SceneGraphComponent();
+    
+    //long t = System.currentTimeMillis();
+    iterateDevelopment(sgc_devmap_,0,source_tetra_,null,null,T);
+    //System.out.printf("Time to calculate: %d ms\n", System.currentTimeMillis() - t);
+    
+    sgc_root_.addChild(sgc_devmap_);
+
+  }
+  
+//struct holding info neccessary to develop off an edge
+  private static class DevelopmentFaceInfo{
+    public Vector vect0_,vect1_,vect2_;
+    public Vertex vert0_,vert1_,vert2_;
+    Face next_source_face_;
+    Tetra next_tetra_;
+
+    public DevelopmentFaceInfo(Vertex vert0, Vertex vert1, Vertex vert2, Vector vect0, Vector vect1, Vector vect2, Tetra next_tetra, Face next_source_face){
+      vect0_ = vect0; vect1_ = vect1; vect2_ = vect2;
+      vert0_ = vert0; vert1_ = vert1; vert2_ = vert2;
+      next_source_face_ = next_source_face;
+      next_tetra_ = next_tetra;
+    }
+  };
+  
+  public static ArrayList<DevelopmentFaceInfo> getDevelopmentFaceInfo(Tetra cur_tetra, Face source_face, AffineTransformation T){
+
+    //for each localFace f of cur_tetra, determine the transformed coordinates of
+    //vertices making up f, put them in CCW order (looking at f outside of cur_tetra)
+    //and find tetra incident to cur_tetra along f.
+    //put all of this information in a DevelopmentFaceInfo, and return list of all of these.
+
+    ArrayList<DevelopmentFaceInfo> retinfo = new ArrayList<DevelopmentFaceInfo>();
+    
+    Iterator<Face> fi = cur_tetra.getLocalFaces().iterator();
+    while(fi.hasNext()){
+      Face f = fi.next();
+      //don't do anything with source_face
+      if(f == source_face){ continue; }
+      
+      //find incident tetra
+      Iterator<Tetra> fit = f.getLocalTetras().iterator();
+      Tetra next_tetra = fit.next();
+      if(next_tetra == cur_tetra){ next_tetra = fit.next(); }
+      
+      //get shared vertices of cur_tetra and next_tetra (i.e. verts of f)
+      Vertex vert[] = new Vertex[4];
+      Iterator<Vertex> vi = f.getLocalVertices().iterator();
+      for(int i=0; i<3; i++){ vert[i] = vi.next(); }
+
+      //get non-common vertex on cur_tetra
+      LinkedList<Vertex> leftover = new LinkedList<Vertex>(cur_tetra.getLocalVertices());
+      leftover.removeAll(f.getLocalVertices());
+      vert[3] = leftover.get(0);
+      
+      //apply T to coordinates
+      Vector[] vect = new Vector[4];
+      for(int i=0; i<4; i++){
+        try { vect[i] = T.affineTransPoint(Coord3D.coordAt(vert[i], cur_tetra)); }
+        catch (Exception e) { e.printStackTrace(); }
+      }
+      
+      //make orientation of verts 0-1-2 is CCW
+      Vector u = Vector.subtract(vect[1], vect[0]);
+      Vector v = Vector.subtract(vect[2], vect[0]);
+      Vector w = Vector.subtract(vect[3], vect[0]);
+      //want cross(u,v) in opposite direction of w, i.e. (uxv).w < 0
+      double z = Vector.dot(Vector.cross(u,v),w);
+      if(z > 0){ //flip orientation
+        Vertex tempvert = vert[2];
+        Vector tempvect = vect[2];
+        vert[2] = vert[1];
+        vect[2] = vect[1];
+        vert[1] = tempvert;
+        vect[1] = tempvect;
+      }
+      
+      //add to list of dfinfos
+      retinfo.add(new DevelopmentFaceInfo(vert[0], vert[1], vert[2], vect[0], vect[1], vect[2], next_tetra, f));
+    }
+    
+    return retinfo;
+  }
+
+  public static void iterateDevelopment(SceneGraphComponent sgc_devmap, int depth, Tetra cur_tetra, Face source_face, Frustum3D current_frustum, AffineTransformation current_trans){
+    
+    //note: source_face and current_frustum may be null
+    
+    //get new affine transformation
+    AffineTransformation new_trans = new AffineTransformation(3);
+    if(source_face != null){
+      AffineTransformation coord_trans = CoordTrans3D.affineTransAt(cur_tetra, source_face);
+      new_trans.leftMultiply(coord_trans);
+    }
+    new_trans.leftMultiply(current_trans);
+    
+    //get transformed points from cur_tetra
+    ArrayList<Vector> efpts = new ArrayList<Vector>();
+    
+    Iterator<Vertex> i = cur_tetra.getLocalVertices().iterator();
+    while(i.hasNext()){
+      Vertex vert = i.next();
+      Vector pt = Coord3D.coordAt(vert, cur_tetra);
+      try{ efpts.add(new_trans.affineTransPoint(pt)); }
+      catch(Exception e1){ e1.printStackTrace(); }
+    }
+    
+    //make sure we are within bounding box
+    //if(isOutsideBoundingBox(efpts)){ return; }
+    
+    //make clipped embeddedface
+    //EmbeddedFace origtetra = new EmbeddedFace(efpts);
+    //EmbeddedFace cliptetra = null;
+    //if(current_frustum != null){ cliptetra = current_frustum.clip(origtetra); }
+    //else{ cliptetra = origtetra; }
+    
+    //quit if tetra is completely obscured
+    //if(cliptetra == null){ return; }
+    
+    //add clipped tetra to display
+    Color color = Color.getHSBColor((float)cur_tetra.getIndex()/(float)Triangulation.tetraTable.size(), 0.5f, 0.9f);
+    if(cur_tetra == source_tetra_){ color = Color.WHITE; }
+    SceneGraphComponent sgc_new_tetra = sgcFromTetra(cur_tetra,new_trans,color);
+    //sgc_new_tetra.setGeometry(clipface.getGeometry(color));
+    //sgc_new_tetra.setAppearance(getFaceAppearance(0.5f));
+    sgc_devmap.addChild(sgc_new_tetra);
+
+    //see which faces to continue developing on, if any
+    if(depth >= max_recursion_depth_){ return; }
+    
+    ArrayList<DevelopmentFaceInfo> dfInfoList = getDevelopmentFaceInfo(cur_tetra, source_face, new_trans);
+    for(int j=0; j<dfInfoList.size(); j++){
+      DevelopmentFaceInfo dfInfo = dfInfoList.get(j);
+      
+      //intersect frustums
+      Frustum3D frust = new Frustum3D(dfInfo.vect0_,dfInfo.vect1_,dfInfo.vect2_);
+      Frustum3D new_frust = null;
+      if(current_frustum == null){ new_frust = frust; }
+      else{ new_frust = Frustum3D.intersect(frust, current_frustum); }
+      if(new_frust == null){ continue; }
+      
+      //iterate
+      iterateDevelopment(sgc_devmap, depth+1, dfInfo.next_tetra_, dfInfo.next_source_face_, new_frust, new_trans);
+    }
+    
+  }
+  /*public static SceneGraphComponent sgcFromPoints(Vector...points){
     
     //create the sgc
     SceneGraphComponent sgc_points = new SceneGraphComponent();
@@ -131,7 +310,7 @@ public class DevelopmentApp3D {
     
     //return
     return sgc_points;
-  }
+  }*/
   
   public static SceneGraphComponent sgcFromTetra(Tetra tetra, AffineTransformation affineTrans, Color color){
     
@@ -142,7 +321,7 @@ public class DevelopmentApp3D {
     Appearance app_tetra = new Appearance();
     
     //set some basic attributes
-    app_tetra.setAttribute(CommonAttributes.FACE_DRAW, true);
+    app_tetra.setAttribute(CommonAttributes.FACE_DRAW, false);
     app_tetra.setAttribute(CommonAttributes.EDGE_DRAW, true);
     app_tetra.setAttribute(CommonAttributes.VERTEX_DRAW, false);
     app_tetra.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
