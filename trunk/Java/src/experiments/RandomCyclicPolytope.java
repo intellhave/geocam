@@ -128,15 +128,24 @@ public class RandomCyclicPolytope {
       setLengths(n, center, length);
 
       for (Edge e : Triangulation.edgeTable.values()) {
-        ecurvature.println(SectionalCurvature.at(e).getValue());
+        if (!Double.isNaN(SectionalCurvature.at(e).getValue())) {
+          ecurvature.println(SectionalCurvature.at(e).getValue());
+        }
       }
 
       for (Vertex v : Triangulation.vertexTable.values()) {
-        vcurvature.println(Curvature3D.at(v).getValue());
+        if (!Double.isNaN(Curvature3D.at(v).getValue())) {
+          vcurvature.println(Curvature3D.at(v).getValue());
+        }
       }
 
-      lehr.println(LEHR.value());
-      vehr.println(VEHR.value());
+      if(!Double.isNaN(LEHR.value())){
+        lehr.println(LEHR.value());
+      }
+      
+      if(!Double.isNaN(VEHR.value())){
+        vehr.println(VEHR.value());
+      }
     }
   }
 }
