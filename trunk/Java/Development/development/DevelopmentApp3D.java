@@ -16,13 +16,17 @@ import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.scene.Appearance;
-import de.jreality.scene.proxy.scene.SceneGraphComponent;
+import de.jreality.scene.Camera;
+import de.jreality.scene.SceneGraphPath;
+import de.jreality.scene.Viewer;
+import de.jreality.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import de.jreality.util.SceneGraphUtility;
 
 import triangulation.*;
 import util.Matrix;
@@ -79,7 +83,7 @@ public class DevelopmentApp3D {
     
     //compute geometry
     computeDevelopmentMap();
-
+    
     //jrviewer
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
@@ -89,6 +93,28 @@ public class DevelopmentApp3D {
     jrv.registerPlugin(new ContentAppearance());
     jrv.registerPlugin(new ContentLoader());
     jrv.registerPlugin(new ContentTools());
+    
+    //see jreality/src-tutorial/de.jreality.tutorial.scene/CameraPathExample
+    //for camera stuff
+    
+    /*
+    final Viewer viewer = JRViewer.display(sgc_root_);
+    final SceneGraphPath campath = viewer.getCameraPath();
+    
+    Camera camera = new Camera();
+    camera.setNear(.015);
+    camera.setFieldOfView(10);
+    // set up second camera path, ending in the moving point on the curve
+    
+    SceneGraphComponent child = SceneGraphUtility.createFullSceneGraphComponent("point");
+    
+    sgc_root_.addChild(child);
+    child.setCamera(camera);
+    final SceneGraphPath campath2 = SceneGraphUtility.getPathsBetween(viewer.getSceneRoot(), child).get(0);
+    campath2.push(child.getCamera());
+    viewer.setCameraPath(campath2);*/
+    
+    
     jrv.startup();
   }
   
