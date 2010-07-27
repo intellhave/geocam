@@ -34,10 +34,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import solvers.*;
-import solvers.ode.DESystem;
-import solvers.ode.EulerSolver;
-import solvers.ode.yamabeFlow.Yamabe2DFlow;
-import solvers.ode.yamabeFlow.Yamabe3DFlow;
+import solvers.implemented.Yamabe2DFlow;
+import solvers.implemented.Yamabe3DFlow;
 import triangulation.Triangulation;
 
 
@@ -227,17 +225,16 @@ public class YamabeFlowDialog extends JDialog {
     public void actionPerformed(ActionEvent evt) {
       if(evt.getSource().equals(runButton)) {
 
-        DESystem sys = null;
+        Solver solver = null;
         switch(dim) {
         case twoD:
-          sys = new Yamabe2DFlow();
+          solver = new Yamabe2DFlow();
           break;
         case threeD:
-          sys = new Yamabe3DFlow();
+          solver = new Yamabe3DFlow();
           break;
         }
         
-        EulerSolver solver = new EulerSolver(sys);
         double[] radii = new double[Triangulation.vertexTable.size()];
         int i = 0;
         for(Radius r : Geometry.getRadii()) {
@@ -248,9 +245,10 @@ public class YamabeFlowDialog extends JDialog {
           try{
             numSteps = Integer.parseInt(numStepsTextField.getText());
             double stepsize = Double.parseDouble(stepsizeTextField.getText());
+            solver.setStepsize(stepsize);
             rec = owner.getRecorder();
             solver.addObserver(rec);
-            solver.run(radii, stepsize, numSteps);
+            solver.run(radii, numSteps);
             solver.deleteObserver(rec);
             
             owner.getPolygonPanel().setRecorder(rec);
@@ -263,9 +261,11 @@ public class YamabeFlowDialog extends JDialog {
           try{
             double precision = Double.parseDouble(precisionTextField.getText());
             double stepsize = Double.parseDouble(stepsizeTextField.getText());
+            solver.setStepsize(stepsize);
+            solver.setStoppingCondition(precision);
             rec = owner.getRecorder();
             solver.addObserver(rec);
-            solver.run(radii, stepsize, precision);
+            solver.run(radii);
             solver.deleteObserver(rec);
             
             owner.getPolygonPanel().setRecorder(rec);

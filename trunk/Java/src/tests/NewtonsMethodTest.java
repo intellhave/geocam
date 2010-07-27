@@ -1,7 +1,6 @@
 package tests;
 
-import solvers.newtonsMethod.NewtonsMethod;
-import solvers.newtonsMethod.WrongDirectionException;
+import solvers.NewtonsMethod;
 import util.Matrix;
 
 public class NewtonsMethodTest {
@@ -45,16 +44,9 @@ public class NewtonsMethodTest {
     }
     // Continue with the procedure until the length of the gradient is
     // less than 0.000001.
-    try {
-      while(nm.stepMax(x_n) > 0.000001) {
-        System.out.printf("\n***** Step %d *****\n", i++);
-        for(int j = 0; j < x_n.length; j++) {
-          System.out.printf("x_n_%d[%d] = %f\n", i, j, x_n[j]);
-        }
-      }
-    } catch (WrongDirectionException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    x_n = nm.run(x_n);
+    for(int j = 0; j < x_n.length; j++) {
+      System.out.printf("x[%d] = %f\n", j, x_n[j]);
     }
   }
 }

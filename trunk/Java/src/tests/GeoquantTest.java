@@ -31,9 +31,7 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import solvers.newtonsMethod.CrossConformalFlow;
-import solvers.newtonsMethod.RadiusVEHRNewton;
-import solvers.newtonsMethod.WrongDirectionException;
+import solvers.implemented.RadiusVEHRNewton;
 import triangulation.*;
 import util.GeoMath;
 import util.Matrix;
