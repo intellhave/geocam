@@ -14,6 +14,8 @@ import solvers.newtonsMethod.WrongDirectionException;
 public class LEHRFlowDialog extends EHRFlowDialog {
   public LEHRFlowDialog(GeoquantViewer owner) {
     super(owner);
+    this.setTitle("LEHR Flow");
+    
     getNmButton().setSelected(false);
     getGradientButton().setSelected(true);
     getNmButton().setEnabled(false);

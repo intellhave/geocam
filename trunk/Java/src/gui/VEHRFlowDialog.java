@@ -43,6 +43,7 @@ public class VEHRFlowDialog extends EHRFlowDialog {
   
   public VEHRFlowDialog(GeoquantViewer owner) {
     super(owner);
+    this.setTitle("VEHR Flow");
   }
   
   protected void handleRun(ActionEvent evt) {

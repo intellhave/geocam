@@ -70,7 +70,6 @@ public abstract class EHRFlowDialog extends JDialog {
     nMethodDialogLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {getDirectionPanel(), getMethodPanel(), getQuantPanel()});
     nMethodDialogLayout.linkSize(SwingConstants.HORIZONTAL, new Component[] {getCancelButton(), getRunButton()});
     this.setPreferredSize(new java.awt.Dimension(377, 222));
-    this.setTitle("VEHR Flow");
     this.setResizable(false);
     this.setSize(377, 222);
   }
