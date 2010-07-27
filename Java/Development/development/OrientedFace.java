@@ -13,9 +13,7 @@ public class OrientedFace {
   Vertex vert_[];
   Vector vect_[];
   
-  //public OrientedFace(Face face, AffineTransformation T){
-  //
-  //}  
+  //public OrientedFace(Face face, AffineTransformation T){ }
   
   public OrientedFace(Face f, Vertex vert0, Vertex vert1, Vertex vert2, Vector vect0, Vector vect1, Vector vect2){
     
@@ -29,6 +27,6 @@ public class OrientedFace {
   }
   
   public Face getFace(){ return f_; }
-  public Vertex getVert(int i){ return vert_[i]; }
-  public Vector getVect(int i){ return vect_[i]; }
+  public Vertex getVertex(int i){ return vert_[i]; }
+  public Vector getVector(int i){ return vect_[i]; }
 }

@@ -15,6 +15,8 @@ public class OrientedTetra {
 
   Tetra tetra_;
   OrientedFace orientedFaces[];
+  Vertex vert_[];
+  Vector vect_[];
   
   public OrientedTetra(Tetra tetra, AffineTransformation T){
     
@@ -22,6 +24,9 @@ public class OrientedTetra {
     tetra_ = tetra;
     
     //get vertices and store transformed coordinates
+    vert_ = new Vertex[4];
+    vect_ = new Vector[4];
+    
     HashMap<Vertex, Vector> transCoords = new HashMap<Vertex, Vector>();
     
     Iterator<Vertex> vi = tetra.getLocalVertices().iterator();
@@ -33,6 +38,8 @@ public class OrientedTetra {
       try { vect = T.affineTransPoint(Coord3D.coordAt(vert, tetra)); }
       catch (Exception e) { e.printStackTrace(); }
       
+      vert_[i] = vert;
+      vect_[i] = vect;
       transCoords.put(vert, vect);
     }
    
@@ -81,4 +88,6 @@ public class OrientedTetra {
   
   public Tetra getTetra(){ return tetra_; }
   public OrientedFace getOrientedFace(int i){ return orientedFaces[i]; }
+  public Vertex getVertex(int i){ return vert_[i]; }
+  public Vector getVector(int i){ return vect_[i]; }
 }
