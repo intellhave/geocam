@@ -373,16 +373,19 @@ public class Frustum3D {
     return true;
   }
 
-  public ArrayList<Vector> clipFace(Tetra tetra) {
-
+  public ArrayList<Vector> clipFace(Tetra tetra, AffineTransformation T, double det) {
+    
     HashMap<Vertex, Vector> vertexCoords = new HashMap<Vertex, Vector>();
     List<Vertex> vertices = tetra.getLocalVertices();
-//    System.out.println("vertices: " + vertices.get(0).equals(vertices.get(1)));
-    vertexCoords.put(vertices.get(0), Coord3D.coordAt(vertices.get(0), tetra));
-    vertexCoords.put(vertices.get(1), Coord3D.coordAt(vertices.get(1), tetra));
-    vertexCoords.put(vertices.get(2), Coord3D.coordAt(vertices.get(2), tetra));
-    vertexCoords.put(vertices.get(3), Coord3D.coordAt(vertices.get(3), tetra));
-
+    //System.out.println("vertices: " + vertices.get(0).equals(vertices.get(1)));
+    for(int i=0; i<4; i++){
+      Vertex vert = vertices.get(i);
+      Vector vect = new Vector(0,0,0);
+      try { vect = T.affineTransPoint(Coord3D.coordAt(vert, tetra)); }
+      catch (Exception e) { e.printStackTrace(); }
+      vertexCoords.put(vert, vect);
+    }
+    
     HashMap<Edge, Vector[]> edgeCoords = new HashMap<Edge, Vector[]>();
     List<Edge> edges = tetra.getLocalEdges();
     for (int i = 0; i < edges.size(); i++) {
@@ -392,7 +395,7 @@ public class Frustum3D {
       points[1] = vertexCoords.get(ends.get(1));
       edgeCoords.put(edges.get(i), points);
     }
-
+    
     HashMap<Face, EmbeddedFace> faces = new HashMap<Face, EmbeddedFace>();
     List<Face> faceList = tetra.getLocalFaces();
     for (Face face : faceList) {
@@ -404,20 +407,20 @@ public class Frustum3D {
       EmbeddedFace f = new EmbeddedFace(vectors);
       faces.put(face, f);
     }
-
+    
     ArrayList<Vector> hullPoints = new ArrayList<Vector>();
-
+    
     ArrayList<Vertex> omitVerts = new ArrayList<Vertex>();
     ArrayList<Edge> omitEdgesRay = new ArrayList<Edge>();
     ArrayList<Face> omitFacesRay = new ArrayList<Face>();
-
+    
     ArrayList<ArrayList<Vertex>> omitVertsSector = new ArrayList<ArrayList<Vertex>>();
     ArrayList<ArrayList<Edge>> omitEdgesSector = new ArrayList<ArrayList<Edge>>();
     for (int i = 0; i < this.getNumberRays(); i++) {
       omitVertsSector.add(new ArrayList<Vertex>());
       omitEdgesSector.add(new ArrayList<Edge>());
     }
-
+    
     // rays
     for (int rayIndex = 0; rayIndex < this.getNumberRays(); rayIndex++) {
 //      System.out.println();

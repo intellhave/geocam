@@ -5,14 +5,11 @@ import inputOutput.TriangulationIO;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -21,8 +18,6 @@ import javax.swing.event.ChangeListener;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
-import de.jreality.plugin.content.ContentAppearance;
-import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;

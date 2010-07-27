@@ -10,7 +10,7 @@ import triangulation.Tetra;
 import triangulation.Face;
 import triangulation.Vertex;
 
-//note that the coordinates this geoquant gives do not take orientation into account
+//value is det(affineTrans)
 
 public class CoordTrans3D extends Geoquant {
   // Index map
@@ -81,7 +81,7 @@ public class CoordTrans3D extends Geoquant {
       e.printStackTrace();
     }
     
-    value = 0; //unused
+    value = affineTrans.determinant();
   }
 
   public void remove() {
