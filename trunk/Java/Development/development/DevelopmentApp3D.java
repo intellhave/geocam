@@ -84,8 +84,8 @@ public class DevelopmentApp3D {
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
     jrv.setContent(sgc_root_);
-    jrv.addVRSupport();
-    jrv.addContentSupport(ContentType.TerrainAligned);
+    //jrv.addVRSupport();
+    //jrv.addContentSupport(ContentType.TerrainAligned);
     jrv.registerPlugin(new ContentAppearance());
     jrv.registerPlugin(new ContentLoader());
     jrv.registerPlugin(new ContentTools());
