@@ -6,7 +6,7 @@ import inputOutput.TriangulationIO;
 import triangulation.Triangulation;
 import util.Matrix;
 
-public class RadiusVEHRGradient extends RadiusOptNEHR {
+public class RadiusVEHRGradient extends RadiusVEHRNewton {
   private int dir = 1;
   @Override
   public Matrix hessian(double[] vars) {

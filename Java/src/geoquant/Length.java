@@ -89,7 +89,7 @@ public class Length extends Geoquant {
   }
   
   public static Sum sum() {
-    if(total == null) {
+    if(total == null || total.id != Triangulation.getTriangulationID()) {
       total = new Sum();
     }
     return total;
@@ -97,9 +97,10 @@ public class Length extends Geoquant {
   
   public static class Sum extends Geoquant {
     LinkedList<Length> lengths = new LinkedList<Length>();
-    
+    private int id;
     private Sum() {
       super();
+      id = Triangulation.getTriangulationID();
       Length l;
       for(Edge e : Triangulation.edgeTable.values()) {
         l = Length.at(e);

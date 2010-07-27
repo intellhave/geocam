@@ -143,6 +143,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox vehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
   private AbstractAction saveAction;
+  private AbstractAction showLehrFlowDialog;
+  private JMenuItem lehrFlowMenuItem;
   private AbstractAction saveFlowAction;
   private JMenuItem saveFlowMenuItem;
   private JLabel stepLabel;
@@ -176,6 +178,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JMenuItem setRadiiMenuItem;
   private JMenu editMenu;
   private VEHRFlowDialog vehrFlowDialog;
+  private LEHRFlowDialog lehrFlowDialog;
   private YamabeFlowDialog yamabe2DDialog;
   private YamabeFlowDialog yamabe3DDialog;
   private JMenuItem vehrFlowMenuItem;
@@ -373,6 +376,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       new DefaultComboBoxModel(Triangulation.edgeTable.values().toArray());
     EdgeList.setModel(EdgeListModel);
     
+    getLehrFlowMenuItem().setEnabled(true);
     getVehrFlowMenuItem().setEnabled(true);
     getYamabe2DMenuItem().setEnabled(true);
     getYamabe3DMenuItem().setEnabled(true);
@@ -1015,42 +1019,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     return secondPartialSelectPanel;
   }
 
-//  class GeoPolygonMouseListener extends MouseAdapter {
-//    private JLabel message;
-//    private Popup geoDisplayPopup;
-//    private int x;
-//    private int y;
-//    private JPanel geoPanel;
-//    
-//    public GeoPolygonMouseListener() {
-//      super();
-//
-//      message = new JLabel();
-//      message.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
-//    }
-//    public void mouseMoved(MouseEvent e) {
-//      if(geoDisplayPopup != null) {
-//        geoDisplayPopup.hide();
-//      }
-//      if(geoMap == null) {
-//        return;
-//      }
-//      x = e.getX();
-//      y = e.getY();
-//      Geoquant q = geoMap.get(new GeoPoint(x, y));
-//      if(q == null) {
-//        return;
-//      }
-//      geoPanel = getGeoPolygonPanel();
-//      message.setText("" + q);
-//      PopupFactory factory = PopupFactory.getSharedInstance();
-//      geoDisplayPopup = factory.getPopup(GeoquantViewer.this, message, 
-//            (int) geoPanel.getLocationOnScreen().getX() + x, 
-//            (int) geoPanel.getLocationOnScreen().getY() + y - 15);
-//      geoDisplayPopup.show();
-//    }
-//  }
-
   private JCheckBox getAngleCheck() {
     if(angleCheck == null) {
       angleCheck = new JCheckBox();
@@ -1335,6 +1303,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     if(runMenu == null) {
       runMenu = new JMenu();
       runMenu.setText("Run");
+      runMenu.add(getLehrFlowMenuItem());
       runMenu.add(getVehrFlowMenuItem());
       runMenu.add(getYamabe2DMenuItem());
       runMenu.add(getYamabe3DMenuItem());
@@ -1357,6 +1326,13 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       vehrFlowDialog = new VEHRFlowDialog(this);
     }
     return vehrFlowDialog;
+  }
+  
+  private LEHRFlowDialog getLehrFlowDialog() {
+    if(lehrFlowDialog == null) {
+      lehrFlowDialog = new LEHRFlowDialog(this);
+    }
+    return lehrFlowDialog;
   }
   
   private YamabeFlowDialog getYamabe2DDialog() {
@@ -2096,6 +2072,29 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   protected void newFlow() {
     getShowFlowButton().setEnabled(true);
     getSaveFlowMenuItem().setEnabled(true);
+  }
+  
+  private JMenuItem getLehrFlowMenuItem() {
+	  if(lehrFlowMenuItem == null) {
+		  lehrFlowMenuItem = new JMenuItem();
+		  lehrFlowMenuItem.setText("LEHR Flow");
+		  lehrFlowMenuItem.setAction(getShowLehrFlowDialog());
+		  lehrFlowMenuItem.setEnabled(false);
+	  }
+	  return lehrFlowMenuItem;
+  }
+  
+  private AbstractAction getShowLehrFlowDialog() {
+	  if(showLehrFlowDialog == null) {
+		  showLehrFlowDialog = new AbstractAction("LEHR Flow", null) {
+			  public void actionPerformed(ActionEvent evt) {
+          getLehrFlowDialog().pack();
+          getLehrFlowDialog().setLocationRelativeTo(null);
+          getLehrFlowDialog().setVisible(true);
+			  }
+		  };
+	  }
+	  return showLehrFlowDialog;
   }
 
 }

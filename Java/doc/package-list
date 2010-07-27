@@ -1,12 +1,1 @@
-experiments
-flipAlgorithm
 geoquant
-gui
-inputOutput
-solvers.newtonsMethod
-solvers.ode
-solvers.ode.yamabeFlow
-tests
-triangulation
-util
-visualization
