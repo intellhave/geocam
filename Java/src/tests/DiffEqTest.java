@@ -11,9 +11,8 @@ import inputOutput.TriangulationIO;
 import java.util.LinkedList;
 import java.util.List;
 
-import solvers.ode.DESystem;
-import solvers.ode.EulerSolver;
-import solvers.ode.yamabeFlow.Yamabe2DFlow;
+import solvers.Solver;
+import solvers.implemented.Yamabe2DFlow;
 import triangulation.Triangulation;
 
 
@@ -36,8 +35,7 @@ public class DiffEqTest {
   }
 
   private static void testYamabe2DFlow() {
-    DESystem sys = new Yamabe2DFlow();
-    EulerSolver solver = new EulerSolver(sys);
+    Solver solver = new Yamabe2DFlow();
     
     List<Class<? extends Geoquant>> list = new LinkedList<Class<? extends Geoquant>>();
     list.add(Radius.class);
@@ -51,7 +49,9 @@ public class DiffEqTest {
       i++;
     }
     
-    radii = solver.run(radii, 0.1, 50);
+    solver.setStepsize(0.1);
+    
+    radii = solver.run(radii, 50);
     
     System.out.println("RADII:");
     for(List<Double> values : rec.getValueHistory(Radius.class)) {

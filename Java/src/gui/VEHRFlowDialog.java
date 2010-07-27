@@ -19,11 +19,11 @@ import javax.swing.JRadioButton;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 
-import solvers.newtonsMethod.EtaVEHRNewton;
-import solvers.newtonsMethod.EtaVEHRGradient;
-import solvers.newtonsMethod.RadiusVEHRNewton;
-import solvers.newtonsMethod.RadiusVEHRGradient;
-import solvers.newtonsMethod.WrongDirectionException;
+import solvers.implemented.EtaVEHRGradient;
+import solvers.implemented.EtaVEHRNewton;
+import solvers.implemented.RadiusLEHRGradient;
+import solvers.implemented.RadiusVEHRGradient;
+import solvers.implemented.RadiusVEHRNewton;
 
 
 
@@ -57,23 +57,21 @@ public class VEHRFlowDialog extends EHRFlowDialog {
           rec.update(radNM, null);
           radNM.addObserver(rec);
           double[] log_radii = radNM.getLogRadii();
-          if(getMaxFlowButton().isSelected()) {
-            try {
-              radNM.setLogRadii(radNM.maximize(log_radii));
-            } catch (WrongDirectionException e) {
+          try{
+            radNM.setStepsize(Double.parseDouble(getStepsizeTextField().getText()));
+            if(getPrecisionButton().isSelected()) {
+              radNM.setStoppingCondition(Double.parseDouble(getPrecisionTextField().getText()));
+              radNM.setLogRadii(radNM.run(log_radii));
+            } else {
+              radNM.setLogRadii(radNM.run(log_radii, Integer.parseInt(getNumStepsTextField().getText())));
             }
-          } else if(getMinFlowButton().isSelected()) {
-            try {
-              radNM.setLogRadii(radNM.minimize(log_radii));
-            } catch (WrongDirectionException e) {
-            }
-          } else {
-            radNM.setLogRadii(radNM.optimize(log_radii));
+
+            radNM.deleteObserver(rec);
+            owner.getPolygonPanel().setRecorder(rec);
+            owner.newFlow();
+            owner.getPolygonPanel().repaint();
+          } catch(NumberFormatException ex) {
           }
-          radNM.deleteObserver(rec);
-          owner.getPolygonPanel().setRecorder(rec);
-          owner.newFlow();
-          owner.getPolygonPanel().repaint();
         } else {
           EtaVEHRNewton etaNM = new EtaVEHRNewton();
           GeoRecorder rec = owner.getRecorder();
@@ -81,114 +79,66 @@ public class VEHRFlowDialog extends EHRFlowDialog {
           etaNM.addObserver(rec);
           double[] etas = etaNM.getEtas();
 
-          if(getMaxFlowButton().isSelected()) {
-            try {
-              etaNM.setEtas(etaNM.maximize(etas));
-            } catch (WrongDirectionException e) {
+          try{
+            etaNM.setStepsize(Double.parseDouble(getStepsizeTextField().getText()));
+            if(getPrecisionButton().isSelected()) {
+              etaNM.setStoppingCondition(Double.parseDouble(getPrecisionTextField().getText()));
+              etaNM.setEtas(etaNM.run(etas));
+            } else {
+              etaNM.setEtas(etaNM.run(etas, Integer.parseInt(getNumStepsTextField().getText())));
             }
-          } else if(getMinFlowButton().isSelected()) {
-            try {
-              etaNM.setEtas(etaNM.minimize(etas));
-            } catch (WrongDirectionException e) {
-            }
-          } else {
-            for(int i = 0; i < 10; i++) {
-              etaNM.setEtas(etaNM.optimize(etas));
-              double max = 0;
-              for(int j = 0; j < etas.length; j++) {
-                if(max < etas[j]) {
-                  max = etas[j];
-                }
-              }
-              for(int j = 0; j < etas.length; j++) {
-                etas[j] = etas[j] / max;
-              }
-            }
-            double max = 0;
-            for(int j = 0; j < etas.length; j++) {
-              if(max < etas[j]) {
-                max = etas[j];
-              }
-            }
-            for(int j = 0; j < etas.length; j++) {
-              etas[j] = etas[j] / max;
-            }
-            etaNM.setEtas(etas);
+
+            etaNM.deleteObserver(rec);
+            owner.getPolygonPanel().setRecorder(rec);
+            owner.newFlow();
+            owner.getPolygonPanel().repaint();
+          } catch(NumberFormatException ex) {
           }
-          etaNM.deleteObserver(rec);
-          owner.getPolygonPanel().setRecorder(rec);
-          owner.newFlow();
-          owner.getPolygonPanel().repaint();
         }
       } else if(getGradientButton().isSelected()) {
         if(getRadFlowButton().isSelected()) {
           RadiusVEHRGradient radNM = new RadiusVEHRGradient();
           GeoRecorder rec = owner.getRecorder();
           rec.update(radNM, null);
-          radNM.addObserver(rec);
+
           double[] log_radii = radNM.getLogRadii();
-          if(getMaxFlowButton().isSelected()) {
-            try {
-              radNM.setLogRadii(radNM.maximize(log_radii));
-            } catch (WrongDirectionException e) {
+          try{
+            radNM.setStepsize(Double.parseDouble(getStepsizeTextField().getText()));
+            if(getPrecisionButton().isSelected()) {
+              radNM.setStoppingCondition(Double.parseDouble(getPrecisionTextField().getText()));
+              radNM.setLogRadii(radNM.run(log_radii));
+            } else {
+              radNM.setLogRadii(radNM.run(log_radii, Integer.parseInt(getNumStepsTextField().getText())));
             }
-          } else if(getMinFlowButton().isSelected()) {
-            try {
-              radNM.setLogRadii(radNM.minimize(log_radii));
-            } catch (WrongDirectionException e) {
-            }
-          } else {
-            radNM.setLogRadii(radNM.optimize(log_radii));
+
+            radNM.deleteObserver(rec);
+            owner.getPolygonPanel().setRecorder(rec);
+            owner.newFlow();
+            owner.getPolygonPanel().repaint();
+          } catch(NumberFormatException ex) {
           }
-          radNM.deleteObserver(rec);
-          owner.getPolygonPanel().setRecorder(rec);
-          owner.newFlow();
-          owner.getPolygonPanel().repaint();
         } else {
           EtaVEHRGradient etaNM = new EtaVEHRGradient();
           GeoRecorder rec = owner.getRecorder();
           rec.update(etaNM, null);
-          etaNM.addObserver(rec);
+          
           double[] etas = etaNM.getEtas();
+          
+          try{
+            etaNM.setStepsize(Double.parseDouble(getStepsizeTextField().getText()));
+            if(getPrecisionButton().isSelected()) {
+              etaNM.setStoppingCondition(Double.parseDouble(getPrecisionTextField().getText()));
+              etaNM.setEtas(etaNM.run(etas));
+            } else {
+              etaNM.setEtas(etaNM.run(etas, Integer.parseInt(getNumStepsTextField().getText())));
+            }
 
-          if(getMaxFlowButton().isSelected()) {
-            try {
-              etaNM.setEtas(etaNM.maximize(etas));
-            } catch (WrongDirectionException e) {
-            }
-          } else if(getMinFlowButton().isSelected()) {
-            try {
-              etaNM.setEtas(etaNM.minimize(etas));
-            } catch (WrongDirectionException e) {
-            }
-          } else {
-            for(int i = 0; i < 10; i++) {
-              etaNM.setEtas(etaNM.optimize(etas));
-              double max = 0;
-              for(int j = 0; j < etas.length; j++) {
-                if(max < etas[j]) {
-                  max = etas[j];
-                }
-              }
-              for(int j = 0; j < etas.length; j++) {
-                etas[j] = etas[j] / max;
-              }
-            }
-            double max = 0;
-            for(int j = 0; j < etas.length; j++) {
-              if(max < etas[j]) {
-                max = etas[j];
-              }
-            }
-            for(int j = 0; j < etas.length; j++) {
-              etas[j] = etas[j] / max;
-            }
-            etaNM.setEtas(etas);
+            etaNM.deleteObserver(rec);
+            owner.getPolygonPanel().setRecorder(rec);
+            owner.newFlow();
+            owner.getPolygonPanel().repaint();
+          } catch(NumberFormatException ex) {
           }
-          etaNM.deleteObserver(rec);
-          owner.getPolygonPanel().setRecorder(rec);
-          owner.newFlow();
-          owner.getPolygonPanel().repaint();
         }
       }
     }

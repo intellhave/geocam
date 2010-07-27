@@ -1,4 +1,4 @@
-package solvers.ode.yamabeFlow;
+package solvers.implemented;
 
 import geoquant.Alpha;
 import geoquant.Curvature2D;
@@ -8,12 +8,12 @@ import geoquant.Geometry;
 import geoquant.Length;
 import geoquant.Radius;
 import geoquant.Volume;
-import solvers.ode.DESystem;
+import solvers.Solver;
 import triangulation.StdTetra;
 import triangulation.Tetra;
 import triangulation.Triangulation;
 
-public class Yamabe3DFlow implements DESystem{
+public class Yamabe3DFlow extends Solver{
 
   @Override
   public double[] calcSlopes(double[] x) {
