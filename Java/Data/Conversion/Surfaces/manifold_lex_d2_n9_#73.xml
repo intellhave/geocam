@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?><Triangulation xmlns="http://code.google.com/p/geocam">
+  <Vertex alpha="1.0" index="1" radius="0.0">
+    <Vertices>2 3 4 </Vertices>
+    <Edges>1 2 4 </Edges>
+    <Faces>1 2 3 </Faces>
+  </Vertex>
+  <Vertex alpha="1.0" index="2" radius="0.0">
+    <Vertices>1 3 4 5 6 </Vertices>
+    <Edges>1 3 5 7 9 </Edges>
+    <Faces>1 2 4 5 6 </Faces>
+  </Vertex>
+  <Vertex alpha="1.0" index="3" radius="0.0">
+    <Vertices>1 2 4 5 7 8 6 </Vertices>
+    <Edges>2 3 6 8 12 14 16 </Edges>
+    <Faces>1 3 4 7 8 9 10 </Faces>
+  </Vertex>
+  <Vertex alpha="1.0" index="4" radius="0.0">
+    <Vertices>1 2 3 6 7 8 </Vertices>
+    <Edges>4 5 6 10 13 19 </Edges>
+    <Faces>2 3 5 7 11 12 </Faces>
+  </Vertex>
+  <Vertex alpha="1.0" index="5" radius="0.0">
+    <Vertices>2 3 6 8 9 </Vertices>
+    <Edges>7 8 11 15 21 </Edges>
+    <Faces>4 6 8 13 14 </Faces>
+  </Vertex>
+  <Vertex alpha="1.0" index="6" radius="0.0">
+    <Vertices>2 4 5 3 7 8 9 </Vertices>
+    <Edges>9 10 11 16 17 18 22 </Edges>
+    <Faces>5 6 9 10 11 13 15 </Faces>
+  </Vertex>
+  <Vertex alpha="1.0" index="7" radius="0.0">
+    <Vertices>3 4 6 8 9 </Vertices>
+    <Edges>12 13 17 20 24 </Edges>
+    <Faces>7 9 12 15 16 </Faces>
+  </Vertex>
+  <Vertex alpha="1.0" index="8" radius="0.0">
+    <Vertices>3 5 6 4 7 9 </Vertices>
+    <Edges>14 15 18 19 20 23 </Edges>
+    <Faces>8 10 11 12 14 16 </Faces>
+  </Vertex>
+  <Vertex alpha="1.0" index="9" radius="0.0">
+    <Vertices>5 6 8 7 </Vertices>
+    <Edges>21 22 23 24 </Edges>
+    <Faces>13 14 15 16 </Faces>
+  </Vertex>
+  <Edge eta="0.0" index="1">
+    <Vertices>1 2 </Vertices>
+    <Edges>2 3 4 5 7 9 </Edges>
+    <Faces>1 2 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="2">
+    <Vertices>1 3 </Vertices>
+    <Edges>1 3 4 6 8 12 14 16 </Edges>
+    <Faces>1 3 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="3">
+    <Vertices>2 3 </Vertices>
+    <Edges>2 1 5 6 7 8 9 12 14 16 </Edges>
+    <Faces>1 4 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="4">
+    <Vertices>1 4 </Vertices>
+    <Edges>1 2 5 6 10 13 19 </Edges>
+    <Faces>2 3 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="5">
+    <Vertices>2 4 </Vertices>
+    <Edges>4 1 3 6 7 9 10 13 19 </Edges>
+    <Faces>2 5 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="6">
+    <Vertices>3 4 </Vertices>
+    <Edges>4 5 2 3 8 10 12 13 14 16 19 </Edges>
+    <Faces>3 7 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="7">
+    <Vertices>2 5 </Vertices>
+    <Edges>1 3 5 8 9 11 15 21 </Edges>
+    <Faces>4 6 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="8">
+    <Vertices>3 5 </Vertices>
+    <Edges>7 2 3 6 11 12 14 15 16 21 </Edges>
+    <Faces>4 8 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="9">
+    <Vertices>2 6 </Vertices>
+    <Edges>1 3 5 7 10 11 16 17 18 22 </Edges>
+    <Faces>5 6 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="10">
+    <Vertices>4 6 </Vertices>
+    <Edges>9 4 5 6 11 13 16 17 18 19 22 </Edges>
+    <Faces>5 11 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="11">
+    <Vertices>5 6 </Vertices>
+    <Edges>9 10 7 8 15 16 17 18 21 22 </Edges>
+    <Faces>6 13 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="12">
+    <Vertices>3 7 </Vertices>
+    <Edges>2 3 6 8 13 14 16 17 20 24 </Edges>
+    <Faces>7 9 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="13">
+    <Vertices>4 7 </Vertices>
+    <Edges>12 4 5 6 10 17 19 20 24 </Edges>
+    <Faces>7 12 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="14">
+    <Vertices>3 8 </Vertices>
+    <Edges>2 3 6 8 12 15 16 18 19 20 23 </Edges>
+    <Faces>8 10 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="15">
+    <Vertices>5 8 </Vertices>
+    <Edges>14 7 8 11 18 19 20 21 23 </Edges>
+    <Faces>8 14 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="17">
+    <Vertices>6 7 </Vertices>
+    <Edges>12 13 9 10 11 16 18 20 22 24 </Edges>
+    <Faces>9 15 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="16">
+    <Vertices>3 6 </Vertices>
+    <Edges>9 10 11 2 3 6 8 12 14 17 18 22 </Edges>
+    <Faces>9 10 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="19">
+    <Vertices>4 8 </Vertices>
+    <Edges>14 15 18 4 5 6 10 13 20 23 </Edges>
+    <Faces>11 12 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="18">
+    <Vertices>6 8 </Vertices>
+    <Edges>14 15 9 10 11 16 17 19 20 22 23 </Edges>
+    <Faces>10 11 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="21">
+    <Vertices>5 9 </Vertices>
+    <Edges>7 8 11 15 22 23 24 </Edges>
+    <Faces>13 14 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="20">
+    <Vertices>7 8 </Vertices>
+    <Edges>14 15 18 19 12 13 17 23 24 </Edges>
+    <Faces>12 16 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="23">
+    <Vertices>8 9 </Vertices>
+    <Edges>21 22 14 15 18 19 20 24 </Edges>
+    <Faces>14 16 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="22">
+    <Vertices>6 9 </Vertices>
+    <Edges>21 9 10 11 16 17 18 23 24 </Edges>
+    <Faces>13 15 </Faces>
+  </Edge>
+  <Edge eta="0.0" index="24">
+    <Vertices>7 9 </Vertices>
+    <Edges>21 22 23 12 13 17 20 </Edges>
+    <Faces>15 16 </Faces>
+  </Edge>
+  <Face index="1">
+    <Vertices>1 2 3 </Vertices>
+    <Edges>1 2 3 </Edges>
+    <Faces>2 3 4 </Faces>
+  </Face>
+  <Face index="2">
+    <Vertices>1 2 4 </Vertices>
+    <Edges>1 4 5 </Edges>
+    <Faces>1 3 5 </Faces>
+  </Face>
+  <Face index="3">
+    <Vertices>1 3 4 </Vertices>
+    <Edges>2 4 6 </Edges>
+    <Faces>1 2 7 </Faces>
+  </Face>
+  <Face index="4">
+    <Vertices>2 3 5 </Vertices>
+    <Edges>3 7 8 </Edges>
+    <Faces>1 6 8 </Faces>
+  </Face>
+  <Face index="5">
+    <Vertices>2 4 6 </Vertices>
+    <Edges>5 9 10 </Edges>
+    <Faces>2 6 11 </Faces>
+  </Face>
+  <Face index="6">
+    <Vertices>2 5 6 </Vertices>
+    <Edges>7 9 11 </Edges>
+    <Faces>4 5 13 </Faces>
+  </Face>
+  <Face index="7">
+    <Vertices>3 4 7 </Vertices>
+    <Edges>6 12 13 </Edges>
+    <Faces>3 9 12 </Faces>
+  </Face>
+  <Face index="8">
+    <Vertices>3 5 8 </Vertices>
+    <Edges>8 14 15 </Edges>
+    <Faces>4 10 14 </Faces>
+  </Face>
+  <Face index="9">
+    <Vertices>3 6 7 </Vertices>
+    <Edges>16 12 17 </Edges>
+    <Faces>7 10 15 </Faces>
+  </Face>
+  <Face index="10">
+    <Vertices>3 6 8 </Vertices>
+    <Edges>16 14 18 </Edges>
+    <Faces>9 8 11 </Faces>
+  </Face>
+  <Face index="11">
+    <Vertices>4 6 8 </Vertices>
+    <Edges>10 19 18 </Edges>
+    <Faces>5 10 12 </Faces>
+  </Face>
+  <Face index="12">
+    <Vertices>4 7 8 </Vertices>
+    <Edges>13 19 20 </Edges>
+    <Faces>7 11 16 </Faces>
+  </Face>
+  <Face index="13">
+    <Vertices>5 6 9 </Vertices>
+    <Edges>11 21 22 </Edges>
+    <Faces>6 14 15 </Faces>
+  </Face>
+  <Face index="14">
+    <Vertices>5 8 9 </Vertices>
+    <Edges>15 21 23 </Edges>
+    <Faces>8 13 16 </Faces>
+  </Face>
+  <Face index="15">
+    <Vertices>6 7 9 </Vertices>
+    <Edges>17 22 24 </Edges>
+    <Faces>9 13 16 </Faces>
+  </Face>
+  <Face index="16">
+    <Vertices>7 8 9 </Vertices>
+    <Edges>20 24 23 </Edges>
+    <Faces>12 15 14 </Faces>
+  </Face>
+</Triangulation>
