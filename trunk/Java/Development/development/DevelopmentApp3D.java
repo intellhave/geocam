@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.JRViewer.ContentType;
 import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
@@ -57,32 +58,8 @@ public class DevelopmentApp3D {
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
       double rand = Math.random(); //random return value is in [0,1)
-      Length.at(e).setValue(2); 
+      Length.at(e).setValue(1.5+rand); 
     }
-    
-    /*//print some tetra info
-    System.out.printf("\n\nTOP DIM SIMPLEX INFO\n");
-    
-    i = Triangulation.tetraTable.keySet().iterator();
-    while(i.hasNext()){
-      Integer key = i.next();
-      Tetra t = Triangulation.tetraTable.get(key);
-      
-      System.out.printf("Tetra %d: \n",key);
-      System.out.printf("   Num local tetras: %d\n", t.getLocalTetras().size());
-      System.out.printf("   Volume: %f\n",Volume.valueAt(t)); 
-      
-      //coords
-      System.out.printf("   Coords: ");
-      Iterator<Vertex> j = t.getLocalVertices().iterator();
-      while(j.hasNext()){
-        Vertex v = j.next();
-        System.out.printf("[v%d: (",v.getIndex());
-        System.out.print(Coord3D.coordAt(v,t));
-        System.out.print(")]");
-      }
-      System.out.printf("\n");
-    }*/
     
     //pick some arbitrary tetra and source point
     i = Triangulation.tetraTable.keySet().iterator();
@@ -107,6 +84,8 @@ public class DevelopmentApp3D {
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
     jrv.setContent(sgc_root_);
+    jrv.addVRSupport();
+    jrv.addContentSupport(ContentType.TerrainAligned);
     jrv.registerPlugin(new ContentAppearance());
     jrv.registerPlugin(new ContentLoader());
     jrv.registerPlugin(new ContentTools());
@@ -153,21 +132,28 @@ public class DevelopmentApp3D {
     //make sure we are within bounding box
     //if(isOutsideBoundingBox(oriented_tetra)){ return; }
     
-    //make clipped embeddedface
-    //EmbeddedFace origtetra = new EmbeddedFace(efpts);
-    //EmbeddedFace cliptetra = null;
-    //if(current_frustum != null){ cliptetra = current_frustum.clip(origtetra); }
-    //else{ cliptetra = origtetra; }
+    //clip the tetra by the current frustum
+    ArrayList<EmbeddedFace> cliptetra = new ArrayList<EmbeddedFace>();
     
-    //quit if tetra is completely obscured
-    //if(cliptetra == null){ return; }
+    if(current_frustum != null){
+      //get list of EmbeddedFaces by clipping with Frustum3D and using ConvexHull3D
+      ArrayList<Vector> cliptetra_points = current_frustum.clipFace(oriented_tetra);
+      if(cliptetra_points.size() < 4){ return; } //quit this branch if cliptetra has no faces
+      ConvexHull3D ch3d = new ConvexHull3D(cliptetra_points);
+      cliptetra = ch3d.getFaces();
+      
+    }else{
+      //get list of EmbeddedFaces directly from oriented_tetra
+      for(int j=0; j<4; j++){
+        OrientedFace of = oriented_tetra.getOrientedFace(j);
+        cliptetra.add(new EmbeddedFace(of.getVector(0), of.getVector(1), of.getVector(2)));
+      }
+    }
     
     //add clipped tetra to display
     Color color = Color.getHSBColor((float)cur_tetra.getIndex()/(float)Triangulation.tetraTable.size(), 0.5f, 0.9f);
     if(cur_tetra == source_tetra_){ color = Color.WHITE; }
-    SceneGraphComponent sgc_new_tetra = sgcFromTetra(cur_tetra,new_trans,color);
-    //sgc_new_tetra.setGeometry(clipface.getGeometry(color));
-    //sgc_new_tetra.setAppearance(getFaceAppearance(0.5f));
+    SceneGraphComponent sgc_new_tetra = sgcFromEFList(cliptetra, color);
     sgc_devmap.addChild(sgc_new_tetra);
     
     //see which faces to continue developing on, if any
@@ -185,7 +171,7 @@ public class DevelopmentApp3D {
       if(next_tetra == cur_tetra){ next_tetra = it.next(); }
       
       //intersect frustums
-      Frustum3D frust = new Frustum3D(of.getVect(0), of.getVect(1), of.getVect(2));
+      Frustum3D frust = new Frustum3D(of.getVector(0), of.getVector(1), of.getVector(2));
       Frustum3D new_frust = null;
       if(current_frustum == null){ new_frust = frust; }
       else{ new_frust = Frustum3D.intersect(frust, current_frustum); }
@@ -194,125 +180,48 @@ public class DevelopmentApp3D {
       //develop off of oriented_face
       iterateDevelopment(sgc_devmap, depth+1, next_tetra, f, new_frust, new_trans);
     }
-    
   }
   
-  /*public static SceneGraphComponent sgcFromPoints(Vector...points){
-    
-    //create the sgc
-    SceneGraphComponent sgc_points = new SceneGraphComponent();
-    
-    //create appearance
-    Appearance app_points = new Appearance();
-    
-    //set some basic attributes
-    app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
-    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
-    
-    //set point shader
-    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_points, true);
-    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
-    dps.setSpheresDraw(true);
-    dps.setPointRadius(0.05);
-    dps.setDiffuseColor(Color.BLUE);
-    
-    //set appearance
-    sgc_points.setAppearance(app_points);
-    
-    //set vertlist
-    double[][] vertlist = new double[points.length][3];
-    for(int i=0; i<points.length; i++){
-      vertlist[i] = new double[]{ points[i].getComponent(0), points[i].getComponent(1), points[i].getComponent(2) };
-    }
-    
-    //create geometry with pointsetfactory
-    PointSetFactory psf = new PointSetFactory();
-    psf.setVertexCount(points.length);
-    psf.setVertexCoordinates(vertlist);
-    psf.update();
-    
-    //set geometry
-    sgc_points.setGeometry(psf.getGeometry());
-    
-    //return
-    return sgc_points;
-  }*/
-  
-  public static SceneGraphComponent sgcFromTetra(Tetra tetra, AffineTransformation affineTrans, Color color){
+  public static SceneGraphComponent sgcFromEFList(ArrayList<EmbeddedFace> eflist, Color color){
     
     //create a sgc for the tetra, after applying specified affine transformation
-    SceneGraphComponent sgc_tetra = new SceneGraphComponent();
+    SceneGraphComponent sgc = new SceneGraphComponent();
     
     //create appearance
-    Appearance app_tetra = new Appearance();
+    Appearance app = new Appearance();
     
     //set some basic attributes
-    app_tetra.setAttribute(CommonAttributes.FACE_DRAW, true);
-    app_tetra.setAttribute(CommonAttributes.EDGE_DRAW, true);
-    app_tetra.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    app_tetra.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
-    app_tetra.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    app.setAttribute(CommonAttributes.FACE_DRAW, true);
+    app.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
     
     //set shaders
-    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_tetra, true);
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app, true);
     
     //line shader
     DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
     dls.setTubeDraw(false);
+    dls.setLineWidth(0.0);
     dls.setDiffuseColor(Color.BLACK);
     
     //polygon shader
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
     dps.setDiffuseColor(color);
-    dps.setTransparency(0.6d);
+    dps.setTransparency(0.9d);
     
     //set appearance
-    sgc_tetra.setAppearance(app_tetra);
+    sgc.setAppearance(app);
 
-    //create list of verts
-    double[][] vertlist = new double[4][3];
-    
-    int count = 0;
-    Iterator<Vertex> i = tetra.getLocalVertices().iterator();
-    
-    while(i.hasNext()){
-      Vertex v = i.next();
-      
-      Vector pt = null;
-      try { pt = affineTrans.affineTransPoint(Coord3D.coordAt(v,tetra)); } 
-      catch (Exception e) { e.printStackTrace(); }
-      
-      vertlist[count] = new double[] { pt.getComponent(0), pt.getComponent(1), pt.getComponent(2)};
-      count++;
+    Iterator<EmbeddedFace> ief = eflist.iterator();
+    while(ief.hasNext()){
+      EmbeddedFace ef = ief.next();
+      SceneGraphComponent sgc_child = new SceneGraphComponent();
+      sgc_child.setGeometry(ef.getGeometry(color));
+      sgc.addChild(sgc_child);
     }
     
-    //set combinatorics
-    int[][] facelist = new int[][] {
-        new int[] {0,2,1}, new int[] {0,2,3},
-        new int[] {2,1,3}, new int[] {1,0,3}};
-    
-    int[][] edgelist = new int[][] {
-        new int[] {0,2}, new int[] {2,1}, new int[] {1,0},
-        new int[] {0,3}, new int[] {1,3}, new int[] {2,3}};
-    
-    //use face factory to create geometry
-    IndexedFaceSetFactory ifsf_tetra = new IndexedFaceSetFactory();
-    
-    ifsf_tetra.setVertexCount(4);
-    ifsf_tetra.setVertexCoordinates(vertlist);
-    
-    ifsf_tetra.setFaceCount(4);
-    ifsf_tetra.setFaceIndices(facelist);
-    
-    ifsf_tetra.setEdgeCount(6);
-    ifsf_tetra.setEdgeIndices(edgelist);
-    
-    ifsf_tetra.update();
-    
-    //set geometry
-    sgc_tetra.setGeometry(ifsf_tetra.getGeometry());
-    
-    //return
-    return sgc_tetra;
+    return sgc;
   }
 }

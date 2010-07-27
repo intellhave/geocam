@@ -373,17 +373,14 @@ public class Frustum3D {
     return true;
   }
 
-  public ArrayList<Vector> clipFace(Tetra tetra, AffineTransformation T, double det) {
+  public ArrayList<Vector> clipFace(OrientedTetra otetra) {
+    
+    Tetra tetra = otetra.getTetra();
     
     HashMap<Vertex, Vector> vertexCoords = new HashMap<Vertex, Vector>();
-    List<Vertex> vertices = tetra.getLocalVertices();
     //System.out.println("vertices: " + vertices.get(0).equals(vertices.get(1)));
     for(int i=0; i<4; i++){
-      Vertex vert = vertices.get(i);
-      Vector vect = new Vector(0,0,0);
-      try { vect = T.affineTransPoint(Coord3D.coordAt(vert, tetra)); }
-      catch (Exception e) { e.printStackTrace(); }
-      vertexCoords.put(vert, vect);
+      vertexCoords.put(otetra.getVertex(i), otetra.getVector(i));
     }
     
     HashMap<Edge, Vector[]> edgeCoords = new HashMap<Edge, Vector[]>();
@@ -397,7 +394,12 @@ public class Frustum3D {
     }
     
     HashMap<Face, EmbeddedFace> faces = new HashMap<Face, EmbeddedFace>();
-    List<Face> faceList = tetra.getLocalFaces();
+    for(int i=0; i<4; i++){
+      OrientedFace of = otetra.getOrientedFace(i);
+      EmbeddedFace ef = new EmbeddedFace(of.getVector(0), of.getVector(1), of.getVector(2));
+      faces.put(of.getFace(), ef);
+    }
+    /*List<Face> faceList = tetra.getLocalFaces();
     for (Face face : faceList) {
       List<Vertex> vs = face.getLocalVertices();
       ArrayList<Vector> vectors = new ArrayList<Vector>();
@@ -406,7 +408,7 @@ public class Frustum3D {
       }
       EmbeddedFace f = new EmbeddedFace(vectors);
       faces.put(face, f);
-    }
+    }*/
     
     ArrayList<Vector> hullPoints = new ArrayList<Vector>();
     

@@ -16,7 +16,7 @@ public class ConvexHull3D {
   public ConvexHull3D(ArrayList<Vector> unsortedVectors) {
     unsorted = unsortedVectors;
     findHull(unsorted);
-    lastPoint = unsorted.get(0);
+    //lastPoint = unsorted.get(0);
   }
 
   public ConvexHull3D(Vector... vectors) {
@@ -59,9 +59,9 @@ public class ConvexHull3D {
   }
   
   // TODO for testing
-  public Vector lastPoint() {
+  /*public Vector lastPoint() {
     return lastPoint;
-  }
+  }*/
 
   public ArrayList<EmbeddedFace> getHiddenFaces() {
     return hiddenFaces;
@@ -89,12 +89,14 @@ public class ConvexHull3D {
    * addPoint method.
    */
   private void findHull(ArrayList<Vector> unsorted) {
+    
     int i = 3;
     Vector v1 = Vector.subtract(unsorted.get(1), unsorted.get(0));
     Vector v2 = Vector.subtract(unsorted.get(2), unsorted.get(0));
 
     while (coplanar(v1, v2, Vector.subtract(unsorted.get(i), unsorted.get(0)))) {
       i++;
+      if(i >= unsorted.size()){ return; }
     }
 
     EmbeddedFace f1 = new EmbeddedFace(unsorted.get(0), unsorted.get(1), unsorted.get(2));
@@ -120,19 +122,19 @@ public class ConvexHull3D {
     faces.add(f4);
 
     // TODO restore when done testing
-    // while(!unsorted.isEmpty()) {
-    // addPoint(unsorted.get(0));
-    // unsorted.remove(0);
-    // }
+    while(!unsorted.isEmpty()) {
+     addPoint(unsorted.get(0));
+     unsorted.remove(0);
+    }
   }
 
   // TODO remove after done testing
-  public boolean addPoint() {
+  /*public boolean addPoint() {
     if (unsorted.isEmpty())
       return false;
     addPoint(unsorted.get(0));
     return true;
-  }
+  }*/
   
   private boolean coplanar(Vector v1, Vector v2, Vector v3) {
     Vector cross1 = Vector.cross(v1, v2);
@@ -202,7 +204,7 @@ public class ConvexHull3D {
     faces.addAll(newFaces);
 
     // TODO remove after testing:
-    unsorted.remove(0);
+    //unsorted.remove(0);
   }
 
   /*
