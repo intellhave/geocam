@@ -134,80 +134,6 @@ public class DevelopmentApp3D {
     sgc_root_.addChild(sgc_devmap_);
 
   }
-  
-//struct holding info neccessary to develop off an edge
-  private static class DevelopmentFaceInfo{
-    public Vector vect0_,vect1_,vect2_;
-    public Vertex vert0_,vert1_,vert2_;
-    Face next_source_face_;
-    Tetra next_tetra_;
-
-    public DevelopmentFaceInfo(Vertex vert0, Vertex vert1, Vertex vert2, Vector vect0, Vector vect1, Vector vect2, Tetra next_tetra, Face next_source_face){
-      vect0_ = vect0; vect1_ = vect1; vect2_ = vect2;
-      vert0_ = vert0; vert1_ = vert1; vert2_ = vert2;
-      next_source_face_ = next_source_face;
-      next_tetra_ = next_tetra;
-    }
-  };
-  
-  public static ArrayList<DevelopmentFaceInfo> getDevelopmentFaceInfo(Tetra cur_tetra, Face source_face, AffineTransformation T){
-
-    //for each localFace f of cur_tetra, determine the transformed coordinates of
-    //vertices making up f, put them in CCW order (looking at f outside of cur_tetra)
-    //and find tetra incident to cur_tetra along f.
-    //put all of this information in a DevelopmentFaceInfo, and return list of all of these.
-
-    ArrayList<DevelopmentFaceInfo> retinfo = new ArrayList<DevelopmentFaceInfo>();
-    
-    Iterator<Face> fi = cur_tetra.getLocalFaces().iterator();
-    while(fi.hasNext()){
-      Face f = fi.next();
-      //don't do anything with source_face
-      if(f == source_face){ continue; }
-      
-      //find incident tetra
-      Iterator<Tetra> fit = f.getLocalTetras().iterator();
-      Tetra next_tetra = fit.next();
-      if(next_tetra == cur_tetra){ next_tetra = fit.next(); }
-      
-      //get shared vertices of cur_tetra and next_tetra (i.e. verts of f)
-      Vertex vert[] = new Vertex[4];
-      Iterator<Vertex> vi = f.getLocalVertices().iterator();
-      for(int i=0; i<3; i++){ vert[i] = vi.next(); }
-
-      //get non-common vertex on cur_tetra
-      LinkedList<Vertex> leftover = new LinkedList<Vertex>(cur_tetra.getLocalVertices());
-      leftover.removeAll(f.getLocalVertices());
-      vert[3] = leftover.get(0);
-      
-      //apply T to coordinates
-      Vector[] vect = new Vector[4];
-      for(int i=0; i<4; i++){
-        try { vect[i] = T.affineTransPoint(Coord3D.coordAt(vert[i], cur_tetra)); }
-        catch (Exception e) { e.printStackTrace(); }
-      }
-      
-      //make orientation of verts 0-1-2 is CCW
-      Vector u = Vector.subtract(vect[1], vect[0]);
-      Vector v = Vector.subtract(vect[2], vect[0]);
-      Vector w = Vector.subtract(vect[3], vect[0]);
-      //want cross(u,v) in opposite direction of w, i.e. (uxv).w < 0
-      double z = Vector.dot(Vector.cross(u,v),w);
-      if(z > 0){ //flip orientation
-        Vertex tempvert = vert[2];
-        Vector tempvect = vect[2];
-        vert[2] = vert[1];
-        vect[2] = vect[1];
-        vert[1] = tempvert;
-        vect[1] = tempvect;
-      }
-      
-      //add to list of dfinfos
-      retinfo.add(new DevelopmentFaceInfo(vert[0], vert[1], vert[2], vect[0], vect[1], vect[2], next_tetra, f));
-    }
-    
-    return retinfo;
-  }
 
   public static void iterateDevelopment(SceneGraphComponent sgc_devmap, int depth, Tetra cur_tetra, Face source_face, Frustum3D current_frustum, AffineTransformation current_trans){
     
@@ -221,19 +147,11 @@ public class DevelopmentApp3D {
     }
     new_trans.leftMultiply(current_trans);
     
-    //get transformed points from cur_tetra
-    ArrayList<Vector> efpts = new ArrayList<Vector>();
-    
-    Iterator<Vertex> i = cur_tetra.getLocalVertices().iterator();
-    while(i.hasNext()){
-      Vertex vert = i.next();
-      Vector pt = Coord3D.coordAt(vert, cur_tetra);
-      try{ efpts.add(new_trans.affineTransPoint(pt)); }
-      catch(Exception e1){ e1.printStackTrace(); }
-    }
+    //apply new_trans to tetra and orient the faces
+    OrientedTetra oriented_tetra = new OrientedTetra(cur_tetra, new_trans);
     
     //make sure we are within bounding box
-    //if(isOutsideBoundingBox(efpts)){ return; }
+    //if(isOutsideBoundingBox(oriented_tetra)){ return; }
     
     //make clipped embeddedface
     //EmbeddedFace origtetra = new EmbeddedFace(efpts);
@@ -251,26 +169,34 @@ public class DevelopmentApp3D {
     //sgc_new_tetra.setGeometry(clipface.getGeometry(color));
     //sgc_new_tetra.setAppearance(getFaceAppearance(0.5f));
     sgc_devmap.addChild(sgc_new_tetra);
-
+    
     //see which faces to continue developing on, if any
     if(depth >= max_recursion_depth_){ return; }
     
-    ArrayList<DevelopmentFaceInfo> dfInfoList = getDevelopmentFaceInfo(cur_tetra, source_face, new_trans);
-    for(int j=0; j<dfInfoList.size(); j++){
-      DevelopmentFaceInfo dfInfo = dfInfoList.get(j);
+    for(int j=0; j<4; j++){
+      OrientedFace of = oriented_tetra.getOrientedFace(j);
+      
+      Face f = of.getFace();
+      if(f == source_face){ continue; }
+      
+      //find tetra incident to cur_tetra through this face
+      Iterator<Tetra> it = f.getLocalTetras().iterator();
+      Tetra next_tetra = it.next();
+      if(next_tetra == cur_tetra){ next_tetra = it.next(); }
       
       //intersect frustums
-      Frustum3D frust = new Frustum3D(dfInfo.vect0_,dfInfo.vect1_,dfInfo.vect2_);
+      Frustum3D frust = new Frustum3D(of.getVect(0), of.getVect(1), of.getVect(2));
       Frustum3D new_frust = null;
       if(current_frustum == null){ new_frust = frust; }
       else{ new_frust = Frustum3D.intersect(frust, current_frustum); }
       if(new_frust == null){ continue; }
       
-      //iterate
-      iterateDevelopment(sgc_devmap, depth+1, dfInfo.next_tetra_, dfInfo.next_source_face_, new_frust, new_trans);
+      //develop off of oriented_face
+      iterateDevelopment(sgc_devmap, depth+1, next_tetra, f, new_frust, new_trans);
     }
     
   }
+  
   /*public static SceneGraphComponent sgcFromPoints(Vector...points){
     
     //create the sgc
@@ -321,7 +247,7 @@ public class DevelopmentApp3D {
     Appearance app_tetra = new Appearance();
     
     //set some basic attributes
-    app_tetra.setAttribute(CommonAttributes.FACE_DRAW, false);
+    app_tetra.setAttribute(CommonAttributes.FACE_DRAW, true);
     app_tetra.setAttribute(CommonAttributes.EDGE_DRAW, true);
     app_tetra.setAttribute(CommonAttributes.VERTEX_DRAW, false);
     app_tetra.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
