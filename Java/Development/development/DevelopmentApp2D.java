@@ -16,7 +16,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.jreality.geometry.PointSetFactory;
+import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.basic.Scene;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.scene.Appearance;
@@ -31,6 +33,7 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import de.jreality.util.CameraUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 
@@ -46,6 +49,8 @@ public class DevelopmentApp2D {
   private static Vector source_direction_;
   
   //options
+  private static Scene scene_;
+  
   private static final int max_max_recursion_depth_ = 200;
   private static int max_recursion_depth_ = 5;
   
@@ -242,9 +247,6 @@ public class DevelopmentApp2D {
     sgc_root_ = new SceneGraphComponent();
     sgc_root_.addTool(new ManifoldMovementTool());
     sgc_root_.addChild(sgc_origin);
-    
-    //compute geometry
-    computeDevelopmentMap();
 
     //jrviewer(s)
     JRViewer jrv = new JRViewer();
@@ -255,6 +257,12 @@ public class DevelopmentApp2D {
     //jrv.registerPlugin(new ContentTools());
     jrv.registerPlugin(new UIPanel_Options());
     jrv.setShowPanelSlots(true,false,false,false);
+    scene_ = jrv.getPlugin(Scene.class);
+    
+    //compute geometry
+    computeDevelopmentMap();
+    
+    //start viewer
     jrv.startup();
     
     JRViewer jrv_embedded = new JRViewer();
@@ -284,6 +292,7 @@ public class DevelopmentApp2D {
     //System.out.printf("Time to calculate: %d ms\n", System.currentTimeMillis() - t);
     
     sgc_root_.addChild(sgc_devmap_);
+    CameraUtility.encompass(scene_.getAvatarPath(), scene_.getContentPath(), scene_.getCameraPath(), 1.75, Pn.EUCLIDEAN);
 
   }
   
