@@ -6,13 +6,13 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
 
-public class RadiusOptNEHR extends NewtonsMethod {
+public class RadiusVEHRNewton extends NewtonsMethod {
   private Radius[] radii;
   private VEHR nehr;
   private VEHR.Partial[] partials;
   private VEHR.SecondPartial[][] secondPartials;
   
-  public RadiusOptNEHR() {
+  public RadiusVEHRNewton() {
     super();
     
     int i = 0;

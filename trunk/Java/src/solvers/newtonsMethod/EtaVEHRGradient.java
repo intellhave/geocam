@@ -2,7 +2,7 @@ package solvers.newtonsMethod;
 
 import util.Matrix;
 
-public class EtaVEHRGradient extends EtaOptNEHR {
+public class EtaVEHRGradient extends EtaVEHRNewton {
   private int dir = 1;
   @Override
   public Matrix hessian(double[] vars) {

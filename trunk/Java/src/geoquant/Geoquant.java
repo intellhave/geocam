@@ -6,13 +6,14 @@ import java.util.Observable;
 import triangulation.Simplex;
 
 /**
- * The Geoquant class serves as an abstract description of a geometric quantity that
- * exists on a Triangulation. A geoquant has several defining features:<br/>
- * 1. A geoquant has a position described by a set of simplices.<br/>
- *    (Ex. An angle is defined by the set {Vertex, Face})<br/>
- * 2. A geoquant's value is either set or is calculated from other geoquants.<br/>
- *    (Ex. An angle is calculated from the three Lengths of its defining face.
- * 
+ * An abstract description of a geometric quantity that
+ * exists on a Triangulation. A geoquant has several defining features:
+ * <ul>
+ * <li>A geoquant has a position described by a set of simplices.<br/>
+ *    (Ex. An angle is defined by the set {Vertex, Face})</li>
+ * <li>A geoquant's value is either set or is calculated from other geoquants.<br/>
+ *    (Ex. An angle is calculated from the three Lengths of its defining face.</li>
+ * </ul>
  * <p>
  * Geoquants employ the Observer/Observable pattern for calculating values.
  * When a geoquant A observes a geoquant B, A is said to be a dependent of B.

@@ -6,16 +6,16 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
 
-public class EtaOptNEHR extends NewtonsMethod {
+public class EtaVEHRNewton extends NewtonsMethod {
   private Eta[] etas;
   private VEHR nehr;
   private VEHR.Partial[] nehr_eta_partials;
   private VEHR.SecondPartial[][] nehr_eta_eta_partials;
   private VEHR.SecondPartial[][] nehr_rad_eta_partials;
   private Radius.Partial[][] radius_partials;
-  protected RadiusOptNEHR minRadii;
+  protected RadiusVEHRNewton minRadii;
   
-  public EtaOptNEHR() {
+  public EtaVEHRNewton() {
     super();
     
     int vertSize = Triangulation.vertexTable.size();
@@ -28,7 +28,7 @@ public class EtaOptNEHR extends NewtonsMethod {
     nehr_rad_eta_partials = new VEHR.SecondPartial[vertSize][edgeSize];
     radius_partials = new Radius.Partial[vertSize][edgeSize];
     
-    minRadii = new RadiusOptNEHR();
+    minRadii = new RadiusVEHRNewton();
     
     int i = 0;
     int j;

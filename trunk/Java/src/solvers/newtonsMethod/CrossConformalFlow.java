@@ -65,7 +65,7 @@ public class CrossConformalFlow {
   }
   
   public static void runMinRadii() {
-    RadiusOptNEHR flow = new RadiusOptNEHR();
+    RadiusVEHRNewton flow = new RadiusVEHRNewton();
     double[] log_radii = flow.getLogRadii();
     try {
       while(flow.stepMin(log_radii) > 0.00001) {
@@ -78,7 +78,7 @@ public class CrossConformalFlow {
   }
   
   public static void runMaxRadii() {
-    RadiusOptNEHR flow = new RadiusOptNEHR();
+    RadiusVEHRNewton flow = new RadiusVEHRNewton();
     double[] log_radii = flow.getLogRadii();
     try {
       while(flow.stepMax(log_radii) > 0.00001) {
@@ -91,7 +91,7 @@ public class CrossConformalFlow {
   }
   
   public static void runRadii() {
-    RadiusOptNEHR flow = new RadiusOptNEHR();
+    RadiusVEHRNewton flow = new RadiusVEHRNewton();
     double[] log_radii = flow.getLogRadii();
       while(flow.step(log_radii) > 0.00001) {
         printArray(log_radii);
@@ -101,7 +101,7 @@ public class CrossConformalFlow {
   }
   
   public static void runMinEtas() {
-    EtaOptNEHR flow = new EtaOptNEHR();
+    EtaVEHRNewton flow = new EtaVEHRNewton();
     double[] etas = flow.getEtas();
     try {
       while(flow.stepMin(etas) > 0.00001) {
@@ -114,7 +114,7 @@ public class CrossConformalFlow {
   }
   
   public static void runMaxEtas() {
-    EtaOptNEHR flow = new EtaOptNEHR();
+    EtaVEHRNewton flow = new EtaVEHRNewton();
     double[] etas = flow.getEtas();
     try {
       while(flow.stepMax(etas) > 0.00001) {
@@ -127,7 +127,7 @@ public class CrossConformalFlow {
   }
   
   public static void runEtas() {
-    EtaOptNEHR flow = new EtaOptNEHR();
+    EtaVEHRNewton flow = new EtaVEHRNewton();
     double[] etas = flow.getEtas();
       while(flow.step(etas) > 0.00001) {
         printArray(etas);
