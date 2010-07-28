@@ -4,49 +4,191 @@ import geoquant.*;
 import inputOutput.TriangulationIO;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 
-import de.jreality.geometry.IndexedFaceSetFactory;
-import de.jreality.geometry.PointSetFactory;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButton;
+
 import de.jreality.plugin.JRViewer;
-import de.jreality.plugin.JRViewer.ContentType;
-import de.jreality.plugin.content.ContentAppearance;
-import de.jreality.plugin.content.ContentLoader;
-import de.jreality.plugin.content.ContentTools;
+import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.pick.PickResult;
+import de.jreality.scene.tool.AbstractTool;
+import de.jreality.scene.tool.AxisState;
+import de.jreality.scene.tool.InputSlot;
+import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
-import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 import de.jreality.util.SceneGraphUtility;
+import de.jtem.jrworkspace.plugin.Controller;
+import de.jtem.jrworkspace.plugin.PluginInfo;
 
 import triangulation.*;
-import util.Matrix;
 
 public class DevelopmentApp3D {
   
   //position info
   private static Tetra source_tetra_;
   private static Vector source_point_;
-  //private static Vector source_direction_;
+  
+  //camera stuff
+  private static Viewer viewer_;
+  
+  private static Vector camera_position_; //should always be 0,0,0
+  private static Vector camera_up_;
+  private static Vector camera_forward_;
+  private static Vector camera_right_;
+  
+  private static SceneGraphPath camera_source_;
+  private static SceneGraphPath camera_free_;
   
   //options
   private static final int max_recursion_depth_ = 3;
   //private static final double movement_units_per_second_ = 1.0;
-  //private static final double movement_seconds_per_rotation_ = 2.0;
+  private static final double movement_seconds_per_rotation_ = 2.0;
   //private static final double bounding_cube_side_length_ = 4.0;
   
   //data
   private static SceneGraphComponent sgc_root_; 
   private static SceneGraphComponent sgc_devmap_;
+  private static SceneGraphComponent sgc_camera_;
+  
+
+  //USER INTERFACE
+  //==============================
+  static class UIPanel_CameraMode extends ViewShrinkPanelPlugin {
+
+    private void makeUIComponents() {
+
+      ButtonGroup group = new ButtonGroup();
+      
+      JRadioButton button;
+      
+      //source mode button
+      button = new JRadioButton("Source Point");
+      button.setSelected(true);
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e){ 
+          viewer_.setCameraPath(camera_source_); 
+          viewer_.render();
+        }
+      });
+      shrinkPanel.add(button);
+      group.add(button);
+      
+      //free mode button
+      button = new JRadioButton("Outside Development");
+      button.setSelected(false);
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e){ 
+          viewer_.setCameraPath(camera_free_); 
+          viewer_.render();
+        }
+      });
+      shrinkPanel.add(button);
+      group.add(button);
+      
+      //specify layout
+      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
+      shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),BoxLayout.Y_AXIS));
+    }
+    
+    @Override
+    public void install(Controller c) throws Exception {
+      makeUIComponents();
+      super.install(c);
+    }
+    
+    @Override
+    public PluginInfo getPluginInfo(){
+      PluginInfo info = new PluginInfo("Camera Mode", "");
+      return info;
+    }
+  };
+  
+  //TOOL(S) FOR MOVEMENT
+  //==============================
+  /*static class ManifoldMovementTool extends AbstractTool {
+
+    public ManifoldMovementTool() {
+      super(InputSlot.LEFT_BUTTON);
+      addCurrentSlot(InputSlot.getDevice("PointerTransformation"));
+    }
+    @Override
+    public void activate(ToolContext tc) { perform(tc); }
+
+    @Override
+    public void perform(ToolContext tc) {
+      
+      //tc.
+      
+      if(pr==null){ return; }
+      else if(pr.getPickType() == PickResult.PICK_TYPE_FACE){
+        //if(source_face_ != pr.getIndex()){ System.out.printf("New source_face_: %d\n", pr.getIndex()); }
+        source_face_ = facelist_[pr.getIndex()];
+        source_local_coords_ = source_face_.getLocalCoordsFromWorldCoords(pr.getObjectCoordinates());
+        computeVisibleGeometry();
+      }
+    }  
+  };*/
+  static class ManifoldMovementTool extends AbstractTool {
+    
+    private static long time; 
+    private static final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
+    
+    private static final InputSlot FORWARD_BACKWARD = InputSlot.getDevice("ForwardBackwardAxis");
+    private static final InputSlot LEFT_RIGHT = InputSlot.getDevice("LeftRightAxis");
+    private static final InputSlot SYSTEM_TIMER = InputSlot.SYSTEM_TIME;  
+    
+    public ManifoldMovementTool() {
+      super(FORWARD_BACKWARD, LEFT_RIGHT); //'activate' tool on F/B or L/R
+      addCurrentSlot(SYSTEM_TIMER); //'perform' tool on tick
+    }
+    
+    @Override
+    public void activate(ToolContext tc) {
+      time = tc.getTime(); //set initial time
+    }
+    
+    @Override
+    public void perform(ToolContext tc) {
+      
+      //get axis state
+      AxisState as_fb = tc.getAxisState(FORWARD_BACKWARD);
+      AxisState as_lr = tc.getAxisState(LEFT_RIGHT);
+      
+      //get dt and update time
+      long newtime = tc.getTime();
+      long dt = newtime - time;
+      time = newtime;
+
+      //move forward/backward
+      if(as_fb.isPressed()){
+        rotateCameraRightAxis(radians_per_millisecond*dt*as_fb.doubleValue());
+      }
+      
+      //move left/right
+      if(as_lr.isPressed()){
+        rotateCameraUpAxis(-radians_per_millisecond*dt*as_lr.doubleValue());
+      }
+      
+      //recompute
+      updateCamera();
+    }  
+  };
+  
   
   //MAIN
   //==============================
@@ -56,16 +198,20 @@ public class DevelopmentApp3D {
     
     Iterator<Integer> i = null;
     
-    //set edge lengths to 1
+    //set edge lengths
     i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
       double rand = Math.random(); //random return value is in [0,1)
-      Length.at(e).setValue(1.5+rand); 
+      Length.at(e).setValue(1.5); 
     }
     
-    //pick some arbitrary tetra and source point
+    //set up sgc_root
+    sgc_root_ = new SceneGraphComponent();
+    sgc_root_.addTool(new ManifoldMovementTool());
+    
+    //pick some arbitrary tetra and source point, and compute geometry
     i = Triangulation.tetraTable.keySet().iterator();
     source_tetra_ = Triangulation.tetraTable.get(i.next());
     
@@ -75,14 +221,23 @@ public class DevelopmentApp3D {
       source_point_.add(Coord3D.coordAt(iv.next(), source_tetra_));
     }
     source_point_.scale(1.0f/4.0f);
-    
-    //set up sgc_root
-    sgc_root_ = new SceneGraphComponent();
-    //sgc_root_.addTool(new ManifoldMovementTool());
-    //sgc_root_.addChild(sgc_origin);
-    
-    //compute geometry
+
     computeDevelopmentMap();
+    
+    //make camera and sgc_camera
+    Camera camera = new Camera();
+    camera.setNear(.015);
+    camera.setFieldOfView(90);
+    
+    sgc_camera_ = SceneGraphUtility.createFullSceneGraphComponent("camera");
+    sgc_root_.addChild(sgc_camera_);
+    sgc_camera_.setCamera(camera);
+    
+    camera_position_ = new Vector(0,0,0);
+    camera_up_ = new Vector(0,1,0);
+    camera_forward_ = new Vector(0,0,-1);
+    camera_right_ = new Vector(1,0,0);
+    updateCamera();
     
     //jrviewer
     JRViewer jrv = new JRViewer();
@@ -90,32 +245,19 @@ public class DevelopmentApp3D {
     jrv.setContent(sgc_root_);
     //jrv.addVRSupport();
     //jrv.addContentSupport(ContentType.TerrainAligned);
-    jrv.registerPlugin(new ContentAppearance());
-    jrv.registerPlugin(new ContentLoader());
-    jrv.registerPlugin(new ContentTools());
-    
-    //see jreality/src-tutorial/de.jreality.tutorial.scene/CameraPathExample
-    //for camera stuff
-    
-    /*
-    final Viewer viewer = JRViewer.display(sgc_root_);
-    final SceneGraphPath campath = viewer.getCameraPath();
-    
-    Camera camera = new Camera();
-    camera.setNear(.015);
-    camera.setFieldOfView(10);
-    // set up second camera path, ending in the moving point on the curve
-    
-    SceneGraphComponent child = SceneGraphUtility.createFullSceneGraphComponent("point");
-    
-    sgc_root_.addChild(child);
-    child.setCamera(camera);
-    final SceneGraphPath campath2 = SceneGraphUtility.getPathsBetween(viewer.getSceneRoot(), child).get(0);
-    campath2.push(child.getCamera());
-    viewer.setCameraPath(campath2);*/
-    
-    
+    //jrv.registerPlugin(new ContentAppearance());
+    //jrv.registerPlugin(new ContentLoader());
+    //jrv.registerPlugin(new ContentTools());
+    jrv.registerPlugin(new UIPanel_CameraMode());
+    jrv.setShowPanelSlots(true,false,false,false);
     jrv.startup();
+    
+    //make jrviewer use the camera we set up
+    viewer_ = jrv.getViewer();
+    camera_free_ = viewer_.getCameraPath();
+    camera_source_ = SceneGraphUtility.getPathsBetween(viewer_.getSceneRoot(), sgc_camera_).get(0);
+    camera_source_.push(sgc_camera_.getCamera());
+    viewer_.setCameraPath(camera_source_);
   }
   
   //ALGORITHM
@@ -208,6 +350,44 @@ public class DevelopmentApp3D {
     }
   }
   
+  //AUXILLIARY METHODS
+  //==============================
+  private static void rotateCameraRightAxis(double theta){
+    
+    //up = +theta, down = -theta
+    double c = Math.cos(theta);
+    double s = Math.sin(theta);
+
+    //f'=fc+us, u'=-fs+uc
+    Vector new_forward = Vector.add(Vector.scale(camera_forward_, c), Vector.scale(camera_up_, s));
+    Vector new_up = Vector.add(Vector.scale(camera_forward_, -s), Vector.scale(camera_up_, c));
+    camera_forward_ = Vector.normalize(new_forward);
+    camera_up_ = Vector.normalize(new_up);
+  }
+
+  private static void rotateCameraUpAxis(double theta){
+  
+    //left = +theta, right = -theta
+    double c = Math.cos(theta);
+    double s = Math.sin(theta);
+    
+    //f'=fc-rs, r'=fs+rc
+    Vector new_forward = Vector.add(Vector.scale(camera_forward_, c), Vector.scale(camera_right_, -s));
+    Vector new_right = Vector.add(Vector.scale(camera_forward_, s), Vector.scale(camera_right_, c));
+    camera_forward_ = Vector.normalize(new_forward);
+    camera_right_ = Vector.normalize(new_right);
+  }
+  
+  private static void updateCamera(){
+    de.jreality.math.Matrix M = new de.jreality.math.Matrix(
+        camera_right_.getComponent(0),camera_up_.getComponent(0),camera_forward_.getComponent(0),camera_position_.getComponent(0),
+        camera_right_.getComponent(1),camera_up_.getComponent(1),camera_forward_.getComponent(1),camera_position_.getComponent(1),
+        camera_right_.getComponent(2),camera_up_.getComponent(2),camera_forward_.getComponent(2),camera_position_.getComponent(2),
+        0,0,0,1
+    );
+    M.assignTo(sgc_camera_);
+  }
+  
   public static SceneGraphComponent sgcFromEFList(ArrayList<EmbeddedFace> eflist, Color color){
     
     //create a sgc for the tetra, after applying specified affine transformation
@@ -235,7 +415,7 @@ public class DevelopmentApp3D {
     //polygon shader
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
     dps.setDiffuseColor(color);
-    dps.setTransparency(0.9d);
+    dps.setTransparency(0.92d);
     
     //set appearance
     sgc.setAppearance(app);
