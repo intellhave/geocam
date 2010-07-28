@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
@@ -21,7 +22,6 @@ import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
 import de.jreality.scene.SceneGraphComponent;
-import de.jreality.scene.pick.PickResult;
 import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.AxisState;
 import de.jreality.scene.tool.InputSlot;
@@ -31,6 +31,7 @@ import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import de.jreality.tools.RotateTool;
 import de.jreality.util.SceneGraphUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
@@ -43,6 +44,9 @@ public class DevelopmentApp3D {
   private static Tetra source_tetra_;
   private static Vector source_point_;
   
+  //objects
+  //private static HashMap<Tetra,ArrayList<ManifoldObject>> objects_;
+  
   //camera stuff
   private static Viewer viewer_;
   
@@ -51,6 +55,7 @@ public class DevelopmentApp3D {
   private static Vector camera_forward_;
   private static Vector camera_right_;
   
+  private static final boolean camera_source_is_default_ = false;
   private static SceneGraphPath camera_source_;
   private static SceneGraphPath camera_free_;
   
@@ -73,12 +78,11 @@ public class DevelopmentApp3D {
     private void makeUIComponents() {
 
       ButtonGroup group = new ButtonGroup();
-      
       JRadioButton button;
       
       //source mode button
       button = new JRadioButton("Source Point");
-      button.setSelected(true);
+      button.setSelected(camera_source_is_default_);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){ 
           viewer_.setCameraPath(camera_source_); 
@@ -90,7 +94,7 @@ public class DevelopmentApp3D {
       
       //free mode button
       button = new JRadioButton("Outside Development");
-      button.setSelected(false);
+      button.setSelected(!camera_source_is_default_);
       button.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e){ 
           viewer_.setCameraPath(camera_free_); 
@@ -113,61 +117,31 @@ public class DevelopmentApp3D {
     
     @Override
     public PluginInfo getPluginInfo(){
-      PluginInfo info = new PluginInfo("Camera Mode", "");
-      return info;
+      return new PluginInfo("Camera Mode", "");
     }
   };
   
   //TOOL(S) FOR MOVEMENT
   //==============================
-  /*static class ManifoldMovementTool extends AbstractTool {
-
-    public ManifoldMovementTool() {
-      super(InputSlot.LEFT_BUTTON);
-      addCurrentSlot(InputSlot.getDevice("PointerTransformation"));
-    }
-    @Override
-    public void activate(ToolContext tc) { perform(tc); }
-
-    @Override
-    public void perform(ToolContext tc) {
-      
-      //tc.
-      
-      if(pr==null){ return; }
-      else if(pr.getPickType() == PickResult.PICK_TYPE_FACE){
-        //if(source_face_ != pr.getIndex()){ System.out.printf("New source_face_: %d\n", pr.getIndex()); }
-        source_face_ = facelist_[pr.getIndex()];
-        source_local_coords_ = source_face_.getLocalCoordsFromWorldCoords(pr.getObjectCoordinates());
-        computeVisibleGeometry();
-      }
-    }  
-  };*/
-  static class ManifoldMovementTool extends AbstractTool {
+  
+  static class CameraRotationTool_RightAxis extends AbstractTool {
     
     private static long time; 
     private static final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
-    
     private static final InputSlot FORWARD_BACKWARD = InputSlot.getDevice("ForwardBackwardAxis");
-    private static final InputSlot LEFT_RIGHT = InputSlot.getDevice("LeftRightAxis");
     private static final InputSlot SYSTEM_TIMER = InputSlot.SYSTEM_TIME;  
     
-    public ManifoldMovementTool() {
-      super(FORWARD_BACKWARD, LEFT_RIGHT); //'activate' tool on F/B or L/R
+    public CameraRotationTool_RightAxis() {
+      super(FORWARD_BACKWARD); //'activate' tool on F/B or L/R
       addCurrentSlot(SYSTEM_TIMER); //'perform' tool on tick
     }
-    
-    @Override
-    public void activate(ToolContext tc) {
-      time = tc.getTime(); //set initial time
-    }
-    
-    @Override
-    public void perform(ToolContext tc) {
-      
+
+    //set initial time
+    @Override public void activate(ToolContext tc) { time = tc.getTime(); }
+
+    @Override public void perform(ToolContext tc) {
       //get axis state
       AxisState as_fb = tc.getAxisState(FORWARD_BACKWARD);
-      AxisState as_lr = tc.getAxisState(LEFT_RIGHT);
       
       //get dt and update time
       long newtime = tc.getTime();
@@ -177,16 +151,41 @@ public class DevelopmentApp3D {
       //move forward/backward
       if(as_fb.isPressed()){
         rotateCameraRightAxis(radians_per_millisecond*dt*as_fb.doubleValue());
+        updateCamera();
       }
+    }  
+  };
+  
+  static class CameraRotationTool_UpAxis extends AbstractTool {
+    
+    private static long time; 
+    private static final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
+    private static final InputSlot LEFT_RIGHT = InputSlot.getDevice("LeftRightAxis");
+    private static final InputSlot SYSTEM_TIMER = InputSlot.SYSTEM_TIME;  
+    
+    public CameraRotationTool_UpAxis() {
+      super(LEFT_RIGHT); //'activate' tool on F/B or L/R
+      addCurrentSlot(SYSTEM_TIMER); //'perform' tool on tick
+    }
+    
+    //set initial time
+    @Override public void activate(ToolContext tc) { time = tc.getTime(); } 
+    
+    @Override public void perform(ToolContext tc) {
+      //get axis state
+      AxisState as_lr = tc.getAxisState(LEFT_RIGHT);
+      
+      //get dt and update time
+      long newtime = tc.getTime();
+      long dt = newtime - time;
+      time = newtime;
       
       //move left/right
-      if(as_lr.isPressed()){
+      if(as_lr.isPressed()){ 
         rotateCameraUpAxis(-radians_per_millisecond*dt*as_lr.doubleValue());
+        updateCamera();
       }
-      
-      //recompute
-      updateCamera();
-    }  
+    }
   };
   
   
@@ -203,13 +202,14 @@ public class DevelopmentApp3D {
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
-      double rand = Math.random(); //random return value is in [0,1)
-      Length.at(e).setValue(1.5); 
+      //double rand = Math.random(); //random return value is in [0,1)
+      Length.at(e).setValue(2);//1.5+rand); 
     }
     
     //set up sgc_root
     sgc_root_ = new SceneGraphComponent();
-    sgc_root_.addTool(new ManifoldMovementTool());
+    sgc_root_.addTool(new CameraRotationTool_UpAxis());
+    sgc_root_.addTool(new CameraRotationTool_RightAxis());
     
     //pick some arbitrary tetra and source point, and compute geometry
     i = Triangulation.tetraTable.keySet().iterator();
@@ -227,7 +227,7 @@ public class DevelopmentApp3D {
     //make camera and sgc_camera
     Camera camera = new Camera();
     camera.setNear(.015);
-    camera.setFieldOfView(90);
+    camera.setFieldOfView(60);
     
     sgc_camera_ = SceneGraphUtility.createFullSceneGraphComponent("camera");
     sgc_root_.addChild(sgc_camera_);
@@ -243,6 +243,7 @@ public class DevelopmentApp3D {
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
     jrv.setContent(sgc_root_);
+    sgc_root_.addTool(new RotateTool());
     //jrv.addVRSupport();
     //jrv.addContentSupport(ContentType.TerrainAligned);
     //jrv.registerPlugin(new ContentAppearance());
@@ -257,7 +258,9 @@ public class DevelopmentApp3D {
     camera_free_ = viewer_.getCameraPath();
     camera_source_ = SceneGraphUtility.getPathsBetween(viewer_.getSceneRoot(), sgc_camera_).get(0);
     camera_source_.push(sgc_camera_.getCamera());
-    viewer_.setCameraPath(camera_source_);
+    
+    if(camera_source_is_default_){ viewer_.setCameraPath(camera_source_); }
+    else{ viewer_.setCameraPath(camera_free_); }
   }
   
   //ALGORITHM
@@ -352,9 +355,30 @@ public class DevelopmentApp3D {
   
   //AUXILLIARY METHODS
   //==============================
-  private static void rotateCameraRightAxis(double theta){
+  /*static private class ManifoldObject{
     
-    //up = +theta, down = -theta
+    Tetra tetra_;
+    Vector position_, forward_, up_, right_;
+    
+    public ManifoldObject(Tetra tetra, Vector position, Vector forward, Vector up, Vector right){
+      setPosition(tetra, position, forward, up, right);
+    }
+    
+    private void setPosition(Tetra tetra, Vector position, Vector forward, Vector up, Vector right){
+      tetra_ = tetra;
+      position_ = position;
+      forward_ = forward;
+      up_ = up;
+      right_ = right;
+    }
+    
+    public SceneGraphComponent getSGC(AffineTransformation T, Frustum3D frust){
+      return null;
+    }
+  };*/
+  
+  private static void rotateCameraRightAxis(double theta){
+
     double c = Math.cos(theta);
     double s = Math.sin(theta);
 
@@ -367,7 +391,6 @@ public class DevelopmentApp3D {
 
   private static void rotateCameraUpAxis(double theta){
   
-    //left = +theta, right = -theta
     double c = Math.cos(theta);
     double s = Math.sin(theta);
     
