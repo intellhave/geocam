@@ -15,6 +15,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 
+import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.Appearance;
@@ -29,6 +30,7 @@ import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
+import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 import de.jreality.tools.RotateTool;
@@ -60,7 +62,7 @@ public class DevelopmentApp3D {
   private static SceneGraphPath camera_free_;
   
   //options
-  private static final int max_recursion_depth_ = 3;
+  private static final int max_recursion_depth_ = 6;
   //private static final double movement_units_per_second_ = 1.0;
   private static final double movement_seconds_per_rotation_ = 2.0;
   //private static final double bounding_cube_side_length_ = 4.0;
@@ -203,7 +205,7 @@ public class DevelopmentApp3D {
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
       //double rand = Math.random(); //random return value is in [0,1)
-      Length.at(e).setValue(2);//1.5+rand); 
+      Length.at(e).setValue(3); 
     }
     
     //set up sgc_root
@@ -278,14 +280,16 @@ public class DevelopmentApp3D {
     sgc_devmap_ = new SceneGraphComponent();
     
     //long t = System.currentTimeMillis();
-    iterateDevelopment(sgc_devmap_,0,source_tetra_,null,null,T);
+    ArrayList<Vector> source_images = new ArrayList<Vector>();
+    iterateDevelopment(source_images, sgc_devmap_,0,source_tetra_,null,null,T);
     //System.out.printf("Time to calculate: %d ms\n", System.currentTimeMillis() - t);
     
+    sgc_devmap_.addChild(sgcFromPoints(source_images));
     sgc_root_.addChild(sgc_devmap_);
 
   }
 
-  public static void iterateDevelopment(SceneGraphComponent sgc_devmap, int depth, Tetra cur_tetra, Face source_face, Frustum3D current_frustum, AffineTransformation current_trans){
+  public static void iterateDevelopment(ArrayList<Vector> source_images, SceneGraphComponent sgc_devmap, int depth, Tetra cur_tetra, Face source_face, Frustum3D current_frustum, AffineTransformation current_trans){
     
     //note: source_face and current_frustum may be null
     
@@ -302,6 +306,21 @@ public class DevelopmentApp3D {
     
     //make sure we are within bounding box
     //if(isOutsideBoundingBox(oriented_tetra)){ return; }
+    
+    //add source images, if any
+    if(cur_tetra == source_tetra_){
+
+      Vector source_image = null;
+      try { source_image = new_trans.affineTransPoint(source_point_); }
+      catch (Exception e1) { e1.printStackTrace(); }
+      
+      boolean isVisible = true;
+      if(current_frustum != null){
+        isVisible = current_frustum.checkInterior(source_image);
+      }
+      
+      if(isVisible && (depth > 0)){ source_images.add(source_image); }
+    }
     
     //clip the tetra by the current frustum
     ArrayList<EmbeddedFace> cliptetra = new ArrayList<EmbeddedFace>();
@@ -349,7 +368,7 @@ public class DevelopmentApp3D {
       if(new_frust == null){ continue; }
       
       //develop off of oriented_face
-      iterateDevelopment(sgc_devmap, depth+1, next_tetra, f, new_frust, new_trans);
+      iterateDevelopment(source_images, sgc_devmap, depth+1, next_tetra, f, new_frust, new_trans);
     }
   }
   
@@ -410,6 +429,47 @@ public class DevelopmentApp3D {
     );
     M.assignTo(sgc_camera_);
   }
+
+  public static SceneGraphComponent sgcFromPoints(ArrayList<Vector> points){
+    
+    //create the sgc
+    SceneGraphComponent sgc_points = new SceneGraphComponent();
+    
+    //create appearance
+    Appearance app_points = new Appearance();
+    
+    //set some basic attributes
+    app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
+    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    
+    //set point shader
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_points, true);
+    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
+    dps.setSpheresDraw(true);
+    dps.setPointRadius(0.05);
+    dps.setDiffuseColor(Color.BLUE);
+    
+    //set appearance
+    sgc_points.setAppearance(app_points);
+    
+    //set vertlist
+    double[][] vertlist = new double[points.size()][3];
+    for(int i=0; i<points.size(); i++){
+      vertlist[i] = new double[]{ points.get(i).getComponent(0), points.get(i).getComponent(1), points.get(i).getComponent(2) };
+    }
+    
+    //create geometry with pointsetfactory
+    PointSetFactory psf = new PointSetFactory();
+    psf.setVertexCount(points.size());
+    psf.setVertexCoordinates(vertlist);
+    psf.update();
+    
+    //set geometry
+    sgc_points.setGeometry(psf.getGeometry());
+    
+    //return
+    return sgc_points;
+  }
   
   public static SceneGraphComponent sgcFromEFList(ArrayList<EmbeddedFace> eflist, Color color){
     
@@ -438,7 +498,7 @@ public class DevelopmentApp3D {
     //polygon shader
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
     dps.setDiffuseColor(color);
-    dps.setTransparency(0.92d);
+    dps.setTransparency(0.99d);
     
     //set appearance
     sgc.setAppearance(app);
