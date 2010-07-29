@@ -165,15 +165,11 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private AbstractAction showEtaDialog;
   private JDialog setEtaDialog;
   private AbstractAction showSetRadiiDialog;
-  private JLabel setRadiiLabel;
   private JLabel setEtaLabel;
-  private JTextField setRadiiTextField;
   private JTextField setEtaTextField;
-  private JButton okButton_SR;
   private JButton okButton_SE;
-  private JButton cancelButton_SR;
   private JButton cancelButton_SE;
-  private JDialog setRadiiDialog;
+  private RadiusSetDialog setRadiiDialog;
   private JMenuItem setEtaMenuItem;
   private JMenuItem setRadiiMenuItem;
   private JMenu editMenu;
@@ -384,6 +380,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     getSetEtaMenuItem().setEnabled(true);
     getSaveGeoquantsMenuItem().setEnabled(true);
     getSaveMenu().setEnabled(true);
+    getSetRadiiDialog().updateList();
     
     for(Alpha a : Geometry.getAlphas()) {
       a.setValue(0.0);
@@ -1379,48 +1376,11 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  return setEtaMenuItem;
   }
   
-  private JDialog getSetRadiiDialog() {
+  private RadiusSetDialog getSetRadiiDialog() {
 	  if(setRadiiDialog == null) {
-		  setRadiiDialog = new JDialog(this);
-		  GroupLayout setRadiiDialogLayout = new GroupLayout((JComponent)setRadiiDialog.getContentPane());
-		  setRadiiDialog.getContentPane().setLayout(setRadiiDialogLayout);
-		  setRadiiDialog.setTitle("Set Radii");
-		  setRadiiDialog.setResizable(false);
-		  setRadiiDialog.setPreferredSize(new java.awt.Dimension(279, 133));
-		  setRadiiDialog.setSize(279, 133);
-		  setRadiiDialogLayout.setHorizontalGroup(setRadiiDialogLayout.createSequentialGroup()
-		  	.addContainerGap()
-		  	.addComponent(getSetRadiiLabel(), GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-		  	.addGroup(setRadiiDialogLayout.createParallelGroup()
-		  	    .addGroup(GroupLayout.Alignment.LEADING, setRadiiDialogLayout.createSequentialGroup()
-		  	        .addComponent(getOkButton_SR(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-		  	        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-		  	        .addComponent(getCancelButton_SR(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
-		  	    .addGroup(GroupLayout.Alignment.LEADING, setRadiiDialogLayout.createSequentialGroup()
-		  	        .addPreferredGap(getOkButton_SR(), getSetRadiiTextField(), LayoutStyle.ComponentPlacement.INDENT)
-		  	        .addComponent(getSetRadiiTextField(), GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)))
-		  	.addContainerGap(6, Short.MAX_VALUE));
-		  setRadiiDialogLayout.setVerticalGroup(setRadiiDialogLayout.createSequentialGroup()
-		  	.addContainerGap()
-		  	.addGroup(setRadiiDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-		  	    .addComponent(getSetRadiiTextField(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-		  	    .addComponent(getSetRadiiLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-		  	.addGap(29)
-		  	.addGroup(setRadiiDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-		  	    .addComponent(getOkButton_SR(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-		  	    .addComponent(getCancelButton_SR(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-		  	.addContainerGap());
+		  setRadiiDialog = new RadiusSetDialog(this);
 	  }
 	  return setRadiiDialog;
-  }
-  
-  private JButton getCancelButton_SR() {
-	  if(cancelButton_SR == null) {
-		  cancelButton_SR = new JButton();
-		  cancelButton_SR.setText("Cancel");
-		  cancelButton_SR.setAction(new CloseSetRadiiDialog("Cancel"));
-	  }
-	  return cancelButton_SR;
   }
   
   private JButton getCancelButton_SE() {
@@ -1431,16 +1391,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     }
     return cancelButton_SE;
   }
-  
-  private JButton getOkButton_SR() {
-	  if(okButton_SR == null) {
-		  okButton_SR = new JButton();
-		  okButton_SR.setText("OK");
-		  okButton_SR.setAction(new CloseSetRadiiDialog("OK"));
-	  }
-	  return okButton_SR;
-  }
-  
+    
   private JButton getOkButton_SE() {
     if(okButton_SE == null) {
       okButton_SE = new JButton();
@@ -1450,26 +1401,11 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     return okButton_SE;
   }
   
-  private JTextField getSetRadiiTextField() {
-	  if(setRadiiTextField == null) {
-		  setRadiiTextField = new JTextField();
-	  }
-	  return setRadiiTextField;
-  }
-  
   private JTextField getSetEtaTextField() {
     if(setEtaTextField == null) {
       setEtaTextField = new JTextField();
     }
     return setEtaTextField;
-  }
-  
-  private JLabel getSetRadiiLabel() {
-	  if(setRadiiLabel == null) {
-		  setRadiiLabel = new JLabel();
-		  setRadiiLabel.setText("Set all radii to:");
-	  }
-	  return setRadiiLabel;
   }
     
   private JLabel getSetEtaLabel() {
@@ -1599,26 +1535,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  }
 	  return showYamabe3DDialog;
   }
-  
-  class CloseSetRadiiDialog extends AbstractAction {
-    public CloseSetRadiiDialog(String text) {
-      super(text, null);
-    }
-    public void actionPerformed(ActionEvent evt) {
-      if(getOkButton_SR().equals(evt.getSource())) {
-        try{
-          double rad_value = Double.parseDouble(getSetRadiiTextField().getText());
-          for(Radius r : Geometry.getRadii()) {
-            r.setValue(rad_value);
-          }
-          getPolygonPanel().repaint();
-        } catch(NumberFormatException e) {
-        }
-      }
-      getSetRadiiDialog().dispose();
-    }
-  }
-  
+    
   class CloseSetEtaDialog extends AbstractAction {
     public CloseSetEtaDialog(String text) {
       super(text, null);
@@ -2096,6 +2013,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  }
 	  return showLehrFlowDialog;
   }
-
+  
 }
 
