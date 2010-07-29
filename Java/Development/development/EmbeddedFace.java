@@ -95,31 +95,45 @@ public class EmbeddedFace {
     return ifsf.getGeometry();
   }
 
-  public Geometry getGeometry3D(double zheight) {
+  public Geometry getGeometry3D(Color color, double zheight) {
     
     int n = getNumberVertices();
-    double[][] ilsf_verts = new double[2*n][3];
-    int[][] ilsf_edges = new int[3*n][2];
-
+    double[][] ifsf_verts = new double[2*n][3];
+    int[][] ifsf_edges = new int[3*n][2];
+    int[][] ifsf_faces = new int[2][n];
+    
     for (int i=0; i<n; i++){
-      ilsf_verts[i] = new double[]{ getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1), -zheight };
-      ilsf_verts[i+n] = new double[]{ getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1), zheight };
+      ifsf_verts[i] = new double[]{ getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1), -zheight };
+      ifsf_verts[i+n] = new double[]{ getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1), zheight };
     }
     
     for(int i=0; i<n; i++){
       int j = (i+1)%n;
-      ilsf_edges[i] = new int[]{ i, j };
-      ilsf_edges[i+n] = new int[]{ i+n, j+n };
-      ilsf_edges[i+n+n] = new int[]{ i, i+n };
+      ifsf_edges[i] = new int[]{ i, j };
+      ifsf_edges[i+n] = new int[]{ i+n, j+n };
+      ifsf_edges[i+n+n] = new int[]{ i, i+n };
     }
-
-    IndexedLineSetFactory ilsf = new IndexedLineSetFactory();
-    ilsf.setVertexCount(ilsf_verts.length);
-    ilsf.setVertexCoordinates(ilsf_verts);
-    ilsf.setEdgeCount(ilsf_edges.length);
-    ilsf.setEdgeIndices(ilsf_edges);
-    ilsf.update();
-    return ilsf.getGeometry();
+    
+    for(int i=0; i<n; i++){
+      ifsf_faces[0][i] = i;
+      ifsf_faces[1][i] = n+(n-1)-i;
+    }
+    
+    Color[] colors = new Color[ifsf_faces.length];
+    for(int i = 0; i < ifsf_faces.length; i++) {
+      colors[i] = color;
+    }
+    
+    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+    ifsf.setVertexCount(ifsf_verts.length);
+    ifsf.setVertexCoordinates(ifsf_verts);
+    ifsf.setEdgeCount(ifsf_edges.length);
+    ifsf.setEdgeIndices(ifsf_edges);
+    ifsf.setFaceCount(ifsf_faces.length);
+    ifsf.setFaceIndices(ifsf_faces);
+    ifsf.setFaceColors(colors);
+    ifsf.update();
+    return ifsf.getGeometry();
   }
   
   

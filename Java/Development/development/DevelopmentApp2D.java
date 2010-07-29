@@ -5,11 +5,15 @@ import inputOutput.TriangulationIO;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -48,35 +52,46 @@ import util.Matrix;
 public class DevelopmentApp2D {
   
   //position info
+  //------------------------
   private static Face source_face_;
   private static Vector source_point_;
-  private static Vector source_direction_;
   
   //camera stuff
+  //------------------------
   private static Viewer viewer_;
+  private static Vector camera_forward_;
+  private static Vector camera_right_;
   private static SceneGraphPath camera_source_;
   private static SceneGraphPath camera_free_;
   private static SceneGraphComponent sgc_camera_;
   
   //options
+  //------------------------
+  //  appearance of faces
+  private static HashMap<Face,Color> color_scheme_;
+  //  objects
+  private static double object_radius_ = 0.03;
+  //  showing embedded mfld
+  private static boolean show_embedded_ = false;
+  //  simulated 3d mode
   private static boolean simulate_3D_ = true;
   private static boolean simulate_3D_is_default_ = true;
-  private static double simulated_3D_height_ = 0.1;
-  
-  private static final int max_max_recursion_depth_ = 200;
+  private static double simulated_3D_height_ = 0.08;
+  //  development options
+  private static final int max_max_recursion_depth_ = 200; //max for slider
   private static int max_recursion_depth_ = 5;
-  
-  private static final int max_bounding_square_side_length_ = 15;
+  private static final int max_bounding_square_side_length_ = 15; //max for slider
   private static int bounding_square_side_length_ = 3;
-  
+  //  movement options
   private static final double movement_units_per_second_ = 1.0;
   private static final double movement_seconds_per_rotation_ = 2.0;
   
-  
   //data
+  //------------------------
   private static Scene scene_;
-  private static SceneGraphComponent sgc_root_;  
-  private static SceneGraphComponent sgc_devmap_;  
+  private static JRViewer jrv_embedded_;
+  private static SceneGraphComponent sgc_root_;
+  private static SceneGraphComponent sgc_devmap_;
   
   //USER INTERFACE
   //==============================
@@ -88,38 +103,66 @@ public class DevelopmentApp2D {
     private void makeUIComponents() {
       
       //slider for recursion depth
-      ChangeListener cl_recdepth = new ChangeListener(){
+      JSlider slider_depth = new JSlider(1,max_max_recursion_depth_,max_recursion_depth_);
+      slider_depth.setMaximumSize(new Dimension(400,100));
+      slider_depth.setAlignmentX(0.0f);
+      border_depth.setTitle(String.format("Max Recursion Depth (%d)",max_recursion_depth_));
+      slider_depth.setBorder(border_depth);
+      slider_depth.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           int val = ((JSlider)e.getSource()).getValue();
           max_recursion_depth_ = val;
           border_depth.setTitle(String.format("Max Recursion Depth (%d)",max_recursion_depth_));
           computeDevelopmentMap();
         }
-      };
-      JSlider slider_depth = new JSlider(1,max_max_recursion_depth_,max_recursion_depth_);
-      slider_depth.setMaximumSize(new Dimension(400,100));
-      slider_depth.setAlignmentX(0.0f);
-      border_depth.setTitle(String.format("Max Recursion Depth (%d)",max_recursion_depth_));
-      slider_depth.setBorder(border_depth);
-      slider_depth.addChangeListener(cl_recdepth);
+      });
       shrinkPanel.add(slider_depth);
       
       //slider for bounding box size
-      ChangeListener cl_boundsize = new ChangeListener(){
+      JSlider slider_bounds = new JSlider(1,max_bounding_square_side_length_,bounding_square_side_length_);
+      slider_bounds.setMaximumSize(new Dimension(400,100));
+      slider_bounds.setAlignmentX(0.0f);
+      border_bounds.setTitle(String.format("Bounding Box Size (%d)",bounding_square_side_length_));
+      slider_bounds.setBorder(border_bounds);
+      slider_bounds.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           int val = ((JSlider)e.getSource()).getValue();
           bounding_square_side_length_ = val;
           border_bounds.setTitle(String.format("Bounding Box Size (%d)",bounding_square_side_length_));
           computeDevelopmentMap();
         }
-      };
-      JSlider slider_bounds = new JSlider(1,max_bounding_square_side_length_,bounding_square_side_length_);
-      slider_bounds.setMaximumSize(new Dimension(400,100));
-      slider_bounds.setAlignmentX(0.0f);
-      border_bounds.setTitle(String.format("Bounding Box Size (%d)",bounding_square_side_length_));
-      slider_bounds.setBorder(border_bounds);
-      slider_bounds.addChangeListener(cl_boundsize);
+      });
       shrinkPanel.add(slider_bounds);
+      
+      //checkbox for simulating 3d
+      JCheckBox check_sim3d = new JCheckBox("Simulate 3D");
+      check_sim3d.setSelected(simulate_3D_is_default_);
+      check_sim3d.setAlignmentX(0.0f);
+      check_sim3d.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          boolean val = ((JCheckBox)e.getSource()).isSelected();
+          //change accordingly
+          simulate_3D_ = val;
+          if(simulate_3D_){ viewer_.setCameraPath(camera_source_); }
+          else{ viewer_.setCameraPath(camera_free_); }
+          computeDevelopmentMap();
+          viewer_.render();
+        }
+      });
+      shrinkPanel.add(check_sim3d);
+      
+      //checkbox for showing embedded
+      JCheckBox check_showembedded = new JCheckBox("Show Embedded Manifold");
+      check_showembedded.setSelected(false);
+      check_showembedded.setAlignmentX(0.0f);
+      check_showembedded.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          boolean val = ((JCheckBox)e.getSource()).isSelected();
+          setEmbeddedVisible(val);
+        }
+      });
+      shrinkPanel.add(check_showembedded);
+      
 
       //specify layout
       shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
@@ -177,24 +220,26 @@ public class DevelopmentApp2D {
       //move forward/backward
       if(as_fb.isPressed()){
         
-        Vector vect_translate = new Vector(source_direction_);
-        vect_translate.scale(-dt * units_per_millisecond * as_fb.doubleValue());
+        Vector vect_translate = new Vector(camera_forward_);
+        vect_translate.scale(dt * units_per_millisecond * as_fb.doubleValue());
         source_point_.add(vect_translate);
+        
+        computeDevelopmentMap();
       }
       
       //rotation
       if(as_lr.isPressed()){
         
-        double dtheta = dt * radians_per_millisecond * as_lr.doubleValue();
+        double dtheta = -dt * radians_per_millisecond * as_lr.doubleValue();
         double cdtheta = Math.cos(dtheta);
         double sdtheta = Math.sin(dtheta);
-        double oldx = source_direction_.getComponent(0);
-        double oldy = source_direction_.getComponent(1);
-        source_direction_ = new Vector(cdtheta*oldx - sdtheta*oldy, sdtheta*oldx + cdtheta*oldy );
+        double oldx = camera_forward_.getComponent(0);
+        double oldy = camera_forward_.getComponent(1);
+        camera_forward_ = new Vector(cdtheta*oldx - sdtheta*oldy, sdtheta*oldx + cdtheta*oldy );
+      
+        updateCamera();
       }
       
-      //recompute
-      computeDevelopmentMap();
     }  
   };
 
@@ -203,7 +248,7 @@ public class DevelopmentApp2D {
   public static void main(String[] args){
     
     EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
-    //TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/icosahedron.xml");
+    //TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
     
     Iterator<Integer> i = null;
     
@@ -232,29 +277,17 @@ public class DevelopmentApp2D {
     }
     source_point_.scale(1.0f/3.0f);
     
-    source_direction_ = new Vector(1,0);
-    
-    /*//set up 'origin' sgc
-    SceneGraphComponent sgc_origin = new SceneGraphComponent();
-    //create appearance
-    Appearance app_points = new Appearance();
-    app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
-    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
-    //set point shader
-    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_points, true);
-    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
-    dps.setSpheresDraw(true);
-    dps.setPointRadius(0.01);
-    dps.setDiffuseColor(Color.BLUE);
-    //set appearance
-    sgc_origin.setAppearance(app_points);
-    //create geometry with pointsetfactory
-    PointSetFactory psf = new PointSetFactory();
-    psf.setVertexCount(1);
-    psf.setVertexCoordinates(new double[][] { new double[] {0,0,0} });
-    psf.update();
-    //set geometry
-    sgc_origin.setGeometry(psf.getGeometry());*/
+    //make color scheme
+    color_scheme_ = new HashMap<Face, Color>();
+    i = Triangulation.faceTable.keySet().iterator();
+    while(i.hasNext()){
+      Integer key = i.next();
+      Face f = Triangulation.faceTable.get(key);
+      //determine appearance
+      Color color = Color.getHSBColor((float)f.getIndex()/(float)Triangulation.faceTable.size(), 0.5f, 0.9f);
+      if(f == source_face_){ color = Color.WHITE; }
+      color_scheme_.put(f, color);
+    }
     
     //set up sgc_root
     sgc_root_ = new SceneGraphComponent();
@@ -280,6 +313,7 @@ public class DevelopmentApp2D {
     Camera camera = new Camera();
     camera.setNear(.015);
     camera.setFieldOfView(60);
+    camera_forward_ = new Vector(1,0);
     
     sgc_camera_ = SceneGraphUtility.createFullSceneGraphComponent("camera");
     sgc_root_.addChild(sgc_camera_);
@@ -294,23 +328,44 @@ public class DevelopmentApp2D {
     
     if(simulate_3D_is_default_){ viewer_.setCameraPath(camera_source_); }
     else{ viewer_.setCameraPath(camera_free_); }
-
-    //JRViewer jrv_embedded = new JRViewer();
-    //jrv_embedded.addBasicUI();
-    //jrv_embedded.registerPlugin(new ContentTools());
-    //jrv_embedded.setContent(EmbeddedTriangulation.getSGC());
-    //jrv_embedded.startup();
-    
   }
   
   private static void updateCamera(){
+    
     de.jreality.math.Matrix M = new de.jreality.math.Matrix(
-        1,0,0,0,
-        0,0,1,0,
+        camera_forward_.getComponent(1),0,camera_forward_.getComponent(0),0,
+        -camera_forward_.getComponent(0),0,camera_forward_.getComponent(1),0,
         0,1,0,0,
         0,0,0,1
     );
     M.assignTo(sgc_camera_);
+  }
+  
+  public static void setEmbeddedVisible(boolean val){
+    
+    if((val == true) && (jrv_embedded_ == null) && (EmbeddedTriangulation.isEmbedded)){
+      
+      //make jrviewer
+      jrv_embedded_ = new JRViewer();
+      jrv_embedded_.addBasicUI();
+      jrv_embedded_.registerPlugin(new ContentTools());
+      //set manifold contents
+      SceneGraphComponent sgc_embedded = EmbeddedTriangulation.getSGC(color_scheme_);
+      sgc_embedded.setAppearance(getFaceAppearance(0.6f));
+      jrv_embedded_.setContent(sgc_embedded);
+      //set source point contents
+      ArrayList<Vector> sourcept = new ArrayList<Vector>();
+      sourcept.add(EmbeddedTriangulation.getCoord3D(source_face_, source_point_));
+      sgc_embedded.addChild(sgcFromPoints(sourcept));
+      //start the viewer
+      jrv_embedded_.startup();
+    }
+    
+    if((val == false) && (jrv_embedded_ != null)){ 
+      jrv_embedded_.dispose(); 
+      jrv_embedded_ = null;
+    }
+
   }
   
   //ALGORITHM
@@ -318,22 +373,27 @@ public class DevelopmentApp2D {
   private static void computeDevelopmentMap(){
 
     //rotation matrix sending dir -> (0,1), rot_cw_pi/2(dir) -> (1,0)
-    double x = source_direction_.getComponent(0);
-    double y = source_direction_.getComponent(1);
-    Matrix M = new Matrix(new double[][]{ new double[] {y,-x}, new double[] {x,y} });
+    //double x = source_direction_.getComponent(0);
+    //double y = source_direction_.getComponent(1);
+    //Matrix M = new Matrix(new double[][]{ new double[] {y,-x}, new double[] {x,y} });
     AffineTransformation T = new AffineTransformation(Vector.scale(source_point_,-1));
-    T.leftMultiply(new AffineTransformation(M));
+    //T.leftMultiply(new AffineTransformation(M));
     
     sgc_root_.removeChild(sgc_devmap_);
     sgc_devmap_ = new SceneGraphComponent();
     
+    ArrayList<Vector> source_images = new ArrayList<Vector>();
     //long t = System.currentTimeMillis();
-    iterateDevelopment(sgc_devmap_,0,source_face_,null,null,T);
+    iterateDevelopment(source_images, sgc_devmap_,0,source_face_,null,null,T);
     //System.out.printf("Time to calculate: %d ms\n", System.currentTimeMillis() - t);
     
+    if(!source_images.isEmpty()){
+      sgc_devmap_.addChild(sgcFromPoints(source_images));
+    }
     sgc_root_.addChild(sgc_devmap_);
+    
     CameraUtility.encompass(scene_.getAvatarPath(), scene_.getContentPath(), scene_.getCameraPath(), 1.75, Pn.EUCLIDEAN);
-
+  
   }
   
   //struct holding info neccessary to develop off an edge
@@ -438,7 +498,7 @@ public class DevelopmentApp2D {
     return (outside_x_max || outside_x_min || outside_y_max || outside_y_min);
   }
   
-  public static void iterateDevelopment(SceneGraphComponent sgc_devmap, int depth, Face cur_face, Edge source_edge, Frustum2D current_frustum, AffineTransformation current_trans){
+  public static void iterateDevelopment(ArrayList<Vector> source_images, SceneGraphComponent sgc_devmap, int depth, Face cur_face, Edge source_edge, Frustum2D current_frustum, AffineTransformation current_trans){
     
     //note: source_face and current_frustum may be null
     
@@ -464,6 +524,21 @@ public class DevelopmentApp2D {
     //make sure we are within bounding box
     if(isOutsideBoundingBox(efpts)){ return; }
     
+    //add source images, if any
+    if(cur_face == source_face_){
+
+      Vector source_image = null;
+      try { source_image = new_trans.affineTransPoint(source_point_); }
+      catch (Exception e1) { e1.printStackTrace(); }
+      
+      boolean isVisible = true;
+      if(current_frustum != null){
+        isVisible = current_frustum.checkInterior(source_image);
+      }
+      
+      if(isVisible && ((depth > 0) || !simulate_3D_)){ source_images.add(source_image); }
+    }
+    
     //make clipped embeddedface
     EmbeddedFace origface = new EmbeddedFace(efpts);
     EmbeddedFace clipface = null;
@@ -475,12 +550,11 @@ public class DevelopmentApp2D {
     
     //add clipped face to display
     SceneGraphComponent sgc_new_face = new SceneGraphComponent();
+    Color color = color_scheme_.get(cur_face);
     if(simulate_3D_){
-      sgc_new_face.setGeometry(clipface.getGeometry3D(simulated_3D_height_));
-      sgc_new_face.setAppearance(getFaceAppearance3D());
+      sgc_new_face.setGeometry(clipface.getGeometry3D(color,simulated_3D_height_));
+      sgc_new_face.setAppearance(getFaceAppearance(0.5f));
     }else{
-      Color color = Color.getHSBColor((float)cur_face.getIndex()/(float)Triangulation.faceTable.size(), 0.5f, 0.9f);
-      if(cur_face == source_face_){ color = Color.WHITE; }
       sgc_new_face.setGeometry(clipface.getGeometry(color));
       sgc_new_face.setAppearance(getFaceAppearance(0.5f));
     }
@@ -501,14 +575,14 @@ public class DevelopmentApp2D {
       if(new_frust == null){ continue; }
       
       //iterate
-      iterateDevelopment(sgc_devmap, depth+1, deInfo.next_face_, deInfo.next_source_edge_, new_frust, new_trans);
+      iterateDevelopment(source_images, sgc_devmap, depth+1, deInfo.next_face_, deInfo.next_source_edge_, new_frust, new_trans);
     }
     
   }
   
   //AUXILLIARY METHODS
   //==============================
-public static Appearance getFaceAppearance(double transparency){
+  public static Appearance getFaceAppearance(double transparency){
     
     //create appearance for developed faces
     Appearance app_face = new Appearance();
@@ -537,7 +611,7 @@ public static Appearance getFaceAppearance(double transparency){
     return app_face;
   }
 
-  public static Appearance getFaceAppearance3D(){
+  /*public static Appearance getFaceAppearance3D(){
     
     //create appearance for developed faces
     Appearance app_face = new Appearance();
@@ -559,14 +633,13 @@ public static Appearance getFaceAppearance(double transparency){
     dls.setDiffuseColor(Color.BLACK);
   
     return app_face;
-  }
-
-  /*
-  public static SceneGraphComponent sgcFromPoints2D(Vector[] points){
+  }*/
+  
+  public static SceneGraphComponent sgcFromPoints(ArrayList<Vector> points){
     
     //create the sgc
     SceneGraphComponent sgc_points = new SceneGraphComponent();
-    
+
     //create appearance
     Appearance app_points = new Appearance();
     
@@ -578,21 +651,26 @@ public static Appearance getFaceAppearance(double transparency){
     DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_points, true);
     DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
     dps.setSpheresDraw(true);
-    dps.setPointRadius(0.05);
+    dps.setPointRadius(object_radius_);
     dps.setDiffuseColor(Color.BLUE);
     
     //set appearance
     sgc_points.setAppearance(app_points);
     
     //set vertlist
-    double[][] vertlist = new double[points.length][3];
-    for(int i=0; i<points.length; i++){
-      vertlist[i] = new double[]{ points[i].getComponent(0), points[i].getComponent(1), 0 };
+    double[][] vertlist = new double[points.size()][3];
+    for(int i=0; i<points.size(); i++){
+      Vector vect = points.get(i);
+      if(vect.getDimension() == 2){
+        vertlist[i] = new double[]{ vect.getComponent(0), vect.getComponent(1), 0 };
+      }else if(vect.getDimension() == 3){
+        vertlist[i] = new double[]{ vect.getComponent(0), vect.getComponent(1), vect.getComponent(2) };
+      }
     }
     
     //create geometry with pointsetfactory
     PointSetFactory psf = new PointSetFactory();
-    psf.setVertexCount(points.length);
+    psf.setVertexCount(points.size());
     psf.setVertexCoordinates(vertlist);
     psf.update();
     
@@ -602,80 +680,5 @@ public static Appearance getFaceAppearance(double transparency){
     //return
     return sgc_points;
   }
-  
-  public static SceneGraphComponent sgcFromFace(Face face, AffineTransformation affineTrans, Color color){
-    
-    //create a sgc for the face, after applying specified affine transformation
-    SceneGraphComponent sgc_face = new SceneGraphComponent();
-    
-    //create appearance
-    Appearance app_face = new Appearance();
-    
-    //set some basic attributes
-    app_face.setAttribute(CommonAttributes.FACE_DRAW, true);
-    app_face.setAttribute(CommonAttributes.EDGE_DRAW, true);
-    app_face.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    app_face.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
-    app_face.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
-    
-    //set shaders
-    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_face, true);
-    
-    //line shader
-    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
-    dls.setTubeDraw(false);
-    dls.setDiffuseColor(Color.BLACK);
-    
-    //polygon shader
-    DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
-    dps.setDiffuseColor(color);
-    dps.setTransparency(0.6d);
-    
-    //set appearance
-    sgc_face.setAppearance(app_face);
 
-    //create list of verts
-    double[][] vertlist = new double[3][3];
-    
-    int count = 0;
-    Iterator<Vertex> i = face.getLocalVertices().iterator();
-    
-    while(i.hasNext()){
-      Vertex v = i.next();
-      
-      Vector pt = null;
-      try { pt = affineTrans.affineTransPoint(Coord2D.coordAt(v,face)); } 
-      catch (Exception e) { e.printStackTrace(); }
-      
-      vertlist[count] = new double[] { pt.getComponent(0), pt.getComponent(1), 0 };
-      count++;
-    }
-    
-    //set combinatorics
-    int[][] facelist = new int[][] { new int[] {0,1,2} };
-    
-    int[][] edgelist = new int[][] { new int[] {0,1}, new int[] {1,2}, new int[] {2,0} };
-    
-    //use face factory to create geometry
-    IndexedFaceSetFactory ifsf_face = new IndexedFaceSetFactory();
-    
-    ifsf_face.setVertexCount(3);
-    ifsf_face.setVertexCoordinates(vertlist);
-    
-    ifsf_face.setFaceCount(1);
-    ifsf_face.setFaceIndices(facelist);
-    
-    ifsf_face.setEdgeCount(3);
-    ifsf_face.setEdgeIndices(edgelist);
-    
-    ifsf_face.update();
-    
-    //set geometry
-    sgc_face.setGeometry(ifsf_face.getGeometry());
-    
-    //return
-    return sgc_face;
-  }*/
-  
-  
 }
