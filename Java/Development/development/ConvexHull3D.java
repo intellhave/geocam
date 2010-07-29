@@ -154,7 +154,7 @@ public class ConvexHull3D {
     lastPoint = v;
     visible.clear();
     hiddenFaces.clear();
-    System.out.println("adding point: " + v);
+    //System.out.println("adding point: " + v);
     ArrayList<EmbeddedFace> visibleFaces = new ArrayList<EmbeddedFace>();
     ArrayList<EmbeddedFace> coplanarFaces = new ArrayList<EmbeddedFace>();
 
@@ -162,10 +162,10 @@ public class ConvexHull3D {
       double dot = Vector.dot(faces.get(i).getNormal(), Vector.subtract(v,
           faces.get(i).getVectorAt(0)));
       if (Math.abs(dot) < epsilon) { // call it planar
-        System.out.println("coplanar with face: ");
-        for(int j = 0; j < faces.get(i).getNumberVertices(); j++)
-          System.out.println(faces.get(i).getVectorAt(j));
-        System.out.println();
+        //System.out.println("coplanar with face: ");
+        //for(int j = 0; j < faces.get(i).getNumberVertices(); j++)
+        //  System.out.println(faces.get(i).getVectorAt(j));
+        //System.out.println();
         coplanarFaces.add(faces.get(i));
         hiddenFaces.add(faces.get(i));  // TODO testing
       } else if (dot >= epsilon) {
@@ -174,18 +174,20 @@ public class ConvexHull3D {
       } else // else not visible
         hiddenFaces.add(faces.get(i));  // TODO testing
     }
+    
+    if(visibleFaces.isEmpty()){ return; }
 
     ArrayList<HashSet<Vector>> badEdges = getBadEdges(visibleFaces);
 
     vertices = findAttachmentLoop(visibleFaces, badEdges);
-    System.out.println("vertices: " );
+    /*System.out.println("vertices: " );
     for(int i = 0; i < vertices.size(); i++) {
       System.out.println(vertices.get(i));
-    }
+    }*/
 
     ArrayList<EmbeddedFace> newFaces = getNewFaces(vertices, v);
 
-    System.out.println("coplanarFaces.size() = " + coplanarFaces.size());
+    //System.out.println("coplanarFaces.size() = " + coplanarFaces.size());
     for (int i = 0; i < coplanarFaces.size(); i++) {
       EmbeddedFace coplanarFace = coplanarFaces.get(i);
       EmbeddedFace newFace = null;
@@ -215,6 +217,7 @@ public class ConvexHull3D {
    */
   private ArrayList<Vector> findAttachmentLoop(ArrayList<EmbeddedFace> visibleFaces,
       ArrayList<HashSet<Vector>> badEdges) {
+     
     EmbeddedFace cur_face = visibleFaces.get(0);
     Vector start = cur_face.getVectorAt(0);
     Vector cur_vec = cur_face.getVectorAt(0);
@@ -275,7 +278,7 @@ public class ConvexHull3D {
    * between the last and first added from newFace.
    */
   private void mergeFaces(EmbeddedFace oldFace, EmbeddedFace newFace) {
-    System.out.println("merging faces: ");
+    /*System.out.println("merging faces: ");
     System.out.println("oldFace");
     for(int i = 0; i < oldFace.getNumberVertices(); i++) {
       System.out.println(oldFace.getVectorAt(i));
@@ -285,7 +288,7 @@ public class ConvexHull3D {
     for(int i = 0; i < newFace.getNumberVertices(); i++) {
       System.out.println(newFace.getVectorAt(i));
     }
-    System.out.println();
+    System.out.println();*/
     ArrayList<Vector> vectors = new ArrayList<Vector>();
 
     int startIndex = 0; // will be index of vector before the non-shared one.
@@ -298,40 +301,40 @@ public class ConvexHull3D {
       startIndex = 2;
 
     // add vectors from newFace
-    System.out.println("on new face");
+    //System.out.println("on new face");
     Vector v1 = newFace.getVectorAt(startIndex);
     Vector v2 = newFace.getVectorAt((startIndex + 1)
         % newFace.getNumberVertices());
     Vector v3 = newFace.getVectorAt((startIndex + 2)
         % newFace.getNumberVertices());
-    System.out.println("adding " + v1);
-    System.out.println("adding " + v2);
-    System.out.println("adding " + v3);
+    //System.out.println("adding " + v1);
+    //System.out.println("adding " + v2);
+    //System.out.println("adding " + v3);
     vectors.add(v1);
     vectors.add(v2);
     vectors.add(v3);
 
     // add vectors from oldFace
-    System.out.println("on old face");
+    //System.out.println("on old face");
     boolean done = false;
     for (int i = (oldFace.indexOf(v3) + 1) % oldFace.getNumberVertices(); !done; i++) {
       int index = i % oldFace.getNumberVertices();
-      System.out.println("at " + oldFace.getVectorAt(index));
+      //System.out.println("at " + oldFace.getVectorAt(index));
       if (oldFace.getVectorAt(index).equals(v1)) {
         done = true;
-        System.out.println("not adding");
+        //System.out.println("not adding");
       }
       else {
         vectors.add(oldFace.getVectorAt(index));
-        System.out.println("adding");
+        //System.out.println("adding");
       }
     }
     
-    System.out.println("result");
+    /*System.out.println("result");
     for(int i = 0; i < vectors.size(); i++) {
       System.out.println(vectors.get(i));
     }
-    System.out.println();
+    System.out.println();*/
 
     faces.add(new EmbeddedFace(vectors));
   }

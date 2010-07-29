@@ -22,7 +22,10 @@ import de.jreality.plugin.basic.Scene;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.scene.Appearance;
+import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.SceneGraphPath;
+import de.jreality.scene.Viewer;
 import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.AxisState;
 import de.jreality.scene.tool.InputSlot;
@@ -34,6 +37,7 @@ import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 import de.jreality.util.CameraUtility;
+import de.jreality.util.SceneGraphUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 
@@ -48,8 +52,16 @@ public class DevelopmentApp2D {
   private static Vector source_point_;
   private static Vector source_direction_;
   
+  //camera stuff
+  private static Viewer viewer_;
+  private static SceneGraphPath camera_source_;
+  private static SceneGraphPath camera_free_;
+  private static SceneGraphComponent sgc_camera_;
+  
   //options
-  private static Scene scene_;
+  private static boolean simulate_3D_ = true;
+  private static boolean simulate_3D_is_default_ = true;
+  private static double simulated_3D_height_ = 0.1;
   
   private static final int max_max_recursion_depth_ = 200;
   private static int max_recursion_depth_ = 5;
@@ -62,6 +74,7 @@ public class DevelopmentApp2D {
   
   
   //data
+  private static Scene scene_;
   private static SceneGraphComponent sgc_root_;  
   private static SceneGraphComponent sgc_devmap_;  
   
@@ -189,19 +202,19 @@ public class DevelopmentApp2D {
   //==============================
   public static void main(String[] args){
     
-    //EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/icosahedron.xml");
+    EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
+    //TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/icosahedron.xml");
     
     Iterator<Integer> i = null;
     
     //set edge lengths randomly from [2,3)
-    i = Triangulation.edgeTable.keySet().iterator();
+    /*i = Triangulation.edgeTable.keySet().iterator();
     while(i.hasNext()){
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
       double rand = Math.random();
       Length.at(e).setValue(2); //random return value is in [0,1)
-    }
+    }*/
     
     //print some debug data
     //EmbeddedTriangulation.printTriangulationData();
@@ -221,7 +234,7 @@ public class DevelopmentApp2D {
     
     source_direction_ = new Vector(1,0);
     
-    //set up 'origin' sgc
+    /*//set up 'origin' sgc
     SceneGraphComponent sgc_origin = new SceneGraphComponent();
     //create appearance
     Appearance app_points = new Appearance();
@@ -241,12 +254,12 @@ public class DevelopmentApp2D {
     psf.setVertexCoordinates(new double[][] { new double[] {0,0,0} });
     psf.update();
     //set geometry
-    sgc_origin.setGeometry(psf.getGeometry());
+    sgc_origin.setGeometry(psf.getGeometry());*/
     
     //set up sgc_root
     sgc_root_ = new SceneGraphComponent();
     sgc_root_.addTool(new ManifoldMovementTool());
-    sgc_root_.addChild(sgc_origin);
+    //sgc_root_.addChild(sgc_origin);
 
     //jrviewer(s)
     JRViewer jrv = new JRViewer();
@@ -258,19 +271,46 @@ public class DevelopmentApp2D {
     jrv.registerPlugin(new UIPanel_Options());
     jrv.setShowPanelSlots(true,false,false,false);
     scene_ = jrv.getPlugin(Scene.class);
+    jrv.startup();
     
     //compute geometry
     computeDevelopmentMap();
     
-    //start viewer
-    jrv.startup();
+    //make camera and sgc_camera
+    Camera camera = new Camera();
+    camera.setNear(.015);
+    camera.setFieldOfView(60);
     
-    JRViewer jrv_embedded = new JRViewer();
-    jrv_embedded.addBasicUI();
-    jrv_embedded.registerPlugin(new ContentTools());
-    jrv_embedded.setContent(EmbeddedTriangulation.getSGC());
+    sgc_camera_ = SceneGraphUtility.createFullSceneGraphComponent("camera");
+    sgc_root_.addChild(sgc_camera_);
+    sgc_camera_.setCamera(camera);
+    updateCamera();
+    
+    //make jrviewer use the camera we set up
+    viewer_ = jrv.getViewer();
+    camera_free_ = viewer_.getCameraPath();
+    camera_source_ = SceneGraphUtility.getPathsBetween(viewer_.getSceneRoot(), sgc_camera_).get(0);
+    camera_source_.push(sgc_camera_.getCamera());
+    
+    if(simulate_3D_is_default_){ viewer_.setCameraPath(camera_source_); }
+    else{ viewer_.setCameraPath(camera_free_); }
+
+    //JRViewer jrv_embedded = new JRViewer();
+    //jrv_embedded.addBasicUI();
+    //jrv_embedded.registerPlugin(new ContentTools());
+    //jrv_embedded.setContent(EmbeddedTriangulation.getSGC());
     //jrv_embedded.startup();
     
+  }
+  
+  private static void updateCamera(){
+    de.jreality.math.Matrix M = new de.jreality.math.Matrix(
+        1,0,0,0,
+        0,0,1,0,
+        0,1,0,0,
+        0,0,0,1
+    );
+    M.assignTo(sgc_camera_);
   }
   
   //ALGORITHM
@@ -435,13 +475,17 @@ public class DevelopmentApp2D {
     
     //add clipped face to display
     SceneGraphComponent sgc_new_face = new SceneGraphComponent();
-    Color color = Color.getHSBColor((float)cur_face.getIndex()/(float)Triangulation.faceTable.size(), 0.5f, 0.9f);
-    if(cur_face == source_face_){ color = Color.WHITE; }
-    
-    sgc_new_face.setGeometry(clipface.getGeometry(color));
-    sgc_new_face.setAppearance(getFaceAppearance(0.5f));
+    if(simulate_3D_){
+      sgc_new_face.setGeometry(clipface.getGeometry3D(simulated_3D_height_));
+      sgc_new_face.setAppearance(getFaceAppearance3D());
+    }else{
+      Color color = Color.getHSBColor((float)cur_face.getIndex()/(float)Triangulation.faceTable.size(), 0.5f, 0.9f);
+      if(cur_face == source_face_){ color = Color.WHITE; }
+      sgc_new_face.setGeometry(clipface.getGeometry(color));
+      sgc_new_face.setAppearance(getFaceAppearance(0.5f));
+    }
     sgc_devmap.addChild(sgc_new_face);
-
+    
     //see which faces to continue developing on, if any
     if(depth >= max_recursion_depth_){ return; }
     
@@ -464,7 +508,7 @@ public class DevelopmentApp2D {
   
   //AUXILLIARY METHODS
   //==============================
-  public static Appearance getFaceAppearance(double transparency){
+public static Appearance getFaceAppearance(double transparency){
     
     //create appearance for developed faces
     Appearance app_face = new Appearance();
@@ -490,6 +534,30 @@ public class DevelopmentApp2D {
     dps.setDiffuseColor(Color.WHITE);
     dps.setTransparency(transparency);
 
+    return app_face;
+  }
+
+  public static Appearance getFaceAppearance3D(){
+    
+    //create appearance for developed faces
+    Appearance app_face = new Appearance();
+    
+    //set some basic attributes
+    app_face.setAttribute(CommonAttributes.FACE_DRAW, false);
+    app_face.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app_face.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app_face.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app_face.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
+    
+    //set shaders
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_face, true);
+    
+    //line shader
+    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+    dls.setTubeDraw(false);
+    dls.setLineWidth(0.0);
+    dls.setDiffuseColor(Color.BLACK);
+  
     return app_face;
   }
 
