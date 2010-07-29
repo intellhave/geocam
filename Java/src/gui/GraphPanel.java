@@ -2,8 +2,10 @@ package gui;
 
 import geoquant.Length;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -65,7 +67,7 @@ public class GraphPanel extends JPanel {
     int[] xpoints = new int[size];
     int[] ypoints = new int[size];
 
-    int circDiam = 5;
+    int circDiam = 10;
     double angleStep = 2 * Math.PI / size;
     double angle = Math.PI/2;
     ListModel model = list.getModel();
@@ -85,6 +87,7 @@ public class GraphPanel extends JPanel {
     
     int v1, v2;
     Color c;
+    ((Graphics2D) g).setStroke(new BasicStroke(3));
     Random r = new Random();
     for(Edge e : Triangulation.edgeTable.values()) {
       c = lengthMap.get(Length.valueAt(e));
@@ -95,6 +98,7 @@ public class GraphPanel extends JPanel {
       g.setColor(c);
       v1 = pointMap.get(e.getLocalVertices().get(0));
       v2 = pointMap.get(e.getLocalVertices().get(1));
+      
       g.drawLine(xpoints[v1], ypoints[v1], xpoints[v2], ypoints[v2]);
     }
     
