@@ -62,6 +62,7 @@ public class DevelopmentApp3D {
   private static SceneGraphPath camera_free_;
   
   //options
+  private static double object_radius_ = 0.03;
   private static final int max_recursion_depth_ = 6;
   //private static final double movement_units_per_second_ = 1.0;
   private static final double movement_seconds_per_rotation_ = 2.0;
@@ -279,14 +280,15 @@ public class DevelopmentApp3D {
     sgc_root_.removeChild(sgc_devmap_);
     sgc_devmap_ = new SceneGraphComponent();
     
-    //long t = System.currentTimeMillis();
     ArrayList<Vector> source_images = new ArrayList<Vector>();
+    //long t = System.currentTimeMillis();
     iterateDevelopment(source_images, sgc_devmap_,0,source_tetra_,null,null,T);
     //System.out.printf("Time to calculate: %d ms\n", System.currentTimeMillis() - t);
     
-    sgc_devmap_.addChild(sgcFromPoints(source_images));
+    if(!source_images.isEmpty()){
+      sgc_devmap_.addChild(sgcFromPoints3D(source_images));
+    }
     sgc_root_.addChild(sgc_devmap_);
-
   }
 
   public static void iterateDevelopment(ArrayList<Vector> source_images, SceneGraphComponent sgc_devmap, int depth, Tetra cur_tetra, Face source_face, Frustum3D current_frustum, AffineTransformation current_trans){
@@ -430,7 +432,7 @@ public class DevelopmentApp3D {
     M.assignTo(sgc_camera_);
   }
 
-  public static SceneGraphComponent sgcFromPoints(ArrayList<Vector> points){
+  public static SceneGraphComponent sgcFromPoints3D(ArrayList<Vector> points){
     
     //create the sgc
     SceneGraphComponent sgc_points = new SceneGraphComponent();
@@ -446,7 +448,7 @@ public class DevelopmentApp3D {
     DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_points, true);
     DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
     dps.setSpheresDraw(true);
-    dps.setPointRadius(0.05);
+    dps.setPointRadius(object_radius_);
     dps.setDiffuseColor(Color.BLUE);
     
     //set appearance

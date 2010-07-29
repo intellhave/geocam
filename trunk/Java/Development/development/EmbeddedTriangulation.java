@@ -1,33 +1,23 @@
 package development;
 
-import geoquant.Alpha;
-import geoquant.Eta;
 import geoquant.Length;
-import geoquant.Radius;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import util.Matrix;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
+import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.reader.Readers;
-import de.jreality.scene.Appearance;
 import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.DataList;
-import de.jreality.shader.CommonAttributes;
-import de.jreality.shader.DefaultGeometryShader;
-import de.jreality.shader.DefaultLineShader;
-import de.jreality.shader.DefaultPolygonShader;
-import de.jreality.shader.ShaderUtility;
 import de.jreality.util.Input;
 
 //HOW TO USE THIS CLASS
@@ -65,14 +55,77 @@ public class EmbeddedTriangulation{
     }
   };
   static boolean isEmbedded = false;
-  static HashMap<Face,EmbeddedFace> EmbeddedManifoldData = null;
-  static SceneGraphComponent sgc_embedded = null;
+  static HashMap<Face,EmbeddedFace> EmbeddedManifoldFaceData = null;
+  static HashMap<Vertex,Vector> EmbeddedManifoldVertexData = null;
   
-  public static Vector getCoord3D(Face f, Vector v){
-    return EmbeddedManifoldData.get(f).getCoord3D(v);
+  public static Vector getCoord3D(Vertex v){
+    return EmbeddedManifoldVertexData.get(v);
   }
   
-  public static SceneGraphComponent getSGC(){
+  public static Vector getCoord3D(Face f, Vector v){
+    return EmbeddedManifoldFaceData.get(f).getCoord3D(v);
+  }
+  
+  public static SceneGraphComponent getSGC(HashMap<Face,Color> color_scheme){
+    
+    if(!isEmbedded){ return null; }
+    
+    SceneGraphComponent sgc_embedded = new SceneGraphComponent();
+    
+    int nverts = Triangulation.vertexTable.size();
+    int nfaces = Triangulation.faceTable.size();
+    
+    double[][] ifsf_verts = new double[nverts][3];
+    int[][] ifsf_faces = new int[nfaces][3];
+    Color[] ifsf_colors = new Color[nfaces];
+    
+    HashMap<Vertex,Integer> vert_indices = new HashMap<Vertex,Integer>();
+    
+    int vindex = 0;
+    Iterator<Integer> vi = Triangulation.vertexTable.keySet().iterator();
+    while(vi.hasNext()){
+      
+      Vertex v = Triangulation.vertexTable.get(vi.next());
+      
+      vert_indices.put(v,vindex);
+      Vector vect = getCoord3D(v);
+      ifsf_verts[vindex] = new double[]{ vect.getComponent(0), vect.getComponent(1), vect.getComponent(2) };
+      
+      vindex++;
+    }
+    
+    int findex = 0;
+    Iterator<Integer> fi = Triangulation.faceTable.keySet().iterator();
+    while(fi.hasNext()){
+      
+      Face f = Triangulation.faceTable.get(fi.next());
+      
+      //get color of face
+      ifsf_colors[findex] = color_scheme.get(f);
+      
+      //get verts for face
+      Iterator<Vertex> fv = f.getLocalVertices().iterator();
+      int fvindex = 0;
+      while(fv.hasNext()){
+        ifsf_faces[findex][fvindex] = vert_indices.get(fv.next());
+        fvindex++;
+      }
+   
+      findex++;
+    }
+    
+    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+    
+    ifsf.setVertexCount(ifsf_verts.length);
+    ifsf.setVertexCoordinates(ifsf_verts);
+    ifsf.setFaceCount(ifsf_faces.length);
+    ifsf.setFaceIndices(ifsf_faces);
+    ifsf.setFaceColors(ifsf_colors);
+    ifsf.setGenerateEdgesFromFaces(true);
+    
+    ifsf.update();
+    sgc_embedded.setGeometry(ifsf.getGeometry());
+    
     return sgc_embedded;
   }
   
@@ -241,7 +294,7 @@ public class EmbeddedTriangulation{
       return;
     }
     
-    //make sgc_embedded
+    /*//make sgc_embedded
     sgc_embedded = new SceneGraphComponent();
     
     //create appearance
@@ -269,7 +322,7 @@ public class EmbeddedTriangulation{
     
     //set appearance
     sgc_embedded.setAppearance(app_embedded);
-    sgc_embedded.setGeometry(geom);
+    sgc_embedded.setGeometry(geom);*/
     
     //get the geometry data
     DataList dl_faceindices = geom.getAttributes(Geometry.CATEGORY_FACE,Attribute.INDICES);
@@ -407,12 +460,20 @@ public class EmbeddedTriangulation{
       Length.at(e).setValue(edgelength);
     }
     
+    //determine table of vertex 3d coordinates
+    EmbeddedManifoldVertexData = new HashMap<Vertex,Vector>();
+    
+    for(int i=0; i<nverts; i++){
+      Vertex v = Triangulation.vertexTable.get(i);
+      EmbeddedManifoldVertexData.put(v, new Vector(dl_vertcoords.item(i).toDoubleArray(null)));
+    }
+    
     //determine origin, tangent_x, tangent_y using Coord geoquants:
     //[ |  |  | ]   [ |  |  |  ][x0 x1 x2]-1
     //[ tx ty o ] = [ p0 p1 p2 ][y0 y1 y2]
     //[ |  |  | ]   [ |  |  |  ][ 1  1  1]
     //where face vertex i has 3d coords pi and 2d coords (xi,yi)
-    EmbeddedManifoldData = new HashMap<Face,EmbeddedFace>();
+    EmbeddedManifoldFaceData = new HashMap<Face,EmbeddedFace>();
     
     for(int i=0; i<nfaces; i++){
       Face f = Triangulation.faceTable.get(i);
@@ -445,7 +506,7 @@ public class EmbeddedTriangulation{
       
       //make embeddedface
       EmbeddedFace eFace = new EmbeddedFace(or,tx,ty);
-      EmbeddedManifoldData.put(f, eFace);
+      EmbeddedManifoldFaceData.put(f, eFace);
       
       if(verbose){
         System.out.printf("\n\nFace %d", f.getIndex());
