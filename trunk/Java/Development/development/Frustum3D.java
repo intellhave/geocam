@@ -479,22 +479,22 @@ public class Frustum3D {
       }
 
       for (Face face : tetra.getLocalFaces()) {
-        System.out.println("checking face: \n" + faces.get(face));
-        System.out.print("adding? ");
+        //System.out.println("checking face: \n" + faces.get(face));
+        //System.out.print("adding? ");
         if (!omitFacesRay.contains(face)) {
           Vector intersection = findIntersectionWithFace(faces.get(face), ray);
           if (intersection != null && this.checkInterior(intersection)) {
-            System.out.println(intersection);
+            //System.out.println(intersection);
             hullPoints.add(intersection);
-          } else
-            System.out.println("no");
-        } else
-          System.out.println("omitted");
+          } //else
+            //System.out.println("no");
+        } //else
+          //System.out.println("omitted");
       }
     } // end rays
 
     // sectors
-    System.out.println();
+    //System.out.println();
     for (int sectorIndex = 0; sectorIndex < this.getNumberRays(); sectorIndex++) {
       // System.out.println("\nchecking sector index " + sectorIndex);
       // System.out.println("with vertices:");

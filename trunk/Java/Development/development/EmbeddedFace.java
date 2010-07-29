@@ -3,6 +3,7 @@ package development;
 import java.awt.Color;
 import java.util.ArrayList;
 import de.jreality.geometry.IndexedFaceSetFactory;
+import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.scene.Geometry;
 
 public class EmbeddedFace {
@@ -92,6 +93,33 @@ public class EmbeddedFace {
     ifsf.setFaceColors(colors);
     ifsf.update();
     return ifsf.getGeometry();
+  }
+
+  public Geometry getGeometry3D(double zheight) {
+    
+    int n = getNumberVertices();
+    double[][] ilsf_verts = new double[2*n][3];
+    int[][] ilsf_edges = new int[3*n][2];
+
+    for (int i=0; i<n; i++){
+      ilsf_verts[i] = new double[]{ getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1), -zheight };
+      ilsf_verts[i+n] = new double[]{ getVectorAt(i).getComponent(0), getVectorAt(i).getComponent(1), zheight };
+    }
+    
+    for(int i=0; i<n; i++){
+      int j = (i+1)%n;
+      ilsf_edges[i] = new int[]{ i, j };
+      ilsf_edges[i+n] = new int[]{ i+n, j+n };
+      ilsf_edges[i+n+n] = new int[]{ i, i+n };
+    }
+
+    IndexedLineSetFactory ilsf = new IndexedLineSetFactory();
+    ilsf.setVertexCount(ilsf_verts.length);
+    ilsf.setVertexCoordinates(ilsf_verts);
+    ilsf.setEdgeCount(ilsf_edges.length);
+    ilsf.setEdgeIndices(ilsf_edges);
+    ilsf.update();
+    return ilsf.getGeometry();
   }
   
   
