@@ -68,6 +68,7 @@ public class DevelopmentApp2D {
   //options
   //------------------------
   //  appearance of faces
+  private static boolean show_faces_ = true;
   private static HashMap<Face,Color> color_scheme_;
   //  objects
   private static double object_radius_ = 0.03;
@@ -163,7 +164,19 @@ public class DevelopmentApp2D {
       });
       shrinkPanel.add(check_showembedded);
       
-
+      //checkbox for showing faces
+      JCheckBox check_showfaces = new JCheckBox("Show Faces");
+      check_showfaces.setSelected(false);
+      check_showfaces.setAlignmentX(0.0f);
+      check_showfaces.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          boolean val = ((JCheckBox)e.getSource()).isSelected();
+          show_faces_ = val;
+          computeDevelopmentMap();
+        }
+      });
+      shrinkPanel.add(check_showfaces);
+      
       //specify layout
       shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
       shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),BoxLayout.Y_AXIS));
@@ -539,26 +552,28 @@ public class DevelopmentApp2D {
       if(isVisible && ((depth > 0) || !simulate_3D_)){ source_images.add(source_image); }
     }
     
-    //make clipped embeddedface
-    EmbeddedFace origface = new EmbeddedFace(efpts);
-    EmbeddedFace clipface = null;
-    if(current_frustum != null){ clipface = current_frustum.clipFace(origface); }
-    else{ clipface = origface; }
-    
-    //quit if face is completely obscured
-    if(clipface == null){ return; }
-    
-    //add clipped face to display
-    SceneGraphComponent sgc_new_face = new SceneGraphComponent();
-    Color color = color_scheme_.get(cur_face);
-    if(simulate_3D_){
-      sgc_new_face.setGeometry(clipface.getGeometry3D(color,simulated_3D_height_));
-      sgc_new_face.setAppearance(getFaceAppearance(0.5f));
-    }else{
-      sgc_new_face.setGeometry(clipface.getGeometry(color));
-      sgc_new_face.setAppearance(getFaceAppearance(0.5f));
+    if(show_faces_ || (depth == 0)){
+      //make clipped embeddedface
+      EmbeddedFace origface = new EmbeddedFace(efpts);
+      EmbeddedFace clipface = null;
+      if(current_frustum != null){ clipface = current_frustum.clipFace(origface); }
+      else{ clipface = origface; }
+      
+      //quit if face is completely obscured
+      if(clipface == null){ return; }
+      
+      //add clipped face to display
+      SceneGraphComponent sgc_new_face = new SceneGraphComponent();
+      Color color = color_scheme_.get(cur_face);
+      if(simulate_3D_){
+        sgc_new_face.setGeometry(clipface.getGeometry3D(color,simulated_3D_height_));
+        sgc_new_face.setAppearance(getFaceAppearance(0.5f));
+      }else{
+        sgc_new_face.setGeometry(clipface.getGeometry(color));
+        sgc_new_face.setAppearance(getFaceAppearance(0.5f));
+      }
+      sgc_devmap.addChild(sgc_new_face);
     }
-    sgc_devmap.addChild(sgc_new_face);
     
     //see which faces to continue developing on, if any
     if(depth >= max_recursion_depth_){ return; }
