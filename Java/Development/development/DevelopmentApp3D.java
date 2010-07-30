@@ -62,8 +62,9 @@ public class DevelopmentApp3D {
   private static SceneGraphPath camera_free_;
   
   //options
-  private static double object_radius_ = 0.03;
-  private static final int max_recursion_depth_ = 6;
+  private static boolean show_tetras_ = true;
+  private static double object_radius_ = 0.1;
+  private static final int max_recursion_depth_ = 5;
   //private static final double movement_units_per_second_ = 1.0;
   private static final double movement_seconds_per_rotation_ = 2.0;
   //private static final double bounding_cube_side_length_ = 4.0;
@@ -325,28 +326,30 @@ public class DevelopmentApp3D {
     }
     
     //clip the tetra by the current frustum
-    ArrayList<EmbeddedFace> cliptetra = new ArrayList<EmbeddedFace>();
-    
-    if(current_frustum != null){
-      //get list of EmbeddedFaces by clipping with Frustum3D and using ConvexHull3D
-      ArrayList<Vector> cliptetra_points = current_frustum.clipFace(oriented_tetra);
-      if(cliptetra_points.size() < 4){ return; } //quit this branch if cliptetra has no faces
-      ConvexHull3D ch3d = new ConvexHull3D(cliptetra_points);
-      cliptetra = ch3d.getFaces();
+    if(show_tetras_){
+      ArrayList<EmbeddedFace> cliptetra = new ArrayList<EmbeddedFace>();
       
-    }else{
-      //get list of EmbeddedFaces directly from oriented_tetra
-      for(int j=0; j<4; j++){
-        OrientedFace of = oriented_tetra.getOrientedFace(j);
-        cliptetra.add(new EmbeddedFace(of.getVector(0), of.getVector(1), of.getVector(2)));
+      if(current_frustum != null){
+        //get list of EmbeddedFaces by clipping with Frustum3D and using ConvexHull3D
+        ArrayList<Vector> cliptetra_points = current_frustum.clipFace(oriented_tetra);
+        if(cliptetra_points.size() < 4){ return; } //quit this branch if cliptetra has no faces
+        ConvexHull3D ch3d = new ConvexHull3D(cliptetra_points);
+        cliptetra = ch3d.getFaces();
+        
+      }else{
+        //get list of EmbeddedFaces directly from oriented_tetra
+        for(int j=0; j<4; j++){
+          OrientedFace of = oriented_tetra.getOrientedFace(j);
+          cliptetra.add(new EmbeddedFace(of.getVector(0), of.getVector(1), of.getVector(2)));
+        }
       }
+      
+      //add clipped tetra to display
+      Color color = Color.getHSBColor((float)cur_tetra.getIndex()/(float)Triangulation.tetraTable.size(), 0.5f, 0.9f);
+      if(cur_tetra == source_tetra_){ color = Color.WHITE; }
+      SceneGraphComponent sgc_new_tetra = sgcFromEFList(cliptetra, color);
+      sgc_devmap.addChild(sgc_new_tetra);
     }
-    
-    //add clipped tetra to display
-    Color color = Color.getHSBColor((float)cur_tetra.getIndex()/(float)Triangulation.tetraTable.size(), 0.5f, 0.9f);
-    if(cur_tetra == source_tetra_){ color = Color.WHITE; }
-    SceneGraphComponent sgc_new_tetra = sgcFromEFList(cliptetra, color);
-    sgc_devmap.addChild(sgc_new_tetra);
     
     //see which faces to continue developing on, if any
     if(depth >= max_recursion_depth_){ return; }
