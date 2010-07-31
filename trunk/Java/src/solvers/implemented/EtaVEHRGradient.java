@@ -26,6 +26,7 @@ public class EtaVEHRGradient extends Solver {
     for(Edge e : Triangulation.edgeTable.values()) {
       etas[i] = Eta.at(e);
       vehr_eta_partials[i] = VEHR.partialAt(e);
+      i++;
     }
   }
   
