@@ -422,8 +422,9 @@ public class EdgeSetPanel extends JPanel {
         if (getEdgeList().getSelectedIndex() != -1) {
           Edge e = (Edge) getEdgeList().getModel().getElementAt(getEdgeList().getSelectedIndex());
           getSetEtaTextField().setText("" + Eta.valueAt(e));
-          getSetLengthTextField().setText("" + Length.valueAt(e));
+          getSetLengthTextField().setText("" + Length.valueAt(e));  
         }
+        getGraphPanel().repaint();
       }
     }
     

@@ -409,6 +409,7 @@ public class VertexSetPanel extends JPanel {
           getSetRadiusTextField().setText("" + Radius.valueAt(v));
           getSetAlphaTextField().setText("" + Alpha.valueAt(v));
         }
+        getGraphPanel().repaint();
       }
     }
     
