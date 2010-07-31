@@ -80,13 +80,6 @@ public class VertexGraphPanel extends JPanel {
       pointMap.put(v, i);
       geoPoints.add(new GeoPoint(xpoints[i], ypoints[i], v.toString()));
       
-//      if(list.isSelectedIndex(i)) {
-//        System.out.println("" + i + " is selected");
-//        g.setColor(Color.YELLOW);
-//      } else {
-//        System.out.println("" + i + " is not selected");
-//        g.setColor(Color.BLACK);
-//      }
       g.fillOval(xpoints[i] - circDiam / 2, ypoints[i] - circDiam / 2, 
               circDiam, circDiam);
       angle += angleStep; 
@@ -109,7 +102,18 @@ public class VertexGraphPanel extends JPanel {
       
       g.drawLine(xpoints[v1], ypoints[v1], xpoints[v2], ypoints[v2]);
     }
+    ((Graphics2D) g).setStroke(new BasicStroke(1));
     
+    for(int i = 0; i < model.getSize(); i++) {
+      if(list.isSelectedIndex(i)) {
+        g.setColor(Color.YELLOW);
+      } else {
+        g.setColor(Color.BLACK);
+      }
+      
+      g.fillOval(xpoints[i] - circDiam / 2, ypoints[i] - circDiam / 2, 
+          circDiam, circDiam);
+    }
   }
   
   protected class GraphPanelMouseListener extends MouseAdapter {
@@ -189,6 +193,7 @@ public class VertexGraphPanel extends JPanel {
       } else {
         list.setSelectedIndex(index);
       }
+      VertexGraphPanel.this.repaint();
     }
   }
 }

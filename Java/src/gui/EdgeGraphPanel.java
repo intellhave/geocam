@@ -80,15 +80,6 @@ public class EdgeGraphPanel extends JPanel {
 
       pointMap.put(v, i);
       
-//      if(list.isSelectedIndex(i)) {
-//        System.out.println("" + i + " is selected");
-//        g.setColor(Color.YELLOW);
-//      } else {
-//        System.out.println("" + i + " is not selected");
-//        g.setColor(Color.BLACK);
-//      }
-      g.fillOval(xpoints[i] - circDiam / 2, ypoints[i] - circDiam / 2, 
-              circDiam, circDiam);
       angle += angleStep;
       i++;
     }
@@ -101,10 +92,14 @@ public class EdgeGraphPanel extends JPanel {
     Edge e;
     for(int j = 0; j < model.getSize(); j++) {
       e = (Edge) model.getElementAt(j);
-      c = lengthMap.get(Length.valueAt(e));
-      if(c == null) {
-        c = new Color(r.nextInt(200), r.nextInt(200), r.nextInt(200));
-        lengthMap.put(Length.valueAt(e), c);
+      if(list.isSelectedIndex(j)) {
+        c = Color.YELLOW;
+      } else {
+        c = lengthMap.get(Length.valueAt(e));
+        if(c == null) {
+          c = new Color(r.nextInt(200), r.nextInt(200), r.nextInt(200));
+          lengthMap.put(Length.valueAt(e), c);
+        }
       }
       g.setColor(c);
       v1 = pointMap.get(e.getLocalVertices().get(0));
@@ -117,6 +112,12 @@ public class EdgeGraphPanel extends JPanel {
       g.drawLine(xpoints[v1], ypoints[v1], xpoints[v2], ypoints[v2]);
     }
     
+    ((Graphics2D) g).setStroke(new BasicStroke(1));
+    g.setColor(Color.BLACK);
+    for(int j = 0; j < xpoints.length; j++) {
+      g.fillOval(xpoints[j] - circDiam / 2, ypoints[j] - circDiam / 2, 
+          circDiam, circDiam);
+    }
   }
   
   private class GraphPanelMouseListener extends MouseAdapter {
@@ -196,6 +197,7 @@ public class EdgeGraphPanel extends JPanel {
       } else {
         list.setSelectedIndex(index);
       }
+      EdgeGraphPanel.this.repaint();
     }
   }
 }
