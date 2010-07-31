@@ -143,6 +143,9 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JCheckBox vehrPartialCheck;
   private JCheckBox dihAnglePartialCheck;
   private AbstractAction saveAction;
+  private EdgeSetPanel edgePanel;
+  private VertexSetPanel vertexPanel;
+  private JTabbedPane jTabbedPane1;
   private AbstractAction showLehrFlowDialog;
   private JMenuItem lehrFlowMenuItem;
   private AbstractAction saveFlowAction;
@@ -162,17 +165,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private JLabel lengthSetLabel;
   private JCheckBox edgeCurvatureCheck;
   private AbstractAction showVehrFlowDialog;
-  private AbstractAction showEtaDialog;
-  private JDialog setEtaDialog;
-  private AbstractAction showSetRadiiDialog;
-  private JLabel setEtaLabel;
-  private JTextField setEtaTextField;
-  private JButton okButton_SE;
-  private JButton cancelButton_SE;
-  private RadiusSetDialog setRadiiDialog;
-  private JMenuItem setEtaMenuItem;
-  private JMenuItem setRadiiMenuItem;
-  private JMenu editMenu;
   private VEHRFlowDialog vehrFlowDialog;
   private LEHRFlowDialog lehrFlowDialog;
   private YamabeFlowDialog yamabe2DDialog;
@@ -228,24 +220,23 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     try {
     	GroupLayout thisLayout = new GroupLayout((JComponent)getContentPane());
       getContentPane().setLayout(thisLayout);
-        thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
-        	.addContainerGap(16, 16)
-        	.addGroup(thisLayout.createParallelGroup()
-        	    .addGroup(GroupLayout.Alignment.LEADING, thisLayout.createSequentialGroup()
-        	        .addGap(0, 0, Short.MAX_VALUE)
-        	        .addComponent(getPolygonPanel(), GroupLayout.PREFERRED_SIZE, 375, GroupLayout.PREFERRED_SIZE)
-        	        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-        	        .addComponent(getJTabbedPane1(), GroupLayout.PREFERRED_SIZE, 228, GroupLayout.PREFERRED_SIZE))
-        	    .addComponent(getQuantityModPanel(), GroupLayout.Alignment.LEADING, 0, 615, Short.MAX_VALUE))
-        	.addContainerGap(20, 20));
         thisLayout.setHorizontalGroup(thisLayout.createSequentialGroup()
-        	.addContainerGap()
+        	.addContainerGap(6, 6)
         	.addGroup(thisLayout.createParallelGroup()
         	    .addComponent(getPolygonPanel(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 486, GroupLayout.PREFERRED_SIZE)
         	    .addComponent(getJTabbedPane1(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 487, GroupLayout.PREFERRED_SIZE))
         	.addGap(21)
-        	.addComponent(getQuantityModPanel(), GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE)
-        	.addContainerGap(23, Short.MAX_VALUE));
+        	.addComponent(getJTabbedPane1x(), GroupLayout.PREFERRED_SIZE, 440, GroupLayout.PREFERRED_SIZE)
+        	.addContainerGap(23, 23));
+        thisLayout.setVerticalGroup(thisLayout.createSequentialGroup()
+      	.addContainerGap(16, 16)
+      	.addGroup(thisLayout.createParallelGroup()
+      	    .addGroup(thisLayout.createSequentialGroup()
+      	        .addComponent(getPolygonPanel(), GroupLayout.PREFERRED_SIZE, 375, GroupLayout.PREFERRED_SIZE)
+      	        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+      	        .addComponent(getJTabbedPane1(), GroupLayout.PREFERRED_SIZE, 228, GroupLayout.PREFERRED_SIZE))
+      	    .addComponent(getJTabbedPane1x(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 615, GroupLayout.PREFERRED_SIZE))
+      	.addContainerGap(20, 20));
       setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
       this.setResizable(false);
       {
@@ -254,7 +245,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         {
           fileMenu = new JMenu();
           mainMenuBar.add(fileMenu);
-          mainMenuBar.add(getEditMenu());
           mainMenuBar.add(getRunMenu());
           fileMenu.setText("File");
           {
@@ -376,11 +366,10 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     getVehrFlowMenuItem().setEnabled(true);
     getYamabe2DMenuItem().setEnabled(true);
     getYamabe3DMenuItem().setEnabled(true);
-    getSetRadiiMenuItem().setEnabled(true);
-    getSetEtaMenuItem().setEnabled(true);
     getSaveGeoquantsMenuItem().setEnabled(true);
     getSaveMenu().setEnabled(true);
-    getSetRadiiDialog().updateList();
+    getVertexPanel().updateList();
+    getEdgePanel().updateList();
     
     for(Alpha a : Geometry.getAlphas()) {
       a.setValue(0.0);
@@ -1345,138 +1334,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     }
     return yamabe3DDialog;
   }
-  
-  private JMenu getEditMenu() {
-	  if(editMenu == null) {
-		  editMenu = new JMenu();
-		  editMenu.setText("Edit");
-		  editMenu.add(getSetRadiiMenuItem());
-		  editMenu.add(getSetEtaMenuItem());
-	  }
-	  return editMenu;
-  }
-  
-  private JMenuItem getSetRadiiMenuItem() {
-	  if(setRadiiMenuItem == null) {
-		  setRadiiMenuItem = new JMenuItem();
-		  setRadiiMenuItem.setText("Set Radii...");
-		  setRadiiMenuItem.setAction(getShowSetRadiiDialog());
-		  setRadiiMenuItem.setEnabled(false);
-	  }
-	  return setRadiiMenuItem;
-  }
-  
-  private JMenuItem getSetEtaMenuItem() {
-	  if(setEtaMenuItem == null) {
-		  setEtaMenuItem = new JMenuItem();
-		  setEtaMenuItem.setText("Set Etas...");
-		  setEtaMenuItem.setAction(getShowEtaDialog());
-		  setEtaMenuItem.setEnabled(false);
-	  }
-	  return setEtaMenuItem;
-  }
-  
-  private RadiusSetDialog getSetRadiiDialog() {
-	  if(setRadiiDialog == null) {
-		  setRadiiDialog = new RadiusSetDialog(this);
-	  }
-	  return setRadiiDialog;
-  }
-  
-  private JButton getCancelButton_SE() {
-    if(cancelButton_SE == null) {
-      cancelButton_SE = new JButton();
-      cancelButton_SE.setText("Cancel");
-      cancelButton_SE.setAction(new CloseSetEtaDialog("Cancel"));
-    }
-    return cancelButton_SE;
-  }
-    
-  private JButton getOkButton_SE() {
-    if(okButton_SE == null) {
-      okButton_SE = new JButton();
-      okButton_SE.setText("OK");
-      okButton_SE.setAction(new CloseSetEtaDialog("OK"));
-    }
-    return okButton_SE;
-  }
-  
-  private JTextField getSetEtaTextField() {
-    if(setEtaTextField == null) {
-      setEtaTextField = new JTextField();
-    }
-    return setEtaTextField;
-  }
-    
-  private JLabel getSetEtaLabel() {
-    if(setEtaLabel == null) {
-      setEtaLabel = new JLabel();
-      setEtaLabel.setText("Set all eta to:");
-    }
-    return setEtaLabel;
-  }
-  
-  private AbstractAction getShowSetRadiiDialog() {
-	  if(showSetRadiiDialog == null) {
-		  showSetRadiiDialog = new AbstractAction("Set Radii...", null) {
-			  public void actionPerformed(ActionEvent evt) {
-			    getSetRadiiDialog().pack();
-			    getSetRadiiDialog().setLocationRelativeTo(null);
-			    getSetRadiiDialog().setVisible(true);
-			  }
-		  };
-	  }
-	  return showSetRadiiDialog;
-  }
-  
-  private JDialog getSetEtaDialog() {
-	  if(setEtaDialog == null) {
-	    setEtaDialog = new JDialog(this);
-      GroupLayout setEtaDialogLayout = new GroupLayout((JComponent)setEtaDialog.getContentPane());
-      setEtaDialog.getContentPane().setLayout(setEtaDialogLayout);
-      setEtaDialog.setTitle("Set Eta");
-      setEtaDialog.setResizable(false);
-      setEtaDialog.setPreferredSize(new java.awt.Dimension(279, 133));
-      setEtaDialog.setSize(279, 133);
-      setEtaDialogLayout.setHorizontalGroup(setEtaDialogLayout.createSequentialGroup()
-        .addContainerGap()
-        .addComponent(getSetEtaLabel(), GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-        .addGroup(setEtaDialogLayout.createParallelGroup()
-            .addGroup(GroupLayout.Alignment.LEADING, setEtaDialogLayout.createSequentialGroup()
-                .addComponent(getOkButton_SE(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(getCancelButton_SE(), GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE))
-            .addGroup(GroupLayout.Alignment.LEADING, setEtaDialogLayout.createSequentialGroup()
-                .addPreferredGap(getOkButton_SE(), getSetEtaTextField(), LayoutStyle.ComponentPlacement.INDENT)
-                .addComponent(getSetEtaTextField(), GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)))
-        .addContainerGap(6, Short.MAX_VALUE));
-      setEtaDialogLayout.setVerticalGroup(setEtaDialogLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(setEtaDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getSetEtaTextField(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getSetEtaLabel(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-        .addGap(29)
-        .addGroup(setEtaDialogLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-            .addComponent(getOkButton_SE(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-            .addComponent(getCancelButton_SE(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-        .addContainerGap());
-	  }
-	  return setEtaDialog;
-  }
-  
-  private AbstractAction getShowEtaDialog() {
-	  if(showEtaDialog == null) {
-		  showEtaDialog = new AbstractAction("Set Etas...", null) {
-			  public void actionPerformed(ActionEvent evt) {
-	         getSetEtaDialog().pack();
-	         getSetEtaDialog().setLocationRelativeTo(null);
-	         getSetEtaDialog().setVisible(true);
-			  }
-		  };
-	  }
-	  return showEtaDialog;
-  }
-  
+   
   private AbstractAction getShowVehrFlowDialog() {
 	  if(showVehrFlowDialog == null) {
 		  showVehrFlowDialog = new AbstractAction("VEHR Flow", null) {
@@ -1534,25 +1392,6 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  };
 	  }
 	  return showYamabe3DDialog;
-  }
-    
-  class CloseSetEtaDialog extends AbstractAction {
-    public CloseSetEtaDialog(String text) {
-      super(text, null);
-    }
-    public void actionPerformed(ActionEvent evt) {
-      if(getOkButton_SE().equals(evt.getSource())) {
-        try{
-          double eta_value = Double.parseDouble(getSetEtaTextField().getText());
-          for(Eta e : Geometry.getEtas()) {
-            e.setValue(eta_value);
-          }
-          getPolygonPanel().repaint();
-        } catch(NumberFormatException e) {
-        }
-      }
-      getSetEtaDialog().dispose();
-    }
   }
   
   protected GeoRecorder getRecorder() {
@@ -2014,5 +1853,31 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  return showLehrFlowDialog;
   }
   
+  private JTabbedPane getJTabbedPane1x() {
+	  if(jTabbedPane1 == null) {
+		  jTabbedPane1 = new JTabbedPane();
+		  jTabbedPane1.addTab("Standard", null, getQuantityModPanel(), null);
+		  jTabbedPane1.addTab("Vertices", null, getVertexPanel(), null);
+		  jTabbedPane1.addTab("Edges", null, getEdgePanel(), null);
+	  }
+	  return jTabbedPane1;
+  }
+  
+  private VertexSetPanel getVertexPanel() {
+	  if(vertexPanel == null) {
+		  vertexPanel = new VertexSetPanel();
+		  vertexPanel.setOwner(this);
+	  }
+	  return vertexPanel;
+  }
+  
+  private EdgeSetPanel getEdgePanel() {
+	  if(edgePanel == null) {
+		  edgePanel = new EdgeSetPanel();
+		  edgePanel.setOwner(this);
+	  }
+	  return edgePanel;
+  }
+
 }
 

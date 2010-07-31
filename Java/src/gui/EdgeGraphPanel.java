@@ -26,15 +26,16 @@ import triangulation.Edge;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 
-public class GraphPanel extends JPanel {
+public class EdgeGraphPanel extends JPanel {
   private HashMap<Double, Color> lengthMap;
   private HashMap<Vertex, Integer> pointMap;
-  protected List<GeoPoint> geoPoints;
+  private HashMap<Edge, Integer> lineMap;
+  protected List<GeoLine> geoLines;
   private GeoquantViewer owner;
   private JList list;
   private GraphPanelMouseListener mouseListener;
   
-  public GraphPanel() {
+  public EdgeGraphPanel() {
     super();
     mouseListener = new GraphPanelMouseListener();
     this.addMouseListener(mouseListener);
@@ -62,7 +63,8 @@ public class GraphPanel extends JPanel {
     int size = Triangulation.vertexTable.size();
     int radius = Math.min(halfWidth, halfHeight) - 10;
     pointMap = new HashMap<Vertex, Integer>();
-    geoPoints = new LinkedList<GeoPoint>();
+    lineMap = new HashMap<Edge, Integer>();
+    geoLines = new LinkedList<GeoLine>();
     
     int[] xpoints = new int[size];
     int[] ypoints = new int[size];
@@ -71,25 +73,34 @@ public class GraphPanel extends JPanel {
     double angleStep = 2 * Math.PI / size;
     double angle = Math.PI/2;
     ListModel model = list.getModel();
-    Vertex v;
-    for(int i = 0; i < model.getSize(); i++) {
-      v = (Vertex) (model.getElementAt(i));
+    int i = 0;
+    for(Vertex v : Triangulation.vertexTable.values()) {
       xpoints[i] = (int) (radius * Math.cos(angle) + halfWidth);
       ypoints[i] = (int) (-1 * radius * Math.sin(angle) + halfHeight);
 
       pointMap.put(v, i);
-      geoPoints.add(new GeoPoint(xpoints[i], ypoints[i], v.toString()));
       
+//      if(list.isSelectedIndex(i)) {
+//        System.out.println("" + i + " is selected");
+//        g.setColor(Color.YELLOW);
+//      } else {
+//        System.out.println("" + i + " is not selected");
+//        g.setColor(Color.BLACK);
+//      }
       g.fillOval(xpoints[i] - circDiam / 2, ypoints[i] - circDiam / 2, 
               circDiam, circDiam);
-      angle += angleStep; 
+      angle += angleStep;
+      i++;
     }
     
     int v1, v2;
     Color c;
     ((Graphics2D) g).setStroke(new BasicStroke(3));
+    
     Random r = new Random();
-    for(Edge e : Triangulation.edgeTable.values()) {
+    Edge e;
+    for(int j = 0; j < model.getSize(); j++) {
+      e = (Edge) model.getElementAt(j);
       c = lengthMap.get(Length.valueAt(e));
       if(c == null) {
         c = new Color(r.nextInt(200), r.nextInt(200), r.nextInt(200));
@@ -98,13 +109,17 @@ public class GraphPanel extends JPanel {
       g.setColor(c);
       v1 = pointMap.get(e.getLocalVertices().get(0));
       v2 = pointMap.get(e.getLocalVertices().get(1));
+      lineMap.put(e, j);
+
+      geoLines.add(new GeoLine(xpoints[v1], ypoints[v1], 
+          xpoints[v2], ypoints[v2], e.toString()));
       
       g.drawLine(xpoints[v1], ypoints[v1], xpoints[v2], ypoints[v2]);
     }
     
   }
   
-  protected class GraphPanelMouseListener extends MouseAdapter {
+  private class GraphPanelMouseListener extends MouseAdapter {
     private JLabel message;
     private Popup geoDisplayPopup;
     private int x;
@@ -128,20 +143,20 @@ public class GraphPanel extends JPanel {
       x = e.getX();
       y = e.getY();
       double minDist = -1;
-      if(geoPoints == null || geoPoints.size() == 0) {
+      if(geoLines == null || geoLines.size() == 0) {
         return;
       }
-      for(GeoPoint p : geoPoints) {
-        double dist = p.distance(x, y);
+      for(GeoLine l : geoLines) {
+        double dist = l.ptSegDist(x, y);
         if(minDist > dist || minDist < 0) {
-          pointMessage = p.getMessage();
+          pointMessage = l.getMessage();
           minDist = dist;
         }
       }
       if(minDist > 2.5) {
         return;
       }
-      geoPanel = GraphPanel.this;
+      geoPanel = EdgeGraphPanel.this;
       message.setText(pointMessage);
       PopupFactory factory = PopupFactory.getSharedInstance();
       geoDisplayPopup = factory.getPopup(owner, message, 
@@ -151,17 +166,17 @@ public class GraphPanel extends JPanel {
     }
   
     public void mouseClicked(MouseEvent e) {
-      String vertex = "";
+      String edge = "";
       x = e.getX();
       y = e.getY();
       double minDist = -1;
-      if(geoPoints == null || geoPoints.size() == 0) {
+      if(geoLines == null || geoLines.size() == 0) {
         return;
       }
-      for(GeoPoint p : geoPoints) {
-        double dist = p.distance(x, y);
+      for(GeoLine l : geoLines) {
+        double dist = l.ptSegDist(x, y);
         if(minDist > dist || minDist < 0) {
-          vertex = p.getMessage();
+          edge = l.getMessage();
           minDist = dist;
         }
       }
@@ -169,8 +184,8 @@ public class GraphPanel extends JPanel {
       if(minDist > 10) {
         return;
       }
-      int vertIndex = Integer.parseInt(vertex.substring(7));
-      int index = pointMap.get(Triangulation.vertexTable.get(vertIndex));
+      int edgeIndex = Integer.parseInt(edge.substring(5));
+      int index = lineMap.get(Triangulation.edgeTable.get(edgeIndex));
       
       if(e.isShiftDown()) {
         if(list.isSelectedIndex(index)) {
