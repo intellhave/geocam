@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="xml/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="xml/xml-apis.jar"/>
 	<classpathentry kind="lib" path="xml/xsltc.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jreality"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
