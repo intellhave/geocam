@@ -12,6 +12,7 @@ public abstract class Simplex {
   protected LinkedList<Edge> localEdges;
   protected LinkedList<Face> localFaces;
   protected LinkedList<Tetra> localTetras;
+  protected int multiplicity;
   
   public Simplex(int index) {
     this.index = index;
@@ -21,6 +22,7 @@ public abstract class Simplex {
     localEdges = new LinkedList<Edge>();
     localFaces = new LinkedList<Face>();
     localTetras = new LinkedList<Tetra>();
+    multiplicity = 1;
   }
   
   public int getIndex() {
@@ -31,8 +33,16 @@ public abstract class Simplex {
     return serialNumber;
   }
   
+  public int getMultiplicity(){
+    return multiplicity;
+  }
+  
   public void setIndex(int index) {
     this.index = index;
+  }
+  
+  public void setMultiplicity(int multiplicity){
+    this.multiplicity = multiplicity;
   }
   
   // Local simplices retrieval methods
