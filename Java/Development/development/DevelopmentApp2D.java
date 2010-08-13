@@ -29,6 +29,7 @@ import de.jreality.scene.Appearance;
 import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
+import de.jreality.scene.StereoViewer;
 import de.jreality.scene.Viewer;
 import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.AxisState;
@@ -71,7 +72,7 @@ public class DevelopmentApp2D {
   private static boolean show_faces_ = true;
   private static HashMap<Face,Color> color_scheme_;
   //  objects
-  private static double object_radius_ = 0.03;
+  private static double object_radius_ = 0.04;
   //  showing embedded mfld
   private static boolean show_embedded_ = false;
   //  simulated 3d mode
@@ -84,7 +85,7 @@ public class DevelopmentApp2D {
   private static final int max_bounding_square_side_length_ = 15; //max for slider
   private static int bounding_square_side_length_ = 3;
   //  movement options
-  private static final double movement_units_per_second_ = 1.0;
+  private static final double movement_units_per_second_ = 0.4;
   private static final double movement_seconds_per_rotation_ = 2.0;
   
   //data
@@ -326,6 +327,7 @@ public class DevelopmentApp2D {
     Camera camera = new Camera();
     camera.setNear(.015);
     camera.setFieldOfView(60);
+//  camera.setStereo(true);
     camera_forward_ = new Vector(1,0);
     
     sgc_camera_ = SceneGraphUtility.createFullSceneGraphComponent("camera");
@@ -335,6 +337,7 @@ public class DevelopmentApp2D {
     
     //make jrviewer use the camera we set up
     viewer_ = jrv.getViewer();
+ //   viewer_.setStereoType(2);
     camera_free_ = viewer_.getCameraPath();
     camera_source_ = SceneGraphUtility.getPathsBetween(viewer_.getSceneRoot(), sgc_camera_).get(0);
     camera_source_.push(sgc_camera_.getCamera());
@@ -409,7 +412,7 @@ public class DevelopmentApp2D {
   
   }
   
-  //struct holding info neccessary to develop off an edge
+  //struct holding info necessary to develop off an edge
   private static class DevelopmentEdgeInfo{
     public Vector vect0_,vect1_;
     public Vertex vert0_,vert1_;
@@ -660,7 +663,7 @@ public class DevelopmentApp2D {
     
     //set some basic attributes
     app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
-    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
     
     //set point shader
     DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_points, true);

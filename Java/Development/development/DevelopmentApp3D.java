@@ -22,6 +22,8 @@ import de.jreality.scene.Appearance;
 import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
+import de.jreality.jogl.AbstractViewer;
+import de.jreality.scene.StereoViewer;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.AxisState;
@@ -63,7 +65,7 @@ public class DevelopmentApp3D {
   
   //options
   private static boolean show_tetras_ = true;
-  private static double object_radius_ = 0.1;
+  private static double object_radius_ = 0.3;
   private static final int max_recursion_depth_ = 5;
   //private static final double movement_units_per_second_ = 1.0;
   private static final double movement_seconds_per_rotation_ = 2.0;
@@ -207,6 +209,7 @@ public class DevelopmentApp3D {
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
       //double rand = Math.random(); //random return value is in [0,1)
+      //Length.at(e).setValue(7.75+.25*rand); 
       Length.at(e).setValue(3); 
     }
     
@@ -232,6 +235,8 @@ public class DevelopmentApp3D {
     Camera camera = new Camera();
     camera.setNear(.015);
     camera.setFieldOfView(60);
+//    camera.setStereo(true);
+    
     
     sgc_camera_ = SceneGraphUtility.createFullSceneGraphComponent("camera");
     sgc_root_.addChild(sgc_camera_);
@@ -243,6 +248,8 @@ public class DevelopmentApp3D {
     camera_right_ = new Vector(1,0,0);
     updateCamera();
     
+//    DevViewer drv = new DevViewer();
+   
     //jrviewer
     JRViewer jrv = new JRViewer();
     jrv.addBasicUI();
@@ -262,6 +269,7 @@ public class DevelopmentApp3D {
     camera_free_ = viewer_.getCameraPath();
     camera_source_ = SceneGraphUtility.getPathsBetween(viewer_.getSceneRoot(), sgc_camera_).get(0);
     camera_source_.push(sgc_camera_.getCamera());
+   
     
     if(camera_source_is_default_){ viewer_.setCameraPath(camera_source_); }
     else{ viewer_.setCameraPath(camera_free_); }
@@ -445,11 +453,12 @@ public class DevelopmentApp3D {
     
     //set some basic attributes
     app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
-    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
     
     //set point shader
     DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app_points, true);
     DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
+ //   DefaultPointShader dps = (DefaultPointShader) ShaderUtility.createDefaultGeometryShader(app_points, true);   
     dps.setSpheresDraw(true);
     dps.setPointRadius(object_radius_);
     dps.setDiffuseColor(Color.BLUE);
@@ -503,7 +512,7 @@ public class DevelopmentApp3D {
     //polygon shader
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
     dps.setDiffuseColor(color);
-    dps.setTransparency(0.99d);
+    dps.setTransparency(0.89d);
     
     //set appearance
     sgc.setAppearance(app);
