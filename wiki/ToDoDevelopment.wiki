@@ -1,10 +1,6 @@
-#summary One-sentence summary of this page.
+#summary To-Do List for Development
 
-= Introduction =
-
-To-Do List for Development 
-
-= Details =
+= Development To Do =
 
   * Move code section to src-
   * Gui issues
