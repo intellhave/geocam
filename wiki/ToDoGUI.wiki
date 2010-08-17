@@ -1,0 +1,13 @@
+#summary One-sentence summary of this page.
+
+= A To-Do list for the Geoquant Viewer =
+
+= Details =
+
+* Separate out 2D/3D
+* Animate Curvature or other quantities than r
+* Fix length interaction
+* ``Circle packing'' to ``inversive distance''
+* Better ways of setting ``length'' and ``eta''
+* change interface with alpha, length, eta.
+ 
