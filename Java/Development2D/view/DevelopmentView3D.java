@@ -41,16 +41,19 @@ public class DevelopmentView3D extends JRViewer implements Observer {
 	
 	public DevelopmentView3D(Development development, ColorScheme scheme) {
 		sgcRoot = new SceneGraphComponent();
-		this.setContent(sgcRoot);
-	    scene = this.getPlugin(Scene.class);
-		this.startup();
 
 		maxDepth = development.getDesiredDepth();
 		colorScheme = scheme;
+		System.out.println("building SGCTree");
 		sgcTree = new SGCTree(development, colorScheme, 3);
-	//	root = development.getRoot();
+    System.out.println("done");
 		sourcePoint = development.getSourcePoint();
+    System.out.println("seting SGC");
 		updateSGC(sgcTree.getRoot(), 0);
+    System.out.println("done");
+    this.setContent(sgcRoot);
+    scene = this.getPlugin(Scene.class);
+  this.startup();
 		sgcRoot.addChild(sgcFromPoint(sourcePoint));
 	    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(), scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
 
