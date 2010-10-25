@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import view.Development.DevelopmentNode;
 import view.SGCTree.SGCNode;
+import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
 import de.jreality.scene.Appearance;
@@ -25,12 +25,12 @@ import development.Vector;
 public class DevelopmentView2D extends JRViewer implements Observer {
 	private SGCTree sgcTree;
 	private SceneGraphComponent sgcRoot;
-	private DevelopmentNode root;
 	private Vector sourcePoint;
 	private ColorScheme colorScheme;
 	private int maxDepth;
 	
 	private Vector cameraForward;
+	private SceneGraphComponent viewingDirection;
 	private SceneGraphComponent sgcCamera;
 	private Viewer viewer;
 	private SceneGraphPath cameraFree;
@@ -39,11 +39,13 @@ public class DevelopmentView2D extends JRViewer implements Observer {
 		maxDepth = development.getDesiredDepth();
 		colorScheme = scheme;
 		sgcTree = new SGCTree(development, colorScheme, 2);
-		root = development.getRoot();
 		sourcePoint = development.getSourcePoint();
 		sgcRoot = new SceneGraphComponent();
 		updateSGC(sgcTree.getRoot(), 0);
 		sgcRoot.addChild(sgcFromPoint(sourcePoint));
+    cameraForward = new Vector(3,0);
+		viewingDirection = sgcFromVector(cameraForward);
+		sgcRoot.addChild(viewingDirection);
 		this.setContent(sgcRoot);
 		this.startup();
 		
@@ -51,8 +53,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
 	    Camera camera = new Camera();
 	    camera.setNear(.015);
 	    camera.setFieldOfView(60);
-	//  camera.setStereo(true);
-	    cameraForward = new Vector(1,0);
 	    
 	    sgcCamera = SceneGraphUtility.createFullSceneGraphComponent("camera");
 	    sgcRoot.addChild(sgcCamera);
@@ -90,7 +90,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
 
 	@Override
 	public void update(Observable development, Object arg) {
-		root = ((Development) development).getRoot();
 		sourcePoint = ((Development) development).getSourcePoint();
 		maxDepth = ((Development) development).getDesiredDepth();
 		sgcTree.setVisibleDepth(maxDepth);
@@ -149,6 +148,63 @@ public class DevelopmentView2D extends JRViewer implements Observer {
 		// return
 		return sgc_points;
 	}
+	
+	 public static SceneGraphComponent sgcFromVector(Vector vector) {
+
+	    // create the sgc
+	    SceneGraphComponent sgc_vector = new SceneGraphComponent();
+
+	    // create appearance
+	    Appearance app_points = new Appearance();
+
+	    // set some basic attributes
+	    app_points.setAttribute(CommonAttributes.EDGE_DRAW, true);
+	   // app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
+	    app_points.setAttribute(CommonAttributes.TUBE_RADIUS, 0.01);
+
+	    // set point shader
+	    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
+	        .createDefaultGeometryShader(app_points, true);
+
+	    // set appearance
+	    sgc_vector.setAppearance(app_points);
+
+	    // set vertlist
+	    double[][] vertlist = { { vector.getComponent(0), vector.getComponent(1),
+	        0 }, {0, 0, 0} };
+	    
+	    int[] edgeList = {0,1};
+
+	    // create geometry with pointsetfactory
+	    IndexedLineSetFactory ilsf = new IndexedLineSetFactory();
+
+	    ilsf.setVertexCount(2);
+	    ilsf.setVertexCoordinates(vertlist);
+	    ilsf.setEdgeCount(1);
+	    ilsf.setEdgeIndices(edgeList);
+	    ilsf.update();
+
+	    // set geometry
+	    sgc_vector.setGeometry(ilsf.getGeometry());
+
+	    // return
+	    return sgc_vector;
+	  }
+
+  public void rotate(double angle) {
+    double cos = Math.cos(-angle);
+    double sin = Math.sin(-angle);
+    double x = cameraForward.getComponent(0);
+    double y = cameraForward.getComponent(1);
+    
+    double x_new = cos*x - sin*y;
+    double y_new = sin*x + cos*y;
+    cameraForward = new Vector(x_new,y_new);
+    sgcRoot.removeChild(viewingDirection);
+    viewingDirection = sgcFromVector(cameraForward);
+    sgcRoot.addChild(viewingDirection);
+    updateCamera();
+  }
 
 	
 }

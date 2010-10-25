@@ -26,144 +26,152 @@ import de.jreality.util.SceneGraphUtility;
 import development.Vector;
 
 public class DevelopmentView3D extends JRViewer implements Observer {
-	  private Viewer viewer;
-	  private SceneGraphPath camera_source;
-	  private SceneGraphComponent sgc_camera;
-	  private SceneGraphComponent sgcRoot;
-	  private Scene scene;
-	  private Vector cameraForward;
+  private Viewer viewer;
+  private SceneGraphPath camera_source;
+  private SceneGraphComponent sgc_camera;
+  private SceneGraphComponent sgcRoot;
+  private Scene scene;
+  private Vector cameraForward;
 
-	  private int maxDepth;
-	  private ColorScheme colorScheme;
-	  private SGCTree sgcTree;
-	  private Vector sourcePoint;
-	 
-	
-	public DevelopmentView3D(Development development, ColorScheme scheme) {
-		sgcRoot = new SceneGraphComponent();
+  private int maxDepth;
+  private ColorScheme colorScheme;
+  private SGCTree sgcTree;
+  private Vector sourcePoint;
 
-		maxDepth = development.getDesiredDepth();
-		colorScheme = scheme;
-		System.out.println("building SGCTree");
-		sgcTree = new SGCTree(development, colorScheme, 3);
+  public DevelopmentView3D(Development development, ColorScheme scheme) {
+    sgcRoot = new SceneGraphComponent();
+
+    maxDepth = development.getDesiredDepth();
+    colorScheme = scheme;
+    System.out.println("building SGCTree");
+    sgcTree = new SGCTree(development, colorScheme, 3);
     System.out.println("done");
-		sourcePoint = development.getSourcePoint();
+    sourcePoint = development.getSourcePoint();
     System.out.println("seting SGC");
-		updateSGC(sgcTree.getRoot(), 0);
+    updateSGC(sgcTree.getRoot(), 0);
     System.out.println("done");
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
-  this.startup();
-		sgcRoot.addChild(sgcFromPoint(sourcePoint));
-	    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(), scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
+    this.startup();
+    sgcRoot.addChild(sgcFromPoint(sourcePoint));
+    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
+        scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
 
-		
-	    //make camera and sgc_camera
-	    Camera camera = new Camera();
-	    camera.setNear(.015);
-	    camera.setFieldOfView(60);
-	    cameraForward = new Vector(1,0);
-	    
-	    sgc_camera = SceneGraphUtility.createFullSceneGraphComponent("camera");
-	    sgcRoot.addChild(sgc_camera);
-	    sgc_camera.setCamera(camera);
-	    updateCamera();
-	    
-	    this.setContent(sgcRoot);
-	    scene = this.getPlugin(Scene.class);
-	   
-	    viewer = this.getViewer();
-	 //   viewer_.setStereoType(2);
-	    camera_source = SceneGraphUtility.getPathsBetween(viewer.getSceneRoot(), sgc_camera).get(0);
-	    camera_source.push(sgc_camera.getCamera());
-	    
-	    viewer.setCameraPath(camera_source); 
-	    viewer.render();
-	}
-	
-	  private void updateCamera(){
-		    
-		    de.jreality.math.Matrix M = new de.jreality.math.Matrix(
-		        cameraForward.getComponent(1),0,cameraForward.getComponent(0),0,
-		        -cameraForward.getComponent(0),0,cameraForward.getComponent(1),0,
-		        0,1,0,0,
-		        0,0,0,1
-		    );
-		    M.assignTo(sgc_camera);
-		  }
-	
-	private void updateSGC(SGCNode node, int depth) {
-		if (depth > maxDepth)
-			return;
-		if (depth == 0)
-			clearSGC();
+    // make camera and sgc_camera
+    Camera camera = new Camera();
+    camera.setNear(.015);
+    camera.setFieldOfView(60);
+    cameraForward = new Vector(-1, 0);
 
-		sgcRoot.addChild(node.getSGC());
-		Iterator<SGCNode> itr = node.getChildren().iterator();
-		while (itr.hasNext()) {
-			updateSGC(itr.next(), depth + 1);
-		}
-	}
-	
-	@Override
-	public void update(Observable development, Object arg) {
-		sourcePoint = ((Development) development).getSourcePoint();
-		maxDepth = ((Development) development).getDesiredDepth();
-		sgcTree.setVisibleDepth(maxDepth);
-		sgcRoot.addChild(sgcFromPoint(sourcePoint));
-	}
-	
-	public void setColorScheme(ColorScheme scheme) {
-		colorScheme = scheme;
-		sgcTree.setColorScheme(colorScheme);
-	}
+    sgc_camera = SceneGraphUtility.createFullSceneGraphComponent("camera");
+    sgcRoot.addChild(sgc_camera);
+    sgc_camera.setCamera(camera);
+    updateCamera();
 
-	private void clearSGC() {
-		List<SceneGraphComponent> list = sgcRoot.getChildComponents();
-		for(int i = 0; i < list.size(); i++) {
-			sgcRoot.removeChild(list.get(i));
-		}
-	}
+    this.setContent(sgcRoot);
+    scene = this.getPlugin(Scene.class);
 
-	public static SceneGraphComponent sgcFromPoint(Vector point) {
+    viewer = this.getViewer();
+    camera_source = SceneGraphUtility.getPathsBetween(viewer.getSceneRoot(),
+        sgc_camera).get(0);
+    camera_source.push(sgc_camera.getCamera());
 
-		// create the sgc
-		SceneGraphComponent sgc_points = new SceneGraphComponent();
+    viewer.setCameraPath(camera_source);
+    viewer.render();
+  }
 
-		// create appearance
-		Appearance app_points = new Appearance();
+  private void updateCamera() {
 
-		// set some basic attributes
-		app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
-		app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
+    de.jreality.math.Matrix M = new de.jreality.math.Matrix(
+        cameraForward.getComponent(1), 0, cameraForward.getComponent(0), 0,
+        -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 0,
+        1, 0, 0, 0, 0, 0, 1);
+    M.assignTo(sgc_camera);
+  }
 
-		// set point shader
-		DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
-				.createDefaultGeometryShader(app_points, true);
-		DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
-		dps.setSpheresDraw(true);
-		dps.setPointRadius(0.01);
-		dps.setDiffuseColor(Color.BLUE);
+  public void rotate(double angle) {
+    double cos = Math.cos(angle);
+    double sin = Math.sin(angle);
+    double x = cameraForward.getComponent(0);
+    double y = cameraForward.getComponent(1);
 
-		// set appearance
-		sgc_points.setAppearance(app_points);
+    double x_new = cos * x - sin * y;
+    double y_new = sin * x + cos * y;
+    cameraForward = new Vector(x_new, y_new);
+    updateCamera();
+  }
 
-		// set vertlist
-		double[][] vertlist = { { point.getComponent(0), point.getComponent(1),
-				0 } };
+  private void updateSGC(SGCNode node, int depth) {
+    if (depth > maxDepth)
+      return;
+    if (depth == 0)
+      clearSGC();
 
-		// create geometry with pointsetfactory
-		PointSetFactory psf = new PointSetFactory();
+    sgcRoot.addChild(node.getSGC());
+    Iterator<SGCNode> itr = node.getChildren().iterator();
+    while (itr.hasNext()) {
+      updateSGC(itr.next(), depth + 1);
+    }
+  }
 
-		psf.setVertexCount(1);
-		psf.setVertexCoordinates(vertlist);
-		psf.update();
+  @Override
+  public void update(Observable development, Object arg) {
+    sourcePoint = ((Development) development).getSourcePoint();
+    maxDepth = ((Development) development).getDesiredDepth();
+    sgcTree.setVisibleDepth(maxDepth);
+    sgcRoot.addChild(sgcFromPoint(sourcePoint));
+  }
 
-		// set geometry
-		sgc_points.setGeometry(psf.getGeometry());
+  public void setColorScheme(ColorScheme scheme) {
+    colorScheme = scheme;
+    sgcTree.setColorScheme(colorScheme);
+  }
 
-		// return
-		return sgc_points;
-	}
+  private void clearSGC() {
+    List<SceneGraphComponent> list = sgcRoot.getChildComponents();
+    for (int i = 0; i < list.size(); i++) {
+      sgcRoot.removeChild(list.get(i));
+    }
+  }
+
+  public static SceneGraphComponent sgcFromPoint(Vector point) {
+
+    // create the sgc
+    SceneGraphComponent sgc_points = new SceneGraphComponent();
+
+    // create appearance
+    Appearance app_points = new Appearance();
+
+    // set some basic attributes
+    app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
+    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
+
+    // set point shader
+    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
+        .createDefaultGeometryShader(app_points, true);
+    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
+    dps.setSpheresDraw(true);
+    dps.setPointRadius(0.01);
+    dps.setDiffuseColor(Color.BLUE);
+
+    // set appearance
+    sgc_points.setAppearance(app_points);
+
+    // set vertlist
+    double[][] vertlist = { { point.getComponent(0), point.getComponent(1), 0 } };
+
+    // create geometry with pointsetfactory
+    PointSetFactory psf = new PointSetFactory();
+
+    psf.setVertexCount(1);
+    psf.setVertexCoordinates(vertlist);
+    psf.update();
+
+    // set geometry
+    sgc_points.setGeometry(psf.getGeometry());
+
+    // return
+    return sgc_points;
+  }
 
 }
