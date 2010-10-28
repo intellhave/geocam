@@ -39,7 +39,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
   private int maxDepth = 25;
   private int currentDepth = maxDepth;
-  private static final double ROTATION_ANGLE = Math.PI / 90;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -57,6 +56,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   // Movement stuff
   private Timer timer;
   private boolean moving = false;
+  private Vector movementDirection = new Vector(1,0);
+  private static final double ROTATION_ANGLE = Math.PI / 90;
+  private static final double STEP_SIZE = 0.2;
 
   private enum movements {
     left, right, forward, back
@@ -78,6 +80,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       sourcePoint.add(Coord2D.coordAt(iv.next(), sourceFace));
     }
     sourcePoint.scale(1.0f / 3.0f);
+//    Vector v = new Vector(movementDirection);
+//    v.scale(.2);
+//    sourcePoint.add(v);
 
     colorScheme = new ColorScheme(schemes.DEPTH);
     development = new Development(sourceFace, sourcePoint, maxDepth,
@@ -145,6 +150,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     this.setLayout(new FlowLayout());
     this.add(sliderPanel);
     this.add(colorPanel);
+
     this.addKeyListener(this);
     this.setFocusable(true);
     this.requestFocus();
@@ -153,17 +159,44 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   public class Moving implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       if (curMovement == movements.right) {
+        rotateMovementDirection(ROTATION_ANGLE);
         view2D.rotate(ROTATION_ANGLE);
         view3D.rotate(ROTATION_ANGLE);
       } else if (curMovement == movements.left) {
+        rotateMovementDirection(-ROTATION_ANGLE);
         view2D.rotate(-ROTATION_ANGLE);
         view3D.rotate(-ROTATION_ANGLE);
+      } else if( curMovement == movements.forward) {
+        Vector v = new Vector(movementDirection);
+        v.scale(STEP_SIZE);
+        sourcePoint.add(v);
+        development.setSourcePoint(sourcePoint);
+        timer.stop();
       }
+    else if( curMovement == movements.back) {
+      Vector v = new Vector(movementDirection);
+      v.scale(-STEP_SIZE);
+      sourcePoint.add(v);
+      development.setSourcePoint(sourcePoint);
+      timer.stop();
     }
+    }
+  }
+  
+  private void rotateMovementDirection(double angle) {
+    double cos = Math.cos(-angle);
+    double sin = Math.sin(-angle);
+    double x = movementDirection.getComponent(0);
+    double y = movementDirection.getComponent(1);
+    
+    double x_new = cos*x - sin*y;
+    double y_new = sin*x + cos*y;
+    movementDirection = new Vector(x_new, y_new);
   }
 
   @Override
-  public void keyTyped(KeyEvent e) {}
+  public void keyTyped(KeyEvent e) {
+  }
 
   @Override
   public void keyPressed(KeyEvent e) {
@@ -183,10 +216,11 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     } else {
       moving = false;
       timer.stop();
-  }
+    }
   }
 
   @Override
-  public void keyReleased(KeyEvent e) {}
+  public void keyReleased(KeyEvent e) {
+  }
 
 }
