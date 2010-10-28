@@ -30,6 +30,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
   private SceneGraphPath camera_source;
   private SceneGraphComponent sgc_camera;
   private SceneGraphComponent sgcRoot;
+  private SceneGraphComponent srcPnt;
   private Scene scene;
   private Vector cameraForward;
 

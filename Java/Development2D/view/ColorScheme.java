@@ -19,7 +19,7 @@ public class ColorScheme {
 	}
 
 	public Color getColor(DevelopmentNode node) {
-		if (node.isRoot())
+		if (node.faceIsSource())
 			return Color.WHITE;
 
 		if (scheme == schemes.FACE) {

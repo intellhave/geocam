@@ -51,8 +51,10 @@ public class Development extends Observable {
 	}
 	
 	public void setSourcePoint(Vector point) {
+	  System.out.println("setting new source point");
 		sourcePoint = point;
 		buildTree();
+		System.out.println("done");
 		setChanged();
 		notifyObservers();
 	}
@@ -186,32 +188,15 @@ public class Development extends Observable {
 			}
 		}
 
-		public void addChild(DevelopmentNode node) {
-			children.add(node);
-		}
+		public void addChild(DevelopmentNode node) { children.add(node); }
+		public void removeChild(DevelopmentNode node) { children.remove(node); }
 
-		public void removeChild(DevelopmentNode node) {
-			children.remove(node);
-		}
+		public EmbeddedFace getEmbeddedFace() {	return embeddedFace;	}
+		public Face getFace() { return face; }
+		public int getDepth() { return depth; }
+		public ArrayList<DevelopmentNode> getChildren() { return children; }
 
-		public EmbeddedFace getEmbeddedFace() {
-			return embeddedFace;
-		}
-
-		public Face getFace() {
-			return face;
-		}
-
-		public int getDepth() {
-			return depth;
-		}
-
-		public ArrayList<DevelopmentNode> getChildren() {
-			return children;
-		}
-
-		public boolean isRoot() {
-			return parent == null;
-		}
+		public boolean isRoot() { return parent == null; }
+		public boolean faceIsSource() { return face.equals(sourceFace); }
 	}
 }
