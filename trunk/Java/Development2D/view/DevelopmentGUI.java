@@ -7,11 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.Iterator;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.Timer;
@@ -37,7 +42,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     window.setVisible(true);
   }
 
-  private int maxDepth = 25;
+  private int maxDepth = 10;
   private int currentDepth = maxDepth;
 
   private static Development development;
@@ -56,7 +61,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   // Movement stuff
   private Timer timer;
   private boolean moving = false;
-  private Vector movementDirection = new Vector(1,0);
+  private Vector movementDirection = new Vector(1, 0);
   private static final double ROTATION_ANGLE = Math.PI / 90;
   private static final double STEP_SIZE = 0.2;
 
@@ -67,26 +72,11 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private movements curMovement;
 
   public DevelopmentGUI() {
-    EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
-
-    Iterator<Integer> i = null;
-    // pick some arbitrary face and source point
-    i = Triangulation.faceTable.keySet().iterator();
-    sourceFace = Triangulation.faceTable.get(i.next());
-
-    sourcePoint = new Vector(0, 0);
-    Iterator<Vertex> iv = sourceFace.getLocalVertices().iterator();
-    while (iv.hasNext()) {
-      sourcePoint.add(Coord2D.coordAt(iv.next(), sourceFace));
-    }
-    sourcePoint.scale(1.0f / 3.0f);
-//    Vector v = new Vector(movementDirection);
-//    v.scale(.2);
-//    sourcePoint.add(v);
-
     colorScheme = new ColorScheme(schemes.DEPTH);
-    development = new Development(sourceFace, sourcePoint, maxDepth,
-        currentDepth);
+
+    development = null;
+    loadSurface("models/epcot.off");
+
     view2D = new DevelopmentView2D(development, colorScheme);
     development.addObserver(view2D);
 
@@ -99,11 +89,61 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     layoutGUI();
   }
 
+  private void loadSurface(String filename) {
+    EmbeddedTriangulation.readEmbeddedSurface(filename);
+
+    Iterator<Integer> i = null;
+    // pick some arbitrary face and source point
+    i = Triangulation.faceTable.keySet().iterator();
+    sourceFace = Triangulation.faceTable.get(i.next());
+
+    sourcePoint = new Vector(0, 0);
+    Iterator<Vertex> iv = sourceFace.getLocalVertices().iterator();
+    while (iv.hasNext()) {
+      sourcePoint.add(Coord2D.coordAt(iv.next(), sourceFace));
+    }
+    sourcePoint.scale(1.0f / 3.0f);
+
+    if (development == null)
+      development = new Development(sourceFace, sourcePoint, maxDepth,
+          currentDepth);
+    else
+      development.rebuild(sourceFace, sourcePoint, maxDepth, currentDepth);
+  }
+
   private void layoutGUI() {
     this.setSize(220, 200);
     this.setResizable(true);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     // this.setLayout(new BorderLayout());
+
+    JMenuBar menuBar = new JMenuBar();
+    JMenu file = new JMenu("File");
+    JMenuItem open = new JMenuItem("Load Surface");
+    open.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        JFileChooser fc = new JFileChooser();
+
+        fc.setDialogTitle("Open File");
+        // Choose only files, not directories
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        // Start in current directory
+        fc.setCurrentDirectory(new File("."));
+        fc.showOpenDialog(null);
+
+        File file = null;
+        try {
+          file = fc.getSelectedFile();
+        } catch (Exception ex) {
+          System.out.println("Invalid file");
+        }
+
+        loadSurface(file.getAbsolutePath());
+      }
+    });
+    menuBar.add(file);
+    file.add(open);
+    this.add(menuBar);
 
     sliderPanel = new JPanel();
     sliderPanel.setLayout(new GridLayout(2, 1));
@@ -166,31 +206,30 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         rotateMovementDirection(-ROTATION_ANGLE);
         view2D.rotate(-ROTATION_ANGLE);
         view3D.rotate(-ROTATION_ANGLE);
-      } else if( curMovement == movements.forward) {
+      } else if (curMovement == movements.forward) {
         Vector v = new Vector(movementDirection);
         v.scale(STEP_SIZE);
         sourcePoint.add(v);
         development.setSourcePoint(sourcePoint);
         timer.stop();
+      } else if (curMovement == movements.back) {
+        Vector v = new Vector(movementDirection);
+        v.scale(-STEP_SIZE);
+        sourcePoint.add(v);
+        development.setSourcePoint(sourcePoint);
+        timer.stop();
       }
-    else if( curMovement == movements.back) {
-      Vector v = new Vector(movementDirection);
-      v.scale(-STEP_SIZE);
-      sourcePoint.add(v);
-      development.setSourcePoint(sourcePoint);
-      timer.stop();
-    }
     }
   }
-  
+
   private void rotateMovementDirection(double angle) {
     double cos = Math.cos(-angle);
     double sin = Math.sin(-angle);
     double x = movementDirection.getComponent(0);
     double y = movementDirection.getComponent(1);
-    
-    double x_new = cos*x - sin*y;
-    double y_new = sin*x + cos*y;
+
+    double x_new = cos * x - sin * y;
+    double y_new = sin * x + cos * y;
     movementDirection = new Vector(x_new, y_new);
   }
 
