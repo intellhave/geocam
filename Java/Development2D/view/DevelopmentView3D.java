@@ -54,7 +54,6 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
     this.startup();
-    sgcRoot.addChild(sgcFromPoint(sourcePoint));
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
         scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
 
@@ -117,10 +116,14 @@ public class DevelopmentView3D extends JRViewer implements Observer {
 
   @Override
   public void update(Observable development, Object arg) {
-    sourcePoint = ((Development) development).getSourcePoint();
-    maxDepth = ((Development) development).getDesiredDepth();
-    sgcTree.setVisibleDepth(maxDepth);
-    sgcRoot.addChild(sgcFromPoint(sourcePoint));
+    String whatChanged = (String) arg;
+    if (whatChanged.equals("depth")) {
+      maxDepth = ((Development) development).getDesiredDepth();
+      sgcTree.setVisibleDepth(maxDepth);
+    } else if(whatChanged.equals("surface")) {
+      sgcTree = new SGCTree((Development)development, colorScheme, 3);
+      updateSGC(sgcTree.getRoot(), 0);
+    }
   }
 
   public void setColorScheme(ColorScheme scheme) {
@@ -130,8 +133,8 @@ public class DevelopmentView3D extends JRViewer implements Observer {
 
   private void clearSGC() {
     List<SceneGraphComponent> list = sgcRoot.getChildComponents();
-    for (int i = 0; i < list.size(); i++) {
-      sgcRoot.removeChild(list.get(i));
+    while(list.size() > 0) {
+      sgcRoot.removeChild(list.get(0));
     }
   }
 

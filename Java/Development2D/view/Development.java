@@ -32,6 +32,17 @@ public class Development extends Observable {
 		buildTree();
 	}
 
+	 public void rebuild(Face sourceF, Vector sourcePt, int max, int desired) {
+	    maxDepth = max;
+	    desiredDepth = desired;
+	    sourcePoint = sourcePt;
+	    sourceFace = sourceF;
+
+	    buildTree();
+	    setChanged();
+	    notifyObservers("surface");
+	  }
+	
 	public DevelopmentNode getRoot() {
 		return root;
 	}
@@ -43,7 +54,7 @@ public class Development extends Observable {
 	public void setDesiredDepth(int d) {
 		desiredDepth = d;
 		setChanged();
-		notifyObservers();
+		notifyObservers("depth");
 	}
 
 	public int getDesiredDepth() {
@@ -56,7 +67,7 @@ public class Development extends Observable {
 		buildTree();
 		System.out.println("done");
 		setChanged();
-		notifyObservers();
+		notifyObservers();// nothing will happen
 	}
 
 	private void buildTree() {
@@ -77,8 +88,8 @@ public class Development extends Observable {
 			List<Edge> list1 = v1.getLocalEdges();
 			Edge edge = null;
 			for (int j = 0; j < list0.size(); j++) {
-				if (list1.contains(list0.get(i))) {
-					edge = list0.get(i);
+				if (list1.contains(list0.get(j))) {
+					edge = list0.get(j);
 					break;
 				}
 			}
@@ -145,12 +156,29 @@ public class Development extends Observable {
 			if (edge.equals(sourceEdge)) {
 				continue;
 			}
+			
 
 			// build frustum through edge end-points
 			Vector vect0 = newTrans.affineTransPoint(Coord2D.coordAt(v0, face));
 			Vector vect1 = newTrans.affineTransPoint(Coord2D.coordAt(v1, face));
-			Frustum2D newFrustum = Frustum2D.intersect(new Frustum2D(vect1,
-					vect0), frustum);
+			// check which is left and which is right
+			Vector left = vect0;
+			Vector right = vect1;
+	     Vertex v3 = vertices.get((i + 2) % vertices.size());
+	     Vector vect3 = newTrans.affineTransPoint(Coord2D.coordAt(v3, face));
+
+	     Vector l = Vector.subtract(left, vect3);
+	     Vector r = Vector.subtract(right, vect3);
+			Vector l3d = new Vector(l.getComponent(0), l.getComponent(1), 0);
+	    Vector r3d = new Vector(r.getComponent(0), r.getComponent(1), 0);
+	    Vector cross = Vector.cross(r3d, l3d);
+	    if(cross.getComponent(2) < 0) {// made the wrong choice if z-component is negative
+	      left = vect1;
+	      right = vect0;
+	    }
+	      
+			Frustum2D newFrustum = Frustum2D.intersect(new Frustum2D(left,
+					right), frustum);
 
 			// each edge is adjacent to 2 faces; take the one that is not the
 			// current face
