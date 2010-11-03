@@ -12,8 +12,16 @@ public class Frustum2D {
   private Vector leftNormal, rightNormal;
 
   public Frustum2D(Vector l, Vector r) {
+   Vector l3d = new Vector(l.getComponent(0), l.getComponent(1), 0);
+   Vector r3d = new Vector(r.getComponent(0), r.getComponent(1), 0);
+   Vector cross = Vector.cross(r3d, l3d);
+   if(cross.getComponent(2) < 0) { // left and right are switched, so it is null
+     left = new Vector(0,0);
+     right = new Vector(0,0);
+   }else {
     left = l;
     right = r;
+   }
     findNormals();
   }
 
@@ -57,6 +65,7 @@ public class Frustum2D {
   }
 
   public static Frustum2D intersect(Frustum2D frustum1, Frustum2D frustum2) {
+    if(frustum1.isNull() || frustum2.isNull()) return null;
     if (frustum1.checkInterior(frustum2.getLeft())) {
       if (frustum1.checkInterior(frustum2.getRight()))
         return frustum2;
@@ -72,6 +81,10 @@ public class Frustum2D {
     }
 
     return null; // no intersection
+  }
+  
+  public boolean isNull() {
+    return left.getComponent(0) == 0 && left.getComponent(1) == 0;
   }
 
   public EmbeddedFace clipFace(EmbeddedFace toClip) {
