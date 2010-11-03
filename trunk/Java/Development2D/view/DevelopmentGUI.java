@@ -42,7 +42,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     window.setVisible(true);
   }
 
-  private int maxDepth = 10;
+  private int maxDepth = 20;
   private int currentDepth = maxDepth;
 
   private static Development development;
@@ -75,7 +75,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     colorScheme = new ColorScheme(schemes.DEPTH);
 
     development = null;
-    loadSurface("models/epcot.off");
+    loadSurface("models/cone.off");
 
     view2D = new DevelopmentView2D(development, colorScheme);
     development.addObserver(view2D);

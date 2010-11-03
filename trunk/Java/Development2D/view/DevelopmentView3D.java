@@ -30,33 +30,17 @@ public class DevelopmentView3D extends JRViewer implements Observer {
   private SceneGraphPath camera_source;
   private SceneGraphComponent sgc_camera;
   private SceneGraphComponent sgcRoot;
-  private SceneGraphComponent srcPnt;
+  private SceneGraphComponent sgcDevelopment;
   private Scene scene;
   private Vector cameraForward;
 
   private int maxDepth;
   private ColorScheme colorScheme;
   private SGCTree sgcTree;
-  private Vector sourcePoint;
 
   public DevelopmentView3D(Development development, ColorScheme scheme) {
     sgcRoot = new SceneGraphComponent();
-
-    maxDepth = development.getDesiredDepth();
-    colorScheme = scheme;
-    System.out.println("building SGCTree");
-    sgcTree = new SGCTree(development, colorScheme, 3);
-    System.out.println("done");
-    sourcePoint = development.getSourcePoint();
-    System.out.println("seting SGC");
-    updateSGC(sgcTree.getRoot(), 0);
-    System.out.println("done");
-    this.setContent(sgcRoot);
-    scene = this.getPlugin(Scene.class);
-    this.startup();
-    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
-        scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
-
+    sgcDevelopment = new SceneGraphComponent();
     // make camera and sgc_camera
     Camera camera = new Camera();
     camera.setNear(.015);
@@ -67,6 +51,21 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sgcRoot.addChild(sgc_camera);
     sgc_camera.setCamera(camera);
     updateCamera();
+
+    maxDepth = development.getDesiredDepth();
+    colorScheme = scheme;
+    System.out.println("building SGCTree");
+    sgcTree = new SGCTree(development, colorScheme, 3);
+    System.out.println("done");
+    System.out.println("seting SGC");
+    updateSGC(sgcTree.getRoot(), 0);
+    sgcRoot.addChild(sgcDevelopment);
+    System.out.println("done");
+    this.setContent(sgcRoot);
+    scene = this.getPlugin(Scene.class);
+    this.startup();
+    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
+        scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
 
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
@@ -105,9 +104,9 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     if (depth > maxDepth)
       return;
     if (depth == 0)
-      clearSGC();
+      clearSGC(sgcDevelopment);
 
-    sgcRoot.addChild(node.getSGC());
+    sgcDevelopment.addChild(node.getSGC());
     Iterator<SGCNode> itr = node.getChildren().iterator();
     while (itr.hasNext()) {
       updateSGC(itr.next(), depth + 1);
@@ -122,8 +121,11 @@ public class DevelopmentView3D extends JRViewer implements Observer {
       sgcTree.setVisibleDepth(maxDepth);
     } else if(whatChanged.equals("surface")) {
       sgcTree = new SGCTree((Development)development, colorScheme, 3);
+      sgcRoot.removeChild(sgcDevelopment);
       updateSGC(sgcTree.getRoot(), 0);
+      sgcRoot.addChild(sgcDevelopment);
     }
+    updateCamera();
   }
 
   public void setColorScheme(ColorScheme scheme) {
@@ -131,10 +133,10 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sgcTree.setColorScheme(colorScheme);
   }
 
-  private void clearSGC() {
-    List<SceneGraphComponent> list = sgcRoot.getChildComponents();
+  private void clearSGC(SceneGraphComponent sgc) {
+    List<SceneGraphComponent> list = sgc.getChildComponents();
     while(list.size() > 0) {
-      sgcRoot.removeChild(list.get(0));
+      sgc.removeChild(list.get(0));
     }
   }
 

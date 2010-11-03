@@ -25,6 +25,7 @@ import development.Vector;
 public class DevelopmentView2D extends JRViewer implements Observer {
   private SGCTree sgcTree;
   private SceneGraphComponent sgcRoot;
+  private SceneGraphComponent sgcDevelopment;
   private ColorScheme colorScheme;
   private int maxDepth;
 
@@ -39,9 +40,11 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     colorScheme = scheme;
     sgcTree = new SGCTree(development, colorScheme, 2);
     sgcRoot = new SceneGraphComponent();
+    sgcDevelopment = new SceneGraphComponent();
     updateSGC(sgcTree.getRoot(), 0);
-    setViewingDirection(cameraForward);
+    sgcRoot.addChild(sgcDevelopment);    
     sgcRoot.addChild(viewingDirection);
+    setViewingDirection(cameraForward);
     this.setContent(sgcRoot);
     this.startup();
 
@@ -64,9 +67,9 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     if (depth > maxDepth)
       return;
     if (depth == 0)
-      clearSGC();
+      clearSGC(sgcDevelopment);
 
-    sgcRoot.addChild(node.getSGC());
+    sgcDevelopment.addChild(node.getSGC());
     Iterator<SGCNode> itr = node.getChildren().iterator();
     while (itr.hasNext()) {
       updateSGC(itr.next(), depth + 1);
@@ -87,7 +90,9 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     String whatChanged = (String)arg;
     if (whatChanged.equals("surface")) {
       sgcTree = new SGCTree((Development) development, colorScheme, 2);
+      sgcRoot.removeChild(sgcDevelopment);
       updateSGC(sgcTree.getRoot(), 0);
+      sgcRoot.addChild(sgcDevelopment);
     } else if (whatChanged.equals("depth")) {
       maxDepth = ((Development) development).getDesiredDepth();
       sgcTree.setVisibleDepth(maxDepth);
@@ -99,10 +104,10 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     sgcTree.setColorScheme(colorScheme);
   }
 
-  private void clearSGC() {
-    List<SceneGraphComponent> list = sgcRoot.getChildComponents();
+  private void clearSGC(SceneGraphComponent sgc) {
+    List<SceneGraphComponent> list = sgc.getChildComponents();
     while(list.size() > 0) {
-      sgcRoot.removeChild(list.get(0));
+      sgc.removeChild(list.get(0));
     }
   }
 
@@ -164,7 +169,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
 
     ilsf.setVertexCoordinates(new double[][] { { 0, 0, 0 },
         { vector.getComponent(0), vector.getComponent(1), 0 } });
-    // ilsf.setVertexColors(new Color[] { Color.blue, Color.black });
     ilsf.setEdgeIndices(new int[][] { { 0, 1 } });
     ilsf.update();
     viewingDirection.setGeometry(ilsf.getGeometry());

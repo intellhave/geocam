@@ -29,7 +29,9 @@ public class Development extends Observable {
 		sourcePoint = sourcePt;
 		sourceFace = sourceF;
 
+		System.out.println("building development tree");
 		buildTree();
+		System.out.println("done");
 	}
 
 	 public void rebuild(Face sourceF, Vector sourcePt, int max, int desired) {
@@ -38,7 +40,9 @@ public class Development extends Observable {
 	    sourcePoint = sourcePt;
 	    sourceFace = sourceF;
 
+	    System.out.println("building development tree");
 	    buildTree();
+	    System.out.println("done");
 	    setChanged();
 	    notifyObservers("surface");
 	  }
