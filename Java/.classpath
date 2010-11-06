@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="DiscreteGeodesics"/>
-	<classpathentry kind="src" path="Development"/>
+	<classpathentry kind="src" path="Development2D"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="xml/bcel-5.2.jar"/>
@@ -12,10 +12,21 @@
 	<classpathentry kind="lib" path="xml/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="xml/xml-apis.jar"/>
 	<classpathentry kind="lib" path="xml/xsltc.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jreality">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jreality/jni/win32"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="jreality/antlr.jar"/>
+	<classpathentry kind="lib" path="jreality/beans.jar"/>
+	<classpathentry kind="lib" path="jreality/bsh.jar"/>
+	<classpathentry kind="lib" path="jreality/colorpicker.jar"/>
+	<classpathentry kind="lib" path="jreality/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="jreality/iText-2.1.3.jar"/>
+	<classpathentry kind="lib" path="jreality/janino.jar"/>
+	<classpathentry kind="lib" path="jreality/jjack_min.jar"/>
+	<classpathentry kind="lib" path="jreality/jogl.jar"/>
+	<classpathentry kind="lib" path="jreality/jReality.jar"/>
+	<classpathentry kind="lib" path="jreality/jrworkspace.jar"/>
+	<classpathentry kind="lib" path="jreality/jterm.jar"/>
+	<classpathentry kind="lib" path="jreality/smrj.jar"/>
+	<classpathentry kind="lib" path="jreality/sunflow.jar"/>
+	<classpathentry kind="lib" path="jreality/xpp3.jar"/>
+	<classpathentry kind="lib" path="jreality/xstream.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
