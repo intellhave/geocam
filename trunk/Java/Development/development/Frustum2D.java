@@ -56,7 +56,7 @@ public class Frustum2D {
   }
 
   public boolean checkInterior(Vector vector) {
-
+    if(left.isZero()) return false;
     if (Vector.dot(leftNormal, vector) < -epsilon)
       return false;
     if (Vector.dot(rightNormal, vector) < -epsilon)

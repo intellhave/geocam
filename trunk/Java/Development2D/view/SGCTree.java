@@ -1,154 +1,158 @@
 package view;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import triangulation.Face;
 import view.Development.DevelopmentNode;
-import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
-import de.jreality.shader.CommonAttributes;
-import de.jreality.shader.DefaultGeometryShader;
-import de.jreality.shader.DefaultLineShader;
-import de.jreality.shader.DefaultPolygonShader;
-import de.jreality.shader.ShaderUtility;
+import development.EmbeddedFace;
+import development.Frustum2D;
+import development.Vector;
 
 public class SGCTree {
-	private SGCNode root;
-	private ColorScheme colorScheme;
-	private int dimension;
-	private final double simulated3DHeight = 0.08;
+  private SGCNode root;
+  private ColorScheme colorScheme;
+  private int dimension;
+  private final double simulated3DHeight = 0.08;
+  private Vector sourcePoint;
 
-	public SGCTree(Development d, ColorScheme scheme, int dim) {
-		dimension = dim;
-		colorScheme = scheme;
-		root = new SGCNode(d.getRoot(), dimension);
-		buildTree(root, d.getRoot());
-		setVisibleDepth(d.getDesiredDepth());
-	}
+  public SGCTree(Development d, ColorScheme scheme, int dim) {
+    sourcePoint = d.getSourcePoint();
+    dimension = dim;
+    colorScheme = scheme;
+    root = new SGCNode(d.getRoot(), dimension);
+    buildTree(root, d.getRoot());
+    setVisibleDepth(d.getDesiredDepth());
+  }
 
-	public void setColorScheme(ColorScheme scheme) {
-		colorScheme = scheme;
-		changeColors(root);
-	}
+  public void setColorScheme(ColorScheme scheme) {
+    colorScheme = scheme;
+    changeColors(root);
+  }
 
-	private void changeColors(SGCNode node) {
-		node.updateColor();
-		Iterator<SGCNode> itr = node.getChildren().iterator();
-		while (itr.hasNext()) {
-			changeColors(itr.next());
-		}
-	}
+  private void changeColors(SGCNode node) {
+    node.updateColor();
+    Iterator<SGCNode> itr = node.getChildren().iterator();
+    while (itr.hasNext()) {
+      changeColors(itr.next());
+    }
+  }
 
-	public void setVisibleDepth(int depth) {
-		setVisibility(root, depth);
-	}
+  public void setVisibleDepth(int depth) {
+    setVisibility(root, depth);
+  }
 
-	private void setVisibility(SGCNode node, int depth) {
-		if (node.getDepth() <= depth)
-			node.getSGC().setVisible(true);
-		else
-			node.getSGC().setVisible(false);
-		Iterator<SGCNode> itr = node.getChildren().iterator();
-		while (itr.hasNext()) {
-			setVisibility(itr.next(), depth);
-		}
-	}
+  private void setVisibility(SGCNode node, int depth) {
+    if (node.getDepth() <= depth)
+      node.getSGC().setVisible(true);
+    else
+      node.getSGC().setVisible(false);
+    Iterator<SGCNode> itr = node.getChildren().iterator();
+    while (itr.hasNext()) {
+      setVisibility(itr.next(), depth);
+    }
+  }
 
-	private void buildTree(SGCNode parent, DevelopmentNode node) {
-		SGCNode newNode = new SGCNode(node, dimension);
-		parent.addChild(newNode);
-		Iterator<DevelopmentNode> itr = node.getChildren().iterator();
-		while (itr.hasNext()) {
-			buildTree(newNode, itr.next());
-		}
-	}
+  private void buildTree(SGCNode parent, DevelopmentNode node) {
+    SGCNode newNode = new SGCNode(node, dimension);
+    parent.addChild(newNode);
+    Iterator<DevelopmentNode> itr = node.getChildren().iterator();
+    while (itr.hasNext()) {
+      buildTree(newNode, itr.next());
+    }
+  }
 
-	public SGCNode getRoot() {
-		return root;
-	}
+  public SGCNode getRoot() {
+    return root;
+  }
 
-	public static Appearance getFaceAppearance(double transparency) {
+  public class SGCNode {
+    private SceneGraphComponent sgc;
+    private DevelopmentNode node;
+    private ArrayList<SGCNode> children;
+    private int dimension;
 
-		// create appearance for developed faces
-		Appearance app_face = new Appearance();
+    public SGCNode(DevelopmentNode n, int dim) {
+      dimension = dim;
+      node = n;
+      sgc = new SceneGraphComponent();
 
-		// set some basic attributes
-		app_face.setAttribute(CommonAttributes.FACE_DRAW, true);
-		app_face.setAttribute(CommonAttributes.EDGE_DRAW, true);
-		app_face.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-		app_face.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
-		app_face.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+      Vector transSourcePoint2d = null;
+      if (node.faceIsSource()) {
+        Vector newSource = new Vector(sourcePoint.getComponent(0),
+            sourcePoint.getComponent(1), 1);
+        Vector transSourcePoint = node.getAffineTransformation()
+            .transformVector(newSource);
+        transSourcePoint2d = new Vector(transSourcePoint.getComponent(0),
+            transSourcePoint.getComponent(1));
+      }
 
-		// set shaders
-		DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
-				.createDefaultGeometryShader(app_face, true);
+      if (dimension == 3) {
+        sgc.setGeometry(node.getEmbeddedFace().getGeometry3D(
+            colorScheme.getColor(node), simulated3DHeight));
+        sgc.setAppearance(SGCMethods.getFaceAppearance(0.5f));
 
-		// line shader
-		DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
-		dls.setTubeDraw(false);
-		dls.setLineWidth(0.0);
-		dls.setDiffuseColor(Color.BLACK);
+        if (node.faceIsSource()
+            && contains(node.getEmbeddedFace(), transSourcePoint2d)) {
+          sgc.addChild(SGCMethods.sgcFromPoint(transSourcePoint2d));
+        }
 
-		// polygon shader
-		DefaultPolygonShader dps = (DefaultPolygonShader) dgs
-				.getPolygonShader();
-		dps.setDiffuseColor(Color.WHITE);
-		dps.setTransparency(transparency);
+      } else if (dimension == 2) {
+        sgc.setGeometry(node.getEmbeddedFace().getGeometry(
+            colorScheme.getColor(node)));
+        sgc.setAppearance(SGCMethods.getFaceAppearance(0.5f));
+        if (node.faceIsSource()
+            && contains(node.getEmbeddedFace(), transSourcePoint2d)) {
+          sgc.addChild(SGCMethods.sgcFromPoint(transSourcePoint2d));
+        } else if (node.isRoot()) {// containment algorithm doesn't work for
+                                   // root face
+          sgc.addChild(SGCMethods.sgcFromPoint(transSourcePoint2d));
+        }
+      }
+      children = new ArrayList<SGCNode>();
+    }
 
-		return app_face;
-	}
+    public int getDepth() {
+      return node.getDepth();
+    }
 
-	public class SGCNode {
-		private SceneGraphComponent sgc;
-		private DevelopmentNode node;
-		private ArrayList<SGCNode> children;
-		private int dimension;
+    public void updateColor() {
+      if (dimension == 3)
+        sgc.setGeometry(node.getEmbeddedFace().getGeometry3D(
+            colorScheme.getColor(node), simulated3DHeight));
+      else
+        sgc.setGeometry(node.getEmbeddedFace().getGeometry(
+            colorScheme.getColor(node)));
+    }
 
-		public SGCNode(DevelopmentNode n, int dim) {
-			dimension = dim;
-			node = n;
-			sgc = new SceneGraphComponent();
-			if (dimension == 3) {
-				sgc.setGeometry(node.getEmbeddedFace().getGeometry3D(
-						colorScheme.getColor(node), simulated3DHeight));
-				sgc.setAppearance(getFaceAppearance(0.5f));
-			} else {
-				sgc.setGeometry(node.getEmbeddedFace().getGeometry(
-						colorScheme.getColor(node)));
-				sgc.setAppearance(getFaceAppearance(0.5f));
-			}
-			children = new ArrayList<SGCNode>();
-		}
+    public void addChild(SGCNode node) {
+      children.add(node);
+    }
 
-		public int getDepth() {
-			return node.getDepth();
-		}
+    public Face getFace() {
+      return node.getFace();
+    }
 
-		public void updateColor() {
-			if (dimension == 3)
-				sgc.setGeometry(node.getEmbeddedFace().getGeometry3D(
-						colorScheme.getColor(node), simulated3DHeight));
-			else
-				sgc.setGeometry(node.getEmbeddedFace().getGeometry(
-						colorScheme.getColor(node)));
-		}
+    public ArrayList<SGCNode> getChildren() {
+      return children;
+    }
 
-		public void addChild(SGCNode node) {
-			children.add(node);
-		}
+    public SceneGraphComponent getSGC() {
+      return sgc;
+    }
 
-		public Face getFace() {
-			return node.getFace();
-		}
-
-		public ArrayList<SGCNode> getChildren() {
-			return children;
-		}
-
-		public SceneGraphComponent getSGC() {
-			return sgc;
-		}
-	}
+    private boolean contains(EmbeddedFace face, Vector point) {
+      List<Vector> vertices = face.getVectors();
+      for (int i = 0; i < vertices.size(); i++) {
+        Vector v1 = vertices.get(i);
+        Vector v2 = vertices.get((i + 1) % vertices.size());
+        Frustum2D frustum = new Frustum2D(v1, v2);
+        if (frustum.checkInterior(point))
+          return true;
+      }
+      return false;
+    }
+  }
 }
