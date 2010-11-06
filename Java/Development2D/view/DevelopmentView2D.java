@@ -8,7 +8,6 @@ import java.util.Observer;
 
 import view.SGCTree.SGCNode;
 import de.jreality.geometry.IndexedLineSetFactory;
-import de.jreality.geometry.PointSetFactory;
 import de.jreality.plugin.JRViewer;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.Camera;
@@ -41,6 +40,7 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     sgcTree = new SGCTree(development, colorScheme, 2);
     sgcRoot = new SceneGraphComponent();
     sgcDevelopment = new SceneGraphComponent();
+    
     updateSGC(sgcTree.getRoot(), 0);
     sgcRoot.addChild(sgcDevelopment);    
     sgcRoot.addChild(viewingDirection);
@@ -77,7 +77,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
   }
 
   private void updateCamera() {
-
     de.jreality.math.Matrix M = new de.jreality.math.Matrix(
         cameraForward.getComponent(1), 0, cameraForward.getComponent(0), 0,
         -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 0,
@@ -88,11 +87,13 @@ public class DevelopmentView2D extends JRViewer implements Observer {
   @Override
   public void update(Observable development, Object arg) {
     String whatChanged = (String)arg;
+    
     if (whatChanged.equals("surface")) {
       sgcTree = new SGCTree((Development) development, colorScheme, 2);
       sgcRoot.removeChild(sgcDevelopment);
       updateSGC(sgcTree.getRoot(), 0);
       sgcRoot.addChild(sgcDevelopment);
+      
     } else if (whatChanged.equals("depth")) {
       maxDepth = ((Development) development).getDesiredDepth();
       sgcTree.setVisibleDepth(maxDepth);
@@ -109,46 +110,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     while(list.size() > 0) {
       sgc.removeChild(list.get(0));
     }
-  }
-
-  public static SceneGraphComponent sgcFromPoint(Vector point) {
-
-    // create the sgc
-    SceneGraphComponent sgc_points = new SceneGraphComponent();
-
-    // create appearance
-    Appearance app_points = new Appearance();
-
-    // set some basic attributes
-    app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
-    app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
-
-    // set point shader
-    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
-        .createDefaultGeometryShader(app_points, true);
-    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
-    dps.setSpheresDraw(true);
-    dps.setPointRadius(0.01);
-    dps.setDiffuseColor(Color.BLUE);
-
-    // set appearance
-    sgc_points.setAppearance(app_points);
-
-    // set vertlist
-    double[][] vertlist = { { point.getComponent(0), point.getComponent(1), 0 } };
-
-    // create geometry with pointsetfactory
-    PointSetFactory psf = new PointSetFactory();
-
-    psf.setVertexCount(1);
-    psf.setVertexCoordinates(vertlist);
-    psf.update();
-
-    // set geometry
-    sgc_points.setGeometry(psf.getGeometry());
-
-    // return
-    return sgc_points;
   }
 
   public void setViewingDirection(Vector vector) {

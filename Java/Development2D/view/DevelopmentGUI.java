@@ -42,7 +42,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     window.setVisible(true);
   }
 
-  private int maxDepth = 20;
+  private int maxDepth = 23;
   private int currentDepth = maxDepth;
 
   private static Development development;
@@ -115,7 +115,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     this.setSize(220, 200);
     this.setResizable(true);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    // this.setLayout(new BorderLayout());
 
     JMenuBar menuBar = new JMenuBar();
     JMenu file = new JMenu("File");
@@ -143,7 +142,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     });
     menuBar.add(file);
     file.add(open);
-    this.add(menuBar);
+    this.setJMenuBar(menuBar);
 
     sliderPanel = new JPanel();
     sliderPanel.setLayout(new GridLayout(2, 1));
