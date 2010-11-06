@@ -8,31 +8,29 @@ import java.util.Observer;
 
 import view.SGCTree.SGCNode;
 import de.jreality.geometry.IndexedLineSetFactory;
+import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
+import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.Appearance;
-import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphComponent;
-import de.jreality.scene.SceneGraphPath;
-import de.jreality.scene.Viewer;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.ShaderUtility;
-import de.jreality.util.SceneGraphUtility;
+import de.jreality.util.CameraUtility;
+import development.Development;
 import development.Vector;
 
 public class DevelopmentView2D extends JRViewer implements Observer {
   private SGCTree sgcTree;
   private SceneGraphComponent sgcRoot;
   private SceneGraphComponent sgcDevelopment;
+  private Scene scene;
   private ColorScheme colorScheme;
   private int maxDepth;
 
   private Vector cameraForward = new Vector(1, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
-  private SceneGraphComponent sgcCamera;
-  private Viewer viewer;
-  private SceneGraphPath cameraFree;
 
   public DevelopmentView2D(Development development, ColorScheme scheme) {
     maxDepth = development.getDesiredDepth();
@@ -45,22 +43,14 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     sgcRoot.addChild(sgcDevelopment);    
     sgcRoot.addChild(viewingDirection);
     setViewingDirection(cameraForward);
+    this.addBasicUI();
+ 
     this.setContent(sgcRoot);
+    scene = this.getPlugin(Scene.class);
+    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
+        scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
+    
     this.startup();
-
-    // make camera and sgc_camera
-    Camera camera = new Camera();
-    camera.setNear(.015);
-    camera.setFieldOfView(60);
-
-    sgcCamera = SceneGraphUtility.createFullSceneGraphComponent("camera");
-    sgcRoot.addChild(sgcCamera);
-    sgcCamera.setCamera(camera);
-    updateCamera();
-
-    viewer = this.getViewer();
-    cameraFree = viewer.getCameraPath();
-    viewer.setCameraPath(cameraFree);
   }
 
   private void updateSGC(SGCNode node, int depth) {
@@ -76,14 +66,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     }
   }
 
-  private void updateCamera() {
-    de.jreality.math.Matrix M = new de.jreality.math.Matrix(
-        cameraForward.getComponent(1), 0, cameraForward.getComponent(0), 0,
-        -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 0,
-        1, 0, 0, 0, 0, 0, 1);
-    M.assignTo(sgcCamera);
-  }
-
   @Override
   public void update(Observable development, Object arg) {
     String whatChanged = (String)arg;
@@ -93,6 +75,8 @@ public class DevelopmentView2D extends JRViewer implements Observer {
       sgcRoot.removeChild(sgcDevelopment);
       updateSGC(sgcTree.getRoot(), 0);
       sgcRoot.addChild(sgcDevelopment);
+      CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
+          scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
       
     } else if (whatChanged.equals("depth")) {
       maxDepth = ((Development) development).getDesiredDepth();
@@ -147,7 +131,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     sgcRoot.removeChild(viewingDirection);
     setViewingDirection(cameraForward);
     sgcRoot.addChild(viewingDirection);
-    updateCamera();
   }
 
 }
