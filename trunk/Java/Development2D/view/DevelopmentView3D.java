@@ -15,6 +15,7 @@ import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
+import development.Development;
 import development.Vector;
 
 public class DevelopmentView3D extends JRViewer implements Observer {

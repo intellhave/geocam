@@ -5,11 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import triangulation.Face;
-import view.Development.DevelopmentNode;
 import de.jreality.scene.SceneGraphComponent;
+import development.Development;
 import development.EmbeddedFace;
 import development.Frustum2D;
 import development.Vector;
+import development.Development.DevelopmentNode;
 
 public class SGCTree {
   private SGCNode root;

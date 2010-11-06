@@ -1,15 +1,9 @@
-package view;
+package development;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import development.AffineTransformation;
-import development.Coord2D;
-import development.CoordTrans2D;
-import development.EmbeddedFace;
-import development.Frustum2D;
-import development.Vector;
 
 import triangulation.Edge;
 import triangulation.Face;

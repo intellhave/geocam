@@ -28,6 +28,7 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme.schemes;
 import development.Coord2D;
+import development.Development;
 import development.EmbeddedTriangulation;
 import development.Vector;
 
@@ -75,7 +76,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     colorScheme = new ColorScheme(schemes.DEPTH);
 
     development = null;
-    loadSurface("models/cone.off");
+    loadSurface("DiscreteGeodesics/models/epcot.off");
 
     view2D = new DevelopmentView2D(development, colorScheme);
     development.addObserver(view2D);
