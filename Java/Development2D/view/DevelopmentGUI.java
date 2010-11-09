@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Iterator;
 
@@ -54,6 +56,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private static DevelopmentView3D view3D;
 
   private JPanel sliderPanel;
+  private JPanel movementPanel;
   private JSlider depthSlider;
   private JLabel depthLabel = new JLabel("Max Recursion Depth (" + currentDepth
       + ")");
@@ -76,12 +79,16 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     colorScheme = new ColorScheme(schemes.DEPTH);
 
     development = null;
-    loadSurface("DiscreteGeodesics/models/epcot.off");
+    loadSurface("surfaces/cone.off");
 
+    System.out.println("Initializing 2D view");
     view2D = new DevelopmentView2D(development, colorScheme);
+    System.out.println("done");
     development.addObserver(view2D);
 
+    System.out.println("Initializing 3D view");
     view3D = new DevelopmentView3D(development, colorScheme);
+    System.out.println("done");
     development.addObserver(view3D);
 
     timer = new Timer(50, null);
@@ -116,6 +123,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     this.setSize(220, 200);
     this.setResizable(true);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    this.setTitle("Development View");
 
     JMenuBar menuBar = new JMenuBar();
     JMenu file = new JMenu("File");
@@ -182,7 +190,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       }
     });
     colorPanel.setLayout(new GridLayout(3, 1));
-    ;
     colorPanel.add(new JLabel("Set Color Scheme"));
     colorPanel.add(depthSchemeButton);
     colorPanel.add(faceSchemeButton);
@@ -191,9 +198,19 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     this.add(sliderPanel);
     this.add(colorPanel);
 
-    this.addKeyListener(this);
-    this.setFocusable(true);
-    this.requestFocus();
+    movementPanel = new JPanel();
+    this.add(movementPanel);
+
+    movementPanel.addKeyListener(this);
+    movementPanel.setFocusable(true);
+    movementPanel.requestFocus();
+
+    this.addWindowFocusListener(new WindowAdapter() {
+      public void windowGainedFocus(WindowEvent e) {
+        movementPanel.requestFocusInWindow();
+      }
+    });
+
   }
 
   public class Moving implements ActionListener {

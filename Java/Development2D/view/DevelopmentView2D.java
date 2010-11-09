@@ -29,7 +29,7 @@ public class DevelopmentView2D extends JRViewer implements Observer {
   private ColorScheme colorScheme;
   private int maxDepth;
 
-  private Vector cameraForward = new Vector(1, 0);
+  private Vector cameraForward = new Vector(2, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
 
   public DevelopmentView2D(Development development, ColorScheme scheme) {
