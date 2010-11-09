@@ -48,14 +48,14 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     maxDepth = development.getDesiredDepth();
     colorScheme = scheme;
     
-    System.out.println("building SGCTree");
+    // System.out.println("building SGCTree");
     sgcTree = new SGCTree(development, colorScheme, 3);
-    System.out.println("done");
+    // System.out.println("done");
     
-    System.out.println("seting SGC");
+    // System.out.println("seting SGC");
     updateSGCDevelopment(sgcTree.getRoot(), 0);
     sgcRoot.addChild(sgcDevelopment);
-    System.out.println("done");
+    // System.out.println("done");
     
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
