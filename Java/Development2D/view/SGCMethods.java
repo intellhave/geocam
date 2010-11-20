@@ -84,4 +84,16 @@ public class SGCMethods {
 
     return app_face;
   }
+  
+  public static Appearance getDevelopmentAppearance() {
+    Appearance app = new Appearance();
+    app.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app.setAttribute(CommonAttributes.TUBES_DRAW, false);
+    app.setAttribute(CommonAttributes.TUBE_RADIUS, 0.01); 
+    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    app.setAttribute(CommonAttributes.TRANSPARENCY, 0.4d);
+    app.setAttribute(CommonAttributes.PICKABLE, true);
+    return app;
+  }
 }
