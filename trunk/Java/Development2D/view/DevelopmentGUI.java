@@ -64,10 +64,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
   // Movement stuff
   private Timer timer;
-  private boolean moving = false;
+  private Timer keyHoldTimer;
   private Vector movementDirection = new Vector(1, 0);
   private static final double ROTATION_ANGLE = Math.PI / 90;
-  private static final double STEP_SIZE = 0.2;
 
   private enum movements {
     left, right, forward, back
@@ -89,9 +88,15 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     System.out.println("Initializing 3D view");
     view3D = new DevelopmentView3D(development, colorScheme);
     System.out.println("done");
-    development.addObserver(view3D);
+    //development.addObserver(view3D);
 
-    timer = new Timer(50, null);
+    keyHoldTimer = new Timer(2, null);
+    keyHoldTimer.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        timer.stop();
+      }
+    });
+    timer = new Timer(100, null);
     timer.addActionListener(new Moving());
 
     layoutGUI();
@@ -224,17 +229,11 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         view2D.rotate(-ROTATION_ANGLE);
         view3D.rotate(-ROTATION_ANGLE);
       } else if (curMovement == movements.forward) {
-        Vector v = new Vector(movementDirection);
-        v.scale(STEP_SIZE);
-        sourcePoint.add(v);
-        development.setSourcePoint(sourcePoint);
-        timer.stop();
+        development.translateSourcePoint(movementDirection);
       } else if (curMovement == movements.back) {
         Vector v = new Vector(movementDirection);
-        v.scale(-STEP_SIZE);
-        sourcePoint.add(v);
-        development.setSourcePoint(sourcePoint);
-        timer.stop();
+        v.scale(-1);
+        development.translateSourcePoint(v);
       }
     }
   }
@@ -256,6 +255,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
   @Override
   public void keyPressed(KeyEvent e) {
+    keyHoldTimer.stop();
     if (e.getKeyCode() == KeyEvent.VK_RIGHT)
       curMovement = movements.right;
     else if (e.getKeyCode() == KeyEvent.VK_LEFT)
@@ -266,17 +266,13 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       curMovement = movements.back;
     else
       return;
-    if (moving == false) {
-      moving = true;
+    if (!timer.isRunning()) {
       timer.start();
-    } else {
-      moving = false;
-      timer.stop();
     }
   }
 
   @Override
   public void keyReleased(KeyEvent e) {
+    keyHoldTimer.start();
   }
-
 }

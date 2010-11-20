@@ -1,13 +1,14 @@
 package development;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
-
 
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
+import util.Matrix;
 
 public class Development extends Observable {
   private DevelopmentNode root;
@@ -15,6 +16,7 @@ public class Development extends Observable {
   private Face sourceFace;
   private int maxDepth;
   private int desiredDepth; // the depth to which observers will want to show
+  private double STEP_SIZE = 0.04;
 
   public Development(Face sourceF, Vector sourcePt, int max, int desired) {
     maxDepth = max;
@@ -58,15 +60,108 @@ public class Development extends Observable {
     return desiredDepth;
   }
 
-  public void setSourcePoint(Vector point) {
-    System.out.println("setting new source point");
-    sourcePoint = point;
-    buildTree();
-    System.out.println("done");
-    setChanged();
-    notifyObservers();// nothing will happen
+  // assumes magnitude of direction is 1
+  public void translateSourcePoint(Vector v) {
+    Vector direction = new Vector(v);
+    direction.scale(STEP_SIZE);
+    Vector direction3d = new Vector(direction.getComponent(0),
+        direction.getComponent(1), 1);
+    try {
+      root.getAffineTransformation().inverse().transformVector(direction3d);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    direction = new Vector(direction3d.getComponent(0),
+        direction3d.getComponent(1));
+
+    sourcePoint.add(direction);
+
+    // currently not dealing with edge case
+    sourceFace = findContainingFace(sourcePoint);
+    setSourcePoint(sourcePoint);
   }
 
+  private Face findContainingFace(Vector point) {
+    return findContainingFace(point, root);
+  }
+
+  private Face findContainingFace(Vector point, DevelopmentNode node) {
+    Vector l = getBarycentricCoords(point, node.getFace());
+    double l1 = l.getComponent(0);
+    double l2 = l.getComponent(1);
+    double l3 = l.getComponent(2);
+
+    List<Vertex> vertices = node.getFace().getLocalVertices();
+    //System.out.println("Face: " + Coord2D.coordAt(vertices.get(0),node.getFace()) + "," + Coord2D.coordAt(vertices.get(1),node.getFace()) + "," + Coord2D.coordAt(vertices.get(2),node.getFace()));
+    //System.out.println("Point: " + point);
+    //System.out.print("Contains? ");
+    // currently not properly handling edge case and assuming point is at least
+    // in face adjacent to current source
+    if (l1 >= 0 && l1 < 1 && l2 >= 0 && l2 < 1 && l3 >= 0 && l3 < 1) {
+      //System.out.println("yes");
+      return node.getFace();
+    } else {
+      //System.out.println("no");
+      Iterator<DevelopmentNode> itr = node.getChildren().iterator();
+      while (itr.hasNext()) {
+        DevelopmentNode next = itr.next();
+        Face f = next.getFace();
+        vertices = f.getLocalVertices();
+        //System.out.println("Face: " + Coord2D.coordAt(vertices.get(0),f) + "," + Coord2D.coordAt(vertices.get(1),f) + "," + Coord2D.coordAt(vertices.get(2),f) + "(" + f + ")");
+        //System.out.println("Point: " + point);
+        //System.out.print("Contains? ");
+        l = getBarycentricCoords(point, f);
+        l1 = l.getComponent(0);
+        l2 = l.getComponent(1);
+        l3 = l.getComponent(2);
+        if (l1 >= 0 && l1 < 1 && l2 >= 0 && l2 < 1 && l3 >= 0 && l3 < 1) {
+          //System.out.println("yes");
+          return f;
+        }//else System.out.println("no");
+      }
+    }
+    return null;
+  }
+
+  private Vector getBarycentricCoords(Vector point, Face face) {
+    // barycentric coordinates
+    // point in interior if l1,l2,l3 all in (0,1)
+    // point on edge if l1,l2,l3 in [0,1] with at least one 0
+    // otherwise outside
+    List<Vertex> vertices = face.getLocalVertices();
+    Vector v1 = Coord2D.coordAt(vertices.get(0), face);
+    Vector v2 = Coord2D.coordAt(vertices.get(1), face);
+    Vector v3 = Coord2D.coordAt(vertices.get(2), face);
+
+    double x1 = v1.getComponent(0);
+    double y1 = v1.getComponent(1);
+    double x2 = v2.getComponent(0);
+    double y2 = v2.getComponent(1);
+    double x3 = v3.getComponent(0);
+    double y3 = v3.getComponent(1);
+    double x = point.getComponent(0);
+    double y = point.getComponent(1);
+
+    Matrix T = new Matrix(new double[][] { { (x1 - x3), (x2 - x3) },
+        { (y1 - y3), (y2 - y3) } });
+    double det = T.determinant();
+
+    double l1 = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / det;
+    double l2 = ((y3 - y2) * (x - x3) + (x1 - x3) * (y - y3)) / det;
+    double l3 = 1 - l1 - l2;
+
+    return new Vector(l1, l2, l3);
+  }
+
+  public void setSourcePoint(Vector point) {
+    sourcePoint = point;
+    buildTree();
+    setChanged();
+    notifyObservers("source");
+  }
+
+  // TODO modify general recursive method to handle special initial case
   private void buildTree() {
     // get transformation taking sourcePoint to origin (translation by
     // -1*sourcePoint)
@@ -128,7 +223,8 @@ public class Development extends Observable {
       return;
     }
 
-    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace, newTrans);
+    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace,
+        newTrans);
     parent.addChild(node);
 
     if (depth == maxDepth)
@@ -188,6 +284,12 @@ public class Development extends Observable {
         buildTree(node, newFace, edge, newFrustum, newTrans, depth + 1);
     }
   }
+  
+  
+  
+/////////////////////////////////////////////////////
+// DevelopmentNode
+/////////////////////////////////////////////////////
 
   public class DevelopmentNode {
     private EmbeddedFace embeddedFace;
@@ -197,8 +299,8 @@ public class Development extends Observable {
     private DevelopmentNode parent;
     private int depth;
 
-    public DevelopmentNode(DevelopmentNode prev, Face f, EmbeddedFace ef, AffineTransformation at,
-        DevelopmentNode... nodes) {
+    public DevelopmentNode(DevelopmentNode prev, Face f, EmbeddedFace ef,
+        AffineTransformation at, DevelopmentNode... nodes) {
       parent = prev;
       if (parent == null)
         depth = 0;
@@ -232,7 +334,7 @@ public class Development extends Observable {
     public int getDepth() {
       return depth;
     }
-    
+
     public AffineTransformation getAffineTransformation() {
       return affineTrans;
     }

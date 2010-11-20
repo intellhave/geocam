@@ -169,4 +169,9 @@ public class EmbeddedFace {
     }
     return result;
   }
+
+  public boolean contains(Vector v) {
+    // TODO Auto-generated method stub
+    return true;
+  }
 }

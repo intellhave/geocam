@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,10 +8,10 @@ import java.util.List;
 import triangulation.Face;
 import de.jreality.scene.SceneGraphComponent;
 import development.Development;
+import development.Development.DevelopmentNode;
 import development.EmbeddedFace;
 import development.Frustum2D;
 import development.Vector;
-import development.Development.DevelopmentNode;
 
 public class SGCTree {
   private SGCNode root;
@@ -23,7 +24,8 @@ public class SGCTree {
     sourcePoint = d.getSourcePoint();
     dimension = dim;
     colorScheme = scheme;
-    root = new SGCNode(d.getRoot(), dimension);
+    double[][] faceVerts = vertsFromFace(d.getRoot().getEmbeddedFace());
+    root = new SGCNode(d.getRoot(), faceVerts, dimension);
     buildTree(root, d.getRoot());
     setVisibleDepth(d.getDesiredDepth());
   }
@@ -57,7 +59,7 @@ public class SGCTree {
   }
 
   private void buildTree(SGCNode parent, DevelopmentNode node) {
-    SGCNode newNode = new SGCNode(node, dimension);
+    SGCNode newNode = new SGCNode(node, vertsFromFace(node.getEmbeddedFace()), dimension);
     parent.addChild(newNode);
     Iterator<DevelopmentNode> itr = node.getChildren().iterator();
     while (itr.hasNext()) {
@@ -68,14 +70,24 @@ public class SGCTree {
   public SGCNode getRoot() {
     return root;
   }
+  
+  private double[][] vertsFromFace(EmbeddedFace face) {
+    double[][] verts = new double[face.getNumberVertices()][3];
+    for(int i = 0; i < face.getNumberVertices(); i++) {
+      verts[i] = face.getVectorAt(i).getVectorAsArray();
+    }
+    return verts;
+  }
 
   public class SGCNode {
     private SceneGraphComponent sgc;
     private DevelopmentNode node;
     private ArrayList<SGCNode> children;
     private int dimension;
+    private double[][] verts;
 
-    public SGCNode(DevelopmentNode n, int dim) {
+    public SGCNode(DevelopmentNode n, double[][] vertList, int dim) {
+      verts = vertList;
       dimension = dim;
       node = n;
       sgc = new SceneGraphComponent();
@@ -142,6 +154,14 @@ public class SGCTree {
 
     public SceneGraphComponent getSGC() {
       return sgc;
+    }
+    
+    public double[][] getVertices() {
+      return verts;
+    }
+    
+    public Color getColor() {
+      return colorScheme.getColor(node);
     }
 
     private boolean contains(EmbeddedFace face, Vector point) {
