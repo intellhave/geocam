@@ -35,9 +35,6 @@ import development.EmbeddedTriangulation;
 import development.Vector;
 
 public class DevelopmentGUI extends JFrame implements KeyListener {
-  /**
-	 * 
-	 */
   private static final long serialVersionUID = 1L;
 
   public static void main(String[] args) {
@@ -88,7 +85,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     System.out.println("Initializing 3D view");
     view3D = new DevelopmentView3D(development, colorScheme);
     System.out.println("done");
-    //development.addObserver(view3D);
+    development.addObserver(view3D);
 
     keyHoldTimer = new Timer(2, null);
     keyHoldTimer.addActionListener(new ActionListener() {
@@ -96,7 +93,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         timer.stop();
       }
     });
-    timer = new Timer(100, null);
+    timer = new Timer(50, null);
     timer.addActionListener(new Moving());
 
     layoutGUI();
@@ -264,8 +261,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       curMovement = movements.forward;
     else if (e.getKeyCode() == KeyEvent.VK_DOWN)
       curMovement = movements.back;
-    else
-      return;
+
     if (!timer.isRunning()) {
       timer.start();
     }

@@ -156,7 +156,11 @@ public class Development extends Observable {
 
   public void setSourcePoint(Vector point) {
     sourcePoint = point;
+    StopWatch s = new StopWatch();
+    s.start();
     buildTree();
+    s.stop();
+    System.out.println("time to build development: " + s.getElapsedTime());
     setChanged();
     notifyObservers("source");
   }

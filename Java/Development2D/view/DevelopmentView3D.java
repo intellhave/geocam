@@ -1,21 +1,25 @@
 package view;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import view.SGCTree.SGCNode;
+import de.jreality.geometry.GeometryMergeFactory;
+import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.Camera;
+import de.jreality.scene.DirectionalLight;
+import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 import development.Development;
+import development.StopWatch;
 import development.Vector;
 
 public class DevelopmentView3D extends JRViewer implements Observer {
@@ -24,6 +28,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
   private SceneGraphComponent sgc_camera;
   private SceneGraphComponent sgcRoot;
   private SceneGraphComponent sgcDevelopment;
+  private SceneGraphComponent sgcObjects; // objects on faces, including source point
   private Scene scene;
   private Vector cameraForward = new Vector(-1, 0);;
 
@@ -34,6 +39,8 @@ public class DevelopmentView3D extends JRViewer implements Observer {
   public DevelopmentView3D(Development development, ColorScheme scheme) {
     sgcRoot = new SceneGraphComponent();
     sgcDevelopment = new SceneGraphComponent();
+    sgcObjects = new SceneGraphComponent();
+    sgcDevelopment.addChild(sgcObjects);
     
     // make camera and sgc_camera
     Camera camera = new Camera();
@@ -50,7 +57,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     
     sgcTree = new SGCTree(development, colorScheme, 3);
     
-    updateSGCDevelopment(sgcTree.getRoot(), 0);
+    updateGeometry();
     sgcRoot.addChild(sgcDevelopment);
     
     this.setContent(sgcRoot);
@@ -63,6 +70,14 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     camera_source = SceneGraphUtility.getPathsBetween(viewer.getSceneRoot(),
         sgc_camera).get(0);
     camera_source.push(sgc_camera.getCamera());
+    
+ // create light
+    SceneGraphComponent sgcLight = new SceneGraphComponent();
+    DirectionalLight light = new DirectionalLight();
+    light.setIntensity(1.30);
+    sgcLight.setLight(light);
+    MatrixBuilder.euclidean().rotate(2.0, new double[]{0,1,0}).assignTo(sgcLight);
+    sgcRoot.addChild(sgcLight);
 
     viewer.setCameraPath(camera_source);
     viewer.render();
@@ -88,44 +103,71 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     updateCamera();
   }
 
-  private void updateSGCDevelopment(SGCNode node, int depth) {
+  private void updateSGC(SGCNode node, int depth, SceneGraphComponent sgc) {
     if (depth > maxDepth)
       return;
-    if (depth == 0)
-      clearSGC(sgcDevelopment);
 
-    sgcDevelopment.addChild(node.getSGC());
+    sgc.addChild(node.getSGC());
     Iterator<SGCNode> itr = node.getChildren().iterator();
     while (itr.hasNext()) {
-      updateSGCDevelopment(itr.next(), depth + 1);
+      updateSGC(itr.next(), depth + 1, sgc);
     }
   }
 
   @Override
   public void update(Observable development, Object arg) {
+    StopWatch s = new StopWatch();
+    StopWatch sTotal = new StopWatch();
+    sTotal.start();
+
     String whatChanged = (String) arg;
     if (whatChanged.equals("depth")) {
       maxDepth = ((Development) development).getDesiredDepth();
       sgcTree.setVisibleDepth(maxDepth);
+      
     } else if(whatChanged.equals("surface") || whatChanged.equals("source")) {
+      s.start();
       sgcTree = new SGCTree((Development)development, colorScheme, 3);
-      sgcRoot.removeChild(sgcDevelopment);
-      updateSGCDevelopment(sgcTree.getRoot(), 0);
-      sgcRoot.addChild(sgcDevelopment);
+      s.stop();
+      System.out.println("time to build SGCTree: " + s.getElapsedTime());
+      
+      updateGeometry();
+      
     }
     updateCamera();
+    System.out.println("total time to update 3d: " + sTotal.getElapsedTime());
+    System.out.println();
+  }
+  
+  private void updateGeometry() {
+    GeometryMergeFactory mergeFact= new GeometryMergeFactory();   
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    
+    StopWatch s = new StopWatch();
+    s.start();
+    updateSGC(sgcTree.getRoot(), 0, sgc);
+    s.stop();
+    System.out.println("time to update SGC: " + s.getElapsedTime());
+    
+    s.start();
+    Geometry g = mergeFact.mergeGeometrySets(sgc);
+    s.stop();
+    System.out.println("time to merge geometry: " + s.getElapsedTime());
+
+    s.start();
+    sgcDevelopment.setGeometry(g);
+    s.stop();
+    System.out.println("time to set geometry: " + s.getElapsedTime());
+    
+    sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
+    sgcDevelopment.removeChild(sgcObjects);
+    sgcObjects = sgcTree.getObjects();
+    sgcDevelopment.addChild(sgcObjects);
   }
 
   public void setColorScheme(ColorScheme scheme) {
     colorScheme = scheme;
     sgcTree.setColorScheme(colorScheme);
-  }
-
-  private void clearSGC(SceneGraphComponent sgc) {
-    List<SceneGraphComponent> list = sgc.getChildComponents();
-    while(list.size() > 0) {
-      sgc.removeChild(list.get(0));
-    }
   }
 
 }

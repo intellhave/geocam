@@ -1,13 +1,9 @@
 package view;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
-import view.SGCTree.SGCNode;
-import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
@@ -28,6 +24,7 @@ public class DevelopmentView2D extends JRViewer implements Observer {
   private SGCTree sgcTree;
   private SceneGraphComponent sgcRoot;
   private SceneGraphComponent sgcDevelopment;
+  private SceneGraphComponent objects = new SceneGraphComponent();
   private Scene scene;
   private ColorScheme colorScheme;
   private int maxDepth;
@@ -41,8 +38,8 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     sgcTree = new SGCTree(development, colorScheme, 2);
     sgcRoot = new SceneGraphComponent();
     sgcDevelopment = new SceneGraphComponent();
+    sgcDevelopment.addChild(objects);
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
-
     
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
@@ -79,75 +76,16 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     } else if (whatChanged.equals("depth")) {
       maxDepth = ((Development) development).getDesiredDepth();
       sgcTree.setVisibleDepth(maxDepth);
+      updateGeometry();
     }
   }
 
   private void updateGeometry() {
-    DevelopmentGeometry geometry = new DevelopmentGeometry();
-    ArrayList<Color> colors = new ArrayList<Color>();
-    computeDevelopment(sgcTree.getRoot(), colors, geometry);
-    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
-
-    Color[] colorList = new Color[colors.size()];
-    for (int i = 0; i < colors.size(); i++) {
-      colorList[i] = colors.get(i);
-    }
-
-    double[][] ifsf_verts = geometry.getVerts();
-    int[][] ifsf_faces = geometry.getFaces();
-
-    ifsf.setVertexCount(ifsf_verts.length);
-    ifsf.setVertexCoordinates(ifsf_verts);
-    ifsf.setFaceCount(ifsf_faces.length);
-    ifsf.setFaceIndices(ifsf_faces);
-    ifsf.setGenerateEdgesFromFaces(true);
-    ifsf.setFaceColors(colorList);
-    ifsf.update();
-    sgcDevelopment.setGeometry(ifsf.getGeometry());
+    sgcDevelopment.removeChild(objects);
+    sgcDevelopment.setGeometry(sgcTree.getGeometry());
+    objects = sgcTree.getObjects();
+    sgcDevelopment.addChild(objects);
   }
-
-  private void computeDevelopment(SGCNode node, ArrayList<Color> colors,
-      DevelopmentGeometry geometry) {
-    double[][] face = node.getVertices();
-    geometry.addFace(face);
-    colors.add(node.getColor());
-    Iterator<SGCNode> itr = node.getChildren().iterator();
-    while (itr.hasNext()) {
-      computeDevelopment(itr.next(), colors, geometry);
-    }
-  }
-
-  // class designed to make it easy to use an IndexedFaceSetFactory
-  public class DevelopmentGeometry {
-
-    private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
-    private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
-
-    public void addFace(double[][] faceverts) {
-
-      int nverts = faceverts.length;
-      int vi = geometry_verts.size();
-
-      int[] newface = new int[nverts];
-      for (int k = 0; k < nverts; k++) {
-        double[] newvert = new double[3];
-        newvert[0] = faceverts[k][0];
-        newvert[1] = faceverts[k][1];
-        newvert[2] = 1.0;
-        geometry_verts.add(newvert);
-        newface[k] = vi++;
-      }
-      geometry_faces.add(newface);
-    }
-
-    public double[][] getVerts() {
-      return (double[][]) geometry_verts.toArray(new double[0][0]);
-    }
-
-    public int[][] getFaces() {
-      return (int[][]) geometry_faces.toArray(new int[0][0]);
-    }
-  };
 
   public void setColorScheme(ColorScheme scheme) {
     colorScheme = scheme;
