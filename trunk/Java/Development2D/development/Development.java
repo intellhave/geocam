@@ -1,7 +1,6 @@
 package development;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
@@ -11,12 +10,14 @@ import triangulation.Vertex;
 import util.Matrix;
 
 public class Development extends Observable {
+  private static final double epsilon = Math.pow(10, -6);
+
   private DevelopmentNode root;
   private Vector sourcePoint;
   private Face sourceFace;
   private int maxDepth;
   private int desiredDepth; // the depth to which observers will want to show
-  private double STEP_SIZE = 0.04;
+  private double STEP_SIZE = 0.06;
 
   public Development(Face sourceF, Vector sourcePt, int max, int desired) {
     maxDepth = max;
@@ -24,9 +25,7 @@ public class Development extends Observable {
     sourcePoint = sourcePt;
     sourceFace = sourceF;
 
-    System.out.println("building development tree");
     buildTree();
-    System.out.println("done");
   }
 
   public void rebuild(Face sourceF, Vector sourcePt, int max, int desired) {
@@ -35,9 +34,7 @@ public class Development extends Observable {
     sourcePoint = sourcePt;
     sourceFace = sourceF;
 
-    System.out.println("building development tree");
     buildTree();
-    System.out.println("done");
     setChanged();
     notifyObservers("surface");
   }
@@ -64,6 +61,7 @@ public class Development extends Observable {
   public void translateSourcePoint(Vector v) {
     Vector direction = new Vector(v);
     direction.scale(STEP_SIZE);
+    
     Vector direction3d = new Vector(direction.getComponent(0),
         direction.getComponent(1), 1);
     try {
@@ -74,54 +72,131 @@ public class Development extends Observable {
 
     direction = new Vector(direction3d.getComponent(0),
         direction3d.getComponent(1));
-
-    sourcePoint.add(direction);
+    
+    direction.add(sourcePoint);
+    computeEnd(direction, sourceFace, null);
+   // sourcePoint.add(direction);
 
     // currently not dealing with edge case
-    sourceFace = findContainingFace(sourcePoint);
+    //sourceFace = findContainingFace(sourcePoint);
     setSourcePoint(sourcePoint);
   }
-
-  private Face findContainingFace(Vector point) {
-    return findContainingFace(point, root);
-  }
-
-  private Face findContainingFace(Vector point, DevelopmentNode node) {
-    Vector l = getBarycentricCoords(point, node.getFace());
+  
+  private void computeEnd(Vector point, Face face, Edge ignoreEdge) {
+    
+    // see if current face contains point
+    Vector l = getBarycentricCoords(point, face);
     double l1 = l.getComponent(0);
     double l2 = l.getComponent(1);
     double l3 = l.getComponent(2);
-
-    List<Vertex> vertices = node.getFace().getLocalVertices();
-    //System.out.println("Face: " + Coord2D.coordAt(vertices.get(0),node.getFace()) + "," + Coord2D.coordAt(vertices.get(1),node.getFace()) + "," + Coord2D.coordAt(vertices.get(2),node.getFace()));
-    //System.out.println("Point: " + point);
-    //System.out.print("Contains? ");
-    // currently not properly handling edge case and assuming point is at least
-    // in face adjacent to current source
     if (l1 >= 0 && l1 < 1 && l2 >= 0 && l2 < 1 && l3 >= 0 && l3 < 1) {
-      //System.out.println("yes");
-      return node.getFace();
+      System.out.println("found point: " + point);
+      System.out.println("in face: " + face);
+      sourceFace = face;
+      sourcePoint = point;
+      return;
     } else {
-      //System.out.println("no");
-      Iterator<DevelopmentNode> itr = node.getChildren().iterator();
-      while (itr.hasNext()) {
-        DevelopmentNode next = itr.next();
-        Face f = next.getFace();
-        vertices = f.getLocalVertices();
-        //System.out.println("Face: " + Coord2D.coordAt(vertices.get(0),f) + "," + Coord2D.coordAt(vertices.get(1),f) + "," + Coord2D.coordAt(vertices.get(2),f) + "(" + f + ")");
-        //System.out.println("Point: " + point);
-        //System.out.print("Contains? ");
-        l = getBarycentricCoords(point, f);
-        l1 = l.getComponent(0);
-        l2 = l.getComponent(1);
-        l3 = l.getComponent(2);
-        if (l1 >= 0 && l1 < 1 && l2 >= 0 && l2 < 1 && l3 >= 0 && l3 < 1) {
-          //System.out.println("yes");
-          return f;
-        }//else System.out.println("no");
+      System.out.println(face + " does not contain point: " + point);
+      System.out.println();
+
+    }
+    
+    // find which edge vector intersects to get next face 
+    // (currently not handling vector through vertex)
+    boolean foundEdge = false;
+    Edge edge = null;
+    List<Edge> edges = face.getLocalEdges();
+    for(int i = 0; i < edges.size();i++) {
+      edge = edges.get(i);
+      if(ignoreEdge != null && edge.equals(ignoreEdge)) continue;
+      Vector v1 = Coord2D.coordAt(edge.getLocalVertices().get(0), face);
+      Vector v2 = Coord2D.coordAt(edge.getLocalVertices().get(1), face);
+      
+      Vector edgeDiff = Vector.subtract(v1, v2);
+      Vector sourceDiff = Vector.subtract(sourcePoint, v2);
+      Vector pointDiff = Vector.subtract(point, v2);
+      Vector intersection = findIntersection(sourceDiff, pointDiff, edgeDiff);
+      if(intersection != null) {
+        foundEdge = true;
+        System.out.println("breaking");
+        break;
       }
     }
-    return null;
+    if(foundEdge) {
+      Face nextFace = null;
+
+      List<Face> faces = edge.getLocalFaces();
+      if(faces.get(0).equals(face)) nextFace = faces.get(1);
+      else nextFace = faces.get(0);
+      
+      // get transformation taking current face to next
+      AffineTransformation trans = CoordTrans2D.affineTransAt(face, edge);
+      Vector newPoint = trans.affineTransPoint(point);
+      
+      computeEnd(newPoint, nextFace, edge);
+    } else {
+      System.out.println("did not find edge\n");
+    }
+  }
+  
+  /*
+   * Returns the intersection of the line formed by points a and b with the ray
+   * from the origin through v. ( ( y1 = (w2/w1)(x-s) + t, y2 = (v2/v1)x )
+   */
+  private Vector findIntersection(Vector a, Vector b, Vector v) {
+    Vector w = Vector.subtract(b, a);
+    double w1 = w.getComponent(0);
+    double w2 = w.getComponent(1);
+    double s = a.getComponent(0);
+    double t = a.getComponent(1);
+    double v1 = v.getComponent(0);
+    double v2 = v.getComponent(1);
+    
+    if((w1 == 0 && v1 == 0) || (w2 / w1) == (v2 / v1)) { // slopes equal => parallel
+      return null;
+    }
+
+    double x, y;
+    if (w1 == 0) {
+      x = s;
+      y = (v2/v1)*s;
+    } else if (v1 == 0) {
+      x = 0;
+      y = (w2 / w1) * (0 - s) + t;
+    } else {
+      x = (t - (w2 / w1) * s) / ((v2 / v1) - (w2 / w1));
+      y = (v2 / v1) * x;
+    }
+
+    Vector intersection = new Vector(x, y);
+
+    if (isContained(a, b, intersection))
+      return intersection;
+    else
+      return null;
+  }
+  
+  /*
+   * returns true if the coordinates of the given vector v are between the
+   * coordinates of v1 and v2
+   */
+  private boolean isContained(Vector v1, Vector v2, Vector v) {
+    double x = v.getComponent(0);
+    double y = v.getComponent(1);
+    double x1 = v1.getComponent(0);
+    double y1 = v1.getComponent(1);
+    double x2 = v2.getComponent(0);
+    double y2 = v2.getComponent(1);
+
+    return (between(x1, x2, x) && between(y1, y2, y));
+  }
+
+  // true if c is between a and b
+  private static boolean between(double a, double b, double c) {
+    if ((a - epsilon > c && b - epsilon > c)
+        || (a + epsilon < c && b + epsilon < c))
+      return false;
+    return true;
   }
 
   private Vector getBarycentricCoords(Vector point, Face face) {
@@ -157,9 +232,11 @@ public class Development extends Observable {
   public void setSourcePoint(Vector point) {
     sourcePoint = point;
     StopWatch s = new StopWatch();
+    
     s.start();
     buildTree();
     s.stop();
+    
     System.out.println("time to build development: " + s.getElapsedTime());
     setChanged();
     notifyObservers("source");
