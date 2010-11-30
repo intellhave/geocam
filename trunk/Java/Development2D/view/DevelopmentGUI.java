@@ -85,7 +85,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     System.out.println("Initializing 3D view");
     view3D = new DevelopmentView3D(development, colorScheme);
     System.out.println("done");
-    development.addObserver(view3D);
+    //development.addObserver(view3D);
 
     keyHoldTimer = new Timer(2, null);
     keyHoldTimer.addActionListener(new ActionListener() {
@@ -157,18 +157,18 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
     sliderPanel = new JPanel();
     sliderPanel.setLayout(new GridLayout(2, 1));
-    depthSlider = new JSlider(1, maxDepth, currentDepth);
-    depthSlider.setMaximumSize(new Dimension(400, 100));
-    depthSlider.addChangeListener(new ChangeListener() {
-      public void stateChanged(ChangeEvent e) {
-        int val = ((JSlider) e.getSource()).getValue();
-        currentDepth = val;
-        depthLabel.setText("Recursion Depth (" + currentDepth + ")");
-        development.setDesiredDepth(currentDepth);
-      }
-    });
-    sliderPanel.add(depthLabel);
-    sliderPanel.add(depthSlider);
+//    depthSlider = new JSlider(1, maxDepth, currentDepth);
+//    depthSlider.setMaximumSize(new Dimension(400, 100));
+//    depthSlider.addChangeListener(new ChangeListener() {
+//      public void stateChanged(ChangeEvent e) {
+//        int val = ((JSlider) e.getSource()).getValue();
+//        currentDepth = val;
+//        depthLabel.setText("Recursion Depth (" + currentDepth + ")");
+//        development.setDesiredDepth(currentDepth);
+//      }
+//    });
+//    sliderPanel.add(depthLabel);
+//    sliderPanel.add(depthSlider);
 
     colorPanel = new JPanel();
     JButton depthSchemeButton = new JButton("Depth");

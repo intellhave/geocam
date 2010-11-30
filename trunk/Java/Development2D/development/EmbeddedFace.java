@@ -2,6 +2,8 @@ package development;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
+
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.scene.Geometry;
@@ -50,8 +52,12 @@ public class EmbeddedFace {
     return vectors;
   }
   
-  public ArrayList<Vector> getVectorsAsArray() {
-    return vectors_;
+  public double[][] getVectorsAsArray() {
+    double[][] array = new double[vectors_.size()][];
+    for(int i = 0; i < vectors_.size(); i++) {
+      array[i] = vectors_.get(i).getVectorAsArray();
+    }
+    return array;
   }
 
   public Vector getVectorAt(int index) {
@@ -170,8 +176,15 @@ public class EmbeddedFace {
     return result;
   }
 
-  public boolean contains(Vector v) {
-    // TODO Auto-generated method stub
-    return true;
+  public boolean contains(Vector point) {
+    List<Vector> vertices = this.getVectors();
+    for (int i = 0; i < vertices.size(); i++) {
+      Vector v1 = vertices.get(i);
+      Vector v2 = vertices.get((i + 1) % vertices.size());
+      Frustum2D frustum = new Frustum2D(v1, v2);
+      if (frustum.checkInterior(point))
+        return true;
+    }
+    return false;
   }
 }

@@ -1,9 +1,13 @@
 package view;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
+import view.SGCTree3D.SGCNode;
+import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
@@ -11,6 +15,7 @@ import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.DirectionalLight;
+import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
@@ -18,35 +23,35 @@ import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.ShaderUtility;
 import de.jreality.util.CameraUtility;
 import development.Development;
+import development.Development.DevelopmentNode;
 import development.Vector;
 
 public class DevelopmentView2D extends JRViewer implements Observer {
-  private SGCTree sgcTree;
   private SceneGraphComponent sgcRoot;
   private SceneGraphComponent sgcDevelopment;
   private SceneGraphComponent objects = new SceneGraphComponent();
   private Scene scene;
   private ColorScheme colorScheme;
-  private int maxDepth;
+  private Development development;
 
   private Vector cameraForward = new Vector(2, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
 
-  public DevelopmentView2D(Development development, ColorScheme scheme) {
-    maxDepth = development.getDesiredDepth();
+  public DevelopmentView2D(Development dev, ColorScheme scheme) {
+    development = dev;
     colorScheme = scheme;
-    sgcTree = new SGCTree(development, colorScheme, 2);
     sgcRoot = new SceneGraphComponent();
     sgcDevelopment = new SceneGraphComponent();
     sgcDevelopment.addChild(objects);
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
-    
+
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
     light.setIntensity(1.10);
     sgcLight.setLight(light);
-    MatrixBuilder.euclidean().rotate(2.0, new double[]{0,1,0}).assignTo(sgcLight);
+    MatrixBuilder.euclidean().rotate(2.0, new double[] { 0, 1, 0 })
+        .assignTo(sgcLight);
     sgcRoot.addChild(sgcLight);
 
     updateGeometry();
@@ -54,7 +59,7 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     sgcRoot.addChild(viewingDirection);
     setViewingDirection(cameraForward);
     this.addBasicUI();
-    
+
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
@@ -64,32 +69,114 @@ public class DevelopmentView2D extends JRViewer implements Observer {
   }
 
   @Override
-  public void update(Observable development, Object arg) {
+  public void update(Observable dev, Object arg) {
     String whatChanged = (String) arg;
-    
+    development = (Development) dev;
+
     if (whatChanged.equals("surface") || whatChanged.equals("source")) {
-      sgcTree = new SGCTree((Development) development, colorScheme, 2);
       updateGeometry();
       CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
           scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
-      
+
     } else if (whatChanged.equals("depth")) {
-      maxDepth = ((Development) development).getDesiredDepth();
-      sgcTree.setVisibleDepth(maxDepth);
-      updateGeometry();
+      // not relevant currently (no depth slider)
+      // maxDepth = ((Development) development).getDesiredDepth();
+      // updateGeometry();
     }
   }
 
   private void updateGeometry() {
     sgcDevelopment.removeChild(objects);
-    sgcDevelopment.setGeometry(sgcTree.getGeometry());
-    objects = sgcTree.getObjects();
+    objects = new SceneGraphComponent();
+    sgcDevelopment.setGeometry(getGeometry());
     sgcDevelopment.addChild(objects);
   }
 
+  public Geometry getGeometry() {
+    DevelopmentGeometry geometry = new DevelopmentGeometry();
+    ArrayList<Color> colors = new ArrayList<Color>();
+    computeDevelopment(development.getRoot(), colors, geometry);
+    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+
+    Color[] colorList = new Color[colors.size()];
+    for (int i = 0; i < colors.size(); i++) {
+      colorList[i] = colors.get(i);
+    }
+
+    double[][] ifsf_verts = geometry.getVerts();
+    int[][] ifsf_faces = geometry.getFaces();
+
+    ifsf.setVertexCount(ifsf_verts.length);
+    ifsf.setVertexCoordinates(ifsf_verts);
+    ifsf.setFaceCount(ifsf_faces.length);
+    ifsf.setFaceIndices(ifsf_faces);
+    ifsf.setGenerateEdgesFromFaces(true);
+    ifsf.setFaceColors(colorList);
+    ifsf.update();
+    return ifsf.getGeometry();
+  }
+
+  // adds appropriate source point objects to objects SGC
+  private void computeDevelopment(DevelopmentNode node,
+      ArrayList<Color> colors, DevelopmentGeometry geometry) {
+    if (node.faceIsSource()) {
+      Vector sourcePoint = development.getSourcePoint();
+      Vector newSource = new Vector(sourcePoint.getComponent(0),
+          sourcePoint.getComponent(1), 1);
+      Vector transSourcePoint = node.getAffineTransformation().transformVector(
+          newSource);
+      Vector transSourcePoint2d = new Vector(transSourcePoint.getComponent(0),
+          transSourcePoint.getComponent(1));
+
+      if (node.getEmbeddedFace().contains(transSourcePoint2d) || node.isRoot()) {
+        // containment alg doesn't work for root
+        objects.addChild(SGCMethods.sgcFromPoint(transSourcePoint));
+      }
+    }
+
+    double[][] face = node.getEmbeddedFace().getVectorsAsArray();
+    geometry.addFace(face);
+    colors.add(colorScheme.getColor(node));
+    Iterator<DevelopmentNode> itr = node.getChildren().iterator();
+    while (itr.hasNext()) {
+      computeDevelopment(itr.next(), colors, geometry);
+    }
+  }
+
+  // class designed to make it easy to use an IndexedFaceSetFactory
+  public class DevelopmentGeometry {
+
+    private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
+    private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
+
+    public void addFace(double[][] faceverts) {
+
+      int nverts = faceverts.length;
+      int vi = geometry_verts.size();
+
+      int[] newface = new int[nverts];
+      for (int k = 0; k < nverts; k++) {
+        double[] newvert = new double[3];
+        newvert[0] = faceverts[k][0];
+        newvert[1] = faceverts[k][1];
+        newvert[2] = 1.0;
+        geometry_verts.add(newvert);
+        newface[k] = vi++;
+      }
+      geometry_faces.add(newface);
+    }
+
+    public double[][] getVerts() {
+      return (double[][]) geometry_verts.toArray(new double[0][0]);
+    }
+
+    public int[][] getFaces() {
+      return (int[][]) geometry_faces.toArray(new int[0][0]);
+    }
+  };
+
   public void setColorScheme(ColorScheme scheme) {
     colorScheme = scheme;
-    sgcTree.setColorScheme(colorScheme);
     updateGeometry();
   }
 

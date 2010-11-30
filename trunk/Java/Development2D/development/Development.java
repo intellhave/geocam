@@ -17,7 +17,7 @@ public class Development extends Observable {
   private Face sourceFace;
   private int maxDepth;
   private int desiredDepth; // the depth to which observers will want to show
-  private double STEP_SIZE = 0.06;
+  private double STEP_SIZE = 0.05;
 
   public Development(Face sourceF, Vector sourcePt, int max, int desired) {
     maxDepth = max;

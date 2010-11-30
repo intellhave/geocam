@@ -1,10 +1,11 @@
 package view;
 
+import java.awt.Color;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
-import view.SGCTree.SGCNode;
+import view.SGCTree3D.SGCNode;
 import de.jreality.geometry.GeometryMergeFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
@@ -34,7 +35,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
 
   private int maxDepth;
   private ColorScheme colorScheme;
-  private SGCTree sgcTree;
+  private SGCTree3D sgcTree;
 
   public DevelopmentView3D(Development development, ColorScheme scheme) {
     sgcRoot = new SceneGraphComponent();
@@ -55,11 +56,13 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     maxDepth = development.getDesiredDepth();
     colorScheme = scheme;
     
-    sgcTree = new SGCTree(development, colorScheme, 3);
+    sgcTree = new SGCTree3D(development, colorScheme);
     
     updateGeometry();
     sgcRoot.addChild(sgcDevelopment);
     
+    this.addBasicUI();
+
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
     this.startup();
@@ -74,10 +77,12 @@ public class DevelopmentView3D extends JRViewer implements Observer {
  // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
-    light.setIntensity(1.30);
+    light.setIntensity(1.50);
+    light.setColor(Color.white);
     sgcLight.setLight(light);
     MatrixBuilder.euclidean().rotate(2.0, new double[]{0,1,0}).assignTo(sgcLight);
     sgcRoot.addChild(sgcLight);
+    
 
     viewer.setCameraPath(camera_source);
     viewer.render();
@@ -127,7 +132,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
       
     } else if(whatChanged.equals("surface") || whatChanged.equals("source")) {
       s.start();
-      sgcTree = new SGCTree((Development)development, colorScheme, 3);
+      sgcTree = new SGCTree3D((Development)development, colorScheme);
       s.stop();
       System.out.println("time to build SGCTree: " + s.getElapsedTime());
       
@@ -154,10 +159,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     s.stop();
     System.out.println("time to merge geometry: " + s.getElapsedTime());
 
-    s.start();
     sgcDevelopment.setGeometry(g);
-    s.stop();
-    System.out.println("time to set geometry: " + s.getElapsedTime());
     
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
     sgcDevelopment.removeChild(sgcObjects);
@@ -168,6 +170,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
   public void setColorScheme(ColorScheme scheme) {
     colorScheme = scheme;
     sgcTree.setColorScheme(colorScheme);
+    updateGeometry();
   }
 
 }
