@@ -3,6 +3,8 @@ package development;
 import java.util.Arrays;
 
 public class Vector {
+  private static final double epsilon = Math.pow(10, -6);
+
 
   protected double[] components_;
 
@@ -193,6 +195,67 @@ public class Vector {
         return (-1) * theta;
       }
     }
+  }
+  
+  /*
+   * Returns the intersection of the line formed by points a and b with the ray
+   * from the origin through v. ( ( y1 = (w2/w1)(x-s) + t, y2 = (v2/v1)x )
+   */
+  public static Vector findIntersection(Vector a, Vector b, Vector v) {
+    Vector w = Vector.subtract(b, a);
+    double w1 = w.getComponent(0);
+    double w2 = w.getComponent(1);
+    double s = a.getComponent(0);
+    double t = a.getComponent(1);
+    double v1 = v.getComponent(0);
+    double v2 = v.getComponent(1);
+
+    if ((w1 == 0 && v1 == 0) || (w2 / w1) == (v2 / v1)) { // slopes equal =>
+                                                          // parallel
+      return null;
+    }
+
+    double x, y;
+    if (w1 == 0) {
+      x = s;
+      y = (v2 / v1) * s;
+    } else if (v1 == 0) {
+      x = 0;
+      y = (w2 / w1) * (0 - s) + t;
+    } else {
+      x = (t - (w2 / w1) * s) / ((v2 / v1) - (w2 / w1));
+      y = (v2 / v1) * x;
+    }
+
+    Vector intersection = new Vector(x, y);
+
+    if (isContained(a, b, intersection))
+      return intersection;
+    else
+      return null;
+  }
+
+  /*
+   * returns true if the coordinates of the given vector v are between the
+   * coordinates of v1 and v2
+   */
+  private static boolean isContained(Vector v1, Vector v2, Vector v) {
+    double x = v.getComponent(0);
+    double y = v.getComponent(1);
+    double x1 = v1.getComponent(0);
+    double y1 = v1.getComponent(1);
+    double x2 = v2.getComponent(0);
+    double y2 = v2.getComponent(1);
+
+    return (between(x1, x2, x) && between(y1, y2, y));
+  }
+
+  // true if c is between a and b
+  private static boolean between(double a, double b, double c) {
+    if ((a - epsilon > c && b - epsilon > c)
+        || (a + epsilon < c && b + epsilon < c))
+      return false;
+    return true;
   }
 
 }
