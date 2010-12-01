@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import triangulation.Face;
-import de.jreality.geometry.IndexedFaceSetFactory;
-import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import development.Development;
 import development.Development.DevelopmentNode;
@@ -26,7 +24,7 @@ public class SGCTree3D {
     double[][] faceVerts = vertsFromFace(d.getRoot().getEmbeddedFace());
     root = new SGCNode(d.getRoot(), faceVerts);
     buildTree(root, d.getRoot());
-    setVisibleDepth(d.getDesiredDepth());
+    setVisibleDepth(d.getDepth());
   }
 
   public SceneGraphComponent getObjects() {
@@ -69,75 +67,6 @@ public class SGCTree3D {
       buildTree(newNode, itr.next());
     }
   }
-
-  public Geometry getGeometry() {
-    DevelopmentGeometry geometry = new DevelopmentGeometry();
-    ArrayList<Color> colors = new ArrayList<Color>();
-    computeDevelopment(root, colors, geometry);
-    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
-
-    Color[] colorList = new Color[colors.size()];
-    for (int i = 0; i < colors.size(); i++) {
-      colorList[i] = colors.get(i);
-    }
-
-    double[][] ifsf_verts = geometry.getVerts();
-    int[][] ifsf_faces = geometry.getFaces();
-
-    ifsf.setVertexCount(ifsf_verts.length);
-    ifsf.setVertexCoordinates(ifsf_verts);
-    ifsf.setFaceCount(ifsf_faces.length);
-    ifsf.setFaceIndices(ifsf_faces);
-    ifsf.setGenerateEdgesFromFaces(true);
-    ifsf.setFaceColors(colorList);
-    ifsf.update();
-    return ifsf.getGeometry();
-  }
-
-  private void computeDevelopment(SGCNode node, ArrayList<Color> colors,
-      DevelopmentGeometry geometry) {
-    if (!node.getSGC().isVisible())
-      return;
-    double[][] face = node.getVertices();
-    geometry.addFace(face);
-    colors.add(node.getColor());
-    Iterator<SGCNode> itr = node.getChildren().iterator();
-    while (itr.hasNext()) {
-      computeDevelopment(itr.next(), colors, geometry);
-    }
-  }
-
-  // class designed to make it easy to use an IndexedFaceSetFactory
-  public class DevelopmentGeometry {
-
-    private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
-    private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
-
-    public void addFace(double[][] faceverts) {
-
-      int nverts = faceverts.length;
-      int vi = geometry_verts.size();
-
-      int[] newface = new int[nverts];
-      for (int k = 0; k < nverts; k++) {
-        double[] newvert = new double[3];
-        newvert[0] = faceverts[k][0];
-        newvert[1] = faceverts[k][1];
-        newvert[2] = 1.0;
-        geometry_verts.add(newvert);
-        newface[k] = vi++;
-      }
-      geometry_faces.add(newface);
-    }
-
-    public double[][] getVerts() {
-      return (double[][]) geometry_verts.toArray(new double[0][0]);
-    }
-
-    public int[][] getFaces() {
-      return (int[][]) geometry_faces.toArray(new int[0][0]);
-    }
-  };
 
   public SGCNode getRoot() {
     return root;

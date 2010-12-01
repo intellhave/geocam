@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,10 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.Timer;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -43,7 +39,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   }
 
   private int maxDepth = 23;
-  private int currentDepth = maxDepth;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -54,9 +49,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
   private JPanel sliderPanel;
   private JPanel movementPanel;
-  private JSlider depthSlider;
-  private JLabel depthLabel = new JLabel("Max Recursion Depth (" + currentDepth
-      + ")");
   private JPanel colorPanel;
 
   // Movement stuff
@@ -115,10 +107,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     sourcePoint.scale(1.0f / 3.0f);
 
     if (development == null)
-      development = new Development(sourceFace, sourcePoint, maxDepth,
-          currentDepth);
+      development = new Development(sourceFace, sourcePoint, maxDepth);
     else
-      development.rebuild(sourceFace, sourcePoint, maxDepth, currentDepth);
+      development.rebuild(sourceFace, sourcePoint, maxDepth);
   }
 
   private void layoutGUI() {

@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
-import view.SGCTree3D.SGCNode;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.math.MatrixBuilder;
@@ -116,7 +115,9 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     return ifsf.getGeometry();
   }
 
-  // adds appropriate source point objects to objects SGC
+  /*
+   *  Adds appropriate source point objects to objects SGC
+   */
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
     if (node.faceIsSource()) {
@@ -137,6 +138,7 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face);
     colors.add(colorScheme.getColor(node));
+    
     Iterator<DevelopmentNode> itr = node.getChildren().iterator();
     while (itr.hasNext()) {
       computeDevelopment(itr.next(), colors, geometry);
