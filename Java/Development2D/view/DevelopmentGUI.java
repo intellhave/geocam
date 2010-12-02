@@ -77,7 +77,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     System.out.println("Initializing 3D view");
     view3D = new DevelopmentView3D(development, colorScheme);
     System.out.println("done");
-    //development.addObserver(view3D);
+    development.addObserver(view3D);
 
     keyHoldTimer = new Timer(2, null);
     keyHoldTimer.addActionListener(new ActionListener() {

@@ -77,10 +77,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
       CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
           scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
 
-    } else if (whatChanged.equals("depth")) {
-      // not relevant currently (no depth slider)
-      // maxDepth = ((Development) development).getDesiredDepth();
-      // updateGeometry();
     }
   }
 

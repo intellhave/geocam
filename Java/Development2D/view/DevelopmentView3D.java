@@ -1,12 +1,12 @@
 package view;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
-import view.SGCTree3D.SGCNode;
-import de.jreality.geometry.GeometryMergeFactory;
+import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
@@ -17,13 +17,19 @@ import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
+import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 import development.Development;
 import development.StopWatch;
 import development.Vector;
+import development.Development.DevelopmentNode;
 
 public class DevelopmentView3D extends JRViewer implements Observer {
+  private final double simulated3DHeight = 0.08;
+  
+  private Development development;
+
   private Viewer viewer;
   private SceneGraphPath camera_source;
   private SceneGraphComponent sgc_camera;
@@ -34,15 +40,16 @@ public class DevelopmentView3D extends JRViewer implements Observer {
   private Scene scene;
   private Vector cameraForward = new Vector(-1, 0);;
 
-  private int maxDepth;
   private ColorScheme colorScheme;
-  private SGCTree3D sgcTree;
 
-  public DevelopmentView3D(Development development, ColorScheme scheme) {
+  public DevelopmentView3D(Development dev, ColorScheme scheme) {
+    development = dev;
     sgcRoot = new SceneGraphComponent();
     sgcDevelopment = new SceneGraphComponent();
     sgcObjects = new SceneGraphComponent();
-    sgcDevelopment.addChild(sgcObjects);
+    sgcRoot.addChild(sgcObjects);
+    
+    sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
 
     // make camera and sgc_camera
     Camera camera = new Camera();
@@ -54,10 +61,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sgc_camera.setCamera(camera);
     updateCamera();
 
-    maxDepth = development.getDepth();
     colorScheme = scheme;
-
-    sgcTree = new SGCTree3D(development, colorScheme);
 
     updateGeometry();
     sgcRoot.addChild(sgcDevelopment);
@@ -78,12 +82,15 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
-    light.setIntensity(1.50);
+    light.setIntensity(0.5);
     light.setColor(Color.white);
     sgcLight.setLight(light);
     MatrixBuilder.euclidean().rotate(2.0, new double[] { 0, 1, 0 })
         .assignTo(sgcLight);
     sgcRoot.addChild(sgcLight);
+    
+    sgcRoot.addTool(new RotateTool());
+
 
     viewer.setCameraPath(camera_source);
     viewer.render();
@@ -109,70 +116,156 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     updateCamera();
   }
 
-  private void updateSGC(SGCNode node, int depth, SceneGraphComponent sgc) {
-    if (depth > maxDepth)
-      return;
-
-    sgc.addChild(node.getSGC());
-    Iterator<SGCNode> itr = node.getChildren().iterator();
-    while (itr.hasNext()) {
-      updateSGC(itr.next(), depth + 1, sgc);
-    }
-  }
-
   @Override
-  public void update(Observable development, Object arg) {
-    StopWatch s = new StopWatch();
+  public void update(Observable dev, Object arg) {
+    development = (Development)dev;
     StopWatch sTotal = new StopWatch();
     sTotal.start();
 
     String whatChanged = (String) arg;
-    if (whatChanged.equals("depth")) {
-      // depth slide no longer exists
-      // maxDepth = ((Development) development).getDesiredDepth();
-      // sgcTree.setVisibleDepth(maxDepth);
-      //
-    } else if (whatChanged.equals("surface") || whatChanged.equals("source")) {
-      s.start();
-      sgcTree = new SGCTree3D((Development) development, colorScheme);
-      s.stop();
-      System.out.println("time to build SGCTree: " + s.getElapsedTime());
-
+    if (whatChanged.equals("surface") || whatChanged.equals("source")) {
       updateGeometry();
-
     }
+    
     updateCamera();
     System.out.println("total time to update 3d: " + sTotal.getElapsedTime());
     System.out.println();
   }
 
   private void updateGeometry() {
-    GeometryMergeFactory mergeFact = new GeometryMergeFactory();
-    SceneGraphComponent sgc = new SceneGraphComponent();
+    sgcRoot.removeChild(sgcObjects);
+    sgcObjects = new SceneGraphComponent();
+    sgcDevelopment.setGeometry(getGeometry());
+    sgcRoot.addChild(sgcObjects);
+  }
+  
+  public Geometry getGeometry() {
+    DevelopmentGeometry geometry = new DevelopmentGeometry();
+    ArrayList<Color> colors = new ArrayList<Color>();
+    computeDevelopment(development.getRoot(), colors, geometry);
+    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
 
-    StopWatch s = new StopWatch();
-    s.start();
-    updateSGC(sgcTree.getRoot(), 0, sgc);
-    s.stop();
-    System.out.println("time to update SGC: " + s.getElapsedTime());
+    Color[] colorList = new Color[colors.size()];
+    for (int i = 0; i < colors.size(); i++) {
+      colorList[i] = colors.get(i);
+    }
 
-    s.start();
-    Geometry g = mergeFact.mergeGeometrySets(sgc);
-    s.stop();
-    System.out.println("time to merge geometry: " + s.getElapsedTime());
+    double[][] ifsf_verts = geometry.getVerts();
+    int[][] ifsf_faces = geometry.getFaces();
+    int[][] ifsf_edges = geometry.getEdges();
 
-    sgcDevelopment.setGeometry(g);
+    ifsf.setVertexCount(ifsf_verts.length);
+    ifsf.setVertexCoordinates(ifsf_verts);
+    ifsf.setEdgeCount(ifsf_edges.length);
+    ifsf.setEdgeIndices(ifsf_edges);
+    ifsf.setFaceCount(ifsf_faces.length);
+    ifsf.setFaceIndices(ifsf_faces);
+    ifsf.setFaceColors(colorList);
+    ifsf.update();
+    return ifsf.getGeometry();
+  }
+  
+  /*
+   *  Adds appropriate source point objects to objects SGC
+   */
+  private void computeDevelopment(DevelopmentNode node,
+      ArrayList<Color> colors, DevelopmentGeometry geometry) {
+    if (node.faceIsSource()) {
+      Vector sourcePoint = development.getSourcePoint();
+      Vector newSource = new Vector(sourcePoint.getComponent(0),
+          sourcePoint.getComponent(1), 1);
+      Vector transSourcePoint = node.getAffineTransformation().transformVector(
+          newSource);
+      Vector transSourcePoint2d = new Vector(transSourcePoint.getComponent(0),
+          transSourcePoint.getComponent(1));
 
-    sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
-    sgcDevelopment.removeChild(sgcObjects);
-    sgcObjects = sgcTree.getObjects();
-    sgcDevelopment.addChild(sgcObjects);
+      if (node.getEmbeddedFace().contains(transSourcePoint2d)) {
+        System.out.println("adding object");
+        sgcObjects.addChild(SGCMethods.sgcFromPoint(transSourcePoint));
+      }
+    }
+
+    double[][] face = node.getEmbeddedFace().getVectorsAsArray();
+    geometry.addFace(face);
+    
+    // (adding two faces at a time)
+    colors.add(colorScheme.getColor(node));
+    colors.add(colorScheme.getColor(node));
+    
+    Iterator<DevelopmentNode> itr = node.getChildren().iterator();
+    while (itr.hasNext()) {
+      computeDevelopment(itr.next(), colors, geometry);
+    }
   }
 
   public void setColorScheme(ColorScheme scheme) {
     colorScheme = scheme;
-    sgcTree.setColorScheme(colorScheme);
     updateGeometry();
   }
+  
+  // class designed to make it easy to use an IndexedFaceSetFactory
+  public class DevelopmentGeometry {
+
+    private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
+    private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
+    private ArrayList<int[]> geometry_edges = new ArrayList<int[]>();
+
+
+    public void addFace(double[][] faceverts) {
+      
+      int n = faceverts.length;
+      double[][] ifsf_verts = new double[2*n][3];
+      int[][] ifsf_edges = new int[3*n][2];
+      int[][] ifsf_faces = new int[2][n];
+      
+      for (int i=0; i<n; i++){
+        // for some reason, switching '-' sign makes light work
+        // but colors are flipped either way
+        ifsf_verts[i] = new double[]{ faceverts[i][0], faceverts[i][1], simulated3DHeight };
+        ifsf_verts[i+n] = new double[]{ faceverts[i][0], faceverts[i][1], -simulated3DHeight };
+      }
+      
+      for(int i=0; i<n; i++){
+        int j = (i+1)%n;
+        ifsf_edges[i] = new int[]{ i+geometry_verts.size(), j+geometry_verts.size()};
+        ifsf_edges[i+n] = new int[]{ i+n+geometry_verts.size(), j+n+geometry_verts.size() };
+        ifsf_edges[i+n+n] = new int[]{ i+geometry_verts.size(), i+n+geometry_verts.size() };
+      }
+      
+      for(int i=0; i<n; i++){
+        ifsf_faces[0][i] = geometry_verts.size() + i;
+        ifsf_faces[1][i] = n+(n-1)-i + geometry_verts.size();
+      }
+      
+      geometry_faces.add(ifsf_faces[0]);
+      geometry_faces.add(ifsf_faces[1]);
+      
+      for(int i = 0; i < 2*n; i++) {
+        geometry_verts.add(ifsf_verts[i]);
+        geometry_edges.add(ifsf_edges[i]);
+      }
+      for(int i = 2*n; i < 3*n; i++) {
+        geometry_edges.add(ifsf_edges[i]);
+      }
+      
+//      Color[] colors = new Color[ifsf_faces.length];
+//      for(int i = 0; i < ifsf_faces.length; i++) {
+//        colors[i] = colorScheme.getColor(node);
+//      }
+      
+    }
+
+    public double[][] getVerts() {
+      return (double[][]) geometry_verts.toArray(new double[0][0]);
+    }
+
+    public int[][] getFaces() {
+      return (int[][]) geometry_faces.toArray(new int[0][0]);
+    }
+    
+    public int[][] getEdges() {
+      return (int[][]) geometry_edges.toArray(new int[0][0]);
+    }
+  };
 
 }
