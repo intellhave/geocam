@@ -55,7 +55,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private Timer timer;
   private Timer keyHoldTimer;
   private Vector movementDirection = new Vector(1, 0);
-  private static final double ROTATION_ANGLE = Math.PI / 90;
+  private static final double ROTATION_ANGLE = Math.PI / 80;
 
   private enum movements {
     left, right, forward, back
@@ -210,12 +210,12 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     public void actionPerformed(ActionEvent e) {
       if (curMovement == movements.right) {
         rotateMovementDirection(ROTATION_ANGLE);
-        view2D.rotate(ROTATION_ANGLE);
-        view3D.rotate(ROTATION_ANGLE);
+        development.rotate(movementDirection);
+        //view3D.rotate(ROTATION_ANGLE);
       } else if (curMovement == movements.left) {
         rotateMovementDirection(-ROTATION_ANGLE);
-        view2D.rotate(-ROTATION_ANGLE);
-        view3D.rotate(-ROTATION_ANGLE);
+        development.rotate(movementDirection);
+        //view3D.rotate(-ROTATION_ANGLE);
       } else if (curMovement == movements.forward) {
         development.translateSourcePoint(movementDirection);
       } else if (curMovement == movements.back) {

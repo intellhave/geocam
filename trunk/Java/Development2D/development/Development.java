@@ -11,8 +11,10 @@ import util.Matrix;
 
 public class Development extends Observable {
 
+  private AffineTransformation rotation = new AffineTransformation(2);
   private DevelopmentNode root;
   private Vector sourcePoint;
+  private Vector direction = new Vector(1,0);
   private Face sourceFace;
   private int maxDepth;
   private double STEP_SIZE = 0.05;
@@ -46,6 +48,13 @@ public class Development extends Observable {
   public int getDepth() {
     return maxDepth;
   }
+  
+  public void rotate(Vector dir) {
+    direction = dir;
+    buildTree();
+    setChanged();
+    notifyObservers("rotation");
+  }
 
   // assumes magnitude of direction is 1
   public void translateSourcePoint(Vector v) {
@@ -54,11 +63,13 @@ public class Development extends Observable {
 
     Vector direction3d = new Vector(direction.getComponent(0),
         direction.getComponent(1), 1);
+    Matrix inverse = null;
     try {
-      root.getAffineTransformation().inverse().transformVector(direction3d);
+      inverse = root.getAffineTransformation().inverse();
     } catch (Exception e) {
       e.printStackTrace();
     }
+    inverse.transformVector(direction3d);
 
     direction = new Vector(direction3d.getComponent(0),
         direction3d.getComponent(1));
@@ -143,10 +154,23 @@ public class Development extends Observable {
   }
 
   private void buildTree() {
+    
+   // AffineTransformation init = new AffineTransformation(dir[0], dir[1], -dir[0]*source_point[0] - dir[1]*source_point[1] };
+    //initial_transformation[1] = new double[] { -dir[1], dir[0],  dir[1]*source_point[0] - dir[0]*source_point[1] };
+    
     // get transformation taking sourcePoint to origin (translation by
     // -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint,
         -1));
+    
+    direction = t.affineTransVector(direction);
+    //rotation matrix sending dir -> (0,1), rot_cw_pi/2(dir) -> (1,0)
+    double x = direction.getComponent(0);
+    double y = direction.getComponent(1);
+    Matrix M = new Matrix(new double[][]{ new double[] {x,y}, new double[] {-y,x} });
+    rotation = new AffineTransformation(M);
+    
+    t.leftMultiply(rotation);
 
     Vector.scale(sourcePoint, -1);
 

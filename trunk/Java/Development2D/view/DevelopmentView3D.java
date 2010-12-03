@@ -82,15 +82,16 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
-    light.setIntensity(0.5);
+    light.setIntensity(1.0);
     light.setColor(Color.white);
     sgcLight.setLight(light);
-    MatrixBuilder.euclidean().rotate(2.0, new double[] { 0, 1, 0 })
+    MatrixBuilder.euclidean().rotate(2.65, new double[] { 0, 1, 0 })
         .assignTo(sgcLight);
     sgcRoot.addChild(sgcLight);
     
-    sgcRoot.addTool(new RotateTool());
-
+    // by default, everything is upside down
+    MatrixBuilder.euclidean().rotate(Math.PI, new double[]{1,0,0}).assignTo(sgcDevelopment);
+    MatrixBuilder.euclidean().rotate(Math.PI, new double[]{1,0,0}).assignTo(sgcObjects);
 
     viewer.setCameraPath(camera_source);
     viewer.render();
@@ -123,9 +124,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sTotal.start();
 
     String whatChanged = (String) arg;
-    if (whatChanged.equals("surface") || whatChanged.equals("source")) {
       updateGeometry();
-    }
     
     updateCamera();
     System.out.println("total time to update 3d: " + sTotal.getElapsedTime());
@@ -136,6 +135,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sgcRoot.removeChild(sgcObjects);
     sgcObjects = new SceneGraphComponent();
     sgcDevelopment.setGeometry(getGeometry());
+    MatrixBuilder.euclidean().rotate(Math.PI, new double[]{1,0,0}).assignTo(sgcObjects);
     sgcRoot.addChild(sgcObjects);
   }
   
@@ -180,8 +180,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
           transSourcePoint.getComponent(1));
 
       if (node.getEmbeddedFace().contains(transSourcePoint2d)) {
-        System.out.println("adding object");
-        sgcObjects.addChild(SGCMethods.sgcFromPoint(transSourcePoint));
+        sgcObjects.addChild(SGCMethods.sgcFromPoint(transSourcePoint2d));
       }
     }
 
