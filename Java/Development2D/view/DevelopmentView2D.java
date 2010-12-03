@@ -72,12 +72,10 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     String whatChanged = (String) arg;
     development = (Development) dev;
 
-    if (whatChanged.equals("surface") || whatChanged.equals("source")) {
       updateGeometry();
       CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
           scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
 
-    }
   }
 
   private void updateGeometry() {
