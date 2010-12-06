@@ -148,18 +148,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
     sliderPanel = new JPanel();
     sliderPanel.setLayout(new GridLayout(2, 1));
-//    depthSlider = new JSlider(1, maxDepth, currentDepth);
-//    depthSlider.setMaximumSize(new Dimension(400, 100));
-//    depthSlider.addChangeListener(new ChangeListener() {
-//      public void stateChanged(ChangeEvent e) {
-//        int val = ((JSlider) e.getSource()).getValue();
-//        currentDepth = val;
-//        depthLabel.setText("Recursion Depth (" + currentDepth + ")");
-//        development.setDesiredDepth(currentDepth);
-//      }
-//    });
-//    sliderPanel.add(depthLabel);
-//    sliderPanel.add(depthSlider);
 
     colorPanel = new JPanel();
     JButton depthSchemeButton = new JButton("Depth");
@@ -210,18 +198,19 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     public void actionPerformed(ActionEvent e) {
       if (curMovement == movements.right) {
         rotateMovementDirection(ROTATION_ANGLE);
-        development.rotate(movementDirection);
-        //view3D.rotate(ROTATION_ANGLE);
+        development.rotate(ROTATION_ANGLE);
+        
       } else if (curMovement == movements.left) {
         rotateMovementDirection(-ROTATION_ANGLE);
-        development.rotate(movementDirection);
-        //view3D.rotate(-ROTATION_ANGLE);
+        development.rotate(-ROTATION_ANGLE);
+        
       } else if (curMovement == movements.forward) {
-        development.translateSourcePoint(movementDirection);
+        development.translateSourcePoint("forward");
+        
       } else if (curMovement == movements.back) {
         Vector v = new Vector(movementDirection);
         v.scale(-1);
-        development.translateSourcePoint(v);
+        development.translateSourcePoint("back");
       }
     }
   }
