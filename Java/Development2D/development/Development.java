@@ -49,20 +49,29 @@ public class Development extends Observable {
     return maxDepth;
   }
   
-  public void rotate(Vector dir) {
-    direction = dir;
+  public void rotate(double angle) {
+    double cos = Math.cos(-angle);
+    double sin = Math.sin(-angle);
+    double x = direction.getComponent(0);
+    double y = direction.getComponent(1);
+
+    double x_new = cos * x - sin * y;
+    double y_new = sin * x + cos * y;
+    direction = new Vector(x_new, y_new);
+    
     buildTree();
     setChanged();
     notifyObservers("rotation");
   }
 
-  // assumes magnitude of direction is 1
-  public void translateSourcePoint(Vector v) {
-    Vector direction = new Vector(v);
-    direction.scale(STEP_SIZE);
+  // /assumes direction is normalized
+  public void translateSourcePoint(String fb) {
+    Vector movement = new Vector(direction);
+    movement.scale(STEP_SIZE);
+    if(fb.equals("back")) movement.scale(-1);
 
-    Vector direction3d = new Vector(direction.getComponent(0),
-        direction.getComponent(1), 1);
+    Vector direction3d = new Vector(movement.getComponent(0),
+        movement.getComponent(1), 1);
     Matrix inverse = null;
     try {
       inverse = root.getAffineTransformation().inverse();
@@ -70,12 +79,13 @@ public class Development extends Observable {
       e.printStackTrace();
     }
     inverse.transformVector(direction3d);
+    inverse.transformVector(new Vector(direction.getComponent(0), direction.getComponent(1), 0));
 
-    direction = new Vector(direction3d.getComponent(0),
+    movement = new Vector(direction3d.getComponent(0),
         direction3d.getComponent(1));
 
-    direction.add(sourcePoint);
-    computeEnd(direction, sourceFace, null);
+    movement.add(sourcePoint);
+    computeEnd(movement, sourceFace, null);
     setSourcePoint(sourcePoint);
   }
 
@@ -94,7 +104,7 @@ public class Development extends Observable {
     double l3 = l.getComponent(2);
     if (l1 >= 0 && l1 < 1 && l2 >= 0 && l2 < 1 && l3 >= 0 && l3 < 1) {
       sourceFace = face;
-      sourcePoint = point;
+      sourcePoint = new Vector(point);
       return;
     }
 
@@ -133,6 +143,7 @@ public class Development extends Observable {
       // get transformation taking current face to next
       AffineTransformation trans = CoordTrans2D.affineTransAt(face, edge);
       Vector newPoint = trans.affineTransPoint(point);
+      direction = trans.affineTransVector(direction);
 
       computeEnd(newPoint, nextFace, edge);
     } else {
@@ -154,16 +165,13 @@ public class Development extends Observable {
   }
 
   private void buildTree() {
-    
-   // AffineTransformation init = new AffineTransformation(dir[0], dir[1], -dir[0]*source_point[0] - dir[1]*source_point[1] };
-    //initial_transformation[1] = new double[] { -dir[1], dir[0],  dir[1]*source_point[0] - dir[0]*source_point[1] };
-    
+    System.out.println("direction = " + direction);
     // get transformation taking sourcePoint to origin (translation by
     // -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint,
         -1));
     
-    direction = t.affineTransVector(direction);
+    //Vector newDirection = t.affineTransVector(direction);
     //rotation matrix sending dir -> (0,1), rot_cw_pi/2(dir) -> (1,0)
     double x = direction.getComponent(0);
     double y = direction.getComponent(1);
@@ -210,8 +218,7 @@ public class Development extends Observable {
       return;
     }
 
-    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace,
-        newTrans);
+    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace, newTrans);
     parent.addChild(node);
 
     if (depth == maxDepth)
