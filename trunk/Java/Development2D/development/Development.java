@@ -14,7 +14,7 @@ public class Development extends Observable {
   private AffineTransformation rotation = new AffineTransformation(2);
   private DevelopmentNode root;
   private Vector sourcePoint;
-  private Vector direction = new Vector(1,0);
+  private Vector direction = new Vector(1, 0);
   private Face sourceFace;
   private int maxDepth;
   private double STEP_SIZE = 0.05;
@@ -48,7 +48,7 @@ public class Development extends Observable {
   public int getDepth() {
     return maxDepth;
   }
-  
+
   public void rotate(double angle) {
     double cos = Math.cos(-angle);
     double sin = Math.sin(-angle);
@@ -58,7 +58,7 @@ public class Development extends Observable {
     double x_new = cos * x - sin * y;
     double y_new = sin * x + cos * y;
     direction = new Vector(x_new, y_new);
-    
+
     buildTree();
     setChanged();
     notifyObservers("rotation");
@@ -68,7 +68,8 @@ public class Development extends Observable {
   public void translateSourcePoint(String fb) {
     Vector movement = new Vector(direction);
     movement.scale(STEP_SIZE);
-    if(fb.equals("back")) movement.scale(-1);
+    if (fb.equals("back"))
+      movement.scale(-1);
 
     Vector direction3d = new Vector(movement.getComponent(0),
         movement.getComponent(1), 1);
@@ -79,7 +80,8 @@ public class Development extends Observable {
       e.printStackTrace();
     }
     inverse.transformVector(direction3d);
-    inverse.transformVector(new Vector(direction.getComponent(0), direction.getComponent(1), 0));
+    inverse.transformVector(new Vector(direction.getComponent(0), direction
+        .getComponent(1), 0));
 
     movement = new Vector(direction3d.getComponent(0),
         direction3d.getComponent(1));
@@ -165,22 +167,22 @@ public class Development extends Observable {
   }
 
   private void buildTree() {
-    System.out.println("direction = " + direction);
     // get transformation taking sourcePoint to origin (translation by
     // -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint,
         -1));
+    Vector.scale(sourcePoint, -1);
+
     
-    //Vector newDirection = t.affineTransVector(direction);
-    //rotation matrix sending dir -> (0,1), rot_cw_pi/2(dir) -> (1,0)
+    // rotation matrix sending direction -> (1,0)
     double x = direction.getComponent(0);
     double y = direction.getComponent(1);
-    Matrix M = new Matrix(new double[][]{ new double[] {x,y}, new double[] {-y,x} });
+    Matrix M = new Matrix(new double[][] { new double[] { x, y },
+        new double[] { -y, x } });
     rotation = new AffineTransformation(M);
-    
+
     t.leftMultiply(rotation);
 
-    Vector.scale(sourcePoint, -1);
 
     EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
     root = new DevelopmentNode(null, sourceFace, transformedFace, t);
@@ -218,7 +220,8 @@ public class Development extends Observable {
       return;
     }
 
-    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace, newTrans);
+    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace,
+        newTrans);
     parent.addChild(node);
 
     if (depth == maxDepth)
