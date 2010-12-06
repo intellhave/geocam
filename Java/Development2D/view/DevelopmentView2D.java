@@ -69,7 +69,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
 
   @Override
   public void update(Observable dev, Object arg) {
-    String whatChanged = (String) arg;
     development = (Development) dev;
 
       updateGeometry();

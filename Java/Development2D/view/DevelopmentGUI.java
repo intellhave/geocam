@@ -54,7 +54,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   // Movement stuff
   private Timer timer;
   private Timer keyHoldTimer;
-  private Vector movementDirection = new Vector(1, 0);
   private static final double ROTATION_ANGLE = Math.PI / 80;
 
   private enum movements {
@@ -197,33 +196,18 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   public class Moving implements ActionListener {
     public void actionPerformed(ActionEvent e) {
       if (curMovement == movements.right) {
-        rotateMovementDirection(ROTATION_ANGLE);
         development.rotate(ROTATION_ANGLE);
         
       } else if (curMovement == movements.left) {
-        rotateMovementDirection(-ROTATION_ANGLE);
         development.rotate(-ROTATION_ANGLE);
         
       } else if (curMovement == movements.forward) {
         development.translateSourcePoint("forward");
         
       } else if (curMovement == movements.back) {
-        Vector v = new Vector(movementDirection);
-        v.scale(-1);
         development.translateSourcePoint("back");
       }
     }
-  }
-
-  private void rotateMovementDirection(double angle) {
-    double cos = Math.cos(-angle);
-    double sin = Math.sin(-angle);
-    double x = movementDirection.getComponent(0);
-    double y = movementDirection.getComponent(1);
-
-    double x_new = cos * x - sin * y;
-    double y_new = sin * x + cos * y;
-    movementDirection = new Vector(x_new, y_new);
   }
 
   @Override

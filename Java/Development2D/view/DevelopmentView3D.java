@@ -17,7 +17,6 @@ import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
-import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 import development.Development;
@@ -27,7 +26,7 @@ import development.Development.DevelopmentNode;
 
 public class DevelopmentView3D extends JRViewer implements Observer {
   private final double simulated3DHeight = 0.08;
-  
+
   private Development development;
 
   private Viewer viewer;
@@ -48,7 +47,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sgcDevelopment = new SceneGraphComponent();
     sgcObjects = new SceneGraphComponent();
     sgcRoot.addChild(sgcObjects);
-    
+
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
 
     // make camera and sgc_camera
@@ -88,10 +87,12 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     MatrixBuilder.euclidean().rotate(2.65, new double[] { 0, 1, 0 })
         .assignTo(sgcLight);
     sgcRoot.addChild(sgcLight);
-    
+
     // by default, everything is upside down
-    MatrixBuilder.euclidean().rotate(Math.PI, new double[]{1,0,0}).assignTo(sgcDevelopment);
-    MatrixBuilder.euclidean().rotate(Math.PI, new double[]{1,0,0}).assignTo(sgcObjects);
+    MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
+        .assignTo(sgcDevelopment);
+    MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
+        .assignTo(sgcObjects);
 
     viewer.setCameraPath(camera_source);
     viewer.render();
@@ -119,13 +120,12 @@ public class DevelopmentView3D extends JRViewer implements Observer {
 
   @Override
   public void update(Observable dev, Object arg) {
-    development = (Development)dev;
+    development = (Development) dev;
     StopWatch sTotal = new StopWatch();
     sTotal.start();
 
-    String whatChanged = (String) arg;
-      updateGeometry();
-    
+    updateGeometry();
+
     updateCamera();
     System.out.println("total time to update 3d: " + sTotal.getElapsedTime());
     System.out.println();
@@ -135,10 +135,11 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sgcRoot.removeChild(sgcObjects);
     sgcObjects = new SceneGraphComponent();
     sgcDevelopment.setGeometry(getGeometry());
-    MatrixBuilder.euclidean().rotate(Math.PI, new double[]{1,0,0}).assignTo(sgcObjects);
+    MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
+        .assignTo(sgcObjects);
     sgcRoot.addChild(sgcObjects);
   }
-  
+
   public Geometry getGeometry() {
     DevelopmentGeometry geometry = new DevelopmentGeometry();
     ArrayList<Color> colors = new ArrayList<Color>();
@@ -164,9 +165,9 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     ifsf.update();
     return ifsf.getGeometry();
   }
-  
+
   /*
-   *  Adds appropriate source point objects to objects SGC
+   * Adds appropriate source point objects to objects SGC
    */
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
@@ -186,11 +187,11 @@ public class DevelopmentView3D extends JRViewer implements Observer {
 
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face);
-    
+
     // (adding two faces at a time)
     colors.add(colorScheme.getColor(node));
     colors.add(colorScheme.getColor(node));
-    
+
     Iterator<DevelopmentNode> itr = node.getChildren().iterator();
     while (itr.hasNext()) {
       computeDevelopment(itr.next(), colors, geometry);
@@ -201,7 +202,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     colorScheme = scheme;
     updateGeometry();
   }
-  
+
   // class designed to make it easy to use an IndexedFaceSetFactory
   public class DevelopmentGeometry {
 
@@ -209,49 +210,47 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
     private ArrayList<int[]> geometry_edges = new ArrayList<int[]>();
 
-
     public void addFace(double[][] faceverts) {
-      
+
       int n = faceverts.length;
-      double[][] ifsf_verts = new double[2*n][3];
-      int[][] ifsf_edges = new int[3*n][2];
+      double[][] ifsf_verts = new double[2 * n][3];
+      int[][] ifsf_edges = new int[3 * n][2];
       int[][] ifsf_faces = new int[2][n];
-      
-      for (int i=0; i<n; i++){
+
+      for (int i = 0; i < n; i++) {
         // for some reason, switching '-' sign makes light work
         // but colors are flipped either way
-        ifsf_verts[i] = new double[]{ faceverts[i][0], faceverts[i][1], simulated3DHeight };
-        ifsf_verts[i+n] = new double[]{ faceverts[i][0], faceverts[i][1], -simulated3DHeight };
+        ifsf_verts[i] = new double[] { faceverts[i][0], faceverts[i][1],
+            simulated3DHeight };
+        ifsf_verts[i + n] = new double[] { faceverts[i][0], faceverts[i][1],
+            -simulated3DHeight };
       }
-      
-      for(int i=0; i<n; i++){
-        int j = (i+1)%n;
-        ifsf_edges[i] = new int[]{ i+geometry_verts.size(), j+geometry_verts.size()};
-        ifsf_edges[i+n] = new int[]{ i+n+geometry_verts.size(), j+n+geometry_verts.size() };
-        ifsf_edges[i+n+n] = new int[]{ i+geometry_verts.size(), i+n+geometry_verts.size() };
+
+      for (int i = 0; i < n; i++) {
+        int j = (i + 1) % n;
+        ifsf_edges[i] = new int[] { i + geometry_verts.size(),
+            j + geometry_verts.size() };
+        ifsf_edges[i + n] = new int[] { i + n + geometry_verts.size(),
+            j + n + geometry_verts.size() };
+        ifsf_edges[i + n + n] = new int[] { i + geometry_verts.size(),
+            i + n + geometry_verts.size() };
       }
-      
-      for(int i=0; i<n; i++){
+
+      for (int i = 0; i < n; i++) {
         ifsf_faces[0][i] = geometry_verts.size() + i;
-        ifsf_faces[1][i] = n+(n-1)-i + geometry_verts.size();
+        ifsf_faces[1][i] = n + (n - 1) - i + geometry_verts.size();
       }
-      
+
       geometry_faces.add(ifsf_faces[0]);
       geometry_faces.add(ifsf_faces[1]);
-      
-      for(int i = 0; i < 2*n; i++) {
+
+      for (int i = 0; i < 2 * n; i++) {
         geometry_verts.add(ifsf_verts[i]);
         geometry_edges.add(ifsf_edges[i]);
       }
-      for(int i = 2*n; i < 3*n; i++) {
+      for (int i = 2 * n; i < 3 * n; i++) {
         geometry_edges.add(ifsf_edges[i]);
       }
-      
-//      Color[] colors = new Color[ifsf_faces.length];
-//      for(int i = 0; i < ifsf_faces.length; i++) {
-//        colors[i] = colorScheme.getColor(node);
-//      }
-      
     }
 
     public double[][] getVerts() {
@@ -261,7 +260,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     public int[][] getFaces() {
       return (int[][]) geometry_faces.toArray(new int[0][0]);
     }
-    
+
     public int[][] getEdges() {
       return (int[][]) geometry_edges.toArray(new int[0][0]);
     }
