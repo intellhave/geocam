@@ -18,6 +18,9 @@ import development.Vector;
  */
 public class SGCMethods {
   public static SceneGraphComponent sgcFromPoint(Vector point) {
+    return sgcFromPoint(point, 0.03);
+  }
+  public static SceneGraphComponent sgcFromPoint(Vector point, double radius) {
     SceneGraphComponent sgc_points = new SceneGraphComponent();
     Appearance app_points = new Appearance();
 
@@ -28,7 +31,7 @@ public class SGCMethods {
         .createDefaultGeometryShader(app_points, true);
     DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
     dps.setSpheresDraw(true);
-    dps.setPointRadius(0.03);
+    dps.setPointRadius(radius);
     dps.setDiffuseColor(Color.BLUE);
 
     sgc_points.setAppearance(app_points);

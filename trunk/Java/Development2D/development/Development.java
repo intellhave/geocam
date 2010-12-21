@@ -17,9 +17,10 @@ public class Development extends Observable {
   private Vector direction = new Vector(1, 0);
   private Face sourceFace;
   private int maxDepth;
-  private double STEP_SIZE = 0.05;
+  private double step_size = 0.05;
 
-  public Development(Face sourceF, Vector sourcePt, int depth) {
+  public Development(Face sourceF, Vector sourcePt, int depth, double step) {
+    step_size = step;
     maxDepth = depth;
     sourcePoint = sourcePt;
     sourceFace = sourceF;
@@ -35,6 +36,17 @@ public class Development extends Observable {
     buildTree();
     setChanged();
     notifyObservers("surface");
+  }
+  
+  public void setDepth(int depth) {
+    maxDepth = depth;
+    buildTree();
+    setChanged();
+    notifyObservers("depth");
+  }
+  
+  public void setStepSize(double size) {
+    step_size = size;
   }
 
   public DevelopmentNode getRoot() {
@@ -67,7 +79,7 @@ public class Development extends Observable {
   // /assumes direction is normalized
   public void translateSourcePoint(String fb) {
     Vector movement = new Vector(direction);
-    movement.scale(STEP_SIZE);
+    movement.scale(step_size);
     if (fb.equals("back"))
       movement.scale(-1);
 
