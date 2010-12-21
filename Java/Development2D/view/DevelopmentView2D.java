@@ -20,6 +20,7 @@ import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.ShaderUtility;
+import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
 import development.Development;
 import development.Development.DevelopmentNode;
@@ -32,11 +33,15 @@ public class DevelopmentView2D extends JRViewer implements Observer {
   private Scene scene;
   private ColorScheme colorScheme;
   private Development development;
+  private double radius; // radius of sourcePoint objects
+  private double lineLength; // length of direction line
 
-  private Vector cameraForward = new Vector(2, 0);
+  private Vector cameraForward = new Vector(1, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
 
-  public DevelopmentView2D(Development dev, ColorScheme scheme) {
+  public DevelopmentView2D(Development dev, ColorScheme scheme, double r, double l) {
+    lineLength = l;
+    radius = r;
     development = dev;
     colorScheme = scheme;
     sgcRoot = new SceneGraphComponent();
@@ -52,6 +57,8 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     MatrixBuilder.euclidean().rotate(2.0, new double[] { 0, 1, 0 })
         .assignTo(sgcLight);
     sgcRoot.addChild(sgcLight);
+
+    //sgcRoot.addTool(new RotateTool());
 
     updateGeometry();
     sgcRoot.addChild(sgcDevelopment);
@@ -70,10 +77,12 @@ public class DevelopmentView2D extends JRViewer implements Observer {
   @Override
   public void update(Observable dev, Object arg) {
     development = (Development) dev;
-
-      updateGeometry();
+    String whatChanged = (String) arg;
+    updateGeometry();
+    if (whatChanged.equals("surface") || whatChanged.equals("depth")) {
       CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
           scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
+    }
 
   }
 
@@ -107,9 +116,14 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     ifsf.update();
     return ifsf.getGeometry();
   }
+  
+  public void setPointRadius(double r) {
+    radius = r;
+    updateGeometry();
+  }
 
   /*
-   *  Adds appropriate source point objects to objects SGC
+   * Adds appropriate source point objects to objects SGC
    */
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
@@ -124,14 +138,14 @@ public class DevelopmentView2D extends JRViewer implements Observer {
 
       if (node.getEmbeddedFace().contains(transSourcePoint2d) || node.isRoot()) {
         // containment alg doesn't work for root
-        objects.addChild(SGCMethods.sgcFromPoint(transSourcePoint));
+        objects.addChild(SGCMethods.sgcFromPoint(transSourcePoint, radius));
       }
     }
 
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face);
     colors.add(colorScheme.getColor(node));
-    
+
     Iterator<DevelopmentNode> itr = node.getChildren().iterator();
     while (itr.hasNext()) {
       computeDevelopment(itr.next(), colors, geometry);
@@ -174,8 +188,16 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     colorScheme = scheme;
     updateGeometry();
   }
+  
+  public void setLineLength(double length) {
+    lineLength = length;
+    setViewingDirection(cameraForward);
+  }
 
-  public void setViewingDirection(Vector vector) {
+  public void setViewingDirection(Vector v) {
+    Vector vector = new Vector(v);
+    vector.normalize();
+    vector.scale(lineLength);
     Appearance app_points = new Appearance();
     app_points.setAttribute(CommonAttributes.TUBE_RADIUS, 0.005);
     // set point shader

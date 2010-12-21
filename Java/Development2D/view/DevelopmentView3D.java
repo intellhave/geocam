@@ -120,11 +120,17 @@ public class DevelopmentView3D extends JRViewer implements Observer {
 
   @Override
   public void update(Observable dev, Object arg) {
+    String whatChanged = (String)arg;
     development = (Development) dev;
     StopWatch sTotal = new StopWatch();
     sTotal.start();
 
     updateGeometry();
+    
+    if(whatChanged.equals("depth") || whatChanged.equals("surface")) {
+      CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
+          scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
+    }
 
     updateCamera();
     System.out.println("total time to update 3d: " + sTotal.getElapsedTime());
