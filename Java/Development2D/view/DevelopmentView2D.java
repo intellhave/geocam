@@ -1,27 +1,33 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JSlider;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import view.SGCMethods.DevelopmentGeometry;
+
 import de.jreality.geometry.IndexedFaceSetFactory;
-import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
-import de.jreality.scene.Appearance;
+import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
-import de.jreality.shader.CommonAttributes;
-import de.jreality.shader.DefaultGeometryShader;
-import de.jreality.shader.DefaultPointShader;
-import de.jreality.shader.ShaderUtility;
-import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
+import de.jtem.jrworkspace.plugin.Controller;
+import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.Development.DevelopmentNode;
 import development.Vector;
@@ -33,15 +39,14 @@ public class DevelopmentView2D extends JRViewer implements Observer {
   private Scene scene;
   private ColorScheme colorScheme;
   private Development development;
-  private double radius; // radius of sourcePoint objects
-  private double lineLength; // length of direction line
-
+  private double radius = 0.03; // radius of sourcePoint objects
+  private double lineRadius = 0.005; // radius of direction line
+  private double lineLength = INITIAL_LINE_LENGTH; // length of direction line
+  
   private Vector cameraForward = new Vector(1, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
 
-  public DevelopmentView2D(Development dev, ColorScheme scheme, double r, double l) {
-    lineLength = l;
-    radius = r;
+  public DevelopmentView2D(Development dev, ColorScheme scheme) {
     development = dev;
     colorScheme = scheme;
     sgcRoot = new SceneGraphComponent();
@@ -65,6 +70,8 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     sgcRoot.addChild(viewingDirection);
     setViewingDirection(cameraForward);
     this.addBasicUI();
+    this.registerPlugin(new UIPanel_Options());
+    this.setShowPanelSlots(true,false,false,false);
 
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
@@ -152,38 +159,6 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     }
   }
 
-  // class designed to make it easy to use an IndexedFaceSetFactory
-  public class DevelopmentGeometry {
-
-    private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
-    private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
-
-    public void addFace(double[][] faceverts) {
-
-      int nverts = faceverts.length;
-      int vi = geometry_verts.size();
-
-      int[] newface = new int[nverts];
-      for (int k = 0; k < nverts; k++) {
-        double[] newvert = new double[3];
-        newvert[0] = faceverts[k][0];
-        newvert[1] = faceverts[k][1];
-        newvert[2] = 1.0;
-        geometry_verts.add(newvert);
-        newface[k] = vi++;
-      }
-      geometry_faces.add(newface);
-    }
-
-    public double[][] getVerts() {
-      return (double[][]) geometry_verts.toArray(new double[0][0]);
-    }
-
-    public int[][] getFaces() {
-      return (int[][]) geometry_faces.toArray(new int[0][0]);
-    }
-  };
-
   public void setColorScheme(ColorScheme scheme) {
     colorScheme = scheme;
     updateGeometry();
@@ -198,26 +173,9 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     Vector vector = new Vector(v);
     vector.normalize();
     vector.scale(lineLength);
-    Appearance app_points = new Appearance();
-    app_points.setAttribute(CommonAttributes.TUBE_RADIUS, 0.005);
-    // set point shader
-    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
-        .createDefaultGeometryShader(app_points, true);
-    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
-    dps.setSpheresDraw(true);
-    dps.setPointRadius(0.01);
-    dps.setDiffuseColor(Color.BLUE);
-    viewingDirection.setAppearance(app_points);
-
-    IndexedLineSetFactory ilsf = new IndexedLineSetFactory();
-    ilsf.setVertexCount(2);
-    ilsf.setEdgeCount(1);
-
-    ilsf.setVertexCoordinates(new double[][] { { 0, 0, 1 },
-        { vector.getComponent(0), vector.getComponent(1), 1 } });
-    ilsf.setEdgeIndices(new int[][] { { 0, 1 } });
-    ilsf.update();
-    viewingDirection.setGeometry(ilsf.getGeometry());
+    sgcRoot.removeChild(viewingDirection);
+    viewingDirection = SGCMethods.sgcFromVector(vector, lineRadius);
+    sgcRoot.addChild(viewingDirection); 
   }
 
   public void rotate(double angle) {
@@ -233,5 +191,88 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     setViewingDirection(cameraForward);
     sgcRoot.addChild(viewingDirection);
   }
+  
+  private static int MAX_LINE_LENGTH = 20;
+  private static int INITIAL_LINE_LENGTH = 2;
+  private static int MAX_POINT_SIZE = 20;
+  private static int INITIAL_POINT_SIZE = 3;
+  private static int MAX_LINE_RADIUS = 50;
+  private static int INITIAL_LINE_RADIUS = 5;
+  
+  class UIPanel_Options extends ViewShrinkPanelPlugin {
+
+    TitledBorder border_size = BorderFactory.createTitledBorder("");
+    TitledBorder border_len = BorderFactory.createTitledBorder("");
+    TitledBorder border_lineRadius = BorderFactory.createTitledBorder("");
+
+    
+    private void makeUIComponents() {
+      
+      JSlider pointSizeSlider = new JSlider(0, MAX_POINT_SIZE, INITIAL_POINT_SIZE);
+      pointSizeSlider.addChangeListener(new ChangeListener(){
+          public void stateChanged(ChangeEvent e) {
+            radius = ((JSlider)e.getSource()).getValue()/100.0;
+            updateGeometry();
+            border_size.setTitle(String.format("Point Radius (%1.3f)", radius));
+          }
+      });
+      
+      pointSizeSlider.setMaximumSize(new Dimension(300,100));
+      pointSizeSlider.setAlignmentX(0.0f);
+      border_size.setTitle(String.format("Point Radius (%1.3f)", radius));
+      pointSizeSlider.setBorder(border_size);
+      shrinkPanel.add(pointSizeSlider);
+      
+      JSlider lengthSlider = new JSlider(0, MAX_LINE_LENGTH, INITIAL_LINE_LENGTH);
+      lengthSlider.addChangeListener(new ChangeListener(){
+          public void stateChanged(ChangeEvent e) {
+            double lineLength = ((JSlider)e.getSource()).getValue();
+            setLineLength(lineLength);
+            border_len.setTitle(String.format("Line Length (%1.3f)",lineLength));
+          }
+      });
+      
+      lengthSlider.setMaximumSize(new Dimension(300,100));
+      lengthSlider.setAlignmentX(0.0f);
+      border_len.setTitle(String.format("Line Length (%1.3f)",lineLength));
+      lengthSlider.setBorder(border_len);
+      shrinkPanel.add(lengthSlider);
+      
+      JSlider lineRadSlider = new JSlider(0, MAX_LINE_RADIUS, INITIAL_LINE_RADIUS);
+      lineRadSlider.addChangeListener(new ChangeListener(){
+          public void stateChanged(ChangeEvent e) {
+            lineRadius = ((JSlider)e.getSource()).getValue()/1000.0;
+            setViewingDirection(cameraForward);
+            border_lineRadius.setTitle(String.format("Line Radius (%1.3f)", lineRadius));
+          }
+      });
+      
+      lineRadSlider.setMaximumSize(new Dimension(300,100));
+      lineRadSlider.setAlignmentX(0.0f);
+      border_lineRadius.setTitle(String.format("Line Radius (%1.3f)", lineRadius));
+      lineRadSlider.setBorder(border_lineRadius);
+      shrinkPanel.add(lineRadSlider);
+      
+      //specify layout
+      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
+      shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),BoxLayout.Y_AXIS));
+    }
+    
+    @Override
+    public void install(Controller c) throws Exception {
+      makeUIComponents();
+      super.install(c);
+    }
+    
+    @Override
+    public PluginInfo getPluginInfo(){
+      PluginInfo info = new PluginInfo("Line and Point Options", "");
+      return info;
+    }
+    
+    //these lines would add a help page for the tool
+    //@Override public String getHelpDocument() { return "BeanShell.html"; }
+    //@Override public String getHelpPath() { return "/de/jreality/plugin/help/"; }
+  };
 
 }

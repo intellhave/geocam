@@ -1,16 +1,25 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JSlider;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
+import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.Camera;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.Geometry;
@@ -19,13 +28,16 @@ import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
+import de.jtem.jrworkspace.plugin.Controller;
+import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
-import development.StopWatch;
 import development.Vector;
 import development.Development.DevelopmentNode;
 
 public class DevelopmentView3D extends JRViewer implements Observer {
-  private final double simulated3DHeight = 0.08;
+  private double height = 0.08;
+  private static int INITIAL_HEIGHT = 8;
+  private static int MAX_HEIGHT = 30;
 
   private Development development;
 
@@ -66,6 +78,8 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sgcRoot.addChild(sgcDevelopment);
 
     this.addBasicUI();
+    this.registerPlugin(new UIPanel_Options());
+    this.setShowPanelSlots(true,false,false,false);
 
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
@@ -122,8 +136,6 @@ public class DevelopmentView3D extends JRViewer implements Observer {
   public void update(Observable dev, Object arg) {
     String whatChanged = (String)arg;
     development = (Development) dev;
-    StopWatch sTotal = new StopWatch();
-    sTotal.start();
 
     updateGeometry();
     
@@ -133,8 +145,6 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     }
 
     updateCamera();
-    System.out.println("total time to update 3d: " + sTotal.getElapsedTime());
-    System.out.println();
   }
 
   private void updateGeometry() {
@@ -227,9 +237,9 @@ public class DevelopmentView3D extends JRViewer implements Observer {
         // for some reason, switching '-' sign makes light work
         // but colors are flipped either way
         ifsf_verts[i] = new double[] { faceverts[i][0], faceverts[i][1],
-            simulated3DHeight };
+            height };
         ifsf_verts[i + n] = new double[] { faceverts[i][0], faceverts[i][1],
-            -simulated3DHeight };
+            -height };
       }
 
       for (int i = 0; i < n; i++) {
@@ -270,6 +280,49 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     public int[][] getEdges() {
       return (int[][]) geometry_edges.toArray(new int[0][0]);
     }
+  };
+  
+  class UIPanel_Options extends ViewShrinkPanelPlugin {
+
+    TitledBorder heightBorder = BorderFactory.createTitledBorder("");
+    
+    private void makeUIComponents() {
+      
+      JSlider heightSlider = new JSlider(0, MAX_HEIGHT, INITIAL_HEIGHT);
+      heightSlider.addChangeListener(new ChangeListener(){
+          public void stateChanged(ChangeEvent e) {
+            height = ((JSlider)e.getSource()).getValue()/100.0;
+            updateGeometry();
+            heightBorder.setTitle(String.format("Height (%1.3f)", height));
+          }
+      });
+      
+      heightSlider.setMaximumSize(new Dimension(300,100));
+      heightSlider.setAlignmentX(0.0f);
+      heightBorder.setTitle(String.format("Height (%1.3f)", height));
+      heightSlider.setBorder(heightBorder);
+      shrinkPanel.add(heightSlider);
+      
+      //specify layout
+      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
+      shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),BoxLayout.Y_AXIS));
+    }
+    
+    @Override
+    public void install(Controller c) throws Exception {
+      makeUIComponents();
+      super.install(c);
+    }
+    
+    @Override
+    public PluginInfo getPluginInfo(){
+      PluginInfo info = new PluginInfo("Set Simulated 3D Height", "");
+      return info;
+    }
+    
+    //these lines would add a help page for the tool
+    //@Override public String getHelpDocument() { return "BeanShell.html"; }
+    //@Override public String getHelpPath() { return "/de/jreality/plugin/help/"; }
   };
 
 }

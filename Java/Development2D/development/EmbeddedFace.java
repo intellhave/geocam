@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
-import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.scene.Geometry;
 
 public class EmbeddedFace {

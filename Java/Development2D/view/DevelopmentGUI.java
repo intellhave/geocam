@@ -11,8 +11,9 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Iterator;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.Timer;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -43,11 +45,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   }
 
   private int currentDepth = 6;
-  private double radius = 0.03;
-  private static int MAX_LINE_LENGTH = 10;
-  private static int INITIAL_LINE_LENGTH = 2;
-  private static int MAX_POINT_SIZE = 12;
-  private static int INITIAL_POINT_SIZE = 3;
+ 
   private static int MAX_DEPTH = 25;
   private static int MAX_STEP_SIZE = 20; // (divided by 100)
   private static int INITIAL_STEP_SIZE = 5;
@@ -80,11 +78,11 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     colorScheme = new ColorScheme(schemes.DEPTH);
 
     development = null;
-    String filename = "surfaces/cone.off";
+    String filename = "surfaces/tetra.off";
     loadSurface(filename);
 
     System.out.println("Initializing 2D view");
-    view2D = new DevelopmentView2D(development, colorScheme, radius, INITIAL_LINE_LENGTH);
+    view2D = new DevelopmentView2D(development, colorScheme);
     System.out.println("done");
     development.addObserver(view2D);
 
@@ -133,10 +131,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
   }
   
-  private JLabel depthLabel = new JLabel("depth: " + currentDepth);
-  private JLabel stepLabel = new JLabel("step size: " + stepSize);
-  private JLabel pointLabel = new JLabel("point size: " + radius);
-  private JLabel lineLabel = new JLabel("line length: " + INITIAL_LINE_LENGTH);
+  TitledBorder stepBorder = BorderFactory.createTitledBorder("Step Size (" + stepSize + ")");
+  TitledBorder depthBorder = BorderFactory.createTitledBorder("Recursion Depth (" + currentDepth + ")");
 
 
   private void layoutGUI() {
@@ -174,14 +170,16 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     this.setJMenuBar(menuBar);
 
     sliderPanel = new JPanel();
-    sliderPanel.setLayout(new GridLayout(8, 1));
+    sliderPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
+    sliderPanel.setLayout(new BoxLayout(sliderPanel,BoxLayout.Y_AXIS));
     
     JSlider depthSlider = new JSlider(1, MAX_DEPTH, currentDepth);
     depthSlider.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           currentDepth = ((JSlider)e.getSource()).getValue();
           development.setDepth(currentDepth);
-          depthLabel.setText("depth: " + currentDepth);
+          depthBorder.setTitle("Recursion Depth (" + currentDepth + ")");
+          movementPanel.requestFocusInWindow();
         }
     });
     
@@ -190,36 +188,15 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         public void stateChanged(ChangeEvent e) {
           stepSize = ((JSlider)e.getSource()).getValue()/100.0;
           development.setStepSize(stepSize);
-          stepLabel.setText("step size: " + stepSize);
+          stepBorder.setTitle("Step Size (" + stepSize + ")");
+          movementPanel.requestFocusInWindow();
         }
-    });
+    }); 
     
-    JSlider pointSizeSlider = new JSlider(1, MAX_POINT_SIZE, INITIAL_POINT_SIZE);
-    pointSizeSlider.addChangeListener(new ChangeListener(){
-        public void stateChanged(ChangeEvent e) {
-          radius = ((JSlider)e.getSource()).getValue()/100.0;
-          view2D.setPointRadius(radius);
-          pointLabel.setText("point size: " + radius);
-        }
-    });
-    
-    JSlider lengthSlider = new JSlider(1, MAX_LINE_LENGTH, INITIAL_LINE_LENGTH);
-    lengthSlider.addChangeListener(new ChangeListener(){
-        public void stateChanged(ChangeEvent e) {
-          double length = ((JSlider)e.getSource()).getValue();
-          view2D.setLineLength(length);
-          lineLabel.setText("line length: " + length);
-        }
-    });
-    
-    sliderPanel.add(depthLabel);
+    depthSlider.setBorder(depthBorder);
     sliderPanel.add(depthSlider);
-    sliderPanel.add(stepLabel);
+    stepSizeSlider.setBorder(stepBorder);
     sliderPanel.add(stepSizeSlider);
-    sliderPanel.add(pointLabel);
-    sliderPanel.add(pointSizeSlider);
-    sliderPanel.add(lineLabel);
-    sliderPanel.add(lengthSlider);
 
     colorPanel = new JPanel();
     JButton depthSchemeButton = new JButton("Depth");
@@ -229,6 +206,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
           colorScheme = new ColorScheme(schemes.DEPTH);
           view2D.setColorScheme(colorScheme);
           view3D.setColorScheme(colorScheme);
+          movementPanel.requestFocusInWindow();
         }
       }
     });
@@ -239,6 +217,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
           colorScheme = new ColorScheme(schemes.FACE);
           view2D.setColorScheme(colorScheme);
           view3D.setColorScheme(colorScheme);
+          movementPanel.requestFocusInWindow();
         }
       }
     });
