@@ -1,7 +1,9 @@
 package view;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
+import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
@@ -58,6 +60,35 @@ public class SGCMethods {
     return sgc_points;
   }
   
+  public static SceneGraphComponent sgcFromVector(Vector v) {
+    return sgcFromVector(v, 0.005);
+  }
+  
+  public static SceneGraphComponent sgcFromVector(Vector v, double radius) {
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    Appearance app_points = new Appearance();
+    app_points.setAttribute(CommonAttributes.TUBE_RADIUS, radius);
+    // set point shader
+    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
+        .createDefaultGeometryShader(app_points, true);
+    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
+    dps.setSpheresDraw(true);
+    dps.setPointRadius(0.01);
+    dps.setDiffuseColor(Color.BLUE);
+    sgc.setAppearance(app_points);
+
+    IndexedLineSetFactory ilsf = new IndexedLineSetFactory();
+    ilsf.setVertexCount(2);
+    ilsf.setEdgeCount(1);
+
+    ilsf.setVertexCoordinates(new double[][] { { 0, 0, 1 },
+        { v.getComponent(0), v.getComponent(1), 1 } });
+    ilsf.setEdgeIndices(new int[][] { { 0, 1 } });
+    ilsf.update();
+    sgc.setGeometry(ilsf.getGeometry());
+    return sgc;
+  }
+  
   public static Appearance getFaceAppearance(double transparency) {
 
     // create appearance for developed faces
@@ -99,4 +130,36 @@ public class SGCMethods {
     app.setAttribute(CommonAttributes.PICKABLE, true);
     return app;
   }
+  
+  // class designed to make it easy to use an IndexedFaceSetFactory
+  public static class DevelopmentGeometry {
+
+    private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
+    private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
+
+    public void addFace(double[][] faceverts) {
+
+      int nverts = faceverts.length;
+      int vi = geometry_verts.size();
+
+      int[] newface = new int[nverts];
+      for (int k = 0; k < nverts; k++) {
+        double[] newvert = new double[3];
+        newvert[0] = faceverts[k][0];
+        newvert[1] = faceverts[k][1];
+        newvert[2] = 1.0;
+        geometry_verts.add(newvert);
+        newface[k] = vi++;
+      }
+      geometry_faces.add(newface);
+    }
+
+    public double[][] getVerts() {
+      return (double[][]) geometry_verts.toArray(new double[0][0]);
+    }
+
+    public int[][] getFaces() {
+      return (int[][]) geometry_faces.toArray(new int[0][0]);
+    }
+  };
 }
