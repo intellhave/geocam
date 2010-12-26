@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -17,7 +16,6 @@ import javax.swing.event.ChangeListener;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
-import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.Camera;
@@ -31,36 +29,24 @@ import de.jreality.util.SceneGraphUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
-import development.Vector;
 import development.Development.DevelopmentNode;
+import development.Node;
+import development.Vector;
 
-public class DevelopmentView3D extends JRViewer implements Observer {
+public class DevelopmentView3D extends DevelopmentView {
   private double height = 0.08;
   private static int INITIAL_HEIGHT = 8;
   private static int MAX_HEIGHT = 30;
 
-  private Development development;
-
   private Viewer viewer;
   private SceneGraphPath camera_source;
   private SceneGraphComponent sgc_camera;
-  private SceneGraphComponent sgcRoot;
-  private SceneGraphComponent sgcDevelopment;
-  private SceneGraphComponent sgcObjects; // objects on faces, including source
-                                          // point
+
   private Scene scene;
   private Vector cameraForward = new Vector(-1, 0);;
 
-  private ColorScheme colorScheme;
-
-  public DevelopmentView3D(Development dev, ColorScheme scheme) {
-    development = dev;
-    sgcRoot = new SceneGraphComponent();
-    sgcDevelopment = new SceneGraphComponent();
-    sgcObjects = new SceneGraphComponent();
-    sgcRoot.addChild(sgcObjects);
-
-    sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
+  public DevelopmentView3D(Development development, ColorScheme colorScheme) {
+    super(development, colorScheme);
 
     // make camera and sgc_camera
     Camera camera = new Camera();
@@ -72,10 +58,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     sgc_camera.setCamera(camera);
     updateCamera();
 
-    colorScheme = scheme;
-
     updateGeometry();
-    sgcRoot.addChild(sgcDevelopment);
 
     this.addBasicUI();
     this.registerPlugin(new UIPanel_Options());
@@ -106,7 +89,7 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
         .assignTo(sgcDevelopment);
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
-        .assignTo(sgcObjects);
+        .assignTo(objects);
 
     viewer.setCameraPath(camera_source);
     viewer.render();
@@ -147,13 +130,12 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     updateCamera();
   }
 
-  private void updateGeometry() {
-    sgcRoot.removeChild(sgcObjects);
-    sgcObjects = new SceneGraphComponent();
+  protected void updateGeometry() {
+    nodeList = new ArrayList<Node>();
     sgcDevelopment.setGeometry(getGeometry());
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
-        .assignTo(sgcObjects);
-    sgcRoot.addChild(sgcObjects);
+        .assignTo(objects);
+    setObjectsSGC();
   }
 
   public Geometry getGeometry() {
@@ -187,18 +169,12 @@ public class DevelopmentView3D extends JRViewer implements Observer {
    */
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
-    if (node.faceIsSource()) {
-      Vector sourcePoint = development.getSourcePoint();
-      Vector newSource = new Vector(sourcePoint.getComponent(0),
-          sourcePoint.getComponent(1), 1);
-      Vector transSourcePoint = node.getAffineTransformation().transformVector(
-          newSource);
-      Vector transSourcePoint2d = new Vector(transSourcePoint.getComponent(0),
-          transSourcePoint.getComponent(1));
-
-      if (node.getEmbeddedFace().contains(transSourcePoint2d)) {
-        sgcObjects.addChild(SGCMethods.sgcFromPoint(transSourcePoint2d));
-      }
+    
+    Iterator<Node> iterator = node.getObjects().iterator();
+    while(iterator.hasNext()) {
+      Node n = iterator.next();
+      if(!n.getPosition().isZero())
+        nodeList.add(n);
     }
 
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();
@@ -214,10 +190,6 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     }
   }
 
-  public void setColorScheme(ColorScheme scheme) {
-    colorScheme = scheme;
-    updateGeometry();
-  }
 
   // class designed to make it easy to use an IndexedFaceSetFactory
   public class DevelopmentGeometry {
@@ -282,6 +254,9 @@ public class DevelopmentView3D extends JRViewer implements Observer {
     }
   };
   
+  
+  // ================== Options Panel ==================
+  
   class UIPanel_Options extends ViewShrinkPanelPlugin {
 
     TitledBorder heightBorder = BorderFactory.createTitledBorder("");
@@ -319,10 +294,6 @@ public class DevelopmentView3D extends JRViewer implements Observer {
       PluginInfo info = new PluginInfo("Set Simulated 3D Height", "");
       return info;
     }
-    
-    //these lines would add a help page for the tool
-    //@Override public String getHelpDocument() { return "BeanShell.html"; }
-    //@Override public String getHelpPath() { return "/de/jreality/plugin/help/"; }
   };
 
 }

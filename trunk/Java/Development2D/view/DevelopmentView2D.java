@@ -15,7 +15,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import view.SGCMethods.DevelopmentGeometry;
-
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
@@ -30,30 +29,20 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.Development.DevelopmentNode;
+import development.Node;
 import development.Vector;
 
-public class DevelopmentView2D extends JRViewer implements Observer {
-  private SceneGraphComponent sgcRoot;
-  private SceneGraphComponent sgcDevelopment;
-  private SceneGraphComponent objects = new SceneGraphComponent();
-  private Scene scene;
-  private ColorScheme colorScheme;
-  private Development development;
-  private double radius = 0.03; // radius of sourcePoint objects
+public class DevelopmentView2D extends DevelopmentView {
+
   private double lineRadius = 0.005; // radius of direction line
   private double lineLength = INITIAL_LINE_LENGTH; // length of direction line
-  
+
   private Vector cameraForward = new Vector(1, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
-
-  public DevelopmentView2D(Development dev, ColorScheme scheme) {
-    development = dev;
-    colorScheme = scheme;
-    sgcRoot = new SceneGraphComponent();
-    sgcDevelopment = new SceneGraphComponent();
-    sgcDevelopment.addChild(objects);
-    sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
-
+  
+  public DevelopmentView2D(Development development, ColorScheme colorScheme) {
+    super(development, colorScheme);
+    
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
@@ -63,15 +52,15 @@ public class DevelopmentView2D extends JRViewer implements Observer {
         .assignTo(sgcLight);
     sgcRoot.addChild(sgcLight);
 
-    //sgcRoot.addTool(new RotateTool());
+    // sgcRoot.addTool(new RotateTool());
 
     updateGeometry();
-    sgcRoot.addChild(sgcDevelopment);
+    
     sgcRoot.addChild(viewingDirection);
     setViewingDirection(cameraForward);
     this.addBasicUI();
     this.registerPlugin(new UIPanel_Options());
-    this.setShowPanelSlots(true,false,false,false);
+    this.setShowPanelSlots(true, false, false, false);
 
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
@@ -93,13 +82,16 @@ public class DevelopmentView2D extends JRViewer implements Observer {
 
   }
 
-  private void updateGeometry() {
-    sgcDevelopment.removeChild(objects);
-    objects = new SceneGraphComponent();
+  protected void updateGeometry() {
+    nodeList = new ArrayList<Node>();
     sgcDevelopment.setGeometry(getGeometry());
-    sgcDevelopment.addChild(objects);
+    setObjectsSGC();
   }
 
+  /*
+   * Returns the geometry of the development, adding clipped faces as calculated
+   * in computeDevelopment()
+   */
   public Geometry getGeometry() {
     DevelopmentGeometry geometry = new DevelopmentGeometry();
     ArrayList<Color> colors = new ArrayList<Color>();
@@ -123,45 +115,24 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     ifsf.update();
     return ifsf.getGeometry();
   }
-  
-  public void setPointRadius(double r) {
-    radius = r;
-    updateGeometry();
-  }
 
-  /*
-   * Adds appropriate source point objects to objects SGC
-   */
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
-    if (node.faceIsSource()) {
-      Vector sourcePoint = development.getSourcePoint();
-      Vector newSource = new Vector(sourcePoint.getComponent(0),
-          sourcePoint.getComponent(1), 1);
-      Vector transSourcePoint = node.getAffineTransformation().transformVector(
-          newSource);
-      Vector transSourcePoint2d = new Vector(transSourcePoint.getComponent(0),
-          transSourcePoint.getComponent(1));
-
-      if (node.getEmbeddedFace().contains(transSourcePoint2d) || node.isRoot()) {
-        // containment alg doesn't work for root
-        objects.addChild(SGCMethods.sgcFromPoint(transSourcePoint, radius));
-      }
+    
+    Iterator<Node> itr = node.getObjects().iterator();
+    while(itr.hasNext()) {
+      nodeList.add(itr.next());
     }
+    
 
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face);
     colors.add(colorScheme.getColor(node));
 
-    Iterator<DevelopmentNode> itr = node.getChildren().iterator();
-    while (itr.hasNext()) {
-      computeDevelopment(itr.next(), colors, geometry);
+    Iterator<DevelopmentNode> iterator = node.getChildren().iterator();
+    while (iterator.hasNext()) {
+      computeDevelopment(iterator.next(), colors, geometry);
     }
-  }
-
-  public void setColorScheme(ColorScheme scheme) {
-    colorScheme = scheme;
-    updateGeometry();
   }
   
   public void setLineLength(double length) {
@@ -175,7 +146,7 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     vector.scale(lineLength);
     sgcRoot.removeChild(viewingDirection);
     viewingDirection = SGCMethods.sgcFromVector(vector, lineRadius);
-    sgcRoot.addChild(viewingDirection); 
+    sgcRoot.addChild(viewingDirection);
   }
 
   public void rotate(double angle) {
@@ -191,88 +162,74 @@ public class DevelopmentView2D extends JRViewer implements Observer {
     setViewingDirection(cameraForward);
     sgcRoot.addChild(viewingDirection);
   }
-  
+
+  // ================== Options Panel ==================
+
   private static int MAX_LINE_LENGTH = 20;
   private static int INITIAL_LINE_LENGTH = 2;
-  private static int MAX_POINT_SIZE = 20;
-  private static int INITIAL_POINT_SIZE = 3;
   private static int MAX_LINE_RADIUS = 50;
   private static int INITIAL_LINE_RADIUS = 5;
-  
+
   class UIPanel_Options extends ViewShrinkPanelPlugin {
 
-    TitledBorder border_size = BorderFactory.createTitledBorder("");
     TitledBorder border_len = BorderFactory.createTitledBorder("");
     TitledBorder border_lineRadius = BorderFactory.createTitledBorder("");
 
-    
     private void makeUIComponents() {
+
       
-      JSlider pointSizeSlider = new JSlider(0, MAX_POINT_SIZE, INITIAL_POINT_SIZE);
-      pointSizeSlider.addChangeListener(new ChangeListener(){
-          public void stateChanged(ChangeEvent e) {
-            radius = ((JSlider)e.getSource()).getValue()/100.0;
-            updateGeometry();
-            border_size.setTitle(String.format("Point Radius (%1.3f)", radius));
-          }
+
+      JSlider lengthSlider = new JSlider(0, MAX_LINE_LENGTH,
+          INITIAL_LINE_LENGTH);
+      lengthSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          double lineLength = ((JSlider) e.getSource()).getValue();
+          setLineLength(lineLength);
+          border_len.setTitle(String.format("Line Length (%1.3f)", lineLength));
+        }
       });
-      
-      pointSizeSlider.setMaximumSize(new Dimension(300,100));
-      pointSizeSlider.setAlignmentX(0.0f);
-      border_size.setTitle(String.format("Point Radius (%1.3f)", radius));
-      pointSizeSlider.setBorder(border_size);
-      shrinkPanel.add(pointSizeSlider);
-      
-      JSlider lengthSlider = new JSlider(0, MAX_LINE_LENGTH, INITIAL_LINE_LENGTH);
-      lengthSlider.addChangeListener(new ChangeListener(){
-          public void stateChanged(ChangeEvent e) {
-            double lineLength = ((JSlider)e.getSource()).getValue();
-            setLineLength(lineLength);
-            border_len.setTitle(String.format("Line Length (%1.3f)",lineLength));
-          }
-      });
-      
-      lengthSlider.setMaximumSize(new Dimension(300,100));
+
+      lengthSlider.setMaximumSize(new Dimension(300, 100));
       lengthSlider.setAlignmentX(0.0f);
-      border_len.setTitle(String.format("Line Length (%1.3f)",lineLength));
+      border_len.setTitle(String.format("Line Length (%1.3f)", lineLength));
       lengthSlider.setBorder(border_len);
       shrinkPanel.add(lengthSlider);
-      
-      JSlider lineRadSlider = new JSlider(0, MAX_LINE_RADIUS, INITIAL_LINE_RADIUS);
-      lineRadSlider.addChangeListener(new ChangeListener(){
-          public void stateChanged(ChangeEvent e) {
-            lineRadius = ((JSlider)e.getSource()).getValue()/1000.0;
-            setViewingDirection(cameraForward);
-            border_lineRadius.setTitle(String.format("Line Radius (%1.3f)", lineRadius));
-          }
+
+      JSlider lineRadSlider = new JSlider(0, MAX_LINE_RADIUS,
+          INITIAL_LINE_RADIUS);
+      lineRadSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          lineRadius = ((JSlider) e.getSource()).getValue() / 1000.0;
+          setViewingDirection(cameraForward);
+          border_lineRadius.setTitle(String.format("Line Radius (%1.3f)",
+              lineRadius));
+        }
       });
-      
-      lineRadSlider.setMaximumSize(new Dimension(300,100));
+
+      lineRadSlider.setMaximumSize(new Dimension(300, 100));
       lineRadSlider.setAlignmentX(0.0f);
-      border_lineRadius.setTitle(String.format("Line Radius (%1.3f)", lineRadius));
+      border_lineRadius.setTitle(String.format("Line Radius (%1.3f)",
+          lineRadius));
       lineRadSlider.setBorder(border_lineRadius);
       shrinkPanel.add(lineRadSlider);
-      
-      //specify layout
-      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
-      shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),BoxLayout.Y_AXIS));
+
+      // specify layout
+      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+      shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),
+          BoxLayout.Y_AXIS));
     }
-    
+
     @Override
     public void install(Controller c) throws Exception {
       makeUIComponents();
       super.install(c);
     }
-    
+
     @Override
-    public PluginInfo getPluginInfo(){
+    public PluginInfo getPluginInfo() {
       PluginInfo info = new PluginInfo("Line and Point Options", "");
       return info;
     }
-    
-    //these lines would add a help page for the tool
-    //@Override public String getHelpDocument() { return "BeanShell.html"; }
-    //@Override public String getHelpPath() { return "/de/jreality/plugin/help/"; }
   };
 
 }

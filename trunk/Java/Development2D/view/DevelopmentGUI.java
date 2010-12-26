@@ -50,6 +50,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private static int MAX_STEP_SIZE = 20; // (divided by 100)
   private static int INITIAL_STEP_SIZE = 5;
   private double stepSize = 0.05;
+  private static int MAX_POINT_SIZE = 20;
+  private static int INITIAL_POINT_SIZE = 3;
+  private double radius = 0.03;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -133,6 +136,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   
   TitledBorder stepBorder = BorderFactory.createTitledBorder("Step Size (" + stepSize + ")");
   TitledBorder depthBorder = BorderFactory.createTitledBorder("Recursion Depth (" + currentDepth + ")");
+  TitledBorder pointBorder = BorderFactory.createTitledBorder("Node Radius (" + radius + ")");
 
 
   private void layoutGUI() {
@@ -193,10 +197,23 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         }
     }); 
     
+    JSlider pointSizeSlider = new JSlider(1, MAX_POINT_SIZE, INITIAL_POINT_SIZE);
+    pointSizeSlider.addChangeListener(new ChangeListener(){
+        public void stateChanged(ChangeEvent e) {
+          radius = ((JSlider)e.getSource()).getValue()/100.0;
+          view2D.setRadius(radius);
+          //view3D.setRadius(radius);
+          pointBorder.setTitle("Node Radius (" + radius + ")");
+          movementPanel.requestFocusInWindow();
+        }
+    }); 
+    
     depthSlider.setBorder(depthBorder);
     sliderPanel.add(depthSlider);
     stepSizeSlider.setBorder(stepBorder);
     sliderPanel.add(stepSizeSlider);
+    pointSizeSlider.setBorder(pointBorder);
+    sliderPanel.add(pointSizeSlider);
 
     colorPanel = new JPanel();
     JButton depthSchemeButton = new JButton("Depth");

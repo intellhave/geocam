@@ -1,6 +1,8 @@
 package development;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
@@ -8,6 +10,8 @@ import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
 import util.Matrix;
+import view.SGCMethods;
+import de.jreality.scene.SceneGraphComponent;
 
 public class Development extends Observable {
 
@@ -18,13 +22,20 @@ public class Development extends Observable {
   private Face sourceFace;
   private int maxDepth;
   private double step_size = 0.05;
+  private ArrayList<Node> nodeList = new ArrayList<Node>();
+  private Node sourcePointNode;
 
   public Development(Face sourceF, Vector sourcePt, int depth, double step) {
     step_size = step;
     maxDepth = depth;
     sourcePoint = sourcePt;
     sourceFace = sourceF;
+    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
+    nodeList.add(sourcePointNode);
 
+    Node n = new Node(Color.red, sourceFace, sourcePoint);
+    n.setRadius(0.2);
+    nodeList.add(n);
     buildTree();
   }
 
@@ -167,6 +178,9 @@ public class Development extends Observable {
 
   public void setSourcePoint(Vector point) {
     sourcePoint = point;
+    nodeList.remove(sourcePointNode);
+    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
+    nodeList.add(sourcePointNode);
 
     buildTree();
 
@@ -348,7 +362,8 @@ public class Development extends Observable {
     private EmbeddedFace embeddedFace;
     private Face face;
     private AffineTransformation affineTrans;
-    private ArrayList<DevelopmentNode> children;
+    private ArrayList<DevelopmentNode> children = new ArrayList<DevelopmentNode>();
+    private ArrayList<Node> containedObjects = new ArrayList<Node>();
     private DevelopmentNode parent;
     private int depth;
 
@@ -362,46 +377,39 @@ public class Development extends Observable {
       embeddedFace = new EmbeddedFace(ef);
       face = f;
       affineTrans = at;
-      children = new ArrayList<DevelopmentNode>();
       for (int i = 0; i < nodes.length; i++) {
         children.add(nodes[i]);
       }
+      
+      // add any objects contained in this face
+      Iterator<Node> itr = nodeList.iterator();
+      while(itr.hasNext()) {
+        Node node = itr.next();
+        if(node.getFace().equals(face)) {
+          Vector point = node.getPosition();
+          Vector transPoint = affineTrans.affineTransPoint(point);
+          Vector transPoint2d = new Vector(transPoint.getComponent(0),
+              transPoint.getComponent(1));
+
+          if(isRoot() || embeddedFace.contains(transPoint2d)) { 
+            // containment alg does not work for root
+            containedObjects.add(new Node(node.getColor(), node.getFace(), transPoint2d));
+          }
+        }
+      }
+      
     }
 
-    public void addChild(DevelopmentNode node) {
-      children.add(node);
-    }
-
-    public void removeChild(DevelopmentNode node) {
-      children.remove(node);
-    }
-
-    public EmbeddedFace getEmbeddedFace() {
-      return embeddedFace;
-    }
-
-    public Face getFace() {
-      return face;
-    }
-
-    public int getDepth() {
-      return depth;
-    }
-
-    public AffineTransformation getAffineTransformation() {
-      return affineTrans;
-    }
-
-    public ArrayList<DevelopmentNode> getChildren() {
-      return children;
-    }
-
-    public boolean isRoot() {
-      return parent == null;
-    }
-
-    public boolean faceIsSource() {
-      return face.equals(sourceFace);
-    }
+    public void addChild(DevelopmentNode node) { children.add(node); }
+    public void removeChild(DevelopmentNode node) { children.remove(node); }
+    public EmbeddedFace getEmbeddedFace() { return embeddedFace; }
+    public Face getFace() { return face; }
+    public int getDepth() { return depth; }
+    public AffineTransformation getAffineTransformation() { return affineTrans; }
+    public ArrayList<DevelopmentNode> getChildren() { return children; }
+    public ArrayList<Node> getObjects() { return containedObjects; }
+    
+    public boolean isRoot() { return parent == null; }
+    public boolean faceIsSource() { return face.equals(sourceFace); }
   }
 }
