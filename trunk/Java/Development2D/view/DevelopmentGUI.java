@@ -51,8 +51,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private static int INITIAL_STEP_SIZE = 5;
   private double stepSize = 0.05;
   private static int MAX_POINT_SIZE = 20;
-  private static int INITIAL_POINT_SIZE = 3;
-  private double radius = 0.03;
+  private static int INITIAL_POINT_SIZE = 8;
+  private double radius = INITIAL_POINT_SIZE/100.0;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -78,7 +78,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private movements curMovement;
 
   public DevelopmentGUI() {
-    colorScheme = new ColorScheme(schemes.DEPTH);
+    colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
     String filename = "surfaces/tetra.off";
@@ -105,6 +105,14 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     timer.addActionListener(new Moving());
 
     layoutGUI();
+    
+    Timer moveTimer = new Timer(50, null);
+    moveTimer.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        development.moveObjects();
+      }
+    });
+    moveTimer.start();
   }
 
   private void loadSurface(String filename) {
@@ -182,6 +190,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         public void stateChanged(ChangeEvent e) {
           currentDepth = ((JSlider)e.getSource()).getValue();
           development.setDepth(currentDepth);
+          System.out.println("setting title");
           depthBorder.setTitle("Recursion Depth (" + currentDepth + ")");
           movementPanel.requestFocusInWindow();
         }
@@ -202,7 +211,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         public void stateChanged(ChangeEvent e) {
           radius = ((JSlider)e.getSource()).getValue()/100.0;
           view2D.setRadius(radius);
-          //view3D.setRadius(radius);
+          view3D.setRadius(radius);
           pointBorder.setTitle("Node Radius (" + radius + ")");
           movementPanel.requestFocusInWindow();
         }

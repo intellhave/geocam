@@ -4,9 +4,11 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
+import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.util.CameraUtility;
 import development.Development;
 import development.Node;
 
@@ -24,6 +26,8 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   public DevelopmentView(Development development, ColorScheme colorScheme) {
     this.development = development;
     this.colorScheme = colorScheme;
+    
+    scene = this.getPlugin(Scene.class);
 
     sgcDevelopment.addChild(objects);
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
@@ -55,9 +59,15 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   
   
   @Override
-  public void update(Observable o, Object arg) {
-    // TODO Auto-generated method stub
-    
+  public void update(Observable dev, Object arg) {
+    development = (Development) dev;
+    String whatChanged = (String) arg;
+    updateGeometry();
+    if (whatChanged.equals("surface") || whatChanged.equals("depth")) {
+      CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
+          scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
+    }
+
   }
 
 }
