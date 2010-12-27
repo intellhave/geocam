@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -18,7 +16,6 @@ import view.SGCMethods.DevelopmentGeometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
-import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.DirectionalLight;
@@ -34,8 +31,13 @@ import development.Vector;
 
 public class DevelopmentView2D extends DevelopmentView {
 
-  private double lineRadius = 0.005; // radius of direction line
+  private static int MAX_LINE_LENGTH = 20;
+  private static int INITIAL_LINE_LENGTH = 2;
   private double lineLength = INITIAL_LINE_LENGTH; // length of direction line
+  
+  private static int MAX_LINE_RADIUS = 50;
+  private static int INITIAL_LINE_RADIUS = 5;
+  private double lineRadius = INITIAL_LINE_RADIUS/1000.0; // radius of direction line
 
   private Vector cameraForward = new Vector(1, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
@@ -67,18 +69,6 @@ public class DevelopmentView2D extends DevelopmentView {
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
         scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
     this.startup();
-
-  }
-
-  @Override
-  public void update(Observable dev, Object arg) {
-    development = (Development) dev;
-    String whatChanged = (String) arg;
-    updateGeometry();
-    if (whatChanged.equals("surface") || whatChanged.equals("depth")) {
-      CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
-          scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
-    }
 
   }
 
@@ -149,26 +139,7 @@ public class DevelopmentView2D extends DevelopmentView {
     sgcRoot.addChild(viewingDirection);
   }
 
-  public void rotate(double angle) {
-    double cos = Math.cos(-angle);
-    double sin = Math.sin(-angle);
-    double x = cameraForward.getComponent(0);
-    double y = cameraForward.getComponent(1);
-
-    double x_new = cos * x - sin * y;
-    double y_new = sin * x + cos * y;
-    cameraForward = new Vector(x_new, y_new);
-    sgcRoot.removeChild(viewingDirection);
-    setViewingDirection(cameraForward);
-    sgcRoot.addChild(viewingDirection);
-  }
-
   // ================== Options Panel ==================
-
-  private static int MAX_LINE_LENGTH = 20;
-  private static int INITIAL_LINE_LENGTH = 2;
-  private static int MAX_LINE_RADIUS = 50;
-  private static int INITIAL_LINE_RADIUS = 5;
 
   class UIPanel_Options extends ViewShrinkPanelPlugin {
 
@@ -176,9 +147,6 @@ public class DevelopmentView2D extends DevelopmentView {
     TitledBorder border_lineRadius = BorderFactory.createTitledBorder("");
 
     private void makeUIComponents() {
-
-      
-
       JSlider lengthSlider = new JSlider(0, MAX_LINE_LENGTH,
           INITIAL_LINE_LENGTH);
       lengthSlider.addChangeListener(new ChangeListener() {
@@ -231,5 +199,4 @@ public class DevelopmentView2D extends DevelopmentView {
       return info;
     }
   };
-
 }
