@@ -127,6 +127,8 @@ public class Geometry {
       list.addAll(getVEinsteins());
     } else if(c.isAssignableFrom(LEHR.class)) {
       list.add(LEHR.getInstance());
+    }  else if(c.isAssignableFrom(LKCurvature.class)) {
+        list.addAll(getLKCurvature());
     } else {
       return null;
     }
@@ -212,6 +214,16 @@ public class Geometry {
     for (Vertex v : Triangulation.vertexTable.values()){
       cu2 = Curvature2D.at(v);
       list.add(cu2);
+    }
+    return list;
+  }
+  
+  public static List<LKCurvature> getLKCurvature() {
+    LinkedList<LKCurvature> list = new LinkedList<LKCurvature>();
+    LKCurvature lkc;
+    for (Vertex v : Triangulation.vertexTable.values()){
+      lkc = LKCurvature.at(v);
+      list.add(lkc);
     }
     return list;
   }
