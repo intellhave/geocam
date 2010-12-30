@@ -43,6 +43,12 @@ public class Development extends Observable {
     maxDepth = depth;
     sourcePoint = sourcePt;
     sourceFace = sourceF;
+    
+    nodeList = new ArrayList<Node>();
+    Node n = new Node(Color.red, sourceFace, sourcePoint);
+    n.setRadius(0.2);
+    n.setMovement(new Vector(0.05, 0));
+    nodeList.add(n);
 
     buildTree();
     setChanged();
@@ -66,10 +72,17 @@ public class Development extends Observable {
     notifyObservers("objects");
   }
   
+  public void addNodeAtSource(Color color, Vector vector) {
+    Node node = new Node(color, sourceFace, sourcePoint);
+    node.setMovement(vector);
+    nodeList.add(node);
+  }
+  
   public void setStepSize(double size) { step_size = size; }
   public DevelopmentNode getRoot() { return root; }
   public Vector getSourcePoint() { return sourcePoint; }
   public int getDepth() { return maxDepth; }
+  public ArrayList<Node> getNodeList() { return nodeList; }
 
   public void rotate(double angle) {
     double cos = Math.cos(-angle);

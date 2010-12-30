@@ -113,7 +113,6 @@ public class DevelopmentView2D extends DevelopmentView {
     while(itr.hasNext()) {
       nodeList.add(itr.next());
     }
-    
 
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face);

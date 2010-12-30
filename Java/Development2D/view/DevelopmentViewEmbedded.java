@@ -2,6 +2,7 @@ package view;
 
 import java.io.File;
 import java.io.IOException;
+
 import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
@@ -12,12 +13,14 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
+import development.Development;
 
 public class DevelopmentViewEmbedded extends JRViewer {
   private SceneGraphComponent sgcRoot = new SceneGraphComponent();
   private SceneGraphComponent sgcPolyhedron = new SceneGraphComponent();
+  private SceneGraphComponent sgcObjects = new SceneGraphComponent();
 
-  public DevelopmentViewEmbedded(String filename) {
+  public DevelopmentViewEmbedded(String filename, Development development) {
     
     Geometry geom = sgcPolyhedron.getGeometry();
     try {
@@ -28,6 +31,7 @@ public class DevelopmentViewEmbedded extends JRViewer {
     }
     sgcPolyhedron.setGeometry(geom);
     sgcRoot.addChild(sgcPolyhedron);
+    sgcRoot.addChild(sgcObjects);
     sgcRoot.addTool(new RotateTool());
 
     Appearance app_polyhedron = new Appearance();
@@ -62,4 +66,5 @@ public class DevelopmentViewEmbedded extends JRViewer {
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
         scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
   }
+  
 }

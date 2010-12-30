@@ -132,13 +132,12 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
     if (development == null)
       development = new Development(sourceFace, sourcePoint, currentDepth, stepSize);
-    else
-      development.rebuild(sourceFace, sourcePoint, currentDepth);
+    else development.rebuild(sourceFace, sourcePoint, currentDepth);
  
-    if (embeddedView == null)
-      embeddedView = new DevelopmentViewEmbedded(filename);
-    else
-      embeddedView.changeGeometry(filename);
+    if (embeddedView == null) {
+      embeddedView = new DevelopmentViewEmbedded(filename, development);
+    }
+    else embeddedView.changeGeometry(filename);
 
   }
   
@@ -190,7 +189,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         public void stateChanged(ChangeEvent e) {
           currentDepth = ((JSlider)e.getSource()).getValue();
           development.setDepth(currentDepth);
-          System.out.println("setting title");
           depthBorder.setTitle("Recursion Depth (" + currentDepth + ")");
           movementPanel.requestFocusInWindow();
         }
