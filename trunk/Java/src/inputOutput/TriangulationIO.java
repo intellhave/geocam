@@ -921,12 +921,12 @@ public class TriangulationIO {
     }
   }
   
-  @Deprecated
+
   public static void read2DLutzFile(String filename) {
     read2DLutzFile(new File(filename));
   }
   
-  @Deprecated
+
   public static void read2DLutzFile(File file) {
     Triangulation.reset();
     String faces;

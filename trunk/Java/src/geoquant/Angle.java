@@ -22,6 +22,7 @@ public class Angle extends Geoquant {
     
     this.f = f;
     StdFace sf = new StdFace(f, v);
+ 
     lenA = Length.at(sf.e12);
     lenB = Length.at(sf.e13);
     lenC = Length.at(sf.e23);

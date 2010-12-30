@@ -26,6 +26,15 @@ public class LKCurvature extends Geoquant {
     this.v = v;
     this.edges = v.getLocalEdges();
     this.faces = v.getLocalFaces();
+
+    CurvatureTube.at(v,v).addObserver(this);
+    for (Edge e: this.edges){
+      CurvatureTube.at(v,e).addObserver(this);
+    }
+    
+    for (Face f: this.faces){
+      CurvatureTube.at(v,f).addObserver(this);
+    }
   }
   
   protected void recalculate() {
@@ -43,6 +52,15 @@ public class LKCurvature extends Geoquant {
  
   public void remove() {
     deleteDependents();
+    CurvatureTube.at(v,v).deleteObserver(this);
+    for (Edge e: this.edges){
+      CurvatureTube.at(v,e).deleteObserver(this);
+    }
+    
+    for (Face f: this.faces){
+      CurvatureTube.at(v,f).deleteObserver(this);
+    }
+    
   }
   
   public static LKCurvature at(Vertex v) {

@@ -39,7 +39,7 @@ public class CurvatureTube extends Geoquant {
       else if (sim instanceof Edge)
         value = Math.PI * sim.getMultiplicity();
       else if (sim instanceof Face)
-        value = Math.PI - a.getValue();
+        value = (Math.PI - a.getValue())*sim.getMultiplicity();
     }
     }
     
