@@ -20,6 +20,7 @@ public class conformaldiskflow extends Solver{
       slopes[i] = x[i] *(-K.getValue());
       i++;
     }
+    slopes[i-1] = -slopes[i-1];
     return slopes;
   }
 

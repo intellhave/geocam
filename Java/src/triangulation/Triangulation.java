@@ -177,6 +177,13 @@ public class Triangulation {
     } 
 }
 
+  public static int getDimension(){
+    if (tetraTable.isEmpty()) {
+      return 2;
+    }
+    else return 3;
+  }
+  
   public static void reset() {
     vertexTable.clear();
     edgeTable.clear();

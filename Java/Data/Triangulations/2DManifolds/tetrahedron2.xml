@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?><Triangulation xmlns="http://code.google.com/p/geocam">
-  <Vertex alpha="1.0" index="1" radius="1.2">
+  <Vertex alpha="1.0" index="1" radius="1.2" multiplicity="1">
     <Vertices>2 3 4 </Vertices>
     <Edges>1 2 3 </Edges>
     <Faces>1 2 3 </Faces>
   </Vertex>
-  <Vertex alpha="1.0" index="2" radius="1.0">
+  <Vertex alpha="1.0" index="2" radius="1.0" multiplicity="1">
     <Vertices>1 3 4 </Vertices>
     <Edges>1 4 5 </Edges>
     <Faces>1 2 4 </Faces>
   </Vertex>
-  <Vertex alpha="1.0" index="3" radius="1.0">
+  <Vertex alpha="1.0" index="3" radius="1.5" multiplicity="1">
     <Vertices>1 2 4 </Vertices>
     <Edges>2 5 6 </Edges>
     <Faces>2 3 4 </Faces>
   </Vertex>
-  <Vertex alpha="1.0" index="4" radius="1.0">
+  <Vertex alpha="1.0" index="4" radius="0.2" multiplicity="1">
     <Vertices>1 2 3 </Vertices>
     <Edges>3 4 6 </Edges>
     <Faces>1 3 4 </Faces>
   </Vertex>
-  <Edge eta="1.0" index="1">
+  <Edge eta="1.0" index="1" multiplicity="1">
     <Vertices>1 2 </Vertices>
     <Edges>2 3 4 5 1 </Edges>
     <Faces>1 2 </Faces>
   </Edge>
-  <Edge eta="1.0" index="2">
+  <Edge eta="1.1" index="2">
     <Vertices>1 3 </Vertices>
     <Edges>2 1 3 5 6 </Edges>
     <Faces>2 3 </Faces>
