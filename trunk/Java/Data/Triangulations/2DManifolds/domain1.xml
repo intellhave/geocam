@@ -7,7 +7,7 @@
   <Vertex alpha="1.0" index="2" radius="1.0">
     <Vertices>1 3 5 6 </Vertices>
     <Edges>1 5 8 9 </Edges>
-    <Faces>1 4 5 8 </Faces>
+    <Faces>1 4 5 </Faces>
   </Vertex>
   <Vertex alpha="1.0" index="3" radius="1.0">
     <Vertices>1 2 4 6 </Vertices>
@@ -22,12 +22,12 @@
   <Vertex alpha="1.0" index="5" radius="1.0">
     <Vertices>1 2 4 6 </Vertices>
     <Edges>4 7 8 12 </Edges>
-    <Faces>3 4 7 8 </Faces>
+    <Faces>3 4 7 </Faces>
   </Vertex>
   <Vertex alpha="1.0" index="6" radius="1.0">
     <Vertices>2 3 4 5 </Vertices>
     <Edges>9 10 11 12 </Edges>
-    <Faces>5 6 7 8 </Faces>
+    <Faces>5 6 7 </Faces>
   </Vertex>
   <Edge eta="1.0" index="1">
     <Vertices>1 2 </Vertices>
@@ -67,12 +67,12 @@
   <Edge eta="1.0" index="8">
     <Vertices>2 5 </Vertices>
     <Edges>1 4 5 7 9 12 </Edges>
-    <Faces>4 8 </Faces>
+    <Faces>4 </Faces>
   </Edge>
   <Edge eta="1.0" index="9">
     <Vertices>2 6 </Vertices>
     <Edges>1 5 8 10 11 12 </Edges>
-    <Faces>5 8 </Faces>
+    <Faces>5 </Faces>
   </Edge>
   <Edge eta="1.0" index="10">
     <Vertices>3 6 </Vertices>
@@ -87,7 +87,7 @@
   <Edge eta="1.0" index="12">
     <Vertices>5 6 </Vertices>
     <Edges>4 7 8 9 10 11 </Edges>
-    <Faces>7 8 </Faces>
+    <Faces>7 </Faces>
   </Edge>
   <Face index="1">
     <Vertices>1 2 3 </Vertices>
@@ -107,12 +107,12 @@
   <Face index="4">
     <Vertices>1 2 5 </Vertices>
     <Edges>1 4 8 </Edges>
-    <Faces>1 3 8 </Faces>
+    <Faces>1 3 </Faces>
   </Face>
   <Face index="5">
     <Vertices>2 3 6 </Vertices>
     <Edges>5 9 10 </Edges>
-    <Faces>1 6 8 </Faces>
+    <Faces>1 6 </Faces>
   </Face>
   <Face index="6">
     <Vertices>3 4 6 </Vertices>
@@ -122,11 +122,6 @@
   <Face index="7">
     <Vertices>4 5 6 </Vertices>
     <Edges>7 11 12 </Edges>
-    <Faces>3 6 8 </Faces>
-  </Face>
-  <Face index="8">
-    <Vertices>2 5 6 </Vertices>
-    <Edges>8 9 12 </Edges>
-    <Faces>4 5 7 </Faces>
+    <Faces>3 6 </Faces>
   </Face>
 </Triangulation>
