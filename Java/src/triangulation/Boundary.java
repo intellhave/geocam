@@ -15,15 +15,15 @@ public class Boundary {
   
   public static void makeBoundary(){
     int dim = Triangulation.getDimension();
-    System.out.println("yo");
+//    System.out.println("yo");
     if (dim == 2){
-      System.out.println("hi");
+//      System.out.println("hi");
       int edgeIndex = 0;
       int vertexIndex = 0;
       for(Face f: Triangulation.faceTable.values()) {
-        System.out.println(f.getLocalFaces().size());
+//        System.out.println(f.getLocalFaces().size());
         if (f.getLocalFaces().size() < 3) {
-          System.out.println("yesssss");
+//          System.out.println("yesssss");
           for (Edge e: f.getLocalEdges()){
             if (e.getLocalFaces().size() == 1 && (! boundaryEdgeTable.containsValue(e))){
               boundaryEdgeTable.put(edgeIndex, e);
@@ -38,8 +38,8 @@ public class Boundary {
           }
         }
       }
-      System.out.println(vertexIndex);
-      System.out.println(edgeIndex);
+//      System.out.println(vertexIndex);
+//      System.out.println(edgeIndex);
     }
     else if (dim == 3 ){
       

@@ -1,10 +1,14 @@
 package tests;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import geoquant.Alpha;
 import geoquant.LKCurvature;
 import geoquant.Eta;
 import geoquant.GeoRecorder;
@@ -26,13 +30,15 @@ public class ConformalDiskflowTest {
 
   public static void main(String[] args) {
     initializeQuantities();
-    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/domain1plus.xml");
-//    testFlow();
-
+    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/trydomain.xml");
+ //   System.out.println(Geometry.getRadii());
+ //   System.out.println(Geometry.getEtas());
+    testFlow();
+    System.out.println("Done.");
   }
   
   private static void initializeQuantities() {
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/domain1.xml");
+    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/domain.xml");
     
     for(Radius r : Geometry.getRadii()) {
       r.setValue(1.0);
@@ -52,6 +58,10 @@ public class ConformalDiskflowTest {
     
     Boundary.makeBoundary();
  
+    for (Vertex v: Boundary.boundaryVertexTable.values()){
+      v.setMultiplicity(0);
+    }
+    
     for (Edge e: Boundary.boundaryEdgeTable.values()){
       e.setMultiplicity(0);
     }
@@ -61,9 +71,12 @@ public class ConformalDiskflowTest {
 //    newV.setIndex(Triangulation.greatestVertex()+1);
     newV.setMultiplicity(-1);
     Triangulation.putVertex(newV);
-        
+
+    Radius.at(newV).setValue(5);
+    Alpha.at(newV).setValue(1);
+    
     // New Edges
-    System.out.println(Boundary.boundaryVertexTable.values());
+//    System.out.println(Boundary.boundaryVertexTable.values());
     
     for (Vertex v: Boundary.boundaryVertexTable.values()){
       Edge newE= new Edge(Triangulation.greatestEdge()+1);
@@ -71,6 +84,7 @@ public class ConformalDiskflowTest {
       newE.setMultiplicity(1);
       newE.addVertex(v);
       newE.addVertex(newV);
+
       for(Edge e: v.getLocalEdges()){
         e.addEdge(newE);
         newE.addEdge(e);
@@ -79,39 +93,57 @@ public class ConformalDiskflowTest {
         e.addEdge(newE);
         newE.addEdge(e);
       }
+      
+      Triangulation.putEdge(newE);
+      
       newV.addEdge(newE);
       newV.addVertex(v);
-      Triangulation.putEdge(newE);
-      System.out.println(newE);
-      System.out.println(Triangulation.edgeTable.values());
+      v.addVertex(newV);
+      v.addEdge(newE);
+      
+      Eta.at(newE).setValue(-1);
+//      System.out.println(Eta.valueAt(newE));
+//      System.out.println(Geometry.getEtas());
+//      System.out.println(Geometry.getRadii());
+//      System.out.println(Geometry.getLengths());
+//      System.out.println(Geometry.getAngles());
+      
+//      System.out.println(newE);
+//      System.out.println(Triangulation.edgeTable.values());
     }
     // At this point, the vertex has neighbor vertices and edges
     //  new edges have neighbor vertices, some neighbor edges
-    System.out.println(Triangulation.vertexTable.values());
+//    System.out.println(Triangulation.vertexTable.values());
     
     // New Faces
     for (Edge e: Boundary.boundaryEdgeTable.values()){
       Face newF = new Face(Triangulation.greatestFace()+1);
+ //     System.out.println(newF.getIndex());
  //     newF.setIndex(Triangulation.greatestFace()+1);
       newF.setMultiplicity(-1);
       newF.addVertex(newV);
       newF.addEdge(e);
+      for (Face f: e.getLocalFaces()){
+        newF.addFace(f);
+        f.addFace(newF);
+      }
       e.addFace(newF);
       newV.addFace(newF);
       
       for (Vertex v: e.getLocalVertices()){
         newF.addVertex(v);
         v.addFace(newF);
+        
+        
+        
         for (Edge ed: v.getLocalEdges()){
           if (ed.isAdjVertex(newV)){
             newF.addEdge(ed);
-            ed.addFace(newF);
-            for (Vertex vert: ed.getLocalVertices()){
-              if (!vert.equals(newV)){
-                newF.addVertex(vert);
-                vert.addFace(newF);
-              }
+            for (Face fa: ed.getLocalFaces()){
+              newF.addFace(fa); 
+              fa.addFace(newF);
             }
+            ed.addFace(newF);
           }
         }
       }
@@ -130,22 +162,27 @@ public class ConformalDiskflowTest {
     double[] radii = new double[Triangulation.vertexTable.size()];
     int i = 0;
     for(Radius r : Geometry.getRadii()) {
-      radii[i] = r.getValue() + i/5.0;
+      radii[i] = r.getValue();
       i++;
     }
     
     solver.setStepsize(0.1);
     
-    radii = solver.run(radii, 50);
-    
-    System.out.println("RADII:");
+    radii = solver.run(radii, 500);
+    PrintStream out = null;
+    try {
+      out = new PrintStream(new File("Data/Tests/flowdata.txt"));
+    } catch (FileNotFoundException e1) {
+      return;
+    }
+    out.println("RADII:");
     for(List<Double> values : rec.getValueHistory(Radius.class)) {
-      System.out.println(values);
+      out.println(values);
     }
     
- //  System.out.println("CURVATURES:");
-//    for(List<Double> values : rec.getValueHistory(Curvature2D.class)) {
-//      System.out.println(values);
-//    }
+  out.println("CURVATURES:");
+    for(List<Double> values : rec.getValueHistory(LKCurvature.class)) {
+      out.println(values);
+    }
   }
 }

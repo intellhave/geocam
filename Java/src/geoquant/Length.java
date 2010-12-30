@@ -63,6 +63,8 @@ public class Length extends Geoquant {
   }
   
   public static Length at(Edge e) {
+    System.out.println(e);
+    System.out.println(e.getSerialNumber());
     TriPosition T = new TriPosition(e.getSerialNumber());
     Length q = Index.get(T);
     if(q == null) {
