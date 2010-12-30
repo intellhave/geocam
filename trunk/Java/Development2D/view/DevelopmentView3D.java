@@ -2,6 +2,8 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -13,7 +15,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import view.SGCMethods.DevelopmentGeometry3D;
-
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
@@ -25,6 +26,9 @@ import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
+import de.jreality.scene.tool.AbstractTool;
+import de.jreality.scene.tool.InputSlot;
+import de.jreality.scene.tool.ToolContext;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 import de.jtem.jrworkspace.plugin.Controller;
@@ -34,7 +38,7 @@ import development.Development.DevelopmentNode;
 import development.Node;
 import development.Vector;
 
-public class DevelopmentView3D extends DevelopmentView {
+public class DevelopmentView3D extends DevelopmentView implements MouseListener{
   private static int INITIAL_HEIGHT = 15;
   private double height = INITIAL_HEIGHT/100.0;
   private static int MAX_HEIGHT = 30;
@@ -66,6 +70,7 @@ public class DevelopmentView3D extends DevelopmentView {
     this.setShowPanelSlots(true,false,false,false);
 
     this.setContent(sgcRoot);
+    sgcRoot.addTool(new ShootTool(development));
     scene = this.getPlugin(Scene.class);
     this.startup();
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
@@ -164,6 +169,35 @@ public class DevelopmentView3D extends DevelopmentView {
       computeDevelopment(itr.next(), colors, geometry);
     }
   }
+  
+  // ================== Shooting Tool ==================
+  
+  private static class ShootTool extends AbstractTool {
+    private Development development;
+    
+    public ShootTool(Development development) {
+      super(InputSlot.LEFT_BUTTON);
+      this.development = development;
+    }
+   
+    @Override
+    public void activate(ToolContext tc) {
+
+      double x = tc.getCurrentPick().getWorldCoordinates()[0];
+      double y = tc.getCurrentPick().getWorldCoordinates()[1];
+      
+      Vector movement = new Vector(x,-y);
+      movement.normalize();
+      movement.scale(0.05);
+      development.addNodeAtSource(Color.green,movement);
+      System.out.println("done");
+
+    }
+    @Override
+    public void deactivate(ToolContext tc) { } 
+    @Override
+    public void perform(ToolContext tc) { }
+  }
 
 
   
@@ -206,5 +240,37 @@ public class DevelopmentView3D extends DevelopmentView {
       PluginInfo info = new PluginInfo("Set Simulated 3D Height", "");
       return info;
     }
+  }
+
+
+
+  @Override
+  public void mouseClicked(MouseEvent e) {
+    System.out.println("clicked");
+    
+  }
+
+  @Override
+  public void mousePressed(MouseEvent e) {
+    System.out.println("pressed");
+    
+  }
+
+  @Override
+  public void mouseReleased(MouseEvent e) {
+    System.out.println("released");
+    
+  }
+
+  @Override
+  public void mouseEntered(MouseEvent e) {
+    System.out.println("entered");
+    
+  }
+
+  @Override
+  public void mouseExited(MouseEvent e) {
+    System.out.println("exited");
+    
   };
 }

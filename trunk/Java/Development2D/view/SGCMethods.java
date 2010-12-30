@@ -13,6 +13,7 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import development.Node;
 import development.Vector;
 
 /**
@@ -21,6 +22,9 @@ import development.Vector;
 public class SGCMethods {
   public static SceneGraphComponent sgcFromPoint(Vector point) {
     return sgcFromPoint(point, 0.03, Color.blue);
+  }
+  public static SceneGraphComponent sgcFromNode(Node node) {
+    return sgcFromPoint(node.getPosition(), node.getRadius(), node.getColor());
   }
   public static SceneGraphComponent sgcFromPoint(Vector point, double radius, Color color) {
     SceneGraphComponent sgc_points = new SceneGraphComponent();
