@@ -280,7 +280,7 @@ public class Development extends Observable {
 
       Face newFace = DevelopmentComputations.getNewFace(face, edge);
 
-      if (newFrustum != null)
+      if (newFrustum != null && newFace != null)
         buildTree(node, newFace, edge, newFrustum, newTrans, depth + 1);
     }
   }  
