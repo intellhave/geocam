@@ -24,7 +24,10 @@ import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-
+import view.ColorScheme;
+import view.DevelopmentView2D;
+import view.ColorScheme.schemes;
+import development.*;
 
 public class ConformalDiskflowTest {
 
@@ -34,7 +37,23 @@ public class ConformalDiskflowTest {
  //   System.out.println(Geometry.getRadii());
  //   System.out.println(Geometry.getEtas());
     testFlow();
+    
+    int i=1;
+    Face sourceFace = Triangulation.faceTable.get(5);
+    System.out.println(sourceFace);
+    
+    Vector sourcePoint = new Vector(0.2, 0.2);
+    int currentDepth = 1;
+    double stepSize = 0.1;
+    Development development = new Development(sourceFace, sourcePoint, currentDepth, stepSize);
+ //   Development development = null;
+    
+    ColorScheme colorScheme = new ColorScheme(schemes.FACE);
+    DevelopmentView2D view2D = new DevelopmentView2D(development, colorScheme);
+    
     System.out.println("Done.");
+    
+    
   }
   
   private static void initializeQuantities() {
