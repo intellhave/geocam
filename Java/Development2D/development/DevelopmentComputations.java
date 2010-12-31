@@ -87,8 +87,11 @@ public class DevelopmentComputations {
     // current face
     Face newFace;
     List<Face> faces = edge.getLocalFaces();
-    if (faces.get(0) == face)
-      newFace = faces.get(1);
+    if (faces.get(0) == face) {
+      if (faces.size() > 1)
+        newFace = faces.get(1);
+      else newFace = null;
+    }
     else
       newFace = faces.get(0);
     return newFace;
