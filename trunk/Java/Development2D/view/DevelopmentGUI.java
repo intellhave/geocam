@@ -134,10 +134,10 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       development = new Development(sourceFace, sourcePoint, currentDepth, stepSize);
     else development.rebuild(sourceFace, sourcePoint, currentDepth);
  
-    if (embeddedView == null) {
-      embeddedView = new DevelopmentViewEmbedded(filename, development);
-    }
-    else embeddedView.changeGeometry(filename);
+//    if (embeddedView == null) {
+//      embeddedView = new DevelopmentViewEmbedded(filename, development);
+//    }
+//    else embeddedView.changeGeometry(filename);
 
   }
   

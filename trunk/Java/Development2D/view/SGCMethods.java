@@ -13,6 +13,7 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import development.FadingNode;
 import development.Node;
 import development.Vector;
 
@@ -21,17 +22,23 @@ import development.Vector;
  */
 public class SGCMethods {
   public static SceneGraphComponent sgcFromPoint(Vector point) {
-    return sgcFromPoint(point, 0.03, Color.blue);
+    return sgcFromPoint(point, 0.03, Color.blue, 0.0);
   }
+
   public static SceneGraphComponent sgcFromNode(Node node) {
-    return sgcFromPoint(node.getPosition(), node.getRadius(), node.getColor());
+    return sgcFromPoint(node.getPosition(), node.getRadius(), node.getColor(),
+        node.getTransparency());
   }
-  public static SceneGraphComponent sgcFromPoint(Vector point, double radius, Color color) {
+
+  public static SceneGraphComponent sgcFromPoint(Vector point, double radius,
+      Color color, double transparency) {
     SceneGraphComponent sgc_points = new SceneGraphComponent();
     Appearance app_points = new Appearance();
 
     app_points.setAttribute(CommonAttributes.VERTEX_DRAW, true);
     app_points.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
+    app_points.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    app_points.setAttribute(CommonAttributes.TRANSPARENCY, transparency);
 
     DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
         .createDefaultGeometryShader(app_points, true);
@@ -63,11 +70,11 @@ public class SGCMethods {
     // return
     return sgc_points;
   }
-  
+
   public static SceneGraphComponent sgcFromVector(Vector v) {
     return sgcFromVector(v, 0.005);
   }
-  
+
   public static SceneGraphComponent sgcFromVector(Vector v, double radius) {
     SceneGraphComponent sgc = new SceneGraphComponent();
     Appearance app_points = new Appearance();
@@ -92,7 +99,7 @@ public class SGCMethods {
     sgc.setGeometry(ilsf.getGeometry());
     return sgc;
   }
-  
+
   public static Appearance getFaceAppearance(double transparency) {
 
     // create appearance for developed faces
@@ -122,19 +129,19 @@ public class SGCMethods {
 
     return app_face;
   }
-  
+
   public static Appearance getDevelopmentAppearance() {
     Appearance app = new Appearance();
     app.setAttribute(CommonAttributes.EDGE_DRAW, true);
     app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
     app.setAttribute(CommonAttributes.TUBES_DRAW, false);
-    app.setAttribute(CommonAttributes.TUBE_RADIUS, 0.01); 
+    app.setAttribute(CommonAttributes.TUBE_RADIUS, 0.01);
     app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
     app.setAttribute(CommonAttributes.TRANSPARENCY, 0.4d);
     app.setAttribute(CommonAttributes.PICKABLE, true);
     return app;
   }
-  
+
   // class designed to make it easy to use an IndexedFaceSetFactory
   public static class DevelopmentGeometry {
 
@@ -166,8 +173,8 @@ public class SGCMethods {
       return (int[][]) geometry_faces.toArray(new int[0][0]);
     }
   };
-  
-//class designed to make it easy to use an IndexedFaceSetFactory
+
+  // class designed to make it easy to use an IndexedFaceSetFactory
   public static class DevelopmentGeometry3D {
 
     private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
@@ -184,8 +191,7 @@ public class SGCMethods {
       for (int i = 0; i < n; i++) {
         // for some reason, switching '-' sign makes light work
         // but colors are flipped either way
-        ifsf_verts[i] = new double[] { faceverts[i][0], faceverts[i][1],
-            height };
+        ifsf_verts[i] = new double[] { faceverts[i][0], faceverts[i][1], height };
         ifsf_verts[i + n] = new double[] { faceverts[i][0], faceverts[i][1],
             -height };
       }
@@ -229,5 +235,5 @@ public class SGCMethods {
       return (int[][]) geometry_edges.toArray(new int[0][0]);
     }
   };
-  
+
 }
