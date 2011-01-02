@@ -7,26 +7,40 @@ import triangulation.Edge;
 import triangulation.Face;
 
 public class Node {
-  private Color color;
-  private Face face;  // face containing this node
-  private Vector pos; // coordinates in containing face
-  private double radius = 0.03;
-  private Vector movement = new Vector(0,0);
+  protected Color color;
+  protected Face face;  // face containing this node
+  protected Vector pos; // coordinates in containing face
+  protected double radius = 0.03;
+  protected Vector movement = new Vector(0,0);
+  protected double transparency = 0.01;
   
   public Node(Color color, Face face, Vector pos) {
     this.color = color;
     this.face = face;
-    this.pos = pos;
+    this.pos = new Vector(pos);
   }
   
-  public void setMovement(Vector v) { movement = v;  }
+  public Node(Node node) {
+    face = node.getFace();
+    pos = new Vector(node.getPosition());
+    radius = node.getRadius();
+    movement = new Vector(node.getMovement());
+    transparency = node.getTransparency();
+    color = node.getColor();
+  }
+
+  public void setMovement(Vector v) { movement = v; }
+  public Vector getMovement() { return movement; }
   public Color getColor() { return color; }
   public Face getFace() { return face; }
   public Vector getPosition() { return pos; }
+  public void setPosition(Vector pos) { this.pos = pos; }
   public void setFace(Face face) { this.face = face; }
   public void setColor(Color color) { this.color = color; }
   public double getRadius() { return radius; }
   public void setRadius(double radius) { this.radius = radius; }
+  public double getTransparency() { return transparency; }
+  public void setTransparency(double transparency) { this.transparency = transparency; }
   
   public void move() {
     pos = computeEnd(Vector.add(pos, movement), face, null);
@@ -38,7 +52,7 @@ public class Node {
    * the transformed point, these become the new source face and point.
    * ignoreEdge is the edge just crossed, so don't want to cross it again.
    */
-  private Vector computeEnd(Vector point, Face face, Edge ignoreEdge) {
+  protected Vector computeEnd(Vector point, Face face, Edge ignoreEdge) {
 
     // see if current face contains point
     Vector l = DevelopmentComputations.getBarycentricCoords(point, face);

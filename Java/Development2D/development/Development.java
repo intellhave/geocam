@@ -2,7 +2,6 @@ package development;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
@@ -61,19 +60,39 @@ public class Development extends Observable {
     setChanged();
     notifyObservers("depth");
   }
-  
+    
   public void moveObjects() {
-    Iterator<Node> itr = nodeList.iterator();
-    while(itr.hasNext()) {
-      itr.next().move();
+    ArrayList<Node> removeList = new ArrayList<Node>();
+    for(Node node : nodeList) {
+      if(node instanceof FadingNode && ((FadingNode)node).isDead())
+        removeList.add(node);
+      else 
+        node.move();
     }
+    nodeList.removeAll(removeList);
+    
     buildTree();
     setChanged();
     notifyObservers("objects");
   }
   
   public void addNodeAtSource(Color color, Vector vector) {
-    Node node = new Node(color, sourceFace, sourcePoint);
+    // rotation matrix sending direction -> (1,0)
+    double x = direction.getComponent(0);
+    double y = direction.getComponent(1);
+    Matrix M = new Matrix(new double[][] { new double[] { x, y },
+        new double[] { -y, x } });
+    Matrix m = null;
+    try {
+      m = M.inverse();
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    rotation = new AffineTransformation(m);
+    vector = rotation.affineTransVector(vector);
+    
+    FadingNode node = new FadingNode(color, sourceFace, sourcePoint);
     node.setMovement(vector);
     nodeList.add(node);
   }
@@ -313,9 +332,7 @@ public class Development extends Observable {
       }
       
       // add any objects contained in this face
-      Iterator<Node> itr = nodeList.iterator();
-      while(itr.hasNext()) {
-        Node node = itr.next();
+      for(Node node : nodeList) {
         if(node.getFace().equals(face)) {
           Vector point = node.getPosition();
           Vector transPoint = affineTrans.affineTransPoint(point);
@@ -324,7 +341,11 @@ public class Development extends Observable {
 
           if(isRoot() || embeddedFace.contains(transPoint2d)) { 
             // containment alg does not work for root
-            containedObjects.add(new Node(node.getColor(), node.getFace(), transPoint2d));
+            if(node instanceof FadingNode)
+              containedObjects.add(new FadingNode(node.getColor(), node.getFace(), transPoint2d));
+
+            else
+              containedObjects.add(new Node(node.getColor(), node.getFace(), transPoint2d));
           }
         }
       }

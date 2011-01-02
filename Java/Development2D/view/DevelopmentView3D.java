@@ -2,8 +2,6 @@ package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -38,7 +36,7 @@ import development.Development.DevelopmentNode;
 import development.Node;
 import development.Vector;
 
-public class DevelopmentView3D extends DevelopmentView implements MouseListener{
+public class DevelopmentView3D extends DevelopmentView {
   private static int INITIAL_HEIGHT = 15;
   private double height = INITIAL_HEIGHT/100.0;
   private static int MAX_HEIGHT = 30;
@@ -61,7 +59,6 @@ public class DevelopmentView3D extends DevelopmentView implements MouseListener{
     sgc_camera = SceneGraphUtility.createFullSceneGraphComponent("camera");
     sgcRoot.addChild(sgc_camera);
     sgc_camera.setCamera(camera);
-   // updateCamera();
 
     updateGeometry();
 
@@ -144,27 +141,22 @@ public class DevelopmentView3D extends DevelopmentView implements MouseListener{
     return ifsf.getGeometry();
   }
 
-  /*
-   * Adds appropriate source point objects to objects SGC
-   */
-  private void computeDevelopment(DevelopmentNode node,
+  private void computeDevelopment(DevelopmentNode devNode,
       ArrayList<Color> colors, DevelopmentGeometry3D geometry) {
     
-    Iterator<Node> iterator = node.getObjects().iterator();
-    while(iterator.hasNext()) {
-      Node n = iterator.next();
+    for(Node n : devNode.getObjects()) {
       if(!n.getPosition().isZero())
         nodeList.add(n);
     }
 
-    double[][] face = node.getEmbeddedFace().getVectorsAsArray();
+    double[][] face = devNode.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face, height);
 
     // (adding two faces at a time)
-    colors.add(colorScheme.getColor(node));
-    colors.add(colorScheme.getColor(node));
+    colors.add(colorScheme.getColor(devNode));
+    colors.add(colorScheme.getColor(devNode));
 
-    Iterator<DevelopmentNode> itr = node.getChildren().iterator();
+    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
     while (itr.hasNext()) {
       computeDevelopment(itr.next(), colors, geometry);
     }
@@ -189,8 +181,7 @@ public class DevelopmentView3D extends DevelopmentView implements MouseListener{
       Vector movement = new Vector(x,-y);
       movement.normalize();
       movement.scale(0.05);
-      development.addNodeAtSource(Color.green,movement);
-      System.out.println("done");
+      development.addNodeAtSource(Color.green, movement);
 
     }
     @Override
@@ -241,36 +232,4 @@ public class DevelopmentView3D extends DevelopmentView implements MouseListener{
       return info;
     }
   }
-
-
-
-  @Override
-  public void mouseClicked(MouseEvent e) {
-    System.out.println("clicked");
-    
-  }
-
-  @Override
-  public void mousePressed(MouseEvent e) {
-    System.out.println("pressed");
-    
-  }
-
-  @Override
-  public void mouseReleased(MouseEvent e) {
-    System.out.println("released");
-    
-  }
-
-  @Override
-  public void mouseEntered(MouseEvent e) {
-    System.out.println("entered");
-    
-  }
-
-  @Override
-  public void mouseExited(MouseEvent e) {
-    System.out.println("exited");
-    
-  };
 }

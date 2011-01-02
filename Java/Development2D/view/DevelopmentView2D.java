@@ -109,9 +109,8 @@ public class DevelopmentView2D extends DevelopmentView {
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
     
-    Iterator<Node> itr = node.getObjects().iterator();
-    while(itr.hasNext()) {
-      nodeList.add(itr.next());
+    for(Node n : node.getObjects()) {
+      nodeList.add(n);
     }
 
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();

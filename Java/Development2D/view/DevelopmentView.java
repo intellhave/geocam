@@ -1,6 +1,5 @@
 package view;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -47,10 +46,9 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected void setObjectsSGC() {
     sgcDevelopment.removeChild(objects);
     objects = new SceneGraphComponent();
-    Iterator<Node> itr = nodeList.iterator();
-    while(itr.hasNext()) {
-      Node n = itr.next();
-      objects.addChild(SGCMethods.sgcFromPoint(n.getPosition(), radius, n.getColor()));
+    for(Node n : nodeList) {
+      n.setRadius(radius);
+      objects.addChild(SGCMethods.sgcFromNode(n));
     }
     sgcDevelopment.addChild(objects);
   }
