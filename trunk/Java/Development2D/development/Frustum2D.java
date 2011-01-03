@@ -2,6 +2,8 @@ package development;
 
 import java.awt.Color;
 import java.util.ArrayList;
+
+import triangulation.Face;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
 
@@ -228,6 +230,28 @@ public class Frustum2D {
     
     ifsf.update();
     return ifsf.getGeometry();
+  }
+  
+  public Trail clipTrail(Vector start, Vector end, Face face, Color color) {
+    Vector a = findIntersection(start, end, this.left);
+    Vector b = findIntersection(start, end, this.right);
+    if(a == null && b == null && (!this.checkInterior(start) || !this.checkInterior(end)))
+      return null;
+    
+    if(a != null && b != null)
+      return new Trail(a, b, face, color);
+    
+    if(this.checkInterior(start)) {
+      if(a == null) a = start;
+      else b = start;
+    }
+      if(b == null) b = end;
+      else if(a == null) a = end;
+      
+    System.out.println("a = " + a);
+    System.out.println("b = " + b);
+    System.out.println();
+    return new Trail(a, b, face, color);
   }
 }
 

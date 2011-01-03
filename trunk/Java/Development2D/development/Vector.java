@@ -49,6 +49,18 @@ public class Vector {
     result += ")";
     return result.toString();
   }
+  
+  @Override
+  public boolean equals(Object object) {
+    if(object == this) return true;
+    if(!(object instanceof Vector)) return false;
+    Vector vector = (Vector)object;
+    if(vector.getDimension() != this.getDimension()) return false;
+    for(int i = 1; i < vector.getDimension(); i++) {
+      if(this.getComponent(i) != vector.getComponent(i)) return false;
+    }
+    return true;
+  }
 
   public void setComponent(int k, double val) {
     components_[k] = val;

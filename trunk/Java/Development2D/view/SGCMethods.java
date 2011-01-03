@@ -13,8 +13,8 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
-import development.FadingNode;
 import development.Node;
+import development.Trail;
 import development.Vector;
 
 /**
@@ -234,6 +234,35 @@ public class SGCMethods {
     public int[][] getEdges() {
       return (int[][]) geometry_edges.toArray(new int[0][0]);
     }
+  }
+
+  public static SceneGraphComponent sgcFromTrail(Trail trail, double radius) {
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    Appearance app_points = new Appearance();
+    app_points.setAttribute(CommonAttributes.TUBE_RADIUS, 0.4);
+    // set point shader
+    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
+        .createDefaultGeometryShader(app_points, true);
+    DefaultPointShader dps = (DefaultPointShader) dgs.getPointShader();
+    dps.setSpheresDraw(true);
+    dps.setPointRadius(0.01);
+    dps.setDiffuseColor(trail.getColor());
+    sgc.setAppearance(app_points);
+
+    IndexedLineSetFactory ilsf = new IndexedLineSetFactory();
+    ilsf.setVertexCount(2);
+    ilsf.setEdgeCount(1);
+
+    Vector s = trail.getStart();
+    Vector e = trail.getEnd();
+
+    ilsf.setVertexCoordinates(new double[][] {
+        { s.getComponent(0), s.getComponent(1), 0 },
+        { e.getComponent(0), e.getComponent(1), 0 } });
+    ilsf.setEdgeIndices(new int[][] { { 0, 1 } });
+    ilsf.update();
+    sgc.setGeometry(ilsf.getGeometry());
+    return sgc;
   };
 
 }
