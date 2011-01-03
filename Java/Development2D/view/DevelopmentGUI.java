@@ -48,8 +48,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
  
   private static int MAX_DEPTH = 25;
   private static int MAX_STEP_SIZE = 20; // (divided by 100)
-  private static int INITIAL_STEP_SIZE = 5;
-  private double stepSize = 0.05;
+  private static int INITIAL_STEP_SIZE = 15;
+  private double stepSize = INITIAL_STEP_SIZE/100.0;
   private static int MAX_POINT_SIZE = 20;
   private static int INITIAL_POINT_SIZE = 8;
   private double radius = INITIAL_POINT_SIZE/100.0;
@@ -84,14 +84,14 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     String filename = "surfaces/tetra.off";
     loadSurface(filename);
 
-    System.out.println("Initializing 2D view");
+    System.out.println("======== Initializing 2D view ========");
     view2D = new DevelopmentView2D(development, colorScheme);
-    System.out.println("done");
+    System.out.println("---------------- done ----------------");
     development.addObserver(view2D);
 
-    System.out.println("Initializing 3D view");
+    System.out.println("======== Initializing 3D view ========");
     view3D = new DevelopmentView3D(development, colorScheme);
-    System.out.println("done");
+    System.out.println("---------------- done ----------------");
     development.addObserver(view3D);
     
 

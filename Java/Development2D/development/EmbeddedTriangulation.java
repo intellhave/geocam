@@ -369,7 +369,6 @@ public class EmbeddedTriangulation {
     // first create the Vertex, Edge, and Face objects
     if (dl_facecolors != null) {
       double[][] colors = new double[nfaces][4];
-      System.out.println(dl_facecolors);
       dl_facecolors.toDoubleArrayArray(colors);
       for (int i = 0; i < nfaces; i++) {
         Color c = new Color((float) colors[i][0], (float) colors[i][1],

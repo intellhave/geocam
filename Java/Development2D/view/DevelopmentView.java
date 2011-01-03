@@ -10,6 +10,7 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.util.CameraUtility;
 import development.Development;
 import development.Node;
+import development.Trail;
 
 
 public abstract class DevelopmentView extends JRViewer implements Observer{
@@ -19,8 +20,9 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected Scene scene;
   protected ColorScheme colorScheme;
   protected Development development;
-  protected double radius = 0.03; // radius of sourcePoint objects
+  protected double radius = 0.15; // radius of sourcePoint objects
   protected ArrayList<Node> nodeList = new ArrayList<Node>();
+  protected ArrayList<Trail> trailList = new ArrayList<Trail>();
   
   public DevelopmentView(Development development, ColorScheme colorScheme) {
     this.development = development;
@@ -49,6 +51,9 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     for(Node n : nodeList) {
       n.setRadius(radius);
       objects.addChild(SGCMethods.sgcFromNode(n));
+    }
+    for(Trail t : trailList) {
+      objects.addChild(SGCMethods.sgcFromTrail(t, radius));
     }
     sgcDevelopment.addChild(objects);
   }

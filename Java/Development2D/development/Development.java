@@ -76,6 +76,8 @@ public class Development extends Observable {
     notifyObservers("objects");
   }
   
+  public double getStepSize() { return step_size; }
+  
   public void addNodeAtSource(Color color, Vector vector) {
     // rotation matrix sending direction -> (1,0)
     double x = direction.getComponent(0);
@@ -86,7 +88,6 @@ public class Development extends Observable {
     try {
       m = M.inverse();
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     rotation = new AffineTransformation(m);
@@ -238,7 +239,7 @@ public class Development extends Observable {
 
 
     EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
-    root = new DevelopmentNode(null, sourceFace, transformedFace, t);
+    root = new DevelopmentNode(null, sourceFace, transformedFace, null, t);
     List<Vertex> vertices = sourceFace.getLocalVertices();
     for (int i = 0; i < vertices.size(); i++) {
       Vertex v0 = vertices.get(i);
@@ -273,7 +274,7 @@ public class Development extends Observable {
       return;
     }
 
-    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace,
+    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace, frustum,
         newTrans);
     parent.addChild(node);
 
@@ -314,11 +315,14 @@ public class Development extends Observable {
     private AffineTransformation affineTrans;
     private ArrayList<DevelopmentNode> children = new ArrayList<DevelopmentNode>();
     private ArrayList<Node> containedObjects = new ArrayList<Node>();
+    private ArrayList<Trail> containedTrails = new ArrayList<Trail>();
     private DevelopmentNode parent;
+    private Frustum2D frustum;
     private int depth;
 
-    public DevelopmentNode(DevelopmentNode prev, Face f, EmbeddedFace ef,
+    public DevelopmentNode(DevelopmentNode prev, Face f, EmbeddedFace ef, Frustum2D frust,
         AffineTransformation at, DevelopmentNode... nodes) {
+      frustum = frust;
       parent = prev;
       if (parent == null)
         depth = 0;
@@ -339,13 +343,33 @@ public class Development extends Observable {
           Vector transPoint2d = new Vector(transPoint.getComponent(0),
               transPoint.getComponent(1));
 
-          if(isRoot() || embeddedFace.contains(transPoint2d)) { 
+          if(isRoot() || frustum.checkInterior(transPoint2d)) { 
             // containment alg does not work for root
             if(node instanceof FadingNode)
               containedObjects.add(new FadingNode(node.getColor(), node.getFace(), transPoint2d));
 
             else
               containedObjects.add(new Node(node.getColor(), node.getFace(), transPoint2d));
+          }
+        }
+      
+        if(node instanceof FadingNode) {
+          for(Trail trail : ((FadingNode)node).getAllTrails()) {
+            if(trail.getFace().equals(face)) {
+              Vector transStart = affineTrans.affineTransPoint(trail.getStart());
+              Vector transStart2d = new Vector(transStart.getComponent(0),
+                  transStart.getComponent(1));
+              Vector transEnd = affineTrans.affineTransPoint(trail.getEnd());
+              Vector transEnd2d = new Vector(transEnd.getComponent(0),
+                  transEnd.getComponent(1));
+              Trail clippedTrail;
+              if(frustum == null) {
+                clippedTrail = new Trail(transStart2d, transEnd2d, face, trail.color);
+              } else {
+                clippedTrail = frustum.clipTrail(transStart2d, transEnd2d, face, trail.color);
+              }
+              if(clippedTrail != null) containedTrails.add(clippedTrail);
+            }
           }
         }
       }
@@ -360,6 +384,7 @@ public class Development extends Observable {
     public AffineTransformation getAffineTransformation() { return affineTrans; }
     public ArrayList<DevelopmentNode> getChildren() { return children; }
     public ArrayList<Node> getObjects() { return containedObjects; }
+    public ArrayList<Trail> getTrails() { return containedTrails; }
     
     public boolean isRoot() { return parent == null; }
     public boolean faceIsSource() { return face.equals(sourceFace); }

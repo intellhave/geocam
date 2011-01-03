@@ -27,16 +27,17 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.Development.DevelopmentNode;
 import development.Node;
+import development.Trail;
 import development.Vector;
 
 public class DevelopmentView2D extends DevelopmentView {
 
   private static int MAX_LINE_LENGTH = 20;
-  private static int INITIAL_LINE_LENGTH = 2;
+  private static int INITIAL_LINE_LENGTH = 11;
   private double lineLength = INITIAL_LINE_LENGTH; // length of direction line
   
   private static int MAX_LINE_RADIUS = 50;
-  private static int INITIAL_LINE_RADIUS = 5;
+  private static int INITIAL_LINE_RADIUS = 40;
   private double lineRadius = INITIAL_LINE_RADIUS/1000.0; // radius of direction line
 
   private Vector cameraForward = new Vector(1, 0);
@@ -74,6 +75,7 @@ public class DevelopmentView2D extends DevelopmentView {
 
   protected void updateGeometry() {
     nodeList = new ArrayList<Node>();
+    trailList = new ArrayList<Trail>();
     sgcDevelopment.setGeometry(getGeometry());
     setObjectsSGC();
   }
@@ -112,6 +114,9 @@ public class DevelopmentView2D extends DevelopmentView {
     for(Node n : node.getObjects()) {
       nodeList.add(n);
     }
+    for(Trail t : node.getTrails()) {
+      trailList.add(t);
+    }
 
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face);
@@ -126,6 +131,8 @@ public class DevelopmentView2D extends DevelopmentView {
   public void setLineLength(double length) {
     lineLength = length;
     setViewingDirection(cameraForward);
+    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
+        scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
   }
 
   public void setViewingDirection(Vector v) {

@@ -34,10 +34,11 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.Development.DevelopmentNode;
 import development.Node;
+import development.Trail;
 import development.Vector;
 
 public class DevelopmentView3D extends DevelopmentView {
-  private static int INITIAL_HEIGHT = 15;
+  private static int INITIAL_HEIGHT = 25;
   private double height = INITIAL_HEIGHT/100.0;
   private static int MAX_HEIGHT = 30;
 
@@ -108,6 +109,7 @@ public class DevelopmentView3D extends DevelopmentView {
 
   protected void updateGeometry() {
     nodeList = new ArrayList<Node>();
+    trailList = new ArrayList<Trail>();
     sgcDevelopment.setGeometry(getGeometry());
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
         .assignTo(objects);
@@ -148,6 +150,9 @@ public class DevelopmentView3D extends DevelopmentView {
       if(!n.getPosition().isZero())
         nodeList.add(n);
     }
+    for(Trail t : devNode.getTrails()) {
+      trailList.add(t);
+    }
 
     double[][] face = devNode.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face, height);
@@ -180,7 +185,7 @@ public class DevelopmentView3D extends DevelopmentView {
       
       Vector movement = new Vector(x,-y);
       movement.normalize();
-      movement.scale(0.05);
+      movement.scale(development.getStepSize());
       development.addNodeAtSource(Color.green, movement);
 
     }
