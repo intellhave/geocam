@@ -186,18 +186,4 @@ public class EmbeddedFace {
     }
     return false;
   }
-
-  public Trail trailFromPoints(Vector s, Vector e) {
-    Vector start, end;
-    if(this.contains(s)) start = s;
-    else {
-      
-    }
-    
-    if(this.contains(e)) end = e;
-    else {
-      
-    }
-    return null;
-  }
 }

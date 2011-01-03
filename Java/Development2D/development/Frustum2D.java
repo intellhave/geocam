@@ -248,9 +248,6 @@ public class Frustum2D {
       if(b == null) b = end;
       else if(a == null) a = end;
       
-    System.out.println("a = " + a);
-    System.out.println("b = " + b);
-    System.out.println();
     return new Trail(a, b, face, color);
   }
 }
