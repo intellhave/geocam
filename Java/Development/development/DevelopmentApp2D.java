@@ -262,18 +262,18 @@ public class DevelopmentApp2D {
   public static void main(String[] args){
     
     EmbeddedTriangulation.readEmbeddedSurface("models/cone.off");
-    //TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
+  //  TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
     
     Iterator<Integer> i = null;
     
     //set edge lengths randomly from [2,3)
-    /*i = Triangulation.edgeTable.keySet().iterator();
-    while(i.hasNext()){
-      Integer key = i.next();
-      Edge e = Triangulation.edgeTable.get(key);
-      double rand = Math.random();
-      Length.at(e).setValue(2); //random return value is in [0,1)
-    }*/
+ //   i = Triangulation.edgeTable.keySet().iterator();
+ //   while(i.hasNext()){
+ //     Integer key = i.next();
+ //     Edge e = Triangulation.edgeTable.get(key);
+ //     double rand = Math.random();
+  //    Length.at(e).setValue(2); //random return value is in [0,1)
+  //  }
     
     //print some debug data
     //EmbeddedTriangulation.printTriangulationData();

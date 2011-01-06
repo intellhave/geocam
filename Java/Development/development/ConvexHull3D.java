@@ -90,6 +90,7 @@ public class ConvexHull3D {
    */
   private void findHull(ArrayList<Vector> unsorted) {
     
+    if(unsorted.size() < 4) {return;};
     int i = 3;
     Vector v1 = Vector.subtract(unsorted.get(1), unsorted.get(0));
     Vector v2 = Vector.subtract(unsorted.get(2), unsorted.get(0));
@@ -278,7 +279,9 @@ public class ConvexHull3D {
    * between the last and first added from newFace.
    */
   private void mergeFaces(EmbeddedFace oldFace, EmbeddedFace newFace) {
-    /*System.out.println("merging faces: ");
+ /**/
+    System.out.println("merging faces: ");
+   
     System.out.println("oldFace");
     for(int i = 0; i < oldFace.getNumberVertices(); i++) {
       System.out.println(oldFace.getVectorAt(i));
@@ -288,7 +291,8 @@ public class ConvexHull3D {
     for(int i = 0; i < newFace.getNumberVertices(); i++) {
       System.out.println(newFace.getVectorAt(i));
     }
-    System.out.println();*/
+    System.out.println();/**/
+    
     ArrayList<Vector> vectors = new ArrayList<Vector>();
 
     int startIndex = 0; // will be index of vector before the non-shared one.

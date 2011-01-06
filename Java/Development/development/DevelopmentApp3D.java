@@ -340,7 +340,7 @@ public class DevelopmentApp3D {
       if(current_frustum != null){
         //get list of EmbeddedFaces by clipping with Frustum3D and using ConvexHull3D
         ArrayList<Vector> cliptetra_points = current_frustum.clipFace(oriented_tetra);
-        if(cliptetra_points.size() < 4){ return; } //quit this branch if cliptetra has no faces
+        if(cliptetra_points.size() < 3){ return; } //quit this branch if cliptetra has no faces
         ConvexHull3D ch3d = new ConvexHull3D(cliptetra_points);
         cliptetra = ch3d.getFaces();
         

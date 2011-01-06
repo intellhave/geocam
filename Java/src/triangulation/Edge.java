@@ -9,4 +9,6 @@ public class Edge extends Simplex {
   public boolean isBorder() {
     return localFaces.size() == 1;
   }
+  
+  
 }

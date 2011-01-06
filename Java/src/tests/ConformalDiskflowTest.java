@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.awt.Color;
 
 import geoquant.Alpha;
 import geoquant.LKCurvature;
@@ -28,6 +29,9 @@ import view.ColorScheme;
 import view.DevelopmentView2D;
 import view.ColorScheme.schemes;
 import development.*;
+import visualization.*;
+import de.jreality.geometry.Primitives;
+import de.jreality.scene.SceneGraphComponent;
 
 public class ConformalDiskflowTest {
 
@@ -35,30 +39,52 @@ public class ConformalDiskflowTest {
     initializeQuantities();
     TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/trydomain.xml");
  //   System.out.println(Geometry.getRadii());
- //   System.out.println(Geometry.getEtas());
+ //   System.out.println(Geometry.getLKCurvatures());
     testFlow();
     
     int i=1;
     Face sourceFace = Triangulation.faceTable.get(5);
-    System.out.println(sourceFace);
+//    System.out.println(sourceFace);
     
     Vector sourcePoint = new Vector(0.2, 0.2);
-    int currentDepth = 1;
+    int currentDepth = 200;
     double stepSize = 0.1;
+    TriangulationDisplay tD = new TriangulationDisplay();
+//    tD.showTriangulation();
+    
+    for(Vertex v: Triangulation.vertexTable.values())
+      if (v.getMultiplicity() == -1){
+        v.remove();
+        break;
+      }
+    
     Development development = new Development(sourceFace, sourcePoint, currentDepth, stepSize);
  //   Development development = null;
     
     ColorScheme colorScheme = new ColorScheme(schemes.FACE);
     DevelopmentView2D view2D = new DevelopmentView2D(development, colorScheme);
+ //   view2D.display(Primitives.regularPolygon(20));
+ //   view2D.updateGeometry();
     
+    view2D.addCircles();
+ //   view2D.updateGeometry();
+    SceneGraphComponent sgcme = new SceneGraphComponent();
+    sgcme.setGeometry(Primitives.regularPolygon(10,5));
+    view2D.setContent(sgcme);
+    
+    
+    for(Vertex v: Triangulation.vertexTable.values()) {
+      LKCurvature lk = new LKCurvature(v);
+      System.out.println(lk);
+    }
     System.out.println("Done.");
     
     
   }
   
   private static void initializeQuantities() {
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/domain.xml");
-    
+    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/owl.xml");
+    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/trydomainbefore.xml");
     for(Radius r : Geometry.getRadii()) {
       r.setValue(1.0);
     }
@@ -73,6 +99,7 @@ public class ConformalDiskflowTest {
     }
     for(Face f: Triangulation.faceTable.values()) {
       f.setMultiplicity(1);
+      f.setColor(Color.YELLOW);
     }
     
     Boundary.makeBoundary();
@@ -91,7 +118,7 @@ public class ConformalDiskflowTest {
     newV.setMultiplicity(-1);
     Triangulation.putVertex(newV);
 
-    Radius.at(newV).setValue(5);
+    Radius.at(newV).setValue(9);
     Alpha.at(newV).setValue(1);
     
     // New Edges
@@ -145,6 +172,7 @@ public class ConformalDiskflowTest {
       for (Face f: e.getLocalFaces()){
         newF.addFace(f);
         f.addFace(newF);
+        newF.setColor(Color.RED);
       }
       e.addFace(newF);
       newV.addFace(newF);
@@ -166,7 +194,8 @@ public class ConformalDiskflowTest {
           }
         }
       }
-      Triangulation.putFace(newF);   
+      Triangulation.putFace(newF);
+//      System.err.println("yess"+newF);
    }
   }
 
@@ -187,7 +216,7 @@ public class ConformalDiskflowTest {
     
     solver.setStepsize(0.1);
     
-    radii = solver.run(radii, 500);
+    radii = solver.run(radii, 300);
     PrintStream out = null;
     try {
       out = new PrintStream(new File("Data/Tests/flowdata.txt"));
@@ -204,4 +233,7 @@ public class ConformalDiskflowTest {
       out.println(values);
     }
   }
+  
 }
+
+
