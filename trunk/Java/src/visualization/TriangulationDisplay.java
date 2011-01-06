@@ -60,7 +60,9 @@ static  Viewer viewer;
     int numVertices = index;
     double[][] vertCoords = new double[numVertices][3];
     for (Vertex vertex : Triangulation.vertexTable.values()) {
+      System.out.println(vertex);
       Point point =  pd.getPoint(vertex);
+      System.out.println(point);
       vertCoords[labeling.get(vertex)][0] = point.x;
       vertCoords[labeling.get(vertex)][1] = point.y;
       vertCoords[labeling.get(vertex)][2] = 0;

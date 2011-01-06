@@ -42,16 +42,32 @@ public class Triangulation {
     vertexTable.remove(v);
   }
 
+  public static void removeVertex(Vertex v) {
+    removeVertex(v.getIndex());
+  }
+  
   public static void removeEdge(int e) {
     edgeTable.remove(e);
   }
 
+  public static void removeEdge(Edge e) {
+    removeEdge(e.getIndex());
+  }
+  
   public static void removeFace(int f) {
     faceTable.remove(f);
   }
 
+  public static void removeFace(Face f) {
+    removeFace(f.getIndex());
+  }
+  
   public static void removeTetra(int t) {
     tetraTable.remove(t);
+  }
+  
+  public static void removeTetra(Tetra t) {
+    removeTetra(t.getIndex());
   }
 
   // Contains methods

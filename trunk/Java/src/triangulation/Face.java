@@ -32,4 +32,8 @@ public class Face extends Simplex {
   public boolean hasColor() {
     return color != null;
   }
+  
+  public void setColor(Color c) {
+    color = c;
+  }
 }

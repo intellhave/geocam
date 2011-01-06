@@ -49,13 +49,14 @@ public class PlanarDevelopment {
       // first face will be handled in a special way cause there aren't
       // any faces already in the triangulation
       currFace = Triangulation.faceTable.values().iterator().next();
+     
       StdFace stdFace = StdFace.getOrientedFace(currFace);
       Point p1, p2, p3;
       p1 = new Point(0, 0);
       p2 = new Point(Length.valueAt(stdFace.e12), 0);
       p3 = (new Point(Length.valueAt(stdFace.e13), 0)).rotate(Angle.valueAt(
           stdFace.v1, currFace));
-
+//      System.err.println("stdFace "+Length.valueAt(stdFace.e12));
       Line l12, l23, l13;
       l12 = new Line(p1, p2);
       l23 = new Line(p2, p3);
@@ -69,9 +70,9 @@ public class PlanarDevelopment {
       lines.put(stdFace.e23, l23);
       lines.put(stdFace.e13, l13);
       
-      //System.err.println("Put Vertex " + stdFace.v1.getIndex() + " at point " + p1.toString());
-      //System.err.println("Put Vertex " + stdFace.v2.getIndex() + " at point " + p2.toString());
-      //System.err.println("Put Vertex " + stdFace.v3.getIndex() + " at point " + p3.toString());
+//      System.err.println("Put Vertex " + stdFace.v1.getIndex() + " at point " + p1.toString());
+//      System.err.println("Put Vertex " + stdFace.v2.getIndex() + " at point " + p2.toString());
+//      System.err.println("Put Vertex " + stdFace.v3.getIndex() + " at point " + p3.toString());
 
       HashSet<Face> alreadyMapped = new HashSet<Face>();
       LinkedList<Face> facesToMap = new LinkedList<Face>();

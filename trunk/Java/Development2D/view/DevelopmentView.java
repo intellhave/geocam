@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import de.jreality.geometry.PointSetFactory;
+import de.jreality.geometry.Primitives;
 import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
@@ -11,6 +13,7 @@ import de.jreality.util.CameraUtility;
 import development.Development;
 import development.Node;
 import development.Trail;
+import java.awt.Color;
 
 
 public abstract class DevelopmentView extends JRViewer implements Observer{
@@ -60,6 +63,32 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   
   protected abstract void updateGeometry();
   
+  public void addCircles(){
+    PointSetFactory psf = new PointSetFactory();
+    double[][] verts = circle(10,.5);
+    psf.setVertexCount( verts.length );
+    psf.setVertexCoordinates( verts );
+   
+    psf.update();
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    sgc.setGeometry(psf.getGeometry());
+    this.sgcRoot.addChild(sgc);
+    this.setContent(sgc);
+    updateGeometry();
+    
+  //  this.display(psf.getPointSet());
+  //  this.display(Primitives.regularPolygon(20));
+//    sgcDevelopment.addChild(Primitives.regularPolygon(20));
+  }
+  public static double[][] circle(int n, double r) {
+    double[][] verts = new double[n][3];
+    double dphi = 2.0*Math.PI/n;
+    for (int i=0; i<n; i++) {
+      verts[i][0]=r*Math.cos(i*dphi);
+      verts[i][1]=r*Math.sin(i*dphi);
+    }
+    return verts;
+  }
   
   @Override
   public void update(Observable dev, Object arg) {
