@@ -4,7 +4,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import de.jreality.geometry.PointSetFactory;
-import de.jreality.geometry.Primitives;
 import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
@@ -13,7 +12,6 @@ import de.jreality.util.CameraUtility;
 import development.Development;
 import development.Node;
 import development.Trail;
-import java.awt.Color;
 
 
 public abstract class DevelopmentView extends JRViewer implements Observer{
@@ -26,10 +24,12 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected double radius = 0.15; // radius of sourcePoint objects
   protected ArrayList<Node> nodeList = new ArrayList<Node>();
   protected ArrayList<Trail> trailList = new ArrayList<Trail>();
+  protected int dimension;
   
-  public DevelopmentView(Development development, ColorScheme colorScheme) {
+  public DevelopmentView(Development development, ColorScheme colorScheme, double radius) {
     this.development = development;
     this.colorScheme = colorScheme;
+    this.radius = radius;
     
     scene = this.getPlugin(Scene.class);
 
@@ -53,7 +53,8 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     objects = new SceneGraphComponent();
     for(Node n : nodeList) {
       n.setRadius(radius);
-      objects.addChild(SGCMethods.sgcFromNode(n));
+      //System.out.println("setObjectsSGC(): adding node at " + n.getPosition());
+      objects.addChild(SGCMethods.sgcFromNode(n, dimension));
     }
     for(Trail t : trailList) {
       objects.addChild(SGCMethods.sgcFromTrail(t, radius));
@@ -76,9 +77,6 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     this.setContent(sgc);
     updateGeometry();
     
-  //  this.display(psf.getPointSet());
-  //  this.display(Primitives.regularPolygon(20));
-//    sgcDevelopment.addChild(Primitives.regularPolygon(20));
   }
   public static double[][] circle(int n, double r) {
     double[][] verts = new double[n][3];

@@ -25,8 +25,12 @@ public class SGCMethods {
     return sgcFromPoint(point, 0.03, Color.blue, 0.0);
   }
 
-  public static SceneGraphComponent sgcFromNode(Node node) {
-    return sgcFromPoint(node.getPosition(), node.getRadius(), node.getColor(),
+  public static SceneGraphComponent sgcFromNode(Node node, int dimension) {
+    Vector v = node.getPosition();
+    if(dimension > 2) 
+      v = new Vector(v.getComponent(0), v.getComponent(1), 0);
+    
+    return sgcFromPoint(v, node.getRadius(), node.getColor(),
         node.getTransparency());
   }
 
@@ -52,7 +56,7 @@ public class SGCMethods {
     double[][] vertlist = new double[1][3];
     if (point.getDimension() == 2) {
       vertlist[0] = new double[] { point.getComponent(0),
-          point.getComponent(1), 0 };
+          point.getComponent(1), 1 };
     } else if (point.getDimension() == 3) {
       vertlist[0] = new double[] { point.getComponent(0),
           point.getComponent(1), point.getComponent(2) };
@@ -239,7 +243,7 @@ public class SGCMethods {
   public static SceneGraphComponent sgcFromTrail(Trail trail, double radius) {
     SceneGraphComponent sgc = new SceneGraphComponent();
     Appearance app_points = new Appearance();
-    app_points.setAttribute(CommonAttributes.TUBE_RADIUS, 0.4);
+    app_points.setAttribute(CommonAttributes.TUBE_RADIUS, radius);
     // set point shader
     DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
         .createDefaultGeometryShader(app_points, true);
@@ -257,8 +261,8 @@ public class SGCMethods {
     Vector e = trail.getEnd();
 
     ilsf.setVertexCoordinates(new double[][] {
-        { s.getComponent(0), s.getComponent(1), 0 },
-        { e.getComponent(0), e.getComponent(1), 0 } });
+        { s.getComponent(0), s.getComponent(1), 1 },
+        { e.getComponent(0), e.getComponent(1), 1 } });
     ilsf.setEdgeIndices(new int[][] { { 0, 1 } });
     ilsf.update();
     sgc.setGeometry(ilsf.getGeometry());

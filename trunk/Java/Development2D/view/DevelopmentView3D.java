@@ -38,7 +38,7 @@ import development.Trail;
 import development.Vector;
 
 public class DevelopmentView3D extends DevelopmentView {
-  private static int INITIAL_HEIGHT = 25;
+  private static int INITIAL_HEIGHT = 15;
   private double height = INITIAL_HEIGHT/100.0;
   private static int MAX_HEIGHT = 30;
 
@@ -49,8 +49,9 @@ public class DevelopmentView3D extends DevelopmentView {
   private Scene scene;
   private Vector cameraForward = new Vector(-1, 0);;
 
-  public DevelopmentView3D(Development development, ColorScheme colorScheme) {
-    super(development, colorScheme);
+  public DevelopmentView3D(Development development, ColorScheme colorScheme, double radius) {
+    super(development, colorScheme, radius);
+    dimension = 3;
 
     // make camera and sgc_camera
     Camera camera = new Camera();
@@ -109,7 +110,7 @@ public class DevelopmentView3D extends DevelopmentView {
 
   protected void updateGeometry() {
     nodeList = new ArrayList<Node>();
-    trailList = new ArrayList<Trail>();
+ //   trailList = new ArrayList<Trail>();
     sgcDevelopment.setGeometry(getGeometry());
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
         .assignTo(objects);
@@ -150,9 +151,9 @@ public class DevelopmentView3D extends DevelopmentView {
       if(!n.getPosition().isZero())
         nodeList.add(n);
     }
-    for(Trail t : devNode.getTrails()) {
-      trailList.add(t);
-    }
+//    for(Trail t : devNode.getTrails()) {
+//      trailList.add(t);
+//    }
 
     double[][] face = devNode.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face, height);
@@ -182,7 +183,6 @@ public class DevelopmentView3D extends DevelopmentView {
 
       double x = tc.getCurrentPick().getWorldCoordinates()[0];
       double y = tc.getCurrentPick().getWorldCoordinates()[1];
-      
       Vector movement = new Vector(x,-y);
       movement.normalize();
       movement.scale(development.getStepSize());

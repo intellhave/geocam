@@ -44,14 +44,14 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     window.setVisible(true);
   }
 
-  private int currentDepth = 6;
+  private int currentDepth = 21;
  
   private static int MAX_DEPTH = 25;
   private static int MAX_STEP_SIZE = 20; // (divided by 100)
-  private static int INITIAL_STEP_SIZE = 15;
+  private static int INITIAL_STEP_SIZE = 3;
   private double stepSize = INITIAL_STEP_SIZE/100.0;
   private static int MAX_POINT_SIZE = 20;
-  private static int INITIAL_POINT_SIZE = 8;
+  private static int INITIAL_POINT_SIZE = 3;
   private double radius = INITIAL_POINT_SIZE/100.0;
 
   private static Development development;
@@ -67,7 +67,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private JPanel colorPanel;
 
   // Movement stuff
-  private Timer timer;
+  private Timer timer; // timer for moving source
+  private Timer moveTimer; // timer for moving objects
   private Timer keyHoldTimer;
   private static final double ROTATION_ANGLE = Math.PI / 80;
 
@@ -81,16 +82,16 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
-    String filename = "surfaces/tetra.off";
+    String filename = "surfaces/cone.off";
     loadSurface(filename);
 
     System.out.println("======== Initializing 2D view ========");
-    view2D = new DevelopmentView2D(development, colorScheme);
+    view2D = new DevelopmentView2D(development, colorScheme, radius);
     System.out.println("---------------- done ----------------");
     development.addObserver(view2D);
 
     System.out.println("======== Initializing 3D view ========");
-    view3D = new DevelopmentView3D(development, colorScheme);
+    view3D = new DevelopmentView3D(development, colorScheme, radius);
     System.out.println("---------------- done ----------------");
     development.addObserver(view3D);
     
@@ -106,7 +107,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
     layoutGUI();
     
-    Timer moveTimer = new Timer(50, null);
+    moveTimer = new Timer(50, null);
     moveTimer.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         development.moveObjects();
@@ -131,7 +132,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     sourcePoint.scale(1.0f / 3.0f);
 
     if (development == null)
-      development = new Development(sourceFace, sourcePoint, currentDepth, stepSize);
+      development = new Development(sourceFace, sourcePoint, currentDepth, stepSize, radius);
     else development.rebuild(sourceFace, sourcePoint, currentDepth);
  
 //    if (embeddedView == null) {
@@ -245,10 +246,27 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         }
       }
     });
-    colorPanel.setLayout(new GridLayout(4, 1));
+    colorPanel.setLayout(new GridLayout(5, 1));
     colorPanel.add(new JLabel("Set Color Scheme"));
     colorPanel.add(depthSchemeButton);
     colorPanel.add(faceSchemeButton);
+    
+    JButton stopStartButton = new JButton("Stop");
+    stopStartButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        JButton source = (JButton)e.getSource();
+        if (source.getText().equals("Stop")) {
+          source.setText("Start");
+          moveTimer.stop();
+        }
+        else {
+          source.setText("Stop");
+          moveTimer.start();
+        }
+        movementPanel.requestFocusInWindow();
+      }
+    });
+    colorPanel.add(stopStartButton);
 
     this.setLayout(new FlowLayout());
     this.add(sliderPanel);
