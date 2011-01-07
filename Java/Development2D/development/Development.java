@@ -22,19 +22,22 @@ public class Development extends Observable {
   private ArrayList<Node> nodeList = new ArrayList<Node>();
   private Node sourcePointNode;
 
-  public Development(Face sourceF, Vector sourcePt, int depth, double step) {
+  public Development(Face sourceF, Vector sourcePt, int depth, double step, double radius) {
     step_size = step;
     maxDepth = depth;
     sourcePoint = sourcePt;
     sourceFace = sourceF;
     System.out.println("source point = " + sourcePoint);
     sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
+    sourcePointNode.setRadius(radius);
     nodeList.add(sourcePointNode);
-
-    Node n = new Node(Color.red, sourceFace, sourcePoint);
-    n.setRadius(0.2);
-    n.setMovement(new Vector(0.05, 0));
-    nodeList.add(n);
+//
+//    Node n = new Node(Color.red, sourceFace, sourcePoint);
+//    n.setRadius(radius);
+//    Vector move = new Vector(1,0);
+//    move.scale(step);
+//    n.setMovement(move);
+//    nodeList.add(n);
     buildTree();
   }
 
@@ -44,10 +47,10 @@ public class Development extends Observable {
     sourceFace = sourceF;
     
     nodeList = new ArrayList<Node>();
-    Node n = new Node(Color.red, sourceFace, sourcePoint);
-    n.setRadius(0.2);
-    n.setMovement(new Vector(0.05, 0));
-    nodeList.add(n);
+//    Node n = new Node(Color.red, sourceFace, sourcePoint);
+//    n.setRadius(0.2);
+//    n.setMovement(new Vector(0.05, 0));
+//    nodeList.add(n);
 
     buildTree();
     setChanged();
@@ -75,9 +78,7 @@ public class Development extends Observable {
     setChanged();
     notifyObservers("objects");
   }
-  
-  public double getStepSize() { return step_size; }
-  
+    
   public void addNodeAtSource(Color color, Vector vector) {
     // rotation matrix sending direction -> (1,0)
     double x = direction.getComponent(0);
@@ -98,12 +99,17 @@ public class Development extends Observable {
     nodeList.add(node);
   }
   
+  // ------------ Getters and Setters ------------
+  
   public void setStepSize(double size) { step_size = size; }
+  public double getStepSize() { return step_size; }
   public DevelopmentNode getRoot() { return root; }
   public Vector getSourcePoint() { return sourcePoint; }
   public int getDepth() { return maxDepth; }
   public ArrayList<Node> getNodeList() { return nodeList; }
+  // ---------------------------------------------
 
+  
   public void rotate(double angle) {
     double cos = Math.cos(-angle);
     double sin = Math.sin(-angle);
@@ -119,7 +125,7 @@ public class Development extends Observable {
     notifyObservers("rotation");
   }
 
-  // /assumes direction is normalized
+  // assumes direction is normalized
   public void translateSourcePoint(String fb) {
     Vector movement = new Vector(direction);
     movement.scale(step_size);
@@ -144,6 +150,8 @@ public class Development extends Observable {
     movement.add(sourcePoint);
     computeEnd(movement, sourceFace, null);
     setSourcePoint(sourcePoint);
+    setChanged();
+    notifyObservers("source");
   }
 
   /*
@@ -305,9 +313,9 @@ public class Development extends Observable {
     }
   }  
 
-  // ///////////////////////////////////////////////////
-  // DevelopmentNode
-  // ///////////////////////////////////////////////////
+  
+  
+  // ================== DevelopmentNode ==================
 
   public class DevelopmentNode {
     private EmbeddedFace embeddedFace;
@@ -339,6 +347,7 @@ public class Development extends Observable {
       for(Node node : nodeList) {
         if(node.getFace().equals(face)) {
           Vector point = node.getPosition();
+
           Vector transPoint = affineTrans.affineTransPoint(point);
           Vector transPoint2d = new Vector(transPoint.getComponent(0),
               transPoint.getComponent(1));
@@ -346,10 +355,12 @@ public class Development extends Observable {
           if(isRoot() || frustum.checkInterior(transPoint2d)) { 
             // containment alg does not work for root
             if(node instanceof FadingNode)
-              containedObjects.add(new FadingNode(node.getColor(), node.getFace(), transPoint2d));
+              containedObjects.add(new FadingNode(node.getColor(), node.getFace(), new Vector(transPoint2d)));
 
-            else
-              containedObjects.add(new Node(node.getColor(), node.getFace(), transPoint2d));
+            else {
+              //System.out.println("DevelopmentNode: adding node at " + transPoint2d);
+              containedObjects.add(new Node(node.getColor(), node.getFace(), new Vector(transPoint2d)));
+            }
           }
         }
       
@@ -363,6 +374,8 @@ public class Development extends Observable {
               Vector transEnd2d = new Vector(transEnd.getComponent(0),
                   transEnd.getComponent(1));
               Trail clippedTrail;
+              //System.out.println("trail from: " + trail.getStart() + " to " + trail.getEnd());
+              //System.out.println("transformed to be: " + transStart2d + " to " + transEnd2d);
               if(frustum == null) {
                 clippedTrail = new Trail(transStart2d, transEnd2d, face, trail.color);
               } else {

@@ -21,6 +21,9 @@ import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.tool.AbstractTool;
+import de.jreality.scene.tool.InputSlot;
+import de.jreality.scene.tool.ToolContext;
 import de.jreality.util.CameraUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
@@ -33,18 +36,19 @@ import development.Vector;
 public class DevelopmentView2D extends DevelopmentView {
 
   private static int MAX_LINE_LENGTH = 20;
-  private static int INITIAL_LINE_LENGTH = 11;
+  private static int INITIAL_LINE_LENGTH = 2;
   private double lineLength = INITIAL_LINE_LENGTH; // length of direction line
   
   private static int MAX_LINE_RADIUS = 50;
-  private static int INITIAL_LINE_RADIUS = 40;
+  private static int INITIAL_LINE_RADIUS = 10;
   private double lineRadius = INITIAL_LINE_RADIUS/1000.0; // radius of direction line
 
   private Vector cameraForward = new Vector(1, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
   
-  public DevelopmentView2D(Development development, ColorScheme colorScheme) {
-    super(development, colorScheme);
+  public DevelopmentView2D(Development development, ColorScheme colorScheme, double radius) {
+    super(development, colorScheme, radius);
+    dimension = 2;
     
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
@@ -64,6 +68,8 @@ public class DevelopmentView2D extends DevelopmentView {
     this.addBasicUI();
     this.registerPlugin(new UIPanel_Options());
     this.setShowPanelSlots(true, false, false, false);
+    
+    sgcRoot.addTool(new PickingTool());
 
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
@@ -112,6 +118,7 @@ public class DevelopmentView2D extends DevelopmentView {
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
     
     for(Node n : node.getObjects()) {
+      //System.out.println("computeDevelopment(): adding node at " + n.getPosition());
       nodeList.add(n);
     }
     for(Trail t : node.getTrails()) {
@@ -142,6 +149,30 @@ public class DevelopmentView2D extends DevelopmentView {
     sgcRoot.removeChild(viewingDirection);
     viewingDirection = SGCMethods.sgcFromVector(vector, lineRadius);
     sgcRoot.addChild(viewingDirection);
+  }
+  
+  // ================== Picking Tool ==================
+  
+  private static class PickingTool extends AbstractTool {
+    
+    public PickingTool() {
+      super(InputSlot.LEFT_BUTTON);
+    }
+   
+    @Override
+    public void activate(ToolContext tc) {
+
+      double x = tc.getCurrentPick().getWorldCoordinates()[0];
+      double y = tc.getCurrentPick().getWorldCoordinates()[1];
+      
+      Vector v = new Vector(x,y);
+      System.out.println(v);
+
+    }
+    @Override
+    public void deactivate(ToolContext tc) { } 
+    @Override
+    public void perform(ToolContext tc) { }
   }
 
   // ================== Options Panel ==================
