@@ -29,7 +29,6 @@ public class SGCMethods {
     Vector v = node.getPosition();
     if(dimension > 2) 
       v = new Vector(v.getComponent(0), v.getComponent(1), 0);
-    
     return sgcFromPoint(v, node.getRadius(), node.getColor(),
         node.getTransparency());
   }

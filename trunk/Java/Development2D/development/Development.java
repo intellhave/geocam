@@ -8,6 +8,7 @@ import java.util.Observable;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
+import geoquant.Radius;
 import util.Matrix;
 
 public class Development extends Observable {
@@ -32,12 +33,12 @@ public class Development extends Observable {
     sourcePointNode.setRadius(radius);
     nodeList.add(sourcePointNode);
 //
-//    Node n = new Node(Color.red, sourceFace, sourcePoint);
-//    n.setRadius(radius);
-//    Vector move = new Vector(1,0);
-//    move.scale(step);
-//    n.setMovement(move);
-//    nodeList.add(n);
+    Node n = new Node(Color.red, sourceFace, sourcePoint);
+    n.setRadius(radius);
+    Vector move = new Vector(1,0);
+    move.scale(step);
+    n.setMovement(move);
+    nodeList.add(n);
     buildTree();
   }
 
@@ -97,6 +98,25 @@ public class Development extends Observable {
     FadingNode node = new FadingNode(color, sourceFace, sourcePoint);
     node.setMovement(vector);
     nodeList.add(node);
+  }
+  
+  public void addVertexNode(Color color, Vertex v) {
+    Face sourceFace = null;
+    for (Face f: v.getLocalFaces()){
+      sourceFace = f;
+      break;
+    }
+    
+    Node node = new Node(color, sourceFace, Coord2D.coordAt(v, sourceFace));
+ //   System.err.println("1 "+ node.getRadius());
+    node.setRadius(Radius.valueAt(v)*.7);
+ //   node.setRadius(2);
+ //   System.err.println("2 "+ node.getRadius());
+    nodeList.add(node);
+    buildTree();
+ //   int last = nodeList.size()-1;
+ //   System.err.println("3 "+ nodeList.get(last).getRadius());
+ //   this.rebuild(this.sourceFace, this.sourcePoint, this.maxDepth);
   }
   
   // ------------ Getters and Setters ------------
@@ -359,7 +379,7 @@ public class Development extends Observable {
 
             else {
               //System.out.println("DevelopmentNode: adding node at " + transPoint2d);
-              containedObjects.add(new Node(node.getColor(), node.getFace(), new Vector(transPoint2d)));
+              containedObjects.add(new Node(node.getColor(), node.getFace(), new Vector(transPoint2d), node.getRadius()));
             }
           }
         }

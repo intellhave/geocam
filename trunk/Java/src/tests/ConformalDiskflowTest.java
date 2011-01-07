@@ -43,7 +43,7 @@ public class ConformalDiskflowTest {
     testFlow();
     
     int i=1;
-    Face sourceFace = Triangulation.faceTable.get(5);
+    Face sourceFace = Triangulation.faceTable.get(1);
 //    System.out.println(sourceFace);
     
     Vector sourcePoint = new Vector(0.2, 0.2);
@@ -58,25 +58,33 @@ public class ConformalDiskflowTest {
         break;
       }
     
-    Development development = new Development(sourceFace, sourcePoint, currentDepth, stepSize);
+    Development development = new Development(sourceFace, sourcePoint, currentDepth, stepSize,.1);
  //   Development development = null;
-    
-    ColorScheme colorScheme = new ColorScheme(schemes.FACE);
-    DevelopmentView2D view2D = new DevelopmentView2D(development, colorScheme);
- //   view2D.display(Primitives.regularPolygon(20));
- //   view2D.updateGeometry();
-    
-    view2D.addCircles();
- //   view2D.updateGeometry();
-    SceneGraphComponent sgcme = new SceneGraphComponent();
-    sgcme.setGeometry(Primitives.regularPolygon(10,5));
-    view2D.setContent(sgcme);
-    
-    
-    for(Vertex v: Triangulation.vertexTable.values()) {
-      LKCurvature lk = new LKCurvature(v);
-      System.out.println(lk);
+    System.err.println(development.getNodeList());
+    development.addNodeAtSource(Color.green, new Vector(.01,.3));
+    System.err.println(development.getNodeList());
+    for(Vertex v: Triangulation.vertexTable.values()){
+      development.addVertexNode(Color.cyan, v);
     }
+//    System.err.println("hehe "+development.getNodeList().get(4).getRadius());
+    ColorScheme colorScheme = new ColorScheme(schemes.FACE);
+    DevelopmentView2D view2D = new DevelopmentView2D(development, colorScheme, .1);
+    development.addObserver(view2D);
+//    System.err.println("hoho "+view2D.getNodeList().get(4).getRadius());
+    //   view2D.display(Primitives.regularPolygon(20));
+ //   view2D.updateGeometry();
+    
+ //   view2D.addCircles();
+ //   view2D.updateGeometry();
+ //   SceneGraphComponent sgcme = new SceneGraphComponent();
+ //   sgcme.setGeometry(Primitives.regularPolygon(10,5));
+ //   view2D.setContent(sgcme);
+    
+    
+ //   for(Vertex v: Triangulation.vertexTable.values()) {
+ //     LKCurvature lk = new LKCurvature(v);
+ //     System.out.println(lk);
+ //   }
     System.out.println("Done.");
     
     
@@ -214,9 +222,9 @@ public class ConformalDiskflowTest {
       i++;
     }
     
-    solver.setStepsize(0.1);
+    solver.setStepsize(0.05);
     
-    radii = solver.run(radii, 300);
+    radii = solver.run(radii, 3000);
     PrintStream out = null;
     try {
       out = new PrintStream(new File("Data/Tests/flowdata.txt"));

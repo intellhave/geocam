@@ -20,6 +20,13 @@ public class Node {
     this.pos = new Vector(pos);
   }
   
+  public Node(Color color, Face face, Vector pos, double radius) {
+    this.color = color;
+    this.face = face;
+    this.pos = new Vector(pos);
+    this.radius = radius;
+  }
+  
   public Node(Node node) {
     face = node.getFace();
     pos = new Vector(node.getPosition());

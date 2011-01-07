@@ -30,6 +30,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     this.development = development;
     this.colorScheme = colorScheme;
     this.radius = radius;
+//    this.nodeList = development.getNodeList();
     
     scene = this.getPlugin(Scene.class);
 
@@ -52,7 +53,9 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcDevelopment.removeChild(objects);
     objects = new SceneGraphComponent();
     for(Node n : nodeList) {
-      n.setRadius(radius);
+      System.err.println(n.getRadius());
+ //     n.setRadius(radius);
+ //     System.err.println(n.getRadius());
       //System.out.println("setObjectsSGC(): adding node at " + n.getPosition());
       objects.addChild(SGCMethods.sgcFromNode(n, dimension));
     }
