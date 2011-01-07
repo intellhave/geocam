@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 public class lkcurvtest {
   
   public static void main(String[] args) {
-   TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/octahedron.xml");
+   TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/tetrahedron2.xml");
    for(Vertex v: Triangulation.vertexTable.values()) {
      v.setMultiplicity(1);
    }
