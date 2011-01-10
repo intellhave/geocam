@@ -144,6 +144,30 @@ public class SGCMethods {
     app.setAttribute(CommonAttributes.PICKABLE, true);
     return app;
   }
+  
+  public static Appearance getDevelopment3DAppearance() {
+    Appearance app = new Appearance();
+    app.setAttribute(CommonAttributes.FACE_DRAW, true);
+    app.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
+    
+    //set shaders
+    DefaultGeometryShader dgs = (DefaultGeometryShader)ShaderUtility.createDefaultGeometryShader(app, true);
+    
+    //line shader
+    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+    dls.setTubeDraw(false);
+    dls.setLineWidth(0.0);
+    dls.setDiffuseColor(Color.BLACK);
+    
+    //polygon shader
+    DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
+    //dps.setDiffuseColor(color);
+    dps.setTransparency(0.89d);
+    return app;
+  }
 
   // class designed to make it easy to use an IndexedFaceSetFactory
   public static class DevelopmentGeometry {
@@ -161,7 +185,10 @@ public class SGCMethods {
         double[] newvert = new double[3];
         newvert[0] = faceverts[k][0];
         newvert[1] = faceverts[k][1];
-        newvert[2] = 1.0;
+        if(faceverts[k].length > 2)
+          newvert[2] = faceverts[k][2];
+        else
+          newvert[2] = 1.0;
         geometry_verts.add(newvert);
         newface[k] = vi++;
       }
@@ -178,7 +205,7 @@ public class SGCMethods {
   };
 
   // class designed to make it easy to use an IndexedFaceSetFactory
-  public static class DevelopmentGeometry3D {
+  public static class DevelopmentGeometrySim3D {
 
     private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
     private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();

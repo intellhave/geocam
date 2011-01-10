@@ -12,7 +12,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import view.SGCMethods.DevelopmentGeometry3D;
+import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
@@ -34,7 +34,6 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.Development.DevelopmentNode;
 import development.Node;
-import development.Trail;
 import development.Vector;
 
 public class DevelopmentView3D extends DevelopmentView {
@@ -119,7 +118,7 @@ public class DevelopmentView3D extends DevelopmentView {
   }
 
   public Geometry getGeometry() {
-    DevelopmentGeometry3D geometry = new DevelopmentGeometry3D();
+    DevelopmentGeometrySim3D geometry = new DevelopmentGeometrySim3D();
     ArrayList<Color> colors = new ArrayList<Color>();
     computeDevelopment(development.getRoot(), colors, geometry);
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
@@ -145,7 +144,7 @@ public class DevelopmentView3D extends DevelopmentView {
   }
 
   private void computeDevelopment(DevelopmentNode devNode,
-      ArrayList<Color> colors, DevelopmentGeometry3D geometry) {
+      ArrayList<Color> colors, DevelopmentGeometrySim3D geometry) {
     
     for(Node n : devNode.getObjects()) {
       if(!n.getPosition().isZero())

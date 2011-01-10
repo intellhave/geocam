@@ -253,8 +253,6 @@ public class Development extends Observable {
     // -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint,
         -1));
-    Vector.scale(sourcePoint, -1);
-
     
     // rotation matrix sending direction -> (1,0)
     double x = direction.getComponent(0);
@@ -378,7 +376,6 @@ public class Development extends Observable {
               containedObjects.add(new FadingNode(node.getColor(), node.getFace(), new Vector(transPoint2d)));
 
             else {
-              //System.out.println("DevelopmentNode: adding node at " + transPoint2d);
               containedObjects.add(new Node(node.getColor(), node.getFace(), new Vector(transPoint2d), node.getRadius()));
             }
           }
@@ -394,8 +391,7 @@ public class Development extends Observable {
               Vector transEnd2d = new Vector(transEnd.getComponent(0),
                   transEnd.getComponent(1));
               Trail clippedTrail;
-              //System.out.println("trail from: " + trail.getStart() + " to " + trail.getEnd());
-              //System.out.println("transformed to be: " + transStart2d + " to " + transEnd2d);
+
               if(frustum == null) {
                 clippedTrail = new Trail(transStart2d, transEnd2d, face, trail.color);
               } else {

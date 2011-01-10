@@ -47,7 +47,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private int currentDepth = 21;
  
   private static int MAX_DEPTH = 25;
-  private static int MAX_STEP_SIZE = 20; // (divided by 100)
+  private static int MAX_STEP_SIZE = 20;
   private static int INITIAL_STEP_SIZE = 3;
   private double stepSize = INITIAL_STEP_SIZE/100.0;
   private static int MAX_POINT_SIZE = 20;
