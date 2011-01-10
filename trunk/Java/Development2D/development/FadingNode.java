@@ -35,9 +35,6 @@ public class FadingNode extends Node{
       die();
       return;
     }
-    if(steps_to_take <= 20) {
-      transparency += 0.055;
-    }
     
     Vector oldPos = new Vector(pos);
     Vector oldMove = new Vector(movement);

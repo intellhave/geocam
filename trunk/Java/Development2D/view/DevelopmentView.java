@@ -21,7 +21,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected Scene scene;
   protected ColorScheme colorScheme;
   protected Development development;
-  protected double radius = 0.15; // radius of sourcePoint objects
+  protected double radius; // radius of sourcePoint objects
   protected ArrayList<Node> nodeList = new ArrayList<Node>();
   protected ArrayList<Trail> trailList = new ArrayList<Trail>();
   protected int dimension;
@@ -53,10 +53,9 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcDevelopment.removeChild(objects);
     objects = new SceneGraphComponent();
     for(Node n : nodeList) {
-      System.err.println(n.getRadius());
- //     n.setRadius(radius);
  //     System.err.println(n.getRadius());
-      //System.out.println("setObjectsSGC(): adding node at " + n.getPosition());
+      n.setRadius(radius);
+ //     System.err.println(n.getRadius());
       objects.addChild(SGCMethods.sgcFromNode(n, dimension));
     }
     for(Trail t : trailList) {

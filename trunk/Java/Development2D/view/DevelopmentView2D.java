@@ -3,7 +3,6 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -118,7 +117,6 @@ public class DevelopmentView2D extends DevelopmentView {
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
     
     for(Node n : node.getObjects()) {
-      //System.out.println("computeDevelopment(): adding node at " + n.getPosition());
       nodeList.add(n);
     }
     for(Trail t : node.getTrails()) {
@@ -129,10 +127,8 @@ public class DevelopmentView2D extends DevelopmentView {
     geometry.addFace(face);
     colors.add(colorScheme.getColor(node));
 
-    Iterator<DevelopmentNode> iterator = node.getChildren().iterator();
-    while (iterator.hasNext()) {
-      computeDevelopment(iterator.next(), colors, geometry);
-    }
+    for(DevelopmentNode n : node.getChildren())
+      computeDevelopment(n, colors, geometry);
   }
   
   public void setLineLength(double length) {
