@@ -18,6 +18,9 @@ public class Development3D {
   private double stepSize_;
   private double radius_;
   private DevelopmentNode3D root_;
+  private ArrayList<Node3D> nodeList_ = new ArrayList<Node3D>();
+  private ArrayList<Node3D> embeddedNodeList_ = new ArrayList<Node3D>();
+  private Node3D sourcePointNode_;
 
   public Development3D(Tetra sourceTetra, Vector sourcePoint, int depth,
       double stepSize, double radius) {
@@ -26,6 +29,11 @@ public class Development3D {
     maxDepth_ = depth;
     stepSize_ = stepSize;
     radius_ = radius;
+    
+    sourcePointNode_ = new Node3D(Color.blue, sourceTetra_, sourcePoint_);
+    sourcePointNode_.setRadius(radius);
+    nodeList_.add(sourcePointNode_);
+    
     buildTree();
   }
 
@@ -121,7 +129,10 @@ public class Development3D {
   public Geometry getGeometry(ColorScheme3D colorScheme) {
     DevelopmentGeometry geometry = new DevelopmentGeometry();
     ArrayList<Color> colors = new ArrayList<Color>();
+    embeddedNodeList_ = new ArrayList<Node3D>();
+    
     computeDevelopment(root_, colors, geometry, colorScheme);
+    
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
 
     Color[] colorList = new Color[colors.size()];
@@ -149,10 +160,15 @@ public class Development3D {
       geometry.addFace(face);
       colors.add(colorScheme.getColor(devNode));
     }
+    for(Node3D n : devNode.getObjects()) {
+      embeddedNodeList_.add(n);
+    }
 
     for (DevelopmentNode3D n : devNode.getChildren())
       computeDevelopment(n, colors, geometry, colorScheme);
   }
+  
+  public ArrayList<Node3D> getObjects() { return embeddedNodeList_; }
   
   
   
@@ -165,6 +181,7 @@ public class Development3D {
     public Frustum3D frustum_;
     public AffineTransformation trans_;
     private int depth_;
+    private ArrayList<Node3D> containedObjects_ = new ArrayList<Node3D>();
     
     private ArrayList<DevelopmentNode3D> children_ = new ArrayList<DevelopmentNode3D>();
     
@@ -175,6 +192,19 @@ public class Development3D {
       frustum_ = frustum;
       trans_ = trans;
       depth_ = depth;
+      
+      // add any objects contained in this face
+      for(Node3D node : nodeList_) {
+        if(node.getTetra().equals(tetra_)) {
+          Vector point = node.getPosition();
+
+          Vector transPoint = trans_.affineTransPoint(point);
+
+          if(isRoot() || frustum_.checkInterior(transPoint)) {
+              containedObjects_.add(new Node3D(node.getColor(), node.getTetra(), new Vector(transPoint), node.getRadius()));
+          }
+        }
+      }
     }
     
     public void addChild(DevelopmentNode3D node) {
@@ -183,6 +213,8 @@ public class Development3D {
     public ArrayList<EmbeddedFace> getClippedTetra() { return clippedTetra_; }
     public ArrayList<DevelopmentNode3D> getChildren() { return children_; }
     public int getDepth() { return depth_; }
+    public boolean isRoot() { return parent_ == null; }   
+    public ArrayList<Node3D> getObjects() { return containedObjects_; }
   }
 
 }

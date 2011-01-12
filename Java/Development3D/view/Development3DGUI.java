@@ -5,6 +5,7 @@ import inputOutput.TriangulationIO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
@@ -41,6 +42,7 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Coord3D;
 import development.Development3D;
+import development.Node3D;
 import development.Vector;
 
 public class Development3DGUI extends JRViewer {
@@ -58,12 +60,15 @@ public class Development3DGUI extends JRViewer {
   private static int currentDepth_ = 4;
   private static final int MAX_DEPTH_ = 5;
   private static double stepSize_ = 0.01;
-  private static double radius_ = 0.3;
+  private static double radius_ = 0.1;
   private static final double movement_seconds_per_rotation_ = 2.0;
 
   private static SceneGraphComponent sgcRoot_ = new SceneGraphComponent();
   private static SceneGraphComponent sgcRootExternal_ = new SceneGraphComponent();
   private static SceneGraphComponent sgcDevelopment_ = new SceneGraphComponent();
+  private static SceneGraphComponent sgcObjects_ = new SceneGraphComponent();
+  private static SceneGraphComponent sgcObjectsExternal_ = new SceneGraphComponent();
+
   private static Scene scene_;
   private static Scene sceneExternal_;
   private static ColorScheme3D colorScheme_;
@@ -76,13 +81,16 @@ public class Development3DGUI extends JRViewer {
     camera.setNear(.015);
     camera.setFieldOfView(60);
 
+    sgcDevelopment_.setAppearance(SGCMethods.getDevelopment3DAppearance());
+
     sgcCamera_ = SceneGraphUtility.createFullSceneGraphComponent("camera");
     sgcRoot_.addChild(sgcCamera_);
-    sgcDevelopment_.setAppearance(SGCMethods.getDevelopment3DAppearance());
+    sgcRoot_.addChild(sgcObjects_);
     sgcRoot_.addChild(sgcDevelopment_);
     sgcRoot_.addTool(new CameraRotationTool_UpAxis());
     sgcRoot_.addTool(new CameraRotationTool_RightAxis());
     sgcRootExternal_.addChild(sgcDevelopment_);
+    sgcRootExternal_.addChild(sgcObjectsExternal_);
     sgcCamera_.setCamera(camera);
 
     updateGeometry();
@@ -191,6 +199,17 @@ public class Development3DGUI extends JRViewer {
 
   private static void updateGeometry() {
     sgcDevelopment_.setGeometry(development_.getGeometry(colorScheme_));
+    sgcRoot_.removeChild(sgcObjects_);
+    sgcRootExternal_.removeChild(sgcObjectsExternal_);
+    sgcObjects_ = new SceneGraphComponent();
+    sgcObjectsExternal_ = new SceneGraphComponent();
+    for(Node3D node : development_.getObjects()) {
+      sgcObjectsExternal_.addChild(SGCMethods.sgcFromNode3D(node));
+      if(!node.getPosition().isZero())
+        sgcObjects_.addChild(SGCMethods.sgcFromNode3D(node));
+    }
+    sgcRoot_.addChild(sgcObjects_);
+    sgcRootExternal_.addChild(sgcObjectsExternal_);
   }
 
   
