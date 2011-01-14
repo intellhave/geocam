@@ -44,6 +44,9 @@ public class DevelopmentView3D extends DevelopmentView {
   private Viewer viewer;
   private SceneGraphPath camera_source;
   private SceneGraphComponent sgc_camera;
+  
+  private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
+  private static int colorIndex = 0;
 
   private Scene scene;
   private Vector cameraForward = new Vector(-1, 0);;
@@ -185,8 +188,8 @@ public class DevelopmentView3D extends DevelopmentView {
       Vector movement = new Vector(x,-y);
       movement.normalize();
       movement.scale(development.getStepSize());
-      development.addNodeAtSource(Color.green, movement);
-
+      development.addNodeAtSource(colors[colorIndex++], movement);
+      colorIndex = colorIndex % colors.length;
     }
     @Override
     public void deactivate(ToolContext tc) { } 
