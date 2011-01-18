@@ -27,6 +27,7 @@ public class SGCMethods {
 
   public static SceneGraphComponent sgcFromNode(Node node, int dimension) {
     Vector v = node.getPosition();
+    System.err.println("no way"+v);
     if(dimension > 2) 
       v = new Vector(v.getComponent(0), v.getComponent(1), 0);
     return sgcFromPoint(v, node.getRadius(), node.getColor(),

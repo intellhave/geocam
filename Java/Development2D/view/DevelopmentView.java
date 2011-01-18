@@ -3,15 +3,20 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import triangulation.Triangulation;
+import triangulation.Vertex;
+
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.util.CameraUtility;
+import development.Coord2D;
 import development.Development;
 import development.Node;
 import development.Trail;
+import geoquant.Radius;
 
 
 public abstract class DevelopmentView extends JRViewer implements Observer{
@@ -30,7 +35,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     this.development = development;
     this.colorScheme = colorScheme;
     this.radius = radius;
-//    this.nodeList = development.getNodeList();
+    this.nodeList = development.getNodeList();
     
     scene = this.getPlugin(Scene.class);
 
@@ -54,7 +59,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     objects = new SceneGraphComponent();
     for(Node n : nodeList) {
  //     System.err.println(n.getRadius());
-      n.setRadius(radius);
+//      n.setRadius(radius);
  //     System.err.println(n.getRadius());
       objects.addChild(SGCMethods.sgcFromNode(n, dimension));
     }
@@ -67,19 +72,22 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected abstract void updateGeometry();
   
   public void addCircles(){
-    PointSetFactory psf = new PointSetFactory();
-    double[][] verts = circle(10,.5);
-    psf.setVertexCount( verts.length );
-    psf.setVertexCoordinates( verts );
-   
-    psf.update();
-    SceneGraphComponent sgc = new SceneGraphComponent();
-    sgc.setGeometry(psf.getGeometry());
-    this.sgcRoot.addChild(sgc);
-    this.setContent(sgc);
+    for (Vertex v: Triangulation.vertexTable.values()){
+      PointSetFactory psf = new PointSetFactory();
+      double[][] verts = circle(20,Radius.valueAt(v));
+      psf.setVertexCount( verts.length );
+      psf.setVertexCoordinates( verts );
+     
+      psf.update();
+      SceneGraphComponent sgc = new SceneGraphComponent();
+      sgc.setGeometry(psf.getGeometry());
+      this.sgcRoot.addChild(sgc);
+      this.setContent(sgc);
+    }
     updateGeometry();
     
   }
+  
   public static double[][] circle(int n, double r) {
     double[][] verts = new double[n][3];
     double dphi = 2.0*Math.PI/n;

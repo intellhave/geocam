@@ -376,7 +376,7 @@ public class EmbeddedTriangulation {
         Triangulation.putFace(new Face(i, c));
       }
     } else {
-      for (int i = 0; i < nedges; i++) {
+      for (int i = 0; i < nfaces; i++) {
         Triangulation.putFace(new Face(i));
       }
     }
