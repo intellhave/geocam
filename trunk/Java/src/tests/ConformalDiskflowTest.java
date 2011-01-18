@@ -15,6 +15,7 @@ import geoquant.Eta;
 import geoquant.GeoRecorder;
 import geoquant.Geometry;
 import geoquant.Geoquant;
+import geoquant.Length;
 import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
@@ -31,14 +32,17 @@ import view.ColorScheme.schemes;
 import development.*;
 import visualization.*;
 import de.jreality.geometry.Primitives;
+import de.jreality.math.MatrixBuilder;
+import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
 
 public class ConformalDiskflowTest {
 
   public static void main(String[] args) {
     initializeQuantities();
-    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/trydomain.xml");
- //   System.out.println(Geometry.getRadii());
+  //  TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/trydomain.xml");
+ //   EmbeddedTriangulation.readEmbeddedSurface("Development2D/surfaces/saddle.off");
+    //   System.out.println(Geometry.getRadii());
  //   System.out.println(Geometry.getLKCurvatures());
     testFlow();
     
@@ -57,13 +61,16 @@ public class ConformalDiskflowTest {
         v.remove();
         break;
       }
-    
+ //   System.out.println("hi1");
     Development development = new Development(sourceFace, sourcePoint, currentDepth, stepSize,.1);
  //   Development development = null;
-    System.err.println(development.getNodeList());
+ //   System.err.println(development.getNodeList());
+ //   System.out.println("hi2");
     development.addNodeAtSource(Color.green, new Vector(.01,.3));
-    System.err.println(development.getNodeList());
+ //   System.err.println(development.getNodeList());
+ //   System.out.println("hi3");
     for(Vertex v: Triangulation.vertexTable.values()){
+ //     System.out.println("hi4"+v);
       development.addVertexNode(Color.cyan, v);
     }
 //    System.err.println("hehe "+development.getNodeList().get(4).getRadius());
@@ -85,16 +92,34 @@ public class ConformalDiskflowTest {
  //     LKCurvature lk = new LKCurvature(v);
  //     System.out.println(lk);
  //   }
+    
+    
+//    view2D.addCircles();
+    for(Edge e: Triangulation.edgeTable.values()) {
+      System.out.println("len="+Length.valueAt(e));
+      double radsum=0;
+      for (Vertex v: e.getLocalVertices()){
+        radsum+=Radius.valueAt(v);
+      }
+      System.out.println("radsum="+radsum);      
+    }
+    
     System.out.println("Done.");
     
     
   }
   
   private static void initializeQuantities() {
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/owl.xml");
-    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/trydomainbefore.xml");
+ //   TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/owl.xml");
+    EmbeddedTriangulation.readEmbeddedSurface("Development2D/surfaces/saddle.off");
+//    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/saddle.xml");
+
+ //   System.err.println(Triangulation.greatestFace());
     for(Radius r : Geometry.getRadii()) {
       r.setValue(1.0);
+    }
+    for(Alpha a : Geometry.getAlphas()) {
+      a.setValue(1.0);
     }
     for(Eta e : Geometry.getEtas()) {
       e.setValue(1.0);
@@ -170,6 +195,7 @@ public class ConformalDiskflowTest {
 //    System.out.println(Triangulation.vertexTable.values());
     
     // New Faces
+
     for (Edge e: Boundary.boundaryEdgeTable.values()){
       Face newF = new Face(Triangulation.greatestFace()+1);
  //     System.out.println(newF.getIndex());
@@ -203,7 +229,9 @@ public class ConformalDiskflowTest {
         }
       }
       Triangulation.putFace(newF);
-//      System.err.println("yess"+newF);
+      TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/saddle.xml");
+      
+      //      System.err.println("yess"+newF);
    }
   }
 

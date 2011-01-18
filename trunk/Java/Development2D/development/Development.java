@@ -109,9 +109,9 @@ public class Development extends Observable {
     
     Node node = new Node(color, sourceFace, Coord2D.coordAt(v, sourceFace));
  //   System.err.println("1 "+ node.getRadius());
-    node.setRadius(Radius.valueAt(v)*.7);
+    node.setRadius(Radius.valueAt(v));
  //   node.setRadius(2);
- //   System.err.println("2 "+ node.getRadius());
+    node.setTransparency(.1);
     nodeList.add(node);
     buildTree();
  //   int last = nodeList.size()-1;
@@ -278,8 +278,10 @@ public class Development extends Observable {
       Frustum2D frustum = new Frustum2D(vect1, vect0);
 
       Face newFace = DevelopmentComputations.getNewFace(sourceFace, edge);
-
-      buildTree(root, newFace, edge, frustum, t, 1);
+//      System.out.println("gogo"+newFace);
+      if (newFace != null){
+        buildTree(root, newFace, edge, frustum, t, 1);
+      }
     }
   }
 
@@ -287,6 +289,7 @@ public class Development extends Observable {
       Frustum2D frustum, AffineTransformation t, int depth) {
 
     AffineTransformation newTrans = new AffineTransformation(2);
+//    System.err.println("lala"+face);
     AffineTransformation coordTrans = CoordTrans2D.affineTransAt(face,
         sourceEdge);
     newTrans.leftMultiply(coordTrans);
