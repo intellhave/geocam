@@ -22,8 +22,10 @@ public class Development extends Observable {
   private double step_size = 0.05;
   private ArrayList<Node> nodeList = new ArrayList<Node>();
   private Node sourcePointNode;
+  private double radius; // default radius of objects
 
   public Development(Face sourceF, Vector sourcePt, int depth, double step, double radius) {
+    this.radius = radius;
     step_size = step;
     maxDepth = depth;
     sourcePoint = sourcePt;
@@ -47,11 +49,16 @@ public class Development extends Observable {
     sourcePoint = sourcePt;
     sourceFace = sourceF;
     
-    nodeList = new ArrayList<Node>();
-//    Node n = new Node(Color.red, sourceFace, sourcePoint);
-//    n.setRadius(0.2);
-//    n.setMovement(new Vector(0.05, 0));
-//    nodeList.add(n);
+    nodeList.clear();
+
+    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
+    sourcePointNode.setRadius(radius);
+    nodeList.add(sourcePointNode);
+    
+    Node n = new Node(Color.red, sourceFace, sourcePoint);
+    n.setRadius(radius);
+    n.setMovement(new Vector(0.05, 0));
+    nodeList.add(n);
 
     buildTree();
     setChanged();
@@ -63,6 +70,15 @@ public class Development extends Observable {
     buildTree();
     setChanged();
     notifyObservers("depth");
+  }
+  
+  public void setRadius(double r) {
+    radius = r;
+    sourcePointNode.setRadius(r);
+
+    buildTree();
+    setChanged();
+    notifyObservers("objects");
   }
     
   public void moveObjects() {
@@ -80,6 +96,9 @@ public class Development extends Observable {
     notifyObservers("objects");
   }
     
+  /*
+   * Places a new fading node at the source point, with specified movement direction
+   */
   public void addNodeAtSource(Color color, Vector vector) {
     // rotation matrix sending direction -> (1,0)
     double x = direction.getComponent(0);
@@ -95,7 +114,7 @@ public class Development extends Observable {
     rotation = new AffineTransformation(m);
     vector = rotation.affineTransVector(vector);
     
-    FadingNode node = new FadingNode(color, sourceFace, sourcePoint);
+    FadingNode node = new FadingNode(color, sourceFace, sourcePoint, radius);
     node.setMovement(vector);
     nodeList.add(node);
   }
@@ -145,27 +164,15 @@ public class Development extends Observable {
     notifyObservers("rotation");
   }
 
-  // assumes direction is normalized
+  /*
+   * Assumes direction is normalized. Moves source point in direction of direction vector, by distance 
+   * given by step_size. fb specifies whether movement is forward or backward. 
+   */
   public void translateSourcePoint(String fb) {
     Vector movement = new Vector(direction);
     movement.scale(step_size);
     if (fb.equals("back"))
       movement.scale(-1);
-
-    Vector direction3d = new Vector(movement.getComponent(0),
-        movement.getComponent(1), 1);
-    Matrix inverse = null;
-    try {
-      inverse = root.getAffineTransformation().inverse();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    inverse.transformVector(direction3d);
-    inverse.transformVector(new Vector(direction.getComponent(0), direction
-        .getComponent(1), 0));
-
-    movement = new Vector(direction3d.getComponent(0),
-        direction3d.getComponent(1));
 
     movement.add(sourcePoint);
     computeEnd(movement, sourceFace, null);
@@ -203,6 +210,7 @@ public class Development extends Observable {
       edge = edges.get(i);
       if (ignoreEdge != null && edge.equals(ignoreEdge))
         continue;
+      
       Vector v1 = Coord2D.coordAt(edge.getLocalVertices().get(0), face);
       Vector v2 = Coord2D.coordAt(edge.getLocalVertices().get(1), face);
 
@@ -216,6 +224,7 @@ public class Development extends Observable {
         break;
       }
     }
+    
     if (foundEdge) {
       Face nextFace = null;
 
@@ -231,8 +240,9 @@ public class Development extends Observable {
       direction = trans.affineTransVector(direction);
 
       computeEnd(newPoint, nextFace, edge);
+      
     } else {
-      System.out.println("did not find edge\n");
+      System.err.println("did not find edge\n");
     }
   }
 
@@ -249,10 +259,8 @@ public class Development extends Observable {
   }
 
   private void buildTree() {
-    // get transformation taking sourcePoint to origin (translation by
-    // -1*sourcePoint)
-    AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint,
-        -1));
+    // get transformation taking sourcePoint to origin (translation by -1*sourcePoint)
+    AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint, -1));
     
     // rotation matrix sending direction -> (1,0)
     double x = direction.getComponent(0);
@@ -266,6 +274,8 @@ public class Development extends Observable {
 
     EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
     root = new DevelopmentNode(null, sourceFace, transformedFace, null, t);
+    
+    // continue development across each adjacent edge
     List<Vertex> vertices = sourceFace.getLocalVertices();
     for (int i = 0; i < vertices.size(); i++) {
       Vertex v0 = vertices.get(i);
@@ -295,9 +305,6 @@ public class Development extends Observable {
     newTrans.leftMultiply(coordTrans);
     newTrans.leftMultiply(t);
 
-    if (depth > maxDepth)
-      return;
-
     EmbeddedFace clippedFace = frustum.clipFace(newTrans.affineTransFace(face));
     if (clippedFace == null) {
       return;
@@ -307,7 +314,7 @@ public class Development extends Observable {
         newTrans);
     parent.addChild(node);
 
-    if (depth == maxDepth)
+    if (depth >= maxDepth)
       return;
 
     // continue developing across each edge
@@ -376,7 +383,7 @@ public class Development extends Observable {
           if(isRoot() || frustum.checkInterior(transPoint2d)) { 
             // containment alg does not work for root
             if(node instanceof FadingNode)
-              containedObjects.add(new FadingNode(node.getColor(), node.getFace(), new Vector(transPoint2d)));
+              containedObjects.add(new FadingNode(node.getColor(), node.getFace(), new Vector(transPoint2d), node.radius));
 
             else {
               containedObjects.add(new Node(node.getColor(), node.getFace(), new Vector(transPoint2d), node.getRadius()));

@@ -13,8 +13,8 @@ public class FadingNode extends Node{
   
   protected static final int DISTANCE = 5;
   
-  public FadingNode(Color color, Face face, Vector pos) {
-    super(color, face, pos);
+  public FadingNode(Color color, Face face, Vector pos, double radius) {
+    super(color, face, pos, radius);
     steps_to_take = 100;
     transparency = 0.2;
     currentTrail = new Trail(pos, pos, face, color);

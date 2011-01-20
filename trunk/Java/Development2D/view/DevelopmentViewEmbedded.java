@@ -21,10 +21,10 @@ public class DevelopmentViewEmbedded extends JRViewer {
   private SceneGraphComponent sgcObjects = new SceneGraphComponent();
 
   public DevelopmentViewEmbedded(String filename, Development development) {
-    
+    filename = "Development2D/" + filename;
     Geometry geom = sgcPolyhedron.getGeometry();
     try {
-      File file = new File("/Share/workspace/Geocam/Development2D/" + filename);
+      File file = new File(filename);
       geom = Readers.read(file).getGeometry();
     } catch (IOException e) {
       e.printStackTrace();

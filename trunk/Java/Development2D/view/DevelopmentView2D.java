@@ -79,8 +79,8 @@ public class DevelopmentView2D extends DevelopmentView {
   }
 
   protected void updateGeometry() {
-    nodeList = new ArrayList<Node>();
-    trailList = new ArrayList<Trail>();
+    nodeList.clear();
+    trailList.clear();
     sgcDevelopment.setGeometry(getGeometry());
     setObjectsSGC();
   }
@@ -113,6 +113,10 @@ public class DevelopmentView2D extends DevelopmentView {
     return ifsf.getGeometry();
   }
 
+  /*
+   * recursively adds geometry for each face in tree to DevelopmentGeometry, 
+   * and adds nodes and trails to corresponding lists (should be empty at start)
+   */
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
     
@@ -179,6 +183,7 @@ public class DevelopmentView2D extends DevelopmentView {
     TitledBorder border_lineRadius = BorderFactory.createTitledBorder("");
 
     private void makeUIComponents() {
+      // -------- LINE LENGTH SLIDER --------
       JSlider lengthSlider = new JSlider(0, MAX_LINE_LENGTH,
           INITIAL_LINE_LENGTH);
       lengthSlider.addChangeListener(new ChangeListener() {
@@ -188,13 +193,14 @@ public class DevelopmentView2D extends DevelopmentView {
           border_len.setTitle(String.format("Line Length (%1.3f)", lineLength));
         }
       });
-
       lengthSlider.setMaximumSize(new Dimension(300, 100));
       lengthSlider.setAlignmentX(0.0f);
       border_len.setTitle(String.format("Line Length (%1.3f)", lineLength));
       lengthSlider.setBorder(border_len);
       shrinkPanel.add(lengthSlider);
 
+      
+      // -------- LINE RADIUS SLIDER --------
       JSlider lineRadSlider = new JSlider(0, MAX_LINE_RADIUS,
           INITIAL_LINE_RADIUS);
       lineRadSlider.addChangeListener(new ChangeListener() {
@@ -205,7 +211,6 @@ public class DevelopmentView2D extends DevelopmentView {
               lineRadius));
         }
       });
-
       lineRadSlider.setMaximumSize(new Dimension(300, 100));
       lineRadSlider.setAlignmentX(0.0f);
       border_lineRadius.setTitle(String.format("Line Radius (%1.3f)",

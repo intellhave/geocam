@@ -14,6 +14,7 @@ import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 import development.Node;
+import development.Node3D;
 import development.Trail;
 import development.Vector;
 
@@ -27,10 +28,14 @@ public class SGCMethods {
 
   public static SceneGraphComponent sgcFromNode(Node node, int dimension) {
     Vector v = node.getPosition();
-    System.err.println("no way"+v);
     if(dimension > 2) 
       v = new Vector(v.getComponent(0), v.getComponent(1), 0);
     return sgcFromPoint(v, node.getRadius(), node.getColor(),
+        node.getTransparency());
+  }
+  
+  public static SceneGraphComponent sgcFromNode3D(Node3D node) {
+    return sgcFromPoint(node.getPosition(), node.getRadius(), node.getColor(),
         node.getTransparency());
   }
 
@@ -111,7 +116,7 @@ public class SGCMethods {
 
     // set some basic attributes
     app_face.setAttribute(CommonAttributes.FACE_DRAW, true);
-    app_face.setAttribute(CommonAttributes.EDGE_DRAW, true);
+    app_face.setAttribute(CommonAttributes.EDGE_DRAW, false);
     app_face.setAttribute(CommonAttributes.VERTEX_DRAW, false);
     app_face.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
     app_face.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
@@ -267,10 +272,10 @@ public class SGCMethods {
     }
   }
 
-  public static SceneGraphComponent sgcFromTrail(Trail trail, double radius) {
+  public static SceneGraphComponent sgcFromTrail(Trail trail) {
     SceneGraphComponent sgc = new SceneGraphComponent();
     Appearance app_points = new Appearance();
-    app_points.setAttribute(CommonAttributes.TUBE_RADIUS, radius);
+    app_points.setAttribute(CommonAttributes.TUBE_RADIUS, 0.05);
     // set point shader
     DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
         .createDefaultGeometryShader(app_points, true);
