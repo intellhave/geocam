@@ -14,6 +14,7 @@ import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.Timer;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -65,6 +67,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private JPanel sliderPanel;
   private JPanel movementPanel;
   private JPanel colorPanel;
+  
+  private String filename; // name of file with surface data
+  private boolean showEmbedded = false; // flag for showing embedded view
 
   // Movement stuff
   private Timer timer; // timer for moving source
@@ -116,7 +121,13 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     moveTimer.start();
   }
 
+  /*
+   * loads triangulated surface from file given by filename. Chooses an arbitrary source face
+   * and source point in that face. Constructs a new Development if one hasn't already been
+   * made. Otherwise rebuilds development with new surface.
+   */
   private void loadSurface(String filename) {
+    this.filename = filename;
     EmbeddedTriangulation.readEmbeddedSurface(filename);
     
     Iterator<Integer> i = null;
@@ -135,10 +146,11 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       development = new Development(sourceFace, sourcePoint, currentDepth, stepSize, radius);
     else development.rebuild(sourceFace, sourcePoint, currentDepth);
  
-//    if (embeddedView == null) {
-//      embeddedView = new DevelopmentViewEmbedded(filename, development);
-//    }
-//    else embeddedView.changeGeometry(filename);
+    
+    if(showEmbedded) {
+      if(embeddedView == null) embeddedView = new DevelopmentViewEmbedded(filename, development);
+      else embeddedView.changeGeometry(filename);
+    }
 
   }
   
@@ -148,11 +160,12 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
 
   private void layoutGUI() {
-    this.setSize(220, 300);
+    this.setSize(220, 400);
     this.setResizable(true);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setTitle("Development View");
 
+    // -------- MENU BAR --------
     JMenuBar menuBar = new JMenuBar();
     JMenu file = new JMenu("File");
     JMenuItem open = new JMenuItem("Load Surface");
@@ -182,9 +195,10 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     this.setJMenuBar(menuBar);
 
     sliderPanel = new JPanel();
-    sliderPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6)); //a little padding
+    sliderPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6));
     sliderPanel.setLayout(new BoxLayout(sliderPanel,BoxLayout.Y_AXIS));
     
+    // -------- DEPTH SLIDER --------
     JSlider depthSlider = new JSlider(1, MAX_DEPTH, currentDepth);
     depthSlider.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
@@ -195,6 +209,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         }
     });
     
+    // -------- STEP SIZE SLIDER --------
     JSlider stepSizeSlider = new JSlider(1, MAX_STEP_SIZE, INITIAL_STEP_SIZE);
     stepSizeSlider.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
@@ -205,12 +220,14 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         }
     }); 
     
+    // -------- POINT SIZE SLIDER --------
     JSlider pointSizeSlider = new JSlider(1, MAX_POINT_SIZE, INITIAL_POINT_SIZE);
     pointSizeSlider.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           radius = ((JSlider)e.getSource()).getValue()/100.0;
-          view2D.setRadius(radius);
-          view3D.setRadius(radius);
+//          view2D.setRadius(radius);
+//          view3D.setRadius(radius);
+          development.setRadius(radius);
           pointBorder.setTitle("Node Radius (" + radius + ")");
           movementPanel.requestFocusInWindow();
         }
@@ -223,6 +240,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     pointSizeSlider.setBorder(pointBorder);
     sliderPanel.add(pointSizeSlider);
 
+    // -------- COLOR SCHEME BUTTONS --------
     colorPanel = new JPanel();
     JButton depthSchemeButton = new JButton("Depth");
     depthSchemeButton.addActionListener(new ActionListener() {
@@ -251,6 +269,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     colorPanel.add(depthSchemeButton);
     colorPanel.add(faceSchemeButton);
     
+    // -------- STOP/START MOVEMENT BUTTON --------
     JButton stopStartButton = new JButton("Stop");
     stopStartButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -268,10 +287,32 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     });
     colorPanel.add(stopStartButton);
 
+    
+    JPanel checkPanel = new JPanel();
+    checkPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    
+    // -------- SHOW EMBEDDED VIEW CHECKBOX --------
+    JCheckBox showEmbeddedBox = new JCheckBox("Show embedded view");
+    showEmbeddedBox.setSelected(showEmbedded);
+    showEmbeddedBox.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        showEmbedded = ((JCheckBox)e.getSource()).isSelected();
+        setEmbeddedVisible(showEmbedded);
+      }
+    });
+    
+    checkPanel.add(showEmbeddedBox);
+    
+    // -------- ADD PANELS --------
     this.setLayout(new FlowLayout());
     this.add(sliderPanel);
     this.add(colorPanel);
+    this.add(checkPanel);
 
+    
+
+    // Arrow keys will move source point as long as focus is on this panel.
+    // Other panels should return focus to this one after performing actions.
     movementPanel = new JPanel();
     this.add(movementPanel);
 
@@ -285,6 +326,15 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       }
     });
 
+  }
+  
+  private void setEmbeddedVisible(boolean setVisible) {
+    if(setVisible && embeddedView == null) {
+        embeddedView = new DevelopmentViewEmbedded(filename, development);
+    } else if(!setVisible && embeddedView != null) {
+      embeddedView.dispose();
+      embeddedView = null;
+    }
   }
 
   public class Moving implements ActionListener {

@@ -1,4 +1,7 @@
 package view;
+/*
+ * Basis class for 2D and simulated 3D views of development
+ */
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -12,7 +15,6 @@ import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.util.CameraUtility;
-import development.Coord2D;
 import development.Development;
 import development.Node;
 import development.Trail;
@@ -22,11 +24,11 @@ import geoquant.Radius;
 public abstract class DevelopmentView extends JRViewer implements Observer{
   protected SceneGraphComponent sgcRoot = new SceneGraphComponent();
   protected SceneGraphComponent sgcDevelopment = new SceneGraphComponent();
-  protected SceneGraphComponent objects = new SceneGraphComponent();
+  protected SceneGraphComponent sgcObjects = new SceneGraphComponent();
   protected Scene scene;
   protected ColorScheme colorScheme;
   protected Development development;
-  protected double radius; // radius of sourcePoint objects
+// protected double radius; // radius of point objects
   protected ArrayList<Node> nodeList = new ArrayList<Node>();
   protected ArrayList<Trail> trailList = new ArrayList<Trail>();
   protected int dimension;
@@ -34,12 +36,10 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   public DevelopmentView(Development development, ColorScheme colorScheme, double radius) {
     this.development = development;
     this.colorScheme = colorScheme;
-    this.radius = radius;
-    this.nodeList = development.getNodeList();
     
     scene = this.getPlugin(Scene.class);
 
-    sgcDevelopment.addChild(objects);
+    sgcDevelopment.addChild(sgcObjects);
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
     sgcRoot.addChild(sgcDevelopment);
   }
@@ -49,24 +49,21 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     updateGeometry();
   }
   
-  public void setRadius(double radius) {
-    this.radius = radius;
-    setObjectsSGC();
-  }
+//  public void setRadius(double radius) {
+//    this.radius = radius;
+//    setObjectsSGC();
+//  }
   
   protected void setObjectsSGC() {
-    sgcDevelopment.removeChild(objects);
-    objects = new SceneGraphComponent();
+    sgcDevelopment.removeChild(sgcObjects);
+    sgcObjects = new SceneGraphComponent();
     for(Node n : nodeList) {
- //     System.err.println(n.getRadius());
-//      n.setRadius(radius);
- //     System.err.println(n.getRadius());
-      objects.addChild(SGCMethods.sgcFromNode(n, dimension));
+      sgcObjects.addChild(SGCMethods.sgcFromNode(n, dimension));
     }
     for(Trail t : trailList) {
-      objects.addChild(SGCMethods.sgcFromTrail(t, radius));
+      sgcObjects.addChild(SGCMethods.sgcFromTrail(t));
     }
-    sgcDevelopment.addChild(objects);
+    sgcDevelopment.addChild(sgcObjects);
   }
   
   protected abstract void updateGeometry();

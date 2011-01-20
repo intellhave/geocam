@@ -96,7 +96,7 @@ public class DevelopmentView3D extends DevelopmentView {
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
         .assignTo(sgcDevelopment);
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
-        .assignTo(objects);
+        .assignTo(sgcObjects);
 
     viewer.setCameraPath(camera_source);
     viewer.render();
@@ -105,21 +105,24 @@ public class DevelopmentView3D extends DevelopmentView {
   private void updateCamera() {
     de.jreality.math.Matrix M = new de.jreality.math.Matrix(
         cameraForward.getComponent(1), 0, cameraForward.getComponent(0), 0,
-        -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 0,
-        1, 0, 0, 0, 0, 0, 1);
+        -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 
+        0, 1, 0, 0, 
+        0, 0, 0, 1);
     M.assignTo(sgc_camera);
   }
 
   protected void updateGeometry() {
-    nodeList = new ArrayList<Node>();
- //   trailList = new ArrayList<Trail>();
+    nodeList.clear();
     sgcDevelopment.setGeometry(getGeometry());
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
-        .assignTo(objects);
+        .assignTo(sgcObjects);
     setObjectsSGC();
     updateCamera();
   }
 
+  /*
+   * Returns geometry for simulated 3D view of development.
+   */
   public Geometry getGeometry() {
     DevelopmentGeometrySim3D geometry = new DevelopmentGeometrySim3D();
     ArrayList<Color> colors = new ArrayList<Color>();
@@ -146,6 +149,10 @@ public class DevelopmentView3D extends DevelopmentView {
     return ifsf.getGeometry();
   }
 
+  /*
+   * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
+   * and adds nodes to nodeList (should be empty at start)
+   */
   private void computeDevelopment(DevelopmentNode devNode,
       ArrayList<Color> colors, DevelopmentGeometrySim3D geometry) {
     
@@ -153,9 +160,6 @@ public class DevelopmentView3D extends DevelopmentView {
       if(!n.getPosition().isZero())
         nodeList.add(n);
     }
-//    for(Trail t : devNode.getTrails()) {
-//      trailList.add(t);
-//    }
 
     double[][] face = devNode.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face, height);
