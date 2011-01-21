@@ -20,6 +20,20 @@ import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.DataList;
 import de.jreality.util.Input;
 
+/*
+ * EmbeddedTriangulation
+ * 
+ *  Overview: This class contains the information that associates
+ *    data from the triangulation with its 3D rendered object 
+ *    (for instance, if triangulation is read from an OFF file)
+ *    
+ *    This allows us to use jReality file reader, then converts
+ *    to Geocam structure, while also maintaining the embedded info.
+ *    
+ *    Possible upgrades:
+ *        * move this to an I/O directory?
+ */
+
 //HOW TO USE THIS CLASS
 //----------------------------------
 // First read a file (any format jReality supports), e.g. readEmbeddedSurface("models/cone.off").

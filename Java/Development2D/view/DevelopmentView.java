@@ -21,6 +21,19 @@ import development.Node;
 import development.Trail;
 import geoquant.Radius;
 
+/*
+ * DevelopmentView
+ * 
+ * Overview: Base viewing object. Extensions give different view methods
+ * 
+ *  * sgcRoot is the root of the scene tree
+ *  * sgcDevelopment is scene graph component displaying embedded (clipped) 
+ *    faces
+ *  * pointer to development
+ *  
+ *  Possible upgrades:
+ *    * remove circles (make an extension)
+ */
 
 public abstract class DevelopmentView extends JRViewer implements Observer{
   protected SceneGraphComponent sgcRoot = new SceneGraphComponent();

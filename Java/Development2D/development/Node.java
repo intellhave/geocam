@@ -6,6 +6,27 @@ import java.util.List;
 import triangulation.Edge;
 import triangulation.Face;
 
+/*************************************************
+ *  Node
+ *  
+ *  Author: K. Kiviat
+ *  
+ *  Overview: A node is an object that lives on the realization
+ *      of the triangulation. It contains the following info:
+ *        * Face the node is contained in
+ *        * position pos within face (specified by coordinates 
+ *          determined in Coord2D)
+ *        * radius that node is rendered (nodes are spheres)
+ *        * color to render the node
+ *        * transparency to render the node
+ *        * movement: direction and how far it moves in one movement
+ *            step size
+ *            
+ *   Possible upgrades:
+ *        * change movement to a velocity
+ * 
+ */
+
 public class Node {
   protected Color color;
   protected Face face;  // face containing this node
