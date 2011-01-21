@@ -15,8 +15,6 @@ public class Development3D {
   private Tetra sourceTetra_;
   private Vector sourcePoint_;
   private int maxDepth_;
-  private double stepSize_;
-  private double radius_;
   private DevelopmentNode3D root_;
   private ArrayList<Node3D> nodeList_ = new ArrayList<Node3D>();
   private ArrayList<Node3D> embeddedNodeList_ = new ArrayList<Node3D>();
@@ -27,12 +25,15 @@ public class Development3D {
     sourceTetra_ = sourceTetra;
     sourcePoint_ = sourcePoint;
     maxDepth_ = depth;
-    stepSize_ = stepSize;
-    radius_ = radius;
     
     sourcePointNode_ = new Node3D(Color.blue, sourceTetra_, sourcePoint_);
     sourcePointNode_.setRadius(radius);
     nodeList_.add(sourcePointNode_);
+    
+    Node3D node = new Node3D(Color.red, sourceTetra_, sourcePoint_);
+    node.setRadius(radius);
+    node.setMovement(new Vector(0.05, 0.05, 0.0));
+    nodeList_.add(node);
     
     buildTree();
   }
@@ -46,6 +47,12 @@ public class Development3D {
   
   public void setDepth(int depth) {
     maxDepth_ = depth;
+    buildTree();
+  }
+  
+  public void moveObjects() {
+    for(Node3D node : nodeList_)
+      node.move();
     buildTree();
   }
 

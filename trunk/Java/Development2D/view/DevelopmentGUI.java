@@ -298,10 +298,35 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       public void actionPerformed(ActionEvent e) {
         showEmbedded = ((JCheckBox)e.getSource()).isSelected();
         setEmbeddedVisible(showEmbedded);
+        movementPanel.requestFocusInWindow();
       }
     });
     
+    JCheckBox drawEdgesBox = new JCheckBox("Draw edges");
+    drawEdgesBox.setSelected(true);
+    drawEdgesBox.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        boolean value = ((JCheckBox)e.getSource()).isSelected();
+        view2D.setDrawEdges(value);
+        view3D.setDrawEdges(value);
+        movementPanel.requestFocusInWindow();
+      }
+    });
+    
+    JCheckBox drawFacesBox = new JCheckBox("Draw faces");
+    drawFacesBox.setSelected(true);
+    drawFacesBox.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        boolean value = ((JCheckBox)e.getSource()).isSelected();
+        view2D.setDrawFaces(value);
+        view3D.setDrawFaces(value);
+        movementPanel.requestFocusInWindow();
+      }
+    });
+    checkPanel.setLayout(new BoxLayout(checkPanel, BoxLayout.Y_AXIS));
     checkPanel.add(showEmbeddedBox);
+    checkPanel.add(drawEdgesBox);
+    checkPanel.add(drawFacesBox);
     
     // -------- ADD PANELS --------
     this.setLayout(new FlowLayout());

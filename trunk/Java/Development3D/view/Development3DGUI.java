@@ -5,15 +5,17 @@ import inputOutput.TriangulationIO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.Timer;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -35,6 +37,7 @@ import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.AxisState;
 import de.jreality.scene.tool.InputSlot;
 import de.jreality.scene.tool.ToolContext;
+import de.jreality.shader.CommonAttributes;
 import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
@@ -57,7 +60,7 @@ public class Development3DGUI extends JRViewer {
   
   private static Development3D development_;
   private static Vector sourcePoint_;
-  private static int currentDepth_ = 4;
+  private static int currentDepth_ = 2;
   private static final int MAX_DEPTH_ = 5;
   private static double stepSize_ = 0.01;
   private static double radius_ = 0.1;
@@ -72,6 +75,8 @@ public class Development3DGUI extends JRViewer {
   private static Scene scene_;
   private static Scene sceneExternal_;
   private static ColorScheme3D colorScheme_;
+  
+  private static Timer moveTimer_; // timer for moving objects
 
   public static void main(String[] args) {
     loadSurface("Data/Triangulations/3DManifolds/pentachoron.xml");
@@ -128,6 +133,15 @@ public class Development3DGUI extends JRViewer {
     CameraUtility.encompass(sceneExternal_.getAvatarPath(),
         sceneExternal_.getContentPath(), sceneExternal_.getCameraPath(), 1.75,
         Pn.EUCLIDEAN);
+    
+    moveTimer_ = new Timer(50, null);
+    moveTimer_.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        development_.moveObjects();
+        updateGeometry();
+      }
+    });
+    moveTimer_.start();
   }
 
   private static void loadSurface(String filename) {
@@ -274,6 +288,32 @@ public class Development3DGUI extends JRViewer {
       shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
       shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),
           BoxLayout.Y_AXIS));
+      
+      JPanel checkPanel = new JPanel();
+      checkPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+      
+      JCheckBox drawEdgesBox = new JCheckBox("Draw edges");
+      drawEdgesBox.setSelected(true);
+      drawEdgesBox.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          boolean value = ((JCheckBox)e.getSource()).isSelected();
+          sgcDevelopment_.getAppearance().setAttribute(CommonAttributes.EDGE_DRAW, value);
+        }
+      });
+      
+      JCheckBox drawFacesBox = new JCheckBox("Draw faces");
+      drawFacesBox.setSelected(true);
+      drawFacesBox.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          boolean value = ((JCheckBox)e.getSource()).isSelected();
+          sgcDevelopment_.getAppearance().setAttribute(CommonAttributes.FACE_DRAW, value);
+        }
+      });
+      checkPanel.setBorder(BorderFactory.createTitledBorder("Visibility options"));
+      checkPanel.setLayout(new BoxLayout(checkPanel, BoxLayout.Y_AXIS));
+      checkPanel.add(drawEdgesBox);
+      checkPanel.add(drawFacesBox);
+      shrinkPanel.add(checkPanel);
     }
 
     @Override
