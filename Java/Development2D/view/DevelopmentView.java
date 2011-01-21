@@ -14,6 +14,7 @@ import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.shader.CommonAttributes;
 import de.jreality.util.CameraUtility;
 import development.Development;
 import development.Node;
@@ -28,7 +29,6 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected Scene scene;
   protected ColorScheme colorScheme;
   protected Development development;
-// protected double radius; // radius of point objects
   protected ArrayList<Node> nodeList = new ArrayList<Node>();
   protected ArrayList<Trail> trailList = new ArrayList<Trail>();
   protected int dimension;
@@ -49,10 +49,13 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     updateGeometry();
   }
   
-//  public void setRadius(double radius) {
-//    this.radius = radius;
-//    setObjectsSGC();
-//  }
+  public void setDrawEdges(boolean value) {
+    sgcDevelopment.getAppearance().setAttribute(CommonAttributes.EDGE_DRAW, value);
+  }
+  
+  public void setDrawFaces(boolean value) {
+    sgcDevelopment.getAppearance().setAttribute(CommonAttributes.FACE_DRAW, value);
+  }
   
   protected void setObjectsSGC() {
     sgcDevelopment.removeChild(sgcObjects);
