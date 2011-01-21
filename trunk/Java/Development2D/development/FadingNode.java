@@ -5,6 +5,19 @@ import java.util.ArrayList;
 
 import triangulation.Face;
 
+/*
+ * Fading Node
+ * 
+ * Author: K. Kiviat
+ * 
+ * An extension of node that leaves a trail behind 
+ * and disappears after some number of steps.
+ * 
+ * Possible upgrades:
+ *    * change steps_to_take to allow for specifying the time that
+ *       the node stays visible, distance visible, etc.
+ */
+
 public class FadingNode extends Node{
   protected int steps_to_take;
   protected boolean dead = false;

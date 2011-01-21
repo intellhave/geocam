@@ -79,7 +79,8 @@ public class Development3DGUI extends JRViewer {
   private static Timer moveTimer_; // timer for moving objects
 
   public static void main(String[] args) {
-    loadSurface("Data/Triangulations/3DManifolds/pentachoron.xml");
+ //   loadSurface("Data/Triangulations/3DManifolds/pentachoron.xml");
+    loadSurface("Data/Triangulations/3DManifolds/FlatTorus.xml");
     colorScheme_ = new ColorScheme3D(schemes.FACE);
 
     Camera camera = new Camera();

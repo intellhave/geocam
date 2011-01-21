@@ -7,6 +7,19 @@ import java.util.List;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
 
+/*
+ * EmbeddedFace
+ * 
+ * Author: K. Kiviat
+ * 
+ * Overview: A list of points in the plane in an order
+ * 
+ * Possible upgrade:
+ *    * do we need normal?
+ * 
+ */
+
+
 public class EmbeddedFace {
   private ArrayList<Vector> vectors_;
   private Vector normal_;

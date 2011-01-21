@@ -11,6 +11,28 @@ import triangulation.Vertex;
 import geoquant.Radius;
 import util.Matrix;
 
+/****************************************
+ *  Development.java
+ * 
+ * @author K. Kiviat
+ * 
+ * Overview: The development is encoded as a linked tree
+ * of development nodes. A development structure contains:
+ *      * the root of the tree (pointing to a development node
+ *      * the source point in the realization of the triangulation
+ *      * list of nodes living on the triangulation
+ *      * default radius of nodes (for when they are rendered)
+ *      * maximum depth is maximum height of tree
+ *      * step size for walking
+ *      * initial position/orientation when rendering is specified
+ *        by a source point, source face, rotation
+ *      * initial direction for walking
+ * 
+ *  See below for description of Development Node
+ * 
+ */
+
+
 public class Development extends Observable {
 
   private AffineTransformation rotation = new AffineTransformation(2);
@@ -344,7 +366,28 @@ public class Development extends Observable {
   
   
   // ================== DevelopmentNode ==================
-
+/*
+ * DevelopmentNode
+ * 
+ * Overview: Tree describing the development is encoded by
+ *   linked development nodes.
+ *   
+ *   Each development node contains:
+ *      * Face in the triangulation
+ *      * Embedded face, which is the face clipped by frustum boundary
+ *      * affine transformation to place embedded face in the scene
+ *      * pointers to parents and children
+ *      * list of object images contained in embedded face (nodes, trails)
+ *      * frustum the embedded face is contained in (used to clip face)
+ * 
+ * 
+ * Possible upgrades? 
+ *        * pointers from object image nodes back to actual nodes
+ *        * change type of nodelist here to a new type for object images
+ * 
+ */
+  
+  
   public class DevelopmentNode {
     private EmbeddedFace embeddedFace;
     private Face face;
