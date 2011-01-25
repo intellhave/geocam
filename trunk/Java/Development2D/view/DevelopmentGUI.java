@@ -75,7 +75,11 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private Timer timer; // timer for moving source
   private Timer moveTimer; // timer for moving objects
   private Timer keyHoldTimer;
-  private static final double ROTATION_ANGLE = Math.PI / 80;
+  
+  private static final double movement_units_per_second_ = 0.3;
+  private static final double movement_seconds_per_rotation_ = 8.0;
+  private final double units_per_millisecond = movement_units_per_second_/1000;
+  private final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
 
   private enum movements {
     left, right, forward, back
@@ -359,18 +363,26 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   }
 
   public class Moving implements ActionListener {
+    private long time;
+    public Moving() {
+      time = System.currentTimeMillis();
+    }
     public void actionPerformed(ActionEvent e) {
+      long newtime = System.currentTimeMillis();
+      long dt = newtime-time;
+      time = newtime;
+      
       if (curMovement == movements.right) {
-        development.rotate(ROTATION_ANGLE);
+        development.rotate(dt * radians_per_millisecond);
         
       } else if (curMovement == movements.left) {
-        development.rotate(-ROTATION_ANGLE);
+        development.rotate(-dt * radians_per_millisecond);
         
       } else if (curMovement == movements.forward) {
-        development.translateSourcePoint("forward");
+        development.translateSourcePoint(dt * units_per_millisecond);
         
       } else if (curMovement == movements.back) {
-        development.translateSourcePoint("back");
+        development.translateSourcePoint(-dt * units_per_millisecond);
       }
     }
   }

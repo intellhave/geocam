@@ -14,6 +14,10 @@ import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.tool.AbstractTool;
+import de.jreality.scene.tool.AxisState;
+import de.jreality.scene.tool.InputSlot;
+import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.util.CameraUtility;
 import development.Development;
@@ -46,6 +50,9 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected ArrayList<Trail> trailList = new ArrayList<Trail>();
   protected int dimension;
   
+  private static final double movement_units_per_second_ = 0.3;
+  private static final double movement_seconds_per_rotation_ = 4.0;
+  
   public DevelopmentView(Development development, ColorScheme colorScheme, double radius) {
     this.development = development;
     this.colorScheme = colorScheme;
@@ -55,6 +62,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcDevelopment.addChild(sgcObjects);
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
     sgcRoot.addChild(sgcDevelopment);
+    sgcRoot.addTool(new ManifoldMovementTool());
   }
   
   public void setColorScheme(ColorScheme scheme) {
@@ -128,7 +136,6 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
       CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
           scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
     }
-
   }
   
   private void collectObjects(DevelopmentNode node) {
@@ -137,5 +144,48 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     for(DevelopmentNode child : node.getChildren()) 
       collectObjects(child);
   }
+  
+  //TOOL(S) FOR MOVEMENT
+  //==============================
+  class ManifoldMovementTool extends AbstractTool {
+    
+    private long time; 
+    private final double units_per_millisecond = movement_units_per_second_/1000;
+    private final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
+    
+    public ManifoldMovementTool() {
+      super(InputSlot.getDevice("ForwardBackwardAxis"), InputSlot.getDevice("LeftRightAxis")); //'activate' tool on F/B or L/R
+      addCurrentSlot(InputSlot.SYSTEM_TIME); //'perform' tool on tick
+    }
+    
+    @Override
+    public void activate(ToolContext tc) {
+      time = tc.getTime(); //set initial time
+    }
+    
+    @Override
+    public void perform(ToolContext tc) {
+      
+      //get axis state
+      AxisState as_fb = tc.getAxisState(InputSlot.getDevice("ForwardBackwardAxis"));
+      AxisState as_lr = tc.getAxisState(InputSlot.getDevice("LeftRightAxis"));
+      
+      //get dt and update time
+      long newtime = tc.getTime();
+      long dt = newtime - time;
+      time = newtime;
+
+      //move forward/backward
+      if(as_fb.isPressed()){
+        development.translateSourcePoint(-dt * units_per_millisecond * as_fb.doubleValue());
+      }
+      
+      //rotation
+      if(as_lr.isPressed()){      
+        development.rotate(-dt * radians_per_millisecond * as_lr.doubleValue());
+      }
+      
+    }  
+  };
 
 }
