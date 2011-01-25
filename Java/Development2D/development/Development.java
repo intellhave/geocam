@@ -382,10 +382,6 @@ public class Development extends Observable {
  *      * frustum the embedded face is contained in (used to clip face)
  * 
  * 
- * Possible upgrades? 
- *        * pointers from object image nodes back to actual nodes
- *        * change type of nodelist here to a new type for object images
- * 
  */
   
   

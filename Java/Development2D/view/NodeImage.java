@@ -16,11 +16,14 @@ public class NodeImage {
   private SceneGraphComponent sgc2d;
   private SceneGraphComponent sgc3d;
   
+  private Node sourceNode; // reference to originating node
+  
   public NodeImage(Node node, Vector pos) {
     this.color = node.getColor();
     this.radius = node.getRadius();
     this.transparency = node.getTransparency();
     this.position = pos;
+    sourceNode = node;
     
     isFadingNode = node instanceof FadingNode;
     
@@ -40,4 +43,5 @@ public class NodeImage {
     if(dimension == 2) return sgc2d;
     return sgc3d;
   } 
+  public Node getNode() { return sourceNode; }
 }

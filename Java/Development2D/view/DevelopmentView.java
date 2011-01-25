@@ -126,6 +126,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     
     if(whatChanged.equals("objects")) {
       nodeList.clear();
+      trailList.clear();
       collectObjects(development.getRoot());
       setObjectsSGC();
 
@@ -141,6 +142,8 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   private void collectObjects(DevelopmentNode node) {
     if(dimension < 3 || !node.isRoot())
       nodeList.addAll(node.getObjects());
+    trailList.addAll(node.getTrails());
+    
     for(DevelopmentNode child : node.getChildren()) 
       collectObjects(child);
   }
