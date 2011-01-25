@@ -33,7 +33,6 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.Development.DevelopmentNode;
-import development.Node;
 import development.Vector;
 
 public class DevelopmentView3D extends DevelopmentView {
@@ -191,7 +190,7 @@ public class DevelopmentView3D extends DevelopmentView {
       double y = tc.getCurrentPick().getWorldCoordinates()[1];
       Vector movement = new Vector(x,-y);
       movement.normalize();
-      movement.scale(development.getStepSize());
+      movement.scale(0.05);
       development.addNodeAtSource(colors[colorIndex++], movement);
       colorIndex = colorIndex % colors.length;
     }

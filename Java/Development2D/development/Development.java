@@ -43,14 +43,12 @@ public class Development extends Observable {
   private Vector direction = new Vector(1, 0);
   private Face sourceFace;
   private int maxDepth;
-  private double step_size = 0.05;
   private ArrayList<Node> nodeList = new ArrayList<Node>();
   private Node sourcePointNode;
   private double radius; // default radius of objects
 
-  public Development(Face sourceF, Vector sourcePt, int depth, double step, double radius) {
+  public Development(Face sourceF, Vector sourcePt, int depth, double radius) {
     this.radius = radius;
-    step_size = step;
     maxDepth = depth;
     sourcePoint = sourcePt;
     sourceFace = sourceF;
@@ -62,7 +60,7 @@ public class Development extends Observable {
     Node n = new Node(Color.red, sourceFace, sourcePoint);
     n.setRadius(radius);
     Vector move = new Vector(1,0);
-    move.scale(step);
+    move.scale(0.05);
     n.setMovement(move);
     nodeList.add(n);
     buildTree();
@@ -100,7 +98,7 @@ public class Development extends Observable {
     radius = r;
     sourcePointNode.setRadius(r);
 
-    buildTree();
+    root.updateObjects();
     setChanged();
     notifyObservers("objects");
   }
@@ -165,8 +163,6 @@ public class Development extends Observable {
   
   // ------------ Getters and Setters ------------
   
-  public void setStepSize(double size) { step_size = size; }
-  public double getStepSize() { return step_size; }
   public DevelopmentNode getRoot() { return root; }
   public Vector getSourcePoint() { return sourcePoint; }
   public int getDepth() { return maxDepth; }
@@ -282,6 +278,7 @@ public class Development extends Observable {
   }
 
   private void buildTree() {
+    System.out.println("building tree");
     // get transformation taking sourcePoint to origin (translation by -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint, -1));
     
