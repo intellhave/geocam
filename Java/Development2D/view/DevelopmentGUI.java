@@ -87,7 +87,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
-    String filename = "surfaces/cone.off";
+    String filename = "Data/off/cone.off";
     loadSurface(filename);
 
     System.out.println("======== Initializing 2D view ========");
@@ -113,11 +113,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     layoutGUI();
     
     moveTimer = new Timer(50, null);
-    moveTimer.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        development.moveObjects();
-      }
-    });
+    moveTimer.addActionListener(new ObjectMoveListener());
     moveTimer.start();
   }
 
@@ -403,5 +399,19 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   @Override
   public void keyReleased(KeyEvent e) {
     keyHoldTimer.start();
+  }
+  
+  public class ObjectMoveListener implements ActionListener {
+    private long time;
+    public ObjectMoveListener() {
+      time = System.currentTimeMillis();
+    }
+    public void actionPerformed(ActionEvent e) {
+      long newtime = System.currentTimeMillis();
+      long dt = newtime - time;
+      time = newtime;
+      
+      development.moveObjects(-dt);
+    }
   }
 }

@@ -17,8 +17,8 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.util.CameraUtility;
 import development.Development;
-import development.Node;
 import development.Trail;
+import development.Development.DevelopmentNode;
 import geoquant.Radius;
 
 /*
@@ -42,7 +42,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected Scene scene;
   protected ColorScheme colorScheme;
   protected Development development;
-  protected ArrayList<Node> nodeList = new ArrayList<Node>();
+  protected ArrayList<NodeImage> nodeList = new ArrayList<NodeImage>();
   protected ArrayList<Trail> trailList = new ArrayList<Trail>();
   protected int dimension;
   
@@ -73,7 +73,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected void setObjectsSGC() {
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = new SceneGraphComponent();
-    for(Node n : nodeList) {
+    for(NodeImage n : nodeList) {
       sgcObjects.addChild(SGCMethods.sgcFromNode(n, dimension));
     }
     for(Trail t : trailList) {
@@ -115,12 +115,27 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   public void update(Observable dev, Object arg) {
     development = (Development) dev;
     String whatChanged = (String) arg;
-    updateGeometry();
+    
+    if(whatChanged.equals("objects")) {
+      nodeList.clear();
+      collectObjects(development.getRoot());
+      setObjectsSGC();
+
+    } else {
+      updateGeometry();
+    }
     if (whatChanged.equals("surface") || whatChanged.equals("depth")) {
       CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
           scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
     }
 
+  }
+  
+  private void collectObjects(DevelopmentNode node) {
+    if(dimension < 3 || !node.isRoot())
+      nodeList.addAll(node.getObjects());
+    for(DevelopmentNode child : node.getChildren()) 
+      collectObjects(child);
   }
 
 }

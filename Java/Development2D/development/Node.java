@@ -9,7 +9,7 @@ import triangulation.Face;
 /*************************************************
  *  Node
  *  
- *  Author: K. Kiviat
+ *  @author K. Kiviat
  *  
  *  Overview: A node is an object that lives on the realization
  *      of the triangulation. It contains the following info:
@@ -33,7 +33,11 @@ public class Node {
   protected Vector pos; // coordinates in containing face
   protected double radius = 0.03;
   protected Vector movement = new Vector(0,0);
-  protected double transparency = 0.9;
+  protected double transparency = 0.1;
+  
+  protected double movement_units_per_second = 4;
+  protected double units_per_millisecond = movement_units_per_second/1000;
+
   
   public Node(Color color, Face face, Vector pos) {
     this.color = color;
@@ -70,8 +74,13 @@ public class Node {
   public double getTransparency() { return transparency; }
   public void setTransparency(double transparency) { this.transparency = transparency; }
   
-  public void move() {
-    pos = computeEnd(Vector.add(pos, movement), face, null);
+  public void move(double elapsedTime) {
+    if(movement.isZero()) return;
+    
+    // assumes movement is normalized
+    Vector v = new Vector(movement);
+    v.scale(elapsedTime*units_per_millisecond);
+    pos = computeEnd(Vector.add(pos, v), face, null);
   }
   
   /*

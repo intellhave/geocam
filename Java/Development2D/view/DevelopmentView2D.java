@@ -120,7 +120,7 @@ public class DevelopmentView2D extends DevelopmentView {
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
     
-    for(Node n : node.getObjects()) {
+    for(NodeImage n : node.getObjects()) {
       nodeList.add(n);
     }
     for(Trail t : node.getTrails()) {

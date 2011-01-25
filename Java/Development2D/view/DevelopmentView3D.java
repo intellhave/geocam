@@ -156,7 +156,7 @@ public class DevelopmentView3D extends DevelopmentView {
   private void computeDevelopment(DevelopmentNode devNode,
       ArrayList<Color> colors, DevelopmentGeometrySim3D geometry) {
     
-    for(Node n : devNode.getObjects()) {
+    for(NodeImage n : devNode.getObjects()) {
       if(!n.getPosition().isZero())
         nodeList.add(n);
     }

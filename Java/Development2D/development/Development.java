@@ -1,5 +1,7 @@
 package development;
 
+import geoquant.Radius;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +10,8 @@ import java.util.Observable;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
-import geoquant.Radius;
 import util.Matrix;
+import view.NodeImage;
 
 /****************************************
  *  Development.java
@@ -103,20 +105,21 @@ public class Development extends Observable {
     notifyObservers("objects");
   }
     
-  public void moveObjects() {
-    ArrayList<Node> removeList = new ArrayList<Node>();
-    for(Node node : nodeList) {
-      if(node instanceof FadingNode && ((FadingNode)node).isDead())
-        removeList.add(node);
-      else 
-        node.move();
-    }
-    nodeList.removeAll(removeList);
-    
-    buildTree();
-    setChanged();
-    notifyObservers("objects");
-  }
+  public void moveObjects(double elapsedTime) {
+    // System.out.println("moving objects. building = " + building);
+     ArrayList<Node> removeList = new ArrayList<Node>();
+     for(Node node : nodeList) {
+       if(node instanceof FadingNode && ((FadingNode)node).isDead())
+         removeList.add(node);
+       else 
+         node.move(elapsedTime);
+     }
+     nodeList.removeAll(removeList);
+     
+     root.updateObjects();
+     setChanged();
+     notifyObservers("objects");
+   }
     
   /*
    * Places a new fading node at the source point, with specified movement direction
@@ -393,7 +396,7 @@ public class Development extends Observable {
     private Face face;
     private AffineTransformation affineTrans;
     private ArrayList<DevelopmentNode> children = new ArrayList<DevelopmentNode>();
-    private ArrayList<Node> containedObjects = new ArrayList<Node>();
+    private ArrayList<NodeImage> containedObjects = new ArrayList<NodeImage>();
     private ArrayList<Trail> containedTrails = new ArrayList<Trail>();
     private DevelopmentNode parent;
     private Frustum2D frustum;
@@ -414,7 +417,12 @@ public class Development extends Observable {
         children.add(nodes[i]);
       }
       
-      // add any objects contained in this face
+      updateObjects();
+    }
+    
+    public void updateObjects() {
+      containedObjects.clear();
+      containedTrails.clear();
       for(Node node : nodeList) {
         if(node.getFace().equals(face)) {
           Vector point = node.getPosition();
@@ -425,12 +433,7 @@ public class Development extends Observable {
 
           if(isRoot() || frustum.checkInterior(transPoint2d)) { 
             // containment alg does not work for root
-            if(node instanceof FadingNode)
-              containedObjects.add(new FadingNode(node.getColor(), node.getFace(), new Vector(transPoint2d), node.radius));
-
-            else {
-              containedObjects.add(new Node(node.getColor(), node.getFace(), new Vector(transPoint2d), node.getRadius()));
-            }
+            containedObjects.add(new NodeImage(node, new Vector(transPoint2d)));
           }
         }
       
@@ -456,6 +459,9 @@ public class Development extends Observable {
         }
       }
       
+      for(DevelopmentNode child : children) {
+        child.updateObjects();
+      }
     }
 
     public void addChild(DevelopmentNode node) { children.add(node); }
@@ -465,7 +471,7 @@ public class Development extends Observable {
     public int getDepth() { return depth; }
     public AffineTransformation getAffineTransformation() { return affineTrans; }
     public ArrayList<DevelopmentNode> getChildren() { return children; }
-    public ArrayList<Node> getObjects() { return containedObjects; }
+    public ArrayList<NodeImage> getObjects() { return containedObjects; }
     public ArrayList<Trail> getTrails() { return containedTrails; }
     
     public boolean isRoot() { return parent == null; }
