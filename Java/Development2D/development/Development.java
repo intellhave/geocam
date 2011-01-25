@@ -191,13 +191,11 @@ public class Development extends Observable {
 
   /*
    * Assumes direction is normalized. Moves source point in direction of direction vector, by distance 
-   * given by step_size. fb specifies whether movement is forward or backward. 
+   * given by scaleVal.
    */
-  public void translateSourcePoint(String fb) {
+  public void translateSourcePoint(double scaleVal) {
     Vector movement = new Vector(direction);
-    movement.scale(step_size);
-    if (fb.equals("back"))
-      movement.scale(-1);
+    movement.scale(scaleVal);
 
     movement.add(sourcePoint);
     computeEnd(movement, sourceFace, null);
