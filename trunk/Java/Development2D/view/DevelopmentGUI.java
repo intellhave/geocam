@@ -423,7 +423,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       long dt = newtime - time;
       time = newtime;
       
-      development.moveObjects(-dt);
+      development.moveObjects(dt);
     }
   }
 }

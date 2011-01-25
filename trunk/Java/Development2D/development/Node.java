@@ -19,11 +19,8 @@ import triangulation.Face;
  *        * radius that node is rendered (nodes are spheres)
  *        * color to render the node
  *        * transparency to render the node
- *        * movement: direction and how far it moves in one movement
- *            step size
- *            
- *   Possible upgrades:
- *        * change movement to a velocity
+ *        * movement: direction of movement
+ *        * units_per_millisecond for movement
  * 
  */
 
