@@ -49,9 +49,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private int currentDepth = 21;
  
   private static int MAX_DEPTH = 25;
-  private static int MAX_STEP_SIZE = 20;
-  private static int INITIAL_STEP_SIZE = 3;
-  private double stepSize = INITIAL_STEP_SIZE/100.0;
   private static int MAX_POINT_SIZE = 20;
   private static int INITIAL_POINT_SIZE = 3;
   private double radius = INITIAL_POINT_SIZE/100.0;
@@ -143,7 +140,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     sourcePoint.scale(1.0f / 3.0f);
 
     if (development == null)
-      development = new Development(sourceFace, sourcePoint, currentDepth, stepSize, radius);
+      development = new Development(sourceFace, sourcePoint, currentDepth, radius);
     else development.rebuild(sourceFace, sourcePoint, currentDepth);
  
     
@@ -154,7 +151,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
 
   }
   
-  TitledBorder stepBorder = BorderFactory.createTitledBorder("Step Size (" + stepSize + ")");
   TitledBorder depthBorder = BorderFactory.createTitledBorder("Recursion Depth (" + currentDepth + ")");
   TitledBorder pointBorder = BorderFactory.createTitledBorder("Node Radius (" + radius + ")");
 
@@ -210,15 +206,15 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     });
     
     // -------- STEP SIZE SLIDER --------
-    JSlider stepSizeSlider = new JSlider(1, MAX_STEP_SIZE, INITIAL_STEP_SIZE);
-    stepSizeSlider.addChangeListener(new ChangeListener(){
-        public void stateChanged(ChangeEvent e) {
-          stepSize = ((JSlider)e.getSource()).getValue()/100.0;
-          development.setStepSize(stepSize);
-          stepBorder.setTitle("Step Size (" + stepSize + ")");
-          movementPanel.requestFocusInWindow();
-        }
-    }); 
+//    JSlider stepSizeSlider = new JSlider(1, MAX_STEP_SIZE, INITIAL_STEP_SIZE);
+//    stepSizeSlider.addChangeListener(new ChangeListener(){
+//        public void stateChanged(ChangeEvent e) {
+//          stepSize = ((JSlider)e.getSource()).getValue()/100.0;
+//          development.setStepSize(stepSize);
+//          stepBorder.setTitle("Step Size (" + stepSize + ")");
+//          movementPanel.requestFocusInWindow();
+//        }
+//    }); 
     
     // -------- POINT SIZE SLIDER --------
     JSlider pointSizeSlider = new JSlider(1, MAX_POINT_SIZE, INITIAL_POINT_SIZE);
@@ -235,8 +231,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     
     depthSlider.setBorder(depthBorder);
     sliderPanel.add(depthSlider);
-    stepSizeSlider.setBorder(stepBorder);
-    sliderPanel.add(stepSizeSlider);
+//    stepSizeSlider.setBorder(stepBorder);
+//    sliderPanel.add(stepSizeSlider);
     pointSizeSlider.setBorder(pointBorder);
     sliderPanel.add(pointSizeSlider);
 
