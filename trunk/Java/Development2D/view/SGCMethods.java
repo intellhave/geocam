@@ -13,7 +13,6 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
-import development.Node;
 import development.Node3D;
 import development.Trail;
 import development.Vector;
@@ -26,7 +25,7 @@ public class SGCMethods {
     return sgcFromPoint(point, 0.03, Color.blue, 0.0);
   }
 
-  public static SceneGraphComponent sgcFromNode(Node node, int dimension) {
+  public static SceneGraphComponent sgcFromNode(NodeImage node, int dimension) {
     Vector v = node.getPosition();
     if(dimension > 2) 
       v = new Vector(v.getComponent(0), v.getComponent(1), 0);

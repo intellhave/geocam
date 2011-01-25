@@ -42,7 +42,7 @@ public class FadingNode extends Node{
   }
 
   @Override
-  public void move() {
+  public void move(double elapsedTime) {
     steps_to_take--;
     if(steps_to_take <= 0) {
       die();
@@ -52,8 +52,10 @@ public class FadingNode extends Node{
     Vector oldPos = new Vector(pos);
     Vector oldMove = new Vector(movement);
     
-    pos = computeEnd(Vector.add(pos, movement), face, null);
-    
+    Vector v = new Vector(movement);
+    v.scale(elapsedTime*units_per_millisecond);
+    pos = computeEnd(Vector.add(pos, v), face, null);
+        
     if(oldMove.equals(movement)) { // movement only changes if it enters a new face
       currentTrail.end = pos;
     } else {
