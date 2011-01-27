@@ -20,7 +20,7 @@ import triangulation.Face;
  *        * color to render the node
  *        * transparency to render the node
  *        * movement: direction of movement
- *        * units_per_millisecond for movement
+ *        * units_per_millisecond to move
  * 
  */
 
@@ -36,23 +36,20 @@ public class Node {
   protected double units_per_millisecond = movement_units_per_second/1000;
 
   
-  public Node(Color color, Face face, Vector pos) {
+  public Node(Color color, Face face, Vector pos, double units_per_millisecond, double radius) {
     this.color = color;
     this.face = face;
     this.pos = new Vector(pos);
-  }
-  
-  public Node(Color color, Face face, Vector pos, double radius) {
-    this.color = color;
-    this.face = face;
-    this.pos = new Vector(pos);
+    this.units_per_millisecond = units_per_millisecond;
     this.radius = radius;
   }
+  
   
   public Node(Node node) {
     face = node.getFace();
     pos = new Vector(node.getPosition());
     radius = node.getRadius();
+    units_per_millisecond = node.getVelocity();
     movement = new Vector(node.getMovement());
     transparency = node.getTransparency();
     color = node.getColor();
@@ -70,6 +67,8 @@ public class Node {
   public void setRadius(double radius) { this.radius = radius; }
   public double getTransparency() { return transparency; }
   public void setTransparency(double transparency) { this.transparency = transparency; }
+  public void setVelocity(double v) { units_per_millisecond = v; }
+  public double getVelocity() { return units_per_millisecond; }
   
   public void move(double elapsedTime) {
     if(movement.isZero()) return;
