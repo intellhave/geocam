@@ -65,6 +65,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private JPanel movementPanel;
   private JPanel colorPanel;
   
+  private Moving movingListener;
+  
   private String filename; // name of file with surface data
   private boolean showEmbedded = false; // flag for showing embedded view
 
@@ -109,7 +111,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       }
     });
     timer = new Timer(50, null);
-    timer.addActionListener(new Moving());
+    movingListener = new Moving();
+    timer.addActionListener(movingListener);
 
     layoutGUI();
     
@@ -363,6 +366,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     public Moving() {
       time = System.currentTimeMillis();
     }
+    public void resetTime() {
+      time = System.currentTimeMillis();
+    }
     public void actionPerformed(ActionEvent e) {
       long newtime = System.currentTimeMillis();
       long dt = newtime-time;
@@ -400,6 +406,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       curMovement = movements.back;
 
     if (!timer.isRunning()) {
+      movingListener.resetTime();
       timer.start();
     }
   }
@@ -416,10 +423,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     }
     public void actionPerformed(ActionEvent e) {
       long newtime = System.currentTimeMillis();
-      long dt = newtime - time;
-      time = newtime;
-      
+      long dt = newtime - time;      
       development.moveObjects(dt);
+      time = System.currentTimeMillis();
     }
   }
 }

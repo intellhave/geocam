@@ -46,6 +46,8 @@ public class Development extends Observable {
   private ArrayList<Node> nodeList = new ArrayList<Node>();
   private Node sourcePointNode;
   private double radius; // default radius of objects
+  
+  public boolean building = false;
 
   public Development(Face sourceF, Vector sourcePt, int depth, double radius) {
     this.radius = radius;
@@ -106,15 +108,19 @@ public class Development extends Observable {
   public void moveObjects(double elapsedTime) {
     // System.out.println("moving objects. building = " + building);
      ArrayList<Node> removeList = new ArrayList<Node>();
-     for(Node node : nodeList) {
-       if(node instanceof FadingNode && ((FadingNode)node).isDead())
-         removeList.add(node);
-       else 
-         node.move(elapsedTime);
+     synchronized(nodeList) {
+       for(Node node : nodeList) {
+         if(node instanceof FadingNode && ((FadingNode)node).isDead())
+           removeList.add(node);
+         else 
+           node.move(elapsedTime);
+       }
+       nodeList.removeAll(removeList);
      }
-     nodeList.removeAll(removeList);
-     
+     if(building) return;
+
      root.updateObjects();
+
      setChanged();
      notifyObservers("objects");
    }
@@ -139,7 +145,9 @@ public class Development extends Observable {
     
     FadingNode node = new FadingNode(color, sourceFace, sourcePoint, radius);
     node.setMovement(vector);
-    nodeList.add(node);
+    synchronized(nodeList) {
+      nodeList.add(node);
+    }
   }
   
   public void addVertexNode(Color color, Vertex v) {
@@ -154,7 +162,9 @@ public class Development extends Observable {
     node.setRadius(Radius.valueAt(v));
  //   node.setRadius(2);
     node.setTransparency(.1);
-    nodeList.add(node);
+    synchronized(nodeList) {
+      nodeList.add(node);
+    }
     buildTree();
  //   int last = nodeList.size()-1;
  //   System.err.println("3 "+ nodeList.get(last).getRadius());
@@ -166,7 +176,7 @@ public class Development extends Observable {
   public DevelopmentNode getRoot() { return root; }
   public Vector getSourcePoint() { return sourcePoint; }
   public int getDepth() { return maxDepth; }
-  public ArrayList<Node> getNodeList() { return nodeList; }
+  //public ArrayList<Node> getNodeList() { return nodeList; }
   // ---------------------------------------------
 
   
@@ -267,9 +277,13 @@ public class Development extends Observable {
 
   public void setSourcePoint(Vector point) {
     sourcePoint = point;
-    nodeList.remove(sourcePointNode);
-    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
-    nodeList.add(sourcePointNode);
+    synchronized(nodeList) {
+      nodeList.remove(sourcePointNode);
+      double radius = sourcePointNode.getRadius();
+      sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
+      sourcePointNode.setRadius(radius);
+      nodeList.add(sourcePointNode);
+    }
 
     buildTree();
 
@@ -278,7 +292,7 @@ public class Development extends Observable {
   }
 
   private void buildTree() {
-    System.out.println("building tree");
+    //building = true;
     // get transformation taking sourcePoint to origin (translation by -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint, -1));
     
@@ -313,6 +327,7 @@ public class Development extends Observable {
         buildTree(root, newFace, edge, frustum, t, 1);
       }
     }
+    //building = false;
   }
 
   private void buildTree(DevelopmentNode parent, Face face, Edge sourceEdge,
@@ -414,37 +429,39 @@ public class Development extends Observable {
     public void updateObjects() {
       containedObjects.clear();
       containedTrails.clear();
-      for(Node node : nodeList) {
-        if(node.getFace().equals(face)) {
-          Vector point = node.getPosition();
-
-          Vector transPoint = affineTrans.affineTransPoint(point);
-          Vector transPoint2d = new Vector(transPoint.getComponent(0),
-              transPoint.getComponent(1));
-
-          if(isRoot() || frustum.checkInterior(transPoint2d)) { 
-            // containment alg does not work for root
-            containedObjects.add(new NodeImage(node, new Vector(transPoint2d)));
+      synchronized(nodeList) {
+        for(Node node : nodeList) {
+          if(node.getFace().equals(face)) {
+            Vector point = node.getPosition();
+  
+            Vector transPoint = affineTrans.affineTransPoint(point);
+            Vector transPoint2d = new Vector(transPoint.getComponent(0),
+                transPoint.getComponent(1));
+  
+            if(isRoot() || frustum.checkInterior(transPoint2d)) { 
+              // containment alg does not work for root
+              containedObjects.add(new NodeImage(node, new Vector(transPoint2d)));
+            }
           }
-        }
-      
-        if(node instanceof FadingNode) {
-          for(Trail trail : ((FadingNode)node).getAllTrails()) {
-            if(trail.getFace().equals(face)) {
-              Vector transStart = affineTrans.affineTransPoint(trail.getStart());
-              Vector transStart2d = new Vector(transStart.getComponent(0),
-                  transStart.getComponent(1));
-              Vector transEnd = affineTrans.affineTransPoint(trail.getEnd());
-              Vector transEnd2d = new Vector(transEnd.getComponent(0),
-                  transEnd.getComponent(1));
-              Trail clippedTrail;
-
-              if(frustum == null) {
-                clippedTrail = new Trail(transStart2d, transEnd2d, face, trail.color);
-              } else {
-                clippedTrail = frustum.clipTrail(transStart2d, transEnd2d, face, trail.color);
+        
+          if(node instanceof FadingNode) {
+            for(Trail trail : ((FadingNode)node).getAllTrails()) {
+              if(trail.getFace().equals(face)) {
+                Vector transStart = affineTrans.affineTransPoint(trail.getStart());
+                Vector transStart2d = new Vector(transStart.getComponent(0),
+                    transStart.getComponent(1));
+                Vector transEnd = affineTrans.affineTransPoint(trail.getEnd());
+                Vector transEnd2d = new Vector(transEnd.getComponent(0),
+                    transEnd.getComponent(1));
+                Trail clippedTrail;
+  
+                if(frustum == null) {
+                  clippedTrail = new Trail(transStart2d, transEnd2d, face, trail.color);
+                } else {
+                  clippedTrail = frustum.clipTrail(transStart2d, transEnd2d, face, trail.color);
+                }
+                if(clippedTrail != null) containedTrails.add(clippedTrail);
               }
-              if(clippedTrail != null) containedTrails.add(clippedTrail);
             }
           }
         }
@@ -461,7 +478,7 @@ public class Development extends Observable {
     public Face getFace() { return face; }
     public int getDepth() { return depth; }
     public AffineTransformation getAffineTransformation() { return affineTrans; }
-    public ArrayList<DevelopmentNode> getChildren() { return children; }
+    public ArrayList<DevelopmentNode> getChildren() { return new ArrayList<DevelopmentNode>(children); }
     public ArrayList<NodeImage> getObjects() { return containedObjects; }
     public ArrayList<Trail> getTrails() { return containedTrails; }
     
