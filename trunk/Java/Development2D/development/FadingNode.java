@@ -14,28 +14,27 @@ import triangulation.Face;
  * and disappears after some number of steps.
  * 
  * Possible upgrades:
- *    * change steps_to_take to allow for specifying the time that
- *       the node stays visible, distance visible, etc.
+ *    * change time_to_live to allow for specifying distance visible, etc.
  */
 
 public class FadingNode extends Node{
-  protected int steps_to_take;
+  protected int time_to_live; // milliseconds before node should disappear
   protected boolean dead = false;
   protected ArrayList<Trail> trails = new ArrayList<Trail>();
   protected Trail currentTrail;
   
   protected static final int DISTANCE = 5;
   
-  public FadingNode(Color color, Face face, Vector pos, double radius) {
-    super(color, face, pos, radius);
-    steps_to_take = 100;
+  public FadingNode(Color color, Face face, Vector pos, double velocity, double radius) {
+    super(color, face, pos, velocity, radius);
+    time_to_live = 15*1000;
     transparency = 0.2;
     currentTrail = new Trail(pos, pos, face, color);
   }
   
   public FadingNode(FadingNode node) {
     super(node);
-    steps_to_take = node.getStepsLeft();
+    time_to_live = node.getTimeLeft();
     dead = node.isDead();
     trails = new ArrayList<Trail>(node.getTrails());
     currentTrail = new Trail(node.getCurrentTrail());
@@ -43,8 +42,8 @@ public class FadingNode extends Node{
 
   @Override
   public void move(double elapsedTime) {
-    steps_to_take--;
-    if(steps_to_take <= 0) {
+    time_to_live -= elapsedTime;
+    if(time_to_live <= 0) {
       die();
       return;
     }
@@ -90,8 +89,8 @@ public class FadingNode extends Node{
     allTrails.add(currentTrail);
     return allTrails;
   }  
-  public int getStepsLeft() {
-    return steps_to_take;
+  public int getTimeLeft() {
+    return time_to_live;
   }
   
 }

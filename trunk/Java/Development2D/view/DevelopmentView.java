@@ -182,7 +182,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
       development.building = true;
       //move forward/backward
       if(as_fb.isPressed()){
-        development.translateSourcePoint(-dt * units_per_millisecond * as_fb.doubleValue());
+        development.translateSourcePoint(-dt * as_fb.doubleValue() * 0.1);
       }
       
       //rotation

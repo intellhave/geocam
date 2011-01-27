@@ -52,6 +52,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private static int MAX_POINT_SIZE = 20;
   private static int INITIAL_POINT_SIZE = 3;
   private double radius = INITIAL_POINT_SIZE/100.0;
+  private static int INITIAL_VELOCITY = 4;
+  private static int MAX_VELOCITY = 10;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -156,6 +158,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   
   TitledBorder depthBorder = BorderFactory.createTitledBorder("Recursion Depth (" + currentDepth + ")");
   TitledBorder pointBorder = BorderFactory.createTitledBorder("Node Radius (" + radius + ")");
+  TitledBorder velocityBorder = BorderFactory.createTitledBorder("Velocity (" + INITIAL_VELOCITY + ")");
 
 
   private void layoutGUI() {
@@ -208,24 +211,22 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         }
     });
     
-    // -------- STEP SIZE SLIDER --------
-//    JSlider stepSizeSlider = new JSlider(1, MAX_STEP_SIZE, INITIAL_STEP_SIZE);
-//    stepSizeSlider.addChangeListener(new ChangeListener(){
-//        public void stateChanged(ChangeEvent e) {
-//          stepSize = ((JSlider)e.getSource()).getValue()/100.0;
-//          development.setStepSize(stepSize);
-//          stepBorder.setTitle("Step Size (" + stepSize + ")");
-//          movementPanel.requestFocusInWindow();
-//        }
-//    }); 
+    // -------- SPEED SLIDER --------
+    JSlider velocitySlider = new JSlider(1, MAX_VELOCITY, INITIAL_VELOCITY);
+    velocitySlider.addChangeListener(new ChangeListener(){
+        public void stateChanged(ChangeEvent e) {
+          double val = ((JSlider)e.getSource()).getValue()/1000.0;
+          development.setVelocity(val);
+          velocityBorder.setTitle("Velocity (" + val + ")");
+          movementPanel.requestFocusInWindow();
+        }
+    }); 
     
     // -------- POINT SIZE SLIDER --------
     JSlider pointSizeSlider = new JSlider(1, MAX_POINT_SIZE, INITIAL_POINT_SIZE);
     pointSizeSlider.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           radius = ((JSlider)e.getSource()).getValue()/100.0;
-//          view2D.setRadius(radius);
-//          view3D.setRadius(radius);
           development.setRadius(radius);
           pointBorder.setTitle("Node Radius (" + radius + ")");
           movementPanel.requestFocusInWindow();
@@ -234,8 +235,8 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     
     depthSlider.setBorder(depthBorder);
     sliderPanel.add(depthSlider);
-//    stepSizeSlider.setBorder(stepBorder);
-//    sliderPanel.add(stepSizeSlider);
+    velocitySlider.setBorder(velocityBorder);
+    sliderPanel.add(velocitySlider);
     pointSizeSlider.setBorder(pointBorder);
     sliderPanel.add(pointSizeSlider);
 

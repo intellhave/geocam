@@ -29,6 +29,8 @@ import view.NodeImage;
  *      * initial position/orientation when rendering is specified
  *        by a source point, source face, rotation
  *      * initial direction for walking
+ *      * building flag to avoid updating objects while tree is being rebuilt
+ *      * units_per_millisecond default velocity for objects
  * 
  *  See below for description of Development Node
  * 
@@ -46,6 +48,7 @@ public class Development extends Observable {
   private ArrayList<Node> nodeList = new ArrayList<Node>();
   private Node sourcePointNode;
   private double radius; // default radius of objects
+  private double units_per_millisecond = 0.004;
   
   public boolean building = false;
 
@@ -55,11 +58,11 @@ public class Development extends Observable {
     sourcePoint = sourcePt;
     sourceFace = sourceF;
     System.out.println("source point = " + sourcePoint);
-    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
+    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint, units_per_millisecond, radius);
     sourcePointNode.setRadius(radius);
     nodeList.add(sourcePointNode);
 //
-    Node n = new Node(Color.red, sourceFace, sourcePoint);
+    Node n = new Node(Color.red, sourceFace, sourcePoint, units_per_millisecond, radius);
     n.setRadius(radius);
     Vector move = new Vector(1,0);
     move.scale(0.05);
@@ -75,11 +78,11 @@ public class Development extends Observable {
     
     nodeList.clear();
 
-    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
+    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint, units_per_millisecond, radius);
     sourcePointNode.setRadius(radius);
     nodeList.add(sourcePointNode);
     
-    Node n = new Node(Color.red, sourceFace, sourcePoint);
+    Node n = new Node(Color.red, sourceFace, sourcePoint, units_per_millisecond, radius);
     n.setRadius(radius);
     n.setMovement(new Vector(0.05, 0));
     nodeList.add(n);
@@ -106,7 +109,6 @@ public class Development extends Observable {
   }
     
   public void moveObjects(double elapsedTime) {
-    // System.out.println("moving objects. building = " + building);
      ArrayList<Node> removeList = new ArrayList<Node>();
      synchronized(nodeList) {
        for(Node node : nodeList) {
@@ -143,7 +145,7 @@ public class Development extends Observable {
     rotation = new AffineTransformation(m);
     vector = rotation.affineTransVector(vector);
     
-    FadingNode node = new FadingNode(color, sourceFace, sourcePoint, radius);
+    FadingNode node = new FadingNode(color, sourceFace, sourcePoint, units_per_millisecond, radius);
     node.setMovement(vector);
     synchronized(nodeList) {
       nodeList.add(node);
@@ -157,7 +159,7 @@ public class Development extends Observable {
       break;
     }
     
-    Node node = new Node(color, sourceFace, Coord2D.coordAt(v, sourceFace));
+    Node node = new Node(color, sourceFace, Coord2D.coordAt(v, sourceFace), units_per_millisecond, radius);
  //   System.err.println("1 "+ node.getRadius());
     node.setRadius(Radius.valueAt(v));
  //   node.setRadius(2);
@@ -176,7 +178,10 @@ public class Development extends Observable {
   public DevelopmentNode getRoot() { return root; }
   public Vector getSourcePoint() { return sourcePoint; }
   public int getDepth() { return maxDepth; }
-  //public ArrayList<Node> getNodeList() { return nodeList; }
+  public void setVelocity(double v) { 
+    units_per_millisecond = v;
+    sourcePointNode.setVelocity(v);
+  }
   // ---------------------------------------------
 
   
@@ -197,11 +202,11 @@ public class Development extends Observable {
 
   /*
    * Assumes direction is normalized. Moves source point in direction of direction vector, by distance 
-   * given by scaleVal.
+   * given by scaleVal*units_per_millisecond.
    */
   public void translateSourcePoint(double scaleVal) {
     Vector movement = new Vector(direction);
-    movement.scale(scaleVal);
+    movement.scale(scaleVal*units_per_millisecond);
 
     movement.add(sourcePoint);
     computeEnd(movement, sourceFace, null);
@@ -280,7 +285,7 @@ public class Development extends Observable {
     synchronized(nodeList) {
       nodeList.remove(sourcePointNode);
       double radius = sourcePointNode.getRadius();
-      sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint);
+      sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint, units_per_millisecond, radius);
       sourcePointNode.setRadius(radius);
       nodeList.add(sourcePointNode);
     }
@@ -292,7 +297,6 @@ public class Development extends Observable {
   }
 
   private void buildTree() {
-    //building = true;
     // get transformation taking sourcePoint to origin (translation by -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint, -1));
     
@@ -327,7 +331,6 @@ public class Development extends Observable {
         buildTree(root, newFace, edge, frustum, t, 1);
       }
     }
-    //building = false;
   }
 
   private void buildTree(DevelopmentNode parent, Face face, Edge sourceEdge,
@@ -389,10 +392,10 @@ public class Development extends Observable {
  *      * Face in the triangulation
  *      * Embedded face, which is the face clipped by frustum boundary
  *      * affine transformation to place embedded face in the scene
- *      * pointers to parents and children
+ *      * pointers to children
  *      * list of object images contained in embedded face (nodes, trails)
  *      * frustum the embedded face is contained in (used to clip face)
- * 
+ *      * depth of node in current tree
  * 
  */
   
@@ -404,18 +407,16 @@ public class Development extends Observable {
     private ArrayList<DevelopmentNode> children = new ArrayList<DevelopmentNode>();
     private ArrayList<NodeImage> containedObjects = new ArrayList<NodeImage>();
     private ArrayList<Trail> containedTrails = new ArrayList<Trail>();
-    private DevelopmentNode parent;
     private Frustum2D frustum;
     private int depth;
 
     public DevelopmentNode(DevelopmentNode prev, Face f, EmbeddedFace ef, Frustum2D frust,
         AffineTransformation at, DevelopmentNode... nodes) {
       frustum = frust;
-      parent = prev;
-      if (parent == null)
+      if (prev == null)
         depth = 0;
       else
-        depth = parent.getDepth() + 1;
+        depth = prev.getDepth() + 1;
       embeddedFace = new EmbeddedFace(ef);
       face = f;
       affineTrans = at;
@@ -482,7 +483,7 @@ public class Development extends Observable {
     public ArrayList<NodeImage> getObjects() { return containedObjects; }
     public ArrayList<Trail> getTrails() { return containedTrails; }
     
-    public boolean isRoot() { return parent == null; }
+    public boolean isRoot() { return depth == 0; }
     public boolean faceIsSource() { return face.equals(sourceFace); }
   }
 }
