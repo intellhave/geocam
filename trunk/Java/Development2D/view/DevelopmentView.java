@@ -143,9 +143,11 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     if(dimension < 3 || !node.isRoot())
       nodeList.addAll(node.getObjects());
     trailList.addAll(node.getTrails());
-    
-    for(DevelopmentNode child : node.getChildren()) 
-      collectObjects(child);
+
+    synchronized(node.getChildren()) {
+      for(DevelopmentNode child : node.getChildren()) 
+        collectObjects(child);
+    }
   }
   
   //TOOL(S) FOR MOVEMENT
@@ -176,8 +178,8 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
       //get dt and update time
       long newtime = tc.getTime();
       long dt = newtime - time;
-      time = newtime;
 
+      development.building = true;
       //move forward/backward
       if(as_fb.isPressed()){
         development.translateSourcePoint(-dt * units_per_millisecond * as_fb.doubleValue());
@@ -187,7 +189,9 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
       if(as_lr.isPressed()){      
         development.rotate(-dt * radians_per_millisecond * as_lr.doubleValue());
       }
-      
+      development.building = false;
+      //development.moveObjects(dt);
+      time = tc.getTime();
     }  
   };
 
