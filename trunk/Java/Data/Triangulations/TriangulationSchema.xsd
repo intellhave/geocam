@@ -81,6 +81,7 @@
                 <xs:element ref="Tetras" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
             <xs:attribute name="index" use="required" type="xs:integer"/>
+            <xs:attribute name="multiplicity" use="optional" type="xs:integer"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="Vertices" type="xs:string"/>
