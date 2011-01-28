@@ -83,10 +83,10 @@ public class Development3DGUI extends JRViewer {
   private static Timer moveTimer_; // timer for moving objects
 
   public static void main(String[] args) {
- //   loadSurface("Data/Triangulations/3DManifolds/pentachoron.xml");
+ //   loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
  //   loadSurface("Data/Triangulations/3DManifolds/FlatTorus.xml");
  
-    loadSurface("Data/Triangulations/3DManifolds/FlatTorus2.xml");
+    loadSurface("Data/Triangulations/3DManifolds/FlatTorus3.xml");
     colorScheme_ = new ColorScheme3D(schemes.FACE);
 
     Camera camera = new Camera();
@@ -157,10 +157,12 @@ public class Development3DGUI extends JRViewer {
     Iterator<Integer> i = null;
 
     // set edge lengths
- /*   i = Triangulation.edgeTable.keySet().iterator();
+/*    i = Triangulation.edgeTable.keySet().iterator();
+     
     while (i.hasNext()) {
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
+      System.out.println(Length.valueAt(e));
       Length.at(e).setValue(3);
     }
 */
