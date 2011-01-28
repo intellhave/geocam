@@ -1,6 +1,10 @@
 package view;
 
+import geoquant.Alpha;
+import geoquant.Eta;
+import geoquant.Geometry;
 import geoquant.Length;
+import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
 import java.awt.event.ActionEvent;
@@ -80,7 +84,9 @@ public class Development3DGUI extends JRViewer {
 
   public static void main(String[] args) {
  //   loadSurface("Data/Triangulations/3DManifolds/pentachoron.xml");
-    loadSurface("Data/Triangulations/3DManifolds/FlatTorus.xml");
+ //   loadSurface("Data/Triangulations/3DManifolds/FlatTorus.xml");
+ 
+    loadSurface("Data/Triangulations/3DManifolds/FlatTorus2.xml");
     colorScheme_ = new ColorScheme3D(schemes.FACE);
 
     Camera camera = new Camera();
@@ -151,13 +157,13 @@ public class Development3DGUI extends JRViewer {
     Iterator<Integer> i = null;
 
     // set edge lengths
-    i = Triangulation.edgeTable.keySet().iterator();
+ /*   i = Triangulation.edgeTable.keySet().iterator();
     while (i.hasNext()) {
       Integer key = i.next();
       Edge e = Triangulation.edgeTable.get(key);
       Length.at(e).setValue(3);
     }
-
+*/
     // pick some arbitrary tetra and source point, and compute geometry
     i = Triangulation.tetraTable.keySet().iterator();
     Tetra sourceTetra_ = Triangulation.tetraTable.get(i.next());
