@@ -28,7 +28,6 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.Development.DevelopmentNode;
-import development.Node;
 import development.Trail;
 import development.Vector;
 
@@ -79,8 +78,12 @@ public class DevelopmentView2D extends DevelopmentView {
   }
 
   protected void updateGeometry() {
-    nodeList.clear();
-    trailList.clear();
+    synchronized(nodeList) {
+      nodeList.clear();
+    }
+    synchronized(trailList) {
+      trailList.clear();
+    }
     sgcDevelopment.setGeometry(getGeometry());
     setObjectsSGC();
   }
@@ -120,12 +123,16 @@ public class DevelopmentView2D extends DevelopmentView {
   private void computeDevelopment(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
     
-    for(NodeImage n : node.getObjects()) {
-      nodeList.add(n);
-    }
-    for(Trail t : node.getTrails()) {
-      trailList.add(t);
-    }
+      for(NodeImage n : node.getObjects()) {
+        synchronized(nodeList) {
+          nodeList.add(n);
+        }
+      }
+      for(Trail t : node.getTrails()) {
+        synchronized(trailList) {
+          trailList.add(t);
+        }
+      }
 
     double[][] face = node.getEmbeddedFace().getVectorsAsArray();
     geometry.addFace(face);

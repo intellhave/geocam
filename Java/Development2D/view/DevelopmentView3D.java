@@ -111,7 +111,9 @@ public class DevelopmentView3D extends DevelopmentView {
   }
 
   protected void updateGeometry() {
-    nodeList.clear();
+    synchronized(nodeList) {
+      nodeList.clear();
+    }
     sgcDevelopment.setGeometry(getGeometry());
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
         .assignTo(sgcObjects);
@@ -157,7 +159,9 @@ public class DevelopmentView3D extends DevelopmentView {
     
     for(NodeImage n : devNode.getObjects()) {
       if(!n.getPosition().isZero())
-        nodeList.add(n);
+        synchronized(nodeList) {
+          nodeList.add(n);
+        }
     }
 
     double[][] face = devNode.getEmbeddedFace().getVectorsAsArray();

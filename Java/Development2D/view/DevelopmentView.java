@@ -1,7 +1,5 @@
 package view;
-/*
- * Basis class for 2D and simulated 3D views of development
- */
+
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -50,7 +48,6 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected ArrayList<Trail> trailList = new ArrayList<Trail>();
   protected int dimension;
   
-  private static final double movement_units_per_second_ = 0.3;
   private static final double movement_seconds_per_rotation_ = 4.0;
   
   public DevelopmentView(Development development, ColorScheme colorScheme, double radius) {
@@ -81,11 +78,15 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   protected void setObjectsSGC() {
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = new SceneGraphComponent();
-    for(NodeImage n : nodeList) {
-      sgcObjects.addChild(SGCMethods.sgcFromNode(n, dimension));
+    synchronized(nodeList) {
+      for(NodeImage n : nodeList) {
+        sgcObjects.addChild(SGCMethods.sgcFromNode(n, dimension));
+      }
     }
-    for(Trail t : trailList) {
-      sgcObjects.addChild(SGCMethods.sgcFromTrail(t));
+    synchronized(trailList) {
+      for(Trail t : trailList) {
+        sgcObjects.addChild(SGCMethods.sgcFromTrail(t));
+      }
     }
     sgcDevelopment.addChild(sgcObjects);
   }
@@ -125,8 +126,12 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     String whatChanged = (String) arg;
     
     if(whatChanged.equals("objects")) {
-      nodeList.clear();
-      trailList.clear();
+      synchronized(nodeList) {
+        nodeList.clear();
+      }
+      synchronized(trailList) {
+        trailList.clear();
+      }
       collectObjects(development.getRoot());
       setObjectsSGC();
 
@@ -140,9 +145,16 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   }
   
   private void collectObjects(DevelopmentNode node) {
-    if(dimension < 3 || !node.isRoot())
-      nodeList.addAll(node.getObjects());
-    trailList.addAll(node.getTrails());
+    if(dimension < 3 || !node.isRoot()) {
+      synchronized(nodeList) {
+        nodeList.addAll(node.getObjects());
+      }
+    }
+    if(dimension < 3) {
+      synchronized(trailList) {
+        trailList.addAll(node.getTrails());
+      }
+    }
 
     synchronized(node.getChildren()) {
       for(DevelopmentNode child : node.getChildren()) 
@@ -155,7 +167,6 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   class ManifoldMovementTool extends AbstractTool {
     
     private long time; 
-    private final double units_per_millisecond = movement_units_per_second_/1000;
     private final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
     
     public ManifoldMovementTool() {
