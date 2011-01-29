@@ -21,10 +21,11 @@ import development.Vector;
  * useful methods of generating SceneGraphComponents
  */
 public class SGCMethods {
-  public static SceneGraphComponent sgcFromPoint(Vector point) {
-    return sgcFromPoint(point, 0.03, Color.blue, 0.0);
-  }
-
+  /*
+   * Returns SGC of sphere at coords of node, with radius, color, and 
+   * transparency of node. For simulated 3D view, object must have
+   * z-coord of 0 to appear in the right position.
+   */
   public static SceneGraphComponent sgcFromNode(NodeImage node, int dimension) {
     Vector v = node.getPosition();
     if(dimension > 2) 
@@ -33,11 +34,18 @@ public class SGCMethods {
         node.getTransparency());
   }
   
+  /*
+   * Returns SGC representing a node in Development3D
+   */
   public static SceneGraphComponent sgcFromNode3D(Node3D node) {
     return sgcFromPoint(node.getPosition(), node.getRadius(), node.getColor(),
         node.getTransparency());
   }
 
+  /*
+   * Returns SGC with sphere at position of point, with specified
+   * radius, color, and transparency in (0,1)
+   */
   public static SceneGraphComponent sgcFromPoint(Vector point, double radius,
       Color color, double transparency) {
     SceneGraphComponent sgc_points = new SceneGraphComponent();
@@ -79,10 +87,10 @@ public class SGCMethods {
     return sgc_points;
   }
 
-  public static SceneGraphComponent sgcFromVector(Vector v) {
-    return sgcFromVector(v, 0.005);
-  }
-
+  /*
+   * Returns SGC with line from origin to v, with specified radius.
+   * Color is blue.
+   */
   public static SceneGraphComponent sgcFromVector(Vector v, double radius) {
     SceneGraphComponent sgc = new SceneGraphComponent();
     Appearance app_points = new Appearance();
@@ -109,7 +117,6 @@ public class SGCMethods {
   }
 
   public static Appearance getFaceAppearance(double transparency) {
-
     // create appearance for developed faces
     Appearance app_face = new Appearance();
 

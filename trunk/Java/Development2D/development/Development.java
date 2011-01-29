@@ -310,8 +310,8 @@ public class Development extends Observable {
     t.leftMultiply(rotation);
 
 
-    EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
-    root = new DevelopmentNode(null, sourceFace, transformedFace, null, t);
+    //EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
+    root = new DevelopmentNode(null, sourceFace, null, t);
     
     // continue development across each adjacent edge
     List<Vertex> vertices = sourceFace.getLocalVertices();
@@ -343,12 +343,12 @@ public class Development extends Observable {
     newTrans.leftMultiply(coordTrans);
     newTrans.leftMultiply(t);
 
-    EmbeddedFace clippedFace = frustum.clipFace(newTrans.affineTransFace(face));
-    if (clippedFace == null) {
-      return;
-    }
+//    EmbeddedFace clippedFace = frustum.clipFace(newTrans.affineTransFace(face));
+//    if (clippedFace == null) {
+//      return;
+//    }
 
-    DevelopmentNode node = new DevelopmentNode(parent, face, clippedFace, frustum,
+    DevelopmentNode node = new DevelopmentNode(parent, face, frustum,
         newTrans);
     parent.addChild(node);
 
@@ -401,7 +401,7 @@ public class Development extends Observable {
   
   
   public class DevelopmentNode {
-    private EmbeddedFace embeddedFace;
+    private EmbeddedFace embeddedFace = null;
     private Face face;
     private AffineTransformation affineTrans;
     private ArrayList<DevelopmentNode> children = new ArrayList<DevelopmentNode>();
@@ -410,14 +410,13 @@ public class Development extends Observable {
     private Frustum2D frustum;
     private int depth;
 
-    public DevelopmentNode(DevelopmentNode prev, Face f, EmbeddedFace ef, Frustum2D frust,
+    public DevelopmentNode(DevelopmentNode prev, Face f, Frustum2D frust,
         AffineTransformation at, DevelopmentNode... nodes) {
       frustum = frust;
       if (prev == null)
         depth = 0;
       else
         depth = prev.getDepth() + 1;
-      embeddedFace = new EmbeddedFace(ef);
       face = f;
       affineTrans = at;
       for (int i = 0; i < nodes.length; i++) {
@@ -475,7 +474,14 @@ public class Development extends Observable {
 
     public void addChild(DevelopmentNode node) { children.add(node); }
     public void removeChild(DevelopmentNode node) { children.remove(node); }
-    public EmbeddedFace getEmbeddedFace() { return embeddedFace; }
+    
+    public EmbeddedFace getEmbeddedFace() { 
+      if(embeddedFace == null) {
+        if(frustum == null) embeddedFace = affineTrans.affineTransFace(face);
+        else embeddedFace = frustum.clipFace(affineTrans.affineTransFace(face));
+      }
+      return embeddedFace; 
+    }
     public Face getFace() { return face; }
     public int getDepth() { return depth; }
     public AffineTransformation getAffineTransformation() { return affineTrans; }
