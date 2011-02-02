@@ -62,7 +62,7 @@ public class ConformalDiskflowTest {
         break;
       }
  //   System.out.println("hi1");
-    Development development = new Development(sourceFace, sourcePoint, currentDepth, stepSize,.1);
+    Development development = new Development(sourceFace, sourcePoint, currentDepth, stepSize);
  //   Development development = null;
  //   System.err.println(development.getNodeList());
  //   System.out.println("hi2");
