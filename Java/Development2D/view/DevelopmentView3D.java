@@ -20,6 +20,7 @@ import de.jreality.plugin.basic.Scene;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.Camera;
 import de.jreality.scene.DirectionalLight;
+import de.jreality.scene.PointLight;
 import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
@@ -83,13 +84,22 @@ public class DevelopmentView3D extends DevelopmentView {
 
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
+    SceneGraphComponent sgcpLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
+    PointLight plight = new PointLight();
     light.setIntensity(1.0);
     light.setColor(Color.white);
+    plight.setIntensity(1.0);
+    plight.setColor(Color.white);
     sgcLight.setLight(light);
+    sgcpLight.setLight(plight);
     MatrixBuilder.euclidean().rotate(2.65, new double[] { 0, 1, 0 })
         .assignTo(sgcLight);
+    MatrixBuilder.euclidean().rotate(2.65, new double[] { 0, 1, 0 })
+    .assignTo(sgcpLight);
+
     sgcRoot.addChild(sgcLight);
+//    sgcRoot.addChild(sgcpLight);
 
     // by default, everything is upside down
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })

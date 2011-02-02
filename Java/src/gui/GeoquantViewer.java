@@ -30,6 +30,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ComboBoxModel;
+import javax.swing.DebugGraphics;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -67,6 +68,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.SwingUtilities;
 
 import triangulation.Edge;
@@ -271,6 +273,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       importAction = new AbstractAction("Import Triangulation", null) {
         public void actionPerformed(ActionEvent e) {
           //Handle open button action.
+          getTriangulationFileChooser().setFileFilter(TXTFilter.getFilter());
           getTriangulationFileChooser().setFileFilter(XMLFilter.getFilter());
           int returnVal = getTriangulationFileChooser().showOpenDialog(GeoquantViewer.this);
           
@@ -278,7 +281,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
             File file = getTriangulationFileChooser().getSelectedFile();
             TriangulationIO.readTriangulation(file.getAbsolutePath());
             newTriangulation();
-            getSaveMenu().setEnabled(true);
+//            getSaveMenu().setEnabled(true);
+          
           }
         }
       };
@@ -361,18 +365,86 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
     EdgeListModel = 
       new DefaultComboBoxModel(Triangulation.edgeTable.values().toArray());
     EdgeList.setModel(EdgeListModel);
+    if(Triangulation.getDimension() == 2){
+      // Menu Items
+      lehrFlowMenuItem.setEnabled(false);
+      vehrFlowMenuItem.setEnabled(false);
+      yamabe2DMenuItem.setEnabled(true);
+      yamabe3DMenuItem.setEnabled(false);
+      
+      //BasicSelectPanel
+      getVcscCheck().setEnabled(false);
+      getVEinsteinCheck().setEnabled(false);
+      getLEinsteinCheck().setEnabled(false);
+      getLcscCheck().setEnabled(false);
+      getTotalCurvatureCheck().setEnabled(false);
+      getLehrCheck().setEnabled(false);
+      getVehrCheck().setEnabled(false);
+      getDihAngleCheck().setEnabled(false);
+      getFaceHeightCheck().setEnabled(true);
+      getDualAreaCheck().setEnabled(false);
+      getAreaCheck().setEnabled(true);
+      getVolumeCheck().setEnabled(false);
+      getTotalVolumeCheck().setEnabled(false);
+      getAngleCheck().setEnabled(false);
+      getConeAngleCheck().setEnabled(false);
+      getEdgeHeightCheck().setEnabled(false);
+      getCurv3DCheck().setEnabled(false);     
+      getPartialEdgeCheck().setEnabled(false);
+      getEdgeCurvatureCheck().setEnabled(false);
+      getCurv2DCheck().setEnabled(true);
+      
+      //Panels
+      partialSelectPanel.setEnabled(false);
+      secondPartialSelectPanel.setEnabled(false);
+      
+    }
+    else if (Triangulation.getDimension() == 3){
+      //Menu Items
+      lehrFlowMenuItem.setEnabled(true);
+      vehrFlowMenuItem.setEnabled(true);
+      yamabe2DMenuItem.setEnabled(false);
+      yamabe3DMenuItem.setEnabled(true);
+      
+      //BasicSelectItems
+      getVcscCheck().setEnabled(true);
+      getVEinsteinCheck().setEnabled(true);
+      getLEinsteinCheck().setEnabled(true);
+      getLcscCheck().setEnabled(true);
+      getTotalCurvatureCheck().setEnabled(true);
+      getLehrCheck().setEnabled(true);
+      getVehrCheck().setEnabled(true);
+      getDihAngleCheck().setEnabled(true);
+      getFaceHeightCheck().setEnabled(true);
+      getDualAreaCheck().setEnabled(true);
+      getAreaCheck().setEnabled(true);
+      getVolumeCheck().setEnabled(true);
+      getTotalVolumeCheck().setEnabled(true);
+      getAngleCheck().setEnabled(true);
+      getConeAngleCheck().setEnabled(true);
+      getEdgeHeightCheck().setEnabled(true);
+      getCurv3DCheck().setEnabled(true);     
+      getPartialEdgeCheck().setEnabled(true);
+      getEdgeCurvatureCheck().setEnabled(true);
+      getCurv2DCheck().setEnabled(false);
+      
+    //Panels
+      partialSelectPanel.setEnabled(true);
+      secondPartialSelectPanel.setEnabled(true);
+      
+    }
+    getRadiusCheck().setEnabled(true);
+    getEtaCheck().setEnabled(true);
+    getLengthCheck().setEnabled(true);
+    getPartialEdgeCheck().setEnabled(true);
     
-    getLehrFlowMenuItem().setEnabled(true);
-    getVehrFlowMenuItem().setEnabled(true);
-    getYamabe2DMenuItem().setEnabled(true);
-    getYamabe3DMenuItem().setEnabled(true);
     getSaveGeoquantsMenuItem().setEnabled(true);
     getSaveMenu().setEnabled(true);
     getVertexPanel().updateList();
     getEdgePanel().updateList();
     
     for(Alpha a : Geometry.getAlphas()) {
-      a.setValue(0.0);
+      a.setValue(1.0);
     }
     
     for(Class<? extends Geoquant> c : getSelectedList()) {
@@ -942,6 +1014,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       partialSelectPanel.setLayout(null);
       partialSelectPanel.setPreferredSize(new java.awt.Dimension(485, 158));
       partialSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
+      partialSelectPanel.setEnabled(false);
       partialSelectPanel.add(getTotalVolumePartialCheck());
       partialSelectPanel.add(getPartialEdgePartialCheck());
       partialSelectPanel.add(getVehrPartialCheck());
@@ -959,6 +1032,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       GroupLayout seconPartialSelectPanelLayout = new GroupLayout((JComponent)secondPartialSelectPanel);
       secondPartialSelectPanel.setLayout(seconPartialSelectPanelLayout);
       secondPartialSelectPanel.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
+      secondPartialSelectPanel.setEnabled(false);
       seconPartialSelectPanelLayout.setHorizontalGroup(seconPartialSelectPanelLayout.createSequentialGroup()
       	.addContainerGap()
       	.addGroup(seconPartialSelectPanelLayout.createParallelGroup()
@@ -1010,6 +1084,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       angleCheck = new JCheckBox();
       angleCheck.setText("Face Angle");
       angleCheck.setBounds(161, 48, 148, 16);
+      angleCheck.setEnabled(false);
       getGeoCheckTable().put(angleCheck, Angle.class);
       angleCheck.addItemListener(this);
     }
@@ -1021,6 +1096,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       areaCheck = new JCheckBox();
       areaCheck.setText("Face Area");
       areaCheck.setBounds(161, 88, 148, 16);
+      areaCheck.setEnabled(false);
       getGeoCheckTable().put(areaCheck, Area.class);
       areaCheck.addItemListener(this);
     }
@@ -1032,6 +1108,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       curv2DCheck = new JCheckBox();
       curv2DCheck.setText("Vertex Curvature (2D)");
       curv2DCheck.setBounds(8, 27, 148, 16);
+      curv2DCheck.setEnabled(false);
       getGeoCheckTable().put(curv2DCheck, Curvature2D.class);
       curv2DCheck.addItemListener(this);
     }
@@ -1043,6 +1120,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       curv3DCheck = new JCheckBox();
       curv3DCheck.setText("Vertex Curvature (3D)");
       curv3DCheck.setBounds(8, 47, 148, 16);
+      curv3DCheck.setEnabled(false);
       getGeoCheckTable().put(curv3DCheck, Curvature3D.class);
       curv3DCheck.addItemListener(this);
     }
@@ -1054,6 +1132,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       dihAngleCheck = new JCheckBox();
       dihAngleCheck.setText("Dihedral Angle");
       dihAngleCheck.setBounds(161, 8, 148, 16);
+      dihAngleCheck.setEnabled(false);
       getGeoCheckTable().put(dihAngleCheck, DihedralAngle.class);
       dihAngleCheck.addItemListener(this);
     }
@@ -1065,6 +1144,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       dualAreaCheck = new JCheckBox();
       dualAreaCheck.setText("Dual Area");
       dualAreaCheck.setBounds(161, 28, 148, 16);
+      dualAreaCheck.setEnabled(false);
       getGeoCheckTable().put(dualAreaCheck, DualArea.class);
       dualAreaCheck.addItemListener(this);
     }
@@ -1076,6 +1156,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       edgeHeightCheck = new JCheckBox();
       edgeHeightCheck.setText("Edge Height");
       edgeHeightCheck.setBounds(8, 146, 148, 16);
+      edgeHeightCheck.setEnabled(false);
       getGeoCheckTable().put(edgeHeightCheck, EdgeHeight.class);
       edgeHeightCheck.addItemListener(this);
     }
@@ -1087,6 +1168,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       etaCheck = new JCheckBox();
       etaCheck.setText("Eta");
       etaCheck.setBounds(8, 67, 148, 16);
+      etaCheck.setEnabled(false);
       getGeoCheckTable().put(etaCheck, Eta.class);
       etaCheck.addItemListener(this);
     }
@@ -1098,6 +1180,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       faceHeightCheck = new JCheckBox();
       faceHeightCheck.setText("Face Height");
       faceHeightCheck.setBounds(161, 68, 146, 16);
+      faceHeightCheck.setEnabled(false);
       getGeoCheckTable().put(faceHeightCheck, FaceHeight.class);
       faceHeightCheck.addItemListener(this);
     }
@@ -1109,6 +1192,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       lengthCheck = new JCheckBox();
       lengthCheck.setText("Edge Length");
       lengthCheck.setBounds(8, 86, 148, 16);
+      lengthCheck.setEnabled(false);
       getGeoCheckTable().put(lengthCheck, Length.class);
       lengthCheck.addItemListener(this);
     }
@@ -1120,6 +1204,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       vehrCheck = new JCheckBox();
       vehrCheck.setText("VEHR");
       vehrCheck.setBounds(324, 129, 148, 16);
+      vehrCheck.setEnabled(false);
       getGeoCheckTable().put(vehrCheck, VEHR.class);
       vehrCheck.addItemListener(this);
     }
@@ -1131,6 +1216,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       partialEdgeCheck = new JCheckBox();
       partialEdgeCheck.setText("Pre-Metric Length");
       partialEdgeCheck.setBounds(8, 126, 148, 16);
+      partialEdgeCheck.setEnabled(false);
       getGeoCheckTable().put(partialEdgeCheck, PartialEdge.class);
       partialEdgeCheck.addItemListener(this);
     }
@@ -1142,6 +1228,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       radiusCheck = new JCheckBox();
       radiusCheck.setText("Radius");
       radiusCheck.setBounds(8, 8, 148, 16);
+      radiusCheck.setEnabled(false);
       getGeoCheckTable().put(radiusCheck, Radius.class);
       radiusCheck.addItemListener(this);
     }
@@ -1153,6 +1240,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
       volumeCheck = new JCheckBox();
       volumeCheck.setText("Tetra Volume");
       volumeCheck.setBounds(161, 108, 148, 16);
+      volumeCheck.setEnabled(false);
       getGeoCheckTable().put(volumeCheck, Volume.class);
       volumeCheck.addItemListener(this);
     }
@@ -1450,6 +1538,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  edgeCurvatureCheck = new JCheckBox();
 		  edgeCurvatureCheck.setText("Edge Curvature");
 		  edgeCurvatureCheck.setBounds(8, 106, 148, 16);
+		  edgeCurvatureCheck.setEnabled(false);
       getGeoCheckTable().put(edgeCurvatureCheck, EdgeCurvature.class);
       edgeCurvatureCheck.addItemListener(this);
 	  }
@@ -1460,6 +1549,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  lehrCheck = new JCheckBox();
 		  lehrCheck.setText("LEHR");
 		  lehrCheck.setBounds(324, 108, 148, 16);
+		  lehrCheck.setEnabled(false);
 		  getGeoCheckTable().put(lehrCheck, LEHR.class);
 		  lehrCheck.addItemListener(this);
 	  }
@@ -1470,6 +1560,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  lcscCheck = new JCheckBox();
 		  lcscCheck.setText("LCSC");
 		  lcscCheck.setBounds(324, 48, 148, 16);
+		  lcscCheck.setEnabled(false);
 		  getGeoCheckTable().put(lcscCheck, LCSC.class);
 		  lcscCheck.addItemListener(this);
 	  }
@@ -1480,6 +1571,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  vcscCheck = new JCheckBox();
 		  vcscCheck.setText("VCSC");
 		  vcscCheck.setBounds(324, 68, 148, 16);
+		  vcscCheck.setEnabled(false);
 		  getGeoCheckTable().put(vcscCheck, VCSC.class);
 		  vcscCheck.addItemListener(this);
 	  }
@@ -1490,6 +1582,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  lEinsteinCheck = new JCheckBox();
 		  lEinsteinCheck.setText("LEinstein");
 		  lEinsteinCheck.setBounds(324, 8, 148, 16);
+		  lEinsteinCheck.setDebugGraphicsOptions(DebugGraphics.NONE_OPTION);
+		  lEinsteinCheck.setEnabled(false);
 		  getGeoCheckTable().put(lEinsteinCheck, LEinstein.class);
 		  lEinsteinCheck.addItemListener(this);
 	  }
@@ -1500,6 +1594,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  vEinsteinCheck = new JCheckBox();
 		  vEinsteinCheck.setText("VEinstein");
 		  vEinsteinCheck.setBounds(324, 28, 148, 16);
+		  vEinsteinCheck.setEnabled(false);
 		  getGeoCheckTable().put(vEinsteinCheck, VEinstein.class);
 		  vEinsteinCheck.addItemListener(this);
 	  }
@@ -1551,6 +1646,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  totalCurvatureCheck = new JCheckBox();
 		  totalCurvatureCheck.setText("EHR");
 		  totalCurvatureCheck.setBounds(324, 88, 148, 16);
+		  totalCurvatureCheck.setEnabled(false);
 		  getGeoCheckTable().put(totalCurvatureCheck, Curvature3D.Sum.class);
 		  totalCurvatureCheck.addItemListener(this);
 	  }
@@ -1561,6 +1657,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  totalVolumeCheck = new JCheckBox();
 		  totalVolumeCheck.setText("Total Volume");
 		  totalVolumeCheck.setBounds(161, 128, 148, 16);
+		  totalVolumeCheck.setEnabled(false);
 		  getGeoCheckTable().put(totalVolumeCheck, Volume.Sum.class);
 		  totalVolumeCheck.addItemListener(this);
 	  }
@@ -1571,6 +1668,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		  coneAngleCheck = new JCheckBox();
 		  coneAngleCheck.setText("Dihedral Angle Sum");
 		  coneAngleCheck.setBounds(161, 148, 148, 16);
+		  coneAngleCheck.setEnabled(false);
 		  getGeoCheckTable().put(coneAngleCheck, ConeAngle.class);
 		  coneAngleCheck.addItemListener(this);
 	  }

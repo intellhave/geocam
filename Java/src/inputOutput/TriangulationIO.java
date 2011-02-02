@@ -40,30 +40,38 @@ public class TriangulationIO {
   
 
   public static void readTriangulation(String fileName) {
-    Document triangulationDoc = XMLParser.parseDocument(fileName);
-    if(triangulationDoc == null) {
-      return;
+    if(fileName.endsWith(".txt"))
+    //Lutz
+    {
+      readLutzFile(fileName);
     }
-    
-    try {
-      if(triangulationSchema == null) {
-        String schemaDir = System.getProperty("user.dir");
-        schemaDir = schemaDir.replaceAll("\\\\", "/") + schemaLoc;
-        SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-        triangulationSchema = sf.newSchema(new File(schemaDir));
+    // XML
+    else { 
+      Document triangulationDoc = XMLParser.parseDocument(fileName);
+      if(triangulationDoc == null) {
+        return;
       }
-      triangulationSchema.newValidator().validate(new DOMSource(triangulationDoc));
-    } catch (SAXException e) {
-      System.err.println("Document did not validate against TriangulationSchema.");
-      return;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return;
-    }
+    
+      try {
+        if(triangulationSchema == null) {
+          String schemaDir = System.getProperty("user.dir");
+          schemaDir = schemaDir.replaceAll("\\\\", "/") + schemaLoc;
+          SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+          triangulationSchema = sf.newSchema(new File(schemaDir));
+        }
+        triangulationSchema.newValidator().validate(new DOMSource(triangulationDoc));
+      } catch (SAXException e) {
+        System.err.println("Document did not validate against TriangulationSchema.");
+        return;
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
+      }
 
     readTriangulation(triangulationDoc);
+    }
   }
-  
+
   public static void readTriangulation(Document triangulationDoc) {
     Triangulation.reset();
     HashMap<TriPosition, Edge> edgeList = new HashMap<TriPosition, Edge>();
@@ -921,13 +929,29 @@ public class TriangulationIO {
     }
   }
   
-
-  public static void read2DLutzFile(String filename) {
+  private static void readLutzFile(String filename){
+    File file = new File(filename);
+    Scanner scanner = null;
+    try {
+      scanner = new Scanner(file);
+    } catch (FileNotFoundException ex) {
+      ex.printStackTrace();
+    }
+    if(scanner.findInLine("\\[\\w*,\\w*,\\w*\\]") != null){
+     read2DLutzFile(filename);
+    }
+    else if (scanner.findInLine("\\[\\w*,\\w*,\\w*,\\w*\\]") != null){
+      read3DLutzFile(filename); 
+    }   
+   }
+  
+  
+  private static void read2DLutzFile(String filename) {
     read2DLutzFile(new File(filename));
   }
   
 
-  public static void read2DLutzFile(File file) {
+  private static void read2DLutzFile(File file) {
     Triangulation.reset();
     String faces;
     Scanner scanner = null;
@@ -1018,13 +1042,13 @@ public class TriangulationIO {
     }
   }
   
-  @Deprecated
-  public static void read3DLutzFile(String filename) {
+ 
+  private static void read3DLutzFile(String filename) {
     read3DLutzFile(new File(filename));
   }
   
-  @Deprecated
-  public static void read3DLutzFile(File file) {
+ 
+  private static void read3DLutzFile(File file) {
     Triangulation.reset();
     String tetras;
     Scanner scanner = null;
