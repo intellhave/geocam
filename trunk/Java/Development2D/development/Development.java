@@ -67,7 +67,7 @@ public class Development extends Observable {
     Node n = new Node(Color.red, sourceFace, sourcePoint, units_per_millisecond, radius);
     n.setRadius(radius);
     Vector move = new Vector(1,0);
-    move.scale(0.05);
+    //move.scale(0.05);
     n.setMovement(move);
     synchronized(nodeList) {
       nodeList.add(n);
@@ -92,7 +92,7 @@ public class Development extends Observable {
     
     Node n = new Node(Color.red, sourceFace, sourcePoint, units_per_millisecond, radius);
     n.setRadius(radius);
-    n.setMovement(new Vector(0.05, 0));
+    n.setMovement(new Vector(1, 0));
     synchronized(nodeList) {
       nodeList.add(n);
     }
@@ -286,7 +286,7 @@ public class Development extends Observable {
       computeEnd(newPoint, nextFace, edge);
       
     } else {
-      System.err.println("did not find edge\n");
+      System.err.println("computeEnd: did not find edge\n");
     }
   }
 
@@ -423,7 +423,7 @@ public class Development extends Observable {
     private int depth;
 
     public DevelopmentNode(DevelopmentNode prev, Face f, Frustum2D frust,
-        AffineTransformation at, DevelopmentNode... nodes) {
+        AffineTransformation at) {
       frustum = frust;
       if (prev == null)
         depth = 0;
@@ -431,9 +431,6 @@ public class Development extends Observable {
         depth = prev.getDepth() + 1;
       face = f;
       affineTrans = at;
-      for (int i = 0; i < nodes.length; i++) {
-        children.add(nodes[i]);
-      }
       
       updateObjects();
     }

@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 import triangulation.Face;
 
-/*
+/**
  * Fading Node
  * 
- * Author: K. Kiviat
+ * @author K. Kiviat
  * 
  * An extension of node that leaves a trail behind 
- * and disappears after some number of steps.
+ * and disappears after some length of time.
  * 
  * Possible upgrades:
  *    * change time_to_live to allow for specifying distance visible, etc.
@@ -47,6 +47,21 @@ public class FadingNode extends Node{
       die();
       return;
     }
+    
+    if(time_to_live < 7000 && time_to_live > 6000) 
+      transparency = 0.3;
+    if(time_to_live < 6000 && time_to_live > 5000)
+      transparency = 0.4;
+    else if(time_to_live < 5000 && time_to_live > 4000)
+      transparency = 0.5;
+    else if(time_to_live < 4000 && time_to_live > 3000)
+      transparency = 0.6;
+    else if(time_to_live < 3000 && time_to_live > 2000)
+      transparency = 0.7;
+    else if(time_to_live < 2000 && time_to_live > 1000)
+      transparency = 0.8;
+    else if(time_to_live < 1000)
+      transparency = 0.9;
     
     Vector oldPos = new Vector(pos);
     Vector oldMove = new Vector(movement);
