@@ -4,10 +4,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Iterator;
 
@@ -38,22 +34,22 @@ import development.Development;
 import development.EmbeddedTriangulation;
 import development.Vector;
 
-public class DevelopmentGUI extends JFrame implements KeyListener {
+public class DevelopmentGUI extends JFrame {
   private static final long serialVersionUID = 1L;
 
   public static void main(String[] args) {
     JFrame window = new DevelopmentGUI();
     window.setVisible(true);
   }
-
-  private int currentDepth = 21;
  
-  private static int MAX_DEPTH = 25;
-  private static int MAX_POINT_SIZE = 20;
-  private static int INITIAL_POINT_SIZE = 3;
+  private static int MAX_DEPTH          = 25;
+  private static int INITIAL_POINT_SIZE = 4;
+  private static int MAX_POINT_SIZE     = 20;
+  private static int INITIAL_VELOCITY   = 6;
+  private static int MAX_VELOCITY       = 10;
+  
   private double radius = INITIAL_POINT_SIZE/100.0;
-  private static int INITIAL_VELOCITY = 4;
-  private static int MAX_VELOCITY = 10;
+  private int currentDepth = 21;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -62,31 +58,11 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   private static DevelopmentView2D view2D;
   private static DevelopmentView3D view3D;
   private static DevelopmentViewEmbedded embeddedView;
-
-  private JPanel sliderPanel;
-  private JPanel movementPanel;
-  private JPanel colorPanel;
-  
-  private Moving movingListener;
-  
+    
   private String filename; // name of file with surface data
   private boolean showEmbedded = false; // flag for showing embedded view
 
-  // Movement stuff
-  private Timer timer; // timer for moving source
   private Timer moveTimer; // timer for moving objects
-  private Timer keyHoldTimer;
-  
-  private static final double movement_units_per_second_ = 0.3;
-  private static final double movement_seconds_per_rotation_ = 8.0;
-  private final double units_per_millisecond = movement_units_per_second_/1000;
-  private final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
-
-  private enum movements {
-    left, right, forward, back
-  };
-
-  private movements curMovement;
 
   public DevelopmentGUI() {
     colorScheme = new ColorScheme(schemes.FACE);
@@ -104,17 +80,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     view3D = new DevelopmentView3D(development, colorScheme, radius);
     System.out.println("---------------- done ----------------");
     development.addObserver(view3D);
-    
-
-    keyHoldTimer = new Timer(2, null);
-    keyHoldTimer.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        timer.stop();
-      }
-    });
-    timer = new Timer(50, null);
-    movingListener = new Moving();
-    timer.addActionListener(movingListener);
 
     layoutGUI();
     
@@ -158,7 +123,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
   
   TitledBorder depthBorder = BorderFactory.createTitledBorder("Recursion Depth (" + currentDepth + ")");
   TitledBorder pointBorder = BorderFactory.createTitledBorder("Node Radius (" + radius + ")");
-  TitledBorder velocityBorder = BorderFactory.createTitledBorder("Velocity (" + INITIAL_VELOCITY + ")");
+  TitledBorder velocityBorder = BorderFactory.createTitledBorder("Velocity (" + INITIAL_VELOCITY/1000.0 + ")");
 
 
   private void layoutGUI() {
@@ -196,7 +161,7 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     file.add(open);
     this.setJMenuBar(menuBar);
 
-    sliderPanel = new JPanel();
+    JPanel sliderPanel = new JPanel();
     sliderPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6));
     sliderPanel.setLayout(new BoxLayout(sliderPanel,BoxLayout.Y_AXIS));
     
@@ -207,7 +172,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
           currentDepth = ((JSlider)e.getSource()).getValue();
           development.setDepth(currentDepth);
           depthBorder.setTitle("Recursion Depth (" + currentDepth + ")");
-          movementPanel.requestFocusInWindow();
         }
     });
     
@@ -218,7 +182,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
           double val = ((JSlider)e.getSource()).getValue()/1000.0;
           development.setVelocity(val);
           velocityBorder.setTitle("Velocity (" + val + ")");
-          movementPanel.requestFocusInWindow();
         }
     }); 
     
@@ -229,19 +192,19 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
           radius = ((JSlider)e.getSource()).getValue()/100.0;
           development.setRadius(radius);
           pointBorder.setTitle("Node Radius (" + radius + ")");
-          movementPanel.requestFocusInWindow();
         }
     }); 
     
     depthSlider.setBorder(depthBorder);
-    sliderPanel.add(depthSlider);
     velocitySlider.setBorder(velocityBorder);
-    sliderPanel.add(velocitySlider);
     pointSizeSlider.setBorder(pointBorder);
+    
+    sliderPanel.add(depthSlider);
+    sliderPanel.add(velocitySlider);
     sliderPanel.add(pointSizeSlider);
 
     // -------- COLOR SCHEME BUTTONS --------
-    colorPanel = new JPanel();
+    JPanel colorPanel = new JPanel();
     JButton depthSchemeButton = new JButton("Depth");
     depthSchemeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -249,7 +212,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
           colorScheme = new ColorScheme(schemes.DEPTH);
           view2D.setColorScheme(colorScheme);
           view3D.setColorScheme(colorScheme);
-          movementPanel.requestFocusInWindow();
         }
       }
     });
@@ -260,7 +222,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
           colorScheme = new ColorScheme(schemes.FACE);
           view2D.setColorScheme(colorScheme);
           view3D.setColorScheme(colorScheme);
-          movementPanel.requestFocusInWindow();
         }
       }
     });
@@ -282,7 +243,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
           source.setText("Stop");
           moveTimer.start();
         }
-        movementPanel.requestFocusInWindow();
       }
     });
     colorPanel.add(stopStartButton);
@@ -298,7 +258,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       public void actionPerformed(ActionEvent e) {
         showEmbedded = ((JCheckBox)e.getSource()).isSelected();
         setEmbeddedVisible(showEmbedded);
-        movementPanel.requestFocusInWindow();
       }
     });
     
@@ -309,7 +268,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         boolean value = ((JCheckBox)e.getSource()).isSelected();
         view2D.setDrawEdges(value);
         view3D.setDrawEdges(value);
-        movementPanel.requestFocusInWindow();
       }
     });
     
@@ -320,9 +278,9 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
         boolean value = ((JCheckBox)e.getSource()).isSelected();
         view2D.setDrawFaces(value);
         view3D.setDrawFaces(value);
-        movementPanel.requestFocusInWindow();
       }
     });
+    
     checkPanel.setLayout(new BoxLayout(checkPanel, BoxLayout.Y_AXIS));
     checkPanel.add(showEmbeddedBox);
     checkPanel.add(drawEdgesBox);
@@ -333,24 +291,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
     this.add(sliderPanel);
     this.add(colorPanel);
     this.add(checkPanel);
-
-    
-
-    // Arrow keys will move source point as long as focus is on this panel.
-    // Other panels should return focus to this one after performing actions.
-    movementPanel = new JPanel();
-    this.add(movementPanel);
-
-    movementPanel.addKeyListener(this);
-    movementPanel.setFocusable(true);
-    movementPanel.requestFocus();
-
-    this.addWindowFocusListener(new WindowAdapter() {
-      public void windowGainedFocus(WindowEvent e) {
-        movementPanel.requestFocusInWindow();
-      }
-    });
-
   }
   
   private void setEmbeddedVisible(boolean setVisible) {
@@ -360,61 +300,6 @@ public class DevelopmentGUI extends JFrame implements KeyListener {
       embeddedView.dispose();
       embeddedView = null;
     }
-  }
-
-  public class Moving implements ActionListener {
-    private long time;
-    public Moving() {
-      time = System.currentTimeMillis();
-    }
-    public void resetTime() {
-      time = System.currentTimeMillis();
-    }
-    public void actionPerformed(ActionEvent e) {
-      long newtime = System.currentTimeMillis();
-      long dt = newtime-time;
-      time = newtime;
-      
-      if (curMovement == movements.right) {
-        development.rotate(dt * radians_per_millisecond);
-        
-      } else if (curMovement == movements.left) {
-        development.rotate(-dt * radians_per_millisecond);
-        
-      } else if (curMovement == movements.forward) {
-        development.translateSourcePoint(dt * units_per_millisecond);
-        
-      } else if (curMovement == movements.back) {
-        development.translateSourcePoint(-dt * units_per_millisecond);
-      }
-    }
-  }
-
-  @Override
-  public void keyTyped(KeyEvent e) {
-  }
-
-  @Override
-  public void keyPressed(KeyEvent e) {
-    keyHoldTimer.stop();
-    if (e.getKeyCode() == KeyEvent.VK_RIGHT)
-      curMovement = movements.right;
-    else if (e.getKeyCode() == KeyEvent.VK_LEFT)
-      curMovement = movements.left;
-    else if (e.getKeyCode() == KeyEvent.VK_UP)
-      curMovement = movements.forward;
-    else if (e.getKeyCode() == KeyEvent.VK_DOWN)
-      curMovement = movements.back;
-
-    if (!timer.isRunning()) {
-      movingListener.resetTime();
-      timer.start();
-    }
-  }
-
-  @Override
-  public void keyReleased(KeyEvent e) {
-    keyHoldTimer.start();
   }
   
   public class ObjectMoveListener implements ActionListener {

@@ -60,14 +60,18 @@ public class Development extends Observable {
     System.out.println("source point = " + sourcePoint);
     sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint, units_per_millisecond, radius);
     sourcePointNode.setRadius(radius);
-    nodeList.add(sourcePointNode);
+    synchronized(nodeList) {
+      nodeList.add(sourcePointNode);
+    }
 //
     Node n = new Node(Color.red, sourceFace, sourcePoint, units_per_millisecond, radius);
     n.setRadius(radius);
     Vector move = new Vector(1,0);
     move.scale(0.05);
     n.setMovement(move);
-    nodeList.add(n);
+    synchronized(nodeList) {
+      nodeList.add(n);
+    }
     buildTree();
   }
 
@@ -76,16 +80,22 @@ public class Development extends Observable {
     sourcePoint = sourcePt;
     sourceFace = sourceF;
     
-    nodeList.clear();
+    synchronized(nodeList) {
+      nodeList.clear();
+    }
 
     sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint, units_per_millisecond, radius);
     sourcePointNode.setRadius(radius);
-    nodeList.add(sourcePointNode);
+    synchronized(nodeList) {
+      nodeList.add(sourcePointNode);
+    }
     
     Node n = new Node(Color.red, sourceFace, sourcePoint, units_per_millisecond, radius);
     n.setRadius(radius);
     n.setMovement(new Vector(0.05, 0));
-    nodeList.add(n);
+    synchronized(nodeList) {
+      nodeList.add(n);
+    }
 
     buildTree();
     setChanged();
@@ -211,8 +221,8 @@ public class Development extends Observable {
     movement.add(sourcePoint);
     computeEnd(movement, sourceFace, null);
     setSourcePoint(sourcePoint);
-    setChanged();
-    notifyObservers("source");
+//    setChanged();
+//    notifyObservers("source");
   }
 
   /*
@@ -284,9 +294,11 @@ public class Development extends Observable {
     sourcePoint = point;
     synchronized(nodeList) {
       nodeList.remove(sourcePointNode);
+    }
       double radius = sourcePointNode.getRadius();
       sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint, units_per_millisecond, radius);
       sourcePointNode.setRadius(radius);
+    synchronized(nodeList) {
       nodeList.add(sourcePointNode);
     }
 
