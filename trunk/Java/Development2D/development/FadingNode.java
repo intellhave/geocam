@@ -27,7 +27,7 @@ public class FadingNode extends Node{
   
   public FadingNode(Color color, Face face, Vector pos, double velocity, double radius) {
     super(color, face, pos, velocity, radius);
-    time_to_live = 15*1000;
+    time_to_live = 10*1000;
     transparency = 0.2;
     currentTrail = new Trail(pos, pos, face, color);
   }
@@ -43,6 +43,7 @@ public class FadingNode extends Node{
   @Override
   public void move(double elapsedTime) {
     time_to_live -= elapsedTime;
+    System.out.println("time to live = " + time_to_live);
     if(time_to_live <= 0) {
       die();
       return;
@@ -73,11 +74,11 @@ public class FadingNode extends Node{
     if(oldMove.equals(movement)) { // movement only changes if it enters a new face
       currentTrail.end = pos;
     } else {
-      oldMove.scale(0.5);
+      oldMove.scale(units_per_millisecond*elapsedTime*0.5);
       currentTrail.end = Vector.add(oldPos, oldMove); // stretch it a little to big avoid jumps
       trails.add(currentTrail);
       Vector s = new Vector(movement);
-      s.scale(-0.5);
+      s.scale(-0.5*elapsedTime*units_per_millisecond);
       s.add(pos);
       currentTrail = new Trail(s, pos, face, color);
     }
@@ -88,6 +89,7 @@ public class FadingNode extends Node{
   }
   
   private void die() {
+    System.out.println("dying");
     dead = true;
   }
   

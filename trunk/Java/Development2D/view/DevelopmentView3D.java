@@ -204,7 +204,7 @@ public class DevelopmentView3D extends DevelopmentView {
       double y = tc.getCurrentPick().getWorldCoordinates()[1];
       Vector movement = new Vector(x,-y);
       movement.normalize();
-      movement.scale(0.05);
+      //movement.scale(0.05);
       development.addNodeAtSource(colors[colorIndex++], movement);
       colorIndex = colorIndex % colors.length;
     }
