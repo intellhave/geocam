@@ -48,7 +48,7 @@ public class Development extends Observable {
   private ArrayList<Node> nodeList = new ArrayList<Node>();
   private Node sourcePointNode;
   private double radius; // default radius of objects
-  private double units_per_millisecond = 0.004;
+  private double units_per_millisecond = 0.0004;
   
   public boolean building = false;
 
@@ -220,9 +220,7 @@ public class Development extends Observable {
 
     movement.add(sourcePoint);
     computeEnd(movement, sourceFace, null);
-    setSourcePoint(sourcePoint);
-//    setChanged();
-//    notifyObservers("source");
+    setSourcePoint(sourcePoint); // notifies observers
   }
 
   /*
@@ -355,10 +353,10 @@ public class Development extends Observable {
     newTrans.leftMultiply(coordTrans);
     newTrans.leftMultiply(t);
 
-//    EmbeddedFace clippedFace = frustum.clipFace(newTrans.affineTransFace(face));
-//    if (clippedFace == null) {
-//      return;
-//    }
+    EmbeddedFace clippedFace = frustum.clipFace(newTrans.affineTransFace(face));
+    if (clippedFace == null) {
+      return;
+    }
 
     DevelopmentNode node = new DevelopmentNode(parent, face, frustum,
         newTrans);

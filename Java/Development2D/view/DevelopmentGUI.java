@@ -310,7 +310,7 @@ public class DevelopmentGUI extends JFrame {
     public void actionPerformed(ActionEvent e) {
       long newtime = System.currentTimeMillis();
       long dt = newtime - time;      
-      development.moveObjects(dt*0.1);
+      development.moveObjects(dt);
       time = System.currentTimeMillis();
     }
   }
