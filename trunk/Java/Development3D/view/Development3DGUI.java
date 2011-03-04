@@ -1,20 +1,18 @@
 package view;
 
-import geoquant.Alpha;
-import geoquant.Eta;
-import geoquant.Geometry;
-import geoquant.Length;
-import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
@@ -24,7 +22,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import triangulation.Edge;
 import triangulation.Tetra;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -61,7 +58,7 @@ public class Development3DGUI extends JRViewer {
   private static SceneGraphPath cameraFree_;
   private static SceneGraphPath cameraSource_;
   private static Viewer viewer_;
-  
+
   private static Development3D development_;
   private static Vector sourcePoint_;
   private static int currentDepth_ = 2;
@@ -79,14 +76,14 @@ public class Development3DGUI extends JRViewer {
   private static Scene scene_;
   private static Scene sceneExternal_;
   private static ColorScheme3D colorScheme_;
-  
+
   private static Timer moveTimer_; // timer for moving objects
 
   public static void main(String[] args) {
- //   loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
- //   loadSurface("Data/Triangulations/3DManifolds/FlatTorus.xml");
- 
-    loadSurface("Data/Triangulations/3DManifolds/FlatTorus3.xml");
+    // loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
+    // loadSurface("Data/Triangulations/3DManifolds/FlatTorus.xml");
+
+    loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
     colorScheme_ = new ColorScheme3D(schemes.FACE);
 
     Camera camera = new Camera();
@@ -103,6 +100,7 @@ public class Development3DGUI extends JRViewer {
     sgcRoot_.addTool(new CameraRotationTool_RightAxis());
     sgcRootExternal_.addChild(sgcDevelopment_);
     sgcRootExternal_.addChild(sgcObjectsExternal_);
+    sgcRootExternal_.addTool(new RotateTool());
     sgcCamera_.setCamera(camera);
 
     updateGeometry();
@@ -140,7 +138,7 @@ public class Development3DGUI extends JRViewer {
     CameraUtility.encompass(sceneExternal_.getAvatarPath(),
         sceneExternal_.getContentPath(), sceneExternal_.getCameraPath(), 1.75,
         Pn.EUCLIDEAN);
-    
+
     moveTimer_ = new Timer(50, null);
     moveTimer_.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -157,15 +155,13 @@ public class Development3DGUI extends JRViewer {
     Iterator<Integer> i = null;
 
     // set edge lengths
-/*    i = Triangulation.edgeTable.keySet().iterator();
-     
-    while (i.hasNext()) {
-      Integer key = i.next();
-      Edge e = Triangulation.edgeTable.get(key);
-      System.out.println(Length.valueAt(e));
-      Length.at(e).setValue(3);
-    }
-*/
+    /*
+     * i = Triangulation.edgeTable.keySet().iterator();
+     * 
+     * while (i.hasNext()) { Integer key = i.next(); Edge e =
+     * Triangulation.edgeTable.get(key); System.out.println(Length.valueAt(e));
+     * Length.at(e).setValue(3); }
+     */
     // pick some arbitrary tetra and source point, and compute geometry
     i = Triangulation.tetraTable.keySet().iterator();
     Tetra sourceTetra_ = Triangulation.tetraTable.get(i.next());
@@ -184,30 +180,34 @@ public class Development3DGUI extends JRViewer {
       development_.rebuild(sourceTetra_, sourcePoint_, currentDepth_);
   }
 
-  private static void rotateCameraRightAxis(double theta){
+  private static void rotateCameraRightAxis(double theta) {
 
     double c = Math.cos(theta);
     double s = Math.sin(theta);
 
-    //f'=fc+us, u'=-fs+uc
-    Vector new_forward = Vector.add(Vector.scale(cameraForward_, c), Vector.scale(cameraUp_, s));
-    Vector new_up = Vector.add(Vector.scale(cameraForward_, -s), Vector.scale(cameraUp_, c));
+    // f'=fc+us, u'=-fs+uc
+    Vector new_forward = Vector.add(Vector.scale(cameraForward_, c),
+        Vector.scale(cameraUp_, s));
+    Vector new_up = Vector.add(Vector.scale(cameraForward_, -s),
+        Vector.scale(cameraUp_, c));
     cameraForward_ = Vector.normalize(new_forward);
     cameraUp_ = Vector.normalize(new_up);
   }
 
-  private static void rotateCameraUpAxis(double theta){
-  
+  private static void rotateCameraUpAxis(double theta) {
+
     double c = Math.cos(theta);
     double s = Math.sin(theta);
-    
-    //f'=fc-rs, r'=fs+rc
-    Vector new_forward = Vector.add(Vector.scale(cameraForward_, c), Vector.scale(cameraRight_, -s));
-    Vector new_right = Vector.add(Vector.scale(cameraForward_, s), Vector.scale(cameraRight_, c));
+
+    // f'=fc-rs, r'=fs+rc
+    Vector new_forward = Vector.add(Vector.scale(cameraForward_, c),
+        Vector.scale(cameraRight_, -s));
+    Vector new_right = Vector.add(Vector.scale(cameraForward_, s),
+        Vector.scale(cameraRight_, c));
     cameraForward_ = Vector.normalize(new_forward);
     cameraRight_ = Vector.normalize(new_right);
   }
-  
+
   private static void updateCamera() {
     de.jreality.math.Matrix M = new de.jreality.math.Matrix(
         cameraRight_.getComponent(0), cameraUp_.getComponent(0),
@@ -226,17 +226,15 @@ public class Development3DGUI extends JRViewer {
     sgcRootExternal_.removeChild(sgcObjectsExternal_);
     sgcObjects_ = new SceneGraphComponent();
     sgcObjectsExternal_ = new SceneGraphComponent();
-    for(Node3D node : development_.getObjects()) {
+    for (Node3D node : development_.getObjects()) {
       sgcObjectsExternal_.addChild(SGCMethods.sgcFromNode3D(node));
-      if(!node.getPosition().isZero())
+      if (!node.getPosition().isZero())
         sgcObjects_.addChild(SGCMethods.sgcFromNode3D(node));
     }
     sgcRoot_.addChild(sgcObjects_);
     sgcRootExternal_.addChild(sgcObjectsExternal_);
   }
 
-  
-  
   // USER INTERFACE
   // ==============================
   static class UIPanel_Options extends ViewShrinkPanelPlugin {
@@ -264,61 +262,91 @@ public class Development3DGUI extends JRViewer {
       shrinkPanel.add(sliderPanel);
 
       JPanel colorPanel = new JPanel();
-       ButtonGroup group = new ButtonGroup();
-       JRadioButton button;
+      ButtonGroup group = new ButtonGroup();
+      JRadioButton button;
+
+      // face scheme button
+      button = new JRadioButton("Face");
+      button.setSelected(colorScheme_.getSchemeType() == schemes.FACE);
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          colorScheme_ = new ColorScheme3D(schemes.FACE);
+          updateGeometry();
+        }
+      });
+      colorPanel.add(button);
+      group.add(button);
+
+      // depth scheme button
+      button = new JRadioButton("Recursion Depth");
+      button.setSelected(colorScheme_.getSchemeType() == schemes.DEPTH);
+      button.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          colorScheme_ = new ColorScheme3D(schemes.DEPTH);
+          updateGeometry();
+        }
+      });
+      colorPanel.add(button);
+      group.add(button);
+
+      colorPanel.setBorder(BorderFactory.createTitledBorder("Color Scheme"));
+      shrinkPanel.add(colorPanel);
       
-       // face scheme button
-       button = new JRadioButton("Face");
-       button.setSelected(colorScheme_.getSchemeType() == schemes.FACE);
-       button.addActionListener(new ActionListener() {
-       public void actionPerformed(ActionEvent e){
-         colorScheme_ = new ColorScheme3D(schemes.FACE);
-         updateGeometry();
-       }
-       });
-       colorPanel.add(button);
-       group.add(button);
+      JButton loadButton = new JButton("Load file");
+      loadButton.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          JFileChooser fc = new JFileChooser();
+
+          fc.setDialogTitle("Open File");
+          // Choose only files, not directories
+          fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+          // Start in current directory
+          fc.setCurrentDirectory(new File("."));
+          fc.showOpenDialog(null);
+
+          File file = null;
+          try {
+            file = fc.getSelectedFile();
+          } catch (Exception ex) {
+            System.out.println("Invalid file");
+          }
+
+          loadSurface(file.getAbsolutePath());
+          updateGeometry();
+        }
+      });
       
-       // depth scheme button
-       button = new JRadioButton("Recursion Depth");
-       button.setSelected(colorScheme_.getSchemeType() == schemes.DEPTH);
-       button.addActionListener(new ActionListener() {
-       public void actionPerformed(ActionEvent e){
-         colorScheme_ = new ColorScheme3D(schemes.DEPTH);
-         updateGeometry();
-       }
-       });
-       colorPanel.add(button);
-       group.add(button);
-       
-       colorPanel.setBorder(BorderFactory.createTitledBorder("Color Scheme"));
-       shrinkPanel.add(colorPanel);
-       
+      shrinkPanel.add(loadButton);
+
       shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
       shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),
           BoxLayout.Y_AXIS));
-      
+
       JPanel checkPanel = new JPanel();
-      checkPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-      
+      checkPanel.setBorder(BorderFactory
+          .createEtchedBorder(EtchedBorder.LOWERED));
+
       JCheckBox drawEdgesBox = new JCheckBox("Draw edges");
       drawEdgesBox.setSelected(true);
       drawEdgesBox.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          boolean value = ((JCheckBox)e.getSource()).isSelected();
-          sgcDevelopment_.getAppearance().setAttribute(CommonAttributes.EDGE_DRAW, value);
+          boolean value = ((JCheckBox) e.getSource()).isSelected();
+          sgcDevelopment_.getAppearance().setAttribute(
+              CommonAttributes.EDGE_DRAW, value);
         }
       });
-      
+
       JCheckBox drawFacesBox = new JCheckBox("Draw faces");
       drawFacesBox.setSelected(true);
       drawFacesBox.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          boolean value = ((JCheckBox)e.getSource()).isSelected();
-          sgcDevelopment_.getAppearance().setAttribute(CommonAttributes.FACE_DRAW, value);
+          boolean value = ((JCheckBox) e.getSource()).isSelected();
+          sgcDevelopment_.getAppearance().setAttribute(
+              CommonAttributes.FACE_DRAW, value);
         }
       });
-      checkPanel.setBorder(BorderFactory.createTitledBorder("Visibility options"));
+      checkPanel.setBorder(BorderFactory
+          .createTitledBorder("Visibility options"));
       checkPanel.setLayout(new BoxLayout(checkPanel, BoxLayout.Y_AXIS));
       checkPanel.add(drawEdgesBox);
       checkPanel.add(drawFacesBox);
@@ -336,69 +364,82 @@ public class Development3DGUI extends JRViewer {
       return new PluginInfo("View Options", "");
     }
   };
-  
-  //TOOL(S) FOR MOVEMENT
-  //==============================
-  
+
+  // TOOL(S) FOR MOVEMENT
+  // ==============================
+
   static class CameraRotationTool_RightAxis extends AbstractTool {
-    
-    private static long time; 
-    private static final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
-    private static final InputSlot FORWARD_BACKWARD = InputSlot.getDevice("ForwardBackwardAxis");
-    private static final InputSlot SYSTEM_TIMER = InputSlot.SYSTEM_TIME;  
-    
+
+    private static long time;
+    private static final double radians_per_millisecond = Math.PI
+        / (movement_seconds_per_rotation_ * 500);
+    private static final InputSlot FORWARD_BACKWARD = InputSlot
+        .getDevice("ForwardBackwardAxis");
+    private static final InputSlot SYSTEM_TIMER = InputSlot.SYSTEM_TIME;
+
     public CameraRotationTool_RightAxis() {
-      super(FORWARD_BACKWARD); //'activate' tool on F/B or L/R
-      addCurrentSlot(SYSTEM_TIMER); //'perform' tool on tick
+      super(FORWARD_BACKWARD); // 'activate' tool on F/B or L/R
+      addCurrentSlot(SYSTEM_TIMER); // 'perform' tool on tick
     }
 
-    //set initial time
-    @Override public void activate(ToolContext tc) { time = tc.getTime(); }
+    // set initial time
+    @Override
+    public void activate(ToolContext tc) {
+      time = tc.getTime();
+    }
 
-    @Override public void perform(ToolContext tc) {
-      //get axis state
+    @Override
+    public void perform(ToolContext tc) {
+      // get axis state
       AxisState as_fb = tc.getAxisState(FORWARD_BACKWARD);
-      
-      //get dt and update time
+
+      // get dt and update time
       long newtime = tc.getTime();
       long dt = newtime - time;
       time = newtime;
 
-      //move forward/backward
-      if(as_fb.isPressed()){
-        rotateCameraRightAxis(radians_per_millisecond*dt*as_fb.doubleValue());
+      // move forward/backward
+      if (as_fb.isPressed()) {
+        rotateCameraRightAxis(radians_per_millisecond * dt
+            * as_fb.doubleValue());
         updateCamera();
       }
-    }  
-  };
-  
-  static class CameraRotationTool_UpAxis extends AbstractTool {
-    
-    private static long time; 
-    private static final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
-    private static final InputSlot LEFT_RIGHT = InputSlot.getDevice("LeftRightAxis");
-    private static final InputSlot SYSTEM_TIMER = InputSlot.SYSTEM_TIME;  
-    
-    public CameraRotationTool_UpAxis() {
-      super(LEFT_RIGHT); //'activate' tool on F/B or L/R
-      addCurrentSlot(SYSTEM_TIMER); //'perform' tool on tick
     }
-    
-    //set initial time
-    @Override public void activate(ToolContext tc) { time = tc.getTime(); } 
-    
-    @Override public void perform(ToolContext tc) {
-      //get axis state
+  };
+
+  static class CameraRotationTool_UpAxis extends AbstractTool {
+
+    private static long time;
+    private static final double radians_per_millisecond = Math.PI
+        / (movement_seconds_per_rotation_ * 500);
+    private static final InputSlot LEFT_RIGHT = InputSlot
+        .getDevice("LeftRightAxis");
+    private static final InputSlot SYSTEM_TIMER = InputSlot.SYSTEM_TIME;
+
+    public CameraRotationTool_UpAxis() {
+      super(LEFT_RIGHT); // 'activate' tool on F/B or L/R
+      addCurrentSlot(SYSTEM_TIMER); // 'perform' tool on tick
+    }
+
+    // set initial time
+    @Override
+    public void activate(ToolContext tc) {
+      time = tc.getTime();
+    }
+
+    @Override
+    public void perform(ToolContext tc) {
+      // get axis state
       AxisState as_lr = tc.getAxisState(LEFT_RIGHT);
-      
-      //get dt and update time
+
+      // get dt and update time
       long newtime = tc.getTime();
       long dt = newtime - time;
       time = newtime;
-      
-      //move left/right
-      if(as_lr.isPressed()){ 
-        rotateCameraUpAxis(-radians_per_millisecond*dt*as_lr.doubleValue());
+
+      // move left/right
+      if (as_lr.isPressed()) {
+        rotateCameraUpAxis(-radians_per_millisecond * dt * as_lr.doubleValue());
         updateCamera();
       }
     }
