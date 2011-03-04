@@ -20,6 +20,7 @@ import de.jreality.shader.CommonAttributes;
 import de.jreality.util.CameraUtility;
 import development.Development;
 import development.Trail;
+import development.Vector;
 import development.Development.DevelopmentNode;
 import geoquant.Radius;
 
@@ -80,7 +81,8 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcObjects = new SceneGraphComponent();
     synchronized(nodeList) {
       for(NodeImage n : nodeList) {
-        sgcObjects.addChild(SGCMethods.sgcFromNode(n, dimension));
+        SceneGraphComponent sgc = SGCMethods.sgcFromNode(n, dimension);
+        sgcObjects.addChild(sgc);
       }
     }
     synchronized(trailList) {
@@ -147,7 +149,12 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   private void collectObjects(DevelopmentNode node) {
     if(dimension < 3 || !node.isRoot()) {
       synchronized(nodeList) {
-        nodeList.addAll(node.getObjects());
+        for(NodeImage n : node.getObjects()) {
+          if(n instanceof SourceNodeImage) {
+            ((SourceNodeImage)n).rotate(development.getRotationInverse(), Vector.scale(development.getSourcePoint(),-1));
+          }
+          nodeList.add(n);
+        }
       }
     }
     if(dimension < 3) {
