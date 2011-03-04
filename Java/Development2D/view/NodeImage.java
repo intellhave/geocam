@@ -8,15 +8,15 @@ import development.Node;
 import development.Vector;
 
 public class NodeImage {
-  private Color color;
-  private double radius;
-  private double transparency;
-  private Vector position;
-  private boolean isFadingNode;
-  private SceneGraphComponent sgc2d;
-  private SceneGraphComponent sgc3d;
+  protected Color color;
+  protected double radius;
+  protected double transparency;
+  protected Vector position;
+  protected boolean isFadingNode;
+  protected SceneGraphComponent sgc2d;
+  protected SceneGraphComponent sgc3d;
   
-  private Node sourceNode; // reference to originating node
+  protected Node sourceNode; // reference to originating node
   
   public NodeImage(Node node, Vector pos) {
     this.color = node.getColor();
@@ -44,4 +44,5 @@ public class NodeImage {
     return sgc3d;
   } 
   public Node getNode() { return sourceNode; }
+  public void setPosition(Vector v) { position = v; }
 }

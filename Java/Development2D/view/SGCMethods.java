@@ -3,6 +3,7 @@ package view;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.scene.Appearance;
@@ -30,6 +31,9 @@ public class SGCMethods {
     Vector v = node.getPosition();
     if(dimension > 2) 
       v = new Vector(v.getComponent(0), v.getComponent(1), 0);
+    if(dimension == 2 && node instanceof SourceNodeImage)
+      return node.getSGC(dimension);
+    
     return sgcFromPoint(v, node.getRadius(), node.getColor(),
         node.getTransparency());
   }
@@ -85,6 +89,34 @@ public class SGCMethods {
 
     // return
     return sgc_points;
+  }
+  
+  public static SceneGraphComponent sgcFromVertices(Vector...vectors) {
+    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+
+//    Color[] colorList = new Color[colors.size()];
+//    for (int i = 0; i < colors.size(); i++) {
+//      colorList[i] = colors.get(i);
+//    }
+    DevelopmentGeometry geometry = new DevelopmentGeometry();
+    double[][] vectorList = new double[vectors.length][vectors[0].getDimension()];
+    
+    for(int i = 0; i < vectors.length; i++) {
+      vectorList[i] = vectors[i].getVectorAsArray();
+    }
+    geometry.addFace(vectorList);
+
+    double[][] ifsf_verts = geometry.getVerts();
+    int[][] ifsf_faces = geometry.getFaces();
+    ifsf.setVertexCount(ifsf_verts.length);
+    ifsf.setVertexCoordinates(ifsf_verts);
+    ifsf.setFaceCount(ifsf_faces.length);
+    ifsf.setFaceIndices(ifsf_faces);
+    ifsf.setGenerateEdgesFromFaces(true);
+    ifsf.update();
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    sgc.setGeometry(ifsf.getGeometry());
+    return sgc;
   }
 
   /*

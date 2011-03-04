@@ -12,6 +12,7 @@ import triangulation.Face;
 import triangulation.Vertex;
 import util.Matrix;
 import view.NodeImage;
+import view.SourceNodeImage;
 
 /****************************************
  *  Development.java
@@ -388,8 +389,31 @@ public class Development extends Observable {
         buildTree(node, newFace, edge, newFrustum, newTrans, depth + 1);
     }
   }  
-
   
+  public AffineTransformation getTranslation() {
+    return new AffineTransformation(Vector.scale(sourcePoint, -1));
+  }
+
+  public AffineTransformation getRotationInverse() {
+    // get transformation taking sourcePoint to origin (translation by -1*sourcePoint)
+    
+    // rotation matrix sending direction -> (1,0)
+    double x = direction.getComponent(0);
+    double y = direction.getComponent(1);
+    Matrix M = new Matrix(new double[][] { new double[] { x, y },
+        new double[] { -y, x } });
+    rotation = new AffineTransformation(M);
+
+    AffineTransformation toReturn = null;
+    try {
+      toReturn = new AffineTransformation(M.inverse());
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return toReturn;
+
+  }
   
   // ================== DevelopmentNode ==================
 /*
@@ -447,7 +471,11 @@ public class Development extends Observable {
   
             if(isRoot() || frustum.checkInterior(transPoint2d)) { 
               // containment alg does not work for root
-              containedObjects.add(new NodeImage(node, new Vector(transPoint2d)));
+              if(node.equals(sourcePointNode)) {
+                containedObjects.add(new SourceNodeImage(node, affineTrans));
+              }
+              else
+                containedObjects.add(new NodeImage(node, new Vector(transPoint2d)));
             }
           }
         

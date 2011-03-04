@@ -43,10 +43,12 @@ public class DevelopmentView2D extends DevelopmentView {
 
   private Vector cameraForward = new Vector(1, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
+  private Development development;
   
   public DevelopmentView2D(Development development, ColorScheme colorScheme, double radius) {
     super(development, colorScheme, radius);
     dimension = 2;
+    this.development = development;
     
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
@@ -125,6 +127,9 @@ public class DevelopmentView2D extends DevelopmentView {
     
       for(NodeImage n : node.getObjects()) {
         synchronized(nodeList) {
+          if(n instanceof SourceNodeImage) {
+            ((SourceNodeImage)n).rotate(development.getRotationInverse(), Vector.scale(development.getSourcePoint(),-1));
+          }
           nodeList.add(n);
         }
       }
