@@ -295,8 +295,6 @@ public class Development extends Observable {
     y_new = sin * x + cos * y;
     left = new Vector(x_new, y_new);
 
-    buildTree();
-    setChanged();
     notifyObservers("rotation");
   }
 
@@ -311,6 +309,11 @@ public class Development extends Observable {
     movement.add(sourcePoint);
     computeEnd(movement, sourceFace, null);
     setSourcePoint(sourcePoint); // notifies observers
+  }
+  
+  public void rebuild(){
+    buildTree();
+    setChanged();
   }
   
   /*

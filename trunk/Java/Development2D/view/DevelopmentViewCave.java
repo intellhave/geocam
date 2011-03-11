@@ -39,16 +39,18 @@ import development.Vector;
 
 public class DevelopmentViewCave extends DevelopmentView {
   
+  private static final double REDEVELOPMENT_TRESHHOLD = .01;
+  private static final boolean USE_MANIFOLD_MOVEMENT_TOOL = false;
+  private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 250;
+  
   private static int INITIAL_HEIGHT = 30;
   private double height = INITIAL_HEIGHT/100.0;
-  
-  private static final double MOVEMENT_TRESHHOLD = 0.05;
 
   private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
   private static int colorIndex = 0;
 
   public DevelopmentViewCave(Development development, ColorScheme colorScheme, double radius) {
-    super(development, colorScheme, radius, false);
+    super(development, colorScheme, radius, USE_MANIFOLD_MOVEMENT_TOOL);
     dimension = 3;
 
     updateGeometry();
@@ -59,7 +61,7 @@ public class DevelopmentViewCave extends DevelopmentView {
     M.multiplyOnLeft(MatrixBuilder.euclidean().rotateY(1.5708).getMatrix());
     M.assignTo(sgcDevelopment);
    
-    // create light
+    //create light
     SceneGraphComponent sgcpLight = new SceneGraphComponent();
     PointLight plight = new PointLight();
     plight.setIntensity(1.0);
@@ -67,7 +69,10 @@ public class DevelopmentViewCave extends DevelopmentView {
     sgcpLight.setLight(plight);
     sgcRoot.addChild(sgcpLight);
     
+    //create identity transformation for the development sgc
     sgcRoot.setTransformation(new Transformation(MatrixBuilder.euclidean().getArray()));
+    
+    //collision detection off
     Appearance appRoot = new Appearance();
     appRoot.setAttribute(CommonAttributes.PICKABLE, false);
     sgcRoot.setAppearance(appRoot);
@@ -81,9 +86,6 @@ public class DevelopmentViewCave extends DevelopmentView {
     this.registerPlugin(new ContentAppearance());
     this.registerPlugin(new ContentLoader());
     this.registerPlugin(new ContentTools());
-    //this.setContent(makeObject());
-    //this.registerPlugin(new UIPanel_Options());
-    //this.setShowPanelSlots(true,false,false,false);
     this.startup();
     
     //get Scene for the viewer
@@ -127,7 +129,6 @@ public class DevelopmentViewCave extends DevelopmentView {
       //translate sgcObject to avatar's head
       double h = 1.7;//1.4;
       MatrixBuilder.euclidean().translate(trans[0],h+trans[1],trans[2]).assignTo(sgcObject);
-      //sgcObject.getTransformation().setMatrix(M);
       
       //figure out delta(translation)
       if(!initialized){
@@ -138,37 +139,21 @@ public class DevelopmentViewCave extends DevelopmentView {
       
       double[] dtrans = new double[]{ trans[0]-oldtrans[0], trans[1]-oldtrans[1], trans[2]-oldtrans[2] };
       
-      System.out.println("dtrans: [" + dtrans[0] + ", " + dtrans[2] + "]"); 
-      if( (dtrans[0] > MOVEMENT_TRESHHOLD) ||
-          (dtrans[0] < -MOVEMENT_TRESHHOLD)|| 
-          (dtrans[2] > MOVEMENT_TRESHHOLD) || 
-          (dtrans[2] < -MOVEMENT_TRESHHOLD))
-      {
+      if( (dtrans[0]*dtrans[0] + dtrans[2]*dtrans[2]) > REDEVELOPMENT_TRESHHOLD ){
+        //System.out.println("dtrans: [" + dtrans[0] + ", " + dtrans[2] + "]"); 
         //move source point
-        //development.translateSourcePoint(0.1*dtrans[0],0.1*dtrans[2]);
         development.building = true;
-        development.translateSourcePoint(dtrans[0]);
+        development.translateSourcePoint(-MANIFOLD_UNITS_PER_AMBIENT_UNIT*dtrans[2],-MANIFOLD_UNITS_PER_AMBIENT_UNIT*dtrans[0]);
+        //development.translateSourcePoint(dtrans[0]);
+        development.rebuild();
         development.building = false;
         //set 'old' values
         oldtrans[0] = trans[0]; oldtrans[1] = trans[1]; oldtrans[2] = trans[2];
       }
-        
-      //(dtrans[0], dtrans[2]) is the movement vector:
-      //move distance of dtrans[0] along the development's "forward" direction [this info is stored]
-      //move distance of dtrans[2] along the development's "right" direction
-      //also, need a method in DevelopmentView to do these translations!
-      
-      //note: it might be reasonable to have a minimum value required to trigger movement
-      //the reason is: vertical movement triggers this listener, but no redevelopment is needed
-      //[if this is done, only update 'old' values when development is recomputed!]
-      
-      //System.out.println("Change in Translation: ");
-      //System.out.println("[" + dtrans[0] + ", " + dtrans[2] + "]");
       
       //should be able to use the upper-left 3x3 submatrix of mData
       //to determine which direction we are facing, hence in what direction to shoot objects
       //use that information in ShootTool
-      
       
     }
   }

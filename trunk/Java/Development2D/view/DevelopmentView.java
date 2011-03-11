@@ -204,9 +204,11 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
       }
       
       //rotation
-      if(as_lr.isPressed()){      
+      if(as_lr.isPressed()){ 
         development.rotate(-dt * radians_per_millisecond * as_lr.doubleValue());
       }
+      
+      development.rebuild();
       development.building = false;
       //development.moveObjects(dt);
       time = tc.getTime();
