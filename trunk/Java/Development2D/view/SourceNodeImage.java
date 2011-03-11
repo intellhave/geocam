@@ -19,11 +19,6 @@ public class SourceNodeImage extends NodeImage {
     Vector vb = new Vector(x+4*r, y);
     Vector vc = new Vector(x, y-r);
     
-    //AffineTransformation t = 
-      // want to cancel out rotation from affine trans, so need to right multiply by 
-      // inverse of translation, then inverse of rotation, then by translation
-   // affineTrans.leftMultiply(lhs)
-    
     Vector v1 = affineTrans.affineTransPoint(va);
     Vector v2 = affineTrans.affineTransPoint(vb);
     Vector v3 = affineTrans.affineTransPoint(vc);
