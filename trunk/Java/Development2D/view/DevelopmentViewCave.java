@@ -41,12 +41,14 @@ public class DevelopmentViewCave extends DevelopmentView {
   
   private static int INITIAL_HEIGHT = 30;
   private double height = INITIAL_HEIGHT/100.0;
+  
+  private static final double MOVEMENT_TRESHHOLD = 0.05;
 
   private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
   private static int colorIndex = 0;
 
   public DevelopmentViewCave(Development development, ColorScheme colorScheme, double radius) {
-    super(development, colorScheme, radius);
+    super(development, colorScheme, radius, false);
     dimension = 3;
 
     updateGeometry();
@@ -98,7 +100,7 @@ public class DevelopmentViewCave extends DevelopmentView {
     scene.getSceneRoot().addChild(sgcRoot);
   }
   
-  public static class CaveTransformer implements TransformationListener{
+  private class CaveTransformer implements TransformationListener{
  
     private boolean initialized = false;
     private double[] oldtrans = new double[3];
@@ -123,7 +125,7 @@ public class DevelopmentViewCave extends DevelopmentView {
       double[] trans = new double[]{ mData[3], mData[7], mData[11] };
       
       //translate sgcObject to avatar's head
-      double h = 1.4;
+      double h = 1.7;//1.4;
       MatrixBuilder.euclidean().translate(trans[0],h+trans[1],trans[2]).assignTo(sgcObject);
       //sgcObject.getTransformation().setMatrix(M);
       
@@ -136,6 +138,21 @@ public class DevelopmentViewCave extends DevelopmentView {
       
       double[] dtrans = new double[]{ trans[0]-oldtrans[0], trans[1]-oldtrans[1], trans[2]-oldtrans[2] };
       
+      System.out.println("dtrans: [" + dtrans[0] + ", " + dtrans[2] + "]"); 
+      if( (dtrans[0] > MOVEMENT_TRESHHOLD) ||
+          (dtrans[0] < -MOVEMENT_TRESHHOLD)|| 
+          (dtrans[2] > MOVEMENT_TRESHHOLD) || 
+          (dtrans[2] < -MOVEMENT_TRESHHOLD))
+      {
+        //move source point
+        //development.translateSourcePoint(0.1*dtrans[0],0.1*dtrans[2]);
+        development.building = true;
+        development.translateSourcePoint(dtrans[0]);
+        development.building = false;
+        //set 'old' values
+        oldtrans[0] = trans[0]; oldtrans[1] = trans[1]; oldtrans[2] = trans[2];
+      }
+        
       //(dtrans[0], dtrans[2]) is the movement vector:
       //move distance of dtrans[0] along the development's "forward" direction [this info is stored]
       //move distance of dtrans[2] along the development's "right" direction
@@ -152,8 +169,7 @@ public class DevelopmentViewCave extends DevelopmentView {
       //to determine which direction we are facing, hence in what direction to shoot objects
       //use that information in ShootTool
       
-      //set 'old' values
-      oldtrans[0] = trans[0]; oldtrans[1] = trans[1]; oldtrans[2] = trans[2];
+      
     }
   }
 

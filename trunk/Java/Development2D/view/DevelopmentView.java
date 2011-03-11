@@ -51,7 +51,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   
   private static final double movement_seconds_per_rotation_ = 4.0;
   
-  public DevelopmentView(Development development, ColorScheme colorScheme, double radius) {
+  public DevelopmentView(Development development, ColorScheme colorScheme, double radius, boolean useMovementTool) {
     this.development = development;
     this.colorScheme = colorScheme;
     
@@ -60,7 +60,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcDevelopment.addChild(sgcObjects);
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
     sgcRoot.addChild(sgcDevelopment);
-    sgcRoot.addTool(new ManifoldMovementTool());
+    if(useMovementTool){ sgcRoot.addTool(new ManifoldMovementTool()); }
   }
   
   public void setColorScheme(ColorScheme scheme) {

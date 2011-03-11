@@ -44,6 +44,7 @@ public class Development extends Observable {
   private DevelopmentNode root;
   private Vector sourcePoint;
   private Vector direction = new Vector(1, 0);
+  private Vector left = new Vector(0, 1);
   private Face sourceFace;
   private int maxDepth;
   private ArrayList<Node> nodeList = new ArrayList<Node>();
@@ -205,18 +206,8 @@ public class Development extends Observable {
    * direction
    */
   public void addNodeAtSource(Color color, Vector vector) {
-    // rotation matrix sending direction -> (1,0)
-    double x = direction.getComponent(0);
-    double y = direction.getComponent(1);
-    Matrix M = new Matrix(new double[][] { new double[] { x, y },
-        new double[] { -y, x } });
-    Matrix m = null;
-    try {
-      m = M.inverse();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    rotation = new AffineTransformation(m);
+    
+    rotation = getRotationInverse();
     vector = rotation.affineTransVector(vector);
 
     FadingNode node = new FadingNode(color, sourceFace, sourcePoint,
@@ -228,18 +219,8 @@ public class Development extends Observable {
   }
 
   public void addBulletAtSource(Color color, Vector vector) {
-    // rotation matrix sending direction -> (1,0)
-    double x = direction.getComponent(0);
-    double y = direction.getComponent(1);
-    Matrix M = new Matrix(new double[][] { new double[] { x, y },
-        new double[] { -y, x } });
-    Matrix m = null;
-    try {
-      m = M.inverse();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    rotation = new AffineTransformation(m);
+    
+    rotation = getRotationInverse();
     vector = rotation.affineTransVector(vector);
 
     FadingNode bullet = new FadingNode(color, sourceFace, sourcePoint,
@@ -293,15 +274,26 @@ public class Development extends Observable {
 
   // ---------------------------------------------
 
+  /*
+   * rotate CCW WRT [forward, left] ordered basis
+   */
   public void rotate(double angle) {
     double cos = Math.cos(-angle);
     double sin = Math.sin(-angle);
-    double x = direction.getComponent(0);
-    double y = direction.getComponent(1);
-
-    double x_new = cos * x - sin * y;
-    double y_new = sin * x + cos * y;
+    
+    double x,y,x_new,y_new;
+    
+    x = direction.getComponent(0);
+    y = direction.getComponent(1);
+    x_new = cos * x - sin * y;
+    y_new = sin * x + cos * y;
     direction = new Vector(x_new, y_new);
+    
+    x = left.getComponent(0);
+    y = left.getComponent(1);
+    x_new = cos * x - sin * y;
+    y_new = sin * x + cos * y;
+    left = new Vector(x_new, y_new);
 
     buildTree();
     setChanged();
@@ -317,6 +309,19 @@ public class Development extends Observable {
     movement.scale(scaleVal * units_per_millisecond);
 
     movement.add(sourcePoint);
+    computeEnd(movement, sourceFace, null);
+    setSourcePoint(sourcePoint); // notifies observers
+  }
+  
+  /*
+   * Assumes direction and left are both normalized; moves in specified direction.
+   */
+  public void translateSourcePoint(double scaleForward, double scaleLeft) {
+
+    Vector movement = new Vector(sourcePoint);
+    movement.add(Vector.scale(direction, scaleForward * units_per_millisecond));
+    movement.add(Vector.scale(left, scaleLeft * units_per_millisecond));
+    
     computeEnd(movement, sourceFace, null);
     setSourcePoint(sourcePoint); // notifies observers
   }
@@ -378,6 +383,7 @@ public class Development extends Observable {
       AffineTransformation trans = CoordTrans2D.affineTransAt(face, edge);
       Vector newPoint = trans.affineTransPoint(point);
       direction = trans.affineTransVector(direction);
+      left = trans.affineTransVector(left);
 
       computeEnd(newPoint, nextFace, edge);
 
@@ -411,13 +417,7 @@ public class Development extends Observable {
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint,
         -1));
 
-    // rotation matrix sending direction -> (1,0)
-    double x = direction.getComponent(0);
-    double y = direction.getComponent(1);
-    Matrix M = new Matrix(new double[][] { new double[] { x, y },
-        new double[] { -y, x } });
-    rotation = new AffineTransformation(M);
-
+    rotation = getRotationInverse();
     t.leftMultiply(rotation);
 
     // EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
@@ -494,6 +494,19 @@ public class Development extends Observable {
   }
 
   public AffineTransformation getRotationInverse() {
+    
+    //rotation matrix sending direction -> (1,0), left -> (0,1)
+    //assumes direction and left are normalized and that det(dir, left) = 1
+    
+    Matrix M = new Matrix(new double[][]{
+       new double[] { left.getComponent(1), -left.getComponent(0)  },
+       new double[] { -direction.getComponent(1), direction.getComponent(0) }
+    });
+    
+    return new AffineTransformation(M);
+  }
+  
+  /*public AffineTransformation getRotationInverse() {
     // get transformation taking sourcePoint to origin (translation by
     // -1*sourcePoint)
 
@@ -512,8 +525,8 @@ public class Development extends Observable {
       e.printStackTrace();
     }
     return toReturn;
-
-  }
+    
+  }*/
 
   // ================== DevelopmentNode ==================
   /*

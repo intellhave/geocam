@@ -46,7 +46,7 @@ public class DevelopmentView2D extends DevelopmentView {
   private Development development;
   
   public DevelopmentView2D(Development development, ColorScheme colorScheme, double radius) {
-    super(development, colorScheme, radius);
+    super(development, colorScheme, radius, true);
     dimension = 2;
     this.development = development;
     

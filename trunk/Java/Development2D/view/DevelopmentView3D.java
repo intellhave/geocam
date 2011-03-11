@@ -52,7 +52,7 @@ public class DevelopmentView3D extends DevelopmentView {
   private Vector cameraForward = new Vector(-1, 0);;
 
   public DevelopmentView3D(Development development, ColorScheme colorScheme, double radius) {
-    super(development, colorScheme, radius);
+    super(development, colorScheme, radius, true);
     dimension = 3;
 
     // make camera and sgc_camera
