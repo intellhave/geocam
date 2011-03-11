@@ -6,17 +6,24 @@ import java.util.Iterator;
 
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
+import de.jreality.geometry.Primitives;
 import de.jreality.math.Matrix;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.plugin.basic.Scene;
+import de.jreality.plugin.content.ContentAppearance;
+import de.jreality.plugin.content.ContentLoader;
+import de.jreality.plugin.content.ContentTools;
+import de.jreality.scene.Appearance;
 import de.jreality.scene.Geometry;
 import de.jreality.scene.PointLight;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.Transformation;
 import de.jreality.scene.event.TransformationEvent;
 import de.jreality.scene.event.TransformationListener;
 import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.InputSlot;
 import de.jreality.scene.tool.ToolContext;
+import de.jreality.shader.CommonAttributes;
 
 import development.Development;
 import development.Development.DevelopmentNode;
@@ -32,7 +39,7 @@ import development.Vector;
 
 public class DevelopmentViewCave extends DevelopmentView {
   
-  private static int INITIAL_HEIGHT = 15;
+  private static int INITIAL_HEIGHT = 30;
   private double height = INITIAL_HEIGHT/100.0;
 
   private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
@@ -57,11 +64,22 @@ public class DevelopmentViewCave extends DevelopmentView {
     plight.setColor(Color.white);
     sgcpLight.setLight(plight);
     sgcRoot.addChild(sgcpLight);
-
+    
+    sgcRoot.setTransformation(new Transformation(MatrixBuilder.euclidean().getArray()));
+    Appearance appRoot = new Appearance();
+    appRoot.setAttribute(CommonAttributes.PICKABLE, false);
+    sgcRoot.setAppearance(appRoot);
+    
+    //sgcRoot.addTool(new ShootTool(development));
+    
     //start up Viewer with VR support
     this.addBasicUI();
     this.addVRSupport();
     this.addContentSupport(ContentType.TerrainAligned);
+    this.registerPlugin(new ContentAppearance());
+    this.registerPlugin(new ContentLoader());
+    this.registerPlugin(new ContentTools());
+    //this.setContent(makeObject());
     //this.registerPlugin(new UIPanel_Options());
     //this.setShowPanelSlots(true,false,false,false);
     this.startup();
@@ -80,7 +98,6 @@ public class DevelopmentViewCave extends DevelopmentView {
     scene.getSceneRoot().addChild(sgcRoot);
   }
   
-
   public static class CaveTransformer implements TransformationListener{
  
     private boolean initialized = false;
@@ -106,7 +123,9 @@ public class DevelopmentViewCave extends DevelopmentView {
       double[] trans = new double[]{ mData[3], mData[7], mData[11] };
       
       //translate sgcObject to avatar's head
-      MatrixBuilder.euclidean().translate(trans[0],1.7+trans[1],trans[2]).assignTo(sgcObject);
+      double h = 1.4;
+      MatrixBuilder.euclidean().translate(trans[0],h+trans[1],trans[2]).assignTo(sgcObject);
+      //sgcObject.getTransformation().setMatrix(M);
       
       //figure out delta(translation)
       if(!initialized){
