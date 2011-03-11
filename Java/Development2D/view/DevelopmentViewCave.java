@@ -39,15 +39,22 @@ import development.Vector;
 
 public class DevelopmentViewCave extends DevelopmentView {
   
-  private static final double REDEVELOPMENT_TRESHHOLD = .01;
+  private static final double REDEVELOPMENT_TRESHHOLD = .05;
   private static final boolean USE_MANIFOLD_MOVEMENT_TOOL = false;
-  private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 250;
+  private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 0.1;
+  private static final double AVATAR_HEIGHT = 1.7;//1.4;
+  private static final boolean PRINT_TRANSFORMATION_DATA = true;
   
   private static int INITIAL_HEIGHT = 30;
   private double height = INITIAL_HEIGHT/100.0;
 
   private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
   private static int colorIndex = 0;
+  
+  private SceneGraphComponent sgcLight = new SceneGraphComponent();
+  
+  //'forward' is in the basis with (1,0) ~ Development.direction and (0,1) ~ Development.left
+  private Vector forward = new Vector(1,0);  
 
   public DevelopmentViewCave(Development development, ColorScheme colorScheme, double radius) {
     super(development, colorScheme, radius, USE_MANIFOLD_MOVEMENT_TOOL);
@@ -62,12 +69,12 @@ public class DevelopmentViewCave extends DevelopmentView {
     M.assignTo(sgcDevelopment);
    
     //create light
-    SceneGraphComponent sgcpLight = new SceneGraphComponent();
-    PointLight plight = new PointLight();
-    plight.setIntensity(1.0);
-    plight.setColor(Color.white);
-    sgcpLight.setLight(plight);
-    sgcRoot.addChild(sgcpLight);
+    //sgcLight.setTransformation(new Transformation(MatrixBuilder.euclidean().getArray()));
+    PointLight pLight = new PointLight();
+    pLight.setIntensity(1.0);
+    pLight.setColor(Color.white);
+    sgcLight.setLight(pLight);
+    sgcRoot.addChild(sgcLight);
     
     //create identity transformation for the development sgc
     sgcRoot.setTransformation(new Transformation(MatrixBuilder.euclidean().getArray()));
@@ -77,7 +84,8 @@ public class DevelopmentViewCave extends DevelopmentView {
     appRoot.setAttribute(CommonAttributes.PICKABLE, false);
     sgcRoot.setAppearance(appRoot);
     
-    //sgcRoot.addTool(new ShootTool(development));
+    //add shoot tool
+    sgcRoot.addTool(new ShootTool());
     
     //start up Viewer with VR support
     this.addBasicUI();
@@ -117,18 +125,23 @@ public class DevelopmentViewCave extends DevelopmentView {
       
       double[] mData = ev.getTransformationMatrix();
       
-      //System.out.println("Transformation:");
-      //System.out.println("R0: [" + mData[0] + ", " + mData[1] + ", " + mData[2] + ", " + mData[3] + "]");
-      //System.out.println("R1: [" + mData[4] + ", " + mData[5] + ", " + mData[6] + ", " + mData[7] + "]");
-      //System.out.println("R1: [" + mData[8] + ", " + mData[9] + ", " + mData[10] + ", " + mData[11] + "]");
-      //System.out.println("R1: [" + mData[12] + ", " + mData[13] + ", " + mData[14] + ", " + mData[15] + "]");
+      if(PRINT_TRANSFORMATION_DATA){
+        System.out.println("Transformation:");
+        System.out.println("R0: [" + mData[0] + ", " + mData[1] + ", " + mData[2] + ", " + mData[3] + "]");
+        System.out.println("R1: [" + mData[4] + ", " + mData[5] + ", " + mData[6] + ", " + mData[7] + "]");
+        System.out.println("R1: [" + mData[8] + ", " + mData[9] + ", " + mData[10] + ", " + mData[11] + "]");
+        System.out.println("R1: [" + mData[12] + ", " + mData[13] + ", " + mData[14] + ", " + mData[15] + "]");
+      }
       
       //read off translation part of transformation from column 3
       double[] trans = new double[]{ mData[3], mData[7], mData[11] };
       
+      //read off forward-pointing direction from x-z submatrix [for shooting]
+      forward.setComponent(0,mData[0]);
+      forward.setComponent(1,mData[2]);
+      
       //translate sgcObject to avatar's head
-      double h = 1.7;//1.4;
-      MatrixBuilder.euclidean().translate(trans[0],h+trans[1],trans[2]).assignTo(sgcObject);
+      MatrixBuilder.euclidean().translate(trans[0],AVATAR_HEIGHT+trans[1],trans[2]).assignTo(sgcObject);
       
       //figure out delta(translation)
       if(!initialized){
@@ -144,17 +157,11 @@ public class DevelopmentViewCave extends DevelopmentView {
         //move source point
         development.building = true;
         development.translateSourcePoint(-MANIFOLD_UNITS_PER_AMBIENT_UNIT*dtrans[2],-MANIFOLD_UNITS_PER_AMBIENT_UNIT*dtrans[0]);
-        //development.translateSourcePoint(dtrans[0]);
         development.rebuild();
         development.building = false;
         //set 'old' values
         oldtrans[0] = trans[0]; oldtrans[1] = trans[1]; oldtrans[2] = trans[2];
       }
-      
-      //should be able to use the upper-left 3x3 submatrix of mData
-      //to determine which direction we are facing, hence in what direction to shoot objects
-      //use that information in ShootTool
-      
     }
   }
 
@@ -224,22 +231,20 @@ public class DevelopmentViewCave extends DevelopmentView {
   
   // ================== Shooting Tool ==================
   
-  private static class ShootTool extends AbstractTool {
-    private Development development;
+  private class ShootTool extends AbstractTool {
+   // private Development development;
     
-    public ShootTool(Development development) {
+    public ShootTool(){ //Development development) {
       super(InputSlot.LEFT_BUTTON);
-      this.development = development;
+      //this.development = development;
     }
    
     @Override
     public void activate(ToolContext tc) {
 
-      double x = tc.getCurrentPick().getWorldCoordinates()[0];
-      double y = tc.getCurrentPick().getWorldCoordinates()[1];
-      Vector movement = new Vector(x,-y);
-      movement.normalize();
-      //movement.scale(0.05);
+      //System.out.println("Added node!");
+      
+      Vector movement = development.getManifoldVector(forward.getComponent(0),forward.getComponent(1));
       development.addNodeAtSource(colors[colorIndex++], movement);
       colorIndex = colorIndex % colors.length;
     }

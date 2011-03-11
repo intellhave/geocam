@@ -4,6 +4,7 @@ import geoquant.Radius;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -301,6 +302,7 @@ public class Development extends Observable {
   /*
    * Assumes direction is normalized. Moves source point in direction of
    * direction vector, by distance given by scaleVal*units_per_millisecond.
+   * (scaleVal has units of milliseconds)
    */
   public void translateSourcePoint(double scaleVal) {
     Vector movement = new Vector(direction);
@@ -317,13 +319,15 @@ public class Development extends Observable {
   }
   
   /*
-   * Assumes direction and left are both normalized; moves in specified direction.
+   * Assumes direction and left are both normalized; moves specified number of units.
+   * (this is used in DevelopmentViewCave; the VR viewer has movement built in,
+   *  this just translates movement in VR space to movement in manifold)
    */
-  public void translateSourcePoint(double scaleForward, double scaleLeft) {
+  public void translateSourcePoint(double dForward, double dLeft) {
 
     Vector movement = new Vector(sourcePoint);
-    movement.add(Vector.scale(direction, scaleForward * units_per_millisecond));
-    movement.add(Vector.scale(left, scaleLeft * units_per_millisecond));
+    movement.add(Vector.scale(direction, dForward));
+    movement.add(Vector.scale(left, dLeft));
     
     computeEnd(movement, sourceFace, null);
     setSourcePoint(sourcePoint); // notifies observers
@@ -445,7 +449,7 @@ public class Development extends Observable {
       }
     }
   }
-
+  
   private void buildTree(DevelopmentNode parent, Face face, Edge sourceEdge,
       Frustum2D frustum, AffineTransformation t, int depth) {
 
@@ -466,7 +470,7 @@ public class Development extends Observable {
 
     if (depth >= maxDepth)
       return;
-
+    
     // continue developing across each edge
     List<Vertex> vertices = face.getLocalVertices();
     for (int i = 0; i < vertices.size(); i++) {
@@ -491,6 +495,13 @@ public class Development extends Observable {
         buildTree(node, newFace, edge, newFrustum, newTrans, depth + 1);
     }
   }
+  
+  public Vector getManifoldVector(double componentForward, double componentLeft){
+    Vector v = new Vector(0,0);
+    v.add(Vector.scale(direction,componentForward));
+    v.add(Vector.scale(left,componentLeft));
+    return v;
+  }
 
   public AffineTransformation getTranslation() {
     return new AffineTransformation(Vector.scale(sourcePoint, -1));
@@ -499,12 +510,14 @@ public class Development extends Observable {
   public AffineTransformation getRotationInverse() {
     
     //rotation matrix sending direction -> (1,0), left -> (0,1)
-    //assumes direction and left are normalized and that det(dir, left) = 1
+    //assumes det(dir, left) = 1
     
     Matrix M = new Matrix(new double[][]{
        new double[] { left.getComponent(1), -left.getComponent(0)  },
        new double[] { -direction.getComponent(1), direction.getComponent(0) }
     });
+    //double det = direction.getComponent(0)*left.getComponent(1)-direction.getComponent(1)*left.getComponent(0);
+    //M.scaleMatrix(1/det);
     
     return new AffineTransformation(M);
   }
@@ -524,7 +537,6 @@ public class Development extends Observable {
     try {
       toReturn = new AffineTransformation(M.inverse());
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return toReturn;
