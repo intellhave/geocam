@@ -43,7 +43,6 @@ public class FadingNode extends Node{
   @Override
   public void move(double elapsedTime) {
     time_to_live -= elapsedTime;
-    System.out.println("time to live = " + time_to_live);
     if(time_to_live <= 0) {
       die();
       return;

@@ -205,7 +205,7 @@ public class DevelopmentView3D extends DevelopmentView {
       Vector movement = new Vector(x,-y);
       movement.normalize();
       //movement.scale(0.05);
-      development.addNodeAtSource(colors[colorIndex++], movement);
+      development.addBulletAtSource(Color.black,/*colors[colorIndex++]*/ movement);
       colorIndex = colorIndex % colors.length;
     }
     @Override
