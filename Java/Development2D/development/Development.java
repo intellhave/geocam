@@ -40,6 +40,10 @@ import de.jreality.math.Rn;
  */
 
 public class Development extends Observable {
+  
+  //-- TIMING ------------
+  private static final int TASK_TYPE_BUILDTREE = 0;
+  //----------------------
 
   private AffineTransformation rotation = new AffineTransformation(2);
   private DevelopmentNode root;
@@ -419,6 +423,12 @@ public class Development extends Observable {
   }
 
   private void buildTree() {
+    
+    //-- TIMING ------------
+    TimingStatistics.nameTask(TASK_TYPE_BUILDTREE, "buildTree");
+    long taskID = TimingStatistics.startTask(TASK_TYPE_BUILDTREE);
+    //----------------------
+    
     // get transformation taking sourcePoint to origin (translation by
     // -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint,
@@ -448,6 +458,10 @@ public class Development extends Observable {
         buildTree(root, newFace, edge, frustum, t, 1);
       }
     }
+    
+    //-- TIMING ------------
+    TimingStatistics.endTask(taskID);
+    //----------------------
   }
   
   private void buildTree(DevelopmentNode parent, Face face, Edge sourceEdge,
