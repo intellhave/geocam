@@ -33,13 +33,18 @@ import de.jreality.util.SceneGraphUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
+import development.TimingStatistics;
 import development.Development.DevelopmentNode;
 import development.Vector;
 
 public class DevelopmentView3D extends DevelopmentView {
-  private static int INITIAL_HEIGHT = 15;
+  private static int INITIAL_HEIGHT = 25;
   private double height = INITIAL_HEIGHT/100.0;
   private static int MAX_HEIGHT = 30;
+  
+  private static final boolean USE_SHOOT_TOOL = false;
+  
+  /*TODO (Timing)*/ private static final int TASK_GET_GEOMETRY = TimingStatistics.generateTaskTypeID("DevelopmentView3D.getGeometry");
 
   private Viewer viewer;
   private SceneGraphPath camera_source;
@@ -71,7 +76,7 @@ public class DevelopmentView3D extends DevelopmentView {
     this.setShowPanelSlots(true,false,false,false);
 
     this.setContent(sgcRoot);
-    sgcRoot.addTool(new ShootTool(development));
+    if(USE_SHOOT_TOOL){ sgcRoot.addTool(new ShootTool(development)); }
     scene = this.getPlugin(Scene.class);
     this.startup();
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
@@ -135,6 +140,9 @@ public class DevelopmentView3D extends DevelopmentView {
    * Returns geometry for simulated 3D view of development.
    */
   public Geometry getGeometry() {
+    
+    /*TODO (Timing)*/ long taskID = TimingStatistics.startTask(TASK_GET_GEOMETRY);
+    
     DevelopmentGeometrySim3D geometry = new DevelopmentGeometrySim3D();
     ArrayList<Color> colors = new ArrayList<Color>();
     computeDevelopment(development.getRoot(), colors, geometry);
@@ -157,6 +165,9 @@ public class DevelopmentView3D extends DevelopmentView {
     ifsf.setFaceIndices(ifsf_faces);
     ifsf.setFaceColors(colorList);
     ifsf.update();
+    
+    /*TODO (Timing)*/ TimingStatistics.endTask(taskID); 
+    
     return ifsf.getGeometry();
   }
 
