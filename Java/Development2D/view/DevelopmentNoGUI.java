@@ -46,7 +46,7 @@ public class DevelopmentNoGUI {
     
     moveTimer = new Timer(50, null);
     moveTimer.addActionListener(new ObjectMoveListener());
-    moveTimer.start();
+    //moveTimer.start();
     
     //make it display timing statistics on exit (maybe there's a better way to do this?)
     Runtime.getRuntime().addShutdownHook(new Thread() {
