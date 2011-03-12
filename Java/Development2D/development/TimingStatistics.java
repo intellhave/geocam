@@ -109,7 +109,7 @@ public class TimingStatistics {
     if(!TIMING_ENABLED){ return; }
     
     //get specified task
-    TaskRecord task = activeTasks.get(curTaskID);
+    TaskRecord task = activeTasks.get(taskID);
     task.endTask();
     
     //get list of finished tasks for this task type
@@ -139,7 +139,7 @@ public class TimingStatistics {
       if(name == null){
         System.out.println("Task Type " + taskType + ":");
       }else{
-        System.out.println("Task Type \"" + name + "\":");
+        System.out.println("Task Type " + taskType + " (" + name + "):");
       }
       
       //statistics to print

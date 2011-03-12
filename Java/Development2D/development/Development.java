@@ -41,7 +41,8 @@ import de.jreality.math.Rn;
 
 public class Development extends Observable {
 
-  /*TIMING*/ private static final int TASK_TYPE_BUILDTREE = TimingStatistics.generateTaskTypeID("Development.buildTree");
+  /*TODO (Timing)*/ private static final int TASK_TYPE_BUILDTREE = TimingStatistics.generateTaskTypeID("Development.buildTree");
+  /*TODO (Timing)*/ private static final int TASK_TYPE_UPDATEOBJECTS = TimingStatistics.generateTaskTypeID("DevelopmentNode.updateObjects");
 
   private AffineTransformation rotation = new AffineTransformation(2);
   private DevelopmentNode root;
@@ -78,7 +79,7 @@ public class Development extends Observable {
                                                                              // (Integer[])(Triangulation.faceTable.keySet().toArray());
     Triangulation.faceTable.keySet().toArray(keyList);
     Random rand = new Random();
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < -1; i++) {
       // get random index of face in which to place object
       int index = rand.nextInt(keyList.length);
       Face f = Triangulation.faceTable.get(index);
@@ -299,6 +300,8 @@ public class Development extends Observable {
     y_new = sin * x + cos * y;
     left = new Vector(x_new, y_new);
 
+    buildTree();
+    setChanged();
     notifyObservers("rotation");
   }
 
@@ -416,14 +419,14 @@ public class Development extends Observable {
     }
 
     buildTree();
-
     setChanged();
     notifyObservers("source");
   }
 
   private void buildTree() {
 
-    /*TIMING*/ long taskID = TimingStatistics.startTask(TASK_TYPE_BUILDTREE);
+    /*TODO (Timing)*/ long taskID;
+    /*TODO (Timing)*/ taskID = TimingStatistics.startTask(TASK_TYPE_BUILDTREE);
     
     // get transformation taking sourcePoint to origin (translation by
     // -1*sourcePoint)
@@ -455,7 +458,11 @@ public class Development extends Observable {
       }
     }
     
-    /*TIMING*/ TimingStatistics.endTask(taskID);
+    /*TODO (Timing)*/ TimingStatistics.endTask(taskID);
+    
+    /*TODO (Timing)*/ taskID = TimingStatistics.startTask(TASK_TYPE_UPDATEOBJECTS);
+    root.updateObjects();
+    /*TODO (Timing)*/ TimingStatistics.endTask(taskID);
   }
   
   private void buildTree(DevelopmentNode parent, Face face, Edge sourceEdge,
@@ -585,10 +592,12 @@ public class Development extends Observable {
       face = f;
       affineTrans = at;
 
-      updateObjects();
+      //unnecessary to updateObjects here.. in buildTree, just call once on the root when complete
+      //updateObjects();
     }
 
     public void updateObjects() {
+      
       containedObjects.clear();
       containedTrails.clear();
       synchronized (nodeList) {
@@ -658,6 +667,7 @@ public class Development extends Observable {
       for (DevelopmentNode child : children) {
         child.updateObjects();
       }
+
     }
 
     public void addChild(DevelopmentNode node) {

@@ -46,11 +46,11 @@ public class DevelopmentGUI extends JFrame {
   private static int MAX_DEPTH          = 25;
   private static int INITIAL_POINT_SIZE = 4;
   private static int MAX_POINT_SIZE     = 20;
-  private static int INITIAL_VELOCITY   = 6;
+  private static int INITIAL_VELOCITY   = 2;
   private static int MAX_VELOCITY       = 10;
   
   private double radius = INITIAL_POINT_SIZE/100.0;
-  private int currentDepth = 21;
+  private int currentDepth = 8;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -69,7 +69,7 @@ public class DevelopmentGUI extends JFrame {
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
-    String filename = "Data/off/cone.off";
+    String filename = "Data/off/tetra2.off";
     loadSurface(filename);
 
     System.out.println("======== Initializing 2D view ========");
@@ -83,6 +83,7 @@ public class DevelopmentGUI extends JFrame {
     development.addObserver(view3D);
 
     layoutGUI();
+    development.setVelocity(INITIAL_VELOCITY/1000.0);
     
     moveTimer = new Timer(50, null);
     moveTimer.addActionListener(new ObjectMoveListener());
