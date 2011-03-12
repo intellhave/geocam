@@ -20,7 +20,7 @@ public class DevelopmentNoGUI {
  
   private static int INITIAL_POINT_SIZE = 4;
   private static double radius = INITIAL_POINT_SIZE/100.0;
-  private static int currentDepth = 8;
+  private static int currentDepth = 20;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -36,7 +36,7 @@ public class DevelopmentNoGUI {
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
-    String filename = "Data/off/tetra2.off";
+    String filename = "Data/off/cone.off";
     loadSurface(filename);
 
     System.out.println("======= Initializing Viewer =======");

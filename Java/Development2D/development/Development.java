@@ -436,8 +436,8 @@ public class Development extends Observable {
     rotation = getRotationInverse();
     t.leftMultiply(rotation);
 
-    // EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
-    root = new DevelopmentNode(null, sourceFace, null, t);
+    EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
+    root = new DevelopmentNode(null, sourceFace, null, transformedFace, t);
 
     // continue development across each adjacent edge
     List<Vertex> vertices = sourceFace.getLocalVertices();
@@ -464,7 +464,7 @@ public class Development extends Observable {
     root.updateObjects();
     /*TODO (Timing)*/ TimingStatistics.endTask(taskID);
   }
-  
+
   private void buildTree(DevelopmentNode parent, Face face, Edge sourceEdge,
       Frustum2D frustum, AffineTransformation t, int depth) {
 
@@ -474,13 +474,15 @@ public class Development extends Observable {
         sourceEdge);
     newTrans.leftMultiply(coordTrans);
     newTrans.leftMultiply(t);
-
-    EmbeddedFace clippedFace = frustum.clipFace(newTrans.affineTransFace(face));
+    
+    //get the transformed face vertices and clipped face
+    EmbeddedFace transFace = newTrans.affineTransFace(face);
+    EmbeddedFace clippedFace = frustum.clipFace(transFace);
     if (clippedFace == null) {
       return;
     }
 
-    DevelopmentNode node = new DevelopmentNode(parent, face, frustum, newTrans);
+    DevelopmentNode node = new DevelopmentNode(parent, face, frustum, clippedFace, newTrans);
     parent.addChild(node);
 
     if (depth >= maxDepth)
@@ -488,29 +490,26 @@ public class Development extends Observable {
     
     // continue developing across each edge
     List<Vertex> vertices = face.getLocalVertices();
-    for (int i = 0; i < vertices.size(); i++) {
-      Vertex v0 = vertices.get(i);
-      Vertex v1 = vertices.get((i + 1) % vertices.size());
-      Vertex v2 = vertices.get((i + 2) % vertices.size());
+    for (int i=0; i < vertices.size(); i++) {
+      int j = (i+1)%vertices.size();
+      int k = (i+2)%vertices.size();
 
-      Edge edge = DevelopmentComputations.findSharedEdge(v0, v1);
+      Edge edge = DevelopmentComputations.findSharedEdge(vertices.get(i), vertices.get(j));
       if (edge.equals(sourceEdge))
         continue;
 
-      Vector vect0 = newTrans.affineTransPoint(Coord2D.coordAt(v0, face));
-      Vector vect1 = newTrans.affineTransPoint(Coord2D.coordAt(v1, face));
-      Vector vect2 = newTrans.affineTransPoint(Coord2D.coordAt(v2, face));
+      Vector vect0 = transFace.getVectorAt(i);
+      Vector vect1 = transFace.getVectorAt(j);
+      Vector vect2 = transFace.getVectorAt(k);
 
-      Frustum2D newFrustum = DevelopmentComputations.getNewFrustum(frustum,
-          vect0, vect1, vect2);
-
+      Frustum2D newFrustum = DevelopmentComputations.getNewFrustum(frustum, vect0, vect1, vect2);
       Face newFace = DevelopmentComputations.getNewFace(face, edge);
-
-      if (newFrustum != null && newFace != null)
-        buildTree(node, newFace, edge, newFrustum, newTrans, depth + 1);
+      if ((newFrustum == null) || (newFace == null)){ continue; }
+      
+      buildTree(node, newFace, edge, newFrustum, newTrans, depth + 1);
     }
   }
-  
+
   public Vector getManifoldVector(double componentForward, double componentLeft){
     Vector v = new Vector(0,0);
     v.add(Vector.scale(direction,componentForward));
@@ -573,7 +572,7 @@ public class Development extends Observable {
    */
 
   public class DevelopmentNode {
-    private EmbeddedFace embeddedFace = null;
+    private EmbeddedFace clippedFace = null;
     private Face face;
     private AffineTransformation affineTrans;
     private ArrayList<DevelopmentNode> children = new ArrayList<DevelopmentNode>();
@@ -582,7 +581,7 @@ public class Development extends Observable {
     private Frustum2D frustum;
     private int depth;
 
-    public DevelopmentNode(DevelopmentNode prev, Face f, Frustum2D frust,
+    public DevelopmentNode(DevelopmentNode prev, Face f, Frustum2D frust, EmbeddedFace cf, 
         AffineTransformation at) {
       frustum = frust;
       if (prev == null)
@@ -590,6 +589,7 @@ public class Development extends Observable {
       else
         depth = prev.getDepth() + 1;
       face = f;
+      clippedFace = cf;
       affineTrans = at;
 
       //unnecessary to updateObjects here.. in buildTree, just call once on the root when complete
@@ -677,15 +677,15 @@ public class Development extends Observable {
     public void removeChild(DevelopmentNode node) {
       children.remove(node);
     }
-
-    public EmbeddedFace getEmbeddedFace() {
-      if (embeddedFace == null) {
-        if (frustum == null)
-          embeddedFace = affineTrans.affineTransFace(face);
-        else
-          embeddedFace = frustum.clipFace(affineTrans.affineTransFace(face));
+    
+    public EmbeddedFace getClippedFace() {
+      
+      if(clippedFace == null){
+        //generate the clippedFace from frustum and affineTrans
+        if(frustum == null){ clippedFace = affineTrans.affineTransFace(face); }
+        else{ clippedFace = frustum.clipFace(affineTrans.affineTransFace(face)); }
       }
-      return embeddedFace;
+      return clippedFace;
     }
 
     public Face getFace() {

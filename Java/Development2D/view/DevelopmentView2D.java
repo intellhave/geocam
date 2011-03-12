@@ -139,7 +139,7 @@ public class DevelopmentView2D extends DevelopmentView {
         }
       }
 
-    double[][] face = node.getEmbeddedFace().getVectorsAsArray();
+    double[][] face = node.getClippedFace().getVectorsAsArray();
     geometry.addFace(face);
     colors.add(colorScheme.getColor(node));
 
