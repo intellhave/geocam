@@ -39,12 +39,16 @@ import development.Vector;
 
 public class DevelopmentViewCave extends DevelopmentView {
   
+  //static settings
   private static final double REDEVELOPMENT_TRESHHOLD = .05;
   private static final boolean USE_MANIFOLD_MOVEMENT_TOOL = false;
   private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 0.1;
-  private static final double AVATAR_HEIGHT = 1.7;//1.4;
-  private static final boolean PRINT_TRANSFORMATION_DATA = true;
+  private static final double AVATAR_HEIGHT = 1.7;//1.2;
+  //debug settings
+  private static final boolean PRINT_TRANSFORMATION_DATA = false;
+  private static final boolean PRINT_SHOOT_TOOL_DATA = false;
   
+  //other settings
   private static int INITIAL_HEIGHT = 30;
   private double height = INITIAL_HEIGHT/100.0;
 
@@ -79,9 +83,9 @@ public class DevelopmentViewCave extends DevelopmentView {
     //create identity transformation for the development sgc
     sgcRoot.setTransformation(new Transformation(MatrixBuilder.euclidean().getArray()));
     
-    //collision detection off
+    //set picking
     Appearance appRoot = new Appearance();
-    appRoot.setAttribute(CommonAttributes.PICKABLE, false);
+    appRoot.setAttribute(CommonAttributes.PICKABLE, true);
     sgcRoot.setAppearance(appRoot);
     
     //add shoot tool
@@ -235,14 +239,16 @@ public class DevelopmentViewCave extends DevelopmentView {
    // private Development development;
     
     public ShootTool(){ //Development development) {
-      super(InputSlot.LEFT_BUTTON);
+      super(InputSlot.POINTER_HIT);
       //this.development = development;
     }
    
     @Override
     public void activate(ToolContext tc) {
 
-      //System.out.println("Added node!");
+      if(PRINT_SHOOT_TOOL_DATA){
+        System.out.println("Added node!");
+      }
       
       Vector movement = development.getManifoldVector(forward.getComponent(0),forward.getComponent(1));
       development.addNodeAtSource(colors[colorIndex++], movement);

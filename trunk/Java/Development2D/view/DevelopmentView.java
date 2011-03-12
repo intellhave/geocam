@@ -61,6 +61,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
     sgcRoot.addChild(sgcDevelopment);
     if(useMovementTool){ sgcRoot.addTool(new ManifoldMovementTool()); }
+    
   }
   
   public void setColorScheme(ColorScheme scheme) {

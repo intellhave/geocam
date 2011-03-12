@@ -13,6 +13,7 @@ import view.ColorScheme.schemes;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
+import development.TimingStatistics;
 import development.Vector;
 
 public class DevelopmentNoGUI {
@@ -46,6 +47,11 @@ public class DevelopmentNoGUI {
     moveTimer = new Timer(50, null);
     moveTimer.addActionListener(new ObjectMoveListener());
     moveTimer.start();
+    
+    //make it display timing statistics on exit (maybe there's a better way to do this?)
+    Runtime.getRuntime().addShutdownHook(new Thread() {
+      public void run(){ TimingStatistics.printData(); }
+    });
   }
 
   /*
