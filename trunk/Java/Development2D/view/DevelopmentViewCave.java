@@ -26,6 +26,7 @@ import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
 
 import development.Development;
+import development.TimingStatistics;
 import development.Development.DevelopmentNode;
 import development.Vector;
 
@@ -41,12 +42,14 @@ public class DevelopmentViewCave extends DevelopmentView {
   
   //static settings
   private static final double REDEVELOPMENT_TRESHHOLD = .05;
-  private static final boolean USE_MANIFOLD_MOVEMENT_TOOL = false;
   private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 0.1;
   private static final double AVATAR_HEIGHT = 1.7;//1.2;
+  private static final boolean USE_MANIFOLD_MOVEMENT_TOOL = false;
+  private static final boolean USE_SHOOT_TOOL = false;
   //debug settings
   private static final boolean PRINT_TRANSFORMATION_DATA = false;
   private static final boolean PRINT_SHOOT_TOOL_DATA = false;
+  private static final int TASK_GET_GEOMETRY = TimingStatistics.generateTaskTypeID("DevelopmentViewCave.getGeometry");
   
   //other settings
   private static int INITIAL_HEIGHT = 30;
@@ -89,7 +92,7 @@ public class DevelopmentViewCave extends DevelopmentView {
     sgcRoot.setAppearance(appRoot);
     
     //add shoot tool
-    sgcRoot.addTool(new ShootTool());
+    if(USE_SHOOT_TOOL){ sgcRoot.addTool(new ShootTool()); }
     
     //start up Viewer with VR support
     this.addBasicUI();
@@ -181,6 +184,9 @@ public class DevelopmentViewCave extends DevelopmentView {
    * Returns geometry for simulated 3D view of development.
    */
   public Geometry getGeometry() {
+    
+    /*TIMING*/ long taskID = TimingStatistics.startTask(TASK_GET_GEOMETRY);
+    
     DevelopmentGeometrySim3D geometry = new DevelopmentGeometrySim3D();
     ArrayList<Color> colors = new ArrayList<Color>();
     computeDevelopment(development.getRoot(), colors, geometry);
@@ -203,6 +209,9 @@ public class DevelopmentViewCave extends DevelopmentView {
     ifsf.setFaceIndices(ifsf_faces);
     ifsf.setFaceColors(colorList);
     ifsf.update();
+    
+    /*TIMING*/ TimingStatistics.endTask(taskID);
+    
     return ifsf.getGeometry();
   }
 

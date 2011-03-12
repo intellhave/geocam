@@ -8,17 +8,32 @@ import java.util.Iterator;
  * This is an easy-to-use class to keep track of timing statistics for any piece of code
  * 
  * Instructions:
+ * 
  * - Say you want to measure how long it takes some method (or part of a method, etc) to run:
- * -  (i) Choose an integer (taskType) to denote this type of task
- * -  (ii) At the beginning of the method, do:  long taskID = TimingStatistics.startTask(taskType);
- * -  (iii) At the end of the method, do: TimingStatistics.endTask(taskID);
- * -  (optional) At any time, call 'nameTask' to associate a String to the taskType (just to clarify output)
+ * -  (i) Choose an integer ID for this type of task.  To ensure uniqueness, should always do:
+ * -      static final int TASK_TYPE_A = TimingStatistics.generateTaskTypeID("A"); (the string is optional, just clarifies output)
+ * -  (ii) At the beginning of the code to measure:  long taskID = TimingStatistics.startTask(taskType);
+ * -  (iii) At the end of the code to measure: TimingStatistics.endTask(taskID);
  * - Call printData() at any time to show the statistics (for example, when the program exits)
  * 
  * Important Notes:
+ * 
  * - No need to initialize, can just start using it whenever
  * - Can 'disable' the class by setting TIMING_ENABLED = false
  * - Multiple tasks of the same type can be running simultaneously (the taskID differentiates them)
+ * 
+ * Sample Output:
+ * 
+ * ==BEGIN TIMING DATA==
+ * Task Type "Development.buildTree":
+ *  - Finished Tasks: 241
+ *  - Average: 65ms (Total: 15818ms)
+ *  - Fastest: 21ms, Slowest: 327ms
+ * Task Type "DevelopmentViewCave.getGeometry":
+ *  - Finished Tasks: 121
+ *  - Average: 51ms (Total: 6209ms)
+ *  - Fastest: 13ms, Slowest: 337ms
+ * ==END TIMING DATA==
  */
 
 public class TimingStatistics {
@@ -26,8 +41,9 @@ public class TimingStatistics {
   //can force all timing to be disabled by setting this false
   private static final boolean TIMING_ENABLED = true;
   
-  //next unique task identifier
+  //next unique taskID and taskTypeID
   private static long curTaskID = 0;
+  private static int curTaskTypeID = 0;
   //active tasks
   private static HashMap<Long,TaskRecord> activeTasks = new HashMap<Long,TaskRecord>();
   //completed tasks
@@ -61,11 +77,21 @@ public class TimingStatistics {
   private TimingStatistics(){}
   
   public static void nameTask(Integer taskType, String name){
-    
     //only works the first time for a particular task type
     if(typeNames.get(taskType) == null){
       typeNames.put(taskType,name);
     }
+  }
+  
+  public static int generateTaskTypeID(){
+    curTaskTypeID++;
+    return curTaskTypeID;
+  }
+  
+  public static int generateTaskTypeID(String name){
+    int taskType = generateTaskTypeID();
+    nameTask(taskType,name);
+    return taskType;
   }
   
   public static long startTask(Integer taskType){
