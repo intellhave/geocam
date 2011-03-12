@@ -9,6 +9,8 @@ import de.jreality.scene.Geometry;
 
 public class Frustum2D {
 
+  /*TODO (TIMING)*/ private static final int TASK_TYPE_CLIPFACE = TimingStatistics.generateTaskTypeID("Frustum2D.clipFace"); 
+  
   private static final double epsilon = Math.pow(10, -6);
   private Vector left, right;
   private Vector leftNormal, rightNormal;
@@ -91,6 +93,8 @@ public class Frustum2D {
 
   public EmbeddedFace clipFace(EmbeddedFace toClip) {
     
+    /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_TYPE_CLIPFACE);
+    
     boolean verbose = false;
     
     int left_intersections = 0;
@@ -104,8 +108,10 @@ public class Frustum2D {
       } else
         if(verbose){ System.out.println("false"); }
     }
-    if (vertices.size() == toClip.getNumberVertices())
+    if (vertices.size() == toClip.getNumberVertices()){
+      /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
       return new EmbeddedFace(toClip); // all vertices contained in frustum
+    }
 
     ArrayList<Vector> intersections = new ArrayList<Vector>();
     for (int i = 0; i < toClip.getNumberVertices(); i++) {
@@ -125,10 +131,14 @@ public class Frustum2D {
     vertices.addAll(intersections);
     //if(left_intersections == 1) vertices.add(new Vector(0, 0));
 
-    if (vertices.size() < 3)
+    if (vertices.size() < 3){
+      /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
       return null;
+    }
     ConvexHull2D hull = new ConvexHull2D(vertices);
-    return new EmbeddedFace(hull.getPoints());
+    EmbeddedFace retef = new EmbeddedFace(hull.getPoints());
+    /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
+    return retef;
   }
 
   /*

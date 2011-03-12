@@ -185,7 +185,7 @@ public class DevelopmentView3D extends DevelopmentView {
         }
     }
 
-    double[][] face = devNode.getEmbeddedFace().getVectorsAsArray();
+    double[][] face = devNode.getClippedFace().getVectorsAsArray();
     geometry.addFace(face, height);
 
     // (adding two faces at a time)

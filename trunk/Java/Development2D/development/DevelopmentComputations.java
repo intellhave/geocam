@@ -59,6 +59,22 @@ public class DevelopmentComputations {
     }
     return edge;
   }
+  
+  /*
+   * Returns the vertex local to both edges (null if no such edge exists)
+   */
+  public static Vertex findSharedVertex(Edge e0, Edge e1) {
+    List<Vertex> list0 = e0.getLocalVertices();
+    List<Vertex> list1 = e1.getLocalVertices();
+    
+    //will always be at most 4 comparisons
+    for(Vertex v : list0){
+      for(Vertex w : list1){
+         if(v == w){ return v; }
+      }
+    }
+    return null;
+  }
 
   public static Frustum2D getNewFrustum(Frustum2D frustum, Vector vect0,
       Vector vect1, Vector vect3) {
