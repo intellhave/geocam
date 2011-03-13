@@ -1,10 +1,9 @@
 package development;
 
 import java.awt.Color;
-import java.util.List;
-
-import triangulation.Edge;
+import objects.ManifoldPosition;
 import triangulation.Face;
+
 
 /*************************************************
  *  Node
@@ -26,8 +25,7 @@ import triangulation.Face;
 
 public class Node {
   protected Color color;
-  protected Face face;  // face containing this node
-  protected Vector pos; // coordinates in containing face
+  protected ManifoldPosition pos;
   protected double radius = 0.03;
   protected Vector movement = new Vector(0,0);
   protected double transparency = 0.1;
@@ -36,18 +34,16 @@ public class Node {
   protected double units_per_millisecond = movement_units_per_second/1000;
 
   
-  public Node(Color color, Face face, Vector pos, double units_per_millisecond, double radius) {
+  public Node(Color color, ManifoldPosition mp, double units_per_millisecond, double radius) {
     this.color = color;
-    this.face = face;
-    this.pos = new Vector(pos);
+    this.pos = new ManifoldPosition(mp); 
     this.units_per_millisecond = units_per_millisecond;
     this.radius = radius;
   }
   
   
   public Node(Node node) {
-    face = node.getFace();
-    pos = new Vector(node.getPosition());
+    pos = new ManifoldPosition(node.getManifoldPosition());
     radius = node.getRadius();
     units_per_millisecond = node.getVelocity();
     movement = new Vector(node.getMovement());
@@ -58,10 +54,10 @@ public class Node {
   public void setMovement(Vector v) { movement = v; }
   public Vector getMovement() { return movement; }
   public Color getColor() { return color; }
-  public Face getFace() { return face; }
-  public Vector getPosition() { return pos; }
-  public void setPosition(Vector pos) { this.pos = pos; }
-  public void setFace(Face face) { this.face = face; }
+  public ManifoldPosition getManifoldPosition(){ return pos; }
+  public void setManifoldPosition(ManifoldPosition newpos){ pos = newpos; }
+  public Vector getPosition(){ return pos.getPosition(); }
+  public Face getFace(){ return pos.getFace(); }
   public void setColor(Color color) { this.color = color; }
   public double getRadius() { return radius; }
   public void setRadius(double radius) { this.radius = radius; }
@@ -76,69 +72,7 @@ public class Node {
     // assumes movement is normalized
     Vector v = new Vector(movement);
     v.scale(elapsedTime*units_per_millisecond);
-    pos = computeEnd(Vector.add(pos, v), face, null);
+    pos.move(v,movement);
   }
   
-  /*
-   * Traces geodesic in direction of point, applying the appropriate affine
-   * transformation whenever it crosses an edge. When a face is found containing
-   * the transformed point, these become the new source face and point.
-   * ignoreEdge is the edge just crossed, so don't want to cross it again.
-   */
-  protected Vector computeEnd(Vector point, Face face, Edge ignoreEdge) {
-
-    // see if current face contains point
-    Vector l = DevelopmentComputations.getBarycentricCoords(point, face);
-    double l1 = l.getComponent(0);
-    double l2 = l.getComponent(1);
-    double l3 = l.getComponent(2);
-
-    if (l1 >= 0 && l1 < 1 && l2 >= 0 && l2 < 1 && l3 >= 0 && l3 < 1) {
-      this.face = face;
-      return new Vector(point);
-    }
-
-    // find which edge vector intersects to get next face
-    // (currently not handling vector through vertex)
-    boolean foundEdge = false;
-    Edge edge = null;
-    List<Edge> edges = face.getLocalEdges();
-
-    for (int i = 0; i < edges.size(); i++) {
-      edge = edges.get(i);
-      if (ignoreEdge != null && edge.equals(ignoreEdge))
-        continue;
-      Vector v1 = Coord2D.coordAt(edge.getLocalVertices().get(0), face);
-      Vector v2 = Coord2D.coordAt(edge.getLocalVertices().get(1), face);
-
-      Vector edgeDiff = Vector.subtract(v1, v2);
-      Vector sourceDiff = Vector.subtract(pos, v2);
-      Vector pointDiff = Vector.subtract(point, v2);
-      Vector intersection = Vector.findIntersection(sourceDiff, pointDiff,
-          edgeDiff);
-      if (intersection != null) {
-        foundEdge = true;
-        break;
-      }
-    }
-    if (foundEdge) {
-      Face nextFace = null;
-
-      List<Face> faces = edge.getLocalFaces();
-      if (faces.get(0).equals(face))
-        nextFace = faces.get(1);
-      else
-        nextFace = faces.get(0);
-
-      // get transformation taking current face to next
-      AffineTransformation trans = CoordTrans2D.affineTransAt(face, edge);
-      Vector newPoint = trans.affineTransPoint(point);
-      movement = trans.affineTransVector(movement);
-
-      return computeEnd(newPoint, nextFace, edge);
-    } else {
-      System.out.println("did not find edge\n");
-      return null;
-    }
-  }
 }

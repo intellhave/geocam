@@ -3,6 +3,8 @@ package development;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import objects.ManifoldPosition;
+
 import triangulation.Face;
 
 /**
@@ -25,11 +27,11 @@ public class FadingNode extends Node{
   
   protected static final int DISTANCE = 5;
   
-  public FadingNode(Color color, Face face, Vector pos, double velocity, double radius) {
-    super(color, face, pos, velocity, radius);
+  public FadingNode(Color color, ManifoldPosition pos, double velocity, double radius) {
+    super(color, pos, velocity, radius);
     time_to_live = 10*1000;
     transparency = 0.2;
-    currentTrail = new Trail(pos, pos, face, color);
+    currentTrail = new Trail(pos.getPosition(), pos.getPosition(), pos.getFace(), color);
   }
   
   public FadingNode(FadingNode node) {
@@ -63,23 +65,24 @@ public class FadingNode extends Node{
     else if(time_to_live < 1000)
       transparency = 0.9;
     
-    Vector oldPos = new Vector(pos);
+    Vector oldPos = new Vector(pos.getPosition());
     Vector oldMove = new Vector(movement);
     
     Vector v = new Vector(movement);
     v.scale(elapsedTime*units_per_millisecond);
-    pos = computeEnd(Vector.add(pos, v), face, null);
+    //pos = computeEnd(Vector.add(pos.getPosition(), v), face, null);
+    pos.move(v,movement);
         
     if(oldMove.equals(movement)) { // movement only changes if it enters a new face
-      currentTrail.end = pos;
+      currentTrail.end = pos.getPosition();
     } else {
       oldMove.scale(units_per_millisecond*elapsedTime*0.5);
       currentTrail.end = Vector.add(oldPos, oldMove); // stretch it a little to big avoid jumps
       trails.add(currentTrail);
       Vector s = new Vector(movement);
       s.scale(-0.5*elapsedTime*units_per_millisecond);
-      s.add(pos);
-      currentTrail = new Trail(s, pos, face, color);
+      s.add(pos.getPosition());
+      currentTrail = new Trail(s, pos.getPosition(), pos.getFace(), color);
     }
   }
   
