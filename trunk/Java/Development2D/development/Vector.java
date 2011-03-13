@@ -65,6 +65,10 @@ public class Vector {
   public void setComponent(int k, double val) {
     components_[k] = val;
   }
+  
+  public void setEqualTo(Vector v){
+   components_ = Arrays.copyOf(v.components_,v.components_.length);
+  }
 
   public double getComponent(int k) {
     return components_[k];

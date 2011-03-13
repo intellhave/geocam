@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.awt.Color;
 
+import objects.ManifoldPosition;
+
 import geoquant.Alpha;
 import geoquant.LKCurvature;
 import geoquant.Eta;
@@ -62,7 +64,7 @@ public class ConformalDiskflowTest {
         break;
       }
  //   System.out.println("hi1");
-    Development development = new Development(sourceFace, sourcePoint, currentDepth, stepSize);
+    Development development = new Development(new ManifoldPosition(sourceFace, sourcePoint), currentDepth, stepSize);
  //   Development development = null;
  //   System.err.println(development.getNodeList());
  //   System.out.println("hi2");

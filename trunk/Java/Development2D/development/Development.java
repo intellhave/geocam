@@ -4,11 +4,12 @@ import geoquant.Radius;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Random;
+
+import objects.ManifoldPosition;
 
 import triangulation.Edge;
 import triangulation.Face;
@@ -46,28 +47,29 @@ public class Development extends Observable {
 
   private AffineTransformation rotation = new AffineTransformation(2);
   private DevelopmentNode root;
-  private Vector sourcePoint;
+  
+  private ManifoldPosition source;
   private Vector direction = new Vector(1, 0);
   private Vector left = new Vector(0, 1);
-  private Face sourceFace;
+
   private int maxDepth;
-  private ArrayList<Node> nodeList = new ArrayList<Node>();
-  private ArrayList<FadingNode> bulletList = new ArrayList<FadingNode>();
-  private Node sourcePointNode;
   private double radius; // default radius of objects
   private double units_per_millisecond = 0.0004;
 
   public boolean building = false;
+  
+  //objects
+  private Node sourcePointNode;
+  private ArrayList<Node> nodeList = new ArrayList<Node>();
+  private ArrayList<FadingNode> bulletList = new ArrayList<FadingNode>();
 
-  public Development(Face sourceF, Vector sourcePt, int depth, double radius) {
+  public Development(ManifoldPosition sourcePoint, int depth, double radius) {
 
     this.radius = radius;
     maxDepth = depth;
-    sourcePoint = sourcePt;
-    sourceFace = sourceF;
-    System.out.println("source point = " + sourcePoint);
-    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint,
-        units_per_millisecond, radius);
+    source = sourcePoint;
+    System.out.println("source point = " + source.getPosition());
+    sourcePointNode = new Node(Color.blue, source, units_per_millisecond, radius);
     sourcePointNode.setRadius(radius);
     synchronized (nodeList) {
       nodeList.add(sourcePointNode);
@@ -79,7 +81,7 @@ public class Development extends Observable {
                                                                              // (Integer[])(Triangulation.faceTable.keySet().toArray());
     Triangulation.faceTable.keySet().toArray(keyList);
     Random rand = new Random();
-    for (int i = 0; i < -1; i++) {
+    for (int i = 0; i < 0; i++) {
       // get random index of face in which to place object
       int index = rand.nextInt(keyList.length);
       Face f = Triangulation.faceTable.get(index);
@@ -93,7 +95,7 @@ public class Development extends Observable {
       p.scale(1.0f / 3.0f);
 
       // create node
-      Node n = new Node(colors[i], f, p, units_per_millisecond, radius);
+      Node n = new Node(colors[i], new ManifoldPosition(f, p), units_per_millisecond, radius);
       n.setRadius(radius);
 
       // set random movement direction
@@ -107,24 +109,21 @@ public class Development extends Observable {
     buildTree();
   }
 
-  public void rebuild(Face sourceF, Vector sourcePt, int depth) {
+  public void rebuild(ManifoldPosition sourcePoint, int depth) {
     maxDepth = depth;
-    sourcePoint = sourcePt;
-    sourceFace = sourceF;
+    source = sourcePoint;
 
     synchronized (nodeList) {
       nodeList.clear();
     }
 
-    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint,
-        units_per_millisecond, radius);
+    sourcePointNode = new Node(Color.blue, source, units_per_millisecond, radius);
     sourcePointNode.setRadius(radius);
     synchronized (nodeList) {
       nodeList.add(sourcePointNode);
     }
 
-    Node n = new Node(Color.red, sourceFace, sourcePoint,
-        units_per_millisecond, radius);
+    Node n = new Node(Color.red, source, units_per_millisecond, radius);
     n.setRadius(radius);
     n.setMovement(new Vector(1, 0));
     synchronized (nodeList) {
@@ -215,8 +214,7 @@ public class Development extends Observable {
     rotation = getRotationInverse();
     vector = rotation.affineTransVector(vector);
 
-    FadingNode node = new FadingNode(color, sourceFace, sourcePoint,
-        units_per_millisecond, radius);
+    FadingNode node = new FadingNode(color, source, units_per_millisecond, radius);
     node.setMovement(vector);
     synchronized (nodeList) {
       nodeList.add(node);
@@ -228,8 +226,7 @@ public class Development extends Observable {
     rotation = getRotationInverse();
     vector = rotation.affineTransVector(vector);
 
-    FadingNode bullet = new FadingNode(color, sourceFace, sourcePoint,
-        units_per_millisecond, radius / 3);
+    FadingNode bullet = new FadingNode(color, source, units_per_millisecond, radius / 3);
     bullet.setMovement(vector);
     synchronized (bulletList) {
       bulletList.add(bullet);
@@ -243,7 +240,7 @@ public class Development extends Observable {
       break;
     }
 
-    Node node = new Node(color, sourceFace, Coord2D.coordAt(v, sourceFace),
+    Node node = new Node(color, new ManifoldPosition(sourceFace, Coord2D.coordAt(v, sourceFace)),
         units_per_millisecond, radius);
     // System.err.println("1 "+ node.getRadius());
     node.setRadius(Radius.valueAt(v));
@@ -264,8 +261,8 @@ public class Development extends Observable {
     return root;
   }
 
-  public Vector getSourcePoint() {
-    return sourcePoint;
+  public ManifoldPosition getSource() {
+    return source;
   }
 
   public int getDepth() {
@@ -311,12 +308,11 @@ public class Development extends Observable {
    * (scaleVal has units of milliseconds)
    */
   public void translateSourcePoint(double scaleVal) {
-    Vector movement = new Vector(direction);
-    movement.scale(scaleVal * units_per_millisecond);
-
-    movement.add(sourcePoint);
-    computeEnd(movement, sourceFace, null);
-    setSourcePoint(sourcePoint); // notifies observers
+    Vector dx = new Vector(direction);
+    dx.scale(scaleVal * units_per_millisecond);
+    
+    source.move(dx,direction,left);
+    updateSource(); // notifies observers
   }
   
   public void rebuild(){
@@ -331,88 +327,21 @@ public class Development extends Observable {
    */
   public void translateSourcePoint(double dForward, double dLeft) {
 
-    Vector movement = new Vector(sourcePoint);
-    movement.add(Vector.scale(direction, dForward));
-    movement.add(Vector.scale(left, dLeft));
+    Vector dx = new Vector(0,0);
+    dx.add(Vector.scale(direction, dForward));
+    dx.add(Vector.scale(left, dLeft));
     
-    computeEnd(movement, sourceFace, null);
-    setSourcePoint(sourcePoint); // notifies observers
+    source.move(dx,direction,left);
+    updateSource(); // notifies observers
   }
 
-  /*
-   * Traces geodesic in direction of point, applying the appropriate affine
-   * transformation whenever it crosses an edge. When a face is found containing
-   * the transformed point, these become the new source face and point.
-   * ignoreEdge is the edge just crossed, so don't want to cross it again.
-   */
-  private void computeEnd(Vector point, Face face, Edge ignoreEdge) {
+  public void updateSource() {
 
-    // see if current face contains point
-    Vector l = DevelopmentComputations.getBarycentricCoords(point, face);
-    double l1 = l.getComponent(0);
-    double l2 = l.getComponent(1);
-    double l3 = l.getComponent(2);
-    if (l1 >= 0 && l1 < 1 && l2 >= 0 && l2 < 1 && l3 >= 0 && l3 < 1) {
-      sourceFace = face;
-      sourcePoint = new Vector(point);
-      return;
-    }
-
-    // find which edge vector intersects to get next face
-    // (currently not handling vector through vertex)
-    boolean foundEdge = false;
-    Edge edge = null;
-    List<Edge> edges = face.getLocalEdges();
-
-    for (int i = 0; i < edges.size(); i++) {
-      edge = edges.get(i);
-      if (ignoreEdge != null && edge.equals(ignoreEdge))
-        continue;
-
-      Vector v1 = Coord2D.coordAt(edge.getLocalVertices().get(0), face);
-      Vector v2 = Coord2D.coordAt(edge.getLocalVertices().get(1), face);
-
-      Vector edgeDiff = Vector.subtract(v1, v2);
-      Vector sourceDiff = Vector.subtract(sourcePoint, v2);
-      Vector pointDiff = Vector.subtract(point, v2);
-      Vector intersection = Vector.findIntersection(sourceDiff, pointDiff,
-          edgeDiff);
-      if (intersection != null) {
-        foundEdge = true;
-        break;
-      }
-    }
-
-    if (foundEdge) {
-      Face nextFace = null;
-
-      List<Face> faces = edge.getLocalFaces();
-      if (faces.get(0).equals(face))
-        nextFace = faces.get(1);
-      else
-        nextFace = faces.get(0);
-
-      // get transformation taking current face to next
-      AffineTransformation trans = CoordTrans2D.affineTransAt(face, edge);
-      Vector newPoint = trans.affineTransPoint(point);
-      direction = trans.affineTransVector(direction);
-      left = trans.affineTransVector(left);
-
-      computeEnd(newPoint, nextFace, edge);
-
-    } else {
-      System.err.println("computeEnd: did not find edge\n");
-    }
-  }
-
-  public void setSourcePoint(Vector point) {
-    sourcePoint = point;
     synchronized (nodeList) {
       nodeList.remove(sourcePointNode);
     }
     double radius = sourcePointNode.getRadius();
-    sourcePointNode = new Node(Color.blue, sourceFace, sourcePoint,
-        units_per_millisecond, radius);
+    sourcePointNode = new Node(Color.blue, source, units_per_millisecond, radius);
     sourcePointNode.setRadius(radius);
     synchronized (nodeList) {
       nodeList.add(sourcePointNode);
@@ -430,28 +359,27 @@ public class Development extends Observable {
     
     // get transformation taking sourcePoint to origin (translation by
     // -1*sourcePoint)
-    AffineTransformation t = new AffineTransformation(Vector.scale(sourcePoint,
-        -1));
+    AffineTransformation t = new AffineTransformation(Vector.scale(source.getPosition(), -1));
 
     rotation = getRotationInverse();
     t.leftMultiply(rotation);
 
-    EmbeddedFace transformedFace = t.affineTransFace(sourceFace);
-    root = new DevelopmentNode(null, sourceFace, null, transformedFace, t);
+    EmbeddedFace transformedFace = t.affineTransFace(source.getFace());
+    root = new DevelopmentNode(null, source.getFace(), null, transformedFace, t);
 
     // continue development across each adjacent edge
-    List<Vertex> vertices = sourceFace.getLocalVertices();
+    List<Vertex> vertices = source.getFace().getLocalVertices();
     for (int i = 0; i < vertices.size(); i++) {
       Vertex v0 = vertices.get(i);
       Vertex v1 = vertices.get((i + 1) % vertices.size());
       Edge edge = DevelopmentComputations.findSharedEdge(v0, v1);
 
       // build frustum through edge end-points
-      Vector vect0 = t.affineTransPoint(Coord2D.coordAt(v0, sourceFace));
-      Vector vect1 = t.affineTransPoint(Coord2D.coordAt(v1, sourceFace));
+      Vector vect0 = t.affineTransPoint(Coord2D.coordAt(v0, source.getFace()));
+      Vector vect1 = t.affineTransPoint(Coord2D.coordAt(v1, source.getFace()));
       Frustum2D frustum = new Frustum2D(vect1, vect0);
 
-      Face newFace = DevelopmentComputations.getNewFace(sourceFace, edge);
+      Face newFace = DevelopmentComputations.getNewFace(source.getFace(), edge);
       // System.out.println("gogo"+newFace);
       if (newFace != null) {
         buildTree(root, newFace, edge, frustum, t, 1);
@@ -517,10 +445,6 @@ public class Development extends Observable {
     return v;
   }
 
-  public AffineTransformation getTranslation() {
-    return new AffineTransformation(Vector.scale(sourcePoint, -1));
-  }
-
   public AffineTransformation getRotationInverse() {
     
     //rotation matrix sending direction -> (1,0), left -> (0,1)
@@ -536,27 +460,6 @@ public class Development extends Observable {
     return new AffineTransformation(M);
   }
   
-  /*public AffineTransformation getRotationInverse() {
-    // get transformation taking sourcePoint to origin (translation by
-    // -1*sourcePoint)
-
-    // rotation matrix sending direction -> (1,0)
-    double x = direction.getComponent(0);
-    double y = direction.getComponent(1);
-    Matrix M = new Matrix(new double[][] { new double[] { x, y },
-        new double[] { -y, x } });
-    rotation = new AffineTransformation(M);
-
-    AffineTransformation toReturn = null;
-    try {
-      toReturn = new AffineTransformation(M.inverse());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return toReturn;
-    
-  }*/
-
   // ================== DevelopmentNode ==================
   /*
    * DevelopmentNode
@@ -581,19 +484,15 @@ public class Development extends Observable {
     private Frustum2D frustum;
     private int depth;
 
-    public DevelopmentNode(DevelopmentNode prev, Face f, Frustum2D frust, EmbeddedFace cf, 
-        AffineTransformation at) {
+    public DevelopmentNode(DevelopmentNode prev, Face f, Frustum2D frust, EmbeddedFace cf, AffineTransformation at) {
+      
+      if (prev == null){ depth = 0; }
+      else{  depth = prev.getDepth() + 1; }
+      
       frustum = frust;
-      if (prev == null)
-        depth = 0;
-      else
-        depth = prev.getDepth() + 1;
       face = f;
       clippedFace = cf;
       affineTrans = at;
-
-      //unnecessary to updateObjects here.. in buildTree, just call once on the root when complete
-      //updateObjects();
     }
 
     public void updateObjects() {
@@ -670,13 +569,8 @@ public class Development extends Observable {
 
     }
 
-    public void addChild(DevelopmentNode node) {
-      children.add(node);
-    }
-
-    public void removeChild(DevelopmentNode node) {
-      children.remove(node);
-    }
+    public void addChild(DevelopmentNode node) { children.add(node); }
+    public void removeChild(DevelopmentNode node) { children.remove(node); }
     
     public EmbeddedFace getClippedFace() {
       
@@ -688,36 +582,15 @@ public class Development extends Observable {
       return clippedFace;
     }
 
-    public Face getFace() {
-      return face;
-    }
+    //accessors
+    public Face getFace() { return face; }
+    public int getDepth() { return depth; }
+    public AffineTransformation getAffineTransformation() { return affineTrans; }
+    public ArrayList<DevelopmentNode> getChildren() { return new ArrayList<DevelopmentNode>(children); }
+    public ArrayList<NodeImage> getObjects() { return containedObjects; }
+    public ArrayList<Trail> getTrails() { return containedTrails; }
 
-    public int getDepth() {
-      return depth;
-    }
-
-    public AffineTransformation getAffineTransformation() {
-      return affineTrans;
-    }
-
-    public ArrayList<DevelopmentNode> getChildren() {
-      return new ArrayList<DevelopmentNode>(children);
-    }
-
-    public ArrayList<NodeImage> getObjects() {
-      return containedObjects;
-    }
-
-    public ArrayList<Trail> getTrails() {
-      return containedTrails;
-    }
-
-    public boolean isRoot() {
-      return depth == 0;
-    }
-
-    public boolean faceIsSource() {
-      return face.equals(sourceFace);
-    }
+    public boolean isRoot() { return depth == 0; }
+    public boolean faceIsSource() { return face.equals(source.getFace()); }
   }
 }

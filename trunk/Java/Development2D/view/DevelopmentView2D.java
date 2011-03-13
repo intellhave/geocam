@@ -128,7 +128,7 @@ public class DevelopmentView2D extends DevelopmentView {
       for(NodeImage n : node.getObjects()) {
         synchronized(nodeList) {
           if(n instanceof SourceNodeImage) {
-            ((SourceNodeImage)n).rotate(development.getRotationInverse(), Vector.scale(development.getSourcePoint(),-1));
+            ((SourceNodeImage)n).rotate(development.getRotationInverse(), Vector.scale(development.getSource().getPosition(),-1));
           }
           nodeList.add(n);
         }

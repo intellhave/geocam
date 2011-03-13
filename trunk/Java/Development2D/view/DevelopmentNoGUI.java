@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 import javax.swing.Timer;
 
+import objects.ManifoldPosition;
+
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -76,8 +78,8 @@ public class DevelopmentNoGUI {
     sourcePoint.scale(1.0f / 3.0f);
 
     if (development == null)
-      development = new Development(sourceFace, sourcePoint, currentDepth, radius);
-    else development.rebuild(sourceFace, sourcePoint, currentDepth);
+      development = new Development(new ManifoldPosition(sourceFace, sourcePoint), currentDepth, radius);
+    else development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), currentDepth);
 
   }
 

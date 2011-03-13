@@ -60,7 +60,10 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcDevelopment.addChild(sgcObjects);
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
     sgcRoot.addChild(sgcDevelopment);
-    if(useMovementTool){ sgcRoot.addTool(new ManifoldMovementTool()); }
+    if(useMovementTool){ 
+      sgcRoot.addTool(new ManifoldMovementToolFB()); 
+      sgcRoot.addTool(new ManifoldMovementToolLR()); 
+    }
     
   }
   
@@ -152,7 +155,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
       synchronized(nodeList) {
         for(NodeImage n : node.getObjects()) {
           if(n instanceof SourceNodeImage) {
-            ((SourceNodeImage)n).rotate(development.getRotationInverse(), Vector.scale(development.getSourcePoint(),-1));
+            ((SourceNodeImage)n).rotate(development.getRotationInverse(), Vector.scale(development.getSource().getPosition(),-1));
           }
           nodeList.add(n);
         }
@@ -172,13 +175,12 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
   
   //TOOL(S) FOR MOVEMENT
   //==============================
-  class ManifoldMovementTool extends AbstractTool {
+  class ManifoldMovementToolFB extends AbstractTool {
     
     private long time; 
-    private final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
     
-    public ManifoldMovementTool() {
-      super(InputSlot.getDevice("ForwardBackwardAxis"), InputSlot.getDevice("LeftRightAxis")); //'activate' tool on F/B or L/R
+    public ManifoldMovementToolFB() {
+      super(InputSlot.getDevice("ForwardBackwardAxis")); //'activate' tool on F/B or L/R
       addCurrentSlot(InputSlot.SYSTEM_TIME); //'perform' tool on tick
     }
     
@@ -192,26 +194,54 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
       
       //get axis state
       AxisState as_fb = tc.getAxisState(InputSlot.getDevice("ForwardBackwardAxis"));
+      
+      //get dt and update time
+      long newtime = tc.getTime();
+      long dt = newtime - time;
+
+      //move forward/backward
+      if(as_fb.isPressed()){
+        development.building = true;
+        development.translateSourcePoint(-dt * as_fb.doubleValue());
+        development.building = false;
+      }
+
+      time = tc.getTime();
+    }  
+  };
+  
+  class ManifoldMovementToolLR extends AbstractTool {
+    
+    private long time; 
+    private final double radians_per_millisecond = Math.PI/(movement_seconds_per_rotation_*500);
+    
+    public ManifoldMovementToolLR() {
+      super(InputSlot.getDevice("LeftRightAxis")); //'activate' tool on F/B or L/R
+      addCurrentSlot(InputSlot.SYSTEM_TIME); //'perform' tool on tick
+    }
+    
+    @Override
+    public void activate(ToolContext tc) {
+      time = tc.getTime(); //set initial time
+    }
+    
+    @Override
+    public void perform(ToolContext tc) {
+      
+      //get axis state
       AxisState as_lr = tc.getAxisState(InputSlot.getDevice("LeftRightAxis"));
       
       //get dt and update time
       long newtime = tc.getTime();
       long dt = newtime - time;
 
-      development.building = true;
-      
       //rotation
       if(as_lr.isPressed()){ 
+        development.building = true;
         development.rotate(-dt * radians_per_millisecond * as_lr.doubleValue());
-      }
-      
-      //move forward/backward
-      if(as_fb.isPressed()){
-        development.translateSourcePoint(-dt * as_fb.doubleValue());
+        development.building = false;
       }
 
-      development.building = false;
-      //development.moveObjects(dt);
       time = tc.getTime();
     }  
   };
