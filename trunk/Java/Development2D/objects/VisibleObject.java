@@ -13,18 +13,22 @@ import triangulation.Face;
 public abstract class VisibleObject extends ManifoldPosition{
   
   private int index;
+  private boolean isVisible;
   ObjectAppearance app;
   
   public VisibleObject(ManifoldPosition manifoldPosition, ObjectAppearance appearance){ 
     super(manifoldPosition);
     
     index = ManifoldObjectHandler.generateIndex();
+    isVisible = true;
     app = appearance;
     
     ManifoldObjectHandler.addObject(this);
   }
   
   public int getIndex(){ return index; }
+  public void setVisible(boolean visibility){ isVisible = visibility; }
+  public boolean isVisible(){ return isVisible; }
   
   public ObjectAppearance getAppearance(){ return app; }
   public void setAppearance(ObjectAppearance appearance){ app = appearance; }
@@ -34,4 +38,10 @@ public abstract class VisibleObject extends ManifoldPosition{
     ManifoldObjectHandler.updateObject(this,oldFace);
   }
   
+  public void removeFromManifold(){
+    //sometimes the object still shows up after calling this... should figure out why
+    //for now, set it invisible to fix this
+    isVisible = false;
+    ManifoldObjectHandler.removeObject(this);
+  }
 }

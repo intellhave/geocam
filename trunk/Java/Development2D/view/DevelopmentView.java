@@ -6,6 +6,7 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.AxisState;
 import de.jreality.scene.tool.InputSlot;
+import de.jreality.scene.tool.Tool;
 import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
 import development.Development;
@@ -54,7 +55,10 @@ public abstract class DevelopmentView extends JRViewer{
       sgcRoot.addTool(new ManifoldMovementToolFB()); 
       sgcRoot.addTool(new ManifoldMovementToolLR()); 
     }
+    //add whatever extra tools are specified
   }
+  
+  public void addTool(Tool tool){ sgcRoot.addTool(tool); }
   
   public void setColorScheme(ColorScheme scheme) {
     colorScheme = scheme;

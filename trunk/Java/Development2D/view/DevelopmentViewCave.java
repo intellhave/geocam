@@ -44,8 +44,7 @@ public class DevelopmentViewCave extends DevelopmentView {
   private static final double REDEVELOPMENT_TRESHHOLD = .01;
   private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 0.5;
   private static final double AVATAR_HEIGHT = 1.7;//1.2;
-  private static final boolean USE_MANIFOLD_MOVEMENT_TOOL = false;
-  private static final boolean USE_SHOOT_TOOL = false;
+  private static final InputSlot SHOOT_TOOL_ACTIVATION_SLOT = InputSlot.LEFT_BUTTON; //InputSlot.POINTER_HIT;
   //debug settings
   private static final boolean PRINT_TRANSFORMATION_DATA = false;
   /*TODO (Timing)*/ private static final int TASK_GET_DEVELOPMENT_GEOMETRY = TimingStatistics.generateTaskTypeID("Generate Development Geometry");
@@ -55,8 +54,8 @@ public class DevelopmentViewCave extends DevelopmentView {
   private static int INITIAL_HEIGHT = 30;
   private double height = INITIAL_HEIGHT/100.0;
 
-  private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
-  private static int colorIndex = 0;
+  //private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
+  //private static int colorIndex = 0;
   
   private SceneGraphComponent sgcLight = new SceneGraphComponent();
   
@@ -64,7 +63,7 @@ public class DevelopmentViewCave extends DevelopmentView {
   private Vector forward = new Vector(1,0);  
   
   public DevelopmentViewCave(Development development, ColorScheme colorScheme) {
-    super(development, colorScheme, USE_MANIFOLD_MOVEMENT_TOOL);
+    super(development, colorScheme, false);
     dimension = 3;
     
     //rotate to correct orientation of development
@@ -88,10 +87,7 @@ public class DevelopmentViewCave extends DevelopmentView {
     Appearance appRoot = new Appearance();
     appRoot.setAttribute(CommonAttributes.PICKABLE, true);
     sgcRoot.setAppearance(appRoot);
-    
-    //add shoot tool
-    //if(USE_SHOOT_TOOL){ sgcRoot.addTool(new ShootTool(shootingGame, development.getSource())); }
-    
+
     //start up Viewer with VR support
     //this.addBasicUI(); //scene graph inspector causes deadlock (?)
     this.addVRSupport();
@@ -273,6 +269,7 @@ public class DevelopmentViewCave extends DevelopmentView {
       AffineTransformation affineTrans = devNode.getAffineTransformation();
       
       for(VisibleObject o : objectList){
+        if(!o.isVisible()){ continue; }
 
         Vector transPos = affineTrans.affineTransPoint(o.getPosition());
         if(frustum != null){
@@ -298,12 +295,15 @@ public class DevelopmentViewCave extends DevelopmentView {
   
   // ================== Shooting Tool ==================
   
+  public void installShootTool(ShootingGame shootingGame){
+    sgcRoot.addTool(new ShootTool(shootingGame));
+  }
+  
   private class ShootTool extends AbstractTool {
-    private ManifoldPosition sourcePos;
     private ShootingGame shootingGame;
 
-    public ShootTool(ShootingGame shootingGame, ManifoldPosition sourcePos) {
-      super(InputSlot.POINTER_HIT);
+    public ShootTool(ShootingGame shootingGame) {
+      super(SHOOT_TOOL_ACTIVATION_SLOT);
       this.shootingGame = shootingGame;
     }
    
@@ -311,8 +311,7 @@ public class DevelopmentViewCave extends DevelopmentView {
     public void activate(ToolContext tc) {
 
       Vector movement = development.getManifoldVector(forward.getComponent(0),forward.getComponent(1));
-      shootingGame.addBullet(sourcePos,movement);
-      colorIndex = colorIndex % colors.length;
+      shootingGame.addBullet(development.getSource(),movement);
     }
     @Override
     public void deactivate(ToolContext tc) { } 
