@@ -3,6 +3,10 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -11,6 +15,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import objects.ManifoldObjectHandler;
+import objects.VisibleObject;
+
 import view.SGCMethods.DevelopmentGeometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
@@ -18,7 +25,6 @@ import de.jreality.math.Pn;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.DirectionalLight;
-import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.InputSlot;
@@ -28,7 +34,8 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.Development.DevelopmentNode;
-import development.Trail;
+import development.AffineTransformation;
+import development.Frustum2D;
 import development.Vector;
 
 public class DevelopmentView2D extends DevelopmentView {
@@ -43,12 +50,11 @@ public class DevelopmentView2D extends DevelopmentView {
 
   private Vector cameraForward = new Vector(1, 0);
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
-  private Development development;
+  //private Development development;
   
-  public DevelopmentView2D(Development development, ColorScheme colorScheme, double radius) {
-    super(development, colorScheme, radius, true);
+  public DevelopmentView2D(Development development, ColorScheme colorScheme) {
+    super(development, colorScheme, true);
     dimension = 2;
-    this.development = development;
     
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
@@ -58,10 +64,6 @@ public class DevelopmentView2D extends DevelopmentView {
     MatrixBuilder.euclidean().rotate(2.0, new double[] { 0, 1, 0 })
         .assignTo(sgcLight);
     sgcRoot.addChild(sgcLight);
-
-    // sgcRoot.addTool(new RotateTool());
-
-    updateGeometry();
     
     sgcRoot.addChild(viewingDirection);
     setViewingDirection(cameraForward);
@@ -73,31 +75,32 @@ public class DevelopmentView2D extends DevelopmentView {
 
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
+    updateCamera();
+
+    this.startup();
+  }
+
+  private void updateCamera(){
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
         scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
-    this.startup();
-
   }
-
-  protected void updateGeometry() {
-    synchronized(nodeList) {
-      nodeList.clear();
-    }
-    synchronized(trailList) {
-      trailList.clear();
-    }
+  
+  protected void initializeNewManifold(){
+    updateCamera();
+  }
+  /*protected void updateGeometry() {
+    
     sgcDevelopment.setGeometry(getGeometry());
-    setObjectsSGC();
-  }
+  }*/
 
   /*
    * Returns the geometry of the development, adding clipped faces as calculated
    * in computeDevelopment()
    */
-  public Geometry getGeometry() {
+  protected void generateManifoldGeometry() {
     DevelopmentGeometry geometry = new DevelopmentGeometry();
     ArrayList<Color> colors = new ArrayList<Color>();
-    computeDevelopment(development.getRoot(), colors, geometry);
+    generateManifoldGeometry(development.getRoot(), colors, geometry);
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
 
     Color[] colorList = new Color[colors.size()];
@@ -115,43 +118,83 @@ public class DevelopmentView2D extends DevelopmentView {
     ifsf.setGenerateEdgesFromFaces(true);
     ifsf.setFaceColors(colorList);
     ifsf.update();
-    return ifsf.getGeometry();
+    sgcDevelopment.setGeometry(ifsf.getGeometry());
   }
 
   /*
    * recursively adds geometry for each face in tree to DevelopmentGeometry, 
    * and adds nodes and trails to corresponding lists (should be empty at start)
    */
-  private void computeDevelopment(DevelopmentNode node,
+  private void generateManifoldGeometry(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
     
-      for(NodeImage n : node.getObjects()) {
-        synchronized(nodeList) {
-          if(n instanceof SourceNodeImage) {
-            ((SourceNodeImage)n).rotate(development.getRotationInverse(), Vector.scale(development.getSource().getPosition(),-1));
-          }
-          nodeList.add(n);
-        }
-      }
-      for(Trail t : node.getTrails()) {
-        synchronized(trailList) {
-          trailList.add(t);
-        }
-      }
-
     double[][] face = node.getClippedFace().getVectorsAsArray();
-    geometry.addFace(face);
+    geometry.addFace(face,1.0);
     colors.add(colorScheme.getColor(node));
 
     for(DevelopmentNode n : node.getChildren())
-      computeDevelopment(n, colors, geometry);
+      generateManifoldGeometry(n, colors, geometry);
+  }
+  
+
+  protected void generateObjectGeometry(){
+    
+    //instead of vector, use something which has a basis (forward, left) also
+    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
+    generateObjectGeometry(development.getRoot(), objectImages);
+
+    //generate sgc's for the objects
+    sgcDevelopment.removeChild(sgcObjects);
+    sgcObjects = new SceneGraphComponent("Objects");
+    sgcDevelopment.addChild(sgcObjects);
+    
+    Set<VisibleObject> objectList = objectImages.keySet();
+    for(VisibleObject o : objectList){
+      sgcObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
+    }
+  }
+
+  /*
+   * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
+   * and adds nodes to nodeList (should be empty at start)
+   */
+  private void generateObjectGeometry(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
+        
+    //look for objects
+    LinkedList<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
+    if(objectList != null){
+      
+      Frustum2D frustum = devNode.getFrustum();
+      AffineTransformation affineTrans = devNode.getAffineTransformation();
+      
+      for(VisibleObject o : objectList){
+
+        Vector transPos = affineTrans.affineTransPoint(o.getPosition());
+        if(frustum != null){
+          //check if object should be clipped
+          if(!frustum.checkInterior(transPos)){ continue; }
+        }
+        
+        //add to image list
+        ArrayList<Vector> imageList = objectImages.get(o);
+        if(imageList == null){
+          imageList = new ArrayList<Vector>();
+          objectImages.put(o,imageList);
+        }
+        imageList.add(transPos);
+      }
+    }
+
+    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
+    while (itr.hasNext()) {
+      generateObjectGeometry(itr.next(), objectImages);
+    }
   }
   
   public void setLineLength(double length) {
     lineLength = length;
     setViewingDirection(cameraForward);
-    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
-        scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
+    updateCamera();
   }
 
   public void setViewingDirection(Vector v) {

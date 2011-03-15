@@ -1,14 +1,5 @@
 package view;
 
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
-import triangulation.Triangulation;
-import triangulation.Vertex;
-
-import de.jreality.geometry.PointSetFactory;
-import de.jreality.math.Pn;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.SceneGraphComponent;
@@ -17,12 +8,7 @@ import de.jreality.scene.tool.AxisState;
 import de.jreality.scene.tool.InputSlot;
 import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
-import de.jreality.util.CameraUtility;
 import development.Development;
-import development.Trail;
-import development.Vector;
-import development.Development.DevelopmentNode;
-import geoquant.Radius;
 
 /*
  * DevelopmentView
@@ -38,20 +24,23 @@ import geoquant.Radius;
  *    * remove circles (make an extension)
  */
 
-public abstract class DevelopmentView extends JRViewer implements Observer{
-  protected SceneGraphComponent sgcRoot = new SceneGraphComponent();
-  protected SceneGraphComponent sgcDevelopment = new SceneGraphComponent();
-  protected SceneGraphComponent sgcObjects = new SceneGraphComponent();
+public abstract class DevelopmentView extends JRViewer{
+  
+  //events to be observed
+  public static final Integer EVENT_REBUILD = new Integer(0); //development tree was rebuilt
+  
+  protected SceneGraphComponent sgcRoot = new SceneGraphComponent("Root");
+  protected SceneGraphComponent sgcDevelopment = new SceneGraphComponent("Development");
+  protected SceneGraphComponent sgcObjects = new SceneGraphComponent("Objects");
   protected Scene scene;
   protected ColorScheme colorScheme;
   protected Development development;
-  protected ArrayList<NodeImage> nodeList = new ArrayList<NodeImage>();
-  protected ArrayList<Trail> trailList = new ArrayList<Trail>();
   protected int dimension;
   
   private static final double movement_seconds_per_rotation_ = 4.0;
+  private double units_per_millisecond = 0.004;
   
-  public DevelopmentView(Development development, ColorScheme colorScheme, double radius, boolean useMovementTool) {
+  public DevelopmentView(Development development, ColorScheme colorScheme, boolean useMovementTool) {
     this.development = development;
     this.colorScheme = colorScheme;
     
@@ -60,16 +49,16 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcDevelopment.addChild(sgcObjects);
     sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
     sgcRoot.addChild(sgcDevelopment);
+    
     if(useMovementTool){ 
       sgcRoot.addTool(new ManifoldMovementToolFB()); 
       sgcRoot.addTool(new ManifoldMovementToolLR()); 
     }
-    
   }
   
   public void setColorScheme(ColorScheme scheme) {
     colorScheme = scheme;
-    updateGeometry();
+    updateGeometry(true,false);
   }
   
   public void setDrawEdges(boolean value) {
@@ -80,26 +69,18 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
     sgcDevelopment.getAppearance().setAttribute(CommonAttributes.FACE_DRAW, value);
   }
   
-  protected void setObjectsSGC() {
-    sgcDevelopment.removeChild(sgcObjects);
-    sgcObjects = new SceneGraphComponent();
-    synchronized(nodeList) {
-      for(NodeImage n : nodeList) {
-        SceneGraphComponent sgc = SGCMethods.sgcFromNode(n, dimension);
-        sgcObjects.addChild(sgc);
-      }
-    }
-    synchronized(trailList) {
-      for(Trail t : trailList) {
-        sgcObjects.addChild(SGCMethods.sgcFromTrail(t));
-      }
-    }
-    sgcDevelopment.addChild(sgcObjects);
+  protected abstract void generateManifoldGeometry();
+  protected abstract void generateObjectGeometry();
+  
+  //used after new geometry has been generated, can put camera encompass here for example
+  protected abstract void initializeNewManifold(); 
+  
+  protected void updateGeometry(boolean dev, boolean obj){
+    if(dev){ generateManifoldGeometry(); }
+    if(obj){ generateObjectGeometry(); }
   }
   
-  protected abstract void updateGeometry();
-  
-  public void addCircles(){
+  /*public void addCircles(){
     for (Vertex v: Triangulation.vertexTable.values()){
       PointSetFactory psf = new PointSetFactory();
       double[][] verts = circle(20,Radius.valueAt(v));
@@ -124,54 +105,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
       verts[i][1]=r*Math.sin(i*dphi);
     }
     return verts;
-  }
-  
-  @Override
-  public void update(Observable dev, Object arg) {
-    development = (Development) dev;
-    String whatChanged = (String) arg;
-    
-    if(whatChanged.equals("objects")) {
-      synchronized(nodeList) {
-        nodeList.clear();
-      }
-      synchronized(trailList) {
-        trailList.clear();
-      }
-      collectObjects(development.getRoot());
-      setObjectsSGC();
-
-    } else {
-      updateGeometry();
-    }
-    if (whatChanged.equals("surface") || whatChanged.equals("depth")) {
-      CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
-          scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
-    }
-  }
-  
-  private void collectObjects(DevelopmentNode node) {
-    if(dimension < 3 || !node.isRoot()) {
-      synchronized(nodeList) {
-        for(NodeImage n : node.getObjects()) {
-          if(n instanceof SourceNodeImage) {
-            ((SourceNodeImage)n).rotate(development.getRotationInverse(), Vector.scale(development.getSource().getPosition(),-1));
-          }
-          nodeList.add(n);
-        }
-      }
-    }
-    if(dimension < 3) {
-      synchronized(trailList) {
-        trailList.addAll(node.getTrails());
-      }
-    }
-
-    synchronized(node.getChildren()) {
-      for(DevelopmentNode child : node.getChildren()) 
-        collectObjects(child);
-    }
-  }
+  }*/
   
   //TOOL(S) FOR MOVEMENT
   //==============================
@@ -201,9 +135,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
 
       //move forward/backward
       if(as_fb.isPressed()){
-        development.building = true;
-        development.translateSourcePoint(-dt * as_fb.doubleValue());
-        development.building = false;
+        development.translateSourcePoint(-dt * as_fb.doubleValue() * units_per_millisecond, 0);
       }
 
       time = tc.getTime();
@@ -237,9 +169,7 @@ public abstract class DevelopmentView extends JRViewer implements Observer{
 
       //rotation
       if(as_lr.isPressed()){ 
-        development.building = true;
         development.rotate(-dt * radians_per_millisecond * as_lr.doubleValue());
-        development.building = false;
       }
 
       time = tc.getTime();

@@ -1,27 +1,16 @@
 package view;
 
-import java.io.File;
-import java.io.IOException;
-
-import de.jreality.math.Pn;
-import de.jreality.plugin.JRViewer;
-import de.jreality.plugin.basic.Scene;
-import de.jreality.reader.Readers;
-import de.jreality.scene.Appearance;
-import de.jreality.scene.Geometry;
-import de.jreality.scene.SceneGraphComponent;
-import de.jreality.shader.CommonAttributes;
-import de.jreality.tools.RotateTool;
-import de.jreality.util.CameraUtility;
 import development.Development;
+import development.EmbeddedTriangulation;
 
-public class DevelopmentViewEmbedded extends JRViewer {
-  private SceneGraphComponent sgcRoot = new SceneGraphComponent();
-  private SceneGraphComponent sgcPolyhedron = new SceneGraphComponent();
-  private SceneGraphComponent sgcObjects = new SceneGraphComponent();
+public class DevelopmentViewEmbedded extends DevelopmentView {
 
-  public DevelopmentViewEmbedded(String filename, Development development) {
-    Geometry geom = sgcPolyhedron.getGeometry();
+  public DevelopmentViewEmbedded(Development development, ColorScheme colorScheme) {
+    super(development, colorScheme, false);
+
+    this.startup();
+    
+    /*Geometry geom = sgcPolyhedron.getGeometry();
     try {
       File file = new File(filename);
       geom = Readers.read(file).getGeometry();
@@ -49,21 +38,22 @@ public class DevelopmentViewEmbedded extends JRViewer {
     Scene scene = this.getPlugin(Scene.class);
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
         scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
-    this.startup();
+    this.startup();*/
 
   }
   
-  public void changeGeometry(String filename) {
-    Geometry geom = sgcPolyhedron.getGeometry();
-    try {
-      geom = Readers.read(new File(filename)).getGeometry();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    sgcPolyhedron.setGeometry(geom);
-    Scene scene = this.getPlugin(Scene.class);
-    CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
-        scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
+  protected void initializeNewManifold(){ }
+  
+  protected void generateManifoldGeometry(){ 
+    
+    //use EmbeddedTriangulation to draw the polyhedron (if it exists)
+    
+  }
+  
+  protected void generateObjectGeometry(){ 
+    
+    //draw the objects in 3D
+    
   }
   
 }

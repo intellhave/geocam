@@ -6,14 +6,20 @@ import development.AffineTransformation;
 import development.Coord2D;
 import development.CoordTrans2D;
 import development.DevelopmentComputations;
-import development.Trail;
 import development.Vector;
+
 import triangulation.Edge;
 import triangulation.Face;
 
-//tuple of a face and a position in that face's coordinates
+/* Represents a position on the Triangulation
+ * 
+ * The only data is a face and a position;
+ * The position is a Vector which is in the coordinates given by the Coord2D geoquant
+ * The most useful aspect of ManifoldPosition is the 'move' method, which can move
+ * the position along a geodesic in the manifold, and can carry tangent vectors along
+ */
 
-public class ManifoldPosition {
+public class ManifoldPosition{
 
   protected Face face;
   protected Vector position;
@@ -28,38 +34,45 @@ public class ManifoldPosition {
     position = new Vector(mpos.getPosition());
   }
   
-  public void setPosition(Face f, Vector pos){
+  //this can be overridden to do something when the position changes faces (see VisibleObject)
+  protected void reportFaceChange(Face oldFace){}
+  
+  public void setManifoldPosition(Face f, Vector pos){
+    Face oldFace = face;
     face = f; position = pos;
+    if(face != oldFace){ reportFaceChange(oldFace); }
   }
-    
+  
   public Face getFace(){ return face; }
   public Vector getPosition(){ return position; }
   
-  //moves position along the manifold in the direction of dx
-  //optional parameter return_trail to show path taken (not operational yet)
-  //optionally keep track of net transformation (useful for tangent vectors etc)
-  //(Adapted from Kira's computeEnd)
-
-  
+  /* moves position along the manifold in the direction of dx
+   * optional parameter return_trail to show path taken (not operational yet)
+   * optionally, carries along tangent vectors at the position
+   * (Adapted from Kira's computeEnd)
+   */
   public void move(Vector dx, Vector...tangentVectors){
     move(dx,null,tangentVectors);
   }
 
-  public void move(Vector dx, Trail trail, Vector...tangentVectors){
-    
+  public void move(Vector dx, GeodesicPath trail, Vector...tangentVectors){
+
     Vector startPos = new Vector(position);
-    position = Vector.add(position, dx);
-    moveRecurse(startPos, null, trail, tangentVectors);
+    Vector endPos = Vector.add(position, dx);
+    Face oldFace = face;
+    moveRecurse(this,startPos, endPos, face, null, trail, tangentVectors);
+    if(face != oldFace){ reportFaceChange(oldFace); }
   }
     
-  private void moveRecurse(Vector startPos, Edge lastEdgeCrossed, Trail trail, Vector...tangentVectors){
+  private static void moveRecurse(ManifoldPosition posToUpdate, Vector startPos, Vector endPos, Face face, Edge lastEdgeCrossed, GeodesicPath trail, Vector...tangentVectors){
     
     //if position is in face, then quit
-    Vector l = DevelopmentComputations.getBarycentricCoords(position,face);
+    Vector l = DevelopmentComputations.getBarycentricCoords(endPos,face);
 
     if( (l.getComponent(0) >= 0) && (l.getComponent(0) < 1) &&
         (l.getComponent(1) >= 0) && (l.getComponent(1) < 1) &&
         (l.getComponent(2) >= 0) && (l.getComponent(2) < 1)){
+      posToUpdate.setManifoldPosition(face,endPos);
       return;
     }
     
@@ -78,7 +91,7 @@ public class ManifoldPosition {
 
       Vector edgeDiff = Vector.subtract(v1, v2);
       Vector sourceDiff = Vector.subtract(startPos, v2);
-      Vector pointDiff = Vector.subtract(position, v2);
+      Vector pointDiff = Vector.subtract(endPos, v2);
 
       //the intersection
       Vector intersection = Vector.findIntersection(sourceDiff, pointDiff, edgeDiff);
@@ -87,7 +100,7 @@ public class ManifoldPosition {
       //if an intersection is found, add intersection to return_trail (if applicable)
       intersectedEdge = e;
       foundEdge = true; 
-
+      
       break;
     }
     
@@ -102,15 +115,14 @@ public class ManifoldPosition {
     
     //flip start and end positions over intersectedEdge
     Vector nextStartPos = affineTrans.affineTransPoint(startPos);
-    Vector nextEndPos = affineTrans.affineTransPoint(position);
-    setPosition(adjacentFace, nextEndPos);
+    Vector nextEndPos = affineTrans.affineTransPoint(endPos);
     
     //flip over whatever tangent vectors are being carried along
     for(int i=0; i<tangentVectors.length; i++){
       tangentVectors[i].setEqualTo(affineTrans.affineTransVector(tangentVectors[i]));
     }
     
-    moveRecurse(nextStartPos, intersectedEdge, trail, tangentVectors);
+    moveRecurse(posToUpdate, nextStartPos, nextEndPos, adjacentFace, intersectedEdge, trail, tangentVectors);
   }
 
 

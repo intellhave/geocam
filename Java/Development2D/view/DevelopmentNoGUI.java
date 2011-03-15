@@ -1,12 +1,14 @@
 package view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Color;
 import java.util.Iterator;
+import java.util.Random;
 
-import javax.swing.Timer;
-
+import objects.BasicMovingObjects;
 import objects.ManifoldPosition;
+import objects.MovingObject;
+import objects.ObjectAppearance;
+import objects.ObjectDynamics;
 
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -18,11 +20,11 @@ import development.EmbeddedTriangulation;
 import development.TimingStatistics;
 import development.Vector;
 
-public class DevelopmentNoGUI {
+public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectDynamics.ObjectViewer {
  
   private static int INITIAL_POINT_SIZE = 4;
   private static double radius = INITIAL_POINT_SIZE/100.0;
-  private static int currentDepth = 20;
+  private static int currentDepth = 8;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -30,30 +32,71 @@ public class DevelopmentNoGUI {
   private static ColorScheme colorScheme;
 
   private static DevelopmentViewCave view;
-
-  private static Timer moveTimer; // timer for moving objects
+  
+  //--- objects ------------------------
+  //private static ShootingGame shootingGame = new ShootingGame();
+  private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
+  private static final boolean INITIAL_MOVEMENT_STATUS = false;
+  private static final int MOVING_OBJECT_COUNT = 4;
+  private static final double objectRadius = 0.1;
+  //------------------------------------
   
   public static void main(String[] args) {
+    DevelopmentNoGUI noGUI = new DevelopmentNoGUI();
+  }
+  
+  public DevelopmentNoGUI(){
 
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
-    String filename = "Data/off/cone.off";
+    String filename = "Data/off/tetra2.off";
     loadSurface(filename);
 
-    System.out.println("======= Initializing Viewer =======");
-    view = new DevelopmentViewCave(development, colorScheme, radius);
+    System.out.println("====== Initializing Cave Viewer ======");
+    view = new DevelopmentViewCave(development, colorScheme);
     System.out.println("---------------- done ----------------");
-    development.addObserver(view);
     
-    moveTimer = new Timer(50, null);
-    moveTimer.addActionListener(new ObjectMoveListener());
-    moveTimer.start();
+    development.addViewer(this);
     
-    //make it display timing statistics on exit (maybe there's a better way to do this?)
+    //make it display timing statistics on exit
     Runtime.getRuntime().addShutdownHook(new Thread() {
       public void run(){ TimingStatistics.printData(); }
     });
+    
+    //set up objects
+    development.getSourceObject().getAppearance().setRadius(objectRadius);
+    Random rand = new Random();
+    for(int i=0; i<MOVING_OBJECT_COUNT; i++){
+      dynamics.addObject(new MovingObject( development.getSource(), new ObjectAppearance(objectRadius, randomColor(rand)), randomUnitVector(rand) ));
+    }
+    dynamics.addViewer(this);
+    if(INITIAL_MOVEMENT_STATUS){ dynamics.start(); }
+
+    //initial geometry
+    updateGeometry(true,true);
+    view.initializeNewManifold();
+  }
+
+  private Color randomColor(Random rand){
+    return new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
+  }
+  
+  private Vector randomUnitVector(Random rand){
+    double a = rand.nextDouble()*Math.PI*2;
+    return new Vector(Math.cos(a), Math.sin(a));
+  }
+  
+  public void updateObjects(){
+    updateGeometry(false,true);
+  }
+  
+  public void updateDevelopment(){
+    updateGeometry(true,true);
+  }
+  
+  private void updateGeometry(boolean dev, boolean obj){
+    view.updateGeometry(dev,obj);
   }
 
   /*
@@ -83,16 +126,4 @@ public class DevelopmentNoGUI {
 
   }
 
-  public static class ObjectMoveListener implements ActionListener {
-    private long time;
-    public ObjectMoveListener() {
-      time = System.currentTimeMillis();
-    }
-    public void actionPerformed(ActionEvent e) {
-      long newtime = System.currentTimeMillis();
-      long dt = newtime - time;      
-      development.moveObjects(dt);
-      time = System.currentTimeMillis();
-    }
-  }
 }

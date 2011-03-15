@@ -67,6 +67,15 @@ public class Matrix implements Cloneable{
     m[i][j] = k;
   }
   
+  public double[] getLinearArray(){
+    double[] mlinear = new double[rows*cols];
+    for(int i=0; i<rows; i++){
+      for(int j=0; j<cols; j++){
+        mlinear[j+i*rows] = m[i][j];
+      }
+    }
+    return mlinear;
+  }
   
   public Matrix transpose() {
     Matrix t = new Matrix(cols, rows);

@@ -3,7 +3,10 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -11,6 +14,11 @@ import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import objects.ManifoldObjectHandler;
+import objects.ManifoldPosition;
+import objects.ShootingGame;
+import objects.VisibleObject;
 
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -21,7 +29,6 @@ import de.jreality.plugin.basic.ViewShrinkPanelPlugin;
 import de.jreality.scene.Camera;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.PointLight;
-import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
@@ -32,19 +39,19 @@ import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
+import development.AffineTransformation;
 import development.Development;
-import development.TimingStatistics;
+import development.Frustum2D;
 import development.Development.DevelopmentNode;
 import development.Vector;
 
 public class DevelopmentView3D extends DevelopmentView {
+  
   private static int INITIAL_HEIGHT = 25;
   private double height = INITIAL_HEIGHT/100.0;
   private static int MAX_HEIGHT = 30;
   
   private static final boolean USE_SHOOT_TOOL = false;
-  
-  /*TODO (Timing)*/ private static final int TASK_GET_GEOMETRY = TimingStatistics.generateTaskTypeID("DevelopmentView3D.getGeometry");
 
   private Viewer viewer;
   private SceneGraphPath camera_source;
@@ -52,12 +59,15 @@ public class DevelopmentView3D extends DevelopmentView {
   
   private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
   private static int colorIndex = 0;
+  
+  //don't add objects which are within this radius of the origin; obstructs camera
+  private static final double CLIP_NEAR_RADIUS = 0.1;
 
   private Scene scene;
-  private Vector cameraForward = new Vector(-1, 0);;
+  private Vector cameraForward = new Vector(-1, 0);
 
-  public DevelopmentView3D(Development development, ColorScheme colorScheme, double radius) {
-    super(development, colorScheme, radius, true);
+  public DevelopmentView3D(Development development, ColorScheme colorScheme) {
+    super(development, colorScheme, true);
     dimension = 3;
 
     // make camera and sgc_camera
@@ -69,14 +79,13 @@ public class DevelopmentView3D extends DevelopmentView {
     sgcRoot.addChild(sgc_camera);
     sgc_camera.setCamera(camera);
 
-    updateGeometry();
-
     this.addBasicUI();
     this.registerPlugin(new UIPanel_Options());
     this.setShowPanelSlots(true,false,false,false);
+    this.startup();
 
     this.setContent(sgcRoot);
-    if(USE_SHOOT_TOOL){ sgcRoot.addTool(new ShootTool(development)); }
+    //if(USE_SHOOT_TOOL){ sgcRoot.addTool(new ShootTool(shootingGame,development.getSource())); }
     scene = this.getPlugin(Scene.class);
     this.startup();
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
@@ -125,27 +134,22 @@ public class DevelopmentView3D extends DevelopmentView {
     M.assignTo(sgc_camera);
   }
 
-  protected void updateGeometry() {
-    synchronized(nodeList) {
-      nodeList.clear();
-    }
-    sgcDevelopment.setGeometry(getGeometry());
-    MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
-        .assignTo(sgcObjects);
-    setObjectsSGC();
-    updateCamera();
-  }
+  /*protected void updateGeometry() {
 
+    sgcDevelopment.setGeometry(getGeometry());
+    updateCamera();
+  }*/
+
+  protected void initializeNewManifold(){ }
+  
   /*
    * Returns geometry for simulated 3D view of development.
    */
-  public Geometry getGeometry() {
-    
-    /*TODO (Timing)*/ long taskID = TimingStatistics.startTask(TASK_GET_GEOMETRY);
+  protected void generateManifoldGeometry() {
     
     DevelopmentGeometrySim3D geometry = new DevelopmentGeometrySim3D();
     ArrayList<Color> colors = new ArrayList<Color>();
-    computeDevelopment(development.getRoot(), colors, geometry);
+    generateManifoldGeometry(development.getRoot(), colors, geometry);
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
 
     Color[] colorList = new Color[colors.size()];
@@ -166,25 +170,19 @@ public class DevelopmentView3D extends DevelopmentView {
     ifsf.setFaceColors(colorList);
     ifsf.update();
     
-    /*TODO (Timing)*/ TimingStatistics.endTask(taskID); 
+    sgcDevelopment.setGeometry(ifsf.getGeometry());
     
-    return ifsf.getGeometry();
+    updateCamera();
   }
-
+  
   /*
    * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
    * and adds nodes to nodeList (should be empty at start)
    */
-  private void computeDevelopment(DevelopmentNode devNode,
+  
+  private void generateManifoldGeometry(DevelopmentNode devNode,
       ArrayList<Color> colors, DevelopmentGeometrySim3D geometry) {
     
-    for(NodeImage n : devNode.getObjects()) {
-      if(!n.getPosition().isZero())
-        synchronized(nodeList) {
-          nodeList.add(n);
-        }
-    }
-
     double[][] face = devNode.getClippedFace().getVectorsAsArray();
     geometry.addFace(face, height);
 
@@ -194,18 +192,78 @@ public class DevelopmentView3D extends DevelopmentView {
 
     Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
     while (itr.hasNext()) {
-      computeDevelopment(itr.next(), colors, geometry);
+      generateManifoldGeometry(itr.next(), colors, geometry);
     }
   }
+  
+
+  protected void generateObjectGeometry(){
+    
+    //instead of vector, use something which has a basis (forward, left) also
+    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
+    generateObjectGeometry(development.getRoot(), objectImages);
+
+    //generate sgc's for the objects
+    sgcDevelopment.removeChild(sgcObjects);
+    sgcObjects = new SceneGraphComponent("Objects");
+    sgcDevelopment.addChild(sgcObjects);
+    
+    Set<VisibleObject> objectList = objectImages.keySet();
+    for(VisibleObject o : objectList){
+      sgcObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
+    }
+  }
+
+  /*
+   * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
+   * and adds nodes to nodeList (should be empty at start)
+   */
+  private void generateObjectGeometry(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
+        
+    //look for objects
+    LinkedList<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
+    if(objectList != null){
+      
+      Frustum2D frustum = devNode.getFrustum();
+      AffineTransformation affineTrans = devNode.getAffineTransformation();
+      
+      for(VisibleObject o : objectList){
+
+        Vector transPos = affineTrans.affineTransPoint(o.getPosition());
+        if(frustum != null){
+          //check if object should be clipped
+          if(!frustum.checkInterior(transPos)){ continue; }
+        }
+        
+        //don't add if it is too close to the origin, gets in the way of the camera
+        if(transPos.length() < CLIP_NEAR_RADIUS){ continue; }
+        
+        //add to image list
+        ArrayList<Vector> imageList = objectImages.get(o);
+        if(imageList == null){
+          imageList = new ArrayList<Vector>();
+          objectImages.put(o,imageList);
+        }
+        imageList.add(transPos);
+      }
+    }
+
+    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
+    while (itr.hasNext()) {
+      generateObjectGeometry(itr.next(), objectImages);
+    }
+  }
+  
   
   // ================== Shooting Tool ==================
   
   private static class ShootTool extends AbstractTool {
-    private Development development;
+    private ManifoldPosition sourcePos;
+    private ShootingGame shootingGame;
     
-    public ShootTool(Development development) {
+    public ShootTool(ShootingGame shootingGame, ManifoldPosition sourcePos) {
       super(InputSlot.LEFT_BUTTON);
-      this.development = development;
+      this.shootingGame = shootingGame;
     }
    
     @Override
@@ -215,8 +273,7 @@ public class DevelopmentView3D extends DevelopmentView {
       double y = tc.getCurrentPick().getWorldCoordinates()[1];
       Vector movement = new Vector(x,-y);
       movement.normalize();
-      //movement.scale(0.05);
-      development.addBulletAtSource(Color.black,/*colors[colorIndex++]*/ movement);
+      //shootingGame.addBullet(sourcePos,movement);
       colorIndex = colorIndex % colors.length;
     }
     @Override
@@ -225,8 +282,6 @@ public class DevelopmentView3D extends DevelopmentView {
     public void perform(ToolContext tc) { }
   }
 
-
-  
   // ================== Options Panel ==================
   
   class UIPanel_Options extends ViewShrinkPanelPlugin {
@@ -239,7 +294,7 @@ public class DevelopmentView3D extends DevelopmentView {
       heightSlider.addChangeListener(new ChangeListener(){
           public void stateChanged(ChangeEvent e) {
             height = ((JSlider)e.getSource()).getValue()/100.0;
-            updateGeometry();
+            generateManifoldGeometry();
             heightBorder.setTitle(String.format("Height (%1.3f)", height));
           }
       });

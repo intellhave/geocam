@@ -25,7 +25,7 @@ public class SourceNodeImage extends NodeImage {
     
     this.setPosition(affineTrans.affineTransPoint(node.getPosition()));
     
-    sgc2d = SGCMethods.sgcFromVertices(v1,v2,v3);
+    sgc2d = SGCMethods.sgcFromVertices(1.0,v1,v2,v3);
   }
   
   
@@ -69,7 +69,7 @@ public class SourceNodeImage extends NodeImage {
     
     this.setPosition(at.affineTransPoint(basePosition));
     
-    sgc2d = SGCMethods.sgcFromVertices(v1,v2,v3);
+    sgc2d = SGCMethods.sgcFromVertices(1.0,v1,v2,v3);
   }
   
 }
