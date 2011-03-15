@@ -67,7 +67,7 @@ public class DevelopmentView2D extends DevelopmentView {
     
     sgcRoot.addChild(viewingDirection);
     setViewingDirection(cameraForward);
-    this.addBasicUI();
+    //this.addBasicUI(); //scene graph inspector causes deadlock (?)
     this.registerPlugin(new UIPanel_Options());
     this.setShowPanelSlots(true, false, false, false);
     
@@ -118,6 +118,7 @@ public class DevelopmentView2D extends DevelopmentView {
     ifsf.setGenerateEdgesFromFaces(true);
     ifsf.setFaceColors(colorList);
     ifsf.update();
+
     sgcDevelopment.setGeometry(ifsf.getGeometry());
   }
 
@@ -149,7 +150,7 @@ public class DevelopmentView2D extends DevelopmentView {
     for(VisibleObject o : objectList){
       sgcNewObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
     }
-    
+
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = sgcNewObjects;
     sgcDevelopment.addChild(sgcObjects);

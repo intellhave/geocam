@@ -93,7 +93,7 @@ public class DevelopmentViewCave extends DevelopmentView {
     //if(USE_SHOOT_TOOL){ sgcRoot.addTool(new ShootTool(shootingGame, development.getSource())); }
     
     //start up Viewer with VR support
-    this.addBasicUI();
+    //this.addBasicUI(); //scene graph inspector causes deadlock (?)
     this.addVRSupport();
     this.addContentSupport(ContentType.TerrainAligned);
     this.registerPlugin(new ContentAppearance());

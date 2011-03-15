@@ -79,7 +79,7 @@ public class SGCMethods {
     
     return sgc;
   }
-  
+
   
   public static SceneGraphComponent sgcFromNode(NodeImage node, int dimension) {
     Vector v = node.getPosition();

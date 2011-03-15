@@ -40,7 +40,7 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     defaultAppearance.setAttribute(CommonAttributes.PICKABLE, true);
     defaultAppearance.setAttribute(CommonAttributes.AMBIENT_COLOR, Color.WHITE);
 
-    this.addBasicUI();
+    //this.addBasicUI(); //scene graph inspector causes deadlock (?)
 
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
