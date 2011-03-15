@@ -204,14 +204,16 @@ public class DevelopmentView3D extends DevelopmentView {
     generateObjectGeometry(development.getRoot(), objectImages);
 
     //generate sgc's for the objects
-    sgcDevelopment.removeChild(sgcObjects);
-    sgcObjects = new SceneGraphComponent("Objects");
-    sgcDevelopment.addChild(sgcObjects);
+    SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
     
     Set<VisibleObject> objectList = objectImages.keySet();
     for(VisibleObject o : objectList){
-      sgcObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
+      sgcNewObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
     }
+    
+    sgcDevelopment.removeChild(sgcObjects);
+    sgcObjects = sgcNewObjects;
+    sgcDevelopment.addChild(sgcObjects);
   }
 
   /*

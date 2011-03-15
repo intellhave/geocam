@@ -120,7 +120,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     if(INITIAL_MOVEMENT_STATUS){ 
       dynamics.start(); 
     }else{
-      dynamics.evolve(300);
+      dynamics.evolve(300); //nudge the objects a little bit (300 ms)
     }
 
     //start listening for updates
