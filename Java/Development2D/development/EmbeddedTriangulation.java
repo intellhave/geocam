@@ -87,13 +87,11 @@ public class EmbeddedTriangulation {
     return EmbeddedManifoldFaceData.get(f).getCoord3D(v);
   }
 
-  public static SceneGraphComponent getSGC(HashMap<Face, Color> color_scheme) {
+  public static Geometry get3DGeometry(HashMap<Face, Color> color_scheme) {
 
     if (!isEmbedded) {
       return null;
     }
-
-    SceneGraphComponent sgc_embedded = new SceneGraphComponent();
 
     int nverts = Triangulation.vertexTable.size();
     int nfaces = Triangulation.faceTable.size();
@@ -148,9 +146,7 @@ public class EmbeddedTriangulation {
     ifsf.setGenerateEdgesFromFaces(true);
 
     ifsf.update();
-    sgc_embedded.setGeometry(ifsf.getGeometry());
-
-    return sgc_embedded;
+    return ifsf.getGeometry();
   }
 
   public static void printTriangulationData() {

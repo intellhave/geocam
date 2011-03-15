@@ -24,10 +24,9 @@ import development.Vector;
  * useful methods of generating SceneGraphComponents
  */
 public class SGCMethods {
+  
   /*
-   * Returns SGC of sphere at coords of node, with radius, color, and 
-   * transparency of node. For simulated 3D view, object must have
-   * z-coord of 0 to appear in the right position.
+   * Returns SGC for a collection of 2D points in the z=zvalue plane
    */
   public static SceneGraphComponent sgcFromImageList(ArrayList<Vector> images, double zvalue, ObjectAppearance app){
     
@@ -41,6 +40,33 @@ public class SGCMethods {
     for(int i=0; i<images.size(); i++){
       Vector v = images.get(i);
       verts[i] = new double[]{ v.getComponent(0), v.getComponent(1), zvalue };
+      colors[i] = c;
+    }
+    psf.setVertexCount(images.size());
+    psf.setVertexCoordinates(verts);
+    psf.setVertexColors(colors);
+    psf.update();
+    
+    sgc.setGeometry(psf.getGeometry());
+    sgc.setAppearance(app.getJRealityAppearance());
+    
+    return sgc;
+  }
+  
+  /*
+   * Returns SGC for a collection of 3D points
+   */
+  public static SceneGraphComponent sgcFrom3DList(ArrayList<Vector> images, ObjectAppearance app){
+    
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    
+    PointSetFactory psf = new PointSetFactory();
+    
+    double[][] verts = new double[images.size()][3];
+    Color[] colors = new Color[images.size()];
+    Color c = app.getColor();
+    for(int i=0; i<images.size(); i++){
+      verts[i] = images.get(i).getVectorAsArray();
       colors[i] = c;
     }
     psf.setVertexCount(images.size());
