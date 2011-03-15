@@ -57,7 +57,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static int MAX_SPEED       = 10000; //in units per millisecond
   //------------------------------------
   
-  //--- development options -----------------------
+  //--- development options ------------------
   private static Development development;
   private static Vector sourcePoint;
   private static Face sourceFace;
@@ -145,7 +145,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     updateGeometry(true,true);
   }
   
-  private void updateGeometry(boolean dev, boolean obj){
+  private synchronized void updateGeometry(boolean dev, boolean obj){
     for(DevelopmentView dv : devViewers){ dv.updateGeometry(dev,obj); } 
   }
   

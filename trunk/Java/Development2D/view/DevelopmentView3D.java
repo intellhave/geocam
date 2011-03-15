@@ -79,7 +79,7 @@ public class DevelopmentView3D extends DevelopmentView {
     sgcRoot.addChild(sgc_camera);
     sgc_camera.setCamera(camera);
 
-    this.addBasicUI();
+    //this.addBasicUI(); //scene graph inspector causes deadlock (?)
     this.registerPlugin(new UIPanel_Options());
     this.setShowPanelSlots(true,false,false,false);
     this.startup();

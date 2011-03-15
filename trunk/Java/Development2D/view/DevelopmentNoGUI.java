@@ -36,7 +36,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
   //--- objects ------------------------
   //private static ShootingGame shootingGame = new ShootingGame();
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
-  private static final boolean INITIAL_MOVEMENT_STATUS = false;
+  private static final boolean INITIAL_MOVEMENT_STATUS = true;
   private static final int MOVING_OBJECT_COUNT = 4;
   private static final double objectRadius = 0.1;
   //------------------------------------
@@ -95,7 +95,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
     updateGeometry(true,true);
   }
   
-  private void updateGeometry(boolean dev, boolean obj){
+  private synchronized void updateGeometry(boolean dev, boolean obj){
     view.updateGeometry(dev,obj);
   }
 
