@@ -42,6 +42,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
   private static final boolean INITIAL_MOVEMENT_STATUS = true;
   private static double targetSpeed = 0.5;
   private static final double TARGET_SPEED_INCREMENT = 0.1;
+  private static int nHits = 0; 
   //------------------------------------
   
   public static void main(String[] args) {
@@ -71,6 +72,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
     //add random targets for the shooting game
     shootingGame = new ShootingGame(50);
     shootingGame.setTargetSpeed(targetSpeed);
+    System.out.println("Initial target is moving " + targetSpeed + " units/sec.");
     shootingGame.addTarget(development.getSource(), randomUnitVector() );
     shootingGame.addListener(this);
     if(INITIAL_MOVEMENT_STATUS){ shootingGame.start(); }
@@ -91,11 +93,16 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
   }
   
   public void dynamicsEvent(int eventID){
+    
     if(eventID == ObjectDynamics.EVENT_DYNAMICS_EVOLVED){
+      
       updateGeometry(false,true);
     }else if(eventID == ShootingGame.EVENT_OBJECT_HIT){
+      
       //make a new target, and a little faster
+      nHits++;
       targetSpeed += TARGET_SPEED_INCREMENT;
+      System.out.println("Hit " + nHits + " target(s).  Now try " + targetSpeed + " units/sec!");
       shootingGame.setTargetSpeed(targetSpeed);
       shootingGame.addTarget(development.getSource(), randomUnitVector() );
     }
