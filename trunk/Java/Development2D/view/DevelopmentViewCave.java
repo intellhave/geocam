@@ -2,11 +2,18 @@ package view;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.LinkedList;
+
+import objects.ManifoldObjectHandler;
+import objects.ManifoldPosition;
+import objects.ShootingGame;
+import objects.VisibleObject;
 
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
-import de.jreality.geometry.Primitives;
 import de.jreality.math.Matrix;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.plugin.basic.Scene;
@@ -14,7 +21,6 @@ import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentLoader;
 import de.jreality.plugin.content.ContentTools;
 import de.jreality.scene.Appearance;
-import de.jreality.scene.Geometry;
 import de.jreality.scene.PointLight;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
@@ -25,31 +31,25 @@ import de.jreality.scene.tool.InputSlot;
 import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
 
+import development.AffineTransformation;
 import development.Development;
+import development.Frustum2D;
 import development.TimingStatistics;
 import development.Development.DevelopmentNode;
 import development.Vector;
-
-//minor changes to DevelopmentView needed:
-//
-// 1) should not use ManifoldMovementTool for this viewer (?)
-//    so, should put an option in DevelopmentView constructor bool useMMT
-//    cavetransformer should handle the movement
-//
-// 2) need method in DevelopmentView to translate source point; see CaveTransformer
 
 public class DevelopmentViewCave extends DevelopmentView {
   
   //static settings
   private static final double REDEVELOPMENT_TRESHHOLD = .01;
-  private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 0.2;
+  private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 0.5;
   private static final double AVATAR_HEIGHT = 1.7;//1.2;
   private static final boolean USE_MANIFOLD_MOVEMENT_TOOL = false;
   private static final boolean USE_SHOOT_TOOL = false;
   //debug settings
   private static final boolean PRINT_TRANSFORMATION_DATA = false;
-  private static final boolean PRINT_SHOOT_TOOL_DATA = false;
-  /*TODO (Timing)*/ private static final int TASK_GET_GEOMETRY = TimingStatistics.generateTaskTypeID("DevelopmentViewCave.getGeometry");
+  /*TODO (Timing)*/ private static final int TASK_GET_DEVELOPMENT_GEOMETRY = TimingStatistics.generateTaskTypeID("Generate Development Geometry");
+  /*TODO (Timing)*/ private static final int TASK_GET_OBJECT_GEOMETRY = TimingStatistics.generateTaskTypeID("Generate Object Geometry");
   
   //other settings
   private static int INITIAL_HEIGHT = 30;
@@ -62,12 +62,10 @@ public class DevelopmentViewCave extends DevelopmentView {
   
   //'forward' is in the basis with (1,0) ~ Development.direction and (0,1) ~ Development.left
   private Vector forward = new Vector(1,0);  
-
-  public DevelopmentViewCave(Development development, ColorScheme colorScheme, double radius) {
-    super(development, colorScheme, radius, USE_MANIFOLD_MOVEMENT_TOOL);
+  
+  public DevelopmentViewCave(Development development, ColorScheme colorScheme) {
+    super(development, colorScheme, USE_MANIFOLD_MOVEMENT_TOOL);
     dimension = 3;
-
-    updateGeometry();
     
     //rotate to correct orientation of development
     Matrix M = MatrixBuilder.euclidean().getMatrix();
@@ -92,7 +90,7 @@ public class DevelopmentViewCave extends DevelopmentView {
     sgcRoot.setAppearance(appRoot);
     
     //add shoot tool
-    if(USE_SHOOT_TOOL){ sgcRoot.addTool(new ShootTool()); }
+    //if(USE_SHOOT_TOOL){ sgcRoot.addTool(new ShootTool(shootingGame, development.getSource())); }
     
     //start up Viewer with VR support
     this.addBasicUI();
@@ -162,34 +160,35 @@ public class DevelopmentViewCave extends DevelopmentView {
       if( (dtrans[0]*dtrans[0] + dtrans[2]*dtrans[2]) > REDEVELOPMENT_TRESHHOLD ){
         //System.out.println("dtrans: [" + dtrans[0] + ", " + dtrans[2] + "]"); 
         //move source point
-        development.building = true;
         development.translateSourcePoint(-MANIFOLD_UNITS_PER_AMBIENT_UNIT*dtrans[2],-MANIFOLD_UNITS_PER_AMBIENT_UNIT*dtrans[0]);
         //changing source point automatically rebuilds tree via development.setSourcePoint
-        development.building = false;
         //set 'old' values
         oldtrans[0] = trans[0]; oldtrans[1] = trans[1]; oldtrans[2] = trans[2];
       }
     }
   }
 
-  protected void updateGeometry() {
-    synchronized(nodeList) {
-      nodeList.clear();
-    }
-    sgcDevelopment.setGeometry(getGeometry());
-    setObjectsSGC();
-  }
+  /*public static de.jreality.math.Matrix getJRealityMatrixFromAffineTrans(AffineTransformation affineTrans){
 
-  /*
-   * Returns geometry for simulated 3D view of development.
-   */
-  public Geometry getGeometry() {
+    //our affineTrans applies the upper 2x2 to [x,y] and adds the last column; z is affine coord
+    //this should apply the same 2x2 to [x,y], leave z alone, and add the last column; w is affine coord
+    return new de.jreality.math.Matrix(new double[]{
+        affineTrans.getEntry(0,0), affineTrans.getEntry(0,1), 0, affineTrans.getEntry(0,2),
+        affineTrans.getEntry(1,0), affineTrans.getEntry(1,1), 0, affineTrans.getEntry(1,2),
+        0,0,1,0,
+        0,0,0,1
+    });
+  }*/
+  
+  protected void initializeNewManifold(){ }
+
+  protected void generateManifoldGeometry(){
     
-    /*TODO (Timing)*/ long taskID = TimingStatistics.startTask(TASK_GET_GEOMETRY);
-    
+    /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_DEVELOPMENT_GEOMETRY);
+
     DevelopmentGeometrySim3D geometry = new DevelopmentGeometrySim3D();
     ArrayList<Color> colors = new ArrayList<Color>();
-    computeDevelopment(development.getRoot(), colors, geometry);
+    generateManifoldGeometry(development.getRoot(), colors, geometry);
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
 
     Color[] colorList = new Color[colors.size()];
@@ -209,59 +208,108 @@ public class DevelopmentViewCave extends DevelopmentView {
     ifsf.setFaceIndices(ifsf_faces);
     ifsf.setFaceColors(colorList);
     ifsf.update();
+        
+    sgcDevelopment.setGeometry(ifsf.getGeometry());
     
-    /*TODO (Timing)*/ TimingStatistics.endTask(taskID);
-    
-    return ifsf.getGeometry();
+    /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
   }
 
   /*
    * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
    * and adds nodes to nodeList (should be empty at start)
    */
-  private void computeDevelopment(DevelopmentNode devNode,
+  private void generateManifoldGeometry(DevelopmentNode devNode,
       ArrayList<Color> colors, DevelopmentGeometrySim3D geometry) {
-    
-    for(NodeImage n : devNode.getObjects()) {
-      if(!n.getPosition().isZero())
-        synchronized(nodeList) {
-          nodeList.add(n);
-        }
-    }
 
     //double[][] face = devNode.getEmbeddedFace().getVectorsAsArray();
-    double[][] face = devNode.getClippedFace().getVectorsAsArray();
-    geometry.addFace(face, height);
-
+    double[][] clippedFace = devNode.getClippedFace().getVectorsAsArray();
+    geometry.addFace(clippedFace, height);
+        
     // (adding two faces at a time)
     colors.add(colorScheme.getColor(devNode));
     colors.add(colorScheme.getColor(devNode));
 
     Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
     while (itr.hasNext()) {
-      computeDevelopment(itr.next(), colors, geometry);
+      generateManifoldGeometry(itr.next(), colors, geometry);
+    }
+  }
+  
+  protected void generateObjectGeometry(){
+    
+    /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
+    
+    //instead of vector, use something which has a basis (forward, left) also
+    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
+    generateObjectGeometry(development.getRoot(), objectImages);
+
+    
+    //generate sgc's for the objects
+    sgcDevelopment.removeChild(sgcObjects);
+    sgcObjects = new SceneGraphComponent("Objects");
+    sgcDevelopment.addChild(sgcObjects);
+    
+    Set<VisibleObject> objectList = objectImages.keySet();
+    for(VisibleObject o : objectList){
+      sgcObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
+    }
+    
+    /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
+  }
+
+  /*
+   * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
+   * and adds nodes to nodeList (should be empty at start)
+   */
+  private void generateObjectGeometry(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
+        
+    //look for objects
+    LinkedList<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
+    if(objectList != null){
+      
+      Frustum2D frustum = devNode.getFrustum();
+      AffineTransformation affineTrans = devNode.getAffineTransformation();
+      
+      for(VisibleObject o : objectList){
+
+        Vector transPos = affineTrans.affineTransPoint(o.getPosition());
+        if(frustum != null){
+          //check if object should be clipped
+          if(!frustum.checkInterior(transPos)){ continue; }
+        }
+        
+        //add to image list
+        ArrayList<Vector> imageList = objectImages.get(o);
+        if(imageList == null){
+          imageList = new ArrayList<Vector>();
+          objectImages.put(o,imageList);
+        }
+        imageList.add(transPos);
+      }
+    }
+
+    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
+    while (itr.hasNext()) {
+      generateObjectGeometry(itr.next(), objectImages);
     }
   }
   
   // ================== Shooting Tool ==================
   
   private class ShootTool extends AbstractTool {
-   // private Development development;
-    
-    public ShootTool(){ //Development development) {
+    private ManifoldPosition sourcePos;
+    private ShootingGame shootingGame;
+
+    public ShootTool(ShootingGame shootingGame, ManifoldPosition sourcePos) {
       super(InputSlot.POINTER_HIT);
-      //this.development = development;
+      this.shootingGame = shootingGame;
     }
    
     @Override
     public void activate(ToolContext tc) {
 
-      if(PRINT_SHOOT_TOOL_DATA){
-        System.out.println("Added node!");
-      }
-      
       Vector movement = development.getManifoldVector(forward.getComponent(0),forward.getComponent(1));
-      development.addNodeAtSource(colors[colorIndex++], movement);
+      shootingGame.addBullet(sourcePos,movement);
       colorIndex = colorIndex % colors.length;
     }
     @Override

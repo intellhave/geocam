@@ -12,9 +12,7 @@ import triangulation.Face;
  *  
  *  Overview: A node is an object that lives on the realization
  *      of the triangulation. It contains the following info:
- *        * Face the node is contained in
- *        * position pos within face (specified by coordinates 
- *          determined in Coord2D)
+ *        * ManifoldPosition pos, a face-coordinates tuple
  *        * radius that node is rendered (nodes are spheres)
  *        * color to render the node
  *        * transparency to render the node

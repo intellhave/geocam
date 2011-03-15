@@ -164,7 +164,7 @@ public class Development3D {
       ArrayList<Color> colors, DevelopmentGeometry geometry, ColorScheme3D colorScheme) {
     for (EmbeddedFace ef : devNode.getClippedTetra()) {
       double[][] face = ef.getVectorsAsArray();
-      geometry.addFace(face);
+      geometry.addFace(face,1.0);
       colors.add(colorScheme.getColor(devNode));
     }
     for(Node3D n : devNode.getObjects()) {

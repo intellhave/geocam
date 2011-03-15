@@ -1,24 +1,18 @@
 package development;
 
-import geoquant.Radius;
-
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Random;
 
+import objects.FixedObject;
 import objects.ManifoldPosition;
+import objects.ObjectAppearance;
 
 import triangulation.Edge;
 import triangulation.Face;
-import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
-import view.NodeImage;
-import view.SourceNodeImage;
-import de.jreality.math.Rn;
 
 /****************************************
  * Development.java
@@ -40,11 +34,10 @@ import de.jreality.math.Rn;
  * 
  */
 
-public class Development extends Observable {
+public class Development {
 
   /*TODO (Timing)*/ private static final int TASK_TYPE_BUILDTREE = TimingStatistics.generateTaskTypeID("Development.buildTree");
-  /*TODO (Timing)*/ private static final int TASK_TYPE_UPDATEOBJECTS = TimingStatistics.generateTaskTypeID("DevelopmentNode.updateObjects");
-
+  
   private AffineTransformation rotation = new AffineTransformation(2);
   private DevelopmentNode root;
   
@@ -52,227 +45,119 @@ public class Development extends Observable {
   private Vector direction = new Vector(1, 0);
   private Vector left = new Vector(0, 1);
 
-  private int maxDepth;
-  private double radius; // default radius of objects
-  private double units_per_millisecond = 0.0004;
+  private FixedObject sourceObject; //fixed object at source point
 
-  public boolean building = false;
+  private int maxDepth;
   
-  //objects
-  private Node sourcePointNode;
-  private ArrayList<Node> nodeList = new ArrayList<Node>();
-  private ArrayList<FadingNode> bulletList = new ArrayList<FadingNode>();
+  //private static final boolean VERBOSE_LOCK_DENIED = true;
+  //private static final boolean VERBOSE_LOCK_GRANTED = true;
+  //private static final boolean VERBOSE_LOCK_RELEASE = true;
+  //private static final boolean VERBOSE_LOCK_REQUEST = true;
+  //Thread lockOwner = null;
+  //String lockReason = "";
+  //boolean locked = false;
+  
+  private boolean locked = false;
+  
+
+  //-- 'custom obsevable' code -----------------------
+  public interface DevelopmentViewer{
+    public abstract void updateDevelopment(); 
+  }
+  LinkedList<DevelopmentViewer> viewers = new LinkedList<DevelopmentViewer>();
+  
+  private void notifyViewers(){
+    for(DevelopmentViewer dv : viewers){
+      if(dv != null){ dv.updateDevelopment(); }
+    }
+  }
+  
+  public void addViewer(DevelopmentViewer dv){ viewers.add(dv); }
+  public void removeViewer(DevelopmentViewer dv){ viewers.remove(dv); }
+  //-----------------------------------------------
 
   public Development(ManifoldPosition sourcePoint, int depth, double radius) {
 
-    this.radius = radius;
     maxDepth = depth;
     source = sourcePoint;
-    System.out.println("source point = " + source.getPosition());
-    sourcePointNode = new Node(Color.blue, source, units_per_millisecond, radius);
-    sourcePointNode.setRadius(radius);
-    synchronized (nodeList) {
-      nodeList.add(sourcePointNode);
-    }
-
-    // add nodes in random faces, to be shot
-    Color[] colors = { Color.red, Color.green, Color.orange, Color.cyan };
-    Integer[] keyList = new Integer[Triangulation.faceTable.keySet().size()];// =
-                                                                             // (Integer[])(Triangulation.faceTable.keySet().toArray());
-    Triangulation.faceTable.keySet().toArray(keyList);
-    Random rand = new Random();
-    for (int i = 0; i < 0; i++) {
-      // get random index of face in which to place object
-      int index = rand.nextInt(keyList.length);
-      Face f = Triangulation.faceTable.get(index);
-
-      // get point inside face
-      Vector p = new Vector(0, 0);
-      Iterator<Vertex> iv = f.getLocalVertices().iterator();
-      while (iv.hasNext()) {
-        p.add(Coord2D.coordAt(iv.next(), f));
-      }
-      p.scale(1.0f / 3.0f);
-
-      // create node
-      Node n = new Node(colors[i], new ManifoldPosition(f, p), units_per_millisecond, radius);
-      n.setRadius(radius);
-
-      // set random movement direction
-      Vector move = new Vector(Math.random(), Math.random());
-      move.normalize();
-      n.setMovement(move);
-      synchronized (nodeList) {
-        nodeList.add(n);
-      }
-    }
-    buildTree();
+    sourceObject = new FixedObject(source, new ObjectAppearance(radius, Color.BLACK, 0.2));
+    rebuild();
   }
 
   public void rebuild(ManifoldPosition sourcePoint, int depth) {
+    
     maxDepth = depth;
     source = sourcePoint;
-
-    synchronized (nodeList) {
-      nodeList.clear();
-    }
-
-    sourcePointNode = new Node(Color.blue, source, units_per_millisecond, radius);
-    sourcePointNode.setRadius(radius);
-    synchronized (nodeList) {
-      nodeList.add(sourcePointNode);
-    }
-
-    Node n = new Node(Color.red, source, units_per_millisecond, radius);
-    n.setRadius(radius);
-    n.setMovement(new Vector(1, 0));
-    synchronized (nodeList) {
-      nodeList.add(n);
-    }
-
-    buildTree();
-    setChanged();
-    notifyObservers("surface");
+    sourceObject.setManifoldPosition(source);
+    rebuild();
   }
 
   public void setDepth(int depth) {
+    
     maxDepth = depth;
-    buildTree();
-    setChanged();
-    notifyObservers("depth");
+    rebuild();
   }
-
-  public void setRadius(double r) {
-    radius = r;
-    sourcePointNode.setRadius(r);
-
-    root.updateObjects();
-    setChanged();
-    notifyObservers("objects");
+  
+  public boolean lock(){
+    if( locked == true ){ return false; }
+    locked = true;
+    return true;
   }
-
-  public void moveObjects(double elapsedTime) {
-    ArrayList<Node> removeList = new ArrayList<Node>();
-    synchronized (nodeList) {
-      for (Node node : nodeList) {
-        if (node instanceof FadingNode && ((FadingNode) node).isDead())
-          removeList.add(node);
-        else
-          node.move(elapsedTime);
-      }
-      nodeList.removeAll(removeList);
-    }
-
-    ArrayList<FadingNode> bulletRemoveList = new ArrayList<FadingNode>();
-    synchronized (bulletList) {
-      for (FadingNode bullet : bulletList) {
-        if (bullet.isDead()) {
-          bulletList.remove(bullet);
-          return;
-        }
-        bullet.move(elapsedTime);
-        Node target = hitObject(bullet);
-        if (target != null) {
-          bulletRemoveList.add(bullet);
-          nodeList.remove(target);
-        }
-      }
-    }
-    if (building)
-      return;
-
-    root.updateObjects();
-
-    setChanged();
-    notifyObservers("objects");
+  
+  public void unlock(){
+    locked = false;
   }
-
-  /*
-   * returns the Node hit by the given bullet, if it exists otherwise, returns
-   * null
-   */
-  private Node hitObject(Node bullet) {
-    double[] bulletPos = bullet.getPosition().getVectorAsArray();
-    for (Node node : nodeList) {
-      if (node.getFace().equals(bullet.getFace())) {
-        double[] objectPos = node.getPosition().getVectorAsArray();
-        if (Rn.euclideanDistance(bulletPos, objectPos) < node.getRadius()) {
-          System.out.println("HIIIIIIIIT!!!!");
-          return node;
-        }
-      }
-    }
-    return null;
-  }
-
-  /*
-   * Places a new fading node at the source point, with specified movement
-   * direction
-   */
-  public void addNodeAtSource(Color color, Vector vector) {
+  
+  /*public synchronized boolean lock(Thread requestingThread, String reason){ 
     
-    rotation = getRotationInverse();
-    vector = rotation.affineTransVector(vector);
-
-    FadingNode node = new FadingNode(color, source, units_per_millisecond, radius);
-    node.setMovement(vector);
-    synchronized (nodeList) {
-      nodeList.add(node);
+    if(VERBOSE_LOCK_REQUEST){
+      System.out.println("Lock requested by " + requestingThread.getName() + " for \"" + reason + "\".");
     }
-  }
-
-  public void addBulletAtSource(Color color, Vector vector) {
     
-    rotation = getRotationInverse();
-    vector = rotation.affineTransVector(vector);
-
-    FadingNode bullet = new FadingNode(color, source, units_per_millisecond, radius / 3);
-    bullet.setMovement(vector);
-    synchronized (bulletList) {
-      bulletList.add(bullet);
+    if(locked){
+      try{ wait(1000); }
+      catch(InterruptedException e){ }
+    }
+    
+    if(!locked){
+      locked = true;
+      lockOwner = requestingThread;
+      if(reason == null){ lockReason = "(None)"; }
+      else{ lockReason = reason; }
+      if(VERBOSE_LOCK_GRANTED){
+        System.out.println("Lock granted to " + lockOwner.getName() + " for \"" + lockReason + "\".");
+      }
+      return true;
+    }else{
+      if(VERBOSE_LOCK_DENIED){
+        System.err.println("Access to development denied:");
+        System.err.println(" - Request by " + requestingThread.getName() + " for \"" + reason + "\".");
+        System.err.println(" - Locked by " + lockOwner.getName() + " for \"" + lockReason + "\".");
+      }
+      return false;
     }
   }
-
-  public void addVertexNode(Color color, Vertex v) {
-    Face sourceFace = null;
-    for (Face f : v.getLocalFaces()) {
-      sourceFace = f;
-      break;
+  
+  public synchronized boolean unlock(Thread requestingThread){
+    if(requestingThread.equals(lockOwner)){
+      if(VERBOSE_LOCK_RELEASE){
+        System.out.println("Lock released by " + lockOwner.getName() + " for \"" + lockReason + "\".");
+      }
+      locked = false;
+      lockOwner = null;
+      lockReason = "";
+      notifyAll();
+      return true;
     }
-
-    Node node = new Node(color, new ManifoldPosition(sourceFace, Coord2D.coordAt(v, sourceFace)),
-        units_per_millisecond, radius);
-    // System.err.println("1 "+ node.getRadius());
-    node.setRadius(Radius.valueAt(v));
-    // node.setRadius(2);
-    node.setTransparency(.1);
-    synchronized (nodeList) {
-      nodeList.add(node);
-    }
-    buildTree();
-    // int last = nodeList.size()-1;
-    // System.err.println("3 "+ nodeList.get(last).getRadius());
-    // this.rebuild(this.sourceFace, this.sourcePoint, this.maxDepth);
-  }
+    return false;
+  }*/
 
   // ------------ Getters and Setters ------------
 
-  public DevelopmentNode getRoot() {
-    return root;
-  }
-
-  public ManifoldPosition getSource() {
-    return source;
-  }
-
-  public int getDepth() {
-    return maxDepth;
-  }
-
-  public void setVelocity(double v) {
-    units_per_millisecond = v;
-    sourcePointNode.setVelocity(v);
-  }
+  public DevelopmentNode getRoot() { return root; }
+  public ManifoldPosition getSource() { return source; }
+  public FixedObject getSourceObject() { return sourceObject; }
+  public int getDepth() { return maxDepth; }
 
   // ---------------------------------------------
 
@@ -297,9 +182,7 @@ public class Development extends Observable {
     y_new = sin * x + cos * y;
     left = new Vector(x_new, y_new);
 
-    buildTree();
-    setChanged();
-    notifyObservers("rotation");
+    rebuild();
   }
 
   /*
@@ -307,17 +190,10 @@ public class Development extends Observable {
    * direction vector, by distance given by scaleVal*units_per_millisecond.
    * (scaleVal has units of milliseconds)
    */
-  public void translateSourcePoint(double scaleVal) {
-    Vector dx = new Vector(direction);
-    dx.scale(scaleVal * units_per_millisecond);
-    
-    source.move(dx,direction,left);
-    updateSource(); // notifies observers
-  }
   
   public void rebuild(){
     buildTree();
-    setChanged();
+    notifyViewers();
   }
   
   /*
@@ -332,24 +208,9 @@ public class Development extends Observable {
     dx.add(Vector.scale(left, dLeft));
     
     source.move(dx,direction,left);
-    updateSource(); // notifies observers
-  }
-
-  public void updateSource() {
-
-    synchronized (nodeList) {
-      nodeList.remove(sourcePointNode);
-    }
-    double radius = sourcePointNode.getRadius();
-    sourcePointNode = new Node(Color.blue, source, units_per_millisecond, radius);
-    sourcePointNode.setRadius(radius);
-    synchronized (nodeList) {
-      nodeList.add(sourcePointNode);
-    }
-
-    buildTree();
-    setChanged();
-    notifyObservers("source");
+    
+    sourceObject.setManifoldPosition(source);
+    rebuild();
   }
 
   private void buildTree() {
@@ -386,10 +247,6 @@ public class Development extends Observable {
       }
     }
     
-    /*TODO (Timing)*/ TimingStatistics.endTask(taskID);
-    
-    /*TODO (Timing)*/ taskID = TimingStatistics.startTask(TASK_TYPE_UPDATEOBJECTS);
-    root.updateObjects();
     /*TODO (Timing)*/ TimingStatistics.endTask(taskID);
   }
 
@@ -479,8 +336,6 @@ public class Development extends Observable {
     private Face face;
     private AffineTransformation affineTrans;
     private ArrayList<DevelopmentNode> children = new ArrayList<DevelopmentNode>();
-    private ArrayList<NodeImage> containedObjects = new ArrayList<NodeImage>();
-    private ArrayList<Trail> containedTrails = new ArrayList<Trail>();
     private Frustum2D frustum;
     private int depth;
 
@@ -493,80 +348,6 @@ public class Development extends Observable {
       face = f;
       clippedFace = cf;
       affineTrans = at;
-    }
-
-    public void updateObjects() {
-      
-      containedObjects.clear();
-      containedTrails.clear();
-      synchronized (nodeList) {
-        for (Node node : nodeList) {
-          if (node.getFace().equals(face)) {
-            Vector point = node.getPosition();
-
-            Vector transPoint = affineTrans.affineTransPoint(point);
-            Vector transPoint2d = new Vector(transPoint.getComponent(0),
-                transPoint.getComponent(1));
-
-            if (isRoot() || frustum.checkInterior(transPoint2d)) {
-              // containment alg does not work for root
-              if (node.equals(sourcePointNode)) {
-                containedObjects.add(new SourceNodeImage(node, affineTrans));
-              } else
-                containedObjects.add(new NodeImage(node, new Vector(
-                    transPoint2d)));
-            }
-          }
-
-          if (node instanceof FadingNode) {
-            for (Trail trail : ((FadingNode) node).getAllTrails()) {
-              if (trail.getFace().equals(face)) {
-                Vector transStart = affineTrans.affineTransPoint(trail
-                    .getStart());
-                Vector transStart2d = new Vector(transStart.getComponent(0),
-                    transStart.getComponent(1));
-                Vector transEnd = affineTrans.affineTransPoint(trail.getEnd());
-                Vector transEnd2d = new Vector(transEnd.getComponent(0),
-                    transEnd.getComponent(1));
-                Trail clippedTrail;
-
-                if (frustum == null) {
-                  clippedTrail = new Trail(transStart2d, transEnd2d, face,
-                      trail.color);
-                } else {
-                  clippedTrail = frustum.clipTrail(transStart2d, transEnd2d,
-                      face, trail.color);
-                }
-                if (clippedTrail != null)
-                  containedTrails.add(clippedTrail);
-              }
-            }
-          }
-        }
-      }
-
-      synchronized (bulletList) {
-        for (Node bullet : bulletList) {
-          if (bullet.getFace().equals(face)) {
-            Vector point = bullet.getPosition();
-
-            Vector transPoint = affineTrans.affineTransPoint(point);
-            Vector transPoint2d = new Vector(transPoint.getComponent(0),
-                transPoint.getComponent(1));
-
-            if (isRoot() || frustum.checkInterior(transPoint2d)) {
-              // containment alg does not work for root
-              containedObjects.add(new NodeImage(bullet, new Vector(
-                  transPoint2d)));
-            }
-          }
-        }
-      }
-
-      for (DevelopmentNode child : children) {
-        child.updateObjects();
-      }
-
     }
 
     public void addChild(DevelopmentNode node) { children.add(node); }
@@ -585,10 +366,9 @@ public class Development extends Observable {
     //accessors
     public Face getFace() { return face; }
     public int getDepth() { return depth; }
+    public Frustum2D getFrustum(){ return frustum; }
     public AffineTransformation getAffineTransformation() { return affineTrans; }
     public ArrayList<DevelopmentNode> getChildren() { return new ArrayList<DevelopmentNode>(children); }
-    public ArrayList<NodeImage> getObjects() { return containedObjects; }
-    public ArrayList<Trail> getTrails() { return containedTrails; }
 
     public boolean isRoot() { return depth == 0; }
     public boolean faceIsSource() { return face.equals(source.getFace()); }

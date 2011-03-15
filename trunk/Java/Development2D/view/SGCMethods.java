@@ -3,6 +3,8 @@ package view;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import objects.ObjectAppearance;
+
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.geometry.PointSetFactory;
@@ -27,6 +29,32 @@ public class SGCMethods {
    * transparency of node. For simulated 3D view, object must have
    * z-coord of 0 to appear in the right position.
    */
+  public static SceneGraphComponent sgcFromImageList(ArrayList<Vector> images, double zvalue, ObjectAppearance app){
+    
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    
+    PointSetFactory psf = new PointSetFactory();
+    
+    double[][] verts = new double[images.size()][3];
+    Color[] colors = new Color[images.size()];
+    Color c = app.getColor();
+    for(int i=0; i<images.size(); i++){
+      Vector v = images.get(i);
+      verts[i] = new double[]{ v.getComponent(0), v.getComponent(1), zvalue };
+      colors[i] = c;
+    }
+    psf.setVertexCount(images.size());
+    psf.setVertexCoordinates(verts);
+    psf.setVertexColors(colors);
+    psf.update();
+    
+    sgc.setGeometry(psf.getGeometry());
+    sgc.setAppearance(app.getJRealityAppearance());
+    
+    return sgc;
+  }
+  
+  
   public static SceneGraphComponent sgcFromNode(NodeImage node, int dimension) {
     Vector v = node.getPosition();
     if(dimension > 2) 
@@ -34,7 +62,7 @@ public class SGCMethods {
     if(dimension == 2 && node instanceof SourceNodeImage)
       return node.getSGC(dimension);
     
-    return sgcFromPoint(v, node.getRadius(), node.getColor(),
+    return sgcFromPoint(v, node.getRadius(), 1, node.getColor(),
         node.getTransparency());
   }
   
@@ -42,7 +70,7 @@ public class SGCMethods {
    * Returns SGC representing a node in Development3D
    */
   public static SceneGraphComponent sgcFromNode3D(Node3D node) {
-    return sgcFromPoint(node.getPosition(), node.getRadius(), node.getColor(),
+    return sgcFromPoint(node.getPosition(), node.getRadius(), 1, node.getColor(),
         node.getTransparency());
   }
 
@@ -50,7 +78,7 @@ public class SGCMethods {
    * Returns SGC with sphere at position of point, with specified
    * radius, color, and transparency in (0,1)
    */
-  public static SceneGraphComponent sgcFromPoint(Vector point, double radius,
+  public static SceneGraphComponent sgcFromPoint(Vector point, double radius, double zvalue,
       Color color, double transparency) {
     SceneGraphComponent sgc_points = new SceneGraphComponent();
     Appearance app_points = new Appearance();
@@ -72,7 +100,7 @@ public class SGCMethods {
     double[][] vertlist = new double[1][3];
     if (point.getDimension() == 2) {
       vertlist[0] = new double[] { point.getComponent(0),
-          point.getComponent(1), 1 };
+          point.getComponent(1), zvalue };
     } else if (point.getDimension() == 3) {
       vertlist[0] = new double[] { point.getComponent(0),
           point.getComponent(1), point.getComponent(2) };
@@ -91,7 +119,7 @@ public class SGCMethods {
     return sgc_points;
   }
   
-  public static SceneGraphComponent sgcFromVertices(Vector...vectors) {
+  public static SceneGraphComponent sgcFromVertices(double zvalue, Vector...vectors) {
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
 
 //    Color[] colorList = new Color[colors.size()];
@@ -104,7 +132,35 @@ public class SGCMethods {
     for(int i = 0; i < vectors.length; i++) {
       vectorList[i] = vectors[i].getVectorAsArray();
     }
-    geometry.addFace(vectorList);
+    geometry.addFace(vectorList, zvalue);
+
+    double[][] ifsf_verts = geometry.getVerts();
+    int[][] ifsf_faces = geometry.getFaces();
+    ifsf.setVertexCount(ifsf_verts.length);
+    ifsf.setVertexCoordinates(ifsf_verts);
+    ifsf.setFaceCount(ifsf_faces.length);
+    ifsf.setFaceIndices(ifsf_faces);
+    ifsf.setGenerateEdgesFromFaces(true);
+    ifsf.update();
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    sgc.setGeometry(ifsf.getGeometry());
+    return sgc;
+  }
+  
+  public static SceneGraphComponent sgcFromVertices(double zvalue, ArrayList<Vector> vectors) {
+    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+
+//    Color[] colorList = new Color[colors.size()];
+//    for (int i = 0; i < colors.size(); i++) {
+//      colorList[i] = colors.get(i);
+//    }
+    DevelopmentGeometry geometry = new DevelopmentGeometry();
+    double[][] vectorList = new double[vectors.size()][vectors.get(0).getDimension()];
+    
+    for(int i = 0; i < vectors.size(); i++) {
+      vectorList[i] = vectors.get(i).getVectorAsArray();
+    }
+    geometry.addFace(vectorList, zvalue);
 
     double[][] ifsf_verts = geometry.getVerts();
     int[][] ifsf_faces = geometry.getFaces();
@@ -219,7 +275,7 @@ public class SGCMethods {
     private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
     private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
 
-    public void addFace(double[][] faceverts) {
+    public void addFace(double[][] faceverts, double zvalue) {
 
       int nverts = faceverts.length;
       int vi = geometry_verts.size();
@@ -232,7 +288,7 @@ public class SGCMethods {
         if(faceverts[k].length > 2)
           newvert[2] = faceverts[k][2];
         else
-          newvert[2] = 1.0;
+          newvert[2] = zvalue;
         geometry_verts.add(newvert);
         newface[k] = vi++;
       }
