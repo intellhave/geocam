@@ -9,18 +9,22 @@ import objects.ManifoldPosition;
 import objects.MovingObject;
 import objects.ObjectAppearance;
 import objects.ObjectDynamics;
+import objects.ShootingGame;
 
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme.schemes;
+import de.jreality.scene.tool.AbstractTool;
+import de.jreality.scene.tool.InputSlot;
+import de.jreality.scene.tool.ToolContext;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
 import development.TimingStatistics;
 import development.Vector;
 
-public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectDynamics.ObjectViewer {
+public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectDynamics.DynamicsListener {
  
   private static int INITIAL_POINT_SIZE = 4;
   private static double radius = INITIAL_POINT_SIZE/100.0;
@@ -34,11 +38,10 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
   private static DevelopmentViewCave view;
   
   //--- objects ------------------------
-  //private static ShootingGame shootingGame = new ShootingGame();
-  private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
+  private static ShootingGame shootingGame;
   private static final boolean INITIAL_MOVEMENT_STATUS = true;
-  private static final int MOVING_OBJECT_COUNT = 4;
-  private static final double objectRadius = 0.1;
+  private static double targetSpeed = 0.5;
+  private static final double TARGET_SPEED_INCREMENT = 0.1;
   //------------------------------------
   
   public static void main(String[] args) {
@@ -57,6 +60,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
     view = new DevelopmentViewCave(development, colorScheme);
     System.out.println("---------------- done ----------------");
     
+    
     development.addViewer(this);
     
     //make it display timing statistics on exit
@@ -64,31 +68,37 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
       public void run(){ TimingStatistics.printData(); }
     });
     
-    //set up objects
-    development.getSourceObject().getAppearance().setRadius(objectRadius);
-    Random rand = new Random();
-    for(int i=0; i<MOVING_OBJECT_COUNT; i++){
-      dynamics.addObject(new MovingObject( development.getSource(), new ObjectAppearance(objectRadius, randomColor(rand)), randomUnitVector(rand) ));
-    }
-    dynamics.addViewer(this);
-    if(INITIAL_MOVEMENT_STATUS){ dynamics.start(); }
+    //add random targets for the shooting game
+    shootingGame = new ShootingGame(50);
+    shootingGame.setTargetSpeed(targetSpeed);
+    shootingGame.addTarget(development.getSource(), randomUnitVector() );
+    shootingGame.addListener(this);
+    if(INITIAL_MOVEMENT_STATUS){ shootingGame.start(); }
+    view.installShootTool(shootingGame);
+    
+    //make source point invisible
+    development.getSourceObject().setVisible(false);
 
     //initial geometry
     updateGeometry(true,true);
     view.initializeNewManifold();
   }
 
-  private Color randomColor(Random rand){
-    return new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
-  }
-  
-  private Vector randomUnitVector(Random rand){
+  private Vector randomUnitVector(){
+    Random rand = new Random();
     double a = rand.nextDouble()*Math.PI*2;
     return new Vector(Math.cos(a), Math.sin(a));
   }
   
-  public void updateObjects(){
-    updateGeometry(false,true);
+  public void dynamicsEvent(int eventID){
+    if(eventID == ObjectDynamics.EVENT_DYNAMICS_EVOLVED){
+      updateGeometry(false,true);
+    }else if(eventID == ShootingGame.EVENT_OBJECT_HIT){
+      //make a new target, and a little faster
+      targetSpeed += TARGET_SPEED_INCREMENT;
+      shootingGame.setTargetSpeed(targetSpeed);
+      shootingGame.addTarget(development.getSource(), randomUnitVector() );
+    }
   }
   
   public void updateDevelopment(){

@@ -24,23 +24,30 @@ import development.TimingStatistics;
 
 public abstract class ObjectDynamics {
 
-  public static final Integer EVENT_OBJECT_UPDATE = new Integer(0);
+  public static int nextEventID = 0; 
+  public static final int EVENT_DYNAMICS_EVOLVED = getNextEventID();
+  
   /*TODO (Timing)*/ private static final int TASK_OBJECT_DYNAMICS = TimingStatistics.generateTaskTypeID("Object Dynamics");
   
   //-- 'custom obsevable' code -----------------------
-  public interface ObjectViewer{
-    public abstract void updateObjects(); 
+  public interface DynamicsListener{
+    public abstract void dynamicsEvent(int eventID); 
   }
-  LinkedList<ObjectViewer> viewers = new LinkedList<ObjectViewer>();
+  LinkedList<DynamicsListener> listeners = new LinkedList<DynamicsListener>();
   
-  private void notifyViewers(){
-    for(ObjectViewer ov : viewers){ 
-      if(ov != null){ ov.updateObjects(); }
+  protected void notifyListeners(int eventID){
+    for(DynamicsListener dl : listeners){ 
+      if(dl != null){ dl.dynamicsEvent(eventID); }
     }
   }
   
-  public void addViewer(ObjectViewer ov){ viewers.add(ov); }
-  public void removeViewer(ObjectViewer ov){ viewers.remove(ov); }
+  public void addListener(DynamicsListener dl){ listeners.add(dl); }
+  public void removeListener(DynamicsListener dl){ listeners.remove(dl); }
+  
+  protected static int getNextEventID(){
+    nextEventID++;
+    return nextEventID;
+  }
   //-----------------------------------------------
   
   private long time;
@@ -77,7 +84,7 @@ public abstract class ObjectDynamics {
   
   public void evolve(long dt){
     evolveDynamics(dt);
-    notifyViewers();
+    notifyListeners(EVENT_DYNAMICS_EVOLVED);
   }
   
   abstract protected void evolveDynamics(long dt);

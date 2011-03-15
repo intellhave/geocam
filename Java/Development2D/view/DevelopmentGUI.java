@@ -43,7 +43,7 @@ import development.EmbeddedTriangulation;
 import development.TimingStatistics;
 import development.Vector;
 
-public class DevelopmentGUI extends JFrame  implements Development.DevelopmentViewer, ObjectDynamics.ObjectViewer{
+public class DevelopmentGUI extends JFrame  implements Development.DevelopmentViewer, ObjectDynamics.DynamicsListener{
   private static final long serialVersionUID = 1L;
 
   public static void main(String[] args) {
@@ -125,7 +125,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
 
     //start listening for updates
     development.addViewer(this);
-    dynamics.addViewer(this);
+    dynamics.addListener(this);
   }
   
   private Color randomColor(Random rand){
@@ -137,8 +137,10 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     return new Vector(Math.cos(a), Math.sin(a));
   }
   
-  public void updateObjects(){
-    updateGeometry(false,true);
+  public void dynamicsEvent(int eventID){
+    if(eventID == ObjectDynamics.EVENT_DYNAMICS_EVOLVED){
+      updateGeometry(false,true);
+    }
   }
   
   public void updateDevelopment(){

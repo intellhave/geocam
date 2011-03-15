@@ -170,6 +170,7 @@ public class DevelopmentView2D extends DevelopmentView {
       AffineTransformation affineTrans = devNode.getAffineTransformation();
       
       for(VisibleObject o : objectList){
+        if(!o.isVisible()){ continue; }
 
         Vector transPos = affineTrans.affineTransPoint(o.getPosition());
         if(frustum != null){

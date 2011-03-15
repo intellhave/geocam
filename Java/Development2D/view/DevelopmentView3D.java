@@ -51,7 +51,7 @@ public class DevelopmentView3D extends DevelopmentView {
   private double height = INITIAL_HEIGHT/100.0;
   private static int MAX_HEIGHT = 30;
   
-  private static final boolean USE_SHOOT_TOOL = false;
+  //private static final boolean USE_SHOOT_TOOL = false;
 
   private Viewer viewer;
   private SceneGraphPath camera_source;
@@ -230,6 +230,7 @@ public class DevelopmentView3D extends DevelopmentView {
       AffineTransformation affineTrans = devNode.getAffineTransformation();
       
       for(VisibleObject o : objectList){
+        if(!o.isVisible()){ continue; }
 
         Vector transPos = affineTrans.affineTransPoint(o.getPosition());
         if(frustum != null){
@@ -259,7 +260,7 @@ public class DevelopmentView3D extends DevelopmentView {
   
   // ================== Shooting Tool ==================
   
-  private static class ShootTool extends AbstractTool {
+  /*private static class ShootTool extends AbstractTool {
     private ManifoldPosition sourcePos;
     private ShootingGame shootingGame;
     
@@ -282,7 +283,7 @@ public class DevelopmentView3D extends DevelopmentView {
     public void deactivate(ToolContext tc) { } 
     @Override
     public void perform(ToolContext tc) { }
-  }
+  }*/
 
   // ================== Options Panel ==================
   

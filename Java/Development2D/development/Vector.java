@@ -148,8 +148,8 @@ public class Vector {
   }
 
   public static double distance(Vector v1, Vector v2) throws Exception {
-    v1.subtract(v2);
-    return Math.sqrt(v1.lengthSquared());
+    
+    return Math.sqrt(Vector.subtract(v1,v2).lengthSquared());
   }
 
   public void normalize() {

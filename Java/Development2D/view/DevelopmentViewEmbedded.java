@@ -16,6 +16,7 @@ import de.jreality.math.Pn;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.tool.AbstractTool;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
@@ -93,12 +94,12 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
       generateObjectGeometry(f, objectImages);
     }
     
-    //generate sgc's for the objects
-    
+    //generate sgc's for each object
     SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
     
     Set<VisibleObject> objectList = objectImages.keySet();
     for(VisibleObject o : objectList){
+      if(!o.isVisible()){ continue; }
       sgcNewObjects.addChild(SGCMethods.sgcFrom3DList(objectImages.get(o), o.getAppearance()));
     }
     
