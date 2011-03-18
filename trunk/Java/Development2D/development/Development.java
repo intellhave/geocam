@@ -73,6 +73,11 @@ public class Development {
     rebuild();
   }
 
+  public void rebuild(){
+    buildTree();
+    notifyViewers();
+  }
+
   public void rebuild(ManifoldPosition sourcePoint, int depth) {
     
     maxDepth = depth;
@@ -80,7 +85,7 @@ public class Development {
     sourceObject.setManifoldPosition(source);
     rebuild();
   }
-
+  
   public void setDepth(int depth) {
     
     maxDepth = depth;
@@ -93,6 +98,13 @@ public class Development {
   public ManifoldPosition getSource() { return source; }
   public FixedObject getSourceObject() { return sourceObject; }
   public int getDepth() { return maxDepth; }
+  
+  public Vector getManifoldVector(double componentForward, double componentLeft){
+    Vector v = new Vector(0,0);
+    v.add(Vector.scale(direction,componentForward));
+    v.add(Vector.scale(left,componentLeft));
+    return v;
+  }
 
   // ---------------------------------------------
 
@@ -100,35 +112,17 @@ public class Development {
    * rotate CCW WRT [forward, left] ordered basis
    */
   public void rotate(double angle) {
-    double cos = Math.cos(-angle);
-    double sin = Math.sin(-angle);
     
-    double x,y,x_new,y_new;
+    double x,y;
+    double cos = Math.cos(-angle), sin = Math.sin(-angle);
     
-    x = direction.getComponent(0);
-    y = direction.getComponent(1);
-    x_new = cos * x - sin * y;
-    y_new = sin * x + cos * y;
-    direction = new Vector(x_new, y_new);
+    x = direction.getComponent(0); y = direction.getComponent(1);
+    direction = new Vector(cos * x - sin * y, sin * x + cos * y);
     
-    x = left.getComponent(0);
-    y = left.getComponent(1);
-    x_new = cos * x - sin * y;
-    y_new = sin * x + cos * y;
-    left = new Vector(x_new, y_new);
+    x = left.getComponent(0); y = left.getComponent(1);
+    left = new Vector(cos * x - sin * y, sin * x + cos * y);
 
     rebuild();
-  }
-
-  /*
-   * Assumes direction is normalized. Moves source point in direction of
-   * direction vector, by distance given by scaleVal*units_per_millisecond.
-   * (scaleVal has units of milliseconds)
-   */
-  
-  public void rebuild(){
-    buildTree();
-    notifyViewers();
   }
   
   /*
@@ -146,6 +140,22 @@ public class Development {
     
     sourceObject.setManifoldPosition(source);
     rebuild();
+  }
+
+  
+  public AffineTransformation getRotationInverse() {
+    
+    //rotation matrix sending direction -> (1,0), left -> (0,1)
+    //assumes det(dir, left) = 1
+    
+    Matrix M = new Matrix(new double[][]{
+       new double[] { left.getComponent(1), -left.getComponent(0)  },
+       new double[] { -direction.getComponent(1), direction.getComponent(0) }
+    });
+    //double det = direction.getComponent(0)*left.getComponent(1)-direction.getComponent(1)*left.getComponent(0);
+    //M.scaleMatrix(1/det);
+    
+    return new AffineTransformation(M);
   }
 
   private void buildTree() {
@@ -230,25 +240,4 @@ public class Development {
     }
   }
 
-  public Vector getManifoldVector(double componentForward, double componentLeft){
-    Vector v = new Vector(0,0);
-    v.add(Vector.scale(direction,componentForward));
-    v.add(Vector.scale(left,componentLeft));
-    return v;
-  }
-
-  public AffineTransformation getRotationInverse() {
-    
-    //rotation matrix sending direction -> (1,0), left -> (0,1)
-    //assumes det(dir, left) = 1
-    
-    Matrix M = new Matrix(new double[][]{
-       new double[] { left.getComponent(1), -left.getComponent(0)  },
-       new double[] { -direction.getComponent(1), direction.getComponent(0) }
-    });
-    //double det = direction.getComponent(0)*left.getComponent(1)-direction.getComponent(1)*left.getComponent(0);
-    //M.scaleMatrix(1/det);
-    
-    return new AffineTransformation(M);
-  }
 }
