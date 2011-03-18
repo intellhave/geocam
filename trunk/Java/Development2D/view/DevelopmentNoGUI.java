@@ -1,13 +1,10 @@
 package view;
 
-import java.awt.Color;
 import java.util.Iterator;
 import java.util.Random;
 
-import objects.BasicMovingObjects;
+import objects.ManifoldObjectHandler;
 import objects.ManifoldPosition;
-import objects.MovingObject;
-import objects.ObjectAppearance;
 import objects.ObjectDynamics;
 import objects.ShootingGame;
 
@@ -15,9 +12,6 @@ import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme.schemes;
-import de.jreality.scene.tool.AbstractTool;
-import de.jreality.scene.tool.InputSlot;
-import de.jreality.scene.tool.ToolContext;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
@@ -97,6 +91,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
     if(eventID == ObjectDynamics.EVENT_DYNAMICS_EVOLVED){
       
       updateGeometry(false,true);
+
     }else if(eventID == ShootingGame.EVENT_OBJECT_HIT){
       
       //make a new target, and a little faster

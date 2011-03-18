@@ -48,17 +48,6 @@ public class Development {
   private FixedObject sourceObject; //fixed object at source point
 
   private int maxDepth;
-  
-  //private static final boolean VERBOSE_LOCK_DENIED = true;
-  //private static final boolean VERBOSE_LOCK_GRANTED = true;
-  //private static final boolean VERBOSE_LOCK_RELEASE = true;
-  //private static final boolean VERBOSE_LOCK_REQUEST = true;
-  //Thread lockOwner = null;
-  //String lockReason = "";
-  //boolean locked = false;
-  
-  private boolean locked = false;
-  
 
   //-- 'custom obsevable' code -----------------------
   public interface DevelopmentViewer{
@@ -97,60 +86,6 @@ public class Development {
     maxDepth = depth;
     rebuild();
   }
-  
-  public boolean lock(){
-    if( locked == true ){ return false; }
-    locked = true;
-    return true;
-  }
-  
-  public void unlock(){
-    locked = false;
-  }
-  
-  /*public synchronized boolean lock(Thread requestingThread, String reason){ 
-    
-    if(VERBOSE_LOCK_REQUEST){
-      System.out.println("Lock requested by " + requestingThread.getName() + " for \"" + reason + "\".");
-    }
-    
-    if(locked){
-      try{ wait(1000); }
-      catch(InterruptedException e){ }
-    }
-    
-    if(!locked){
-      locked = true;
-      lockOwner = requestingThread;
-      if(reason == null){ lockReason = "(None)"; }
-      else{ lockReason = reason; }
-      if(VERBOSE_LOCK_GRANTED){
-        System.out.println("Lock granted to " + lockOwner.getName() + " for \"" + lockReason + "\".");
-      }
-      return true;
-    }else{
-      if(VERBOSE_LOCK_DENIED){
-        System.err.println("Access to development denied:");
-        System.err.println(" - Request by " + requestingThread.getName() + " for \"" + reason + "\".");
-        System.err.println(" - Locked by " + lockOwner.getName() + " for \"" + lockReason + "\".");
-      }
-      return false;
-    }
-  }
-  
-  public synchronized boolean unlock(Thread requestingThread){
-    if(requestingThread.equals(lockOwner)){
-      if(VERBOSE_LOCK_RELEASE){
-        System.out.println("Lock released by " + lockOwner.getName() + " for \"" + lockReason + "\".");
-      }
-      locked = false;
-      lockOwner = null;
-      lockReason = "";
-      notifyAll();
-      return true;
-    }
-    return false;
-  }*/
 
   // ------------ Getters and Setters ------------
 
@@ -315,62 +250,5 @@ public class Development {
     //M.scaleMatrix(1/det);
     
     return new AffineTransformation(M);
-  }
-  
-  // ================== DevelopmentNode ==================
-  /*
-   * DevelopmentNode
-   * 
-   * Overview: Tree describing the development is encoded by linked development
-   * nodes.
-   * 
-   * Each development node contains: * Face in the triangulation * Embedded
-   * face, which is the face clipped by frustum boundary * affine transformation
-   * to place embedded face in the scene * pointers to children * list of object
-   * images contained in embedded face (nodes, trails) * frustum the embedded
-   * face is contained in (used to clip face) * depth of node in current tree
-   */
-
-  public class DevelopmentNode {
-    private EmbeddedFace clippedFace = null;
-    private Face face;
-    private AffineTransformation affineTrans;
-    private ArrayList<DevelopmentNode> children = new ArrayList<DevelopmentNode>();
-    private Frustum2D frustum;
-    private int depth;
-
-    public DevelopmentNode(DevelopmentNode prev, Face f, Frustum2D frust, EmbeddedFace cf, AffineTransformation at) {
-      
-      if (prev == null){ depth = 0; }
-      else{  depth = prev.getDepth() + 1; }
-      
-      frustum = frust;
-      face = f;
-      clippedFace = cf;
-      affineTrans = at;
-    }
-
-    public void addChild(DevelopmentNode node) { children.add(node); }
-    public void removeChild(DevelopmentNode node) { children.remove(node); }
-    
-    public EmbeddedFace getClippedFace() {
-      
-      if(clippedFace == null){
-        //generate the clippedFace from frustum and affineTrans
-        if(frustum == null){ clippedFace = affineTrans.affineTransFace(face); }
-        else{ clippedFace = frustum.clipFace(affineTrans.affineTransFace(face)); }
-      }
-      return clippedFace;
-    }
-
-    //accessors
-    public Face getFace() { return face; }
-    public int getDepth() { return depth; }
-    public Frustum2D getFrustum(){ return frustum; }
-    public AffineTransformation getAffineTransformation() { return affineTrans; }
-    public ArrayList<DevelopmentNode> getChildren() { return new ArrayList<DevelopmentNode>(children); }
-
-    public boolean isRoot() { return depth == 0; }
-    public boolean faceIsSource() { return face.equals(source.getFace()); }
   }
 }

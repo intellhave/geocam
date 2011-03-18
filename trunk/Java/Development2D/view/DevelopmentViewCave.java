@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.LinkedList;
 
 import objects.ManifoldObjectHandler;
-import objects.ManifoldPosition;
 import objects.ShootingGame;
 import objects.VisibleObject;
 
@@ -35,7 +34,7 @@ import development.AffineTransformation;
 import development.Development;
 import development.Frustum2D;
 import development.TimingStatistics;
-import development.Development.DevelopmentNode;
+import development.DevelopmentNode;
 import development.Vector;
 
 public class DevelopmentViewCave extends DevelopmentView {

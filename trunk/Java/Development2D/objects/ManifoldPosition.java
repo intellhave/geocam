@@ -60,11 +60,10 @@ public class ManifoldPosition{
     Vector startPos = new Vector(position);
     Vector endPos = Vector.add(position, dx);
     Face oldFace = face;
-    moveRecurse(this,startPos, endPos, face, null, trail, tangentVectors);
-    if(face != oldFace){ reportFaceChange(oldFace); }
+    move(this,startPos, endPos, face, null, trail, tangentVectors);
   }
     
-  private static void moveRecurse(ManifoldPosition posToUpdate, Vector startPos, Vector endPos, Face face, Edge lastEdgeCrossed, GeodesicPath trail, Vector...tangentVectors){
+  private static void move(ManifoldPosition posToUpdate, Vector startPos, Vector endPos, Face face, Edge lastEdgeCrossed, GeodesicPath trail, Vector...tangentVectors){
     
     //if position is in face, then quit
     Vector l = DevelopmentComputations.getBarycentricCoords(endPos,face);
@@ -105,7 +104,7 @@ public class ManifoldPosition{
     }
     
     if(!foundEdge){ 
-      System.err.println("(ManifoldPosition.moveRecurse) Error: No intersection found"); 
+      System.err.println("(ManifoldPosition.move) Error: No intersection found"); 
       return;
     }
     
@@ -122,7 +121,7 @@ public class ManifoldPosition{
       tangentVectors[i].setEqualTo(affineTrans.affineTransVector(tangentVectors[i]));
     }
     
-    moveRecurse(posToUpdate, nextStartPos, nextEndPos, adjacentFace, intersectedEdge, trail, tangentVectors);
+    move(posToUpdate, nextStartPos, nextEndPos, adjacentFace, intersectedEdge, trail, tangentVectors);
   }
 
 
