@@ -1,5 +1,6 @@
 package objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import development.AffineTransformation;
@@ -13,7 +14,7 @@ import triangulation.Face;
 
 /* Represents a position on the Triangulation
  * 
- * The only data is a face and a position;
+ * The data is a face, position, and orientation
  * The position is a Vector which is in the coordinates given by the Coord2D geoquant
  * The most useful aspect of ManifoldPosition is the 'move' method, which can move
  * the position along a geodesic in the manifold, and can carry tangent vectors along
@@ -21,22 +22,80 @@ import triangulation.Face;
 
 public class ManifoldPosition{
 
+  //position
   protected Face face;
   protected Vector position;
+  //orientation (probably should be normal and orthogonal, but this is not enforced)
+  protected Vector forward;
+  protected Vector left;
   
   public ManifoldPosition(Face f, Vector pos){
     face = f; position = pos;
+    setDefaultOrientation();
+  }
+  public ManifoldPosition(Face f, Vector pos, Vector directionForward, Vector directionLeft){
+    face = f; position = pos;
+    if(!setOrientation(directionForward, directionLeft)){ setDefaultOrientation(); }
   }
   
   public ManifoldPosition(ManifoldPosition mpos){
     //copy constructor
     face = mpos.getFace();
     position = new Vector(mpos.getPosition());
+    if(!setOrientation(mpos.getDirectionForward(), mpos.getDirectionLeft())){ setDefaultOrientation(); }
   }
-  
+    
   //this can be overridden to do something when the position changes faces (see VisibleObject)
+  //-----------------------------------------
   protected void reportFaceChange(Face oldFace){}
   
+  //tangent vectors getters and setters
+  //-----------------------------------------
+  private void setDefaultOrientation(){
+    //some arbitrary orientation
+    forward = new Vector(1,0);
+    left = new Vector(0,1);
+  }
+  
+  public boolean setOrientation(Vector directionForward, Vector directionLeft){
+    //set forward and left vectors
+    if((directionForward == null) || (directionLeft == null)){ return false; }
+    forward = new Vector(directionForward); 
+    left = new Vector(directionLeft);
+    return true;
+  }
+  public boolean setOrientation(Vector directionForward){
+    //if no left vector is specified, choose an arbitrary one that is normal to it
+    if(directionForward == null){ return false; }
+    double x = directionForward.getComponent(0);
+    double y = directionForward.getComponent(1);
+    return setOrientation(directionForward, new Vector(-y,x));
+  }
+  
+  public void rotateOrientation(double angle) {
+    
+    double cos = Math.cos(-angle), sin = Math.sin(-angle);
+    Vector m1 = new Vector(cos, -sin);
+    Vector m2 = new Vector(sin, cos);
+    Vector F = getDirectionForward();
+    Vector L = getDirectionLeft();
+    setOrientation(
+        new Vector(Vector.dot(m1,F), Vector.dot(m2,F)),
+        new Vector(Vector.dot(m1,L), Vector.dot(m2,L)));
+  }
+  
+  public Vector getDirectionForward(){ return forward; }
+  public Vector getDirectionLeft(){ return left; }
+  
+  public Vector getDirection(double componentForward, double componentLeft){ 
+    Vector v = new Vector(0,0);
+    v.add(Vector.scale(getDirectionForward(),componentForward));
+    v.add(Vector.scale(getDirectionLeft(),componentLeft));
+    return v;
+  }
+  
+  //face and position getters and setters
+  //-----------------------------------------
   public void setManifoldPosition(Face f, Vector pos){
     Face oldFace = face;
     face = f; position = pos;
@@ -48,22 +107,21 @@ public class ManifoldPosition{
   
   /* moves position along the manifold in the direction of dx
    * optional parameter return_trail to show path taken (not operational yet)
-   * optionally, carries along tangent vectors at the position
+   * carries along tangent vectors at the position
    * (Adapted from Kira's computeEnd)
    */
   public void move(Vector dx, Vector...tangentVectors){
-    move(dx,null,tangentVectors);
+    move(dx, null, tangentVectors);
   }
 
   public void move(Vector dx, GeodesicPath trail, Vector...tangentVectors){
 
     Vector startPos = new Vector(position);
     Vector endPos = Vector.add(position, dx);
-    Face oldFace = face;
     move(this,startPos, endPos, face, null, trail, tangentVectors);
   }
-    
-  private static void move(ManifoldPosition posToUpdate, Vector startPos, Vector endPos, Face face, Edge lastEdgeCrossed, GeodesicPath trail, Vector...tangentVectors){
+
+  private void move(ManifoldPosition posToUpdate, Vector startPos, Vector endPos, Face face, Edge lastEdgeCrossed, GeodesicPath trail, Vector...tangentVectors){
     
     //if position is in face, then quit
     Vector l = DevelopmentComputations.getBarycentricCoords(endPos,face);
@@ -117,8 +175,11 @@ public class ManifoldPosition{
     Vector nextEndPos = affineTrans.affineTransPoint(endPos);
     
     //flip over whatever tangent vectors are being carried along
+    if(forward != null){ forward.setEqualTo(affineTrans.affineTransVector(forward)); }
+    if(left != null){ left.setEqualTo(affineTrans.affineTransVector(left)); }
     for(int i=0; i<tangentVectors.length; i++){
-      tangentVectors[i].setEqualTo(affineTrans.affineTransVector(tangentVectors[i]));
+      Vector v = tangentVectors[i];
+      if(v != null){ v.setEqualTo(affineTrans.affineTransVector(v)); }
     }
     
     move(posToUpdate, nextStartPos, nextEndPos, adjacentFace, intersectedEdge, trail, tangentVectors);
