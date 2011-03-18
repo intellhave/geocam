@@ -2,7 +2,7 @@ package view;
 
 import java.awt.Color;
 
-import development.Development.DevelopmentNode;
+import development.DevelopmentNode;
 
 import triangulation.Face;
 import triangulation.Triangulation;

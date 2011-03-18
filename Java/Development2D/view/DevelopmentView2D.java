@@ -33,7 +33,7 @@ import de.jreality.util.CameraUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
-import development.Development.DevelopmentNode;
+import development.DevelopmentNode;
 import development.AffineTransformation;
 import development.Frustum2D;
 import development.Vector;

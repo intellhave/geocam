@@ -16,8 +16,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import objects.ManifoldObjectHandler;
-import objects.ManifoldPosition;
-import objects.ShootingGame;
 import objects.VisibleObject;
 
 import view.SGCMethods.DevelopmentGeometrySim3D;
@@ -32,9 +30,6 @@ import de.jreality.scene.PointLight;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.Viewer;
-import de.jreality.scene.tool.AbstractTool;
-import de.jreality.scene.tool.InputSlot;
-import de.jreality.scene.tool.ToolContext;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 import de.jtem.jrworkspace.plugin.Controller;
@@ -42,7 +37,7 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.AffineTransformation;
 import development.Development;
 import development.Frustum2D;
-import development.Development.DevelopmentNode;
+import development.DevelopmentNode;
 import development.Vector;
 
 public class DevelopmentView3D extends DevelopmentView {
@@ -56,9 +51,6 @@ public class DevelopmentView3D extends DevelopmentView {
   private Viewer viewer;
   private SceneGraphPath camera_source;
   private SceneGraphComponent sgc_camera;
-  
-  private static Color[] colors = { Color.green, Color.yellow, Color.pink, Color.cyan, Color.orange };
-  private static int colorIndex = 0;
   
   //don't add objects which are within this radius of the origin; obstructs camera
   private static final double CLIP_NEAR_RADIUS = 0.1;

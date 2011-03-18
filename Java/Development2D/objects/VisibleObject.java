@@ -39,9 +39,6 @@ public abstract class VisibleObject extends ManifoldPosition{
   }
   
   public void removeFromManifold(){
-    //sometimes the object still shows up after calling this... should figure out why
-    //for now, set it invisible to fix this
-    isVisible = false;
     ManifoldObjectHandler.removeObject(this);
   }
 }
