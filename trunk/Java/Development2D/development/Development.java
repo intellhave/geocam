@@ -115,8 +115,7 @@ public class Development {
    */
   public void translateSourcePoint(double dForward, double dLeft) {
 
-    Vector dx = source.getDirection(dForward,dLeft);
-    source.move(dx);
+    source.move(dForward, dLeft);
     sourceObject.setManifoldPosition(source);
     rebuild();
   }
