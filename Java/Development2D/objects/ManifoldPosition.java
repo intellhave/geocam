@@ -25,7 +25,7 @@ public class ManifoldPosition{
   //position
   protected Face face;
   protected Vector position;
-  //orientation (probably should be normal and orthogonal, but this is not enforced)
+  //orientation (should be normal and orthogonal, but this is not enforced)
   protected Vector forward;
   protected Vector left;
   
@@ -110,15 +110,17 @@ public class ManifoldPosition{
    * carries along tangent vectors at the position
    * (Adapted from Kira's computeEnd)
    */
-  public void move(Vector dx, Vector...tangentVectors){
-    move(dx, null, tangentVectors);
-  }
+  public void move(double dForward, double dLeft, Vector...tangentVectors){
+    move(dForward, dLeft, null, tangentVectors);
+  } 
 
-  public void move(Vector dx, GeodesicPath trail, Vector...tangentVectors){
+  public void move(double dForward, double dLeft, GeodesicPath trail, Vector...tangentVectors){
 
     Vector startPos = new Vector(position);
-    Vector endPos = Vector.add(position, dx);
-    move(this,startPos, endPos, face, null, trail, tangentVectors);
+    Vector endPos = new Vector(position);
+    endPos.add(Vector.scale(getDirectionForward(), dForward));
+    endPos.add(Vector.scale(getDirectionLeft(), dLeft));
+    move(this, startPos, endPos, face, null, trail, tangentVectors);
   }
 
   private void move(ManifoldPosition posToUpdate, Vector startPos, Vector endPos, Face face, Edge lastEdgeCrossed, GeodesicPath trail, Vector...tangentVectors){

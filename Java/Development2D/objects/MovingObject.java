@@ -26,6 +26,6 @@ public class MovingObject extends VisibleObject{
   }
   
   public void updatePosition(double dt){
-    move(Vector.scale(forward,dt*speed));
+    move(dt*speed, 0);
   }
 }
