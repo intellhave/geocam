@@ -2,9 +2,7 @@ package objects;
 
 import java.awt.Color;
 
-/* This is the most basic type of VisibleObject
- * It doesn't do anything but sit in one place
- * This is useful for drawing, for example, the source point on a development
+/* This object changes its appearance with time, then removes itself from the manifold
  */
 
 public class ExplodingObject extends VisibleObject{

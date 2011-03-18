@@ -7,8 +7,7 @@ import development.Vector;
 
 public class MovingObject extends VisibleObject{
   
-  private Vector normalizedVelocity; 
-  private double speed; //in units per millisecond
+  private double speed; //in units per millisecond; 'forward' vector is normalized velocity
 
   public MovingObject(ManifoldPosition manifoldPosition, ObjectAppearance appearance, Vector velocityUnitsPerSecond){
     super(manifoldPosition, appearance);
@@ -17,19 +16,16 @@ public class MovingObject extends VisibleObject{
   
   public void setVelocity(Vector velocityUnitsPerSecond){
     double L = velocityUnitsPerSecond.length();
-    if(L == 0){
-      normalizedVelocity = new Vector(1,0);
-    }else{
-      normalizedVelocity = Vector.scale(velocityUnitsPerSecond,1/L);
-    }
-    speed = L*.001;
+    if(L == 0){ setOrientation(new Vector(1,0)); } 
+    else{ setOrientation(Vector.scale(velocityUnitsPerSecond,1/L)); }
+    speed = L*.001; //convert to units per ms
   }
   
   public void setSpeed(double speedUnitsPerSecond){
-    speed = speedUnitsPerSecond * .001;
+    speed = speedUnitsPerSecond*.001;
   }
   
   public void updatePosition(double dt){
-    move(Vector.scale(normalizedVelocity,dt*speed),normalizedVelocity);
+    move(Vector.scale(forward,dt*speed));
   }
 }

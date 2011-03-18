@@ -309,7 +309,7 @@ public class DevelopmentViewCave extends DevelopmentView {
     @Override
     public void activate(ToolContext tc) {
 
-      Vector movement = development.getManifoldVector(forward.getComponent(0),forward.getComponent(1));
+      Vector movement = development.getSource().getDirection(forward.getComponent(0),forward.getComponent(1));
       shootingGame.addBullet(development.getSource(),movement);
     }
     @Override

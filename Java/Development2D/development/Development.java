@@ -42,8 +42,6 @@ public class Development {
   private DevelopmentNode root;
   
   private ManifoldPosition source;
-  private Vector direction = new Vector(1, 0);
-  private Vector left = new Vector(0, 1);
 
   private FixedObject sourceObject; //fixed object at source point
 
@@ -98,13 +96,6 @@ public class Development {
   public ManifoldPosition getSource() { return source; }
   public FixedObject getSourceObject() { return sourceObject; }
   public int getDepth() { return maxDepth; }
-  
-  public Vector getManifoldVector(double componentForward, double componentLeft){
-    Vector v = new Vector(0,0);
-    v.add(Vector.scale(direction,componentForward));
-    v.add(Vector.scale(left,componentLeft));
-    return v;
-  }
 
   // ---------------------------------------------
 
@@ -113,15 +104,7 @@ public class Development {
    */
   public void rotate(double angle) {
     
-    double x,y;
-    double cos = Math.cos(-angle), sin = Math.sin(-angle);
-    
-    x = direction.getComponent(0); y = direction.getComponent(1);
-    direction = new Vector(cos * x - sin * y, sin * x + cos * y);
-    
-    x = left.getComponent(0); y = left.getComponent(1);
-    left = new Vector(cos * x - sin * y, sin * x + cos * y);
-
+    source.rotateOrientation(angle);
     rebuild();
   }
   
@@ -132,12 +115,8 @@ public class Development {
    */
   public void translateSourcePoint(double dForward, double dLeft) {
 
-    Vector dx = new Vector(0,0);
-    dx.add(Vector.scale(direction, dForward));
-    dx.add(Vector.scale(left, dLeft));
-    
-    source.move(dx,direction,left);
-    
+    Vector dx = source.getDirection(dForward,dLeft);
+    source.move(dx);
     sourceObject.setManifoldPosition(source);
     rebuild();
   }
@@ -147,12 +126,13 @@ public class Development {
     
     //rotation matrix sending direction -> (1,0), left -> (0,1)
     //assumes det(dir, left) = 1
-    
+    Vector F = source.getDirectionForward();
+    Vector L = source.getDirectionLeft();
     Matrix M = new Matrix(new double[][]{
-       new double[] { left.getComponent(1), -left.getComponent(0)  },
-       new double[] { -direction.getComponent(1), direction.getComponent(0) }
+       new double[] {  L.getComponent(1), -L.getComponent(0) },
+       new double[] { -F.getComponent(1),  F.getComponent(0) }
     });
-    //double det = direction.getComponent(0)*left.getComponent(1)-direction.getComponent(1)*left.getComponent(0);
+    //double det = F.getComponent(0)*L.getComponent(1) - F.getComponent(1)*L.getComponent(0);
     //M.scaleMatrix(1/det);
     
     return new AffineTransformation(M);
@@ -163,8 +143,7 @@ public class Development {
     /*TODO (Timing)*/ long taskID;
     /*TODO (Timing)*/ taskID = TimingStatistics.startTask(TASK_TYPE_BUILDTREE);
     
-    // get transformation taking sourcePoint to origin (translation by
-    // -1*sourcePoint)
+    // get transformation taking sourcePoint to origin (translation by -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(source.getPosition(), -1));
 
     rotation = getRotationInverse();
@@ -186,7 +165,7 @@ public class Development {
       Frustum2D frustum = new Frustum2D(vect1, vect0);
 
       Face newFace = DevelopmentComputations.getNewFace(source.getFace(), edge);
-      // System.out.println("gogo"+newFace);
+
       if (newFace != null) {
         buildTree(root, newFace, edge, frustum, t, 1);
       }
@@ -199,9 +178,8 @@ public class Development {
       Frustum2D frustum, AffineTransformation t, int depth) {
 
     AffineTransformation newTrans = new AffineTransformation(2);
-    // System.err.println("lala"+face);
-    AffineTransformation coordTrans = CoordTrans2D.affineTransAt(face,
-        sourceEdge);
+    
+    AffineTransformation coordTrans = CoordTrans2D.affineTransAt(face, sourceEdge);
     newTrans.leftMultiply(coordTrans);
     newTrans.leftMultiply(t);
     

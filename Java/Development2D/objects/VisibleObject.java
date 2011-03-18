@@ -1,5 +1,6 @@
 package objects;
 
+import development.Vector;
 import triangulation.Face;
 
 /* abstract class representing a visible object on the Triangulation
