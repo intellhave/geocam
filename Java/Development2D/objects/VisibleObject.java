@@ -1,6 +1,5 @@
 package objects;
 
-import development.Vector;
 import triangulation.Face;
 
 /* Represents a visible object on the Triangulation

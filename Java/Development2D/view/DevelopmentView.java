@@ -10,6 +10,7 @@ import de.jreality.scene.tool.Tool;
 import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
 import development.Development;
+import development.TimingStatistics;
 
 /*
  * DevelopmentView
@@ -29,6 +30,9 @@ public abstract class DevelopmentView extends JRViewer{
   
   //events to be observed
   public static final Integer EVENT_REBUILD = new Integer(0); //development tree was rebuilt
+  
+  /*TODO (Timing)*/ protected static final int TASK_GET_DEVELOPMENT_GEOMETRY = TimingStatistics.generateTaskTypeID("Generate Development Geometry");
+  /*TODO (Timing)*/ protected static final int TASK_GET_OBJECT_GEOMETRY = TimingStatistics.generateTaskTypeID("Generate Object Geometry");
   
   protected SceneGraphComponent sgcRoot = new SceneGraphComponent("Root");
   protected SceneGraphComponent sgcDevelopment = new SceneGraphComponent("Development");

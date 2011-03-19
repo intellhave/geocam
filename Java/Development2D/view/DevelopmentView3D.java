@@ -3,11 +3,7 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -15,9 +11,6 @@ import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import objects.ManifoldObjectHandler;
-import objects.VisibleObject;
 
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -35,10 +28,9 @@ import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
-import development.AffineTransformation;
 import development.Development;
-import development.Frustum2D;
 import development.DevelopmentNode;
+import development.TimingStatistics;
 import development.Vector;
 
 public class DevelopmentView3D extends DevelopmentView {
@@ -54,7 +46,7 @@ public class DevelopmentView3D extends DevelopmentView {
   private SceneGraphComponent sgc_camera;
   
   //don't add objects which are within this radius of the origin; obstructs camera
-  private static final double CLIP_NEAR_RADIUS = 0.1;
+  private static final double CLIP_NEAR_RADIUS = 0.1; //TODO: re-implement this
 
   private Scene scene;
   private Vector cameraForward = new Vector(-1, 0);
@@ -189,68 +181,16 @@ public class DevelopmentView3D extends DevelopmentView {
     }
   }
   
-
   protected void generateObjectGeometry(){
     
-    //instead of vector, use something which has a basis (forward, left) also
-    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
-    generateObjectGeometry(development.getRoot(), objectImages);
-
-    //generate sgc's for the objects
-    SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
-    
-    Set<VisibleObject> objectList = objectImages.keySet();
-    for(VisibleObject o : objectList){
-      sgcNewObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
-    }
-    
+    /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
+    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot());
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = sgcNewObjects;
     sgcDevelopment.addChild(sgcObjects);
+    /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
   }
 
-  /*
-   * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
-   * and adds nodes to nodeList (should be empty at start)
-   */
-  private void generateObjectGeometry(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
-        
-    //look for objects
-    Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
-    if(objectList != null){
-      
-      Frustum2D frustum = devNode.getFrustum();
-      AffineTransformation affineTrans = devNode.getAffineTransformation();
-      
-      for(VisibleObject o : objectList){
-        if(!o.isVisible()){ continue; }
-
-        Vector transPos = affineTrans.affineTransPoint(o.getPosition());
-        if(frustum != null){
-          //check if object should be clipped
-          if(!frustum.checkInterior(transPos)){ continue; }
-        }
-        
-        //don't add if it is too close to the origin, gets in the way of the camera
-        if(transPos.length() < CLIP_NEAR_RADIUS){ continue; }
-        
-        //add to image list
-        ArrayList<Vector> imageList = objectImages.get(o);
-        if(imageList == null){
-          imageList = new ArrayList<Vector>();
-          objectImages.put(o,imageList);
-        }
-        imageList.add(transPos);
-      }
-    }
-
-    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
-    while (itr.hasNext()) {
-      generateObjectGeometry(itr.next(), objectImages);
-    }
-  }
-  
-  
   // ================== Shooting Tool ==================
   
   /*private static class ShootTool extends AbstractTool {

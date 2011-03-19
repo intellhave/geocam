@@ -2,15 +2,9 @@ package view;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
-import objects.ManifoldObjectHandler;
 import objects.ShootingGame;
-import objects.VisibleObject;
-import objects.VisiblePath;
 
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -31,10 +25,7 @@ import de.jreality.scene.tool.InputSlot;
 import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
 
-import development.AffineTransformation;
 import development.Development;
-import development.Frustum2D;
-import development.LineSegment;
 import development.TimingStatistics;
 import development.DevelopmentNode;
 import development.Vector;
@@ -48,9 +39,7 @@ public class DevelopmentViewCave extends DevelopmentView {
   private static final InputSlot SHOOT_TOOL_ACTIVATION_SLOT = InputSlot.LEFT_BUTTON; //InputSlot.POINTER_HIT;
   //debug settings
   private static final boolean PRINT_TRANSFORMATION_DATA = false;
-  /*TODO (Timing)*/ private static final int TASK_GET_DEVELOPMENT_GEOMETRY = TimingStatistics.generateTaskTypeID("Generate Development Geometry");
-  /*TODO (Timing)*/ private static final int TASK_GET_OBJECT_GEOMETRY = TimingStatistics.generateTaskTypeID("Generate Object Geometry");
-  
+
   //other settings
   private static int INITIAL_HEIGHT = 30;
   private double height = INITIAL_HEIGHT/100.0;
@@ -165,7 +154,8 @@ public class DevelopmentViewCave extends DevelopmentView {
     }
   }
 
-  /*public static de.jreality.math.Matrix getJRealityMatrixFromAffineTrans(AffineTransformation affineTrans){
+  /*//this function allows one to apply an 2D AffineTransformation to a JReality object like an SGC
+  public static de.jreality.math.Matrix getJRealityMatrixFromAffineTrans(AffineTransformation affineTrans){
 
     //our affineTrans applies the upper 2x2 to [x,y] and adds the last column; z is affine coord
     //this should apply the same 2x2 to [x,y], leave z alone, and add the last column; w is affine coord
@@ -235,64 +225,11 @@ public class DevelopmentViewCave extends DevelopmentView {
   protected void generateObjectGeometry(){
     
     /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
-    
-    //instead of vector, use something which has a basis (forward, left) also
-    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
-    //HashMap<VisiblePath,ArrayList<LineSegment>> pathImages = new HashMap<VisiblePath,ArrayList<LineSegment>>();
-    
-    generateObjectGeometry(development.getRoot(), objectImages);
-    
-    //generate sgc's for the objects
-    SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
-    
-    Set<VisibleObject> objectList = objectImages.keySet();
-    for(VisibleObject o : objectList){
-      sgcNewObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
-    }
-    
+    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot());
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = sgcNewObjects;
     sgcDevelopment.addChild(sgcObjects);
-    
     /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
-  }
-
-  /*
-   * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
-   * and adds nodes to nodeList (should be empty at start)
-   */
-  private void generateObjectGeometry(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
-        
-    //look for objects
-    Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
-    if(objectList != null){
-      
-      Frustum2D frustum = devNode.getFrustum();
-      AffineTransformation affineTrans = devNode.getAffineTransformation();
-      
-      for(VisibleObject o : objectList){
-        if(!o.isVisible()){ continue; }
-
-        Vector transPos = affineTrans.affineTransPoint(o.getPosition());
-        if(frustum != null){
-          //check if object should be clipped
-          if(!frustum.checkInterior(transPos)){ continue; }
-        }
-        
-        //add to image list
-        ArrayList<Vector> imageList = objectImages.get(o);
-        if(imageList == null){
-          imageList = new ArrayList<Vector>();
-          objectImages.put(o,imageList);
-        }
-        imageList.add(transPos);
-      }
-    }
-
-    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
-    while (itr.hasNext()) {
-      generateObjectGeometry(itr.next(), objectImages);
-    }
   }
   
   // ================== Shooting Tool ==================

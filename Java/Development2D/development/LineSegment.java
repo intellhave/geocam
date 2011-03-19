@@ -34,35 +34,30 @@ public class LineSegment {
     Vector p0 = ls.getStart();
     Vector p1 = ls.getEnd();
     
-    //first case: both endpoints of the line segment are contained within the frustum
-    //in this case, no clipping occurs
+    //first case: frustum is null, i.e. 'full' frustum
+    if(frust == null){ return new LineSegment(p0,p1); }
+    
+    //now see which line segment endpoints are inside the frustum
     boolean p0inside = frust.checkInterior(p0);
     boolean p1inside = frust.checkInterior(p1);
+    
+    //if both points inside, then no clipping occurs
     if(p0inside && p1inside){ return new LineSegment(p0, p1); }
 
-    //at least one point is outside--record which one is inside, then check intersections with frustum edges
+    //if at least one point outside, record which, and check intersections with frust edges
     Vector pInside = p0;
     if(p1inside){ pInside = p1; }
     
     Vector lineIntersectionL =  intersectRayWithLineSegment(frust.getLeft(), ls);
     Vector lineIntersectionR =  intersectRayWithLineSegment(frust.getRight(), ls);
     
+    //several cases:
     if(lineIntersectionL == null){
-      if(lineIntersectionR == null){
-        //the line intersects neither frustum edge
-        return null;
-      }else{
-        //the line only intersects the right edge
-        return new LineSegment(pInside, lineIntersectionR);
-      }
+      if(lineIntersectionR == null){ return null; }
+      else{ return new LineSegment(pInside, lineIntersectionR); }
     }else{
-      if(lineIntersectionR == null){
-        //the line only intersects the left edge
-        return new LineSegment(pInside, lineIntersectionL);
-      }else{
-        //the line intersects both edges
-        return new LineSegment(lineIntersectionL, lineIntersectionR);
-      }
+      if(lineIntersectionR == null){ return new LineSegment(pInside, lineIntersectionL); }
+      else{ return new LineSegment(lineIntersectionL, lineIntersectionR); }
     }
   }
   
