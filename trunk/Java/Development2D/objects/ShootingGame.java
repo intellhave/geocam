@@ -24,6 +24,7 @@ public class ShootingGame extends ObjectDynamics{
   private double bulletSpeed = 2.0; //units per sec
   private ObjectAppearance targetAppearance = new ObjectAppearance(0.05, Color.BLUE);
   private ObjectAppearance bulletAppearance = new ObjectAppearance(0.01, Color.BLACK);
+  private PathAppearance bulletTrailAppearance = new PathAppearance(0.01, Color.BLACK, 0.01, Color.BLACK);
   private double collisionThreshhold = 0.06; //should be target radius + bullet radius
   private boolean clearBulletsOnHit = true;
   
@@ -52,7 +53,10 @@ public class ShootingGame extends ObjectDynamics{
     double L = direction.length();
     if(L == 0){ return; }
     double scalefactor = bulletSpeed/L;
-    bulletList.add(new MovingObject(mp, bulletAppearance, Vector.scale(direction,scalefactor)));
+    
+    MovingObject newBullet = new MovingObject(mp, bulletAppearance, Vector.scale(direction,scalefactor));
+    newBullet.setTrailEnabled(1,bulletTrailAppearance);
+    bulletList.add(newBullet);
   }
   
   //dynamics

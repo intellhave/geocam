@@ -2,12 +2,14 @@ package view;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Set;
 
 import objects.ManifoldObjectHandler;
+import objects.ManifoldPath;
 import objects.VisibleObject;
+import objects.VisiblePath;
 
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -21,6 +23,7 @@ import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
 import development.Development;
 import development.EmbeddedTriangulation;
+import development.LineSegment;
 import development.Vector;
 
 public class DevelopmentViewEmbedded extends DevelopmentView {
@@ -84,16 +87,18 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
   protected void generateObjectGeometry(){
     
     HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
+    HashMap<VisiblePath,ArrayList<LineSegment>> pathImages = new HashMap<VisiblePath,ArrayList<LineSegment>>();
     
-    //get objects for each face
+    //get objects and paths for each face
     HashMap<Integer,Face> faceTable = Triangulation.faceTable;
     Set<Integer> faceIndices = faceTable.keySet();
     for(Integer i : faceIndices){
       Face f = faceTable.get(i);
-      generateObjectGeometry(f, objectImages);
+      getObjectAmbientPositions(f, objectImages);
+      getPathAmbientPositions(f, pathImages);
     }
     
-    //generate sgc's for each object
+    //generate sgc's for each object and path
     SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
     
     Set<VisibleObject> objectList = objectImages.keySet();
@@ -102,15 +107,21 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
       sgcNewObjects.addChild(SGCMethods.sgcFrom3DList(objectImages.get(o), o.getAppearance()));
     }
     
+    Set<VisiblePath> pathList = pathImages.keySet();
+    for(VisiblePath p : pathList){
+      if(!p.isVisible()){ continue; }
+      sgcNewObjects.addChild(SGCMethods.sgcFrom3DList(pathImages.get(p), p.getAppearance()));
+    }
+    
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = sgcNewObjects;
     sgcDevelopment.addChild(sgcObjects);
   }
   
-  private void generateObjectGeometry(Face f, HashMap<VisibleObject,ArrayList<Vector>> objectImages){
+  private void getObjectAmbientPositions(Face f, HashMap<VisibleObject,ArrayList<Vector>> objectImages){
 
     //look for objects
-    LinkedList<VisibleObject> objectList = ManifoldObjectHandler.getObjects(f);
+    Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(f);
     if(objectList == null){ return; }
 
     for(VisibleObject o : objectList){
@@ -125,6 +136,36 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
         objectImages.put(o,imageList);
       }
       imageList.add(pos3D);
+    }
+  }
+  
+  private void getPathAmbientPositions(Face f, HashMap<VisiblePath,ArrayList<LineSegment>> pathImages){
+
+    //look for paths
+    Collection<VisiblePath> pathList = ManifoldObjectHandler.getPaths(f);
+    if(pathList == null){ return; }
+
+    for(VisiblePath p : pathList){
+      
+      //get list of segments of this path contained in the face f
+      Collection<ManifoldPath.Segment> segments = p.getPathSegmentsInFace(f);
+      if(segments == null){ return; }
+      
+      //make image list for this path if one doesn't already exist
+      ArrayList<LineSegment> imageList = pathImages.get(p);
+      if(imageList == null){
+        imageList = new ArrayList<LineSegment>();
+        pathImages.put(p, imageList);
+      }
+      
+      //add the transformed path segments to the list
+      for(ManifoldPath.Segment s : segments){
+        //transform each segment that appears in this face
+        imageList.add(new LineSegment(
+            EmbeddedTriangulation.getCoord3D(f, s.ls.getStart()),
+            EmbeddedTriangulation.getCoord3D(f, s.ls.getEnd())
+        ));
+      }
     }
   }
   

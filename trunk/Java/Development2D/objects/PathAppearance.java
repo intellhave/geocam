@@ -10,42 +10,36 @@ import de.jreality.shader.CommonAttributes;
 
 public class PathAppearance {
 
-  boolean t = false; //transparency enabled
-  double a = 1.0; //alpha value
-  double r = 2; //tube size
-  Color c = Color.BLUE; //color
+  double rTube = 0.04; //tube radius
+  double rVertex = 0.05; //vertex radius
+  Color cTube = Color.BLACK; //tube color
+  Color cVertex = Color.BLUE; //vertex color
   
   public PathAppearance(){ }
-  public PathAppearance(double tubeSize, Color color){
-    r = tubeSize;
-    c = color;
-    t = false;
-  }
-  public PathAppearance(double tubeSize, Color color, double alpha){
-    r = tubeSize;
-    c = color;
-    t = true;
-    a = alpha;
+  public PathAppearance(double tubeSize, Color tubeColor, double vertexSize, Color vertexColor){
+    rTube = tubeSize;
+    cTube = tubeColor;
+    rVertex = vertexSize;
+    cVertex = vertexColor;
   }
   
-  public void setOpaque(){ t = false; }
-  public void setTransparent(double alpha){ t = true; a = alpha; }
-  public void setRadius(double radius){ r = radius; }
-  public void setColor(Color color){ c = color; }
+  public void setTubeRadius(double radius){ rTube = radius; }
+  public void setVertexRadius(double radius){ rVertex = radius; }
+  public void setTubeColor(Color color){ cTube = color; }
+  public void setVertexColor(Color color){ cVertex = color; }
   
   public Appearance getJRealityAppearance(){
     Appearance app = new Appearance();
-    app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+    app.setAttribute(CommonAttributes.VERTEX_DRAW, true);
+    app.setAttribute(CommonAttributes.POINT_RADIUS, rVertex);
     app.setAttribute(CommonAttributes.EDGE_DRAW, true);
     app.setAttribute(CommonAttributes.TUBES_DRAW, true);
-    app.setAttribute(CommonAttributes.TUBE_RADIUS, r);
-    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, t);
-    if(t){ app.setAttribute(CommonAttributes.TRANSPARENCY, a); }
+    app.setAttribute(CommonAttributes.TUBE_RADIUS, rTube);
+    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
     app.setAttribute(CommonAttributes.PICKABLE, false);
     return app;
   }
   
-  public Color getColor(){
-    return c;
-  }
+  public Color getTubeColor(){ return cTube; }
+  public Color getVertexColor(){ return cVertex; }
 }

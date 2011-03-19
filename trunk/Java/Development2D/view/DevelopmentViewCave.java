@@ -2,14 +2,15 @@ package view;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.LinkedList;
 
 import objects.ManifoldObjectHandler;
 import objects.ShootingGame;
 import objects.VisibleObject;
+import objects.VisiblePath;
 
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -33,6 +34,7 @@ import de.jreality.shader.CommonAttributes;
 import development.AffineTransformation;
 import development.Development;
 import development.Frustum2D;
+import development.LineSegment;
 import development.TimingStatistics;
 import development.DevelopmentNode;
 import development.Vector;
@@ -236,8 +238,9 @@ public class DevelopmentViewCave extends DevelopmentView {
     
     //instead of vector, use something which has a basis (forward, left) also
     HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
+    //HashMap<VisiblePath,ArrayList<LineSegment>> pathImages = new HashMap<VisiblePath,ArrayList<LineSegment>>();
+    
     generateObjectGeometry(development.getRoot(), objectImages);
-
     
     //generate sgc's for the objects
     SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
@@ -261,7 +264,7 @@ public class DevelopmentViewCave extends DevelopmentView {
   private void generateObjectGeometry(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
         
     //look for objects
-    LinkedList<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
+    Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
     if(objectList != null){
       
       Frustum2D frustum = devNode.getFrustum();
