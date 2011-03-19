@@ -3,15 +3,15 @@ package objects;
 import development.Vector;
 import triangulation.Face;
 
-/* abstract class representing a visible object on the Triangulation
+/* Represents a visible object on the Triangulation
  * 
- * This is intended to be extended to particular types of objects
- * which are then used in a class that extends ObjectDynamics
+ * This can easily be extended to particular types of objects
+ * which can then be used in a class that extends ObjectDynamics
  * 
  * Any VisibleObject that gets created is automatically handled by ManifoldObjectHandler
  */
 
-public abstract class VisibleObject extends ManifoldPosition{
+public class VisibleObject extends ManifoldPosition{
   
   private int index;
   private boolean isVisible;

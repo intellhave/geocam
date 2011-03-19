@@ -1,6 +1,7 @@
 package objects;
 
 import java.awt.Color;
+import java.awt.Transparency;
 
 import de.jreality.scene.Appearance;
 import de.jreality.shader.CommonAttributes;
@@ -12,35 +13,28 @@ import de.jreality.shader.CommonAttributes;
 
 public class ObjectAppearance {
 
-  boolean t = false; //transparency enabled
-  double a = 1.0; //alpha value
   double r = 2; //radius
-  Color c = Color.BLUE; //color
+  Color c = Color.BLUE; 
   
   public ObjectAppearance(){ }
   public ObjectAppearance(double radius, Color color){
     r = radius;
     c = color;
-    t = false;
-  }
-  public ObjectAppearance(double radius, Color color, double alpha){
-    r = radius;
-    c = color;
-    t = true;
-    a = alpha;
   }
   
-  public void setOpaque(){ t = false; }
-  public void setTransparent(double alpha){ t = true; a = alpha; }
   public void setRadius(double radius){ r = radius; }
   public void setColor(Color color){ c = color; }
+  public boolean isTransparent(){ 
+    //possible values for c.getTransparency() are Transparency.BITMASK, Transparency.OPAQUE, Transparency.TRANSLUCENT 
+    return (c.getTransparency() == Transparency.TRANSLUCENT); 
+  }
   
   public Appearance getJRealityAppearance(){
+    //note: color is set in the PointSetFactory in SGCMethods
     Appearance app = new Appearance();
     app.setAttribute(CommonAttributes.VERTEX_DRAW, true);
     app.setAttribute(CommonAttributes.POINT_RADIUS, r);
-    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, t);
-    if(t){ app.setAttribute(CommonAttributes.TRANSPARENCY, a); }
+    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false); //still draws with alpha specified in color
     app.setAttribute(CommonAttributes.PICKABLE, false);
     return app;
   }

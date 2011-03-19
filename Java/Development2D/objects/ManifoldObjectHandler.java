@@ -1,6 +1,8 @@
 package objects;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -17,10 +19,16 @@ import triangulation.Triangulation;
 
 public class ManifoldObjectHandler{
 
-  //references to the objects in objectList, sorted by Face
   private static int nextIndex = 0;
-  private static HashMap<Face,LinkedList<VisibleObject>> sortedObjectList = new HashMap<Face,LinkedList<VisibleObject>>();
-  private static HashMap<Face,LinkedList<VisiblePath>> sortedPathList = new HashMap<Face,LinkedList<VisiblePath>>();
+
+  //might be useful to have references to all objects/paths as well, for DevelopmentViewEmbedded (for example)
+  //private static HashSet<VisibleObject> allVisibleObjects = new HashSet<VisibleObject>();
+  //private static HashSet<VisiblePath> allVisiblePaths = new HashSet<VisiblePath>();
+  
+  //references to visible objects and paths, sorted by face (path references appear in any face the path intersects)
+  private static HashMap<Face,HashSet<VisibleObject>> sortedObjectList = new HashMap<Face,HashSet<VisibleObject>>();
+  private static HashMap<Face,HashSet<VisiblePath>> sortedPathList = new HashMap<Face,HashSet<VisiblePath>>();
+  
   
   private ManifoldObjectHandler(){ }
   
@@ -32,7 +40,7 @@ public class ManifoldObjectHandler{
   //========= OBJECTS =============
   
   //status
-  public static void printObjectInfo(){
+  /*public static void printObjectInfo(){
     
     //quick way to check for bugs, e.g. objects in duplicate or wrong face lists
     
@@ -42,7 +50,7 @@ public class ManifoldObjectHandler{
     Set<Integer> faceIndices = faceTable.keySet();
     for(Integer i : faceIndices){
       Face f = faceTable.get(i);
-      LinkedList<VisibleObject> objectList = sortedObjectList.get(f);
+      Collection<VisibleObject> objectList = sortedObjectList.get(f);
       
       if(objectList == null){
         System.out.println("Face " + f.getIndex() + ": null list");
@@ -55,18 +63,18 @@ public class ManifoldObjectHandler{
         System.out.println("  Object " + o.getIndex() + " (Face " + o.getFace().getIndex() + ")");
       }
     }
-  }
+  }*/
 
   //add and remove objects
   public static void addObject(VisibleObject o){ 
     
-    LinkedList<VisibleObject> objectList = getObjectsCreateIfNull(o.getFace());
+    Collection<VisibleObject> objectList = getObjectsCreateIfNull(o.getFace());
     objectList.add(o);
   }
   
   public static void removeObject(VisibleObject o){
 
-    LinkedList<VisibleObject> objectList = sortedObjectList.get(o.getFace());
+    Collection<VisibleObject> objectList = sortedObjectList.get(o.getFace());
     if(objectList == null){ return; }
     if(!objectList.remove(o)){
       System.err.println("(ManifoldObjectHandler.removeObject) Error removing object " + o.getIndex() + " from face " + o.getFace().getIndex());
@@ -78,14 +86,14 @@ public class ManifoldObjectHandler{
   }
   
   //access to object lists  
-  public static LinkedList<VisibleObject> getObjects(Face f){
+  public static Collection<VisibleObject> getObjects(Face f){
     return sortedObjectList.get(f);
   }
   
-  private static LinkedList<VisibleObject> getObjectsCreateIfNull(Face f){
-    LinkedList<VisibleObject> objectList = sortedObjectList.get(f);
+  private static Collection<VisibleObject> getObjectsCreateIfNull(Face f){
+    HashSet<VisibleObject> objectList = sortedObjectList.get(f);
     if(objectList == null){
-      objectList = new LinkedList<VisibleObject>();
+      objectList = new HashSet<VisibleObject>();
       sortedObjectList.put(f, objectList);
     }
     return objectList;
@@ -98,7 +106,7 @@ public class ManifoldObjectHandler{
 
     //remove the object, which should be in the list for oldFace
     if(oldFace != null){
-      LinkedList<VisibleObject> objectList = sortedObjectList.get(oldFace);
+      Collection<VisibleObject> objectList = sortedObjectList.get(oldFace);
       if(objectList != null){ 
         if(!objectList.remove(o)){
           System.err.println("(ManifoldObjectHandler.updateObject) Error transferring object " + o.getIndex() + " from face " + oldFace.getIndex() + " to face " + o.getFace().getIndex());
@@ -112,14 +120,43 @@ public class ManifoldObjectHandler{
   
   //========= PATHS =============
 
+  //status
+  /*public static void printPathInfo(){
+    
+    //quick way to check for bugs, e.g. paths in wrong face lists
+    
+    System.out.println("\nPATH STATS:");
+    
+    //HashSet<VisiblePath> allVisiblePaths = new HashSet<VisiblePath>();
+    
+    HashMap<Integer,Face> faceTable = Triangulation.faceTable;
+    Set<Integer> faceIndices = faceTable.keySet();
+    for(Integer i : faceIndices){
+      Face f = faceTable.get(i);
+      Collection<VisiblePath> pathList = sortedPathList.get(f);
+      
+      if(pathList == null){
+        System.out.println("Face " + f.getIndex() + ": null list");
+        continue;
+      }
+      
+      int n = pathList.size();
+      System.out.println("Face " + f.getIndex() + ": " + n + " paths:");
+      for(VisiblePath p : pathList){
+        System.out.println("  Path " + p.getIndex());
+        //allVisiblePaths.add(p);
+      }
+    }
+  }*/
+
   //add and remove paths
-  public static void addPath(VisiblePath p){ 
-    LinkedList<VisiblePath> pathList = getPathsCreateIfNull(p.getFace());
+  public static void addPathToFace(Face face, VisiblePath p){
+    Collection<VisiblePath> pathList = getPathsCreateIfNull(face);
     pathList.add(p);
   }
   
-  public static void removePath(VisiblePath p){
-    LinkedList<VisiblePath> pathList = sortedPathList.get(p.getFace());
+  public static void removePathFromFace(Face face, VisiblePath p){
+    Collection<VisiblePath> pathList = sortedPathList.get(face);
     if(pathList == null){ return; }
     pathList.remove(p);
   }
@@ -129,14 +166,14 @@ public class ManifoldObjectHandler{
   }
   
   //access to path lists  
-  public static LinkedList<VisiblePath> getPaths(Face f){
+  public static Collection<VisiblePath> getPaths(Face f){
     return sortedPathList.get(f);
   }
   
-  private static LinkedList<VisiblePath> getPathsCreateIfNull(Face f){
-    LinkedList<VisiblePath> pathList = sortedPathList.get(f);
+  private static Collection<VisiblePath> getPathsCreateIfNull(Face f){
+    HashSet<VisiblePath> pathList = sortedPathList.get(f);
     if(pathList == null){
-      pathList = new LinkedList<VisiblePath>();
+      pathList = new HashSet<VisiblePath>();
       sortedPathList.put(f, pathList);
     }
     return pathList;

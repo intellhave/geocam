@@ -32,6 +32,7 @@ import objects.ManifoldPosition;
 import objects.MovingObject;
 import objects.ObjectAppearance;
 import objects.ObjectDynamics;
+import objects.PathAppearance;
 
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -86,7 +87,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   //private static ShootingGame shootingGame = new ShootingGame();
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
-  private static final int MOVING_OBJECT_COUNT = 15;
+  private static final int MOVING_OBJECT_COUNT = 50;
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
   //don't generally need to keep track of this list, but GUI will change the objects' properties
@@ -111,7 +112,12 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     development.getSourceObject().getAppearance().setRadius(objectRadius);
     Random rand = new Random();
     for(int i=0; i<MOVING_OBJECT_COUNT; i++){
-      movingObjects.add(new MovingObject( development.getSource(), new ObjectAppearance(objectRadius, randomColor(rand)), randomUnitVector(rand) ));
+      MovingObject newObject = new MovingObject( 
+          development.getSource(), 
+          new ObjectAppearance(objectRadius, randomColor(rand)), 
+          randomUnitVector(rand) );
+      newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE));
+      movingObjects.add(newObject);
     }
     for(MovingObject o : movingObjects){
       o.setSpeed(objectSpeed); //scale so speed is correct

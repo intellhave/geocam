@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import objects.FixedObject;
 import objects.ManifoldPosition;
 import objects.ObjectAppearance;
+import objects.VisibleObject;
 
 import triangulation.Edge;
 import triangulation.Face;
@@ -43,7 +43,7 @@ public class Development {
   
   private ManifoldPosition source;
 
-  private FixedObject sourceObject; //fixed object at source point
+  private VisibleObject sourceObject; //fixed object at source point
 
   private int maxDepth;
 
@@ -67,7 +67,7 @@ public class Development {
 
     maxDepth = depth;
     source = sourcePoint;
-    sourceObject = new FixedObject(source, new ObjectAppearance(radius, Color.BLACK, 0.2));
+    sourceObject = new VisibleObject(source, new ObjectAppearance(radius, Color.BLACK));
     rebuild();
   }
 
@@ -94,7 +94,7 @@ public class Development {
 
   public DevelopmentNode getRoot() { return root; }
   public ManifoldPosition getSource() { return source; }
-  public FixedObject getSourceObject() { return sourceObject; }
+  public VisibleObject getSourceObject() { return sourceObject; }
   public int getDepth() { return maxDepth; }
 
   // ---------------------------------------------
@@ -115,7 +115,7 @@ public class Development {
    */
   public void translateSourcePoint(double dForward, double dLeft) {
 
-    source.move(dForward, dLeft);
+    source.move(source.getDirection(dForward, dLeft));
     sourceObject.setManifoldPosition(source);
     rebuild();
   }

@@ -1,12 +1,12 @@
 package objects;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import development.AffineTransformation;
 import development.Coord2D;
 import development.CoordTrans2D;
 import development.DevelopmentComputations;
+import development.LineSegment;
 import development.Vector;
 
 import triangulation.Edge;
@@ -21,6 +21,8 @@ import triangulation.Face;
  */
 
 public class ManifoldPosition{
+  
+  //private static final boolean VERBOSE_PATH_RECORD = true; //for debugging
 
   //position
   protected Face face;
@@ -40,12 +42,10 @@ public class ManifoldPosition{
   
   public ManifoldPosition(ManifoldPosition mpos){
     //copy constructor
-    face = mpos.getFace();
-    position = new Vector(mpos.getPosition());
-    if(!setOrientation(mpos.getDirectionForward(), mpos.getDirectionLeft())){ setDefaultOrientation(); }
+    setManifoldPosition(mpos);
   }
     
-  //this can be overridden to do something when the position changes faces (see VisibleObject)
+  //this is overridden in VisibleObject so that it can notify ManifoldObjectHandler
   //-----------------------------------------
   protected void reportFaceChange(Face oldFace){}
   
@@ -102,28 +102,37 @@ public class ManifoldPosition{
     if(face != oldFace){ reportFaceChange(oldFace); }
   }
   
+  public void setManifoldPosition(ManifoldPosition mpos){
+    face = mpos.getFace();
+    position = new Vector(mpos.getPosition());
+    if(!setOrientation(mpos.getDirectionForward(), mpos.getDirectionLeft())){ setDefaultOrientation(); }
+  }
+  
   public Face getFace(){ return face; }
   public Vector getPosition(){ return position; }
   
-  /* moves position along the manifold in the direction of dx
-   * optional parameter return_trail to show path taken (not operational yet)
-   * carries along tangent vectors at the position
+  /* moves position along the manifold in the specified direction
+   * optional ManifoldPath version to record the path taken
+   * carries along tangent vectors at the position, if specified
    * (Adapted from Kira's computeEnd)
    */
-  public void move(double dForward, double dLeft, Vector...tangentVectors){
-    move(dForward, dLeft, null, tangentVectors);
+  public void move(Vector dx, Vector...tangentVectors){
+    
+    Vector startPos = new Vector(position);
+    Vector endPos = Vector.add(position, dx);
+    move(this, startPos, endPos, face, null, null, tangentVectors);
   } 
 
-  public void move(double dForward, double dLeft, GeodesicPath trail, Vector...tangentVectors){
+  public void moveWithTrail(Vector dx, ManifoldPath path, Vector...tangentVectors){
 
     Vector startPos = new Vector(position);
-    Vector endPos = new Vector(position);
-    endPos.add(Vector.scale(getDirectionForward(), dForward));
-    endPos.add(Vector.scale(getDirectionLeft(), dLeft));
-    move(this, startPos, endPos, face, null, trail, tangentVectors);
+    Vector endPos = Vector.add(position, dx);
+    //if(VERBOSE_PATH_RECORD){ System.out.println("\nMOVING: \n  Initial position:  Face " + face.getIndex() + ", " + position); }
+    move(this, startPos, endPos, face, null, path, tangentVectors);
   }
 
-  private void move(ManifoldPosition posToUpdate, Vector startPos, Vector endPos, Face face, Edge lastEdgeCrossed, GeodesicPath trail, Vector...tangentVectors){
+  private void move(ManifoldPosition posToUpdate, Vector startPos, Vector endPos, 
+      Face face, Edge lastEdgeCrossed, ManifoldPath path, Vector...tangentVectors){
     
     //if position is in face, then quit
     Vector l = DevelopmentComputations.getBarycentricCoords(endPos,face);
@@ -132,12 +141,20 @@ public class ManifoldPosition{
         (l.getComponent(1) >= 0) && (l.getComponent(1) < 1) &&
         (l.getComponent(2) >= 0) && (l.getComponent(2) < 1)){
       posToUpdate.setManifoldPosition(face,endPos);
+      
+      if(path != null){ 
+        path.addSegment(new ManifoldPath.Segment(face, startPos, endPos));
+        //if(VERBOSE_PATH_RECORD){ System.out.println("  Face " + face.getIndex() + ", " + startPos + " to " + endPos); }
+      }
+      
       return;
     }
     
     //if not, find the edge that the line intersects
+    LineSegment pathSegment = new LineSegment(startPos,endPos);
     boolean foundEdge = false;
     Edge intersectedEdge = null;
+    Vector intersection = null;
 
     List<Edge> edgeList = face.getLocalEdges();
     for(Edge e : edgeList){
@@ -145,35 +162,37 @@ public class ManifoldPosition{
       //don't check the edge that we just flipped over from
       if((lastEdgeCrossed != null) && e.equals(lastEdgeCrossed)){ continue; }
       
-      Vector v1 = Coord2D.coordAt(e.getLocalVertices().get(0), face);
-      Vector v2 = Coord2D.coordAt(e.getLocalVertices().get(1), face);
-
-      Vector edgeDiff = Vector.subtract(v1, v2);
-      Vector sourceDiff = Vector.subtract(startPos, v2);
-      Vector pointDiff = Vector.subtract(endPos, v2);
-
-      //the intersection
-      Vector intersection = Vector.findIntersection(sourceDiff, pointDiff, edgeDiff);
-      if(intersection == null) { continue; }
+      LineSegment edgeSegment = new LineSegment(
+          Coord2D.coordAt(e.getLocalVertices().get(0), face),
+          Coord2D.coordAt(e.getLocalVertices().get(1), face)
+      );
+      intersection = LineSegment.intersectLineSegments(edgeSegment, pathSegment);
       
-      //if an intersection is found, add intersection to return_trail (if applicable)
-      intersectedEdge = e;
-      foundEdge = true; 
-      
-      break;
+      if(intersection != null){
+        intersectedEdge = e;
+        foundEdge = true;
+        break;
+      }
     }
     
     if(!foundEdge){ 
       System.err.println("(ManifoldPosition.move) Error: No intersection found"); 
       return;
     }
-    
+
+    //add the new segment, if the path is being recorded
+    if(path != null){ 
+      path.addSegment(new ManifoldPath.Segment(face, startPos, intersection));
+      //if(VERBOSE_PATH_RECORD){ System.out.println("  Face " + face.getIndex() + ", " + startPos + " to " + intersection); }
+    }
+        
     //get adjacent face and the AffineTransformation for the flip
     Face adjacentFace = DevelopmentComputations.getNewFace(face, intersectedEdge);
     AffineTransformation affineTrans = CoordTrans2D.affineTransAt(face, intersectedEdge);
     
     //flip start and end positions over intersectedEdge
-    Vector nextStartPos = affineTrans.affineTransPoint(startPos);
+    //(note: new start pos should be the intersection point, so that the correct path segment is added)
+    Vector nextStartPos = affineTrans.affineTransPoint(intersection); 
     Vector nextEndPos = affineTrans.affineTransPoint(endPos);
     
     //flip over whatever tangent vectors are being carried along
@@ -184,7 +203,8 @@ public class ManifoldPosition{
       if(v != null){ v.setEqualTo(affineTrans.affineTransVector(v)); }
     }
     
-    move(posToUpdate, nextStartPos, nextEndPos, adjacentFace, intersectedEdge, trail, tangentVectors);
+    //recurse
+    move(posToUpdate, nextStartPos, nextEndPos, adjacentFace, intersectedEdge, path, tangentVectors);
   }
 
 

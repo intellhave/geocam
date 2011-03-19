@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import objects.ObjectAppearance;
+import objects.PathAppearance;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.geometry.PointSetFactory;
 import de.jreality.scene.Appearance;
+import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
@@ -16,6 +18,7 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPointShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import development.LineSegment;
 import development.Node3D;
 import development.Trail;
 import development.Vector;
@@ -28,9 +31,7 @@ public class SGCMethods {
   /*
    * Returns SGC for a collection of 2D points in the z=zvalue plane
    */
-  public static SceneGraphComponent sgcFromImageList(ArrayList<Vector> images, double zvalue, ObjectAppearance app){
-    
-    SceneGraphComponent sgc = new SceneGraphComponent();
+  public static Geometry geometryFromImageList(ArrayList<Vector> images, double zvalue, ObjectAppearance app){
     
     PointSetFactory psf = new PointSetFactory();
     
@@ -47,19 +48,22 @@ public class SGCMethods {
     psf.setVertexColors(colors);
     psf.update();
     
-    sgc.setGeometry(psf.getGeometry());
-    sgc.setAppearance(app.getJRealityAppearance());
+    return psf.getGeometry();
+  }
+  
+  public static SceneGraphComponent sgcFromImageList(ArrayList<Vector> images, double zvalue, ObjectAppearance app){
     
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    sgc.setGeometry(geometryFromImageList(images,zvalue,app));
+    sgc.setAppearance(app.getJRealityAppearance());
     return sgc;
   }
   
   /*
    * Returns SGC for a collection of 3D points
    */
-  public static SceneGraphComponent sgcFrom3DList(ArrayList<Vector> images, ObjectAppearance app){
-    
-    SceneGraphComponent sgc = new SceneGraphComponent();
-    
+  public static Geometry geometryFrom3DList(ArrayList<Vector> images, ObjectAppearance app){
+
     PointSetFactory psf = new PointSetFactory();
     
     double[][] verts = new double[images.size()][3];
@@ -74,9 +78,56 @@ public class SGCMethods {
     psf.setVertexColors(colors);
     psf.update();
     
-    sgc.setGeometry(psf.getGeometry());
-    sgc.setAppearance(app.getJRealityAppearance());
+    return psf.getGeometry();
+  }
+  
+  public static SceneGraphComponent sgcFrom3DList(ArrayList<Vector> images, ObjectAppearance app){
     
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    sgc.setGeometry(geometryFrom3DList(images,app));
+    sgc.setAppearance(app.getJRealityAppearance());
+    return sgc;
+  }
+
+  /*
+   * Returns SGC for a collection of 3D points
+   */
+  public static Geometry geometryFrom3DList(ArrayList<LineSegment> images, PathAppearance app){
+
+    IndexedLineSetFactory ilsf = new IndexedLineSetFactory();
+
+    int lineCount = images.size();
+    double[][] verts = new double[lineCount*2][3];
+    Color[] vertcolors = new Color[lineCount*2];
+    int[][] edges = new int[lineCount][2];
+    Color[] tubecolors = new Color[lineCount];
+    
+    for(int i=0; i<lineCount; i++){
+      LineSegment s = images.get(i);
+      verts[i*2] = s.getStart().getVectorAsArray();
+      verts[i*2+1] = s.getEnd().getVectorAsArray();
+      vertcolors[i*2] = app.getVertexColor();
+      vertcolors[i*2+1] = app.getVertexColor();
+      edges[i] = new int[]{ i*2, i*2+1 };
+      tubecolors[i] = app.getTubeColor();
+    }
+    
+    ilsf.setVertexCount(lineCount*2);
+    ilsf.setVertexCoordinates(verts);
+    ilsf.setVertexColors(vertcolors);
+    ilsf.setEdgeCount(lineCount);
+    ilsf.setEdgeIndices(edges);
+    ilsf.setEdgeColors(tubecolors);
+    ilsf.update();
+    
+    return ilsf.getGeometry();
+  }
+  
+  public static SceneGraphComponent sgcFrom3DList(ArrayList<LineSegment> images, PathAppearance app){
+    
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    sgc.setGeometry(geometryFrom3DList(images,app));
+    sgc.setAppearance(app.getJRealityAppearance());
     return sgc;
   }
 

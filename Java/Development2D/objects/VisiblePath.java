@@ -1,5 +1,9 @@
 package objects;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import objects.ManifoldPath.Segment;
 import development.Vector;
 import triangulation.Face;
 
@@ -8,41 +12,42 @@ import triangulation.Face;
  * Any VisiblePath that gets created is automatically handled by ManifoldObjectHandler
  */
 
-public abstract class VisiblePath{
+public class VisiblePath extends ManifoldPath{
   
   private int index;
-  
-  Face face;
-  private Vector pathStart;
-  private Vector pathEnd;
   
   private boolean isVisible;
   PathAppearance app;
   
-  public VisiblePath(ManifoldPosition pathStart, ManifoldPosition pathEnd, PathAppearance pathAppearance){
-    
+  public VisiblePath(PathAppearance appearance){
     index = ManifoldObjectHandler.generateIndex();
-    
-    pathStart = new ManifoldPosition(pathStart);
-    pathEnd = new ManifoldPosition(pathEnd);
-    
-    app = pathAppearance;
-    
-    ManifoldObjectHandler.addPath(this);
+    isVisible = true;
+    app = appearance;
+  }
+  
+  public VisiblePath(ManifoldPath path, PathAppearance appearance){
+    super(path);
+    index = ManifoldObjectHandler.generateIndex();
+    isVisible = true;
+    app = appearance;
   }
   
   public int getIndex(){ return index; }
   public void setVisible(boolean visibility){ isVisible = visibility; }
   public boolean isVisible(){ return isVisible; }
   
-  public Face getFace(){ return face; }
-  public Vector getPathStartPosition(){ return pathStart; }
-  public Vector getPathEndPosition(){ return pathEnd; }
-  
   public PathAppearance getAppearance(){ return app; }
   public void setAppearance(PathAppearance appearance){ app = appearance; }
 
+  protected void reportFaceChange(Face f, boolean newIntersection){
+    //make sure this object appears in, and only in, the lists for the faces the path intersects
+    if(newIntersection == true){ ManifoldObjectHandler.addPathToFace(f, this); }
+    if(newIntersection == false){ ManifoldObjectHandler.removePathFromFace(f, this); }
+  }
+
   public void removeFromManifold(){
-    ManifoldObjectHandler.removePath(this);
+    //ManifoldPath.clear() calls reportFaceChange(f,false) for all faces the path intersects
+    //note that this gets rid of the path data, in addition to removing from manifold
+    clear(); 
   }
 }

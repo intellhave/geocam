@@ -3,6 +3,7 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -163,7 +164,7 @@ public class DevelopmentView2D extends DevelopmentView {
   private void generateObjectGeometry(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
         
     //look for objects
-    LinkedList<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
+    Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
     if(objectList != null){
       
       Frustum2D frustum = devNode.getFrustum();

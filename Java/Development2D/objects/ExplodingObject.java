@@ -13,7 +13,7 @@ public class ExplodingObject extends VisibleObject{
   private static final int R_START = 0, R_END = 255;
   private static final int G_START = 0, G_END = 0;
   private static final int B_START = 255, B_END = 0;
-  private static final double A_START = 1.0, A_END = 0.0;
+  private static final int A_START = 255, A_END = 0;
   
   private long startTime;
 
@@ -36,7 +36,7 @@ public class ExplodingObject extends VisibleObject{
     int r = (int)((R_END - R_START)*percent) + R_START;
     int g = (int)((G_END - G_START)*percent) + G_START;
     int b = (int)((B_END - B_START)*percent) + B_START;
-    double a = (A_END - A_START)*percent + A_START;
-    return new ObjectAppearance(radius,new Color(r,g,b), a);
+    int a = (int)((A_END - A_START)*percent) + A_START;
+    return new ObjectAppearance(radius,new Color(r,g,b,a));
   }
 }
