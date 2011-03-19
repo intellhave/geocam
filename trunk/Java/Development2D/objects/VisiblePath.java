@@ -1,10 +1,5 @@
 package objects;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import objects.ManifoldPath.Segment;
-import development.Vector;
 import triangulation.Face;
 
 /* class for specifying a visible path on the Triangulation

@@ -28,10 +28,8 @@ import development.Vector;
  */
 public class SGCMethods {
   
-  /*
-   * Returns SGC for a collection of 2D points in the z=zvalue plane
-   */
-  public static Geometry geometryFromImageList(ArrayList<Vector> images, double zvalue, ObjectAppearance app){
+  // Returns geometry for a collection of 2D or 3D points
+  public static Geometry objectGeometryFromList(ArrayList<Vector> images, ObjectAppearance app, boolean mode2D, double zvalue){
     
     PointSetFactory psf = new PointSetFactory();
     
@@ -40,7 +38,8 @@ public class SGCMethods {
     Color c = app.getColor();
     for(int i=0; i<images.size(); i++){
       Vector v = images.get(i);
-      verts[i] = new double[]{ v.getComponent(0), v.getComponent(1), zvalue };
+      if(mode2D){ verts[i] = new double[]{ v.getComponent(0), v.getComponent(1), zvalue }; }
+      else{ verts[i] = new double[]{ v.getComponent(0), v.getComponent(1), v.getComponent(2) }; }
       colors[i] = c;
     }
     psf.setVertexCount(images.size());
@@ -51,48 +50,17 @@ public class SGCMethods {
     return psf.getGeometry();
   }
   
-  public static SceneGraphComponent sgcFromImageList(ArrayList<Vector> images, double zvalue, ObjectAppearance app){
+  //Returns SGC for a collection of 2D or 3D points (used in each DevelopmentView)
+  public static SceneGraphComponent objectSGCFromList(ArrayList<Vector> images, ObjectAppearance app, boolean mode2D, double zvalue){
     
     SceneGraphComponent sgc = new SceneGraphComponent();
-    sgc.setGeometry(geometryFromImageList(images,zvalue,app));
+    sgc.setGeometry(objectGeometryFromList(images,app,mode2D,zvalue));
     sgc.setAppearance(app.getJRealityAppearance());
     return sgc;
   }
   
-  /*
-   * Returns SGC for a collection of 3D points
-   */
-  public static Geometry geometryFrom3DList(ArrayList<Vector> images, ObjectAppearance app){
-
-    PointSetFactory psf = new PointSetFactory();
-    
-    double[][] verts = new double[images.size()][3];
-    Color[] colors = new Color[images.size()];
-    Color c = app.getColor();
-    for(int i=0; i<images.size(); i++){
-      verts[i] = images.get(i).getVectorAsArray();
-      colors[i] = c;
-    }
-    psf.setVertexCount(images.size());
-    psf.setVertexCoordinates(verts);
-    psf.setVertexColors(colors);
-    psf.update();
-    
-    return psf.getGeometry();
-  }
-  
-  public static SceneGraphComponent sgcFrom3DList(ArrayList<Vector> images, ObjectAppearance app){
-    
-    SceneGraphComponent sgc = new SceneGraphComponent();
-    sgc.setGeometry(geometryFrom3DList(images,app));
-    sgc.setAppearance(app.getJRealityAppearance());
-    return sgc;
-  }
-
-  /*
-   * Returns SGC for a collection of 3D points
-   */
-  public static Geometry geometryFrom3DList(ArrayList<LineSegment> images, PathAppearance app){
+  // Returns geometry for a collection of 2D or 3D line segments
+  public static Geometry pathGeometryFromList(ArrayList<LineSegment> images, PathAppearance app, boolean mode2D, double zvalue){
 
     IndexedLineSetFactory ilsf = new IndexedLineSetFactory();
 
@@ -104,8 +72,15 @@ public class SGCMethods {
     
     for(int i=0; i<lineCount; i++){
       LineSegment s = images.get(i);
-      verts[i*2] = s.getStart().getVectorAsArray();
-      verts[i*2+1] = s.getEnd().getVectorAsArray();
+      Vector v0 = s.getStart();
+      Vector v1 = s.getEnd();
+      if(mode2D){
+        verts[i*2] = new double[]{ v0.getComponent(0), v0.getComponent(1), zvalue };
+        verts[i*2+1] = new double[]{ v1.getComponent(0), v1.getComponent(1), zvalue };
+      }else{
+        verts[i*2] = new double[]{ v0.getComponent(0), v0.getComponent(1), v0.getComponent(2) };
+        verts[i*2+1] = new double[]{ v1.getComponent(0), v1.getComponent(1), v1.getComponent(2) };
+      }
       vertcolors[i*2] = app.getVertexColor();
       vertcolors[i*2+1] = app.getVertexColor();
       edges[i] = new int[]{ i*2, i*2+1 };
@@ -123,10 +98,11 @@ public class SGCMethods {
     return ilsf.getGeometry();
   }
   
-  public static SceneGraphComponent sgcFrom3DList(ArrayList<LineSegment> images, PathAppearance app){
+  //Returns SGC for a collection of 2D or 3D line segments (used in each DevelopmentView)
+  public static SceneGraphComponent pathSGCFromList(ArrayList<LineSegment> images, PathAppearance app, boolean mode2D, double zvalue){
     
     SceneGraphComponent sgc = new SceneGraphComponent();
-    sgc.setGeometry(geometryFrom3DList(images,app));
+    sgc.setGeometry(pathGeometryFromList(images,app,mode2D,zvalue));
     sgc.setAppearance(app.getJRealityAppearance());
     return sgc;
   }

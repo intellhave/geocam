@@ -86,6 +86,7 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
 
   protected void generateObjectGeometry(){
     
+    //instead of vector, use an affine transformation (to record position + orientation of images)
     HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
     HashMap<VisiblePath,ArrayList<LineSegment>> pathImages = new HashMap<VisiblePath,ArrayList<LineSegment>>();
     
@@ -103,14 +104,12 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     
     Set<VisibleObject> objectList = objectImages.keySet();
     for(VisibleObject o : objectList){
-      if(!o.isVisible()){ continue; }
-      sgcNewObjects.addChild(SGCMethods.sgcFrom3DList(objectImages.get(o), o.getAppearance()));
+      sgcNewObjects.addChild(SGCMethods.objectSGCFromList(objectImages.get(o), o.getAppearance(), false, 0));
     }
     
     Set<VisiblePath> pathList = pathImages.keySet();
     for(VisiblePath p : pathList){
-      if(!p.isVisible()){ continue; }
-      sgcNewObjects.addChild(SGCMethods.sgcFrom3DList(pathImages.get(p), p.getAppearance()));
+      sgcNewObjects.addChild(SGCMethods.pathSGCFromList(pathImages.get(p), p.getAppearance(), false, 0));
     }
     
     sgcDevelopment.removeChild(sgcObjects);
@@ -125,7 +124,8 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     if(objectList == null){ return; }
 
     for(VisibleObject o : objectList){
-
+      if(!o.isVisible()){ continue; }
+      
       //get position in ambient coordinates
       Vector pos3D = EmbeddedTriangulation.getCoord3D(f,o.getPosition());
       
@@ -146,10 +146,11 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     if(pathList == null){ return; }
 
     for(VisiblePath p : pathList){
+      if(!p.isVisible()){ continue; }
       
       //get list of segments of this path contained in the face f
       Collection<ManifoldPath.Segment> segments = p.getPathSegmentsInFace(f);
-      if(segments == null){ return; }
+      if(segments == null){ continue; }
       
       //make image list for this path if one doesn't already exist
       ArrayList<LineSegment> imageList = pathImages.get(p);
@@ -162,8 +163,8 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
       for(ManifoldPath.Segment s : segments){
         //transform each segment that appears in this face
         imageList.add(new LineSegment(
-            EmbeddedTriangulation.getCoord3D(f, s.ls.getStart()),
-            EmbeddedTriangulation.getCoord3D(f, s.ls.getEnd())
+            EmbeddedTriangulation.getCoord3D(f, s.startPos),
+            EmbeddedTriangulation.getCoord3D(f, s.endPos)
         ));
       }
     }

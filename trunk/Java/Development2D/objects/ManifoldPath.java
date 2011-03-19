@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-import development.LineSegment;
 import development.Vector;
 import triangulation.Face;
 
@@ -19,16 +18,19 @@ public class ManifoldPath {
   //little data structure to hold a line segment residing in a single face
   public static class Segment{
     public Face face;
-    public LineSegment ls;
+    public Vector startPos;
+    public Vector endPos;
     
     public Segment(Face face, Vector startPos, Vector endPos){
       this.face = face;
-      this.ls = new LineSegment(startPos, endPos);
+      this.startPos = new Vector(startPos);
+      this.endPos = new Vector(endPos);
     }
     
     public Segment(Segment s){
       this.face = s.face;
-      this.ls = new LineSegment(s.ls);
+      this.startPos = new Vector(s.startPos);
+      this.endPos = new Vector(s.endPos);
     }
   }
   

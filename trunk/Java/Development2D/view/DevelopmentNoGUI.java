@@ -3,7 +3,6 @@ package view;
 import java.util.Iterator;
 import java.util.Random;
 
-import objects.ManifoldObjectHandler;
 import objects.ManifoldPosition;
 import objects.ObjectDynamics;
 import objects.ShootingGame;

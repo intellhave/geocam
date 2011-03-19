@@ -3,11 +3,6 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -15,9 +10,6 @@ import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import objects.ManifoldObjectHandler;
-import objects.VisibleObject;
 
 import view.SGCMethods.DevelopmentGeometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
@@ -35,8 +27,7 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.DevelopmentNode;
-import development.AffineTransformation;
-import development.Frustum2D;
+import development.TimingStatistics;
 import development.Vector;
 
 public class DevelopmentView2D extends DevelopmentView {
@@ -138,63 +129,17 @@ public class DevelopmentView2D extends DevelopmentView {
       generateManifoldGeometry(n, colors, geometry);
   }
   
+
   protected void generateObjectGeometry(){
     
-    //instead of vector, use something which has a basis (forward, left) also
-    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
-    generateObjectGeometry(development.getRoot(), objectImages);
-
-    //generate sgc's for the objects
-    SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
-    
-    Set<VisibleObject> objectList = objectImages.keySet();
-    for(VisibleObject o : objectList){
-      sgcNewObjects.addChild(SGCMethods.sgcFromImageList(objectImages.get(o), 0, o.getAppearance()));
-    }
-
+    /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
+    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot());
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = sgcNewObjects;
     sgcDevelopment.addChild(sgcObjects);
+    /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
   }
 
-  /*
-   * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
-   * and adds nodes to nodeList (should be empty at start)
-   */
-  private void generateObjectGeometry(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
-        
-    //look for objects
-    Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
-    if(objectList != null){
-      
-      Frustum2D frustum = devNode.getFrustum();
-      AffineTransformation affineTrans = devNode.getAffineTransformation();
-      
-      for(VisibleObject o : objectList){
-        if(!o.isVisible()){ continue; }
-
-        Vector transPos = affineTrans.affineTransPoint(o.getPosition());
-        if(frustum != null){
-          //check if object should be clipped
-          if(!frustum.checkInterior(transPos)){ continue; }
-        }
-        
-        //add to image list
-        ArrayList<Vector> imageList = objectImages.get(o);
-        if(imageList == null){
-          imageList = new ArrayList<Vector>();
-          objectImages.put(o,imageList);
-        }
-        imageList.add(transPos);
-      }
-    }
-
-    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
-    while (itr.hasNext()) {
-      generateObjectGeometry(itr.next(), objectImages);
-    }
-  }
-  
   public void setLineLength(double length) {
     lineLength = length;
     setViewingDirection(cameraForward);

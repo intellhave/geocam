@@ -3,11 +3,8 @@ package objects;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
 
 import triangulation.Face;
-import triangulation.Triangulation;
 
 /* This is the 'master object' which holds all VisibleObjects on the Triangulation
  * 
