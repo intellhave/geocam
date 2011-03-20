@@ -88,6 +88,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
   private static final int MOVING_OBJECT_COUNT = 15;
+  private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
   //don't generally need to keep track of this list, but GUI will change the objects' properties
@@ -116,7 +117,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
           development.getSource(), 
           new ObjectAppearance(objectRadius, randomColor(rand)), 
           randomUnitVector(rand) );
-      newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE));
+      if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
       movingObjects.add(newObject);
     }
     for(MovingObject o : movingObjects){

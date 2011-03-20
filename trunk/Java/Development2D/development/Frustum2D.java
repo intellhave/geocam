@@ -3,7 +3,6 @@ package development;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import triangulation.Face;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
 
@@ -21,10 +20,10 @@ public class Frustum2D {
      left = new Vector(0,0);
      right = new Vector(0,0);
    }else {
-    left = l;
-    right = r;
+    left = new Vector(l);
+    right = new Vector(r);
    }
-    findNormals();
+   findNormals();
   }
 
   public Frustum2D(double[] l, double[] r) {
@@ -44,28 +43,23 @@ public class Frustum2D {
     rightNormal = new Vector(-right.getComponent(1), right.getComponent(0));
   }
 
-  public Vector getLeft() {
-    return left;
-  }
-
-  public Vector getRight() {
-    return right;
-  }
+  public Vector getLeft() { return left; }
+  public Vector getRight() { return right; }
 
   public void normalizeVectors() {
     left.normalize();
     right.normalize();
   }
 
+  //check if vector is inside frustum
   public boolean checkInterior(Vector vector) {
-    if(left.isZero()) return false;
-    if (Vector.dot(leftNormal, vector) < -epsilon)
-      return false;
-    if (Vector.dot(rightNormal, vector) < -epsilon)
-      return false;
+    if(left.isZero()){ return false; }
+    if(Vector.dot(leftNormal, vector) < -epsilon){ return false; }
+    if(Vector.dot(rightNormal, vector) < -epsilon){ return false; }
     return true;
   }
 
+  //return intersection of two frustums, or null if there is no intersection
   public static Frustum2D intersect(Frustum2D frustum1, Frustum2D frustum2) {
     if(frustum1.isNull() || frustum2.isNull()) return null;
     if (frustum1.checkInterior(frustum2.getLeft())) {
@@ -86,127 +80,55 @@ public class Frustum2D {
   }
   
   public boolean isNull() {
-    return left.getComponent(0) == 0 && left.getComponent(1) == 0;
+    return ((left.getComponent(0) == 0) && (left.getComponent(1) == 0));
   }
 
   public EmbeddedFace clipFace(EmbeddedFace toClip) {
-    
-    boolean verbose = false;
-    
-    int left_intersections = 0;
-    ArrayList<Vector> vertices = new ArrayList<Vector>();
-    
-    for (int i = 0; i < toClip.getNumberVertices(); i++) {
-      if(verbose){ System.out.println("checking interior: " + toClip.getVectorAt(i)); }
-      if (this.checkInterior(toClip.getVectorAt(i))) {
-        vertices.add(new Vector(toClip.getVectorAt(i)));
-        if(verbose){ System.out.println("true"); }
-      } else
-        if(verbose){ System.out.println("false"); }
-    }
-    if (vertices.size() == toClip.getNumberVertices()){
-      return new EmbeddedFace(toClip); // all vertices contained in frustum
-    }
 
+    int efVertCount = toClip.getNumberVertices();
+    ArrayList<Vector> efVerts = toClip.getVectors();
+    ArrayList<Vector> newVerts = new ArrayList<Vector>();
+    
+    //check for those vertices of the EmbeddedFace which are contained in the frustum
+    for(Vector v : efVerts){
+      if(this.checkInterior(v)){ newVerts.add(new Vector(v)); }
+    }
+    //if all of the vertices are already in the frustum, no clipping occurs
+    if (newVerts.size() == efVertCount){
+      return new EmbeddedFace(toClip); 
+    }
+    
+    //check for intersections of each EmbeddedFace edge with the frustum's edges
     ArrayList<Vector> intersections = new ArrayList<Vector>();
-    for (int i = 0; i < toClip.getNumberVertices(); i++) {
-      Vector a = toClip.getVectorAt(i);
-      Vector b = toClip.getVectorAt((i + 1) % toClip.getNumberVertices());
-      if(verbose){ System.out.println("checking edge " + i); }
-      Vector v = findIntersection(a, b, this.right);
-      if (v != null && notTooCloseToAnyOf(vertices, v))
-        intersections.add(v);
-
-      v = findIntersection(a, b, this.left);
-      if (v != null && notTooCloseToAnyOf(vertices, v)) {
-        left_intersections++;
-        intersections.add(v);
+    
+    for(int i=0; i<efVertCount; i++){
+      
+      //get edge of EmbeddedFace as a LineSegment
+      LineSegment efEdge = new LineSegment(efVerts.get(i), efVerts.get((i+1) % efVertCount));
+      
+      //intersect with left and right rays of frustum
+      Vector intersectionLeft = LineSegment.intersectRayWithLineSegment(this.getLeft(), efEdge);
+      Vector intersectionRight = LineSegment.intersectRayWithLineSegment(this.getRight(), efEdge);
+      
+      //add intersections to newVertList, if applicable
+      if((intersectionLeft != null) && !Vector.closeToAnyOf(newVerts, intersectionLeft, epsilon)){ 
+        intersections.add(intersectionLeft); 
+      }
+      if((intersectionRight != null) && !Vector.closeToAnyOf(newVerts, intersectionRight, epsilon)){ 
+        intersections.add(intersectionRight); 
       }
     }
-    vertices.addAll(intersections);
-    //if(left_intersections == 1) vertices.add(new Vector(0, 0));
-
-    if (vertices.size() < 3){
-      return null;
-    }
-    ConvexHull2D hull = new ConvexHull2D(vertices);
-    EmbeddedFace retef = new EmbeddedFace(hull.getPoints());
-    return retef;
-  }
-
-  /*
-   * returns true if the coordinates of the given vector v are between the
-   * coordinates of v1 and v2 and contained in frustum f
-   */
-  private boolean isContained(Frustum2D f, Vector v1, Vector v2, Vector v) {
-    double x = v.getComponent(0);
-    double y = v.getComponent(1);
-    double x1 = v1.getComponent(0);
-    double y1 = v1.getComponent(1);
-    double x2 = v2.getComponent(0);
-    double y2 = v2.getComponent(1);
-
-    return (between(x1, x2, x) && between(y1, y2, y) && f.checkInterior(v));
-  }
-
-  // true if c is between a and b
-  private static boolean between(double a, double b, double c) {
-    if ((a - epsilon > c && b - epsilon > c)
-        || (a + epsilon < c && b + epsilon < c))
-      return false;
-    return true;
-  }
-  
-  /*
-   * Returns the intersection of the line formed by points a and b with the ray
-   * from the origin through v. ( ( y1 = (w2/w1)(x-s) + t, y2 = (v2/v1)x )
-   */
-  private Vector findIntersection(Vector a, Vector b, Vector v) {
-    Vector w = Vector.subtract(b, a);
-    double w1 = w.getComponent(0);
-    double w2 = w.getComponent(1);
-    double s = a.getComponent(0);
-    double t = a.getComponent(1);
-    double v1 = v.getComponent(0);
-    double v2 = v.getComponent(1);
     
-    if((w1 == 0 && v1 == 0) || (w2 / w1) == (v2 / v1)) { // slopes equal => parallel
-      return null;
-    }
-
-    double x, y;
-    if (w1 == 0) {
-      x = s;
-      y = (v2/v1)*s;
-    } else if (v1 == 0) {
-      x = 0;
-      y = (w2 / w1) * (0 - s) + t;
-    } else {
-      x = (t - (w2 / w1) * s) / ((v2 / v1) - (w2 / w1));
-      y = (v2 / v1) * x;
-    }
-
-    Vector intersection = new Vector(x, y);
-
-    if (isContained(this, a, b, intersection))
-      return intersection;
-    else
-      return null;
+    newVerts.addAll(intersections);
+    
+    //intersection regarded as empty if it has fewer than 3 vertices
+    if (newVerts.size() < 3){ return null; }
+    
+    //return the convex hull, as an EmbeddedFace, of all the points found above
+    ConvexHull2D hull = new ConvexHull2D(newVerts);
+    return new EmbeddedFace(hull.getPoints());
   }
 
-  private boolean notTooCloseToAnyOf(ArrayList<Vector> vectors, Vector v) {
-    for (int i = 0; i < vectors.size(); i++) {
-      if (closeTogether(vectors.get(i), v))
-        return false;
-    }
-    return true;
-  }
-
-  private boolean closeTogether(Vector v1, Vector v2) {
-    return (Math.abs(v1.getComponent(0) - v2.getComponent(0)) < epsilon && Math
-        .abs(v1.getComponent(1) - v2.getComponent(1)) < epsilon);
-  }
-  
   public Geometry getGeometry(Color color, double z){
     
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
@@ -235,7 +157,7 @@ public class Frustum2D {
     return ifsf.getGeometry();
   }
   
-  public Trail clipTrail(Vector start, Vector end, Face face, Color color) {
+  /*public Trail clipTrail(Vector start, Vector end, Face face, Color color) {
     Vector a = findIntersection(start, end, this.left);
     Vector b = findIntersection(start, end, this.right);
     if(a == null && b == null && (!this.checkInterior(start) || !this.checkInterior(end)))
@@ -252,6 +174,6 @@ public class Frustum2D {
       else if(a == null) a = end;
       
     return new Trail(a, b, face, color);
-  }
+  }*/
 }
 
