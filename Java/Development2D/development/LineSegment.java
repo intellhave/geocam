@@ -29,6 +29,8 @@ public class LineSegment {
   
   //some useful geometric routines
   //----------------------------------------------
+  
+  //return intersection of line segment with frustum, or null if no intersetcion (assumes vectors are 2D)
   public static LineSegment clipWithFrustum(Frustum2D frust, LineSegment ls){
     
     Vector p0 = ls.getStart();
@@ -60,9 +62,8 @@ public class LineSegment {
       else{ return new LineSegment(lineIntersectionL, lineIntersectionR); }
     }
   }
-  
-  //intersect the ray (starting at the origin) with the specified line segment
-  //assumes everything is 2D
+
+  //return intersection of ray with line segment, or null if no intersection (assumes vectors are 2D)
   public static Vector intersectRayWithLineSegment(Vector v, LineSegment ls){
 
     Vector a = ls.getStart();
@@ -83,7 +84,7 @@ public class LineSegment {
     return Vector.scale(v,s);
   }
   
-  //intersect two line segments
+  //return intersection of two line segments, or null if no intersection (assumes vectors are 2D)
   public static Vector intersectLineSegments(LineSegment ls0, LineSegment ls1){
     
     Vector a = ls0.getStart();

@@ -32,18 +32,36 @@ public class ManifoldPosition{
   protected Vector left;
   
   public ManifoldPosition(Face f, Vector pos){
-    face = f; position = pos;
+    face = f; position = new Vector(pos);
     setDefaultOrientation();
   }
   public ManifoldPosition(Face f, Vector pos, Vector directionForward, Vector directionLeft){
-    face = f; position = pos;
+    face = f; position = new Vector(pos);
     if(!setOrientation(directionForward, directionLeft)){ setDefaultOrientation(); }
   }
   
   public ManifoldPosition(ManifoldPosition mpos){
     //copy constructor
-    setManifoldPosition(mpos);
+    face = mpos.getFace();
+    position = new Vector(mpos.getPosition());
+    if(!setOrientation(mpos.getDirectionForward(), mpos.getDirectionLeft())){ setDefaultOrientation(); }
   }
+  
+  //face and position getters and setters
+  //-----------------------------------------
+  public void setManifoldPosition(Face f, Vector pos){
+    Face oldFace = face;
+    face = f; position = new Vector(pos);
+    if(face != oldFace){ reportFaceChange(oldFace); }
+  }
+  
+  public void setManifoldPosition(ManifoldPosition mpos){
+    setManifoldPosition(mpos.getFace(), mpos.getPosition());
+    if(!setOrientation(mpos.getDirectionForward(), mpos.getDirectionLeft())){ setDefaultOrientation(); }
+  }
+  
+  public Face getFace(){ return face; }
+  public Vector getPosition(){ return position; }
     
   //this is overridden in VisibleObject so that it can notify ManifoldObjectHandler
   //-----------------------------------------
@@ -93,24 +111,9 @@ public class ManifoldPosition{
     v.add(Vector.scale(getDirectionLeft(),componentLeft));
     return v;
   }
-  
-  //face and position getters and setters
+ 
+  //moving the position
   //-----------------------------------------
-  public void setManifoldPosition(Face f, Vector pos){
-    Face oldFace = face;
-    face = f; position = pos;
-    if(face != oldFace){ reportFaceChange(oldFace); }
-  }
-  
-  public void setManifoldPosition(ManifoldPosition mpos){
-    face = mpos.getFace();
-    position = new Vector(mpos.getPosition());
-    if(!setOrientation(mpos.getDirectionForward(), mpos.getDirectionLeft())){ setDefaultOrientation(); }
-  }
-  
-  public Face getFace(){ return face; }
-  public Vector getPosition(){ return position; }
-  
   /* moves position along the manifold in the specified direction
    * optional ManifoldPath version to record the path taken
    * carries along tangent vectors at the position, if specified

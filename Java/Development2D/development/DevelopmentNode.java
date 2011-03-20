@@ -57,6 +57,6 @@ public class DevelopmentNode {
   public AffineTransformation getAffineTransformation() { return affineTrans; }
   public ArrayList<DevelopmentNode> getChildren() { return new ArrayList<DevelopmentNode>(children); }
 
-  public boolean isRoot() { return depth == 0; }
+  //public boolean isRoot() { return depth == 0; }
   //public boolean faceIsSource() { return face.equals(source.getFace()); }
 }

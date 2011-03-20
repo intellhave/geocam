@@ -3,8 +3,10 @@ package objects;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import triangulation.Face;
+import triangulation.Triangulation;
 
 /* This is the 'master object' which holds all VisibleObjects on the Triangulation
  * 
@@ -37,7 +39,7 @@ public class ManifoldObjectHandler{
   //========= OBJECTS =============
   
   //status
-  /*public static void printObjectInfo(){
+  public static void printObjectInfo(){
     
     //quick way to check for bugs, e.g. objects in duplicate or wrong face lists
     
@@ -60,7 +62,7 @@ public class ManifoldObjectHandler{
         System.out.println("  Object " + o.getIndex() + " (Face " + o.getFace().getIndex() + ")");
       }
     }
-  }*/
+  }
 
   //add and remove objects
   public static void addObject(VisibleObject o){ 

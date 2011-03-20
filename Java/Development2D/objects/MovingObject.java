@@ -2,7 +2,7 @@ package objects;
 
 import development.Vector;
 
-/* This is a particular type of VisibleObject which is used in the BasicMovingObjects dynamics
+/* This is a particular type of VisibleObject which is used in BasicMovingObjects and ShootingGame
  */
 
 public class MovingObject extends VisibleObject{

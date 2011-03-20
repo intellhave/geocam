@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import objects.ManifoldObjectHandler;
 import objects.ManifoldPosition;
 import objects.ObjectAppearance;
 import objects.VisibleObject;
