@@ -37,6 +37,8 @@ public class DevelopmentViewCave extends DevelopmentView {
   private static final double MANIFOLD_UNITS_PER_AMBIENT_UNIT = 0.5;
   private static final double AVATAR_HEIGHT = 1.7;//1.2;
   private static final InputSlot SHOOT_TOOL_ACTIVATION_SLOT = InputSlot.LEFT_BUTTON; //InputSlot.POINTER_HIT;
+  private static final double CLIP_NEAR_RADIUS = 0.1; //TODO: re-implement this
+  
   //debug settings
   private static final boolean PRINT_TRANSFORMATION_DATA = false;
 
@@ -225,7 +227,7 @@ public class DevelopmentViewCave extends DevelopmentView {
   protected void generateObjectGeometry(){
     
     /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
-    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot());
+    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot(), true, CLIP_NEAR_RADIUS);
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = sgcNewObjects;
     sgcDevelopment.addChild(sgcObjects);

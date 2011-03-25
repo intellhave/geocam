@@ -19,13 +19,13 @@ import development.Vector;
 
 public class CommonViewMethods {
 
-  protected static SceneGraphComponent generateDevelopmentObjectGeometry(DevelopmentNode devRoot){
+  protected static SceneGraphComponent generateDevelopmentObjectGeometry(DevelopmentNode devRoot, boolean clipNear, double clipNearRadius){
 
     //instead of vector, use an affine transformation (to record position + orientation of images)
     HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
     HashMap<VisiblePath,ArrayList<LineSegment>> pathImages = new HashMap<VisiblePath,ArrayList<LineSegment>>();
     
-    getDevelopmentObjectImages(devRoot, objectImages);
+    getDevelopmentObjectImages(devRoot, objectImages, clipNear, clipNearRadius);
     getDevelopmentPathImages(devRoot, pathImages); 
     
     //generate sgc's for the objects
@@ -50,7 +50,7 @@ public class CommonViewMethods {
    * Recursively adds geometry for each face in tree to a DevelopmentGeometrySim3D, 
    * and adds nodes to nodeList (should be empty at start)
    */
-  private static void getDevelopmentObjectImages(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages) {
+  private static void getDevelopmentObjectImages(DevelopmentNode devNode, HashMap<VisibleObject,ArrayList<Vector>> objectImages, boolean clipNear, double clipNearRadius) {
         
     //look for objects
     Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(devNode.getFace());
@@ -63,10 +63,12 @@ public class CommonViewMethods {
         if(!o.isVisible()){ continue; }
 
         Vector transPos = affineTrans.affineTransPoint(o.getPosition());
+        //check if object image should be clipped by frustum
         if(frustum != null){
-          //check if object should be clipped
           if(!frustum.checkInterior(transPos)){ continue; }
         }
+        //check if object should be clipped by specified clipNearRadius (ok, sqrt(radius), but who cares)
+        if(transPos.lengthSquared() < clipNearRadius){ continue; }
         
         //add to image list
         ArrayList<Vector> imageList = objectImages.get(o);
@@ -80,7 +82,7 @@ public class CommonViewMethods {
 
     Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
     while (itr.hasNext()) {
-      getDevelopmentObjectImages(itr.next(), objectImages);
+      getDevelopmentObjectImages(itr.next(), objectImages, clipNear, clipNearRadius);
     }
   }
   

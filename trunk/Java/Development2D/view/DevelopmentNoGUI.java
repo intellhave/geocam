@@ -72,7 +72,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
     view.installShootTool(shootingGame);
     
     //make source point invisible
-    development.getSourceObject().setVisible(false);
+    //development.getSourceObject().setVisible(false);
 
     //initial geometry
     updateGeometry(true,true);
