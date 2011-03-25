@@ -133,7 +133,7 @@ public class DevelopmentView2D extends DevelopmentView {
   protected void generateObjectGeometry(){
     
     /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
-    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot());
+    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot(), false, 0);
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = sgcNewObjects;
     sgcDevelopment.addChild(sgcObjects);
