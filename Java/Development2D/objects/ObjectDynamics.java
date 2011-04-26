@@ -29,7 +29,7 @@ public abstract class ObjectDynamics {
   
   /*TODO (Timing)*/ private static final int TASK_OBJECT_DYNAMICS = TimingStatistics.generateTaskTypeID("Object Dynamics");
   
-  //-- 'custom obsevable' code -----------------------
+  //-- 'custom observable' code -----------------------
   public interface DynamicsListener{
     public abstract void dynamicsEvent(int eventID); 
   }

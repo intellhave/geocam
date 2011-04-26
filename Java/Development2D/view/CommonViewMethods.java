@@ -59,24 +59,26 @@ public class CommonViewMethods {
       Frustum2D frustum = devNode.getFrustum();
       AffineTransformation affineTrans = devNode.getAffineTransformation();
       
-      for(VisibleObject o : objectList){
-        if(!o.isVisible()){ continue; }
-
-        Vector transPos = affineTrans.affineTransPoint(o.getPosition());
-        //check if object image should be clipped by frustum
-        if(frustum != null){
-          if(!frustum.checkInterior(transPos)){ continue; }
+      synchronized(objectList) {
+        for(VisibleObject o : objectList){
+          if(!o.isVisible()){ continue; }
+  
+          Vector transPos = affineTrans.affineTransPoint(o.getPosition());
+          //check if object image should be clipped by frustum
+          if(frustum != null){
+            if(!frustum.checkInterior(transPos)){ continue; }
+          }
+          //check if object should be clipped by specified clipNearRadius (ok, sqrt(radius), but who cares)
+          if(transPos.lengthSquared() < clipNearRadius){ continue; }
+          
+          //add to image list
+          ArrayList<Vector> imageList = objectImages.get(o);
+          if(imageList == null){
+            imageList = new ArrayList<Vector>();
+            objectImages.put(o,imageList);
+          }
+          imageList.add(transPos);
         }
-        //check if object should be clipped by specified clipNearRadius (ok, sqrt(radius), but who cares)
-        if(transPos.lengthSquared() < clipNearRadius){ continue; }
-        
-        //add to image list
-        ArrayList<Vector> imageList = objectImages.get(o);
-        if(imageList == null){
-          imageList = new ArrayList<Vector>();
-          objectImages.put(o,imageList);
-        }
-        imageList.add(transPos);
       }
     }
 

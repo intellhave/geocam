@@ -57,7 +57,7 @@ public abstract class DevelopmentView extends JRViewer{
     
     if(useMovementTool){ 
       sgcRoot.addTool(new ManifoldMovementToolFB()); 
-      sgcRoot.addTool(new ManifoldMovementToolLR()); 
+      sgcRoot.addTool(new ManifoldMovementToolLR());
     }
     //add whatever extra tools are specified
   }

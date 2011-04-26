@@ -33,7 +33,7 @@ import development.DevelopmentNode;
 import development.TimingStatistics;
 import development.Vector;
 
-public class DevelopmentView3D extends DevelopmentView {
+public class DevelopmentViewSim3D extends DevelopmentView {
   
   private static int INITIAL_HEIGHT = 25;
   private double height = INITIAL_HEIGHT/100.0;
@@ -51,7 +51,7 @@ public class DevelopmentView3D extends DevelopmentView {
   private Scene scene;
   private Vector cameraForward = new Vector(-1, 0);
 
-  public DevelopmentView3D(Development development, ColorScheme colorScheme) {
+  public DevelopmentViewSim3D(Development development, ColorScheme colorScheme) {
     super(development, colorScheme, true);
     dimension = 3;
 
@@ -184,7 +184,7 @@ public class DevelopmentView3D extends DevelopmentView {
   protected void generateObjectGeometry(){
     
     /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
-    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot(), true, CLIP_NEAR_RADIUS);
+    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot(),false,0);
     sgcDevelopment.removeChild(sgcObjects);
     sgcObjects = sgcNewObjects;
     sgcDevelopment.addChild(sgcObjects);
