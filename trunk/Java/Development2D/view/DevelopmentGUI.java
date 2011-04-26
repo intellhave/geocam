@@ -69,7 +69,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   
   //--- viewers -----------------------
   private static DevelopmentView2D view2D = null;
-  private static DevelopmentView3D view3D = null;
+  private static DevelopmentViewSim3D view3D = null;
   private static DevelopmentViewEmbedded embeddedView = null;
   
   private static LinkedList<DevelopmentView> devViewers = new LinkedList<DevelopmentView>(); //active viewers
@@ -92,7 +92,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
   //don't generally need to keep track of this list, but GUI will change the objects' properties
-  private static LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>(); 
+  private static LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
   //------------------------------------
 
   public DevelopmentGUI() {
@@ -375,7 +375,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
         showView3D = ((JCheckBox)e.getSource()).isSelected();
         if(showView3D == true){
           //start up the embedded viewer
-          view3D = new DevelopmentView3D(development, colorScheme);
+          view3D = new DevelopmentViewSim3D(development, colorScheme);
           view3D.setDrawEdges(drawEdges);
           view3D.setDrawFaces(drawFaces);
           view3D.updateGeometry(true,true);

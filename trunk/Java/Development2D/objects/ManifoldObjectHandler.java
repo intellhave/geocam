@@ -58,8 +58,10 @@ public class ManifoldObjectHandler{
       
       int n = objectList.size();
       System.out.println("Face " + f.getIndex() + ": " + n + " objects:");
-      for(VisibleObject o : objectList){
-        System.out.println("  Object " + o.getIndex() + " (Face " + o.getFace().getIndex() + ")");
+      synchronized(objectList) {
+        for(VisibleObject o : objectList){
+          System.out.println("  Object " + o.getIndex() + " (Face " + o.getFace().getIndex() + ")");
+        }
       }
     }
   }
@@ -68,20 +70,26 @@ public class ManifoldObjectHandler{
   public static void addObject(VisibleObject o){ 
     
     Collection<VisibleObject> objectList = getObjectsCreateIfNull(o.getFace());
-    objectList.add(o);
+    synchronized(objectList) {
+      objectList.add(o);
+    }
   }
   
   public static void removeObject(VisibleObject o){
 
     Collection<VisibleObject> objectList = sortedObjectList.get(o.getFace());
     if(objectList == null){ return; }
-    if(!objectList.remove(o)){
-      System.err.println("(ManifoldObjectHandler.removeObject) Error removing object " + o.getIndex() + " from face " + o.getFace().getIndex());
+    synchronized(objectList) {
+      if(!objectList.remove(o)){
+        System.err.println("(ManifoldObjectHandler.removeObject) Error removing object " + o.getIndex() + " from face " + o.getFace().getIndex());
+      }
     }
   }
   
   public static void clearObjects(){
-    sortedObjectList.clear();
+    synchronized(sortedObjectList) {
+      sortedObjectList.clear();
+    }
   }
   
   //access to object lists  
@@ -93,7 +101,9 @@ public class ManifoldObjectHandler{
     HashSet<VisibleObject> objectList = sortedObjectList.get(f);
     if(objectList == null){
       objectList = new HashSet<VisibleObject>();
-      sortedObjectList.put(f, objectList);
+      synchronized(sortedObjectList) {
+        sortedObjectList.put(f, objectList);
+      }
     }
     return objectList;
   }
@@ -107,8 +117,10 @@ public class ManifoldObjectHandler{
     if(oldFace != null){
       Collection<VisibleObject> objectList = sortedObjectList.get(oldFace);
       if(objectList != null){ 
-        if(!objectList.remove(o)){
-          System.err.println("(ManifoldObjectHandler.updateObject) Error transferring object " + o.getIndex() + " from face " + oldFace.getIndex() + " to face " + o.getFace().getIndex());
+        synchronized(objectList) {
+          if(!objectList.remove(o)){
+            System.err.println("(ManifoldObjectHandler.updateObject) Error transferring object " + o.getIndex() + " from face " + oldFace.getIndex() + " to face " + o.getFace().getIndex());
+          }
         }
       }
     }

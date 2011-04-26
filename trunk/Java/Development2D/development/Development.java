@@ -1,11 +1,9 @@
 package development;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import objects.ManifoldObjectHandler;
 import objects.ManifoldPosition;
 import objects.ObjectAppearance;
 import objects.VisibleObject;
@@ -48,7 +46,7 @@ public class Development {
 
   private int maxDepth;
 
-  //-- 'custom obsevable' code -----------------------
+  //-- 'custom observable' code -----------------------
   public interface DevelopmentViewer{
     public abstract void updateDevelopment(); 
   }

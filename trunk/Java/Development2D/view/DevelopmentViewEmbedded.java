@@ -123,19 +123,21 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(f);
     if(objectList == null){ return; }
 
-    for(VisibleObject o : objectList){
-      if(!o.isVisible()){ continue; }
-      
-      //get position in ambient coordinates
-      Vector pos3D = EmbeddedTriangulation.getCoord3D(f,o.getPosition());
-      
-      //add to image list
-      ArrayList<Vector> imageList = objectImages.get(o);
-      if(imageList == null){
-        imageList = new ArrayList<Vector>();
-        objectImages.put(o,imageList);
+    synchronized(objectList) {
+      for(VisibleObject o : objectList){
+        if(!o.isVisible()){ continue; }
+        
+        //get position in ambient coordinates
+        Vector pos3D = EmbeddedTriangulation.getCoord3D(f,o.getPosition());
+        
+        //add to image list
+        ArrayList<Vector> imageList = objectImages.get(o);
+        if(imageList == null){
+          imageList = new ArrayList<Vector>();
+          objectImages.put(o,imageList);
+        }
+        imageList.add(pos3D);
       }
-      imageList.add(pos3D);
     }
   }
   
