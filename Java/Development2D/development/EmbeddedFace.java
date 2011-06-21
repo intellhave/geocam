@@ -48,8 +48,11 @@ public class EmbeddedFace {
 
   private void findNormal() {
     Vector v1 = Vector.subtract(vectors_.get(1), vectors_.get(0));
-    Vector v2 = Vector.subtract(vectors_.get(2), vectors_.get(1));
+    Vector v2 = Vector.subtract(vectors_.get(2), vectors_.get(0));
     normal_ = Vector.cross(v1, v2);
+    if (normal_ == null) {
+      normal_ = new Vector(0.0, 0.0, 1.0);
+    }
   }
 
   public int getNumberVertices() {

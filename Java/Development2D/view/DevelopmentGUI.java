@@ -1,5 +1,7 @@
 package view;
 
+import inputOutput.TriangulationIO;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -63,8 +65,19 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Vector sourcePoint;
   private static Face sourceFace;
   private static ColorScheme colorScheme;
-  private int currentDepth = 8;
-  private String filename; 
+  private int currentDepth = 1;
+  private String filename = "Data/off/square2.off";
+//  String filename = "Data/off/tetra3.off";
+//String filename = "Data/off/tetra2.off";
+//String filename = "Data/off/icosa.off";
+//String filename = "Data/off/cone.off";
+//String filename = "Data/off/epcot.off";
+// String filename = "Data/off/square2.off";
+//String filename = "Data/Triangulations/2DManifolds/tetrahedronnonembed3.xml";
+//String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
+//String filename = "Data/Triangulations/2DManifolds/tetrahedronnew.xml";
+//String filename = "Data/Triangulations/2DManifolds/torus-9.xml";
+
   //------------------------------------
   
   //--- viewers -----------------------
@@ -87,21 +100,28 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   //private static ShootingGame shootingGame = new ShootingGame();
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
-  private static final int MOVING_OBJECT_COUNT = 15;
+  private static final int MOVING_OBJECT_COUNT = 1;//15;
   private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
   //don't generally need to keep track of this list, but GUI will change the objects' properties
   private static LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
   //------------------------------------
+ 
 
+  
+  public DevelopmentGUI(String filename) {
+    this.filename = filename;
+//    DevelopmentGUI();
+  }
+  
   public DevelopmentGUI() {
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
-    String filename = "Data/off/tetra2.off";
+   
     loadSurface(filename);
-
+    
     layoutGUI();
     
     //make it display timing statistics on exit
@@ -134,6 +154,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     development.addViewer(this);
     dynamics.addListener(this);
   }
+
   
   private Color randomColor(Random rand){
     return new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256));
@@ -169,13 +190,22 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
    */
   private void loadSurface(String file) {
     filename = file;
-    EmbeddedTriangulation.readEmbeddedSurface(filename);
-    
+    String extension = file.substring(file.length() - 3, file.length());
+
+    if (extension.contentEquals("off")) {
+      EmbeddedTriangulation.readEmbeddedSurface(filename); 
+//      TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/tetrahedronnew.xml");
+    }
+    else if (extension.contentEquals("xml")){
+      TriangulationIO.readTriangulation(file);
+//      TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/tetrahedronnew2.xml");
+    }
+    else System.err.println("invalid file");
+ 
     Iterator<Integer> i = null;
     // pick some arbitrary face and source point
     i = Triangulation.faceTable.keySet().iterator();
     sourceFace = Triangulation.faceTable.get(i.next());
-
     sourcePoint = new Vector(0, 0);
     Iterator<Vertex> iv = sourceFace.getLocalVertices().iterator();
     while (iv.hasNext()) {
@@ -220,7 +250,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
         } catch (Exception ex) {
           System.out.println("Invalid file");
         }
-
+       
         loadSurface(file.getAbsolutePath());
       }
     });
@@ -303,6 +333,8 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     colorPanel.add(new JLabel("Set Color Scheme"));
     colorPanel.add(depthSchemeButton);
     colorPanel.add(faceSchemeButton);
+    
+   
     
     // -------- STOP/START MOVEMENT BUTTON --------
     JButton stopStartButton = new JButton("");

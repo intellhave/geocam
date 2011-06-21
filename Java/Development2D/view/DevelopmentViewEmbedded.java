@@ -14,9 +14,11 @@ import objects.VisiblePath;
 import triangulation.Face;
 import triangulation.Triangulation;
 
+import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
 import de.jreality.plugin.basic.Scene;
 import de.jreality.scene.Appearance;
+import de.jreality.scene.PointLight;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.tools.RotateTool;
@@ -48,6 +50,17 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     this.setContent(sgcRoot);
     scene = this.getPlugin(Scene.class);
     updateCamera();
+
+    // create light
+    SceneGraphComponent sgcLight = new SceneGraphComponent();
+    PointLight light = new PointLight();
+    light.setIntensity(1.10);
+    sgcLight.setLight(light);
+    MatrixBuilder.euclidean().rotate(2.0, new double[] { 0, 1, 0 })
+        .assignTo(sgcLight);
+    sgcRoot.addChild(sgcLight);
+    
+  
     
     sgcRoot.addTool(new RotateTool());
     sgcDevelopment.setAppearance(defaultAppearance);

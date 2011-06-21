@@ -43,7 +43,7 @@ public abstract class DevelopmentView extends JRViewer{
   protected int dimension;
   
   private static final double movement_seconds_per_rotation_ = 4.0;
-  private double units_per_millisecond = 0.004;
+  private double units_per_millisecond = 0.0004;
   
   public DevelopmentView(Development development, ColorScheme colorScheme, boolean useMovementTool) {
     this.development = development;

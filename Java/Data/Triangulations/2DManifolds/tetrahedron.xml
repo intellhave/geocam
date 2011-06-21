@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><Triangulation xmlns="http://code.google.com/p/geocam">
-  <Vertex alpha="1.0" index="1" radius="1.2">
+  <Vertex alpha="1.0" index="1" radius="1.0">
     <Vertices>2 3 4 </Vertices>
     <Edges>1 2 3 </Edges>
     <Faces>1 2 3 </Faces>

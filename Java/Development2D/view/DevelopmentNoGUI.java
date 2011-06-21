@@ -1,5 +1,7 @@
 package view;
 
+import inputOutput.TriangulationIO;
+
 import java.util.Iterator;
 import java.util.Random;
 
@@ -21,7 +23,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
  
   private static int INITIAL_POINT_SIZE = 4;
   private static double radius = INITIAL_POINT_SIZE/100.0;
-  private static int currentDepth = 8;
+  private static int currentDepth = 30;
 
   private static Development development;
   private static Vector sourcePoint;
@@ -47,7 +49,9 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
-    String filename = "Data/off/tetra2.off";
+ //   String filename = "Data/off/epcot.off";
+    String filename = "Data/Triangulations/2DManifolds/tetrahedronnew.xml";
+    
     loadSurface(filename);
 
     System.out.println("====== Initializing Cave Viewer ======");
@@ -117,8 +121,8 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
    */
   private static void loadSurface(String filename) {
 
-    EmbeddedTriangulation.readEmbeddedSurface(filename);
-    
+//    EmbeddedTriangulation.readEmbeddedSurface(filename);
+    TriangulationIO.readTriangulation(filename);
     Iterator<Integer> i = null;
     // pick some arbitrary face and source point
     i = Triangulation.faceTable.keySet().iterator();
