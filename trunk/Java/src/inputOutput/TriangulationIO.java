@@ -98,8 +98,10 @@ public class TriangulationIO {
         Vertex v2;
         while(localScanner.hasNextInt()) {
           v2 = getVertex(localScanner.nextInt());
-          v.addUniqueVertex(v2);
-          v2.addUniqueVertex(v);
+ //         v.addUniqueVertex(v2);
+          v.addVertex(v2);
+ //         v2.addUniqueVertex(v);
+ //         v2.addVertex(v);
         }
       }
       localList = simplexNode.getElementsByTagName("Edges");
@@ -110,7 +112,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           e2 = getEdge(localScanner.nextInt());
           v.addUniqueEdge(e2);
-          e2.addUniqueVertex(v);
+ //         e2.addUniqueVertex(v);
         }
       }
       localList = simplexNode.getElementsByTagName("Faces");
@@ -121,7 +123,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           f2 = getFace(localScanner.nextInt());
           v.addUniqueFace(f2);
-          f2.addUniqueVertex(v);
+   //       f2.addUniqueVertex(v);
         }
       }
       localList = simplexNode.getElementsByTagName("Tetras");
@@ -132,7 +134,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           t2 = getTetra(localScanner.nextInt());
           v.addUniqueTetra(t2);
-          t2.addUniqueVertex(v);
+  //        t2.addUniqueVertex(v);
         }
       }
       String radius = simplexNode.getAttribute("radius");
@@ -162,7 +164,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           v2 = getVertex(localScanner.nextInt());
           e.addUniqueVertex(v2);
-          v2.addUniqueEdge(e);
+    //      v2.addUniqueEdge(e);
         }
       }
       T = new TriPosition(e.getLocalVertices().get(0).getIndex(),
@@ -176,7 +178,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           e2 = getEdge(localScanner.nextInt());
           e.addUniqueEdge(e2);
-          e2.addUniqueEdge(e2);
+      //    e2.addUniqueEdge(e2);
         }
       }
       localList = simplexNode.getElementsByTagName("Faces");
@@ -187,7 +189,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           f2 = getFace(localScanner.nextInt());
           e.addUniqueFace(f2);
-          f2.addUniqueEdge(e);
+     //     f2.addUniqueEdge(e);
         }
       }
       localList = simplexNode.getElementsByTagName("Tetras");
@@ -198,7 +200,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           t2 = getTetra(localScanner.nextInt());
           e.addUniqueTetra(t2);
-          t2.addUniqueEdge(e);
+  //        t2.addUniqueEdge(e);
         }
       }
       String eta = simplexNode.getAttribute("eta");
@@ -228,7 +230,8 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           v2 = getVertex(localScanner.nextInt());
           f.addUniqueVertex(v2);
-          v2.addUniqueFace(f);
+//          f.addVertex(v2);          
+//          v2.addUniqueFace(f);
         }
       }
       verts = f.getLocalVertices().toArray(new Vertex[0]);
@@ -245,7 +248,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           e2 = getEdge(localScanner.nextInt());
           f.addUniqueEdge(e2);
-          e2.addUniqueFace(f);
+  //        e2.addUniqueFace(f);
         }
       }
       Edge e2;
@@ -262,7 +265,7 @@ public class TriangulationIO {
             verts[k].addUniqueEdge(e2);
           }
           f.addUniqueEdge(e2);
-          e2.addUniqueFace(f);
+ //         e2.addUniqueFace(f);
         }        
       }
       
@@ -274,7 +277,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           f2 = getFace(localScanner.nextInt());
           f.addUniqueFace(f2);
-          f2.addUniqueFace(f);
+   //       f2.addUniqueFace(f);
         }
       }
       localList = simplexNode.getElementsByTagName("Tetras");
@@ -285,7 +288,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           t2 = getTetra(localScanner.nextInt());
           f.addUniqueTetra(t2);
-          t2.addUniqueFace(f);
+ //         t2.addUniqueFace(f);
         }
       }
       String multiplicity = simplexNode.getAttribute("multiplicity");
@@ -307,7 +310,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           v2 = getVertex(localScanner.nextInt());
           t.addUniqueVertex(v2);
-          v2.addUniqueTetra(t);
+  //        v2.addUniqueTetra(t);
         }
       }
       localList = simplexNode.getElementsByTagName("Edges");
@@ -318,7 +321,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           e2 = getEdge(localScanner.nextInt());
           t.addUniqueEdge(e2);
-          e2.addUniqueTetra(t);
+  //        e2.addUniqueTetra(t);
         }
       }
       verts = t.getLocalVertices().toArray(new Vertex[0]);
@@ -336,7 +339,7 @@ public class TriangulationIO {
             verts[k].addUniqueEdge(e2);
           }
           t.addUniqueEdge(e2);
-          e2.addUniqueTetra(t);
+    //      e2.addUniqueTetra(t);
         }
       }
       
@@ -348,10 +351,10 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           f2 = getFace(localScanner.nextInt());
           t.addUniqueFace(f2);
-          f2.addUniqueTetra(t);
+  //        f2.addUniqueTetra(t);
         }
       }
-      Face f2;
+  /*    Face f2;
       Edge ejk, ejl, ekl;
       for(int j = 0; j < verts.length; j++) {
         for(int k = j + 1; k < verts.length; k++) {
@@ -383,7 +386,7 @@ public class TriangulationIO {
           }
         }
       }
-      
+    */  
       localList = simplexNode.getElementsByTagName("Tetras");
       if(localList.getLength() == 1) {
         localSimplices = (Element) localList.item(0);
@@ -392,7 +395,7 @@ public class TriangulationIO {
         while(localScanner.hasNextInt()) {
           t2 = getTetra(localScanner.nextInt());
           t.addUniqueTetra(t2);
-          t2.addUniqueTetra(t);
+ //         t2.addUniqueTetra(t);
         }
       }
       String multiplicity = simplexNode.getAttribute("multiplicity");

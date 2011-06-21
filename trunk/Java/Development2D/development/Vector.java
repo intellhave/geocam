@@ -23,6 +23,10 @@ public class Vector {
     }
     components[n] = w;
   }
+ 
+  public Vector(double x){
+    components = new double[] { x };
+  }
   
   public Vector(double x, double y){
     components = new double[] { x, y };
@@ -185,10 +189,13 @@ public class Vector {
 
   // return a x b
   public static Vector cross(Vector a, Vector b) {
-    if(a.getDimension() != 3 || b.getDimension() != 3) return null;
-    return new Vector(a.components[1] * b.components[2] - a.components[2]
+    if(a.getDimension() == 3 && b.getDimension() == 3)
+      return new Vector(a.components[1] * b.components[2] - a.components[2]
         * b.components[1], -a.components[0] * b.components[2]
         + a.components[2] * b.components[0], a.components[0]
         * b.components[1] - a.components[1] * b.components[0]);
+    else if (a.getDimension() == 2 && b.getDimension() == 2)
+      return new Vector(a.components[0] * b.components[1] - a.components[1] * b.components[0]);
+    else return null;
   }
 }

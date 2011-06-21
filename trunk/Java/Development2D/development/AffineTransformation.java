@@ -80,6 +80,7 @@ public class AffineTransformation extends Matrix {
     setData(a,b);
   }
 
+
   //Create translation as special case of above
   public AffineTransformation(Vector b){
     

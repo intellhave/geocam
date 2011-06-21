@@ -334,6 +334,7 @@ public class SGCMethods {
       int vi = geometry_verts.size();
 
       int[] newface = new int[nverts];
+      
       for (int k = 0; k < nverts; k++) {
         double[] newvert = new double[3];
         newvert[0] = faceverts[k][0];

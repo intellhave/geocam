@@ -34,7 +34,7 @@ public class CoordTrans2D extends Geoquant {
     Iterator<Face> fi = e.getLocalFaces().iterator();
     Face f2 = fi.next();
     if(f2 == f){ f2 = fi.next(); }
-    
+ // System.out.println(f2);  
     //get shared vertices of f and f2
     Iterator<Vertex> vi = e.getLocalVertices().iterator();
     Vertex v1 = vi.next();
@@ -53,10 +53,29 @@ public class CoordTrans2D extends Geoquant {
     //set up geoquant dependencies
     cv1f1 = Coord2D.At(v1, f);
     cv2f1 = Coord2D.At(v2, f);
-    cv1f2 = Coord2D.At(v1, f2);
-    cv2f2 = Coord2D.At(v2, f2);
     cw1 = Coord2D.At(w1, f);
-    cw2 = Coord2D.At(w2, f2);
+
+    Vector cv1f1value = cv1f1.getCoord();
+    Vector cv2f1value = cv2f1.getCoord();
+    Vector cv1f2value = Coord2D.At(v1,  f2).getCoord();
+    Vector cv2f2value = Coord2D.At(v2,  f2).getCoord();
+    Vector cw1value = Coord2D.At(w1, f).getCoord();
+    Vector cw2value = Coord2D.At(w2, f2).getCoord();
+    
+    if (true) {
+    //(Vector.cross(Vector.subtract(cv2f2value,cv1f2value),Vector.subtract(cw2value,cv1f2value)).getComponent(0)/Vector.cross(Vector.subtract(cv2f1value,cv1f1value),Vector.subtract(cw1value,cv1f1value)).getComponent(0)<0){
+      cv1f2 = Coord2D.At(v1, f2);
+      cv2f2 = Coord2D.At(v2, f2);       
+      cw2 = Coord2D.At(w2, f2);
+    }
+    else{
+      cv1f2 = Coord2D.At(v1, f2);
+      cv2f2 = Coord2D.At(v2, f2);
+      cw2 = Coord2D.At(w2, f2);
+
+    }
+//    cw1 = Coord2D.At(w1, f);
+ //   cw2 = Coord2D.At(w2, f2);
     
     cv1f1.addObserver(this);
     cv1f2.addObserver(this);
@@ -68,9 +87,40 @@ public class CoordTrans2D extends Geoquant {
   
   protected void recalculate() {
 
-    Vector[] P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
-    Vector[] Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), cw2.getCoord()};
-    try {
+    Vector cv1f1value = cv1f1.getCoord();
+    Vector cv2f1value = cv2f1.getCoord();
+    Vector cv1f2value = cv1f2.getCoord();
+    Vector cv2f2value = cv2f2.getCoord();
+    Vector cw1value = cw1.getCoord();
+    Vector cw2value = cw2.getCoord();
+    
+//    Vector[] P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
+//    Vector[] Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), cw2.getCoord()};
+    Vector[] P;
+    Vector[] Q;
+    
+    if (Vector.cross(Vector.subtract(cv2f2value,cv1f2value),Vector.subtract(cw2value,cv1f2value)).getComponent(0)/Vector.cross(Vector.subtract(cv2f1value,cv1f1value),Vector.subtract(cw1value,cv1f1value)).getComponent(0)<0){
+      P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
+      Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), cw2.getCoord()};
+    }
+    else {
+      P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
+      Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), Vector.scale(cw2.getCoord(),1.0)};    
+    }
+  Vector[] Vec = {new Vector(0,1), new Vector (1,0), new Vector(1,1)};
+  AffineTransformation Tra1;
+  AffineTransformation Tra2;
+  try {
+      Tra1 = new AffineTransformation(Q,Vec);
+      Tra2 = new AffineTransformation(Vec,Q);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+//    System.out.println(cv1f1.getCoord()+" "+cv2f1.getCoord()+" "+cw1.getCoord());
+// System.out.println(cv1f2.getCoord()+" "+cv2f2.getCoord()+" "+cw2.getCoord());
+// System.out.println("Q="+Q);
+   try {
       affineTrans = new AffineTransformation(P,Q);
     } catch (Exception e) {
       // TODO Auto-generated catch block

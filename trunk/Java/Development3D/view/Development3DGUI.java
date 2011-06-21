@@ -61,8 +61,8 @@ public class Development3DGUI extends JRViewer {
 
   private static Development3D development_;
   private static Vector sourcePoint_;
-  private static int currentDepth_ = 2;
-  private static final int MAX_DEPTH_ = 5;
+  private static int currentDepth_ = 5;
+  private static final int MAX_DEPTH_ = 7;
   private static double stepSize_ = 0.01;
   private static double radius_ = 0.1;
   private static final double movement_seconds_per_rotation_ = 2.0;
@@ -81,9 +81,9 @@ public class Development3DGUI extends JRViewer {
 
   public static void main(String[] args) {
     // loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
-    // loadSurface("Data/Triangulations/3DManifolds/FlatTorus.xml");
+     loadSurface("Data/Triangulations/3DManifolds/FlatTorus2.xml");
 
-    loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
+    //loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
     colorScheme_ = new ColorScheme3D(schemes.FACE);
 
     Camera camera = new Camera();
@@ -91,7 +91,7 @@ public class Development3DGUI extends JRViewer {
     camera.setFieldOfView(60);
 
     sgcDevelopment_.setAppearance(SGCMethods.getDevelopment3DAppearance());
-
+    System.out.println("yo1");
     sgcCamera_ = SceneGraphUtility.createFullSceneGraphComponent("camera");
     sgcRoot_.addChild(sgcCamera_);
     sgcRoot_.addChild(sgcObjects_);
@@ -102,23 +102,28 @@ public class Development3DGUI extends JRViewer {
     sgcRootExternal_.addChild(sgcObjectsExternal_);
     sgcRootExternal_.addTool(new RotateTool());
     sgcCamera_.setCamera(camera);
-
+    System.out.println("yo2");
     updateGeometry();
 
     updateCamera();
-
+    System.out.println("yo3");
     JRViewer jrv = new JRViewer();
+    System.out.println("yo3.1");
     jrv.addBasicUI();
     jrv.setContent(sgcRoot_);
+    System.out.println("yo3.2");
     jrv.registerPlugin(new UIPanel_Options());
     jrv.setShowPanelSlots(true, false, false, false);
+    System.out.println("yo3.7");
     jrv.startup();
-
+    System.out.println("yo4");
     JRViewer jrvExternal = new JRViewer();
     jrvExternal.addBasicUI();
     jrvExternal.setContent(sgcRootExternal_);
     sgcRootExternal_.addTool(new RotateTool());
+    System.out.println("yo4.1");
     jrvExternal.startup();
+    System.out.println("yo4.2");
 
     viewer_ = jrv.getViewer();
     Viewer viewer2_ = jrvExternal.getViewer();
@@ -129,7 +134,7 @@ public class Development3DGUI extends JRViewer {
 
     viewer_.setCameraPath(cameraSource_);
     viewer2_.setCameraPath(cameraFree_);
-
+    System.out.println("yo5");
     scene_ = jrv.getPlugin(Scene.class);
     CameraUtility.encompass(scene_.getAvatarPath(), scene_.getContentPath(),
         scene_.getCameraPath(), 1.75, Pn.EUCLIDEAN);

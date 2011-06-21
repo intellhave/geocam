@@ -10,6 +10,7 @@ import objects.VisibleObject;
 
 import triangulation.Edge;
 import triangulation.Face;
+import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
 
@@ -149,7 +150,7 @@ public class Development {
 
     EmbeddedFace transformedFace = t.affineTransFace(source.getFace());
     root = new DevelopmentNode(null, source.getFace(), null, transformedFace, t);
-
+//System.out.println(source.getFace());
     // continue development across each adjacent edge
     List<Vertex> vertices = source.getFace().getLocalVertices();
     for (int i = 0; i < vertices.size(); i++) {
@@ -174,7 +175,8 @@ public class Development {
 
   private void buildTree(DevelopmentNode parent, Face face, Edge sourceEdge,
       Frustum2D frustum, AffineTransformation t, int depth) {
-
+  //System.out.println(face.getLocalVertices()); 
+    
     AffineTransformation newTrans = new AffineTransformation(2);
     
     AffineTransformation coordTrans = CoordTrans2D.affineTransAt(face, sourceEdge);

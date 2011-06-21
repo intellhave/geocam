@@ -37,7 +37,7 @@ public class DevelopmentViewSim3D extends DevelopmentView {
   
   private static int INITIAL_HEIGHT = 25;
   private double height = INITIAL_HEIGHT/100.0;
-  private static int MAX_HEIGHT = 30;
+  private static int MAX_HEIGHT = 50;
   
   //private static final boolean USE_SHOOT_TOOL = false;
 
@@ -55,9 +55,10 @@ public class DevelopmentViewSim3D extends DevelopmentView {
     super(development, colorScheme, true);
     dimension = 3;
 
-    // make camera and sgc_camera
+  // make camera and sgc_camera
     Camera camera = new Camera();
-    camera.setNear(.015);
+    camera.setNear(.11); //make big enough so that your own ball is clipped
+    //camera.setNear(.015);
     camera.setFieldOfView(60);
 
     sgc_camera = SceneGraphUtility.createFullSceneGraphComponent("camera");
