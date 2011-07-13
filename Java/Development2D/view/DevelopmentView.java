@@ -88,6 +88,11 @@ public abstract class DevelopmentView extends JRViewer{
     if(obj){ generateObjectGeometry(); }
   }
   
+  public void refreshView(){
+    System.out.println("yo"+development);
+    development.rebuild();
+  }
+  
   /*public void addCircles(){
     for (Vertex v: Triangulation.vertexTable.values()){
       PointSetFactory psf = new PointSetFactory();
