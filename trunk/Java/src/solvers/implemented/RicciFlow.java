@@ -22,7 +22,7 @@ public class RicciFlow extends Solver{
       i++;
     }
     double aveK = totalK/i;
-    System.out.println("aveK ="+aveK);
+//    System.out.println("aveK ="+aveK);
     i=0;
     for(Curvature2D K : Geometry.getCurvature2D()){
       slopes[i] = (aveK - K.getValue()) * x[i];
