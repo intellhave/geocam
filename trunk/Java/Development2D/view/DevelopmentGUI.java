@@ -50,7 +50,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static final long serialVersionUID = 1L;
 
   public static void main(String[] args) {
-    JFrame window = new DevelopmentGUI();
+    JFrame window = new DevelopmentGUI(filename);
     window.setVisible(true);
   }
  
@@ -65,13 +65,13 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Vector sourcePoint;
   private static Face sourceFace;
   private static ColorScheme colorScheme;
-  private int currentDepth = 1;
-  private String filename = "Data/off/square2.off";
-//  String filename = "Data/off/tetra3.off";
+  private int currentDepth = 6;
+//  private String filename = "Data/off/square2.off";
+//  private static String filename = "Data/off/tetra3.off";
 //String filename = "Data/off/tetra2.off";
 //String filename = "Data/off/icosa.off";
 //String filename = "Data/off/cone.off";
-//String filename = "Data/off/epcot.off";
+  private static String filename = "Data/off/epcot.off";
 // String filename = "Data/off/square2.off";
 //String filename = "Data/Triangulations/2DManifolds/tetrahedronnonembed3.xml";
 //String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
@@ -88,7 +88,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static LinkedList<DevelopmentView> devViewers = new LinkedList<DevelopmentView>(); //active viewers
   
   //some viewer options
-  private boolean showView2D = false;
+  private boolean showView2D = true;
   private boolean showView3D = false;
   private boolean showEmbedded = false;
   
@@ -100,7 +100,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   //private static ShootingGame shootingGame = new ShootingGame();
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
-  private static final int MOVING_OBJECT_COUNT = 1;//15;
+  private static final int MOVING_OBJECT_COUNT = 0;//15;
   private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
@@ -112,15 +112,21 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   
   public DevelopmentGUI(String filename) {
     this.filename = filename;
-//    DevelopmentGUI();
+    loadSurface(filename);
+    eDevelopmentGUI();
   }
   
-  public DevelopmentGUI() {
+  public DevelopmentGUI(){
+    eDevelopmentGUI();
+  }
+  
+  private void eDevelopmentGUI() {
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
    
-    loadSurface(filename);
+ //   loadSurface(filename);
+    initializeSurface();
     
     layoutGUI();
     
@@ -150,6 +156,13 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
       dynamics.evolve(300); //nudge the objects a little bit (300 ms)
     }
 
+    view2D = new DevelopmentView2D(development, colorScheme);
+    view2D.setDrawEdges(drawEdges);
+    view2D.setDrawFaces(drawFaces);
+    view2D.updateGeometry(true,true);
+    view2D.initializeNewManifold();
+    devViewers.add(view2D);
+    
     //start listening for updates
     development.addViewer(this);
     dynamics.addListener(this);
@@ -179,6 +192,11 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     for(DevelopmentView dv : devViewers){ dv.updateGeometry(dev,obj); } 
   }
   
+  public void refresh2D(){
+    System.out.println(view2D);
+    view2D.refreshView();
+  }
+  
   private void initializeNewManifold(){
     for(DevelopmentView dv : devViewers){ dv.initializeNewManifold(); } 
   }
@@ -201,7 +219,9 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
 //      TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/tetrahedronnew2.xml");
     }
     else System.err.println("invalid file");
- 
+  }
+  
+  private void initializeSurface(){
     Iterator<Integer> i = null;
     // pick some arbitrary face and source point
     i = Triangulation.faceTable.keySet().iterator();
@@ -385,7 +405,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
       public void actionPerformed(ActionEvent e) {
         showView2D = ((JCheckBox)e.getSource()).isSelected();
         if(showView2D == true){
-          //start up the embedded viewer
+          //start up the viewer 2D
           view2D = new DevelopmentView2D(development, colorScheme);
           view2D.setDrawEdges(drawEdges);
           view2D.setDrawFaces(drawFaces);

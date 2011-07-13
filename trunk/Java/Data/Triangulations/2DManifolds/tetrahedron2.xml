@@ -50,7 +50,7 @@
     <Faces>3 4 </Faces>
   </Edge>
   <Face index="1">
-    <Vertices>1 2 4 </Vertices>
+    <Vertices>1 4 2 </Vertices>
     <Edges>1 3 4 </Edges>
     <Faces>2 3 4 </Faces>
   </Face>
@@ -65,7 +65,7 @@
     <Faces>1 2 4 </Faces>
   </Face>
   <Face index="4">
-    <Vertices>2 3 4 </Vertices>
+    <Vertices>2 4 3 </Vertices>
     <Edges>4 5 6 </Edges>
     <Faces>1 2 3 </Faces>
   </Face>

@@ -16,8 +16,16 @@ public class RicciFlow extends Solver{
     
     double[] slopes = new double[x.length];
     i = 0;
+    double totalK=0;
     for(Curvature2D K : Geometry.getCurvature2D()){
-      slopes[i] = -K.getValue() * x[i];
+      totalK += K.getValue();
+      i++;
+    }
+    double aveK = totalK/i;
+    System.out.println("aveK ="+aveK);
+    i=0;
+    for(Curvature2D K : Geometry.getCurvature2D()){
+      slopes[i] = (aveK - K.getValue()) * x[i];
       i++;
     }
     

@@ -51,24 +51,33 @@ public class ConformalDiskflowTest {
  //   EmbeddedTriangulation.readEmbeddedSurface("Development2D/surfaces/saddle.off");
     //   System.out.println(Geometry.getRadii());
  //   System.out.println(Geometry.getLKCurvatures());
- //   testFlow();
+    System.out.println("rad1 " + Length.at(Triangulation.edgeTable.get(1)));
+
+    testFlow();
+    System.out.println("rade " + Length.at(Triangulation.edgeTable.get(1)));
+    TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/trydomainrun.xml");
     
-    int i=1;
-    Face sourceFace = Triangulation.faceTable.get(1);
-//    System.out.println(sourceFace);
-    
-    Vector sourcePoint = new Vector(0.2, 0.2);
-    int currentDepth = 200;
-    double stepSize = 0.1;
-    TriangulationDisplay tD = new TriangulationDisplay();
-//    tD.showTriangulation();
-    
+    System.out.println("numfaces2 = "+Triangulation.faceTable.size());
     for(Vertex v: Triangulation.vertexTable.values())
       if (v.getMultiplicity() == -1){
         v.remove();
         break;
       }
- //   System.out.println("hi1");
+ 
+    System.out.println("numfaces3 = "+Triangulation.faceTable.size());
+    int i=1;
+   
+    Face sourceFace = Triangulation.faceTable.get(1);
+//    System.out.println(sourceFace);
+    Vector sourcePoint = new Vector(0.2, 0.2);
+    int currentDepth = 10;
+    double stepSize = 0.1;   
+    
+    TriangulationDisplay tD = new TriangulationDisplay();
+//    tD.showTriangulation();
+    
+
+    //   System.out.println("hi1");
     Development development = new Development(new ManifoldPosition(sourceFace, sourcePoint), currentDepth, stepSize);
  //   Development development = null;
  //   System.err.println(development.getNodeList());
@@ -76,14 +85,15 @@ public class ConformalDiskflowTest {
   //  development.addNodeAtSource(Color.green, new Vector(.01,.3));
  //   System.err.println(development.getNodeList());
  //   System.out.println("hi3");
-    for(Vertex v: Triangulation.vertexTable.values()){
+ //   for(Vertex v: Triangulation.vertexTable.values()){
  //     System.out.println("hi4"+v);
   //    development.addVertexNode(Color.cyan, v);
-    }
+  //  }
 //    System.err.println("hehe "+development.getNodeList().get(4).getRadius());
     ColorScheme colorScheme = new ColorScheme(schemes.FACE);
 
-    DevelopmentGUI viewGUI;
+ //   DevelopmentGUI viewGUI;
+//    JFrame window = new DevelopmentGUI("Data/Triangulations/2DManifolds/trydomainrun.xml");
     JFrame window = new DevelopmentGUI();
     window.setVisible(true);
     DevelopmentView2D view2D = null;
@@ -129,10 +139,12 @@ public class ConformalDiskflowTest {
   
   private static void initializeQuantities() {
  //   TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/owl.xml");
- //   EmbeddedTriangulation.readEmbeddedSurface("Data/off/square2.off");
-    EmbeddedTriangulation.readEmbeddedSurface("Data/off/square2.off");
+    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/domain.xml");
+    
+    //   EmbeddedTriangulation.readEmbeddedSurface("Data/off/square2.off");
+  //  EmbeddedTriangulation.readEmbeddedSurface("Data/off/square.off");
     // TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/square2.xml");
-
+    System.out.println("numfaces1 = "+Triangulation.faceTable.size());
  //   System.err.println(Triangulation.greatestFace());
     for(Radius r : Geometry.getRadii()) {
       r.setValue(1.0);
@@ -260,8 +272,8 @@ public class ConformalDiskflowTest {
     List<Class<? extends Geoquant>> list = new LinkedList<Class<? extends Geoquant>>();
     list.add(Radius.class);
     list.add(LKCurvature.class);
-//    GeoRecorder rec = new GeoRecorder(list);
-//    solver.addObserver(rec);
+    GeoRecorder rec = new GeoRecorder(list);
+    solver.addObserver(rec);
     double[] radii = new double[Triangulation.vertexTable.size()];
     int i = 0;
     for(Radius r : Geometry.getRadii()) {
@@ -271,7 +283,17 @@ public class ConformalDiskflowTest {
     
     solver.setStepsize(0.05);
     
-    radii = solver.run(radii, 1);
+    radii = solver.run(radii, 100);
+  
+    int j=0;
+    for(Vertex v: Triangulation.vertexTable.values()) {
+//      System.out.println("rad1 = "+Radius.at(v).getValue());
+//      System.out.println("rad2 = "+radii[j]);
+      Radius.at(v).setValue(radii[j]);   
+      j++;
+    }
+    
+  
     PrintStream out = null;
     try {
       out = new PrintStream(new File("Data/Tests/flowdata.txt"));
@@ -283,12 +305,12 @@ public class ConformalDiskflowTest {
       out.println(values);
     }
     
-    
+*/    
   out.println("CURVATURES:");
     for(List<Double> values : rec.getValueHistory(LKCurvature.class)) {
       out.println(values);
     }
-    out.println(values);
+ /*   out.println(values);
 */
   }
   
