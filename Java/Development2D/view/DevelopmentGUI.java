@@ -65,7 +65,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Vector sourcePoint;
   private static Face sourceFace;
   private static ColorScheme colorScheme;
-  private int currentDepth = 6;
+  private int currentDepth = 12;
 //  private String filename = "Data/off/square2.off";
 //  private static String filename = "Data/off/tetra3.off";
 //String filename = "Data/off/tetra2.off";
@@ -193,9 +193,15 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   }
   
   public void refresh2D(){
-    System.out.println(view2D);
-    view2D.refreshView();
+//    System.out.println(view2D);
+    if(view2D != null) view2D.refreshView();
   }
+
+  public void refresh3D(){
+//  System.out.println(view3D);
+    if(view3D != null) view3D.refreshView();
+}
+
   
   private void initializeNewManifold(){
     for(DevelopmentView dv : devViewers){ dv.initializeNewManifold(); } 

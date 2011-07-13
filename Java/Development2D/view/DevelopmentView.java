@@ -89,7 +89,6 @@ public abstract class DevelopmentView extends JRViewer{
   }
   
   public void refreshView(){
-    System.out.println("yo"+development);
     development.rebuild();
   }
   
