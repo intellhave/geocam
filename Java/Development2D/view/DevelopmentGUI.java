@@ -55,7 +55,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   }
  
   //--- GUI options -----------------------
-  private static int MAX_DEPTH          = 25;
+  private static int MAX_DEPTH          = 50;
   private static int MAX_POINT_SIZE     = 50; //hundredths of a unit
   private static int MAX_SPEED       = 10000; //in units per millisecond
   //------------------------------------
@@ -65,18 +65,18 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Vector sourcePoint;
   private static Face sourceFace;
   private static ColorScheme colorScheme;
-  private int currentDepth = 12;
+  private int currentDepth = 8;
 //  private String filename = "Data/off/square2.off";
+//  private static String filename = "Data/off/tetra2.off";
 //  private static String filename = "Data/off/tetra3.off";
-//String filename = "Data/off/tetra2.off";
-//String filename = "Data/off/icosa.off";
-//String filename = "Data/off/cone.off";
-  private static String filename = "Data/off/epcot.off";
-// String filename = "Data/off/square2.off";
-//String filename = "Data/Triangulations/2DManifolds/tetrahedronnonembed3.xml";
-//String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
-//String filename = "Data/Triangulations/2DManifolds/tetrahedronnew.xml";
-//String filename = "Data/Triangulations/2DManifolds/torus-9.xml";
+//  private static String filename = "Data/off/icosa.off";
+  private static String filename = "Data/off/cone.off";
+//  private static String filename = "Data/off/epcot.off";
+//  private static String filename = "Data/off/square2.off";
+//  private static String filename = "Data/Triangulations/2DManifolds/tetrahedronnonembed3.xml";
+//  private static String filename = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
+//  private static String filename = "Data/Triangulations/2DManifolds/tetrahedronnew.xml";
+//  private static String filename = "Data/Triangulations/2DManifolds/torus-9.xml";
 
   //------------------------------------
   
@@ -100,7 +100,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   //private static ShootingGame shootingGame = new ShootingGame();
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
-  private static final int MOVING_OBJECT_COUNT = 0;//15;
+  private static final int MOVING_OBJECT_COUNT = 15;//15;
   private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
@@ -108,15 +108,37 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
   //------------------------------------
  
-
+  //--GUI pieces ----------------------------------------------
+  JMenuBar menuBar;
+  JMenu file;
+  JMenuItem open;
+  JPanel sliderPanel;
+  JSlider depthSlider;
+  JSlider speedSlider;
+  JSlider pointSizeSlider;
+  JPanel colorPanel;
+  JButton depthSchemeButton;
+  JButton faceSchemeButton;
+  JButton stopStartButton;
+  JPanel viewerPanel;
+  JCheckBox showEmbeddedBox;
+  JCheckBox showView2DBox;
+  JCheckBox showView3DBox;
+  JPanel drawOptionsPanel;
+  JCheckBox drawEdgesBox;
+  JCheckBox drawFacesBox;
+  
+  
   
   public DevelopmentGUI(String filename) {
     this.filename = filename;
+    layoutGUI();
     loadSurface(filename);
     eDevelopmentGUI();
   }
   
   public DevelopmentGUI(){
+    layoutGUI();
     eDevelopmentGUI();
   }
   
@@ -128,7 +150,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
  //   loadSurface(filename);
     initializeSurface();
     
-    layoutGUI();
+ //   layoutGUI();
     
     //make it display timing statistics on exit
     Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -215,13 +237,15 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private void loadSurface(String file) {
     filename = file;
     String extension = file.substring(file.length() - 3, file.length());
-
+    
     if (extension.contentEquals("off")) {
       EmbeddedTriangulation.readEmbeddedSurface(filename); 
+      showEmbeddedBox.setVisible(true);
 //      TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/tetrahedronnew.xml");
     }
     else if (extension.contentEquals("xml")){
       TriangulationIO.readTriangulation(file);
+      showEmbeddedBox.setVisible(false);
 //      TriangulationIO.writeTriangulation("Data/Triangulations/2DManifolds/tetrahedronnew2.xml");
     }
     else System.err.println("invalid file");
@@ -256,9 +280,9 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     this.setTitle("Development View");
 
     // -------- MENU BAR --------
-    JMenuBar menuBar = new JMenuBar();
-    JMenu file = new JMenu("File");
-    JMenuItem open = new JMenuItem("Load Surface");
+    menuBar = new JMenuBar();
+    file = new JMenu("File");
+    open = new JMenuItem("Load Surface");
     open.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         JFileChooser fc = new JFileChooser();
@@ -284,12 +308,12 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     file.add(open);
     this.setJMenuBar(menuBar);
 
-    JPanel sliderPanel = new JPanel();
+    sliderPanel = new JPanel();
     sliderPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6));
     sliderPanel.setLayout(new BoxLayout(sliderPanel,BoxLayout.Y_AXIS));
     
     // -------- DEPTH SLIDER --------
-    JSlider depthSlider = new JSlider(1, MAX_DEPTH, currentDepth);
+    depthSlider = new JSlider(1, MAX_DEPTH, currentDepth);
     depthSlider.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           currentDepth = ((JSlider)e.getSource()).getValue();
@@ -300,7 +324,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     });
     
     // -------- SPEED SLIDER --------
-    JSlider speedSlider = new JSlider(1, MAX_SPEED, (int)(objectSpeed*1000));
+    speedSlider = new JSlider(1, MAX_SPEED, (int)(objectSpeed*1000));
     speedSlider.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           objectSpeed = ((JSlider)e.getSource()).getValue()/1000.0;
@@ -312,7 +336,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     }); 
     
     // -------- POINT SIZE SLIDER --------
-    JSlider pointSizeSlider = new JSlider(1, MAX_POINT_SIZE, (int)(objectRadius*100.0));
+    pointSizeSlider = new JSlider(1, MAX_POINT_SIZE, (int)(objectRadius*100.0));
     pointSizeSlider.addChangeListener(new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           objectRadius = ((JSlider)e.getSource()).getValue()/100.0;
@@ -334,8 +358,8 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     sliderPanel.add(pointSizeSlider);
 
     // -------- COLOR SCHEME BUTTONS --------
-    JPanel colorPanel = new JPanel();
-    JButton depthSchemeButton = new JButton("Depth");
+    colorPanel = new JPanel();
+    depthSchemeButton = new JButton("Depth");
     depthSchemeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if (colorScheme.getSchemeType() != schemes.DEPTH) {
@@ -345,7 +369,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
         }
       }
     });
-    JButton faceSchemeButton = new JButton("Face");
+    faceSchemeButton = new JButton("Face");
     faceSchemeButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         if (colorScheme.getSchemeType() != schemes.FACE) {
@@ -363,7 +387,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
    
     
     // -------- STOP/START MOVEMENT BUTTON --------
-    JButton stopStartButton = new JButton("");
+    stopStartButton = new JButton("");
     if(INITIAL_MOVEMENT_STATUS){ stopStartButton.setText("Stop"); }
     else{ stopStartButton.setText("Start"); }
     stopStartButton.addActionListener(new ActionListener() {
@@ -381,10 +405,10 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     colorPanel.add(stopStartButton);
 
     // -------- VIEWER PANEL --------
-    JPanel viewerPanel = new JPanel();
+    viewerPanel = new JPanel();
     viewerPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     
-    JCheckBox showEmbeddedBox = new JCheckBox("Show embedded view");
+    showEmbeddedBox = new JCheckBox("Show embedded view");
     showEmbeddedBox.setSelected(showEmbedded);
     showEmbeddedBox.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -405,7 +429,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
       }
     });
     
-    JCheckBox showView2DBox = new JCheckBox("Show 2D view");
+    showView2DBox = new JCheckBox("Show 2D view");
     showView2DBox.setSelected(showView2D);
     showView2DBox.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -426,7 +450,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
       }
     });
     
-    JCheckBox showView3DBox = new JCheckBox("Show 3D view");
+    showView3DBox = new JCheckBox("Show 3D view");
     showView3DBox.setSelected(showView3D);
     showView3DBox.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -453,10 +477,10 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     viewerPanel.add(showEmbeddedBox);
     
     // -------- DRAW OPTIONS PANEL --------
-    JPanel drawOptionsPanel = new JPanel();
+    drawOptionsPanel = new JPanel();
     drawOptionsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     
-    JCheckBox drawEdgesBox = new JCheckBox("Draw edges");
+    drawEdgesBox = new JCheckBox("Draw edges");
     drawEdgesBox.setSelected(true);
     drawEdgesBox.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -466,7 +490,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
       }
     });
     
-    JCheckBox drawFacesBox = new JCheckBox("Draw faces");
+    drawFacesBox = new JCheckBox("Draw faces");
     drawFacesBox.setSelected(true);
     drawFacesBox.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {

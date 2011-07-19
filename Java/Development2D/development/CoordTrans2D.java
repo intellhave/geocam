@@ -24,6 +24,7 @@ public class CoordTrans2D extends Geoquant {
   //the returned affine transformation.  cw1 is the non-common vertex in f, cw2 in f2.
   private Coord2D cv1f1,cv2f1,cw1;
   private Coord2D cv1f2,cv2f2,cw2;
+  private boolean flip=false;
   
   private AffineTransformation affineTrans; 
   
@@ -61,18 +62,16 @@ public class CoordTrans2D extends Geoquant {
     Vector cv2f2value = Coord2D.At(v2,  f2).getCoord();
     Vector cw1value = Coord2D.At(w1, f).getCoord();
     Vector cw2value = Coord2D.At(w2, f2).getCoord();
-    
-    if (true) {
-    //(Vector.cross(Vector.subtract(cv2f2value,cv1f2value),Vector.subtract(cw2value,cv1f2value)).getComponent(0)/Vector.cross(Vector.subtract(cv2f1value,cv1f1value),Vector.subtract(cw1value,cv1f1value)).getComponent(0)<0){
-      cv1f2 = Coord2D.At(v1, f2);
-      cv2f2 = Coord2D.At(v2, f2);       
-      cw2 = Coord2D.At(w2, f2);
-    }
-    else{
-      cv1f2 = Coord2D.At(v1, f2);
-      cv2f2 = Coord2D.At(v2, f2);
-      cw2 = Coord2D.At(w2, f2);
+  
+    cv1f2 = Coord2D.At(v1, f2);
+    cv2f2 = Coord2D.At(v2, f2);       
+    cw2 = Coord2D.At(w2, f2);
 
+    if ((!f.sameOrientation(e) && f2.sameOrientation(e)) ||(f.sameOrientation(e) && !f2.sameOrientation(e)))
+    //(Vector.cross(Vector.subtract(cv2f2value,cv1f2value),Vector.subtract(cw2value,cv1f2value)).getComponent(0)/Vector.cross(Vector.subtract(cv2f1value,cv1f1value),Vector.subtract(cw1value,cv1f1value)).getComponent(0)<0){
+      flip = true;
+    else{
+      flip = false;
     }
 //    cw1 = Coord2D.At(w1, f);
  //   cw2 = Coord2D.At(w2, f2);
@@ -89,23 +88,39 @@ public class CoordTrans2D extends Geoquant {
 
     Vector cv1f1value = cv1f1.getCoord();
     Vector cv2f1value = cv2f1.getCoord();
+    Vector cw1value = cw1.getCoord();
     Vector cv1f2value = cv1f2.getCoord();
     Vector cv2f2value = cv2f2.getCoord();
-    Vector cw1value = cw1.getCoord();
     Vector cw2value = cw2.getCoord();
-    
+    if (flip){
+      cv1f1value = cv1f1.getFlipCoord();
+      cv2f1value = cv2f1.getFlipCoord();
+      cw1value = cw1.getFlipCoord();
+    }
+    else{
+      
+      
+    }
 //    Vector[] P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
 //    Vector[] Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), cw2.getCoord()};
     Vector[] P;
     Vector[] Q;
     
+//    if (Vector.cross(Vector.subtract(cv2f2value,cv1f2value),Vector.subtract(cw2value,cv1f2value)).getComponent(0)/Vector.cross(Vector.subtract(cv2f1value,cv1f1value),Vector.subtract(cw1value,cv1f1value)).getComponent(0)<0){
+//      P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
+//      Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), cw2.getCoord()};
+//    }
+//    else {
+//      P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
+//      Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), Vector.scale(cw2.getCoord(),1.0)};    
+//    }
     if (Vector.cross(Vector.subtract(cv2f2value,cv1f2value),Vector.subtract(cw2value,cv1f2value)).getComponent(0)/Vector.cross(Vector.subtract(cv2f1value,cv1f1value),Vector.subtract(cw1value,cv1f1value)).getComponent(0)<0){
-      P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
-      Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), cw2.getCoord()};
+      P = new Vector[] {cv1f1value, cv2f1value, cw1value};
+      Q = new Vector[] {cv1f2value, cv2f2value, cw2value};
     }
     else {
-      P = new Vector[] {cv1f1.getCoord(), cv2f1.getCoord(), cw1.getCoord()};
-      Q = new Vector[] {cv1f2.getCoord(), cv2f2.getCoord(), Vector.scale(cw2.getCoord(),1.0)};    
+      P = new Vector[] {cv1f1value, cv2f1value, cw1value};
+      Q = new Vector[] {cv1f2value, cv2f2value, cw2value};    
     }
   Vector[] Vec = {new Vector(0,1), new Vector (1,0), new Vector(1,1)};
   AffineTransformation Tra1;
@@ -127,7 +142,7 @@ public class CoordTrans2D extends Geoquant {
       e.printStackTrace();
     }
     
-    value = affineTrans.determinant(); //unused
+//    value = affineTrans.determinant(); //unused
   }
 
   public void remove() {
