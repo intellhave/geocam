@@ -32,8 +32,8 @@ import development.Vector;
 
 public class DevelopmentView2D extends DevelopmentView {
 
-  private static int MAX_LINE_LENGTH = 20;
-  private static int INITIAL_LINE_LENGTH = 2;
+  private static int MAX_LINE_LENGTH = 5;
+  private static int INITIAL_LINE_LENGTH = 1;
   private double lineLength = INITIAL_LINE_LENGTH; // length of direction line
   
   private static int MAX_LINE_RADIUS = 50;

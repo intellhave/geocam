@@ -22,4 +22,8 @@ public class BasicMovingObjects extends ObjectDynamics{
   public void addObject(MovingObject o){
     objectList.add(o);
   }
+  
+  public void removeObject(MovingObject o){
+    objectList.remove(o);
+  }
 }
