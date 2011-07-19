@@ -350,7 +350,7 @@
     <Faces>13 10 18 </Faces>
   </Face>
   <Face index="15" multiplicity="1">
-    <Vertices>4 6 12 </Vertices>
+    <Vertices>4 12 6 </Vertices>
     <Edges>26 27 21 </Edges>
     <Faces>11 16 19 </Faces>
   </Face>
@@ -390,7 +390,7 @@
     <Faces>19 24 27 </Faces>
   </Face>
   <Face index="22" multiplicity="1">
-    <Vertices>9 11 10 </Vertices>
+    <Vertices>9 10 11 </Vertices>
     <Edges>37 36 31 </Edges>
     <Faces>21 18 26 </Faces>
   </Face>
@@ -405,7 +405,7 @@
     <Faces>23 20 28 </Faces>
   </Face>
   <Face index="27" multiplicity="1">
-    <Vertices>8 2 10 </Vertices>
+    <Vertices>2 8 10 </Vertices>
     <Edges>7 39 42 </Edges>
     <Faces>3 23 26 </Faces>
   </Face>

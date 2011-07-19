@@ -21,6 +21,7 @@ public class Coord2D extends Geoquant {
 
   private int stdFIndex; //coordinate computed differently depending on index
   private Vector coord; //2d point holding coords for this vertex/face pair
+  private Vector flipcoord; //2d point holding coords for this vertex/face pair when flipped
   
   public Coord2D(Vertex v, Face f) {
     super(v,f);
@@ -46,17 +47,20 @@ public class Coord2D extends Geoquant {
     if(stdFIndex == 0){
       
       coord = new Vector(new double[] {0, 0});
+      flipcoord = new Vector(new double[] {0, 0});
       
     }else if(stdFIndex == 1){
       
       double l1 = lij.getValue();
       coord = new Vector(new double[] {l1, 0});
+      flipcoord = new Vector(new double[] {l1, 0});
       
     }else if(stdFIndex == 2){
       
       double l3 = lik.getValue();
       double t = ai.getValue();
       coord = new Vector(new double[] {l3*Math.cos(t), l3*Math.sin(t)});
+      flipcoord = new Vector(new double[] {l3*Math.cos(t), l3*Math.sin(t)});
     }
     
     value = 0; //unused
@@ -91,11 +95,18 @@ public class Coord2D extends Geoquant {
     double d = getValue(); //used to invoke recalculate if invalid
     return coord; 
   }
+  public Vector getFlipCoord() {
+    double d = getValue(); //used to invoke recalculate if invalid
+    return flipcoord; 
+  }
   //like valueAt(), but returns coordinate point
   public static Vector coordAt(Vertex v, Face f) {
     return At(v,f).getCoord();
   }
   
+  public static Vector flipCoordAt(Vertex v, Face f) {
+    return At(v,f).getFlipCoord();
+  }
   
   
 

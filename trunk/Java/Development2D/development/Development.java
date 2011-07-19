@@ -118,7 +118,7 @@ public class Development {
     source.move(source.getDirection(dForward, dLeft));
     sourceObject.setManifoldPosition(source);
     rebuild();
- //   System.out.println("Source = " + source.getFace());
+//    System.out.println("Source = " + source.getFace());
   }
 
   
