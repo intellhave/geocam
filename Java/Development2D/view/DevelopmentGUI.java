@@ -1,6 +1,7 @@
 package view;
 
 import inputOutput.TriangulationIO;
+import java.awt.BorderLayout;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -24,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -46,6 +48,19 @@ import development.EmbeddedTriangulation;
 import development.TimingStatistics;
 import development.Vector;
 
+
+/**
+* This code was edited or generated using CloudGarden's Jigloo
+* SWT/Swing GUI Builder, which is free for non-commercial
+* use. If Jigloo is being used commercially (ie, by a corporation,
+* company or business for any purpose whatever) then you
+* should purchase a license for each developer using Jigloo.
+* Please visit www.cloudgarden.com for details.
+* Use of Jigloo implies acceptance of these licensing terms.
+* A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR
+* THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
+* LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+*/
 public class DevelopmentGUI extends JFrame  implements Development.DevelopmentViewer, ObjectDynamics.DynamicsListener{
   private static final long serialVersionUID = 1L;
 
@@ -68,9 +83,9 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private int currentDepth = 8;
 //  private String filename = "Data/off/square2.off";
 //  private static String filename = "Data/off/tetra2.off";
-//  private static String filename = "Data/off/tetra3.off";
+  private static String filename = "Data/off/tetra3.off";
 //  private static String filename = "Data/off/icosa.off";
-  private static String filename = "Data/off/cone.off";
+//  private static String filename = "Data/off/cone.off";
 //  private static String filename = "Data/off/epcot.off";
 //  private static String filename = "Data/off/square2.off";
 //  private static String filename = "Data/Triangulations/2DManifolds/tetrahedronnonembed3.xml";
@@ -100,36 +115,38 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   //private static ShootingGame shootingGame = new ShootingGame();
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
-  private static final int MOVING_OBJECT_COUNT = 15;//15;
+  private static final int MOVING_OBJECT_START = 3;//15;
   private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
+  int numObjects = MOVING_OBJECT_START;
+  private JButton depthSchemeButton;
+  private JCheckBox drawEdgesBox;
+  private JCheckBox drawFacesBox;
+  private JMenuItem open;
+  private JMenu file;
+  private JSlider numObjectsSlider;
+  private JPanel drawOptionsPanel;
+  private JCheckBox showEmbeddedBox;
+  private JCheckBox showView3DBox;
+  private JCheckBox showView2DBox;
+  private JPanel viewerPanel;
+  private JLabel jLabel_IL1;
+  private JButton stopStartButton;
+  private JButton faceSchemeButton;
+  private JLabel jLabel_IL;
+  private JPanel colorPanel;
+  private JSlider pointSizeSlider;
+  private JSlider speedSlider;
+  private JSlider depthSlider;
+  private JPanel sliderPanel;
   //don't generally need to keep track of this list, but GUI will change the objects' properties
-  private static LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
+  private LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
   //------------------------------------
  
   //--GUI pieces ----------------------------------------------
   JMenuBar menuBar;
-  JMenu file;
-  JMenuItem open;
-  JPanel sliderPanel;
-  JSlider depthSlider;
-  JSlider speedSlider;
-  JSlider pointSizeSlider;
-  JPanel colorPanel;
-  JButton depthSchemeButton;
-  JButton faceSchemeButton;
-  JButton stopStartButton;
-  JPanel viewerPanel;
-  JCheckBox showEmbeddedBox;
-  JCheckBox showView2DBox;
-  JCheckBox showView3DBox;
-  JPanel drawOptionsPanel;
-  JCheckBox drawEdgesBox;
-  JCheckBox drawFacesBox;
-  
-  
-  
+
   public DevelopmentGUI(String filename) {
     this.filename = filename;
     layoutGUI();
@@ -157,26 +174,27 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
       public void run(){ TimingStatistics.printData(); }
     });
     
-    //set up objects
-    development.getSourceObject().getAppearance().setRadius(objectRadius);
-    Random rand = new Random();
-    for(int i=0; i<MOVING_OBJECT_COUNT; i++){
-      MovingObject newObject = new MovingObject( 
-          development.getSource(), 
-          new ObjectAppearance(objectRadius, randomColor(rand)), 
-          randomUnitVector(rand) );
-      if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
-      movingObjects.add(newObject);
-    }
-    for(MovingObject o : movingObjects){
-      o.setSpeed(objectSpeed); //scale so speed is correct
-      dynamics.addObject(o); 
-    }
-    if(INITIAL_MOVEMENT_STATUS){ 
-      dynamics.start(); 
-    }else{
-      dynamics.evolve(300); //nudge the objects a little bit (300 ms)
-    }
+    setUpObjects();
+//    //set up objects
+//    development.getSourceObject().getAppearance().setRadius(objectRadius);
+//    Random rand = new Random();
+//    for(int i=0; i<MOVING_OBJECT_COUNT; i++){
+//      MovingObject newObject = new MovingObject( 
+//          development.getSource(), 
+//          new ObjectAppearance(objectRadius, randomColor(rand)), 
+//          randomUnitVector(rand) );
+//      if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
+//      movingObjects.add(newObject);
+//    }
+//    for(MovingObject o : movingObjects){
+//      o.setSpeed(objectSpeed); //scale so speed is correct
+//      dynamics.addObject(o); 
+//    }
+//    if(INITIAL_MOVEMENT_STATUS){ 
+//      dynamics.start(); 
+//    }else{
+//      dynamics.evolve(300); //nudge the objects a little bit (300 ms)
+//    }
 
     view2D = new DevelopmentView2D(development, colorScheme);
     view2D.setDrawEdges(drawEdges);
@@ -269,246 +287,347 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
 
   }
   
+  private void setUpObjects(){
+    //set up objects
+    development.getSourceObject().getAppearance().setRadius(objectRadius);
+    Random rand = new Random();
+    for(int i=0; i<numObjects; i++){
+      MovingObject newObject = new MovingObject( 
+          development.getSource(), 
+          new ObjectAppearance(objectRadius, randomColor(rand)), 
+          randomUnitVector(rand) );
+      if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
+      movingObjects.add(newObject);
+    }
+    for(MovingObject o : movingObjects){
+      o.setSpeed(objectSpeed); //scale so speed is correct
+      dynamics.addObject(o); 
+    }
+    if(INITIAL_MOVEMENT_STATUS){ 
+      dynamics.start(); 
+    }else{
+      dynamics.evolve(300); //nudge the objects a little bit (300 ms)
+    }
+
+  }
+  
   TitledBorder depthBorder = BorderFactory.createTitledBorder("Recursion Depth (" + currentDepth + ")");
   TitledBorder pointBorder = BorderFactory.createTitledBorder("Object Radius (" + objectRadius + ")");
   TitledBorder speedBorder = BorderFactory.createTitledBorder("Speed (" + objectSpeed + ")");
+  TitledBorder objectsBorder = BorderFactory.createTitledBorder("Number of objects (" + numObjects + ")");
 
+  
   private void layoutGUI() {
-    this.setSize(220, 470);
+    this.setSize(220, 559);
     this.setResizable(true);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setTitle("Development View");
 
     // -------- MENU BAR --------
     menuBar = new JMenuBar();
-    file = new JMenu("File");
-    open = new JMenuItem("Load Surface");
-    open.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        JFileChooser fc = new JFileChooser();
-
-        fc.setDialogTitle("Open File");
-        // Choose only files, not directories
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        // Start in current directory
-        fc.setCurrentDirectory(new File("."));
-        fc.showOpenDialog(null);
-
-        File file = null;
-        try {
-          file = fc.getSelectedFile();
-        } catch (Exception ex) {
-          System.out.println("Invalid file");
-        }
-       
-        loadSurface(file.getAbsolutePath());
-      }
-    });
-    menuBar.add(file);
-    file.add(open);
     this.setJMenuBar(menuBar);
-
-    sliderPanel = new JPanel();
-    sliderPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6));
-    sliderPanel.setLayout(new BoxLayout(sliderPanel,BoxLayout.Y_AXIS));
+    {
+    	file = new JMenu();
+    	menuBar.add(file);
+    	file.setText("File");
+    	{
+    		open = new JMenuItem();
+    		file.add(open);
+    		open.setText("Load Surface");
+    		open.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				JFileChooser fc = new JFileChooser();
+    				
+    				fc.setDialogTitle("Open File");
+    				// Choose only files, not directories
+    				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    				// Start in current directory
+    				fc.setCurrentDirectory(new File("."));
+    				fc.showOpenDialog(null);
+    				
+    				File file = null;
+    				try {
+    					file = fc.getSelectedFile();
+    				} catch (Exception ex) {
+    					System.out.println("Invalid file");
+    				}
+    				
+    				loadSurface(file.getAbsolutePath());
+    				initializeSurface();
+    				
+    			}
+    		});
+    	}
+    }
     
     // -------- DEPTH SLIDER --------
-    depthSlider = new JSlider(1, MAX_DEPTH, currentDepth);
-    depthSlider.addChangeListener(new ChangeListener(){
-        public void stateChanged(ChangeEvent e) {
-          currentDepth = ((JSlider)e.getSource()).getValue();
-          development.setDepth(currentDepth);
-          depthBorder.setTitle("Recursion Depth (" + currentDepth + ")");
-          initializeNewManifold();
-        }
-    });
-    
+
     // -------- SPEED SLIDER --------
-    speedSlider = new JSlider(1, MAX_SPEED, (int)(objectSpeed*1000));
-    speedSlider.addChangeListener(new ChangeListener(){
-        public void stateChanged(ChangeEvent e) {
-          objectSpeed = ((JSlider)e.getSource()).getValue()/1000.0;
-          for(MovingObject o : movingObjects){ 
-            o.setSpeed(objectSpeed); 
-          }
-          speedBorder.setTitle("Speed (" + objectSpeed + ")");
-        }
-    }); 
-    
+
     // -------- POINT SIZE SLIDER --------
-    pointSizeSlider = new JSlider(1, MAX_POINT_SIZE, (int)(objectRadius*100.0));
-    pointSizeSlider.addChangeListener(new ChangeListener(){
-        public void stateChanged(ChangeEvent e) {
-          objectRadius = ((JSlider)e.getSource()).getValue()/100.0;
-          development.getSourceObject().getAppearance().setRadius(objectRadius);
-          for(MovingObject o : movingObjects){ 
-            o.getAppearance().setRadius(objectRadius);
-          }
-          pointBorder.setTitle("Object Radius (" + objectRadius + ")");
-          updateGeometry(false,true);
-        }
-    }); 
-    
-    depthSlider.setBorder(depthBorder);
-    speedSlider.setBorder(speedBorder);
-    pointSizeSlider.setBorder(pointBorder);
-    
-    sliderPanel.add(depthSlider);
-    sliderPanel.add(speedSlider);
-    sliderPanel.add(pointSizeSlider);
 
     // -------- COLOR SCHEME BUTTONS --------
-    colorPanel = new JPanel();
-    depthSchemeButton = new JButton("Depth");
-    depthSchemeButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        if (colorScheme.getSchemeType() != schemes.DEPTH) {
-          colorScheme = new ColorScheme(schemes.DEPTH);
-          if(showView2D){ view2D.setColorScheme(colorScheme); }
-          if(showView3D){ view3D.setColorScheme(colorScheme); }
-        }
-      }
-    });
-    faceSchemeButton = new JButton("Face");
-    faceSchemeButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        if (colorScheme.getSchemeType() != schemes.FACE) {
-          colorScheme = new ColorScheme(schemes.FACE);
-          if(showView2D){ view2D.setColorScheme(colorScheme); }
-          if(showView3D){ view3D.setColorScheme(colorScheme); }
-        }
-      }
-    });
-    colorPanel.setLayout(new GridLayout(5, 1));
-    colorPanel.add(new JLabel("Set Color Scheme"));
-    colorPanel.add(depthSchemeButton);
-    colorPanel.add(faceSchemeButton);
-    
-   
-    
+
     // -------- STOP/START MOVEMENT BUTTON --------
-    stopStartButton = new JButton("");
     if(INITIAL_MOVEMENT_STATUS){ stopStartButton.setText("Stop"); }
-    else{ stopStartButton.setText("Start"); }
-    stopStartButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        JButton source = (JButton)e.getSource();
-        if (source.getText().equals("Stop")) {
-          source.setText("Start");
-          dynamics.stop();
-        }else{
-          source.setText("Stop");
-          dynamics.start();
-        }
-      }
-    });
-    colorPanel.add(stopStartButton);
 
     // -------- VIEWER PANEL --------
-    viewerPanel = new JPanel();
-    viewerPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-    
-    showEmbeddedBox = new JCheckBox("Show embedded view");
-    showEmbeddedBox.setSelected(showEmbedded);
-    showEmbeddedBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        showEmbedded = ((JCheckBox)e.getSource()).isSelected();
-        if(showEmbedded == true){
-          //start up the embedded viewer
-          embeddedView = new DevelopmentViewEmbedded(development, colorScheme);
-          embeddedView.setDrawEdges(drawEdges);
-          embeddedView.setDrawFaces(drawFaces);
-          embeddedView.updateGeometry(true,true);
-          embeddedView.initializeNewManifold();
-          devViewers.add(embeddedView);
-        }else{
-          //end the embedded  viewer
-          devViewers.remove(embeddedView);
-          embeddedView.dispose();
-        }
-      }
-    });
-    
-    showView2DBox = new JCheckBox("Show 2D view");
-    showView2DBox.setSelected(showView2D);
-    showView2DBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        showView2D = ((JCheckBox)e.getSource()).isSelected();
-        if(showView2D == true){
-          //start up the viewer 2D
-          view2D = new DevelopmentView2D(development, colorScheme);
-          view2D.setDrawEdges(drawEdges);
-          view2D.setDrawFaces(drawFaces);
-          view2D.updateGeometry(true,true);
-          view2D.initializeNewManifold();
-          devViewers.add(view2D);
-        }else{
-          //end the embedded  viewer
-          devViewers.remove(view2D);
-          view2D.dispose();
-        }
-      }
-    });
-    
-    showView3DBox = new JCheckBox("Show 3D view");
-    showView3DBox.setSelected(showView3D);
-    showView3DBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        showView3D = ((JCheckBox)e.getSource()).isSelected();
-        if(showView3D == true){
-          //start up the embedded viewer
-          view3D = new DevelopmentViewSim3D(development, colorScheme);
-          view3D.setDrawEdges(drawEdges);
-          view3D.setDrawFaces(drawFaces);
-          view3D.updateGeometry(true,true);
-          view3D.initializeNewManifold();
-          devViewers.add(view3D);
-        }else{
-          //end the embedded  viewer
-          devViewers.remove(view3D);
-          view3D.dispose();
-        }
-      }
-    });
-    
-    viewerPanel.setLayout(new BoxLayout(viewerPanel, BoxLayout.Y_AXIS));
-    viewerPanel.add(showView2DBox);
-    viewerPanel.add(showView3DBox);
-    viewerPanel.add(showEmbeddedBox);
-    
+
     // -------- DRAW OPTIONS PANEL --------
-    drawOptionsPanel = new JPanel();
-    drawOptionsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-    
-    drawEdgesBox = new JCheckBox("Draw edges");
-    drawEdgesBox.setSelected(true);
-    drawEdgesBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        drawEdges = ((JCheckBox)e.getSource()).isSelected();
-        if(showView2D){ view2D.setDrawEdges(drawEdges); }
-        if(showView3D){ view3D.setDrawEdges(drawEdges); }
-      }
-    });
-    
-    drawFacesBox = new JCheckBox("Draw faces");
-    drawFacesBox.setSelected(true);
-    drawFacesBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        drawFaces = ((JCheckBox)e.getSource()).isSelected();
-        if(showView2D){ view2D.setDrawFaces(drawFaces); }
-        if(showView3D){ view3D.setDrawFaces(drawFaces); }
-      }
-    });
-    
-    drawOptionsPanel.setLayout(new BoxLayout(drawOptionsPanel, BoxLayout.Y_AXIS));
-    drawOptionsPanel.add(drawEdgesBox);
-    drawOptionsPanel.add(drawFacesBox);
-    
+
     // -------- ADD PANELS --------
     this.setLayout(new FlowLayout());
-    this.add(sliderPanel);
-    this.add(colorPanel);
-    this.add(viewerPanel);
-    this.add(drawOptionsPanel);
+    {
+    	sliderPanel = new JPanel();
+    	getContentPane().add(sliderPanel);
+    	sliderPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6));
+    	sliderPanel.setLayout(new BoxLayout(sliderPanel,BoxLayout.Y_AXIS));
+    	{
+    		depthSlider = new JSlider();
+    		sliderPanel.add(depthSlider);
+    		depthSlider.setValue(currentDepth);
+    		depthSlider.setMaximum(MAX_DEPTH);
+    		depthSlider.setBorder(depthBorder);
+    		depthSlider.addChangeListener(new ChangeListener() {
+    			public void stateChanged(ChangeEvent e) {
+    				currentDepth = ((JSlider)e.getSource()).getValue();
+    				development.setDepth(currentDepth);
+    				depthBorder.setTitle("Recursion Depth (" + currentDepth + ")");
+    				initializeNewManifold();
+    			}
+    		});
+    	}
+    	{
+    		speedSlider = new JSlider();
+    		sliderPanel.add(speedSlider);
+    		speedSlider.setValue((int)(objectSpeed*1000));
+    		speedSlider.setMaximum(MAX_SPEED);
+    		speedSlider.setBorder(speedBorder);
+    		speedSlider.addChangeListener(new ChangeListener() {
+    			public void stateChanged(ChangeEvent e) {
+    				objectSpeed = ((JSlider)e.getSource()).getValue()/1000.0;
+    				for(MovingObject o : movingObjects){ 
+    					o.setSpeed(objectSpeed); 
+    				}
+    				speedBorder.setTitle("Speed (" + objectSpeed + ")");
+    			}
+    		});
+    	}
+    	{
+    		pointSizeSlider = new JSlider();
+    		sliderPanel.add(pointSizeSlider);
+    		pointSizeSlider.setValue((int)(objectRadius*100.0));
+    		pointSizeSlider.setMaximum(MAX_POINT_SIZE);
+    		pointSizeSlider.setBorder(pointBorder);
+    		pointSizeSlider.addChangeListener(new ChangeListener() {
+    			public void stateChanged(ChangeEvent e) {
+    				objectRadius = ((JSlider)e.getSource()).getValue()/100.0;
+    				development.getSourceObject().getAppearance().setRadius(objectRadius);
+    				for(MovingObject o : movingObjects){ 
+    					o.getAppearance().setRadius(objectRadius);
+    				}
+    				pointBorder.setTitle("Object Radius (" + objectRadius + ")");
+    				updateGeometry(false,true);
+    			}
+    		});
+    	}
+    }
+    {
+    	colorPanel = new JPanel();
+    	getContentPane().add(colorPanel);
+    	colorPanel.setLayout(new GridLayout(5,1));
+//    	colorPanelLayout.setColumns(1);
+//    	colorPanelLayout.setRows(5);
+    	{
+    		jLabel_IL = new JLabel("Set Color Scheme");
+    		colorPanel.add(jLabel_IL);
+    		jLabel_IL.setText("Set Color Scheme");
+    	}
+    	{
+    		depthSchemeButton = new JButton();
+    		colorPanel.add(depthSchemeButton);
+    		depthSchemeButton.setText("Depth");
+    		depthSchemeButton.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				if (colorScheme.getSchemeType() != schemes.DEPTH) {
+    					colorScheme = new ColorScheme(schemes.DEPTH);
+    					if(showView2D){ view2D.setColorScheme(colorScheme); }
+    					if(showView3D){ view3D.setColorScheme(colorScheme); }
+    				}
+    			}
+    		});
+    	}
+    	{
+    		faceSchemeButton = new JButton();
+    		colorPanel.add(faceSchemeButton);
+    		faceSchemeButton.setText("Face");
+    		faceSchemeButton.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				if (colorScheme.getSchemeType() != schemes.FACE) {
+    					colorScheme = new ColorScheme(schemes.FACE);
+    					if(showView2D){ view2D.setColorScheme(colorScheme); }
+    					if(showView3D){ view3D.setColorScheme(colorScheme); }
+    				}
+    			}
+    		});
+    	}
+    	{
+    		stopStartButton = new JButton();
+    		colorPanel.add(stopStartButton);
+    		stopStartButton.setText("Start");
+    		stopStartButton.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				JButton source = (JButton)e.getSource();
+    				if (source.getText().equals("Stop")) {
+    					source.setText("Start");
+    					dynamics.stop();
+    				}else{
+    					source.setText("Stop");
+    					dynamics.start();
+    				}
+    			}
+    		});
+    	}
+    	{
+    		jLabel_IL1 = new JLabel("Set Color Scheme");
+    		colorPanel.add(jLabel_IL1);
+    		jLabel_IL1.setText("Set Color Scheme");
+    	}
+    }
+    {
+    	viewerPanel = new JPanel();
+    	getContentPane().add(viewerPanel);
+    	viewerPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    	viewerPanel.setLayout(new BoxLayout(viewerPanel,BoxLayout.Y_AXIS));
+    	{
+    		showView2DBox = new JCheckBox();
+    		viewerPanel.add(showView2DBox);
+    		showView2DBox.setText("Show 2D view");
+    		showView2DBox.setSelected(showView2D);
+    		showView2DBox.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				showView2D = ((JCheckBox)e.getSource()).isSelected();
+    				if(showView2D == true){
+    					//start up the viewer 2D
+    					view2D = new DevelopmentView2D(development, colorScheme);
+    					view2D.setDrawEdges(drawEdges);
+    					view2D.setDrawFaces(drawFaces);
+    					view2D.updateGeometry(true,true);
+    					view2D.initializeNewManifold();
+    					devViewers.add(view2D);
+    				}else{
+    					//end the embedded  viewer
+    					devViewers.remove(view2D);
+    					view2D.dispose();
+    				}
+    			}
+    		});
+    	}
+    	{
+    		showView3DBox = new JCheckBox();
+    		viewerPanel.add(showView3DBox);
+    		showView3DBox.setText("Show 3D view");
+    		showView3DBox.setSelected(showView3D);
+    		showView3DBox.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				showView3D = ((JCheckBox)e.getSource()).isSelected();
+    				if(showView3D == true){
+    					//start up the embedded viewer
+    					view3D = new DevelopmentViewSim3D(development, colorScheme);
+    					view3D.setDrawEdges(drawEdges);
+    					view3D.setDrawFaces(drawFaces);
+    					view3D.updateGeometry(true,true);
+    					view3D.initializeNewManifold();
+    					devViewers.add(view3D);
+    				}else{
+    					//end the embedded  viewer
+    					devViewers.remove(view3D);
+    					view3D.dispose();
+    				}
+    			}
+    		});
+    	}
+    	{
+    		showEmbeddedBox = new JCheckBox();
+    		viewerPanel.add(showEmbeddedBox);
+    		showEmbeddedBox.setText("Show embedded view");
+    		showEmbeddedBox.setSelected(showEmbedded);
+    		showEmbeddedBox.setVisible(true);
+    		showEmbeddedBox.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				showEmbedded = ((JCheckBox)e.getSource()).isSelected();
+    				if(showEmbedded == true){
+    					//start up the embedded viewer
+    					embeddedView = new DevelopmentViewEmbedded(development, colorScheme);
+    					embeddedView.setDrawEdges(drawEdges);
+    					embeddedView.setDrawFaces(drawFaces);
+    					embeddedView.updateGeometry(true,true);
+    					embeddedView.initializeNewManifold();
+    					devViewers.add(embeddedView);
+    				}else{
+    					//end the embedded  viewer
+    					devViewers.remove(embeddedView);
+    					embeddedView.dispose();
+    				}
+    			}
+    		});
+    	}
+    }
+    {
+    	drawOptionsPanel = new JPanel();
+    	getContentPane().add(drawOptionsPanel);
+    	drawOptionsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    	drawOptionsPanel.setLayout(new BoxLayout(drawOptionsPanel,BoxLayout.Y_AXIS));
+    	{
+    		drawEdgesBox = new JCheckBox();
+    		drawOptionsPanel.add(drawEdgesBox);
+    		drawEdgesBox.setText("Draw edges");
+    		drawEdgesBox.setSelected(true);
+    		drawEdgesBox.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				drawEdges = ((JCheckBox)e.getSource()).isSelected();
+    				if(showView2D){ view2D.setDrawEdges(drawEdges); }
+    				if(showView3D){ view3D.setDrawEdges(drawEdges); }
+    			}
+    		});
+    	}
+    	{
+    		drawFacesBox = new JCheckBox();
+    		drawOptionsPanel.add(drawFacesBox);
+    		drawFacesBox.setText("Draw faces");
+    		drawFacesBox.setSelected(true);
+    		drawFacesBox.addActionListener(new ActionListener() {
+    			public void actionPerformed(ActionEvent e) {
+    				drawFaces = ((JCheckBox)e.getSource()).isSelected();
+    				if(showView2D){ view2D.setDrawFaces(drawFaces); }
+    				if(showView3D){ view3D.setDrawFaces(drawFaces); }
+    			}
+    		});
+    	}
+    }
+    {
+    	numObjectsSlider = new JSlider();
+    	getContentPane().add(numObjectsSlider);
+    	numObjectsSlider.setLayout(null);
+    	numObjectsSlider.setMaximum(20);
+    	numObjectsSlider.setValue(numObjects);
+    	numObjectsSlider.setBorder(objectsBorder);
+      numObjectsSlider.addChangeListener(new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          numObjects = ((JSlider)e.getSource()).getValue();
+//          movingObjects = null;
+          for(MovingObject o : movingObjects){
+//            movingObjects.remove(o); 
+            o.removeFromManifold();
+            dynamics.removeObject(o);
+          }       
+          movingObjects.clear();
+          setUpObjects();
+          objectsBorder.setTitle("Number of objects (" + numObjects + ")");
+          initializeNewManifold();
+        }
+      });
+
+    }
   }
 }
