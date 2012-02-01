@@ -1,22 +1,22 @@
 package views;
 
 import java.awt.Color;
-import java.awt.peer.SystemTrayPeer;
+
 import java.io.File;
 import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.List;
-
-
 import model.Coordinates;
 import model.Marker;
 import model.Marker.MarkerType;
 import model.Surface;
 import model.Vector;
 import de.jreality.geometry.ParametricSurfaceFactory;
+import de.jreality.geometry.Primitives;
 import de.jreality.geometry.TubeFactory;
 
+
 import de.jreality.math.MatrixBuilder;
+import de.jreality.math.P3;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.content.ContentAppearance;
 import de.jreality.plugin.content.ContentTools;
@@ -26,46 +26,41 @@ import de.jreality.scene.Camera;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.Light;
 import de.jreality.scene.PointLight;
+import de.jreality.scene.SpotLight;
+
 import de.jreality.scene.Scene;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
-import de.jreality.scene.Viewer;
+import de.jreality.jogl.Viewer;
 
-import de.jreality.shader.DefaultGeometryShader;
-import de.jreality.shader.DefaultLineShader;
-import de.jreality.shader.DefaultPointShader;
-import de.jreality.shader.DefaultPolygonShader;
-import de.jreality.shader.RenderingHintsShader;
-import de.jreality.shader.ShaderUtility;
-
+import de.jreality.shader.CommonAttributes;
+import de.jreality.tools.RotateTool;
 import de.jreality.util.SceneGraphUtility;
 
-public class EmbeddedView extends JRViewer {
-	public Viewer temp_v;
+public class EmbeddedView {
+	public Viewer viewer;
 	
+	/* Model-Related Variables */
 	private Surface surface;
 	private Marker player;
 	private AbstractList<Marker> markers;
-
-	private SceneGraphComponent world;
 	private SceneGraphComponent surfaceSGC;
 	private AbstractList<SceneGraphComponent> markerSGCs;		
 	
-	private enum View{ Global, Attached, Closeup };
-	private View viewSelection = View.Attached;
+	/* Display-Related Variables */
+	private enum ViewType{ Global, Attached };
+	private ViewType viewSelection = ViewType.Global;
 	
+	private SceneGraphComponent root;
+	
+	/* "Free" indicates a camera/light distant from the scene, 
+	 * "attached" denotes a camera/light that follows the player's 
+	 * marker. */
 	private SceneGraphComponent freeCameraSGC;
 	private SceneGraphPath freeCamera;
-
 	private SceneGraphComponent attachedCameraSGC;
 	private SceneGraphPath attachedCamera;	
-	
-	private Light attachedLight;
-	private SceneGraphComponent attachedLightSGC;
-	
-	private Light freeLight;
-	private SceneGraphComponent freeLightSGC;
-	
+		
 	private double surfaceNormScalar = 10.0; 
 	
 	public EmbeddedView(Surface s, Marker player, AbstractList<Marker> markers){
@@ -73,69 +68,73 @@ public class EmbeddedView extends JRViewer {
 		this.player = player;
 		this.markers = markers;
 		
-		initViewerProperties(); // Initialize the window and toolbars around the scene.		
 		initSceneGraph(); 		// Construct the root of the scene graph, and global display preferences.
 		initSurfaceSGC(); 		// Initialize the 2D surface, add it to the scene graph.
 		initMarkerSGCs(); 		// Initialize the markers scene graph components, add them to the scene graph.
 		updateScene(); 			// Position markers, camera, and light		
 	}
-	
-	public void initViewerProperties(){
-		addBasicUI();
-        //addVRSupport();
-        addContentSupport(ContentType.TerrainAligned);
-        registerPlugin(new ContentAppearance());
-        registerPlugin(new ContentTools());        
+		
+	public void initSceneGraph(){
+		root = new SceneGraphComponent("root");
+				
+		SceneGraphComponent origin = TubeFactory.getXYZAxes();
+		root.addChild(origin);
+		MatrixBuilder.euclidean().scale(10).assignTo(origin);		
+		
+		freeCameraSGC = new SceneGraphComponent("free_camera");
+		root.addChild(freeCameraSGC);		
+		Camera freecam = new Camera();
+		freecam.setFar(200.0);
+		freecam.setNear(0.015);
+		freecam.setFieldOfView(90);
+		freeCameraSGC.setCamera(freecam);
+		freeCamera = new SceneGraphPath(root,freeCameraSGC);
+		freeCamera.push(freecam);
+		MatrixBuilder.euclidean().translate(0,0,75).assignTo(freeCameraSGC);
+		
+		attachedCameraSGC = new SceneGraphComponent("attached_camera");				
+		root.addChild(attachedCameraSGC);		
+		Camera attachedcam = new Camera();
+		attachedcam.setFar(200.0);
+		attachedcam.setNear(0.015);
+		attachedcam.setFieldOfView(90);		
+		attachedCameraSGC.setCamera(attachedcam);
+		attachedCamera = new SceneGraphPath(root,attachedCameraSGC);
+		attachedCamera.push(attachedcam);
+		
+		viewer = new Viewer();
+		viewer.setSceneRoot(root);
+		viewer.setCameraPath(freeCamera);
+				
+		Appearance ap = new Appearance();
+		ap.setAttribute(CommonAttributes.BACKGROUND_COLOR, new Color(0f,0.1f,0.1f));				
+		root.setAppearance( ap );
+		
+		SceneGraphUtility.removeLights(viewer);
+		initLights();
 	}
 	
-	public void initSceneGraph(){
-		world = SceneGraphUtility.createFullSceneGraphComponent("world");
-		//setContent( world );		
+	public void initLights(){
+		double R = 150;
 		
-		Viewer vv = display( world );		
-		freeCamera = vv.getCameraPath();
-		
-		temp_v = vv;
-		
-		Camera cam = new Camera();
-		cam.setNear(0.015);
-		cam.setFar(100.0);
-		cam.setFieldOfView(90);		
-		freeCameraSGC = new SceneGraphComponent("attached_camera");
-		freeCameraSGC.setCamera(cam);
-		world.addChild(freeCameraSGC);
-		attachedCamera = SceneGraphUtility.getPathsBetween(vv.getSceneRoot(), freeCameraSGC).get(0);
-		attachedCamera.push(freeCameraSGC.getCamera());		
-				
-		freeLightSGC = new SceneGraphComponent("light_psn");
-		freeCameraSGC.addChild(freeLightSGC); //For now, light goes where camera goes.
-		//freeLightSGC.setVisible(true);				
-		freeLight = new DirectionalLight();
-		freeLightSGC.setLight(freeLight);	
-		
-		Appearance ap = world.getAppearance();
-		DefaultGeometryShader dgs;
-		DefaultPolygonShader dfs;
-		RenderingHintsShader rhs;		
-		
-		dgs = ShaderUtility.createDefaultGeometryShader(ap, true);
-		dfs = (DefaultPolygonShader) dgs.createPolygonShader("default");
-		rhs = ShaderUtility.createDefaultRenderingHintsShader(ap, true);
-				
-		dfs.setDiffuseColor(new Color(0, 0, 200));
-		dfs.setSpecularColor(Color.white);
-		
-		dgs.setShowLines(false);
-		dgs.setShowPoints(false);
-		
-		dfs.setSmoothShading(false);
-		rhs.setTransparencyEnabled(false);
-		
-		dfs.setAmbientCoefficient(0.0); // Default: 0.0
-		dfs.setDiffuseCoefficient(1.0); // Default: 1.0
-		dfs.setSpecularCoefficient(0.7); // Default: 0.7
-		dfs.setSpecularExponent(120.0); // Default: 60 
-	    
+		Light l = new DirectionalLight();
+		SceneGraphComponent sgc = new SceneGraphComponent();
+		sgc.setLight( l );
+		MatrixBuilder.euclidean()
+					 .translate( R, 0, 0 )
+					 .rotateY(-Math.PI/2)					 
+					 .assignTo(sgc);
+		root.addChild(sgc);
+	
+		l = new DirectionalLight();
+		l.setIntensity(1);
+		sgc = new SceneGraphComponent();
+		sgc.setLight( l );
+		MatrixBuilder.euclidean()
+					 .translate( -R, 0, 0 )
+					 .rotateY(Math.PI/2)					 
+					 .assignTo(sgc);
+		root.addChild(sgc);	
 	}
 	
 	private void initSurfaceSGC() {
@@ -152,15 +151,21 @@ public class EmbeddedView extends JRViewer {
         surfaceSGC = new SceneGraphComponent("surface");
         surfaceSGC.setGeometry(psf.getIndexedFaceSet());
         
-        world.addChild(surfaceSGC);
+        Appearance ap = new Appearance();        
+        ap.setAttribute(CommonAttributes.DIFFUSE_COLOR, new Color(90,0,0));
+        ap.setAttribute(CommonAttributes.AMBIENT_COLOR, new Color(50,0,0));		
+		ap.setAttribute(CommonAttributes.AMBIENT_COEFFICIENT, 0.5);
+		
+		surfaceSGC.setAppearance(ap);        
+        root.addChild(surfaceSGC);
 	}
 
 	private SceneGraphComponent makeMarkerSGC( MarkerType mt ){
 		File ff;
 		if( mt == MarkerType.Rocket ){
-			ff = new File("/home/jthomas/eclipse/SpaceGame/Data/rocket.3ds");
+			ff = new File("/home/jthomas/eclipse/SurfaceExplorer/Data/rocket.3ds");
 		} else {
-			ff = new File("/home/jthomas/eclipse/SpaceGame/Data/sattelite.3ds");
+			ff = new File("/home/jthomas/eclipse/SurfaceExplorer/Data/sattelite.3ds");
 		}
 		SceneGraphComponent sgc = null;
 		try{
@@ -169,6 +174,10 @@ public class EmbeddedView extends JRViewer {
 			ee.printStackTrace();
 			System.exit(1);
 		}
+		Appearance ap = new Appearance();
+		ap.setAttribute(CommonAttributes.VERTEX_DRAW, false);
+		ap.setAttribute(CommonAttributes.EDGE_DRAW, false);
+		sgc.setAppearance(ap);
 		return sgc;
 	}
 			
@@ -176,7 +185,7 @@ public class EmbeddedView extends JRViewer {
 		markerSGCs = new ArrayList<SceneGraphComponent>();
 		for( Marker m : markers ){
 			SceneGraphComponent sgc = makeMarkerSGC( m.getMarkerType() );
-			world.addChild(sgc);
+			root.addChild(sgc);
 			markerSGCs.add(sgc);			
 		}		
 	}
@@ -252,18 +261,19 @@ public class EmbeddedView extends JRViewer {
 		MatrixBuilder.euclidean()
 						.translate(norm.getComponents())
 						.translate(R3Point)
-						.times(mat).assignTo(freeCameraSGC);
+						.times(mat).assignTo(attachedCameraSGC);
+		viewer.render();
 	}
 
 	public void toggleView() {		
 		switch( viewSelection ){
 		case Global:
-			viewSelection = View.Attached;
-			Scene.executeWriter( temp_v.getSceneRoot(), new Runnable(){
+			viewSelection = ViewType.Attached;
+			Scene.executeWriter( viewer.getSceneRoot(), new Runnable(){
 				
 				public void run() {
-					freeLightSGC.setVisible( false );
-					temp_v.setCameraPath(freeCamera);
+					//freeLightSGC.setVisible( false );
+					viewer.setCameraPath(freeCamera);
 					System.out.println("Global View Assigned!");
 				}
 				
@@ -271,31 +281,17 @@ public class EmbeddedView extends JRViewer {
 			break;
 			
 		case Attached:
-			viewSelection = View.Closeup;
-			Scene.executeWriter( temp_v.getSceneRoot(), new Runnable(){
+			viewSelection = ViewType.Global;
+			Scene.executeWriter( viewer.getSceneRoot(), new Runnable(){
 				
 				public void run() {
-					freeLightSGC.setVisible( true );
-					temp_v.setCameraPath(attachedCamera);
+					//freeLightSGC.setVisible( true );
+					viewer.setCameraPath(attachedCamera);
 					System.out.println("Attached View Assigned!");
 				}
 				
 			});
-			break;
-			
-		case Closeup:
-			viewSelection = View.Global;
-			
-			Scene.executeWriter( temp_v.getSceneRoot(), new Runnable(){
-				
-				public void run() {
-					freeLightSGC.setVisible( true );
-					temp_v.setCameraPath(attachedCamera);
-					System.out.println("Closeup View Assigned!");
-				}
-				
-			});			
-			break;
+			break;			
 		}
 		
 	}

@@ -3,9 +3,15 @@ package ui;
 import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.AbstractList;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
+
+import de.jreality.util.RenderTrigger;
 
 import views.EmbeddedView;
 import model.CurvedTorus;
@@ -32,7 +38,8 @@ public class SpaceGame {
 	}	
 	
 	public static void initSurface(){
-		S = new CurvedTorus();		
+		S = new CurvedTorus();	
+		//S = new OpenSquare();
 	}
 	
 	public static void initMarkers(){
@@ -45,10 +52,24 @@ public class SpaceGame {
 	
 	public static void initView(){
 		view = new EmbeddedView( S, player, markers );
+		JFrame frame = new JFrame();
+		frame.setVisible(true);
+		frame.setSize(750,750);
+		frame.getContentPane().add( (Component) view.viewer.getViewingComponent() );
+		frame.validate();		
+		RenderTrigger rt = new RenderTrigger();
+		rt.addSceneGraphComponent( view.viewer.getSceneRoot() );
+		rt.addViewer( view.viewer );
+
+		frame.addWindowListener(new WindowAdapter() {
+		      public void windowClosing(WindowEvent arg0) {
+		        System.exit(0);
+		      }
+			});		    
 	}
 	
 	public static void initControls(){
-		Component comp = (Component) view.temp_v.getViewingComponent();
+		Component comp = (Component) view.viewer.getViewingComponent();
 		
 		comp.addKeyListener( new KeyAdapter() {
 			public void keyPressed(KeyEvent e){								
