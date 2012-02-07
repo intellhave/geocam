@@ -53,4 +53,17 @@ public class OpenSquare implements Surface {
 		xyz[1] = v;
 		xyz[2] = 0.0;
 	}
+	
+	// This method is wrong, but yields an OK approximation.
+	public Coordinates move(Coordinates start, Vector direction, double distance) {
+		Vector v = new Vector(direction);
+		v.normalize();
+		v.scale(distance);
+		Coordinates retval = new Coordinates( start.u, start.v );
+		retval.u += v.components[0];
+		retval.v += v.components[1];
+		
+		return retval;		
+	}	
 }
+

@@ -59,8 +59,7 @@ public class CurvedTorus implements Surface, Immersion  {
 	}
 
 	private static Vector ddu = new Vector(1,0);
-	private static Vector ddv = new Vector(0,1);
-	
+	private static Vector ddv = new Vector(0,1);	
 	public Vector getSurfaceNormal(Coordinates c) {
 		Vector s = immerseVector( c, ddu );
 		Vector t = immerseVector( c, ddv );
@@ -78,5 +77,17 @@ public class CurvedTorus implements Surface, Immersion  {
 		xyz[0] = - (R + r * Math.cos(u)) * Math.cos(v);
 		xyz[1] = - (R + r * Math.cos(u)) * Math.sin(v);
 		xyz[2] = - r * Math.sin(u);
+	}
+	
+	// This method is wrong, but yields an OK approximation.
+	public Coordinates move(Coordinates start, Vector direction, double distance) {
+		Vector v = new Vector(direction);
+		v.normalize();
+		v.scale(distance);
+		Coordinates retval = new Coordinates( start.u, start.v );
+		retval.u += v.components[0];
+		retval.v += v.components[1];
+		
+		return retval;		
 	}
 }

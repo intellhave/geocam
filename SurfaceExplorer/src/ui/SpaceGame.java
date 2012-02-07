@@ -18,6 +18,7 @@ import model.CurvedTorus;
 import model.Marker;
 import model.Marker.MarkerType;
 import model.OpenSquare;
+import model.Saddle;
 import model.Surface;
 import model.Vector;
 
@@ -26,8 +27,7 @@ public class SpaceGame {
 	public static Surface S;
 	
 	public static Marker player;
-	public static AbstractList<Marker> markers;
-	
+	public static AbstractList<Marker> markers;	
 	public static EmbeddedView view;
 	
 	public static void main(String[] args) {
@@ -40,11 +40,12 @@ public class SpaceGame {
 	public static void initSurface(){
 		S = new CurvedTorus();	
 		//S = new OpenSquare();
+		//S = new Saddle();
 	}
 	
 	public static void initMarkers(){
 		markers = new ArrayList<Marker>();
-		player = new Marker(MarkerType.Rocket, S.makeCoordinates(50.0,50.0), new Vector(1.0,0.0));
+		player = new Marker(MarkerType.Rocket, S.makeCoordinates(10.0,10.0), new Vector(1.0,0.0));
 		Marker sattelite = new Marker(MarkerType.Sattelite, S.makeCoordinates(2,3), new Vector(0.0,1.0));		
 		markers.add( player );
 		markers.add( sattelite );
@@ -90,16 +91,20 @@ public class SpaceGame {
 				case KeyEvent.VK_DOWN:
 					player.move( -0.1 );
 					break;				
-								
+				
+				case KeyEvent.VK_R:
+					view.toggleRadar();
+					break;
+					
 				case KeyEvent.VK_V:
 					view.toggleView();
 					break;
 					
-				case KeyEvent.VK_F:
+				case KeyEvent.VK_EQUALS:
 					view.moveCameraZ(10);
 					break;
 				
-				case KeyEvent.VK_G:
+				case KeyEvent.VK_MINUS:
 					view.moveCameraZ(-10);
 					break;
 				}

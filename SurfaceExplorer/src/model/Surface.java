@@ -12,4 +12,5 @@ public interface Surface extends Immersion {
 	void immersePoint(Coordinates c, double[] R3Point);
 	Vector immerseVector(Coordinates c, Vector v);	
 	Vector getSurfaceNormal(Coordinates c);
+	Coordinates move(Coordinates start, Vector direction, double distance);
 }

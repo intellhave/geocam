@@ -9,7 +9,7 @@ public class Vector {
 	}
 		
 	public Vector( Vector other ){
-		this.components = components.clone();
+		this.components = other.components.clone();
 	}
 		
 	public double[] getComponents(){

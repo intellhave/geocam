@@ -2,7 +2,7 @@ package model;
 
 public class Marker {
 		
-	public static enum MarkerType { Rocket, Sattelite };
+	public static enum MarkerType { Rocket, Sattelite, Tube };
 	
 	private MarkerType type;
 	private Coordinates position;
