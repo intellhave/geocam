@@ -38,9 +38,9 @@ public class SpaceGame {
 	}	
 	
 	public static void initSurface(){
-		S = new CurvedTorus();	
+		//S = new CurvedTorus();	
 		//S = new OpenSquare();
-		//S = new Saddle();
+		S = new Saddle();
 	}
 	
 	public static void initMarkers(){

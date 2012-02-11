@@ -1,16 +1,13 @@
 package model;
 
-import de.jreality.geometry.ParametricSurfaceFactory.Immersion;
-
-public class CurvedTorus implements Surface, Immersion  {
+public class CurvedTorus extends Surface {
 	private static final double TWO_PI = 2 * Math.PI;
+	
 	public static final double INNER_RADIUS = 40;
 	public static final double TUBE_RADIUS = 20;
-	
 	private static final double R = INNER_RADIUS;
 	private static final double r = TUBE_RADIUS;
-	
-	
+
 	public double getUMin() { return 0; }
 	public double getUMax() { return TWO_PI; }
 	public double getVMin() { return 0; }
@@ -33,11 +30,7 @@ public class CurvedTorus implements Surface, Immersion  {
 		
 		return new Coordinates(uu,vv);
 	}
-
-	public void immersePoint(Coordinates c, double[] R3Point) {
-		evaluate( c.u, c.v, R3Point, 0 );
-	}
-
+	
 	public Vector immerseVector( Coordinates c, Vector vec ){		
 		double u = c.u;
 		double v = c.v;
@@ -58,36 +51,11 @@ public class CurvedTorus implements Surface, Immersion  {
 		return new Vector(v0,v1,v2);
 	}
 
-	private static Vector ddu = new Vector(1,0);
-	private static Vector ddv = new Vector(0,1);	
-	public Vector getSurfaceNormal(Coordinates c) {
-		Vector s = immerseVector( c, ddu );
-		Vector t = immerseVector( c, ddv );
-		s.normalize();
-		t.normalize();		
-		return s.crossProduct( t );
-	}
-	
-	public boolean isImmutable() { return true; }
-	
-	public int getDimensionOfAmbientSpace() { return 3; }
-	
 	// This method enables the torus to be rendered by jreality.
 	public void evaluate(double u, double v, double[] xyz, int index) {
 		xyz[0] = - (R + r * Math.cos(u)) * Math.cos(v);
 		xyz[1] = - (R + r * Math.cos(u)) * Math.sin(v);
 		xyz[2] = - r * Math.sin(u);
 	}
-	
-	// This method is wrong, but yields an OK approximation.
-	public Coordinates move(Coordinates start, Vector direction, double distance) {
-		Vector v = new Vector(direction);
-		v.normalize();
-		v.scale(distance);
-		Coordinates retval = new Coordinates( start.u, start.v );
-		retval.u += v.components[0];
-		retval.v += v.components[1];
-		
-		return retval;		
-	}
+
 }
