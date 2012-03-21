@@ -80,10 +80,11 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Vector sourcePoint;
   private static Face sourceFace;
   private static ColorScheme colorScheme;
-  private int currentDepth = 8;
+  private int currentDepth = 3;
+//  private static String filename = "Data/off/dodec.off";
 //  private String filename = "Data/off/square2.off";
-//  private static String filename = "Data/off/tetra2.off";
-  private static String filename = "Data/off/tetra3.off";
+   private static String filename = "Data/off/tetra2.off";
+//  private static String filename = "Data/off/tetra3.off";
 //  private static String filename = "Data/off/icosa.off";
 //  private static String filename = "Data/off/cone.off";
 //  private static String filename = "Data/off/epcot.off";
@@ -115,7 +116,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   //private static ShootingGame shootingGame = new ShootingGame();
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
-  private static final int MOVING_OBJECT_START = 3;//15;
+  private static final int MOVING_OBJECT_START = 2;//15;
   private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
@@ -161,7 +162,6 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   
   private void eDevelopmentGUI() {
     colorScheme = new ColorScheme(schemes.FACE);
-
     development = null;
    
  //   loadSurface(filename);
@@ -291,18 +291,31 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     //set up objects
     development.getSourceObject().getAppearance().setRadius(objectRadius);
     Random rand = new Random();
+    
     for(int i=0; i<numObjects; i++){
+      ObjectAppearance oa;
+      if( i % 2 == 0 ){
+        oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.ANT );        
+      } else if( i % 2 == 1) {
+        oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.COOKIE );
+      } else {
+        // Not used, for now.
+        oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.APPLE );
+      }
+      
       MovingObject newObject = new MovingObject( 
-          development.getSource(), 
-          new ObjectAppearance(objectRadius, randomColor(rand)), 
-          randomUnitVector(rand) );
+          development.getSource(), oa, randomUnitVector(rand) );
+      
       if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
       movingObjects.add(newObject);
+    
     }
+    
     for(MovingObject o : movingObjects){
       o.setSpeed(objectSpeed); //scale so speed is correct
       dynamics.addObject(o); 
     }
+    
     if(INITIAL_MOVEMENT_STATUS){ 
       dynamics.start(); 
     }else{
