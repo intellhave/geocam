@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Set;
 
 import objects.ManifoldObjectHandler;
 import objects.ManifoldPath;
+import objects.ObjectAppearance;
 import objects.VisibleObject;
 import objects.VisiblePath;
 
@@ -31,10 +33,14 @@ import development.Vector;
 public class DevelopmentViewEmbedded extends DevelopmentView {
   
   Appearance defaultAppearance;
-
+  
+  private HashMap<VisibleObject, LinkedList<SceneGraphComponent>> sgcpools;
+  
   public DevelopmentViewEmbedded(Development development, ColorScheme colorScheme) {
     super(development, colorScheme, false);
 
+    sgcpools = new HashMap<VisibleObject, LinkedList<SceneGraphComponent>>();
+    
     this.startup();
     
     defaultAppearance = new Appearance();
@@ -112,22 +118,57 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
       getPathAmbientPositions(f, pathImages);
     }
     
-    //generate sgc's for each object and path
-    SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
-    
-    Set<VisibleObject> objectList = objectImages.keySet();
-    for(VisibleObject o : objectList){
-      sgcNewObjects.addChild(SGCMethods.objectSGCFromList(objectImages.get(o), o.getAppearance(), false, 0));
+    for( VisibleObject vo : objectImages.keySet() ){
+      LinkedList<SceneGraphComponent> pool = sgcpools.get( vo );
+      
+      if( pool == null ){
+        pool = new LinkedList<SceneGraphComponent>();
+        sgcpools.put( vo, pool );      
+      }
+      
+      ArrayList<Vector> images = objectImages.get( vo );
+      if( images == null ) continue;
+     
+      if( images.size() > pool.size() ){
+        int sgcCount = images.size() - pool.size();
+        for( int jj = 0; jj < sgcCount; jj++ ){
+           ObjectAppearance oa = vo.getAppearance();
+           SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
+           pool.add( sgc );
+           sgcObjects.addChild( sgc );
+        }        
+      }
+      
+      int counter = 0;
+      for( SceneGraphComponent sgc : pool ){
+        if( counter >= images.size()  ){
+          sgc.setVisible( false );
+        } else {
+          Vector v = images.get( counter );
+          MatrixBuilder.euclidean().translate( v.getComponent(0), v.getComponent(1), v.getComponent(2) ).assignTo( sgc );
+          sgc.setVisible( true );                    
+        }
+        counter++;
+      }
     }
     
-    Set<VisiblePath> pathList = pathImages.keySet();
-    for(VisiblePath p : pathList){
-      sgcNewObjects.addChild(SGCMethods.pathSGCFromList(pathImages.get(p), p.getAppearance(), false, 0));
-    }
     
-    sgcDevelopment.removeChild(sgcObjects);
-    sgcObjects = sgcNewObjects;
-    sgcDevelopment.addChild(sgcObjects);
+//    //generate sgc's for each object and path
+//    SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
+//    
+//    Set<VisibleObject> objectList = objectImages.keySet();
+//    for(VisibleObject o : objectList){
+//      sgcNewObjects.addChild(SGCMethods.objectSGCFromList(objectImages.get(o), o.getAppearance(), false, 0));
+//    }
+//    
+//    Set<VisiblePath> pathList = pathImages.keySet();
+//    for(VisiblePath p : pathList){
+//      sgcNewObjects.addChild(SGCMethods.pathSGCFromList(pathImages.get(p), p.getAppearance(), false, 0));
+//    }
+//    
+//    sgcDevelopment.removeChild(sgcObjects);
+//    sgcObjects = sgcNewObjects;
+//    sgcDevelopment.addChild(sgcObjects);
   }
   
   private void getObjectAmbientPositions(Face f, HashMap<VisibleObject,ArrayList<Vector>> objectImages){

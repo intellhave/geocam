@@ -3,6 +3,8 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -30,6 +32,10 @@ import development.DevelopmentNode;
 import development.TimingStatistics;
 import development.Vector;
 
+import objects.MovingObject;
+import objects.ObjectAppearance;
+import objects.VisibleObject;
+
 public class DevelopmentView2D extends DevelopmentView {
 
   private static int MAX_LINE_LENGTH = 5;
@@ -44,10 +50,14 @@ public class DevelopmentView2D extends DevelopmentView {
   private SceneGraphComponent viewingDirection = new SceneGraphComponent();
   //private Development development;
   
+  private HashMap<VisibleObject, LinkedList<SceneGraphComponent>> sgcpools;
+    
   public DevelopmentView2D(Development development, ColorScheme colorScheme) {
     super(development, colorScheme, true);
     dimension = 2;
     
+    this.sgcpools = new HashMap<VisibleObject, LinkedList<SceneGraphComponent>>();
+        
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
@@ -131,13 +141,49 @@ public class DevelopmentView2D extends DevelopmentView {
   
 
   protected void generateObjectGeometry(){
+    // OLD CODE:
+    //  SceneGraphComponent sgcNewObjects = 
+    //      CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot(), false, 0);
+    //  sgcDevelopment.removeChild(sgcObjects);
+    //  sgcObjects = sgcNewObjects;
+    //  sgcDevelopment.addChild(sgcObjects);
+
+    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
+    CommonViewMethods.getDevelopmentObjectImages(development.getRoot(), objectImages, false, 0);
     
-    /*TODO (TIMING)*/ long taskID = TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
-    SceneGraphComponent sgcNewObjects = CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot(), false, 0);
-    sgcDevelopment.removeChild(sgcObjects);
-    sgcObjects = sgcNewObjects;
-    sgcDevelopment.addChild(sgcObjects);
-    /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
+    for( VisibleObject vo : objectImages.keySet() ){
+      LinkedList<SceneGraphComponent> pool = sgcpools.get( vo );
+      
+      if( pool == null ){
+        pool = new LinkedList<SceneGraphComponent>();
+        sgcpools.put( vo, pool );      
+      }
+      
+      ArrayList<Vector> images = objectImages.get( vo );
+      if( images == null ) continue;
+     
+      if( images.size() > pool.size() ){
+        int sgcCount = images.size() - pool.size();
+        for( int jj = 0; jj < 2 * sgcCount; jj++ ){
+           ObjectAppearance oa = vo.getAppearance();
+           SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
+           pool.add( sgc );
+           sgcObjects.addChild( sgc );
+        }        
+      }
+      
+      int counter = 0;
+      for( SceneGraphComponent sgc : pool ){
+        if( counter >= images.size()  ){
+          sgc.setVisible( false );
+        } else {
+          Vector v = images.get( counter );
+          MatrixBuilder.euclidean().translate( v.getComponent(0), v.getComponent(1), 0.0 ).assignTo( sgc );
+          sgc.setVisible( true );                    
+        }
+        counter++;
+      }
+    }
   }
 
   public void setLineLength(double length) {
