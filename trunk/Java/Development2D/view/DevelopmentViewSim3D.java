@@ -197,15 +197,6 @@ public class DevelopmentViewSim3D extends DevelopmentView {
     VisibleObject obj = development.getSourceObject();
     obj.setOrientation(cameraForward);
     
-    // /*TODO (TIMING)*/ long taskID =
-    // TimingStatistics.startTask(TASK_GET_OBJECT_GEOMETRY);
-    // SceneGraphComponent sgcNewObjects =
-    // CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot(),false,0);
-    // sgcDevelopment.removeChild(sgcObjects);
-    // sgcObjects = sgcNewObjects;
-    // sgcDevelopment.addChild(sgcObjects);
-    // /*TODO (TIMING)*/ TimingStatistics.endTask(taskID);
-
     HashMap<VisibleObject, ArrayList<Vector[]>> objectImages = new HashMap<VisibleObject, ArrayList<Vector[]>>();
     CommonViewMethods.getDevelopmentObjectImagesAndOrientations(development.getRoot(), objectImages);
 
@@ -239,10 +230,10 @@ public class DevelopmentViewSim3D extends DevelopmentView {
           Vector[] triple = images.get(counter);
           Vector position = triple[0];
           Vector forward = triple[1];
-          Vector left = triple[2];
-                    
           forward.normalize();
-          left.normalize();
+          //Vector left = triple[2];
+          //left.normalize();                              
+
           double[] matrix = new double[16];
           matrix[0*4+0] = forward.getComponent(0); matrix[0*4+1] = -forward.getComponent(1); matrix[0*4+2] = 0.0; matrix[0*4+3] = 0.0;
           matrix[1*4+0] = forward.getComponent(1); matrix[1*4+1] =  forward.getComponent(0); matrix[1*4+2] = 0.0; matrix[1*4+3] = 0.0;
