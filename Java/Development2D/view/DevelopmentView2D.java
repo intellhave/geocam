@@ -140,46 +140,70 @@ public class DevelopmentView2D extends DevelopmentView {
   }
   
 
-  protected void generateObjectGeometry(){
-    // OLD CODE:
-    //  SceneGraphComponent sgcNewObjects = 
-    //      CommonViewMethods.generateDevelopmentObjectGeometry(development.getRoot(), false, 0);
-    //  sgcDevelopment.removeChild(sgcObjects);
-    //  sgcObjects = sgcNewObjects;
-    //  sgcDevelopment.addChild(sgcObjects);
+  protected void generateObjectGeometry() {
 
-    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
-    CommonViewMethods.getDevelopmentObjectImages(development.getRoot(), objectImages, false, 0);
-    
-    for( VisibleObject vo : objectImages.keySet() ){
-      LinkedList<SceneGraphComponent> pool = sgcpools.get( vo );
-      
-      if( pool == null ){
+    VisibleObject obj = development.getSourceObject();
+    obj.setOrientation(cameraForward);
+
+    HashMap<VisibleObject, ArrayList<Vector[]>> objectImages = new HashMap<VisibleObject, ArrayList<Vector[]>>();
+    CommonViewMethods.getDevelopmentObjectImagesAndOrientations(development
+        .getRoot(), objectImages);
+
+    for (VisibleObject vo : objectImages.keySet()) {
+      LinkedList<SceneGraphComponent> pool = sgcpools.get(vo);
+
+      if (pool == null) {
         pool = new LinkedList<SceneGraphComponent>();
-        sgcpools.put( vo, pool );      
+        sgcpools.put(vo, pool);
       }
-      
-      ArrayList<Vector> images = objectImages.get( vo );
-      if( images == null ) continue;
-     
-      if( images.size() > pool.size() ){
+
+      ArrayList<Vector[]> images = objectImages.get(vo);
+      if (images == null)
+        continue;
+
+      if (images.size() > pool.size()) {
         int sgcCount = images.size() - pool.size();
-        for( int jj = 0; jj < 2 * sgcCount; jj++ ){
-           ObjectAppearance oa = vo.getAppearance();
-           SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
-           pool.add( sgc );
-           sgcObjects.addChild( sgc );
-        }        
+        for (int jj = 0; jj < 2 * sgcCount; jj++) {
+          ObjectAppearance oa = vo.getAppearance();
+          SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
+          pool.add(sgc);
+          sgcObjects.addChild(sgc);
+        }
       }
-      
+
       int counter = 0;
-      for( SceneGraphComponent sgc : pool ){
-        if( counter >= images.size()  ){
-          sgc.setVisible( false );
+      for (SceneGraphComponent sgc : pool) {
+        if (counter >= images.size()) {
+          sgc.setVisible(false);
         } else {
-          Vector v = images.get( counter );
-          MatrixBuilder.euclidean().translate( v.getComponent(0), v.getComponent(1), 0.0 ).assignTo( sgc );
-          sgc.setVisible( true );                    
+          Vector[] triple = images.get(counter);
+          Vector position = triple[0];
+          Vector forward = triple[1];
+          forward.normalize();
+          // Vector left = triple[2];
+          // left.normalize();
+
+          double[] matrix = new double[16];
+          matrix[0 * 4 + 0] = forward.getComponent(0);
+          matrix[0 * 4 + 1] = -forward.getComponent(1);
+          matrix[0 * 4 + 2] = 0.0;
+          matrix[0 * 4 + 3] = 0.0;
+          matrix[1 * 4 + 0] = forward.getComponent(1);
+          matrix[1 * 4 + 1] = forward.getComponent(0);
+          matrix[1 * 4 + 2] = 0.0;
+          matrix[1 * 4 + 3] = 0.0;
+          matrix[2 * 4 + 0] = 0.0;
+          matrix[2 * 4 + 1] = 0.0;
+          matrix[2 * 4 + 2] = 1.0;
+          matrix[2 * 4 + 3] = 0.0;
+          matrix[3 * 4 + 0] = 0.0;
+          matrix[3 * 4 + 1] = 0.0;
+          matrix[3 * 4 + 2] = 0.0;
+          matrix[3 * 4 + 3] = 1.0;
+
+          MatrixBuilder.euclidean().translate(position.getComponent(0),
+              position.getComponent(1), 0.0).times(matrix).assignTo(sgc);
+          sgc.setVisible(true);
         }
         counter++;
       }

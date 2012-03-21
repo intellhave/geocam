@@ -138,8 +138,8 @@ public class CommonViewMethods {
           
           Vector[] triple = new Vector[3];
           triple[0] = transPos;
-          triple[1] = affineTrans.affineTransPoint( o.getDirectionForward() );
-          triple[2] = affineTrans.affineTransPoint( o.getDirectionLeft() );          
+          triple[1] = affineTrans.affineTransVector( o.getDirectionForward() );
+          triple[2] = affineTrans.affineTransVector( o.getDirectionLeft() );          
           
           imageList.add( triple );
         }
