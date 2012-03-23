@@ -142,9 +142,6 @@ public class DevelopmentView2D extends DevelopmentView {
 
   protected void generateObjectGeometry() {
 
-    VisibleObject obj = development.getSourceObject();
-    obj.setOrientation(cameraForward);
-
     HashMap<VisibleObject, ArrayList<Vector[]>> objectImages = new HashMap<VisibleObject, ArrayList<Vector[]>>();
     CommonViewMethods.getDevelopmentObjectImagesAndOrientations(development
         .getRoot(), objectImages);
@@ -178,7 +175,7 @@ public class DevelopmentView2D extends DevelopmentView {
         } else {
           Vector[] triple = images.get(counter);
           Vector position = triple[0];
-          Vector forward = triple[1];
+          Vector forward = triple[1];                            
           forward.normalize();
           // Vector left = triple[2];
           // left.normalize();
@@ -188,21 +185,38 @@ public class DevelopmentView2D extends DevelopmentView {
           matrix[0 * 4 + 1] = -forward.getComponent(1);
           matrix[0 * 4 + 2] = 0.0;
           matrix[0 * 4 + 3] = 0.0;
+          
           matrix[1 * 4 + 0] = forward.getComponent(1);
           matrix[1 * 4 + 1] = forward.getComponent(0);
           matrix[1 * 4 + 2] = 0.0;
           matrix[1 * 4 + 3] = 0.0;
+          
           matrix[2 * 4 + 0] = 0.0;
           matrix[2 * 4 + 1] = 0.0;
           matrix[2 * 4 + 2] = 1.0;
           matrix[2 * 4 + 3] = 0.0;
+          
           matrix[3 * 4 + 0] = 0.0;
           matrix[3 * 4 + 1] = 0.0;
           matrix[3 * 4 + 2] = 0.0;
           matrix[3 * 4 + 3] = 1.0;
 
-          MatrixBuilder.euclidean().translate(position.getComponent(0),
-              position.getComponent(1), 0.0).times(matrix).assignTo(sgc);
+          double epsilon = 0.05;
+          if( vo == development.getSourceObject() &&
+              position.getComponent(0) < epsilon &&
+              - epsilon < position.getComponent(0) &&
+              position.getComponent(1) < epsilon &&
+              - epsilon < position.getComponent(1) ){
+            
+              MatrixBuilder.euclidean()
+                           .translate(position.getComponent(0), position.getComponent(1), 0.0)
+                           .assignTo(sgc);              
+            
+          } else {
+            MatrixBuilder.euclidean()
+                         .translate(position.getComponent(0),position.getComponent(1), 0.0)
+                         .times(matrix).assignTo(sgc);            
+          }
           sgc.setVisible(true);
         }
         counter++;
