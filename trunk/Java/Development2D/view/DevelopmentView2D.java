@@ -29,10 +29,8 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.DevelopmentNode;
-import development.TimingStatistics;
 import development.Vector;
 
-import objects.MovingObject;
 import objects.ObjectAppearance;
 import objects.VisibleObject;
 
@@ -143,8 +141,7 @@ public class DevelopmentView2D extends DevelopmentView {
   protected void generateObjectGeometry() {
 
     HashMap<VisibleObject, ArrayList<Vector[]>> objectImages = new HashMap<VisibleObject, ArrayList<Vector[]>>();
-    CommonViewMethods.getDevelopmentObjectImagesAndOrientations(development
-        .getRoot(), objectImages);
+    CommonViewMethods.getDevelopmentObjectImagesAndOrientations(development.getRoot(), objectImages);
 
     for (VisibleObject vo : objectImages.keySet()) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(vo);
@@ -201,22 +198,12 @@ public class DevelopmentView2D extends DevelopmentView {
           matrix[3 * 4 + 2] = 0.0;
           matrix[3 * 4 + 3] = 1.0;
 
-          double epsilon = 0.05;
-          if( vo == development.getSourceObject() &&
-              position.getComponent(0) < epsilon &&
-              - epsilon < position.getComponent(0) &&
-              position.getComponent(1) < epsilon &&
-              - epsilon < position.getComponent(1) ){
-            
-              MatrixBuilder.euclidean()
-                           .translate(position.getComponent(0), position.getComponent(1), 0.0)
-                           .assignTo(sgc);              
-            
-          } else {
-            MatrixBuilder.euclidean()
-                         .translate(position.getComponent(0),position.getComponent(1), 0.0)
-                         .times(matrix).assignTo(sgc);            
-          }
+          MatrixBuilder.euclidean()
+                       .translate(position.getComponent(0),position.getComponent(1), 0.0)
+                       .times(matrix)
+                       .scale( vo.getAppearance().getScale() )
+                       .assignTo(sgc);            
+
           sgc.setVisible(true);
         }
         counter++;

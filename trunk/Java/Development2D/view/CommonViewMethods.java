@@ -11,7 +11,6 @@ import objects.ManifoldPath;
 import objects.VisibleObject;
 import objects.VisiblePath;
 import de.jreality.scene.SceneGraphComponent;
-import de.jreality.scene.Transformation;
 import development.AffineTransformation;
 import development.DevelopmentNode;
 import development.Frustum2D;

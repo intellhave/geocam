@@ -15,12 +15,9 @@ import de.jreality.shader.CommonAttributes;
  * 
  * Look at de.jreality.tutorial.app.PointShaderExample for fancier ways to specify point appearance
  */
-
-
-
 public class ObjectAppearance {
   
-  public static enum ModelType { ANT, APPLE, COOKIE };
+  public static enum ModelType { ANT, APPLE, COOKIE, ROCKET, SATTELITE, CUBE };
   
   private double scale = 1.0;
   private Color c = Color.BLUE; 
@@ -31,28 +28,38 @@ public class ObjectAppearance {
     this.scale = scale;
     c = color;
   }
-  
+
   public static ObjectAppearance makeModel(ModelType mt) {
     ObjectAppearance oa = new ObjectAppearance();
     oa.model = mt;
     switch (mt) {
-    case ANT:
-      oa.scale = 1.0;
+    case CUBE:
+      oa.scale = 0.2;
       break;
     case APPLE:
-      oa.scale = 0.005;
+      oa.scale = 0.1;
       break;
-    case COOKIE:
-      oa.scale = 0.05;
+
+    case SATTELITE:
+    case ROCKET:
+      oa.scale = 0.1;
+      break;
+    case ANT:
+    case COOKIE:    
+    default:
+      oa.scale = 1.0;
       break;
     }
     return oa;
   }
 
-  public void setRadius(double scale){ this.scale = scale; }
+  public void setScale(double scale){ this.scale = scale; }
+  public double getScale(){ return this.scale; }
+  
   public void setColor(Color color){ c = color; }
   public boolean isTransparent(){ 
-    //possible values for c.getTransparency() are Transparency.BITMASK, Transparency.OPAQUE, Transparency.TRANSLUCENT 
+    //possible values for c.getTransparency() are Transparency.BITMASK,
+    // Transparency.OPAQUE, Transparency.TRANSLUCENT 
     return (c.getTransparency() == Transparency.TRANSLUCENT); 
   }
   
@@ -82,8 +89,18 @@ public class ObjectAppearance {
       ff = new File("Data/blender/apple.3ds");
       break;
     case COOKIE:
-    default:
       ff = new File("Data/blender/cookie.3ds");
+      break;
+    case ROCKET:
+      ff = new File("Data/blender/rocket.3ds");
+      break;
+    case SATTELITE:
+      ff = new File("Data/blender/sattelite.3ds");
+      break;
+    case CUBE:
+    default:
+      ff = new File("Data/blender/cube.3ds");
+      break;
     }
 
     SceneGraphComponent sgc = null;

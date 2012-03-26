@@ -15,7 +15,6 @@ import triangulation.Vertex;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.reader.Readers;
 import de.jreality.scene.Geometry;
-import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.DataList;
 import de.jreality.util.Input;
