@@ -35,7 +35,6 @@ import de.jtem.jrworkspace.plugin.Controller;
 import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.DevelopmentNode;
-import development.TimingStatistics;
 import development.Vector;
 
 public class DevelopmentViewSim3D extends DevelopmentView {
@@ -193,9 +192,6 @@ public class DevelopmentViewSim3D extends DevelopmentView {
   }
 
   protected void generateObjectGeometry() {
-
-    VisibleObject obj = development.getSourceObject();
-    obj.setOrientation(cameraForward);
     
     HashMap<VisibleObject, ArrayList<Vector[]>> objectImages = new HashMap<VisibleObject, ArrayList<Vector[]>>();
     CommonViewMethods.getDevelopmentObjectImagesAndOrientations(development.getRoot(), objectImages);
@@ -239,11 +235,13 @@ public class DevelopmentViewSim3D extends DevelopmentView {
           matrix[1*4+0] = forward.getComponent(1); matrix[1*4+1] =  forward.getComponent(0); matrix[1*4+2] = 0.0; matrix[1*4+3] = 0.0;
           matrix[2*4+0] = 0.0; matrix[2*4+1] = 0.0; matrix[2*4+2] = 1.0; matrix[2*4+3] = 0.0;
           matrix[3*4+0] = 0.0; matrix[3*4+1] = 0.0; matrix[3*4+2] = 0.0; matrix[3*4+3] = 1.0;
-               
+                                   
           MatrixBuilder.euclidean()
               .translate(position.getComponent(0), position.getComponent(1), height)
               .times(matrix)
-              .rotate(Math.PI, new double[] { 1, 0, 0 }).assignTo(sgc);
+              .rotate(Math.PI, new double[] { 1, 0, 0 })
+              .scale(vo.getAppearance().getScale())
+              .assignTo(sgc);
           sgc.setVisible(true);
         }
         counter++;
@@ -297,9 +295,7 @@ public class DevelopmentViewSim3D extends DevelopmentView {
       shrinkPanel.add(heightSlider);
 
       // specify layout
-      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6)); // a
-                                                                          // little
-                                                                          // padding
+      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));                                                                           // padding
       shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),
           BoxLayout.Y_AXIS));
     }

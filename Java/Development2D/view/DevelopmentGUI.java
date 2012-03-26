@@ -1,8 +1,6 @@
 package view;
 
 import inputOutput.TriangulationIO;
-import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -25,7 +23,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -80,12 +77,11 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Vector sourcePoint;
   private static Face sourceFace;
   private static ColorScheme colorScheme;
-  private int currentDepth = 3;
-//  private static String filename = "Data/off/dodec.off";
+  private int currentDepth = 1;
 //  private String filename = "Data/off/square2.off";
-   private static String filename = "Data/off/tetra2.off";
+//   private static String filename = "Data/off/tetra2.off";
 //  private static String filename = "Data/off/tetra3.off";
-//  private static String filename = "Data/off/icosa.off";
+  private static String filename = "Data/off/icosa.off";
 //  private static String filename = "Data/off/cone.off";
 //  private static String filename = "Data/off/epcot.off";
 //  private static String filename = "Data/off/square2.off";
@@ -164,10 +160,8 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     colorScheme = new ColorScheme(schemes.FACE);
     development = null;
    
- //   loadSurface(filename);
+    //   loadSurface(filename);
     initializeSurface();
-    
- //   layoutGUI();
     
     //make it display timing statistics on exit
     Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -175,26 +169,6 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     });
     
     setUpObjects();
-//    //set up objects
-//    development.getSourceObject().getAppearance().setRadius(objectRadius);
-//    Random rand = new Random();
-//    for(int i=0; i<MOVING_OBJECT_COUNT; i++){
-//      MovingObject newObject = new MovingObject( 
-//          development.getSource(), 
-//          new ObjectAppearance(objectRadius, randomColor(rand)), 
-//          randomUnitVector(rand) );
-//      if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
-//      movingObjects.add(newObject);
-//    }
-//    for(MovingObject o : movingObjects){
-//      o.setSpeed(objectSpeed); //scale so speed is correct
-//      dynamics.addObject(o); 
-//    }
-//    if(INITIAL_MOVEMENT_STATUS){ 
-//      dynamics.start(); 
-//    }else{
-//      dynamics.evolve(300); //nudge the objects a little bit (300 ms)
-//    }
 
     view2D = new DevelopmentView2D(development, colorScheme);
     view2D.setDrawEdges(drawEdges);
@@ -289,18 +263,16 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   
   private void setUpObjects(){
     //set up objects
-    development.getSourceObject().getAppearance().setRadius(objectRadius);
+    development.getSourceObject()
+               .setAppearance( ObjectAppearance.makeModel( ObjectAppearance.ModelType.ANT ));
     Random rand = new Random();
     
     for(int i=0; i<numObjects; i++){
       ObjectAppearance oa;
       if( i % 2 == 0 ){
         oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.ANT );        
-      } else if( i % 2 == 1) {
-        oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.COOKIE );
       } else {
-        // Not used, for now.
-        oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.APPLE );
+        oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.ROCKET );
       }
       
       MovingObject newObject = new MovingObject( 
@@ -435,9 +407,9 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     		pointSizeSlider.addChangeListener(new ChangeListener() {
     			public void stateChanged(ChangeEvent e) {
     				objectRadius = ((JSlider)e.getSource()).getValue()/100.0;
-    				development.getSourceObject().getAppearance().setRadius(objectRadius);
+    				development.getSourceObject().getAppearance().setScale(objectRadius);
     				for(MovingObject o : movingObjects){ 
-    					o.getAppearance().setRadius(objectRadius);
+    					o.getAppearance().setScale(objectRadius);
     				}
     				pointBorder.setTitle("Object Radius (" + objectRadius + ")");
     				updateGeometry(false,true);

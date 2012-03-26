@@ -34,8 +34,8 @@ public class ShootingGame extends ObjectDynamics{
   //options
   public void setTargetSpeed(double targetUnitsPerSecond){ targetSpeed = targetUnitsPerSecond; }
   public void setBulletSpeed(double bulletUnitsPerSecond){ bulletSpeed = bulletUnitsPerSecond; }
-  public void setTargetRadius(double radius){ targetAppearance.setRadius(radius); }
-  public void setBulletRadius(double radius){ bulletAppearance.setRadius(radius); }
+  public void setTargetRadius(double radius){ targetAppearance.setScale(radius); }
+  public void setBulletRadius(double radius){ bulletAppearance.setScale(radius); }
   public void setCollisionThreshhold(double d){ collisionThreshhold = d; }
   public void setClearBulletsOnHit(boolean value){ clearBulletsOnHit = value; }
   

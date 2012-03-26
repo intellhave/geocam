@@ -1,7 +1,6 @@
 package development;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Vector {
   //private static final double epsilon = Math.pow(10, -6);

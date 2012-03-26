@@ -10,7 +10,6 @@ import objects.VisibleObject;
 
 import triangulation.Edge;
 import triangulation.Face;
-import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
 
@@ -105,6 +104,11 @@ public class Development {
   public void rotate(double angle) {
     
     source.rotateOrientation(angle);
+    // jthomas: For reasons I don't understand, it is very
+    // important to reset the sourceObject's manifold position.
+    // I would think this ought to be covered by pointing to
+    // the same ManifoldPosition object, but this isn't true. 
+    sourceObject.setManifoldPosition(source);
     rebuild();
   }
   
@@ -116,9 +120,11 @@ public class Development {
   public void translateSourcePoint(double dForward, double dLeft) {
 
     source.move(source.getDirection(dForward, dLeft));
+    // jthomas: For reasons I don't understand, it is very
+    // important to reset the sourceObject's manifold position.
     sourceObject.setManifoldPosition(source);
     rebuild();
-//    System.out.println("Source = " + source.getFace());
+    
   }
 
   
@@ -151,7 +157,7 @@ public class Development {
 
     EmbeddedFace transformedFace = t.affineTransFace(source.getFace());
     root = new DevelopmentNode(null, source.getFace(), null, transformedFace, t);
-//System.out.println(source.getFace());
+
     // continue development across each adjacent edge
     List<Vertex> vertices = source.getFace().getLocalVertices();
     for (int i = 0; i < vertices.size(); i++) {

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 import objects.ManifoldPosition;
 
-import triangulation.Face;
-
 /**
  * Fading Node
  * 
