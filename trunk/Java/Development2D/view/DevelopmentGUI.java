@@ -78,10 +78,10 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Face sourceFace;
   private static ColorScheme colorScheme;
   private int currentDepth = 1;
-//  private String filename = "Data/off/square2.off";
-//   private static String filename = "Data/off/tetra2.off";
+
+  private static String filename = "Data/off/tetra2.off";
 //  private static String filename = "Data/off/tetra3.off";
-  private static String filename = "Data/off/icosa.off";
+//  private static String filename = "Data/off/icosa.off";
 //  private static String filename = "Data/off/cone.off";
 //  private static String filename = "Data/off/epcot.off";
 //  private static String filename = "Data/off/square2.off";
@@ -106,6 +106,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   
   private boolean drawEdges = true;
   private boolean drawFaces = true;
+  private boolean drawAvatar = true;
   //------------------------------------
     
   //--- objects ------------------------
@@ -120,6 +121,8 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private JButton depthSchemeButton;
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
+  private JCheckBox drawAvatarBox;
+  
   private JMenuItem open;
   private JMenu file;
   private JSlider numObjectsSlider;
@@ -589,6 +592,21 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     			}
     		});
     	}
+
+      {
+        drawAvatarBox = new JCheckBox();
+        drawOptionsPanel.add(drawAvatarBox);
+        drawAvatarBox.setText("Draw Avatar");
+        drawAvatarBox.setSelected(true);
+        drawAvatarBox.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            drawAvatar = ((JCheckBox) e.getSource()).isSelected();
+            if (showView3D) {
+              view3D.setDrawAvatar(drawAvatar);
+            }
+          }
+        });
+      }
     }
     {
     	numObjectsSlider = new JSlider();

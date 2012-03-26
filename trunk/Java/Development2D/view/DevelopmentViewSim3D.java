@@ -43,6 +43,8 @@ public class DevelopmentViewSim3D extends DevelopmentView {
   private double height = INITIAL_HEIGHT / 100.0;
   private static int MAX_HEIGHT = 50;
 
+  private boolean showAvatar = true;
+  
   // private static final boolean USE_SHOOT_TOOL = false;
 
   private Viewer viewer;
@@ -242,13 +244,27 @@ public class DevelopmentViewSim3D extends DevelopmentView {
               .rotate(Math.PI, new double[] { 1, 0, 0 })
               .scale(vo.getAppearance().getScale())
               .assignTo(sgc);
-          sgc.setVisible(true);
+          
+          // This is a hack to find the SGC that displays the avatar.
+          // In the future, we should have a dedicated SGC pointer for the avatar. 
+          double epsilon = 0.05;
+          if( position.lengthSquared() < epsilon ){
+            sgc.setVisible( this.showAvatar );
+          } else {
+            sgc.setVisible(true);
+          }
         }
         counter++;
       }
     }
   }
 
+
+  public void setDrawAvatar(boolean showAvatar) {
+     this.showAvatar = showAvatar; 
+     this.refreshView();
+  }
+  
   // ================== Shooting Tool ==================
 
   /*
@@ -295,7 +311,7 @@ public class DevelopmentViewSim3D extends DevelopmentView {
       shrinkPanel.add(heightSlider);
 
       // specify layout
-      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));                                                                           // padding
+      shrinkPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
       shrinkPanel.setLayout(new BoxLayout(shrinkPanel.getContentPanel(),
           BoxLayout.Y_AXIS));
     }
@@ -312,4 +328,5 @@ public class DevelopmentViewSim3D extends DevelopmentView {
       return info;
     }
   }
+
 }
