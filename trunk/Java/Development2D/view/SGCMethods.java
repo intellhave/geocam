@@ -303,7 +303,7 @@ public class SGCMethods {
     app.setAttribute(CommonAttributes.FACE_DRAW, true);
     app.setAttribute(CommonAttributes.EDGE_DRAW, true);
     app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    app.setAttribute(CommonAttributes.LIGHTING_ENABLED, false);
+    app.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
     app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, true);
     
     //set shaders
@@ -311,15 +311,24 @@ public class SGCMethods {
     
     //line shader
     DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
-    dls.setTubeDraw(false);
+    dls.setTubeDraw(true);
     dls.setLineWidth(0.0);
     dls.setDiffuseColor(Color.BLACK);
+//    dls.setDiffuseColor(Color.BLUE);
     
+      
     //polygon shader
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
     //dps.setDiffuseColor(color);
-    dps.setTransparency(0.89d);
-    return app;
+ //   dps.setTransparency(0.89d);
+ //   dps.setDiffuseCoefficient(10.0);
+ //   dps.setDiffuseColor(Color.BLUE);
+    dps.setAmbientCoefficient(0.2);
+    dps.setAmbientColor(Color.WHITE);
+    dps.setSmoothShading(false);
+ //   dps.setSpecularCoefficient(10.0);
+    dps.setTransparency(0.8d);
+     return app;
   }
 
   // class designed to make it easy to use an IndexedFaceSetFactory

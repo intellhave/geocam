@@ -1,6 +1,8 @@
 package view;
 
 import inputOutput.TriangulationIO;
+import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -23,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -34,6 +37,7 @@ import objects.MovingObject;
 import objects.ObjectAppearance;
 import objects.ObjectDynamics;
 import objects.PathAppearance;
+import objects.ShootingGame;
 
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -77,18 +81,19 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Vector sourcePoint;
   private static Face sourceFace;
   private static ColorScheme colorScheme;
-  private int currentDepth = 1;
-
-  private static String filename = "Data/off/tetra2.off";
-//  private static String filename = "Data/off/tetra3.off";
+  private int currentDepth = 8;
+//  private String filename = "Data/off/square2.off";
+//  private static String filename = "Data/off/tetra.off";
+//  private static String filename = "Data/off/tetra2.off";
 //  private static String filename = "Data/off/icosa.off";
+  private static String filename = "Data/off/dodec2.off";
 //  private static String filename = "Data/off/cone.off";
 //  private static String filename = "Data/off/epcot.off";
 //  private static String filename = "Data/off/square2.off";
-//  private static String filename = "Data/Triangulations/2DManifolds/tetrahedronnonembed3.xml";
+//  private static String filename = "Data/Triangulations/2DManifolds/tetrahedronnonembed2.xml";
 //  private static String filename = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
 //  private static String filename = "Data/Triangulations/2DManifolds/tetrahedronnew.xml";
-//  private static String filename = "Data/Triangulations/2DManifolds/torus-9.xml";
+//  private static String filename = "Data/Triangulations/2DManifolds/torus-9-2.xml";
 
   //------------------------------------
   
@@ -100,20 +105,22 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static LinkedList<DevelopmentView> devViewers = new LinkedList<DevelopmentView>(); //active viewers
   
   //some viewer options
-  private boolean showView2D = true;
+  private boolean showView2D = false;
   private boolean showView3D = false;
   private boolean showEmbedded = false;
   
   private boolean drawEdges = true;
   private boolean drawFaces = true;
-  private boolean drawAvatar = true;
   //------------------------------------
     
   //--- objects ------------------------
-  //private static ShootingGame shootingGame = new ShootingGame();
+  private static ShootingGame shootingGame;   
   private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
-  private static final int MOVING_OBJECT_START = 2;//15;
+  private static double targetSpeed = 0.5;
+  private static final double TARGET_SPEED_INCREMENT = 0.1;
+  private static int nHits = 0; 
+  private static final int MOVING_OBJECT_START = 3;//15;
   private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
   double objectRadius = 0.1;
@@ -121,8 +128,6 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private JButton depthSchemeButton;
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
-  private JCheckBox drawAvatarBox;
-  
   private JMenuItem open;
   private JMenu file;
   private JSlider numObjectsSlider;
@@ -161,10 +166,13 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   
   private void eDevelopmentGUI() {
     colorScheme = new ColorScheme(schemes.FACE);
+
     development = null;
    
-    //   loadSurface(filename);
+ //   loadSurface(filename);
     initializeSurface();
+ 
+ //   layoutGUI();
     
     //make it display timing statistics on exit
     Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -172,14 +180,45 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     });
     
     setUpObjects();
-
+    shootingGame = new ShootingGame(50);
+    shootingGame.setTargetSpeed(targetSpeed);
+    System.out.println("Initial target is moving " + targetSpeed + " units/sec.");
+    shootingGame.addTarget(development.getSource(), randomUnitVector(new Random()) );
+    shootingGame.addListener(this);
+    if(INITIAL_MOVEMENT_STATUS){ shootingGame.start(); }
+    
+     
+    
+    
+    
+//    //set up objects
+//    development.getSourceObject().getAppearance().setRadius(objectRadius);
+//    Random rand = new Random();
+//    for(int i=0; i<MOVING_OBJECT_COUNT; i++){
+//      MovingObject newObject = new MovingObject( 
+//          development.getSource(), 
+//          new ObjectAppearance(objectRadius, randomColor(rand)), 
+//          randomUnitVector(rand) );
+//      if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
+//      movingObjects.add(newObject);
+//    }
+//    for(MovingObject o : movingObjects){
+//      o.setSpeed(objectSpeed); //scale so speed is correct
+//      dynamics.addObject(o); 
+//    }
+//    if(INITIAL_MOVEMENT_STATUS){ 
+//      dynamics.start(); 
+//    }else{
+//      dynamics.evolve(300); //nudge the objects a little bit (300 ms)
+//    }
+/*
     view2D = new DevelopmentView2D(development, colorScheme);
     view2D.setDrawEdges(drawEdges);
     view2D.setDrawFaces(drawFaces);
     view2D.updateGeometry(true,true);
     view2D.initializeNewManifold();
     devViewers.add(view2D);
-    
+*/    
     //start listening for updates
     development.addViewer(this);
     dynamics.addListener(this);
@@ -266,31 +305,20 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   
   private void setUpObjects(){
     //set up objects
-    development.getSourceObject()
-               .setAppearance( ObjectAppearance.makeModel( ObjectAppearance.ModelType.ANT ));
+//    development.getSourceObject().getAppearance().setRadius(objectRadius);
     Random rand = new Random();
-    
     for(int i=0; i<numObjects; i++){
-      ObjectAppearance oa;
-      if( i % 2 == 0 ){
-        oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.ANT );        
-      } else {
-        oa = ObjectAppearance.makeModel( ObjectAppearance.ModelType.ROCKET );
-      }
-      
       MovingObject newObject = new MovingObject( 
-          development.getSource(), oa, randomUnitVector(rand) );
-      
+          development.getSource(), 
+          new ObjectAppearance(objectRadius, randomColor(rand)), 
+          randomUnitVector(rand) );
       if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
       movingObjects.add(newObject);
-    
     }
-    
     for(MovingObject o : movingObjects){
       o.setSpeed(objectSpeed); //scale so speed is correct
       dynamics.addObject(o); 
     }
-    
     if(INITIAL_MOVEMENT_STATUS){ 
       dynamics.start(); 
     }else{
@@ -410,9 +438,9 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     		pointSizeSlider.addChangeListener(new ChangeListener() {
     			public void stateChanged(ChangeEvent e) {
     				objectRadius = ((JSlider)e.getSource()).getValue()/100.0;
-    				development.getSourceObject().getAppearance().setScale(objectRadius);
+//    				development.getSourceObject().getAppearance().setRadius(objectRadius);
     				for(MovingObject o : movingObjects){ 
-    					o.getAppearance().setScale(objectRadius);
+//    					o.getAppearance().setRadius(objectRadius);
     				}
     				pointBorder.setTitle("Object Radius (" + objectRadius + ")");
     				updateGeometry(false,true);
@@ -527,6 +555,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     					view3D.updateGeometry(true,true);
     					view3D.initializeNewManifold();
     					devViewers.add(view3D);
+//    					view3D.installShootTool(shootingGame);
     				}else{
     					//end the embedded  viewer
     					devViewers.remove(view3D);
@@ -592,21 +621,6 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     			}
     		});
     	}
-
-      {
-        drawAvatarBox = new JCheckBox();
-        drawOptionsPanel.add(drawAvatarBox);
-        drawAvatarBox.setText("Draw Avatar");
-        drawAvatarBox.setSelected(true);
-        drawAvatarBox.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-            drawAvatar = ((JCheckBox) e.getSource()).isSelected();
-            if (showView3D) {
-              view3D.setDrawAvatar(drawAvatar);
-            }
-          }
-        });
-      }
     }
     {
     	numObjectsSlider = new JSlider();
