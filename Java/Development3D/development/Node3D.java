@@ -12,7 +12,7 @@ public class Node3D {
   protected Vector pos; // coordinates in containing face
   protected double radius = 0.03;
   protected Vector movement = new Vector(0,0);
-  protected double transparency = 0.01;
+  protected double transparency = 0.1;
   
   public Node3D(Color color, Tetra tetra, Vector pos) {
     this.color = color;

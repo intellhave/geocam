@@ -69,7 +69,7 @@ public class CoordTrans2D extends Geoquant {
 
     if ((!f.sameOrientation(e) && f2.sameOrientation(e)) ||(f.sameOrientation(e) && !f2.sameOrientation(e)))
     //(Vector.cross(Vector.subtract(cv2f2value,cv1f2value),Vector.subtract(cw2value,cv1f2value)).getComponent(0)/Vector.cross(Vector.subtract(cv2f1value,cv1f1value),Vector.subtract(cw1value,cv1f1value)).getComponent(0)<0){
-      flip = true;
+      flip = false;
     else{
       flip = false;
     }

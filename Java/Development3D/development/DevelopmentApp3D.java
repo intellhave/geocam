@@ -63,7 +63,7 @@ public class DevelopmentApp3D {
   //options
   private static boolean show_tetras_ = true;
   private static double object_radius_ = 0.3;
-  private static final int max_recursion_depth_ = 5;
+  private static final int max_recursion_depth_ = 1;//5;
   //private static final double movement_units_per_second_ = 1.0;
   private static final double movement_seconds_per_rotation_ = 2.0;
   //private static final double bounding_cube_side_length_ = 4.0;
@@ -509,7 +509,8 @@ public class DevelopmentApp3D {
     //polygon shader
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs.getPolygonShader();
     dps.setDiffuseColor(color);
-    dps.setTransparency(0.89d);
+//    dps.setTransparency(0.89d);
+    dps.setTransparency(0.01d);
     
     //set appearance
     sgc.setAppearance(app);

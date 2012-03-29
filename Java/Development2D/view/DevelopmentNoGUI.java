@@ -35,7 +35,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
   //--- objects ------------------------
   private static ShootingGame shootingGame;
   private static final boolean INITIAL_MOVEMENT_STATUS = true;
-  private static double targetSpeed = 0.5;
+  private static double targetSpeed = 0.1;
   private static final double TARGET_SPEED_INCREMENT = 0.1;
   private static int nHits = 0; 
   //------------------------------------
@@ -51,6 +51,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
     development = null;
  //   String filename = "Data/off/epcot.off";
     String filename = "Data/Triangulations/2DManifolds/tetrahedronnew.xml";
+ //   String filename = "Data/off/cone.off";
     
     loadSurface(filename);
 

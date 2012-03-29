@@ -107,9 +107,32 @@ public class ConvexHull3D {
     }
 
     // complete initial tetrahedron
-    EmbeddedFace f2 = new EmbeddedFace(f1.getVectorAt(1), f1.getVectorAt(0), unsorted.get(i));
-    EmbeddedFace f3 = new EmbeddedFace(f1.getVectorAt(2), f1.getVectorAt(1), unsorted.get(i));
-    EmbeddedFace f4 = new EmbeddedFace(f1.getVectorAt(0), f1.getVectorAt(2), unsorted.get(i));
+ //   EmbeddedFace f2 = new EmbeddedFace(f1.getVectorAt(1), f1.getVectorAt(0), unsorted.get(i));
+    EmbeddedFace f2 = new EmbeddedFace(unsorted.get(0), unsorted.get(1), unsorted.get(i));
+    dot = Vector.dot(f2.getNormal(), Vector.subtract(
+        unsorted.get(2), unsorted.get(0)));
+    if (dot > 0) { // change order
+//      f2 = new EmbeddedFace(f1.getVectorAt(0), f1.getVectorAt(1), unsorted.get(i));
+      f2 = new EmbeddedFace(unsorted.get(1), unsorted.get(0), unsorted.get(i));
+    }
+    
+//    EmbeddedFace f3 = new EmbeddedFace(f1.getVectorAt(2), f1.getVectorAt(1), unsorted.get(i));
+    EmbeddedFace f3 = new EmbeddedFace(unsorted.get(2), unsorted.get(1), unsorted.get(i));
+    dot = Vector.dot(f3.getNormal(), Vector.subtract(
+        unsorted.get(0), unsorted.get(2)));
+    if (dot > 0) { // change order
+//  f3 = new EmbeddedFace(f1.getVectorAt(1), f1.getVectorAt(2), unsorted.get(i));
+      f3 = new EmbeddedFace(unsorted.get(1), unsorted.get(2), unsorted.get(i)); 
+    }
+    
+//    EmbeddedFace f4 = new EmbeddedFace(f1.getVectorAt(0), f1.getVectorAt(2), unsorted.get(i));
+    EmbeddedFace f4 = new EmbeddedFace(unsorted.get(0), unsorted.get(2), unsorted.get(i));
+    dot = Vector.dot(f4.getNormal(), Vector.subtract(
+        unsorted.get(1), unsorted.get(0)));
+    if (dot > 0) { // change order
+//      f4 = new EmbeddedFace(f1.getVectorAt(2), f1.getVectorAt(0), unsorted.get(i));
+      f4 = new EmbeddedFace(unsorted.get(2), unsorted.get(0), unsorted.get(i));
+    }
 
     unsorted.remove(i);
     unsorted.remove(2);

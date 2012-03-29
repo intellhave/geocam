@@ -61,7 +61,7 @@ public class Development3DGUI extends JRViewer {
 
   private static Development3D development_;
   private static Vector sourcePoint_;
-  private static int currentDepth_ = 5;
+  private static int currentDepth_ = 1;
   private static final int MAX_DEPTH_ = 7;
   private static double stepSize_ = 0.01;
   private static double radius_ = 0.1;
@@ -80,8 +80,8 @@ public class Development3DGUI extends JRViewer {
   private static Timer moveTimer_; // timer for moving objects
 
   public static void main(String[] args) {
-    // loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
-     loadSurface("Data/Triangulations/3DManifolds/FlatTorus2.xml");
+     loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
+    // loadSurface("Data/Triangulations/3DManifolds/FlatTorus2.xml");
 
     //loadSurface("Data/Triangulations/3DManifolds/pentachoron2.xml");
     colorScheme_ = new ColorScheme3D(schemes.FACE);
