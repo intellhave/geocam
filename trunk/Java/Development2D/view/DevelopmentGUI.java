@@ -84,8 +84,8 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private int currentDepth = 8;
 //  private String filename = "Data/off/square2.off";
 //  private static String filename = "Data/off/tetra.off";
-  private static String filename = "Data/off/tetra2.off";
-//  private static String filename = "Data/blender/neckpinch.off";
+//  private static String filename = "Data/off/tetra2.off";
+  private static String filename = "Data/blender/neckpinch.off";
 //  private static String filename = "Data/off/icosa.off";
 //  private static String filename = "Data/off/dodec2.off";
 //  private static String filename = "Data/off/cone.off";
