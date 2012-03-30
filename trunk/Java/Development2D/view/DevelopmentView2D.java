@@ -85,8 +85,14 @@ public class DevelopmentView2D extends DevelopmentView {
         scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
   }
   
-  protected void initializeNewManifold(){
-    updateCamera();
+  protected void initializeNewManifold(){        
+//    for( LinkedList<SceneGraphComponent> pool : sgcpools.values() ){
+//      while( ! pool.isEmpty() ){
+//        SceneGraphComponent sgc = pool.remove();
+//        sgcRoot.removeChild( sgc );
+//      }      
+//    }
+    updateCamera();    
   }
   /*protected void updateGeometry() {
     

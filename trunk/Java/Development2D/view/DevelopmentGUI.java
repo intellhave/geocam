@@ -1,8 +1,6 @@
 package view;
 
 import inputOutput.TriangulationIO;
-import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -25,7 +23,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.border.BevelBorder;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -62,6 +61,7 @@ import development.Vector;
 * THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
+@SuppressWarnings("static-access")
 public class DevelopmentGUI extends JFrame  implements Development.DevelopmentViewer, ObjectDynamics.DynamicsListener{
   private static final long serialVersionUID = 1L;
 
@@ -84,9 +84,10 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private int currentDepth = 8;
 //  private String filename = "Data/off/square2.off";
 //  private static String filename = "Data/off/tetra.off";
-//  private static String filename = "Data/off/tetra2.off";
+  private static String filename = "Data/off/tetra2.off";
+//  private static String filename = "Data/blender/neckpinch.off";
 //  private static String filename = "Data/off/icosa.off";
-  private static String filename = "Data/off/dodec2.off";
+//  private static String filename = "Data/off/dodec2.off";
 //  private static String filename = "Data/off/cone.off";
 //  private static String filename = "Data/off/epcot.off";
 //  private static String filename = "Data/off/square2.off";
@@ -123,7 +124,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static final int MOVING_OBJECT_START = 3;//15;
   private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
-  double objectRadius = 0.1;
+  double objectScale = 1.0;
   int numObjects = MOVING_OBJECT_START;
   private JButton depthSchemeButton;
   private JCheckBox drawEdgesBox;
@@ -147,7 +148,6 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private JPanel sliderPanel;
   //don't generally need to keep track of this list, but GUI will change the objects' properties
   private LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
-  //------------------------------------
  
   //--GUI pieces ----------------------------------------------
   JMenuBar menuBar;
@@ -168,57 +168,21 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     colorScheme = new ColorScheme(schemes.FACE);
 
     development = null;
-   
- //   loadSurface(filename);
     initializeSurface();
- 
- //   layoutGUI();
-    
+
     //make it display timing statistics on exit
     Runtime.getRuntime().addShutdownHook(new Thread() {
       public void run(){ TimingStatistics.printData(); }
     });
     
     setUpObjects();
-    shootingGame = new ShootingGame(50);
-    shootingGame.setTargetSpeed(targetSpeed);
-    System.out.println("Initial target is moving " + targetSpeed + " units/sec.");
-    shootingGame.addTarget(development.getSource(), randomUnitVector(new Random()) );
-    shootingGame.addListener(this);
-    if(INITIAL_MOVEMENT_STATUS){ shootingGame.start(); }
-    
-     
-    
-    
-    
-//    //set up objects
-//    development.getSourceObject().getAppearance().setRadius(objectRadius);
-//    Random rand = new Random();
-//    for(int i=0; i<MOVING_OBJECT_COUNT; i++){
-//      MovingObject newObject = new MovingObject( 
-//          development.getSource(), 
-//          new ObjectAppearance(objectRadius, randomColor(rand)), 
-//          randomUnitVector(rand) );
-//      if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
-//      movingObjects.add(newObject);
-//    }
-//    for(MovingObject o : movingObjects){
-//      o.setSpeed(objectSpeed); //scale so speed is correct
-//      dynamics.addObject(o); 
-//    }
-//    if(INITIAL_MOVEMENT_STATUS){ 
-//      dynamics.start(); 
-//    }else{
-//      dynamics.evolve(300); //nudge the objects a little bit (300 ms)
-//    }
-/*
-    view2D = new DevelopmentView2D(development, colorScheme);
-    view2D.setDrawEdges(drawEdges);
-    view2D.setDrawFaces(drawFaces);
-    view2D.updateGeometry(true,true);
-    view2D.initializeNewManifold();
-    devViewers.add(view2D);
-*/    
+//    shootingGame = new ShootingGame(50);
+//    shootingGame.setTargetSpeed(targetSpeed);
+//    System.out.println("Initial target is moving " + targetSpeed + " units/sec.");
+//    shootingGame.addTarget(development.getSource(), randomUnitVector(new Random()) );
+//    shootingGame.addListener(this);
+//    if(INITIAL_MOVEMENT_STATUS){ shootingGame.start(); }
+//    
     //start listening for updates
     development.addViewer(this);
     dynamics.addListener(this);
@@ -298,7 +262,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     sourcePoint.scale(1.0f / 3.0f);
 
     if (development == null)
-      development = new Development(new ManifoldPosition(sourceFace, sourcePoint), currentDepth, objectRadius);
+      development = new Development(new ManifoldPosition(sourceFace, sourcePoint), currentDepth, objectScale);
     else development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), currentDepth);
 
   }
@@ -310,7 +274,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     for(int i=0; i<numObjects; i++){
       MovingObject newObject = new MovingObject( 
           development.getSource(), 
-          new ObjectAppearance(objectRadius, randomColor(rand)), 
+          new ObjectAppearance(objectScale, randomColor(rand)), 
           randomUnitVector(rand) );
       if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
       movingObjects.add(newObject);
@@ -328,12 +292,20 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   }
   
   TitledBorder depthBorder = BorderFactory.createTitledBorder("Recursion Depth (" + currentDepth + ")");
-  TitledBorder pointBorder = BorderFactory.createTitledBorder("Object Radius (" + objectRadius + ")");
+  TitledBorder pointBorder = BorderFactory.createTitledBorder("Object Scaling (" + objectScale + ")");
   TitledBorder speedBorder = BorderFactory.createTitledBorder("Speed (" + objectSpeed + ")");
   TitledBorder objectsBorder = BorderFactory.createTitledBorder("Number of objects (" + numObjects + ")");
 
   
   private void layoutGUI() {
+    
+    try {
+      //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (Exception e) {
+      System.err.println("Error: Unable to set system look and feel.");
+      e.printStackTrace();
+    } 
+    
     this.setSize(220, 559);
     this.setResizable(true);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -416,6 +388,11 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     	{
     		speedSlider = new JSlider();
     		sliderPanel.add(speedSlider);
+    		
+    		speedSlider.setPaintLabels(false);
+    		speedSlider.setPaintTicks(false);
+    		speedSlider.setPaintTrack(true);    		    		
+    		
     		speedSlider.setValue((int)(objectSpeed*1000));
     		speedSlider.setMaximum(MAX_SPEED);
     		speedSlider.setBorder(speedBorder);
@@ -432,17 +409,23 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     	{
     		pointSizeSlider = new JSlider();
     		sliderPanel.add(pointSizeSlider);
-    		pointSizeSlider.setValue((int)(objectRadius*100.0));
-    		pointSizeSlider.setMaximum(MAX_POINT_SIZE);
+    		pointSizeSlider.setValue( (int) (objectScale * 10.0 ) );
+    		pointSizeSlider.setMaximum( 100 );
     		pointSizeSlider.setBorder(pointBorder);
     		pointSizeSlider.addChangeListener(new ChangeListener() {
     			public void stateChanged(ChangeEvent e) {
-    				objectRadius = ((JSlider)e.getSource()).getValue()/100.0;
-//    				development.getSourceObject().getAppearance().setRadius(objectRadius);
-    				for(MovingObject o : movingObjects){ 
-//    					o.getAppearance().setRadius(objectRadius);
+    				objectScale = ((JSlider)e.getSource()).getValue() / 10.0;
+    				
+    				ObjectAppearance oa;
+    				oa = development.getSourceObject().getAppearance();
+    				oa.setScale( oa.getDefaultScale() * objectScale );
+    				
+    				development.getSourceObject().getAppearance().setScale(objectScale);
+    				for(MovingObject mo : movingObjects){
+    				  oa = mo.getAppearance();
+    				  oa.setScale( oa.getDefaultScale() * objectScale );    					
     				}
-    				pointBorder.setTitle("Object Radius (" + objectRadius + ")");
+    				pointBorder.setTitle("Object Scaling (" + objectScale + ")" );
     				updateGeometry(false,true);
     			}
     		});
@@ -555,7 +538,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     					view3D.updateGeometry(true,true);
     					view3D.initializeNewManifold();
     					devViewers.add(view3D);
-//    					view3D.installShootTool(shootingGame);
+    					//view3D.installShootTool(shootingGame);
     				}else{
     					//end the embedded  viewer
     					devViewers.remove(view3D);
@@ -632,9 +615,9 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
       numObjectsSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           numObjects = ((JSlider)e.getSource()).getValue();
-//          movingObjects = null;
+          //movingObjects = null;
           for(MovingObject o : movingObjects){
-//            movingObjects.remove(o); 
+            //movingObjects.remove(o); 
             o.removeFromManifold();
             dynamics.removeObject(o);
           }       

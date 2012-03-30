@@ -20,6 +20,8 @@ public class ObjectAppearance {
   public static enum ModelType { ANT, APPLE, COOKIE, ROCKET, SATTELITE, CUBE };
   
   private double scale = 1.0;
+  private double default_scale = 1.0;
+  
   private Color c = Color.BLUE; 
   private ModelType model = ModelType.ANT; 
   
@@ -34,25 +36,31 @@ public class ObjectAppearance {
     oa.model = mt;
     switch (mt) {
     case CUBE:
-      oa.scale = 0.2;
+      oa.setDefaultScale(0.2);
       break;
     case APPLE:
-      oa.scale = 0.1;
+      oa.setDefaultScale(0.1);
       break;
 
     case SATTELITE:
     case ROCKET:
-      oa.scale = 0.1;
+      oa.setDefaultScale(1.0);
       break;
     case ANT:
     case COOKIE:    
     default:
-      oa.scale = 1.0;
+      oa.setDefaultScale(1.0);
       break;
     }
     return oa;
   }
-
+  
+  // Default Scale methods should be used to scale models so
+  // that they have a reasonable size for most models.
+  // The setScale methods exist so users can dynamically resize models
+  // however they want, without losing the default scale.
+  public void setDefaultScale( double scale ) { this.default_scale = scale; }
+  public double getDefaultScale() { return default_scale; }
   public void setScale(double scale){ this.scale = scale; }
   public double getScale(){ return this.scale; }
   
@@ -123,4 +131,5 @@ public class ObjectAppearance {
     
     return sgc;
   }
+  
 }
