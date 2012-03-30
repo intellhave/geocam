@@ -13,21 +13,6 @@
 	<classpathentry kind="lib" path="xml/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="xml/xml-apis.jar"/>
 	<classpathentry kind="lib" path="xml/xsltc.jar"/>
-	<classpathentry kind="lib" path="jreality/antlr.jar"/>
-	<classpathentry kind="lib" path="jreality/beans.jar"/>
-	<classpathentry kind="lib" path="jreality/bsh.jar"/>
-	<classpathentry kind="lib" path="jreality/colorpicker.jar"/>
-	<classpathentry kind="lib" path="jreality/gluegen-rt.jar"/>
-	<classpathentry kind="lib" path="jreality/iText-2.1.3.jar"/>
-	<classpathentry kind="lib" path="jreality/janino.jar"/>
-	<classpathentry kind="lib" path="jreality/jjack_min.jar"/>
-	<classpathentry kind="lib" path="jreality/jogl.jar"/>
-	<classpathentry kind="lib" path="jreality/jReality.jar"/>
-	<classpathentry kind="lib" path="jreality/jrworkspace.jar"/>
-	<classpathentry kind="lib" path="jreality/jterm.jar"/>
-	<classpathentry kind="lib" path="jreality/smrj.jar"/>
-	<classpathentry kind="lib" path="jreality/sunflow.jar"/>
-	<classpathentry kind="lib" path="jreality/xpp3.jar"/>
-	<classpathentry kind="lib" path="jreality/xstream.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jreality"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
