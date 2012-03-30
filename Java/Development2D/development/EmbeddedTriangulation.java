@@ -345,8 +345,8 @@ public class EmbeddedTriangulation {
     // get the geometry data
     DataList dl_faceindices = geom.getAttributes(Geometry.CATEGORY_FACE,
         Attribute.INDICES);
-    // DataList dl_facenormals =
-    // geom.getAttributes(Geometry.CATEGORY_FACE,Attribute.NORMALS);
+    DataList dl_facenormals = geom.getAttributes(Geometry.CATEGORY_FACE,
+        Attribute.NORMALS);
     DataList dl_edgeindices = geom.getAttributes(Geometry.CATEGORY_EDGE,
         Attribute.INDICES);
     DataList dl_vertcoords = geom.getAttributes(Geometry.CATEGORY_VERTEX,
@@ -600,4 +600,16 @@ public class EmbeddedTriangulation {
     isEmbedded = true;
   }
 
+  public static Vector getEmbeddedNormal(Face f) {
+    EmbeddedFace ef = EmbeddedManifoldFaceData.get(f);
+    return Vector.normalize(Vector.cross( ef.tx_, ef.ty_ ));    
+  }
+  
+  public static Vector embedVector( Face f, Vector vec2d ){
+    EmbeddedFace ef = EmbeddedManifoldFaceData.get(f);
+    Vector x = ef.tx_;
+    Vector y = ef.ty_;   
+    return Vector.add( Vector.scale(x, vec2d.getComponent(0)), Vector.scale(y, vec2d.getComponent(1)));
+  }
+ 
 };

@@ -34,12 +34,12 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
   
   Appearance defaultAppearance;
   
-  private HashMap<VisibleObject, LinkedList<SceneGraphComponent>> sgcpools;
+  private HashMap<VisibleObject, SceneGraphComponent> sgcpools;
   
   public DevelopmentViewEmbedded(Development development, ColorScheme colorScheme) {
     super(development, colorScheme, false);
 
-    sgcpools = new HashMap<VisibleObject, LinkedList<SceneGraphComponent>>();
+    sgcpools = new HashMap<VisibleObject, SceneGraphComponent>();
     
     this.startup();
     
@@ -125,127 +125,109 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     //no need to remake the manifold geometry
   }
 
-  protected void generateObjectGeometry(){
-    
-    //instead of vector, use an affine transformation (to record position + orientation of images)
-    HashMap<VisibleObject,ArrayList<Vector>> objectImages = new HashMap<VisibleObject,ArrayList<Vector>>();
-    HashMap<VisiblePath,ArrayList<LineSegment>> pathImages = new HashMap<VisiblePath,ArrayList<LineSegment>>();
-    
-    //get objects and paths for each face
-    HashMap<Integer,Face> faceTable = Triangulation.faceTable;
+  protected void generateObjectGeometry() {
+
+    // instead of vector, use an affine transformation (to record position +
+    // orientation of images)
+    HashMap<VisibleObject, Vector[]> objectImages = new HashMap<VisibleObject, Vector[]>();
+
+    // HashMap<VisiblePath,ArrayList<LineSegment>> pathImages = new
+    // HashMap<VisiblePath,ArrayList<LineSegment>>();
+
+    // get objects and paths for each face
+    HashMap<Integer, Face> faceTable = Triangulation.faceTable;
     Set<Integer> faceIndices = faceTable.keySet();
-    for(Integer i : faceIndices){
+    for (Integer i : faceIndices) {
       Face f = faceTable.get(i);
-      getObjectAmbientPositions(f, objectImages);
-      getPathAmbientPositions(f, pathImages);
+      getObjectEmbeddedPositionsAndOrientations(f, objectImages);
+      // getPathAmbientPositions(f, pathImages);
     }
-    
-    for( VisibleObject vo : objectImages.keySet() ){
-      LinkedList<SceneGraphComponent> pool = sgcpools.get( vo );
-      
-      if( pool == null ){
-        pool = new LinkedList<SceneGraphComponent>();
-        sgcpools.put( vo, pool );      
+
+    for (VisibleObject vo : objectImages.keySet()) {
+      SceneGraphComponent sgc = sgcpools.get(vo);
+
+      if (sgc == null) {
+        ObjectAppearance oa = vo.getAppearance();
+        sgc = oa.prepareNewSceneGraphComponent();
+        sgcpools.put(vo, sgc);
+        sgcObjects.addChild(sgc);
       }
+
+      Vector[] tuple = objectImages.get(vo);
+      Vector pos = tuple[0];
+      Vector forward = Vector.normalize(tuple[1]);
+      Vector left = Vector.normalize(tuple[2]);
+      Vector normal = Vector.normalize(tuple[3]);
+
+      double[] matrix = new double[16];
       
-      ArrayList<Vector> images = objectImages.get( vo );
-      if( images == null ) continue;
-     
-      if( images.size() > pool.size() ){
-        int sgcCount = images.size() - pool.size();
-        for( int jj = 0; jj < sgcCount; jj++ ){
-           ObjectAppearance oa = vo.getAppearance();
-           SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
-           pool.add( sgc );
-           sgcObjects.addChild( sgc );
-        }        
-      }
-      
-      int counter = 0;
-      for( SceneGraphComponent sgc : pool ){
-        if( counter >= images.size()  ){
-          sgc.setVisible( false );
-        } else {
-          Vector v = images.get( counter );
-          MatrixBuilder.euclidean().translate( v.getComponent(0), v.getComponent(1), v.getComponent(2) ).assignTo( sgc );
-          sgc.setVisible( true );                    
-        }
-        counter++;
-      }
+      matrix[0*4+0] = forward.getComponent(0); matrix[0*4+1] = left.getComponent(0); matrix[0*4+2] = normal.getComponent(0); matrix[0*4+3] = 0.0;
+      matrix[1*4+0] = forward.getComponent(1); matrix[1*4+1] = left.getComponent(1); matrix[1*4+2] = normal.getComponent(1); matrix[1*4+3] = 0.0;
+      matrix[2*4+0] = forward.getComponent(2); matrix[2*4+1] = left.getComponent(2); matrix[2*4+2] = normal.getComponent(2); matrix[2*4+3] = 0.0;
+      matrix[3*4+0] = 0.0;                     matrix[3*4+1] = 0.0;                  matrix[3*4+2] = 0.0;                    matrix[3*4+3] = 1.0;
+                               
+
+      MatrixBuilder.euclidean()
+                   .translate(pos.getComponent(0), pos.getComponent(1), pos.getComponent(2))
+                   .times(matrix)
+                   .scale(vo.getAppearance().getScale())
+                   .assignTo(sgc);
+      sgc.setVisible(true);
     }
-    
-    
-//    //generate sgc's for each object and path
-//    SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
-//    
-//    Set<VisibleObject> objectList = objectImages.keySet();
-//    for(VisibleObject o : objectList){
-//      sgcNewObjects.addChild(SGCMethods.objectSGCFromList(objectImages.get(o), o.getAppearance(), false, 0));
-//    }
-//    
-//    Set<VisiblePath> pathList = pathImages.keySet();
-//    for(VisiblePath p : pathList){
-//      sgcNewObjects.addChild(SGCMethods.pathSGCFromList(pathImages.get(p), p.getAppearance(), false, 0));
-//    }
-//    
-//    sgcDevelopment.removeChild(sgcObjects);
-//    sgcObjects = sgcNewObjects;
-//    sgcDevelopment.addChild(sgcObjects);
+
   }
   
-  private void getObjectAmbientPositions(Face f, HashMap<VisibleObject,ArrayList<Vector>> objectImages){
+  private void getObjectEmbeddedPositionsAndOrientations(Face f, HashMap<VisibleObject,Vector[]> objectImages){
 
     //look for objects
     Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(f);
     if(objectList == null){ return; }
-
+        
     synchronized(objectList) {
       for(VisibleObject o : objectList){
         if(!o.isVisible()){ continue; }
         
-        //get position in ambient coordinates
-        Vector pos3D = EmbeddedTriangulation.getCoord3D(f,o.getPosition());
+        Vector[] tuple = new Vector[4];
         
-        //add to image list
-        ArrayList<Vector> imageList = objectImages.get(o);
-        if(imageList == null){
-          imageList = new ArrayList<Vector>();
-          objectImages.put(o,imageList);
-        }
-        imageList.add(pos3D);
+        tuple[0] = EmbeddedTriangulation.getCoord3D(f,o.getPosition());
+        tuple[1] = EmbeddedTriangulation.embedVector(f, o.getDirectionForward());
+        tuple[2] = EmbeddedTriangulation.embedVector(f, o.getDirectionLeft());        
+        tuple[3] = EmbeddedTriangulation.getEmbeddedNormal(f);
+        
+        objectImages.put( o, tuple );
       }
     }
   }
   
-  private void getPathAmbientPositions(Face f, HashMap<VisiblePath,ArrayList<LineSegment>> pathImages){
-
-    //look for paths
-    Collection<VisiblePath> pathList = ManifoldObjectHandler.getPaths(f);
-    if(pathList == null){ return; }
-
-    for(VisiblePath p : pathList){
-      if(!p.isVisible()){ continue; }
-      
-      //get list of segments of this path contained in the face f
-      Collection<ManifoldPath.Segment> segments = p.getPathSegmentsInFace(f);
-      if(segments == null){ continue; }
-      
-      //make image list for this path if one doesn't already exist
-      ArrayList<LineSegment> imageList = pathImages.get(p);
-      if(imageList == null){
-        imageList = new ArrayList<LineSegment>();
-        pathImages.put(p, imageList);
-      }
-      
-      //add the transformed path segments to the list
-      for(ManifoldPath.Segment s : segments){
-        //transform each segment that appears in this face
-        imageList.add(new LineSegment(
-            EmbeddedTriangulation.getCoord3D(f, s.startPos),
-            EmbeddedTriangulation.getCoord3D(f, s.endPos)
-        ));
-      }
-    }
-  }
+//  private void getPathAmbientPositions(Face f, HashMap<VisiblePath,ArrayList<LineSegment>> pathImages){
+//
+//    //look for paths
+//    Collection<VisiblePath> pathList = ManifoldObjectHandler.getPaths(f);
+//    if(pathList == null){ return; }
+//
+//    for(VisiblePath p : pathList){
+//      if(!p.isVisible()){ continue; }
+//      
+//      //get list of segments of this path contained in the face f
+//      Collection<ManifoldPath.Segment> segments = p.getPathSegmentsInFace(f);
+//      if(segments == null){ continue; }
+//      
+//      //make image list for this path if one doesn't already exist
+//      ArrayList<LineSegment> imageList = pathImages.get(p);
+//      if(imageList == null){
+//        imageList = new ArrayList<LineSegment>();
+//        pathImages.put(p, imageList);
+//      }
+//      
+//      //add the transformed path segments to the list
+//      for(ManifoldPath.Segment s : segments){
+//        //transform each segment that appears in this face
+//        imageList.add(new LineSegment(
+//            EmbeddedTriangulation.getCoord3D(f, s.startPos),
+//            EmbeddedTriangulation.getCoord3D(f, s.endPos)
+//        ));
+//      }
+//    }
+//  }
   
 }
