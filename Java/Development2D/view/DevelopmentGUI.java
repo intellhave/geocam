@@ -82,19 +82,22 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Face sourceFace;
   private static ColorScheme colorScheme;
   private int currentDepth = 8;
-//  private String filename = "Data/off/square2.off";
-//  private static String filename = "Data/off/tetra.off";
-//  private static String filename = "Data/off/tetra2.off";
-  private static String filename = "Data/blender/neckpinch.off";
-//  private static String filename = "Data/off/icosa.off";
-//  private static String filename = "Data/off/dodec2.off";
-//  private static String filename = "Data/off/cone.off";
-//  private static String filename = "Data/off/epcot.off";
-//  private static String filename = "Data/off/square2.off";
-//  private static String filename = "Data/Triangulations/2DManifolds/tetrahedronnonembed2.xml";
-//  private static String filename = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
-//  private static String filename = "Data/Triangulations/2DManifolds/tetrahedronnew.xml";
-//  private static String filename = "Data/Triangulations/2DManifolds/torus-9-2.xml";
+  
+  private static String[] filenames = { "Data/off/square2.off", 
+                                        "Data/off/tetra.off",
+                                        "Data/off/tetra2.off",
+                                        "Data/blender/neckpinch.off",
+                                        "Data/blender/cube_surf.off",
+                                        "Data/off/icosa.off",
+                                        "Data/off/dodec2.off",
+                                        "Data/off/cone.off",
+                                        "Data/off/epcot.off",
+                                        "Data/off/square2.off",
+                                        "Data/Triangulations/2DManifolds/tetrahedronnonembed2.xml",
+                                        "Data/Triangulations/2DManifolds/tetrahedron2.xml",
+                                        "Data/Triangulations/2DManifolds/tetrahedronnew.xml",
+                                        "Data/Triangulations/2DManifolds/torus-9-2.xml" };
+  private static String filename = filenames[4];
 
   //------------------------------------
   
