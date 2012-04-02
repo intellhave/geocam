@@ -57,39 +57,23 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     scene = this.getPlugin(Scene.class);
     updateCamera();
 
-    // create light
-    SceneGraphComponent sgcLight = new SceneGraphComponent();
-    PointLight light = new PointLight();
-    light.setIntensity(2.0);
-    sgcLight.setLight(light);
-    MatrixBuilder.euclidean().translate(2,-2,0)
-    //.rotate(1.5, new double[] { 0, 1, 0 })
-        .assignTo(sgcLight);
-    sgcRoot.addChild(sgcLight);
-    
-    SceneGraphComponent sgcLight2 = new SceneGraphComponent();
-    PointLight light2 = new PointLight();
-    light2.setIntensity(2.0);
-    sgcLight2.setLight(light2);
-    MatrixBuilder.euclidean().translate(-2,2,0)
- //   .rotate(1.5, new double[] { 0, 1, 0 })
-        .assignTo(sgcLight2);
-    sgcRoot.addChild(sgcLight2);
-    
-    SceneGraphComponent sgcLight3 = new SceneGraphComponent();
-    PointLight light3 = new PointLight();
-    light3.setIntensity(2.0);
-    sgcLight3.setLight(light3);
-    MatrixBuilder.euclidean().translate(2,2,0)
-    //.rotate(2.0, new double[] { 1, 0, 0 })
-    .assignTo(sgcLight3);
-    sgcRoot.addChild(sgcLight3);
-
-//    MatrixBuilder.euclidean().rotate(2.0, new double[] { 1, 0, 0 })
-//    .assignTo(sgcLight);
-//    sgcRoot.addChild(sgcLight);
-
-    
+    // create lights
+    // TODO: Adding more than 5 lights appears to break jReality.
+    int numlights = 4;
+    double[][] light_psns = {{ 2, -2, 0},
+                             {-2,  2, 0},
+                             { 2,  2, 0},
+                             {-2, -2, 0}};
+        
+    for( int ii = 0; ii < numlights; ii++ ){
+      SceneGraphComponent sgcLight = new SceneGraphComponent();
+      PointLight light = new PointLight();
+      light.setIntensity(4.0);
+      sgcLight.setLight(light);
+      MatrixBuilder.euclidean().translate(light_psns[ii]).assignTo(sgcLight);
+      sgcRoot.addChild(sgcLight);           
+    }
+        
     sgcRoot.addTool(new RotateTool());
     sgcDevelopment.setAppearance(defaultAppearance);
 
