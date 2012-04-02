@@ -22,8 +22,8 @@ public class ShootingGame extends ObjectDynamics{
   //options
   private double targetSpeed = 0.5; //units per sec
   private double bulletSpeed = 2.0; //units per sec
-  private ObjectAppearance targetAppearance = new ObjectAppearance(0.05, Color.BLUE);
-  private ObjectAppearance bulletAppearance = new ObjectAppearance(0.01, Color.BLACK);
+  private ObjectAppearance targetAppearance = new ObjectAppearance();
+  private ObjectAppearance bulletAppearance = new ObjectAppearance();
   //private PathAppearance bulletTrailAppearance = new PathAppearance(0.01, Color.BLACK, 0.01, Color.BLACK);
   private double collisionThreshhold = 0.06; //should be target radius + bullet radius
   private boolean clearBulletsOnHit = true;

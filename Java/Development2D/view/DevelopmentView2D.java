@@ -222,6 +222,11 @@ public class DevelopmentView2D extends DevelopmentView {
     setViewingDirection(cameraForward);
     updateCamera();
   }
+    
+  public void setLineVisible(boolean setting){
+    this.viewingDirection.setVisible( setting );
+  }
+  
 
   public void setViewingDirection(Vector v) {
     Vector vector = new Vector(v);

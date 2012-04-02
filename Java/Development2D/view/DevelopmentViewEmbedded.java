@@ -111,12 +111,7 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
 
   protected void generateObjectGeometry() {
 
-    // instead of vector, use an affine transformation (to record position +
-    // orientation of images)
     HashMap<VisibleObject, Vector[]> objectImages = new HashMap<VisibleObject, Vector[]>();
-
-    // HashMap<VisiblePath,ArrayList<LineSegment>> pathImages = new
-    // HashMap<VisiblePath,ArrayList<LineSegment>>();
 
     // get objects and paths for each face
     HashMap<Integer, Face> faceTable = Triangulation.faceTable;
@@ -124,7 +119,6 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     for (Integer i : faceIndices) {
       Face f = faceTable.get(i);
       getObjectEmbeddedPositionsAndOrientations(f, objectImages);
-      // getPathAmbientPositions(f, pathImages);
     }
 
     for (VisibleObject vo : objectImages.keySet()) {
@@ -181,37 +175,5 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
         objectImages.put( o, tuple );
       }
     }
-  }
-  
-//  private void getPathAmbientPositions(Face f, HashMap<VisiblePath,ArrayList<LineSegment>> pathImages){
-//
-//    //look for paths
-//    Collection<VisiblePath> pathList = ManifoldObjectHandler.getPaths(f);
-//    if(pathList == null){ return; }
-//
-//    for(VisiblePath p : pathList){
-//      if(!p.isVisible()){ continue; }
-//      
-//      //get list of segments of this path contained in the face f
-//      Collection<ManifoldPath.Segment> segments = p.getPathSegmentsInFace(f);
-//      if(segments == null){ continue; }
-//      
-//      //make image list for this path if one doesn't already exist
-//      ArrayList<LineSegment> imageList = pathImages.get(p);
-//      if(imageList == null){
-//        imageList = new ArrayList<LineSegment>();
-//        pathImages.put(p, imageList);
-//      }
-//      
-//      //add the transformed path segments to the list
-//      for(ManifoldPath.Segment s : segments){
-//        //transform each segment that appears in this face
-//        imageList.add(new LineSegment(
-//            EmbeddedTriangulation.getCoord3D(f, s.startPos),
-//            EmbeddedTriangulation.getCoord3D(f, s.endPos)
-//        ));
-//      }
-//    }
-//  }
-  
+  }  
 }
