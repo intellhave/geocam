@@ -66,7 +66,7 @@ public class Development {
 
     maxDepth = depth;
     source = sourcePoint;
-    sourceObject = new VisibleObject(source, new ObjectAppearance(radius, Color.BLACK));
+    sourceObject = new VisibleObject(source, new ObjectAppearance());
     rebuild();
   }
 

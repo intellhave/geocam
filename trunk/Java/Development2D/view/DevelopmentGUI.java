@@ -277,7 +277,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     for(int i=0; i<numObjects; i++){
       MovingObject newObject = new MovingObject( 
           development.getSource(), 
-          new ObjectAppearance(objectScale, randomColor(rand)), 
+          new ObjectAppearance(ObjectAppearance.ModelType.ANT, objectScale), 
           randomUnitVector(rand) );
       if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
       movingObjects.add(newObject);

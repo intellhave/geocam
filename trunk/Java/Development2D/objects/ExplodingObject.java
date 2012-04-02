@@ -37,6 +37,6 @@ public class ExplodingObject extends VisibleObject{
     int g = (int)((G_END - G_START)*percent) + G_START;
     int b = (int)((B_END - B_START)*percent) + B_START;
     int a = (int)((A_END - A_START)*percent) + A_START;
-    return new ObjectAppearance(radius,new Color(r,g,b,a));
+    return new ObjectAppearance();
   }
 }
