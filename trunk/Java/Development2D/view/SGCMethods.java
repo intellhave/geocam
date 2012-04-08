@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import objects.ObjectAppearance;
 import objects.PathAppearance;
-
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.geometry.PointSetFactory;

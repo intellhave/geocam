@@ -13,6 +13,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import objects.ObjectAppearance;
+import objects.VisibleObject;
 import view.SGCMethods.DevelopmentGeometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
@@ -30,9 +32,6 @@ import de.jtem.jrworkspace.plugin.PluginInfo;
 import development.Development;
 import development.DevelopmentNode;
 import development.Vector;
-
-import objects.ObjectAppearance;
-import objects.VisibleObject;
 
 public class DevelopmentView2D extends DevelopmentView {
 
@@ -84,16 +83,19 @@ public class DevelopmentView2D extends DevelopmentView {
     CameraUtility.encompass(scene.getAvatarPath(), scene.getContentPath(),
         scene.getCameraPath(), 1.75, Pn.EUCLIDEAN);
   }
-  
-  protected void initializeNewManifold(){        
-//    for( LinkedList<SceneGraphComponent> pool : sgcpools.values() ){
-//      while( ! pool.isEmpty() ){
-//        SceneGraphComponent sgc = pool.remove();
-//        sgcRoot.removeChild( sgc );
-//      }      
-//    }
-    updateCamera();    
+
+  protected void initializeNewManifold() {        
+    for (LinkedList<SceneGraphComponent> pool : sgcpools.values()) {
+      while (!pool.isEmpty()) {
+        SceneGraphComponent sgc = pool.remove();        
+        sgcObjects.removeChild(sgc);        
+      }
+    }
+    sgcpools.clear();    
+    updateCamera();
+    updateGeometry(true,true);
   }
+
   /*protected void updateGeometry() {
     
     sgcDevelopment.setGeometry(getGeometry());

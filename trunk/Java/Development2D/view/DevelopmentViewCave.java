@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import objects.ShootingGame;
-
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.Matrix;
@@ -24,10 +23,9 @@ import de.jreality.scene.tool.AbstractTool;
 import de.jreality.scene.tool.InputSlot;
 import de.jreality.scene.tool.ToolContext;
 import de.jreality.shader.CommonAttributes;
-
 import development.Development;
-import development.TimingStatistics;
 import development.DevelopmentNode;
+import development.TimingStatistics;
 import development.Vector;
 
 public class DevelopmentViewCave extends DevelopmentView {

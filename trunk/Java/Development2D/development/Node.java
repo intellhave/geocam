@@ -1,6 +1,7 @@
 package development;
 
 import java.awt.Color;
+
 import objects.ManifoldPosition;
 import triangulation.Face;
 

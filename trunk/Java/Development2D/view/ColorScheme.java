@@ -2,10 +2,9 @@ package view;
 
 import java.awt.Color;
 
-import development.DevelopmentNode;
-
 import triangulation.Face;
 import triangulation.Triangulation;
+import development.DevelopmentNode;
 
 
 public class ColorScheme {
