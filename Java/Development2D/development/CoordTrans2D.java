@@ -1,13 +1,14 @@
 package development;
 
-import geoquant.*;
+import geoquant.Geoquant;
+import geoquant.TriPosition;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import triangulation.Face;
 import triangulation.Edge;
+import triangulation.Face;
 import triangulation.Vertex;
 
 //value is det(affineTrans)

@@ -1,6 +1,7 @@
 package view;
 
 import inputOutput.TriangulationIO;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -23,8 +24,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -37,7 +36,6 @@ import objects.ObjectAppearance;
 import objects.ObjectDynamics;
 import objects.PathAppearance;
 import objects.ShootingGame;
-
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -81,7 +79,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static Vector sourcePoint;
   private static Face sourceFace;
   private static ColorScheme colorScheme;
-  private int currentDepth = 8;
+  private int currentDepth = 3;
   
   private static String[] filenames = { "Data/off/square2.off", 
                                         "Data/off/tetra.off",
@@ -124,7 +122,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static double targetSpeed = 0.5;
   private static final double TARGET_SPEED_INCREMENT = 0.1;
   private static int nHits = 0; 
-  private static final int MOVING_OBJECT_START = 3;//15;
+  private static final int MOVING_OBJECT_START = 1;//15;
   private static final boolean OBJECT_TRAILS = false;
   double objectSpeed = 1; //units per second
   double objectScale = 1.0;
@@ -132,6 +130,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private JButton depthSchemeButton;
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
+  private JCheckBox drawAvatarBox;
   private JMenuItem open;
   private JMenu file;
   private JSlider numObjectsSlider;
@@ -149,6 +148,8 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private JSlider speedSlider;
   private JSlider depthSlider;
   private JPanel sliderPanel;
+  
+  
   //don't generally need to keep track of this list, but GUI will change the objects' properties
   private LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
  
@@ -216,14 +217,12 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   }
   
   public void refresh2D(){
-//    System.out.println(view2D);
     if(view2D != null) view2D.refreshView();
   }
 
   public void refresh3D(){
-//  System.out.println(view3D);
     if(view3D != null) view3D.refreshView();
-}
+  } 
 
   
   private void initializeNewManifold(){
@@ -607,6 +606,21 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     			}
     		});
     	}
+    	
+    	{
+    	  drawAvatarBox = new JCheckBox();
+    	  drawOptionsPanel.add(drawAvatarBox);
+    	  drawAvatarBox.setText("Draw avatar");
+    	  drawAvatarBox.setSelected(true);
+    	  drawAvatarBox.addActionListener(new ActionListener(){
+    	    public void actionPerformed(ActionEvent e) {
+            boolean drawAvatar = ((JCheckBox)e.getSource()).isSelected();            
+            if(showView3D){ view3D.setDrawAvatar(drawAvatar); }
+          }
+    	  });
+    	  
+    	}
+    	
     }
     {
     	numObjectsSlider = new JSlider();

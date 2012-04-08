@@ -1,21 +1,15 @@
 package view;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Set;
 
 import objects.ManifoldObjectHandler;
-import objects.ManifoldPath;
 import objects.ObjectAppearance;
 import objects.VisibleObject;
-import objects.VisiblePath;
-
 import triangulation.Face;
 import triangulation.Triangulation;
-
 import de.jreality.math.MatrixBuilder;
 import de.jreality.math.Pn;
 import de.jreality.plugin.basic.Scene;
@@ -27,7 +21,6 @@ import de.jreality.tools.RotateTool;
 import de.jreality.util.CameraUtility;
 import development.Development;
 import development.EmbeddedTriangulation;
-import development.LineSegment;
 import development.Vector;
 
 public class DevelopmentViewEmbedded extends DevelopmentView {
@@ -86,7 +79,11 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
   }
   
   protected void initializeNewManifold(){
-    
+    for (SceneGraphComponent sgc : sgcpools.values()) {
+      sgcObjects.removeChild(sgc);        
+    }
+    sgcpools.clear();    
+        
     //use EmbeddedTriangulation to draw the polyhedron (if it exists)
 
     HashMap<Face,Color> faceColors = new HashMap<Face,Color>();
@@ -102,6 +99,7 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
     sgcDevelopment.setGeometry(EmbeddedTriangulation.get3DGeometry(faceColors));
     
     updateCamera();
+    updateGeometry(true,true);
   }
   
   protected void generateManifoldGeometry(){ 

@@ -16,7 +16,6 @@ import javax.swing.event.ChangeListener;
 
 import objects.ObjectAppearance;
 import objects.VisibleObject;
-
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
@@ -138,6 +137,15 @@ public class DevelopmentViewSim3D extends DevelopmentView {
    */
 
   protected void initializeNewManifold() {
+    for (LinkedList<SceneGraphComponent> pool : sgcpools.values()) {
+      while (!pool.isEmpty()) {
+        SceneGraphComponent sgc = pool.remove();        
+        sgcObjects.removeChild(sgc);        
+      }
+    }
+    sgcpools.clear();    
+    updateCamera();
+    updateGeometry(true,true);    
   }
 
   /*

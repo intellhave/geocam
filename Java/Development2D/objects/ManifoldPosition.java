@@ -2,15 +2,14 @@ package objects;
 
 import java.util.List;
 
+import triangulation.Edge;
+import triangulation.Face;
 import development.AffineTransformation;
 import development.Coord2D;
 import development.CoordTrans2D;
 import development.DevelopmentComputations;
 import development.LineSegment;
 import development.Vector;
-
-import triangulation.Edge;
-import triangulation.Face;
 
 /* Represents a position on the Triangulation
  * 

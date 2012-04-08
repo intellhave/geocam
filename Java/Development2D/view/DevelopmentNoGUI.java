@@ -8,14 +8,12 @@ import java.util.Random;
 import objects.ManifoldPosition;
 import objects.ObjectDynamics;
 import objects.ShootingGame;
-
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme.schemes;
 import development.Coord2D;
 import development.Development;
-import development.EmbeddedTriangulation;
 import development.TimingStatistics;
 import development.Vector;
 

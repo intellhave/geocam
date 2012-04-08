@@ -1,12 +1,15 @@
 package development;
 
-import geoquant.*;
+import geoquant.Angle;
+import geoquant.Geoquant;
+import geoquant.Length;
+import geoquant.TriPosition;
 
 import java.util.HashMap;
 
 import triangulation.Face;
-import triangulation.Vertex;
 import triangulation.StdFace;
+import triangulation.Vertex;
 
 //note that the coordinates this geoquant gives do not take orientation into account
 

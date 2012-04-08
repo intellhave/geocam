@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import util.Matrix;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
+import util.Matrix;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.reader.Readers;
 import de.jreality.scene.Geometry;

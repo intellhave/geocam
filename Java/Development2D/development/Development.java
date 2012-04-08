@@ -1,13 +1,11 @@
 package development;
 
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
 import objects.ManifoldPosition;
 import objects.ObjectAppearance;
 import objects.VisibleObject;
-
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;

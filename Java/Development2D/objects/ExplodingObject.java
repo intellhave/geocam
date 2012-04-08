@@ -1,6 +1,5 @@
 package objects;
 
-import java.awt.Color;
 
 /* This object changes its appearance with time, then removes itself from the manifold
  */
