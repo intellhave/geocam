@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.EtchedBorder;
@@ -34,6 +35,7 @@ import objects.ManifoldPosition;
 import objects.MovingObject;
 import objects.ObjectAppearance;
 import objects.ObjectDynamics;
+import objects.VisibleObject;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -81,7 +83,7 @@ public class FindingGame extends JFrame
                                           "Data/Triangulations/2DManifolds/tetrahedron2.xml",
                                           "Data/Triangulations/2DManifolds/tetrahedronnew.xml",
                                           "Data/Triangulations/2DManifolds/torus-9-2.xml" };
-    private static String filename = filenames[4];
+    private static String filename = filenames[3];
 
     //------------------------------------
     
@@ -171,7 +173,7 @@ public class FindingGame extends JFrame
     }
     
     public void dynamicsEvent(int eventID){
-      if(eventID == ObjectDynamics.EVENT_DYNAMICS_EVOLVED){
+      if(eventID == BasicMovingObjects.EVENT_DYNAMICS_EVOLVED){
         updateGeometry(false,true);
       }
     }
@@ -181,7 +183,38 @@ public class FindingGame extends JFrame
     }
     
     private synchronized void updateGeometry(boolean dev, boolean obj){
-      for(DevelopmentView dv : devViewers){ dv.updateGeometry(dev,obj); } 
+      for(DevelopmentView dv : devViewers){ dv.updateGeometry(dev,obj); }
+      
+      VisibleObject avatar = development.getSourceObject();
+      
+      double epsilon = 0.5;
+      boolean playAgain = false;
+      for( MovingObject o : movingObjects )
+        if( o.getFace() == avatar.getFace() && 
+            Vector.distanceSquared(o.getPosition(),avatar.getPosition()) < epsilon ){                      
+            int result = JOptionPane.showConfirmDialog(this,"You found the cookie! Play again?", "You Won!",
+                                                       JOptionPane.YES_NO_OPTION);
+            if( result == 0 ){
+              // User wants to play again
+              playAgain = true;
+            } else {
+              // User wants to quit
+              System.exit(0);
+            }            
+      }   
+      
+      if( playAgain ){
+        // Set up the objects in new locations.
+        for(MovingObject o : movingObjects){
+          //movingObjects.remove(o); 
+          o.removeFromManifold();
+          dynamics.removeObject(o);
+        }       
+        movingObjects.clear();
+        setUpObjects();
+        initializeNewManifold();        
+      }
+      
     }
     
     public void refresh2D(){
@@ -235,6 +268,9 @@ public class FindingGame extends JFrame
     }
     
     private void setUpObjects(){
+      development.getSourceObject()
+                 .setAppearance( new ObjectAppearance(ObjectAppearance.ModelType.ANT ));
+            
       Random rand = new Random();
       for(int i=0; i<numObjects; i++){
         MovingObject newObject = 
@@ -251,7 +287,8 @@ public class FindingGame extends JFrame
       if(INITIAL_MOVEMENT_STATUS){ 
         dynamics.start(); 
       }else{
-        dynamics.evolve(300);
+        // Move the cookie for a while to "hide" it.
+        dynamics.evolve(10000);
       }
     }
     
