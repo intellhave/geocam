@@ -73,6 +73,7 @@ public class FindingGame extends JFrame
                                           "Data/off/tetra.off",
                                           "Data/off/tetra2.off",
                                           "Data/blender/neckpinch.off",
+                                          "Data/blender/torus.off",
                                           "Data/blender/cube_surf.off",
                                           "Data/off/icosa.off",
                                           "Data/off/dodec2.off",
