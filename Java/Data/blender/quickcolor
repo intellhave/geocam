@@ -1,0 +1,112 @@
+#!/usr/bin/env python
+import optparse, sys, random, math
+
+def parseMesh(meshstring):
+    lines = meshstring.split('\n')
+    lines = filter( lambda line : len(line) > 0, lines )
+    lines = filter( lambda line : (line.strip())[0] != "#", lines )
+    
+    str = lines[1]
+    (vertices, faces, tetrahedra) = [ int(x) for x in str.split(' ') ]
+    
+    if tetrahedra == 0: tetrahedra = len(lines)
+
+    vert_strings = lines[2: vertices + 2]
+    face_strings = lines[ vertices + 2 : tetrahedra ]
+
+    verts = [ tuple( [ float(x) for x in line.split() ] ) for line in vert_strings ]
+    faces = [ tuple( [ int(x) for x in (line.split())[0:4] ] ) for line in face_strings ]
+
+    return (verts, faces)
+
+def meshToString(mesh, colorMap):
+    string = "OFF\n"
+    string += "%d %d 0\n" % ( len( mesh[0] ), len( mesh[1] ) )
+
+    for vertex in mesh[0]:
+        string += "%f %f %f\n" % vertex
+
+    for face in mesh[1]:
+        string += ("3 %d %d %d " % face[1:]) + ("%f %f %f\n" % colorMap[ face ])
+
+    return string
+
+def parseColors(colorstring):
+    lines = colorstring.split('\n')
+    colors = [ tuple( [ float(x) for x in line ] ) for line in lines ]
+    return colors
+
+def computeNormal( pointA, pointB, pointC ):
+    v = tuple( [ pointB[ii] - pointA[ii] for ii in range(0,3) ] )
+    w = tuple( [ pointC[ii] - pointA[ii] for ii in range(0,3) ] )
+
+    nx = v[1] * w[2] - v[2] * w[1]
+    ny = -(v[0] * w[2] - v[2] * w[0])
+    nz = v[0] * w[1] - v[1] * w[0]
+
+    len = norm( (nx,ny,nz) )
+
+    return ( nx/len, ny/len, nz/len )
+
+def norm( vec ):
+    return math.sqrt(sum( [ (vec[ii]) ** 2 for ii in range(0,len(vec)) ] ) )
+
+def diff( vec1, vec2 ):
+    return norm( tuple( [vec1[ii] - vec2[ii] for ii in range(0,len(vec1)) ] ) )
+    
+
+def generateColors( numColors ):
+    return [ (random.random(), random.random(), random.random())
+             for ii in range(0, numColors ) ]
+
+def main():
+    p = optparse.OptionParser()
+    p.add_option('--mesh', '-m', default=None, dest="meshfile",
+                 help="Specifies an Object File Format (.off) mesh to colorize.")
+    p.add_option('--palette','-p', default=None, dest="colorfile",
+                 help="Specifies a color palette (RGB values in a text file).")
+
+    (options,arguments) = p.parse_args()
+    if options.meshfile == None:
+        sys.stdout.write("You must specify a mesh file to colorize!\n")
+        sys.exit(1)
+
+    mesh = parseMesh( open(options.meshfile).read() )
+    
+    if options.colorfile == None:
+        # We'll need at most as many colors as triangles, so generate
+        # that many.
+        colors = generateColors( len(mesh[1]) ) 
+    else:
+        colors = parseColors( open(options.colorfile).read() )
+
+    normals = []
+    colormap = {}
+    normalmap = {}
+    counter = 0
+
+    for face in mesh[1]:
+        v = computeNormal( mesh[0][face[1]], mesh[0][face[2]], mesh[0][face[3]] ) 
+        
+        normal = None
+        for w in normals:
+            if( diff( v, w ) < 0.005 ):
+                normal = w
+
+        if normal != None:
+            colormap[ face ] = normalmap[ normal ]
+        else:
+            colormap[ face ] = colors[ counter ]
+            normalmap[ v ] = colors[ counter ]
+            normals.append( v )
+            counter = (counter + 1) % len(colors)
+
+    string = meshToString( mesh, colormap )
+    sys.stdout.write(string) 
+    sys.exit(0)
+                
+
+
+        
+if __name__ == '__main__':
+    main()
