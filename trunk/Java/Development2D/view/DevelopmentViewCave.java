@@ -4,7 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import objects.ShootingGame;
+import markers.ShootingGame;
+
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.Matrix;

@@ -5,9 +5,10 @@ import inputOutput.TriangulationIO;
 import java.util.Iterator;
 import java.util.Random;
 
-import objects.ManifoldPosition;
-import objects.ObjectDynamics;
-import objects.ShootingGame;
+import markers.ManifoldPosition;
+import markers.MarkerDynamics;
+import markers.ShootingGame;
+
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -17,7 +18,7 @@ import development.Development;
 import development.TimingStatistics;
 import development.Vector;
 
-public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectDynamics.DynamicsListener {
+public class DevelopmentNoGUI  implements Development.DevelopmentViewer, MarkerDynamics.DynamicsListener {
  
   private static int INITIAL_POINT_SIZE = 4;
   private static double radius = INITIAL_POINT_SIZE/100.0;
@@ -90,7 +91,7 @@ public class DevelopmentNoGUI  implements Development.DevelopmentViewer, ObjectD
   
   public void dynamicsEvent(int eventID){
     
-    if(eventID == ObjectDynamics.EVENT_DYNAMICS_EVOLVED){
+    if(eventID == MarkerDynamics.EVENT_DYNAMICS_EVOLVED){
       
       updateGeometry(false,true);
 

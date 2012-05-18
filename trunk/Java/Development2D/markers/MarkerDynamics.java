@@ -1,4 +1,4 @@
-package objects;
+package markers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +22,7 @@ import development.TimingStatistics;
  * Example implementations:  BasicMovingObjects, ShootingGame
  */
 
-public abstract class ObjectDynamics {
+public abstract class MarkerDynamics {
 
   public static int nextEventID = 0; 
   public static final int EVENT_DYNAMICS_EVOLVED = getNextEventID();
@@ -53,7 +53,7 @@ public abstract class ObjectDynamics {
   private long time;
   private Timer moveTimer;
   
-  public ObjectDynamics(int tickMS){ 
+  public MarkerDynamics(int tickMS){ 
     
     moveTimer = new Timer(tickMS,null);
     moveTimer.addActionListener(new ActionListener(){

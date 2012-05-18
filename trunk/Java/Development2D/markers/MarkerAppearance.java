@@ -1,4 +1,4 @@
-package objects;
+package markers;
 
 import java.awt.Color;
 import java.awt.Transparency;
@@ -15,7 +15,7 @@ import de.jreality.shader.CommonAttributes;
  * 
  * Look at de.jreality.tutorial.app.PointShaderExample for fancier ways to specify point appearance
  */
-public class ObjectAppearance {
+public class MarkerAppearance {
   
   public static enum ModelType { ANT, APPLE, COOKIE, ROCKET, SATTELITE, CUBE };
   
@@ -25,7 +25,7 @@ public class ObjectAppearance {
   private Color c = Color.BLUE; 
   private ModelType model = ModelType.ANT; 
     
-  public ObjectAppearance( ModelType mt, double scale ){
+  public MarkerAppearance( ModelType mt, double scale ){
     this.setModelType( mt );
     this.setScale( scale );
 
@@ -50,8 +50,8 @@ public class ObjectAppearance {
     }
   }
   
-  public ObjectAppearance( ModelType mt ){ this( mt, 1.0 ); }
-  public ObjectAppearance(){ this( ModelType.ANT, 1.0 ); }
+  public MarkerAppearance( ModelType mt ){ this( mt, 1.0 ); }
+  public MarkerAppearance(){ this( ModelType.ANT, 1.0 ); }
     
   public void setModelType(ModelType mt) {
     this.model = mt;

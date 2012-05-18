@@ -5,9 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
-import objects.ManifoldObjectHandler;
-import objects.ObjectAppearance;
-import objects.VisibleObject;
+import markers.ManifoldMarkerHandler;
+import markers.MarkerAppearance;
+import markers.VisibleMarker;
+
 import triangulation.Face;
 import triangulation.Triangulation;
 import de.jreality.math.MatrixBuilder;
@@ -27,12 +28,12 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
   
   Appearance defaultAppearance;
   
-  private HashMap<VisibleObject, SceneGraphComponent> sgcpools;
+  private HashMap<VisibleMarker, SceneGraphComponent> sgcpools;
   
   public DevelopmentViewEmbedded(Development development, ColorScheme colorScheme) {
     super(development, colorScheme, false);
 
-    sgcpools = new HashMap<VisibleObject, SceneGraphComponent>();
+    sgcpools = new HashMap<VisibleMarker, SceneGraphComponent>();
     
     this.startup();
     
@@ -109,7 +110,7 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
 
   protected void generateObjectGeometry() {
 
-    HashMap<VisibleObject, Vector[]> objectImages = new HashMap<VisibleObject, Vector[]>();
+    HashMap<VisibleMarker, Vector[]> objectImages = new HashMap<VisibleMarker, Vector[]>();
 
     // get objects and paths for each face
     HashMap<Integer, Face> faceTable = Triangulation.faceTable;
@@ -119,11 +120,11 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
       getObjectEmbeddedPositionsAndOrientations(f, objectImages);
     }
 
-    for (VisibleObject vo : objectImages.keySet()) {
+    for (VisibleMarker vo : objectImages.keySet()) {
       SceneGraphComponent sgc = sgcpools.get(vo);
 
       if (sgc == null) {
-        ObjectAppearance oa = vo.getAppearance();
+        MarkerAppearance oa = vo.getAppearance();
         sgc = oa.prepareNewSceneGraphComponent();
         sgcpools.put(vo, sgc);
         sgcObjects.addChild(sgc);
@@ -153,14 +154,14 @@ public class DevelopmentViewEmbedded extends DevelopmentView {
 
   }
   
-  private void getObjectEmbeddedPositionsAndOrientations(Face f, HashMap<VisibleObject,Vector[]> objectImages){
+  private void getObjectEmbeddedPositionsAndOrientations(Face f, HashMap<VisibleMarker,Vector[]> objectImages){
 
     //look for objects
-    Collection<VisibleObject> objectList = ManifoldObjectHandler.getObjects(f);
+    Collection<VisibleMarker> objectList = ManifoldMarkerHandler.getObjects(f);
     if(objectList == null){ return; }
         
     synchronized(objectList) {
-      for(VisibleObject o : objectList){
+      for(VisibleMarker o : objectList){
         if(!o.isVisible()){ continue; }
         
         Vector[] tuple = new Vector[4];

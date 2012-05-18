@@ -14,8 +14,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import objects.ObjectAppearance;
-import objects.VisibleObject;
+import markers.MarkerAppearance;
+import markers.VisibleMarker;
+
 import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
@@ -57,13 +58,13 @@ public class DevelopmentViewSim3D extends DevelopmentView {
   private Scene scene;
   private Vector cameraForward = new Vector(-1, 0);
 
-  private HashMap<VisibleObject, LinkedList<SceneGraphComponent>> sgcpools;
+  private HashMap<VisibleMarker, LinkedList<SceneGraphComponent>> sgcpools;
 
   public DevelopmentViewSim3D(Development development, ColorScheme colorScheme) {
     super(development, colorScheme, true);
     dimension = 3;
 
-    sgcpools = new HashMap<VisibleObject, LinkedList<SceneGraphComponent>>();
+    sgcpools = new HashMap<VisibleMarker, LinkedList<SceneGraphComponent>>();
 
     // make camera and sgc_camera
     Camera camera = new Camera();
@@ -203,10 +204,10 @@ public class DevelopmentViewSim3D extends DevelopmentView {
 
   protected void generateObjectGeometry() {
     
-    HashMap<VisibleObject, ArrayList<Vector[]>> objectImages = new HashMap<VisibleObject, ArrayList<Vector[]>>();
-    CommonViewMethods.getDevelopmentObjectImagesAndOrientations(development.getRoot(), objectImages);
+    HashMap<VisibleMarker, ArrayList<Vector[]>> objectImages = new HashMap<VisibleMarker, ArrayList<Vector[]>>();
+    CommonViewMethods.getDevelopmentMarkerImagesAndOrientations(development.getRoot(), objectImages);
 
-    for (VisibleObject vo : objectImages.keySet()) {
+    for (VisibleMarker vo : objectImages.keySet()) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(vo);
 
       if (pool == null) {
@@ -221,7 +222,7 @@ public class DevelopmentViewSim3D extends DevelopmentView {
       if (images.size() > pool.size()) {
         int sgcCount = images.size() - pool.size();
         for (int jj = 0; jj < 2 * sgcCount; jj++) {
-          ObjectAppearance oa = vo.getAppearance();
+          MarkerAppearance oa = vo.getAppearance();
           SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
           pool.add(sgc);
           sgcObjects.addChild(sgc);

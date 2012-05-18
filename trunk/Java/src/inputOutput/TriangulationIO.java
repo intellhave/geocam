@@ -8,25 +8,26 @@ import geoquant.TriPosition;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.apache.xerces.xni.XMLString;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import triangulation.*;
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Simplex;
+import triangulation.Tetra;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 
 
 public class TriangulationIO {

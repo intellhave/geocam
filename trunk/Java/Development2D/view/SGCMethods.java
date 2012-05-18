@@ -3,8 +3,9 @@ package view;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import objects.ObjectAppearance;
-import objects.PathAppearance;
+import markers.MarkerAppearance;
+import markers.PathAppearance;
+
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;
 import de.jreality.geometry.PointSetFactory;
@@ -28,7 +29,7 @@ import development.Vector;
 public class SGCMethods {
   
   // Returns geometry for a collection of 2D or 3D points
-  public static Geometry objectGeometryFromList(ArrayList<Vector> images, ObjectAppearance app, boolean mode2D, double zvalue){
+  public static Geometry objectGeometryFromList(ArrayList<Vector> images, MarkerAppearance app, boolean mode2D, double zvalue){
     
     PointSetFactory psf = new PointSetFactory();
     
@@ -50,7 +51,7 @@ public class SGCMethods {
   }
   
   //Returns SGC for a collection of 2D or 3D points (used in each DevelopmentView)
-  public static SceneGraphComponent objectSGCFromList(ArrayList<Vector> images, ObjectAppearance app, boolean mode2D, double zvalue){
+  public static SceneGraphComponent objectSGCFromList(ArrayList<Vector> images, MarkerAppearance app, boolean mode2D, double zvalue){
     
     SceneGraphComponent sgc = new SceneGraphComponent();
     sgc.setGeometry(objectGeometryFromList(images,app,mode2D,zvalue));

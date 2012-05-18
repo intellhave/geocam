@@ -6,10 +6,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import objects.ManifoldObjectHandler;
-import objects.ManifoldPath;
-import objects.VisibleObject;
-import objects.VisiblePath;
+import markers.ManifoldMarkerHandler;
+import markers.ManifoldPath;
+import markers.VisibleMarker;
+import markers.VisiblePath;
+
 import de.jreality.scene.SceneGraphComponent;
 import development.AffineTransformation;
 import development.DevelopmentNode;
@@ -24,7 +25,7 @@ public class CommonViewMethods {
 
     // instead of vector, use an affine transformation (to record position +
     // orientation of images)
-    HashMap<VisibleObject, ArrayList<Vector>> objectImages = new HashMap<VisibleObject, ArrayList<Vector>>();
+    HashMap<VisibleMarker, ArrayList<Vector>> objectImages = new HashMap<VisibleMarker, ArrayList<Vector>>();
     HashMap<VisiblePath, ArrayList<LineSegment>> pathImages = new HashMap<VisiblePath, ArrayList<LineSegment>>();
 
     getDevelopmentObjectImages(devRoot, objectImages, clipNear, clipNearRadius);
@@ -33,8 +34,8 @@ public class CommonViewMethods {
     // generate sgc's for the objects
     SceneGraphComponent sgcNewObjects = new SceneGraphComponent("Objects");
 
-    Set<VisibleObject> objectList = objectImages.keySet();
-    for (VisibleObject o : objectList) {
+    Set<VisibleMarker> objectList = objectImages.keySet();
+    for (VisibleMarker o : objectList) {
       sgcNewObjects.addChild(SGCMethods.objectSGCFromList(objectImages.get(o),
           o.getAppearance(), true, 0));
     }
@@ -59,11 +60,11 @@ public class CommonViewMethods {
    * start)
    */
   public static void getDevelopmentObjectImages(DevelopmentNode devNode,
-      HashMap<VisibleObject, ArrayList<Vector>> objectImages, boolean clipNear,
+      HashMap<VisibleMarker, ArrayList<Vector>> objectImages, boolean clipNear,
       double clipNearRadius) {
 
     // look for objects
-    Collection<VisibleObject> objectList = ManifoldObjectHandler
+    Collection<VisibleMarker> objectList = ManifoldMarkerHandler
         .getObjects(devNode.getFace());
     if (objectList != null) {
 
@@ -71,7 +72,7 @@ public class CommonViewMethods {
       AffineTransformation affineTrans = devNode.getAffineTransformation();
 
       synchronized (objectList) {
-        for (VisibleObject o : objectList) {
+        for (VisibleMarker o : objectList) {
           if (!o.isVisible()) {
             continue;
           }
@@ -107,19 +108,18 @@ public class CommonViewMethods {
     }
   }
 
-  public static void getDevelopmentObjectImagesAndOrientations
-      ( DevelopmentNode devNode, HashMap<VisibleObject, ArrayList<Vector[]>> objectImages ) {
+  public static void getDevelopmentMarkerImagesAndOrientations
+      ( DevelopmentNode devNode, HashMap<VisibleMarker, ArrayList<Vector[]>> objectImages ) {
 
     // look for objects
-    Collection<VisibleObject> objectList = ManifoldObjectHandler
-        .getObjects(devNode.getFace());
+    Collection<VisibleMarker> objectList = ManifoldMarkerHandler.getObjects(devNode.getFace());
     if (objectList != null) {
 
       Frustum2D frustum = devNode.getFrustum();
       AffineTransformation affineTrans = devNode.getAffineTransformation();
 
       synchronized (objectList) {
-        for (VisibleObject o : objectList) {
+        for (VisibleMarker o : objectList) {
           if (!o.isVisible()) {
             continue;
           }
@@ -147,7 +147,7 @@ public class CommonViewMethods {
 
     Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
     while (itr.hasNext()) {
-      getDevelopmentObjectImagesAndOrientations(itr.next(), objectImages);
+      getDevelopmentMarkerImagesAndOrientations(itr.next(), objectImages);
     }
   }
 
@@ -156,7 +156,7 @@ public class CommonViewMethods {
       HashMap<VisiblePath, ArrayList<LineSegment>> pathImages) {
 
     // look for paths
-    Collection<VisiblePath> pathList = ManifoldObjectHandler.getPaths(devNode
+    Collection<VisiblePath> pathList = ManifoldMarkerHandler.getPaths(devNode
         .getFace());
     if (pathList != null) {
 

@@ -30,12 +30,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import objects.BasicMovingObjects;
-import objects.ManifoldPosition;
-import objects.MovingObject;
-import objects.ObjectAppearance;
-import objects.ObjectDynamics;
-import objects.VisibleObject;
+import markers.BasicMovingMarkers;
+import markers.ManifoldPosition;
+import markers.MovingMarker;
+import markers.MarkerAppearance;
+import markers.MarkerDynamics;
+import markers.VisibleMarker;
+
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -47,7 +48,7 @@ import development.Vector;
 
 public class FindingGame extends JFrame  
                          implements Development.DevelopmentViewer, 
-                                    ObjectDynamics.DynamicsListener{
+                                    MarkerDynamics.DynamicsListener{
 
     private static final long serialVersionUID = 1L;
 
@@ -105,7 +106,7 @@ public class FindingGame extends JFrame
     //------------------------------------
       
     //--- objects ------------------------
-    private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
+    private static BasicMovingMarkers dynamics = new BasicMovingMarkers(50);
     private static final boolean INITIAL_MOVEMENT_STATUS = false;
     private static final int MOVING_OBJECT_START = 1;
     
@@ -134,7 +135,7 @@ public class FindingGame extends JFrame
     private JPanel sliderPanel;
     
     //don't generally need to keep track of this list, but GUI will change the objects' properties
-    private LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
+    private LinkedList<MovingMarker> movingObjects = new LinkedList<MovingMarker>();
    
     //--GUI pieces ----------------------------------------------
     JMenuBar menuBar;
@@ -174,7 +175,7 @@ public class FindingGame extends JFrame
     }
     
     public void dynamicsEvent(int eventID){
-      if(eventID == BasicMovingObjects.EVENT_DYNAMICS_EVOLVED){
+      if(eventID == BasicMovingMarkers.EVENT_DYNAMICS_EVOLVED){
         updateGeometry(false,true);
       }
     }
@@ -186,11 +187,11 @@ public class FindingGame extends JFrame
     private synchronized void updateGeometry(boolean dev, boolean obj){
       for(DevelopmentView dv : devViewers){ dv.updateGeometry(dev,obj); }
       
-      VisibleObject avatar = development.getSourceObject();
+      VisibleMarker avatar = development.getSourceObject();
       
       double epsilon = 0.5;
       boolean playAgain = false;
-      for( MovingObject o : movingObjects )
+      for( MovingMarker o : movingObjects )
         if( o.getFace() == avatar.getFace() && 
             Vector.distanceSquared(o.getPosition(),avatar.getPosition()) < epsilon ){                      
             int result = JOptionPane.showConfirmDialog(this,"You found the cookie! Play again?", "You Won!",
@@ -206,7 +207,7 @@ public class FindingGame extends JFrame
       
       if( playAgain ){
         // Set up the objects in new locations.
-        for(MovingObject o : movingObjects){
+        for(MovingMarker o : movingObjects){
           //movingObjects.remove(o); 
           o.removeFromManifold();
           dynamics.removeObject(o);
@@ -270,17 +271,17 @@ public class FindingGame extends JFrame
     
     private void setUpObjects(){
       development.getSourceObject()
-                 .setAppearance( new ObjectAppearance(ObjectAppearance.ModelType.ANT ));
+                 .setAppearance( new MarkerAppearance(MarkerAppearance.ModelType.ANT ));
             
       Random rand = new Random();
       for(int i=0; i<numObjects; i++){
-        MovingObject newObject = 
-          new MovingObject(development.getSource(),
-                           new ObjectAppearance(ObjectAppearance.ModelType.COOKIE), 
+        MovingMarker newObject = 
+          new MovingMarker(development.getSource(),
+                           new MarkerAppearance(MarkerAppearance.ModelType.COOKIE), 
                            randomUnitVector(rand) );
         movingObjects.add(newObject);
       }
-      for(MovingObject o : movingObjects){
+      for(MovingMarker o : movingObjects){
         o.setSpeed(objectSpeed);
         dynamics.addObject(o); 
       }
@@ -394,7 +395,7 @@ public class FindingGame extends JFrame
           speedSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
               objectSpeed = ((JSlider)e.getSource()).getValue()/1000.0;
-              for(MovingObject o : movingObjects){ 
+              for(MovingMarker o : movingObjects){ 
                 o.setSpeed(objectSpeed); 
               }
               speedBorder.setTitle("Speed (" + objectSpeed + ")");
@@ -411,12 +412,12 @@ public class FindingGame extends JFrame
             public void stateChanged(ChangeEvent e) {
               objectScale = ((JSlider)e.getSource()).getValue() / 10.0;
               
-              ObjectAppearance oa;
+              MarkerAppearance oa;
               oa = development.getSourceObject().getAppearance();
               oa.setScale( oa.getDefaultScale() * objectScale );
               
               development.getSourceObject().getAppearance().setScale(objectScale);
-              for(MovingObject mo : movingObjects){
+              for(MovingMarker mo : movingObjects){
                 oa = mo.getAppearance();
                 oa.setScale( oa.getDefaultScale() * objectScale );              
               }
@@ -609,7 +610,7 @@ public class FindingGame extends JFrame
           public void stateChanged(ChangeEvent e) {
             numObjects = ((JSlider)e.getSource()).getValue();
             //movingObjects = null;
-            for(MovingObject o : movingObjects){
+            for(MovingMarker o : movingObjects){
               //movingObjects.remove(o); 
               o.removeFromManifold();
               dynamics.removeObject(o);

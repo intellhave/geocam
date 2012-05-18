@@ -1,11 +1,11 @@
-package objects;
+package markers;
 
 import development.Vector;
 
 /* This is a particular type of VisibleObject which is used in BasicMovingObjects and ShootingGame
  */
 
-public class MovingObject extends VisibleObject{
+public class MovingMarker extends VisibleMarker{
   
   private double speed; //in units per millisecond; 'forward' vector is normalized velocity
   
@@ -14,7 +14,7 @@ public class MovingObject extends VisibleObject{
   private VisiblePath trail = null;
   private PathAppearance trailAppearance;
 
-  public MovingObject(ManifoldPosition manifoldPosition, ObjectAppearance appearance, Vector velocityUnitsPerSecond){
+  public MovingMarker(ManifoldPosition manifoldPosition, MarkerAppearance appearance, Vector velocityUnitsPerSecond){
     super(manifoldPosition, appearance);
     setVelocity(velocityUnitsPerSecond);
   }
