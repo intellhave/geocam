@@ -1,4 +1,4 @@
-package objects;
+package markers;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import triangulation.Triangulation;
  * Any VisibleObject created is automatically handled by the ManifoldObjectHandler
  */
 
-public class ManifoldObjectHandler{
+public class ManifoldMarkerHandler{
 
   private static int nextIndex = 0;
 
@@ -25,11 +25,11 @@ public class ManifoldObjectHandler{
   //private static HashSet<VisiblePath> allVisiblePaths = new HashSet<VisiblePath>();
   
   //references to visible objects and paths, sorted by face (path references appear in any face the path intersects)
-  private static HashMap<Face,HashSet<VisibleObject>> sortedObjectList = new HashMap<Face,HashSet<VisibleObject>>();
+  private static HashMap<Face,HashSet<VisibleMarker>> sortedObjectList = new HashMap<Face,HashSet<VisibleMarker>>();
   private static HashMap<Face,HashSet<VisiblePath>> sortedPathList = new HashMap<Face,HashSet<VisiblePath>>();
   
   
-  private ManifoldObjectHandler(){ }
+  private ManifoldMarkerHandler(){ }
   
   public static int generateIndex(){
     nextIndex++;
@@ -49,7 +49,7 @@ public class ManifoldObjectHandler{
     Set<Integer> faceIndices = faceTable.keySet();
     for(Integer i : faceIndices){
       Face f = faceTable.get(i);
-      Collection<VisibleObject> objectList = sortedObjectList.get(f);
+      Collection<VisibleMarker> objectList = sortedObjectList.get(f);
       
       if(objectList == null){
         System.out.println("Face " + f.getIndex() + ": null list");
@@ -59,7 +59,7 @@ public class ManifoldObjectHandler{
       int n = objectList.size();
       System.out.println("Face " + f.getIndex() + ": " + n + " objects:");
       synchronized(objectList) {
-        for(VisibleObject o : objectList){
+        for(VisibleMarker o : objectList){
           System.out.println("  Object " + o.getIndex() + " (Face " + o.getFace().getIndex() + ")");
         }
       }
@@ -67,17 +67,17 @@ public class ManifoldObjectHandler{
   }
 
   //add and remove objects
-  public static void addObject(VisibleObject o){ 
+  public static void addObject(VisibleMarker o){ 
     
-    Collection<VisibleObject> objectList = getObjectsCreateIfNull(o.getFace());
+    Collection<VisibleMarker> objectList = getObjectsCreateIfNull(o.getFace());
     synchronized(objectList) {
       objectList.add(o);
     }
   }
   
-  public static void removeObject(VisibleObject o){
+  public static void removeObject(VisibleMarker o){
 
-    Collection<VisibleObject> objectList = sortedObjectList.get(o.getFace());
+    Collection<VisibleMarker> objectList = sortedObjectList.get(o.getFace());
     if(objectList == null){ return; }
     synchronized(objectList) {
       if(!objectList.remove(o)){
@@ -93,14 +93,14 @@ public class ManifoldObjectHandler{
   }
   
   //access to object lists  
-  public static Collection<VisibleObject> getObjects(Face f){
+  public static Collection<VisibleMarker> getObjects(Face f){
     return sortedObjectList.get(f);
   }
   
-  private static Collection<VisibleObject> getObjectsCreateIfNull(Face f){
-    HashSet<VisibleObject> objectList = sortedObjectList.get(f);
+  private static Collection<VisibleMarker> getObjectsCreateIfNull(Face f){
+    HashSet<VisibleMarker> objectList = sortedObjectList.get(f);
     if(objectList == null){
-      objectList = new HashSet<VisibleObject>();
+      objectList = new HashSet<VisibleMarker>();
       synchronized(sortedObjectList) {
         sortedObjectList.put(f, objectList);
       }
@@ -109,13 +109,13 @@ public class ManifoldObjectHandler{
   }
   
   //this should get called whenever the position of a referenced object changes its face 
-  public static void updateObject(VisibleObject o, Face oldFace) {
+  public static void updateObject(VisibleMarker o, Face oldFace) {
 
     if(o == null){ return; }
 
     //remove the object, which should be in the list for oldFace
     if(oldFace != null){
-      Collection<VisibleObject> objectList = sortedObjectList.get(oldFace);
+      Collection<VisibleMarker> objectList = sortedObjectList.get(oldFace);
       if(objectList != null){ 
         synchronized(objectList) {
           if(!objectList.remove(o)){

@@ -6,13 +6,32 @@
 	<classpathentry kind="src" path="Development3D"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="xml/bcel-5.2.jar"/>
-	<classpathentry kind="lib" path="xml/log4j-1.2.15.jar"/>
-	<classpathentry kind="lib" path="xml/serializer.jar"/>
-	<classpathentry kind="lib" path="xml/xalan.jar"/>
-	<classpathentry kind="lib" path="xml/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="xml/xml-apis.jar"/>
-	<classpathentry kind="lib" path="xml/xsltc.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jreality"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jreality">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jreality/jni/linux32"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/jreality/lib/antlr.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/beans.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/bsh.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/colorpicker.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/iText-2.1.3.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/jacknativeclient.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/janino.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/jogl.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/jrworkspace.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/jterm.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/netutil.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/pd.jar" sourcepath="/PdCore"/>
+	<classpathentry kind="lib" path="/jreality/lib/smrj-app.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/smrj-client.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/smrj.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/sunflow.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/vrData.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/vrExamples.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/xpp3.jar"/>
+	<classpathentry kind="lib" path="/jreality/lib/xstream.jar" sourcepath="/xstream/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

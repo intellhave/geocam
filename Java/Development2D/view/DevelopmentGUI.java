@@ -29,13 +29,14 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import objects.BasicMovingObjects;
-import objects.ManifoldPosition;
-import objects.MovingObject;
-import objects.ObjectAppearance;
-import objects.ObjectDynamics;
-import objects.PathAppearance;
-import objects.ShootingGame;
+import markers.BasicMovingMarkers;
+import markers.ManifoldPosition;
+import markers.MovingMarker;
+import markers.MarkerAppearance;
+import markers.MarkerDynamics;
+import markers.PathAppearance;
+import markers.ShootingGame;
+
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -60,7 +61,7 @@ import development.Vector;
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
 @SuppressWarnings("static-access")
-public class DevelopmentGUI extends JFrame  implements Development.DevelopmentViewer, ObjectDynamics.DynamicsListener{
+public class DevelopmentGUI extends JFrame  implements Development.DevelopmentViewer, MarkerDynamics.DynamicsListener{
   private static final long serialVersionUID = 1L;
 
   public static void main(String[] args) {
@@ -117,7 +118,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     
   //--- objects ------------------------
   private static ShootingGame shootingGame;   
-  private static BasicMovingObjects dynamics = new BasicMovingObjects(50);
+  private static BasicMovingMarkers dynamics = new BasicMovingMarkers(50);
   private static final boolean INITIAL_MOVEMENT_STATUS = false;
   private static double targetSpeed = 0.5;
   private static final double TARGET_SPEED_INCREMENT = 0.1;
@@ -151,7 +152,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   
   
   //don't generally need to keep track of this list, but GUI will change the objects' properties
-  private LinkedList<MovingObject> movingObjects = new LinkedList<MovingObject>();
+  private LinkedList<MovingMarker> movingObjects = new LinkedList<MovingMarker>();
  
   //--GUI pieces ----------------------------------------------
   JMenuBar menuBar;
@@ -203,7 +204,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   }
   
   public void dynamicsEvent(int eventID){
-    if(eventID == ObjectDynamics.EVENT_DYNAMICS_EVOLVED){
+    if(eventID == MarkerDynamics.EVENT_DYNAMICS_EVOLVED){
       updateGeometry(false,true);
     }
   }
@@ -274,14 +275,14 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
 //    development.getSourceObject().getAppearance().setRadius(objectRadius);
     Random rand = new Random();
     for(int i=0; i<numObjects; i++){
-      MovingObject newObject = new MovingObject( 
+      MovingMarker newObject = new MovingMarker( 
           development.getSource(), 
-          new ObjectAppearance(ObjectAppearance.ModelType.ANT, objectScale), 
+          new MarkerAppearance(MarkerAppearance.ModelType.ANT, objectScale), 
           randomUnitVector(rand) );
       if(OBJECT_TRAILS){ newObject.setTrailEnabled(1,new PathAppearance(0.04,Color.BLACK,0.05,Color.BLUE)); }
       movingObjects.add(newObject);
     }
-    for(MovingObject o : movingObjects){
+    for(MovingMarker o : movingObjects){
       o.setSpeed(objectSpeed); //scale so speed is correct
       dynamics.addObject(o); 
     }
@@ -401,7 +402,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     		speedSlider.addChangeListener(new ChangeListener() {
     			public void stateChanged(ChangeEvent e) {
     				objectSpeed = ((JSlider)e.getSource()).getValue()/1000.0;
-    				for(MovingObject o : movingObjects){ 
+    				for(MovingMarker o : movingObjects){ 
     					o.setSpeed(objectSpeed); 
     				}
     				speedBorder.setTitle("Speed (" + objectSpeed + ")");
@@ -418,12 +419,12 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
     			public void stateChanged(ChangeEvent e) {
     				objectScale = ((JSlider)e.getSource()).getValue() / 10.0;
     				
-    				ObjectAppearance oa;
+    				MarkerAppearance oa;
     				oa = development.getSourceObject().getAppearance();
     				oa.setScale( oa.getDefaultScale() * objectScale );
     				
     				development.getSourceObject().getAppearance().setScale(objectScale);
-    				for(MovingObject mo : movingObjects){
+    				for(MovingMarker mo : movingObjects){
     				  oa = mo.getAppearance();
     				  oa.setScale( oa.getDefaultScale() * objectScale );    					
     				}
@@ -633,7 +634,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
         public void stateChanged(ChangeEvent e) {
           numObjects = ((JSlider)e.getSource()).getValue();
           //movingObjects = null;
-          for(MovingObject o : movingObjects){
+          for(MovingMarker o : movingObjects){
             //movingObjects.remove(o); 
             o.removeFromManifold();
             dynamics.removeObject(o);

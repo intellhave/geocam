@@ -1,4 +1,4 @@
-package objects;
+package markers;
 
 import triangulation.Face;
 
@@ -10,35 +10,35 @@ import triangulation.Face;
  * Any VisibleObject that gets created is automatically handled by ManifoldObjectHandler
  */
 
-public class VisibleObject extends ManifoldPosition{
+public class VisibleMarker extends ManifoldPosition{
   
   private int index;
   private boolean isVisible;
-  ObjectAppearance app;
+  MarkerAppearance app;
   
-  public VisibleObject(ManifoldPosition manifoldPosition, ObjectAppearance appearance){ 
+  public VisibleMarker(ManifoldPosition manifoldPosition, MarkerAppearance appearance){ 
     super(manifoldPosition);
     
-    index = ManifoldObjectHandler.generateIndex();
+    index = ManifoldMarkerHandler.generateIndex();
     isVisible = true;
     app = appearance;
     
-    ManifoldObjectHandler.addObject(this);
+    ManifoldMarkerHandler.addObject(this);
   }
   
   public int getIndex(){ return index; }
   public void setVisible(boolean visibility){ isVisible = visibility; }
   public boolean isVisible(){ return isVisible; }
   
-  public ObjectAppearance getAppearance(){ return app; }
-  public void setAppearance(ObjectAppearance appearance){ app = appearance; }
+  public MarkerAppearance getAppearance(){ return app; }
+  public void setAppearance(MarkerAppearance appearance){ app = appearance; }
   
   protected void reportFaceChange(Face oldFace){
     //make sure this object appears in the correct list in the Handler
-    ManifoldObjectHandler.updateObject(this,oldFace);
+    ManifoldMarkerHandler.updateObject(this,oldFace);
   }
   
   public void removeFromManifold(){
-    ManifoldObjectHandler.removeObject(this);
+    ManifoldMarkerHandler.removeObject(this);
   }
 }

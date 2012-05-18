@@ -11,7 +11,8 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 
-import objects.ManifoldPosition;
+import markers.ManifoldPosition;
+
 
 import geoquant.Alpha;
 import geoquant.LKCurvature;
@@ -31,8 +32,6 @@ import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.*;
-import view.DevelopmentView2D;
-import view.DevelopmentGUI;
 import view.ColorScheme.schemes;
 import development.*;
 import visualization.*;

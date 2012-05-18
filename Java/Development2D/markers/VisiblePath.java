@@ -1,4 +1,4 @@
-package objects;
+package markers;
 
 import triangulation.Face;
 
@@ -15,14 +15,14 @@ public class VisiblePath extends ManifoldPath{
   PathAppearance app;
   
   public VisiblePath(PathAppearance appearance){
-    index = ManifoldObjectHandler.generateIndex();
+    index = ManifoldMarkerHandler.generateIndex();
     isVisible = true;
     app = appearance;
   }
   
   public VisiblePath(ManifoldPath path, PathAppearance appearance){
     super(path);
-    index = ManifoldObjectHandler.generateIndex();
+    index = ManifoldMarkerHandler.generateIndex();
     isVisible = true;
     app = appearance;
   }
@@ -36,8 +36,8 @@ public class VisiblePath extends ManifoldPath{
 
   protected void reportFaceChange(Face f, boolean newIntersection){
     //make sure this object appears in, and only in, the lists for the faces the path intersects
-    if(newIntersection == true){ ManifoldObjectHandler.addPathToFace(f, this); }
-    if(newIntersection == false){ ManifoldObjectHandler.removePathFromFace(f, this); }
+    if(newIntersection == true){ ManifoldMarkerHandler.addPathToFace(f, this); }
+    if(newIntersection == false){ ManifoldMarkerHandler.removePathFromFace(f, this); }
   }
 
   public void removeFromManifold(){

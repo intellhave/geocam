@@ -3,7 +3,8 @@ package development;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import objects.ManifoldPosition;
+import markers.ManifoldPosition;
+
 
 /**
  * Fading Node

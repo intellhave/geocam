@@ -1,10 +1,10 @@
-package objects;
+package markers;
 
 
 /* This object changes its appearance with time, then removes itself from the manifold
  */
 
-public class ExplodingObject extends VisibleObject{
+public class ExplodingMarker extends VisibleMarker{
   
   private static final long TIME_TO_LIVE = 500;
   
@@ -16,12 +16,12 @@ public class ExplodingObject extends VisibleObject{
   
   private long startTime;
 
-  public ExplodingObject(ManifoldPosition manifoldPosition){
+  public ExplodingMarker(ManifoldPosition manifoldPosition){
     super(manifoldPosition, getAppearance(0));
     startTime = System.currentTimeMillis();
   }
 
-  public ObjectAppearance getAppearance(){
+  public MarkerAppearance getAppearance(){
     long dt = System.currentTimeMillis() - startTime;
     if(dt > TIME_TO_LIVE){
       removeFromManifold();
@@ -30,12 +30,12 @@ public class ExplodingObject extends VisibleObject{
     return getAppearance((double)dt/(double)TIME_TO_LIVE);
   }
 
-  private static ObjectAppearance getAppearance(double percent){
+  private static MarkerAppearance getAppearance(double percent){
     double radius = (RADIUS_END - RADIUS_START)*percent*percent + RADIUS_START; //percent^2 so it grows faster near the end
     int r = (int)((R_END - R_START)*percent) + R_START;
     int g = (int)((G_END - G_START)*percent) + G_START;
     int b = (int)((B_END - B_START)*percent) + B_START;
     int a = (int)((A_END - A_START)*percent) + A_START;
-    return new ObjectAppearance();
+    return new MarkerAppearance();
   }
 }

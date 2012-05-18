@@ -1,4 +1,4 @@
-package objects;
+package markers;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -9,11 +9,11 @@ import development.Vector;
  * when a bullet hits a target, the target disappears
  */
 
-public class ShootingGame extends ObjectDynamics{
+public class ShootingGame extends MarkerDynamics{
 
   //list of objects
-  private LinkedList<MovingObject> targetList = new LinkedList<MovingObject>();
-  private LinkedList<MovingObject> bulletList = new LinkedList<MovingObject>();
+  private LinkedList<MovingMarker> targetList = new LinkedList<MovingMarker>();
+  private LinkedList<MovingMarker> bulletList = new LinkedList<MovingMarker>();
   
   //extra events
   public static final int EVENT_OBJECT_HIT = getNextEventID();
@@ -21,8 +21,8 @@ public class ShootingGame extends ObjectDynamics{
   //options
   private double targetSpeed = 0.5; //units per sec
   private double bulletSpeed = 2.0; //units per sec
-  private ObjectAppearance targetAppearance = new ObjectAppearance();
-  private ObjectAppearance bulletAppearance = new ObjectAppearance();
+  private MarkerAppearance targetAppearance = new MarkerAppearance();
+  private MarkerAppearance bulletAppearance = new MarkerAppearance();
   //private PathAppearance bulletTrailAppearance = new PathAppearance(0.01, Color.BLACK, 0.01, Color.BLACK);
   private double collisionThreshhold = 0.06; //should be target radius + bullet radius
   private boolean clearBulletsOnHit = true;
@@ -44,7 +44,7 @@ public class ShootingGame extends ObjectDynamics{
     double L = direction.length();
     if(L == 0){ return; }
     double scalefactor = targetSpeed/L;
-    targetList.add(new MovingObject(mp, targetAppearance, Vector.scale(direction,scalefactor)));
+    targetList.add(new MovingMarker(mp, targetAppearance, Vector.scale(direction,scalefactor)));
   }
   
   public void addBullet(ManifoldPosition mp, Vector direction){
@@ -53,7 +53,7 @@ public class ShootingGame extends ObjectDynamics{
     if(L == 0){ return; }
     double scalefactor = bulletSpeed/L;
     
-    MovingObject newBullet = new MovingObject(mp, bulletAppearance, Vector.scale(direction,scalefactor));
+    MovingMarker newBullet = new MovingMarker(mp, bulletAppearance, Vector.scale(direction,scalefactor));
     //newBullet.setTrailEnabled(1,bulletTrailAppearance);
     bulletList.add(newBullet);
   }
@@ -61,17 +61,17 @@ public class ShootingGame extends ObjectDynamics{
   //dynamics
   protected void evolveDynamics(long dt){
 
-    for(MovingObject o : targetList){ o.updatePosition(dt); } 
-    for(MovingObject o : bulletList){ o.updatePosition(dt); } 
+    for(MovingMarker o : targetList){ o.updatePosition(dt); } 
+    for(MovingMarker o : bulletList){ o.updatePosition(dt); } 
     
     //check for any instance of a bullet hitting a target
     boolean hitObject = false;
     
-    ArrayList<MovingObject> killedTargets = new ArrayList<MovingObject>();
-    ArrayList<MovingObject> killedBullets = new ArrayList<MovingObject>();
+    ArrayList<MovingMarker> killedTargets = new ArrayList<MovingMarker>();
+    ArrayList<MovingMarker> killedBullets = new ArrayList<MovingMarker>();
     
-    for(MovingObject bullet : bulletList){
-      for(MovingObject target : targetList){
+    for(MovingMarker bullet : bulletList){
+      for(MovingMarker target : targetList){
         boolean hit = checkCollision(bullet,target);
         if(hit){ 
           hitObject = true;
@@ -82,13 +82,13 @@ public class ShootingGame extends ObjectDynamics{
     }
     
     //get rid of the killed targets and bullets
-    for(MovingObject killedBullet : killedBullets){
+    for(MovingMarker killedBullet : killedBullets){
       bulletList.remove(killedBullet);
       killedBullet.removeFromManifold();
     }
-    for(MovingObject killedTarget : killedTargets){
+    for(MovingMarker killedTarget : killedTargets){
       ManifoldPosition ktPos = new ManifoldPosition(killedTarget.getFace(), killedTarget.getPosition());
-      ExplodingObject eo = new ExplodingObject(ktPos);
+      ExplodingMarker eo = new ExplodingMarker(ktPos);
       targetList.remove(killedTarget);
       killedTarget.removeFromManifold();
     }
@@ -96,7 +96,7 @@ public class ShootingGame extends ObjectDynamics{
     //notify listeners if hit occurred
     if(hitObject){
       if(clearBulletsOnHit){
-        for(MovingObject bullet : bulletList){
+        for(MovingMarker bullet : bulletList){
           bullet.removeFromManifold();
         }
         bulletList.clear();
@@ -107,7 +107,7 @@ public class ShootingGame extends ObjectDynamics{
   
   //check if the objects are within the collision threshhold
   //should use the real manifold metric here, but that's not implemented.  someday...
-  private boolean checkCollision(MovingObject bullet, MovingObject target){
+  private boolean checkCollision(MovingMarker bullet, MovingMarker target){
     
     if(bullet.getFace() == target.getFace()){
       Vector v = bullet.getPosition();

@@ -3,9 +3,10 @@ package development;
 import java.util.LinkedList;
 import java.util.List;
 
-import objects.ManifoldPosition;
-import objects.ObjectAppearance;
-import objects.VisibleObject;
+import markers.ManifoldPosition;
+import markers.MarkerAppearance;
+import markers.VisibleMarker;
+
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
@@ -33,14 +34,12 @@ import util.Matrix;
 
 public class Development {
 
-  /*TODO (Timing)*/ private static final int TASK_TYPE_BUILDTREE = TimingStatistics.generateTaskTypeID("Development.buildTree");
-  
   private AffineTransformation rotation = new AffineTransformation(2);
   private DevelopmentNode root;
   
   private ManifoldPosition source;
 
-  private VisibleObject sourceObject; //fixed object at source point
+  private VisibleMarker sourceObject; //fixed object at source point
 
   private int maxDepth;
 
@@ -64,7 +63,7 @@ public class Development {
 
     maxDepth = depth;
     source = sourcePoint;
-    sourceObject = new VisibleObject(source, new ObjectAppearance());
+    sourceObject = new VisibleMarker(source, new MarkerAppearance());
     rebuild();
   }
 
@@ -91,7 +90,7 @@ public class Development {
 
   public DevelopmentNode getRoot() { return root; }
   public ManifoldPosition getSource() { return source; }
-  public VisibleObject getSourceObject() { return sourceObject; }
+  public VisibleMarker getSourceObject() { return sourceObject; }
   public int getDepth() { return maxDepth; }
 
   // ---------------------------------------------
@@ -144,9 +143,6 @@ public class Development {
 
   private void buildTree() {
 
-    /*TODO (Timing)*/ long taskID;
-    /*TODO (Timing)*/ taskID = TimingStatistics.startTask(TASK_TYPE_BUILDTREE);
-    
     // get transformation taking sourcePoint to origin (translation by -1*sourcePoint)
     AffineTransformation t = new AffineTransformation(Vector.scale(source.getPosition(), -1));
 
@@ -174,8 +170,6 @@ public class Development {
         buildTree(root, newFace, edge, frustum, t, 1);
       }
     }
-    
-    /*TODO (Timing)*/ TimingStatistics.endTask(taskID);
   }
 
   private void buildTree(DevelopmentNode parent, Face face, Edge sourceEdge,

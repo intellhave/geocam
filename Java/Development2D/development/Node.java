@@ -2,7 +2,8 @@ package development;
 
 import java.awt.Color;
 
-import objects.ManifoldPosition;
+import markers.ManifoldPosition;
+
 import triangulation.Face;
 
 
