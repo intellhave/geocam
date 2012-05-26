@@ -12,8 +12,11 @@ import markers.VisibleMarker;
 import triangulation.Face;
 import triangulation.Triangulation;
 import view.ColorScheme;
+import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.math.MatrixBuilder;
+import de.jreality.math.Pn;
 import de.jreality.scene.DirectionalLight;
+import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import development.Development;
 import development.EmbeddedTriangulation;
@@ -33,7 +36,7 @@ public class EmbeddedView extends View {
 
   private HashMap<VisibleMarker, SceneGraphComponent> sgcpools;
   private SceneGraphComponent sgcLight;
-  
+
   /*********************************************************************************
    * EmbeddedView
    * 
@@ -43,35 +46,24 @@ public class EmbeddedView extends View {
   public EmbeddedView(Development development, ColorScheme colorScheme) {
     super(development, colorScheme);
     sgcpools = new HashMap<VisibleMarker, SceneGraphComponent>();
-    
-    sgcLight = new SceneGraphComponent();
-    DirectionalLight light = new DirectionalLight();
-    light.setIntensity(4.0);
-    sgcLight.setLight(light);
-    sgcCamera.addChild(sgcLight);    
-    
     updateCamera();
-    
+
     // create lights
     // TODO: Adding more than 5 lights appears to break jReality.
-//    int numlights = 4;
-//    double[][] light_psns = { { 1, 0, 1 }, { -1, 0, 1 }, { 0, 1, 1 },
-//        { 0, -1, 1 } };
-//
-//    for (int ii = 0; ii < numlights; ii++) {
-//      SceneGraphComponent sgcLight = new SceneGraphComponent();
-//      DirectionalLight light = new DirectionalLight();
-//      light.setIntensity(4.0);
-//      sgcLight.setLight(light);
-//      MatrixBuilder
-//        .euclidean()
-//        .scale(2)
-//        .translate(light_psns[ii])        
-//        .rotateX( light_psns[ii][0] * Math.PI/4 )
-//        .rotateY( light_psns[ii][1] * Math.PI/4 )
-//        .assignTo(sgcLight);
-//      sgcRoot.addChild(sgcLight);
-//    }
+    int numlights = 4;
+    double[][] light_psns = { { 1, 0, 1 }, { -1, 0, 1 }, { 0, 1, 1 },
+        { 0, -1, 1 } };
+
+    for (int ii = 0; ii < numlights; ii++) {
+      SceneGraphComponent sgcLight = new SceneGraphComponent();
+      DirectionalLight light = new DirectionalLight();
+      light.setIntensity(4.0);
+      sgcLight.setLight(light);
+      MatrixBuilder.euclidean().scale(2).translate(light_psns[ii])
+          .rotateX(light_psns[ii][0] * Math.PI / 4)
+          .rotateY(light_psns[ii][1] * Math.PI / 4).assignTo(sgcLight);
+      sgcRoot.addChild(sgcLight);
+    }
   }
 
   /*********************************************************************************
@@ -79,22 +71,24 @@ public class EmbeddedView extends View {
    * 
    * TODO: Implement this method, so that the camera can either hover over a
    * fixed point or take a more "global view" of the embedded surface.
-   * 
    *********************************************************************************/
-  private void updateCamera() {
+  protected void updateCamera() {
     VisibleMarker source = development.getSourceObject();
-    Vector embPsn = EmbeddedTriangulation.getCoord3D(source.getFace(), source.getPosition());
-    
-    Vector forward = EmbeddedTriangulation.embedVector(source.getFace(), source.getDirectionForward());
-    Vector left = EmbeddedTriangulation.embedVector(source.getFace(), source.getDirectionLeft());
+    Vector embPsn = EmbeddedTriangulation.getCoord3D(source.getFace(),
+        source.getPosition());
+
+    Vector forward = EmbeddedTriangulation.embedVector(source.getFace(),
+        source.getDirectionForward());
+    Vector left = EmbeddedTriangulation.embedVector(source.getFace(),
+        source.getDirectionLeft());
     Vector normal = EmbeddedTriangulation.getEmbeddedNormal(source.getFace());
-    
+
     forward.normalize();
     left.normalize();
     normal.normalize();
-    
+
     double matrix[] = new double[16];
-    
+
     matrix[0 * 4 + 0] = forward.getComponent(0);
     matrix[0 * 4 + 1] = left.getComponent(0);
     matrix[0 * 4 + 2] = normal.getComponent(0);
@@ -114,13 +108,12 @@ public class EmbeddedView extends View {
     matrix[3 * 4 + 1] = 0.0;
     matrix[3 * 4 + 2] = 0.0;
     matrix[3 * 4 + 3] = 1.0;
-        
-    MatrixBuilder
-      .euclidean()      
-      .translate(normal.getVectorAsArray())
-      .translate(embPsn.getVectorAsArray())
-      .times(matrix)      
-      .assignTo(sgcCamera);    
+
+    normal.scale(2.0);
+
+    MatrixBuilder.euclidean().translate(normal.getVectorAsArray())
+        .translate(embPsn.getVectorAsArray()).times(matrix)
+        .rotateZ(-Math.PI / 2).assignTo(sgcCamera);
   }
 
   /*********************************************************************************
@@ -135,7 +128,6 @@ public class EmbeddedView extends View {
     sgcpools.clear();
 
     // use EmbeddedTriangulation to draw the polyhedron (if it exists)
-
     HashMap<Face, Color> faceColors = new HashMap<Face, Color>();
     // Set<Integer> faceIndexSet = Triangulation.faceTable.keySet();
 
@@ -146,10 +138,9 @@ public class EmbeddedView extends View {
       faceColors.put(f, colorScheme.getColor(f));
     }
 
-    sgcDevelopment.setGeometry(EmbeddedTriangulation.get3DGeometry(faceColors));
-
-    updateCamera();
-    // updateGeometry(true,true);
+    Geometry g = EmbeddedTriangulation.get3DGeometry(faceColors);
+    sgcDevelopment.setGeometry(g);
+    updateCamera();    
   }
 
   /*********************************************************************************
@@ -222,8 +213,8 @@ public class EmbeddedView extends View {
 
       MatrixBuilder
           .euclidean()
-          .translate(pos.getComponent(0), pos.getComponent(1), pos.getComponent(2))
-          .times(matrix)
+          .translate(pos.getComponent(0), pos.getComponent(1),
+              pos.getComponent(2)).times(matrix)
           .scale(vo.getAppearance().getScale()).assignTo(sgc);
       sgc.setVisible(true);
     }
@@ -238,7 +229,7 @@ public class EmbeddedView extends View {
    * surface.
    *********************************************************************************/
   private void getObjectEmbeddedPositionsAndOrientations(Face f,
-    HashMap<VisibleMarker, Vector[]> objectImages) {
+      HashMap<VisibleMarker, Vector[]> objectImages) {
 
     // look for objects
     Collection<VisibleMarker> objectList = ManifoldMarkerHandler.getObjects(f);
@@ -255,7 +246,8 @@ public class EmbeddedView extends View {
         Vector[] tuple = new Vector[4];
 
         tuple[0] = EmbeddedTriangulation.getCoord3D(f, o.getPosition());
-        tuple[1] = EmbeddedTriangulation.embedVector(f, o.getDirectionForward());
+        tuple[1] = EmbeddedTriangulation
+            .embedVector(f, o.getDirectionForward());
         tuple[2] = EmbeddedTriangulation.embedVector(f, o.getDirectionLeft());
         tuple[3] = EmbeddedTriangulation.getEmbeddedNormal(f);
 

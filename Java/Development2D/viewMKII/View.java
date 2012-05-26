@@ -1,9 +1,22 @@
 package viewMKII;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.awt.image.IndexColorModel;
+import java.beans.Expression;
+import java.beans.Statement;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.media.opengl.GLCanvas;
 
 import view.ColorScheme;
 import view.SGCMethods;
+import de.jreality.jogl.JOGLRenderer;
 import de.jreality.jogl.Viewer;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Appearance;
@@ -15,6 +28,8 @@ import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 import de.jreality.toolsystem.ToolSystem;
+import de.jreality.ui.viewerapp.FileFilter;
+import de.jreality.ui.viewerapp.FileLoaderDialog;
 import development.Development;
 
 /*********************************************************************************
@@ -29,6 +44,16 @@ import development.Development;
  *********************************************************************************/
 
 public abstract class View {
+
+  /*********************************************************************************
+   * Model Data and Viewing Parameters
+   * 
+   * These protected variables hold references to the parts of the model views
+   * must inspect in order to depict the model and variables which specify how
+   * to render the model (for example, how faces should be colored).
+   *********************************************************************************/
+  protected Development development;
+  protected ColorScheme colorScheme;
 
   /*********************************************************************************
    * Scene Graph Data
@@ -50,14 +75,13 @@ public abstract class View {
    * 
    * These protected variables hold the objects that JOGL needs to display the
    * scene. This include the "viewer," an object we use to transform the scene
-   * graph into an actual image. It also includes some data about how certain
-   * basic geometric primitives (lines/vertices/etc) should be displayed.
+   * graph into an actual image. 
    *********************************************************************************/
+  protected JOGLRenderer renderer;
+  protected GLCanvas canvas;
   protected Viewer viewer;
   protected Appearance defaultAppearance;
-  protected ColorScheme colorScheme;
-  protected Development development;
-
+  
   /*********************************************************************************
    * View
    * 
@@ -108,11 +132,10 @@ public abstract class View {
    * TODO : Documentation
    *********************************************************************************/
   public void initViewer() {
-    viewer = new Viewer();
-    viewer.setSceneRoot(sgcRoot);
-    viewer.setCameraPath(camPath);
-    ToolSystem toolSystem = ToolSystem.toolSystemForViewer(viewer);
-    toolSystem.initializeSceneTools();
+    viewer = new Viewer(camPath, sgcRoot);    
+    //ToolSystem toolSystem = ToolSystem.toolSystemForViewer(viewer);
+    //toolSystem.initializeSceneTools();
+    //viewer.getViewingComponent();
   }
 
   /*********************************************************************************
@@ -185,10 +208,10 @@ public abstract class View {
         .createDefaultGeometryShader(defaultAppearance, true);
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs
         .createPolygonShader("default");
-    //dps.setAmbientColor(Color.white);
-    //dps.setDiffuseColor(Color.white);
-    //dps.setAmbientCoefficient(0.2);
-    //dps.setDiffuseCoefficient(0.5);
+    // dps.setAmbientColor(Color.white);
+    // dps.setDiffuseColor(Color.white);
+    // dps.setAmbientCoefficient(0.2);
+    // dps.setDiffuseCoefficient(0.5);
 
     sgcRoot.setAppearance(defaultAppearance);
   }
@@ -224,6 +247,7 @@ public abstract class View {
    * updateScene
    *********************************************************************************/
   public void updateScene() {
+    updateCamera();
     viewer.render();
   }
 
@@ -256,5 +280,7 @@ public abstract class View {
    * one.
    *********************************************************************************/
   protected abstract void initializeNewManifold();
+  
+  protected abstract void updateCamera();
 
 }

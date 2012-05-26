@@ -3,26 +3,30 @@ package viewMKII;
 import inputOutput.TriangulationIO;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.AbstractList;
+import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JSlider;
 
 import markers.ManifoldPosition;
-
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme;
 import view.ColorScheme.schemes;
-
-import de.jreality.util.RenderTrigger;
+import de.jreality.jogl.JOGLConfiguration;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
@@ -38,9 +42,9 @@ public class DevelopmentUI {
    *********************************************************************************/
   // TODO: Allow the manifold to be specified by an object like the one below,
   // rather than a single global object.
-  
+
   // private static TriangulatedManifold manifold;
-  //private static AbstractList<Marker> markers;
+  // private static AbstractList<Marker> markers;
   private static Development development;
 
   /*********************************************************************************
@@ -49,10 +53,7 @@ public class DevelopmentUI {
    * These variables are responsible for keeping track of the viewers that will
    * present the mathematical objects to the user.
    *********************************************************************************/
-  private static AbstractList<View> views;
-  private static JPanel compositor;
-  private static JFrame frame;
-
+  private static AbstractMap<View, JFrame> frames;
   /*********************************************************************************
    * Model Control Data
    * 
@@ -60,7 +61,7 @@ public class DevelopmentUI {
    * keeping track of user input to the program that effects the model.
    *********************************************************************************/
   // private static MouseController mouseControl;
-  // private static KeyboardController keyboardControl;
+    private static KeyboardController keyboardControl;
 
   /*********************************************************************************
    * View Control Data
@@ -71,6 +72,7 @@ public class DevelopmentUI {
    * For example, a slider bar that controls how big the objects on the surfaces
    * are belongs here.
    *********************************************************************************/
+  static View[] views;
   private static JSlider pointSizeSlider;
   private static JSlider speedSlider;
   private static JSlider depthSlider;
@@ -79,11 +81,24 @@ public class DevelopmentUI {
   private static ColorScheme colorScheme;
 
   public static void main(String[] args) {
+    JOGLConfiguration.getLogger().setLevel(Level.INFO);
+
     initModel();
     initViews();
     initModelControls();
     initViewControls();
-    ((SideBySideViewPanel) compositor).updateScene();
+    
+    TimerTask tt = new TimerTask(){
+      public void run() {        
+        for(View v : views){
+          v.updateGeometry(true,true);
+          v.updateScene();
+        }
+      }
+    };
+      
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(tt, 0, 1000 / 40); // Try for 40 frames per second.    
   }
 
   /*********************************************************************************
@@ -137,8 +152,9 @@ public class DevelopmentUI {
     }
     sourcePoint.scale(1.0f / 3.0f);
 
-    if (development == null){
-      development = new Development(new ManifoldPosition(sourceFace, sourcePoint), 7, 1.0);
+    if (development == null) {
+      development = new Development(new ManifoldPosition(sourceFace,
+          sourcePoint), 7, 1.0);
     } else {
       development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), 7);
     }
@@ -157,41 +173,52 @@ public class DevelopmentUI {
   /*********************************************************************************
    * Method initViews
    * 
-   * This method is responsible for initializing the objects that will create a
-   * visualization of the triangulated surface for the user. This may involve
-   * composing several different visualizations into a single image of the
-   * surface.
+   * This method is responsible for initializing the code that creates a
+   * visualization of the triangulated surface for the user. This method is also
+   * responsible for positioning the views on the screen.
+   * 
+   * Because we're interested in displaying this in a museum setting (where
+   * users shouldn't be allowed to change window sizes), it's OK to hard code
+   * this information.
    *********************************************************************************/
   private static void initViews() {
     colorScheme = new ColorScheme(schemes.FACE);
 
-    views = new LinkedList<View>();
-    View v = new EmbeddedView(development, colorScheme);
-    View w = new ExponentialView(development, colorScheme);
-    compositor = new SideBySideViewPanel(v, w);
-    views.add(v);
-    views.add(w);
+    int viewCount = 3;
+    views = new View[viewCount];
+    views[0] = new FirstPersonView(development, colorScheme);
+    views[1] = new ExponentialView(development, colorScheme);
+    views[2] = new EmbeddedView(development, colorScheme);
+    
+    int[][] framePositions = {{0,310},{0,10},{400,10}}; 
+    int[][] frameSizes = {{800,400},{400,300},{400,300}};
 
-    frame = new JFrame();
-    frame.setVisible(true);
+    frames = new HashMap<View, JFrame>();
 
-    // jthomas: For reasons that aren't completely clear, this code seems to be
-    // very delicate. Changing settings can cause the views to stop appearing,
-    // leaving a grey screen instead. I think this might be a JOGL/AWT
-    // communication problem. Modify with caution.
-    // Begin Delicate Code
-    frame.setSize(compositor.getSize());
-    frame.add(compositor);
-    frame.setResizable(false);
-    // End Delicate Code
+    for (int ii = 0; ii < 3; ii++) {
+      View u = views[ii];
 
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    // Now the Views are situated in the frame. We can tell the views to begin
-    // displaying the model.
-    for (View u : views) {
       u.updateGeometry();
       u.initializeNewManifold();
+      u.updateScene();
+
+      JFrame frame = new JFrame();
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
+      frame.setLocation(framePositions[ii][0], framePositions[ii][1]);      
+      frame.setResizable(false);
+      
+      Dimension size = new Dimension(frameSizes[ii][0], frameSizes[ii][1]);
+      Container contentPane = frame.getContentPane();
+      contentPane.add((Component) u.getViewer().getViewingComponent());
+      contentPane.setMinimumSize(size);
+      contentPane.setPreferredSize(size);
+      contentPane.setMaximumSize(size);
+      frame.pack();
+      frame.validate();
+      frame.setVisible(true);
+
+      frames.put(u, frame);
     }
   }
 
@@ -206,6 +233,37 @@ public class DevelopmentUI {
    * "initViewControls" method.
    *********************************************************************************/
   private static void initModelControls() {
+    keyboardControl = new KeyboardController(development);
+    
+    
+//    Component comp = (Component) views[0].getViewer().getViewingComponent();
+//    comp.addKeyListener(new KeyAdapter() {
+//
+//      public void keyPressed(KeyEvent e) {
+//
+//        System.out.println("Received keypress: " + e.getKeyCode());
+//
+//        switch (e.getKeyCode()) {
+//        case KeyEvent.VK_RIGHT:
+//          development.rotate(0.1);
+//          break;
+//        case KeyEvent.VK_LEFT:
+//          development.rotate(-0.1);
+//          break;
+//        case KeyEvent.VK_UP:
+//          development.translateSourcePoint(0.1, 0);
+//          break;
+//        case KeyEvent.VK_DOWN:
+//          development.translateSourcePoint(-0.1, 0);
+//          break;
+//        }
+//
+//        for (View v : views) {
+//          v.updateGeometry(true, true);          
+//          v.updateScene();
+//        }
+//      }
+//    });
   }
 
   /*********************************************************************************
@@ -215,16 +273,5 @@ public class DevelopmentUI {
    * will control how the model is visualized for the user. For example, a
    * slider that controls how big the markers are should be initialized here.
    *********************************************************************************/
-  private static void initViewControls() {
-    frame.addKeyListener(new KeyAdapter() {
-      public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-        case KeyEvent.VK_ENTER:
-          ((SideBySideViewPanel) compositor).updateScene();
-          System.out.println("Enter pressed. Updating Scene.");
-
-        }
-      }
-    });
-  }
+  private static void initViewControls() {}
 }

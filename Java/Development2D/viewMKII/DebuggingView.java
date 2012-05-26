@@ -40,4 +40,10 @@ public class DebuggingView extends View {
   protected void initializeNewManifold() {
   }
 
+  @Override
+  protected void updateCamera() {
+    // TODO Auto-generated method stub
+    
+  }
+
 }
