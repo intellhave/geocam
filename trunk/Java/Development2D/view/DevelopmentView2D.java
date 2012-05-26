@@ -290,8 +290,7 @@ public class DevelopmentView2D extends DevelopmentView {
 
       
       // -------- LINE RADIUS SLIDER --------
-      JSlider lineRadSlider = new JSlider(0, MAX_LINE_RADIUS,
-          INITIAL_LINE_RADIUS);
+      JSlider lineRadSlider = new JSlider(0, MAX_LINE_RADIUS, INITIAL_LINE_RADIUS);
       lineRadSlider.addChangeListener(new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           lineRadius = ((JSlider) e.getSource()).getValue() / 1000.0;

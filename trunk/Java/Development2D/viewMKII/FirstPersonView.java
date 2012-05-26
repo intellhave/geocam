@@ -3,36 +3,37 @@ package viewMKII;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import markers.MarkerAppearance;
 import markers.VisibleMarker;
-
-import view.ColorScheme;
-import view.CommonViewMethods;
-import view.SGCMethods.DevelopmentGeometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
-import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.math.MatrixBuilder;
-import de.jreality.math.Pn;
 import de.jreality.scene.DirectionalLight;
-import de.jreality.scene.PointLight;
 import de.jreality.scene.SceneGraphComponent;
 import development.Development;
 import development.DevelopmentNode;
 import development.Vector;
+import view.ColorScheme;
+import view.CommonViewMethods;
+import view.SGCMethods.DevelopmentGeometrySim3D;
 
 /*********************************************************************************
- * Exponential View (Previously DevelopmentView2D)
+ * FirstPersonView (Previously DevelopmentViewSim3D)
  * 
  * This view visualizes a triangulated 2 dimensional surface using the notion of
  * an exponential map. Starting from the face that contains a designated
- * "source point," this view unfolds pieces of the surface into a plane. The
- * result is a representation of a neighborhood of the source point built out of
- * polygons in the plane.
+ * "source point," this view unfolds pieces of the surface into a plane. Then,
+ * it "thickens" the plane by a small amount, so that one can visualize what it
+ * would be like to move around in this space as a two dimensional creature.
  *********************************************************************************/
 
-public class ExponentialView extends View {
+public class FirstPersonView extends View {
+  private double height = 25.0 / 100.0;
+  private boolean showAvatar = true;
+  private Vector cameraForward = new Vector(-1, 0);
+  
   private HashMap<VisibleMarker, LinkedList<SceneGraphComponent>> sgcpools;
 
   /*********************************************************************************
@@ -42,32 +43,40 @@ public class ExponentialView extends View {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public ExponentialView(Development development, ColorScheme colorScheme) {
-    super(development, colorScheme);
+  public FirstPersonView(Development dev, ColorScheme cs) {
+    super(dev, cs);
     this.sgcpools = new HashMap<VisibleMarker, LinkedList<SceneGraphComponent>>();
 
-    // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
-    light.setIntensity(3.00);
+    light.setIntensity(3.0);
+    light.setColor(Color.white);
     sgcLight.setLight(light);
+    MatrixBuilder.euclidean().rotate(2.65, new double[] { 0, 1, 0 })
+        .assignTo(sgcLight);
 
-    // MatrixBuilder.euclidean().translate(0,0,5).assignTo(sgcLight);
     sgcCamera.addChild(sgcLight);
+
+    // By default, everything is upside down. This rotation corrects the
+    // problem.
+    MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
+        .assignTo(sgcDevelopment);
   }
 
   /*********************************************************************************
    * updateCamera
    * 
-   * This method is responsible for positioning the camera such that the entire
-   * development can be viewed.
-   * 
-   * TODO We still need to determine how far to translate along the z axis. The
-   * rotation ensures that the source point's "forward direction" points north.
+   * This method is responsible for positioning the camera such that the
+   * development can be viewed from the perspective of a small creature on the
+   * manifold.
    *********************************************************************************/
   protected void updateCamera() {
-    MatrixBuilder.euclidean().translate(0, 0, 10).rotateZ(-Math.PI / 2)
-        .assignTo(sgcCamera);
+    de.jreality.math.Matrix M = new de.jreality.math.Matrix(
+        cameraForward.getComponent(1), 0, cameraForward.getComponent(0), 0,
+        -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 
+        0, 1, 0, 0, 
+        0, 0, 0, 1);
+    M.assignTo(sgcCamera);
   }
 
   /*********************************************************************************
@@ -78,7 +87,7 @@ public class ExponentialView extends View {
    * procedure outlined in one of the 2010 REU papers.
    *********************************************************************************/
   protected void generateManifoldGeometry() {
-    DevelopmentGeometry geometry = new DevelopmentGeometry();
+    DevelopmentGeometrySim3D geometry = new DevelopmentGeometrySim3D();
     ArrayList<Color> colors = new ArrayList<Color>();
     generateManifoldGeometry(development.getRoot(), colors, geometry);
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
@@ -90,31 +99,39 @@ public class ExponentialView extends View {
 
     double[][] ifsf_verts = geometry.getVerts();
     int[][] ifsf_faces = geometry.getFaces();
+    int[][] ifsf_edges = geometry.getEdges();
 
     ifsf.setVertexCount(ifsf_verts.length);
     ifsf.setVertexCoordinates(ifsf_verts);
+    ifsf.setEdgeCount(ifsf_edges.length);
+    ifsf.setEdgeIndices(ifsf_edges);
     ifsf.setFaceCount(ifsf_faces.length);
     ifsf.setFaceIndices(ifsf_faces);
-    ifsf.setGenerateEdgesFromFaces(true);
     ifsf.setFaceColors(colorList);
     ifsf.update();
 
     sgcDevelopment.setGeometry(ifsf.getGeometry());
+
+    updateCamera();
   }
 
-  private void generateManifoldGeometry(DevelopmentNode node,
-      ArrayList<Color> colors, DevelopmentGeometry geometry) {
+  private void generateManifoldGeometry(DevelopmentNode devNode,
+      ArrayList<Color> colors, DevelopmentGeometrySim3D geometry) {
+    double[][] face = devNode.getClippedFace().getVectorsAsArray();
+    geometry.addFace(face, height);
 
-    double[][] face = node.getClippedFace().getVectorsAsArray();
-    geometry.addFace(face, 1.0);
-    colors.add(colorScheme.getColor(node));
+    // (adding two faces at a time)
+    colors.add(colorScheme.getColor(devNode));
+    colors.add(colorScheme.getColor(devNode));
 
-    for (DevelopmentNode n : node.getChildren())
-      generateManifoldGeometry(n, colors, geometry);
+    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
+    while (itr.hasNext()) {
+      generateManifoldGeometry(itr.next(), colors, geometry);
+    }
   }
 
   /*********************************************************************************
-   * generateObjectGeometry
+   * generateMarkerGeometry
    * 
    * This method is responsible for placing representations of the markers in
    * the visualization. Due to the nature of this particular view, a single
@@ -166,17 +183,14 @@ public class ExponentialView extends View {
           matrix[0 * 4 + 1] = -forward.getComponent(1);
           matrix[0 * 4 + 2] = 0.0;
           matrix[0 * 4 + 3] = 0.0;
-
           matrix[1 * 4 + 0] = forward.getComponent(1);
           matrix[1 * 4 + 1] = forward.getComponent(0);
           matrix[1 * 4 + 2] = 0.0;
           matrix[1 * 4 + 3] = 0.0;
-
           matrix[2 * 4 + 0] = 0.0;
           matrix[2 * 4 + 1] = 0.0;
           matrix[2 * 4 + 2] = 1.0;
           matrix[2 * 4 + 3] = 0.0;
-
           matrix[3 * 4 + 0] = 0.0;
           matrix[3 * 4 + 1] = 0.0;
           matrix[3 * 4 + 2] = 0.0;
@@ -185,10 +199,19 @@ public class ExponentialView extends View {
           MatrixBuilder
               .euclidean()
               .translate(position.getComponent(0), position.getComponent(1),
-                  0.0).times(matrix).scale(vo.getAppearance().getScale())
-              .assignTo(sgc);
+                  height).times(matrix)
+              .rotate(Math.PI, new double[] { 1, 0, 0 })
+              .scale(vo.getAppearance().getScale()).assignTo(sgc);
 
-          sgc.setVisible(true);
+          // This is a hack to find the SGC that displays the avatar.
+          // In the future, we should have a dedicated SGC pointer for the
+          // avatar.
+          double epsilon = 0.05;
+          if (position.lengthSquared() < epsilon) {
+            sgc.setVisible(this.showAvatar);
+          } else {
+            sgc.setVisible(true);
+          }
         }
         counter++;
       }
@@ -211,6 +234,11 @@ public class ExponentialView extends View {
     sgcpools.clear();
     updateCamera();
     updateGeometry(true, true);
+
+  }
+
+  public void setDrawAvatar(boolean showAvatar) {
+    this.showAvatar = showAvatar;
   }
 
 }
