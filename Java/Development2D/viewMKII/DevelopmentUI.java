@@ -61,7 +61,7 @@ public class DevelopmentUI {
    * keeping track of user input to the program that effects the model.
    *********************************************************************************/
   // private static MouseController mouseControl;
-    private static KeyboardController keyboardControl;
+  private static KeyboardController keyboardControl;
 
   /*********************************************************************************
    * View Control Data
@@ -81,28 +81,101 @@ public class DevelopmentUI {
   private static ColorScheme colorScheme;
 
   public static void main(String[] args) {
-    JOGLConfiguration.getLogger().setLevel(Level.INFO);
+    // This is a good option to set if you wan't more information about what
+    // JReality does behind the scenes
+    // JOGLConfiguration.getLogger().setLevel(Level.INFO);
 
     initModel();
     initViews();
     initModelControls();
     initViewControls();
-    
-    TimerTask tt = new TimerTask(){
-      public void run() {        
-        for(View v : views){
-          v.updateGeometry(true,true);
-          v.updateScene();
-        }
-      }
-    };
-      
-    Timer timer = new Timer();
-    timer.scheduleAtFixedRate(tt, 0, 1000 / 40); // Try for 40 frames per second.    
+    runSimulation();
   }
 
   /*********************************************************************************
-   * Method initModel
+   * runSimulation
+   * 
+   * This method gathers together all the pieces needed to carry out the
+   * simulation. Specifically, it contains the "game loop" which specifies when
+   * the model should be updated and when it should be rendered.
+   * 
+   * The logic in this method solves a somewhat tricky problem: How should one
+   * time updates to the model and rendering so as to display images smoothly?
+   * Basically, the idea is to fix a certain time-step size T (which specifies a
+   * frame-rate), and then write a render loop such that each run through the
+   * loop takes at most time T.
+   * 
+   * TODO Add more description here.
+   *********************************************************************************/
+  private static void runSimulation() {
+    boolean quit = false;
+
+    long t = 0;
+    final long dt = 1; // Timestep size, in microseconds
+    final long maxFrameTime = 80;
+
+    long startTime = System.currentTimeMillis();
+    long currentTime = startTime;
+    long accumulator = 0;
+    long frametimeSum = 0;
+    long cycles = 0;
+    
+    while ( (currentTime - startTime < 30000) && !quit) {
+      long newTime = System.currentTimeMillis();
+      long frameTime = newTime - currentTime;
+
+      frametimeSum += frameTime;
+      cycles += 1;
+      
+      if (frameTime > 0.25)
+        frameTime = maxFrameTime; // note: max frame time to avoid spiral of
+                                  // death
+
+      currentTime = newTime;
+      accumulator += frameTime;
+
+      while (accumulator >= dt) {
+
+        keyboardControl.runNextAction();
+        // networkControl.runNextAction();
+        t += dt;
+        accumulator -= dt;
+
+      }
+
+      // Normally, we would form a "convex combination" of our current and
+      // previous states here, to ensure a smooth animation. We will omit 
+      // this code for now.
+      // const double alpha = accumulator / dt;
+      // State state = currentState*alpha + previousState * ( 1.0 - alpha );
+
+      render();
+    }
+    
+    System.out.println("# Cycles: " + cycles);
+    System.out.println("Average Cycle Time: " + ((double) frametimeSum)/cycles);
+    
+  }
+
+  /*********************************************************************************
+   * render
+   * 
+   * This method is responsible for causing all of the views to update. Right
+   * now this method is pretty simple, but I suspect in the future we will need
+   * logic that updates only the parts of the scene that actually changed. In
+   * other words, instead of just calling updateGeomtetry(true,true) as below,
+   * we'll need to specify how to pick those parameters.
+   *********************************************************************************/
+
+  private static void render() {
+    for (View v : views) {
+      v.updateGeometry(true, true);
+      v.updateScene();
+    }
+  }
+
+  /*********************************************************************************
+   * initModel
    * 
    * This method is responsible for initializing the mathematical model of the
    * simulation we'll present to the user. Specifically, this means setting up
@@ -114,7 +187,7 @@ public class DevelopmentUI {
   }
 
   /*********************************************************************************
-   * Method loadSurface
+   * loadSurface
    * 
    * This method uses the input file name (which should include the path to the
    * file), and reads that file to determine the surface that will be displayed.
@@ -134,7 +207,7 @@ public class DevelopmentUI {
   }
 
   /*********************************************************************************
-   * Method initSurface
+   * initSurface
    * 
    * After "loadSurface" has read the data specifying a triangulated surface
    * into the program, this method is responsible for placing that data into the
@@ -153,15 +226,14 @@ public class DevelopmentUI {
     sourcePoint.scale(1.0f / 3.0f);
 
     if (development == null) {
-      development = new Development(new ManifoldPosition(sourceFace,
-          sourcePoint), 7, 1.0);
+      development = new Development(new ManifoldPosition(sourceFace,sourcePoint), 3, 1.0);
     } else {
       development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), 7);
     }
   }
 
   /*********************************************************************************
-   * Method initMarkers
+   * initMarkers
    * 
    * This method initializes the markers (ants, rockets, cookies, etc.) that
    * will appear on the surface for games and exploration.
@@ -171,7 +243,7 @@ public class DevelopmentUI {
   }
 
   /*********************************************************************************
-   * Method initViews
+   * initViews
    * 
    * This method is responsible for initializing the code that creates a
    * visualization of the triangulated surface for the user. This method is also
@@ -189,9 +261,9 @@ public class DevelopmentUI {
     views[0] = new FirstPersonView(development, colorScheme);
     views[1] = new ExponentialView(development, colorScheme);
     views[2] = new EmbeddedView(development, colorScheme);
-    
-    int[][] framePositions = {{0,310},{0,10},{400,10}}; 
-    int[][] frameSizes = {{800,400},{400,300},{400,300}};
+
+    int[][] framePositions = { { 0, 10 }, { 400, 10 }, { 800, 10 } };
+    int[][] frameSizes = { { 400, 400 }, { 400, 400 }, { 400, 400 } };
 
     frames = new HashMap<View, JFrame>();
 
@@ -205,9 +277,9 @@ public class DevelopmentUI {
       JFrame frame = new JFrame();
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setVisible(true);
-      frame.setLocation(framePositions[ii][0], framePositions[ii][1]);      
+      frame.setLocation(framePositions[ii][0], framePositions[ii][1]);
       frame.setResizable(false);
-      
+
       Dimension size = new Dimension(frameSizes[ii][0], frameSizes[ii][1]);
       Container contentPane = frame.getContentPane();
       contentPane.add((Component) u.getViewer().getViewingComponent());
@@ -223,7 +295,7 @@ public class DevelopmentUI {
   }
 
   /*********************************************************************************
-   * Method initModelControls
+   * initModelControls
    * 
    * This method is responsible for initializing the objects that will listen
    * for the user's input and modify the triangulated surface accordingly.
@@ -234,44 +306,15 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void initModelControls() {
     keyboardControl = new KeyboardController(development);
-    
-    
-//    Component comp = (Component) views[0].getViewer().getViewingComponent();
-//    comp.addKeyListener(new KeyAdapter() {
-//
-//      public void keyPressed(KeyEvent e) {
-//
-//        System.out.println("Received keypress: " + e.getKeyCode());
-//
-//        switch (e.getKeyCode()) {
-//        case KeyEvent.VK_RIGHT:
-//          development.rotate(0.1);
-//          break;
-//        case KeyEvent.VK_LEFT:
-//          development.rotate(-0.1);
-//          break;
-//        case KeyEvent.VK_UP:
-//          development.translateSourcePoint(0.1, 0);
-//          break;
-//        case KeyEvent.VK_DOWN:
-//          development.translateSourcePoint(-0.1, 0);
-//          break;
-//        }
-//
-//        for (View v : views) {
-//          v.updateGeometry(true, true);          
-//          v.updateScene();
-//        }
-//      }
-//    });
   }
 
   /*********************************************************************************
-   * Method initViewControls
+   * initViewControls
    * 
    * This method is responsible for initializing the buttons and sliders that
    * will control how the model is visualized for the user. For example, a
    * slider that controls how big the markers are should be initialized here.
    *********************************************************************************/
-  private static void initViewControls() {}
+  private static void initViewControls() {
+  }
 }
