@@ -19,3 +19,16 @@
   * "Software Engineering" Tasks:
     * ||Release version 0.1|| ???||
       * This will have a limited choice of manifolds.
+
+  * Bugs
+    * ||Fix bugs for non-embedded stuff|| Staci/Taylor ||
+
+  * Dynamics
+    * Allow (live) changing geometry
+      * || Changing radii tori|| ??? ||
+      * || Combinatorial Ricci flow|| ??? ||
+
+  * Pie in the Sky Tasks:
+    * || Multi-player games|| ??? ||
+    * ||Android pad functionality|| ??? ||
+    * ||VR goggles functionality||??? ||
