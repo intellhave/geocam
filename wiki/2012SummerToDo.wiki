@@ -16,6 +16,13 @@
     * ||New controller|| ???||
       * Probably nintendo controller?
 
+  * "Animation" Tasks:
+    * ||Animation of changing perspective|| ??? ||
+      * Fly the camera from far away to the first person embedded view.
+    * || Animation for unfolding || ??? ||
+      * Show unfolding from embedded view to first person
+
+
   * "Software Engineering" Tasks:
     * ||Release version 0.1|| ???||
       * This will have a limited choice of manifolds.
