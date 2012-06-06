@@ -1,0 +1,21 @@
+#summary Summer 2012 To Do List.
+
+
+= To Do =
+
+  * "Model" Tasks:
+    * <strike> Mobius strip from .off </strike>
+    * ||Immersed Klein bottle .off|| ??? ||
+    * ||Surfaces with more genus .off files|| ???||
+
+  * "View" Tasks:
+    * ||1st person embedded view|| ???||
+      * Tie the embedded view to the perspective of the viewer
+
+  * "Controller" Tasks:
+    * ||New controller|| ???||
+      * Probably nintendo controller?
+
+  * "Software Engineering" Tasks:
+    * ||Release version 0.1|| ???||
+      * This will have a limited choice of manifolds.
