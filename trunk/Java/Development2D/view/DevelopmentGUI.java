@@ -82,21 +82,38 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
   private static ColorScheme colorScheme;
   private int currentDepth = 3;
   
-  private static String[] filenames = { "Data/off/square2.off", 
-                                        "Data/off/tetra.off",
-                                        "Data/off/tetra2.off",
-                                        "Data/blender/neckpinch.off",
-                                        "Data/blender/cube_surf.off",
-                                        "Data/off/icosa.off",
-                                        "Data/off/dodec2.off",
-                                        "Data/off/cone.off",
-                                        "Data/off/epcot.off",
-                                        "Data/off/square2.off",
-                                        "Data/Triangulations/2DManifolds/tetrahedronnonembed2.xml",
-                                        "Data/Triangulations/2DManifolds/tetrahedron2.xml",
-                                        "Data/Triangulations/2DManifolds/tetrahedronnew.xml",
-                                        "Data/Triangulations/2DManifolds/torus-9-2.xml" };
-  private static String filename = filenames[4];
+  private static String[] filenames = { "Data/off/tetra.off",     //0
+                                        "Data/off/tetra2.off",    //1
+                                        "Data/blender/neckpinch.off",  //2
+                                        "Data/blender/cube_surf.off",  //3
+                                        "Data/off/icosa.off",  //4
+                                        "Data/off/dodec2.off",  //5
+                                        "Data/off/cone.off",   //6
+                                        "Data/off/epcot.off",   //7
+                                        "Data/Triangulations/2DManifolds/tetrahedronnonembed2.xml",  //8
+                                        "Data/Triangulations/2DManifolds/tetrahedron2.xml",   //9
+                                        "Data/Triangulations/2DManifolds/tetrahedronnew.xml",    //10
+                                        "Data/Triangulations/2DManifolds/torus-9-2.xml",    //11
+                                        "Data/off/mobius.off",   //12
+                                        "Data/off/triangle.off",    //13
+                                        "Data/Triangulations/2DManifolds/kleinbottle.xml",   //14
+                                        "Data/Triangulations/2DManifolds/domain.xml",   //15
+                                        "Data/Triangulations/2DManifolds/double_torus.xml",   //16
+                                        "Data/Triangulations/2DManifolds/goodnotch.xml",   //17
+                                        "Data/Triangulations/2DManifolds/icosahedron.xml",   //18
+                                        "Data/Triangulations/2DManifolds/icosahedronrandom.xml",    //19
+                                        "Data/Triangulations/2DManifolds/kleinbottlerandom.xml",    //20
+                                        "Data/Triangulations/2DManifolds/Monster.xml",   //21
+                                        "Data/Triangulations/2DManifolds/octahedron.xml",   //22
+                                        "Data/Triangulations/2DManifolds/square2.xml",     //23
+                                        "Data/Triangulations/2DManifolds/tetrahedron.xml",   //24
+                                        "Data/Triangulations/2DManifolds/tetrahedron2.xml",  //25
+                                        "Data/Triangulations/2DManifolds/tetrahedron3.xml",  //26
+                                        "Data/Triangulations/2DManifolds/tetrahedronnew.xml",   //27
+                                        "Data/Triangulations/2DManifolds/tetrahedronnonembed.xml",   //28
+                                        "Data/Triangulations/2DManifolds/torus-4.xml",    //29
+                                        "Data/Triangulations/2DManifolds/octahedron2.xml"};   //30
+  private static String filename = filenames[12];
 
   //------------------------------------
   
