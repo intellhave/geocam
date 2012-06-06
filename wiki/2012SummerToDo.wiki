@@ -11,6 +11,13 @@
   * "View" Tasks:
     * ||1st person embedded view|| ???||
       * Tie the embedded view to the perspective of the viewer
+    * || Overlay the map (2D View)|| ??? ||
+      * Place a black cutout over the view so that we do not see the boundary of the development.
+
+  * "Picture" Tasks: 
+    * || Color scheme with patterns || ???||
+      * Allow patterns in the faces, not just colors.
+
 
   * "Controller" Tasks:
     * ||New controller|| ???||
@@ -39,6 +46,8 @@
     * || Multi-player games|| ??? ||
     * ||Android pad functionality|| ??? ||
     * ||VR goggles functionality||??? ||
+    * ||Exotic controller functionality|| ??? ||
+      * Kinect?
 
   * From related projects:
     * ||xml functionality for geoquantViewer runnable jar|| ??? ||
