@@ -39,3 +39,7 @@
     * || Multi-player games|| ??? ||
     * ||Android pad functionality|| ??? ||
     * ||VR goggles functionality||??? ||
+
+  * From related projects:
+    * ||xml functionality for geoquantViewer runnable jar|| ??? ||
+      * It will not read this right now.
