@@ -17,7 +17,6 @@ import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
 import development.AffineTransformation;
-import development.Development;
 import development.DevelopmentNode;
 import development.Frustum2D;
 import development.Vector;
@@ -34,7 +33,8 @@ import development.Vector;
 
 public class ExponentialView extends View {
   protected HashMap<Marker, LinkedList<SceneGraphComponent>> sgcpools;
-
+  protected SceneGraphComponent sgcLight;
+  
   /*********************************************************************************
    * ExponentialView
    * 
@@ -47,7 +47,7 @@ public class ExponentialView extends View {
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
 
     // create light
-    SceneGraphComponent sgcLight = new SceneGraphComponent();
+    sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
     light.setIntensity(1.5);
     sgcLight.setLight(light);
@@ -102,6 +102,7 @@ public class ExponentialView extends View {
     sgcDevelopment.setGeometry(ifsf.getGeometry());
   }
 
+  // This is a recursive helper method for generateManifoldGeometry().
   private void generateManifoldGeometry(DevelopmentNode node,
       ArrayList<Color> colors, DevelopmentGeometry geometry) {
 
@@ -145,7 +146,7 @@ public class ExponentialView extends View {
           MarkerAppearance oa = m.getAppearance();
           SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
           pool.add(sgc);
-          sgcObjects.addChild(sgc);
+          sgcMarkers.addChild(sgc);
         }
       }
 
@@ -205,7 +206,7 @@ public class ExponentialView extends View {
     for (LinkedList<SceneGraphComponent> pool : sgcpools.values()) {
       while (!pool.isEmpty()) {
         SceneGraphComponent sgc = pool.remove();
-        sgcObjects.removeChild(sgc);
+        sgcMarkers.removeChild(sgc);
       }
     }
     sgcpools.clear();

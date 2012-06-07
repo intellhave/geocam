@@ -6,7 +6,6 @@ import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.Light;
 import de.jreality.scene.SceneGraphComponent;
-import development.Development;
 import view.ColorScheme;
 
 /*********************************************************************************

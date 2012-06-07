@@ -7,18 +7,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import markers.MarkerAppearance;
-import markers.VisibleMarker;
+import markersMKII.Marker;
 import markersMKII.MarkerHandler;
+import view.ColorScheme;
+import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
-import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
-import development.Development;
 import development.DevelopmentNode;
 import development.Vector;
-import view.ColorScheme;
-import view.CommonViewMethods;
-import view.SGCMethods.DevelopmentGeometrySim3D;
 
 /*********************************************************************************
  * FirstPersonView (Previously DevelopmentViewSim3D)
@@ -30,33 +27,25 @@ import view.SGCMethods.DevelopmentGeometrySim3D;
  * would be like to move around in this space as a two dimensional creature.
  *********************************************************************************/
 
-public class FirstPersonView extends View {
+public class FirstPersonView extends ExponentialView {
   private double height = 25.0 / 100.0;
   private boolean showAvatar = true;
   private Vector cameraForward = new Vector(-1, 0);
-  
-  private HashMap<VisibleMarker, LinkedList<SceneGraphComponent>> sgcpools;
 
   /*********************************************************************************
-   * ExponentialView
+   * FirstPersonView
    * 
    * This method initializes a new ExponentialView to use a particular
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
   public FirstPersonView(Development dev, MarkerHandler mh, ColorScheme cs) {
-    super(dev, mh, cs);
-    this.sgcpools = new HashMap<VisibleMarker, LinkedList<SceneGraphComponent>>();
+    super(dev, mh, cs); // This call initializes the sgcpools datastructure.
 
-    SceneGraphComponent sgcLight = new SceneGraphComponent();
-    DirectionalLight light = new DirectionalLight();
-    light.setIntensity(1.5);
-    light.setColor(Color.white);
-    sgcLight.setLight(light);
+    // The call to super also initializes sgcLight, and attaches it to the
+    // camera. However, we wish to orient the light differently.
     MatrixBuilder.euclidean().rotate(2.65, new double[] { 0, 1, 0 })
         .assignTo(sgcLight);
-
-    sgcCamera.addChild(sgcLight);
 
     // By default, everything is upside down. This rotation corrects the
     // problem.
@@ -74,9 +63,8 @@ public class FirstPersonView extends View {
   protected void updateCamera() {
     de.jreality.math.Matrix M = new de.jreality.math.Matrix(
         cameraForward.getComponent(1), 0, cameraForward.getComponent(0), 0,
-        -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 
-        0, 1, 0, 0, 
-        0, 0, 0, 1);
+        -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 0,
+        1, 0, 0, 0, 0, 0, 1);
     M.assignTo(sgcCamera);
   }
 
@@ -116,6 +104,7 @@ public class FirstPersonView extends View {
     updateCamera();
   }
 
+  // This is a recursive helper method for generateManifoldGeometry().
   private void generateManifoldGeometry(DevelopmentNode devNode,
       ArrayList<Color> colors, DevelopmentGeometrySim3D geometry) {
     double[][] face = devNode.getClippedFace().getVectorsAsArray();
@@ -141,29 +130,28 @@ public class FirstPersonView extends View {
    * to depict each marker in the scene.
    *********************************************************************************/
   protected void generateMarkerGeometry() {
-    HashMap<VisibleMarker, ArrayList<Vector[]>> objectImages = new HashMap<VisibleMarker, ArrayList<Vector[]>>();
-    CommonViewMethods.getDevelopmentMarkerImagesAndOrientations(
-        development.getRoot(), objectImages);
+    HashMap<Marker, ArrayList<Vector[]>> markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
+    super.developMarkers(development.getRoot(), markerImages);
 
-    for (VisibleMarker vo : objectImages.keySet()) {
-      LinkedList<SceneGraphComponent> pool = sgcpools.get(vo);
+    for (Marker m : markerImages.keySet()) {
+      LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 
       if (pool == null) {
         pool = new LinkedList<SceneGraphComponent>();
-        sgcpools.put(vo, pool);
+        sgcpools.put(m, pool);
       }
 
-      ArrayList<Vector[]> images = objectImages.get(vo);
+      ArrayList<Vector[]> images = markerImages.get(m);
       if (images == null)
         continue;
 
       if (images.size() > pool.size()) {
         int sgcCount = images.size() - pool.size();
         for (int jj = 0; jj < 2 * sgcCount; jj++) {
-          MarkerAppearance oa = vo.getAppearance();
+          MarkerAppearance oa = m.getAppearance();
           SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
           pool.add(sgc);
-          sgcObjects.addChild(sgc);
+          sgcMarkers.addChild(sgc);
         }
       }
 
@@ -202,7 +190,7 @@ public class FirstPersonView extends View {
               .translate(position.getComponent(0), position.getComponent(1),
                   height).times(matrix)
               .rotate(Math.PI, new double[] { 1, 0, 0 })
-              .scale(vo.getAppearance().getScale()).assignTo(sgc);
+              .scale(m.getAppearance().getScale()).assignTo(sgc);
 
           // This is a hack to find the SGC that displays the avatar.
           // In the future, we should have a dedicated SGC pointer for the
@@ -220,24 +208,12 @@ public class FirstPersonView extends View {
   }
 
   /*********************************************************************************
-   * initializeNewManifold
+   * setDrawAvatar
    * 
-   * This method is responsible for initializing (or reinitializing) the scene
-   * graph in the event that we wish to display a different manifold.
+   * Based on the input boolean, this method sets whether or not an avatar (a
+   * particular marker) is drawn right in front of the camera (to represent the
+   * user/player).
    *********************************************************************************/
-  protected void initializeNewManifold() {
-    for (LinkedList<SceneGraphComponent> pool : sgcpools.values()) {
-      while (!pool.isEmpty()) {
-        SceneGraphComponent sgc = pool.remove();
-        sgcObjects.removeChild(sgc);
-      }
-    }
-    sgcpools.clear();
-    updateCamera();
-    updateGeometry(true, true);
-
-  }
-
   public void setDrawAvatar(boolean showAvatar) {
     this.showAvatar = showAvatar;
   }

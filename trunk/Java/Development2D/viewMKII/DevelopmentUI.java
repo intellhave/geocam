@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JSlider;
 
 import markers.ManifoldPosition;
 import markers.MarkerAppearance;
@@ -24,7 +22,6 @@ import triangulation.Vertex;
 import view.ColorScheme;
 import view.ColorScheme.schemes;
 import development.Coord2D;
-import development.Development;
 import development.EmbeddedTriangulation;
 import development.Vector;
 
@@ -84,10 +81,10 @@ public class DevelopmentUI {
    * are belongs here.
    *********************************************************************************/
   static View[] views;
-//  private static JSlider pointSizeSlider;
-//  private static JSlider speedSlider;
-//  private static JSlider depthSlider;
-//  private static JButton stopStartButton;
+  // private static JSlider pointSizeSlider;
+  // private static JSlider speedSlider;
+  // private static JSlider depthSlider;
+  // private static JButton stopStartButton;
 
   private static ColorScheme colorScheme;
 
@@ -124,7 +121,7 @@ public class DevelopmentUI {
     boolean quit = false;
 
     final long dt = 10; // Timestep size, in microseconds
-    //final long maxFrameTime = 80;
+    // final long maxFrameTime = 80;
 
     long startTime = System.currentTimeMillis();
     long currentTime = startTime;
@@ -139,9 +136,20 @@ public class DevelopmentUI {
 
       while (accumulator >= dt) {
 
+        // FIXME: This code will make sure the source point marker is displayed
+        // correctly, but this code does not belong in the DevelopmentUI class.
+        // Refactoring is needed here.
+        // PATCH START
+        Face prev = development.getSource().getFace();
         keyboardControl.runNextAction();
-        markers.updateMarkers(dt);
+        Face next = development.getSource().getFace();
+        if(next != prev){
+          markers.updateMarker(development.getSourceMarker(), prev);
+        }
+        // PATCH END
         
+        markers.updateMarkers(dt);
+
         accumulator -= dt;
       }
 
@@ -227,7 +235,7 @@ public class DevelopmentUI {
       development = new Development(new ManifoldPosition(sourceFace,
           sourcePoint), 3, 1.0);
     } else {
-      development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), 7);
+      development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), 3);
     }
   }
 
@@ -241,15 +249,20 @@ public class DevelopmentUI {
     Random rand = new Random();
 
     markers = new MarkerHandler();
+
+    markers.addMarker(development.getSourceMarker());
+
+    ManifoldPosition pos;
+    MarkerAppearance app;
+    // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {
-      ManifoldPosition mp = development.getSource();
-      MarkerAppearance ma = new MarkerAppearance(
-          MarkerAppearance.ModelType.ANT, 1.0);
+      pos = new ManifoldPosition(development.getSource());
+      app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, 0.5);
       double a = rand.nextDouble() * Math.PI * 2;
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
       vel.scale(0.001);
-      
-      Marker m = new Marker(mp, ma, vel);
+
+      Marker m = new Marker(pos, app, vel);
       markers.addMarker(m);
     }
 
@@ -272,12 +285,12 @@ public class DevelopmentUI {
   private static void initViews() {
     colorScheme = new ColorScheme(schemes.FACE);
 
-    int viewCount = 1;
+    int viewCount = 3;
     views = new View[viewCount];
-    views[0] = new ExponentialView(development, markers, colorScheme);
-    //views[0] = new FirstPersonView(development, markers, colorScheme);
-    //views[1] = new ExponentialView(development, markers, colorScheme);
-    //views[2] = new EmbeddedView(development, markers, colorScheme);
+    // views[0] = new FirstPersonView(development, markers, colorScheme);
+    views[0] = new FirstPersonView(development, markers, colorScheme);
+    views[1] = new ExponentialView(development, markers, colorScheme);
+    views[2] = new EmbeddedView(development, markers, colorScheme);
 
     int[][] framePositions = { { 0, 10 }, { 400, 10 }, { 800, 10 } };
     int[][] frameSizes = { { 400, 400 }, { 400, 400 }, { 400, 400 } };
