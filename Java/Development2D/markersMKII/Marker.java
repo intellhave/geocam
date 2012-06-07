@@ -35,6 +35,10 @@ public class Marker {
    * 
    * Given a position on the manifold, a marker appearance, and possibly a
    * velocity, these constructors create a new marker with those parameters.
+   * 
+   * TODO: Reimplement this so that the input ManifoldPosition and
+   * MarkerAppearance are copied, rather than referenced. This will require
+   * changing the code in other places.
    *********************************************************************************/
   public Marker(ManifoldPosition mp, MarkerAppearance ma) {
     // Assign this Marker a unique ID.
@@ -42,7 +46,7 @@ public class Marker {
     index = idCounter;
     idCounter = idCounter + 1;
 
-    pos = new ManifoldPosition(mp);
+    pos = mp;
     app = ma;
     isVisible = true;
     speed = 0.0;
@@ -57,16 +61,26 @@ public class Marker {
   }
 
   /*********************************************************************************
-   * get/set Methods These are self explanatory.
+   * get/set Methods These are self explanatory, unless otherwise documented.
    *********************************************************************************/
   public ManifoldPosition getPosition() {
     return pos;
+  }
+
+  public void setPosition(ManifoldPosition pos) {
+    this.pos = new ManifoldPosition(pos);
   }
 
   public int getIndex() {
     return index;
   }
 
+  /*********************************************************************************
+   * setVisible / isVisible
+   * 
+   * These methods determine whether the marker in question should be visible in
+   * the scenes it will belong to. By default, markers are visible.
+   *********************************************************************************/
   public void setVisible(boolean visibility) {
     isVisible = visibility;
   }
