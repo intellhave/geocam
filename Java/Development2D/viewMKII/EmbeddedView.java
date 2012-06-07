@@ -5,16 +5,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
-import markers.ManifoldMarkerHandler;
+import markers.ManifoldPosition;
 import markers.MarkerAppearance;
 import markers.VisibleMarker;
-
+import markersMKII.Marker;
+import markersMKII.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
 import view.ColorScheme;
-import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.math.MatrixBuilder;
-import de.jreality.math.Pn;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
@@ -34,8 +33,8 @@ import development.Vector;
 
 public class EmbeddedView extends View {
 
-  private HashMap<VisibleMarker, SceneGraphComponent> sgcpools;
-  private SceneGraphComponent sgcLight;
+  private HashMap<Marker, SceneGraphComponent> sgcpools;
+  //private SceneGraphComponent sgcLight;
 
   /*********************************************************************************
    * EmbeddedView
@@ -43,9 +42,9 @@ public class EmbeddedView extends View {
    * Given a development object and a colorscheme, this constructor initializes
    * an EmbeddedView object to display the specified surface.
    *********************************************************************************/
-  public EmbeddedView(Development development, ColorScheme colorScheme) {
-    super(development, colorScheme);
-    sgcpools = new HashMap<VisibleMarker, SceneGraphComponent>();
+  public EmbeddedView(Development d, MarkerHandler mh, ColorScheme cs) {
+    super(d, mh, cs);
+    sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
 
     // create lights
@@ -57,12 +56,12 @@ public class EmbeddedView extends View {
     for (int ii = 0; ii < numlights; ii++) {
       SceneGraphComponent sgcLight = new SceneGraphComponent();
       DirectionalLight light = new DirectionalLight();
-      light.setIntensity(4.0);
+      light.setIntensity(1.5);
       sgcLight.setLight(light);
       MatrixBuilder.euclidean().scale(2).translate(light_psns[ii])
           .rotateX(light_psns[ii][0] * Math.PI / 4)
           .rotateY(light_psns[ii][1] * Math.PI / 4).assignTo(sgcLight);
-      sgcRoot.addChild(sgcLight);
+      sgcDevelopment.addChild(sgcLight);
     }
   }
 
@@ -155,7 +154,7 @@ public class EmbeddedView extends View {
   }
 
   /*********************************************************************************
-   * generateObjectGeometry
+   * generateMarkerGeometry
    * 
    * See the documentation in View. In this particular view, we need to position
    * and orient each marker in R^3, based upon its coordinates on the surface.
@@ -163,17 +162,17 @@ public class EmbeddedView extends View {
    *********************************************************************************/
   protected void generateMarkerGeometry() {
 
-    HashMap<VisibleMarker, Vector[]> objectImages = new HashMap<VisibleMarker, Vector[]>();
+    HashMap<Marker, Vector[]> objectImages = new HashMap<Marker, Vector[]>();
 
     // get objects and paths for each face
     HashMap<Integer, Face> faceTable = Triangulation.faceTable;
     Set<Integer> faceIndices = faceTable.keySet();
     for (Integer i : faceIndices) {
       Face f = faceTable.get(i);
-      getObjectEmbeddedPositionsAndOrientations(f, objectImages);
+      getMarkerPlacementData(f, objectImages);
     }
 
-    for (VisibleMarker vo : objectImages.keySet()) {
+    for (Marker vo : objectImages.keySet()) {
       SceneGraphComponent sgc = sgcpools.get(vo);
 
       if (sgc == null) {
@@ -222,36 +221,32 @@ public class EmbeddedView extends View {
   }
 
   /*********************************************************************************
-   * getObjectEmbeddedPositionAndOrientations
+   * getMarkerPlacementData
    * 
    * This helper method determines, for each marker, its coordinates and
    * orientation in R^3 based upon its coordinates and orientation on the 2D
    * surface.
    *********************************************************************************/
-  private void getObjectEmbeddedPositionsAndOrientations(Face f,
-      HashMap<VisibleMarker, Vector[]> objectImages) {
+  private void getMarkerPlacementData(Face f, HashMap<Marker, Vector[]> markerImages) {
 
     // look for objects
-    Collection<VisibleMarker> objectList = ManifoldMarkerHandler.getObjects(f);
-    if (objectList == null) {
-      return;
-    }
-
-    synchronized (objectList) {
-      for (VisibleMarker o : objectList) {
-        if (!o.isVisible()) {
-          continue;
-        }
+    Collection<Marker> markers = this.markers.getMarkers(f);
+    if (markers == null) return;
+      
+    synchronized (markers) {
+      for (Marker m : markers) {
+        if (!m.isVisible()) continue;
 
         Vector[] tuple = new Vector[4];
 
-        tuple[0] = EmbeddedTriangulation.getCoord3D(f, o.getPosition());
+        ManifoldPosition pos = m.getPosition();
+        tuple[0] = EmbeddedTriangulation.getCoord3D(f, pos.getPosition());
         tuple[1] = EmbeddedTriangulation
-            .embedVector(f, o.getDirectionForward());
-        tuple[2] = EmbeddedTriangulation.embedVector(f, o.getDirectionLeft());
+            .embedVector(f, pos.getDirectionForward());
+        tuple[2] = EmbeddedTriangulation.embedVector(f, pos.getDirectionLeft());
         tuple[3] = EmbeddedTriangulation.getEmbeddedNormal(f);
 
-        objectImages.put(o, tuple);
+        markerImages.put(m, tuple);
       }
     }
   }

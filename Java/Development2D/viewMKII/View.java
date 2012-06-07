@@ -1,21 +1,19 @@
 package viewMKII;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
-import java.beans.Expression;
-import java.beans.Statement;
-import java.io.File;
-import java.io.IOException;
+import static de.jreality.shader.CommonAttributes.EDGE_DRAW;
+import static de.jreality.shader.CommonAttributes.FACE_DRAW;
+import static de.jreality.shader.CommonAttributes.LIGHTING_ENABLED;
+import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
+import static de.jreality.shader.CommonAttributes.TUBES_DRAW;
+import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
 
-import javax.imageio.ImageIO;
+import java.awt.Color;
+
 import javax.media.opengl.GLCanvas;
 
+import markersMKII.MarkerHandler;
+
 import view.ColorScheme;
-import view.SGCMethods;
 import de.jreality.jogl.JOGLRenderer;
 import de.jreality.jogl.Viewer;
 import de.jreality.math.MatrixBuilder;
@@ -25,11 +23,9 @@ import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.proxy.scene.Camera;
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
+import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
-import de.jreality.toolsystem.ToolSystem;
-import de.jreality.ui.viewerapp.FileFilter;
-import de.jreality.ui.viewerapp.FileLoaderDialog;
 import development.Development;
 
 /*********************************************************************************
@@ -53,6 +49,7 @@ public abstract class View {
    * to render the model (for example, how faces should be colored).
    *********************************************************************************/
   protected Development development;
+  protected MarkerHandler markers;
   protected ColorScheme colorScheme;
 
   /*********************************************************************************
@@ -88,8 +85,9 @@ public abstract class View {
    * This constructor is responsible for setting up the scene graph and
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
-  public View(Development development, ColorScheme colorScheme) {
+  public View(Development development, MarkerHandler markers, ColorScheme colorScheme) {
     this.development = development;
+    this.markers = markers;
     this.colorScheme = colorScheme;
 
     initSceneGraph();
@@ -109,7 +107,7 @@ public abstract class View {
     sgcDevelopment = new SceneGraphComponent("Development");
     sgcObjects = new SceneGraphComponent("Objects");
     sgcDevelopment.addChild(sgcObjects);
-    sgcDevelopment.setAppearance(SGCMethods.getDevelopmentAppearance());
+    sgcDevelopment.setAppearance(defaultAppearance);
     sgcRoot.addChild(sgcDevelopment);
 
     // Initialize the camera.
@@ -166,8 +164,7 @@ public abstract class View {
    * the development should be explicitly drawn.
    *********************************************************************************/
   public void setDrawEdges(boolean value) {
-    sgcDevelopment.getAppearance().setAttribute(CommonAttributes.EDGE_DRAW,
-        value);
+    sgcDevelopment.getAppearance().setAttribute(CommonAttributes.EDGE_DRAW, value);
   }
 
   /*********************************************************************************
@@ -194,26 +191,28 @@ public abstract class View {
    * diameter, that should be specified here.
    *********************************************************************************/
   protected void initAppearances() {
-    defaultAppearance = new Appearance();
-    defaultAppearance.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    defaultAppearance.setAttribute(CommonAttributes.TUBES_DRAW, false);
-    defaultAppearance
-        .setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
-    defaultAppearance.setAttribute(CommonAttributes.BACKGROUND_COLOR,
-        new Color(0f, .1f, .1f));
-    defaultAppearance.setAttribute(CommonAttributes.DIFFUSE_COLOR, new Color(
-        1f, 0f, 0f));
+      defaultAppearance = new Appearance();
+      defaultAppearance.setAttribute(VERTEX_DRAW, false);
+      defaultAppearance.setAttribute(EDGE_DRAW, true);
+      defaultAppearance.setAttribute(FACE_DRAW, true);
+      defaultAppearance.setAttribute(TUBES_DRAW, false);
+      defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
+      defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
+      //defaultAppearance.setAttribute(BACKGROUND_COLOR, new Color(0f, .1f, .1f));
+      //defaultAppearance.setAttribute(DIFFUSE_COLOR, new Color(1f, 0f, 0f));
 
-    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
-        .createDefaultGeometryShader(defaultAppearance, true);
-    DefaultPolygonShader dps = (DefaultPolygonShader) dgs
-        .createPolygonShader("default");
-    // dps.setAmbientColor(Color.white);
-    // dps.setDiffuseColor(Color.white);
-    // dps.setAmbientCoefficient(0.2);
-    // dps.setDiffuseCoefficient(0.5);
-
-    sgcRoot.setAppearance(defaultAppearance);
+      DefaultGeometryShader dgs;
+      dgs = (DefaultGeometryShader) ShaderUtility.createDefaultGeometryShader(defaultAppearance, true);
+      DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+      dls.setDiffuseColor(Color.black);
+      
+      DefaultPolygonShader dps;
+      dps = (DefaultPolygonShader) dgs.createPolygonShader("default");
+      dps.setDiffuseColor(Color.white);
+      
+      //defaultAppearance.setAttribute(LINE_SHADER+"."+POLYGON_SHADER+"."+"SMOOTH_SHADING", true);
+    
+      sgcDevelopment.setAppearance(defaultAppearance);
   }
 
   /*********************************************************************************
