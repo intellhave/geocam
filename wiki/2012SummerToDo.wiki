@@ -8,7 +8,7 @@
     * ||Immersed Klein bottle .off|| ??? ||
     * ||Surfaces with more genus .off files|| ???||
     * ||Set up marker models and surface models to use a consistent scale||
-           That is to say, if the scales are consistent across our data files, we should never load an ant and a surface and find the ant is enormous in comparison to the surface. The easiest thing to do would be to start with the data we know we'll use in the museum exhibit (the ant model and some simple .off's), using blender 2.49 to rescale the data and export the .offs.
+           That is to say, if the scales are consistent across our data files, we should never load an ant and a surface and find the ant is enormous in comparison to the surface. The easiest thing to do would be to start with the data we know we'll use in the museum exhibit (the ant model and some simple .off's), using blender 2.49 to rescale the data and export the .offs. We will still have an "object rescaling" slider, so the scales don't have to be perfect, they should just look reasonable by default.
 
   * "View" Tasks:
     * ||1st person embedded view|| ???||
