@@ -4,11 +4,8 @@ import java.awt.EventQueue;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.util.AbstractQueue;
 import java.util.EnumMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
@@ -265,16 +262,16 @@ public class KeyboardController implements KeyEventDispatcher {
 
     switch (aa) {
     case Forward:
-      development.translateSourcePoint(0.001, 0);
+      development.translateSourcePoint(0.01, 0);
       break;
     case Back:
-      development.translateSourcePoint(-0.001, 0);
+      development.translateSourcePoint(-0.01, 0);
       break;
     case Left:
-      development.rotate(-0.005);
+      development.rotate(-0.05);
       break;
     case Right:
-      development.rotate(0.005);
+      development.rotate(0.05);
       break;
     }
 

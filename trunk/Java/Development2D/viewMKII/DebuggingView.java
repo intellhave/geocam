@@ -1,5 +1,6 @@
 package viewMKII;
 
+import markersMKII.MarkerHandler;
 import de.jreality.geometry.Primitives;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.IndexedFaceSet;
@@ -18,8 +19,8 @@ import view.ColorScheme;
 
 public class DebuggingView extends View {
 
-  public DebuggingView(Development development, ColorScheme colorScheme) {
-    super(development, colorScheme);
+  public DebuggingView(Development development, MarkerHandler m, ColorScheme colorScheme) {
+    super(development, m, colorScheme);
     IndexedFaceSet ifs = Primitives.icosahedron();
     sgcDevelopment.setGeometry(ifs);
     SceneGraphComponent lightNode = new SceneGraphComponent("light");

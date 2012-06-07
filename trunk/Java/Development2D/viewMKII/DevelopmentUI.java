@@ -5,28 +5,24 @@ import inputOutput.TriangulationIO;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.AbstractList;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Level;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JSlider;
 
 import markers.ManifoldPosition;
+import markers.MarkerAppearance;
+import markersMKII.Marker;
+import markersMKII.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme;
 import view.ColorScheme.schemes;
-import de.jreality.jogl.JOGLConfiguration;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
@@ -42,9 +38,9 @@ public class DevelopmentUI {
    *********************************************************************************/
   // TODO: Allow the manifold to be specified by an object like the one below,
   // rather than a single global object.
-
   // private static TriangulatedManifold manifold;
-  // private static AbstractList<Marker> markers;
+
+  private static MarkerHandler markers;
   private static Development development;
 
   /*********************************************************************************
@@ -54,14 +50,29 @@ public class DevelopmentUI {
    * present the mathematical objects to the user.
    *********************************************************************************/
   private static AbstractMap<View, JFrame> frames;
+
   /*********************************************************************************
    * Model Control Data
    * 
    * These variables hold the listeners and other objects responsible for
    * keeping track of user input to the program that effects the model.
+   * 
+   * mouseControl: Translates mouse input into modifications of the view and
+   * model.
+   * 
+   * keyboardControl: Translates keyboard input into modifications of the view
+   * and model.
+   * 
+   * markerControl: Translates AI movements of markers into modifications of the
+   * markers.
+   * 
+   * networkControl: Receives network input from other instances of
+   * "DevelopmentUI", and modifies the model accordingly.
    *********************************************************************************/
   // private static MouseController mouseControl;
   private static KeyboardController keyboardControl;
+  // private static MarkerController markerControl;
+  // private static NetworkController networkControl;
 
   /*********************************************************************************
    * View Control Data
@@ -73,10 +84,10 @@ public class DevelopmentUI {
    * are belongs here.
    *********************************************************************************/
   static View[] views;
-  private static JSlider pointSizeSlider;
-  private static JSlider speedSlider;
-  private static JSlider depthSlider;
-  private static JButton stopStartButton;
+//  private static JSlider pointSizeSlider;
+//  private static JSlider speedSlider;
+//  private static JSlider depthSlider;
+//  private static JButton stopStartButton;
 
   private static ColorScheme colorScheme;
 
@@ -85,6 +96,8 @@ public class DevelopmentUI {
     // JReality does behind the scenes
     // JOGLConfiguration.getLogger().setLevel(Level.INFO);
 
+    // Note: For correct initialization, it is important the method calls listed
+    // below occur in the particular order listed.
     initModel();
     initViews();
     initModelControls();
@@ -110,26 +123,16 @@ public class DevelopmentUI {
   private static void runSimulation() {
     boolean quit = false;
 
-    long t = 0;
-    final long dt = 1; // Timestep size, in microseconds
-    final long maxFrameTime = 80;
+    final long dt = 10; // Timestep size, in microseconds
+    //final long maxFrameTime = 80;
 
     long startTime = System.currentTimeMillis();
     long currentTime = startTime;
     long accumulator = 0;
-    long frametimeSum = 0;
-    long cycles = 0;
-    
-    while ( (currentTime - startTime < 30000) && !quit) {
+
+    while (!quit) {
       long newTime = System.currentTimeMillis();
       long frameTime = newTime - currentTime;
-
-      frametimeSum += frameTime;
-      cycles += 1;
-      
-      if (frameTime > 0.25)
-        frameTime = maxFrameTime; // note: max frame time to avoid spiral of
-                                  // death
 
       currentTime = newTime;
       accumulator += frameTime;
@@ -137,24 +140,19 @@ public class DevelopmentUI {
       while (accumulator >= dt) {
 
         keyboardControl.runNextAction();
-        // networkControl.runNextAction();
-        t += dt;
+        markers.updateMarkers(dt);
+        
         accumulator -= dt;
-
       }
 
       // Normally, we would form a "convex combination" of our current and
-      // previous states here, to ensure a smooth animation. We will omit 
+      // previous states here, to ensure a smooth animation. We will omit
       // this code for now.
       // const double alpha = accumulator / dt;
       // State state = currentState*alpha + previousState * ( 1.0 - alpha );
 
       render();
     }
-    
-    System.out.println("# Cycles: " + cycles);
-    System.out.println("Average Cycle Time: " + ((double) frametimeSum)/cycles);
-    
   }
 
   /*********************************************************************************
@@ -166,7 +164,6 @@ public class DevelopmentUI {
    * other words, instead of just calling updateGeomtetry(true,true) as below,
    * we'll need to specify how to pick those parameters.
    *********************************************************************************/
-
   private static void render() {
     for (View v : views) {
       v.updateGeometry(true, true);
@@ -204,6 +201,7 @@ public class DevelopmentUI {
     }
 
     initSurface();
+    initMarkers();
   }
 
   /*********************************************************************************
@@ -226,7 +224,8 @@ public class DevelopmentUI {
     sourcePoint.scale(1.0f / 3.0f);
 
     if (development == null) {
-      development = new Development(new ManifoldPosition(sourceFace,sourcePoint), 3, 1.0);
+      development = new Development(new ManifoldPosition(sourceFace,
+          sourcePoint), 3, 1.0);
     } else {
       development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), 7);
     }
@@ -239,7 +238,24 @@ public class DevelopmentUI {
    * will appear on the surface for games and exploration.
    *********************************************************************************/
   private static void initMarkers() {
+    Random rand = new Random();
 
+    markers = new MarkerHandler();
+    for (int ii = 0; ii < 3; ii++) {
+      ManifoldPosition mp = development.getSource();
+      MarkerAppearance ma = new MarkerAppearance(
+          MarkerAppearance.ModelType.ANT, 1.0);
+      double a = rand.nextDouble() * Math.PI * 2;
+      Vector vel = new Vector(Math.cos(a), Math.sin(a));
+      vel.scale(0.001);
+      
+      Marker m = new Marker(mp, ma, vel);
+      markers.addMarker(m);
+    }
+
+    // Move the markers along their trajectories for 300ms, so that they don't
+    // sit on top of each other.
+    markers.updateMarkers(300);
   }
 
   /*********************************************************************************
@@ -256,18 +272,19 @@ public class DevelopmentUI {
   private static void initViews() {
     colorScheme = new ColorScheme(schemes.FACE);
 
-    int viewCount = 3;
+    int viewCount = 1;
     views = new View[viewCount];
-    views[0] = new FirstPersonView(development, colorScheme);
-    views[1] = new ExponentialView(development, colorScheme);
-    views[2] = new EmbeddedView(development, colorScheme);
+    views[0] = new ExponentialView(development, markers, colorScheme);
+    //views[0] = new FirstPersonView(development, markers, colorScheme);
+    //views[1] = new ExponentialView(development, markers, colorScheme);
+    //views[2] = new EmbeddedView(development, markers, colorScheme);
 
     int[][] framePositions = { { 0, 10 }, { 400, 10 }, { 800, 10 } };
     int[][] frameSizes = { { 400, 400 }, { 400, 400 }, { 400, 400 } };
 
     frames = new HashMap<View, JFrame>();
 
-    for (int ii = 0; ii < 3; ii++) {
+    for (int ii = 0; ii < viewCount; ii++) {
       View u = views[ii];
 
       u.updateGeometry();

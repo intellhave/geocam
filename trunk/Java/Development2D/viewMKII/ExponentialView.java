@@ -2,24 +2,24 @@ package viewMKII;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import markers.ManifoldPosition;
 import markers.MarkerAppearance;
-import markers.VisibleMarker;
-
+import markersMKII.Marker;
+import markersMKII.MarkerHandler;
 import view.ColorScheme;
-import view.CommonViewMethods;
 import view.SGCMethods.DevelopmentGeometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
-import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.math.MatrixBuilder;
-import de.jreality.math.Pn;
 import de.jreality.scene.DirectionalLight;
-import de.jreality.scene.PointLight;
 import de.jreality.scene.SceneGraphComponent;
+import development.AffineTransformation;
 import development.Development;
 import development.DevelopmentNode;
+import development.Frustum2D;
 import development.Vector;
 
 /*********************************************************************************
@@ -33,7 +33,7 @@ import development.Vector;
  *********************************************************************************/
 
 public class ExponentialView extends View {
-  private HashMap<VisibleMarker, LinkedList<SceneGraphComponent>> sgcpools;
+  protected HashMap<Marker, LinkedList<SceneGraphComponent>> sgcpools;
 
   /*********************************************************************************
    * ExponentialView
@@ -42,14 +42,14 @@ public class ExponentialView extends View {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public ExponentialView(Development development, ColorScheme colorScheme) {
-    super(development, colorScheme);
-    this.sgcpools = new HashMap<VisibleMarker, LinkedList<SceneGraphComponent>>();
+  public ExponentialView(Development d, MarkerHandler mh, ColorScheme cs) {
+    super(d, mh, cs);
+    this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
 
     // create light
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
-    light.setIntensity(3.00);
+    light.setIntensity(1.5);
     sgcLight.setLight(light);
 
     // MatrixBuilder.euclidean().translate(0,0,5).assignTo(sgcLight);
@@ -66,7 +66,7 @@ public class ExponentialView extends View {
    * rotation ensures that the source point's "forward direction" points north.
    *********************************************************************************/
   protected void updateCamera() {
-    MatrixBuilder.euclidean().translate(0, 0, 10).rotateZ(-Math.PI / 2)
+    MatrixBuilder.euclidean().translate(0, 0, 5).rotateZ(-Math.PI / 2)
         .assignTo(sgcCamera);
   }
 
@@ -123,26 +123,26 @@ public class ExponentialView extends View {
    * to depict each marker in the scene.
    *********************************************************************************/
   protected void generateMarkerGeometry() {
-    HashMap<VisibleMarker, ArrayList<Vector[]>> objectImages = new HashMap<VisibleMarker, ArrayList<Vector[]>>();
-    CommonViewMethods.getDevelopmentMarkerImagesAndOrientations(
-        development.getRoot(), objectImages);
+    HashMap<Marker, ArrayList<Vector[]>> markerImages;
+    markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
+    developMarkers(development.getRoot(), markerImages);
 
-    for (VisibleMarker vo : objectImages.keySet()) {
-      LinkedList<SceneGraphComponent> pool = sgcpools.get(vo);
+    for (Marker m : markerImages.keySet()) {
+      LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 
       if (pool == null) {
         pool = new LinkedList<SceneGraphComponent>();
-        sgcpools.put(vo, pool);
+        sgcpools.put(m, pool);
       }
 
-      ArrayList<Vector[]> images = objectImages.get(vo);
+      ArrayList<Vector[]> images = markerImages.get(m);
       if (images == null)
         continue;
 
       if (images.size() > pool.size()) {
         int sgcCount = images.size() - pool.size();
         for (int jj = 0; jj < 2 * sgcCount; jj++) {
-          MarkerAppearance oa = vo.getAppearance();
+          MarkerAppearance oa = m.getAppearance();
           SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
           pool.add(sgc);
           sgcObjects.addChild(sgc);
@@ -184,8 +184,8 @@ public class ExponentialView extends View {
 
           MatrixBuilder
               .euclidean()
-              .translate(position.getComponent(0), position.getComponent(1),
-                  0.0).times(matrix).scale(vo.getAppearance().getScale())
+              .translate(position.getComponent(0), position.getComponent(1),1.0)
+              .times(matrix).scale(m.getAppearance().getScale())
               .assignTo(sgc);
 
           sgc.setVisible(true);
@@ -213,4 +213,52 @@ public class ExponentialView extends View {
     updateGeometry(true, true);
   }
 
+  /*********************************************************************************
+   * developMarkers
+   * 
+   * Given a development, this method determines where particular markers on the
+   * manifold should appear in that development, and with what orientation. Once
+   * calculated, this data is stored in the input ArrayList "markerImages",
+   * which is used to accumulate results across all of the recursive calls to
+   * developMarkers.
+   *********************************************************************************/
+  protected void developMarkers(DevelopmentNode devNode,
+      HashMap<Marker, ArrayList<Vector[]>> markerImages) {
+    Collection<Marker> localMarkers = markers.getMarkers(devNode.getFace());
+    if (localMarkers != null) {
+
+      Frustum2D frustum = devNode.getFrustum();
+      AffineTransformation affineTrans = devNode.getAffineTransformation();
+
+      synchronized (localMarkers) {
+        for (Marker m : localMarkers) {
+          if (!m.isVisible()) continue;
+
+          ManifoldPosition pos = m.getPosition();
+          Vector transPos = affineTrans.affineTransPoint(pos.getPosition());
+          // check if object image should be clipped by frustum
+          if (frustum != null && !frustum.checkInterior(transPos))
+            continue;
+
+          // add to image list
+          ArrayList<Vector[]> imageList = markerImages.get(m);
+          if (imageList == null) {
+            imageList = new ArrayList<Vector[]>();
+            markerImages.put(m, imageList);
+          }
+         
+          Vector[] triple = new Vector[3];
+          triple[0] = transPos;
+          triple[1] = affineTrans.affineTransVector(pos.getDirectionForward());
+          triple[2] = affineTrans.affineTransVector(pos.getDirectionLeft());
+
+          imageList.add(triple);
+        }
+      }
+    }
+
+    ArrayList<DevelopmentNode> children = devNode.getChildren();
+    for (DevelopmentNode child : children)
+      developMarkers(child, markerImages);
+  }
 }

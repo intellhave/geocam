@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 import markers.MarkerAppearance;
 import markers.VisibleMarker;
+import markersMKII.MarkerHandler;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.DirectionalLight;
@@ -43,13 +44,13 @@ public class FirstPersonView extends View {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public FirstPersonView(Development dev, ColorScheme cs) {
-    super(dev, cs);
+  public FirstPersonView(Development dev, MarkerHandler mh, ColorScheme cs) {
+    super(dev, mh, cs);
     this.sgcpools = new HashMap<VisibleMarker, LinkedList<SceneGraphComponent>>();
 
     SceneGraphComponent sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
-    light.setIntensity(3.0);
+    light.setIntensity(1.5);
     light.setColor(Color.white);
     sgcLight.setLight(light);
     MatrixBuilder.euclidean().rotate(2.65, new double[] { 0, 1, 0 })
