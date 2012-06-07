@@ -7,7 +7,6 @@ import java.util.Set;
 
 import markers.ManifoldPosition;
 import markers.MarkerAppearance;
-import markers.VisibleMarker;
 import markersMKII.Marker;
 import markersMKII.MarkerHandler;
 import triangulation.Face;
@@ -17,7 +16,6 @@ import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
-import development.Development;
 import development.EmbeddedTriangulation;
 import development.Vector;
 
@@ -72,15 +70,13 @@ public class EmbeddedView extends View {
    * fixed point or take a more "global view" of the embedded surface.
    *********************************************************************************/
   protected void updateCamera() {
-    VisibleMarker source = development.getSourceObject();
-    Vector embPsn = EmbeddedTriangulation.getCoord3D(source.getFace(),
-        source.getPosition());
+    ManifoldPosition pos = development.getSourceMarker().getPosition();
+    Vector embPsn = EmbeddedTriangulation.getCoord3D(pos.getFace(), pos.getPosition());
 
-    Vector forward = EmbeddedTriangulation.embedVector(source.getFace(),
-        source.getDirectionForward());
-    Vector left = EmbeddedTriangulation.embedVector(source.getFace(),
-        source.getDirectionLeft());
-    Vector normal = EmbeddedTriangulation.getEmbeddedNormal(source.getFace());
+    Vector forward, left, normal;
+    forward = EmbeddedTriangulation.embedVector(pos.getFace(), pos.getDirectionForward());
+    left = EmbeddedTriangulation.embedVector(pos.getFace(), pos.getDirectionLeft());
+    normal = EmbeddedTriangulation.getEmbeddedNormal(pos.getFace());
 
     forward.normalize();
     left.normalize();
@@ -122,7 +118,7 @@ public class EmbeddedView extends View {
    *********************************************************************************/
   protected void initializeNewManifold() {
     for (SceneGraphComponent sgc : sgcpools.values()) {
-      sgcObjects.removeChild(sgc);
+      sgcMarkers.removeChild(sgc);
     }
     sgcpools.clear();
 
@@ -179,7 +175,7 @@ public class EmbeddedView extends View {
         MarkerAppearance oa = vo.getAppearance();
         sgc = oa.prepareNewSceneGraphComponent();
         sgcpools.put(vo, sgc);
-        sgcObjects.addChild(sgc);
+        sgcMarkers.addChild(sgc);
       }
 
       Vector[] tuple = objectImages.get(vo);

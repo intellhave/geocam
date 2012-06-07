@@ -26,7 +26,6 @@ import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
-import development.Development;
 
 /*********************************************************************************
  * View
@@ -63,7 +62,7 @@ public abstract class View {
    *********************************************************************************/
   protected SceneGraphComponent sgcRoot;
   protected SceneGraphComponent sgcDevelopment;
-  protected SceneGraphComponent sgcObjects;
+  protected SceneGraphComponent sgcMarkers;
   protected SceneGraphComponent sgcCamera;
   protected SceneGraphPath camPath;
 
@@ -105,8 +104,8 @@ public abstract class View {
   public void initSceneGraph() {
     sgcRoot = new SceneGraphComponent("Root");
     sgcDevelopment = new SceneGraphComponent("Development");
-    sgcObjects = new SceneGraphComponent("Objects");
-    sgcDevelopment.addChild(sgcObjects);
+    sgcMarkers = new SceneGraphComponent("Objects");
+    sgcDevelopment.addChild(sgcMarkers);
     sgcDevelopment.setAppearance(defaultAppearance);
     sgcRoot.addChild(sgcDevelopment);
 
