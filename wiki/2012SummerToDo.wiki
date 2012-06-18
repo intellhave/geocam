@@ -37,7 +37,7 @@
       * This will have a limited choice of manifolds.
 
   * Bugs
-    * ||Fix bugs for non-embedded stuff|| Staci/Taylor ||
+    * ||<strike>Fix bugs for non-embedded stuff</strike>|| Staci/Taylor ||
 
   * Dynamics
     * Allow (live) changing geometry
