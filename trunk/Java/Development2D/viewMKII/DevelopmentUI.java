@@ -81,11 +81,8 @@ public class DevelopmentUI {
    * are belongs here.
    *********************************************************************************/
   static View[] views;
-  // private static JSlider pointSizeSlider;
-  // private static JSlider speedSlider;
-  // private static JSlider depthSlider;
-  // private static JButton stopStartButton;
-
+  static ViewerController viewerControl;
+  
   private static ColorScheme colorScheme;
 
   public static void main(String[] args) {
@@ -174,6 +171,7 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void render() {
     for (View v : views) {
+      //v.initializeNewManifold();
       v.updateGeometry(true, true);
       v.updateScene();
     }
@@ -188,6 +186,9 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void initModel() {
     String filename = "Data/blender/cube_surf.off";
+    String newFile = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
+    String brokenFile = "Data/Triangulations/2DManifolds/octahedron.xml";
+    String mobius = "Data/off/mobius.off";
     loadSurface(filename);
   }
 
@@ -260,15 +261,17 @@ public class DevelopmentUI {
       app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, 0.5);
       double a = rand.nextDouble() * Math.PI * 2;
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
-      vel.scale(0.001);
+      vel.scale(0.0005);
 
       Marker m = new Marker(pos, app, vel);
       markers.addMarker(m);
+      
     }
 
     // Move the markers along their trajectories for 300ms, so that they don't
     // sit on top of each other.
     markers.updateMarkers(300);
+    
   }
 
   /*********************************************************************************
@@ -346,5 +349,7 @@ public class DevelopmentUI {
    * slider that controls how big the markers are should be initialized here.
    *********************************************************************************/
   private static void initViewControls() {
+    viewerControl = new ViewerController(markers,development);
+    viewerControl.setVisible(true);
   }
 }

@@ -96,14 +96,14 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
                                         "Data/Triangulations/2DManifolds/torus-9-2.xml",    //11
                                         "Data/off/mobius.off",   //12
                                         "Data/off/triangle.off",    //13
-                                        "Data/Triangulations/2DManifolds/kleinbottle.xml",   //14
+                                        "Data/Triangulations/2DManifolds/kleinbottle.xml",   //14 stack overflow error
                                         "Data/Triangulations/2DManifolds/domain.xml",   //15
-                                        "Data/Triangulations/2DManifolds/double_torus.xml",   //16
+                                        "Data/Triangulations/2DManifolds/double_torus.xml",   //16 not validating
                                         "Data/Triangulations/2DManifolds/goodnotch.xml",   //17
-                                        "Data/Triangulations/2DManifolds/icosahedron.xml",   //18
+                                        "Data/Triangulations/2DManifolds/icosahedron.xml",   //18 stack overflow error
                                         "Data/Triangulations/2DManifolds/icosahedronrandom.xml",    //19
                                         "Data/Triangulations/2DManifolds/kleinbottlerandom.xml",    //20
-                                        "Data/Triangulations/2DManifolds/Monster.xml",   //21
+                                        "Data/Triangulations/2DManifolds/Monster.xml",   //21 stack overflow error
                                         "Data/Triangulations/2DManifolds/octahedron.xml",   //22
                                         "Data/Triangulations/2DManifolds/square2.xml",     //23
                                         "Data/Triangulations/2DManifolds/tetrahedron.xml",   //24
@@ -111,8 +111,9 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
                                         "Data/Triangulations/2DManifolds/tetrahedron3.xml",  //26
                                         "Data/Triangulations/2DManifolds/tetrahedronnew.xml",   //27
                                         "Data/Triangulations/2DManifolds/tetrahedronnonembed.xml",   //28
-                                        "Data/Triangulations/2DManifolds/torus-4.xml",    //29
-                                        "Data/Triangulations/2DManifolds/octahedron2.xml"};   //30
+                                        "Data/Triangulations/2DManifolds/torus-4.xml",    //29 stack overflow
+                                        "Data/Triangulations/2DManifolds/octahedron2.xml", //30
+                                        "Data/Triangulations/2DManifolds/mobiusband.xml"};   //31 not validating
   private static String filename = filenames[12];
 
   //------------------------------------

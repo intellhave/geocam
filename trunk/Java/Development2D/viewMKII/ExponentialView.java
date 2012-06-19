@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import markers.ManifoldPosition;
 import markers.MarkerAppearance;
@@ -128,6 +131,39 @@ public class ExponentialView extends View {
     markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     developMarkers(development.getRoot(), markerImages);
 
+    //******************************************************************************
+    
+    //See FirstPersonView for documentation
+    List<SceneGraphComponent> children = sgcMarkers.getChildComponents();
+    Set<Marker> currentMarkers = markerImages.keySet();
+    
+    for(int i=0; i<children.size(); i++){
+      SceneGraphComponent child = (SceneGraphComponent) children.get(i);
+      boolean found = false;
+      for(Marker m: currentMarkers){
+        LinkedList<SceneGraphComponent> markerSceneChildren = sgcpools.get(m);
+        if(markerSceneChildren !=null && markerSceneChildren.contains(child))
+          found= true;
+      }
+      
+      if(!found){
+        List<SceneGraphComponent> sourceSGCs = sgcpools.get(development.getSourceMarker());
+        Iterator<SceneGraphComponent> iter = sourceSGCs.iterator();
+        boolean isSource = false;
+        while(iter.hasNext()){
+          SceneGraphComponent source = iter.next();
+          if(child.equals(source)){
+            child.setVisible(false);
+            isSource = true;
+          }
+        }
+        if(!isSource)
+          child.setVisible(false);
+          //sgcMarkers.removeChild(child);
+      }
+    }
+    //******************************************************************************
+    
     for (Marker m : markerImages.keySet()) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 

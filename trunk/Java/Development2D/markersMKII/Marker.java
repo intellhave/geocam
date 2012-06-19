@@ -126,7 +126,16 @@ public class Marker {
   public void setSpeed(double speedUnitsPerSecond) {
     speed = speedUnitsPerSecond * .001;
   }
-
+  
+  /*********************************************************************************
+   * getSpeed
+   * 
+   * Returns speed in units per second
+   *********************************************************************************/
+  public double getSpeed(){
+    return speed * 1000;
+  }
+  
   /*********************************************************************************
    * toString
    * 
