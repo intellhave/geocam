@@ -4,6 +4,7 @@ import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import triangulation.Face;
@@ -139,6 +140,62 @@ public class MarkerHandler {
   }
 
   /*********************************************************************************
+   * getMarkerSpeed
+   * 
+   * Returns the speed of markers in the visualization. Requires a reference to
+   * the development's source marker so that its speed may be kept independent
+   * of the other markers'
+   *********************************************************************************/
+  public double getMarkerSpeed(Marker source) {
+    Iterator<Marker> iter = allMarkers.iterator();
+    double speed;
+    if (allMarkers.size() > 1) {
+      Marker m = iter.next();
+      if (!m.equals(source))
+        speed = m.getSpeed();
+      else {
+        m = iter.next();
+        speed = m.getSpeed();
+      }
+    } else
+      speed = 0;
+    return speed;
+        
+  }
+  
+  /*********************************************************************************
+   * getMarkerScale
+   * 
+   * Returns the scale of markers in the visualization. Requires a reference to
+   * the development's source marker so that its scale may be kept independent
+   * of the other markers'
+   *********************************************************************************/
+  
+  public double getMarkerScale(Marker source){
+    double scale = .5;
+    Iterator<Marker> i = allMarkers.iterator();
+    if(allMarkers.size() > 1){
+      Marker m = i.next();
+      if(!m.equals(source))
+        scale = m.getAppearance().getScale();
+      else{
+        m = (Marker) i.next();
+        scale= m.getAppearance().getScale();
+      }
+    }
+    return scale;
+  }
+  
+  /*********************************************************************************
+   * getAllMarkers
+   * 
+   * Returns a reference to the collection of markers so that it may be modified
+   *********************************************************************************/
+  public HashSet<Marker> getAllMarkers(){
+    return (HashSet<Marker>) allMarkers;
+  }
+  
+  /*********************************************************************************
    * updateMarker
    * 
    * Given an input marker and its previous face, this method is responsible for
@@ -177,7 +234,7 @@ public class MarkerHandler {
    * according to their velocities and the time-step. It checks whether each
    * marker moves out of its current face, and updates the database accordingly.
    *********************************************************************************/
-  public void updateMarkers(long dt) {
+  public synchronized void updateMarkers(long dt) {
     for (Marker m : allMarkers) {
       Face prev = m.getPosition().getFace();
       m.updatePosition(dt);

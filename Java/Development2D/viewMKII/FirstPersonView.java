@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import markers.MarkerAppearance;
 import markersMKII.Marker;
@@ -132,7 +134,42 @@ public class FirstPersonView extends ExponentialView {
   protected void generateMarkerGeometry() {
     HashMap<Marker, ArrayList<Vector[]>> markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     super.developMarkers(development.getRoot(), markerImages);
-
+    
+  //******************************************************************************
+    //This code removes from the scene graph tree ants that have been removed from
+    //the MarkerHandler class.
+    List<SceneGraphComponent> children = sgcMarkers.getChildComponents();
+    Set<Marker> currentMarkers = markerImages.keySet();
+    
+    for(int i=0; i<children.size();i++){
+      SceneGraphComponent child = (SceneGraphComponent) children.get(i);
+      boolean found  = false;
+      for(Marker m: currentMarkers){
+        LinkedList<SceneGraphComponent> markerSceneChildren = sgcpools.get(m);
+        if(markerSceneChildren != null && markerSceneChildren.contains(child))
+          found = true;
+      }
+      //Make sure not to remove the source ant
+      //The line of code directly below might need to be changed if there is ever more
+      //than one scene graph component for the source marker
+      if(!found){
+        List<SceneGraphComponent> sourceSGCs = sgcpools.get(development.getSourceMarker());
+        Iterator<SceneGraphComponent> iter = sourceSGCs.iterator();
+        boolean isSource = false;
+        while(iter.hasNext()){
+          SceneGraphComponent source = iter.next();
+          if(child.equals(source)){
+            child.setVisible(false);
+            isSource = true;
+          }
+        }
+        if(!isSource)
+          child.setVisible(false);
+          //sgcMarkers.removeChild(child);
+      }
+    }
+    //*******************************************************************************
+    
     for (Marker m : markerImages.keySet()) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 

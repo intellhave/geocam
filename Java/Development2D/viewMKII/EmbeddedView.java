@@ -3,6 +3,8 @@ package viewMKII;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import markers.ManifoldPosition;
@@ -168,6 +170,31 @@ public class EmbeddedView extends View {
       getMarkerPlacementData(f, objectImages);
     }
 
+    //*******************************************************************************
+    //Remove old markers from Scene Graph Tree
+    List<SceneGraphComponent> children = sgcMarkers.getChildComponents();
+    Set<Marker> currentMarkers = objectImages.keySet();
+
+    for (int ii = 0; ii < children.size(); ii++) {
+      SceneGraphComponent child = (SceneGraphComponent) children.get(ii);
+      boolean found = false;
+      for (Marker m : currentMarkers) {
+        SceneGraphComponent markerComponent = sgcpools.get(m);
+        if (markerComponent != null && markerComponent.equals(child)) {
+          found = true;
+        }
+      }
+      // Makes sure not to remove the source marker
+      SceneGraphComponent source = sgcpools.get(development.getSourceMarker());
+      if (!found) {
+        if (!child.equals(source))
+          sgcMarkers.removeChild(child);
+        else
+          child.setVisible(false);
+      }
+    } 
+    //******************************************************************************
+    
     for (Marker vo : objectImages.keySet()) {
       SceneGraphComponent sgc = sgcpools.get(vo);
 

@@ -80,7 +80,7 @@ public class Development {
     rebuild();
   }
   
-  public void setDepth(int depth) {
+  public synchronized void setDepth(int depth) {
     
     maxDepth = depth;
     rebuild();
