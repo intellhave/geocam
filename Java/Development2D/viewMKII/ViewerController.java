@@ -325,6 +325,7 @@ public class ViewerController extends JFrame {
           double newSpeed = 0.05 * Math.pow(Math.E, sliderValue);
           HashSet<Marker> allMarkers = mark.getAllMarkers();
           Iterator<Marker> iter = allMarkers.iterator();
+          if(stopStartButton.getText().equals("Stop")){
           synchronized (allMarkers) {
             while (iter.hasNext()) {
               Marker m = iter.next();
@@ -332,6 +333,7 @@ public class ViewerController extends JFrame {
                 m.setSpeed(newSpeed);
             }
           }
+         }
           speedBorder.setTitle("Speed (" + speedFormat.format(newSpeed) + ")");
         }
       };
@@ -394,8 +396,9 @@ public class ViewerController extends JFrame {
           synchronized (markers) {
             while (iter.hasNext()) {
               Marker m = iter.next();
+              double newSpeed = speedSlider.getValue()/1000.0;
               if (!m.equals(source))
-                m.setSpeed(speedSlider.getValue() / 1000.0);
+                m.setSpeed(.05*Math.pow(Math.E,newSpeed));
             }
           }
           stopStartButton.setText("Stop");

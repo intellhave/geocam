@@ -13,6 +13,8 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import controllerMKII.KeyboardController;
+import controllerMKII.SNESController;
+import controllerMKII.UserController;
 
 import markers.ManifoldPosition;
 import markers.MarkerAppearance;
@@ -69,7 +71,7 @@ public class DevelopmentUI {
    * "DevelopmentUI", and modifies the model accordingly.
    *********************************************************************************/
   // private static MouseController mouseControl;
-  private static KeyboardController keyboardControl;
+  private static UserController userControl;
   // private static MarkerController markerControl;
   // private static NetworkController networkControl;
 
@@ -125,7 +127,8 @@ public class DevelopmentUI {
     long startTime = System.currentTimeMillis();
     long currentTime = startTime;
     long accumulator = 0;
-
+    Thread t = new Thread(userControl);
+    t.start();
     while (!quit) {
       long newTime = System.currentTimeMillis();
       long frameTime = newTime - currentTime;
@@ -140,7 +143,7 @@ public class DevelopmentUI {
         // Refactoring is needed here.
         // PATCH START
         Face prev = development.getSource().getFace();
-        keyboardControl.runNextAction();
+        userControl.runNextAction();
         Face next = development.getSource().getFace();
         if(next != prev){
           markers.updateMarker(development.getSourceMarker(), prev);
@@ -340,7 +343,8 @@ public class DevelopmentUI {
    * "initViewControls" method.
    *********************************************************************************/
   private static void initModelControls() {
-    keyboardControl = new KeyboardController(development);
+    //userControl = new SNESController(development);
+    userControl = new KeyboardController(development);
   }
 
   /*********************************************************************************
