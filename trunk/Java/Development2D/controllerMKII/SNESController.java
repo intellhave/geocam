@@ -1,8 +1,6 @@
-package viewMKII;
+package controllerMKII;
 
 import java.awt.EventQueue;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.util.EnumMap;
 import java.util.Map;
@@ -11,7 +9,16 @@ import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class KeyboardController implements KeyEventDispatcher {
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Controller;
+import org.lwjgl.input.Controllers;
+
+import viewMKII.Development;
+
+public class SNESController implements Runnable {
+
+  // This thread sleeps for 10 milliseconds between runs through the loop.
+  private static long sleep_time = 10;
 
   /*********************************************************************************
    * Timing Constants
@@ -25,45 +32,144 @@ public class KeyboardController implements KeyEventDispatcher {
   private static final long KEY_REPEAT_RATE = 50;
   private final int MAX_REPEAT_RATE = 100; // Hz
 
-  /*********************************************************************************
-   * This enumeration defines all of the different kinds of user input that we
-   * know how to process.
-   *********************************************************************************/
   private static enum Action {
-    Right, Left, Forward, Back
+    Forward, Back, Left, Right
   }
 
-  /*********************************************************************************
-   * Data Structures
-   * 
-   * We use actions ordered by the actionQueue to make changes to the model,
-   * through the reference "development."
-   * 
-   * The "keyRepeatTimer" variable and "repeatingTasks" map are used to process
-   * certain repeating keystrokes (like holding down the up arrow) into a
-   * collection of discrete actions.
-   *********************************************************************************/
+  private static enum Button {
+    Left, Right, Up, Down, A, B, X, Y, L, R, Select, Start
+  }
+
   private Development development;
   private BlockingQueue<Action> actionQueue;
 
-  Timer keyRepeatTimer;
-  Map<Action, TimerTask> repeatingTasks;
+  private Timer keyRepeatTimer;
+  private Map<Action, TimerTask> repeatingTasks;
 
-  /*********************************************************************************
-   * KeyboardController
-   * 
-   * This constructor builds a new KeyboardController to control the input
-   * Development. From this development, we construct the data structures we use
-   * internally to process actions, and signal the KeyboardFocusManager that we
-   * want this code to be notified of input from the keyboard.
-   **********************************************************************************/
-  public KeyboardController(Development dev) {
+  private Controllers allControllers;
+  private Controller userController;
+  
+  public SNESController(Development dev) {
     development = dev;
     actionQueue = new LinkedBlockingQueue<Action>();
     repeatingTasks = new EnumMap<Action, TimerTask>(Action.class);
     init();
   }
 
+  /*********************************************************************************
+   * FIXME: Does this need to be synchronized?
+   *********************************************************************************/
+  public synchronized void init() {
+    keyRepeatTimer = new Timer("Button Repeat Timer");
+    try {
+      allControllers.create();
+    } catch (LWJGLException e) {
+      System.err.println("Error: Unable to initialize controllers.");
+      e.printStackTrace();
+    }
+    
+    if( allControllers.getControllerCount() == 0){
+      System.err.println("Error: No controllers detected.");
+      System.exit(1);
+    }
+    
+    userController = allControllers.getController(0);    
+  }
+
+  private static enum ButtonState{ Up, Down }
+  private class ControllerState {
+    public EnumMap<Button, ButtonState> controllerState;
+    
+    public ControllerState( Controller c ){
+      controllerState = new EnumMap<Button, ButtonState>(Button.class);
+      
+      controllerState.put(SNESController.Button.A, getButtonState(c,1));
+      controllerState.put(SNESController.Button.B, getButtonState(c,0));
+      controllerState.put(SNESController.Button.X, getButtonState(c,3));
+      controllerState.put(SNESController.Button.Y, getButtonState(c,2));
+      controllerState.put(SNESController.Button.L, getButtonState(c,4));
+      controllerState.put(SNESController.Button.R, getButtonState(c,5));
+      controllerState.put(SNESController.Button.Select, getButtonState(c,6));
+      controllerState.put(SNESController.Button.Start, getButtonState(c,7));
+      
+      if( c.getXAxisValue() == 0.0 ){
+        controllerState.put( SNESController.Button.Left, SNESController.ButtonState.Up );
+        controllerState.put( SNESController.Button.Right, SNESController.ButtonState.Up );
+      }
+      
+      if( c.getXAxisValue() == 1.0 ){
+        controllerState.put( SNESController.Button.Left, SNESController.ButtonState.Up );
+        controllerState.put( SNESController.Button.Right, SNESController.ButtonState.Down );
+      }
+      
+      if( c.getXAxisValue() == -1.0 ){
+        controllerState.put( SNESController.Button.Left, SNESController.ButtonState.Down );
+        controllerState.put( SNESController.Button.Right, SNESController.ButtonState.Up );
+      }
+      
+      if( c.getYAxisValue() == 0.0 ){
+        controllerState.put( SNESController.Button.Up, SNESController.ButtonState.Up );
+        controllerState.put( SNESController.Button.Down, SNESController.ButtonState.Up );
+      }
+     
+      if( c.getYAxisValue() == 1.0 ){
+        controllerState.put( SNESController.Button.Up, SNESController.ButtonState.Up );
+        controllerState.put( SNESController.Button.Down, SNESController.ButtonState.Down );
+      }
+      
+      if( c.getYAxisValue() == -1.0 ){
+        controllerState.put( SNESController.Button.Up, SNESController.ButtonState.Down );
+        controllerState.put( SNESController.Button.Down, SNESController.ButtonState.Up );
+      }
+    }
+    
+    public SNESController.ButtonState getButtonState( Controller c, int buttonNum ){
+        if( c.isButtonPressed( buttonNum ) ){
+          return SNESController.ButtonState.Down;
+        } else {
+          return SNESController.ButtonState.Up;
+        }
+    }
+    
+    public boolean equals( ControllerState other ){
+      for( SNESController.Button button : SNESController.Button.values() ){
+        if( controllerState.get(button) != other.controllerState.get(button))
+          return false;
+      }
+      return true;
+    }
+  }
+  
+  public void run() {
+    ControllerState prev, curr;
+    
+    curr = new ControllerState( userController );
+    while (true) {
+      prev = curr;
+      userController.poll();
+      curr = new ControllerState( userController );
+      
+      if( ! prev.equals( curr ) ){
+        for( Button b : Button.values() ){
+          if(prev.controllerState.get(b) != curr.controllerState.get(b)){
+            dispatchKeyEvent( b, curr.controllerState.get(b) );
+          }
+        }
+      }
+      
+      try {
+        Thread.sleep(sleep_time);
+      } catch (InterruptedException e) {
+        System.err.println("Error: Could not sleep the controller thread.");
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /*
+   * currentState == Up => Button was released.
+   * currentState == Down => Button was pressed.
+   */
   /*********************************************************************************
    * dispatchKeyEvent
    * 
@@ -74,40 +180,45 @@ public class KeyboardController implements KeyEventDispatcher {
    * need to carefully synchronize the tasks of rendering the scene and
    * processing user input to achieve a smooth animation.
    *********************************************************************************/
-  public boolean dispatchKeyEvent(KeyEvent e) {
+  public boolean dispatchKeyEvent(Button eventButton, ButtonState currentState) {
 
-    assert EventQueue.isDispatchThread();
-
-    int kc = e.getKeyCode();
-
-    if (e.getID() == KeyEvent.KEY_PRESSED) {
-      // Note: If repeat is activated, we ignore KEY_PRESSED events.
-      // Technically, it should be impossible for another KEY_PRESSED event to
-      // be created if one is already repeating, so this check is somewhat
-      // redundant.
-      if (kc == KeyEvent.VK_LEFT && !isRepeating(Action.Left))
+    if ( currentState == ButtonState.Down ) {
+      switch(eventButton){
+        case Left:
         addRepeatingAction(Action.Left);
-      if (kc == KeyEvent.VK_RIGHT && !isRepeating(Action.Right))
+        break;
+        case Right:
         addRepeatingAction(Action.Right);
-      if (kc == KeyEvent.VK_DOWN && !isRepeating(Action.Back))
+       break;
+        case Down:
         addRepeatingAction(Action.Back);
-      if (kc == KeyEvent.VK_UP && !isRepeating(Action.Forward))
+        break;
+        case Up:
         addRepeatingAction(Action.Forward);
+        break;
+    }
     }
 
-    if (e.getID() == KeyEvent.KEY_RELEASED) {
-      if (kc == KeyEvent.VK_LEFT)
+    if ( currentState == ButtonState.Up ){
+      switch( eventButton ){
+      case Left:
         stopRepeating(Action.Left);
-      if (kc == KeyEvent.VK_RIGHT)
+        break;
+      case Right:
         stopRepeating(Action.Right);
-      if (kc == KeyEvent.VK_DOWN)
+        break;
+      case Down:
         stopRepeating(Action.Back);
-      if (kc == KeyEvent.VK_UP)
+        break;
+      case Up:
         stopRepeating(Action.Forward);
+        break;
+      }
     }
 
     return false;
-  }
+    }
+ 
 
   /*********************************************************************************
    * isRepeating
@@ -128,8 +239,6 @@ public class KeyboardController implements KeyEventDispatcher {
    * the "left" arrow on his keyboard.)
    *********************************************************************************/
   private synchronized void addRepeatingAction(Action move) {
-    assert EventQueue.isDispatchThread();
-
     // Initiate key repeats
     long delay = KEY_REPEAT_DELAY;
     long rate = KEY_REPEAT_RATE;
@@ -200,47 +309,6 @@ public class KeyboardController implements KeyEventDispatcher {
       return;
     repeatingTasks.get(m).cancel();
     repeatingTasks.put(m,null);
-  }
-
-  /*********************************************************************************
-   * init
-   * 
-   * This method resets the keyboard focus manager that this instance of
-   * KeyboardController uses. Usually, this code is called from the constructor.
-   * Or, one might need to "reboot" the controller after calling uninit.
-   *********************************************************************************/
-  public synchronized void init() {
-    if (!isInited()) {
-      keyRepeatTimer = new Timer("Key Repeat Timer");
-      KeyboardFocusManager.getCurrentKeyboardFocusManager()
-          .addKeyEventDispatcher(this);
-    }
-  }
-
-  /*********************************************************************************
-   * isInited
-   * 
-   * This method returns a boolean indicating whether the timing variables for
-   * this instance of KeyboardController are initialized.
-   *********************************************************************************/
-  public synchronized boolean isInited() {
-    return keyRepeatTimer != null;
-  }
-
-  /*********************************************************************************
-   * uninit
-   * 
-   * This method deactivates the KeyboardController, so it no longer receives
-   * keyboard input. To reverse this operation, one calls init();
-   *********************************************************************************/
-  public synchronized void uninit() {
-    if (isInited()) {
-      KeyboardFocusManager.getCurrentKeyboardFocusManager()
-          .removeKeyEventDispatcher(this);
-
-      keyRepeatTimer.cancel();
-      keyRepeatTimer = null;
-    }
   }
 
   /*********************************************************************************
