@@ -12,10 +12,6 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import controllerMKII.KeyboardController;
-import controllerMKII.SNESController;
-import controllerMKII.UserController;
-
 import markers.ManifoldPosition;
 import markers.MarkerAppearance;
 import markersMKII.Marker;
@@ -25,6 +21,9 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme;
 import view.ColorScheme.schemes;
+import controllerMKII.KeyboardController;
+import controllerMKII.SNESController;
+import controllerMKII.UserController;
 import development.Coord2D;
 import development.EmbeddedTriangulation;
 import development.Vector;
@@ -191,9 +190,9 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void initModel() {
     String filename = "Data/blender/cube_surf.off";
-    String newFile = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
-    String brokenFile = "Data/Triangulations/2DManifolds/octahedron.xml";
-    String mobius = "Data/off/mobius.off";
+    //String newFile = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
+    //String brokenFile = "Data/Triangulations/2DManifolds/octahedron.xml";
+    //String mobius = "Data/off/mobius.off";
     loadSurface(filename);
   }
 
