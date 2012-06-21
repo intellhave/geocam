@@ -19,11 +19,19 @@
   * "Picture" Tasks: 
     * || Color scheme with patterns || ???||
       * Allow patterns in the faces, not just colors.
-
+      * We now have a proof-of-concept for texturing faces. There are several issues to be addressed:
+        * Revise the file TextureLibrary to include more textures. Also, textures in the library should be scaled so that they look good on our models (i.e. a checkboard texture shouldn't have squares that are too small).
+        * We need a mechanism to read in texture specifications for each face. So, we need to extend our .off/.xml parser to read this data.
+        * We also need to extend ColorScheme to something more general, like "FaceAppearanceScheme" to allow for a mapping of faces to textures to be stored.
+        * We should think about how to make "seams" between triangles that have the same texture smooth. For example, the faces of a cube show seams on the diagonals.
+        * Our current texturing code is sprinkled with "TODO"s (mostly about how jReality/AffineTransformation code works. We should resolve these (they're about 20 minutes apiece).
 
   * "Controller" Tasks:
     * ||New controller|| ???||
       * Probably nintendo controller?
+      * SNES Controller is now up and running.
+      * Added library lwjgl (LightWeight Java Game Library) which has better documentation of the jInput library (at least for the methods we use).
+      * Now KeyboardController and SNESController extend from a base Controller class. This class can be re-used if/when we need to add other kinds of controllers. 
 
   * "Animation" Tasks:
     * ||Animation of changing perspective|| ??? ||
