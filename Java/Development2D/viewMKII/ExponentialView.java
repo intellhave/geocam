@@ -13,12 +13,16 @@ import markers.ManifoldPosition;
 import markers.MarkerAppearance;
 import markersMKII.Marker;
 import markersMKII.MarkerHandler;
+import triangulation.Face;
+import triangulation.Triangulation;
 import view.ColorScheme;
 import view.SGCMethods.DevelopmentGeometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
+import de.jreality.scene.Appearance;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.data.Attribute;
 import development.AffineTransformation;
 import development.DevelopmentNode;
 import development.Frustum2D;
@@ -37,6 +41,9 @@ import development.Vector;
 public class ExponentialView extends View {
   protected HashMap<Marker, LinkedList<SceneGraphComponent>> sgcpools;
   protected SceneGraphComponent sgcLight;
+  
+  protected HashMap<Face, DevelopmentGeometry> faceDevelopments;
+  protected HashMap<Face, SceneGraphComponent> faceSGCs;
   
   /*********************************************************************************
    * ExponentialView
@@ -57,6 +64,16 @@ public class ExponentialView extends View {
 
     // MatrixBuilder.euclidean().translate(0,0,5).assignTo(sgcLight);
     sgcCamera.addChild(sgcLight);
+    
+    faceDevelopments = new HashMap<Face, DevelopmentGeometry>();
+    faceSGCs = new HashMap<Face, SceneGraphComponent>();
+    
+    for( Face f : Triangulation.faceTable.values() ){
+      SceneGraphComponent sgc = new SceneGraphComponent();
+      faceSGCs.put(f, sgc);
+      this.sgcDevelopment.addChild(sgc);
+      // TODO: Can sgc carry the appearance for all the pieces of the development beneath it???
+    }
   }
 
   /*********************************************************************************
@@ -81,40 +98,89 @@ public class ExponentialView extends View {
    * procedure outlined in one of the 2010 REU papers.
    *********************************************************************************/
   protected void generateManifoldGeometry() {
-    DevelopmentGeometry geometry = new DevelopmentGeometry();
-    ArrayList<Color> colors = new ArrayList<Color>();
-    generateManifoldGeometry(development.getRoot(), colors, geometry);
-    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
-
-    Color[] colorList = new Color[colors.size()];
-    for (int i = 0; i < colors.size(); i++) {
-      colorList[i] = colors.get(i);
+    for( Face f : Triangulation.faceTable.values() ){
+      // TODO: Would it be better to be able to tell a development geometry to clear all its existing data???
+      faceDevelopments.put(f, new DevelopmentGeometry());
     }
+    
+    generateManifoldGeometry(development.getRoot());
 
-    double[][] ifsf_verts = geometry.getVerts();
-    int[][] ifsf_faces = geometry.getFaces();
+    for( Face f : faceDevelopments.keySet() ){
+      SceneGraphComponent sgc = faceSGCs.get(f);
+      
+      DevelopmentGeometry dgf = faceDevelopments.get(f);
+      double[][] ifsf_verts = dgf.getVerts();
+      int[][] ifsf_faces = dgf.getFaces();
 
-    ifsf.setVertexCount(ifsf_verts.length);
-    ifsf.setVertexCoordinates(ifsf_verts);
-    ifsf.setFaceCount(ifsf_faces.length);
-    ifsf.setFaceIndices(ifsf_faces);
-    ifsf.setGenerateEdgesFromFaces(true);
-    ifsf.setFaceColors(colorList);
-    ifsf.update();
+      if( ifsf_verts.length == 0 ){
+        sgc.setVisible(false);
+        continue;
+      } else {
+        sgc.setVisible(true);
+      }
+      
+      IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+      ifsf.setVertexCount(ifsf_verts.length);
+      ifsf.setVertexCoordinates(ifsf_verts);
+      
+      double[][] tex_verts = makeTextureCoords( ifsf_verts );
+      
+      ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, tex_verts);
+      ifsf.setFaceCount(ifsf_faces.length);
+      ifsf.setFaceIndices(ifsf_faces);
+      ifsf.setGenerateEdgesFromFaces(true);
+//      
+//      Color[] colorlist = new Color[ ifsf_faces.length ];
+//      for( int ii = 0; ii < ifsf_faces.length; ii++ ){
+//        colorlist[ii] = colorScheme.getColor(f);
+//      }
+//      ifsf.setFaceColors(colorlist);
+      ifsf.update();
 
-    sgcDevelopment.setGeometry(ifsf.getGeometry());
+      Appearance app = new Appearance();
+      if( f.getIndex() % 2 == 0 ){
+        TextureLibrary.initializeAppearance(app, 
+            TextureLibrary.TextureDescriptor.Dots, colorScheme.getColor(f));
+      } else {
+        TextureLibrary.initializeAppearance(app, 
+            TextureLibrary.TextureDescriptor.Checkerboard, colorScheme.getColor(f));
+      }
+      
+      sgc.setGeometry(ifsf.getGeometry());
+      sgc.setAppearance(app);
+    }
+  }
+  
+  private double[][] makeTextureCoords( double[][] worldCoords ){
+    double[][] tex_verts = new double[worldCoords.length][3];
+    
+    for( int ii = 0; ii < worldCoords.length; ii++ ){
+      tex_verts[ii][0] = worldCoords[ii][0] - worldCoords[0][0];
+      tex_verts[ii][1] = worldCoords[ii][1] - worldCoords[0][1];
+      //tex_verts[ii][2] = worldCoords[ii][2] - worldCoords[0][2];
+    }
+     
+    double u = tex_verts[1][0];
+    double v = tex_verts[1][1];
+    double scaling = 1 / Math.sqrt( u*u + v*v );
+    
+    for( int ii = 0; ii < worldCoords.length; ii++ ){
+      double x = tex_verts[ii][0];
+      double y = tex_verts[ii][1];
+      tex_verts[ii][0] = scaling * (x * u + y * v);
+      tex_verts[ii][1] = scaling * (x * (-v) + y * u);
+    }
+    return tex_verts;
   }
 
   // This is a recursive helper method for generateManifoldGeometry().
-  private void generateManifoldGeometry(DevelopmentNode node,
-      ArrayList<Color> colors, DevelopmentGeometry geometry) {
-
+  private void generateManifoldGeometry( DevelopmentNode node ) {
+    Face f = node.getFace();
+    DevelopmentGeometry dg = faceDevelopments.get(f);
     double[][] face = node.getClippedFace().getVectorsAsArray();
-    geometry.addFace(face, 1.0);
-    colors.add(colorScheme.getColor(node));
-
+    dg.addFace(face, 1.0);
     for (DevelopmentNode n : node.getChildren())
-      generateManifoldGeometry(n, colors, geometry);
+      generateManifoldGeometry(n);
   }
 
   /*********************************************************************************
