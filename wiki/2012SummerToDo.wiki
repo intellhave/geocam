@@ -45,7 +45,8 @@
       * This will have a limited choice of manifolds.
 
   * Bugs
-    * ||<strike>Fix bugs for non-embedded stuff</strike>|| Staci/Taylor ||
+    * ||Fix bugs for non-embedded stuff|| Staci/Taylor ||
+    *We now have a solution that checks the orientation of edges as faces are matched up, and if necessary changes the order of the edge's vertices in the underlying data structure (in Triangulation).  This solution appears to fix the bug for .xml files and for the first person view of non-orientable objects (such as the mobius strip).  However it creates a problem with the normal vectors of the embedded mobius strip.
 
   * Dynamics
     * Allow (live) changing geometry
