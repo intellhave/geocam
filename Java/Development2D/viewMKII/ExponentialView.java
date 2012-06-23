@@ -151,6 +151,7 @@ public class ExponentialView extends View {
     }
   }
   
+  //TODO: Would it be better to use existing AffineTransformation class to do compute this?
   private double[][] makeTextureCoords( double[][] worldCoords ){
     double[][] tex_verts = new double[worldCoords.length][3];
     

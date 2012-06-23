@@ -19,17 +19,19 @@ public abstract class UserController implements Runnable {
    * holds down the up arrow key for 2 seconds, the KEY_REPEAT_RATE variable
    * explains how many "Forward" actions those 2 seconds translate to.
    *********************************************************************************/
+  //TODO: Make it possible for classes that have a UserController to set the "sensitivity"
+  //(i.e. adjust KEY_REPEAT_RATE and SLEEP_TIME)
   protected static final long KEY_REPEAT_DELAY = 1;
-  protected static final long KEY_REPEAT_RATE = 50;
-  protected static long SLEEP_TIME = 10;
+  protected static final long KEY_REPEAT_RATE = 50; //5;
+  protected static long SLEEP_TIME = 10; //0;
   protected final int MAX_REPEAT_RATE = 100; // Hz
 
   /*********************************************************************************
    * This enumeration defines all of the different kinds of user input that we
    * know how to process.
    *********************************************************************************/
-  protected static enum Action {
-    Right, Left, Forward, Back
+  public static enum Action {
+    Right, Left, Forward, Back, A_Button, B_Button
   }
 
   /*********************************************************************************
@@ -57,6 +59,13 @@ public abstract class UserController implements Runnable {
    **********************************************************************************/
   public UserController(Development dev) {
     development = dev;
+    actionQueue = new LinkedBlockingQueue<Action>();
+    repeatingTasks = new EnumMap<Action, TimerTask>(Action.class);
+    keyRepeatTimer = new Timer("Button Repeat Timer");
+  }
+  
+  public UserController(){
+    development = null;
     actionQueue = new LinkedBlockingQueue<Action>();
     repeatingTasks = new EnumMap<Action, TimerTask>(Action.class);
     keyRepeatTimer = new Timer("Button Repeat Timer");
@@ -109,6 +118,12 @@ public abstract class UserController implements Runnable {
           break;
         case Right:
           actionQueue.add(Action.Right);
+          break;
+        case A_Button:
+          actionQueue.add(Action.A_Button);
+          break;
+        case B_Button:
+          actionQueue.add(Action.B_Button);
           break;
         }
         // Attempt to make it more responsive to key-releases.
@@ -168,5 +183,17 @@ public abstract class UserController implements Runnable {
     }
 
     return true;
+  }
+  
+  /*********************************************************************************
+   * getNextAction
+   * 
+   * Allows any class with a UserController object to get the next action in the
+   * queue.  Allows the controller to be used for input in any setting (navigating 
+   * menus for example) not only in running the development simulation.
+   *********************************************************************************/
+  public Action getNextAction(){
+    Action aa = actionQueue.poll();
+    return aa;
   }
 }
