@@ -342,8 +342,8 @@ public class DevelopmentUI {
    * "initViewControls" method.
    *********************************************************************************/
   private static void initModelControls() {
-    //userControl = new SNESController(development);
-    userControl = new KeyboardController(development);
+    userControl = new SNESController(development);
+    //userControl = new KeyboardController(development);
   }
 
   /*********************************************************************************

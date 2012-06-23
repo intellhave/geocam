@@ -46,6 +46,11 @@ public class SNESController extends UserController {
     super(dev);
     init();
   }
+  
+  public SNESController(){
+    super();
+    init();
+  }
 
   /*********************************************************************************
    * init
@@ -216,6 +221,12 @@ public class SNESController extends UserController {
       case Up:
         startRepeatingAction(Action.Forward);
         break;
+      case A:
+        startRepeatingAction(Action.A_Button);
+        break;
+      case B:
+        startRepeatingAction(Action.B_Button);
+        break;
       }
     }
     /*
@@ -235,6 +246,12 @@ public class SNESController extends UserController {
         break;
       case Up:
         stopRepeatingAction(Action.Forward);
+        break;
+      case A:
+        stopRepeatingAction(Action.A_Button);
+        break;
+      case B:
+        stopRepeatingAction(Action.B_Button);
         break;
       }
     }
