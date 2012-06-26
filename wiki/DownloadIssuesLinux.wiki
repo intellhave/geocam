@@ -1,0 +1,25 @@
+#labels DownloadIssues
+This page explains how to re-configure the build path in the project either after downloading or updating the project.
+
+= Configuring the Build Path =
+
+If you encounter problems running the Geocam project after either updating or downloading, the first thing to do is to try to re-configure the build path. To do this, first right click on the Geocam project under project explorer. Scroll down on the menu that pops up until you reach "build path". Under this menu, click "configure build path". 
+
+Next, a small screen should pop up with four headings that you can toggle between: source, projects, libraries, order and export. Begin by clicking the projects menu. Under projects, you should see a folder named "jreality". Press down the arrow next to the folder. Next, click on "native library location". This should pop up a small screen. Choose the button labeled "workspace". Click "jreality", then "jni", then select either linux 32 or linux 64, depending on which operating system you are using. 
+
+Next, click on the libraries heading. You want to first make sure that you have all of the correct jar files and libraries under this tab. Here is what you should see:
+  *jogl.jar
+  *lwgjl.jar
+  *xerceslmpl.jar
+  *xercesSamples.jar
+  *xml-apis.jar
+  *JRESystemLibrary
+  *JUnit4
+
+If you click the arrow next to each object, you should see a label that says "native library location". The only library that you need to set is the lwgil library. Click on the "native library location", select "edit", and then "workspace". Next, choose "Geocam", "lwgil", "native", and then "linux". 
+
+This is everything that needs to be configured in the build path. The next section briefly covers another option, which is cleaning the project. 
+
+= Cleaning the Project = 
+
+After configuring the build path, one more thing that can be done if you are still having difficulties with the project is to clean it. To do this, select "project" from the main menu and choose "clean". This should bring up a small menu. Choose "clean projects selected below" and then select the Geocam project from the project list. After cleaning the project, you should then attempt to run it and see if the problems are resolved. 
