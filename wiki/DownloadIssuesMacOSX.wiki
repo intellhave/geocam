@@ -1,0 +1,24 @@
+#Fixes to make when downloading/updating the project on Mac
+
+= Download/Update Issues for Mac OSX =
+
+When downloading for the first time, need to add jreality project and some JARs to project's build path:
+
+Geocam => Configure build path
+  * Add jreality folder to projects
+  * Add to libraries jogl.jar (from jreality), lwjgl.jar (from lwjgl folder), and xercesImpl.jar, xercesSamples.jar, and xml-apis.jar (from xerces folder).
+  * Change native library of jreality project to macosx
+  * Change native library of lwjgl.jar to macosx
+
+How to change the native libraries:
+
+ For jreality:
+  * Geocam => Configure build path => Projects
+  * Click on arrow next to jreality folder
+  * Double click on Native library location
+  * In workspace folder, locate jreality => jni => macosx
+ For lwgjl:
+  * Geocam => Configure build path => Libraries
+  * Click arrow next to lwjgl.jar
+  * Double click on Native library location
+  * In workspace folder, locate lwjgl => native => macosx
