@@ -1,7 +1,6 @@
 #labels DownloadIssue,UpdateIssue
 = Introduction =
-We fresh download the file to replace the old file to solve this issue.
-Add your content here.
+We fresh download the file to replace the old file to solve download or update issues.
 
 
 = Details =
