@@ -7,7 +7,7 @@ We fresh download the file to replace the old file to solve download or update i
 Steps:
 1. Right click to the file which you want to replace;
 
-2.choose replace with/Latest from Repository
+2.choose replace with/Latest from Repository;
 
 3.After replace the file, go to Build Path/Project/jreality to set the Native library location of jreality:
  Native library location: jreality/jni/win32;
