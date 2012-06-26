@@ -1,0 +1,11 @@
+#labels DownloadIssue,UpdateIssue
+= Introduction =
+We fresh download the file to replace the old file to solve this issue.
+Add your content here.
+
+
+= Details =
+Steps:
+1. Right click to the file which you want to replace;
+2.choose replace with/Latest from Repository
+3.After replace the file, go to Build Path to set the Native library location of jreality and some Libraries; 
