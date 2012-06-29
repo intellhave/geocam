@@ -18,5 +18,8 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Geocam/lwjgl/native/macosx"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="xerces/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="xerces/xercesSamples.jar"/>
+	<classpathentry kind="lib" path="xerces/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

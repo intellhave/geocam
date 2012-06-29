@@ -9,6 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import viewMKII.Development;
+import viewMKII.DevelopmentUI;
 
 public abstract class UserController implements Runnable {
   /*********************************************************************************
@@ -19,11 +20,9 @@ public abstract class UserController implements Runnable {
    * holds down the up arrow key for 2 seconds, the KEY_REPEAT_RATE variable
    * explains how many "Forward" actions those 2 seconds translate to.
    *********************************************************************************/
-  //TODO: Make it possible for classes that have a UserController to set the "sensitivity"
-  //(i.e. adjust KEY_REPEAT_RATE and SLEEP_TIME)
   protected static final long KEY_REPEAT_DELAY = 1;
-  protected static final long KEY_REPEAT_RATE = 50; //5;
-  protected static long SLEEP_TIME = 10; //0;
+  protected static final long KEY_REPEAT_RATE = 90;
+  protected static long SLEEP_TIME = 0;
   protected final int MAX_REPEAT_RATE = 100; // Hz
 
   /*********************************************************************************
@@ -31,7 +30,7 @@ public abstract class UserController implements Runnable {
    * know how to process.
    *********************************************************************************/
   public static enum Action {
-    Right, Left, Forward, Back, A_Button, B_Button
+    Right, Left, Forward, Back, A_Button, B_Button, start
   }
 
   /*********************************************************************************
@@ -45,7 +44,7 @@ public abstract class UserController implements Runnable {
    * collection of discrete actions.
    *********************************************************************************/
   private Development development;
-  private BlockingQueue<Action> actionQueue;
+  protected BlockingQueue<Action> actionQueue;
 
   protected Timer keyRepeatTimer;
   private Map<Action, TimerTask> repeatingTasks;
@@ -125,6 +124,9 @@ public abstract class UserController implements Runnable {
         case B_Button:
           actionQueue.add(Action.B_Button);
           break;
+        case start:
+          actionQueue.add(Action.start);
+          break;
         }
         // Attempt to make it more responsive to key-releases.
         // Even if there are multiple this-tasks piled up (due to
@@ -180,6 +182,9 @@ public abstract class UserController implements Runnable {
     case Right:
       development.rotate(0.05);
       break;
+    case start:
+      DevelopmentUI.paused = true;
+      break;
     }
 
     return true;
@@ -195,5 +200,14 @@ public abstract class UserController implements Runnable {
   public Action getNextAction(){
     Action aa = actionQueue.poll();
     return aa;
+  }
+  
+  public Action seeNextAction(){
+    Action aa = actionQueue.peek();
+    return aa;
+  }
+
+  public void clear() {
+    this.actionQueue.clear();
   }
 }

@@ -11,6 +11,7 @@ import java.awt.Color;
 
 import javax.media.opengl.GLCanvas;
 
+import markersMKII.Marker;
 import markersMKII.MarkerHandler;
 
 import view.ColorScheme;
@@ -71,20 +72,21 @@ public abstract class View {
    * 
    * These protected variables hold the objects that JOGL needs to display the
    * scene. This include the "viewer," an object we use to transform the scene
-   * graph into an actual image. 
+   * graph into an actual image.
    *********************************************************************************/
   protected JOGLRenderer renderer;
   protected GLCanvas canvas;
   protected Viewer viewer;
   protected Appearance defaultAppearance;
-  
+
   /*********************************************************************************
    * View
    * 
    * This constructor is responsible for setting up the scene graph and
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
-  public View(Development development, MarkerHandler markers, ColorScheme colorScheme) {
+  public View(Development development, MarkerHandler markers,
+      ColorScheme colorScheme) {
     this.development = development;
     this.markers = markers;
     this.colorScheme = colorScheme;
@@ -129,10 +131,10 @@ public abstract class View {
    * TODO : Documentation
    *********************************************************************************/
   public void initViewer() {
-    viewer = new Viewer(camPath, sgcRoot);    
-    //ToolSystem toolSystem = ToolSystem.toolSystemForViewer(viewer);
-    //toolSystem.initializeSceneTools();
-    //viewer.getViewingComponent();
+    viewer = new Viewer(camPath, sgcRoot);
+    // ToolSystem toolSystem = ToolSystem.toolSystemForViewer(viewer);
+    // toolSystem.initializeSceneTools();
+    // viewer.getViewingComponent();
   }
 
   /*********************************************************************************
@@ -163,7 +165,8 @@ public abstract class View {
    * the development should be explicitly drawn.
    *********************************************************************************/
   public void setDrawEdges(boolean value) {
-    sgcDevelopment.getAppearance().setAttribute(CommonAttributes.EDGE_DRAW, value);
+    sgcDevelopment.getAppearance().setAttribute(CommonAttributes.EDGE_DRAW,
+        value);
   }
 
   /*********************************************************************************
@@ -190,28 +193,31 @@ public abstract class View {
    * diameter, that should be specified here.
    *********************************************************************************/
   protected void initAppearances() {
-      defaultAppearance = new Appearance();
-      defaultAppearance.setAttribute(VERTEX_DRAW, false);
-      defaultAppearance.setAttribute(EDGE_DRAW, true);
-      defaultAppearance.setAttribute(FACE_DRAW, true);
-      defaultAppearance.setAttribute(TUBES_DRAW, false);
-      defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
-      defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
-      //defaultAppearance.setAttribute(BACKGROUND_COLOR, new Color(0f, .1f, .1f));
-      //defaultAppearance.setAttribute(DIFFUSE_COLOR, new Color(1f, 0f, 0f));
+    defaultAppearance = new Appearance();
+    defaultAppearance.setAttribute(VERTEX_DRAW, false);
+    defaultAppearance.setAttribute(EDGE_DRAW, true);
+    defaultAppearance.setAttribute(FACE_DRAW, true);
+    defaultAppearance.setAttribute(TUBES_DRAW, false);
+    defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
+    defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
+    // defaultAppearance.setAttribute(BACKGROUND_COLOR, new Color(0f, .1f,
+    // .1f));
+    // defaultAppearance.setAttribute(DIFFUSE_COLOR, new Color(1f, 0f, 0f));
 
-      DefaultGeometryShader dgs;
-      dgs = (DefaultGeometryShader) ShaderUtility.createDefaultGeometryShader(defaultAppearance, true);
-      DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
-      dls.setDiffuseColor(Color.black);
-      
-      DefaultPolygonShader dps;
-      dps = (DefaultPolygonShader) dgs.createPolygonShader("default");
-      dps.setDiffuseColor(Color.white);
-      
-      //defaultAppearance.setAttribute(LINE_SHADER+"."+POLYGON_SHADER+"."+"SMOOTH_SHADING", true);
-    
-      sgcDevelopment.setAppearance(defaultAppearance);
+    DefaultGeometryShader dgs;
+    dgs = (DefaultGeometryShader) ShaderUtility.createDefaultGeometryShader(
+        defaultAppearance, true);
+    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+    dls.setDiffuseColor(Color.black);
+
+    DefaultPolygonShader dps;
+    dps = (DefaultPolygonShader) dgs.createPolygonShader("default");
+    dps.setDiffuseColor(Color.white);
+
+    // defaultAppearance.setAttribute(LINE_SHADER+"."+POLYGON_SHADER+"."+"SMOOTH_SHADING",
+    // true);
+
+    sgcDevelopment.setAppearance(defaultAppearance);
   }
 
   /*********************************************************************************
@@ -278,7 +284,16 @@ public abstract class View {
    * one.
    *********************************************************************************/
   protected abstract void initializeNewManifold();
-  
+
   protected abstract void updateCamera();
 
+  /*********************************************************************************
+   * removeMarker
+   * 
+   * This method is responsible for removing the input marker from the view.
+   * Since a marker may have many scene graph components attached to it, this
+   * often requires a nontrivial modification of the view's data structures that
+   * is specific to the view in question.
+   *********************************************************************************/
+  public abstract void removeMarker(Marker m);
 }

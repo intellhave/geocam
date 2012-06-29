@@ -21,7 +21,6 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme;
 import view.ColorScheme.schemes;
-import controllerMKII.KeyboardController;
 import controllerMKII.SNESController;
 import controllerMKII.UserController;
 import development.Coord2D;
@@ -30,6 +29,9 @@ import development.Vector;
 
 public class DevelopmentUI {
 
+  private static boolean developerMode = false;  
+  public static boolean paused;
+  
   /*********************************************************************************
    * Model Data
    * 
@@ -95,13 +97,43 @@ public class DevelopmentUI {
 
     // Note: For correct initialization, it is important the method calls listed
     // below occur in the particular order listed.
+    developerMode = true;
     initModel();
     initViews();
     initModelControls();
     initViewControls();
     runSimulation();
   }
-
+  
+  /*********************************************************************************
+   * runExplorer, quitExplorer
+   * 
+   * These public methods allow MenuUI to start and stop a DevelopmentUI simulation.
+   * The runExplorer method initializes a new simulation (i.e. loads a model and 
+   * views, creates a new controller object, and starts the simulation running).
+   * The quitExplorer method closes and discards the view windows.
+   * 
+   * Note that the simulation may be paused without quitting it. In order to
+   * resume a simulation in progress, MenuUI calls the runSimulation method
+   * (not the runExplorer method).
+   *********************************************************************************/
+ 
+  public static void runExplorer(){
+    initModel();
+    initViews();
+    initModelControls();
+    runSimulation(); 
+  }
+  
+  public static void quitExplorer(){
+    for (int ii = 0; ii < 3; ii++){
+      View view = views[ii];
+      JFrame window = frames.get(view);
+      window.setVisible(false);
+      window.dispose();
+    } 
+  }
+  
   /*********************************************************************************
    * runSimulation
    * 
@@ -117,18 +149,20 @@ public class DevelopmentUI {
    * 
    * TODO Add more description here.
    *********************************************************************************/
-  private static void runSimulation() {
-    boolean quit = false;
-
+  public static void runSimulation() {
+    
     final long dt = 10; // Timestep size, in microseconds
     // final long maxFrameTime = 80;
 
+    paused = false;
+    
     long startTime = System.currentTimeMillis();
     long currentTime = startTime;
     long accumulator = 0;
     Thread t = new Thread(userControl);
     t.start();
-    while (!quit) {
+    
+    while (!paused || developerMode ) {
       long newTime = System.currentTimeMillis();
       long frameTime = newTime - currentTime;
 
@@ -136,12 +170,12 @@ public class DevelopmentUI {
       accumulator += frameTime;
 
       while (accumulator >= dt) {
-
+        
         // FIXME: This code will make sure the source point marker is displayed
         // correctly, but this code does not belong in the DevelopmentUI class.
         // Refactoring is needed here.
         // PATCH START
-        Face prev = development.getSource().getFace();
+        Face prev = development.getSource().getFace();        
         userControl.runNextAction();
         Face next = development.getSource().getFace();
         if(next != prev){
@@ -162,6 +196,7 @@ public class DevelopmentUI {
 
       render();
     }
+    t.interrupt();
   }
 
   /*********************************************************************************
@@ -345,6 +380,7 @@ public class DevelopmentUI {
     userControl = new SNESController(development);
     //userControl = new KeyboardController(development);
   }
+  
 
   /*********************************************************************************
    * initViewControls
@@ -354,7 +390,7 @@ public class DevelopmentUI {
    * slider that controls how big the markers are should be initialized here.
    *********************************************************************************/
   private static void initViewControls() {
-    viewerControl = new ViewerController(markers,development);
+    viewerControl = new ViewerController(markers, development, views);
     viewerControl.setVisible(true);
   }
 }

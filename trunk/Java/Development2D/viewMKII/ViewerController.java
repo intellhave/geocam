@@ -50,15 +50,18 @@ public class ViewerController extends JFrame {
   private Development develop;
   private MarkerHandler mark;
   private Marker source;
+  private View[] views;
   
+  // This main method is for button layout testing.
   public static void main(String[] args) {
-    JFrame window = new ViewerController(null,null);
+    JFrame window = new ViewerController(null,null,null);
     window.setVisible(true);
   }
   
-  public ViewerController(MarkerHandler mh,Development d){
+  public ViewerController(MarkerHandler mh, Development d, View[] views){
     develop = d;
     mark = mh;
+    this.views = views;
     source = develop.getSourceMarker();
     layoutGUI();
   }
@@ -206,37 +209,6 @@ public class ViewerController extends JFrame {
             newMarkers =20;
           }
           
-          /********************************************************************************
-           * This code implements the change in ant number as DevelopmentGUI did previously, 
-           * i.e. clearing all markers and adding new markers
-           ********************************************************************************/
-          
-          //mark.clearMarkers();
-
-          //Random rand = new Random();
-
-          //mark.addMarker(develop.getSourceMarker());
-
-          //ManifoldPosition pos;
-          //MarkerAppearance app;
-          //for (int ii = 0; ii < newMarkers; ii++) {
-            //pos = new ManifoldPosition(develop.getSource());
-            //app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, 0.5);
-            //double a = rand.nextDouble() * Math.PI * 2;
-            //Vector vel = new Vector(Math.cos(a), Math.sin(a));
-            //vel.scale(0.0001);
-
-            //Marker m = new Marker(pos, app, vel);
-            //mark.addMarker(m);
-
-            //mark.updateMarkers(300);
-          //}
-          
-          /********************************************************************************
-           * This code adds and subtracts objects from the MarkerHandler data structure
-           * as needed to achieve the new number of ants
-           ********************************************************************************/
-          
           HashSet<Marker> markers = mark.getAllMarkers();
           Iterator<Marker> i = markers.iterator();
           int currentMarkers = markers.size() - 1;
@@ -274,18 +246,18 @@ public class ViewerController extends JFrame {
           synchronized (markers) {
             if (currentMarkers > newMarkers) {
               List<Marker> toRemove = new LinkedList<Marker>();
-              for (int ii = 0; ii < currentMarkers - newMarkers; ii++) {
-                Marker m = i.next();
-                if (m.equals(source)) {
-                  m = i.next();
-                  toRemove.add(m);
-                } else
-                  toRemove.add(m);
+              for( Marker m : markers ){
+                if(m == source) continue;
+                toRemove.add(m);  
+                if(toRemove.size() == currentMarkers - newMarkers)
+                  break;
               }
-              Iterator<Marker> remove = toRemove.iterator();
-              while (remove.hasNext()) {
-                Marker m = remove.next();
+              
+              for( Marker m : toRemove ){
                 mark.removeMarker(m);
+                for(View v : views){
+                  v.removeMarker( m );
+                }
               }
             }
           }
