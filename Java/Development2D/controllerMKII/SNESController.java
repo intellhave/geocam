@@ -6,6 +6,8 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
 
+import controllerMKII.UserController.Action;
+
 import viewMKII.Development;
 
 public class SNESController extends UserController {
@@ -86,6 +88,23 @@ public class SNESController extends UserController {
   private class ControllerState {
     public EnumMap<Button, ButtonState> controllerState;
 
+    public ControllerState(){
+      controllerState = new EnumMap<Button, ButtonState>(Button.class);
+      controllerState.put(SNESController.Button.A, ButtonState.Up);
+      controllerState.put(SNESController.Button.B, ButtonState.Up);
+      controllerState.put(SNESController.Button.X, ButtonState.Up);
+      controllerState.put(SNESController.Button.Y, ButtonState.Up);
+      controllerState.put(SNESController.Button.L, ButtonState.Up);
+      controllerState.put(SNESController.Button.R, ButtonState.Up);
+      controllerState.put(SNESController.Button.Select, ButtonState.Up);
+      controllerState.put(SNESController.Button.Start, ButtonState.Up);
+      
+      controllerState.put(SNESController.Button.Right, ButtonState.Up);
+      controllerState.put(SNESController.Button.Left, ButtonState.Up);
+      controllerState.put(SNESController.Button.Up, ButtonState.Up);
+      controllerState.put(SNESController.Button.Down, ButtonState.Up);
+    }
+    
     public ControllerState(Controller c) {
       controllerState = new EnumMap<Button, ButtonState>(Button.class);
 
@@ -98,7 +117,10 @@ public class SNESController extends UserController {
       controllerState.put(SNESController.Button.Select, getButtonState(c, 6));
       controllerState.put(SNESController.Button.Start, getButtonState(c, 7));
 
-      if (c.getXAxisValue() == 0.0) {
+      // Note: the controller's x and y values are not calibrated until the controller 
+      // is used, so initially getXAxisValue() and getYAxisValue() may not return 0
+      // when the arrow keys are released, but instead some very small decimal.
+      if (Math.abs(c.getXAxisValue()) < 0.05) {
         controllerState.put(SNESController.Button.Left,
             SNESController.ButtonState.Up);
         controllerState.put(SNESController.Button.Right,
@@ -119,7 +141,7 @@ public class SNESController extends UserController {
             SNESController.ButtonState.Up);
       }
 
-      if (c.getYAxisValue() == 0.0) {
+      if (Math.abs(c.getYAxisValue()) < 0.05) {
         controllerState.put(SNESController.Button.Up,
             SNESController.ButtonState.Up);
         controllerState.put(SNESController.Button.Down,
@@ -169,25 +191,27 @@ public class SNESController extends UserController {
   public void run() {
     ControllerState prev, curr;
 
-    curr = new ControllerState(userController);
+    curr = new ControllerState();
     while (true) {
+      if (SLEEP_TIME > 0) {
+        try {
+          Thread.sleep(SLEEP_TIME);
+        } catch (InterruptedException e) {
+          System.err.println("Error: Could not sleep the controller thread.");
+          e.printStackTrace();
+        }
+      }
+
       prev = curr;
       userController.poll();
       curr = new ControllerState(userController);
 
-      if (!prev.equals(curr)) {
-        for (Button b : Button.values()) {
-          if (prev.controllerState.get(b) != curr.controllerState.get(b)) {
-            dispatchKeyEvent(b, curr.controllerState.get(b));
-          }
-        }
-      }
+      if (prev.equals(curr)) continue;
 
-      try {
-        Thread.sleep(SLEEP_TIME);
-      } catch (InterruptedException e) {
-        System.err.println("Error: Could not sleep the controller thread.");
-        e.printStackTrace();
+      for (Button b : Button.values()) {
+        if (prev.controllerState.get(b) != curr.controllerState.get(b)) {
+          dispatchKeyEvent(b, curr.controllerState.get(b));
+        }
       }
     }
   }
@@ -227,6 +251,9 @@ public class SNESController extends UserController {
       case B:
         startRepeatingAction(Action.B_Button);
         break;
+      case Start:
+        startRepeatingAction(Action.start);
+        break;
       }
     }
     /*
@@ -253,7 +280,28 @@ public class SNESController extends UserController {
       case B:
         stopRepeatingAction(Action.B_Button);
         break;
+      case Start:
+        stopRepeatingAction(Action.start);
+        break;
       }
     }
   }
+//  
+//  
+//  /*********************************************************************************
+//   * createAction
+//   *  
+//   * This method provides an alternative to userController's 
+//   * start/stopRepeatingActions methods for generating actions from buttons on 
+//   * the controller which need to receive discrete inputs for the purposes of 
+//   * calling menus from within the simulation. For example the start button needs
+//   * to generate only one action when pressed in while running DevelopmentUI (in
+//   * order to call up the pause menu).
+//   * 
+//   **********************************************************************************/
+//  
+//  protected synchronized void createAction(Action action){
+//    actionQueue.add( action );
+//  }
+
 }

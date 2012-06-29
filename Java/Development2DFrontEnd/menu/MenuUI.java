@@ -1,23 +1,130 @@
 package menu;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import controllerMKII.SNESController;
+import viewMKII.DevelopmentUI;
+import controllerMKII.SNESMenuController;
 import controllerMKII.UserController;
 import controllerMKII.UserController.Action;
 
-public class MenuUI {
+/*********************************************************************************
+ * MenuUI
+ * 
+ * This source code is responsible for implementing the system of menus that
+ * enables a user (a museum visitor) to configure the development program (and
+ * similar programs), and then launch the simulation.
+ * 
+ * Each menu is built from a collection of images. First, we have a background
+ * image which is composited with a foreground image to create the illusion of
+ * an interactive menu. Generally, we have one foreground image for each button
+ * that can be active. For each menu we have a static method which explains how
+ * the images should be changed according to user input.
+ * 
+ *********************************************************************************/
 
-  // TODO: Build all menus the user will actually see, and integrate this with the simulation UI
+public class MenuUI extends JFrame {
+  private static final long serialVersionUID = 1L;
 
-  private static JFrame menuViewer;
-  private static UserController controller;
+  // TODO: Build all menus the user will actually see, and integrate this with
+  // the simulation UI
+  
+  private UserController controller;
 
-  public static void main(String[] args) {
-    controller = new SNESController();
+  /*********************************************************************************
+   * Image data
+   * 
+   * These are the composite BufferedImages that will be displayed to the user.
+   * To improve the speed of the program (i.e. to avoid repeatedly reading from 
+   * the disk) these images are read in from image files only once as the 
+   * program initializes.
+   * 
+   *********************************************************************************/
+
+  private static BufferedImage start_games;
+  private static BufferedImage start_explorer;
+  private static BufferedImage start_about;
+  private static BufferedImage game_tag;
+  private static BufferedImage game_cookie;
+  private static BufferedImage explorer_start;
+  private static BufferedImage explorer_options;
+
+  private static BufferedImage about;
+  private static BufferedImage tag;
+  private static BufferedImage cookie;
+  private static BufferedImage options;
+  private static BufferedImage paused;
+
+  private static BufferedImage currentMenu;
+
+  /*********************************************************************************
+   * 
+   *********************************************************************************/
+
+  public static void main(String[] args) throws IOException {
+    new MenuUI();
+  }
+
+  /*********************************************************************************
+   * 
+   *********************************************************************************/
+
+  public MenuUI() {
+    controller = new SNESMenuController();
+    try {
+      initFiles();
+    } catch (IOException ioe) {
+      System.err.println("Error: Could not locate menu images.");      
+      ioe.printStackTrace();
+    }
     initMenuView();
+  }
+
+  /*********************************************************************************
+   * initFiles
+   * 
+   *********************************************************************************/
+
+  private void initFiles() throws IOException {
+    final String bg_path = "Data/frontEnd/backgrounds/";
+    final String menu_path = "Data/frontEnd/menus/";
+    
+    File startMenuBackground = new File(bg_path + "dodecBackground.png");
+    File gameMenuBackground = new File(bg_path + "barbellBackground2.png");
+    File explorerMenuBackground = new File(bg_path + "dodecFirstPerson.png");
+
+    File startMenu_games = new File(menu_path + "StartMenu_games.png");
+    File startMenu_explorer = new File(menu_path + "StartMenu_explorer.png");
+    File startMenu_about = new File(menu_path + "StartMenu_about.png");
+    File gameMenu_tag = new File(menu_path + "GameSelection_tag.png");
+    File gameMenu_cookie = new File(menu_path + "GameSelection_cookie.png");
+    File explorerMenu_start = new File(menu_path + "SurfaceExplorer_start.png");
+    File explorerMenu_options = new File(menu_path + "SurfaceExplorer_options.png");
+
+    File aboutPage = new File(menu_path + "AboutPage.png");
+    File tagGame = new File(menu_path + "TagGame.png");
+    File cookieGame = new File(menu_path + "CookieGame.png");
+    File explorerOptions = new File(menu_path + "Options.png");
+    File pause_screen = new File(menu_path + "Paused.png");
+
+    start_games = compose(startMenuBackground, startMenu_games);
+    start_explorer = compose(startMenuBackground, startMenu_explorer);
+    start_about = compose(startMenuBackground, startMenu_about);
+    game_tag = compose(gameMenuBackground, gameMenu_tag);
+    game_cookie = compose(gameMenuBackground, gameMenu_cookie);
+    explorer_start = compose(explorerMenuBackground, explorerMenu_start);
+    explorer_options = compose(explorerMenuBackground, explorerMenu_options);
+
+    about = compose(aboutPage, aboutPage);
+    tag = compose(tagGame, tagGame);
+    cookie = compose(cookieGame, cookieGame);
+    options = compose(explorerOptions, explorerOptions);
+    paused = compose(pause_screen, pause_screen);
   }
 
   /*********************************************************************************
@@ -26,123 +133,338 @@ public class MenuUI {
    * Initializes the JFrame that will display the menus. Also starts the thread
    * that will monitor and read input from the controller.
    *********************************************************************************/
-  private static void initMenuView() {
-    menuViewer = new JFrame("TestViewer");
-    menuViewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  private void initMenuView() {
+    currentMenu = start_games;
+
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setSize(currentMenu.getWidth(), currentMenu.getHeight());
+    this.setVisible(true);
 
     // start the controller thread
     Thread t = new Thread(controller);
     t.start();
 
-    // call startMenu method to monitor controller
+    // call startMenu method to display the start menu
     startMenu();
   }
 
   /*********************************************************************************
-   * startMenu, gameMenu, optionsMenu
+   * startMenu, gameMenu, explorerMenu, etc
    * 
-   * Each menu is implemented as a static method. It has a MenuState which keeps
-   * track of which option is highlighted on the screen. Different states are
-   * displayed to the user as separate images created by the MenuImage class.
-   * For example, startMenu has two states with two different images: one where
-   * the "start" button is highlighted and one where the "options" button is
-   * highlighted. Inside startMenu a while loop is continuously running checking
-   * for user input. When the user "selects" one of the options, the while loop
-   * terminates and calls the method for the menu the user selected.
+   * Each menu is implemented as a static method. It has a menu state integer which 
+   * keeps track of which option is highlighted on the screen, and it displays 
+   * different states to the user as different BufferedImages (creating the 
+   * illusion of interactive menus).
+   * 
+   * For example, explorerMenu has two states with two different images: one
+   * where the "start" button is highlighted and one where the "options" button
+   * is highlighted. Inside explorerMenu a while loop is continuously running
+   * checking for user input. When the user "selects" one of the options, 
+   * explorerMenu either calls the optionsMenu method or starts the explorer 
+   * simulation.
+   * 
+   * The menus are implemented as a tree. For example suppose the user is viewing 
+   * the explorerMenu. If they then wish to go back to the previous menu, 
+   * explorerMenu breaks from its while loop and the previous menu's while loop 
+   * resumes where it left off.
    * 
    *********************************************************************************/
-  private static enum StartMenuState {
-    start, select
-  };
 
-  private static void startMenu() {
-    // compose the background and menu images
-    File backgroundImage = new File("Development2DFrontEnd/data/TestBackground.png");
-    File textImage = new File("Development2DFrontEnd/data/TestScreen_start.png");
-    MenuImage.compose(backgroundImage, textImage);
+  //  TODO: Is this enum necessary for anything?
+  
+//  private static enum MenuState {
+//    START_GAMES, START_EXPLORER, START_ABOUT, GAME_TAG, GAME_COOKIE, EXPLORER_START, EXPLORER_OPTIONS
+//  };
 
-    MenuImage image = new MenuImage();
-    menuViewer.add(image);
-    menuViewer.pack();
-    menuViewer.setVisible(true);
+  private void startMenu() {
+    BufferedImage[] menuImages = { start_games, start_explorer, start_about };
+    currentMenu = start_games;
+    int state = 0;
+    
+    this.repaint();
 
-    // set the initial state
-    StartMenuState currentState = StartMenuState.start;
+    controller.clear();
+    Action act = null;
 
     while (true) {
-      Action act = controller.getNextAction();
-      if (act == null)
-        continue;
-      if (act.equals(Action.Forward) || act.equals(Action.Back)) {
-        File background = new File("Development2DFrontEnd/data/TestBackground.png");
-        File text;
-        if (currentState.equals(StartMenuState.start)) {
-          text = new File("Development2DFrontEnd/data/TestScreen_select.png");
-          currentState = StartMenuState.select;
-          //System.out.println("Button pressed!");
-        } else {
-          text = new File("Development2DFrontEnd/data/TestScreen_start.png");
-          currentState = StartMenuState.start;
-          //System.out.println("Button pressed!");
-        }
-
-        // update the image
-        MenuImage.compose(background, text);
-        image = new MenuImage();
-        menuViewer.repaint();
+      act = controller.getNextAction();
+      if( act == null ) continue;
+      
+      switch (act) {
+      case Back:
+        state = (state + 1) % 3;
+        break;
+      case Forward:
+        // 2 is congruent to -1 mod 3.
+        // (Java only likes positive integers for % calculations.)
+        state = (state + 2) % 3;
+        break;
+      case A_Button:
+        if (state == 0)
+          gameMenu();
+        else if (state == 1)
+          explorerMenu();
+        else
+          aboutPage();
       }
-      if (act.equals(Action.A_Button)) {
-        //System.out.println("A button pressed!");
+      currentMenu = menuImages[state];
+      this.repaint();
+    }
+  }
+
+  private void gameMenu() {
+    BufferedImage[] menuImages = { game_tag, game_cookie };
+    currentMenu = game_tag;
+    int state = 0;
+    
+    this.repaint();
+
+    Action act = null;
+
+    while (true) {
+      act = controller.getNextAction();
+      if (act == null) continue;
+      
+      switch(act) {
+      case Back:
+      case Forward:
+        state = (state + 1) % 2;
+        break;
+      case A_Button:
+        if (state == 0)
+          tagGame();
+        else
+          cookieGame();
+        break;
+      }
+      if( act == Action.B_Button)
+        break;
+      
+      currentMenu = menuImages[state];
+      this.repaint();
+    }
+  }
+
+  private void explorerMenu() {
+    BufferedImage[] menuImages = { explorer_start, explorer_options };
+    currentMenu = explorer_start;
+    int state = 0;
+    
+    this.repaint();
+
+    Action act = null;
+
+    while (true) {
+      act = controller.getNextAction();
+      if (act == null) continue;
+
+      switch (act) {
+      case Back:
+      case Forward:
+        state = (state + 1) % 2;
+        break;
+      case A_Button:
+        if (state == 0) {
+          this.setVisible(false);
+          // Menu windows are now hidden, we can pass control to the Explorer
+          // simulation.
+          DevelopmentUI.runExplorer();
+          // Now we have returned from the runExplorer method call.
+          // This means that the Explorer simulation is currently paused.
+          // Consequently, we need to bring the menu windows back and restore
+          // the menu controller.
+          
+          //this.setVisible(true);
+          initMenuControls();
+          pauseExplorerMenu();
+        } 
+        else
+          explorerOptions();
+      }
+      if (act == Action.B_Button)
+        break;
+      
+      currentMenu = menuImages[state];
+      this.repaint();
+    }
+  }
+
+  private void pauseExplorerMenu() {
+    currentMenu = paused;
+    this.repaint();
+    this.setVisible(true);
+
+    Action a = null;
+    
+    while (true) {
+      a = controller.getNextAction();
+      if (a == null) continue;
+      
+      if( a == Action.B_Button){
+        this.setVisible(false);        
+        DevelopmentUI.runSimulation();
+        this.setVisible(true);
+        initMenuControls();
+      }
+      if( a == Action.A_Button ){
+        DevelopmentUI.quitExplorer();
         break;
       }
     }
-    if (currentState.equals(StartMenuState.start))
-      gameMenu();
+  }
+
+  // TODO: Implement About page
+  private void aboutPage() {
+    currentMenu = about;
+    this.repaint();
+
+    Action a = null;
+
+    while (true) {
+      a = controller.getNextAction();
+      if (a == null)
+        continue;
+      if (a == Action.B_Button)
+        break;
+    }
+  }
+
+  // TODO: Implement Tag game
+  private void tagGame() {
+    currentMenu = tag;
+    this.repaint();
+
+    Action a = null;
+
+    while (true) {
+      a = controller.getNextAction();
+      if (a == null)
+        continue;
+      if (a == Action.B_Button)
+        break;
+    }
+  }
+
+  // TODO: Implement Cookie game
+  private void cookieGame() {
+    currentMenu = cookie;
+    this.repaint();
+
+    Action a = null;
+
+    while (true) {
+      a = controller.getNextAction();
+      if (a == null)
+        continue;
+      if (a == Action.B_Button)
+        break;
+    }
+  }
+
+  // TODO: implement options menu
+  private void explorerOptions() {
+    currentMenu = options;
+    this.repaint();
+
+    Action a = null;
+
+    while (true) {
+      a = controller.getNextAction();
+      if (a == null)
+        continue;
+      if (a == Action.B_Button)
+        break;
+    }
+  }
+
+  /*********************************************************************************
+   * paint
+   * 
+   *********************************************************************************/
+
+  public void paint(Graphics g) {
+    g.drawImage(currentMenu, 0, 0, null);
+  }
+
+  /*********************************************************************************
+   * compose
+   * 
+   * This method takes as input two files, which contain images: a background
+   * image (such as a screenshot from DevelopmentUI) and a foreground menu image
+   * (which has a transparent background and options buttons). It composes these
+   * two images and saves the result to a BufferedImage, which it returns.
+   * 
+   * If the background image is too big, this method crops an area out of the
+   * center of the image to use in the final composited image. If the background
+   * image is too small, it centers it. The foreground image (or textLayer) is
+   * used to determine the size of the BufferedImage that will be returned.
+   *********************************************************************************/
+  private BufferedImage compose(File backgroundLayer, File textLayer) {
+    // load source images
+    BufferedImage background = null;
+    try {
+      background = ImageIO.read(backgroundLayer);
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    }
+    BufferedImage text = null;
+    try {
+      text = ImageIO.read(textLayer);
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    }
+
+    // may need to crop buffered image of background before composing images
+    if (background.getWidth() > text.getWidth()) {
+      int x = (background.getWidth() - text.getWidth()) / 2;
+      background = background.getSubimage(x, 0, text.getWidth(),
+          background.getHeight());
+    }
+    if (background.getHeight() > text.getHeight()) {
+      int y = (background.getHeight() - text.getHeight()) / 2;
+      background = background.getSubimage(0, y, background.getWidth(),
+          text.getHeight());
+    }
+
+    // create a new BufferedImage and paint the two images onto it
+    // if background is too small, center it behind the menu image
+    int w = text.getWidth();
+    int h = text.getHeight();
+    int x, y;
+    if (background.getWidth() < text.getWidth())
+      x = (text.getWidth() - background.getWidth()) / 2;
     else
-      optionsMenu();
+      x = 0;
+    if (background.getHeight() < text.getHeight())
+      y = (text.getHeight() - background.getHeight()) / 2;
+    else
+      y = 0;
+
+    BufferedImage composition = new BufferedImage(w, h,
+        BufferedImage.TYPE_INT_ARGB);
+    Graphics g = composition.getGraphics();
+    g.drawImage(background, x, y, null);
+    g.drawImage(text, 0, 0, null);
+
+    return composition;
   }
 
-  private static void gameMenu() {
-    File backgroundImage = new File("Development2DFrontEnd/data/TestBackground2.png");
-    File textImage = new File("Development2DFrontEnd/data/GameMenu.png");
-    MenuImage.compose(backgroundImage, textImage);
-
-    MenuImage image = new MenuImage();
-    menuViewer.add(image);
-    menuViewer.pack();
-    menuViewer.setVisible(true);
-
-    while (true) {
-      Action act = controller.getNextAction();
-      if (act == null)
-        continue;
-      if (act.equals(Action.B_Button)) {
-        //System.out.println("B button pressed!");
-        break;
-      }
-    }
-    startMenu();
+  /***********************************************************************
+   * initMenuControls
+   * 
+   * This method is responsible for reinitializing the MenuController after
+   * control has been passed to another piece of code. For example, whenever a
+   * simulation runs, it needs input from a UserController object, which
+   * prevents us from simultaneously receiving MenuController input. So, we need
+   * to reinitialize a MenuController after finishing/pausing a simulation.
+   * 
+   * TODO: Is there a better way of doing this than just creating a new
+   * controller object?
+   ***********************************************************************/
+  private void initMenuControls() {
+    controller = new SNESMenuController();
+    Thread t = new Thread(controller);
+    t.start();
   }
 
-  private static void optionsMenu() {
-    File backgroundImage = new File("Development2DFrontEnd/data/TestBackground2.png");
-    File textImage = new File("Development2DFrontEnd/data/OptionMenu.png");
-    MenuImage.compose(backgroundImage, textImage);
-
-    MenuImage image = new MenuImage();
-    menuViewer.add(image);
-    menuViewer.pack();
-    menuViewer.setVisible(true);
-
-    while (true) {
-      Action act = controller.getNextAction();
-      if (act == null)
-        continue;
-      if (act.equals(Action.B_Button)) {
-        //System.out.println("B button pressed!");
-        break;
-      }
-    }
-    startMenu();
-  }
 }
