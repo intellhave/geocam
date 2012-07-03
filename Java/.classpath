@@ -4,21 +4,17 @@
 	<classpathentry kind="src" path="DiscreteGeodesics"/>
 	<classpathentry kind="src" path="Development2D"/>
 	<classpathentry kind="src" path="Development3D"/>
-	<classpathentry kind="src" path="Development2DFrontEnd"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jreality">
+	<classpathentry kind="lib" path="lib/jogl.jar"/>
+	<classpathentry kind="lib" path="lib/jReality.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jreality/jni/win64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Geocam/lib/jni/lwjgl_native/linux"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lwjgl/jar/lwjgl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Geocam/lwjgl/native/windows"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="xerces/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="xerces/xercesSamples.jar"/>
-	<classpathentry kind="lib" path="xerces/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib/xercesSamples.jar"/>
+	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,4 +1,4 @@
-package menu;
+package frontend;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
