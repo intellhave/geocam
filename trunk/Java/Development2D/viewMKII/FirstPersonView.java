@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 
 import markers.MarkerAppearance;
 import markersMKII.Marker;
@@ -131,8 +132,9 @@ public class FirstPersonView extends ExponentialView {
   protected void generateMarkerGeometry() {
     HashMap<Marker, ArrayList<Vector[]>> markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     super.developMarkers(development.getRoot(), markerImages);
+    Set <Marker> allMarkers = markers.getAllMarkers();
 
-    for (Marker m : markerImages.keySet()) {
+    for (Marker m :allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 
       if (pool == null) {
@@ -141,8 +143,11 @@ public class FirstPersonView extends ExponentialView {
       }
 
       ArrayList<Vector[]> images = markerImages.get(m);
-      if (images == null)
+      if (images == null){
+        for(SceneGraphComponent sgc: pool)
+          sgc.setVisible(false);
         continue;
+      }
 
       if (images.size() > pool.size()) {
         int sgcCount = images.size() - pool.size();
