@@ -107,8 +107,7 @@ public class Frustum2D {
         newTextureCoords.add(startTexCoord);
       }
 
-      if (startInside && endInside)
-        continue;
+      if (startInside && endInside) continue;
 
       double t = findIntersection(end, start, this.getLeft());
       double s = findIntersection(end, start, this.getRight());
@@ -125,6 +124,8 @@ public class Frustum2D {
             endTexCoord));
       }
     }
+    
+    if(newVerts.size() < 3) return null;
 
     return new EmbeddedFace(newVerts, newTextureCoords);
   }
@@ -140,6 +141,7 @@ public class Frustum2D {
     if (differencefromstart.length()<epsilon||differencefromend.length()<epsilon){
       return -1;
     }
+    
     double tt = -1;
     for(int jj = 0; jj < 2; jj++){
       if( end.getComponent(jj) != start.getComponent(jj) ){
@@ -150,8 +152,8 @@ public class Frustum2D {
     
     if( tt == -1 ){
       System.err.println("Error: Unable to compute intersection point.");
-      System.exit(1);
     }
+    
     return tt;
   }
   
