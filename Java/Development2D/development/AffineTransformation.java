@@ -132,14 +132,19 @@ public class AffineTransformation extends Matrix {
   
   public EmbeddedFace affineTransFace(Face f) {
       ArrayList<Vector> efpts = new ArrayList<Vector>();
+      ArrayList<Vector> texCoords = new ArrayList<Vector>();
+      
       Iterator<Vertex> i = f.getLocalVertices().iterator();
       while(i.hasNext()){
         Vertex vert = i.next();
         Vector pt = Coord2D.coordAt(vert, f);
-        try{ efpts.add(this.affineTransPoint(pt)); }
+        try{ 
+          efpts.add(this.affineTransPoint(pt)); 
+          texCoords.add(pt);
+        }
         catch(Exception e1){ e1.printStackTrace(); }
       }
-      return new EmbeddedFace(efpts);
+      return new EmbeddedFace(efpts,texCoords);
     }
   
   //Creates a matrix from a list of Vectors
