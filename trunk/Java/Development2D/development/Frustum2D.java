@@ -84,50 +84,118 @@ public class Frustum2D {
   }
 
   public EmbeddedFace clipFace(EmbeddedFace toClip) {
-
-    int efVertCount = toClip.getNumberVertices();
     ArrayList<Vector> efVerts = toClip.getVectors();
+    ArrayList<Vector> texCoords = toClip.getTexCoords();
+
     ArrayList<Vector> newVerts = new ArrayList<Vector>();
-    
-    //check for those vertices of the EmbeddedFace which are contained in the frustum
-    for(Vector v : efVerts){
-      if(this.checkInterior(v)){ newVerts.add(new Vector(v)); }
-    }
-    //if all of the vertices are already in the frustum, no clipping occurs
-    if (newVerts.size() == efVertCount){
-      return new EmbeddedFace(toClip); 
-    }
-    
-    //check for intersections of each EmbeddedFace edge with the frustum's edges
-    ArrayList<Vector> intersections = new ArrayList<Vector>();
-    
-    for(int i=0; i<efVertCount; i++){
-      
-      //get edge of EmbeddedFace as a LineSegment
-      LineSegment efEdge = new LineSegment(efVerts.get(i), efVerts.get((i+1) % efVertCount));
-      
-      //intersect with left and right rays of frustum
-      Vector intersectionLeft = LineSegment.intersectRayWithLineSegment(this.getLeft(), efEdge);
-      Vector intersectionRight = LineSegment.intersectRayWithLineSegment(this.getRight(), efEdge);
-      
-      //add intersections to newVertList, if applicable
-      if((intersectionLeft != null) && !Vector.closeToAnyOf(newVerts, intersectionLeft, epsilon)){ 
-        intersections.add(intersectionLeft); 
+    ArrayList<Vector> newTextureCoords = new ArrayList<Vector>();
+
+    boolean endInside, startInside;
+    Vector start, end, startTexCoord, endTexCoord;
+
+    for (int i = 0; i < efVerts.size(); i++) {
+      start = efVerts.get(i);
+      end = efVerts.get((i + 1) % efVerts.size());
+      startTexCoord = texCoords.get(i);
+      endTexCoord = texCoords.get((i + 1) % texCoords.size());
+
+      startInside = this.checkInterior(start);
+      endInside = this.checkInterior(end);
+
+      if (startInside) {
+        newVerts.add(start);
+        newTextureCoords.add(startTexCoord);
       }
-      if((intersectionRight != null) && !Vector.closeToAnyOf(newVerts, intersectionRight, epsilon)){ 
-        intersections.add(intersectionRight); 
+
+      if (startInside && endInside)
+        continue;
+
+      double t = findIntersection(end, start, this.getLeft());
+      double s = findIntersection(end, start, this.getRight());
+      Vector p = makePoint(Math.min(t, s), start, end);
+      Vector q = makePoint(Math.max(t, s), start, end);
+      if (p != null) {
+        newVerts.add(p);
+        newTextureCoords.add(makePoint(Math.min(t, s), startTexCoord,
+            endTexCoord));
+      }
+      if (q != null) {
+        newVerts.add(q);
+        newTextureCoords.add(makePoint(Math.max(t, s), startTexCoord,
+            endTexCoord));
       }
     }
-    
-    newVerts.addAll(intersections);
-    
-    //intersection regarded as empty if it has fewer than 3 vertices
-    if (newVerts.size() < 3){ return null; }
-    
-    //return the convex hull, as an EmbeddedFace, of all the points found above
-    ConvexHull2D hull = new ConvexHull2D(newVerts);
-    return new EmbeddedFace(hull.getPoints());
+
+    return new EmbeddedFace(newVerts, newTextureCoords);
   }
+
+  private double findIntersection(Vector end, Vector start, Vector ray){
+    LineSegment efEdge = new LineSegment(end,start);
+    Vector rayIntersection = LineSegment.intersectRayWithLineSegment(ray, efEdge);
+    if(rayIntersection==null){
+      return -1;
+    }
+    Vector differencefromstart=Vector.subtract(start, rayIntersection);
+    Vector differencefromend=Vector.subtract(end, rayIntersection);
+    if (differencefromstart.length()<epsilon||differencefromend.length()<epsilon){
+      return -1;
+    }
+    double tt = -1;
+    for(int jj = 0; jj < 2; jj++){
+      if( end.getComponent(jj) != start.getComponent(jj) ){
+        tt = (rayIntersection.getComponent(jj) - start.getComponent(jj)) / (end.getComponent(jj) - start.getComponent(jj));
+        break;
+      }
+    }
+    
+    if( tt == -1 ){
+      System.err.println("Error: Unable to compute intersection point.");
+      System.exit(1);
+    }
+    return tt;
+  }
+  
+  private Vector makePoint(double t, Vector start, Vector end){
+    if (t<0||t>1){
+      return null;
+    }
+    return Vector.add(Vector.scale(end, t),Vector.scale(start,1-t));
+  }
+  
+//  private void computeIntersection(ArrayList<Vector> efVerts, ArrayList<Vector> texCoords, 
+//                                   ArrayList<Vector> newVerts, ArrayList<Vector> newTextureCoords, Vector ray){
+//    int efVertCount = efVerts.size();
+//    for(int ii=0; ii<efVertCount; ii++){
+//      Vector p = efVerts.get(ii);
+//      Vector q = efVerts.get((ii+1) % efVertCount);
+//      
+//      LineSegment efEdge = new LineSegment(p,q);
+//      Vector rayIntersection = LineSegment.intersectRayWithLineSegment(ray, efEdge);
+//      
+//      if(rayIntersection == null) continue;
+//      if(Vector.closeToAnyOf(newVerts, rayIntersection, epsilon)) continue;
+//      
+//      double tt = -1;
+//      for(int jj = 0; jj < 2; jj++){
+//        if( p.getComponent(jj) != q.getComponent(jj) ){
+//          tt = (rayIntersection.getComponent(jj) - q.getComponent(jj)) / (p.getComponent(jj) - q.getComponent(jj));
+//          break;
+//        }
+//      }
+//      
+//      if( tt == -1 ){
+//        System.err.println("Error: Unable to compute intersection point.");
+//        System.exit(1);
+//      }
+//      
+//      Vector pCoords = new Vector(texCoords.get(ii));
+//      Vector qCoords = new Vector(texCoords.get((ii+1) % efVertCount));
+//      Vector intersectionCoords = Vector.add(Vector.scale(pCoords, tt), Vector.scale(qCoords, 1-tt));
+//      
+//      newVerts.add( rayIntersection );
+//      newTextureCoords.add( intersectionCoords );
+//    }
+//  }
 
   public Geometry getGeometry(Color color, double z){
     

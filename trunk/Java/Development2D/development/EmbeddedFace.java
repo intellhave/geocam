@@ -21,34 +21,62 @@ import de.jreality.scene.Geometry;
 
 
 public class EmbeddedFace {
-  private ArrayList<Vector> vectors_;
+  private ArrayList<Vector> vertices;
+  private ArrayList<Vector> textureCoordinates;
   private Vector normal_;
 
   // expects vectors in counter-clockwise order
-  public EmbeddedFace(ArrayList<Vector> v) {
-    vectors_ = v;
-    findNormal();
+  public EmbeddedFace(ArrayList<Vector> points) {
+    initialize(points);
   }
 
   public EmbeddedFace(Vector... vectors) {
-    vectors_ = new ArrayList<Vector>();
+    vertices = new ArrayList<Vector>();
     for(int i = 0; i < vectors.length; i++)
-      vectors_.add(vectors[i]);
+      vertices.add(vectors[i]);
+    initialize(vertices);
+  }
+  
+  private void initialize(ArrayList<Vector> points){
+    vertices = points;
+    textureCoordinates = new ArrayList<Vector>();
+    for( Vector v : vertices ){
+      textureCoordinates.add( new Vector(v) );
+    }
     findNormal();
   }
   
   public EmbeddedFace(EmbeddedFace face) {
-    vectors_ = new ArrayList<Vector>();
+    vertices = new ArrayList<Vector>();
     ArrayList<Vector> oldVectors = face.getVectors();
     for(int i = 0; i < oldVectors.size(); i++) {
-      vectors_.add(new Vector(oldVectors.get(i)));
+      vertices.add(new Vector(oldVectors.get(i)));
+    }
+    findNormal();
+    
+    textureCoordinates = new ArrayList<Vector>();
+    for( Vector v : face.textureCoordinates ){
+      this.textureCoordinates.add( new Vector(v) );
+    }
+  }
+
+  public EmbeddedFace(ArrayList<Vector> points, ArrayList<Vector> texCoords){
+    vertices = new ArrayList<Vector>();
+    textureCoordinates = new ArrayList<Vector>();
+    
+    for(Vector v : points){
+      vertices.add(new Vector(v));
+    }
+    
+    for(Vector tc : texCoords){
+      textureCoordinates.add(new Vector(tc));
     }
     findNormal();
   }
-
+  
   private void findNormal() {
-    Vector v1 = Vector.subtract(vectors_.get(1), vectors_.get(0));
-    Vector v2 = Vector.subtract(vectors_.get(2), vectors_.get(0));
+    Vector v1 = Vector.subtract(vertices.get(1), vertices.get(0));
+    Vector v2 = Vector.subtract(vertices.get(2), vertices.get(0));
     normal_ = Vector.cross(v1, v2);
     if (normal_ == null) {
       normal_ = new Vector(0.0, 0.0, 1.0);
@@ -56,27 +84,36 @@ public class EmbeddedFace {
   }
 
   public int getNumberVertices() {
-    return vectors_.size();
+    return vertices.size();
   }
   
   public ArrayList<Vector> getVectors() {
     ArrayList<Vector> vectors = new ArrayList<Vector>();
-    for(int i = 0; i < vectors_.size(); i++) {
-      vectors.add(vectors_.get(i));
+    for(int i = 0; i < vertices.size(); i++) {
+      vectors.add(vertices.get(i));
     }
     return vectors;
   }
   
+  // TODO: Does creating copies of the texture coordinates cause problems???
+  public ArrayList<Vector> getTexCoords(){
+    ArrayList<Vector> coords = new ArrayList<Vector>();
+    for(Vector v : textureCoordinates){
+      coords.add(new Vector(v));
+    }
+    return coords;
+  }
+  
   public double[][] getVectorsAsArray() {
-    double[][] array = new double[vectors_.size()][];
-    for(int i = 0; i < vectors_.size(); i++) {
-      array[i] = vectors_.get(i).getVectorAsArray();
+    double[][] array = new double[vertices.size()][];
+    for(int i = 0; i < vertices.size(); i++) {
+      array[i] = vertices.get(i).getVectorAsArray();
     }
     return array;
   }
 
   public Vector getVectorAt(int index) {
-    return vectors_.get(index);
+    return vertices.get(index);
   }
 
   public Vector getNormal() {
@@ -159,16 +196,16 @@ public class EmbeddedFace {
   
   
   public void addVertex(Vector v) {
-    vectors_.add(v);
+    vertices.add(v);
   }
   
   public int indexOf(Vector v) {
-    return vectors_.indexOf(v);
+    return vertices.indexOf(v);
   }
   
   public boolean hasVertex(Vector v) {
-    for(int i =0 ; i < vectors_.size(); i++) {
-      if(vectors_.get(i).equals(v)) return true;
+    for(int i =0 ; i < vertices.size(); i++) {
+      if(vertices.get(i).equals(v)) return true;
     }
     return false;
   }
@@ -176,7 +213,7 @@ public class EmbeddedFace {
   public boolean sharesEdgeWith(EmbeddedFace face) {
     int count = 0;
     for(int i = 0; i < face.getNumberVertices(); i++) {
-      if(vectors_.contains(face.getVectorAt(i)))
+      if(vertices.contains(face.getVectorAt(i)))
         count++;
     }
 
@@ -201,5 +238,18 @@ public class EmbeddedFace {
         return true;
     }
     return false;
+  }
+
+  public double[][] getTexCoordsAsArray() {
+    int n = textureCoordinates.size();
+    int m = textureCoordinates.get(0).getDimension();
+    double[][] array = new double[n][m];
+    
+    for(int ii = 0; ii < n; ii++){
+      for(int jj = 0; jj < m; jj++){
+        array[ii][jj] = textureCoordinates.get(ii).getComponent(jj);
+      }
+    }
+    return array;
   }
 }
