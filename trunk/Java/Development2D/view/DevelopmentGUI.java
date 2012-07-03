@@ -113,6 +113,7 @@ public class DevelopmentGUI extends JFrame  implements Development.DevelopmentVi
                                         "Data/Triangulations/2DManifolds/tetrahedronnonembed.xml",   //28
                                         "Data/Triangulations/2DManifolds/torus-4.xml",    //29 stack overflow
                                         "Data/Triangulations/2DManifolds/octahedron2.xml", //30
+                                        "Data/Triangulations/2DManifolds/mobiusband.xml",   //31 not validating
                                         "Data/Triangulations/2DManifolds/mobiusband.xml", //31 not validating
                                         "Data/off/saddle.off"}; //32
   private static String filename = filenames[2];
