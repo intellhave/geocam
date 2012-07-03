@@ -91,8 +91,8 @@ public class MenuUI extends JFrame {
    *********************************************************************************/
 
   private void initFiles() throws IOException {
-    final String bg_path = "Data/frontEnd/backgrounds/";
-    final String menu_path = "Data/frontEnd/menus/";
+    final String bg_path = "Data/frontend/backgrounds/";
+    final String menu_path = "Data/frontend/menus/";
     
     File startMenuBackground = new File(bg_path + "dodecBackground.png");
     File gameMenuBackground = new File(bg_path + "barbellBackground2.png");
