@@ -46,6 +46,15 @@ public class KeyboardController extends UserController implements
       case KeyEvent.VK_DOWN:
         startRepeatingAction(Action.Back);
         break;
+      case KeyEvent.VK_SPACE:
+        startRepeatingAction(Action.start);
+        break;
+      case KeyEvent.VK_ENTER:
+        startRepeatingAction(Action.A_Button);
+        break;
+      case KeyEvent.VK_BACK_SPACE:
+      startRepeatingAction(Action.B_Button);
+      break;
       }
     }
 
@@ -63,6 +72,15 @@ public class KeyboardController extends UserController implements
       case KeyEvent.VK_DOWN:
         stopRepeatingAction(Action.Back);
         break;
+      case KeyEvent.VK_SPACE:
+        stopRepeatingAction(Action.start);
+        break;
+      case KeyEvent.VK_ENTER:
+        stopRepeatingAction(Action.A_Button);
+        break;
+      case KeyEvent.VK_BACK_SPACE:
+      stopRepeatingAction(Action.B_Button);
+      break;
       }
     }
     // The code that calls this method expects a boolean.
