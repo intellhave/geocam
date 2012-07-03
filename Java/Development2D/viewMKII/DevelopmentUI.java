@@ -21,6 +21,7 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.ColorScheme;
 import view.ColorScheme.schemes;
+import controllerMKII.KeyboardController;
 import controllerMKII.SNESController;
 import controllerMKII.UserController;
 import development.Coord2D;
@@ -377,8 +378,8 @@ public class DevelopmentUI {
    * "initViewControls" method.
    *********************************************************************************/
   private static void initModelControls() {
-    userControl = new SNESController(development);
-    //userControl = new KeyboardController(development);
+    //userControl = new SNESController(development);
+    userControl = new KeyboardController(development);
   }
   
 

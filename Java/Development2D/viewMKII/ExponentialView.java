@@ -133,13 +133,11 @@ public class ExponentialView extends View {
 //      ifsf.setFaceColors(colorlist);
       ifsf.update();
 
-      Appearance app = new Appearance();
+      Appearance app;
       if( f.getIndex() % 2 == 0 ){
-        TextureLibrary.initializeAppearance(app, 
-            TextureLibrary.TextureDescriptor.Dots, colorScheme.getColor(f));
+        app = TextureLibrary.getAppearance(TextureLibrary.TextureDescriptor.DOTS);
       } else {
-        TextureLibrary.initializeAppearance(app, 
-            TextureLibrary.TextureDescriptor.Checkerboard, colorScheme.getColor(f));
+        app = TextureLibrary.getAppearance(TextureLibrary.TextureDescriptor.CHECKER);
       }
       
       sgc.setGeometry(ifsf.getGeometry());
