@@ -1,9 +1,11 @@
 package viewMKII;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 import markers.ManifoldPosition;
 import markers.MarkerAppearance;
@@ -125,7 +127,6 @@ public class ExponentialView extends View {
       ifsf.setFaceCount(ifsf_faces.length);
       ifsf.setFaceIndices(ifsf_faces);
       ifsf.setGenerateEdgesFromFaces(true);
-
       ifsf.update();
 
       Appearance app;
@@ -164,8 +165,9 @@ public class ExponentialView extends View {
     HashMap<Marker, ArrayList<Vector[]>> markerImages;
     markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     developMarkers(development.getRoot(), markerImages);
+    Set <Marker> allMarkers = markers.getAllMarkers();
 
-    for (Marker m : markerImages.keySet()) {
+    for (Marker m : allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 
       if (pool == null) {
@@ -174,8 +176,11 @@ public class ExponentialView extends View {
       }
 
       ArrayList<Vector[]> images = markerImages.get(m);
-      if (images == null)
+      if (images == null){
+        for(SceneGraphComponent sgc: pool)
+          sgc.setVisible(false);
         continue;
+      }
 
       if (images.size() > pool.size()) {
         int sgcCount = images.size() - pool.size();

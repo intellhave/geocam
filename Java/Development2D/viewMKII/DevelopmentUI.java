@@ -228,7 +228,8 @@ public class DevelopmentUI {
     String filename = "Data/blender/cube_surf.off";
     //String newFile = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
     //String brokenFile = "Data/Triangulations/2DManifolds/octahedron.xml";
-    //String mobius = "Data/off/mobius.off";
+   //String mobius = "Data/off/mobius.off";
+    //String domain = "Data/Triangulations/2DManifolds/domain.xml";
     loadSurface(filename);
   }
 
