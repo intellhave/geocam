@@ -61,7 +61,7 @@ public abstract class View {
    * development at a given point, and the subgraph consisting of the "objects"
    * or "markers" that will move around in the scene.
    *********************************************************************************/
-  protected SceneGraphComponent sgcRoot;
+  public SceneGraphComponent sgcRoot;
   protected SceneGraphComponent sgcDevelopment;
   protected SceneGraphComponent sgcMarkers;
   protected SceneGraphComponent sgcCamera;
