@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import viewMKII.CookieGame;
 import viewMKII.Development;
 import viewMKII.DevelopmentUI;
 
@@ -184,6 +185,7 @@ public abstract class UserController implements Runnable {
       break;
     case start:
       DevelopmentUI.paused = true;
+      CookieGame.paused = true;
       break;
     }
 
