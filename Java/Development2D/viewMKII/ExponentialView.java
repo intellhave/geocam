@@ -114,23 +114,18 @@ public class ExponentialView extends View {
       } else {
         sgc.setVisible(true);
       }
-      
+     
       IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
       ifsf.setVertexCount(ifsf_verts.length);
       ifsf.setVertexCoordinates(ifsf_verts);
       
-      double[][] tex_verts = makeTextureCoords( ifsf_verts );
+      double[][] tex_verts = dgf.getTexCoords();
       
       ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, tex_verts);
       ifsf.setFaceCount(ifsf_faces.length);
       ifsf.setFaceIndices(ifsf_faces);
       ifsf.setGenerateEdgesFromFaces(true);
-//      
-//      Color[] colorlist = new Color[ ifsf_faces.length ];
-//      for( int ii = 0; ii < ifsf_faces.length; ii++ ){
-//        colorlist[ii] = colorScheme.getColor(f);
-//      }
-//      ifsf.setFaceColors(colorlist);
+
       ifsf.update();
 
       Appearance app;
@@ -139,41 +134,19 @@ public class ExponentialView extends View {
       } else {
         app = TextureLibrary.getAppearance(TextureLibrary.TextureDescriptor.CHECKER);
       }
-      
+     
       sgc.setGeometry(ifsf.getGeometry());
       sgc.setAppearance(app);
     }
   }
   
-  //TODO: Would it be better to use existing AffineTransformation class to do compute this?
-  private double[][] makeTextureCoords( double[][] worldCoords ){
-    double[][] tex_verts = new double[worldCoords.length][3];
-    
-    for( int ii = 0; ii < worldCoords.length; ii++ ){
-      tex_verts[ii][0] = worldCoords[ii][0] - worldCoords[0][0];
-      tex_verts[ii][1] = worldCoords[ii][1] - worldCoords[0][1];
-      //tex_verts[ii][2] = worldCoords[ii][2] - worldCoords[0][2];
-    }
-     
-    double u = tex_verts[1][0];
-    double v = tex_verts[1][1];
-    double scaling = 1 / Math.sqrt( u*u + v*v );
-    
-    for( int ii = 0; ii < worldCoords.length; ii++ ){
-      double x = tex_verts[ii][0];
-      double y = tex_verts[ii][1];
-      tex_verts[ii][0] = scaling * (x * u + y * v);
-      tex_verts[ii][1] = scaling * (x * (-v) + y * u);
-    }
-    return tex_verts;
-  }
-
   // This is a recursive helper method for generateManifoldGeometry().
   private void generateManifoldGeometry( DevelopmentNode node ) {
     Face f = node.getFace();
     DevelopmentGeometry dg = faceDevelopments.get(f);
     double[][] face = node.getClippedFace().getVectorsAsArray();
-    dg.addFace(face, 1.0);
+    double[][] texCoords = node.getClippedFace().getTexCoordsAsArray();
+    dg.addFace(face, texCoords, 1.0);
     for (DevelopmentNode n : node.getChildren())
       generateManifoldGeometry(n);
   }

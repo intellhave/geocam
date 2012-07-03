@@ -172,61 +172,61 @@ public class SGCMethods {
     return sgc_points;
   }
   
-  public static SceneGraphComponent sgcFromVertices(double zvalue, Vector...vectors) {
-    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
-
-//    Color[] colorList = new Color[colors.size()];
-//    for (int i = 0; i < colors.size(); i++) {
-//      colorList[i] = colors.get(i);
+//  public static SceneGraphComponent sgcFromVertices(double zvalue, Vector...vectors) {
+//    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+//
+////    Color[] colorList = new Color[colors.size()];
+////    for (int i = 0; i < colors.size(); i++) {
+////      colorList[i] = colors.get(i);
+////    }
+//    DevelopmentGeometry geometry = new DevelopmentGeometry();
+//    double[][] vectorList = new double[vectors.length][vectors[0].getDimension()];
+//    
+//    for(int i = 0; i < vectors.length; i++) {
+//      vectorList[i] = vectors[i].getVectorAsArray();
 //    }
-    DevelopmentGeometry geometry = new DevelopmentGeometry();
-    double[][] vectorList = new double[vectors.length][vectors[0].getDimension()];
-    
-    for(int i = 0; i < vectors.length; i++) {
-      vectorList[i] = vectors[i].getVectorAsArray();
-    }
-    geometry.addFace(vectorList, zvalue);
-
-    double[][] ifsf_verts = geometry.getVerts();
-    int[][] ifsf_faces = geometry.getFaces();
-    ifsf.setVertexCount(ifsf_verts.length);
-    ifsf.setVertexCoordinates(ifsf_verts);
-    ifsf.setFaceCount(ifsf_faces.length);
-    ifsf.setFaceIndices(ifsf_faces);
-    ifsf.setGenerateEdgesFromFaces(true);
-    ifsf.update();
-    SceneGraphComponent sgc = new SceneGraphComponent();
-    sgc.setGeometry(ifsf.getGeometry());
-    return sgc;
-  }
-  
-  public static SceneGraphComponent sgcFromVertices(double zvalue, ArrayList<Vector> vectors) {
-    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
-
-//    Color[] colorList = new Color[colors.size()];
-//    for (int i = 0; i < colors.size(); i++) {
-//      colorList[i] = colors.get(i);
+//    geometry.addFace(vectorList, zvalue);
+//
+//    double[][] ifsf_verts = geometry.getVerts();
+//    int[][] ifsf_faces = geometry.getFaces();
+//    ifsf.setVertexCount(ifsf_verts.length);
+//    ifsf.setVertexCoordinates(ifsf_verts);
+//    ifsf.setFaceCount(ifsf_faces.length);
+//    ifsf.setFaceIndices(ifsf_faces);
+//    ifsf.setGenerateEdgesFromFaces(true);
+//    ifsf.update();
+//    SceneGraphComponent sgc = new SceneGraphComponent();
+//    sgc.setGeometry(ifsf.getGeometry());
+//    return sgc;
+//  }
+//  
+//  public static SceneGraphComponent sgcFromVertices(double zvalue, ArrayList<Vector> vectors) {
+//    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+//
+////    Color[] colorList = new Color[colors.size()];
+////    for (int i = 0; i < colors.size(); i++) {
+////      colorList[i] = colors.get(i);
+////    }
+//    DevelopmentGeometry geometry = new DevelopmentGeometry();
+//    double[][] vectorList = new double[vectors.size()][vectors.get(0).getDimension()];
+//    
+//    for(int i = 0; i < vectors.size(); i++) {
+//      vectorList[i] = vectors.get(i).getVectorAsArray();
 //    }
-    DevelopmentGeometry geometry = new DevelopmentGeometry();
-    double[][] vectorList = new double[vectors.size()][vectors.get(0).getDimension()];
-    
-    for(int i = 0; i < vectors.size(); i++) {
-      vectorList[i] = vectors.get(i).getVectorAsArray();
-    }
-    geometry.addFace(vectorList, zvalue);
-
-    double[][] ifsf_verts = geometry.getVerts();
-    int[][] ifsf_faces = geometry.getFaces();
-    ifsf.setVertexCount(ifsf_verts.length);
-    ifsf.setVertexCoordinates(ifsf_verts);
-    ifsf.setFaceCount(ifsf_faces.length);
-    ifsf.setFaceIndices(ifsf_faces);
-    ifsf.setGenerateEdgesFromFaces(true);
-    ifsf.update();
-    SceneGraphComponent sgc = new SceneGraphComponent();
-    sgc.setGeometry(ifsf.getGeometry());
-    return sgc;
-  }
+//    geometry.addFace(vectorList, zvalue);
+//
+//    double[][] ifsf_verts = geometry.getVerts();
+//    int[][] ifsf_faces = geometry.getFaces();
+//    ifsf.setVertexCount(ifsf_verts.length);
+//    ifsf.setVertexCoordinates(ifsf_verts);
+//    ifsf.setFaceCount(ifsf_faces.length);
+//    ifsf.setFaceIndices(ifsf_faces);
+//    ifsf.setGenerateEdgesFromFaces(true);
+//    ifsf.update();
+//    SceneGraphComponent sgc = new SceneGraphComponent();
+//    sgc.setGeometry(ifsf.getGeometry());
+//    return sgc;
+//  }
 
   /*
    * Returns SGC with line from origin to v, with specified radius.
@@ -335,9 +335,10 @@ public class SGCMethods {
   public static class DevelopmentGeometry {
 
     private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
+    private ArrayList<double[]> geometry_texCoords = new ArrayList<double[]>();
     private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
 
-    public void addFace(double[][] faceverts, double zvalue) {
+    public void addFace(double[][] faceverts, double[][] texCoords, double zvalue) {
 
       int nverts = faceverts.length;
       int vi = geometry_verts.size();
@@ -346,13 +347,16 @@ public class SGCMethods {
       
       for (int k = 0; k < nverts; k++) {
         double[] newvert = new double[3];
-        newvert[0] = faceverts[k][0];
-        newvert[1] = faceverts[k][1];
-        if(faceverts[k].length > 2)
-          newvert[2] = faceverts[k][2];
-        else
-          newvert[2] = zvalue;
+        double[] texCoord = new double[3];
+        newvert[0] = faceverts[k][0]; texCoord[0] = texCoords[k][0];
+        newvert[1] = faceverts[k][1]; texCoord[1] = texCoords[k][1];
+        if(faceverts[k].length > 2){
+          newvert[2] = faceverts[k][2]; texCoord[2] = texCoords[k][2];
+        } else {
+          newvert[2] = zvalue; texCoord[2] = zvalue;
+        }
         geometry_verts.add(newvert);
+        geometry_texCoords.add(texCoord);
         newface[k] = vi++;
       }
       geometry_faces.add(newface);
@@ -360,6 +364,10 @@ public class SGCMethods {
 
     public double[][] getVerts() {
       return (double[][]) geometry_verts.toArray(new double[0][0]);
+    }
+    
+    public double[][] getTexCoords(){
+      return (double[][]) geometry_texCoords.toArray(new double[0][0]);
     }
 
     public int[][] getFaces() {
