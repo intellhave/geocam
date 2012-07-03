@@ -9,13 +9,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jreality">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jreality/jni/macosx"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jreality/jni/win64"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/jreality/lib/jogl.jar"/>
 	<classpathentry kind="lib" path="lwjgl/jar/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Geocam/lwjgl/native/macosx"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Geocam/lwjgl/native/windows"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="xerces/xercesImpl.jar"/>
