@@ -2,7 +2,6 @@ package markersMKII;
 
 import development.Vector;
 import markers.ManifoldPosition;
-import markers.MarkerAppearance;
 
 /*********************************************************************************
  * Marker

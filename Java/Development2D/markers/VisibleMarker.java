@@ -1,5 +1,6 @@
 package markers;
 
+import markersMKII.MarkerAppearance;
 import triangulation.Face;
 
 /* Represents a visible object on the Triangulation

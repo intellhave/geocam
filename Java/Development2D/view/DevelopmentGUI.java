@@ -32,10 +32,10 @@ import javax.swing.event.ChangeListener;
 import markers.BasicMovingMarkers;
 import markers.ManifoldPosition;
 import markers.MovingMarker;
-import markers.MarkerAppearance;
 import markers.MarkerDynamics;
 import markers.PathAppearance;
 import markers.ShootingGame;
+import markersMKII.MarkerAppearance;
 
 import triangulation.Face;
 import triangulation.Triangulation;

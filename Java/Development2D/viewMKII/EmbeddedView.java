@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import markers.ManifoldPosition;
-import markers.MarkerAppearance;
 import markersMKII.Marker;
+import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;

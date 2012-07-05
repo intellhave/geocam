@@ -1,5 +1,6 @@
 package markers;
 
+import markersMKII.MarkerAppearance;
 import development.Vector;
 
 /* This is a particular type of VisibleObject which is used in BasicMovingObjects and ShootingGame

@@ -3,6 +3,8 @@ package markers;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import markersMKII.MarkerAppearance;
+
 import development.Vector;
 
 /* This is a type of ObjectDynamics which allows the user to add some moving targets and bullets
