@@ -33,9 +33,9 @@ import javax.swing.event.ChangeListener;
 import markers.BasicMovingMarkers;
 import markers.ManifoldPosition;
 import markers.MovingMarker;
-import markers.MarkerAppearance;
 import markers.MarkerDynamics;
 import markers.VisibleMarker;
+import markersMKII.MarkerAppearance;
 
 import triangulation.Face;
 import triangulation.Triangulation;

@@ -34,8 +34,8 @@ import javax.swing.event.ChangeListener;
 import development.Vector;
 
 import markers.ManifoldPosition;
-import markers.MarkerAppearance;
 import markersMKII.Marker;
+import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
 
 public class ViewerController extends JFrame {

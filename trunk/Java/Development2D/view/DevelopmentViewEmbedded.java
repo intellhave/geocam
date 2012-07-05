@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Set;
 
 import markers.ManifoldMarkerHandler;
-import markers.MarkerAppearance;
 import markers.VisibleMarker;
+import markersMKII.MarkerAppearance;
 
 import triangulation.Face;
 import triangulation.Triangulation;

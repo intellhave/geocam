@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import markers.ManifoldPosition;
-import markers.MarkerAppearance;
 import markers.VisibleMarker;
+import markersMKII.MarkerAppearance;
 
 import triangulation.Edge;
 import triangulation.Face;

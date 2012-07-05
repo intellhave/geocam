@@ -3,8 +3,8 @@ package view;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import markers.MarkerAppearance;
 import markers.PathAppearance;
+import markersMKII.MarkerAppearance;
 
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedLineSetFactory;

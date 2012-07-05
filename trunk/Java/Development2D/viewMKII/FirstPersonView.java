@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
-import markers.MarkerAppearance;
 import markersMKII.Marker;
+import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
 import view.ColorScheme;
 import view.SGCMethods.DevelopmentGeometrySim3D;

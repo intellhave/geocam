@@ -24,8 +24,8 @@ import development.EmbeddedTriangulation;
 import development.Vector;
 
 import markers.ManifoldPosition;
-import markers.MarkerAppearance;
 import markersMKII.Marker;
+import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
 
 public class CookieGame {
@@ -67,7 +67,7 @@ public class CookieGame {
       "Data/Triangulations/2DManifolds/tetrahedronnew.xml",// 13
       "Data/Triangulations/2DManifolds/torus-9-2.xml",// 14
       "Data/Triangulations/2DManifolds/domain.xml"};//15
-  private static String filename = filenames[3];
+  private static String filename = filenames[5];
 
   private static void initModel() {
     loadSurface(filename);

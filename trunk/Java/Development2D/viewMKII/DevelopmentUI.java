@@ -13,8 +13,8 @@ import java.util.Random;
 import javax.swing.JFrame;
 
 import markers.ManifoldPosition;
-import markers.MarkerAppearance;
 import markersMKII.Marker;
+import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -152,8 +152,7 @@ public class DevelopmentUI {
    *********************************************************************************/
   public static void runSimulation() {
     
-    final long dt = 10; // Timestep size, in microseconds
-    // final long maxFrameTime = 80;
+    final long dt = 10; // Timestep size, in microseconds    
 
     paused = false;
     
@@ -175,6 +174,7 @@ public class DevelopmentUI {
         // FIXME: This code will make sure the source point marker is displayed
         // correctly, but this code does not belong in the DevelopmentUI class.
         // Refactoring is needed here.
+        
         // PATCH START
         Face prev = development.getSource().getFace();        
         userControl.runNextAction();
@@ -185,16 +185,8 @@ public class DevelopmentUI {
         // PATCH END
         
         markers.updateMarkers(dt);
-
         accumulator -= dt;
       }
-
-      // Normally, we would form a "convex combination" of our current and
-      // previous states here, to ensure a smooth animation. We will omit
-      // this code for now.
-      // const double alpha = accumulator / dt;
-      // State state = currentState*alpha + previousState * ( 1.0 - alpha );
-
       render();
     }
     t.interrupt();
@@ -228,7 +220,7 @@ public class DevelopmentUI {
     String filename = "Data/blender/cube_surf.off";
     //String newFile = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
     //String brokenFile = "Data/Triangulations/2DManifolds/octahedron.xml";
-   //String mobius = "Data/off/mobius.off";
+    //String mobius = "Data/off/mobius.off";
     //String domain = "Data/Triangulations/2DManifolds/domain.xml";
     loadSurface(filename);
   }

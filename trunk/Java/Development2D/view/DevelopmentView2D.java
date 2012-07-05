@@ -13,8 +13,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import markers.MarkerAppearance;
 import markers.VisibleMarker;
+import markersMKII.MarkerAppearance;
 
 import view.SGCMethods.DevelopmentGeometry;
 import de.jreality.geometry.IndexedFaceSetFactory;
