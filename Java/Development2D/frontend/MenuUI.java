@@ -8,7 +8,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import viewMKII.CookieGame;
 import viewMKII.DevelopmentUI;
+import controllerMKII.KeyboardMenuController;
 import controllerMKII.SNESMenuController;
 import controllerMKII.UserController;
 import controllerMKII.UserController.Action;
@@ -33,15 +35,16 @@ public class MenuUI extends JFrame {
 
   // TODO: Build all menus the user will actually see, and integrate this with
   // the simulation UI
-  
+
   private UserController controller;
+  private Boolean exit;
 
   /*********************************************************************************
    * Image data
    * 
    * These are the composite BufferedImages that will be displayed to the user.
-   * To improve the speed of the program (i.e. to avoid repeatedly reading from 
-   * the disk) these images are read in from image files only once as the 
+   * To improve the speed of the program (i.e. to avoid repeatedly reading from
+   * the disk) these images are read in from image files only once as the
    * program initializes.
    * 
    *********************************************************************************/
@@ -56,9 +59,11 @@ public class MenuUI extends JFrame {
 
   private static BufferedImage about;
   private static BufferedImage tag;
-  private static BufferedImage cookie;
+  // private static BufferedImage cookie;
   private static BufferedImage options;
   private static BufferedImage paused;
+  private static BufferedImage cookiePaused;
+  private static BufferedImage cookieWin;
 
   private static BufferedImage currentMenu;
 
@@ -75,13 +80,15 @@ public class MenuUI extends JFrame {
    *********************************************************************************/
 
   public MenuUI() {
-    controller = new SNESMenuController();
+    // controller = new SNESMenuController();
+    controller = new KeyboardMenuController();
     try {
       initFiles();
     } catch (IOException ioe) {
-      System.err.println("Error: Could not locate menu images.");      
+      System.err.println("Error: Could not locate menu images.");
       ioe.printStackTrace();
     }
+
     initMenuView();
   }
 
@@ -91,9 +98,9 @@ public class MenuUI extends JFrame {
    *********************************************************************************/
 
   private void initFiles() throws IOException {
-    final String bg_path = "Data/frontend/backgrounds/";
-    final String menu_path = "Data/frontend/menus/";
-    
+    final String bg_path = "Data/menu/backgrounds/";
+    final String menu_path = "Data/menu/menus/";
+
     File startMenuBackground = new File(bg_path + "dodecBackground.png");
     File gameMenuBackground = new File(bg_path + "barbellBackground2.png");
     File explorerMenuBackground = new File(bg_path + "dodecFirstPerson.png");
@@ -104,13 +111,16 @@ public class MenuUI extends JFrame {
     File gameMenu_tag = new File(menu_path + "GameSelection_tag.png");
     File gameMenu_cookie = new File(menu_path + "GameSelection_cookie.png");
     File explorerMenu_start = new File(menu_path + "SurfaceExplorer_start.png");
-    File explorerMenu_options = new File(menu_path + "SurfaceExplorer_options.png");
+    File explorerMenu_options = new File(menu_path
+        + "SurfaceExplorer_options.png");
 
     File aboutPage = new File(menu_path + "AboutPage.png");
     File tagGame = new File(menu_path + "TagGame.png");
-    File cookieGame = new File(menu_path + "CookieGame.png");
+    //File cookieGame = new File(menu_path + "CookieGame.png");
     File explorerOptions = new File(menu_path + "Options.png");
     File pause_screen = new File(menu_path + "Paused.png");
+    File pause_cookie = new File(menu_path + "CookiePaused.png");
+    File win = new File(menu_path + "CookieWin.png");
 
     start_games = compose(startMenuBackground, startMenu_games);
     start_explorer = compose(startMenuBackground, startMenu_explorer);
@@ -122,9 +132,11 @@ public class MenuUI extends JFrame {
 
     about = compose(aboutPage, aboutPage);
     tag = compose(tagGame, tagGame);
-    cookie = compose(cookieGame, cookieGame);
+    // cookie = compose(cookieGame, cookieGame);
     options = compose(explorerOptions, explorerOptions);
     paused = compose(pause_screen, pause_screen);
+    cookiePaused = compose(pause_cookie, pause_cookie);
+    cookieWin = compose(win, win);
   }
 
   /*********************************************************************************
@@ -151,36 +163,37 @@ public class MenuUI extends JFrame {
   /*********************************************************************************
    * startMenu, gameMenu, explorerMenu, etc
    * 
-   * Each menu is implemented as a static method. It has a menu state integer which 
-   * keeps track of which option is highlighted on the screen, and it displays 
-   * different states to the user as different BufferedImages (creating the 
-   * illusion of interactive menus).
+   * Each menu is implemented as a static method. It has a menu state integer
+   * which keeps track of which option is highlighted on the screen, and it
+   * displays different states to the user as different BufferedImages (creating
+   * the illusion of interactive menus).
    * 
    * For example, explorerMenu has two states with two different images: one
    * where the "start" button is highlighted and one where the "options" button
    * is highlighted. Inside explorerMenu a while loop is continuously running
-   * checking for user input. When the user "selects" one of the options, 
-   * explorerMenu either calls the optionsMenu method or starts the explorer 
+   * checking for user input. When the user "selects" one of the options,
+   * explorerMenu either calls the optionsMenu method or starts the explorer
    * simulation.
    * 
-   * The menus are implemented as a tree. For example suppose the user is viewing 
-   * the explorerMenu. If they then wish to go back to the previous menu, 
-   * explorerMenu breaks from its while loop and the previous menu's while loop 
-   * resumes where it left off.
+   * The menus are implemented as a tree. For example suppose the user is
+   * viewing the explorerMenu. If they then wish to go back to the previous
+   * menu, explorerMenu breaks from its while loop and the previous menu's while
+   * loop resumes where it left off.
    * 
    *********************************************************************************/
 
-  //  TODO: Is this enum necessary for anything?
-  
-//  private static enum MenuState {
-//    START_GAMES, START_EXPLORER, START_ABOUT, GAME_TAG, GAME_COOKIE, EXPLORER_START, EXPLORER_OPTIONS
-//  };
+  // TODO: Is this enum necessary for anything?
+
+  // private static enum MenuState {
+  // START_GAMES, START_EXPLORER, START_ABOUT, GAME_TAG, GAME_COOKIE,
+  // EXPLORER_START, EXPLORER_OPTIONS
+  // };
 
   private void startMenu() {
     BufferedImage[] menuImages = { start_games, start_explorer, start_about };
     currentMenu = start_games;
     int state = 0;
-    
+
     this.repaint();
 
     controller.clear();
@@ -188,8 +201,9 @@ public class MenuUI extends JFrame {
 
     while (true) {
       act = controller.getNextAction();
-      if( act == null ) continue;
-      
+      if (act == null)
+        continue;
+
       switch (act) {
       case Back:
         state = (state + 1) % 3;
@@ -216,16 +230,17 @@ public class MenuUI extends JFrame {
     BufferedImage[] menuImages = { game_tag, game_cookie };
     currentMenu = game_tag;
     int state = 0;
-    
+
     this.repaint();
 
     Action act = null;
 
     while (true) {
       act = controller.getNextAction();
-      if (act == null) continue;
-      
-      switch(act) {
+      if (act == null)
+        continue;
+
+      switch (act) {
       case Back:
       case Forward:
         state = (state + 1) % 2;
@@ -234,14 +249,83 @@ public class MenuUI extends JFrame {
         if (state == 0)
           tagGame();
         else
-          cookieGame();
+          runCookie();
         break;
       }
-      if( act == Action.B_Button)
+      if (act == Action.B_Button)
         break;
-      
+
       currentMenu = menuImages[state];
       this.repaint();
+    }
+  }
+
+  /*********************************************************************************
+   * runCookie
+   * 
+   * This method monitors the state of the cookie game until the player chooses
+   * to exit. It switches control between the win menu and the pause menu as
+   * necessary, then returns control to gameMenu when done.
+   *********************************************************************************/
+  private void runCookie() {
+    exit = false;
+    this.setVisible(false);
+    CookieGame.runCookie();
+    while (!exit) {
+      if (CookieGame.gameWon) {
+        CookieGame.quitCookie();
+        cookieWinMenu();
+      }
+      if (CookieGame.paused) {
+        cookiePauseMenu();
+      }
+    }
+  }
+
+  private void cookiePauseMenu() {
+    currentMenu = cookiePaused;
+    this.repaint();
+    this.setVisible(true);
+
+    Action a = null;
+    while (true) {
+      a = controller.getNextAction();
+      if (a == null)
+        continue;
+      if (a == Action.B_Button) {
+        this.setVisible(false);
+        CookieGame.runGame();
+        break;
+      }
+      if (a == Action.A_Button) {
+        CookieGame.quitCookie();
+        exit = true;
+        break;
+      }
+    }
+  }
+
+  private void cookieWinMenu() {
+    currentMenu = cookieWin;
+    this.repaint();
+    this.setVisible(true);
+
+    Action a = null;
+
+    while (true) {
+      a = controller.getNextAction();
+      if (a == null)
+        continue;
+
+      if (a == Action.B_Button) {
+        this.setVisible(false);
+        CookieGame.runCookie();
+        break;
+      }
+      if (a == Action.A_Button) {
+        exit = true;
+        break;
+      }
     }
   }
 
@@ -249,14 +333,15 @@ public class MenuUI extends JFrame {
     BufferedImage[] menuImages = { explorer_start, explorer_options };
     currentMenu = explorer_start;
     int state = 0;
-    
+
     this.repaint();
 
     Action act = null;
 
     while (true) {
       act = controller.getNextAction();
-      if (act == null) continue;
+      if (act == null)
+        continue;
 
       switch (act) {
       case Back:
@@ -273,17 +358,17 @@ public class MenuUI extends JFrame {
           // This means that the Explorer simulation is currently paused.
           // Consequently, we need to bring the menu windows back and restore
           // the menu controller.
-          
-          //this.setVisible(true);
-          initMenuControls();
+
+          // this.setVisible(true);
+
+          // resumeController();
           pauseExplorerMenu();
-        } 
-        else
+        } else
           explorerOptions();
       }
       if (act == Action.B_Button)
         break;
-      
+
       currentMenu = menuImages[state];
       this.repaint();
     }
@@ -295,27 +380,27 @@ public class MenuUI extends JFrame {
     this.setVisible(true);
 
     Action a = null;
-    
+
     while (true) {
       a = controller.getNextAction();
-      if (a == null) continue;
-      
-      if( a == Action.B_Button){
-        this.setVisible(false);        
+      if (a == null)
+        continue;
+
+      if (a == Action.B_Button) {
+        this.setVisible(false);
         DevelopmentUI.runSimulation();
         this.setVisible(true);
-        initMenuControls();
       }
-      if( a == Action.A_Button ){
+      if (a == Action.A_Button) {
         DevelopmentUI.quitExplorer();
         break;
       }
     }
   }
 
-  // TODO: Implement About page
-  private void aboutPage() {
-    currentMenu = about;
+  // TODO: implement options menu
+  private void explorerOptions() {
+    currentMenu = options;
     this.repaint();
 
     Action a = null;
@@ -345,25 +430,9 @@ public class MenuUI extends JFrame {
     }
   }
 
-  // TODO: Implement Cookie game
-  private void cookieGame() {
-    currentMenu = cookie;
-    this.repaint();
-
-    Action a = null;
-
-    while (true) {
-      a = controller.getNextAction();
-      if (a == null)
-        continue;
-      if (a == Action.B_Button)
-        break;
-    }
-  }
-
-  // TODO: implement options menu
-  private void explorerOptions() {
-    currentMenu = options;
+  // TODO: Implement About page
+  private void aboutPage() {
+    currentMenu = about;
     this.repaint();
 
     Action a = null;
@@ -389,9 +458,9 @@ public class MenuUI extends JFrame {
   /*********************************************************************************
    * compose
    * 
-   * This method takes as input two files, which contain images: a background
+   * This method takes as input two files which contain images: a background
    * image (such as a screenshot from DevelopmentUI) and a foreground menu image
-   * (which has a transparent background and options buttons). It composes these
+   * (which has a transparent background and option buttons). It composes these
    * two images and saves the result to a BufferedImage, which it returns.
    * 
    * If the background image is too big, this method crops an area out of the
@@ -448,23 +517,4 @@ public class MenuUI extends JFrame {
 
     return composition;
   }
-
-  /***********************************************************************
-   * initMenuControls
-   * 
-   * This method is responsible for reinitializing the MenuController after
-   * control has been passed to another piece of code. For example, whenever a
-   * simulation runs, it needs input from a UserController object, which
-   * prevents us from simultaneously receiving MenuController input. So, we need
-   * to reinitialize a MenuController after finishing/pausing a simulation.
-   * 
-   * TODO: Is there a better way of doing this than just creating a new
-   * controller object?
-   ***********************************************************************/
-  private void initMenuControls() {
-    controller = new SNESMenuController();
-    Thread t = new Thread(controller);
-    t.start();
-  }
-
 }
