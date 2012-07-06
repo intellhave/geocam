@@ -19,33 +19,32 @@ import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.DataList;
 import de.jreality.util.Input;
 
-/*
+/*********************************************************************************
  * EmbeddedTriangulation
  * 
- *  Overview: This class contains the information that associates
- *    data from the triangulation with its 3D rendered object 
- *    (for instance, if triangulation is read from an OFF file)
- *    
- *    This allows us to use jReality file reader, then converts
- *    to Geocam structure, while also maintaining the embedded info.
- *    
- *    Possible upgrades:
- *        * move this to an I/O directory?
- */
-
-//HOW TO USE THIS CLASS
-//----------------------------------
-// First read a file (any format jReality supports), e.g. readEmbeddedSurface("models/cone.off").
-// Now Triangulation, Length, Coord, and CoordTrans are ready to go.
-//
-// A SceneGraphComponent containing the manifold can be retrieved with getSGC()
-//
-// To find where a point on the abstract triangulation is in the embedding, 
-// do EmbeddedTriangulation.getCoords3D(Face f, Vector v) where v is some 2D point
-// in the coordinates on f (which can be retrieved using the Coord2D geoquant).
-//
-// Note:  At the moment it is assumed that the embedded surface consists of triangles.
-//----------------------------------
+ * Overview: This class contains the information that associates data from the
+ * triangulation with its 3D rendered object (for instance, if triangulation is
+ * read from an OFF file)
+ * 
+ * This allows us to use jReality file reader, then converts to Geocam
+ * structure, while also maintaining the embedded info.
+ * 
+ * Possible upgrades: * move this to an I/O directory?
+ * 
+ * How to use this class:
+ * 
+ * First read a file (any format jReality supports), e.g.
+ * readEmbeddedSurface("models/cone.off"). Now Triangulation, Length, Coord, and
+ * CoordTrans are ready to go. A SceneGraphComponent containing the manifold can
+ * be retrieved with getSGC()
+ * 
+ * To find where a point on the abstract triangulation is in the embedding, do
+ * EmbeddedTriangulation.getCoords3D(Face f, Vector v) where v is some 2D point
+ * in the coordinates on f (which can be retrieved using the Coord2D geoquant).
+ * 
+ * Note: At the moment it is assumed that the embedded surface consists of
+ * triangles.
+ *********************************************************************************/
 
 public class EmbeddedTriangulation {
 
@@ -86,6 +85,20 @@ public class EmbeddedTriangulation {
     return EmbeddedManifoldFaceData.get(f).getCoord3D(v);
   }
 
+  public static double[][] getFaceGeometry(Face f){
+    if(! isEmbedded) return null;
+    
+    double[][] faceVerts = new double[3][3];
+    int vIndex = 0;
+    for(Vertex v : f.getLocalVertices()){
+      Vector psn = getCoord3D(v);
+      faceVerts[vIndex] = psn.getVectorAsArray();
+      vIndex += 1;
+    }
+    
+    return faceVerts;
+  }
+  
   public static Geometry get3DGeometry(HashMap<Face, Color> color_scheme) {
 
     if (!isEmbedded) {
@@ -136,7 +149,6 @@ public class EmbeddedTriangulation {
     }
 
     IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
-
     ifsf.setVertexCount(ifsf_verts.length);
     ifsf.setVertexCoordinates(ifsf_verts);
     ifsf.setFaceCount(ifsf_faces.length);
@@ -389,7 +401,7 @@ public class EmbeddedTriangulation {
         Triangulation.putFace(new Face(i));
       }
     }
-    
+
     for (int i = 0; i < nedges; i++) {
       Triangulation.putEdge(new Edge(i));
     }
@@ -602,14 +614,15 @@ public class EmbeddedTriangulation {
 
   public static Vector getEmbeddedNormal(Face f) {
     EmbeddedFace ef = EmbeddedManifoldFaceData.get(f);
-    return Vector.normalize(Vector.cross( ef.tx_, ef.ty_ ));    
+    return Vector.normalize(Vector.cross(ef.tx_, ef.ty_));
   }
-  
-  public static Vector embedVector( Face f, Vector vec2d ){
+
+  public static Vector embedVector(Face f, Vector vec2d) {
     EmbeddedFace ef = EmbeddedManifoldFaceData.get(f);
     Vector x = ef.tx_;
-    Vector y = ef.ty_;   
-    return Vector.add( Vector.scale(x, vec2d.getComponent(0)), Vector.scale(y, vec2d.getComponent(1)));
+    Vector y = ef.ty_;
+    return Vector.add(Vector.scale(x, vec2d.getComponent(0)),
+        Vector.scale(y, vec2d.getComponent(1)));
   }
- 
+
 };

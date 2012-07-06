@@ -3,10 +3,9 @@ package development;
 import java.util.LinkedList;
 import java.util.List;
 
-import markers.ManifoldPosition;
-import markers.VisibleMarker;
+import markersMKII.ManifoldPosition;
+import markersMKII.Marker;
 import markersMKII.MarkerAppearance;
-
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
@@ -39,7 +38,7 @@ public class Development {
   
   private ManifoldPosition source;
 
-  private VisibleMarker sourceObject; //fixed object at source point
+  private Marker sourceObject; //fixed object at source point
 
   private int maxDepth;
 
@@ -63,7 +62,7 @@ public class Development {
 
     maxDepth = depth;
     source = sourcePoint;
-    sourceObject = new VisibleMarker(source, new MarkerAppearance());
+    sourceObject = new Marker(source, new MarkerAppearance());
     rebuild();
   }
 
@@ -76,7 +75,7 @@ public class Development {
     
     maxDepth = depth;
     source = sourcePoint;
-    sourceObject.setManifoldPosition(source);
+    sourceObject.setPosition(source);
     rebuild();
   }
   
@@ -90,7 +89,7 @@ public class Development {
 
   public DevelopmentNode getRoot() { return root; }
   public ManifoldPosition getSource() { return source; }
-  public VisibleMarker getSourceObject() { return sourceObject; }
+  public Marker getSourceObject() { return sourceObject; }
   public int getDepth() { return maxDepth; }
 
   // ---------------------------------------------
@@ -105,7 +104,7 @@ public class Development {
     // important to reset the sourceObject's manifold position.
     // I would think this ought to be covered by pointing to
     // the same ManifoldPosition object, but this isn't true. 
-    sourceObject.setManifoldPosition(source);
+    sourceObject.setPosition(source);
     rebuild();
   }
   
@@ -119,7 +118,7 @@ public class Development {
     source.move(source.getDirection(dForward, dLeft));
     // jthomas: For reasons I don't understand, it is very
     // important to reset the sourceObject's manifold position.
-    sourceObject.setManifoldPosition(source);
+    sourceObject.setPosition(source);
     rebuild();
     
   }
