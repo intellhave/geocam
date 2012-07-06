@@ -12,15 +12,13 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import markers.ManifoldPosition;
+import markersMKII.ManifoldPosition;
 import markersMKII.Marker;
 import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import view.ColorScheme;
-import view.ColorScheme.schemes;
 import controllerMKII.KeyboardController;
 import controllerMKII.SNESController;
 import controllerMKII.UserController;
@@ -89,8 +87,8 @@ public class DevelopmentUI {
   static View[] views;
   static ViewerController viewerControl;
   
-  private static ColorScheme colorScheme;
-
+  private static FaceAppearanceScheme faceScheme;
+  
   public static void main(String[] args) {
     // This is a good option to set if you wan't more information about what
     // JReality does behind the scenes
@@ -217,7 +215,8 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    String filename = "Data/blender/cube_surf.off";
+    //String filename = "Data/blender/cube_surf.off";
+    String filename = "Data/off/dodec.off";
     //String newFile = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
     //String brokenFile = "Data/Triangulations/2DManifolds/octahedron.xml";
     //String mobius = "Data/off/mobius.off";
@@ -319,14 +318,14 @@ public class DevelopmentUI {
    * this information.
    *********************************************************************************/
   private static void initViews() {
-    colorScheme = new ColorScheme(schemes.FACE);
+    faceScheme = new FaceAppearanceScheme();
 
     int viewCount = 3;
     views = new View[viewCount];
     // views[0] = new FirstPersonView(development, markers, colorScheme);
-    views[0] = new FirstPersonView(development, markers, colorScheme);
-    views[1] = new ExponentialView(development, markers, colorScheme);
-    views[2] = new EmbeddedView(development, markers, colorScheme);
+    views[0] = new FirstPersonView(development, markers, faceScheme);
+    views[1] = new ExponentialView(development, markers, faceScheme);
+    views[2] = new EmbeddedView(development, markers, faceScheme);
 
     int[][] framePositions = { { 0, 10 }, { 400, 10 }, { 800, 10 } };
     int[][] frameSizes = { { 400, 400 }, { 400, 400 }, { 400, 400 } };

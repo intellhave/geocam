@@ -1,22 +1,23 @@
 package viewMKII;
 
-import java.awt.Color;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
-import markers.ManifoldPosition;
+import markersMKII.ManifoldPosition;
 import markersMKII.Marker;
 import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
-import view.ColorScheme;
+import viewMKII.TextureLibrary.TextureDescriptor;
+import de.jreality.geometry.IndexedFaceSetFactory;
+import de.jreality.math.Matrix;
 import de.jreality.math.MatrixBuilder;
+import de.jreality.scene.Appearance;
 import de.jreality.scene.DirectionalLight;
-import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.data.Attribute;
 import development.EmbeddedTriangulation;
 import development.Vector;
 
@@ -38,19 +39,19 @@ public class EmbeddedView extends View {
   /*********************************************************************************
    * EmbeddedView
    * 
-   * Given a development object and a colorscheme, this constructor initializes
+   * Given a development object and a color scheme, this constructor initializes
    * an EmbeddedView object to display the specified surface.
    *********************************************************************************/
-  public EmbeddedView(Development d, MarkerHandler mh, ColorScheme cs) {
-    super(d, mh, cs);
+  public EmbeddedView(Development d, MarkerHandler mh, FaceAppearanceScheme fas) {
+    super(d, mh, fas);
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
 
     // create lights
     // TODO: Adding more than 5 lights appears to break jReality.
     int numlights = 4;
-    double[][] light_psns = { { 1, 0, 1 }, { -1, 0, 1 }, { 0, 1, 1 },
-        { 0, -1, 1 } };
+    double[][] light_psns = 
+      { { 1, 0, 1 }, { -1, 0, 1 }, { 0, 1, 1 }, { 0, -1, 1 } };
 
     for (int ii = 0; ii < numlights; ii++) {
       SceneGraphComponent sgcLight = new SceneGraphComponent();
@@ -83,21 +84,25 @@ public class EmbeddedView extends View {
     left.normalize();
     normal.normalize();
 
+    Matrix rot = MatrixBuilder.euclidean().rotate( -Math.PI/4, left.getVectorAsArray()).getMatrix();
+    Vector adjustedNormal = new Vector(rot.multiplyVector(normal.getVectorAsArray()));
+    Vector adjustedForward = new Vector(rot.multiplyVector(forward.getVectorAsArray()));
+    Vector adjustedLeft = left;
     double matrix[] = new double[16];
 
-    matrix[0 * 4 + 0] = forward.getComponent(0);
-    matrix[0 * 4 + 1] = left.getComponent(0);
-    matrix[0 * 4 + 2] = normal.getComponent(0);
+    matrix[0 * 4 + 0] = adjustedForward.getComponent(0);
+    matrix[0 * 4 + 1] = adjustedLeft.getComponent(0);
+    matrix[0 * 4 + 2] = adjustedNormal.getComponent(0);
     matrix[0 * 4 + 3] = 0.0;
 
-    matrix[1 * 4 + 0] = forward.getComponent(1);
-    matrix[1 * 4 + 1] = left.getComponent(1);
-    matrix[1 * 4 + 2] = normal.getComponent(1);
+    matrix[1 * 4 + 0] = adjustedForward.getComponent(1);
+    matrix[1 * 4 + 1] = adjustedLeft.getComponent(1);
+    matrix[1 * 4 + 2] = adjustedNormal.getComponent(1);
     matrix[1 * 4 + 3] = 0.0;
 
-    matrix[2 * 4 + 0] = forward.getComponent(2);
-    matrix[2 * 4 + 1] = left.getComponent(2);
-    matrix[2 * 4 + 2] = normal.getComponent(2);
+    matrix[2 * 4 + 0] = adjustedForward.getComponent(2);
+    matrix[2 * 4 + 1] = adjustedLeft.getComponent(2);
+    matrix[2 * 4 + 2] = adjustedNormal.getComponent(2);
     matrix[2 * 4 + 3] = 0.0;
 
     matrix[3 * 4 + 0] = 0.0;
@@ -105,11 +110,14 @@ public class EmbeddedView extends View {
     matrix[3 * 4 + 2] = 0.0;
     matrix[3 * 4 + 3] = 1.0;
 
-    normal.scale(2.0);
+    adjustedNormal.scale(3.0);
 
-    MatrixBuilder.euclidean().translate(normal.getVectorAsArray())
-        .translate(embPsn.getVectorAsArray()).times(matrix)
-        .rotateZ(-Math.PI / 2).assignTo(sgcCamera);
+    MatrixBuilder.euclidean()
+        .translate(adjustedNormal.getVectorAsArray())
+        .translate(embPsn.getVectorAsArray())
+        .times(matrix)
+        .rotateZ(-Math.PI / 2)
+        .assignTo(sgcCamera);
   }
 
   /*********************************************************************************
@@ -123,19 +131,30 @@ public class EmbeddedView extends View {
     }
     sgcpools.clear();
 
-    // use EmbeddedTriangulation to draw the polyhedron (if it exists)
-    HashMap<Face, Color> faceColors = new HashMap<Face, Color>();
-    // Set<Integer> faceIndexSet = Triangulation.faceTable.keySet();
+    int[][] ifsf_faces = new int[][]{ {0,1,2} };     
+    
+    for( Face f : Triangulation.faceTable.values() ){
+      double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
+      
+      IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();      
+      ifsf.setVertexCount(verts.length);
+      ifsf.setVertexCoordinates(verts);      
+      ifsf.setFaceCount(ifsf_faces.length);
+      ifsf.setFaceIndices(ifsf_faces);      
+      ifsf.setGenerateEdgesFromFaces(true);
+      ifsf.setGenerateFaceNormals(true);
+      ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, verts);
+      ifsf.update();
 
-    HashMap<Integer, Face> faceTable = Triangulation.faceTable;
-    Set<Integer> faceIndices = faceTable.keySet();
-    for (Integer i : faceIndices) {
-      Face f = faceTable.get(i);
-      faceColors.put(f, colorScheme.getColor(f));
+      TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+      Appearance app = TextureLibrary.getAppearance(td);
+      
+      SceneGraphComponent sgc = new SceneGraphComponent();
+      sgc.setGeometry(ifsf.getGeometry());
+      sgc.setAppearance(app);
+      sgcDevelopment.addChild(sgc);
     }
-
-    Geometry g = EmbeddedTriangulation.get3DGeometry(faceColors);
-    sgcDevelopment.setGeometry(g);
+           
     updateCamera();    
   }
 
@@ -145,7 +164,6 @@ public class EmbeddedView extends View {
    * See the documentation in View. In this particular view, we don't ever need
    * to change the (computer-graphics related) geometry of the polygons we use
    * to represent the surface, so this method is empty.
-   * 
    *********************************************************************************/
   protected void generateManifoldGeometry() {
   }
@@ -155,7 +173,6 @@ public class EmbeddedView extends View {
    * 
    * See the documentation in View. In this particular view, we need to position
    * and orient each marker in R^3, based upon its coordinates on the surface.
-   * 
    *********************************************************************************/
   protected void generateMarkerGeometry() {
 

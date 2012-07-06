@@ -10,8 +10,6 @@ import java.util.Set;
 import markersMKII.Marker;
 import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
-import view.ColorScheme;
-import view.SGCMethods.DevelopmentGeometrySim3D;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.SceneGraphComponent;
@@ -39,8 +37,8 @@ public class FirstPersonView extends ExponentialView {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public FirstPersonView(Development dev, MarkerHandler mh, ColorScheme cs) {
-    super(dev, mh, cs); // This call initializes the sgcpools datastructure.
+  public FirstPersonView(Development dev, MarkerHandler mh, FaceAppearanceScheme fas) {
+    super(dev, mh, fas); // This call initializes the sgcpools datastructure.
 
     // The call to super also initializes sgcLight, and attaches it to the
     // camera. However, we wish to orient the light differently.
@@ -111,8 +109,8 @@ public class FirstPersonView extends ExponentialView {
     geometry.addFace(face, height);
 
     // (adding two faces at a time)
-    colors.add(colorScheme.getColor(devNode));
-    colors.add(colorScheme.getColor(devNode));
+    colors.add(faceAppearanceScheme.getColor(devNode.getFace()));
+    colors.add(faceAppearanceScheme.getColor(devNode.getFace()));
 
     Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
     while (itr.hasNext()) {

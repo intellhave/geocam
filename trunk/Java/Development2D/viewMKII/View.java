@@ -14,7 +14,6 @@ import javax.media.opengl.GLCanvas;
 import markersMKII.Marker;
 import markersMKII.MarkerHandler;
 
-import view.ColorScheme;
 import de.jreality.jogl.JOGLRenderer;
 import de.jreality.jogl.Viewer;
 import de.jreality.math.MatrixBuilder;
@@ -50,7 +49,7 @@ public abstract class View {
    *********************************************************************************/
   protected Development development;
   protected MarkerHandler markers;
-  protected ColorScheme colorScheme;
+  protected FaceAppearanceScheme faceAppearanceScheme;
 
   /*********************************************************************************
    * Scene Graph Data
@@ -86,10 +85,10 @@ public abstract class View {
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
   public View(Development development, MarkerHandler markers,
-      ColorScheme colorScheme) {
+      FaceAppearanceScheme fas) {
     this.development = development;
     this.markers = markers;
-    this.colorScheme = colorScheme;
+    this.faceAppearanceScheme = fas;
 
     initSceneGraph();
     initAppearances();
@@ -147,14 +146,14 @@ public abstract class View {
   }
 
   /*********************************************************************************
-   * setColorScheme
+   * setFaceAppearanceScheme
    * 
    * This method takes as input a ColorScheme object, and uses it to color the
    * faces/edges/vertices that make up the Development. As a side effect, this
    * method forces an update to the development's geometry.
    *********************************************************************************/
-  public void setColorScheme(ColorScheme scheme) {
-    colorScheme = scheme;
+  public void setFaceAppearanceScheme(FaceAppearanceScheme scheme) {
+    faceAppearanceScheme = scheme;
     updateGeometry(true, false);
   }
 

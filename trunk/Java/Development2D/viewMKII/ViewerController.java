@@ -31,7 +31,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import markers.ManifoldPosition;
+import markersMKII.ManifoldPosition;
 import markersMKII.Marker;
 import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
@@ -70,7 +70,6 @@ public class ViewerController extends JFrame {
    * 
    * Data required for laying out the window
    ********************************************************************************/
-  
   private JMenuBar menuBar;
   private JMenu file;
   private JMenuItem open;
