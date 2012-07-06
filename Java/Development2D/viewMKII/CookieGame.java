@@ -1,32 +1,27 @@
 package viewMKII;
 
+import inputOutput.TriangulationIO;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
-
-import inputOutput.TriangulationIO;
 
 import javax.swing.JFrame;
 
+import markersMKII.ManifoldPosition;
+import markersMKII.Marker;
+import markersMKII.MarkerAppearance;
+import markersMKII.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import view.ColorScheme;
-import view.ColorScheme.schemes;
-
 import controllerMKII.KeyboardController;
 import controllerMKII.UserController;
 import development.Coord2D;
 import development.EmbeddedTriangulation;
 import development.Vector;
-
-import markers.ManifoldPosition;
-import markersMKII.Marker;
-import markersMKII.MarkerAppearance;
-import markersMKII.MarkerHandler;
 
 public class CookieGame {
 
@@ -41,7 +36,7 @@ public class CookieGame {
   private static Development development;
   private static JFrame viewer;
   private static UserController userControl;
-  private static ColorScheme colorScheme;
+  private static FaceAppearanceScheme faceAppearanceScheme;
   private static View gameView;
 
   private static final int recursionDepth = 5;
@@ -129,10 +124,10 @@ public class CookieGame {
   }
 
   private static void initView() {
-    colorScheme = new ColorScheme(schemes.FACE);
+    faceAppearanceScheme = new FaceAppearanceScheme();
     int[] framePosition = { 0, 10 };
     int[] frameSize = { 700, 700 };
-    gameView = new ExponentialView(development, markers, colorScheme);
+    gameView = new ExponentialView(development, markers, faceAppearanceScheme);
     gameView.updateGeometry();
     gameView.initializeNewManifold();
     gameView.updateScene();

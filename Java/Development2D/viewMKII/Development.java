@@ -3,7 +3,7 @@ package viewMKII;
 import java.util.LinkedList;
 import java.util.List;
 
-import markers.ManifoldPosition;
+import markersMKII.ManifoldPosition;
 import markersMKII.Marker;
 import markersMKII.MarkerAppearance;
 import triangulation.Edge;

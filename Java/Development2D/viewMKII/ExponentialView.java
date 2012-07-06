@@ -6,14 +6,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
-import markers.ManifoldPosition;
+import markersMKII.ManifoldPosition;
 import markersMKII.Marker;
 import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
-import view.ColorScheme;
-import view.SGCMethods.DevelopmentGeometry;
+import viewMKII.TextureLibrary.TextureDescriptor;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Appearance;
@@ -49,8 +48,8 @@ public class ExponentialView extends View {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public ExponentialView(Development d, MarkerHandler mh, ColorScheme cs) {
-    super(d, mh, cs);
+  public ExponentialView(Development d, MarkerHandler mh, FaceAppearanceScheme fas) {
+    super(d, mh, fas);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
 
     // create light
@@ -128,13 +127,8 @@ public class ExponentialView extends View {
       ifsf.setGenerateEdgesFromFaces(true);
       ifsf.update();
 
-      Appearance app;
-      if( f.getIndex() % 2 == 0 ){
-        app = TextureLibrary.getAppearance(TextureLibrary.TextureDescriptor.LIGHTHOUSE);
-      } else {
-        app = TextureLibrary.getAppearance(TextureLibrary.TextureDescriptor.CHECKER);
-      }
-     
+      TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+      Appearance app = TextureLibrary.getAppearance(td);      
       sgc.setGeometry(ifsf.getGeometry());
       sgc.setAppearance(app);
     }
