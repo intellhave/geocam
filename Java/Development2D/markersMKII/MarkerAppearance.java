@@ -1,12 +1,5 @@
 package markersMKII;
 
-import static de.jreality.shader.CommonAttributes.EDGE_DRAW;
-import static de.jreality.shader.CommonAttributes.FACE_DRAW;
-import static de.jreality.shader.CommonAttributes.LIGHTING_ENABLED;
-import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
-import static de.jreality.shader.CommonAttributes.TUBES_DRAW;
-import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
-
 import java.awt.Color;
 import java.awt.Transparency;
 import java.io.File;
@@ -19,10 +12,6 @@ import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
 import de.jreality.shader.CommonAttributes;
-import de.jreality.shader.DefaultGeometryShader;
-import de.jreality.shader.DefaultLineShader;
-import de.jreality.shader.DefaultPolygonShader;
-import de.jreality.shader.ShaderUtility;
 
 /*********************************************************************************
  * MarkerAppearance
