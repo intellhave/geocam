@@ -1,42 +1,16 @@
 package visualization;
 
-import static de.jreality.shader.CommonAttributes.DIFFUSE_COLOR;
-import static de.jreality.shader.CommonAttributes.LINE_SHADER;
-import static de.jreality.shader.CommonAttributes.OPAQUE_TUBES_AND_SPHERES;
-import static de.jreality.shader.CommonAttributes.POINT_RADIUS;
-import static de.jreality.shader.CommonAttributes.POINT_SHADER;
-import static de.jreality.shader.CommonAttributes.POLYGON_SHADER;
-import static de.jreality.shader.CommonAttributes.SMOOTH_SHADING;
-import static de.jreality.shader.CommonAttributes.TRANSPARENCY;
-import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
-import static de.jreality.shader.CommonAttributes.TUBE_RADIUS;
-
-import java.awt.Color;
 import java.util.Hashtable;
-
-import javax.swing.JFrame;
 
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import visualization.PlanarDevelopment;
-
 import de.jreality.geometry.IndexedFaceSetFactory;
-import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.plugin.JRViewer;
-import de.jreality.plugin.JRViewer.ContentType;
-import de.jreality.plugin.basic.Inspector;
-import de.jreality.plugin.content.ContentTools;
-import de.jreality.scene.Appearance;
 import de.jreality.scene.IndexedFaceSet;
-import de.jreality.scene.SceneGraphComponent;
-import de.jreality.scene.SceneGraphNode;
 import de.jreality.scene.Viewer;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
-import de.jreality.scene.tool.Tool;
-import de.jreality.tools.EncompassTool;
-import de.jtem.jrworkspace.plugin.sidecontainer.template.ShrinkPanelPlugin;
 
 
 public class TriangulationDisplay {
