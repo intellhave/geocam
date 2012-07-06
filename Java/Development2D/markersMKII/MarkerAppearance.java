@@ -1,5 +1,12 @@
 package markersMKII;
 
+import static de.jreality.shader.CommonAttributes.EDGE_DRAW;
+import static de.jreality.shader.CommonAttributes.FACE_DRAW;
+import static de.jreality.shader.CommonAttributes.LIGHTING_ENABLED;
+import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
+import static de.jreality.shader.CommonAttributes.TUBES_DRAW;
+import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
+
 import java.awt.Color;
 import java.awt.Transparency;
 import java.io.File;
@@ -12,6 +19,10 @@ import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
 import de.jreality.shader.CommonAttributes;
+import de.jreality.shader.DefaultGeometryShader;
+import de.jreality.shader.DefaultLineShader;
+import de.jreality.shader.DefaultPolygonShader;
+import de.jreality.shader.ShaderUtility;
 
 /*********************************************************************************
  * MarkerAppearance
@@ -58,8 +69,6 @@ public class MarkerAppearance {
     ff = new File("Data/blender/apple.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.APPLE, sgc);
-
-    System.out.println("MarkerAppearance: Static data initialized!");
 
     ff = new File("Data/blender/cookie.3ds");
     sgc = loadTemplateSGC(ff);
@@ -251,11 +260,13 @@ public class MarkerAppearance {
     Appearance app = new Appearance();
     app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
     app.setAttribute(CommonAttributes.EDGE_DRAW, false);
+    app.setAttribute(CommonAttributes.FACE_DRAW, true);
     app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
-    app.setAttribute(CommonAttributes.PICKABLE, false);
-
+    app.setAttribute(CommonAttributes.PICKABLE, false);    
+    app.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
+    app.setAttribute(CommonAttributes.SMOOTH_SHADING, true);
+    
     sgc.setAppearance(app);
-
     double[] mat = MatrixBuilder.euclidean().scale(this.scale).getMatrix()
         .getArray();
     Transformation t = new Transformation(mat);

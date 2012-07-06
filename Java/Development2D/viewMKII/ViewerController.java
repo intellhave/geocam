@@ -7,11 +7,11 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -31,12 +31,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import development.Vector;
-
 import markers.ManifoldPosition;
 import markersMKII.Marker;
 import markersMKII.MarkerAppearance;
 import markersMKII.MarkerHandler;
+import development.Vector;
 
 public class ViewerController extends JFrame {
   
@@ -197,20 +196,18 @@ public class ViewerController extends JFrame {
       };
       recDepth.addActionListener(recDepthListener);
       
-      //Number of objects action listener
-      ActionListener numObjectsListener = new ActionListener(){
-        public void actionPerformed(ActionEvent e){
+      // Number of objects action listener
+      ActionListener numObjectsListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
           String value = numObjects.getValue().toString();
           int newMarkers = Integer.parseInt(value);
-          if(newMarkers<0){
+          if (newMarkers < 0) {
             newMarkers = 0;
+          } else if (newMarkers > 20) {
+            newMarkers = 20;
           }
-          else if(newMarkers>20){
-            newMarkers =20;
-          }
-          
-          HashSet<Marker> markers = mark.getAllMarkers();
-          Iterator<Marker> i = markers.iterator();
+
+          Set<Marker> markers = mark.getAllMarkers();
           int currentMarkers = markers.size() - 1;
 
           // if necessary, add markers
@@ -221,7 +218,7 @@ public class ViewerController extends JFrame {
 
             for (int ii = 0; ii < newMarkers - currentMarkers; ii++) {
               pos = new ManifoldPosition(develop.getSource());
-              double scale = scalingSlider.getValue()/10.0;
+              double scale = scalingSlider.getValue() / 10.0;
               app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, scale);
               double a = rand.nextDouble() * Math.PI * 2;
               Vector vel = new Vector(Math.cos(a), Math.sin(a));
@@ -229,35 +226,34 @@ public class ViewerController extends JFrame {
               vel.scale(0.25);
               pos.move(vel);
               Marker m = new Marker(pos, app, vel);
-              //set the speed of the marker objects after they are constructed
-              //when new ants are added, their speed will depend on whether the stop/start
-              //button is pressed
-              if (stopStartButton.getText().equals("Stop")){
-                double sliderSpeed = speedSlider.getValue()/1000.0;
+              // set the speed of the marker objects after they are constructed
+              // when new ants are added, their speed will depend on whether the
+              // stop/start
+              // button is pressed
+              if (stopStartButton.getText().equals("Stop")) {
+                double sliderSpeed = speedSlider.getValue() / 1000.0;
                 m.setSpeed(0.05 * Math.pow(Math.E, sliderSpeed));
-              }
-              else
+              } else
                 m.setSpeed(0);
-              mark.addMarker(m); 
+              mark.addMarker(m);
             }
           }
-          
-          //if necessary, remove markers
-          synchronized (markers) {
-            if (currentMarkers > newMarkers) {
-              List<Marker> toRemove = new LinkedList<Marker>();
-              for( Marker m : markers ){
-                if(m == source) continue;
-                toRemove.add(m);  
-                if(toRemove.size() == currentMarkers - newMarkers)
-                  break;
-              }
-              
-              for( Marker m : toRemove ){
-                mark.removeMarker(m);
-                for(View v : views){
-                  v.removeMarker( m );
-                }
+
+          // if necessary, remove markers
+          if (currentMarkers > newMarkers) {
+            List<Marker> toRemove = new LinkedList<Marker>();
+            for (Marker m : markers) {
+              if (m == source)
+                continue;
+              toRemove.add(m);
+              if (toRemove.size() == currentMarkers - newMarkers)
+                break;
+            }
+
+            for (Marker m : toRemove) {
+              mark.removeMarker(m);
+              for (View v : views) {
+                v.removeMarker(m);
               }
             }
           }
@@ -295,7 +291,7 @@ public class ViewerController extends JFrame {
         public void stateChanged(ChangeEvent e) {
           double sliderValue = speedSlider.getValue() / 1000.0;
           double newSpeed = 0.05 * Math.pow(Math.E, sliderValue);
-          HashSet<Marker> allMarkers = mark.getAllMarkers();
+          Set<Marker> allMarkers = mark.getAllMarkers();
           Iterator<Marker> iter = allMarkers.iterator();
           if(stopStartButton.getText().equals("Stop")){
           synchronized (allMarkers) {
@@ -325,7 +321,7 @@ public class ViewerController extends JFrame {
       ChangeListener scalingSliderListener = new ChangeListener(){
         public void stateChanged(ChangeEvent e) {
           double newScale = scalingSlider.getValue() / 10.0;
-          HashSet<Marker> markers = mark.getAllMarkers();
+          Set<Marker> markers = mark.getAllMarkers();
           Iterator<Marker> i = markers.iterator();
           
           synchronized(markers) {
@@ -351,7 +347,7 @@ public class ViewerController extends JFrame {
     //Start/stop button action listener
     ActionListener stopStartButtonListener = new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        HashSet<Marker> markers = mark.getAllMarkers();
+        Set<Marker> markers = mark.getAllMarkers();
         Iterator<Marker> iter = markers.iterator();
         
         if (stopStartButton.getText().equals("Stop")) {

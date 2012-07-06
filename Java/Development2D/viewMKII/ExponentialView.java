@@ -1,6 +1,5 @@
 package viewMKII;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -57,7 +56,7 @@ public class ExponentialView extends View {
     // create light
     sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
-    light.setIntensity(1.5);
+    light.setIntensity(1.0);
     sgcLight.setLight(light);
 
     // MatrixBuilder.euclidean().translate(0,0,5).assignTo(sgcLight);
@@ -84,7 +83,7 @@ public class ExponentialView extends View {
    * rotation ensures that the source point's "forward direction" points north.
    *********************************************************************************/
   protected void updateCamera() {
-    MatrixBuilder.euclidean().translate(0, 0, 5).rotateZ(-Math.PI / 2)
+    MatrixBuilder.euclidean().translate(0, 0, 4).rotateZ(-Math.PI / 2)
         .assignTo(sgcCamera);
   }
 
@@ -131,7 +130,7 @@ public class ExponentialView extends View {
 
       Appearance app;
       if( f.getIndex() % 2 == 0 ){
-        app = TextureLibrary.getAppearance(TextureLibrary.TextureDescriptor.DOTS);
+        app = TextureLibrary.getAppearance(TextureLibrary.TextureDescriptor.LIGHTHOUSE);
       } else {
         app = TextureLibrary.getAppearance(TextureLibrary.TextureDescriptor.CHECKER);
       }
@@ -153,7 +152,7 @@ public class ExponentialView extends View {
   }
 
   /*********************************************************************************
-   * generateObjectGeometry
+   * generateMarkerGeometry
    * 
    * This method is responsible for placing representations of the markers in
    * the visualization. Due to the nature of this particular view, a single
@@ -165,7 +164,7 @@ public class ExponentialView extends View {
     HashMap<Marker, ArrayList<Vector[]>> markerImages;
     markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     developMarkers(development.getRoot(), markerImages);
-    Set <Marker> allMarkers = markers.getAllMarkers();
+    Set<Marker> allMarkers = markers.getAllMarkers();
 
     for (Marker m : allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
@@ -268,6 +267,7 @@ public class ExponentialView extends View {
   protected void developMarkers(DevelopmentNode devNode,
       HashMap<Marker, ArrayList<Vector[]>> markerImages) {
     Collection<Marker> localMarkers = markers.getMarkers(devNode.getFace());
+
     if (localMarkers != null) {
 
       Frustum2D frustum = devNode.getFrustum();
@@ -275,7 +275,8 @@ public class ExponentialView extends View {
 
       synchronized (localMarkers) {
         for (Marker m : localMarkers) {
-          if (!m.isVisible()) continue;
+          if (!m.isVisible())
+            continue;
 
           ManifoldPosition pos = m.getPosition();
           Vector transPos = affineTrans.affineTransPoint(pos.getPosition());
@@ -289,7 +290,7 @@ public class ExponentialView extends View {
             imageList = new ArrayList<Vector[]>();
             markerImages.put(m, imageList);
           }
-         
+
           Vector[] triple = new Vector[3];
           triple[0] = transPos;
           triple[1] = affineTrans.affineTransVector(pos.getDirectionForward());

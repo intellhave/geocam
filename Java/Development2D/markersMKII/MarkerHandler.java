@@ -1,11 +1,13 @@
 package markersMKII;
 
-import java.util.AbstractSet;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -18,12 +20,14 @@ import triangulation.Triangulation;
  * inhabit a particular face on the triangulation. Second, it can "evolve" the
  * marker dynamics --- that is, it can update the positions of the markers on
  * the manifold, based upon their velocities and an input time step.
+ * 
+ * Because MarkerHandler is shared between all three views,
  *********************************************************************************/
 
 public class MarkerHandler {
 
-  private HashMap<Face, HashSet<Marker>> markerDatabase;
-  private AbstractSet<Marker> allMarkers;
+  private Map<Face, Set<Marker>> markerDatabase;
+  private Set<Marker> allMarkers;
 
   /*********************************************************************************
    * MarkerHandler (Constructor)
@@ -32,10 +36,17 @@ public class MarkerHandler {
    * refactorings, we may add an input for which triangulation the MarkerHandler
    * is using. Currently the triangulation is a global object, so we do not do
    * this.
+   * 
+   * Note: Because allMarkers is shared between several different threads, it
+   * needs to be internally represented by a data structure with concurrency
+   * properties. Currently, only ViewerController and MarkerHandler write to
+   * allMarkers, while the views read from it.
+   * 
    *********************************************************************************/
   public MarkerHandler() {
-    markerDatabase = new HashMap<Face, HashSet<Marker>>();
-    allMarkers = new HashSet<Marker>();
+    markerDatabase = new HashMap<Face, Set<Marker>>();
+    allMarkers = Collections
+        .newSetFromMap(new ConcurrentHashMap<Marker, Boolean>());
   }
 
   /*********************************************************************************
@@ -45,7 +56,7 @@ public class MarkerHandler {
    * Specifically, it prints for each face in the database the markers that are
    * recorded as inhabiting that face.
    *********************************************************************************/
-  public String toString() {
+  public synchronized String toString() {
     String retval = "";
 
     retval += "MarkerHandler #" + this.hashCode() + " contains:\n";
@@ -128,8 +139,8 @@ public class MarkerHandler {
    * Users should NOT tamper with the contents of the collection returned. The
    * return value should be treated as read-only.
    *********************************************************************************/
-  public Collection<Marker> getMarkers(Face f) {
-    HashSet<Marker> markers = markerDatabase.get(f);
+  public synchronized Collection<Marker> getMarkers(Face f) {
+    Set<Marker> markers = markerDatabase.get(f);
     if (markers == null) {
       markers = new HashSet<Marker>();
       synchronized (markerDatabase) {
@@ -146,7 +157,7 @@ public class MarkerHandler {
    * the development's source marker so that its speed may be kept independent
    * of the other markers'
    *********************************************************************************/
-  public double getMarkerSpeed(Marker source) {
+  public synchronized double getMarkerSpeed(Marker source) {
     Iterator<Marker> iter = allMarkers.iterator();
     double speed;
     if (allMarkers.size() > 1) {
@@ -160,9 +171,9 @@ public class MarkerHandler {
     } else
       speed = 0;
     return speed;
-        
+
   }
-  
+
   /*********************************************************************************
    * getMarkerScale
    * 
@@ -170,31 +181,30 @@ public class MarkerHandler {
    * the development's source marker so that its scale may be kept independent
    * of the other markers'
    *********************************************************************************/
-  
-  public double getMarkerScale(Marker source){
+  public synchronized double getMarkerScale(Marker source) {
     double scale = .5;
     Iterator<Marker> i = allMarkers.iterator();
-    if(allMarkers.size() > 1){
+    if (allMarkers.size() > 1) {
       Marker m = i.next();
-      if(!m.equals(source))
+      if (!m.equals(source))
         scale = m.getAppearance().getScale();
-      else{
+      else {
         m = (Marker) i.next();
-        scale= m.getAppearance().getScale();
+        scale = m.getAppearance().getScale();
       }
     }
     return scale;
   }
-  
+
   /*********************************************************************************
    * getAllMarkers
    * 
    * Returns a reference to the collection of markers so that it may be modified
    *********************************************************************************/
-  public HashSet<Marker> getAllMarkers(){
-    return (HashSet<Marker>) allMarkers;
+  public Set<Marker> getAllMarkers() {
+    return allMarkers;
   }
-  
+
   /*********************************************************************************
    * updateMarker
    * 
@@ -202,7 +212,7 @@ public class MarkerHandler {
    * updating the database to reflect that the marker has departed the old face
    * and entered a new one.
    *********************************************************************************/
-  public void updateMarker(Marker o, Face oldFace) {
+  public synchronized void updateMarker(Marker o, Face oldFace) {
     if (o == null)
       return;
 
