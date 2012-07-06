@@ -132,9 +132,9 @@ public class FirstPersonView extends ExponentialView {
   protected void generateMarkerGeometry() {
     HashMap<Marker, ArrayList<Vector[]>> markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     super.developMarkers(development.getRoot(), markerImages);
-    Set <Marker> allMarkers = markers.getAllMarkers();
+    Set<Marker> allMarkers = markers.getAllMarkers();
 
-    for (Marker m :allMarkers) {
+    for (Marker m : allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 
       if (pool == null) {

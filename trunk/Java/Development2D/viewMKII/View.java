@@ -200,9 +200,8 @@ public abstract class View {
     defaultAppearance.setAttribute(TUBES_DRAW, false);
     defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
     defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
-    // defaultAppearance.setAttribute(BACKGROUND_COLOR, new Color(0f, .1f,
-    // .1f));
-    // defaultAppearance.setAttribute(DIFFUSE_COLOR, new Color(1f, 0f, 0f));
+    defaultAppearance.setAttribute(CommonAttributes.BACKGROUND_COLOR, Color.gray);
+    defaultAppearance.setAttribute(CommonAttributes.DIFFUSE_COLOR, Color.white);
 
     DefaultGeometryShader dgs;
     dgs = (DefaultGeometryShader) ShaderUtility.createDefaultGeometryShader(
@@ -214,8 +213,7 @@ public abstract class View {
     dps = (DefaultPolygonShader) dgs.createPolygonShader("default");
     dps.setDiffuseColor(Color.white);
 
-    // defaultAppearance.setAttribute(LINE_SHADER+"."+POLYGON_SHADER+"."+"SMOOTH_SHADING",
-    // true);
+    defaultAppearance.setAttribute("LINE_SHADER.POLYGON_SHADER.SMOOTH_SHADING", true);
 
     sgcDevelopment.setAppearance(defaultAppearance);
   }
