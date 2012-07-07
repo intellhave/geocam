@@ -1,4 +1,4 @@
-package viewMKII;
+package view;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -31,10 +31,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import markersMKII.ManifoldPosition;
-import markersMKII.Marker;
-import markersMKII.MarkerAppearance;
-import markersMKII.MarkerHandler;
+import marker.ManifoldPosition;
+import marker.Marker;
+import marker.MarkerAppearance;
+import marker.MarkerHandler;
 import development.Vector;
 
 public class ViewerController extends JFrame {

@@ -4,7 +4,7 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
-import viewMKII.Development;
+import view.Development;
 
 public class KeyboardController extends UserController implements
     KeyEventDispatcher {

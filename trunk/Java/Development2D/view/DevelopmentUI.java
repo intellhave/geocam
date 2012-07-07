@@ -1,4 +1,4 @@
-package viewMKII;
+package view;
 
 import inputOutput.TriangulationIO;
 
@@ -12,10 +12,10 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import markersMKII.ManifoldPosition;
-import markersMKII.Marker;
-import markersMKII.MarkerAppearance;
-import markersMKII.MarkerHandler;
+import marker.ManifoldPosition;
+import marker.Marker;
+import marker.MarkerAppearance;
+import marker.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;

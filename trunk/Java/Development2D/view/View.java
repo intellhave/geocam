@@ -1,4 +1,4 @@
-package viewMKII;
+package view;
 
 import static de.jreality.shader.CommonAttributes.EDGE_DRAW;
 import static de.jreality.shader.CommonAttributes.FACE_DRAW;
@@ -11,8 +11,8 @@ import java.awt.Color;
 
 import javax.media.opengl.GLCanvas;
 
-import markersMKII.Marker;
-import markersMKII.MarkerHandler;
+import marker.Marker;
+import marker.MarkerHandler;
 
 import de.jreality.jogl.JOGLRenderer;
 import de.jreality.jogl.Viewer;

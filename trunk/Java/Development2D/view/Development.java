@@ -1,11 +1,11 @@
-package viewMKII;
+package view;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import markersMKII.ManifoldPosition;
-import markersMKII.Marker;
-import markersMKII.MarkerAppearance;
+import marker.ManifoldPosition;
+import marker.Marker;
+import marker.MarkerAppearance;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
