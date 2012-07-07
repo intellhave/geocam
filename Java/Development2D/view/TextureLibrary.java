@@ -1,4 +1,4 @@
-package viewMKII;
+package view;
 
 import static de.jreality.shader.CommonAttributes.POLYGON_SHADER;
 

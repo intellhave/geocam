@@ -1,4 +1,4 @@
-package viewMKII;
+package view;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
-import markersMKII.Marker;
-import markersMKII.MarkerAppearance;
-import markersMKII.MarkerHandler;
+import marker.Marker;
+import marker.MarkerAppearance;
+import marker.MarkerHandler;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.SceneGraphComponent;

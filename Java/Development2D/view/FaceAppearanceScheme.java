@@ -1,10 +1,10 @@
-package viewMKII;
+package view;
 
 import java.awt.Color;
 
 import triangulation.Face;
 import triangulation.Triangulation;
-import viewMKII.TextureLibrary.TextureDescriptor;
+import view.TextureLibrary.TextureDescriptor;
 
 /*********************************************************************************
  * FaceAppearanceScheme

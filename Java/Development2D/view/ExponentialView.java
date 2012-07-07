@@ -1,4 +1,4 @@
-package viewMKII;
+package view;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
-import markersMKII.ManifoldPosition;
-import markersMKII.Marker;
-import markersMKII.MarkerAppearance;
-import markersMKII.MarkerHandler;
+import marker.ManifoldPosition;
+import marker.Marker;
+import marker.MarkerAppearance;
+import marker.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
-import viewMKII.TextureLibrary.TextureDescriptor;
+import view.TextureLibrary.TextureDescriptor;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Appearance;
