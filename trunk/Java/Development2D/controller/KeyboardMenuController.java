@@ -1,6 +1,6 @@
-package controllerMKII;
+package controller;
 
-import controllerMKII.UserController.Action;
+import controller.UserController.Action;
 
 public class KeyboardMenuController extends KeyboardController {
 

@@ -1,4 +1,4 @@
-package controllerMKII;
+package controller;
 
 import java.util.EnumMap;
 
@@ -6,7 +6,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
 
-import controllerMKII.UserController.Action;
+import controller.UserController.Action;
 
 import viewMKII.Development;
 
