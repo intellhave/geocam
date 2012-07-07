@@ -1,4 +1,4 @@
-package controllerMKII;
+package controller;
 
 import java.awt.EventQueue;
 import java.util.EnumMap;

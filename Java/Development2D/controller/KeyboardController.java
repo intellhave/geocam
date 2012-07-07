@@ -1,4 +1,4 @@
-package controllerMKII;
+package controller;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;

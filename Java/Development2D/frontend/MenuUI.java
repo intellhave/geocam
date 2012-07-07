@@ -10,10 +10,10 @@ import javax.swing.JFrame;
 
 import viewMKII.CookieGame;
 import viewMKII.DevelopmentUI;
-import controllerMKII.KeyboardMenuController;
-import controllerMKII.SNESMenuController;
-import controllerMKII.UserController;
-import controllerMKII.UserController.Action;
+import controller.KeyboardMenuController;
+import controller.SNESMenuController;
+import controller.UserController;
+import controller.UserController.Action;
 
 /*********************************************************************************
  * MenuUI

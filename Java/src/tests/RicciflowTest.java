@@ -31,7 +31,6 @@ import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import view.*;
 import development.*;
 import visualization.*;
 import de.jreality.geometry.Primitives;

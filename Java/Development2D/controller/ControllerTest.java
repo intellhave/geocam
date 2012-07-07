@@ -1,4 +1,4 @@
-package controllerMKII;
+package controller;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
