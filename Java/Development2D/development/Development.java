@@ -3,8 +3,6 @@ package development;
 import java.util.LinkedList;
 import java.util.List;
 
-import marker.Marker;
-import marker.MarkerAppearance;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
@@ -45,16 +43,14 @@ public class Development {
 
   private AffineTransformation rotation = new AffineTransformation(2);
   private DevelopmentNode root;
-  private ManifoldPosition source;
-  private Marker sourceObject;
+  private ManifoldPosition source;  
   private int maxDepth;
 
   LinkedList<DevelopmentViewer> viewers = new LinkedList<DevelopmentViewer>();
 
   public Development(ManifoldPosition sourcePoint, int depth, double radius) {
     maxDepth = depth;
-    source = sourcePoint;
-    sourceObject = new Marker(source, new MarkerAppearance());
+    source = sourcePoint;    
     rebuild();
   }
 
@@ -66,7 +62,6 @@ public class Development {
   public void rebuild(ManifoldPosition sourcePoint, int depth) {
     maxDepth = depth;
     source = sourcePoint;
-    sourceObject.setPosition(source);
     rebuild();
   }
 
@@ -87,10 +82,6 @@ public class Development {
     return source;
   }
 
-  public Marker getSourceMarker() {
-    return sourceObject;
-  }
-
   /*********************************************************************************
    * rotate
    * 
@@ -99,11 +90,6 @@ public class Development {
    *********************************************************************************/
   public void rotate(double angle) {
     source.rotateOrientation(angle);
-    // jthomas: For reasons I don't understand, it is very
-    // important to reset the sourceObject's manifold position.
-    // I would think this ought to be covered by pointing to
-    // the same ManifoldPosition object, but this isn't true.
-    sourceObject.setPosition(source);
     rebuild();
   }
 
@@ -119,13 +105,8 @@ public class Development {
    * this just translates movement in VR space to movement in manifold.
    *********************************************************************************/
   public void translateSourcePoint(double dForward, double dLeft) {
-
     source.move(source.getDirection(dForward, dLeft));
-    // jthomas: For reasons I don't understand, it is very
-    // important to reset the sourceObject's manifold position.
-    sourceObject.setPosition(source);
     rebuild();
-
   }
 
   private AffineTransformation getRotationInverse() {

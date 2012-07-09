@@ -24,6 +24,7 @@ import view.FaceAppearanceScheme;
 import view.FirstPersonView;
 import view.View;
 import controller.KeyboardController;
+import controller.SNESController;
 import controller.UserController;
 import development.Coord2D;
 import development.Development;
@@ -45,7 +46,7 @@ public class DevelopmentUI {
   // rather than a single global object.
   // private static TriangulatedManifold manifold;
 
-  private static MarkerHandler markers;
+  private static MarkerHandler markerHandler;
   private static Development development;
 
   /*********************************************************************************
@@ -162,6 +163,7 @@ public class DevelopmentUI {
     Thread t = new Thread(userControl);
     t.start();
     
+    Marker source = markerHandler.getSourceMarker();
     userControl.resetPausedFlag();
     userControl.clear();
     while (! userControl.isPaused() || developerMode ) {
@@ -180,13 +182,14 @@ public class DevelopmentUI {
         // PATCH START
         Face prev = development.getSource().getFace();        
         userControl.runNextAction();
-        Face next = development.getSource().getFace();
+        Face next = development.getSource().getFace();        
+        source.setPosition(development.getSource());
         if(next != prev){
-          markers.updateMarker(development.getSourceMarker(), prev);
+          markerHandler.updateMarker(source, prev);
         }
         // PATCH END
         
-        markers.updateMarkers(dt);
+        markerHandler.updateMarkers(dt);
         accumulator -= dt;
       }
       render();
@@ -282,15 +285,17 @@ public class DevelopmentUI {
    * This method initializes the markers (ants, rockets, cookies, etc.) that
    * will appear on the surface for games and exploration.
    *********************************************************************************/
-  private static void initMarkers() {
-    Random rand = new Random();
-
-    markers = new MarkerHandler();
-
-    markers.addMarker(development.getSourceMarker());
-
+  private static void initMarkers() { 
+    markerHandler = new MarkerHandler();
+    
     ManifoldPosition pos;
     MarkerAppearance app;
+    
+    pos = development.getSource();
+    app = new MarkerAppearance(MarkerAppearance.ModelType.ANT);
+    markerHandler.addSourceMarker( new Marker( pos, app ) );
+    
+    Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {
       pos = new ManifoldPosition(development.getSource());
@@ -300,14 +305,12 @@ public class DevelopmentUI {
       vel.scale(0.0005);
 
       Marker m = new Marker(pos, app, vel);
-      markers.addMarker(m);
-      
+      markerHandler.addMarker(m); 
     }
 
     // Move the markers along their trajectories for 300ms, so that they don't
     // sit on top of each other.
-    markers.updateMarkers(300);
-    
+    markerHandler.updateMarkers(300);
   }
 
   /*********************************************************************************
@@ -327,9 +330,9 @@ public class DevelopmentUI {
     int viewCount = 3;
     views = new View[viewCount];
     // views[0] = new FirstPersonView(development, markers, colorScheme);
-    views[0] = new FirstPersonView(development, markers, faceScheme);
-    views[1] = new ExponentialView(development, markers, faceScheme);
-    views[2] = new EmbeddedView(development, markers, faceScheme);
+    views[0] = new FirstPersonView(development, markerHandler, faceScheme);
+    views[1] = new ExponentialView(development, markerHandler, faceScheme);
+    views[2] = new EmbeddedView(development, markerHandler, faceScheme);
 
     int[][] framePositions = { { 0, 10 }, { 400, 10 }, { 800, 10 } };
     int[][] frameSizes = { { 400, 400 }, { 400, 400 }, { 400, 400 } };
@@ -387,14 +390,16 @@ public class DevelopmentUI {
    * slider that controls how big the markers are should be initialized here.
    *********************************************************************************/
   private static void initViewControls() {
-    viewerControl = new ViewerController(markers, development, views);
+    viewerControl = new ViewerController(markerHandler, development, views);
     viewerControl.setVisible(true);
   }
+  
   public static void setDrawEdges(boolean drawEdge){
     for(View v: views){
       v.setDrawEdges(drawEdge);
     }
   }
+  
   public static void setDrawFaces(boolean drawFace){
     for(View v: views){
       v.setDrawFaces(drawFace);

@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 
 import marker.Marker;
 import marker.MarkerAppearance;
+import marker.MarkerAppearance.ModelType;
 import marker.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -30,18 +31,51 @@ import development.Vector;
 public class CookieGame {
 
   private static boolean developerMode = false;
+
+  /*********************************************************************************
+   * Model Data
+   * 
+   * These variables are responsible for keeping track of the states of the
+   * mathematical objects in the simulation.
+   *********************************************************************************/
   public static boolean gameWon;
   public static boolean paused = false;
   private static Marker source;
   private static Marker cookie;
 
-  private static MarkerHandler markers;
+  private static MarkerHandler markerHandler;
   private static Development development;
+  
+  /*********************************************************************************
+   * View Data
+   * 
+   * These variables are responsible for keeping track of the viewers that will
+   * present the mathematical objects to the user.
+   *********************************************************************************/
   private static JFrame viewer;
-  private static UserController userControl;
   private static FaceAppearanceScheme faceAppearanceScheme;
   private static View gameView;
 
+  /*********************************************************************************
+   * Model Control Data
+   * 
+   * These variables hold the listeners and other objects responsible for
+   * keeping track of user input to the program that effects the model.
+   * 
+   * mouseControl: Translates mouse input into modifications of the view and
+   * model.
+   * 
+   * keyboardControl: Translates keyboard input into modifications of the view
+   * and model.
+   * 
+   * markerControl: Translates AI movements of markers into modifications of the
+   * markers.
+   * 
+   * networkControl: Receives network input from other instances of
+   * "DevelopmentUI", and modifies the model accordingly.
+   *********************************************************************************/
+  private static UserController userControl;
+  
   private static final int recursionDepth = 5;
   
   public static void main(String[] args) {
@@ -69,10 +103,23 @@ public class CookieGame {
       "Data/Triangulations/2DManifolds/domain.xml"};//15
   private static String filename = filenames[3];
 
+  /*********************************************************************************
+   * initModel
+   * 
+   * This method is responsible for initializing the mathematical model of the
+   * simulation we'll present to the user. Specifically, this means setting up
+   * the triangulated surface and the markers that will be placed on it.
+   *********************************************************************************/
   private static void initModel() {
     loadSurface(filename);
   }
 
+  /*********************************************************************************
+   * loadSurface
+   * 
+   * This method uses the input file name (which should include the path to the
+   * file), and reads that file to determine the surface that will be displayed.
+   *********************************************************************************/
   private static void loadSurface(String file) {
     String extension = file.substring(file.length() - 3, file.length());
 
@@ -88,6 +135,13 @@ public class CookieGame {
     initMarkers();
   }
 
+  /*********************************************************************************
+   * initSurface
+   * 
+   * After "loadSurface" has read the data specifying a triangulated surface
+   * into the program, this method is responsible for placing that data into the
+   * data structure that specifies the surface for the rest of the program.
+   *********************************************************************************/
   private static void initSurface() {
     Iterator<Integer> i = null;
     // pick some arbitrary face and source point
@@ -107,30 +161,52 @@ public class CookieGame {
     }
   }
 
+  /*********************************************************************************
+   * initMarkers
+   * 
+   * This method initializes the markers (ants, rockets, cookies, etc.) that
+   * will appear on the surface for games and exploration.
+   *********************************************************************************/
   private static void initMarkers() {
-    Random rand = new Random();
-
-    markers = new MarkerHandler();
-    source = development.getSourceMarker();
-    markers.addMarker(source);
+    
+    markerHandler = new MarkerHandler();    
     ManifoldPosition pos;
     MarkerAppearance app;
+    
+    /* Initialize the source marker. */
+    pos = development.getSource();
+    app = new MarkerAppearance(ModelType.ANT, 1.0);
+    source = new Marker(pos, app);
+    markerHandler.addSourceMarker( source );
+    
+    /* Initialize the cookie marker. */
     pos = new ManifoldPosition(development.getSource());
-    app = new MarkerAppearance(MarkerAppearance.ModelType.COOKIE, 1.0);
+    app = new MarkerAppearance(ModelType.COOKIE, 1.0);
+
+    Random rand = new Random();
     double a = rand.nextDouble() * Math.PI * 2;
     Vector direction = new Vector(Math.cos(a), Math.sin(a));
-
-    // TODO: Do we need to tweak the scaling on this?
     pos.move(Vector.scale(direction, 4));
     cookie = new Marker(pos, app);
-    markers.addMarker(cookie);
+    markerHandler.addMarker(cookie);
   }
 
+  /*********************************************************************************
+   * initView
+   * 
+   * This method is responsible for initializing the code that creates a
+   * visualization of the triangulated surface for the user. This method is also
+   * responsible for positioning the views on the screen.
+   * 
+   * Because we're interested in displaying this in a museum setting (where
+   * users shouldn't be allowed to change window sizes), it's OK to hard code
+   * this information.
+   *********************************************************************************/
   private static void initView() {
     faceAppearanceScheme = new FaceAppearanceScheme();
     int[] framePosition = { 0, 10 };
     int[] frameSize = { 700, 700 };
-    gameView = new ExponentialView(development, markers, faceAppearanceScheme);
+    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
     gameView.updateGeometry();
     gameView.initializeNewManifold();
     gameView.updateScene();
@@ -152,6 +228,16 @@ public class CookieGame {
     viewer.setVisible(true);
   }
 
+  /*********************************************************************************
+   * initModelControls
+   * 
+   * This method is responsible for initializing the objects that will listen
+   * for the user's input and modify the triangulated surface accordingly.
+   * 
+   * Notice: These controls are the ones that modify the model, NOT the ones
+   * that modify how the model is visualized. Those controls belong in the
+   * "initViewControls" method.
+   *********************************************************************************/
   private static void initModelControls() {
     userControl = new KeyboardController(development);
   }
@@ -159,6 +245,7 @@ public class CookieGame {
   public static void runGame() {
     final long dt = 10; // Timestep size, in microseconds
     // final long maxFrameTime = 80;
+
     gameWon = false;
 
     long startTime = System.currentTimeMillis();
@@ -167,6 +254,7 @@ public class CookieGame {
     Thread t = new Thread(userControl);
     t.start();
     
+    Marker source = markerHandler.getSourceMarker();
     userControl.clear();
     userControl.resetPausedFlag();
     paused = false;
@@ -178,23 +266,28 @@ public class CookieGame {
       accumulator += frameTime;
 
       while (accumulator >= dt) {
+        /* Update the source marker: */
         Face prev = development.getSource().getFace();
         userControl.runNextAction();
         Face next = development.getSource().getFace();
+        
+        source.setPosition(development.getSource());        
         if (next != prev) {
-          markers.updateMarker(development.getSourceMarker(), prev);
+          markerHandler.updateMarker(source, prev);
         }
-        // PATCH END
+        
+        /* Update the other markers: */
+        markerHandler.updateMarkers(dt);
 
-        markers.updateMarkers(dt);
-
+        /* Check the end of game condition: */
         double epsilon = .25;
         if (source.getPosition().getFace() == cookie.getPosition().getFace()
             && (Vector.distanceSquared(source.getPosition().getPosition(),
                 cookie.getPosition().getPosition()) < epsilon))
           gameWon = true;
+        
+        /* Update accumulator */
         accumulator -= dt;
-
       }
       render();
       paused = userControl.isPaused();
@@ -215,6 +308,15 @@ public class CookieGame {
     viewer.dispose();
   }
 
+  /*********************************************************************************
+   * render
+   * 
+   * This method is responsible for causing all of the views to update. Right
+   * now this method is pretty simple, but I suspect in the future we will need
+   * logic that updates only the parts of the scene that actually changed. In
+   * other words, instead of just calling updateGeomtetry(true,true) as below,
+   * we'll need to specify how to pick those parameters.
+   *********************************************************************************/
   private static void render() {
     gameView.updateGeometry(true, true);
     gameView.updateScene();

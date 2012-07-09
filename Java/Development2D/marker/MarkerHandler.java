@@ -28,6 +28,7 @@ public class MarkerHandler {
 
   private Map<Face, Set<Marker>> markerDatabase;
   private Set<Marker> allMarkers;
+  private Marker sourceMarker;
 
   /*********************************************************************************
    * MarkerHandler (Constructor)
@@ -95,6 +96,23 @@ public class MarkerHandler {
     Collection<Marker> markers = getMarkers(m.getPosition().getFace());
     markers.add(m);
     allMarkers.add(m);
+  }
+
+  /*********************************************************************************
+   * addMarker
+   * 
+   * This method adds the input marker's positional data to the database, and
+   * records that it is the source marker. If the marker is already in the
+   * database, there is no effect on the Face -> Markers mapping database,
+   * though the source marker pointer will be updated.
+   *********************************************************************************/
+  public synchronized void addSourceMarker(Marker m) {
+    sourceMarker = m;
+    addMarker(m);
+  }
+  
+  public Marker getSourceMarker(){
+    return sourceMarker;
   }
 
   /*********************************************************************************

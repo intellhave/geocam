@@ -64,7 +64,7 @@ public class ViewerController extends JFrame {
     develop = d;
     mark = mh;
     this.views = views;
-    source = develop.getSourceMarker();
+    source = mark.getSourceMarker();
     layoutGUI();
   }
   
@@ -435,11 +435,6 @@ public class ViewerController extends JFrame {
       drawEdgesBox.setText("Draw edges");
       drawEdgesBox.setSelected(true);
       
-      //add action listener
-      
-      /********************************************************************************
-       * TODO: make the Draw Edges checkbox functional
-       ********************************************************************************/
       ActionListener drawEdgesListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           boolean boxChecked = drawEdgesBox.isSelected();
@@ -454,7 +449,7 @@ public class ViewerController extends JFrame {
       drawOptionsPanel.add(drawFacesBox);
       drawFacesBox.setText("Draw faces");
       drawFacesBox.setSelected(true);
-      //add action listener
+
       ActionListener drawFacesListener = new ActionListener(){
         public void actionPerformed(ActionEvent arg0) {
           boolean boxChecked = drawFacesBox.isSelected();
