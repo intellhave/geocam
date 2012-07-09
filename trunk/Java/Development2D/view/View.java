@@ -85,7 +85,8 @@ public abstract class View {
    * This constructor is responsible for setting up the scene graph and
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
-  public View(Development development, MarkerHandler markers, FaceAppearanceScheme fas) {
+  public View(Development development, MarkerHandler markers,
+      FaceAppearanceScheme fas) {
     this.development = development;
     this.markers = markers;
     this.faceAppearanceScheme = fas;
@@ -199,7 +200,8 @@ public abstract class View {
     defaultAppearance.setAttribute(TUBES_DRAW, false);
     defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
     defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
-    defaultAppearance.setAttribute(CommonAttributes.BACKGROUND_COLOR, Color.gray);
+    defaultAppearance.setAttribute(CommonAttributes.BACKGROUND_COLOR,
+        Color.gray);
     defaultAppearance.setAttribute(CommonAttributes.DIFFUSE_COLOR, Color.white);
 
     DefaultGeometryShader dgs;
@@ -212,7 +214,8 @@ public abstract class View {
     dps = (DefaultPolygonShader) dgs.createPolygonShader("default");
     dps.setDiffuseColor(Color.white);
 
-    defaultAppearance.setAttribute("LINE_SHADER.POLYGON_SHADER.SMOOTH_SHADING", true);
+    defaultAppearance.setAttribute("LINE_SHADER.POLYGON_SHADER.SMOOTH_SHADING",
+        true);
 
     sgcDevelopment.setAppearance(defaultAppearance);
   }
@@ -231,7 +234,7 @@ public abstract class View {
    * development is more expensive than recalculating the placement of the
    * markers, so these booleans need to be used judiciously.
    *********************************************************************************/
-  protected void updateGeometry(boolean dev, boolean obj) {
+  public void updateGeometry(boolean dev, boolean obj) {
     if (dev) {
       generateManifoldGeometry();
     }
@@ -240,7 +243,7 @@ public abstract class View {
     }
   }
 
-  protected void updateGeometry() {
+  public void updateGeometry() {
     updateGeometry(true, true);
   }
 
@@ -280,7 +283,7 @@ public abstract class View {
    * how to reinitialize the view when the old manifold is replaced with a new
    * one.
    *********************************************************************************/
-  protected abstract void initializeNewManifold();
+  public abstract void initializeNewManifold();
 
   protected abstract void updateCamera();
 

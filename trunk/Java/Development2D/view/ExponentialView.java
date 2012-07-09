@@ -238,7 +238,7 @@ public class ExponentialView extends View {
    * This method is responsible for initializing (or reinitializing) the scene
    * graph in the event that we wish to display a different manifold.
    *********************************************************************************/
-  protected void initializeNewManifold() {
+  public void initializeNewManifold() {
     for (LinkedList<SceneGraphComponent> pool : sgcpools.values()) {
       while (!pool.isEmpty()) {
         SceneGraphComponent sgc = pool.remove();

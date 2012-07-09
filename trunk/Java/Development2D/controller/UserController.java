@@ -8,9 +8,9 @@ import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import view.CookieGame;
 import development.Development;
-import view.DevelopmentUI;
+import frontend.CookieGame;
+import frontend.DevelopmentUI;
 
 public abstract class UserController implements Runnable {
   /*********************************************************************************
