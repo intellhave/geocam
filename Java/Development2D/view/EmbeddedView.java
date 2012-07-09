@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
-import marker.ManifoldPosition;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -18,7 +17,9 @@ import de.jreality.scene.Appearance;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
+import development.Development;
 import development.EmbeddedTriangulation;
+import development.ManifoldPosition;
 import development.Vector;
 
 /*********************************************************************************

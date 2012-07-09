@@ -1,11 +1,10 @@
-package marker;
+package development;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import triangulation.Face;
-import development.Vector;
 
 /* Represents a path on the manifold
  * 

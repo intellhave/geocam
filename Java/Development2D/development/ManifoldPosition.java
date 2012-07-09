@@ -1,15 +1,9 @@
-package marker;
+package development;
 
 import java.util.List;
 
 import triangulation.Edge;
 import triangulation.Face;
-import development.AffineTransformation;
-import development.Coord2D;
-import development.CoordTrans2D;
-import development.DevelopmentComputations;
-import development.LineSegment;
-import development.Vector;
 
 /* Represents a position on the Triangulation
  * 

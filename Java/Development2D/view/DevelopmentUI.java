@@ -12,7 +12,6 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-import marker.ManifoldPosition;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -23,7 +22,9 @@ import controller.KeyboardController;
 import controller.SNESController;
 import controller.UserController;
 import development.Coord2D;
+import development.Development;
 import development.EmbeddedTriangulation;
+import development.ManifoldPosition;
 import development.Vector;
 
 public class DevelopmentUI {
