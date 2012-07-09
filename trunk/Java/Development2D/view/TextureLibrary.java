@@ -16,27 +16,50 @@ import de.jreality.shader.Texture2D;
 import de.jreality.shader.TextureUtility;
 import de.jreality.util.Input;
 
+/*********************************************************************************
+ * TextureLibrary
+ * 
+ * The static methods in this class are responsible for creating and storing
+ * textures for use in various visualizations. Since we need textures in many
+ * places, going to disk each time we need to texture a polygon would be very
+ * expensive (and make the simulation appear to lag). Instead, this class caches
+ * those textures, so that the same appearance can be shared by several items in
+ * a scene.
+ *********************************************************************************/
 public class TextureLibrary {
 
+  /*********************************************************************************
+   * This enumeration class records the various textures the library can
+   * provide. The EnumMap below maintains a mapping of these constants to cached
+   * appearances.
+   *********************************************************************************/
   public enum TextureDescriptor {
     BATHROOMTILE, CHECKER, CLAY, COBBLESTONE, DOTS, GRID, LIGHTHOUSE, PLAID, STUCCO, SWIRLS, ZIGZAG
   }
 
   private static EnumMap<TextureDescriptor, Appearance> library;
-  
+
   /*********************************************************************************
    * This block of code initializes our library of textures, so we aren't always
    * fetching copies from the disk.
    *********************************************************************************/
   static {
-    library = new EnumMap<TextureDescriptor, Appearance>(TextureDescriptor.class);
-    
-    for( TextureDescriptor td : TextureDescriptor.values() ){
-      Appearance tdApp = initializeAppearance( td );
-      library.put(td, tdApp);      
+    library = new EnumMap<TextureDescriptor, Appearance>(
+        TextureDescriptor.class);
+
+    for (TextureDescriptor td : TextureDescriptor.values()) {
+      Appearance tdApp = initializeAppearance(td);
+      library.put(td, tdApp);
     }
   }
 
+  /*********************************************************************************
+   * initializeAppearance
+   * 
+   * This method is used to load each texture from disk the first time it is
+   * needed. It should only be called once (and the results stored) which is why
+   * this method is private.
+   *********************************************************************************/
   private static Appearance initializeAppearance(TextureDescriptor td) {
     Appearance app = new Appearance();
     DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
@@ -100,12 +123,20 @@ public class TextureLibrary {
 
     Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);
     tex.setTextureMatrix(MatrixBuilder.euclidean().scale(0.5).getMatrix());
-    
+
     return app;
   }
 
-  public static Appearance getAppearance( TextureDescriptor td ){
+  /*********************************************************************************
+   * getAppearance
+   * 
+   * This method is the primary method in this class used by outside code. Given
+   * an input TextureDescriptor, this method returns the corresponding cached
+   * appearance object. Implicitly, we assume that the Appearance object that is
+   * returned will not be modified (since it is shared among possibly many scene
+   * graph components).
+   *********************************************************************************/
+  public static Appearance getAppearance(TextureDescriptor td) {
     return library.get(td);
   }
-  
 }
