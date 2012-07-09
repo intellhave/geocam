@@ -1,4 +1,4 @@
-package view;
+package frontend;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -30,6 +30,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import view.View;
 
 import marker.Marker;
 import marker.MarkerAppearance;

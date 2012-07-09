@@ -1,4 +1,4 @@
-package view;
+package frontend;
 
 import inputOutput.TriangulationIO;
 
@@ -18,6 +18,11 @@ import marker.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
+import view.EmbeddedView;
+import view.ExponentialView;
+import view.FaceAppearanceScheme;
+import view.FirstPersonView;
+import view.View;
 import controller.KeyboardController;
 import controller.SNESController;
 import controller.UserController;

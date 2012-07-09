@@ -126,7 +126,7 @@ public class EmbeddedView extends View {
    * 
    * See the documentation in View.
    *********************************************************************************/
-  protected void initializeNewManifold() {
+  public void initializeNewManifold() {
     for (SceneGraphComponent sgc : sgcpools.values()) {
       sgcMarkers.removeChild(sgc);
     }
