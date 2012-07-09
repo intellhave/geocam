@@ -434,11 +434,19 @@ public class ViewerController extends JFrame {
       drawOptionsPanel.add(drawEdgesBox);
       drawEdgesBox.setText("Draw edges");
       drawEdgesBox.setSelected(true);
+      
       //add action listener
       
       /********************************************************************************
        * TODO: make the Draw Edges checkbox functional
        ********************************************************************************/
+      ActionListener drawEdgesListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          boolean boxChecked = drawEdgesBox.isSelected();
+          DevelopmentUI.setDrawEdges(boxChecked);
+        }
+      };
+      drawEdgesBox.addActionListener(drawEdgesListener);
     }
   //***************************DRAW FACES CHECK BOX*****************************
     {
@@ -447,10 +455,13 @@ public class ViewerController extends JFrame {
       drawFacesBox.setText("Draw faces");
       drawFacesBox.setSelected(true);
       //add action listener
-      
-      /********************************************************************************
-       * TODO: make the Draw Faces checkbox functional
-       ********************************************************************************/
+      ActionListener drawFacesListener = new ActionListener(){
+        public void actionPerformed(ActionEvent arg0) {
+          boolean boxChecked = drawFacesBox.isSelected();
+          DevelopmentUI.setDrawFaces(boxChecked);
+        }
+      };
+      drawFacesBox.addActionListener(drawFacesListener); 
     }
   //***************************DRAW AVATAR CHECK BOX*****************************
     {

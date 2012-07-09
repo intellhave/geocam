@@ -9,8 +9,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import development.Development;
-import frontend.CookieGame;
-import frontend.DevelopmentUI;
 
 public abstract class UserController implements Runnable {
   /*********************************************************************************
@@ -25,6 +23,9 @@ public abstract class UserController implements Runnable {
   protected static final long KEY_REPEAT_RATE = 90;
   protected static long SLEEP_TIME = 0;
   protected final int MAX_REPEAT_RATE = 100; // Hz
+
+  public boolean isPaused = false;
+
 
   /*********************************************************************************
    * This enumeration defines all of the different kinds of user input that we
@@ -184,8 +185,7 @@ public abstract class UserController implements Runnable {
       development.rotate(0.05);
       break;
     case start:
-      DevelopmentUI.paused = true;
-      CookieGame.paused = true;
+      isPaused = true;
       break;
     }
 
@@ -209,6 +209,14 @@ public abstract class UserController implements Runnable {
     return aa;
   }
 
+  public void resetPausedFlag(){
+    isPaused = false;
+  }
+  
+  public boolean isPaused(){
+    return isPaused;
+  }
+  
   public void clear() {
     this.actionQueue.clear();
   }

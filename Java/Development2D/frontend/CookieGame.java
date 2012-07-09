@@ -30,9 +30,8 @@ import development.Vector;
 public class CookieGame {
 
   private static boolean developerMode = false;
-  public static boolean paused;
   public static boolean gameWon;
-
+  public static boolean paused = false;
   private static Marker source;
   private static Marker cookie;
 
@@ -160,8 +159,6 @@ public class CookieGame {
   public static void runGame() {
     final long dt = 10; // Timestep size, in microseconds
     // final long maxFrameTime = 80;
-
-    paused = false;
     gameWon = false;
 
     long startTime = System.currentTimeMillis();
@@ -169,6 +166,10 @@ public class CookieGame {
     long accumulator = 0;
     Thread t = new Thread(userControl);
     t.start();
+    
+    userControl.clear();
+    userControl.resetPausedFlag();
+    paused = false;
     while (!paused && !gameWon) {
       long newTime = System.currentTimeMillis();
       long frameTime = newTime - currentTime;
@@ -196,6 +197,7 @@ public class CookieGame {
 
       }
       render();
+      paused = userControl.isPaused();
     }
     t.interrupt();
 
