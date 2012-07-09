@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import view.CookieGame;
 import view.DevelopmentUI;
 import controller.KeyboardMenuController;
-import controller.SNESMenuController;
 import controller.UserController;
 import controller.UserController.Action;
 
@@ -35,7 +34,7 @@ public class MenuUI extends JFrame {
 
   // TODO: Build all menus the user will actually see, and integrate this with
   // the simulation UI
-  
+
   private UserController controller;
   private Boolean exit;
 
@@ -43,8 +42,8 @@ public class MenuUI extends JFrame {
    * Image data
    * 
    * These are the composite BufferedImages that will be displayed to the user.
-   * To improve the speed of the program (i.e. to avoid repeatedly reading from 
-   * the disk) these images are read in from image files only once as the 
+   * To improve the speed of the program (i.e. to avoid repeatedly reading from
+   * the disk) these images are read in from image files only once as the
    * program initializes.
    * 
    *********************************************************************************/
@@ -68,24 +67,20 @@ public class MenuUI extends JFrame {
   private static BufferedImage currentMenu;
 
   /*********************************************************************************
-   * 
+   * This main method starts our whole application, including the "explorer"
+   * version of our simulation and the "cookie game" version of the simulation.
    *********************************************************************************/
-
   public static void main(String[] args) throws IOException {
     new MenuUI();
   }
 
-  /*********************************************************************************
-   * 
-   *********************************************************************************/
-
   public MenuUI() {
-   // controller = new SNESMenuController();
+    // controller = new SNESMenuController();
     controller = new KeyboardMenuController();
     try {
       initFiles();
     } catch (IOException ioe) {
-      System.err.println("Error: Could not locate menu images.");      
+      System.err.println("Error: Could not locate menu images.");
       ioe.printStackTrace();
     }
     initMenuView();
@@ -93,13 +88,11 @@ public class MenuUI extends JFrame {
 
   /*********************************************************************************
    * initFiles
-   * 
    *********************************************************************************/
-
   private void initFiles() throws IOException {
     final String bg_path = "Data/menu/backgrounds/";
     final String menu_path = "Data/menu/menus/";
-    
+
     File startMenuBackground = new File(bg_path + "dodecBackground.png");
     File gameMenuBackground = new File(bg_path + "barbellBackground2.png");
     File explorerMenuBackground = new File(bg_path + "dodecFirstPerson.png");
@@ -110,7 +103,8 @@ public class MenuUI extends JFrame {
     File gameMenu_tag = new File(menu_path + "GameSelection_tag.png");
     File gameMenu_cookie = new File(menu_path + "GameSelection_cookie.png");
     File explorerMenu_start = new File(menu_path + "SurfaceExplorer_start.png");
-    File explorerMenu_options = new File(menu_path + "SurfaceExplorer_options.png");
+    File explorerMenu_options = new File(menu_path
+        + "SurfaceExplorer_options.png");
 
     File aboutPage = new File(menu_path + "AboutPage.png");
     File tagGame = new File(menu_path + "TagGame.png");
@@ -161,36 +155,37 @@ public class MenuUI extends JFrame {
   /*********************************************************************************
    * startMenu, gameMenu, explorerMenu, etc
    * 
-   * Each menu is implemented as a static method. It has a menu state integer which 
-   * keeps track of which option is highlighted on the screen, and it displays 
-   * different states to the user as different BufferedImages (creating the 
-   * illusion of interactive menus).
+   * Each menu is implemented as a static method. It has a menu state integer
+   * which keeps track of which option is highlighted on the screen, and it
+   * displays different states to the user as different BufferedImages (creating
+   * the illusion of interactive menus).
    * 
    * For example, explorerMenu has two states with two different images: one
    * where the "start" button is highlighted and one where the "options" button
    * is highlighted. Inside explorerMenu a while loop is continuously running
-   * checking for user input. When the user "selects" one of the options, 
-   * explorerMenu either calls the optionsMenu method or starts the explorer 
+   * checking for user input. When the user "selects" one of the options,
+   * explorerMenu either calls the optionsMenu method or starts the explorer
    * simulation.
    * 
-   * The menus are implemented as a tree. For example suppose the user is viewing 
-   * the explorerMenu. If they then wish to go back to the previous menu, 
-   * explorerMenu breaks from its while loop and the previous menu's while loop 
-   * resumes where it left off.
+   * The menus are implemented as a tree. For example suppose the user is
+   * viewing the explorerMenu. If they then wish to go back to the previous
+   * menu, explorerMenu breaks from its while loop and the previous menu's while
+   * loop resumes where it left off.
    * 
    *********************************************************************************/
 
-  //  TODO: Is this enum necessary for anything?
-  
-//  private static enum MenuState {
-//    START_GAMES, START_EXPLORER, START_ABOUT, GAME_TAG, GAME_COOKIE, EXPLORER_START, EXPLORER_OPTIONS
-//  };
+  // TODO: Is this enum necessary for anything?
+
+  // private static enum MenuState {
+  // START_GAMES, START_EXPLORER, START_ABOUT, GAME_TAG, GAME_COOKIE,
+  // EXPLORER_START, EXPLORER_OPTIONS
+  // };
 
   private void startMenu() {
     BufferedImage[] menuImages = { start_games, start_explorer, start_about };
     currentMenu = start_games;
     int state = 0;
-    
+
     this.repaint();
 
     controller.clear();
@@ -198,8 +193,9 @@ public class MenuUI extends JFrame {
 
     while (true) {
       act = controller.getNextAction();
-      if( act == null ) continue;
-      
+      if (act == null)
+        continue;
+
       switch (act) {
       case Back:
         state = (state + 1) % 3;
@@ -226,16 +222,17 @@ public class MenuUI extends JFrame {
     BufferedImage[] menuImages = { game_tag, game_cookie };
     currentMenu = game_tag;
     int state = 0;
-    
+
     this.repaint();
 
     Action act = null;
 
     while (true) {
       act = controller.getNextAction();
-      if (act == null) continue;
-      
-      switch(act) {
+      if (act == null)
+        continue;
+
+      switch (act) {
       case Back:
       case Forward:
         state = (state + 1) % 2;
@@ -247,9 +244,9 @@ public class MenuUI extends JFrame {
           runCookie();
         break;
       }
-      if( act == Action.B_Button)
+      if (act == Action.B_Button)
         break;
-      
+
       currentMenu = menuImages[state];
       this.repaint();
     }
@@ -328,14 +325,15 @@ public class MenuUI extends JFrame {
     BufferedImage[] menuImages = { explorer_start, explorer_options };
     currentMenu = explorer_start;
     int state = 0;
-    
+
     this.repaint();
 
     Action act = null;
 
     while (true) {
       act = controller.getNextAction();
-      if (act == null) continue;
+      if (act == null)
+        continue;
 
       switch (act) {
       case Back:
@@ -357,13 +355,12 @@ public class MenuUI extends JFrame {
 
           // resumeController();
           pauseExplorerMenu();
-        } 
-        else
+        } else
           explorerOptions();
       }
       if (act == Action.B_Button)
         break;
-      
+
       currentMenu = menuImages[state];
       this.repaint();
     }
@@ -375,17 +372,18 @@ public class MenuUI extends JFrame {
     this.setVisible(true);
 
     Action a = null;
-    
+
     while (true) {
       a = controller.getNextAction();
-      if (a == null) continue;
-      
-      if( a == Action.B_Button){
-        this.setVisible(false);        
+      if (a == null)
+        continue;
+
+      if (a == Action.B_Button) {
+        this.setVisible(false);
         DevelopmentUI.runSimulation();
         this.setVisible(true);
       }
-      if( a == Action.A_Button ){
+      if (a == Action.A_Button) {
         DevelopmentUI.quitExplorer();
         break;
       }

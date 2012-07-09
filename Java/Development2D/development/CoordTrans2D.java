@@ -1,7 +1,6 @@
 package development;
 
 import geoquant.Geoquant;
-import geoquant.Length;
 import geoquant.TriPosition;
 
 import java.util.HashMap;
@@ -11,9 +10,7 @@ import java.util.List;
 
 import triangulation.Edge;
 import triangulation.Face;
-import triangulation.StdFace;
 import triangulation.Vertex;
-import util.Matrix;
 
 //value is det(affineTrans)
 
