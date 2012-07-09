@@ -24,7 +24,6 @@ import view.FaceAppearanceScheme;
 import view.FirstPersonView;
 import view.View;
 import controller.KeyboardController;
-import controller.SNESController;
 import controller.UserController;
 import development.Coord2D;
 import development.Development;
@@ -35,7 +34,6 @@ import development.Vector;
 public class DevelopmentUI {
 
   private static boolean developerMode = false;  
-  public static boolean paused;
   
   /*********************************************************************************
    * Model Data
@@ -157,8 +155,6 @@ public class DevelopmentUI {
   public static void runSimulation() {
     
     final long dt = 10; // Timestep size, in microseconds    
-
-    paused = false;
     
     long startTime = System.currentTimeMillis();
     long currentTime = startTime;
@@ -166,7 +162,9 @@ public class DevelopmentUI {
     Thread t = new Thread(userControl);
     t.start();
     
-    while (!paused || developerMode ) {
+    userControl.resetPausedFlag();
+    userControl.clear();
+    while (! userControl.isPaused() || developerMode ) {
       long newTime = System.currentTimeMillis();
       long frameTime = newTime - currentTime;
 
@@ -391,5 +389,15 @@ public class DevelopmentUI {
   private static void initViewControls() {
     viewerControl = new ViewerController(markers, development, views);
     viewerControl.setVisible(true);
+  }
+  public static void setDrawEdges(boolean drawEdge){
+    for(View v: views){
+      v.setDrawEdges(drawEdge);
+    }
+  }
+  public static void setDrawFaces(boolean drawFace){
+    for(View v: views){
+      v.setDrawFaces(drawFace);
+    }
   }
 }

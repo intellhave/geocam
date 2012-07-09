@@ -165,8 +165,8 @@ public abstract class View {
    * the development should be explicitly drawn.
    *********************************************************************************/
   public void setDrawEdges(boolean value) {
-    sgcDevelopment.getAppearance().setAttribute(CommonAttributes.EDGE_DRAW,
-        value);
+    Appearance app = sgcDevelopment.getAppearance();
+    app.setAttribute(CommonAttributes.EDGE_DRAW, value);
   }
 
   /*********************************************************************************
@@ -176,8 +176,8 @@ public abstract class View {
    * the development should be explicitly drawn.
    *********************************************************************************/
   public void setDrawFaces(boolean value) {
-    sgcDevelopment.getAppearance().setAttribute(CommonAttributes.FACE_DRAW,
-        value);
+    Appearance app = sgcDevelopment.getAppearance();
+    app.setAttribute(CommonAttributes.FACE_DRAW, value);
   }
 
   /*********************************************************************************
