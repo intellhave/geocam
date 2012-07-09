@@ -31,10 +31,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import marker.ManifoldPosition;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
+import development.Development;
+import development.ManifoldPosition;
 import development.Vector;
 
 public class ViewerController extends JFrame {

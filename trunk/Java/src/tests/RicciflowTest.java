@@ -11,7 +11,6 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 
-import marker.ManifoldPosition;
 
 
 import geoquant.Alpha;

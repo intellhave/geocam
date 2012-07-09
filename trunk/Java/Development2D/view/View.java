@@ -26,6 +26,7 @@ import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+import development.Development;
 
 /*********************************************************************************
  * View
@@ -84,8 +85,7 @@ public abstract class View {
    * This constructor is responsible for setting up the scene graph and
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
-  public View(Development development, MarkerHandler markers,
-      FaceAppearanceScheme fas) {
+  public View(Development development, MarkerHandler markers, FaceAppearanceScheme fas) {
     this.development = development;
     this.markers = markers;
     this.faceAppearanceScheme = fas;

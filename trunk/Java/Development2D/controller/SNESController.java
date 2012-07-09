@@ -6,7 +6,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
 
-import view.Development;
+import development.Development;
 
 public class SNESController extends UserController {
 
