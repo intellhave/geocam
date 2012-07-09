@@ -73,7 +73,7 @@ public class EmbeddedView extends View {
    * fixed point or take a more "global view" of the embedded surface.
    *********************************************************************************/
   protected void updateCamera() {
-    ManifoldPosition pos = development.getSourceMarker().getPosition();
+    ManifoldPosition pos = development.getSource();
     Vector embPsn = EmbeddedTriangulation.getCoord3D(pos.getFace(), pos.getPosition());
 
     Vector forward, left, normal;
