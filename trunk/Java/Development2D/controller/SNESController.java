@@ -6,8 +6,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
 
-import controller.UserController.Action;
-
 import view.Development;
 
 public class SNESController extends UserController {
@@ -286,22 +284,4 @@ public class SNESController extends UserController {
       }
     }
   }
-//  
-//  
-//  /*********************************************************************************
-//   * createAction
-//   *  
-//   * This method provides an alternative to userController's 
-//   * start/stopRepeatingActions methods for generating actions from buttons on 
-//   * the controller which need to receive discrete inputs for the purposes of 
-//   * calling menus from within the simulation. For example the start button needs
-//   * to generate only one action when pressed in while running DevelopmentUI (in
-//   * order to call up the pause menu).
-//   * 
-//   **********************************************************************************/
-//  
-//  protected synchronized void createAction(Action action){
-//    actionQueue.add( action );
-//  }
-
 }

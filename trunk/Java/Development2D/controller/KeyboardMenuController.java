@@ -1,7 +1,5 @@
 package controller;
 
-import controller.UserController.Action;
-
 public class KeyboardMenuController extends KeyboardController {
 
   public KeyboardMenuController() {
