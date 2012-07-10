@@ -50,22 +50,22 @@ public class ViewerController extends JFrame {
    * Data related to the model
    ********************************************************************************/
   private Development develop;
-  private MarkerHandler mark;
-  private Marker source;
-  private View[] views;
+  private static MarkerHandler mark;
+  private static Marker source;
+  private Set<View> views;
   
   // This main method is for button layout testing.
-  public static void main(String[] args) {
-    JFrame window = new ViewerController(null,null,null);
-    window.setVisible(true);
-  }
+
   
-  public ViewerController(MarkerHandler mh, Development d, View[] views){
+  public ViewerController(MarkerHandler mh, Development d, Set<View> views){
     develop = d;
     mark = mh;
     this.views = views;
     source = mark.getSourceMarker();
     layoutGUI();
+    DevelopmentUI.setExponentialView(showView2DBox.isSelected());
+    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected());
+    DevelopmentUI.setFirstView(showView3DBox.isSelected());
   }
   
   /********************************************************************************
@@ -113,7 +113,47 @@ public class ViewerController extends JFrame {
     this.setTitle("Development View");
     this.setLayout(new FlowLayout());
     
-    //******************************MENU BAR********************************
+//    //******************************MENU BAR********************************
+//    menuBar = new JMenuBar();
+//    this.setJMenuBar(menuBar);
+//    {
+//      file = new JMenu();
+//      menuBar.add(file);
+//      file.setText("File");
+//      {
+//        open = new JMenuItem();
+//        file.add(open);
+//        open.setText("Load Surface");
+//        
+//        ActionListener fileListener = new ActionListener(){
+//          public void actionPerformed(ActionEvent e){
+//            JFileChooser fc = new JFileChooser();
+//            
+//            fc.setDialogTitle("Open File");
+//            // Choose only files, not directories
+//            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//            // Start in current directory
+//            fc.setCurrentDirectory(new File("."));
+//            fc.showOpenDialog(null);
+//            
+//            File file = null;
+//            try {
+//              file = fc.getSelectedFile();
+//            } catch (Exception ex) {
+//              System.out.println("Invalid file");
+//            }
+//            
+//            /********************************************************************************
+//             * TODO hook up loadSurface() and initializeSurface()
+//             ********************************************************************************/
+//          } 
+//        };
+//        open.addActionListener(fileListener);
+//      }
+//    }
+//    
+    
+    
     menuBar = new JMenuBar();
     this.setJMenuBar(menuBar);
     {
@@ -124,9 +164,8 @@ public class ViewerController extends JFrame {
         open = new JMenuItem();
         file.add(open);
         open.setText("Load Surface");
-        
-        ActionListener fileListener = new ActionListener(){
-          public void actionPerformed(ActionEvent e){
+        open.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
             JFileChooser fc = new JFileChooser();
             
             fc.setDialogTitle("Open File");
@@ -142,15 +181,14 @@ public class ViewerController extends JFrame {
             } catch (Exception ex) {
               System.out.println("Invalid file");
             }
-            
-            /********************************************************************************
-             * TODO hook up loadSurface() and initializeSurface()
-             ********************************************************************************/
-          } 
-        };
-        open.addActionListener(fileListener);
+            DevelopmentUI.loadSurface(file.getAbsolutePath());
+            DevelopmentUI.resetView();
+            resetViewController();
+          }
+        });
       }
     }
+    
     
   //******************************TEXT BOX PANEL********************************
     textBoxPanel = new JPanel();
@@ -391,6 +429,15 @@ public class ViewerController extends JFrame {
       showView2DBox.setText("Show 2D view");
       showView2DBox.setSelected(true);
       //add action listener here
+      ActionListener view2DListener = new ActionListener(){
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+          // TODO Auto-generated method stub
+          boolean checkBox = showView2DBox.isSelected();
+          DevelopmentUI.setExponentialView(checkBox);
+        }
+      };
+      showView2DBox.addActionListener(view2DListener);
       
       /********************************************************************************
        * TODO: make the 2D View checkbox functional
@@ -402,11 +449,16 @@ public class ViewerController extends JFrame {
       viewerPanel.add(showView3DBox);
       showView3DBox.setText("Show 3D view");
       showView3DBox.setSelected(true);
-      //add action listener
+      ActionListener view3DListener = new ActionListener(){
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+          // TODO Auto-generated method stub
+          boolean checkBox = showView3DBox.isSelected();
+          DevelopmentUI.setFirstView(checkBox);
+        }
+      };
+      showView3DBox.addActionListener(view3DListener);
       
-      /********************************************************************************
-       * TODO: make the 3D View checkbox functional
-       ********************************************************************************/
     }
     //************************EMBEDDED VIEW CHECK BOX**************************
     {
@@ -414,11 +466,15 @@ public class ViewerController extends JFrame {
       viewerPanel.add(showEmbeddedBox);
       showEmbeddedBox.setText("Show embedded view");
       showEmbeddedBox.setSelected(true);
-      //add action listener
-      
-      /********************************************************************************
-       * TODO: make the Embedded View checkbox functional
-       ********************************************************************************/
+      ActionListener viewEmbeddedListener = new ActionListener(){
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+          // TODO Auto-generated method stub
+          boolean checkBox = showEmbeddedBox.isSelected();
+          DevelopmentUI.setEmbeddedView(checkBox);
+        }
+      };
+      showEmbeddedBox.addActionListener(viewEmbeddedListener); 
     }
     
   //******************************DRAW OPTIONS PANEL********************************
@@ -479,5 +535,25 @@ public class ViewerController extends JFrame {
       };
       drawAvatarBox.addActionListener(drawAvatar);
       }
+  }
+  private void resetViewController(){
+    source = mark.getSourceMarker();
+    numObjects.setValue(mark.getAllMarkers().size()-1);
+    recDepth.setValue(develop.getDepth());
+    double speed = mark.getMarkerSpeed(source);
+    double speedToSet = Math.log(speed/0.05);
+    speedSlider.setValue((int)(speedToSet*1000.0));
+    scalingSlider.setValue((int)(mark.getMarkerScale(source)*10));
+    stopStartButton.setText("Stop");
+    showView2DBox.setSelected(true);
+    showView3DBox.setSelected(true);
+    showEmbeddedBox.setSelected(true);
+    drawEdgesBox.setSelected(true);
+    drawAvatarBox.setSelected(true);
+    drawFacesBox.setSelected(true);
+    System.out.println(mark.getAllMarkers().size()-1);
+  }
+  public void setMarkerHandler(MarkerHandler mh){
+    mark = mh;
   }
 }
