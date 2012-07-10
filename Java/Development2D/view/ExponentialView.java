@@ -38,10 +38,10 @@ import development.Vector;
 public class ExponentialView extends View {
   protected HashMap<Marker, LinkedList<SceneGraphComponent>> sgcpools;
   protected SceneGraphComponent sgcLight;
-  
+
   protected HashMap<Face, DevelopmentGeometry> faceDevelopments;
   protected HashMap<Face, SceneGraphComponent> faceSGCs;
-  
+
   /*********************************************************************************
    * ExponentialView
    * 
@@ -49,7 +49,8 @@ public class ExponentialView extends View {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public ExponentialView(Development d, MarkerHandler mh, FaceAppearanceScheme fas) {
+  public ExponentialView(Development d, MarkerHandler mh,
+      FaceAppearanceScheme fas) {
     super(d, mh, fas);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
 
@@ -61,15 +62,16 @@ public class ExponentialView extends View {
 
     // MatrixBuilder.euclidean().translate(0,0,5).assignTo(sgcLight);
     sgcCamera.addChild(sgcLight);
-    
+
     faceDevelopments = new HashMap<Face, DevelopmentGeometry>();
     faceSGCs = new HashMap<Face, SceneGraphComponent>();
-    
-    for( Face f : Triangulation.faceTable.values() ){
+
+    for (Face f : Triangulation.faceTable.values()) {
       SceneGraphComponent sgc = new SceneGraphComponent();
       faceSGCs.put(f, sgc);
       this.sgcDevelopment.addChild(sgc);
-      // TODO: Can sgc carry the appearance for all the pieces of the development beneath it???
+      // TODO: Can sgc carry the appearance for all the pieces of the
+      // development beneath it???
     }
   }
 
@@ -95,33 +97,34 @@ public class ExponentialView extends View {
    * procedure outlined in one of the 2010 REU papers.
    *********************************************************************************/
   protected void generateManifoldGeometry() {
-    for( Face f : Triangulation.faceTable.values() ){
-      // TODO: Would it be better to be able to tell a development geometry to clear all its existing data???
+    for (Face f : Triangulation.faceTable.values()) {
+      // TODO: Would it be better to be able to tell a development geometry to
+      // clear all its existing data???
       faceDevelopments.put(f, new DevelopmentGeometry());
     }
-    
+
     generateManifoldGeometry(development.getRoot());
 
-    for( Face f : faceDevelopments.keySet() ){
+    for (Face f : faceDevelopments.keySet()) {
       SceneGraphComponent sgc = faceSGCs.get(f);
-      
+
       DevelopmentGeometry dgf = faceDevelopments.get(f);
       double[][] ifsf_verts = dgf.getVerts();
       int[][] ifsf_faces = dgf.getFaces();
 
-      if( ifsf_verts.length == 0 ){
+      if (ifsf_verts.length == 0) {
         sgc.setVisible(false);
         continue;
       } else {
         sgc.setVisible(true);
       }
-     
+
       IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
       ifsf.setVertexCount(ifsf_verts.length);
       ifsf.setVertexCoordinates(ifsf_verts);
-      
+
       double[][] tex_verts = dgf.getTexCoords();
-      
+
       ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, tex_verts);
       ifsf.setFaceCount(ifsf_faces.length);
       ifsf.setFaceIndices(ifsf_faces);
@@ -129,14 +132,14 @@ public class ExponentialView extends View {
       ifsf.update();
 
       TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
-      Appearance app = TextureLibrary.getAppearance(td);      
+      Appearance app = TextureLibrary.getAppearance(td);
       sgc.setGeometry(ifsf.getGeometry());
       sgc.setAppearance(app);
     }
   }
-  
+
   // This is a recursive helper method for generateManifoldGeometry().
-  private void generateManifoldGeometry( DevelopmentNode node ) {
+  private void generateManifoldGeometry(DevelopmentNode node) {
     Face f = node.getFace();
     DevelopmentGeometry dg = faceDevelopments.get(f);
     double[][] face = node.getClippedFace().getVectorsAsArray();
@@ -170,8 +173,8 @@ public class ExponentialView extends View {
       }
 
       ArrayList<Vector[]> images = markerImages.get(m);
-      if (images == null){
-        for(SceneGraphComponent sgc: pool)
+      if (images == null) {
+        for (SceneGraphComponent sgc : pool)
           sgc.setVisible(false);
         continue;
       }
@@ -221,8 +224,8 @@ public class ExponentialView extends View {
 
           MatrixBuilder
               .euclidean()
-              .translate(position.getComponent(0), position.getComponent(1),1.0)
-              .times(matrix).scale(m.getAppearance().getScale())
+              .translate(position.getComponent(0), position.getComponent(1),
+                  1.0).times(matrix).scale(m.getAppearance().getScale())
               .assignTo(sgc);
 
           sgc.setVisible(true);
@@ -304,7 +307,7 @@ public class ExponentialView extends View {
   @Override
   public void removeMarker(Marker m) {
     LinkedList<SceneGraphComponent> objectImages = sgcpools.get(m);
-    for(SceneGraphComponent sgc : objectImages){
+    for (SceneGraphComponent sgc : objectImages) {
       sgcMarkers.removeChild(sgc);
     }
   }
