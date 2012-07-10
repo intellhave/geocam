@@ -6,11 +6,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.util.AbstractMap;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JFrame;
 
@@ -26,7 +27,6 @@ import view.FaceAppearanceScheme;
 import view.FirstPersonView;
 import view.View;
 import controller.KeyboardController;
-import controller.SNESController;
 import controller.UserController;
 import development.Coord2D;
 import development.Development;
@@ -36,8 +36,8 @@ import development.Vector;
 
 public class DevelopmentUI {
 
-  private static boolean developerMode = false;  
-  
+  private static boolean developerMode = false;
+
   /*********************************************************************************
    * Model Data
    * 
@@ -58,6 +58,10 @@ public class DevelopmentUI {
    * present the mathematical objects to the user.
    *********************************************************************************/
   private static AbstractMap<View, JFrame> frames;
+  static Set<View> views;
+  static View firstPersonView;
+  static View exponentialView;
+  static View embeddedView;
 
   /*********************************************************************************
    * Model Control Data
@@ -77,10 +81,7 @@ public class DevelopmentUI {
    * networkControl: Receives network input from other instances of
    * "DevelopmentUI", and modifies the model accordingly.
    *********************************************************************************/
-  // private static MouseController mouseControl;
   private static UserController userControl;
-  // private static MarkerController markerControl;
-  // private static NetworkController networkControl;
 
   /*********************************************************************************
    * View Control Data
@@ -91,18 +92,10 @@ public class DevelopmentUI {
    * For example, a slider bar that controls how big the objects on the surfaces
    * are belongs here.
    *********************************************************************************/
-  static Set<View> views;
-  
-  static View firstView;
-  
-  static View exponentialView;
-  
-  static View embeddedView;
-  
-  static ViewerController viewerControl;
-  
-  private static FaceAppearanceScheme faceScheme;
-  
+  private static ViewerController viewerController;
+
+  private static FaceAppearanceScheme faceAppearanceScheme;
+
   public static void main(String[] args) {
     // This is a good option to set if you wan't more information about what
     // JReality does behind the scenes
@@ -110,45 +103,43 @@ public class DevelopmentUI {
 
     // Note: For correct initialization, it is important the method calls listed
     // below occur in the particular order listed.
-    faceScheme = new FaceAppearanceScheme();
-    frames = new HashMap<View, JFrame>();
-    views = new HashSet<View>();
     developerMode = true;
     initModel();
-    //initViews();
-    initViewControls();
+    initViews();
     initModelControls();
+    initViewControls();
     runSimulation();
   }
-  
+
   /*********************************************************************************
    * runExplorer, quitExplorer
    * 
-   * These public methods allow MenuUI to start and stop a DevelopmentUI simulation.
-   * The runExplorer method initializes a new simulation (i.e. loads a model and 
-   * views, creates a new controller object, and starts the simulation running).
-   * The quitExplorer method closes and discards the view windows.
+   * These public methods allow MenuUI to start and stop a DevelopmentUI
+   * simulation. The runExplorer method initializes a new simulation (i.e. loads
+   * a model and views, creates a new controller object, and starts the
+   * simulation running). The quitExplorer method closes and discards the view
+   * windows.
    * 
    * Note that the simulation may be paused without quitting it. In order to
-   * resume a simulation in progress, MenuUI calls the runSimulation method
-   * (not the runExplorer method).
+   * resume a simulation in progress, MenuUI calls the runSimulation method (not
+   * the runExplorer method).
    *********************************************************************************/
- 
-  public static void runExplorer(){
+
+  public static void runExplorer() {
     initModel();
-    //initViews();
+    initViews();
     initModelControls();
-    runSimulation(); 
+    runSimulation();
   }
-  
-  public static void quitExplorer(){
-    for (View view:views){
+
+  public static void quitExplorer() {
+    for (View view : views) {
       JFrame window = frames.get(view);
       window.setVisible(false);
       window.dispose();
-    } 
+    }
   }
-  
+
   /*********************************************************************************
    * runSimulation
    * 
@@ -165,19 +156,19 @@ public class DevelopmentUI {
    * TODO Add more description here.
    *********************************************************************************/
   public static void runSimulation() {
-    
-    final long dt = 10; // Timestep size, in microseconds    
-    
+
+    final long dt = 10; // Timestep size, in microseconds
+
     long startTime = System.currentTimeMillis();
     long currentTime = startTime;
     long accumulator = 0;
     Thread t = new Thread(userControl);
     t.start();
-    
+
     Marker source = markerHandler.getSourceMarker();
     userControl.resetPausedFlag();
     userControl.clear();
-    while (! userControl.isPaused() || developerMode ) {
+    while (!userControl.isPaused() || developerMode) {      
       long newTime = System.currentTimeMillis();
       long frameTime = newTime - currentTime;
 
@@ -185,21 +176,21 @@ public class DevelopmentUI {
       accumulator += frameTime;
 
       while (accumulator >= dt) {
-        
+
         // FIXME: This code will make sure the source point marker is displayed
         // correctly, but this code does not belong in the DevelopmentUI class.
         // Refactoring is needed here.
-        
+
         // PATCH START
-        Face prev = development.getSource().getFace();        
+        Face prev = development.getSource().getFace();
         userControl.runNextAction();
-        Face next = development.getSource().getFace();        
+        Face next = development.getSource().getFace();
         source.setPosition(development.getSource());
-        if(next != prev){
+        if (next != prev) {
           markerHandler.updateMarker(source, prev);
         }
         // PATCH END
-        
+
         markerHandler.updateMarkers(dt);
         accumulator -= dt;
       }
@@ -219,7 +210,6 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void render() {
     for (View v : views) {
-      //v.initializeNewManifold();
       v.updateGeometry(true, true);
       v.updateScene();
     }
@@ -233,12 +223,8 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    //String filename = "Data/blender/cube_surf.off";
+    // String filename = "Data/blender/cube_surf.off";
     String filename = "Data/off/dodec.off";
-    //String newFile = "Data/Triangulations/2DManifolds/tetrahedron2.xml";
-    //String brokenFile = "Data/Triangulations/2DManifolds/octahedron.xml";
-    //String mobius = "Data/off/mobius.off";
-    //String domain = "Data/Triangulations/2DManifolds/domain.xml";
     loadSurface(filename);
   }
 
@@ -296,16 +282,16 @@ public class DevelopmentUI {
    * This method initializes the markers (ants, rockets, cookies, etc.) that
    * will appear on the surface for games and exploration.
    *********************************************************************************/
-  private static void initMarkers() { 
+  private static void initMarkers() {
     markerHandler = new MarkerHandler();
-    
+
     ManifoldPosition pos;
     MarkerAppearance app;
-    
+
     pos = development.getSource();
     app = new MarkerAppearance(MarkerAppearance.ModelType.ANT);
-    markerHandler.addSourceMarker( new Marker( pos, app ) );
-    
+    markerHandler.addSourceMarker(new Marker(pos, app));
+
     Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {
@@ -316,7 +302,7 @@ public class DevelopmentUI {
       vel.scale(0.0005);
 
       Marker m = new Marker(pos, app, vel);
-      markerHandler.addMarker(m); 
+      markerHandler.addMarker(m);
     }
 
     // Move the markers along their trajectories for 300ms, so that they don't
@@ -327,55 +313,14 @@ public class DevelopmentUI {
   /*********************************************************************************
    * initViews
    * 
-   * This method is responsible for initializing the code that creates a
-   * visualization of the triangulated surface for the user. This method is also
-   * responsible for positioning the views on the screen.
-   * 
-   * Because we're interested in displaying this in a museum setting (where
-   * users shouldn't be allowed to change window sizes), it's OK to hard code
-   * this information.
+   * This method initializes the data structures that keep track of the views in
+   * our program. These views will be initialized in ViewerController.
    *********************************************************************************/
-//  private static void initViews() {
-//    faceScheme = new FaceAppearanceScheme();
-//
-//    int viewCount = 3;
-//    views = new View[viewCount];
-//    // views[0] = new FirstPersonView(development, markers, colorScheme);
-//    views[0] = new FirstPersonView(development, markerHandler, faceScheme);
-//    views[1] = new ExponentialView(development, markerHandler, faceScheme);
-//    views[2] = new EmbeddedView(development, markerHandler, faceScheme);
-//
-//    int[][] framePositions = { { 0, 10 }, { 400, 10 }, { 800, 10 } };
-//    int[][] frameSizes = { { 400, 400 }, { 400, 400 }, { 400, 400 } };
-//
-//    frames = new HashMap<View, JFrame>();
-//
-//    for (int ii = 0; ii < viewCount; ii++) {
-//      View u = views[ii];
-//
-//      u.updateGeometry();
-//      u.initializeNewManifold();
-//      u.updateScene();
-//
-//      JFrame frame = new JFrame();
-//      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//      frame.setVisible(true);
-//      frame.setLocation(framePositions[ii][0], framePositions[ii][1]);
-//      frame.setResizable(false);
-//
-//      Dimension size = new Dimension(frameSizes[ii][0], frameSizes[ii][1]);
-//      Container contentPane = frame.getContentPane();
-//      contentPane.add((Component) u.getViewer().getViewingComponent());
-//      contentPane.setMinimumSize(size);
-//      contentPane.setPreferredSize(size);
-//      contentPane.setMaximumSize(size);
-//      frame.pack();
-//      frame.validate();
-//      frame.setVisible(true);
-//
-//      frames.put(u, frame);
-//    }
-//  }
+  private static void initViews() {
+    faceAppearanceScheme = new FaceAppearanceScheme();
+    views = Collections.newSetFromMap(new ConcurrentHashMap<View, Boolean>());
+    frames = new HashMap<View, JFrame>();
+  }
 
   /*********************************************************************************
    * initModelControls
@@ -388,10 +333,9 @@ public class DevelopmentUI {
    * "initViewControls" method.
    *********************************************************************************/
   private static void initModelControls() {
-    //userControl = new SNESController(development);
+    // userControl = new SNESController(development);
     userControl = new KeyboardController(development);
   }
-  
 
   /*********************************************************************************
    * initViewControls
@@ -401,80 +345,44 @@ public class DevelopmentUI {
    * slider that controls how big the markers are should be initialized here.
    *********************************************************************************/
   private static void initViewControls() {
-    viewerControl = new ViewerController(markerHandler, development, views);
-    viewerControl.setVisible(true);
+    viewerController = new ViewerController(markerHandler, development, views);
+    viewerController.setVisible(true);
   }
-  
-  public static void setDrawEdges(boolean drawEdge){
-    for(View v: views){
+
+  public static void setDrawEdges(boolean drawEdge) {
+    for (View v : views) {
       v.setDrawEdges(drawEdge);
     }
   }
-  
-  public static void setDrawFaces(boolean drawFace){
-    for(View v: views){
+
+  public static void setDrawFaces(boolean drawFace) {
+    for (View v : views) {
       v.setDrawFaces(drawFace);
     }
   }
-  public static void resetView(){
-    if( exponentialView != null ){
-      setExponentialView( false );
-      setExponentialView( true );
-    }
-    
-    if( embeddedView != null ){
-      setEmbeddedView( false );
-      setEmbeddedView( true );
-    }
-    
-    if( firstView != null ){
-      setFirstView( false );
-      setFirstView( true );
-    }
-    
-    viewerControl.setMarkerHandler(markerHandler);
-  }
-  
-  public static void setFirstView(boolean checkBox) {
-    // TODO Auto-generated method stub
-    if (checkBox){
-      firstView = new ExponentialView(development, markerHandler, faceScheme);
-      firstView.updateGeometry();
-      firstView.initializeNewManifold();
-      firstView.updateScene();
 
-      JFrame frame = new JFrame();
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setVisible(true);
-      frame.setLocation(820,20);
-      frame.setResizable(false);
-
-      Dimension size = new Dimension(400,400);
-      Container contentPane = frame.getContentPane();
-      contentPane.add((Component) firstView.getViewer().getViewingComponent());
-      contentPane.setMinimumSize(size);
-      contentPane.setPreferredSize(size);
-      contentPane.setMaximumSize(size);
-      frame.pack();
-      frame.validate();
-      frame.setVisible(true);
-
-      frames.put(firstView, frame);
+  public static void resetView() {
+    if (exponentialView != null) {
+      setExponentialView(false);
+      setExponentialView(true);
     }
-    else {
-      if(firstView == null) return;
-      JFrame frame = frames.remove(firstView);
-      frame.setVisible(false);
-      frame.dispose();
-      views.remove(firstView);
-      firstView = null;
+
+    if (embeddedView != null) {
+      setEmbeddedView(false);
+      setEmbeddedView(true);
     }
+
+    if (firstPersonView != null) {
+      setFirstPersonView(false);
+      setFirstPersonView(true);
+    }
+
+    viewerController.setMarkerHandler(markerHandler);
   }
 
-  public static void setExponentialView(boolean checkBox) {
-    // TODO Auto-generated method stub
-    if (checkBox){
-      exponentialView = new ExponentialView(development, markerHandler, faceScheme);
+  public static void setExponentialView(boolean viewEnabled) {
+    if (viewEnabled) {
+      exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
       exponentialView.updateGeometry();
       exponentialView.initializeNewManifold();
       exponentialView.updateScene();
@@ -482,23 +390,25 @@ public class DevelopmentUI {
       JFrame frame = new JFrame();
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setVisible(true);
-      frame.setLocation(20,20);
+      frame.setLocation(400, 40);
       frame.setResizable(false);
 
-      Dimension size = new Dimension(400,400);
+      Dimension size = new Dimension(400, 400);
       Container contentPane = frame.getContentPane();
-      contentPane.add((Component) exponentialView.getViewer().getViewingComponent());
+      contentPane.add((Component) exponentialView.getViewer()
+          .getViewingComponent());
       contentPane.setMinimumSize(size);
       contentPane.setPreferredSize(size);
       contentPane.setMaximumSize(size);
       frame.pack();
       frame.validate();
       frame.setVisible(true);
-
+      
+      views.add(exponentialView);
       frames.put(exponentialView, frame);
-    }
-    else {
-      if( exponentialView == null ) return;
+    } else {
+      if (exponentialView == null)
+        return;
       JFrame frame = frames.remove(exponentialView);
       frame.setVisible(false);
       frame.dispose();
@@ -506,11 +416,10 @@ public class DevelopmentUI {
       exponentialView = null;
     }
   }
-  
-  public static void setEmbeddedView(boolean checkBox) {
-    // TODO Auto-generated method stub
-    if (checkBox){
-      embeddedView = new ExponentialView(development, markerHandler, faceScheme);
+
+  public static void setEmbeddedView(boolean viewEnabled) {
+    if (viewEnabled) {
+      embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme);
       embeddedView.updateGeometry();
       embeddedView.initializeNewManifold();
       embeddedView.updateScene();
@@ -518,12 +427,13 @@ public class DevelopmentUI {
       JFrame frame = new JFrame();
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setVisible(true);
-      frame.setLocation(420,20);
+      frame.setLocation(805, 40);
       frame.setResizable(false);
 
-      Dimension size = new Dimension(400,400);
+      Dimension size = new Dimension(400, 400);
       Container contentPane = frame.getContentPane();
-      contentPane.add((Component) embeddedView.getViewer().getViewingComponent());
+      contentPane.add((Component) embeddedView.getViewer()
+          .getViewingComponent());
       contentPane.setMinimumSize(size);
       contentPane.setPreferredSize(size);
       contentPane.setMaximumSize(size);
@@ -531,10 +441,11 @@ public class DevelopmentUI {
       frame.validate();
       frame.setVisible(true);
 
+      views.add(embeddedView);
       frames.put(embeddedView, frame);
-    }
-    else {
-      if( embeddedView == null ) return;
+    } else {
+      if (embeddedView == null)
+        return;
       JFrame frame = frames.remove(embeddedView);
       frame.setVisible(false);
       frame.dispose();
@@ -542,4 +453,42 @@ public class DevelopmentUI {
       embeddedView = null;
     }
   }
+
+  public static void setFirstPersonView(boolean viewEnabled) {
+    if (viewEnabled) {
+      firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme);
+      firstPersonView.updateGeometry();
+      firstPersonView.initializeNewManifold();
+      firstPersonView.updateScene();
+
+      JFrame frame = new JFrame();
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
+      frame.setLocation(1210, 40);
+      frame.setResizable(false);
+
+      Dimension size = new Dimension(400, 400);
+      Container contentPane = frame.getContentPane();
+      contentPane.add((Component) firstPersonView.getViewer()
+          .getViewingComponent());
+      contentPane.setMinimumSize(size);
+      contentPane.setPreferredSize(size);
+      contentPane.setMaximumSize(size);
+      frame.pack();
+      frame.validate();
+      frame.setVisible(true);
+
+      views.add(firstPersonView);
+      frames.put(firstPersonView, frame);
+    } else {
+      if (firstPersonView == null)
+        return;
+      JFrame frame = frames.remove(firstPersonView);
+      frame.setVisible(false);
+      frame.dispose();
+      views.remove(firstPersonView);
+      firstPersonView = null;
+    }
+  }
+
 }

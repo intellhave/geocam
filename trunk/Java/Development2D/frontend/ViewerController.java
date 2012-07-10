@@ -41,7 +41,7 @@ import development.ManifoldPosition;
 import development.Vector;
 
 public class ViewerController extends JFrame {
-  
+
   private static final long serialVersionUID = 1L;
 
   /********************************************************************************
@@ -50,24 +50,23 @@ public class ViewerController extends JFrame {
    * Data related to the model
    ********************************************************************************/
   private Development develop;
-  private static MarkerHandler mark;
+  private static MarkerHandler markerHandler;
   private static Marker source;
   private Set<View> views;
-  
+
   // This main method is for button layout testing.
 
-  
-  public ViewerController(MarkerHandler mh, Development d, Set<View> views){
+  public ViewerController(MarkerHandler mh, Development d, Set<View> views) {
     develop = d;
-    mark = mh;
+    markerHandler = mh;
     this.views = views;
-    source = mark.getSourceMarker();
+    source = markerHandler.getSourceMarker();
     layoutGUI();
     DevelopmentUI.setExponentialView(showView2DBox.isSelected());
     DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected());
-    DevelopmentUI.setFirstView(showView3DBox.isSelected());
+    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected());
   }
-  
+
   /********************************************************************************
    * JFrame Data
    * 
@@ -95,65 +94,23 @@ public class ViewerController extends JFrame {
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
   private JCheckBox drawAvatarBox;
- 
+
   private static int MAX_SPEED = 4000;
   private static int MAX_SIZE = 10;
-  
+
   TitledBorder depthBorder = BorderFactory.createTitledBorder("");
   TitledBorder pointBorder = BorderFactory.createTitledBorder("");
   TitledBorder speedBorder = BorderFactory.createTitledBorder("");
   TitledBorder objectsBorder = BorderFactory.createTitledBorder("");
-  
-  
+
   private void layoutGUI() {
-    
+
     this.setSize(220, 480);
     this.setResizable(false);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setTitle("Development View");
     this.setLayout(new FlowLayout());
-    
-//    //******************************MENU BAR********************************
-//    menuBar = new JMenuBar();
-//    this.setJMenuBar(menuBar);
-//    {
-//      file = new JMenu();
-//      menuBar.add(file);
-//      file.setText("File");
-//      {
-//        open = new JMenuItem();
-//        file.add(open);
-//        open.setText("Load Surface");
-//        
-//        ActionListener fileListener = new ActionListener(){
-//          public void actionPerformed(ActionEvent e){
-//            JFileChooser fc = new JFileChooser();
-//            
-//            fc.setDialogTitle("Open File");
-//            // Choose only files, not directories
-//            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-//            // Start in current directory
-//            fc.setCurrentDirectory(new File("."));
-//            fc.showOpenDialog(null);
-//            
-//            File file = null;
-//            try {
-//              file = fc.getSelectedFile();
-//            } catch (Exception ex) {
-//              System.out.println("Invalid file");
-//            }
-//            
-//            /********************************************************************************
-//             * TODO hook up loadSurface() and initializeSurface()
-//             ********************************************************************************/
-//          } 
-//        };
-//        open.addActionListener(fileListener);
-//      }
-//    }
-//    
-    
-    
+
     menuBar = new JMenuBar();
     this.setJMenuBar(menuBar);
     {
@@ -167,14 +124,14 @@ public class ViewerController extends JFrame {
         open.addActionListener(new ActionListener() {
           public void actionPerformed(ActionEvent e) {
             JFileChooser fc = new JFileChooser();
-            
+
             fc.setDialogTitle("Open File");
             // Choose only files, not directories
             fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             // Start in current directory
             fc.setCurrentDirectory(new File("."));
             fc.showOpenDialog(null);
-            
+
             File file = null;
             try {
               file = fc.getSelectedFile();
@@ -188,16 +145,19 @@ public class ViewerController extends JFrame {
         });
       }
     }
-    
-    
-  //******************************TEXT BOX PANEL********************************
+
+    // ******************************TEXT BOX
+    // PANEL********************************
     textBoxPanel = new JPanel();
     getContentPane().add(textBoxPanel);
-    textBoxPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    textBoxPanel.setBorder(BorderFactory
+        .createEtchedBorder(EtchedBorder.LOWERED));
     textBoxPanel.setLayout(new GridLayout(2, 1));
-    
-    //****************************RECURSION DEPTH TEXT BOX******************************
-    //******************************NUM OBJECTS TEXT BOX********************************
+
+    // ****************************RECURSION DEPTH TEXT
+    // BOX******************************
+    // ******************************NUM OBJECTS TEXT
+    // BOX********************************
     {
       NumberFormat f = NumberFormat.getIntegerInstance();
       recDepth = new JFormattedTextField(f);
@@ -209,10 +169,10 @@ public class ViewerController extends JFrame {
       recDepthPanel.add(recDepthLabel);
       recDepthPanel.add(recDepth);
       textBoxPanel.add(recDepthPanel);
-      
+
       numObjects = new JFormattedTextField(f);
       numObjects.setColumns(3);
-      int current = mark.getAllMarkers().size() -1;
+      int current = markerHandler.getAllMarkers().size() - 1;
       numObjects.setValue(current);
       numObjectsLabel = new JLabel("Number of objects");
       numObjectsPanel = new JPanel();
@@ -221,7 +181,7 @@ public class ViewerController extends JFrame {
       numObjectsPanel.add(numObjects);
       textBoxPanel.add(numObjectsPanel);
 
-      //Recursion depth action listener
+      // Recursion depth action listener
       ActionListener recDepthListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           String value = recDepth.getValue().toString();
@@ -235,7 +195,7 @@ public class ViewerController extends JFrame {
         }
       };
       recDepth.addActionListener(recDepthListener);
-      
+
       // Number of objects action listener
       ActionListener numObjectsListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -247,7 +207,7 @@ public class ViewerController extends JFrame {
             newMarkers = 20;
           }
 
-          Set<Marker> markers = mark.getAllMarkers();
+          Set<Marker> markers = markerHandler.getAllMarkers();
           int currentMarkers = markers.size() - 1;
 
           // if necessary, add markers
@@ -275,7 +235,7 @@ public class ViewerController extends JFrame {
                 m.setSpeed(0.05 * Math.pow(Math.E, sliderSpeed));
               } else
                 m.setSpeed(0);
-              mark.addMarker(m);
+              markerHandler.addMarker(m);
             }
           }
 
@@ -291,7 +251,7 @@ public class ViewerController extends JFrame {
             }
 
             for (Marker m : toRemove) {
-              mark.removeMarker(m);
+              markerHandler.removeMarker(m);
               for (View v : views) {
                 v.removeMarker(m);
               }
@@ -301,95 +261,100 @@ public class ViewerController extends JFrame {
       };
       numObjects.addActionListener(numObjectsListener);
     }
-    
-  //********************************SLIDER PANEL**********************************
+
+    // ********************************SLIDER
+    // PANEL**********************************
     sliderPanel = new JPanel();
     getContentPane().add(sliderPanel);
-    sliderPanel.setBorder(BorderFactory.createEmptyBorder(6,6,6,6));
-    sliderPanel.setLayout(new BoxLayout(sliderPanel,BoxLayout.Y_AXIS));
-    
-    //******************************SPEED SLIDER********************************
+    sliderPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+    sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS));
+
+    // ******************************SPEED
+    // SLIDER********************************
     /********************************************************************************
-     * Note: Speed slider is using the exponential function y = 0.05*e^x to convert 
-     * input from the slider to a speed.  This gives you more control over low speeds 
-     * on the slider.
+     * Note: Speed slider is using the exponential function y = 0.05*e^x to
+     * convert input from the slider to a speed. This gives you more control
+     * over low speeds on the slider.
      ********************************************************************************/
     {
       speedSlider = new JSlider();
       sliderPanel.add(speedSlider);
       speedSlider.setMaximum(MAX_SPEED);
-      double speed = mark.getMarkerSpeed(source);
-      double speedToSet = Math.log(speed/0.05);
-      speedSlider.setValue((int)(speedToSet*1000.0));
-      
+      double speed = markerHandler.getMarkerSpeed(source);
+      double speedToSet = Math.log(speed / 0.05);
+      speedSlider.setValue((int) (speedToSet * 1000.0));
+
       final DecimalFormat speedFormat = new DecimalFormat("0.00");
       speedSlider.setBorder(speedBorder);
       speedBorder.setTitle("Speed (" + speedFormat.format(speed) + ")");
 
-      //Speed slider action listener
-      ChangeListener speedSliderListener = new ChangeListener(){
+      // Speed slider action listener
+      ChangeListener speedSliderListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           double sliderValue = speedSlider.getValue() / 1000.0;
           double newSpeed = 0.05 * Math.pow(Math.E, sliderValue);
-          Set<Marker> allMarkers = mark.getAllMarkers();
+          Set<Marker> allMarkers = markerHandler.getAllMarkers();
           Iterator<Marker> iter = allMarkers.iterator();
-          if(stopStartButton.getText().equals("Stop")){
-          synchronized (allMarkers) {
-            while (iter.hasNext()) {
-              Marker m = iter.next();
-              if(!m.equals(source))
-                m.setSpeed(newSpeed);
+          if (stopStartButton.getText().equals("Stop")) {
+            synchronized (allMarkers) {
+              while (iter.hasNext()) {
+                Marker m = iter.next();
+                if (!m.equals(source))
+                  m.setSpeed(newSpeed);
+              }
             }
           }
-         }
           speedBorder.setTitle("Speed (" + speedFormat.format(newSpeed) + ")");
         }
       };
       speedSlider.addChangeListener(speedSliderListener);
     }
-    
-    //******************************SCALE SLIDER********************************
+
+    // ******************************SCALE
+    // SLIDER********************************
     {
       scalingSlider = new JSlider();
       sliderPanel.add(scalingSlider);
       scalingSlider.setMaximum(MAX_SIZE);
-      scalingSlider.setValue((int)(mark.getMarkerScale(source)*10));
-      scalingSlider.setBorder(pointBorder); 
-      pointBorder.setTitle("Object scaling (" + scalingSlider.getValue()/10.0 + ")");
-      
-      //Scaling slider change listener
-      ChangeListener scalingSliderListener = new ChangeListener(){
+      scalingSlider.setValue((int) (markerHandler.getMarkerScale(source) * 10));
+      scalingSlider.setBorder(pointBorder);
+      pointBorder.setTitle("Object scaling (" + scalingSlider.getValue() / 10.0
+          + ")");
+
+      // Scaling slider change listener
+      ChangeListener scalingSliderListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           double newScale = scalingSlider.getValue() / 10.0;
-          Set<Marker> markers = mark.getAllMarkers();
+          Set<Marker> markers = markerHandler.getAllMarkers();
           Iterator<Marker> i = markers.iterator();
-          
-          synchronized(markers) {
-            while(i.hasNext()){
+
+          synchronized (markers) {
+            while (i.hasNext()) {
               Marker m = i.next();
-              if(!m.equals(source)){
+              if (!m.equals(source)) {
                 MarkerAppearance newAppearance = m.getAppearance();
                 newAppearance.setScale(newScale);
                 m.setAppearance(newAppearance);
-              }   
+              }
             }
           }
-          pointBorder.setTitle("Object scaling (" + newScale + ")");  
-        }  
+          pointBorder.setTitle("Object scaling (" + newScale + ")");
+        }
       };
       scalingSlider.addChangeListener(scalingSliderListener);
     }
-   
-  //****************************START/STOP BUTTON******************************
+
+    // ****************************START/STOP
+    // BUTTON******************************
     stopStartButton = new JButton();
     stopStartButton.setText("Stop");
     this.add(stopStartButton);
-    //Start/stop button action listener
+    // Start/stop button action listener
     ActionListener stopStartButtonListener = new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        Set<Marker> markers = mark.getAllMarkers();
+        Set<Marker> markers = markerHandler.getAllMarkers();
         Iterator<Marker> iter = markers.iterator();
-        
+
         if (stopStartButton.getText().equals("Stop")) {
           synchronized (markers) {
             while (iter.hasNext()) {
@@ -399,37 +364,37 @@ public class ViewerController extends JFrame {
             }
           }
           stopStartButton.setText("Start");
-        } 
-        else {
+        } else {
           synchronized (markers) {
             while (iter.hasNext()) {
               Marker m = iter.next();
-              double newSpeed = speedSlider.getValue()/1000.0;
+              double newSpeed = speedSlider.getValue() / 1000.0;
               if (!m.equals(source))
-                m.setSpeed(.05*Math.pow(Math.E,newSpeed));
+                m.setSpeed(.05 * Math.pow(Math.E, newSpeed));
             }
           }
           stopStartButton.setText("Stop");
         }
-      }  
-     };
-     stopStartButton.addActionListener(stopStartButtonListener);
-    
-    
-  //********************************VIEW PANEL**********************************
+      }
+    };
+    stopStartButton.addActionListener(stopStartButtonListener);
+
+    // ********************************VIEW
+    // PANEL**********************************
     viewerPanel = new JPanel();
     getContentPane().add(viewerPanel);
-    viewerPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-    viewerPanel.setLayout(new BoxLayout(viewerPanel,BoxLayout.Y_AXIS));
-    
-    //***************************2D VIEW CHECK BOX*****************************
+    viewerPanel.setBorder(BorderFactory
+        .createEtchedBorder(EtchedBorder.LOWERED));
+    viewerPanel.setLayout(new BoxLayout(viewerPanel, BoxLayout.Y_AXIS));
+
+    // ***************************2D VIEW CHECK BOX*****************************
     {
       showView2DBox = new JCheckBox();
       viewerPanel.add(showView2DBox);
-      showView2DBox.setText("Show 2D view");
+      showView2DBox.setText("Show Exponential View");
       showView2DBox.setSelected(true);
-      //add action listener here
-      ActionListener view2DListener = new ActionListener(){
+      // add action listener here
+      ActionListener view2DListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent arg0) {
           // TODO Auto-generated method stub
@@ -438,35 +403,35 @@ public class ViewerController extends JFrame {
         }
       };
       showView2DBox.addActionListener(view2DListener);
-      
+
       /********************************************************************************
        * TODO: make the 2D View checkbox functional
        ********************************************************************************/
     }
-    //***************************3D VIEW CHECK BOX*****************************
+    // ***************************3D VIEW CHECK BOX*****************************
     {
       showView3DBox = new JCheckBox();
       viewerPanel.add(showView3DBox);
-      showView3DBox.setText("Show 3D view");
+      showView3DBox.setText("Show First Person View");
       showView3DBox.setSelected(true);
-      ActionListener view3DListener = new ActionListener(){
+      ActionListener view3DListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent arg0) {
           // TODO Auto-generated method stub
           boolean checkBox = showView3DBox.isSelected();
-          DevelopmentUI.setFirstView(checkBox);
+          DevelopmentUI.setFirstPersonView(checkBox);
         }
       };
       showView3DBox.addActionListener(view3DListener);
-      
+
     }
-    //************************EMBEDDED VIEW CHECK BOX**************************
+    // ************************EMBEDDED VIEW CHECK BOX**************************
     {
       showEmbeddedBox = new JCheckBox();
       viewerPanel.add(showEmbeddedBox);
-      showEmbeddedBox.setText("Show embedded view");
+      showEmbeddedBox.setText("Show Embedded View");
       showEmbeddedBox.setSelected(true);
-      ActionListener viewEmbeddedListener = new ActionListener(){
+      ActionListener viewEmbeddedListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent arg0) {
           // TODO Auto-generated method stub
@@ -474,23 +439,26 @@ public class ViewerController extends JFrame {
           DevelopmentUI.setEmbeddedView(checkBox);
         }
       };
-      showEmbeddedBox.addActionListener(viewEmbeddedListener); 
+      showEmbeddedBox.addActionListener(viewEmbeddedListener);
     }
-    
-  //******************************DRAW OPTIONS PANEL********************************
+
+    // ******************************DRAW OPTIONS
+    // PANEL********************************
     drawOptionsPanel = new JPanel();
     getContentPane().add(drawOptionsPanel);
-    drawOptionsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-    drawOptionsPanel.setLayout(new BoxLayout(drawOptionsPanel,BoxLayout.Y_AXIS));
-    
-    
-    //***************************DRAW EDGES CHECK BOX*****************************
+    drawOptionsPanel.setBorder(BorderFactory
+        .createEtchedBorder(EtchedBorder.LOWERED));
+    drawOptionsPanel
+        .setLayout(new BoxLayout(drawOptionsPanel, BoxLayout.Y_AXIS));
+
+    // ***************************DRAW EDGES CHECK
+    // BOX*****************************
     {
       drawEdgesBox = new JCheckBox();
       drawOptionsPanel.add(drawEdgesBox);
       drawEdgesBox.setText("Draw edges");
       drawEdgesBox.setSelected(true);
-      
+
       ActionListener drawEdgesListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           boolean boxChecked = drawEdgesBox.isSelected();
@@ -499,51 +467,53 @@ public class ViewerController extends JFrame {
       };
       drawEdgesBox.addActionListener(drawEdgesListener);
     }
-  //***************************DRAW FACES CHECK BOX*****************************
+    // ***************************DRAW FACES CHECK
+    // BOX*****************************
     {
       drawFacesBox = new JCheckBox();
       drawOptionsPanel.add(drawFacesBox);
       drawFacesBox.setText("Draw faces");
       drawFacesBox.setSelected(true);
 
-      ActionListener drawFacesListener = new ActionListener(){
+      ActionListener drawFacesListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean boxChecked = drawFacesBox.isSelected();
           DevelopmentUI.setDrawFaces(boxChecked);
         }
       };
-      drawFacesBox.addActionListener(drawFacesListener); 
+      drawFacesBox.addActionListener(drawFacesListener);
     }
-  //***************************DRAW AVATAR CHECK BOX*****************************
+    // ***************************DRAW AVATAR CHECK
+    // BOX*****************************
     {
       drawAvatarBox = new JCheckBox();
       drawOptionsPanel.add(drawAvatarBox);
       drawAvatarBox.setText("Draw avatar");
       drawAvatarBox.setSelected(true);
-      
-      //Draw avatar action listener
-      ActionListener drawAvatar = new ActionListener(){
+
+      // Draw avatar action listener
+      ActionListener drawAvatar = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           boolean showAvatar = drawAvatarBox.isSelected();
-          if(showAvatar){
+          if (showAvatar) {
             source.setVisible(true);
-          }
-          else{
+          } else {
             source.setVisible(false);
-          }  
+          }
         }
       };
       drawAvatarBox.addActionListener(drawAvatar);
-      }
+    }
   }
-  private void resetViewController(){
-    source = mark.getSourceMarker();
-    numObjects.setValue(mark.getAllMarkers().size()-1);
+
+  private void resetViewController() {
+    source = markerHandler.getSourceMarker();
+    numObjects.setValue(markerHandler.getAllMarkers().size() - 1);
     recDepth.setValue(develop.getDepth());
-    double speed = mark.getMarkerSpeed(source);
-    double speedToSet = Math.log(speed/0.05);
-    speedSlider.setValue((int)(speedToSet*1000.0));
-    scalingSlider.setValue((int)(mark.getMarkerScale(source)*10));
+    double speed = markerHandler.getMarkerSpeed(source);
+    double speedToSet = Math.log(speed / 0.05);
+    speedSlider.setValue((int) (speedToSet * 1000.0));
+    scalingSlider.setValue((int) (markerHandler.getMarkerScale(source) * 10));
     stopStartButton.setText("Stop");
     showView2DBox.setSelected(true);
     showView3DBox.setSelected(true);
@@ -551,9 +521,10 @@ public class ViewerController extends JFrame {
     drawEdgesBox.setSelected(true);
     drawAvatarBox.setSelected(true);
     drawFacesBox.setSelected(true);
-    System.out.println(mark.getAllMarkers().size()-1);
+    System.out.println(markerHandler.getAllMarkers().size() - 1);
   }
-  public void setMarkerHandler(MarkerHandler mh){
-    mark = mh;
+
+  public void setMarkerHandler(MarkerHandler mh) {
+    markerHandler = mh;
   }
 }
