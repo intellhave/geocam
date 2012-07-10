@@ -7,8 +7,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 import javax.swing.JFrame;
 
@@ -89,7 +91,14 @@ public class DevelopmentUI {
    * For example, a slider bar that controls how big the objects on the surfaces
    * are belongs here.
    *********************************************************************************/
-  static View[] views;
+  static Set<View> views;
+  
+  static View firstView;
+  
+  static View exponentialView;
+  
+  static View embeddedView;
+  
   static ViewerController viewerControl;
   
   private static FaceAppearanceScheme faceScheme;
@@ -101,11 +110,14 @@ public class DevelopmentUI {
 
     // Note: For correct initialization, it is important the method calls listed
     // below occur in the particular order listed.
+    faceScheme = new FaceAppearanceScheme();
+    frames = new HashMap<View, JFrame>();
+    views = new HashSet<View>();
     developerMode = true;
     initModel();
-    initViews();
-    initModelControls();
+    //initViews();
     initViewControls();
+    initModelControls();
     runSimulation();
   }
   
@@ -124,14 +136,13 @@ public class DevelopmentUI {
  
   public static void runExplorer(){
     initModel();
-    initViews();
+    //initViews();
     initModelControls();
     runSimulation(); 
   }
   
   public static void quitExplorer(){
-    for (int ii = 0; ii < 3; ii++){
-      View view = views[ii];
+    for (View view:views){
       JFrame window = frames.get(view);
       window.setVisible(false);
       window.dispose();
@@ -237,7 +248,7 @@ public class DevelopmentUI {
    * This method uses the input file name (which should include the path to the
    * file), and reads that file to determine the surface that will be displayed.
    *********************************************************************************/
-  private static void loadSurface(String file) {
+  public static void loadSurface(String file) {
     String extension = file.substring(file.length() - 3, file.length());
 
     if (extension.contentEquals("off")) {
@@ -324,47 +335,47 @@ public class DevelopmentUI {
    * users shouldn't be allowed to change window sizes), it's OK to hard code
    * this information.
    *********************************************************************************/
-  private static void initViews() {
-    faceScheme = new FaceAppearanceScheme();
-
-    int viewCount = 3;
-    views = new View[viewCount];
-    // views[0] = new FirstPersonView(development, markers, colorScheme);
-    views[0] = new FirstPersonView(development, markerHandler, faceScheme);
-    views[1] = new ExponentialView(development, markerHandler, faceScheme);
-    views[2] = new EmbeddedView(development, markerHandler, faceScheme);
-
-    int[][] framePositions = { { 0, 10 }, { 400, 10 }, { 800, 10 } };
-    int[][] frameSizes = { { 400, 400 }, { 400, 400 }, { 400, 400 } };
-
-    frames = new HashMap<View, JFrame>();
-
-    for (int ii = 0; ii < viewCount; ii++) {
-      View u = views[ii];
-
-      u.updateGeometry();
-      u.initializeNewManifold();
-      u.updateScene();
-
-      JFrame frame = new JFrame();
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setVisible(true);
-      frame.setLocation(framePositions[ii][0], framePositions[ii][1]);
-      frame.setResizable(false);
-
-      Dimension size = new Dimension(frameSizes[ii][0], frameSizes[ii][1]);
-      Container contentPane = frame.getContentPane();
-      contentPane.add((Component) u.getViewer().getViewingComponent());
-      contentPane.setMinimumSize(size);
-      contentPane.setPreferredSize(size);
-      contentPane.setMaximumSize(size);
-      frame.pack();
-      frame.validate();
-      frame.setVisible(true);
-
-      frames.put(u, frame);
-    }
-  }
+//  private static void initViews() {
+//    faceScheme = new FaceAppearanceScheme();
+//
+//    int viewCount = 3;
+//    views = new View[viewCount];
+//    // views[0] = new FirstPersonView(development, markers, colorScheme);
+//    views[0] = new FirstPersonView(development, markerHandler, faceScheme);
+//    views[1] = new ExponentialView(development, markerHandler, faceScheme);
+//    views[2] = new EmbeddedView(development, markerHandler, faceScheme);
+//
+//    int[][] framePositions = { { 0, 10 }, { 400, 10 }, { 800, 10 } };
+//    int[][] frameSizes = { { 400, 400 }, { 400, 400 }, { 400, 400 } };
+//
+//    frames = new HashMap<View, JFrame>();
+//
+//    for (int ii = 0; ii < viewCount; ii++) {
+//      View u = views[ii];
+//
+//      u.updateGeometry();
+//      u.initializeNewManifold();
+//      u.updateScene();
+//
+//      JFrame frame = new JFrame();
+//      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//      frame.setVisible(true);
+//      frame.setLocation(framePositions[ii][0], framePositions[ii][1]);
+//      frame.setResizable(false);
+//
+//      Dimension size = new Dimension(frameSizes[ii][0], frameSizes[ii][1]);
+//      Container contentPane = frame.getContentPane();
+//      contentPane.add((Component) u.getViewer().getViewingComponent());
+//      contentPane.setMinimumSize(size);
+//      contentPane.setPreferredSize(size);
+//      contentPane.setMaximumSize(size);
+//      frame.pack();
+//      frame.validate();
+//      frame.setVisible(true);
+//
+//      frames.put(u, frame);
+//    }
+//  }
 
   /*********************************************************************************
    * initModelControls
@@ -403,6 +414,132 @@ public class DevelopmentUI {
   public static void setDrawFaces(boolean drawFace){
     for(View v: views){
       v.setDrawFaces(drawFace);
+    }
+  }
+  public static void resetView(){
+    if( exponentialView != null ){
+      setExponentialView( false );
+      setExponentialView( true );
+    }
+    
+    if( embeddedView != null ){
+      setEmbeddedView( false );
+      setEmbeddedView( true );
+    }
+    
+    if( firstView != null ){
+      setFirstView( false );
+      setFirstView( true );
+    }
+    
+    viewerControl.setMarkerHandler(markerHandler);
+  }
+  
+  public static void setFirstView(boolean checkBox) {
+    // TODO Auto-generated method stub
+    if (checkBox){
+      firstView = new ExponentialView(development, markerHandler, faceScheme);
+      firstView.updateGeometry();
+      firstView.initializeNewManifold();
+      firstView.updateScene();
+
+      JFrame frame = new JFrame();
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
+      frame.setLocation(820,20);
+      frame.setResizable(false);
+
+      Dimension size = new Dimension(400,400);
+      Container contentPane = frame.getContentPane();
+      contentPane.add((Component) firstView.getViewer().getViewingComponent());
+      contentPane.setMinimumSize(size);
+      contentPane.setPreferredSize(size);
+      contentPane.setMaximumSize(size);
+      frame.pack();
+      frame.validate();
+      frame.setVisible(true);
+
+      frames.put(firstView, frame);
+    }
+    else {
+      if(firstView == null) return;
+      JFrame frame = frames.remove(firstView);
+      frame.setVisible(false);
+      frame.dispose();
+      views.remove(firstView);
+      firstView = null;
+    }
+  }
+
+  public static void setExponentialView(boolean checkBox) {
+    // TODO Auto-generated method stub
+    if (checkBox){
+      exponentialView = new ExponentialView(development, markerHandler, faceScheme);
+      exponentialView.updateGeometry();
+      exponentialView.initializeNewManifold();
+      exponentialView.updateScene();
+
+      JFrame frame = new JFrame();
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
+      frame.setLocation(20,20);
+      frame.setResizable(false);
+
+      Dimension size = new Dimension(400,400);
+      Container contentPane = frame.getContentPane();
+      contentPane.add((Component) exponentialView.getViewer().getViewingComponent());
+      contentPane.setMinimumSize(size);
+      contentPane.setPreferredSize(size);
+      contentPane.setMaximumSize(size);
+      frame.pack();
+      frame.validate();
+      frame.setVisible(true);
+
+      frames.put(exponentialView, frame);
+    }
+    else {
+      if( exponentialView == null ) return;
+      JFrame frame = frames.remove(exponentialView);
+      frame.setVisible(false);
+      frame.dispose();
+      views.remove(exponentialView);
+      exponentialView = null;
+    }
+  }
+  
+  public static void setEmbeddedView(boolean checkBox) {
+    // TODO Auto-generated method stub
+    if (checkBox){
+      embeddedView = new ExponentialView(development, markerHandler, faceScheme);
+      embeddedView.updateGeometry();
+      embeddedView.initializeNewManifold();
+      embeddedView.updateScene();
+
+      JFrame frame = new JFrame();
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setVisible(true);
+      frame.setLocation(420,20);
+      frame.setResizable(false);
+
+      Dimension size = new Dimension(400,400);
+      Container contentPane = frame.getContentPane();
+      contentPane.add((Component) embeddedView.getViewer().getViewingComponent());
+      contentPane.setMinimumSize(size);
+      contentPane.setPreferredSize(size);
+      contentPane.setMaximumSize(size);
+      frame.pack();
+      frame.validate();
+      frame.setVisible(true);
+
+      frames.put(embeddedView, frame);
+    }
+    else {
+      if( embeddedView == null ) return;
+      JFrame frame = frames.remove(embeddedView);
+      frame.setVisible(false);
+      frame.dispose();
+      views.remove(embeddedView);
+      embeddedView = null;
     }
   }
 }
