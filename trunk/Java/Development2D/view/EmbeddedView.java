@@ -14,6 +14,7 @@ import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.Matrix;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Appearance;
+import de.jreality.scene.Camera;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
@@ -64,6 +65,13 @@ public class EmbeddedView extends View {
           .rotateY(light_psns[ii][1] * Math.PI / 4).assignTo(sgcLight);
       sgcDevelopment.addChild(sgcLight);
     }
+    
+    Camera cam = sgcCamera.getCamera();
+    //cam.setFocalLength(0.01);
+    //cam.setFieldOfView(160);
+    System.out.println("Focal Length:" + cam.getFocalLength());
+    System.out.println("Field of View:" + cam.getFieldOfView());
+    
   }
 
   /*********************************************************************************
@@ -85,7 +93,7 @@ public class EmbeddedView extends View {
     left.normalize();
     normal.normalize();
 
-    Matrix rot = MatrixBuilder.euclidean().rotate( -Math.PI/4, left.getVectorAsArray()).getMatrix();
+    Matrix rot = MatrixBuilder.euclidean().rotate( -Math.PI/8, left.getVectorAsArray()).getMatrix();
     Vector adjustedNormal = new Vector(rot.multiplyVector(normal.getVectorAsArray()));
     Vector adjustedForward = new Vector(rot.multiplyVector(forward.getVectorAsArray()));
     Vector adjustedLeft = left;

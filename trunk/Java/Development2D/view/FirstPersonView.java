@@ -13,6 +13,7 @@ import marker.MarkerHandler;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.SceneGraphComponent;
+import de.jreality.scene.Camera;
 import development.Development;
 import development.DevelopmentNode;
 import development.Vector;
@@ -50,6 +51,10 @@ public class FirstPersonView extends ExponentialView {
     // problem.
     MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
         .assignTo(sgcDevelopment);
+    
+    Camera cam = sgcCamera.getCamera();
+    cam.setPerspective(true);
+    
   }
 
   /*********************************************************************************

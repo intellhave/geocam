@@ -1,0 +1,5 @@
+This folder ("release") should be used to contain scripts that we will
+use to make our release files. That is to say, this folder won't be
+released; instead, the person in charge of creating the releases will
+pick and choose scripts from this file when he/she is putting together
+the data that will be released.
