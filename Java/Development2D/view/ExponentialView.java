@@ -15,6 +15,7 @@ import view.TextureLibrary.TextureDescriptor;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Appearance;
+import de.jreality.scene.Camera;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
@@ -34,7 +35,6 @@ import development.Vector;
  * result is a representation of a neighborhood of the source point built out of
  * polygons in the plane.
  *********************************************************************************/
-
 public class ExponentialView extends View {
   protected HashMap<Marker, LinkedList<SceneGraphComponent>> sgcpools;
   protected SceneGraphComponent sgcLight;
@@ -57,11 +57,13 @@ public class ExponentialView extends View {
     // create light
     sgcLight = new SceneGraphComponent();
     DirectionalLight light = new DirectionalLight();
-    light.setIntensity(1.0);
+    light.setIntensity(1.5);
     sgcLight.setLight(light);
 
     // MatrixBuilder.euclidean().translate(0,0,5).assignTo(sgcLight);
     sgcCamera.addChild(sgcLight);
+    Camera cam = sgcCamera.getCamera();
+    cam.setPerspective(false);
 
     faceDevelopments = new HashMap<Face, DevelopmentGeometry>();
     faceSGCs = new HashMap<Face, SceneGraphComponent>();

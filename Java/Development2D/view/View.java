@@ -1,11 +1,6 @@
 package view;
 
-import static de.jreality.shader.CommonAttributes.EDGE_DRAW;
-import static de.jreality.shader.CommonAttributes.FACE_DRAW;
-import static de.jreality.shader.CommonAttributes.LIGHTING_ENABLED;
-import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
-import static de.jreality.shader.CommonAttributes.TUBES_DRAW;
-import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
+import static de.jreality.shader.CommonAttributes.*;
 
 import java.awt.Color;
 
@@ -200,10 +195,10 @@ public abstract class View {
     defaultAppearance.setAttribute(TUBES_DRAW, false);
     defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
     defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
-    defaultAppearance.setAttribute(CommonAttributes.BACKGROUND_COLOR,
-        Color.gray);
-    defaultAppearance.setAttribute(CommonAttributes.DIFFUSE_COLOR, Color.white);
-
+    defaultAppearance.setAttribute(BACKGROUND_COLOR, Color.gray);
+    defaultAppearance.setAttribute(DIFFUSE_COLOR, Color.white);
+    defaultAppearance.setAttribute(LINE_SHADER + "." + POLYGON_SHADER + "." + SMOOTH_SHADING, true);
+    
     DefaultGeometryShader dgs;
     dgs = (DefaultGeometryShader) ShaderUtility.createDefaultGeometryShader(
         defaultAppearance, true);
@@ -213,9 +208,6 @@ public abstract class View {
     DefaultPolygonShader dps;
     dps = (DefaultPolygonShader) dgs.createPolygonShader("default");
     dps.setDiffuseColor(Color.white);
-
-    defaultAppearance.setAttribute("LINE_SHADER.POLYGON_SHADER.SMOOTH_SHADING",
-        true);
 
     sgcDevelopment.setAppearance(defaultAppearance);
   }

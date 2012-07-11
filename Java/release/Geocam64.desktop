@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=0.1
+Name=Geocam Development Explorer\n(Linux 64 Bit)
+GenericName=Java Application
+Comment=A Visualization Tool for 2 Dimenisonal Piecewise Flat Manifolds
+Type=Application
+Icon=/home/jthomas/Desktop/logo.png
+Vendor=Geocam Project
+Exec=java -cp -Djava.library.path="./lib/jni/jReality/linux64" -jar app.jar

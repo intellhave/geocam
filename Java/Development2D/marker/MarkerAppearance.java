@@ -50,28 +50,29 @@ public class MarkerAppearance {
     templateSGCs = new EnumMap<ModelType, SceneGraphComponent>(ModelType.class);
     File ff;
     SceneGraphComponent sgc;
-
-    ff = new File("Data/blender/ant.3ds");
+    String path = "Data/marker/";
+    
+    ff = new File(path + "ant.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.ANT, sgc);
 
-    ff = new File("Data/blender/apple.3ds");
+    ff = new File(path + "apple.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.APPLE, sgc);
 
-    ff = new File("Data/blender/cookie.3ds");
+    ff = new File(path + "cookie.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.COOKIE, sgc);
 
-    ff = new File("Data/blender/rocket.3ds");
+    ff = new File(path + "rocket.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.ROCKET, sgc);
 
-    ff = new File("Data/blender/sattelite.3ds");
+    ff = new File(path + "sattelite.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.SATTELITE, sgc);
 
-    ff = new File("Data/blender/cube.3ds");
+    ff = new File(path + "cube.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.CUBE, sgc);
 

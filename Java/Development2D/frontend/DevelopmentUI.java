@@ -224,7 +224,7 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void initModel() {
     // String filename = "Data/blender/cube_surf.off";
-    String filename = "Data/off/dodec.off";
+    String filename = "Data/surfaces/dodec.off";
     loadSurface(filename);
   }
 
@@ -391,7 +391,7 @@ public class DevelopmentUI {
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setVisible(true);
       frame.setLocation(400, 40);
-      frame.setResizable(false);
+      frame.setResizable(true);
 
       Dimension size = new Dimension(400, 400);
       Container contentPane = frame.getContentPane();
@@ -428,7 +428,7 @@ public class DevelopmentUI {
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setVisible(true);
       frame.setLocation(805, 40);
-      frame.setResizable(false);
+      frame.setResizable(true);
 
       Dimension size = new Dimension(400, 400);
       Container contentPane = frame.getContentPane();
@@ -465,7 +465,7 @@ public class DevelopmentUI {
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setVisible(true);
       frame.setLocation(1210, 40);
-      frame.setResizable(false);
+      frame.setResizable(true);
 
       Dimension size = new Dimension(400, 400);
       Container contentPane = frame.getContentPane();
