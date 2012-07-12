@@ -223,8 +223,8 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    // String filename = "Data/blender/cube_surf.off";
-    String filename = "Data/surfaces/dodec.off";
+    String filename = "Data/surfaces/tetra.off";
+    //String filename = "Data/surfaces/dodec.off";
     loadSurface(filename);
   }
 

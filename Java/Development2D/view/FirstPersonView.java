@@ -1,21 +1,17 @@
 package view;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
-import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
-import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Camera;
+import de.jreality.scene.SceneGraphComponent;
 import development.Development;
-import development.DevelopmentNode;
 import development.Vector;
 
 /*********************************************************************************
@@ -28,10 +24,8 @@ import development.Vector;
  * would be like to move around in this space as a two dimensional creature.
  *********************************************************************************/
 public class FirstPersonView extends ExponentialView {
-  private double height = 25.0 / 100.0;
   private boolean showAvatar = true;
-  private Vector cameraForward = new Vector(-1, 0);
-
+  
   /*********************************************************************************
    * FirstPersonView
    * 
@@ -39,22 +33,12 @@ public class FirstPersonView extends ExponentialView {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public FirstPersonView(Development dev, MarkerHandler mh, FaceAppearanceScheme fas) {
-    super(dev, mh, fas); // This call initializes the sgcpools datastructure.
-
-    // The call to super also initializes sgcLight, and attaches it to the
-    // camera. However, we wish to orient the light differently.
-    MatrixBuilder.euclidean().rotate(2.65, new double[] { 0, 1, 0 })
-        .assignTo(sgcLight);
-
-    // By default, everything is upside down. This rotation corrects the
-    // problem.
-    MatrixBuilder.euclidean().rotate(Math.PI, new double[] { 1, 0, 0 })
-        .assignTo(sgcDevelopment);
-    
+  public FirstPersonView(Development dev, MarkerHandler mh,
+      FaceAppearanceScheme fas) {
+    super(dev, mh, fas); // This call initializes the sgcpools data structure.
     Camera cam = sgcCamera.getCamera();
     cam.setPerspective(true);
-    
+
   }
 
   /*********************************************************************************
@@ -65,63 +49,11 @@ public class FirstPersonView extends ExponentialView {
    * manifold.
    *********************************************************************************/
   protected void updateCamera() {
-    de.jreality.math.Matrix M = new de.jreality.math.Matrix(
-        cameraForward.getComponent(1), 0, cameraForward.getComponent(0), 0,
-        -cameraForward.getComponent(0), 0, cameraForward.getComponent(1), 0, 0,
-        1, 0, 0, 0, 0, 0, 1);
-    M.assignTo(sgcCamera);
-  }
-
-  /*********************************************************************************
-   * generateManifoldGeometry
-   * 
-   * This method constructs the polygons that will make up the development, and
-   * places them in the plane. The polygons are constructed via a recursive
-   * procedure outlined in one of the 2010 REU papers.
-   *********************************************************************************/
-  protected void generateManifoldGeometry() {
-    DevelopmentGeometrySim3D geometry = new DevelopmentGeometrySim3D();
-    ArrayList<Color> colors = new ArrayList<Color>();
-    generateManifoldGeometry(development.getRoot(), colors, geometry);
-    IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
-
-    Color[] colorList = new Color[colors.size()];
-    for (int i = 0; i < colors.size(); i++) {
-      colorList[i] = colors.get(i);
-    }
-
-    double[][] ifsf_verts = geometry.getVerts();
-    int[][] ifsf_faces = geometry.getFaces();
-    int[][] ifsf_edges = geometry.getEdges();
-
-    ifsf.setVertexCount(ifsf_verts.length);
-    ifsf.setVertexCoordinates(ifsf_verts);
-    ifsf.setEdgeCount(ifsf_edges.length);
-    ifsf.setEdgeIndices(ifsf_edges);
-    ifsf.setFaceCount(ifsf_faces.length);
-    ifsf.setFaceIndices(ifsf_faces);
-    ifsf.setFaceColors(colorList);
-    ifsf.update();
-
-    sgcDevelopment.setGeometry(ifsf.getGeometry());
-
-    updateCamera();
-  }
-
-  // This is a recursive helper method for generateManifoldGeometry().
-  private void generateManifoldGeometry(DevelopmentNode devNode,
-      ArrayList<Color> colors, DevelopmentGeometrySim3D geometry) {
-    double[][] face = devNode.getClippedFace().getVectorsAsArray();
-    geometry.addFace(face, height);
-
-    // (adding two faces at a time)
-    colors.add(faceAppearanceScheme.getColor(devNode.getFace()));
-    colors.add(faceAppearanceScheme.getColor(devNode.getFace()));
-
-    Iterator<DevelopmentNode> itr = devNode.getChildren().iterator();
-    while (itr.hasNext()) {
-      generateManifoldGeometry(itr.next(), colors, geometry);
-    }
+    // The angle in rotateY controls the pitch of the camera.
+    // Generally, the smaller we make the altitude of the camera, the harder it
+    // is to get an idea of the structure of the development in this view.
+    MatrixBuilder.euclidean().translate(0.1, 0, 1.3).rotateY(-Math.PI / 3)
+        .rotateZ(-Math.PI / 2).assignTo(sgcCamera);
   }
 
   /*********************************************************************************
@@ -147,8 +79,8 @@ public class FirstPersonView extends ExponentialView {
       }
 
       ArrayList<Vector[]> images = markerImages.get(m);
-      if (images == null){
-        for(SceneGraphComponent sgc: pool)
+      if (images == null) {
+        for (SceneGraphComponent sgc : pool)
           sgc.setVisible(false);
         continue;
       }
@@ -193,12 +125,9 @@ public class FirstPersonView extends ExponentialView {
           matrix[3 * 4 + 2] = 0.0;
           matrix[3 * 4 + 3] = 1.0;
 
-          MatrixBuilder
-              .euclidean()
-              .translate(position.getComponent(0), position.getComponent(1),
-                  height).times(matrix)
-              .rotate(Math.PI, new double[] { 1, 0, 0 })
-              .scale(m.getAppearance().getScale()).assignTo(sgc);
+          MatrixBuilder.euclidean()
+              .translate(position.getComponent(0), position.getComponent(1), 1)
+              .times(matrix).scale(m.getAppearance().getScale()).assignTo(sgc);
 
           // This is a hack to find the SGC that displays the avatar.
           // In the future, we should have a dedicated SGC pointer for the
