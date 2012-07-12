@@ -200,7 +200,7 @@ public class EmbeddedView extends View {
 
       if (sgc == null) {
         MarkerAppearance oa = vo.getAppearance();
-        sgc = oa.prepareNewSceneGraphComponent();
+        sgc = oa.makeSceneGraphComponent();
         sgcpools.put(vo, sgc);
         sgcMarkers.addChild(sgc);
       }
