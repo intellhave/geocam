@@ -3,15 +3,24 @@ package marker;
 import java.awt.Color;
 import java.awt.Transparency;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.EnumMap;
 
+import de.jreality.geometry.GeometryMergeFactory;
+import de.jreality.geometry.IndexedFaceSetFactory;
+import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.geometry.Primitives;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.reader.Readers;
+import de.jreality.reader.Reader3DS;
 import de.jreality.scene.Appearance;
+import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
 import de.jreality.shader.CommonAttributes;
+import de.jreality.util.Input;
+import de.jreality.util.SceneGraphUtility;
 
 /*********************************************************************************
  * MarkerAppearance
@@ -51,7 +60,7 @@ public class MarkerAppearance {
     File ff;
     SceneGraphComponent sgc;
     String path = "Data/marker/";
-    
+
     ff = new File(path + "ant.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.ANT, sgc);
@@ -78,33 +87,44 @@ public class MarkerAppearance {
 
     sgc = Primitives.sphere(1.0, new double[] { 0.0, 0.0, 0.0 });
     templateSGCs.put(ModelType.SPHERE, sgc);
-
-    Appearance app = new Appearance();
-    app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    app.setAttribute(CommonAttributes.EDGE_DRAW, false);
-    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
-    app.setAttribute(CommonAttributes.PICKABLE, false);
-
-    for (SceneGraphComponent val : templateSGCs.values()) {
-      val.setAppearance(app);
-    }
   }
 
   /*********************************************************************************
    * loadTemplateSGC
    * 
-   * This method reads a scene graph component from the input file object. Note:
-   * Since reading from disk is expensive, this method is only supposed to be
-   * used to initialize the "templateSGCs" map. When a marker model is needed,
-   * we make a copy of one of the templates in this map.
+   * This method reads a scene graph component from the input file object. After
+   * loading the object, some of the properties of its geometry, like vertex
+   * normals, are calculated. This allows properties that are not necessarily
+   * stored in the mesh file (like smooth shading) to be applied to the model.
+   * 
+   * Note: Since reading from disk is expensive, this method is only supposed to
+   * be used to initialize the "templateSGCs" map. When a marker model is
+   * needed, we make a copy of one of the templates in this map.
    *********************************************************************************/
   private static SceneGraphComponent loadTemplateSGC(File ff) {
     SceneGraphComponent sgc = null;
+
     try {
       sgc = Readers.read(ff);
     } catch (Exception ee) {
       System.err.println("Error: Unable to read model file " + ff);
       ee.printStackTrace();
+      System.exit(1);
+    }
+
+    GeometryMergeFactory gmf = new GeometryMergeFactory();
+    IndexedFaceSet ifs = gmf.mergeIndexedFaceSets(sgc);
+
+    SceneGraphUtility.removeChildren(sgc);
+    sgc.setGeometry(ifs);
+
+    try {
+      // Not all of these normal calculations may be necessary.
+      IndexedFaceSetUtility.makeConsistentOrientation(ifs);
+      IndexedFaceSetUtility.calculateAndSetNormals(ifs);
+      IndexedFaceSetUtility.assignSmoothVertexNormals(ifs,3);
+    } catch (Exception ee) {
+      System.err.println("Unable to assign smooth vertex normals.");
       System.exit(1);
     }
     return sgc;
@@ -225,15 +245,6 @@ public class MarkerAppearance {
     return (color.getTransparency() == Transparency.TRANSLUCENT);
   }
 
-  public Appearance getJRealityAppearance() {
-    Appearance app = new Appearance();
-    app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
-    app.setAttribute(CommonAttributes.EDGE_DRAW, false);
-    app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
-    app.setAttribute(CommonAttributes.PICKABLE, false);
-    return app;
-  }
-
   /*********************************************************************************
    * prepareNewSceneGraphComponent
    * 
@@ -244,7 +255,7 @@ public class MarkerAppearance {
    * users of MarkerAppearance are freed from having to load model meshes, deal
    * with their textures, etc.
    *********************************************************************************/
-  public SceneGraphComponent prepareNewSceneGraphComponent() {
+  public SceneGraphComponent makeSceneGraphComponent() {
     SceneGraphComponent sgc = copySceneGraph(templateSGCs.get(this.model));
 
     Appearance app = new Appearance();
@@ -252,11 +263,12 @@ public class MarkerAppearance {
     app.setAttribute(CommonAttributes.EDGE_DRAW, false);
     app.setAttribute(CommonAttributes.FACE_DRAW, true);
     app.setAttribute(CommonAttributes.TRANSPARENCY_ENABLED, false);
-    app.setAttribute(CommonAttributes.PICKABLE, false);    
+    app.setAttribute(CommonAttributes.PICKABLE, false);
     app.setAttribute(CommonAttributes.LIGHTING_ENABLED, true);
-    app.setAttribute(CommonAttributes.SMOOTH_SHADING, true);
-    
+    app.setAttribute(CommonAttributes.POLYGON_SHADER + "."
+        + CommonAttributes.SMOOTH_SHADING, true);
     sgc.setAppearance(app);
+
     double[] mat = MatrixBuilder.euclidean().scale(this.scale).getMatrix()
         .getArray();
     Transformation t = new Transformation(mat);

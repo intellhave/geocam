@@ -89,7 +89,7 @@ public class FirstPersonView extends ExponentialView {
         int sgcCount = images.size() - pool.size();
         for (int jj = 0; jj < 2 * sgcCount; jj++) {
           MarkerAppearance oa = m.getAppearance();
-          SceneGraphComponent sgc = oa.prepareNewSceneGraphComponent();
+          SceneGraphComponent sgc = oa.makeSceneGraphComponent();
           pool.add(sgc);
           sgcMarkers.addChild(sgc);
         }
