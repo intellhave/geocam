@@ -33,7 +33,6 @@ import development.Development;
  * the geometry of the surface and markers should be presented in that
  * particular visualization.
  *********************************************************************************/
-
 public abstract class View {
 
   /*********************************************************************************
@@ -190,9 +189,8 @@ public abstract class View {
   protected void initAppearances() {
     defaultAppearance = new Appearance();
     defaultAppearance.setAttribute(VERTEX_DRAW, false);
-    defaultAppearance.setAttribute(EDGE_DRAW, true);
-    defaultAppearance.setAttribute(FACE_DRAW, true);
-    defaultAppearance.setAttribute(TUBES_DRAW, false);
+    defaultAppearance.setAttribute(EDGE_DRAW, false);
+    defaultAppearance.setAttribute(FACE_DRAW, true);    
     defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
     defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
     defaultAppearance.setAttribute(BACKGROUND_COLOR, Color.gray);

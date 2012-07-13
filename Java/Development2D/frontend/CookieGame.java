@@ -100,7 +100,7 @@ public class CookieGame {
   private static String filename = path + filenames[7];
 
   /*********************************************************************************
-   * initModel
+   * initModel@math
    * 
    * This method is responsible for initializing the mathematical model of the
    * simulation we'll present to the user. Specifically, this means setting up
