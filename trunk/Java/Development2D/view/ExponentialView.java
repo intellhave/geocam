@@ -87,7 +87,7 @@ public class ExponentialView extends View {
    * rotation ensures that the source point's "forward direction" points north.
    *********************************************************************************/
   protected void updateCamera() {
-    MatrixBuilder.euclidean().translate(0, 0, 4).rotateZ(-Math.PI / 2)
+    MatrixBuilder.euclidean().translate(0, 0, 3).rotateZ(-Math.PI / 2)
         .assignTo(sgcCamera);
   }
 
@@ -131,8 +131,10 @@ public class ExponentialView extends View {
       ifsf.setFaceCount(ifsf_faces.length);
       ifsf.setFaceIndices(ifsf_faces);
       ifsf.setGenerateEdgesFromFaces(true);
+      ifsf.setGenerateFaceNormals(true);
+      ifsf.setGenerateVertexNormals(true);      
       ifsf.update();
-
+      
       TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
       Appearance app = TextureLibrary.getAppearance(td);
       sgc.setGeometry(ifsf.getGeometry());
