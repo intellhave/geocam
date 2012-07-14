@@ -1,8 +1,6 @@
 package triangulation;
 
 import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Triangulation {
@@ -10,8 +8,11 @@ public class Triangulation {
   public static HashMap<Integer, Edge> edgeTable = new HashMap<Integer, Edge>();
   public static HashMap<Integer, Face> faceTable = new HashMap<Integer, Face>();
   public static HashMap<Integer, Tetra> tetraTable = new HashMap<Integer, Tetra>();
+
+  public static HashMap<Face, FaceGrouping> groupTable = new HashMap<Face, FaceGrouping>();
+
   private static int id = 0;
-  
+
   private Triangulation() {
 
   }
@@ -19,7 +20,7 @@ public class Triangulation {
   public static int getTriangulationID() {
     return id;
   }
-  
+
   // Put methods
   public static void putVertex(Vertex v) {
     vertexTable.put(v.getIndex(), v);
@@ -37,6 +38,10 @@ public class Triangulation {
     tetraTable.put(t.getIndex(), t);
   }
 
+  public static void putFaceGrouping(Face f, FaceGrouping fg) {
+    groupTable.put(f, fg);
+  }
+
   // Remove methods
   public static void removeVertex(int v) {
     vertexTable.remove(v);
@@ -45,7 +50,7 @@ public class Triangulation {
   public static void removeVertex(Vertex v) {
     removeVertex(v.getIndex());
   }
-  
+
   public static void removeEdge(int e) {
     edgeTable.remove(e);
   }
@@ -53,7 +58,7 @@ public class Triangulation {
   public static void removeEdge(Edge e) {
     removeEdge(e.getIndex());
   }
-  
+
   public static void removeFace(int f) {
     faceTable.remove(f);
   }
@@ -61,11 +66,11 @@ public class Triangulation {
   public static void removeFace(Face f) {
     removeFace(f.getIndex());
   }
-  
+
   public static void removeTetra(int t) {
     tetraTable.remove(t);
   }
-  
+
   public static void removeTetra(Tetra t) {
     removeTetra(t.getIndex());
   }
@@ -143,15 +148,17 @@ public class Triangulation {
   public static boolean isManifold() {
     for (Edge e : edgeTable.values()) {
       if (e.getLocalFaces().size() != 2) {
-        System.out.println("Edge " + e.getIndex() + " does not have two adjacent faces");
+        System.out.println("Edge " + e.getIndex()
+            + " does not have two adjacent faces");
         return false;
       }
     }
 
     for (Vertex v : vertexTable.values()) {
       if (!isCyclic(v))
-        System.out.println("Vertex " + v.getIndex() + " does not have a cyclic ordering of adjacent faces");
-        return false;
+        System.out.println("Vertex " + v.getIndex()
+            + " does not have a cyclic ordering of adjacent faces");
+      return false;
     }
     return true;
   }
@@ -161,7 +168,7 @@ public class Triangulation {
     if (faceList.size() == 0) {
       return false;
     }
-     
+
     Face currentFace = faceList.get(0);
     HashMap<Face, Boolean> visited = new HashMap<Face, Boolean>();
     visited.put(currentFace, true);
@@ -184,27 +191,27 @@ public class Triangulation {
         }
       }
     }
-    
-    if(counted == v.getLocalFaces().size()){  
-      return true;
-    }
-    else{
-      return false;     
-    } 
-}
 
-  public static int getDimension(){
+    if (counted == v.getLocalFaces().size()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public static int getDimension() {
     if (tetraTable.isEmpty()) {
       return 2;
-    }
-    else return 3;
+    } else
+      return 3;
   }
-  
+
   public static void reset() {
     vertexTable.clear();
     edgeTable.clear();
     faceTable.clear();
     tetraTable.clear();
+    groupTable.clear();
     id++;
   }
 }

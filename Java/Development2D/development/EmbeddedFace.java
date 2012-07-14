@@ -26,6 +26,7 @@ public class EmbeddedFace {
   private Vector normal_;
 
   // expects vectors in counter-clockwise order
+  
   public EmbeddedFace(ArrayList<Vector> points) {
     initialize(points);
   }
@@ -37,6 +38,7 @@ public class EmbeddedFace {
     initialize(vertices);
   }
   
+  //TODO: Make this method return the correct texCoords? (Is this even possible???)
   private void initialize(ArrayList<Vector> points){
     vertices = points;
     textureCoordinates = new ArrayList<Vector>();

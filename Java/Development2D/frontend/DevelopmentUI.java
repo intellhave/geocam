@@ -49,6 +49,7 @@ public class DevelopmentUI {
   // private static TriangulatedManifold manifold;
 
   private static MarkerHandler markerHandler;
+  private static Marker source;
   private static Development development;
 
   /*********************************************************************************
@@ -165,7 +166,6 @@ public class DevelopmentUI {
     Thread t = new Thread(userControl);
     t.start();
 
-    Marker source = markerHandler.getSourceMarker();
     userControl.resetPausedFlag();
     userControl.clear();
     while (!userControl.isPaused() || developerMode) {      
@@ -223,8 +223,8 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    String filename = "Data/surfaces/tetra.off";
-    //String filename = "Data/surfaces/dodec.off";
+    String filename = "Data/surfaces/cube_surf.off";
+    //String filename = "Data/surfaces/dodec2.off";
     loadSurface(filename);
   }
 
@@ -291,12 +291,13 @@ public class DevelopmentUI {
     pos = development.getSource();
     app = new MarkerAppearance(MarkerAppearance.ModelType.ANT);
     markerHandler.addSourceMarker(new Marker(pos, app));
+    source = markerHandler.getSourceMarker();
 
     Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {
       pos = new ManifoldPosition(development.getSource());
-      app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, 0.5);
+      app = new MarkerAppearance(MarkerAppearance.ModelType.COOKIE, 0.5);
       double a = rand.nextDouble() * Math.PI * 2;
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
       vel.scale(0.0005);

@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import triangulation.Edge;
 import triangulation.Face;
+import triangulation.FaceGrouping;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
@@ -85,20 +86,21 @@ public class EmbeddedTriangulation {
     return EmbeddedManifoldFaceData.get(f).getCoord3D(v);
   }
 
-  public static double[][] getFaceGeometry(Face f){
-    if(! isEmbedded) return null;
-    
+  public static double[][] getFaceGeometry(Face f) {
+    if (!isEmbedded)
+      return null;
+
     double[][] faceVerts = new double[3][3];
     int vIndex = 0;
-    for(Vertex v : f.getLocalVertices()){
+    for (Vertex v : f.getLocalVertices()) {
       Vector psn = getCoord3D(v);
       faceVerts[vIndex] = psn.getVectorAsArray();
       vIndex += 1;
     }
-    
+
     return faceVerts;
   }
-  
+
   public static Geometry get3DGeometry(HashMap<Face, Color> color_scheme) {
 
     if (!isEmbedded) {
@@ -608,8 +610,63 @@ public class EmbeddedTriangulation {
       }
     }
 
+    //reset the TextureCoords data and create the face groups
+    TextureCoords.reset();
+    createGroupings();
+
     // set flag that this triangulation is embedded, once finished
     isEmbedded = true;
+  }
+
+  /*********************************************************************************
+   * createGroupings
+   * 
+   * This method is responsible for going recursively through the faces in the
+   * triangulation and putting them together in their appropriate groups (i.e.
+   * putting together all triangles that belong to the same surface of the
+   * manifold). It then stores the faces and these FaceGroupings in a map from
+   * Faces => FaceGroupings, allowing other classes to quickly access the
+   * FaceGrouping for any given Face. The map can be found in Triangulation.
+   * 
+   * Note that right now this method determines if two faces should be grouped
+   * based on whether they share an edge and have the same color. This may need
+   * to be updated later.
+   *********************************************************************************/
+  
+  private static void createGroupings() {
+    for (int ii = 0; ii < Triangulation.faceTable.size(); ii++) {
+      Face f = Triangulation.faceTable.get(ii);
+      FaceGrouping fg = Triangulation.groupTable.get(f);
+
+      if (fg != null)
+        continue;
+
+      fg = new FaceGrouping(f);
+      Triangulation.groupTable.put(f, fg);
+      checkNeighbors(f, fg);
+    }
+  }
+
+  /*********************************************************************************
+   * checkNeighbors
+   * 
+   * This is a recursive helper method for createGroupings.
+   *********************************************************************************/
+  
+  private static void checkNeighbors(Face f, FaceGrouping fg) {
+    for (Edge e : f.getLocalEdges()) {
+      Face adjFace = DevelopmentComputations.getNewFace(f, e);
+      if (adjFace == null)
+        continue;
+      if (fg.contains(adjFace))
+        continue;
+      // TODO: modify condition for grouping?
+      if (f.getColor().equals(adjFace.getColor())) {
+        fg.add(adjFace);
+        Triangulation.groupTable.put(adjFace, fg);
+        checkNeighbors(adjFace, fg);
+      }
+    }
   }
 
   public static Vector getEmbeddedNormal(Face f) {
