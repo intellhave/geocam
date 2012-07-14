@@ -2,6 +2,7 @@ package development;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import triangulation.Face;
 import triangulation.Vertex;
@@ -132,15 +133,14 @@ public class AffineTransformation extends Matrix {
   
   public EmbeddedFace affineTransFace(Face f) {
       ArrayList<Vector> efpts = new ArrayList<Vector>();
-      ArrayList<Vector> texCoords = new ArrayList<Vector>();
+      ArrayList<Vector> texCoords = (ArrayList<Vector>) TextureCoords.getCoords(f);
       
       Iterator<Vertex> i = f.getLocalVertices().iterator();
       while(i.hasNext()){
         Vertex vert = i.next();
         Vector pt = Coord2D.coordAt(vert, f);
         try{ 
-          efpts.add(this.affineTransPoint(pt)); 
-          texCoords.add(pt);
+          efpts.add(this.affineTransPoint(pt));
         }
         catch(Exception e1){ e1.printStackTrace(); }
       }

@@ -21,6 +21,7 @@ import de.jreality.scene.data.Attribute;
 import development.Development;
 import development.EmbeddedTriangulation;
 import development.ManifoldPosition;
+import development.TextureCoords;
 import development.Vector;
 
 /*********************************************************************************
@@ -144,6 +145,7 @@ public class EmbeddedView extends View {
     
     for( Face f : Triangulation.faceTable.values() ){
       double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
+      double[][] texCoords = TextureCoords.getCoordsAsArray(f);
       
       IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();      
       ifsf.setVertexCount(verts.length);
@@ -152,7 +154,7 @@ public class EmbeddedView extends View {
       ifsf.setFaceIndices(ifsf_faces);      
       ifsf.setGenerateEdgesFromFaces(true);
       ifsf.setGenerateFaceNormals(true);
-      ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, verts);
+      ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, texCoords);
       ifsf.update();
 
       TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);

@@ -32,7 +32,7 @@ public class FaceAppearanceScheme {
    * the future, we will allow the mapping to be customizable.
    *********************************************************************************/
   public TextureDescriptor getTextureDescriptor(Face f) {
-    int index = f.getIndex();
+    int index = Math.abs(getColor(f).getRGB());
     TextureDescriptor[] textures = TextureDescriptor.values();
     return textures[index % textures.length];
   }

@@ -134,7 +134,7 @@ public class ExponentialView extends View {
       ifsf.setGenerateFaceNormals(true);
       ifsf.setGenerateVertexNormals(true);      
       ifsf.update();
-      
+
       TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
       Appearance app = TextureLibrary.getAppearance(td);
       sgc.setGeometry(ifsf.getGeometry());
