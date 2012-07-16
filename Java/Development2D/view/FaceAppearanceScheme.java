@@ -100,7 +100,8 @@ private void initColorLibrary(){
     case -9868951:
       return colorMap.get(Colors.DARK_GRAY);
      default:
-       return colorMap.get(Colors.DEFAULT);
+       //This returns a random texture based on the RGB components of the color
+       return TextureDescriptor.values()[(faceColor.getRGB() %TextureDescriptor.values().length)];
     }
 
   }
