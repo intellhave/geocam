@@ -62,9 +62,9 @@ public class ViewerController extends JFrame {
     this.views = views;
     source = markerHandler.getSourceMarker();
     layoutGUI();
-    DevelopmentUI.setExponentialView(showView2DBox.isSelected());
-    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected());
-    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected());
+    DevelopmentUI.setExponentialView(showView2DBox.isSelected(), TextureEnabledBox.isSelected());
+    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(), TextureEnabledBox.isSelected());
+    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), TextureEnabledBox.isSelected());
   }
 
   /********************************************************************************
@@ -94,6 +94,7 @@ public class ViewerController extends JFrame {
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
   private JCheckBox drawAvatarBox;
+  private JCheckBox TextureEnabledBox;
 
   private static int MAX_SPEED = 4000;
   private static int MAX_SIZE = 10;
@@ -399,13 +400,13 @@ public class ViewerController extends JFrame {
         public void actionPerformed(ActionEvent arg0) {
           // TODO Auto-generated method stub
           boolean checkBox = showView2DBox.isSelected();
-          DevelopmentUI.setExponentialView(checkBox);
+          DevelopmentUI.setExponentialView(checkBox, TextureEnabledBox.isSelected());
         }
       };
       showView2DBox.addActionListener(view2DListener);
 
       /********************************************************************************
-       * TODO: make the 2D View checkbox functional
+       * 
        ********************************************************************************/
     }
     // ***************************3D VIEW CHECK BOX*****************************
@@ -419,7 +420,7 @@ public class ViewerController extends JFrame {
         public void actionPerformed(ActionEvent arg0) {
           // TODO Auto-generated method stub
           boolean checkBox = showView3DBox.isSelected();
-          DevelopmentUI.setFirstPersonView(checkBox);
+          DevelopmentUI.setFirstPersonView(checkBox, TextureEnabledBox.isSelected());
         }
       };
       showView3DBox.addActionListener(view3DListener);
@@ -436,12 +437,30 @@ public class ViewerController extends JFrame {
         public void actionPerformed(ActionEvent arg0) {
           // TODO Auto-generated method stub
           boolean checkBox = showEmbeddedBox.isSelected();
-          DevelopmentUI.setEmbeddedView(checkBox);
+          DevelopmentUI.setEmbeddedView(checkBox,TextureEnabledBox.isSelected());
         }
       };
       showEmbeddedBox.addActionListener(viewEmbeddedListener);
     }
-
+ // ************************TEXTURE ENABLED CHECK BOX**************************
+    {
+      TextureEnabledBox = new JCheckBox();
+      viewerPanel.add(TextureEnabledBox);
+      TextureEnabledBox.setText("Display Texture");
+      TextureEnabledBox.setSelected(true);
+      ActionListener TextureEnabledListener = new ActionListener(){
+        public void actionPerformed(ActionEvent arg0) {
+          boolean textureEnabled = TextureEnabledBox.isSelected();
+          DevelopmentUI.setExponentialView(false, textureEnabled);
+          DevelopmentUI.setFirstPersonView(false, textureEnabled);
+          DevelopmentUI.setEmbeddedView(false, textureEnabled);
+          DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(),textureEnabled);
+          DevelopmentUI.setExponentialView(showView2DBox.isSelected(), textureEnabled);
+          DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), textureEnabled);
+        } 
+    };
+    TextureEnabledBox.addActionListener(TextureEnabledListener);
+    }
     // ******************************DRAW OPTIONS
     // PANEL********************************
     drawOptionsPanel = new JPanel();

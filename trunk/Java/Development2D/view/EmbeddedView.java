@@ -156,9 +156,13 @@ public class EmbeddedView extends View {
       ifsf.setGenerateFaceNormals(true);
       ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, texCoords);
       ifsf.update();
-
+      Appearance app;
+      if(showTexture){
       TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
-      Appearance app = TextureLibrary.getAppearance(td);
+      app = TextureLibrary.getAppearance(td);
+      }
+      else
+         app = TextureLibrary.getAppearance(f.getColor());
       
       SceneGraphComponent sgc = new SceneGraphComponent();
       sgc.setGeometry(ifsf.getGeometry());
