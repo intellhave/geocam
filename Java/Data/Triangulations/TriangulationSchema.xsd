@@ -66,6 +66,7 @@
                 <xs:element ref="Edges" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="Faces" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="Tetras" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="Color" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
             <xs:attribute name="index" use="required" type="xs:integer"/>
         	<xs:attribute name="multiplicity" use="optional" type="xs:integer"/>
@@ -88,4 +89,5 @@
     <xs:element name="Edges" type="xs:string"/>
     <xs:element name="Faces" type="xs:string"/>
     <xs:element name="Tetras" type="xs:string"/>
+    <xs:element name="Color" type="xs:string"/>
 </xs:schema>

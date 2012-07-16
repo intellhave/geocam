@@ -634,8 +634,7 @@ public class EmbeddedTriangulation {
    *********************************************************************************/
   
   private static void createGroupings() {
-    for (int ii = 0; ii < Triangulation.faceTable.size(); ii++) {
-      Face f = Triangulation.faceTable.get(ii);
+    for (Face f : Triangulation.faceTable.values()) {
       FaceGrouping fg = Triangulation.groupTable.get(f);
 
       if (fg != null)

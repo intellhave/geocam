@@ -93,40 +93,48 @@
     <Vertices>1 2 3 </Vertices>
     <Edges>1 2 5 </Edges>
     <Faces>2 4 5 </Faces>
+    <Color>1.0 .25 .75</Color>
   </Face>
   <Face index="2">
     <Vertices>1 3 4 </Vertices>
     <Edges>2 3 6 </Edges>
     <Faces>1 3 6 </Faces>
+    <Color>1.0 .25 .75</Color>
   </Face>
   <Face index="3">
     <Vertices>1 4 5 </Vertices>
     <Edges>3 4 7 </Edges>
     <Faces>2 4 7 </Faces>
+    <Color>0.0 .85 .1</Color>
   </Face>
   <Face index="4">
     <Vertices>1 2 5 </Vertices>
     <Edges>1 4 8 </Edges>
     <Faces>1 3 8 </Faces>
+    <Color>0.0 .85 .1</Color>
   </Face>
   <Face index="5">
     <Vertices>2 3 6 </Vertices>
     <Edges>5 9 10 </Edges>
     <Faces>1 6 8 </Faces>
+    <Color>0.0 .85 .1</Color>
   </Face>
   <Face index="6">
     <Vertices>3 4 6 </Vertices>
     <Edges>6 10 11 </Edges>
     <Faces>2 5 7 </Faces>
+    <Color>0.0 .85 .1</Color>
   </Face>
   <Face index="7">
     <Vertices>4 5 6 </Vertices>
     <Edges>7 11 12 </Edges>
     <Faces>3 6 8 </Faces>
+    <Color>0.0 .85 .1</Color>
   </Face>
   <Face index="8">
     <Vertices>2 5 6 </Vertices>
     <Edges>8 9 12 </Edges>
     <Faces>4 5 7 </Faces>
+    <Color>0.0 .85 .1</Color>
   </Face>
 </Triangulation>
