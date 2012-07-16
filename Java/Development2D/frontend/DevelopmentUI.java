@@ -63,6 +63,7 @@ public class DevelopmentUI {
   static View firstPersonView;
   static View exponentialView;
   static View embeddedView;
+  private static boolean isEmbedded;
 
   /*********************************************************************************
    * Model Control Data
@@ -223,10 +224,10 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    //String filename = "Data/surfaces/tetra.off";
-    //String filename = "Data/surfaces/dodec.off";
-    String file = "Data/surfaces/Test_cube.off";
-    loadSurface(file);
+    //String filename = "Data/surfaces/cube_surf.off";
+    String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
+    //String filename = "Data/surfaces/dodec2.off";
+    loadSurface(filename);
   }
 
   /*********************************************************************************
@@ -240,8 +241,10 @@ public class DevelopmentUI {
 
     if (extension.contentEquals("off")) {
       EmbeddedTriangulation.readEmbeddedSurface(file);
+      isEmbedded = true;
     } else if (extension.contentEquals("xml")) {
       TriangulationIO.readTriangulation(file);
+      isEmbedded = false;
     } else {
       System.err.println("invalid file");
     }
@@ -421,7 +424,7 @@ public class DevelopmentUI {
   }
 
   public static void setEmbeddedView(boolean viewEnabled, boolean textureEnabled) {
-    if (viewEnabled) {
+    if (viewEnabled && isEmbedded) {
       embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme);
       embeddedView.setTexture(textureEnabled);
       embeddedView.updateGeometry();
