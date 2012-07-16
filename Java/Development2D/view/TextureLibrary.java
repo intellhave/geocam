@@ -70,7 +70,7 @@ public class TextureLibrary {
         .createPolygonShader("default");
 
     dps.setAmbientColor(Color.white); // dps.setAmbientColor(c);
-    dps.setAmbientColor(Color.white); // dps.setDiffuseColor(c);
+    dps.setDiffuseColor(Color.white); // dps.setDiffuseColor(c);
     dps.setAmbientCoefficient(0.3); // These coefficients seem to help the
                                     // texture look "bright"
     dps.setDiffuseCoefficient(0.8); // when it gets mapped to the surface.
@@ -121,7 +121,7 @@ public class TextureLibrary {
       ee.printStackTrace();
     }
 
-    Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);
+   Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);
     tex.setTextureMatrix(MatrixBuilder.euclidean().scale(0.5).getMatrix());
 
     return app;
@@ -139,4 +139,22 @@ public class TextureLibrary {
   public static Appearance getAppearance(TextureDescriptor td) {
     return library.get(td);
   }
+  public static Appearance getAppearance(Color color){
+    Appearance app = new Appearance();
+    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
+        .createDefaultGeometryShader(app, true);
+    dgs.setShowLines(false);
+    dgs.setShowPoints(false);
+    DefaultPolygonShader dps = (DefaultPolygonShader) dgs
+        .createPolygonShader("default");
+
+    dps.setAmbientColor(color); // dps.setAmbientColor(c);
+    dps.setDiffuseColor(color); // dps.setDiffuseColor(c);
+    dps.setAmbientCoefficient(0.1); // These coefficients seem to help the
+                                    // texture look "bright"
+    dps.setDiffuseCoefficient(0.1); // when it gets mapped to the surface.
+
+    return app;
+  }
+  
 }

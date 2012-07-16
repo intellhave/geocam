@@ -45,6 +45,7 @@ public abstract class View {
   protected Development development;
   protected MarkerHandler markers;
   protected FaceAppearanceScheme faceAppearanceScheme;
+  protected boolean showTexture;
 
   /*********************************************************************************
    * Scene Graph Data
@@ -84,6 +85,7 @@ public abstract class View {
     this.development = development;
     this.markers = markers;
     this.faceAppearanceScheme = fas;
+    showTexture = true;
 
     initSceneGraph();
     initAppearances();
@@ -286,4 +288,12 @@ public abstract class View {
    * is specific to the view in question.
    *********************************************************************************/
   public abstract void removeMarker(Marker m);
+  
+  public boolean getTextureOn(){
+    return showTexture;
+  }
+  
+  public void setTexture(boolean texture){
+    showTexture = texture;
+  }
 }
