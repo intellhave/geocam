@@ -6,10 +6,12 @@ import geoquant.Length;
 import geoquant.Radius;
 import geoquant.TriPosition;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -296,6 +298,20 @@ public class TriangulationIO {
           // t2.addUniqueFace(f);
         }
       }
+      
+      NodeList rgbComponents = simplexNode.getElementsByTagName("Color");
+      if (rgbComponents.getLength() > 0) {
+        Element rgbs = (Element) rgbComponents.item(0);
+        localScanner = new Scanner(rgbs.getTextContent());
+        ArrayList<Float> colors = new ArrayList<Float>();
+        while (localScanner.hasNextFloat()) {
+          float color = localScanner.nextFloat();
+          colors.add(color);
+        }
+        Color faceColor = new Color(colors.get(0), colors.get(1), colors.get(2));
+        f.setColor(faceColor);
+      }
+    
       String multiplicity = simplexNode.getAttribute("multiplicity");
       if (multiplicity.length() != 0) {
         f.setMultiplicity(Integer.parseInt(multiplicity));
@@ -439,8 +455,26 @@ public class TriangulationIO {
     }
 
     //reset TextureCoords values and create the face groups
+    
+    /**
+     * TODO: We need some equivalence relation between faces in .xml documents in order
+     * to get consistent texturing.
+     */
+    
     TextureCoords.reset();
-    createGroupings();
+    
+    //Check if the xml file had color info
+    Face testFace = Triangulation.faceTable.get(1);
+    if(testFace.getColor() != null){
+      createGroupings();
+    }
+    else{
+      //If not color, just give each face its own face group for the purposes of texturing
+      for(Face face : Triangulation.faceTable.values()){
+        FaceGrouping fg = new FaceGrouping(face);
+        Triangulation.putFaceGrouping(face, fg);
+      }
+    }
   }
 
   /*********************************************************************************
@@ -459,8 +493,7 @@ public class TriangulationIO {
    *********************************************************************************/
   
   private static void createGroupings() {
-    for (int ii = 0; ii < Triangulation.faceTable.size(); ii++) {
-      Face f = Triangulation.faceTable.get(ii);
+    for (Face f : Triangulation.faceTable.values()) {
       FaceGrouping fg = Triangulation.groupTable.get(f);
 
       if (fg != null)
