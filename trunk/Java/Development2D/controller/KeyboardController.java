@@ -4,6 +4,8 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
+import marker.BreadCrumbs;
+
 import development.Development;
 
 
@@ -17,8 +19,8 @@ public class KeyboardController extends UserController implements
    * Development. From this development, we construct the data structures we use
    * internally to process actions, and then the initialize method is called.
    **********************************************************************************/
-  public KeyboardController(Development dev) {
-    super(dev);
+  public KeyboardController(Development dev, BreadCrumbs bc) {
+    super(dev, bc);
     KeyboardFocusManager.getCurrentKeyboardFocusManager()
         .addKeyEventDispatcher(this);
   }
@@ -82,6 +84,8 @@ public class KeyboardController extends UserController implements
       case KeyEvent.VK_BACK_SPACE:
       stopRepeatingAction(Action.B_Button);
       break;
+      case KeyEvent.VK_SHIFT:
+        actionQueue.add(Action.L);
       }
     }
     // The code that calls this method expects a boolean.
