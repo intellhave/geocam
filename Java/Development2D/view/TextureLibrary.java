@@ -147,12 +147,13 @@ public class TextureLibrary {
     dgs.setShowPoints(false);
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs
         .createPolygonShader("default");
-
     dps.setAmbientColor(color); // dps.setAmbientColor(c);
     dps.setDiffuseColor(color); // dps.setDiffuseColor(c);
-    dps.setAmbientCoefficient(0.1); // These coefficients seem to help the
-                                    // texture look "bright"
-    dps.setDiffuseCoefficient(0.1); // when it gets mapped to the surface.
+    dps.setAmbientCoefficient(0.25); // These coefficients seem to help the
+                                    // texture look "bright
+   dps.setSpecularCoefficient(0.0);//this makes the "shiny" look of the surface go away
+   
+    dps.setDiffuseCoefficient(0.25); // when it gets mapped to the surface.
 
     return app;
   }

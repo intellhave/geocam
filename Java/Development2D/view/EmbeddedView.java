@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
+import marker.BreadCrumbs;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -45,8 +46,8 @@ public class EmbeddedView extends View {
    * Given a development object and a color scheme, this constructor initializes
    * an EmbeddedView object to display the specified surface.
    *********************************************************************************/
-  public EmbeddedView(Development d, MarkerHandler mh, FaceAppearanceScheme fas) {
-    super(d, mh, fas);
+  public EmbeddedView(Development d, MarkerHandler mh, FaceAppearanceScheme fas, BreadCrumbs crumb) {
+    super(d, mh, fas, crumb);
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
 
@@ -59,7 +60,7 @@ public class EmbeddedView extends View {
     for (int ii = 0; ii < numlights; ii++) {
       SceneGraphComponent sgcLight = new SceneGraphComponent();
       DirectionalLight light = new DirectionalLight();
-      light.setIntensity(1.5);
+      light.setIntensity(1.0);
       sgcLight.setLight(light);
       MatrixBuilder.euclidean().scale(2).translate(light_psns[ii])
           .rotateX(light_psns[ii][0] * Math.PI / 4)
@@ -162,7 +163,7 @@ public class EmbeddedView extends View {
       app = TextureLibrary.getAppearance(td);
       }
       else
-         app = TextureLibrary.getAppearance(f.getColor());
+         app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
       
       SceneGraphComponent sgc = new SceneGraphComponent();
       sgc.setGeometry(ifsf.getGeometry());
@@ -200,8 +201,10 @@ public class EmbeddedView extends View {
       Face f = faceTable.get(i);
       getMarkerPlacementData(f, objectImages);
     }
+    Set<Marker> allMarkers = markers.getAllMarkers();
+    allMarkers.addAll(crumbs.getAllMarkers());
 
-    for (Marker vo : objectImages.keySet()) {
+    for (Marker vo : allMarkers) {
       SceneGraphComponent sgc = sgcpools.get(vo);
 
       if (sgc == null) {
@@ -212,6 +215,11 @@ public class EmbeddedView extends View {
       }
 
       Vector[] tuple = objectImages.get(vo);
+      if(tuple == null){
+        sgcpools.get(vo).setVisible(false);
+        continue;
+      }
+      
       Vector pos = tuple[0];
       Vector forward = Vector.normalize(tuple[1]);
       Vector left = Vector.normalize(tuple[2]);
@@ -260,6 +268,10 @@ public class EmbeddedView extends View {
 
     // look for objects
     Collection<Marker> markers = this.markers.getMarkers(f);
+    Collection<Marker> breadCrumbs = crumbs.getMarkers(f);
+    for(Marker bread : breadCrumbs)
+      markers.add(bread);
+  
     if (markers == null) return;
       
     synchronized (markers) {

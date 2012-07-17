@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
+import marker.BreadCrumbs;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -34,8 +35,8 @@ public class FirstPersonView extends ExponentialView {
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
   public FirstPersonView(Development dev, MarkerHandler mh,
-      FaceAppearanceScheme fas) {
-    super(dev, mh, fas); // This call initializes the sgcpools data structure.
+      FaceAppearanceScheme fas, BreadCrumbs crumbs) {
+    super(dev, mh, fas, crumbs); // This call initializes the sgcpools data structure.
     Camera cam = sgcCamera.getCamera();
     cam.setPerspective(true);
 

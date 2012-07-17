@@ -6,6 +6,7 @@ import java.awt.Color;
 
 import javax.media.opengl.GLCanvas;
 
+import marker.BreadCrumbs;
 import marker.Marker;
 import marker.MarkerHandler;
 
@@ -44,6 +45,7 @@ public abstract class View {
    *********************************************************************************/
   protected Development development;
   protected MarkerHandler markers;
+  protected BreadCrumbs crumbs;
   protected FaceAppearanceScheme faceAppearanceScheme;
   protected boolean showTexture;
 
@@ -81,9 +83,10 @@ public abstract class View {
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
   public View(Development development, MarkerHandler markers,
-      FaceAppearanceScheme fas) {
+      FaceAppearanceScheme fas, BreadCrumbs crumb) {
     this.development = development;
     this.markers = markers;
+    this.crumbs = crumb;
     this.faceAppearanceScheme = fas;
     showTexture = true;
 

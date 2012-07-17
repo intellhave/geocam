@@ -65,7 +65,7 @@ private void initColorLibrary(){
    *********************************************************************************/
   public TextureDescriptor getTextureDescriptor(Face f) {
     initColorLibrary();
-    Color faceColor = f.getColor();
+    Color faceColor = getColor(f);
     switch(faceColor.getRGB()){
     case-16734503 :
       return colorMap.get(Colors.SKY_BLUE);
@@ -101,7 +101,7 @@ private void initColorLibrary(){
       return colorMap.get(Colors.DARK_GRAY);
      default:
        //This returns a random texture based on the RGB components of the color
-       return TextureDescriptor.values()[(faceColor.getRGB() %TextureDescriptor.values().length)];
+       return TextureDescriptor.values()[(Math.abs(faceColor.getRGB() % TextureDescriptor.values().length))];
     }
 
   }
