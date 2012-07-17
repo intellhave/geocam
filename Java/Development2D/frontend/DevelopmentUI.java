@@ -15,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JFrame;
 
+import marker.BreadCrumbs;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -50,6 +51,7 @@ public class DevelopmentUI {
 
   private static MarkerHandler markerHandler;
   private static Marker source;
+  private static BreadCrumbs crumbs;
   private static Development development;
 
   /*********************************************************************************
@@ -224,8 +226,8 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    //String filename = "Data/surfaces/cube_surf.off";
-    String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
+    String filename = "Data/surfaces/cube_surf.off";
+    //String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
     //String filename = "Data/surfaces/dodec2.off";
     loadSurface(filename);
   }
@@ -288,6 +290,7 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void initMarkers() {
     markerHandler = new MarkerHandler();
+    crumbs = new BreadCrumbs();
 
     ManifoldPosition pos;
     MarkerAppearance app;
@@ -296,12 +299,13 @@ public class DevelopmentUI {
     app = new MarkerAppearance(MarkerAppearance.ModelType.ANT);
     markerHandler.addSourceMarker(new Marker(pos, app));
     source = markerHandler.getSourceMarker();
+    crumbs.addSourceMarker(source);
 
     Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {
       pos = new ManifoldPosition(development.getSource());
-      app = new MarkerAppearance(MarkerAppearance.ModelType.COOKIE, 0.5);
+      app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, 0.5);
       double a = rand.nextDouble() * Math.PI * 2;
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
       vel.scale(0.0005);
@@ -339,7 +343,7 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void initModelControls() {
     // userControl = new SNESController(development);
-    userControl = new KeyboardController(development);
+    userControl = new KeyboardController(development, crumbs);
   }
 
   /*********************************************************************************
@@ -387,7 +391,7 @@ public class DevelopmentUI {
 
   public static void setExponentialView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled) {
-      exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
+      exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme, crumbs);
       exponentialView.setTexture(textureEnabled);
       exponentialView.updateGeometry();
       exponentialView.initializeNewManifold();
@@ -425,7 +429,7 @@ public class DevelopmentUI {
 
   public static void setEmbeddedView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled && isEmbedded) {
-      embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme);
+      embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme, crumbs);
       embeddedView.setTexture(textureEnabled);
       embeddedView.updateGeometry();
       embeddedView.initializeNewManifold();
@@ -463,7 +467,7 @@ public class DevelopmentUI {
 
   public static void setFirstPersonView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled) {
-      firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme);
+      firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme, crumbs);
       firstPersonView.setTexture(textureEnabled);
       firstPersonView.updateGeometry();
       firstPersonView.initializeNewManifold();
