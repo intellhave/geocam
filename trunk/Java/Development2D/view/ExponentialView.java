@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 
+import marker.BreadCrumbs;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -50,8 +51,8 @@ public class ExponentialView extends View {
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
   public ExponentialView(Development d, MarkerHandler mh,
-      FaceAppearanceScheme fas) {
-    super(d, mh, fas);
+      FaceAppearanceScheme fas, BreadCrumbs crumbs) {
+    super(d, mh, fas, crumbs);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
 
     // create light
@@ -140,7 +141,7 @@ public class ExponentialView extends View {
       app = TextureLibrary.getAppearance(td);
       }
       else{
-        app = TextureLibrary.getAppearance(f.getColor());
+        app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
       }
       sgc.setGeometry(ifsf.getGeometry());
       sgc.setAppearance(app);
@@ -171,7 +172,10 @@ public class ExponentialView extends View {
     HashMap<Marker, ArrayList<Vector[]>> markerImages;
     markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     developMarkers(development.getRoot(), markerImages);
+    
     Set<Marker> allMarkers = markers.getAllMarkers();
+    Set<Marker> crumbMarkers = crumbs.getAllMarkers();
+    allMarkers.addAll(crumbMarkers);
 
     for (Marker m : allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
@@ -274,6 +278,9 @@ public class ExponentialView extends View {
   protected void developMarkers(DevelopmentNode devNode,
       HashMap<Marker, ArrayList<Vector[]>> markerImages) {
     Collection<Marker> localMarkers = markers.getMarkers(devNode.getFace());
+    Collection<Marker> breadCrumbs = crumbs.getMarkers(devNode.getFace());
+    for(Marker bread : breadCrumbs)
+        localMarkers.add(bread);
 
     if (localMarkers != null) {
 
