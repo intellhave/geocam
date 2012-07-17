@@ -26,9 +26,9 @@ import triangulation.Triangulation;
 
 public class MarkerHandler {
 
-  private Map<Face, Set<Marker>> markerDatabase;
-  private Set<Marker> allMarkers;
-  private Marker sourceMarker;
+  protected Map<Face, Set<Marker>> markerDatabase;
+  protected Set<Marker> allMarkers;
+  protected Marker sourceMarker;
 
   /*********************************************************************************
    * MarkerHandler (Constructor)
