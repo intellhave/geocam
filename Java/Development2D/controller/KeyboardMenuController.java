@@ -3,7 +3,7 @@ package controller;
 public class KeyboardMenuController extends KeyboardController {
 
   public KeyboardMenuController() {
-    super(null);
+    super(null,null);
   }
 
   protected synchronized void startRepeatingAction(Action action) {
