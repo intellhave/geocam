@@ -2,6 +2,8 @@ package controller;
 
 import java.util.EnumMap;
 
+import marker.BreadCrumbs;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
@@ -42,8 +44,8 @@ public class SNESController extends UserController {
    * Development. From this development, we construct the data structures we use
    * internally to process actions, and then the initialize method is called.
    **********************************************************************************/
-  public SNESController(Development dev) {
-    super(dev);
+  public SNESController(Development dev, BreadCrumbs bc) {
+    super(dev, bc);
     init();
   }
   
