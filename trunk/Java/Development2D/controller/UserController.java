@@ -8,6 +8,8 @@ import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import marker.BreadCrumbs;
+
 import development.Development;
 
 public abstract class UserController implements Runnable {
@@ -32,7 +34,7 @@ public abstract class UserController implements Runnable {
    * know how to process.
    *********************************************************************************/
   public static enum Action {
-    Right, Left, Forward, Back, A_Button, B_Button, start
+    Right, Left, Forward, Back, A_Button, B_Button, start, L, R
   }
 
   /*********************************************************************************
@@ -47,6 +49,7 @@ public abstract class UserController implements Runnable {
    *********************************************************************************/
   private Development development;
   protected BlockingQueue<Action> actionQueue;
+  private BreadCrumbs crumbs;
 
   protected Timer keyRepeatTimer;
   private Map<Action, TimerTask> repeatingTasks;
@@ -58,11 +61,12 @@ public abstract class UserController implements Runnable {
    * Development. From this development, we construct the data structures we use
    * internally to process actions.
    **********************************************************************************/
-  public UserController(Development dev) {
+  public UserController(Development dev, BreadCrumbs bc) {
     development = dev;
     actionQueue = new LinkedBlockingQueue<Action>();
     repeatingTasks = new EnumMap<Action, TimerTask>(Action.class);
     keyRepeatTimer = new Timer("Button Repeat Timer");
+    crumbs = bc;
   }
   
   public UserController(){
@@ -129,6 +133,8 @@ public abstract class UserController implements Runnable {
         case start:
           actionQueue.add(Action.start);
           break;
+        case L:
+          actionQueue.add(Action.L);
         }
         // Attempt to make it more responsive to key-releases.
         // Even if there are multiple this-tasks piled up (due to
@@ -187,6 +193,8 @@ public abstract class UserController implements Runnable {
     case start:
       isPaused = true;
       break;
+    case L:
+      crumbs.addMarker();
     }
 
     return true;
