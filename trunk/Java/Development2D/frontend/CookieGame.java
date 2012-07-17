@@ -202,7 +202,7 @@ public class CookieGame {
     faceAppearanceScheme = new FaceAppearanceScheme();
     int[] framePosition = { 0, 10 };
     int[] frameSize = { 700, 700 };
-    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
+    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme, null);
     gameView.updateGeometry();
     gameView.initializeNewManifold();
     gameView.updateScene();
@@ -235,7 +235,7 @@ public class CookieGame {
    * "initViewControls" method.
    *********************************************************************************/
   private static void initModelControls() {
-    userControl = new KeyboardController(development);
+    userControl = new KeyboardController(development, null);
   }
 
   public static void runGame() {
