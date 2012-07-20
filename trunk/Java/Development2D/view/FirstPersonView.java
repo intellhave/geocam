@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphComponent;
 import development.Development;
+import development.ForwardGeodesics;
 import development.Vector;
 
 /*********************************************************************************
@@ -35,8 +37,8 @@ public class FirstPersonView extends ExponentialView {
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
   public FirstPersonView(Development dev, MarkerHandler mh,
-      FaceAppearanceScheme fas, BreadCrumbs crumbs) {
-    super(dev, mh, fas, crumbs); // This call initializes the sgcpools data structure.
+      FaceAppearanceScheme fas, BreadCrumbs crumbs, ForwardGeodesics geo) {
+    super(dev, mh, fas, crumbs, geo); // This call initializes the sgcpools data structure.
     Camera cam = sgcCamera.getCamera();
     cam.setPerspective(true);
 
@@ -69,7 +71,10 @@ public class FirstPersonView extends ExponentialView {
   protected void generateMarkerGeometry() {
     HashMap<Marker, ArrayList<Vector[]>> markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     super.developMarkers(development.getRoot(), markerImages);
-    Set<Marker> allMarkers = markers.getAllMarkers();
+    Set<Marker> allMarkers = new HashSet<Marker>();
+       allMarkers.addAll( markers.getAllMarkers());
+       allMarkers.addAll(crumbs.getAllMarkers());
+       allMarkers.addAll(geo.getAllGeoMarkers());
 
     for (Marker m : allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);

@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import de.jreality.scene.data.Attribute;
 import development.AffineTransformation;
 import development.Development;
 import development.DevelopmentNode;
+import development.ForwardGeodesics;
 import development.Frustum2D;
 import development.ManifoldPosition;
 import development.Vector;
@@ -51,8 +53,8 @@ public class ExponentialView extends View {
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
   public ExponentialView(Development d, MarkerHandler mh,
-      FaceAppearanceScheme fas, BreadCrumbs crumbs) {
-    super(d, mh, fas, crumbs);
+      FaceAppearanceScheme fas, BreadCrumbs crumbs, ForwardGeodesics geo) {
+    super(d, mh, fas, crumbs, geo);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
 
     // create light
@@ -173,9 +175,14 @@ public class ExponentialView extends View {
     markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     developMarkers(development.getRoot(), markerImages);
     
-    Set<Marker> allMarkers = markers.getAllMarkers();
+    Set<Marker> allMarkers = new HashSet<Marker>();
+   allMarkers.addAll(markers.getAllMarkers());
     Set<Marker> crumbMarkers = crumbs.getAllMarkers();
     allMarkers.addAll(crumbMarkers);
+    Set<Marker> geodesics = geo.getAllGeoMarkers();
+    //allMarkers.addAll(geodesics);
+    for(Marker m: geodesics)
+        allMarkers.add(m);
 
     for (Marker m : allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
@@ -277,10 +284,16 @@ public class ExponentialView extends View {
    *********************************************************************************/
   protected void developMarkers(DevelopmentNode devNode,
       HashMap<Marker, ArrayList<Vector[]>> markerImages) {
-    Collection<Marker> localMarkers = markers.getMarkers(devNode.getFace());
+    Collection<Marker> localMarkers = new HashSet<Marker>();
+    Collection<Marker> locals = markers.getMarkers(devNode.getFace());
     Collection<Marker> breadCrumbs = crumbs.getMarkers(devNode.getFace());
+    Collection<Marker> geos = geo.getMarkers(devNode.getFace());
+    localMarkers.addAll(locals);
+    //localMarkers.addAll(geos);
     for(Marker bread : breadCrumbs)
         localMarkers.add(bread);
+    for(Marker m: geos)
+        localMarkers.add(m);
 
     if (localMarkers != null) {
 

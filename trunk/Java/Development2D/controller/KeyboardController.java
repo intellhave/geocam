@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import marker.BreadCrumbs;
 
 import development.Development;
+import development.ForwardGeodesics;
 
 
 public class KeyboardController extends UserController implements
@@ -19,8 +20,8 @@ public class KeyboardController extends UserController implements
    * Development. From this development, we construct the data structures we use
    * internally to process actions, and then the initialize method is called.
    **********************************************************************************/
-  public KeyboardController(Development dev, BreadCrumbs bc) {
-    super(dev, bc);
+  public KeyboardController(Development dev, BreadCrumbs bc, ForwardGeodesics geo) {
+    super(dev, bc, geo);
     KeyboardFocusManager.getCurrentKeyboardFocusManager()
         .addKeyEventDispatcher(this);
   }
@@ -86,6 +87,10 @@ public class KeyboardController extends UserController implements
       break;
       case KeyEvent.VK_SHIFT:
         actionQueue.add(Action.L);
+        break;
+      case KeyEvent.VK_TAB:
+        actionQueue.add(Action.R);
+        break;
       }
     }
     // The code that calls this method expects a boolean.

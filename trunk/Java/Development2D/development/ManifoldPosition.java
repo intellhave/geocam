@@ -123,7 +123,7 @@ public class ManifoldPosition{
 
     Vector startPos = new Vector(position);
     Vector endPos = Vector.add(position, dx);
-    //if(VERBOSE_PATH_RECORD){ System.out.println("\nMOVING: \n  Initial position:  Face " + face.getIndex() + ", " + position); }
+     System.out.println("\nMOVING: \n  Initial position:  Face " + face.getIndex() + ", " + position); 
     move(this, startPos, endPos, face, null, path, tangentVectors);
   }
 
@@ -139,8 +139,8 @@ public class ManifoldPosition{
       posToUpdate.setManifoldPosition(face,endPos);
       
       if(path != null){ 
-        path.addSegment(new ManifoldPath.Segment(face, startPos, endPos));
-        //if(VERBOSE_PATH_RECORD){ System.out.println("  Face " + face.getIndex() + ", " + startPos + " to " + endPos); }
+        path.addSegment(new ManifoldPath.Segment(face, startPos, endPos, true));
+      // System.out.println("  Face " + face.getIndex() + ", " + startPos + " to " + endPos); 
       }
       
       return;
@@ -171,15 +171,15 @@ public class ManifoldPosition{
       }
     }
     
-    if(!foundEdge){ 
-      System.err.println("(ManifoldPosition.move) Error: No intersection found"); 
+   if(!foundEdge){ 
+//    System.err.println("(ManifoldPosition.move) Error: No intersection found"); 
       return;
     }
 
     //add the new segment, if the path is being recorded
     if(path != null){ 
-      path.addSegment(new ManifoldPath.Segment(face, startPos, intersection));
-      //if(VERBOSE_PATH_RECORD){ System.out.println("  Face " + face.getIndex() + ", " + startPos + " to " + intersection); }
+      path.addSegment(new ManifoldPath.Segment(face, startPos, intersection, false));
+      // System.out.println("  Face " + face.getIndex() + ", " + startPos + " to " + intersection); 
     }
         
     //get adjacent face and the AffineTransformation for the flip

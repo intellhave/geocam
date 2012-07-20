@@ -2,6 +2,7 @@ package view;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import marker.BreadCrumbs;
@@ -21,6 +22,7 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import development.Development;
 import development.EmbeddedTriangulation;
+import development.ForwardGeodesics;
 import development.ManifoldPosition;
 import development.TextureCoords;
 import development.Vector;
@@ -46,8 +48,8 @@ public class EmbeddedView extends View {
    * Given a development object and a color scheme, this constructor initializes
    * an EmbeddedView object to display the specified surface.
    *********************************************************************************/
-  public EmbeddedView(Development d, MarkerHandler mh, FaceAppearanceScheme fas, BreadCrumbs crumb) {
-    super(d, mh, fas, crumb);
+  public EmbeddedView(Development d, MarkerHandler mh, FaceAppearanceScheme fas, BreadCrumbs crumb, ForwardGeodesics geo) {
+    super(d, mh, fas, crumb,geo);
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
 
@@ -201,9 +203,12 @@ public class EmbeddedView extends View {
       Face f = faceTable.get(i);
       getMarkerPlacementData(f, objectImages);
     }
-    Set<Marker> allMarkers = markers.getAllMarkers();
+    Set<Marker> allMarkers = new HashSet<Marker>();
+   allMarkers.addAll(markers.getAllMarkers());
     allMarkers.addAll(crumbs.getAllMarkers());
-
+   // allMarkers.addAll(geo.getAllGeoMarkers());
+    for(Marker geos : geo.getAllGeoMarkers())
+        allMarkers.add(geos);
     for (Marker vo : allMarkers) {
       SceneGraphComponent sgc = sgcpools.get(vo);
 
@@ -267,10 +272,15 @@ public class EmbeddedView extends View {
   private void getMarkerPlacementData(Face f, HashMap<Marker, Vector[]> markerImages) {
 
     // look for objects
-    Collection<Marker> markers = this.markers.getMarkers(f);
+    Collection<Marker> markers = new HashSet<Marker>();
+    Collection<Marker> antMarkers = this.markers.getMarkers(f);
     Collection<Marker> breadCrumbs = crumbs.getMarkers(f);
+   Collection<Marker> geodesics = geo.getMarkers(f);
+   markers.addAll(antMarkers);
+   for(Marker geo : geodesics)
+       markers.add(geo);
     for(Marker bread : breadCrumbs)
-      markers.add(bread);
+      markers.add(bread);    
   
     if (markers == null) return;
       
