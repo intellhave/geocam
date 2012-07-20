@@ -171,7 +171,7 @@ public class CookieGame {
     
     /* Initialize the source marker. */
     pos = development.getSource();
-    app = new MarkerAppearance(ModelType.ANT, 1.0);
+    app = new MarkerAppearance(ModelType.ARROWHEAD, 1.0);
     source = new Marker(pos, app);
     markerHandler.addSourceMarker( source );
     
@@ -202,7 +202,7 @@ public class CookieGame {
     faceAppearanceScheme = new FaceAppearanceScheme();
     int[] framePosition = { 0, 10 };
     int[] frameSize = { 700, 700 };
-    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme, null);
+    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme, null, null);
     gameView.updateGeometry();
     gameView.initializeNewManifold();
     gameView.updateScene();
@@ -235,7 +235,7 @@ public class CookieGame {
    * "initViewControls" method.
    *********************************************************************************/
   private static void initModelControls() {
-    userControl = new KeyboardController(development, null);
+    userControl = new KeyboardController(development, null, null);
   }
 
   public static void runGame() {

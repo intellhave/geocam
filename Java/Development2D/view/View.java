@@ -23,6 +23,7 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 import development.Development;
+import development.ForwardGeodesics;
 
 /*********************************************************************************
  * View
@@ -48,6 +49,7 @@ public abstract class View {
   protected BreadCrumbs crumbs;
   protected FaceAppearanceScheme faceAppearanceScheme;
   protected boolean showTexture;
+  protected ForwardGeodesics geo;
 
   /*********************************************************************************
    * Scene Graph Data
@@ -83,10 +85,12 @@ public abstract class View {
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
   public View(Development development, MarkerHandler markers,
-      FaceAppearanceScheme fas, BreadCrumbs crumb) {
+      FaceAppearanceScheme fas, BreadCrumbs crumb, ForwardGeodesics geo) {
     this.development = development;
     this.markers = markers;
     this.crumbs = crumb;
+    this.geo = geo;
+  
     this.faceAppearanceScheme = fas;
     showTexture = true;
 

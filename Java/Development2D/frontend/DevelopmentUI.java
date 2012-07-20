@@ -32,6 +32,7 @@ import controller.UserController;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
+import development.ForwardGeodesics;
 import development.ManifoldPosition;
 import development.Vector;
 
@@ -53,7 +54,7 @@ public class DevelopmentUI {
   private static Marker source;
   private static BreadCrumbs crumbs;
   private static Development development;
-
+  private static ForwardGeodesics geo;
   /*********************************************************************************
    * View Data
    * 
@@ -226,9 +227,10 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    String filename = "Data/surfaces/cube_surf.off";
+    //String filename = "Data/surfaces/cube_surf.off";
     //String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
-    //String filename = "Data/surfaces/dodec2.off";
+    String filename = "Data/surfaces/dodec2.off";
+   // String filename = "Data/off/icosa.off";
     loadSurface(filename);
   }
 
@@ -291,7 +293,8 @@ public class DevelopmentUI {
   private static void initMarkers() {
     markerHandler = new MarkerHandler();
     crumbs = new BreadCrumbs();
-
+  
+    
     ManifoldPosition pos;
     MarkerAppearance app;
 
@@ -299,13 +302,14 @@ public class DevelopmentUI {
     app = new MarkerAppearance(MarkerAppearance.ModelType.ANT);
     markerHandler.addSourceMarker(new Marker(pos, app));
     source = markerHandler.getSourceMarker();
+    geo = new ForwardGeodesics(source);
     crumbs.addSourceMarker(source);
 
     Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {
       pos = new ManifoldPosition(development.getSource());
-      app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, 0.5);
+      app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, .5);
       double a = rand.nextDouble() * Math.PI * 2;
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
       vel.scale(0.0005);
@@ -343,7 +347,7 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void initModelControls() {
     // userControl = new SNESController(development);
-    userControl = new KeyboardController(development, crumbs);
+    userControl = new KeyboardController(development, crumbs, geo);
   }
 
   /*********************************************************************************
@@ -391,7 +395,7 @@ public class DevelopmentUI {
 
   public static void setExponentialView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled) {
-      exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme, crumbs);
+      exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme, crumbs, geo);
       exponentialView.setTexture(textureEnabled);
       exponentialView.updateGeometry();
       exponentialView.initializeNewManifold();
@@ -429,7 +433,7 @@ public class DevelopmentUI {
 
   public static void setEmbeddedView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled && isEmbedded) {
-      embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme, crumbs);
+      embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme, crumbs, geo);
       embeddedView.setTexture(textureEnabled);
       embeddedView.updateGeometry();
       embeddedView.initializeNewManifold();
@@ -467,7 +471,7 @@ public class DevelopmentUI {
 
   public static void setFirstPersonView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled) {
-      firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme, crumbs);
+      firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme, crumbs, geo);
       firstPersonView.setTexture(textureEnabled);
       firstPersonView.updateGeometry();
       firstPersonView.initializeNewManifold();

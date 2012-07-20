@@ -11,6 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import marker.BreadCrumbs;
 
 import development.Development;
+import development.ForwardGeodesics;
 
 public abstract class UserController implements Runnable {
   /*********************************************************************************
@@ -50,6 +51,7 @@ public abstract class UserController implements Runnable {
   private Development development;
   protected BlockingQueue<Action> actionQueue;
   private BreadCrumbs crumbs;
+  private ForwardGeodesics geodesic;
 
   protected Timer keyRepeatTimer;
   private Map<Action, TimerTask> repeatingTasks;
@@ -61,9 +63,10 @@ public abstract class UserController implements Runnable {
    * Development. From this development, we construct the data structures we use
    * internally to process actions.
    **********************************************************************************/
-  public UserController(Development dev, BreadCrumbs bc) {
+  public UserController(Development dev, BreadCrumbs bc, ForwardGeodesics geo) {
     development = dev;
     actionQueue = new LinkedBlockingQueue<Action>();
+    geodesic = geo;
     repeatingTasks = new EnumMap<Action, TimerTask>(Action.class);
     keyRepeatTimer = new Timer("Button Repeat Timer");
     crumbs = bc;
@@ -71,6 +74,7 @@ public abstract class UserController implements Runnable {
   
   public UserController(){
     development = null;
+    geodesic = null;
     actionQueue = new LinkedBlockingQueue<Action>();
     repeatingTasks = new EnumMap<Action, TimerTask>(Action.class);
     keyRepeatTimer = new Timer("Button Repeat Timer");
@@ -195,7 +199,12 @@ public abstract class UserController implements Runnable {
       break;
     case L:
       crumbs.addMarker();
+      break;
+    case R:
+      geodesic.generateGeodesic();
     }
+    
+      
 
     return true;
   }

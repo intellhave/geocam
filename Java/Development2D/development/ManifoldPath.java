@@ -19,17 +19,20 @@ public class ManifoldPath {
     public Face face;
     public Vector startPos;
     public Vector endPos;
+    public boolean isLast;
     
-    public Segment(Face face, Vector startPos, Vector endPos){
+    public Segment(Face face, Vector startPos, Vector endPos, boolean last){
       this.face = face;
       this.startPos = new Vector(startPos);
       this.endPos = new Vector(endPos);
+      isLast = last;
     }
     
     public Segment(Segment s){
       this.face = s.face;
       this.startPos = new Vector(s.startPos);
       this.endPos = new Vector(s.endPos);
+      this.isLast = s.isLast;
     }
   }
   
