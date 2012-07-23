@@ -14,13 +14,16 @@ import development.ManifoldPath.Segment;
 import marker.Marker;
 import marker.MarkerAppearance;
 
-/*ForwardGeodesics
- * This class is responsible for constructing geodesics that can be displayed on the manifold. 
- * The geodesic consists of a series of line segments that are calculated using data structures
- * in ManifoldPath and the method "moveWithTrail" in ManifoldPosition. These line segments are 
- * then used to create markers with the appearance of an arrow that are displayed. 
+/*********************************************************************************
+ * ForwardGeodesics
  * 
- */
+ * This class is responsible for constructing geodesics that can be displayed on
+ * the manifold. The geodesic consists of a series of line segments that are
+ * calculated using data structures in ManifoldPath and the method
+ * "moveWithTrail" in ManifoldPosition. These line segments are then used to
+ * create markers with the appearance of an arrow that are displayed.
+ * 
+ *********************************************************************************/
 public class ForwardGeodesics {
 
   private Set<Marker> geodesicMarkers;
@@ -28,10 +31,11 @@ public class ForwardGeodesics {
   ManifoldPosition sourcepos;
   private HashMap<Face, ArrayList<Segment>> segmentList;
   private HashMap<Face, Set<Marker>> faceMarkers;
-  
-  /*TIPSIZE affects how large the tip of the arrow is on the final segment in the geodesic, while
-   * GEO_LENGTH controls how long the geodesic is. 
-   */
+
+  /*********************************************************************************
+   * TIPSIZE effects how large the tip of the arrow is on the final segment in
+   * the geodesic, while GEO_LENGTH controls how long the geodesic is.
+   *********************************************************************************/
   private final double TIPSIZE = .25;
   private final double GEO_LENGTH = 2.0;
 
@@ -40,13 +44,15 @@ public class ForwardGeodesics {
     faceMarkers = new HashMap<Face, Set<Marker>>();
     source = sourceMarker;
   }
-  
-/*generateGeodesic
- * This is the main method that is used when constructing geodesics for display. The method
- * constructs a list of all of the geodesic segments on a face (faceMarkers) as well as a 
- * collection of all geodesics on the manifold (geodesicMarkers). Currently, only one 
- * geodesic is displayed at a time. 
- */
+
+  /*********************************************************************************
+   * generateGeodesic
+   * 
+   * This is the main method that is used when constructing geodesics for
+   * display. The method constructs a list of all of the geodesic segments on a
+   * face (faceMarkers) as well as a collection of all geodesics on the manifold
+   * (geodesicMarkers). Currently, only one geodesic is displayed at a time.
+   *********************************************************************************/
   public void generateGeodesic() {
     for (Marker m : geodesicMarkers)
       m.setVisible(false);
@@ -88,7 +94,6 @@ public class ForwardGeodesics {
   }
 
   public Set<Marker> getMarkers(Face f) {
-
     Set<Marker> markers = faceMarkers.get(f);
 
     if (markers == null) {
