@@ -198,10 +198,12 @@ public abstract class UserController implements Runnable {
       isPaused = true;
       break;
     case L:
-      crumbs.addMarker();
+      if(crumbs != null)
+        crumbs.addMarker();
       break;
     case R:
-      geodesic.generateGeodesic();
+      if(geodesic != null)
+        geodesic.generateGeodesic();
     }
     
       

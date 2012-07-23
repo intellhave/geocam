@@ -5,10 +5,14 @@ import inputOutput.TriangulationIO;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 import java.util.Random;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import marker.Marker;
 import marker.MarkerAppearance;
@@ -79,6 +83,7 @@ public class CookieGame {
   private static final int recursionDepth = 2;
   
   public static void main(String[] args) {
+    developerMode = true;
     initModel();
     initView();
     initModelControls();
@@ -171,7 +176,7 @@ public class CookieGame {
     
     /* Initialize the source marker. */
     pos = development.getSource();
-    app = new MarkerAppearance(ModelType.ARROWHEAD, 1.0);
+    app = new MarkerAppearance(ModelType.ANT, 1.0);
     source = new Marker(pos, app);
     markerHandler.addSourceMarker( source );
     
@@ -289,7 +294,27 @@ public class CookieGame {
       paused = userControl.isPaused();
     }
     t.interrupt();
-
+    if(developerMode)
+       winScreen();
+  }
+  
+  /*********************************************************************************
+   * winScreen
+   * 
+   * Displays options to the user when playing in DeveloperMode (not from MenuUI).
+   *********************************************************************************/
+  public static void winScreen() {
+    Object [] options = {"Play again", "Exit"};
+    int option = JOptionPane.showOptionDialog(null, "You win", "Cookie Game", JOptionPane.OK_CANCEL_OPTION, 
+        JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+    
+    if(option == 0)
+      runCookie();
+    if(option == 1)
+      System.exit(0);
+    if(option == JOptionPane.CLOSED_OPTION)
+      System.exit(0);
+    
   }
 
   public static void runCookie() {

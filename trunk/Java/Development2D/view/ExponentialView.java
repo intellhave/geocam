@@ -176,14 +176,12 @@ public class ExponentialView extends View {
     developMarkers(development.getRoot(), markerImages);
     
     Set<Marker> allMarkers = new HashSet<Marker>();
-   allMarkers.addAll(markers.getAllMarkers());
-    Set<Marker> crumbMarkers = crumbs.getAllMarkers();
-    allMarkers.addAll(crumbMarkers);
-    Set<Marker> geodesics = geo.getAllGeoMarkers();
-    //allMarkers.addAll(geodesics);
-    for(Marker m: geodesics)
-        allMarkers.add(m);
-
+    allMarkers.addAll(markers.getAllMarkers());
+    if(crumbs != null)
+      allMarkers.addAll(crumbs.getAllMarkers());
+    if(geo != null)
+      allMarkers.addAll(geo.getAllGeoMarkers());
+   
     for (Marker m : allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 
@@ -285,17 +283,13 @@ public class ExponentialView extends View {
   protected void developMarkers(DevelopmentNode devNode,
       HashMap<Marker, ArrayList<Vector[]>> markerImages) {
     Collection<Marker> localMarkers = new HashSet<Marker>();
-    Collection<Marker> locals = markers.getMarkers(devNode.getFace());
-    Collection<Marker> breadCrumbs = crumbs.getMarkers(devNode.getFace());
-    Collection<Marker> geos = geo.getMarkers(devNode.getFace());
-    localMarkers.addAll(locals);
-    //localMarkers.addAll(geos);
-    for(Marker bread : breadCrumbs)
-        localMarkers.add(bread);
-    for(Marker m: geos)
-        localMarkers.add(m);
+    localMarkers.addAll(markers.getMarkers(devNode.getFace()));
+    if(crumbs != null)
+      localMarkers.addAll(crumbs.getMarkers(devNode.getFace()));
+    if(geo != null)
+      localMarkers.addAll(geo.getMarkers(devNode.getFace()));
 
-    if (localMarkers != null) {
+    if (localMarkers.size() > 0) {
 
       Frustum2D frustum = devNode.getFrustum();
       AffineTransformation affineTrans = devNode.getAffineTransformation();

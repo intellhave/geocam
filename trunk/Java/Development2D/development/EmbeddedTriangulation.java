@@ -612,8 +612,19 @@ public class EmbeddedTriangulation {
 
     //reset the TextureCoords data and create the face groups
     TextureCoords.reset();
-    createGroupings();
-
+   
+    //to avoid null pointers, must check if the file had color info
+    //TODO: Update the requirement for faces being grouped? Or give all OFF files color?
+    Face testFace = Triangulation.faceTable.get(1);
+    if(testFace.getColor() != null){
+      createGroupings();
+    }
+    else {
+      for(Face face : Triangulation.faceTable.values()) {
+        FaceGrouping fg = new FaceGrouping(face);
+        Triangulation.putFaceGrouping(face, fg);
+      }
+    }
     // set flag that this triangulation is embedded, once finished
     isEmbedded = true;
   }
