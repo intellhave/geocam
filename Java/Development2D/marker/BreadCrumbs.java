@@ -24,12 +24,12 @@ import development.Vector;
  */
 public class BreadCrumbs extends MarkerHandler {
   
-  private Queue<Marker> allMarkers; 
+  private Queue<Marker> trail; 
   private MarkerAppearance crumb = new MarkerAppearance(MarkerAppearance.ModelType.COOKIE, .5);
   
  public BreadCrumbs(){
-   markerDatabase = new HashMap<Face, Set<Marker>>();
-   allMarkers = new ConcurrentLinkedQueue<Marker>();
+   super();
+   trail = new ConcurrentLinkedQueue<Marker>();
  }
  
  public void addSourceMarker(Marker m){
@@ -46,23 +46,15 @@ public void addMarker(){
   vec.scale(-.25);
   pos.move(vec);
   Marker m = new Marker(pos,crumb);
+  trail.add(m);
   allMarkers.add(m);
   Collection<Marker> markers = getMarkers(m.getPosition().getFace());
   markers.add(m);
-  int numMarkers = allMarkers.size()-1;
+  int numMarkers = trail.size()-1;
   if(numMarkers >= 20){
-    Marker toRemove = allMarkers.poll();
+    Marker toRemove = trail.poll();
     toRemove.setVisible(false);
-    addMarker(toRemove);
   }
-}
-public Set<Marker> getAllMarkers(){
-  Iterator<Marker> i = allMarkers.iterator();
-  Set<Marker> toReturn = new HashSet<Marker>();
-  while(i.hasNext()){
-    toReturn.add(i.next());
-  }
-  return toReturn;
 }
 
 public  double getMarkerSpeed(Marker m){

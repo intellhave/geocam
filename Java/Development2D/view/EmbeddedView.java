@@ -204,9 +204,11 @@ public class EmbeddedView extends View {
       getMarkerPlacementData(f, objectImages);
     }
     Set<Marker> allMarkers = new HashSet<Marker>();
-   allMarkers.addAll(markers.getAllMarkers());
-    allMarkers.addAll(crumbs.getAllMarkers());
-   // allMarkers.addAll(geo.getAllGeoMarkers());
+    allMarkers.addAll(markers.getAllMarkers());
+    if(crumbs != null)
+      allMarkers.addAll(crumbs.getAllMarkers());
+    if(geo != null)
+      allMarkers.addAll(geo.getAllGeoMarkers());
     for(Marker geos : geo.getAllGeoMarkers())
         allMarkers.add(geos);
     for (Marker vo : allMarkers) {
@@ -273,16 +275,13 @@ public class EmbeddedView extends View {
 
     // look for objects
     Collection<Marker> markers = new HashSet<Marker>();
-    Collection<Marker> antMarkers = this.markers.getMarkers(f);
-    Collection<Marker> breadCrumbs = crumbs.getMarkers(f);
-   Collection<Marker> geodesics = geo.getMarkers(f);
-   markers.addAll(antMarkers);
-   for(Marker geo : geodesics)
-       markers.add(geo);
-    for(Marker bread : breadCrumbs)
-      markers.add(bread);    
-  
-    if (markers == null) return;
+    markers.addAll(this.markers.getMarkers(f));
+    if(crumbs != null)
+      markers.addAll(crumbs.getMarkers(f));
+    if(geo != null)
+      markers.addAll(geo.getMarkers(f));
+
+    if (markers.size() == 0) return;
       
     synchronized (markers) {
       for (Marker m : markers) {
