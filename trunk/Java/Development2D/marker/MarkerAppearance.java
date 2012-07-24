@@ -7,29 +7,19 @@ import static de.jreality.shader.CommonAttributes.POINT_SHADER;
 import java.awt.Color;
 import java.awt.Transparency;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.EnumMap;
 
 import de.jreality.geometry.GeometryMergeFactory;
-import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.geometry.Primitives;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.reader.Readers;
-import de.jreality.reader.Reader3DS;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.IndexedLineSet;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
-import de.jreality.scene.data.Attribute;
-import de.jreality.scene.data.DataList;
 import de.jreality.shader.CommonAttributes;
-import de.jreality.shader.DefaultGeometryShader;
-import de.jreality.shader.DefaultPolygonShader;
-import de.jreality.shader.ShaderUtility;
-import de.jreality.util.Input;
 import de.jreality.util.SceneGraphUtility;
 
 /*********************************************************************************
@@ -97,16 +87,18 @@ public class MarkerAppearance {
 
     sgc = Primitives.sphere(1.0, new double[] { 0.0, 0.0, 0.0 });
     templateSGCs.put(ModelType.SPHERE, sgc);
-    
+
   }
-  
+
   /*********************************************************************************
    * Constructor (for arrows)
    * 
-   * This constructor is used to create the MarkerAppearances needed for the geodesics.
+   * This constructor is used to create the MarkerAppearances needed for the
+   * geodesics.
    * 
    *********************************************************************************/
-  public MarkerAppearance(double x0, double y0, double x1, double y1, double tipSize){
+  public MarkerAppearance(double x0, double y0, double x1, double y1,
+      double tipSize) {
     this.setModelType(ModelType.ARROWHEAD);
     this.setScale(1.0);
     this.x0 = x0;
@@ -115,7 +107,8 @@ public class MarkerAppearance {
     this.y1 = y1;
     this.pointSize = tipSize;
   }
-  public MarkerAppearance(double x0, double y0, double x1, double y1){
+
+  public MarkerAppearance(double x0, double y0, double x1, double y1) {
     this.setModelType(ModelType.ARROWBODY);
     this.setScale(1.0);
     this.x0 = x0;
@@ -123,6 +116,7 @@ public class MarkerAppearance {
     this.y0 = y0;
     this.y1 = y1;
   }
+
   /*********************************************************************************
    * loadTemplateSGC
    * 
@@ -156,7 +150,7 @@ public class MarkerAppearance {
       // Not all of these normal calculations may be necessary.
       IndexedFaceSetUtility.makeConsistentOrientation(ifs);
       IndexedFaceSetUtility.calculateAndSetNormals(ifs);
-      IndexedFaceSetUtility.assignSmoothVertexNormals(ifs,3);
+      IndexedFaceSetUtility.assignSmoothVertexNormals(ifs, 3);
     } catch (Exception ee) {
       System.err.println("Unable to assign smooth vertex normals.");
       System.exit(1);
@@ -197,6 +191,7 @@ public class MarkerAppearance {
   private double default_scale = 1.0;
   private Color color = Color.BLUE;
   private ModelType model = ModelType.ANT;
+  
   private double x0;
   private double x1;
   private double y0;
@@ -295,25 +290,25 @@ public class MarkerAppearance {
    * with their textures, etc.
    *********************************************************************************/
   public SceneGraphComponent makeSceneGraphComponent() {
-    
-     Appearance app = new Appearance();
-     SceneGraphComponent sgc = new SceneGraphComponent();
-    if(this.model == ModelType.ARROWHEAD || this.model == ModelType.ARROWBODY){
-      if(this.model == ModelType.ARROWHEAD){
-      IndexedLineSet ils = Primitives.arrow(x0, y0, x1, y1, pointSize);
-      sgc.setGeometry(ils);
-      }
-      else{
- 
-        IndexedLineSet ils = Primitives.arrow(x0, y0, x1, y1,0);
+
+    Appearance app = new Appearance();
+    SceneGraphComponent sgc = new SceneGraphComponent();
+    if (this.model == ModelType.ARROWHEAD || this.model == ModelType.ARROWBODY) {
+      if (this.model == ModelType.ARROWHEAD) {
+        IndexedLineSet ils = Primitives.arrow(x0, y0, x1, y1, pointSize);
+        sgc.setGeometry(ils);
+      } else {
+
+        IndexedLineSet ils = Primitives.arrow(x0, y0, x1, y1, 0);
         sgc.setGeometry(ils);
       }
       app.setAttribute(CommonAttributes.VERTEX_DRAW, true);
       app.setAttribute(CommonAttributes.EDGE_DRAW, true);
-      app.setAttribute(LINE_SHADER+"."+ DIFFUSE_COLOR, Color.red);
-      app.setAttribute(POINT_SHADER + "." +DIFFUSE_COLOR, Color.red);
-      app.setAttribute(CommonAttributes.LINE_SHADER+"."+ CommonAttributes.TUBE_RADIUS, .05);
-      app.setAttribute(POINT_SHADER+"."+CommonAttributes.POINT_RADIUS, .05);
+      app.setAttribute(LINE_SHADER + "." + DIFFUSE_COLOR, Color.red);
+      app.setAttribute(POINT_SHADER + "." + DIFFUSE_COLOR, Color.red);
+      app.setAttribute(CommonAttributes.LINE_SHADER + "."
+          + CommonAttributes.TUBE_RADIUS, .05);
+      app.setAttribute(POINT_SHADER + "." + CommonAttributes.POINT_RADIUS, .05);
       sgc.setAppearance(app);
       double[] mat = MatrixBuilder.euclidean().scale(this.scale).getMatrix()
           .getArray();
@@ -323,7 +318,6 @@ public class MarkerAppearance {
       return sgc;
     }
     sgc = copySceneGraph(templateSGCs.get(this.model));
-
 
     app.setAttribute(CommonAttributes.VERTEX_DRAW, false);
     app.setAttribute(CommonAttributes.EDGE_DRAW, false);
