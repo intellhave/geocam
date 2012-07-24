@@ -29,6 +29,8 @@ public class MarkerHandler {
   protected Map<Face, Set<Marker>> markerDatabase;
   protected Set<Marker> allMarkers;
   protected Marker sourceMarker;
+  
+  private boolean simulationPaused = false;
 
   /*********************************************************************************
    * MarkerHandler (Constructor)
@@ -263,6 +265,8 @@ public class MarkerHandler {
    * marker moves out of its current face, and updates the database accordingly.
    *********************************************************************************/
   public synchronized void updateMarkers(long dt) {
+    if( simulationPaused ) return;
+    
     for (Marker m : allMarkers) {
       Face prev = m.getPosition().getFace();
       m.updatePosition(dt);
@@ -271,5 +275,17 @@ public class MarkerHandler {
         updateMarker(m, prev);
       }
     }
+  }
+  
+  public void pauseSimulation(){
+    simulationPaused = true;
+  }
+  
+  public void unpauseSimulation(){
+    simulationPaused = false;
+  }
+  
+  public boolean isPaused(){
+    return simulationPaused;
   }
 }

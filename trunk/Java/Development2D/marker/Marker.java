@@ -14,6 +14,9 @@ import development.Vector;
  * 
  *********************************************************************************/
 public class Marker {
+  
+  public static enum MarkerType { SOURCE, MOVING, FIXED, REMOVED };
+  
   /*********************************************************************************
    * Internally, each Marker is assigned a unique id, based on the value of this
    * idCounter. Note that currently, accessing the counter is not thread safe,
@@ -26,7 +29,8 @@ public class Marker {
   protected boolean isVisible;
   protected MarkerAppearance app;
   protected ManifoldPosition pos;
-
+  protected MarkerType type;
+  
   protected double speed;
 
   /*********************************************************************************
@@ -39,7 +43,7 @@ public class Marker {
    * MarkerAppearance are copied, rather than referenced. This will require
    * changing the code in other places.
    *********************************************************************************/
-  public Marker(ManifoldPosition mp, MarkerAppearance ma) {
+  public Marker(ManifoldPosition mp, MarkerAppearance ma, MarkerType mt) {
     // Assign this Marker a unique ID.
     // Note: This code is not thread safe.
     index = idCounter;
@@ -47,12 +51,13 @@ public class Marker {
 
     pos = mp;
     app = ma;
+    type = mt;
     isVisible = true;
     speed = 0.0;
   }
 
-  public Marker(ManifoldPosition mp, MarkerAppearance ma, Vector velocity) {
-    this(mp, ma);
+  public Marker(ManifoldPosition mp, MarkerAppearance ma, MarkerType mt, Vector velocity) {
+    this(mp, ma, mt);
     Vector forward = new Vector(velocity);
     forward.normalize();
     pos.setOrientation(forward);
@@ -154,5 +159,17 @@ public class Marker {
    *********************************************************************************/
   public void updatePosition(double dt) {
     pos.move(pos.getDirection(dt * speed, 0));
+  }
+  
+  public MarkerType getMarkerType(){
+    return type;
+  }
+  
+  public void flagForRemoval(){
+    type = MarkerType.REMOVED;
+  }
+  
+  public boolean isRemoved(){
+    return type == MarkerType.REMOVED;
   }
 }

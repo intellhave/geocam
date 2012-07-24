@@ -199,11 +199,12 @@ public abstract class UserController implements Runnable {
       break;
     case L:
       if(crumbs != null)
-        crumbs.addMarker();
+        crumbs.addMarker( development.getSource() );
       break;
     case R:
-      if(geodesic != null)
+      if( geodesic != null )
         geodesic.generateGeodesic();
+      break;
     }
     
       

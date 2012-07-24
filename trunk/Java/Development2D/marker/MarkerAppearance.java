@@ -87,7 +87,6 @@ public class MarkerAppearance {
 
     sgc = Primitives.sphere(1.0, new double[] { 0.0, 0.0, 0.0 });
     templateSGCs.put(ModelType.SPHERE, sgc);
-
   }
 
   /*********************************************************************************

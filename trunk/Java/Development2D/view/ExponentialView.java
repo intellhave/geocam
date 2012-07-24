@@ -138,11 +138,10 @@ public class ExponentialView extends View {
       ifsf.setGenerateVertexNormals(true);      
       ifsf.update();
       Appearance app;
-      if(showTexture){
-      TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
-      app = TextureLibrary.getAppearance(td);
-      }
-      else{
+      if (showTexture) {
+        TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+        app = TextureLibrary.getAppearance(td);
+      } else {
         app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
       }
       sgc.setGeometry(ifsf.getGeometry());
@@ -174,14 +173,9 @@ public class ExponentialView extends View {
     HashMap<Marker, ArrayList<Vector[]>> markerImages;
     markerImages = new HashMap<Marker, ArrayList<Vector[]>>();
     developMarkers(development.getRoot(), markerImages);
-    
-    Set<Marker> allMarkers = new HashSet<Marker>();
-    allMarkers.addAll(markers.getAllMarkers());
-    if(crumbs != null)
-      allMarkers.addAll(crumbs.getAllMarkers());
-    if(geo != null)
-      allMarkers.addAll(geo.getAllGeoMarkers());
-   
+
+    Set<Marker> allMarkers = markers.getAllMarkers();
+
     for (Marker m : allMarkers) {
       LinkedList<SceneGraphComponent> pool = sgcpools.get(m);
 
@@ -282,14 +276,9 @@ public class ExponentialView extends View {
    *********************************************************************************/
   protected void developMarkers(DevelopmentNode devNode,
       HashMap<Marker, ArrayList<Vector[]>> markerImages) {
-    Collection<Marker> localMarkers = new HashSet<Marker>();
-    localMarkers.addAll(markers.getMarkers(devNode.getFace()));
-    if(crumbs != null)
-      localMarkers.addAll(crumbs.getMarkers(devNode.getFace()));
-    if(geo != null)
-      localMarkers.addAll(geo.getMarkers(devNode.getFace()));
+    Collection<Marker> localMarkers = markers.getMarkers(devNode.getFace());
 
-    if (localMarkers.size() > 0) {
+    if (localMarkers != null) {
 
       Frustum2D frustum = devNode.getFrustum();
       AffineTransformation affineTrans = devNode.getAffineTransformation();
