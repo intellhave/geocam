@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.JFrame;
 
 import marker.BreadCrumbs;
+import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -33,7 +34,6 @@ import controller.UserController;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
-import development.ForwardGeodesics;
 import development.ManifoldPosition;
 import development.Vector;
 
@@ -55,7 +55,7 @@ public class DevelopmentUI {
   private static Marker source;
   private static BreadCrumbs crumbs;
   private static Development development;
-  private static ForwardGeodesics geo;
+  private static ForwardGeodesic geo;
   /*********************************************************************************
    * View Data
    * 
@@ -319,7 +319,8 @@ public class DevelopmentUI {
   private static void initMarkers() {
     markerHandler = new MarkerHandler();
     crumbs = new BreadCrumbs(markerHandler);
-
+    geo = new ForwardGeodesic( markerHandler );    
+    
     ManifoldPosition pos;
     MarkerAppearance app;
 
@@ -327,8 +328,7 @@ public class DevelopmentUI {
     app = new MarkerAppearance(MarkerAppearance.ModelType.ANT);
     markerHandler.addSourceMarker(new Marker(pos, app, Marker.MarkerType.SOURCE));
     source = markerHandler.getSourceMarker();
-    geo = new ForwardGeodesics(source);    
-
+    
     Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import marker.BreadCrumbs;
+import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -24,7 +25,6 @@ import de.jreality.scene.data.Attribute;
 import development.AffineTransformation;
 import development.Development;
 import development.DevelopmentNode;
-import development.ForwardGeodesics;
 import development.Frustum2D;
 import development.ManifoldPosition;
 import development.Vector;
@@ -53,7 +53,7 @@ public class ExponentialView extends View {
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
   public ExponentialView(Development d, MarkerHandler mh,
-      FaceAppearanceScheme fas, BreadCrumbs crumbs, ForwardGeodesics geo) {
+      FaceAppearanceScheme fas, BreadCrumbs crumbs, ForwardGeodesic geo) {
     super(d, mh, fas, crumbs, geo);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
 

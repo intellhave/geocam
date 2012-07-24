@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import marker.BreadCrumbs;
+import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -22,7 +23,6 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import development.Development;
 import development.EmbeddedTriangulation;
-import development.ForwardGeodesics;
 import development.ManifoldPosition;
 import development.TextureCoords;
 import development.Vector;
@@ -48,7 +48,7 @@ public class EmbeddedView extends View {
    * Given a development object and a color scheme, this constructor initializes
    * an EmbeddedView object to display the specified surface.
    *********************************************************************************/
-  public EmbeddedView(Development d, MarkerHandler mh, FaceAppearanceScheme fas, BreadCrumbs crumb, ForwardGeodesics geo) {
+  public EmbeddedView(Development d, MarkerHandler mh, FaceAppearanceScheme fas, BreadCrumbs crumb, ForwardGeodesic geo) {
     super(d, mh, fas, crumb,geo);
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();

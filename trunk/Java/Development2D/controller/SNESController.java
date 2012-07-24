@@ -3,13 +3,13 @@ package controller;
 import java.util.EnumMap;
 
 import marker.BreadCrumbs;
+import marker.ForwardGeodesic;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
 
 import development.Development;
-import development.ForwardGeodesics;
 
 public class SNESController extends UserController {
 
@@ -45,7 +45,7 @@ public class SNESController extends UserController {
    * Development. From this development, we construct the data structures we use
    * internally to process actions, and then the initialize method is called.
    **********************************************************************************/
-  public SNESController(Development dev, BreadCrumbs bc, ForwardGeodesics geo) {
+  public SNESController(Development dev, BreadCrumbs bc, ForwardGeodesic geo) {
     super(dev, bc, geo);
     init();
   }
