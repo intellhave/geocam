@@ -226,7 +226,7 @@ public class ViewerController extends JFrame {
               // advance ants off of source point
               vel.scale(0.25);
               pos.move(vel);
-              Marker m = new Marker(pos, app, vel);
+              Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
               // set the speed of the marker objects after they are constructed
               // when new ants are added, their speed will depend on whether the
               // stop/start
@@ -242,20 +242,13 @@ public class ViewerController extends JFrame {
 
           // if necessary, remove markers
           if (currentMarkers > newMarkers) {
-            List<Marker> toRemove = new LinkedList<Marker>();
+            int counter = 0;            
             for (Marker m : markers) {
-              if (m == source)
+              if (m.getMarkerType() == Marker.MarkerType.SOURCE)
                 continue;
-              toRemove.add(m);
-              if (toRemove.size() == currentMarkers - newMarkers)
-                break;
-            }
-
-            for (Marker m : toRemove) {
-              markerHandler.removeMarker(m);
-              for (View v : views) {
-                v.removeMarker(m);
-              }
+              m.flagForRemoval();
+              counter++;
+              if (counter == currentMarkers - newMarkers) break;
             }
           }
         }
@@ -294,15 +287,10 @@ public class ViewerController extends JFrame {
         public void stateChanged(ChangeEvent e) {
           double sliderValue = speedSlider.getValue() / 1000.0;
           double newSpeed = 0.05 * Math.pow(Math.E, sliderValue);
-          Set<Marker> allMarkers = markerHandler.getAllMarkers();
-          Iterator<Marker> iter = allMarkers.iterator();
-          if (stopStartButton.getText().equals("Stop")) {
-            synchronized (allMarkers) {
-              while (iter.hasNext()) {
-                Marker m = iter.next();
-                if (!m.equals(source))
-                  m.setSpeed(newSpeed);
-              }
+          Set<Marker> allMarkers = markerHandler.getAllMarkers();          
+          for(Marker m : allMarkers){
+            if( m.getMarkerType() == Marker.MarkerType.MOVING){
+              m.setSpeed(newSpeed);
             }
           }
           speedBorder.setTitle("Speed (" + speedFormat.format(newSpeed) + ")");
@@ -353,27 +341,11 @@ public class ViewerController extends JFrame {
     // Start/stop button action listener
     ActionListener stopStartButtonListener = new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        Set<Marker> markers = markerHandler.getAllMarkers();
-        Iterator<Marker> iter = markers.iterator();
-
         if (stopStartButton.getText().equals("Stop")) {
-          synchronized (markers) {
-            while (iter.hasNext()) {
-              Marker m = iter.next();
-              if (!m.equals(source))
-                m.setSpeed(0);
-            }
-          }
+          markerHandler.pauseSimulation();          
           stopStartButton.setText("Start");
         } else {
-          synchronized (markers) {
-            while (iter.hasNext()) {
-              Marker m = iter.next();
-              double newSpeed = speedSlider.getValue() / 1000.0;
-              if (!m.equals(source))
-                m.setSpeed(.05 * Math.pow(Math.E, newSpeed));
-            }
-          }
+          markerHandler.unpauseSimulation();
           stopStartButton.setText("Stop");
         }
       }

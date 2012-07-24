@@ -177,7 +177,7 @@ public class CookieGame {
     /* Initialize the source marker. */
     pos = development.getSource();
     app = new MarkerAppearance(ModelType.ANT, 1.0);
-    source = new Marker(pos, app);
+    source = new Marker(pos, app, Marker.MarkerType.SOURCE);
     markerHandler.addSourceMarker( source );
     
     /* Initialize the cookie marker. */
@@ -188,7 +188,7 @@ public class CookieGame {
     double a = rand.nextDouble() * Math.PI * 2;
     Vector direction = new Vector(Math.cos(a), Math.sin(a));
     pos.move(Vector.scale(direction, 4));
-    cookie = new Marker(pos, app);
+    cookie = new Marker(pos, app, Marker.MarkerType.FIXED);
     markerHandler.addMarker(cookie);
   }
 

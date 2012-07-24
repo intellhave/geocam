@@ -203,14 +203,8 @@ public class EmbeddedView extends View {
       Face f = faceTable.get(i);
       getMarkerPlacementData(f, objectImages);
     }
-    Set<Marker> allMarkers = new HashSet<Marker>();
-    allMarkers.addAll(markers.getAllMarkers());
-    if(crumbs != null)
-      allMarkers.addAll(crumbs.getAllMarkers());
-    if(geo != null)
-      allMarkers.addAll(geo.getAllGeoMarkers());
-    for(Marker geos : geo.getAllGeoMarkers())
-        allMarkers.add(geos);
+    Set<Marker> allMarkers = markers.getAllMarkers();    
+
     for (Marker vo : allMarkers) {
       SceneGraphComponent sgc = sgcpools.get(vo);
 
@@ -271,28 +265,22 @@ public class EmbeddedView extends View {
    * orientation in R^3 based upon its coordinates and orientation on the 2D
    * surface.
    *********************************************************************************/
-  private void getMarkerPlacementData(Face f, HashMap<Marker, Vector[]> markerImages) {
+  private void getMarkerPlacementData(Face f,
+      HashMap<Marker, Vector[]> markerImages) {
 
-    // look for objects
-    Collection<Marker> markers = new HashSet<Marker>();
-    markers.addAll(this.markers.getMarkers(f));
-    if(crumbs != null)
-      markers.addAll(crumbs.getMarkers(f));
-    if(geo != null)
-      markers.addAll(geo.getMarkers(f));
+    Collection<Marker> markers = this.markers.getMarkers(f);    
 
-    if (markers.size() == 0) return;
-      
     synchronized (markers) {
       for (Marker m : markers) {
-        if (!m.isVisible()) continue;
+        if (!m.isVisible())
+          continue;
 
         Vector[] tuple = new Vector[4];
 
         ManifoldPosition pos = m.getPosition();
         tuple[0] = EmbeddedTriangulation.getCoord3D(f, pos.getPosition());
-        tuple[1] = EmbeddedTriangulation
-            .embedVector(f, pos.getDirectionForward());
+        tuple[1] = EmbeddedTriangulation.embedVector(f,
+            pos.getDirectionForward());
         tuple[2] = EmbeddedTriangulation.embedVector(f, pos.getDirectionLeft());
         tuple[3] = EmbeddedTriangulation.getEmbeddedNormal(f);
 

@@ -22,7 +22,6 @@ import marker.MarkerAppearance;
  * calculated using data structures in ManifoldPath and the method
  * "moveWithTrail" in ManifoldPosition. These line segments are then used to
  * create markers with the appearance of an arrow that are displayed.
- * 
  *********************************************************************************/
 public class ForwardGeodesics {
 
@@ -85,7 +84,7 @@ public class ForwardGeodesics {
           app = new MarkerAppearance(0, 0, x0, y0, pointSize);
         }
         ManifoldPosition pos = new ManifoldPosition(f, start);
-        Marker mark = new Marker(pos, app);
+        Marker mark = new Marker(pos, app, Marker.MarkerType.FIXED);
         geodesicMarkers.add(mark);
         localMarkers.add(mark);
       }

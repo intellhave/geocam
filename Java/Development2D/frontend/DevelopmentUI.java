@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
@@ -172,7 +173,9 @@ public class DevelopmentUI {
 
     userControl.resetPausedFlag();
     userControl.clear();
-    while (!userControl.isPaused() || developerMode) {      
+    while (!userControl.isPaused() || developerMode) {
+      removeFlaggedMarkers();
+
       long newTime = System.currentTimeMillis();
       long frameTime = newTime - currentTime;
 
@@ -204,6 +207,29 @@ public class DevelopmentUI {
   }
 
   /*********************************************************************************
+   * removeFlaggedMarkers
+   * 
+   * When a marker needs to be removed from the simulation, it indicates this by
+   * setting its markertype to REMOVED. In this method, we find all such markers
+   * and remove them from each part of the simulation.
+   *********************************************************************************/
+  private static void removeFlaggedMarkers() {
+    Set<Marker> removedMarkers = new HashSet<Marker>();
+    for (Marker m : markerHandler.getAllMarkers()) {
+      if (m.isRemoved()) {
+        removedMarkers.add(m);
+      }
+    }
+
+    for (Marker m : removedMarkers) {
+      markerHandler.removeMarker(m);
+      for (View v : views) {
+        v.removeMarker(m);
+      }
+    }
+  }
+
+  /*********************************************************************************
    * render
    * 
    * This method is responsible for causing all of the views to update. Right
@@ -227,10 +253,10 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    //String filename = "Data/surfaces/cube_surf.off";
-    //String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
+    // String filename = "Data/surfaces/cube_surf.off";
+    // String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
     String filename = "Data/surfaces/dodec2.off";
-   // String filename = "Data/off/icosa.off";
+    // String filename = "Data/off/icosa.off";
     loadSurface(filename);
   }
 
@@ -292,18 +318,16 @@ public class DevelopmentUI {
    *********************************************************************************/
   private static void initMarkers() {
     markerHandler = new MarkerHandler();
-    crumbs = new BreadCrumbs();
-  
-    
+    crumbs = new BreadCrumbs(markerHandler);
+
     ManifoldPosition pos;
     MarkerAppearance app;
 
     pos = development.getSource();
     app = new MarkerAppearance(MarkerAppearance.ModelType.ANT);
-    markerHandler.addSourceMarker(new Marker(pos, app));
+    markerHandler.addSourceMarker(new Marker(pos, app, Marker.MarkerType.SOURCE));
     source = markerHandler.getSourceMarker();
-    geo = new ForwardGeodesics(source);
-    crumbs.addSourceMarker(source);
+    geo = new ForwardGeodesics(source);    
 
     Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
@@ -314,7 +338,7 @@ public class DevelopmentUI {
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
       vel.scale(0.0005);
 
-      Marker m = new Marker(pos, app, vel);
+      Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
       markerHandler.addMarker(m);
     }
 
@@ -393,9 +417,11 @@ public class DevelopmentUI {
     viewerController.setMarkerHandler(markerHandler);
   }
 
-  public static void setExponentialView(boolean viewEnabled, boolean textureEnabled) {
+  public static void setExponentialView(boolean viewEnabled,
+      boolean textureEnabled) {
     if (viewEnabled) {
-      exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme, crumbs, geo);
+      exponentialView = new ExponentialView(development, markerHandler,
+          faceAppearanceScheme, crumbs, geo);
       exponentialView.setTexture(textureEnabled);
       exponentialView.updateGeometry();
       exponentialView.initializeNewManifold();
@@ -417,7 +443,7 @@ public class DevelopmentUI {
       frame.pack();
       frame.validate();
       frame.setVisible(true);
-      
+
       views.add(exponentialView);
       frames.put(exponentialView, frame);
     } else {
@@ -433,7 +459,8 @@ public class DevelopmentUI {
 
   public static void setEmbeddedView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled && isEmbedded) {
-      embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme, crumbs, geo);
+      embeddedView = new EmbeddedView(development, markerHandler,
+          faceAppearanceScheme, crumbs, geo);
       embeddedView.setTexture(textureEnabled);
       embeddedView.updateGeometry();
       embeddedView.initializeNewManifold();
@@ -469,9 +496,11 @@ public class DevelopmentUI {
     }
   }
 
-  public static void setFirstPersonView(boolean viewEnabled, boolean textureEnabled) {
+  public static void setFirstPersonView(boolean viewEnabled,
+      boolean textureEnabled) {
     if (viewEnabled) {
-      firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme, crumbs, geo);
+      firstPersonView = new FirstPersonView(development, markerHandler,
+          faceAppearanceScheme, crumbs, geo);
       firstPersonView.setTexture(textureEnabled);
       firstPersonView.updateGeometry();
       firstPersonView.initializeNewManifold();
