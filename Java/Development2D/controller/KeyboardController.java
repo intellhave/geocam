@@ -5,9 +5,9 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
 import marker.BreadCrumbs;
+import marker.ForwardGeodesic;
 
 import development.Development;
-import development.ForwardGeodesics;
 
 
 public class KeyboardController extends UserController implements
@@ -20,7 +20,7 @@ public class KeyboardController extends UserController implements
    * Development. From this development, we construct the data structures we use
    * internally to process actions, and then the initialize method is called.
    **********************************************************************************/
-  public KeyboardController(Development dev, BreadCrumbs bc, ForwardGeodesics geo) {
+  public KeyboardController(Development dev, BreadCrumbs bc, ForwardGeodesic geo) {
     super(dev, bc, geo);
     KeyboardFocusManager.getCurrentKeyboardFocusManager()
         .addKeyEventDispatcher(this);

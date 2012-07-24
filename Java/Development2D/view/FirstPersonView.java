@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import marker.BreadCrumbs;
+import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -14,7 +15,6 @@ import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphComponent;
 import development.Development;
-import development.ForwardGeodesics;
 import development.Vector;
 
 /*********************************************************************************
@@ -37,7 +37,7 @@ public class FirstPersonView extends ExponentialView {
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
   public FirstPersonView(Development dev, MarkerHandler mh,
-      FaceAppearanceScheme fas, BreadCrumbs crumbs, ForwardGeodesics geo) {
+      FaceAppearanceScheme fas, BreadCrumbs crumbs, ForwardGeodesic geo) {
     super(dev, mh, fas, crumbs, geo); // This call initializes the sgcpools data structure.
     Camera cam = sgcCamera.getCamera();
     cam.setPerspective(true);
