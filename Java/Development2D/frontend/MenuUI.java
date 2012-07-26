@@ -106,18 +106,17 @@ public class MenuUI extends JFrame {
     File startMenuBackground = new File(bg_path + "dodecBackground.png");
     File gameMenuBackground = new File(bg_path + "barbellBackground2.png");
     File explorerMenuBackground = new File(bg_path + "dodecFirstPerson.png");
-
+    File pausedMenuBackground = new File(bg_path + "paused_background_temp.png");
+    
     File startMenu_games = new File(menu_path + "StartMenu_games.png");
     File startMenu_explorer = new File(menu_path + "StartMenu_explorer.png");
     File startMenu_about = new File(menu_path + "StartMenu_about.png");
     File gameMenu_tag = new File(menu_path + "GameSelection_tag.png");
     File gameMenu_cookie = new File(menu_path + "GameSelection_cookie.png");
     File explorerMenu_start = new File(menu_path + "SurfaceExplorer_start.png");
-    File explorerMenu_options = new File(menu_path
-        + "SurfaceExplorer_options.png");
+    File explorerMenu_options = new File(menu_path + "SurfaceExplorer_options.png");
     File explorerPausedResume = new File(menu_path + "ExplorerPause_resume.png");
-    File explorerPausedOptions = new File(menu_path
-        + "ExplorerPause_options.png");
+    File explorerPausedOptions = new File(menu_path + "ExplorerPause_options.png");
     File explorerPausedExit = new File(menu_path + "ExplorerPause_exit.png");
     File cookiePauseResume = new File(menu_path + "cookiepause_resume.png");
     File cookiePauseOptions = new File(menu_path + "cookiepause_options.png");
@@ -136,13 +135,12 @@ public class MenuUI extends JFrame {
     game_cookie = compose(gameMenuBackground, gameMenu_cookie);
     explorer_start = compose(explorerMenuBackground, explorerMenu_start);
     explorer_options = compose(explorerMenuBackground, explorerMenu_options);
-    explorerPause_resume = compose(explorerPausedResume, explorerPausedResume);
-    explorerPause_options = compose(explorerPausedOptions,
-        explorerPausedOptions);
-    explorerPause_exit = compose(explorerPausedExit, explorerPausedExit);
-    cookiePause_resume = compose(cookiePauseResume, cookiePauseResume);
-    cookiePause_options = compose(cookiePauseOptions, cookiePauseOptions);
-    cookiePause_exit = compose(cookiePauseExit, cookiePauseExit);
+    explorerPause_resume = compose(pausedMenuBackground, explorerPausedResume);
+    explorerPause_options = compose(pausedMenuBackground, explorerPausedOptions);
+    explorerPause_exit = compose(pausedMenuBackground, explorerPausedExit);
+    cookiePause_resume = compose(pausedMenuBackground, cookiePauseResume);
+    cookiePause_options = compose(pausedMenuBackground, cookiePauseOptions);
+    cookiePause_exit = compose(pausedMenuBackground, cookiePauseExit);
     cookieWin_again = compose(cookieWinAgain, cookieWinAgain);
     cookieWin_exit = compose(cookieWinExit, cookieWinExit);
 
