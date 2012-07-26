@@ -325,7 +325,7 @@ public class DevelopmentUI {
     MarkerAppearance app;
 
     pos = development.getSource();
-    app = new MarkerAppearance(MarkerAppearance.ModelType.ANT);
+    app = new MarkerAppearance(MarkerAppearance.ModelType.LADYBUG);
     markerHandler.addSourceMarker(new Marker(pos, app, Marker.MarkerType.SOURCE));
     source = markerHandler.getSourceMarker();
     
@@ -333,7 +333,7 @@ public class DevelopmentUI {
     // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {
       pos = new ManifoldPosition(development.getSource());
-      app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, .5);
+      app = new MarkerAppearance(MarkerAppearance.ModelType.LADYBUG, .5);
       double a = rand.nextDouble() * Math.PI * 2;
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
       vel.scale(0.0005);
