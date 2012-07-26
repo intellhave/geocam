@@ -2,7 +2,6 @@ package view;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import marker.BreadCrumbs;
@@ -53,29 +52,27 @@ public class EmbeddedView extends View {
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
 
-    // create lights
-    // TODO: Adding more than 5 lights appears to break jReality.
-    int numlights = 4;
     double[][] light_psns = 
-      { { 1, 0, 1 }, { -1, 0, 1 }, { 0, 1, 1 }, { 0, -1, 1 } };
+      { {  1, 0, 0 }, { 0,  1, 0 }, { 0, 0,  1 }, 
+        { -1, 0, 0 }, { 0, -1, 0 }, { 0, 0, -1 }  };
 
-    for (int ii = 0; ii < numlights; ii++) {
+    Vector origin = new Vector(0,0,0);
+    for( double[] psn : light_psns ){
       SceneGraphComponent sgcLight = new SceneGraphComponent();
       DirectionalLight light = new DirectionalLight();
       light.setIntensity(1.0);
       sgcLight.setLight(light);
-      MatrixBuilder.euclidean().scale(2).translate(light_psns[ii])
-          .rotateX(light_psns[ii][0] * Math.PI / 4)
-          .rotateY(light_psns[ii][1] * Math.PI / 4).assignTo(sgcLight);
+      
+      MatrixBuilder m = View.lookAt(new Vector(psn), origin);
+      m.assignTo(sgcLight);
+      
       sgcDevelopment.addChild(sgcLight);
     }
     
     Camera cam = sgcCamera.getCamera();
-    //cam.setFocalLength(0.01);
-    //cam.setFieldOfView(160);
+
     System.out.println("Focal Length:" + cam.getFocalLength());
     System.out.println("Field of View:" + cam.getFieldOfView());
-    
   }
 
   /*********************************************************************************
@@ -97,7 +94,7 @@ public class EmbeddedView extends View {
     left.normalize();
     normal.normalize();
 
-    Matrix rot = MatrixBuilder.euclidean().rotate( -Math.PI/8, left.getVectorAsArray()).getMatrix();
+    Matrix rot = MatrixBuilder.euclidean().rotate(-Math.PI/8, left.getVectorAsArray()).getMatrix();
     Vector adjustedNormal = new Vector(rot.multiplyVector(normal.getVectorAsArray()));
     Vector adjustedForward = new Vector(rot.multiplyVector(forward.getVectorAsArray()));
     Vector adjustedLeft = left;

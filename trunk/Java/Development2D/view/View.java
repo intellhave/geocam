@@ -24,6 +24,7 @@ import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
 import development.Development;
+import development.Vector;
 
 /*********************************************************************************
  * View
@@ -90,7 +91,7 @@ public abstract class View {
     this.markers = markers;
     this.crumbs = crumb;
     this.geo = geo;
-  
+
     this.faceAppearanceScheme = fas;
     showTexture = true;
 
@@ -199,13 +200,14 @@ public abstract class View {
     defaultAppearance = new Appearance();
     defaultAppearance.setAttribute(VERTEX_DRAW, false);
     defaultAppearance.setAttribute(EDGE_DRAW, false);
-    defaultAppearance.setAttribute(FACE_DRAW, true);    
+    defaultAppearance.setAttribute(FACE_DRAW, true);
     defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
     defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
     defaultAppearance.setAttribute(BACKGROUND_COLOR, Color.gray);
     defaultAppearance.setAttribute(DIFFUSE_COLOR, Color.white);
-    defaultAppearance.setAttribute(LINE_SHADER + "." + POLYGON_SHADER + "." + SMOOTH_SHADING, true);
-    
+    defaultAppearance.setAttribute(LINE_SHADER + "." + POLYGON_SHADER + "."
+        + SMOOTH_SHADING, true);
+
     DefaultGeometryShader dgs;
     dgs = (DefaultGeometryShader) ShaderUtility.createDefaultGeometryShader(
         defaultAppearance, true);
@@ -295,12 +297,60 @@ public abstract class View {
    * is specific to the view in question.
    *********************************************************************************/
   public abstract void removeMarker(Marker m);
-  
-  public boolean getTextureOn(){
+
+  public boolean getTextureOn() {
     return showTexture;
   }
-  
-  public void setTexture(boolean texture){
+
+  public void setTexture(boolean texture) {
     showTexture = texture;
+  }
+
+  /*********************************************************************************
+   * lookAt
+   * 
+   * This utility method produces a certain transformation normally provided by
+   * openGL. Given a position and a target position in object coordinates, and
+   * possibly an "up" vector, this method returns an affine transformation that
+   * will move a camera/light from its default orientation to the input position
+   * and point it at the target, with the prescribed orientation.
+   * 
+   * If an up vector is not given, then one is chosen arbitrarily among vectors
+   * perpendicular to the vector pointing in the direction (psn_target - psn).
+   * This can be useful when positioning a light (we only care about the
+   * direction it points, not the orientation).
+   *********************************************************************************/
+  protected static MatrixBuilder lookAt(Vector psn, Vector target) {
+    Vector forward = Vector.subtract(target, psn);
+    Vector up = new Vector( forward.getComponent(1), -forward.getComponent(0), 0 );
+    return lookAt(psn, target, up);
+  }
+
+  protected static MatrixBuilder lookAt(Vector psn, Vector target, Vector up) {
+    Vector forward = Vector.subtract(target, psn);
+    Vector v = Vector.cross(forward, up);
+    
+    double[] matrix = new double[16];
+    matrix[0 * 4 + 0] = v.getComponent(0);
+    matrix[0 * 4 + 1] = up.getComponent(0);
+    matrix[0 * 4 + 2] = -forward.getComponent(0);
+    matrix[0 * 4 + 3] = 0.0;
+    
+    matrix[1 * 4 + 0] = v.getComponent(1);
+    matrix[1 * 4 + 1] = up.getComponent(1);
+    matrix[1 * 4 + 2] = -forward.getComponent(1);
+    matrix[1 * 4 + 3] = 0.0;
+   
+    matrix[2 * 4 + 0] = v.getComponent(2);
+    matrix[2 * 4 + 1] = up.getComponent(2);
+    matrix[2 * 4 + 2] = -forward.getComponent(2);
+    matrix[2 * 4 + 3] = 0.0;
+        
+    matrix[3 * 4 + 0] = 0.0;
+    matrix[3 * 4 + 1] = 0.0;
+    matrix[3 * 4 + 2] = 0.0;
+    matrix[3 * 4 + 3] = 1.0;
+    
+    return MatrixBuilder.euclidean().translate(psn.getVectorAsArray()).times(matrix);
   }
 }
