@@ -385,7 +385,7 @@ public class DevelopmentUI {
    * slider that controls how big the markers are should be initialized here.
    *********************************************************************************/
   private static void initViewControls() {
-    viewerController = new ViewerController(markerHandler, development, views);
+    viewerController = new ViewerController(markerHandler, development);
     viewerController.setVisible(true);
   }
 

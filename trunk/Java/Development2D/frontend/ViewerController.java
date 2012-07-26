@@ -8,8 +8,6 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -31,8 +29,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import view.View;
-
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -51,15 +47,13 @@ public class ViewerController extends JFrame {
    ********************************************************************************/
   private Development develop;
   private static MarkerHandler markerHandler;
-  private static Marker source;
-  private Set<View> views;
+  private static Marker source;  
 
   // This main method is for button layout testing.
 
-  public ViewerController(MarkerHandler mh, Development d, Set<View> views) {
+  public ViewerController(MarkerHandler mh, Development d) {
     develop = d;
     markerHandler = mh;
-    this.views = views;
     source = markerHandler.getSourceMarker();
     layoutGUI();
     DevelopmentUI.setExponentialView(showView2DBox.isSelected(), TextureEnabledBox.isSelected());

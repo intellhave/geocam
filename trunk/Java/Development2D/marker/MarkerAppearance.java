@@ -1,6 +1,18 @@
 package marker;
 
-import static de.jreality.shader.CommonAttributes.*;
+import static de.jreality.shader.CommonAttributes.DIFFUSE_COLOR;
+import static de.jreality.shader.CommonAttributes.EDGE_DRAW;
+import static de.jreality.shader.CommonAttributes.FACE_DRAW;
+import static de.jreality.shader.CommonAttributes.LIGHTING_ENABLED;
+import static de.jreality.shader.CommonAttributes.LINE_SHADER;
+import static de.jreality.shader.CommonAttributes.PICKABLE;
+import static de.jreality.shader.CommonAttributes.POINT_RADIUS;
+import static de.jreality.shader.CommonAttributes.POINT_SHADER;
+import static de.jreality.shader.CommonAttributes.POLYGON_SHADER;
+import static de.jreality.shader.CommonAttributes.SMOOTH_SHADING;
+import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
+import static de.jreality.shader.CommonAttributes.TUBE_RADIUS;
+import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
 
 import java.awt.Color;
 import java.awt.Transparency;
@@ -8,7 +20,6 @@ import java.io.File;
 import java.util.EnumMap;
 
 import de.jreality.geometry.GeometryMergeFactory;
-import de.jreality.geometry.IndexedFaceSetUtility;
 import de.jreality.geometry.Primitives;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.reader.Readers;
@@ -16,7 +27,6 @@ import de.jreality.scene.Appearance;
 import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
-import de.jreality.shader.CommonAttributes;
 import de.jreality.util.SceneGraphUtility;
 
 /*********************************************************************************
