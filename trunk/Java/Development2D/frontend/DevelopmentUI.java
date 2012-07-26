@@ -134,6 +134,9 @@ public class DevelopmentUI {
   public static void runExplorer() {
     initModel();
     initViews();
+    setExponentialView(true,true);    
+    setFirstPersonView(true,true);    
+    setEmbeddedView(true,true);            
     initModelControls();
     runSimulation();
   }
