@@ -33,7 +33,6 @@ public class MenuUI extends JFrame {
 
   // TODO: Build all menus the user will actually see, and integrate this with
   // the simulation UI
-
   private UserController controller;
   private Boolean exit;
 
@@ -62,7 +61,7 @@ public class MenuUI extends JFrame {
   private static BufferedImage cookiePause_exit;
   private static BufferedImage cookieWin_again;
   private static BufferedImage cookieWin_exit;
-  
+
   private static BufferedImage about;
   private static BufferedImage tag;
   private static BufferedImage options;
@@ -114,9 +113,11 @@ public class MenuUI extends JFrame {
     File gameMenu_tag = new File(menu_path + "GameSelection_tag.png");
     File gameMenu_cookie = new File(menu_path + "GameSelection_cookie.png");
     File explorerMenu_start = new File(menu_path + "SurfaceExplorer_start.png");
-    File explorerMenu_options = new File(menu_path + "SurfaceExplorer_options.png");
+    File explorerMenu_options = new File(menu_path
+        + "SurfaceExplorer_options.png");
     File explorerPausedResume = new File(menu_path + "ExplorerPause_resume.png");
-    File explorerPausedOptions = new File(menu_path + "ExplorerPause_options.png");
+    File explorerPausedOptions = new File(menu_path
+        + "ExplorerPause_options.png");
     File explorerPausedExit = new File(menu_path + "ExplorerPause_exit.png");
     File cookiePauseResume = new File(menu_path + "cookiepause_resume.png");
     File cookiePauseOptions = new File(menu_path + "cookiepause_options.png");
@@ -136,14 +137,15 @@ public class MenuUI extends JFrame {
     explorer_start = compose(explorerMenuBackground, explorerMenu_start);
     explorer_options = compose(explorerMenuBackground, explorerMenu_options);
     explorerPause_resume = compose(explorerPausedResume, explorerPausedResume);
-    explorerPause_options = compose(explorerPausedOptions, explorerPausedOptions);
+    explorerPause_options = compose(explorerPausedOptions,
+        explorerPausedOptions);
     explorerPause_exit = compose(explorerPausedExit, explorerPausedExit);
     cookiePause_resume = compose(cookiePauseResume, cookiePauseResume);
     cookiePause_options = compose(cookiePauseOptions, cookiePauseOptions);
     cookiePause_exit = compose(cookiePauseExit, cookiePauseExit);
     cookieWin_again = compose(cookieWinAgain, cookieWinAgain);
     cookieWin_exit = compose(cookieWinExit, cookieWinExit);
-    
+
     about = compose(aboutPage, aboutPage);
     tag = compose(tagGame, tagGame);
     options = compose(explorerOptions, explorerOptions);
@@ -161,8 +163,8 @@ public class MenuUI extends JFrame {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setSize(currentMenu.getWidth(), currentMenu.getHeight());
     this.setLocation(0, 10);
-    //Makes the frame transparent for pause menus
-    this.setBackground(new Color(1.0f,1.0f,1.0f,0.25f));
+    // Makes the frame transparent for pause menus
+    this.setBackground(new Color(1.0f, 1.0f, 1.0f, 0.25f));
     this.setResizable(false);
     this.setVisible(true);
 
@@ -297,22 +299,23 @@ public class MenuUI extends JFrame {
   }
 
   private void cookiePauseMenu() {
-    BufferedImage[] menuImages = {cookiePause_resume, cookiePause_exit, cookiePause_options};
+    BufferedImage[] menuImages = { cookiePause_resume, cookiePause_exit,
+        cookiePause_options };
     int state = 0;
     currentMenu = cookiePause_resume;
-    
+
     this.setSize(700, 723);
     this.repaint();
     this.setVisible(true);
 
     Action a = null;
-    
+
     while (true) {
       a = controller.getNextAction();
       if (a == null)
         continue;
-      
-      switch(a){
+
+      switch (a) {
       case Back:
         state = (state + 1) % 3;
         break;
@@ -337,17 +340,17 @@ public class MenuUI extends JFrame {
           // TODO: implement options for cookie game
         }
       }
-      
+
       currentMenu = menuImages[state];
       this.repaint();
     }
   }
 
   private void cookieWinMenu() {
-    BufferedImage[] menuImages = {cookieWin_again, cookieWin_exit};
+    BufferedImage[] menuImages = { cookieWin_again, cookieWin_exit };
     int state = 0;
     currentMenu = cookieWin_again;
-    
+
     this.setSize(700, 723);
     this.repaint();
     this.setVisible(true);
@@ -360,28 +363,28 @@ public class MenuUI extends JFrame {
       if (a == null)
         continue;
 
-      switch(a){
+      switch (a) {
       case Back:
       case Forward:
         state = (state + 1) % 2;
         break;
       }
-    if(a == Action.A_Button) {
-      if(state == 0){
-        this.setVisible(false);
-        CookieGame.quitCookie();
-        CookieGame.runCookie();
-        controller.clear();
-        this.setVisible(true);
-        break;
+      if (a == Action.A_Button) {
+        if (state == 0) {
+          this.setVisible(false);
+          CookieGame.quitCookie();
+          CookieGame.runCookie();
+          controller.clear();
+          this.setVisible(true);
+          break;
+        }
+        if (state == 1) {
+          exit = true;
+          CookieGame.quitCookie();
+          this.setSize(700, 700);
+          break;
+        }
       }
-      if (state == 1) {
-        exit = true;
-        CookieGame.quitCookie();
-        this.setSize(700,700);
-        break;
-      }
-    }
       currentMenu = menuImages[state];
       this.repaint();
     }
@@ -431,12 +434,13 @@ public class MenuUI extends JFrame {
   }
 
   private void pauseExplorerMenu() {
-    BufferedImage[] menuImages = { explorerPause_resume, explorerPause_options, explorerPause_exit };
+    BufferedImage[] menuImages = { explorerPause_resume, explorerPause_options,
+        explorerPause_exit };
     int state = 0;
     currentMenu = explorerPause_resume;
-    
-    //Dimensions should be 800 by 400, but this appears too short
-    //Need to size up height by approx. 20?
+
+    // Dimensions should be 800 by 400, but this appears too short
+    // Need to size up height by approx. 20?
     this.setSize(800, 423);
     this.repaint();
     this.setVisible(true);
@@ -447,8 +451,8 @@ public class MenuUI extends JFrame {
       a = controller.getNextAction();
       if (a == null)
         continue;
-      
-      switch(a){
+
+      switch (a) {
       case Back:
         state = (state + 1) % 3;
         break;
@@ -456,24 +460,24 @@ public class MenuUI extends JFrame {
         state = (state + 2) % 3;
         break;
       case A_Button:
-        if(state == 0){
+        if (state == 0) {
           this.setVisible(false);
           DevelopmentUI.runSimulation();
           controller.clear();
           this.setVisible(true);
           break;
         }
-        if(state == 1){
-          //TODO: implement options menu
+        if (state == 1) {
+          // TODO: implement options menu
         }
       }
-      
-      if(a == Action.A_Button && state == 2){
+
+      if (a == Action.A_Button && state == 2) {
         DevelopmentUI.quitExplorer();
-        this.setSize(700,700);
+        this.setSize(700, 700);
         break;
       }
-      
+
       currentMenu = menuImages[state];
       this.repaint();
     }
@@ -529,11 +533,15 @@ public class MenuUI extends JFrame {
 
   /*********************************************************************************
    * paint
-   * 
    *********************************************************************************/
-
   public void paint(Graphics g) {
-    g.clearRect(0, 0, this.getWidth(), this.getHeight());
+    /*
+     * Previously, there was a line here which read: g.clearRect(0, 0,
+     * this.getWidth(), this.getHeight()); This caused menu to flicker.
+     * Basically, this is because we are writing directly to the screen. Since
+     * we're writing whole images to the screen (and our backgrounds aren't
+     * transparent), there's no need to clear the screen before we use it again.
+     */
     g.drawImage(currentMenu, 0, 0, null);
   }
 
