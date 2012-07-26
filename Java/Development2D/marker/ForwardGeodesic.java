@@ -6,7 +6,6 @@ import java.util.Set;
 import development.ManifoldPosition;
 import development.Vector;
 
-
 /*********************************************************************************
  * ForwardGeodesics
  * 
@@ -19,23 +18,38 @@ import development.Vector;
 public class ForwardGeodesic {
 
   private MarkerHandler markers;
-  private Set<Marker> geodesicMarkers; 
+  private Set<Marker> geodesicMarkers;
 
   /*********************************************************************************
-   * 
+   * These parameters control the appearance of a geodesic on the manifold.
    *********************************************************************************/
   private final double size = .05;
   private final double segmentSize = 0.2;
   private final double segments = 10;
 
+  /*********************************************************************************
+   * ForwardGeodesic
+   * 
+   * Given a marker handler, this constructor makes a new "ForwardGeodesic"
+   * object, which is responsible for creating new markers to represent a
+   * geodesic and then adding them to the manifold.
+   *********************************************************************************/
   public ForwardGeodesic(MarkerHandler mh) {
     geodesicMarkers = new HashSet<Marker>();
     markers = mh;
   }
-  
-  public void generateGeodesic(ManifoldPosition mp){    
-    for( Marker m : geodesicMarkers ){
-      m.flagForRemoval();      
+
+  /*********************************************************************************
+   * generateGeodesic
+   * 
+   * Given a manifold position p, this method adds markers to the marker handler
+   * to represent a geodesic specified by p (recall that p carries with it an
+   * orientation with a designated "forward" vector). If a geodesic has been
+   * created already, this old geodesic is marked for removal from the manifold.
+   *********************************************************************************/
+  public void generateGeodesic(ManifoldPosition mp) {
+    for (Marker m : geodesicMarkers) {
+      m.flagForRemoval();
     }
     geodesicMarkers.clear();
     ManifoldPosition pos = new ManifoldPosition(mp);
@@ -43,26 +57,35 @@ public class ForwardGeodesic {
     Vector v = pos.getDirectionForward();
     v.normalize();
     v.scale(segmentSize);
-    
-    // Once we get the arrow marker appearance working, these will be replaced with 
+
+    // Once we get the arrow marker appearance working, these will be replaced
+    // with
     // arrow body and arrow head respectively.
-    MarkerAppearance body = new MarkerAppearance(MarkerAppearance.ModelType.SPHERE, size);
-    MarkerAppearance head = new MarkerAppearance(MarkerAppearance.ModelType.SPHERE, size);
+    MarkerAppearance body = new MarkerAppearance(
+        MarkerAppearance.ModelType.SPHERE, size);
+    MarkerAppearance head = new MarkerAppearance(
+        MarkerAppearance.ModelType.SPHERE, size);
     MarkerAppearance ma;
-    for( int ii = 0; ii < segments; ii++ ){
+    for (int ii = 0; ii < segments; ii++) {
       ma = body;
-      if( ii == segments - 1 ) ma = head;      
-      
-      Marker m = new Marker(new ManifoldPosition(pos), ma, Marker.MarkerType.FIXED);
+      if (ii == segments - 1)
+        ma = head;
+
+      Marker m = new Marker(new ManifoldPosition(pos), ma,
+          Marker.MarkerType.FIXED);
       geodesicMarkers.add(m);
       markers.addMarker(m);
-      pos.move(v);      
+      pos.move(v);
     }
-    
-    
   }
 
-  public Set<Marker> getAllGeoMarkers() {
+  /*********************************************************************************
+   * getMarkers
+   * 
+   * This method returns all of the markers that have been used to represent the
+   * geodesic.
+   *********************************************************************************/
+  public Set<Marker> getMarkers() {
     return geodesicMarkers;
   }
 }
