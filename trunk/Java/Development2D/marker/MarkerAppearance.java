@@ -43,7 +43,8 @@ public class MarkerAppearance {
    * appearance represents.
    *********************************************************************************/
   public static enum ModelType {
-    ANT, APPLE, COOKIE, ROCKET, SATTELITE, CUBE, SPHERE, ARROWHEAD, ARROWBODY
+    ANT, APPLE, COOKIE, ROCKET, SATTELITE, CUBE, SPHERE, ARROWHEAD, ARROWBODY,
+      LADYBUG
   };
 
   /*********************************************************************************
@@ -81,6 +82,10 @@ public class MarkerAppearance {
     ff = new File(path + "cube.3ds");
     sgc = loadTemplateSGC(ff);
     templateSGCs.put(ModelType.CUBE, sgc);
+    
+    ff = new File(path + "ladybug.3ds");
+    sgc = loadTemplateSGC(ff);
+    templateSGCs.put(ModelType.LADYBUG, sgc);
 
     sgc = Primitives.sphere(1.0, new double[] { 0.0, 0.0, 0.0 });
     templateSGCs.put(ModelType.SPHERE, sgc);
@@ -123,15 +128,16 @@ public class MarkerAppearance {
     SceneGraphUtility.removeChildren(sgc);
     sgc.setGeometry(ifs);
 
-    try {
-      // Not all of these normal calculations may be necessary.
-      IndexedFaceSetUtility.makeConsistentOrientation(ifs);
-      IndexedFaceSetUtility.calculateAndSetNormals(ifs);
-      IndexedFaceSetUtility.assignSmoothVertexNormals(ifs, 3);
-    } catch (Exception ee) {
-      System.err.println("Unable to assign smooth vertex normals.");
-      System.exit(1);
-    }
+//    try {
+//      // Not all of these normal calculations may be necessary.
+//      IndexedFaceSetUtility.makeConsistentOrientation(ifs);
+//      IndexedFaceSetUtility.calculateAndSetNormals(ifs);
+//      IndexedFaceSetUtility.assignSmoothVertexNormals(ifs,3);
+//    } catch (Exception ee) {
+//      System.err.println("Unable to assign smooth vertex normals.");
+//      ee.printStackTrace();
+//      System.exit(1);
+//    }
     return sgc;
   }
 
