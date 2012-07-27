@@ -227,6 +227,10 @@ public class MarkerAppearance {
   public void setModelType(ModelType mt) {
     this.model = mt;
   }
+  
+  public ModelType getModelType(){
+    return this.model;
+  }
 
   /*********************************************************************************
    * setDefaultScale / getDefaultScale

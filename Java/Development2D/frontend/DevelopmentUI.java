@@ -134,9 +134,9 @@ public class DevelopmentUI {
   public static void runExplorer() {
     initModel();
     initViews();
-    setExponentialView(true);
-    setFirstPersonView(true);
-    setEmbeddedView(true);
+    setExponentialView(true, true);
+    setEmbeddedView(true, true);
+    setFirstPersonView(true,true);            
     initModelControls();
     runSimulation();
   }
@@ -322,22 +322,21 @@ public class DevelopmentUI {
   private static void initMarkers() {
     markerHandler = new MarkerHandler();
     crumbs = new BreadCrumbs(markerHandler);
-    geo = new ForwardGeodesic(markerHandler);
-
+    geo = new ForwardGeodesic( markerHandler );    
+    
     ManifoldPosition pos;
     MarkerAppearance app;
 
     pos = development.getSource();
     app = new MarkerAppearance(MarkerAppearance.ModelType.LADYBUG);
-    markerHandler
-        .addSourceMarker(new Marker(pos, app, Marker.MarkerType.SOURCE));
+    markerHandler.addSourceMarker(new Marker(pos, app, Marker.MarkerType.SOURCE));
     source = markerHandler.getSourceMarker();
-
+    
     Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
     for (int ii = 0; ii < 3; ii++) {
       pos = new ManifoldPosition(development.getSource());
-      app = new MarkerAppearance(MarkerAppearance.ModelType.LADYBUG, .5);
+      app = new MarkerAppearance(source.getAppearance().getModelType(), .5);
       double a = rand.nextDouble() * Math.PI * 2;
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
       vel.scale(0.0005);
@@ -404,42 +403,29 @@ public class DevelopmentUI {
 
   public static void resetView() {
     if (exponentialView != null) {
-      setExponentialView(false);
-      setExponentialView(true);
+      setExponentialView(false, true);
+      setExponentialView(true, true);
     }
 
     if (embeddedView != null) {
-      setEmbeddedView(false);
-      setEmbeddedView(true);
+      setEmbeddedView(false, true);
+      setEmbeddedView(true, true);
     }
 
     if (firstPersonView != null) {
-      setFirstPersonView(false);
-      setFirstPersonView(true);
+      setFirstPersonView(false, true);
+      setFirstPersonView(true, true);
     }
 
     viewerController.setMarkerHandler(markerHandler);
   }
 
-  /*********************************************************************************
-   * setTexture
-   * 
-   * This method can be called to change the texturing settings of all of the
-   * views managed by DevelopmentUI, without concern for whether some views are
-   * enabled or disabled.
-   *********************************************************************************/
-  public static void setTexture(boolean texturingOn) {
-    for (View v : views) {
-      v.setTexture(texturingOn);
-      v.updateGeometry();
-    }
-  }
-
-  public static void setExponentialView(boolean viewEnabled) {
+  public static void setExponentialView(boolean viewEnabled,
+      boolean textureEnabled) {
     if (viewEnabled) {
       exponentialView = new ExponentialView(development, markerHandler,
           faceAppearanceScheme, crumbs, geo);
-      exponentialView.setTexture(true);
+      exponentialView.setTexture(textureEnabled);
       exponentialView.updateGeometry();
       exponentialView.initializeNewManifold();
       exponentialView.updateScene();
@@ -474,11 +460,11 @@ public class DevelopmentUI {
     }
   }
 
-  public static void setEmbeddedView(boolean viewEnabled) {
+  public static void setEmbeddedView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled && isEmbedded) {
       embeddedView = new EmbeddedView(development, markerHandler,
           faceAppearanceScheme, crumbs, geo);
-      embeddedView.setTexture(true);
+      embeddedView.setTexture(textureEnabled);
       embeddedView.updateGeometry();
       embeddedView.initializeNewManifold();
       embeddedView.updateScene();
@@ -513,11 +499,12 @@ public class DevelopmentUI {
     }
   }
 
-  public static void setFirstPersonView(boolean viewEnabled) {
+  public static void setFirstPersonView(boolean viewEnabled,
+      boolean textureEnabled) {
     if (viewEnabled) {
       firstPersonView = new FirstPersonView(development, markerHandler,
           faceAppearanceScheme, crumbs, geo);
-      firstPersonView.setTexture(true);
+      firstPersonView.setTexture(textureEnabled);
       firstPersonView.updateGeometry();
       firstPersonView.initializeNewManifold();
       firstPersonView.updateScene();

@@ -47,19 +47,16 @@ public class ViewerController extends JFrame {
    ********************************************************************************/
   private Development develop;
   private static MarkerHandler markerHandler;
-  private static Marker source;  
-
-  // This main method is for button layout testing.
+  private static Marker source;
 
   public ViewerController(MarkerHandler mh, Development d) {
     develop = d;
     markerHandler = mh;
     source = markerHandler.getSourceMarker();
     layoutGUI();
-    DevelopmentUI.setExponentialView(showView2DBox.isSelected());
-    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected());
-    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected());
-    DevelopmentUI.setTexture(textureEnabledBox.isSelected());
+    DevelopmentUI.setExponentialView(showView2DBox.isSelected(), TextureEnabledBox.isSelected());
+    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(), TextureEnabledBox.isSelected());
+    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), TextureEnabledBox.isSelected());
   }
 
   /********************************************************************************
@@ -80,7 +77,9 @@ public class ViewerController extends JFrame {
   private JPanel sliderPanel;
   private JSlider speedSlider;
   private JSlider scalingSlider;
+  private JPanel buttonPanel;
   private JButton stopStartButton;
+  private JButton clearGeosButton;
   private JPanel viewerPanel;
   private JCheckBox showView2DBox;
   private JCheckBox showView3DBox;
@@ -89,7 +88,7 @@ public class ViewerController extends JFrame {
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
   private JCheckBox drawAvatarBox;
-  private JCheckBox textureEnabledBox;
+  private JCheckBox TextureEnabledBox;
 
   private static int MAX_SPEED = 4000;
   private static int MAX_SIZE = 10;
@@ -101,7 +100,7 @@ public class ViewerController extends JFrame {
 
   private void layoutGUI() {
 
-    this.setSize(220, 480);
+    this.setSize(220, 520);
     this.setResizable(false);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setTitle("Development View");
@@ -142,18 +141,14 @@ public class ViewerController extends JFrame {
       }
     }
 
-    // ******************************TEXT BOX
-    // PANEL********************************
+    // ******************************TEXT BOX PANEL********************************
     textBoxPanel = new JPanel();
     getContentPane().add(textBoxPanel);
-    textBoxPanel.setBorder(BorderFactory
-        .createEtchedBorder(EtchedBorder.LOWERED));
+    textBoxPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     textBoxPanel.setLayout(new GridLayout(2, 1));
 
-    // ****************************RECURSION DEPTH TEXT
-    // BOX******************************
-    // ******************************NUM OBJECTS TEXT
-    // BOX********************************
+    // ****************************RECURSION DEPTH TEXT BOX******************************
+    // ******************************NUM OBJECTS TEXT BOX********************************
     {
       NumberFormat f = NumberFormat.getIntegerInstance();
       recDepth = new JFormattedTextField(f);
@@ -204,9 +199,15 @@ public class ViewerController extends JFrame {
           }
 
           Set<Marker> markers = markerHandler.getAllMarkers();
-          int currentMarkers = markers.size() - 1;
+          //get the current number of moving markers
+          int currentMarkers = 0;
+          for( Marker m : markers) {
+            if(m.getMarkerType() == Marker.MarkerType.MOVING){
+              currentMarkers++;
+            }
+          }
 
-          // if necessary, add markers
+          // if necessary, add moving markers
           if (currentMarkers < newMarkers) {
             Random rand = new Random();
             ManifoldPosition pos;
@@ -215,34 +216,29 @@ public class ViewerController extends JFrame {
             for (int ii = 0; ii < newMarkers - currentMarkers; ii++) {
               pos = new ManifoldPosition(develop.getSource());
               double scale = scalingSlider.getValue() / 10.0;
-              app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, scale);
+              app = new MarkerAppearance(source.getAppearance().getModelType(), scale);
               double a = rand.nextDouble() * Math.PI * 2;
               Vector vel = new Vector(Math.cos(a), Math.sin(a));
               // advance ants off of source point
               vel.scale(0.25);
               pos.move(vel);
               Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
-              // set the speed of the marker objects after they are constructed
-              // when new ants are added, their speed will depend on whether the
-              // stop/start
-              // button is pressed
-              if (stopStartButton.getText().equals("Stop")) {
-                double sliderSpeed = speedSlider.getValue() / 1000.0;
-                m.setSpeed(0.05 * Math.pow(Math.E, sliderSpeed));
-              } else
-                m.setSpeed(0);
+              double sliderSpeed = speedSlider.getValue() / 1000.0;
+              m.setSpeed(0.05 * Math.pow(Math.E, sliderSpeed));
+
               markerHandler.addMarker(m);
             }
           }
 
-          // if necessary, remove markers
+          // if necessary, remove moving markers (make sure not to remove geodesic 
+          // markers or the source marker)
           if (currentMarkers > newMarkers) {
             int counter = 0;            
             for (Marker m : markers) {
-              if (m.getMarkerType() == Marker.MarkerType.SOURCE)
-                continue;
-              m.flagForRemoval();
-              counter++;
+              if (m.getMarkerType() == Marker.MarkerType.MOVING){
+                m.flagForRemoval();
+                counter++;
+              }
               if (counter == currentMarkers - newMarkers) break;
             }
           }
@@ -251,15 +247,13 @@ public class ViewerController extends JFrame {
       numObjects.addActionListener(numObjectsListener);
     }
 
-    // ********************************SLIDER
-    // PANEL**********************************
+    // ********************************SLIDER PANEL**********************************
     sliderPanel = new JPanel();
     getContentPane().add(sliderPanel);
     sliderPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
     sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS));
 
-    // ******************************SPEED
-    // SLIDER********************************
+    // ******************************SPEED SLIDER********************************
     /********************************************************************************
      * Note: Speed slider is using the exponential function y = 0.05*e^x to
      * convert input from the slider to a speed. This gives you more control
@@ -294,16 +288,14 @@ public class ViewerController extends JFrame {
       speedSlider.addChangeListener(speedSliderListener);
     }
 
-    // ******************************SCALE
-    // SLIDER********************************
+    // ******************************SCALE SLIDER********************************
     {
       scalingSlider = new JSlider();
       sliderPanel.add(scalingSlider);
       scalingSlider.setMaximum(MAX_SIZE);
       scalingSlider.setValue((int) (markerHandler.getMarkerScale(source) * 10));
       scalingSlider.setBorder(pointBorder);
-      pointBorder.setTitle("Object scaling (" + scalingSlider.getValue() / 10.0
-          + ")");
+      pointBorder.setTitle("Object scaling (" + scalingSlider.getValue() / 10.0 + ")");
 
       // Scaling slider change listener
       ChangeListener scalingSliderListener = new ChangeListener() {
@@ -315,7 +307,7 @@ public class ViewerController extends JFrame {
           synchronized (markers) {
             while (i.hasNext()) {
               Marker m = i.next();
-              if (!m.equals(source)) {
+              if (m.getMarkerType() == Marker.MarkerType.MOVING) {
                 MarkerAppearance newAppearance = m.getAppearance();
                 newAppearance.setScale(newScale);
                 m.setAppearance(newAppearance);
@@ -328,31 +320,52 @@ public class ViewerController extends JFrame {
       scalingSlider.addChangeListener(scalingSliderListener);
     }
 
-    // ****************************START/STOP
-    // BUTTON******************************
-    stopStartButton = new JButton();
-    stopStartButton.setText("Stop");
-    this.add(stopStartButton);
-    // Start/stop button action listener
-    ActionListener stopStartButtonListener = new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        if (stopStartButton.getText().equals("Stop")) {
-          markerHandler.pauseSimulation();          
-          stopStartButton.setText("Start");
-        } else {
-          markerHandler.unpauseSimulation();
-          stopStartButton.setText("Stop");
+    // ********************************BUTTON PANEL**********************************
+    buttonPanel = new JPanel();
+    getContentPane().add(buttonPanel);
+    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+    
+    //***************************CLEAR GEODESICS BUTTON***************************
+    {
+      clearGeosButton = new JButton();
+      clearGeosButton.setText("Clear geodesics");
+      buttonPanel.add(clearGeosButton);
+      
+      ActionListener geosButtonListener = new ActionListener() {
+        public void actionPerformed(ActionEvent arg0) {
+          Set<Marker> allMarkers = markerHandler.getAllMarkers();
+          for(Marker m : allMarkers) {
+            if(m.getMarkerType() == Marker.MarkerType.FIXED)
+              m.flagForRemoval();
+          }
         }
-      }
-    };
-    stopStartButton.addActionListener(stopStartButtonListener);
-
-    // ********************************VIEW
-    // PANEL**********************************
+      };
+      clearGeosButton.addActionListener(geosButtonListener);
+      
+    }
+    // ****************************START/STOP BUTTON******************************
+    {
+      stopStartButton = new JButton();
+      stopStartButton.setText("Stop");
+      buttonPanel.add(stopStartButton);
+      
+      ActionListener stopStartButtonListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          if (stopStartButton.getText().equals("Stop")) {
+            markerHandler.pauseSimulation();
+            stopStartButton.setText("Start");
+          } else {
+            markerHandler.unpauseSimulation();
+            stopStartButton.setText("Stop");
+          }
+        }
+      };
+      stopStartButton.addActionListener(stopStartButtonListener);
+    }
+    // ********************************VIEW PANEL**********************************
     viewerPanel = new JPanel();
     getContentPane().add(viewerPanel);
-    viewerPanel.setBorder(BorderFactory
-        .createEtchedBorder(EtchedBorder.LOWERED));
+    viewerPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
     viewerPanel.setLayout(new BoxLayout(viewerPanel, BoxLayout.Y_AXIS));
 
     // ***************************2D VIEW CHECK BOX*****************************
@@ -361,19 +374,14 @@ public class ViewerController extends JFrame {
       viewerPanel.add(showView2DBox);
       showView2DBox.setText("Show Exponential View");
       showView2DBox.setSelected(true);
+      
       ActionListener view2DListener = new ActionListener() {
-        @Override
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showView2DBox.isSelected();
-          DevelopmentUI.setExponentialView(checkBox);
-          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
+          DevelopmentUI.setExponentialView(checkBox, TextureEnabledBox.isSelected());
         }
       };
-      showView2DBox.addActionListener(view2DListener);
-
-      /********************************************************************************
-       * 
-       ********************************************************************************/
+      showView2DBox.addActionListener(view2DListener);    
     }
     // ***************************3D VIEW CHECK BOX*****************************
     {
@@ -382,16 +390,12 @@ public class ViewerController extends JFrame {
       showView3DBox.setText("Show First Person View");
       showView3DBox.setSelected(true);
       ActionListener view3DListener = new ActionListener() {
-        @Override
         public void actionPerformed(ActionEvent arg0) {
-          // TODO Auto-generated method stub
           boolean checkBox = showView3DBox.isSelected();
-          DevelopmentUI.setFirstPersonView(checkBox);
-          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
+          DevelopmentUI.setFirstPersonView(checkBox, TextureEnabledBox.isSelected());
         }
       };
       showView3DBox.addActionListener(view3DListener);
-
     }
     // ************************EMBEDDED VIEW CHECK BOX**************************
     {
@@ -400,41 +404,39 @@ public class ViewerController extends JFrame {
       showEmbeddedBox.setText("Show Embedded View");
       showEmbeddedBox.setSelected(true);
       ActionListener viewEmbeddedListener = new ActionListener() {
-        @Override
         public void actionPerformed(ActionEvent arg0) {
-          // TODO Auto-generated method stub
           boolean checkBox = showEmbeddedBox.isSelected();
-          DevelopmentUI.setEmbeddedView(checkBox);
-          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
+          DevelopmentUI.setEmbeddedView(checkBox,TextureEnabledBox.isSelected());
         }
       };
       showEmbeddedBox.addActionListener(viewEmbeddedListener);
     }
  // ************************TEXTURE ENABLED CHECK BOX**************************
     {
-      textureEnabledBox = new JCheckBox();
-      viewerPanel.add(textureEnabledBox);
-      textureEnabledBox.setText("Display Texture");
-      textureEnabledBox.setSelected(true);
+      TextureEnabledBox = new JCheckBox();
+      viewerPanel.add(TextureEnabledBox);
+      TextureEnabledBox.setText("Display Texture");
+      TextureEnabledBox.setSelected(true);
       ActionListener TextureEnabledListener = new ActionListener(){
         public void actionPerformed(ActionEvent arg0) {
-          boolean textureEnabled = textureEnabledBox.isSelected();
-          DevelopmentUI.setTexture(textureEnabled);
+          boolean textureEnabled = TextureEnabledBox.isSelected();
+          DevelopmentUI.setExponentialView(false, textureEnabled);
+          DevelopmentUI.setFirstPersonView(false, textureEnabled);
+          DevelopmentUI.setEmbeddedView(false, textureEnabled);
+          DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(),textureEnabled);
+          DevelopmentUI.setExponentialView(showView2DBox.isSelected(), textureEnabled);
+          DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), textureEnabled);
         } 
     };
-    textureEnabledBox.addActionListener(TextureEnabledListener);
+    TextureEnabledBox.addActionListener(TextureEnabledListener);
     }
-    // ******************************DRAW OPTIONS
-    // PANEL********************************
+    // ******************************DRAW OPTIONS PANEL********************************
     drawOptionsPanel = new JPanel();
     getContentPane().add(drawOptionsPanel);
-    drawOptionsPanel.setBorder(BorderFactory
-        .createEtchedBorder(EtchedBorder.LOWERED));
-    drawOptionsPanel
-        .setLayout(new BoxLayout(drawOptionsPanel, BoxLayout.Y_AXIS));
+    drawOptionsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    drawOptionsPanel.setLayout(new BoxLayout(drawOptionsPanel, BoxLayout.Y_AXIS));
 
-    // ***************************DRAW EDGES CHECK
-    // BOX*****************************
+    // ***************************DRAW EDGES CHECK BOX*****************************
     {
       drawEdgesBox = new JCheckBox();
       drawOptionsPanel.add(drawEdgesBox);
@@ -449,8 +451,7 @@ public class ViewerController extends JFrame {
       };
       drawEdgesBox.addActionListener(drawEdgesListener);
     }
-    // ***************************DRAW FACES CHECK
-    // BOX*****************************
+    // ***************************DRAW FACES CHECK BOX*****************************
     {
       drawFacesBox = new JCheckBox();
       drawOptionsPanel.add(drawFacesBox);
@@ -465,8 +466,7 @@ public class ViewerController extends JFrame {
       };
       drawFacesBox.addActionListener(drawFacesListener);
     }
-    // ***************************DRAW AVATAR CHECK
-    // BOX*****************************
+    // ***************************DRAW AVATAR CHECK BOX*****************************
     {
       drawAvatarBox = new JCheckBox();
       drawOptionsPanel.add(drawAvatarBox);
