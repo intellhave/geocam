@@ -91,7 +91,7 @@ public abstract class View {
     this.markers = markers;
     this.crumbs = crumb;
     this.geo = geo;
-
+  
     this.faceAppearanceScheme = fas;
     showTexture = true;
 
@@ -200,14 +200,13 @@ public abstract class View {
     defaultAppearance = new Appearance();
     defaultAppearance.setAttribute(VERTEX_DRAW, false);
     defaultAppearance.setAttribute(EDGE_DRAW, false);
-    defaultAppearance.setAttribute(FACE_DRAW, true);
+    defaultAppearance.setAttribute(FACE_DRAW, true);    
     defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
     defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
     defaultAppearance.setAttribute(BACKGROUND_COLOR, Color.gray);
     defaultAppearance.setAttribute(DIFFUSE_COLOR, Color.white);
-    defaultAppearance.setAttribute(LINE_SHADER + "." + POLYGON_SHADER + "."
-        + SMOOTH_SHADING, true);
-
+    defaultAppearance.setAttribute(LINE_SHADER + "." + POLYGON_SHADER + "." + SMOOTH_SHADING, true);
+    
     DefaultGeometryShader dgs;
     dgs = (DefaultGeometryShader) ShaderUtility.createDefaultGeometryShader(
         defaultAppearance, true);
@@ -297,14 +296,13 @@ public abstract class View {
    * is specific to the view in question.
    *********************************************************************************/
   public abstract void removeMarker(Marker m);
-
-  public boolean getTextureOn() {
+  
+  public boolean isTextured(){
     return showTexture;
   }
-
-  public void setTexture(boolean texture) {
+  
+  public void setTexture(boolean texture){
     showTexture = texture;
-    updateScene();
   }
 
   /*********************************************************************************

@@ -88,7 +88,7 @@ public class KeyboardController extends UserController implements
       case KeyEvent.VK_SHIFT:
         actionQueue.add(Action.L);
         break;
-      case KeyEvent.VK_TAB:
+      case KeyEvent.VK_CONTROL:
         actionQueue.add(Action.R);
         break;
       }
