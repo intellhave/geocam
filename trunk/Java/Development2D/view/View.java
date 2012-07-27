@@ -304,6 +304,7 @@ public abstract class View {
 
   public void setTexture(boolean texture) {
     showTexture = texture;
+    updateScene();
   }
 
   /*********************************************************************************

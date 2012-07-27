@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Color;
 import java.util.EnumMap;
-import java.util.HashMap;
 
 import triangulation.Face;
 import triangulation.Triangulation;
