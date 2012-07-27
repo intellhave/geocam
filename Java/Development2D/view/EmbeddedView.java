@@ -39,7 +39,8 @@ import development.Vector;
 public class EmbeddedView extends View {
 
   private HashMap<Marker, SceneGraphComponent> sgcpools;
-  //private SceneGraphComponent sgcLight;
+
+  // private SceneGraphComponent sgcLight;
 
   /*********************************************************************************
    * EmbeddedView
@@ -47,28 +48,28 @@ public class EmbeddedView extends View {
    * Given a development object and a color scheme, this constructor initializes
    * an EmbeddedView object to display the specified surface.
    *********************************************************************************/
-  public EmbeddedView(Development d, MarkerHandler mh, FaceAppearanceScheme fas, BreadCrumbs crumb, ForwardGeodesic geo) {
-    super(d, mh, fas, crumb,geo);
+  public EmbeddedView(Development d, MarkerHandler mh,
+      FaceAppearanceScheme fas, BreadCrumbs crumb, ForwardGeodesic geo) {
+    super(d, mh, fas, crumb, geo);
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
 
-    double[][] light_psns = 
-      { {  1, 0, 0 }, { 0,  1, 0 }, { 0, 0,  1 }, 
-        { -1, 0, 0 }, { 0, -1, 0 }, { 0, 0, -1 }  };
+    double[][] light_psns = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 },
+        { -1, 0, 0 }, { 0, -1, 0 }, { 0, 0, -1 } };
 
-    Vector origin = new Vector(0,0,0);
-    for( double[] psn : light_psns ){
+    Vector origin = new Vector(0, 0, 0);
+    for (double[] psn : light_psns) {
       SceneGraphComponent sgcLight = new SceneGraphComponent();
       DirectionalLight light = new DirectionalLight();
       light.setIntensity(1.0);
       sgcLight.setLight(light);
-      
+
       MatrixBuilder m = View.lookAt(new Vector(psn), origin);
       m.assignTo(sgcLight);
-      
+
       sgcDevelopment.addChild(sgcLight);
     }
-    
+
     Camera cam = sgcCamera.getCamera();
 
     System.out.println("Focal Length:" + cam.getFocalLength());
@@ -83,20 +84,26 @@ public class EmbeddedView extends View {
    *********************************************************************************/
   protected void updateCamera() {
     ManifoldPosition pos = development.getSource();
-    Vector embPsn = EmbeddedTriangulation.getCoord3D(pos.getFace(), pos.getPosition());
+    Vector embPsn = EmbeddedTriangulation.getCoord3D(pos.getFace(),
+        pos.getPosition());
 
     Vector forward, left, normal;
-    forward = EmbeddedTriangulation.embedVector(pos.getFace(), pos.getDirectionForward());
-    left = EmbeddedTriangulation.embedVector(pos.getFace(), pos.getDirectionLeft());
+    forward = EmbeddedTriangulation.embedVector(pos.getFace(),
+        pos.getDirectionForward());
+    left = EmbeddedTriangulation.embedVector(pos.getFace(),
+        pos.getDirectionLeft());
     normal = EmbeddedTriangulation.getEmbeddedNormal(pos.getFace());
 
     forward.normalize();
     left.normalize();
     normal.normalize();
 
-    Matrix rot = MatrixBuilder.euclidean().rotate(-Math.PI/8, left.getVectorAsArray()).getMatrix();
-    Vector adjustedNormal = new Vector(rot.multiplyVector(normal.getVectorAsArray()));
-    Vector adjustedForward = new Vector(rot.multiplyVector(forward.getVectorAsArray()));
+    Matrix rot = MatrixBuilder.euclidean()
+        .rotate(-Math.PI / 8, left.getVectorAsArray()).getMatrix();
+    Vector adjustedNormal = new Vector(rot.multiplyVector(normal
+        .getVectorAsArray()));
+    Vector adjustedForward = new Vector(rot.multiplyVector(forward
+        .getVectorAsArray()));
     Vector adjustedLeft = left;
     double matrix[] = new double[16];
 
@@ -122,12 +129,9 @@ public class EmbeddedView extends View {
 
     adjustedNormal.scale(3.0);
 
-    MatrixBuilder.euclidean()
-        .translate(adjustedNormal.getVectorAsArray())
-        .translate(embPsn.getVectorAsArray())
-        .times(matrix)
-        .rotateZ(-Math.PI / 2)
-        .assignTo(sgcCamera);
+    MatrixBuilder.euclidean().translate(adjustedNormal.getVectorAsArray())
+        .translate(embPsn.getVectorAsArray()).times(matrix)
+        .rotateZ(-Math.PI / 2).assignTo(sgcCamera);
   }
 
   /*********************************************************************************
@@ -141,36 +145,34 @@ public class EmbeddedView extends View {
     }
     sgcpools.clear();
 
-    int[][] ifsf_faces = new int[][]{ {0,1,2} };     
-    
-    for( Face f : Triangulation.faceTable.values() ){
+    int[][] ifsf_faces = new int[][] { { 0, 1, 2 } };
+
+    for (Face f : Triangulation.faceTable.values()) {
       double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
       double[][] texCoords = TextureCoords.getCoordsAsArray(f);
-      
-      IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();      
+
+      IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
       ifsf.setVertexCount(verts.length);
-      ifsf.setVertexCoordinates(verts);      
+      ifsf.setVertexCoordinates(verts);
       ifsf.setFaceCount(ifsf_faces.length);
-      ifsf.setFaceIndices(ifsf_faces);      
+      ifsf.setFaceIndices(ifsf_faces);
       ifsf.setGenerateEdgesFromFaces(true);
       ifsf.setGenerateFaceNormals(true);
       ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, texCoords);
       ifsf.update();
       Appearance app;
-      if(showTexture){
-      TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
-      app = TextureLibrary.getAppearance(td);
-      }
-      else
-         app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
-      
+      if (showTexture) {
+        TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+        app = TextureLibrary.getAppearance(td);
+      } else
+        app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
+
       SceneGraphComponent sgc = new SceneGraphComponent();
       sgc.setGeometry(ifsf.getGeometry());
       sgc.setAppearance(app);
       sgcDevelopment.addChild(sgc);
     }
-           
-    updateCamera();    
+    updateCamera();
   }
 
   /*********************************************************************************
@@ -190,7 +192,6 @@ public class EmbeddedView extends View {
    * and orient each marker in R^3, based upon its coordinates on the surface.
    *********************************************************************************/
   protected void generateMarkerGeometry() {
-
     HashMap<Marker, Vector[]> objectImages = new HashMap<Marker, Vector[]>();
 
     // get objects and paths for each face
@@ -200,7 +201,7 @@ public class EmbeddedView extends View {
       Face f = faceTable.get(i);
       getMarkerPlacementData(f, objectImages);
     }
-    Set<Marker> allMarkers = markers.getAllMarkers();    
+    Set<Marker> allMarkers = markers.getAllMarkers();
 
     for (Marker vo : allMarkers) {
       SceneGraphComponent sgc = sgcpools.get(vo);
@@ -213,11 +214,11 @@ public class EmbeddedView extends View {
       }
 
       Vector[] tuple = objectImages.get(vo);
-      if(tuple == null){
+      if (tuple == null) {
         sgcpools.get(vo).setVisible(false);
         continue;
       }
-      
+
       Vector pos = tuple[0];
       Vector forward = Vector.normalize(tuple[1]);
       Vector left = Vector.normalize(tuple[2]);
@@ -252,7 +253,6 @@ public class EmbeddedView extends View {
           .scale(vo.getAppearance().getScale()).assignTo(sgc);
       sgc.setVisible(true);
     }
-
   }
 
   /*********************************************************************************
@@ -265,7 +265,7 @@ public class EmbeddedView extends View {
   private void getMarkerPlacementData(Face f,
       HashMap<Marker, Vector[]> markerImages) {
 
-    Collection<Marker> markers = this.markers.getMarkers(f);    
+    Collection<Marker> markers = this.markers.getMarkers(f);
 
     synchronized (markers) {
       for (Marker m : markers) {
@@ -289,6 +289,45 @@ public class EmbeddedView extends View {
   @Override
   public void removeMarker(Marker m) {
     SceneGraphComponent sgc = sgcpools.get(m);
-    sgcMarkers.removeChild(sgc);    
+    sgcMarkers.removeChild(sgc);
+  }
+
+  /*********************************************************************************
+   * setTexture
+   * 
+   * This method is overridden from View, because in the case of an EmbeddedView
+   * we cannot simply "redevelop" the manifold to force an appearance change.
+   *********************************************************************************/
+  public void setTexture(boolean texture) {
+    showTexture = texture;
+    
+    int[][] ifsf_faces = new int[][] { { 0, 1, 2 } };
+    for (Face f : Triangulation.faceTable.values()) {
+      double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
+      double[][] texCoords = TextureCoords.getCoordsAsArray(f);
+
+      IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+      ifsf.setVertexCount(verts.length);
+      ifsf.setVertexCoordinates(verts);
+      ifsf.setFaceCount(ifsf_faces.length);
+      ifsf.setFaceIndices(ifsf_faces);
+      ifsf.setGenerateEdgesFromFaces(true);
+      ifsf.setGenerateFaceNormals(true);
+      ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, texCoords);
+      ifsf.update();
+      Appearance app;
+      if (showTexture) {
+        TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+        app = TextureLibrary.getAppearance(td);
+      } else
+        app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
+
+      SceneGraphComponent sgc = new SceneGraphComponent();
+      sgc.setGeometry(ifsf.getGeometry());
+      sgc.setAppearance(app);
+      sgcDevelopment.addChild(sgc);
+    }    
+    
+    updateScene();
   }
 }
