@@ -49,8 +49,8 @@ public class EmbeddedView extends View {
    * an EmbeddedView object to display the specified surface.
    *********************************************************************************/
   public EmbeddedView(Development d, MarkerHandler mh,
-      FaceAppearanceScheme fas, BreadCrumbs crumb, ForwardGeodesic geo) {
-    super(d, mh, fas, crumb, geo);
+      FaceAppearanceScheme fas) {
+    super(d, mh, fas);
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
 

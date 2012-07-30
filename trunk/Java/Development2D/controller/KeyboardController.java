@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 
 import marker.BreadCrumbs;
 import marker.ForwardGeodesic;
+import marker.Marker;
 
 import development.Development;
 
@@ -24,6 +25,12 @@ public class KeyboardController extends UserController implements
     super(dev, bc, geo);
     KeyboardFocusManager.getCurrentKeyboardFocusManager()
         .addKeyEventDispatcher(this);
+  }
+  public KeyboardController(Marker source){
+    super(null, null, null);
+    this.source = source;
+    KeyboardFocusManager.getCurrentKeyboardFocusManager()
+    .addKeyEventDispatcher(this);
   }
 
   /*********************************************************************************

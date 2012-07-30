@@ -10,8 +10,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import marker.BreadCrumbs;
 import marker.ForwardGeodesic;
+import marker.Marker;
 
 import development.Development;
+import development.Vector;
 
 public abstract class UserController implements Runnable {
   /*********************************************************************************
@@ -49,6 +51,7 @@ public abstract class UserController implements Runnable {
    * collection of discrete actions.
    *********************************************************************************/
   private Development development;
+  protected Marker source;
   protected BlockingQueue<Action> actionQueue;
   private BreadCrumbs crumbs;
   private ForwardGeodesic geodesic;
@@ -183,15 +186,38 @@ public abstract class UserController implements Runnable {
 
     switch (aa) {
     case Forward:
+      if(development == null){
+        Vector dx = source.getPosition().getDirectionForward();
+        dx.normalize();
+        dx.scale(.01);
+        source.getPosition().move(dx);
+      }  
+      else
       development.translateSourcePoint(0.01, 0);
       break;
     case Back:
+      if(development == null){
+        Vector forward = source.getPosition().getDirectionForward();
+        forward.normalize();
+        Vector dx = new Vector(forward);
+        dx.scale(-.01);
+        source.getPosition().move(dx);
+      }  
+      else
       development.translateSourcePoint(-0.01, 0);
       break;
     case Left:
+      if(development == null){
+         source.getPosition().rotateOrientation(-.05);
+      }  
+      else
       development.rotate(-0.05);
       break;
     case Right:
+      if(development == null){
+        source.getPosition().rotateOrientation(.05);
+      }
+      else
       development.rotate(0.05);
       break;
     case start:
