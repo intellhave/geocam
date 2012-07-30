@@ -47,10 +47,8 @@ public abstract class View {
    *********************************************************************************/
   protected Development development;
   protected MarkerHandler markers;
-  protected BreadCrumbs crumbs;
   protected FaceAppearanceScheme faceAppearanceScheme;
   protected boolean showTexture;
-  protected ForwardGeodesic geo;
 
   /*********************************************************************************
    * Scene Graph Data
@@ -85,12 +83,9 @@ public abstract class View {
    * This constructor is responsible for setting up the scene graph and
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
-  public View(Development development, MarkerHandler markers,
-      FaceAppearanceScheme fas, BreadCrumbs crumb, ForwardGeodesic geo) {
+  public View(Development development, MarkerHandler markers, FaceAppearanceScheme fas ) {
     this.development = development;
     this.markers = markers;
-    this.crumbs = crumb;
-    this.geo = geo;
   
     this.faceAppearanceScheme = fas;
     showTexture = true;

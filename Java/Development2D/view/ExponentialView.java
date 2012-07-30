@@ -52,8 +52,8 @@ public class ExponentialView extends View {
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
   public ExponentialView(Development d, MarkerHandler mh,
-      FaceAppearanceScheme fas, BreadCrumbs crumbs, ForwardGeodesic geo) {
-    super(d, mh, fas, crumbs, geo);
+      FaceAppearanceScheme fas) {
+    super(d, mh, fas);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
 
     // create light
