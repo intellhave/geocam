@@ -1,6 +1,7 @@
 package triangulation;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /*********************************************************************************
@@ -50,5 +51,34 @@ public class FaceGrouping {
     for (Face f : faces)
       copy.add(f);
     return copy;
+  }
+  
+  /*********************************************************************************
+   * getLocalEdges
+   * 
+   * This method returns a list containing all the edges that lie around the
+   * outside of the face group, but not the internal edges (i.e. it returns the
+   * edges of the larger polygon the group represents).
+   * 
+   * To find these edges it inspects the local edges of every face in the group.
+   * Since each edge has at most two faces connected to it, this means that each
+   * edge may be inspected either once or twice. If it is inspected once, this
+   * means it belongs to only one face in the group and should be returned. If
+   * it is inspected twice, this means that it belongs to two faces in the
+   * triangulation and is therefore an "internal" edge which should not be
+   * returned. Consequently, the first time an edge is inspected it is added to
+   * the list of edges to be returned. If it is inspected a second time, it is
+   * removed from the list.
+   *********************************************************************************/
+  public List<Edge> getLocalEdges() {
+    List<Edge> edges = new LinkedList<Edge>();
+    for(Face f : faces)
+      for(Edge e : f.getLocalEdges()){
+        if(edges.contains(e))
+          edges.remove(e);
+        else
+          edges.add(e);
+      }
+    return edges;
   }
 }
