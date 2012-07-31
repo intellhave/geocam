@@ -54,7 +54,7 @@ public class MarkerAppearance {
    *********************************************************************************/
   public static enum ModelType {
     ANT, APPLE, COOKIE, ROCKET, SATTELITE, CUBE, SPHERE, ARROWHEAD, ARROWBODY,
-      LADYBUG
+      LADYBUG, FLAG
   };
 
   /*********************************************************************************
@@ -99,6 +99,10 @@ public class MarkerAppearance {
 
     sgc = Primitives.sphere(1.0, new double[] { 0.0, 0.0, 0.0 });
     templateSGCs.put(ModelType.SPHERE, sgc);
+    
+    ff= new File(path+"x.3ds");
+    sgc = loadTemplateSGC(ff);
+    templateSGCs.put(ModelType.FLAG, sgc);
     
     sgc = new SceneGraphComponent();
     sgc.setGeometry(Primitives.arrow(0.0, 0.0, 1.0, 0.0, 0.25));
@@ -302,6 +306,12 @@ public class MarkerAppearance {
     app.setAttribute(LINE_SHADER + "." + DIFFUSE_COLOR, this.color);
     app.setAttribute(POINT_SHADER + "." + DIFFUSE_COLOR, this.color);
     app.setAttribute(POLYGON_SHADER + "." + DIFFUSE_COLOR, this.color);
+    
+    if(this.model == ModelType.FLAG){
+      app.setAttribute(LINE_SHADER + "." + DIFFUSE_COLOR, Color.red);
+      app.setAttribute(POINT_SHADER + "." + DIFFUSE_COLOR, Color.red);
+      app.setAttribute(POLYGON_SHADER + "." + DIFFUSE_COLOR, Color.red);
+    }
     
     sgc.setAppearance(app);
 
