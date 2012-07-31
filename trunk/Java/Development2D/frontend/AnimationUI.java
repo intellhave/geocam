@@ -14,7 +14,6 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.FaceAppearanceScheme;
 import view.UnfoldingView;
-import view.View;
 import controller.KeyboardController;
 import controller.UserController;
 import development.Coord2D;
@@ -24,22 +23,16 @@ import development.Vector;
 
 public class AnimationUI {
   private static Marker source;
-  private static View unfoldingView;
+  private static UnfoldingView unfoldingView;
   private static JFrame frame;
   private static UserController control;
   private static FaceAppearanceScheme faceAppearanceScheme;
-  private static boolean developerMode;
 
   public static void main(String[] args) {
-    // This is a good option to set if you wan't more information about what
-    // JReality does behind the scenes
-    // JOGLConfiguration.getLogger().setLevel(Level.INFO);
-
-    // Note: For correct initialization, it is important the method calls listed
-    // below occur in the particular order listed.
-    developerMode = true;
     initModel();
     initViews();
+    //display the unfolding, then give control to the user
+    unfoldingView.displayUnfolding();
     initControls();
     runSimulation();
   }
@@ -68,10 +61,7 @@ public class AnimationUI {
       accumulator += frameTime;
 
       while (accumulator >= dt) {
-
-        //Face prev = source.getPosition().getFace();
         control.runNextAction();
-       // if(Vector.closeToAnyOf(vectors, v, epsilon))
         accumulator -= dt;
       }
       unfoldingView.updateGeometry();
@@ -106,6 +96,7 @@ public class AnimationUI {
 
   private static void initModel() {
     String file = "Data/surfaces/dodec2.off";
+    //String file = "Data/surfaces/cube_surf.off";
 
     String extension = file.substring(file.length() - 3, file.length());
 

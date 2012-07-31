@@ -418,13 +418,13 @@ public class DevelopmentUI {
     }
 
     viewerController.setMarkerHandler(markerHandler);
+    initModelControls();
   }
 
   public static void setExponentialView(boolean viewEnabled,
       boolean textureEnabled) {
     if (viewEnabled) {
-      exponentialView = new ExponentialView(development, markerHandler,
-          faceAppearanceScheme, crumbs, geo);
+      exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
       exponentialView.setTexture(textureEnabled);
       exponentialView.updateGeometry();
       exponentialView.initializeNewManifold();
@@ -462,8 +462,7 @@ public class DevelopmentUI {
 
   public static void setEmbeddedView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled && isEmbedded) {
-      embeddedView = new EmbeddedView(development, markerHandler,
-          faceAppearanceScheme, crumbs, geo);
+      embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme);
       embeddedView.setTexture(textureEnabled);
       embeddedView.updateGeometry();
       embeddedView.initializeNewManifold();
@@ -502,8 +501,7 @@ public class DevelopmentUI {
   public static void setFirstPersonView(boolean viewEnabled,
       boolean textureEnabled) {
     if (viewEnabled) {
-      firstPersonView = new FirstPersonView(development, markerHandler,
-          faceAppearanceScheme, crumbs, geo);
+      firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme);
       firstPersonView.setTexture(textureEnabled);
       firstPersonView.updateGeometry();
       firstPersonView.initializeNewManifold();

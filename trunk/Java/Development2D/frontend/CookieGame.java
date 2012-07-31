@@ -204,7 +204,7 @@ public class CookieGame {
     faceAppearanceScheme = new FaceAppearanceScheme();
     int[] framePosition = { 0, 10 };
     int[] frameSize = { 700, 700 };
-    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme, null, null);
+    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
     gameView.updateGeometry();
     gameView.initializeNewManifold();
     gameView.updateScene();
