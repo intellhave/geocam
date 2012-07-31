@@ -2,7 +2,9 @@ package view;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import marker.Marker;
 import triangulation.Edge;
@@ -17,6 +19,7 @@ import de.jreality.math.Matrix;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.DirectionalLight;
+import de.jreality.scene.Geometry;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import development.DevelopmentComputations;
@@ -29,10 +32,11 @@ public class UnfoldingView extends View {
 
   private Marker source;
   private SceneGraphComponent sourceSGC;
-  private HashMap<Face, SceneGraphComponent> faceGroups;
+  private HashMap<FaceGrouping, SceneGraphComponent> faceGroups;
   private List<FaceGrouping> checked;
   private List<SceneGraphComponent> unfolded;
-  private int recursionDepth = 2;
+  private int recursionDepth = 3;
+  private TreeNode root;
 
   public UnfoldingView(Marker source, FaceAppearanceScheme fas) {
     super(null, null, fas);
@@ -40,7 +44,7 @@ public class UnfoldingView extends View {
     sourceSGC = source.getAppearance().makeSceneGraphComponent();
     sgcMarkers.addChild(sourceSGC);
 
-    faceGroups = new HashMap<Face, SceneGraphComponent>();
+    faceGroups = new HashMap<FaceGrouping, SceneGraphComponent>();
     checked = new ArrayList<FaceGrouping>();
     unfolded = new ArrayList<SceneGraphComponent>();
 
@@ -73,9 +77,14 @@ public class UnfoldingView extends View {
       List<Face> connectedFaces = fg.getFaces();
       for (Face f : connectedFaces) {
         group.addChild(makeSGC(f));
-        faceGroups.put(f, group);
       }
+      faceGroups.put(fg, group);
     }
+    Face sourceFace = source.getPosition().getFace();
+    SceneGraphComponent startFace = faceGroups.get(sourceFace);
+    Matrix identity = MatrixBuilder.euclidean().getMatrix();
+    root = new TreeNode(startFace, Triangulation.groupTable.get(sourceFace),
+        identity, identity);
   }
 
   protected SceneGraphComponent makeSGC(Face f) {
@@ -158,7 +167,6 @@ public class UnfoldingView extends View {
     ManifoldPosition pos = source.getPosition();
     Vector embedPos = EmbeddedTriangulation.getCoord3D(pos.getFace(),
         pos.getPosition());
-
     Vector forward, left, normal;
     forward = EmbeddedTriangulation.embedVector(pos.getFace(),
         pos.getDirectionForward());
@@ -170,41 +178,47 @@ public class UnfoldingView extends View {
     left.normalize();
     normal.normalize();
 
-    Matrix rot = MatrixBuilder.euclidean()
-        .rotate(-Math.PI / 8, left.getVectorAsArray()).getMatrix();
-    Vector adjustedNormal = new Vector(rot.multiplyVector(normal
-        .getVectorAsArray()));
-    Vector adjustedForward = new Vector(rot.multiplyVector(forward
-        .getVectorAsArray()));
+//    Matrix rot = MatrixBuilder.euclidean()
+//        .rotate(-Math.PI / 8, left.getVectorAsArray()).getMatrix();
+
+    Vector adjustedForward = new Vector(forward);
+    adjustedForward.scale(-.5);
+    Vector offset = Vector.add(normal, adjustedForward);
+    offset.scale(5.0);
+    
+    Vector position = Vector.add(offset,embedPos);
+    
     Vector adjustedLeft = left;
-    double matrix[] = new double[16];
-
-    matrix[0 * 4 + 0] = adjustedForward.getComponent(0);
-    matrix[0 * 4 + 1] = adjustedLeft.getComponent(0);
-    matrix[0 * 4 + 2] = adjustedNormal.getComponent(0);
-    matrix[0 * 4 + 3] = 0.0;
-
-    matrix[1 * 4 + 0] = adjustedForward.getComponent(1);
-    matrix[1 * 4 + 1] = adjustedLeft.getComponent(1);
-    matrix[1 * 4 + 2] = adjustedNormal.getComponent(1);
-    matrix[1 * 4 + 3] = 0.0;
-
-    matrix[2 * 4 + 0] = adjustedForward.getComponent(2);
-    matrix[2 * 4 + 1] = adjustedLeft.getComponent(2);
-    matrix[2 * 4 + 2] = adjustedNormal.getComponent(2);
-    matrix[2 * 4 + 3] = 0.0;
-
-    matrix[3 * 4 + 0] = 0.0;
-    matrix[3 * 4 + 1] = 0.0;
-    matrix[3 * 4 + 2] = 0.0;
-    matrix[3 * 4 + 3] = 1.0;
-
-    adjustedNormal.scale(3.0);
-
-    MatrixBuilder.euclidean().translate(adjustedNormal.getVectorAsArray())
-        .translate(embedPos.getVectorAsArray()).times(matrix)
-        .rotateZ(-Math.PI / 2).assignTo(sgcCamera);
-
+//    double matrix[] = new double[16];
+//
+//    matrix[0 * 4 + 0] = adjustedForward.getComponent(0);
+//    matrix[0 * 4 + 1] = adjustedLeft.getComponent(0);
+//    matrix[0 * 4 + 2] = adjustedNormal.getComponent(0);
+//    matrix[0 * 4 + 3] = 0.0;
+//
+//    matrix[1 * 4 + 0] = adjustedForward.getComponent(1);
+//    matrix[1 * 4 + 1] = adjustedLeft.getComponent(1);
+//    matrix[1 * 4 + 2] = adjustedNormal.getComponent(1);
+//    matrix[1 * 4 + 3] = 0.0;
+//
+//    matrix[2 * 4 + 0] = adjustedForward.getComponent(2);
+//    matrix[2 * 4 + 1] = adjustedLeft.getComponent(2);
+//    matrix[2 * 4 + 2] = adjustedNormal.getComponent(2);
+//    matrix[2 * 4 + 3] = 0.0;
+//
+//    matrix[3 * 4 + 0] = 0.0;
+//    matrix[3 * 4 + 1] = 0.0;
+//    matrix[3 * 4 + 2] = 0.0;
+//    matrix[3 * 4 + 3] = 1.0;
+//
+//    // adjustedForward.scale(3.0);
+//    adjustedNormal.scale(5.0);
+//
+//    MatrixBuilder.euclidean().translate(adjustedNormal.getVectorAsArray())
+//        .translate(embedPos.getVectorAsArray()).times(matrix)
+//        .rotateZ(-Math.PI / 2).assignTo(sgcCamera);
+     MatrixBuilder mb = lookAt(position, embedPos, normal);
+     mb.assignTo(sgcCamera);
   }
 
   public void removeMarker(Marker m) {
@@ -216,28 +230,52 @@ public class UnfoldingView extends View {
    * This public method allows AnimationUI to start the unfolding process.
    *********************************************************************************/
   public void displayUnfolding() {
-    Face sourceFace = source.getPosition().getFace();
-    unfolded.add(faceGroups.get(sourceFace));
-    Matrix identity = MatrixBuilder.euclidean().getMatrix();
-    unfold(sourceFace, identity, 0);
+    // Face sourceFace = source.getPosition().getFace();
+    // unfolded.add(faceGroups.get(sourceFace));
+    buildTree();
+    unfoldTree();
   }
 
   /*********************************************************************************
-   * unfold
+   * buildTree
    * 
-   * This recursive method unfolds all faces in the embedding in a systematic way.
+   * This recursive method unfolds all faces in the embedding in a systematic
+   * way.
    * 
    * TODO: add more description here
    * 
-   * TODO: Make the traversal of the surface "breadth first"
-   * TODO: allow for multiple SceneGraphComponents for each group of faces so that
-   *      they may appear in multiple places
-   * TODO: determine how to clip faces
+   * TODO: Make the traversal of the surface "breadth first" TODO: allow for
+   * multiple SceneGraphComponents for each group of faces so that they may
+   * appear in multiple places TODO: determine how to clip faces
    *********************************************************************************/
+  private void buildTree() {
+    Matrix identity = MatrixBuilder.euclidean().getMatrix();
+    buildTree(identity, 0, root);
+
+    Queue<TreeNode> q = new LinkedList<TreeNode>();
+    q.add(root);
+    while (q.size() > 0) {
+      TreeNode n = q.poll();
+      for (TreeNode child : n.children)
+        q.add(child);
+
+      SceneGraphComponent rotatingFace = faceGroups.get(n.faceList);
+      if (unfolded.contains(rotatingFace)) {
+        SceneGraphComponent copy = copySceneGraph(rotatingFace);
+        copy.setVisible(false);
+        sgcDevelopment.addChild(copy);
+        rotatingFace = copy;
+      } else {
+        unfolded.add(rotatingFace);
+      }
+      n.sgc = rotatingFace;
+    }
+  }
+  
   @SuppressWarnings("static-access")
-  private void unfold(Face f, Matrix t, int depth) {
+  private void buildTree(Matrix t, int depth, TreeNode parent) {
     if (depth < recursionDepth) {
-      FaceGrouping fg = Triangulation.groupTable.get(f);
+      FaceGrouping fg = parent.faceList;
       Face f1 = null;
       for (Edge sharedEdge : fg.getLocalEdges()) {
         // determine which face in the group has that edge
@@ -248,29 +286,28 @@ public class UnfoldingView extends View {
         }
 
         Face f2 = DevelopmentComputations.getNewFace(f1, sharedEdge);
-        SceneGraphComponent rotatingFace = faceGroups.get(f2);
-        
-        //for now, if a face has already been unfolded do not rotate it again
-        if( unfolded.contains(rotatingFace) ) continue;
-        
-        unfolded.add(rotatingFace);
-        
+        FaceGrouping fg2 = Triangulation.groupTable.get(f2);
+        SceneGraphComponent rotatingFace = faceGroups.get(fg2);
+
+        // Don't unfold the face if it is the source face
+        if (rotatingFace.equals(faceGroups.get(Triangulation.groupTable.get(source.getPosition().getFace()))))
+          continue;
+
         double angle = computeAngle(f1, f2);
         Vertex v1 = sharedEdge.getLocalVertices().get(0);
         Vertex v2 = sharedEdge.getLocalVertices().get(1);
         Vertex first = null;
         Vertex second = null;
-        
+
         int orientation = getOrientation(v1, v2, f1);
-        if(orientation == 1) {
+        if (orientation == 1) {
           first = v1;
           second = v2;
-        }
-        else {
+        } else {
           first = v2;
           second = v1;
         }
-        
+
         Vector vec1 = EmbeddedTriangulation.getCoord3D(first);
         double[] coord1 = new double[3];
         for (int i = 0; i < 3; i++) {
@@ -281,28 +318,72 @@ public class UnfoldingView extends View {
         for (int i = 0; i < 3; i++) {
           coord2[i] = vec2.getComponent(i);
         }
-        
-        //perform the transformation on the rotating face
-        //Note that in each step of the animation loop, you must compose the previous
-        //transformation (i.e. the transformation to move the face into position) with 
-        //the current step of the rotation
+
+        // perform the transformation on the rotating face
+        // Note that in each step of the animation loop, you must compose the
+        // previous
+        // transformation (i.e. the transformation to move the face into
+        // position) with
+        // the current step of the rotation
         Matrix rot;
-        int step = 0;
-        while (step <= 100) {
-          rot = MatrixBuilder.euclidean().rotate(coord1, coord2, -(step/100.0)*angle).getMatrix();
-          Matrix.times(t, rot).assignTo(rotatingFace);
-          step++;
-          viewer.render();
-          try {
-            Thread.currentThread().sleep(1);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-        rot = MatrixBuilder.euclidean().rotate(coord1, coord2, -angle).getMatrix();
+        rot = MatrixBuilder.euclidean().rotate(coord1, coord2, -angle)
+            .getMatrix();
+        TreeNode node = new TreeNode(fg2, t, rot, angle, coord1, coord2);
+        parent.children.add(node);
+
         Matrix newTrans = Matrix.times(t, rot);
-        
-        unfold(f2, newTrans, depth + 1);
+
+        buildTree(newTrans, depth + 1, node);
+      }
+    }
+  }
+
+  private SceneGraphComponent copySceneGraph(SceneGraphComponent root) {
+    SceneGraphComponent sgc = new SceneGraphComponent();
+
+    sgc.setAppearance(root.getAppearance());
+    sgc.setGeometry(root.getGeometry());
+
+    int numChildren = root.getChildComponentCount();
+    for (int ii = 0; ii < numChildren; ii++) {
+      SceneGraphComponent child = root.getChildComponent(ii);
+      sgc.addChild(copySceneGraph(child));
+    }
+
+    return sgc;
+  }
+
+  private void unfoldTree() {
+
+    Queue<TreeNode> q = new LinkedList<TreeNode>();
+    q.add(root);
+
+    while (q.size() > 0) {
+      TreeNode node = q.poll();
+      for (TreeNode child : node.children) {
+        q.add(child);
+      }
+
+      if(node == root) continue;
+      Matrix rot = node.rotation;
+      Matrix t = node.transformation;
+      double[] coord1 = node.coord1;
+      double[] coord2 = node.coord2;
+      double angle = node.angle;
+      SceneGraphComponent rotatingFace = node.sgc;
+      rotatingFace.setVisible(true);
+      int step = 0;
+      while (step <= 50) {
+        rot = MatrixBuilder.euclidean()
+            .rotate(coord1, coord2, -(step / 50.0) * angle).getMatrix();
+        Matrix.times(t, rot).assignTo(rotatingFace);
+        step++;
+        viewer.render();
+        try {
+          Thread.currentThread().sleep(1);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
     }
   }
@@ -341,11 +422,12 @@ public class UnfoldingView extends View {
     Vector f2vec2 = Vector.subtract(f2coord3, f2coord1);
     Vector f2normal = Vector.cross(f2vec1, f2vec2);
 
-    double angle = Math.acos(Vector.dot(f1normal, f2normal) / (f1normal.length() * f2normal.length()));
+    double angle = Math.acos(Vector.dot(f1normal, f2normal)
+        / (f1normal.length() * f2normal.length()));
 
     return angle;
   }
-  
+
   /*********************************************************************************
    * getOrientation
    * 
@@ -355,15 +437,17 @@ public class UnfoldingView extends View {
    * clockwise order, it returns -1.
    * 
    * TODO: Is this necessary to make the rotations work? And if so, is there a
-   *    simpler algorithm for determining orientation?
+   * simpler algorithm for determining orientation?
    *********************************************************************************/
   private int getOrientation(Vertex v1, Vertex v2, Face f) {
-    
+
     StdFace standface = new StdFace(f);
-    
-    //Find which vertex on the standard face is equal to v1
-    //If the next vertex on the standard face is v2, the ordering is counter-clockwise
-    //If not, v2 must have occurred directly before v1, and the ordering is clockwise
+
+    // Find which vertex on the standard face is equal to v1
+    // If the next vertex on the standard face is v2, the ordering is
+    // counter-clockwise
+    // If not, v2 must have occurred directly before v1, and the ordering is
+    // clockwise
     if (standface.v1.equals(v1))
       if (standface.v2.equals(v2))
         return 1;
@@ -374,11 +458,55 @@ public class UnfoldingView extends View {
         return 1;
       else
         return -1;
-    else 
-      if (standface.v1.equals(v2))
-        return 1;
-      else
-        return -1;
+    else if (standface.v1.equals(v2))
+      return 1;
+    else
+      return -1;
+  }
+
+  private class TreeNode {
+    private SceneGraphComponent sgc;
+    private FaceGrouping faceList;
+    private Matrix transformation;
+    private List<TreeNode> children;
+    private Matrix rotation;
+    private double angle;
+    private double[] coord1;
+    private double[] coord2;
+
+    public TreeNode(SceneGraphComponent sgc, FaceGrouping fg, Matrix trans,
+        Matrix rotate, double angle, double[] coord1, double[] coord2) {
+      this.sgc = sgc;
+      faceList = fg;
+      transformation = trans;
+      children = new LinkedList<TreeNode>();
+      rotation = rotate;
+      this.angle = angle;
+      this.coord1 = coord1;
+      this.coord2 = coord2;
+    }
+    
+    public TreeNode(FaceGrouping fg, Matrix trans,
+        Matrix rotate, double angle, double[] coord1, double[] coord2) {
+      //this.sgc = sgc;
+      faceList = fg;
+      transformation = trans;
+      children = new LinkedList<TreeNode>();
+      rotation = rotate;
+      this.angle = angle;
+      this.coord1 = coord1;
+      this.coord2 = coord2;
+    }
+
+    // this is a constructor for the root
+    public TreeNode(SceneGraphComponent sgc, FaceGrouping fg, Matrix trans,
+        Matrix rotate) {
+      this.sgc = sgc;
+      faceList = fg;
+      transformation = trans;
+      children = new LinkedList<TreeNode>();
+      rotation = rotate;
+    }
   }
 
 }
