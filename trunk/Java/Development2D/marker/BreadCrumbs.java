@@ -21,7 +21,7 @@ public class BreadCrumbs {
   private MarkerHandler markers;
   private Queue<Marker> trail;  
   private MarkerAppearance crumb = new MarkerAppearance(
-      MarkerAppearance.ModelType.COOKIE, .5);
+      MarkerAppearance.ModelType.FLAG, .045);
 
   public BreadCrumbs(MarkerHandler mh) {    
     markers = mh;
