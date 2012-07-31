@@ -82,7 +82,7 @@ public class AnimationUI {
     frame.setLocation(40, 40);
     frame.setResizable(true);
 
-    Dimension size = new Dimension(400, 400);
+    Dimension size = new Dimension(800, 800);
     Container contentPane = frame.getContentPane();
     contentPane
         .add((Component) unfoldingView.getViewer().getViewingComponent());

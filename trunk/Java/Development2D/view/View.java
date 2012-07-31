@@ -322,21 +322,29 @@ public abstract class View {
 
   protected static MatrixBuilder lookAt(Vector psn, Vector target, Vector up) {
     Vector forward = Vector.subtract(target, psn);
+    forward.normalize();
+    Vector forwardScaled = new Vector(forward);
+    forwardScaled.scale(Vector.dot(forward, up));
+    Vector upUnit = new Vector(up);
+    upUnit.subtract(forwardScaled);
+    upUnit.normalize();
+    
     Vector v = Vector.cross(forward, up);
+    v.normalize();
     
     double[] matrix = new double[16];
     matrix[0 * 4 + 0] = v.getComponent(0);
-    matrix[0 * 4 + 1] = up.getComponent(0);
+    matrix[0 * 4 + 1] = upUnit.getComponent(0);
     matrix[0 * 4 + 2] = -forward.getComponent(0);
     matrix[0 * 4 + 3] = 0.0;
     
     matrix[1 * 4 + 0] = v.getComponent(1);
-    matrix[1 * 4 + 1] = up.getComponent(1);
+    matrix[1 * 4 + 1] = upUnit.getComponent(1);
     matrix[1 * 4 + 2] = -forward.getComponent(1);
     matrix[1 * 4 + 3] = 0.0;
    
     matrix[2 * 4 + 0] = v.getComponent(2);
-    matrix[2 * 4 + 1] = up.getComponent(2);
+    matrix[2 * 4 + 1] = upUnit.getComponent(2);
     matrix[2 * 4 + 2] = -forward.getComponent(2);
     matrix[2 * 4 + 3] = 0.0;
         
