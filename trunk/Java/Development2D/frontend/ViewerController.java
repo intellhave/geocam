@@ -69,7 +69,13 @@ public class ViewerController extends JFrame {
    ********************************************************************************/
   private JMenuBar menuBar;
   private JMenu file;
-  private JMenuItem open;
+  private JMenuItem cube;
+  private JMenuItem dodec;
+  private JMenuItem tetra;
+  private JMenuItem neckpinch;  
+  private JMenuItem cone;
+  private JMenuItem icosa;
+  private JMenuItem saddle;
   private JPanel textBoxPanel;
   private JPanel recDepthPanel;
   private JFormattedTextField recDepth;
@@ -118,32 +124,128 @@ public class ViewerController extends JFrame {
       menuBar.add(file);
       file.setText("File");
       {
+        cube = new JMenuItem();
+        dodec = new JMenuItem();
+        tetra = new JMenuItem();
+        neckpinch = new JMenuItem();
+        cone = new JMenuItem();
+        icosa = new JMenuItem();
+        saddle = new JMenuItem();
         
-        open = new JMenuItem();
-        file.add(open);
-        open.setText("Load Surface");
-        open.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-            JFileChooser fc = new JFileChooser();
-
-            fc.setDialogTitle("Open File");
-            // Choose only files, not directories
-            fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            // Start in current directory
-            fc.setCurrentDirectory(new File("."));
-            fc.showOpenDialog(null);
-
+        file.add(cube);
+        file.add(dodec);
+        file.add(tetra);
+        file.add(neckpinch);
+        file.add(cone);
+        file.add(icosa);
+        file.add(saddle);
+        
+        cube.setText("Cube");
+        dodec.setText("Dodecahedron");
+        tetra.setText("Tetrahedron");
+        neckpinch.setText("Barbell");
+        cone.setText("Cone");
+        icosa.setText("Icosahedron");
+        saddle.setText("Saddle");
+        
+        cube.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
             File file = null;
             try {
-              file = fc.getSelectedFile();
+              file = new File("Data/surfaces/cube_surf.off");
             } catch (Exception ex) {
               System.out.println("Invalid file");
             }
             DevelopmentUI.loadSurface(file.getAbsolutePath());
             DevelopmentUI.resetView();
             resetViewController();
-          }
+          } 
         });
+        
+        dodec.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
+            File file = null;
+            try {
+              file = new File("Data/surfaces/dodec2.off");
+            } catch (Exception ex) {
+              System.out.println("Invalid file");
+            }
+            DevelopmentUI.loadSurface(file.getAbsolutePath());
+            DevelopmentUI.resetView();
+            resetViewController();
+          } 
+        });
+        
+        tetra.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
+            File file = null;
+            try {
+              file = new File("Data/surfaces/tetra2.off");
+            } catch (Exception ex) {
+              System.out.println("Invalid file");
+            }
+            DevelopmentUI.loadSurface(file.getAbsolutePath());
+            DevelopmentUI.resetView();
+            resetViewController();
+          } 
+        });
+        
+        neckpinch.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
+            File file = null;
+            try {
+              file = new File("Data/surfaces/neckpinch.off");
+            } catch (Exception ex) {
+              System.out.println("Invalid file");
+            }
+            DevelopmentUI.loadSurface(file.getAbsolutePath());
+            DevelopmentUI.resetView();
+            resetViewController();
+          } 
+        });
+        
+        cone.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
+            File file = null;
+            try {
+              file = new File("Data/surfaces/scaledCone.off");
+            } catch (Exception ex) {
+              System.out.println("Invalid file");
+            }
+            DevelopmentUI.loadSurface(file.getAbsolutePath());
+            DevelopmentUI.resetView();
+            resetViewController();
+          } 
+        });
+        
+        icosa.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
+            File file = null;
+            try {
+              file = new File("Data/off/icosa.off");
+            } catch (Exception ex) {
+              System.out.println("Invalid file");
+            }
+            DevelopmentUI.loadSurface(file.getAbsolutePath());
+            DevelopmentUI.resetView();
+            resetViewController();
+          } 
+        });
+        
+        saddle.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
+            File file = null;
+            try {
+              file = new File("Data/off/saddle.off");
+            } catch (Exception ex) {
+              System.out.println("Invalid file");
+            }
+            DevelopmentUI.loadSurface(file.getAbsolutePath());
+            DevelopmentUI.resetView();
+            resetViewController();
+          } 
+        });
+        
       }
     }
 

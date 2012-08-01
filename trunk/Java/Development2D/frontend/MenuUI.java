@@ -141,7 +141,7 @@ public class MenuUI extends JFrame {
     cookiePause_resume = compose(pausedMenuBackground, cookiePauseResume);
     cookiePause_options = compose(pausedMenuBackground, cookiePauseOptions);
     cookiePause_exit = compose(pausedMenuBackground, cookiePauseExit);
-    cookieWin_again = compose(cookieWinAgain, cookieWinAgain);
+    cookieWin_again = compose(pausedMenuBackground, cookieWinAgain);
     cookieWin_exit = compose(cookieWinExit, cookieWinExit);
 
     about = compose(aboutPage, aboutPage);
