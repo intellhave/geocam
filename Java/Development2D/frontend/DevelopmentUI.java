@@ -20,6 +20,7 @@ import marker.BreadCrumbs;
 import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
+import marker.MarkerAppearance.ModelType;
 import marker.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
@@ -258,8 +259,16 @@ public class DevelopmentUI {
   private static void initModel() {
     // String filename = "Data/surfaces/cube_surf.off";
     // String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
-    String filename = "Data/surfaces/dodec2.off";
+   // String filename = "Data/surfaces/tetra2.off";
+    //String filename = "Data/surfaces/neckpinch.off";
+   // String filename = "Data/surfaces/cone.off";
+   // String filename = "Data/surfaces/scaledCone.off";
+    //String filename = "Data/off/sphere.off";
+   // String filename = "Data/surfaces/dodec2.off";
     // String filename = "Data/off/icosa.off";
+    //String filename = "Data/surfaces/mobius2.off";
+   // String filename = "Data/surfaces/mobius.off";
+    String filename = "Data/off/saddle.off";
     loadSurface(filename);
   }
 
@@ -334,14 +343,15 @@ public class DevelopmentUI {
     
     Random rand = new Random();
     // Introduce three other markers to move around on the manifold.
-    for (int ii = 0; ii < 3; ii++) {
+    for (int ii = 0; ii < 1; ii++) {
       pos = new ManifoldPosition(development.getSource());
-      app = new MarkerAppearance(source.getAppearance().getModelType(), .5);
+      app = new MarkerAppearance(ModelType.ANT, .75);
       double a = rand.nextDouble() * Math.PI * 2;
       Vector vel = new Vector(Math.cos(a), Math.sin(a));
       vel.scale(0.0005);
 
       Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
+      m.setSpeed(0.0);
       markerHandler.addMarker(m);
     }
 
@@ -385,7 +395,7 @@ public class DevelopmentUI {
    * slider that controls how big the markers are should be initialized here.
    *********************************************************************************/
   private static void initViewControls() {
-    viewerController = new ViewerController(markerHandler, development);
+    viewerController = new ViewerController(markerHandler, development, geo);
     viewerController.setVisible(true);
   }
 
@@ -419,6 +429,7 @@ public class DevelopmentUI {
 
     viewerController.setMarkerHandler(markerHandler);
     initModelControls();
+    viewerController.setGeodesics(geo);
   }
 
   public static void setExponentialView(boolean viewEnabled,
@@ -436,7 +447,7 @@ public class DevelopmentUI {
       frame.setLocation(400, 40);
       frame.setResizable(true);
 
-      Dimension size = new Dimension(400, 400);
+      Dimension size = new Dimension(800, 800);
       Container contentPane = frame.getContentPane();
       contentPane.add((Component) exponentialView.getViewer()
           .getViewingComponent());
