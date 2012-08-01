@@ -25,7 +25,7 @@ public class ForwardGeodesic {
    *********************************************************************************/
   private final double size = .05;
   private final double segmentSize = 0.2;
-  private final double segments = 10;
+  private  double segments = 10;
 
   /*********************************************************************************
    * ForwardGeodesic
@@ -87,5 +87,11 @@ public class ForwardGeodesic {
    *********************************************************************************/
   public Set<Marker> getMarkers() {
     return geodesicMarkers;
+  }
+  public double getLength(){
+    return segments;
+  }
+  public void setLength(double newLength){
+    segments = newLength;
   }
 }

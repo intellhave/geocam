@@ -29,6 +29,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -48,11 +49,13 @@ public class ViewerController extends JFrame {
   private Development develop;
   private static MarkerHandler markerHandler;
   private static Marker source;
+  private static ForwardGeodesic geo;
 
-  public ViewerController(MarkerHandler mh, Development d) {
+  public ViewerController(MarkerHandler mh, Development d, ForwardGeodesic geo) {
     develop = d;
     markerHandler = mh;
     source = markerHandler.getSourceMarker();
+    this.geo = geo;
     layoutGUI();
     DevelopmentUI.setExponentialView(showView2DBox.isSelected(), TextureEnabledBox.isSelected());
     DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(), TextureEnabledBox.isSelected());
@@ -77,6 +80,7 @@ public class ViewerController extends JFrame {
   private JPanel sliderPanel;
   private JSlider speedSlider;
   private JSlider scalingSlider;
+  private JSlider geoSlider;
   private JPanel buttonPanel;
   private JButton stopStartButton;
   private JButton clearGeosButton;
@@ -97,6 +101,7 @@ public class ViewerController extends JFrame {
   TitledBorder pointBorder = BorderFactory.createTitledBorder("");
   TitledBorder speedBorder = BorderFactory.createTitledBorder("");
   TitledBorder objectsBorder = BorderFactory.createTitledBorder("");
+  TitledBorder geoBorder = BorderFactory.createTitledBorder("");
 
   private void layoutGUI() {
 
@@ -113,6 +118,7 @@ public class ViewerController extends JFrame {
       menuBar.add(file);
       file.setText("File");
       {
+        
         open = new JMenuItem();
         file.add(open);
         open.setText("Load Surface");
@@ -319,6 +325,27 @@ public class ViewerController extends JFrame {
       };
       scalingSlider.addChangeListener(scalingSliderListener);
     }
+    
+    // ********************************GEO SLIDER**********************************
+    {
+      geoSlider = new JSlider();
+      sliderPanel.add(geoSlider);
+      geoSlider.setMaximum(30);
+      geoSlider.setValue ((int) geo.getLength());
+      geoSlider.setBorder(geoBorder);
+      geoBorder.setTitle("Geodesic length ("+ geoSlider.getValue()+")");
+      
+      ChangeListener geoSliderListener = new ChangeListener() {
+
+        public void stateChanged(ChangeEvent e) {
+          int newLength = geoSlider.getValue();
+          geo.setLength(newLength);
+         geoBorder.setTitle("Geodesic length (" + newLength + ")");
+        }
+     
+      };
+      geoSlider.addChangeListener(geoSliderListener);
+    }
 
     // ********************************BUTTON PANEL**********************************
     buttonPanel = new JPanel();
@@ -508,5 +535,8 @@ public class ViewerController extends JFrame {
 
   public void setMarkerHandler(MarkerHandler mh) {
     markerHandler = mh;
+  }
+  public void setGeodesics(ForwardGeodesic geo){
+    this.geo = geo;
   }
 }
