@@ -108,6 +108,23 @@ public class ViewerController extends JFrame {
   TitledBorder objectsBorder = BorderFactory.createTitledBorder("");
   TitledBorder geoBorder = BorderFactory.createTitledBorder("");
 
+  private ActionListener makeSurfaceLoader(final String surfaceFilePath){
+    ActionListener al =  new ActionListener() {
+      public void actionPerformed(ActionEvent arg0) {
+        File file = null;
+        try {
+          file = new File(surfaceFilePath);
+        } catch (Exception ex) {
+          System.out.println("Invalid file");
+        }
+        DevelopmentUI.loadSurface(file.getAbsolutePath());
+        DevelopmentUI.resetView();
+        resetViewController();
+      }
+    };
+    return al;
+  }
+  
   private void layoutGUI() {
 
     this.setSize(220, 520);
@@ -147,104 +164,13 @@ public class ViewerController extends JFrame {
         icosa.setText("Icosahedron");
         saddle.setText("Saddle");
         
-        cube.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            File file = null;
-            try {
-              file = new File("Data/surfaces/cube_surf.off");
-            } catch (Exception ex) {
-              System.out.println("Invalid file");
-            }
-            DevelopmentUI.loadSurface(file.getAbsolutePath());
-            DevelopmentUI.resetView();
-            resetViewController();
-          } 
-        });
-        
-        dodec.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            File file = null;
-            try {
-              file = new File("Data/surfaces/dodec2.off");
-            } catch (Exception ex) {
-              System.out.println("Invalid file");
-            }
-            DevelopmentUI.loadSurface(file.getAbsolutePath());
-            DevelopmentUI.resetView();
-            resetViewController();
-          } 
-        });
-        
-        tetra.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            File file = null;
-            try {
-              file = new File("Data/surfaces/tetra2.off");
-            } catch (Exception ex) {
-              System.out.println("Invalid file");
-            }
-            DevelopmentUI.loadSurface(file.getAbsolutePath());
-            DevelopmentUI.resetView();
-            resetViewController();
-          } 
-        });
-        
-        neckpinch.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            File file = null;
-            try {
-              file = new File("Data/surfaces/neckpinch.off");
-            } catch (Exception ex) {
-              System.out.println("Invalid file");
-            }
-            DevelopmentUI.loadSurface(file.getAbsolutePath());
-            DevelopmentUI.resetView();
-            resetViewController();
-          } 
-        });
-        
-        cone.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            File file = null;
-            try {
-              file = new File("Data/surfaces/scaledCone.off");
-            } catch (Exception ex) {
-              System.out.println("Invalid file");
-            }
-            DevelopmentUI.loadSurface(file.getAbsolutePath());
-            DevelopmentUI.resetView();
-            resetViewController();
-          } 
-        });
-        
-        icosa.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            File file = null;
-            try {
-              file = new File("Data/off/icosa.off");
-            } catch (Exception ex) {
-              System.out.println("Invalid file");
-            }
-            DevelopmentUI.loadSurface(file.getAbsolutePath());
-            DevelopmentUI.resetView();
-            resetViewController();
-          } 
-        });
-        
-        saddle.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            File file = null;
-            try {
-              file = new File("Data/off/saddle.off");
-            } catch (Exception ex) {
-              System.out.println("Invalid file");
-            }
-            DevelopmentUI.loadSurface(file.getAbsolutePath());
-            DevelopmentUI.resetView();
-            resetViewController();
-          } 
-        });
-        
+        cube.addActionListener( makeSurfaceLoader("Data/surfaces/cube_surf.off") );                  
+        dodec.addActionListener( makeSurfaceLoader("Data/surfaces/dodec2.off") );                    
+        tetra.addActionListener( makeSurfaceLoader("Data/surfaces/tetra2.off") );        
+        neckpinch.addActionListener( makeSurfaceLoader("Data/surfaces/neckpinch.off") );                    
+        cone.addActionListener( makeSurfaceLoader("Data/surfaces/scaledCone.off") );        
+        icosa.addActionListener( makeSurfaceLoader("Data/off/icosa.off") );        
+        saddle.addActionListener( makeSurfaceLoader("Data/off/saddle.off") );        
       }
     }
 
