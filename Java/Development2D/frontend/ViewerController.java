@@ -15,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -56,9 +57,9 @@ public class ViewerController extends JFrame {
     source = markerHandler.getSourceMarker();
     this.geo = geo;
     layoutGUI();
-    DevelopmentUI.setExponentialView(showView2DBox.isSelected());
-    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected());
-    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected());
+    DevelopmentUI.setExponentialView(showView2DBox.isSelected(), TextureEnabledBox.isSelected());
+    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(), TextureEnabledBox.isSelected());
+    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), TextureEnabledBox.isSelected());
   }
 
   /********************************************************************************
@@ -97,7 +98,7 @@ public class ViewerController extends JFrame {
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
   private JCheckBox drawAvatarBox;
-  private JCheckBox textureEnabledBox;
+  private JCheckBox TextureEnabledBox;
 
   private static int MAX_SPEED = 4000;
   private static int MAX_SIZE = 10;
@@ -117,9 +118,23 @@ public class ViewerController extends JFrame {
         } catch (Exception ex) {
           System.out.println("Invalid file");
         }
+        DevelopmentUI.simulationRunning = false;
+        System.out.println(Thread.currentThread().getName() + ": About to wait!");
+        while(!DevelopmentUI.simulatorClear){
+          //System.out.println("ViewerController Thread: I'm waiting!");
+          
+//          try {
+//            Thread.currentThread().sleep(1000);
+//          } catch (InterruptedException e) {
+//            System.err.println("ViewerController Thread: Unable to wait!");
+//            e.printStackTrace();
+//          }
+        }
+        System.out.println(Thread.currentThread().getName() + ": Finished waiting!");
         DevelopmentUI.loadSurface(file.getAbsolutePath());
         DevelopmentUI.resetView();
         resetViewController();
+        DevelopmentUI.simulationRunning = true;
       }
     };
     return al;
@@ -432,8 +447,7 @@ public class ViewerController extends JFrame {
       ActionListener view2DListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showView2DBox.isSelected();
-          DevelopmentUI.setExponentialView(checkBox);
-          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
+          DevelopmentUI.setExponentialView(checkBox, TextureEnabledBox.isSelected());
         }
       };
       showView2DBox.addActionListener(view2DListener);    
@@ -447,8 +461,7 @@ public class ViewerController extends JFrame {
       ActionListener view3DListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showView3DBox.isSelected();
-          DevelopmentUI.setFirstPersonView(checkBox);
-          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
+          DevelopmentUI.setFirstPersonView(checkBox, TextureEnabledBox.isSelected());
         }
       };
       showView3DBox.addActionListener(view3DListener);
@@ -462,25 +475,29 @@ public class ViewerController extends JFrame {
       ActionListener viewEmbeddedListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showEmbeddedBox.isSelected();
-          DevelopmentUI.setEmbeddedView(checkBox);
-          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
+          DevelopmentUI.setEmbeddedView(checkBox,TextureEnabledBox.isSelected());
         }
       };
       showEmbeddedBox.addActionListener(viewEmbeddedListener);
     }
  // ************************TEXTURE ENABLED CHECK BOX**************************
     {
-      textureEnabledBox = new JCheckBox();
-      viewerPanel.add(textureEnabledBox);
-      textureEnabledBox.setText("Display Texture");
-      textureEnabledBox.setSelected(true);
+      TextureEnabledBox = new JCheckBox();
+      viewerPanel.add(TextureEnabledBox);
+      TextureEnabledBox.setText("Display Texture");
+      TextureEnabledBox.setSelected(true);
       ActionListener TextureEnabledListener = new ActionListener(){
         public void actionPerformed(ActionEvent arg0) {
-          boolean textureEnabled = textureEnabledBox.isSelected();
-          DevelopmentUI.setTexture(textureEnabled);
+          boolean textureEnabled = TextureEnabledBox.isSelected();
+          DevelopmentUI.setExponentialView(false, textureEnabled);
+          DevelopmentUI.setFirstPersonView(false, textureEnabled);
+          DevelopmentUI.setEmbeddedView(false, textureEnabled);
+          DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(),textureEnabled);
+          DevelopmentUI.setExponentialView(showView2DBox.isSelected(), textureEnabled);
+          DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), textureEnabled);
         } 
     };
-    textureEnabledBox.addActionListener(TextureEnabledListener);
+    TextureEnabledBox.addActionListener(TextureEnabledListener);
     }
     // ******************************DRAW OPTIONS PANEL********************************
     drawOptionsPanel = new JPanel();
@@ -555,7 +572,6 @@ public class ViewerController extends JFrame {
     drawEdgesBox.setSelected(true);
     drawAvatarBox.setSelected(true);
     drawFacesBox.setSelected(true);
-    System.out.println(markerHandler.getAllMarkers().size() - 1);
   }
 
   public void setMarkerHandler(MarkerHandler mh) {
