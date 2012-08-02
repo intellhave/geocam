@@ -43,6 +43,13 @@ public class DevelopmentUI {
   private static boolean developerMode = false;
 
   /*********************************************************************************
+   * Thread Data
+   *********************************************************************************/
+  public static Thread simulation;
+  public static boolean simulationRunning;
+  public static boolean simulatorClear;
+  
+  /*********************************************************************************
    * Model Data
    * 
    * These variables are responsible for keeping track of the states of the
@@ -66,7 +73,7 @@ public class DevelopmentUI {
   private static AbstractMap<View, JFrame> frames;
   static Set<View> views;
   static View firstPersonView;
-  static View exponentialView;
+  static ExponentialView exponentialView;
   static View embeddedView;
   private static boolean isEmbedded;
 
@@ -110,12 +117,24 @@ public class DevelopmentUI {
 
     // Note: For correct initialization, it is important the method calls listed
     // below occur in the particular order listed.
+    simulationRunning = true;
+    simulatorClear = false;
     developerMode = true;
     initModel();
-    initViews();
+    initViews();         
     initModelControls();
     initViewControls();
-    runSimulation();
+    
+    simulation = new Thread(new Runnable(){
+
+      @Override
+      public void run() {
+        runSimulation();
+      }
+      
+    });
+      
+   simulation.start();
   }
 
   /*********************************************************************************
@@ -135,9 +154,9 @@ public class DevelopmentUI {
   public static void runExplorer() {
     initModel();
     initViews();
-    setExponentialView(true);
-    setFirstPersonView(true);
-    setEmbeddedView(true);
+    setExponentialView(true, true);
+    setEmbeddedView(true, true);
+    setFirstPersonView(true,true);            
     initModelControls();
     runSimulation();
   }
@@ -165,8 +184,27 @@ public class DevelopmentUI {
    * 
    * TODO Add more description here.
    *********************************************************************************/
-  public static void runSimulation() {
-
+  
+  public static void runSimulation(){
+    while(true){
+      System.out.println(Thread.currentThread().getName() + ": About to wait!");
+      while(!simulationRunning){
+//        try {
+//          Thread.currentThread().wait(1000);
+//        } catch (InterruptedException e) {
+//          System.err.println("Main Thread: Unable to wait!");
+//          e.printStackTrace();
+//        }
+        System.out.println(Thread.currentThread().getName() + ": I'm waiting!");
+      }
+      System.out.println(Thread.currentThread().getName() + ": Finished waiting!");
+      simulatorClear = false;
+      runCurrentSimulation();
+      simulatorClear = true;
+    }
+  }
+  
+  public static void runCurrentSimulation() {
     final long dt = 10; // Timestep size, in microseconds
 
     long startTime = System.currentTimeMillis();
@@ -177,7 +215,7 @@ public class DevelopmentUI {
 
     userControl.resetPausedFlag();
     userControl.clear();
-    while (!userControl.isPaused() || developerMode) {
+    while ((!userControl.isPaused() || developerMode) && simulationRunning) {
       removeFlaggedMarkers();
 
       long newTime = System.currentTimeMillis();
@@ -206,7 +244,11 @@ public class DevelopmentUI {
         accumulator -= dt;
       }
       render();
+      
+      System.out.println(Thread.currentThread().getName() + ": " + simulationRunning);
+      System.out.flush();
     }
+    System.out.println(Thread.currentThread().getName() + ": Exited simulation loop!");
     t.interrupt();
   }
 
@@ -257,18 +299,18 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    String filename = "Data/surfaces/cube_surf.off";
+    // String filename = "Data/surfaces/cube_surf.off";
     // String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
     //String filename = "Data/off/bunny.off";
-   // String filename = "Data/surfaces/tetra2.off";
+   //String filename = "Data/surfaces/tetra2.off";
     //String filename = "Data/surfaces/neckpinch.off";
    // String filename = "Data/surfaces/cone.off";
    // String filename = "Data/surfaces/scaledCone.off";
     //String filename = "Data/off/sphere.off";
-   // String filename = "Data/surfaces/dodec2.off";
+    String filename = "Data/surfaces/dodec2.off";
     // String filename = "Data/off/icosa.off";
     //String filename = "Data/off/neckpinch_large.off";
-    //String filename = "Data/off/saddle.off";
+   //  String filename = "Data/off/saddle.off";
     loadSurface(filename);
   }
 
@@ -331,8 +373,8 @@ public class DevelopmentUI {
   private static void initMarkers() {
     markerHandler = new MarkerHandler();
     crumbs = new BreadCrumbs(markerHandler);
-    geo = new ForwardGeodesic(markerHandler);
-
+    geo = new ForwardGeodesic( markerHandler );    
+    
     ManifoldPosition pos;
     MarkerAppearance app;
 
@@ -351,6 +393,7 @@ public class DevelopmentUI {
       vel.scale(0.0005);
 
       Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
+      m.setSpeed(0.0);
       markerHandler.addMarker(m);
     }
 
@@ -412,18 +455,18 @@ public class DevelopmentUI {
 
   public static void resetView() {
     if (exponentialView != null) {
-      setExponentialView(false);
-      setExponentialView(true);
+      setExponentialView(false, true);
+      setExponentialView(true, true);
     }
 
     if (embeddedView != null) {
-      setEmbeddedView(false);
-      setEmbeddedView(true);
+      setEmbeddedView(false, true);
+      setEmbeddedView(true, true);
     }
 
     if (firstPersonView != null) {
-      setFirstPersonView(false);
-      setFirstPersonView(true);
+      setFirstPersonView(false, true);
+      setFirstPersonView(true, true);
     }
 
     viewerController.setMarkerHandler(markerHandler);
@@ -431,24 +474,11 @@ public class DevelopmentUI {
     viewerController.setGeodesics(geo);
   }
 
-  /*********************************************************************************
-   * setTexture
-   * 
-   * This method can be called to change the texturing settings of all of the
-   * views managed by DevelopmentUI, without concern for whether some views are
-   * enabled or disabled.
-   *********************************************************************************/
-  public static void setTexture(boolean texturingOn) {
-    for (View v : views) {
-      v.setTexture(texturingOn);
-      v.updateGeometry();
-    }
-  }
-
-  public static void setExponentialView(boolean viewEnabled) {
+  public static void setExponentialView(boolean viewEnabled,
+      boolean textureEnabled) {
     if (viewEnabled) {
       exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
-      exponentialView.setTexture(true);
+      exponentialView.setTexture(textureEnabled);
       exponentialView.updateGeometry();
       exponentialView.initializeNewManifold();
       exponentialView.updateScene();
@@ -459,7 +489,7 @@ public class DevelopmentUI {
       frame.setLocation(400, 40);
       frame.setResizable(true);
 
-      Dimension size = new Dimension(400, 400);
+      Dimension size = new Dimension(800, 800);
       Container contentPane = frame.getContentPane();
       contentPane.add((Component) exponentialView.getViewer()
           .getViewingComponent());
@@ -483,10 +513,10 @@ public class DevelopmentUI {
     }
   }
 
-  public static void setEmbeddedView(boolean viewEnabled) {
+  public static void setEmbeddedView(boolean viewEnabled, boolean textureEnabled) {
     if (viewEnabled && isEmbedded) {
       embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme);
-      embeddedView.setTexture(true);
+      embeddedView.setTexture(textureEnabled);
       embeddedView.updateGeometry();
       embeddedView.initializeNewManifold();
       embeddedView.updateScene();
@@ -521,10 +551,11 @@ public class DevelopmentUI {
     }
   }
 
-  public static void setFirstPersonView(boolean viewEnabled) {
+  public static void setFirstPersonView(boolean viewEnabled,
+      boolean textureEnabled) {
     if (viewEnabled) {
       firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme);
-      firstPersonView.setTexture(true);
+      firstPersonView.setTexture(textureEnabled);
       firstPersonView.updateGeometry();
       firstPersonView.initializeNewManifold();
       firstPersonView.updateScene();
