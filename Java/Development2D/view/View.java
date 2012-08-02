@@ -1,16 +1,22 @@
 package view;
 
-import static de.jreality.shader.CommonAttributes.*;
+import static de.jreality.shader.CommonAttributes.BACKGROUND_COLOR;
+import static de.jreality.shader.CommonAttributes.DIFFUSE_COLOR;
+import static de.jreality.shader.CommonAttributes.EDGE_DRAW;
+import static de.jreality.shader.CommonAttributes.FACE_DRAW;
+import static de.jreality.shader.CommonAttributes.LIGHTING_ENABLED;
+import static de.jreality.shader.CommonAttributes.LINE_SHADER;
+import static de.jreality.shader.CommonAttributes.POLYGON_SHADER;
+import static de.jreality.shader.CommonAttributes.SMOOTH_SHADING;
+import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
+import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
 
 import java.awt.Color;
 
 import javax.media.opengl.GLCanvas;
 
-import marker.BreadCrumbs;
-import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerHandler;
-
 import de.jreality.jogl.JOGLRenderer;
 import de.jreality.jogl.Viewer;
 import de.jreality.math.MatrixBuilder;
