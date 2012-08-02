@@ -135,9 +135,9 @@ public class DevelopmentUI {
   public static void runExplorer() {
     initModel();
     initViews();
-    setExponentialView(true, true);
-    setEmbeddedView(true, true);
-    setFirstPersonView(true,true);            
+    setExponentialView(true);
+    setFirstPersonView(true);
+    setEmbeddedView(true);
     initModelControls();
     runSimulation();
   }
@@ -257,7 +257,7 @@ public class DevelopmentUI {
    * the triangulated surface and the markers that will be placed on it.
    *********************************************************************************/
   private static void initModel() {
-    // String filename = "Data/surfaces/cube_surf.off";
+    String filename = "Data/surfaces/cube_surf.off";
     // String filename = "Data/Triangulations/2DManifolds/tetrahedron.xml";
     //String filename = "Data/off/bunny.off";
    // String filename = "Data/surfaces/tetra2.off";
@@ -268,7 +268,7 @@ public class DevelopmentUI {
    // String filename = "Data/surfaces/dodec2.off";
     // String filename = "Data/off/icosa.off";
     //String filename = "Data/off/neckpinch_large.off";
-     String filename = "Data/off/saddle.off";
+    //String filename = "Data/off/saddle.off";
     loadSurface(filename);
   }
 
@@ -331,8 +331,8 @@ public class DevelopmentUI {
   private static void initMarkers() {
     markerHandler = new MarkerHandler();
     crumbs = new BreadCrumbs(markerHandler);
-    geo = new ForwardGeodesic( markerHandler );    
-    
+    geo = new ForwardGeodesic(markerHandler);
+
     ManifoldPosition pos;
     MarkerAppearance app;
 
@@ -412,18 +412,18 @@ public class DevelopmentUI {
 
   public static void resetView() {
     if (exponentialView != null) {
-      setExponentialView(false, true);
-      setExponentialView(true, true);
+      setExponentialView(false);
+      setExponentialView(true);
     }
 
     if (embeddedView != null) {
-      setEmbeddedView(false, true);
-      setEmbeddedView(true, true);
+      setEmbeddedView(false);
+      setEmbeddedView(true);
     }
 
     if (firstPersonView != null) {
-      setFirstPersonView(false, true);
-      setFirstPersonView(true, true);
+      setFirstPersonView(false);
+      setFirstPersonView(true);
     }
 
     viewerController.setMarkerHandler(markerHandler);
@@ -431,11 +431,24 @@ public class DevelopmentUI {
     viewerController.setGeodesics(geo);
   }
 
-  public static void setExponentialView(boolean viewEnabled,
-      boolean textureEnabled) {
+  /*********************************************************************************
+   * setTexture
+   * 
+   * This method can be called to change the texturing settings of all of the
+   * views managed by DevelopmentUI, without concern for whether some views are
+   * enabled or disabled.
+   *********************************************************************************/
+  public static void setTexture(boolean texturingOn) {
+    for (View v : views) {
+      v.setTexture(texturingOn);
+      v.updateGeometry();
+    }
+  }
+
+  public static void setExponentialView(boolean viewEnabled) {
     if (viewEnabled) {
       exponentialView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
-      exponentialView.setTexture(textureEnabled);
+      exponentialView.setTexture(true);
       exponentialView.updateGeometry();
       exponentialView.initializeNewManifold();
       exponentialView.updateScene();
@@ -446,7 +459,7 @@ public class DevelopmentUI {
       frame.setLocation(400, 40);
       frame.setResizable(true);
 
-      Dimension size = new Dimension(800, 800);
+      Dimension size = new Dimension(400, 400);
       Container contentPane = frame.getContentPane();
       contentPane.add((Component) exponentialView.getViewer()
           .getViewingComponent());
@@ -470,10 +483,10 @@ public class DevelopmentUI {
     }
   }
 
-  public static void setEmbeddedView(boolean viewEnabled, boolean textureEnabled) {
+  public static void setEmbeddedView(boolean viewEnabled) {
     if (viewEnabled && isEmbedded) {
       embeddedView = new EmbeddedView(development, markerHandler, faceAppearanceScheme);
-      embeddedView.setTexture(textureEnabled);
+      embeddedView.setTexture(true);
       embeddedView.updateGeometry();
       embeddedView.initializeNewManifold();
       embeddedView.updateScene();
@@ -508,11 +521,10 @@ public class DevelopmentUI {
     }
   }
 
-  public static void setFirstPersonView(boolean viewEnabled,
-      boolean textureEnabled) {
+  public static void setFirstPersonView(boolean viewEnabled) {
     if (viewEnabled) {
       firstPersonView = new FirstPersonView(development, markerHandler, faceAppearanceScheme);
-      firstPersonView.setTexture(textureEnabled);
+      firstPersonView.setTexture(true);
       firstPersonView.updateGeometry();
       firstPersonView.initializeNewManifold();
       firstPersonView.updateScene();

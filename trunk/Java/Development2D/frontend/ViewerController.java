@@ -15,7 +15,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -57,9 +56,9 @@ public class ViewerController extends JFrame {
     source = markerHandler.getSourceMarker();
     this.geo = geo;
     layoutGUI();
-    DevelopmentUI.setExponentialView(showView2DBox.isSelected(), TextureEnabledBox.isSelected());
-    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(), TextureEnabledBox.isSelected());
-    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), TextureEnabledBox.isSelected());
+    DevelopmentUI.setExponentialView(showView2DBox.isSelected());
+    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected());
+    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected());
   }
 
   /********************************************************************************
@@ -98,7 +97,7 @@ public class ViewerController extends JFrame {
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
   private JCheckBox drawAvatarBox;
-  private JCheckBox TextureEnabledBox;
+  private JCheckBox textureEnabledBox;
 
   private static int MAX_SPEED = 4000;
   private static int MAX_SIZE = 10;
@@ -507,7 +506,8 @@ public class ViewerController extends JFrame {
       ActionListener view2DListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showView2DBox.isSelected();
-          DevelopmentUI.setExponentialView(checkBox, TextureEnabledBox.isSelected());
+          DevelopmentUI.setExponentialView(checkBox);
+          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
         }
       };
       showView2DBox.addActionListener(view2DListener);    
@@ -521,7 +521,8 @@ public class ViewerController extends JFrame {
       ActionListener view3DListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showView3DBox.isSelected();
-          DevelopmentUI.setFirstPersonView(checkBox, TextureEnabledBox.isSelected());
+          DevelopmentUI.setFirstPersonView(checkBox);
+          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
         }
       };
       showView3DBox.addActionListener(view3DListener);
@@ -535,29 +536,25 @@ public class ViewerController extends JFrame {
       ActionListener viewEmbeddedListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showEmbeddedBox.isSelected();
-          DevelopmentUI.setEmbeddedView(checkBox,TextureEnabledBox.isSelected());
+          DevelopmentUI.setEmbeddedView(checkBox);
+          DevelopmentUI.setTexture(textureEnabledBox.isSelected());
         }
       };
       showEmbeddedBox.addActionListener(viewEmbeddedListener);
     }
  // ************************TEXTURE ENABLED CHECK BOX**************************
     {
-      TextureEnabledBox = new JCheckBox();
-      viewerPanel.add(TextureEnabledBox);
-      TextureEnabledBox.setText("Display Texture");
-      TextureEnabledBox.setSelected(true);
+      textureEnabledBox = new JCheckBox();
+      viewerPanel.add(textureEnabledBox);
+      textureEnabledBox.setText("Display Texture");
+      textureEnabledBox.setSelected(true);
       ActionListener TextureEnabledListener = new ActionListener(){
         public void actionPerformed(ActionEvent arg0) {
-          boolean textureEnabled = TextureEnabledBox.isSelected();
-          DevelopmentUI.setExponentialView(false, textureEnabled);
-          DevelopmentUI.setFirstPersonView(false, textureEnabled);
-          DevelopmentUI.setEmbeddedView(false, textureEnabled);
-          DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(),textureEnabled);
-          DevelopmentUI.setExponentialView(showView2DBox.isSelected(), textureEnabled);
-          DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), textureEnabled);
+          boolean textureEnabled = textureEnabledBox.isSelected();
+          DevelopmentUI.setTexture(textureEnabled);
         } 
     };
-    TextureEnabledBox.addActionListener(TextureEnabledListener);
+    textureEnabledBox.addActionListener(TextureEnabledListener);
     }
     // ******************************DRAW OPTIONS PANEL********************************
     drawOptionsPanel = new JPanel();
