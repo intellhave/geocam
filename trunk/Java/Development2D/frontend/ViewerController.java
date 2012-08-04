@@ -7,15 +7,11 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,14 +25,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import marker.ForwardGeodesic;
-import marker.Marker;
-import marker.MarkerAppearance;
-import marker.MarkerHandler;
-import development.Development;
-import development.ManifoldPosition;
-import development.Vector;
-
 public class ViewerController extends JFrame {
 
   private static final long serialVersionUID = 1L;
@@ -46,22 +34,26 @@ public class ViewerController extends JFrame {
    * 
    * Data related to the model
    ********************************************************************************/
-  private Development develop;
-  private static MarkerHandler markerHandler;
-  private static Marker source;
-  private static ForwardGeodesic geo;
-
-  public ViewerController(MarkerHandler mh, Development d, ForwardGeodesic geo) {
-    develop = d;
-    markerHandler = mh;
-    source = markerHandler.getSourceMarker();
-    this.geo = geo;
-    layoutGUI();
-    DevelopmentUI.setExponentialView(showView2DBox.isSelected(), TextureEnabledBox.isSelected());
-    DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(), TextureEnabledBox.isSelected());
-    DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), TextureEnabledBox.isSelected());
+  private DevelopmentUI currentSim;
+  private String currentSurfacePath;
+  
+  public ViewerController(DevelopmentUI dui) {
+    setSimulation(dui);
+  }
+  
+  public String getPath(){
+    return currentSurfacePath;
   }
 
+  public void setSimulation(DevelopmentUI dui){    
+    currentSim = dui;    
+    layoutGUI();
+    currentSim.setExponentialView(showView2DBox.isSelected());
+    currentSim.setEmbeddedView(showEmbeddedBox.isSelected());
+    currentSim.setFirstPersonView(showView3DBox.isSelected());
+    this.setVisible(true);
+  }
+  
   /********************************************************************************
    * JFrame Data
    * 
@@ -69,13 +61,6 @@ public class ViewerController extends JFrame {
    ********************************************************************************/
   private JMenuBar menuBar;
   private JMenu file;
-  private JMenuItem cube;
-  private JMenuItem dodec;
-  private JMenuItem tetra;
-  private JMenuItem neckpinch;  
-  private JMenuItem cone;
-  private JMenuItem icosa;
-  private JMenuItem saddle;
   private JPanel textBoxPanel;
   private JPanel recDepthPanel;
   private JFormattedTextField recDepth;
@@ -109,37 +94,28 @@ public class ViewerController extends JFrame {
   TitledBorder objectsBorder = BorderFactory.createTitledBorder("");
   TitledBorder geoBorder = BorderFactory.createTitledBorder("");
 
-  private ActionListener makeSurfaceLoader(final String surfaceFilePath){
-    ActionListener al =  new ActionListener() {
-      public void actionPerformed(ActionEvent arg0) {
-        File file = null;
-        try {
-          file = new File(surfaceFilePath);
-        } catch (Exception ex) {
-          System.out.println("Invalid file");
-        }
-        DevelopmentUI.simulationRunning = false;
-        System.out.println(Thread.currentThread().getName() + ": About to wait!");
-        while(!DevelopmentUI.simulatorClear){
-          //System.out.println("ViewerController Thread: I'm waiting!");
-          
-//          try {
-//            Thread.currentThread().sleep(1000);
-//          } catch (InterruptedException e) {
-//            System.err.println("ViewerController Thread: Unable to wait!");
-//            e.printStackTrace();
-//          }
-        }
-        System.out.println(Thread.currentThread().getName() + ": Finished waiting!");
-        DevelopmentUI.loadSurface(file.getAbsolutePath());
-        DevelopmentUI.resetView();
-        resetViewController();
-        DevelopmentUI.simulationRunning = true;
+  private class SurfaceLoader implements ActionListener {
+    private ViewerController vc;
+    private String path;
+
+    public SurfaceLoader(ViewerController vc, String surfaceFilePath) {
+      this.vc = vc;
+      this.path = surfaceFilePath;
+    }
+
+    public void actionPerformed(ActionEvent arg0) {
+      currentSurfacePath = path;
+      File file = null;
+      try {
+        file = new File(path);
+      } catch (Exception ex) {
+        System.err.println("Error: Could not locate file " + path + ".");
+        System.exit(1);
       }
-    };
-    return al;
+      vc.reset(file.getAbsolutePath());
+    }
   }
-  
+
   private void layoutGUI() {
 
     this.setSize(220, 520);
@@ -155,53 +131,46 @@ public class ViewerController extends JFrame {
       menuBar.add(file);
       file.setText("File");
       {
-        cube = new JMenuItem();
-        dodec = new JMenuItem();
-        tetra = new JMenuItem();
-        neckpinch = new JMenuItem();
-        cone = new JMenuItem();
-        icosa = new JMenuItem();
-        saddle = new JMenuItem();
-        
-        file.add(cube);
-        file.add(dodec);
-        file.add(tetra);
-        file.add(neckpinch);
-        file.add(cone);
-        file.add(icosa);
-        file.add(saddle);
-        
-        cube.setText("Cube");
-        dodec.setText("Dodecahedron");
-        tetra.setText("Tetrahedron");
-        neckpinch.setText("Barbell");
-        cone.setText("Cone");
-        icosa.setText("Icosahedron");
-        saddle.setText("Saddle");
-        
-        cube.addActionListener( makeSurfaceLoader("Data/surfaces/cube_surf.off") );                  
-        dodec.addActionListener( makeSurfaceLoader("Data/surfaces/dodec2.off") );                    
-        tetra.addActionListener( makeSurfaceLoader("Data/surfaces/tetra2.off") );        
-        neckpinch.addActionListener( makeSurfaceLoader("Data/surfaces/neckpinch.off") );                    
-        cone.addActionListener( makeSurfaceLoader("Data/surfaces/scaledCone.off") );        
-        icosa.addActionListener( makeSurfaceLoader("Data/off/icosa.off") );        
-        saddle.addActionListener( makeSurfaceLoader("Data/off/saddle.off") );        
+        String[][] namesAndPaths = new String[][] {
+            { "Tetrahedron", "Data/surfaces/tetra2.off" },
+            { "Cube", "Data/surfaces/cube_surf.off" },
+            { "Dodecahedron", "Data/surfaces/dodec2.off" },
+            { "Icosahedron", "Data/off/icosa.off" },
+            { "Cone", "Data/surfaces/scaledCone.off" },
+            { "Neckpinch", "Data/surfaces/neckpinch.off" },
+            { "Saddle", "Data/off/saddle.off" } };
+
+        for (String[] pair : namesAndPaths) {
+          String name = pair[0];
+          String path = pair[1];
+          JMenuItem jmi = new JMenuItem();
+          file.add(jmi);
+          jmi.setText(name);
+          SurfaceLoader sl = new SurfaceLoader(this, path);
+          jmi.addActionListener(sl);
+        }
       }
     }
 
-    // ******************************TEXT BOX PANEL********************************
+    /*********************************************************************************
+     * Text Box Panel
+     * 
+     * Contains: - Recursion depth text box. - Number of moving objects text
+     * box.
+     *********************************************************************************/
     textBoxPanel = new JPanel();
     getContentPane().add(textBoxPanel);
-    textBoxPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    textBoxPanel.setBorder(BorderFactory
+        .createEtchedBorder(EtchedBorder.LOWERED));
     textBoxPanel.setLayout(new GridLayout(2, 1));
-
-    // ****************************RECURSION DEPTH TEXT BOX******************************
-    // ******************************NUM OBJECTS TEXT BOX********************************
     {
       NumberFormat f = NumberFormat.getIntegerInstance();
       recDepth = new JFormattedTextField(f);
       recDepth.setColumns(3);
-      recDepth.setValue(develop.getDepth());
+
+      recDepth.setValue(3);
+      currentSim.setRecursionDepth(3);
+
       recDepthLabel = new JLabel("Recursion Depth");
       recDepthPanel = new JPanel();
       recDepthPanel.setLayout(new FlowLayout());
@@ -211,8 +180,10 @@ public class ViewerController extends JFrame {
 
       numObjects = new JFormattedTextField(f);
       numObjects.setColumns(3);
-      int current = markerHandler.getAllMarkers().size() - 1;
-      numObjects.setValue(current);
+
+      numObjects.setValue(3);
+      currentSim.setMovingMarkerCount(3);
+
       numObjectsLabel = new JLabel("Number of objects");
       numObjectsPanel = new JPanel();
       numObjectsPanel.setLayout(new FlowLayout());
@@ -230,7 +201,7 @@ public class ViewerController extends JFrame {
           } else if (newDepth > 20) {
             newDepth = 20;
           }
-          develop.setDepth(newDepth);
+          currentSim.setRecursionDepth(newDepth);
         }
       };
       recDepth.addActionListener(recDepthListener);
@@ -239,220 +210,163 @@ public class ViewerController extends JFrame {
       ActionListener numObjectsListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           String value = numObjects.getValue().toString();
-          int newMarkers = Integer.parseInt(value);
-          if (newMarkers < 0) {
-            newMarkers = 0;
-          } else if (newMarkers > 20) {
-            newMarkers = 20;
+          Integer numMarkers = Integer.parseInt(value);
+          if (numMarkers < 0) {
+            numMarkers = 0;
+          } else if (numMarkers > 20) {
+            numMarkers = 20;
           }
-
-          Set<Marker> markers = markerHandler.getAllMarkers();
-          //get the current number of moving markers
-          int currentMarkers = 0;
-          for( Marker m : markers) {
-            if(m.getMarkerType() == Marker.MarkerType.MOVING){
-              currentMarkers++;
-            }
-          }
-
-          // if necessary, add moving markers
-          if (currentMarkers < newMarkers) {
-            Random rand = new Random();
-            ManifoldPosition pos;
-            MarkerAppearance app;
-
-            for (int ii = 0; ii < newMarkers - currentMarkers; ii++) {
-              pos = new ManifoldPosition(develop.getSource());
-              double scale = scalingSlider.getValue() / 10.0;
-              app = new MarkerAppearance(source.getAppearance().getModelType(), scale);
-              double a = rand.nextDouble() * Math.PI * 2;
-              Vector vel = new Vector(Math.cos(a), Math.sin(a));
-              // advance ants off of source point
-              vel.scale(0.25);
-              pos.move(vel);
-              Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
-              double sliderSpeed = speedSlider.getValue() / 1000.0;
-              m.setSpeed(0.05 * Math.pow(Math.E, sliderSpeed));
-
-              markerHandler.addMarker(m);
-            }
-          }
-
-          // if necessary, remove moving markers (make sure not to remove geodesic 
-          // markers or the source marker)
-          if (currentMarkers > newMarkers) {
-            int counter = 0;            
-            for (Marker m : markers) {
-              if (m.getMarkerType() == Marker.MarkerType.MOVING){
-                m.flagForRemoval();
-                counter++;
-              }
-              if (counter == currentMarkers - newMarkers) break;
-            }
-          }
+          numObjects.setValue(numMarkers.toString());
+          currentSim.setMovingMarkerCount(numMarkers);
         }
       };
       numObjects.addActionListener(numObjectsListener);
     }
 
-    // ********************************SLIDER PANEL**********************************
+    /*********************************************************************************
+     * Slider Panel
+     * 
+     * Contains: - Speed slider. - Scale slider. - Geodesic length slider.
+     * 
+     * Note: Speed slider is using the exponential function y = 0.05*e^x to
+     * convert input from the slider to a speed. This gives you more control
+     * over low speeds on the slider.
+     *********************************************************************************/
     sliderPanel = new JPanel();
     getContentPane().add(sliderPanel);
     sliderPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
     sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS));
-
-    // ******************************SPEED SLIDER********************************
-    /********************************************************************************
-     * Note: Speed slider is using the exponential function y = 0.05*e^x to
-     * convert input from the slider to a speed. This gives you more control
-     * over low speeds on the slider.
-     ********************************************************************************/
     {
       speedSlider = new JSlider();
       sliderPanel.add(speedSlider);
       speedSlider.setMaximum(MAX_SPEED);
-      double speed = markerHandler.getMarkerSpeed(source);
-      double speedToSet = Math.log(speed / 0.05);
-      speedSlider.setValue((int) (speedToSet * 1000.0));
+      speedSlider.setValue(0);
 
       final DecimalFormat speedFormat = new DecimalFormat("0.00");
       speedSlider.setBorder(speedBorder);
-      speedBorder.setTitle("Speed (" + speedFormat.format(speed) + ")");
+      speedBorder.setTitle("Speed (" + speedFormat.format(0) + ")");
 
-      // Speed slider action listener
       ChangeListener speedSliderListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           double sliderValue = speedSlider.getValue() / 1000.0;
           double newSpeed = 0.05 * Math.pow(Math.E, sliderValue);
-          Set<Marker> allMarkers = markerHandler.getAllMarkers();          
-          for(Marker m : allMarkers){
-            if( m.getMarkerType() == Marker.MarkerType.MOVING){
-              m.setSpeed(newSpeed);
-            }
-          }
+          currentSim.setMovingMarkerSpeed(newSpeed);
           speedBorder.setTitle("Speed (" + speedFormat.format(newSpeed) + ")");
         }
       };
       speedSlider.addChangeListener(speedSliderListener);
     }
 
-    // ******************************SCALE SLIDER********************************
     {
       scalingSlider = new JSlider();
       sliderPanel.add(scalingSlider);
       scalingSlider.setMaximum(MAX_SIZE);
-      scalingSlider.setValue((int) (markerHandler.getMarkerScale(source) * 10));
+      scalingSlider.setValue((int) 1.0 * 10);
       scalingSlider.setBorder(pointBorder);
-      pointBorder.setTitle("Object scaling (" + scalingSlider.getValue() / 10.0 + ")");
+      pointBorder.setTitle("Object scaling (" + scalingSlider.getValue() / 10.0
+          + ")");
 
       // Scaling slider change listener
       ChangeListener scalingSliderListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
           double newScale = scalingSlider.getValue() / 10.0;
-          Set<Marker> markers = markerHandler.getAllMarkers();
-          Iterator<Marker> i = markers.iterator();
-
-          synchronized (markers) {
-            while (i.hasNext()) {
-              Marker m = i.next();
-              if (m.getMarkerType() == Marker.MarkerType.MOVING) {
-                MarkerAppearance newAppearance = m.getAppearance();
-                newAppearance.setScale(newScale);
-                m.setAppearance(newAppearance);
-              }
-            }
-          }
+          currentSim.setMovingMarkerScale(newScale);
           pointBorder.setTitle("Object scaling (" + newScale + ")");
         }
       };
       scalingSlider.addChangeListener(scalingSliderListener);
     }
-    
-    // ********************************GEO SLIDER**********************************
+
     {
       geoSlider = new JSlider();
       sliderPanel.add(geoSlider);
       geoSlider.setMaximum(30);
-      geoSlider.setValue ((int) geo.getLength());
+      geoSlider.setValue(5);
+      currentSim.setGeodesicLength(5);
       geoSlider.setBorder(geoBorder);
-      geoBorder.setTitle("Geodesic length ("+ geoSlider.getValue()+")");
-      
+      geoBorder.setTitle("Geodesic length (" + geoSlider.getValue() + ")");
+
       ChangeListener geoSliderListener = new ChangeListener() {
 
         public void stateChanged(ChangeEvent e) {
           int newLength = geoSlider.getValue();
-          geo.setLength(newLength);
-         geoBorder.setTitle("Geodesic length (" + newLength + ")");
+          currentSim.setGeodesicLength(newLength);
+          geoBorder.setTitle("Geodesic length (" + newLength + ")");
         }
-     
+
       };
       geoSlider.addChangeListener(geoSliderListener);
     }
 
-    // ********************************BUTTON PANEL**********************************
+    /********************************************************************************
+     * Button Panel
+     * 
+     * Contains: - Start/stop button. - Clear geodesics button.
+     ********************************************************************************/
     buttonPanel = new JPanel();
     getContentPane().add(buttonPanel);
     buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-    
-    //***************************CLEAR GEODESICS BUTTON***************************
+
     {
       clearGeosButton = new JButton();
       clearGeosButton.setText("Clear geodesics");
       buttonPanel.add(clearGeosButton);
-      
+
       ActionListener geosButtonListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
-          Set<Marker> allMarkers = markerHandler.getAllMarkers();
-          for(Marker m : allMarkers) {
-            if(m.getMarkerType() == Marker.MarkerType.FIXED)
-              m.flagForRemoval();
-          }
+          currentSim.clearGeodesic();
         }
       };
       clearGeosButton.addActionListener(geosButtonListener);
-      
+
     }
-    // ****************************START/STOP BUTTON******************************
+
     {
       stopStartButton = new JButton();
       stopStartButton.setText("Stop");
       buttonPanel.add(stopStartButton);
-      
+
       ActionListener stopStartButtonListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          if (stopStartButton.getText().equals("Stop")) {
-            markerHandler.pauseSimulation();
+          boolean markersMobile = stopStartButton.getText().equals("Stop");
+          currentSim.setMarkerMobility(markersMobile);
+          if (markersMobile) {
             stopStartButton.setText("Start");
           } else {
-            markerHandler.unpauseSimulation();
             stopStartButton.setText("Stop");
           }
         }
       };
       stopStartButton.addActionListener(stopStartButtonListener);
     }
-    // ********************************VIEW PANEL**********************************
+
+    /*********************************************************************************
+     * ViewerPanel
+     * 
+     * Contains: - Checkboxes for each of the three views. - ShowAvatar
+     * checkbox. - ShowTexture checkbox.
+     *********************************************************************************/
     viewerPanel = new JPanel();
     getContentPane().add(viewerPanel);
-    viewerPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+    viewerPanel.setBorder(BorderFactory
+        .createEtchedBorder(EtchedBorder.LOWERED));
     viewerPanel.setLayout(new BoxLayout(viewerPanel, BoxLayout.Y_AXIS));
 
-    // ***************************2D VIEW CHECK BOX*****************************
     {
       showView2DBox = new JCheckBox();
       viewerPanel.add(showView2DBox);
       showView2DBox.setText("Show Exponential View");
       showView2DBox.setSelected(true);
-      
+
       ActionListener view2DListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showView2DBox.isSelected();
-          DevelopmentUI.setExponentialView(checkBox, TextureEnabledBox.isSelected());
+          currentSim.setExponentialView(checkBox);
         }
       };
-      showView2DBox.addActionListener(view2DListener);    
+      showView2DBox.addActionListener(view2DListener);
     }
-    // ***************************3D VIEW CHECK BOX*****************************
+
     {
       showView3DBox = new JCheckBox();
       viewerPanel.add(showView3DBox);
@@ -461,12 +375,12 @@ public class ViewerController extends JFrame {
       ActionListener view3DListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showView3DBox.isSelected();
-          DevelopmentUI.setFirstPersonView(checkBox, TextureEnabledBox.isSelected());
+          currentSim.setFirstPersonView(checkBox);
         }
       };
       showView3DBox.addActionListener(view3DListener);
     }
-    // ************************EMBEDDED VIEW CHECK BOX**************************
+
     {
       showEmbeddedBox = new JCheckBox();
       viewerPanel.add(showEmbeddedBox);
@@ -475,37 +389,40 @@ public class ViewerController extends JFrame {
       ActionListener viewEmbeddedListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showEmbeddedBox.isSelected();
-          DevelopmentUI.setEmbeddedView(checkBox,TextureEnabledBox.isSelected());
+          currentSim.setEmbeddedView(checkBox);
         }
       };
       showEmbeddedBox.addActionListener(viewEmbeddedListener);
     }
- // ************************TEXTURE ENABLED CHECK BOX**************************
+
     {
       TextureEnabledBox = new JCheckBox();
       viewerPanel.add(TextureEnabledBox);
       TextureEnabledBox.setText("Display Texture");
       TextureEnabledBox.setSelected(true);
-      ActionListener TextureEnabledListener = new ActionListener(){
+      ActionListener TextureEnabledListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean textureEnabled = TextureEnabledBox.isSelected();
-          DevelopmentUI.setExponentialView(false, textureEnabled);
-          DevelopmentUI.setFirstPersonView(false, textureEnabled);
-          DevelopmentUI.setEmbeddedView(false, textureEnabled);
-          DevelopmentUI.setEmbeddedView(showEmbeddedBox.isSelected(),textureEnabled);
-          DevelopmentUI.setExponentialView(showView2DBox.isSelected(), textureEnabled);
-          DevelopmentUI.setFirstPersonView(showView3DBox.isSelected(), textureEnabled);
-        } 
-    };
-    TextureEnabledBox.addActionListener(TextureEnabledListener);
+          currentSim.setTexturing(textureEnabled);
+        }
+      };
+      TextureEnabledBox.addActionListener(TextureEnabledListener);
     }
-    // ******************************DRAW OPTIONS PANEL********************************
+
+    /*********************************************************************************
+     * DrawOptionsPanel
+     * 
+     * Contains: - ShowEdges checkbox. - ShowFaces checkbox. - ShowTexture
+     * checkbox.
+     *********************************************************************************/
+
     drawOptionsPanel = new JPanel();
     getContentPane().add(drawOptionsPanel);
-    drawOptionsPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-    drawOptionsPanel.setLayout(new BoxLayout(drawOptionsPanel, BoxLayout.Y_AXIS));
+    drawOptionsPanel.setBorder(BorderFactory
+        .createEtchedBorder(EtchedBorder.LOWERED));
+    drawOptionsPanel
+        .setLayout(new BoxLayout(drawOptionsPanel, BoxLayout.Y_AXIS));
 
-    // ***************************DRAW EDGES CHECK BOX*****************************
     {
       drawEdgesBox = new JCheckBox();
       drawOptionsPanel.add(drawEdgesBox);
@@ -515,12 +432,12 @@ public class ViewerController extends JFrame {
       ActionListener drawEdgesListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           boolean boxChecked = drawEdgesBox.isSelected();
-          DevelopmentUI.setDrawEdges(boxChecked);
+          currentSim.setDrawEdges(boxChecked);
         }
       };
       drawEdgesBox.addActionListener(drawEdgesListener);
     }
-    // ***************************DRAW FACES CHECK BOX*****************************
+
     {
       drawFacesBox = new JCheckBox();
       drawOptionsPanel.add(drawFacesBox);
@@ -530,12 +447,12 @@ public class ViewerController extends JFrame {
       ActionListener drawFacesListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean boxChecked = drawFacesBox.isSelected();
-          DevelopmentUI.setDrawFaces(boxChecked);
+          currentSim.setDrawFaces(boxChecked);
         }
       };
       drawFacesBox.addActionListener(drawFacesListener);
     }
-    // ***************************DRAW AVATAR CHECK BOX*****************************
+
     {
       drawAvatarBox = new JCheckBox();
       drawOptionsPanel.add(drawAvatarBox);
@@ -546,38 +463,18 @@ public class ViewerController extends JFrame {
       ActionListener drawAvatar = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           boolean showAvatar = drawAvatarBox.isSelected();
-          if (showAvatar) {
-            source.setVisible(true);
-          } else {
-            source.setVisible(false);
-          }
+          currentSim.setSourceVisible(showAvatar);
         }
       };
       drawAvatarBox.addActionListener(drawAvatar);
     }
   }
 
-  private void resetViewController() {
-    source = markerHandler.getSourceMarker();
-    numObjects.setValue(markerHandler.getAllMarkers().size() - 1);
-    recDepth.setValue(develop.getDepth());
-    double speed = markerHandler.getMarkerSpeed(source);
-    double speedToSet = Math.log(speed / 0.05);
-    speedSlider.setValue((int) (speedToSet * 1000.0));
-    scalingSlider.setValue((int) (markerHandler.getMarkerScale(source) * 10));
-    stopStartButton.setText("Stop");
-    showView2DBox.setSelected(true);
-    showView3DBox.setSelected(true);
-    showEmbeddedBox.setSelected(true);
-    drawEdgesBox.setSelected(true);
-    drawAvatarBox.setSelected(true);
-    drawFacesBox.setSelected(true);
-  }
-
-  public void setMarkerHandler(MarkerHandler mh) {
-    markerHandler = mh;
-  }
-  public void setGeodesics(ForwardGeodesic geo){
-    this.geo = geo;
+  private void reset(String pathToSurfaceData) {
+    // First, lock the interface, so the user can't give data to
+    // a non-operational DevelopmentUI.
+    this.setEnabled(false);    
+    // Next, signal the current simulation to terminate.
+    currentSim.terminate();    
   }
 }

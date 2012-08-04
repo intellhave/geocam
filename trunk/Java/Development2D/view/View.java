@@ -251,7 +251,8 @@ public abstract class View {
   /*********************************************************************************
    * updateScene
    *********************************************************************************/
-  public void updateScene() {
+  public void update() {
+    updateGeometry();
     updateCamera();
     viewer.render();
   }

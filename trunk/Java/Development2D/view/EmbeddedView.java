@@ -328,6 +328,6 @@ public class EmbeddedView extends View {
       sgcDevelopment.addChild(sgc);
     }    
     
-    updateScene();
+    update();
   }
 }

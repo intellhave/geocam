@@ -63,18 +63,16 @@ public class AnimationUI {
       while (accumulator >= dt) {
         control.runNextAction();
         accumulator -= dt;
-      }
-      unfoldingView.updateGeometry();
-      unfoldingView.updateScene();
+      }      
+      unfoldingView.update();
     }
   }
 
   private static void initViews() {
     faceAppearanceScheme = new FaceAppearanceScheme();
     unfoldingView = new UnfoldingView(source, faceAppearanceScheme);
-    unfoldingView.updateGeometry();
     unfoldingView.initializeNewManifold();
-    unfoldingView.updateScene();
+    unfoldingView.update();
 
     frame = new JFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
