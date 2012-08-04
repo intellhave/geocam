@@ -204,10 +204,9 @@ public class CookieGame {
     faceAppearanceScheme = new FaceAppearanceScheme();
     int[] framePosition = { 0, 10 };
     int[] frameSize = { 700, 700 };
-    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme);
-    gameView.updateGeometry();
+    gameView = new ExponentialView(development, markerHandler, faceAppearanceScheme);    
     gameView.initializeNewManifold();
-    gameView.updateScene();
+    gameView.update();
 
     viewer = new JFrame();
     viewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -337,6 +336,6 @@ public class CookieGame {
    *********************************************************************************/
   private static void render() {
     gameView.updateGeometry(true, true);
-    gameView.updateScene();
+    gameView.update();
   }
 }
