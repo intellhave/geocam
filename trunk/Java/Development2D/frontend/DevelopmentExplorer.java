@@ -13,8 +13,8 @@ public class DevelopmentExplorer {
       System.out.println("Rebooting! Using " + vc.getPath());
       System.out.flush();
       dui = new DevelopmentUI(vc.getPath());
-      // Now we have a fresh DevelopmentUI instance. We're ready to allow user
-      // input from vc again.
+      // Now we have a fresh, initialized DevelopmentUI instance. We're ready to
+      // allow user input from vc again.
       vc.setSimulation(dui);
       vc.setEnabled(true);
     }

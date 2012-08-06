@@ -24,6 +24,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.MaskFormatter;
 
 public class ViewerController extends JFrame {
 
@@ -32,32 +33,71 @@ public class ViewerController extends JFrame {
   /********************************************************************************
    * Viewer Controller Data
    * 
-   * Data related to the model
+   * These references allow us to adjust the main UI object, an instance of
+   * DevelopmentUI. currentSurfacePath keeps track of the filename for the
+   * surface we currently display to the user.
    ********************************************************************************/
   private DevelopmentUI currentSim;
   private String currentSurfacePath;
-  
+
   public ViewerController(DevelopmentUI dui) {
-    setSimulation(dui);
+    currentSim = dui;
+    layoutGUI();
+    synchronizeSettings();
+    this.setVisible(true);
   }
-  
-  public String getPath(){
+
+  public String getPath() {
     return currentSurfacePath;
   }
 
-  public void setSimulation(DevelopmentUI dui){    
-    currentSim = dui;    
-    layoutGUI();
+  public void setSimulation(DevelopmentUI dui) {
+    currentSim = dui;
+    synchronizeSettings();
+  }
+
+  /********************************************************************************
+   * synchronizeSettings
+   * 
+   * This method is used to push all the settings currently contained in
+   * ViewerController onto the current DevelopmentUI object. This method is only
+   * used when we're given a fresh DevelopmentUI object and want to make sure
+   * its state matches the state of the buttons on the panel. Usually, each
+   * button will have its own action listener object for pushing individual
+   * changes onto the current DevelopmentUI object.
+   ********************************************************************************/
+  private void synchronizeSettings() {
+    currentSim.setRecursionDepth(Integer.parseInt(recDepth.getValue()
+        .toString()));
+    currentSim.setMovingMarkerCount(Integer.parseInt(numObjects.getValue().toString()));
+
+    double sliderValue = speedSlider.getValue() / 1000.0;
+    double newSpeed = 0.05 * Math.pow(Math.E, sliderValue);
+    currentSim.setMovingMarkerSpeed(newSpeed);
+
+    double newScale = scalingSlider.getValue() / 10.0;
+    currentSim.setMovingMarkerScale(newScale);
+
+    currentSim.setGeodesicLength(geoSlider.getValue());
+
+    currentSim.clearGeodesic();
+
+    boolean bb = stopStartButton.getText().equals("Stop");
+    currentSim.setMarkerMobility(bb);
+
     currentSim.setExponentialView(showView2DBox.isSelected());
     currentSim.setEmbeddedView(showEmbeddedBox.isSelected());
     currentSim.setFirstPersonView(showView3DBox.isSelected());
-    this.setVisible(true);
+
+    currentSim.setDrawEdges(drawEdgesBox.isSelected());
+    currentSim.setDrawFaces(drawFacesBox.isSelected());
+    currentSim.setSourceVisible(drawAvatarBox.isSelected());
   }
-  
+
   /********************************************************************************
    * JFrame Data
    * 
-   * Data required for laying out the window
+   * This data is required for laying out the window.
    ********************************************************************************/
   private JMenuBar menuBar;
   private JMenu file;
@@ -112,7 +152,13 @@ public class ViewerController extends JFrame {
         System.err.println("Error: Could not locate file " + path + ".");
         System.exit(1);
       }
-      vc.reset(file.getAbsolutePath());
+
+      // First, lock the interface, so the user can't give data to
+      // a non-operational DevelopmentUI.
+      vc.currentSurfacePath = file.getAbsolutePath();
+      vc.setEnabled(false);
+      // Next, signal the current simulation to terminate.
+      currentSim.terminate();
     }
   }
 
@@ -164,12 +210,9 @@ public class ViewerController extends JFrame {
         .createEtchedBorder(EtchedBorder.LOWERED));
     textBoxPanel.setLayout(new GridLayout(2, 1));
     {
-      NumberFormat f = NumberFormat.getIntegerInstance();
-      recDepth = new JFormattedTextField(f);
+      recDepth = new JFormattedTextField(NumberFormat.getIntegerInstance());
       recDepth.setColumns(3);
-
       recDepth.setValue(3);
-      currentSim.setRecursionDepth(3);
 
       recDepthLabel = new JLabel("Recursion Depth");
       recDepthPanel = new JPanel();
@@ -178,11 +221,9 @@ public class ViewerController extends JFrame {
       recDepthPanel.add(recDepth);
       textBoxPanel.add(recDepthPanel);
 
-      numObjects = new JFormattedTextField(f);
+      numObjects = new JFormattedTextField(NumberFormat.getIntegerInstance());      
       numObjects.setColumns(3);
-
       numObjects.setValue(3);
-      currentSim.setMovingMarkerCount(3);
 
       numObjectsLabel = new JLabel("Number of objects");
       numObjectsPanel = new JPanel();
@@ -209,14 +250,12 @@ public class ViewerController extends JFrame {
       // Number of objects action listener
       ActionListener numObjectsListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          String value = numObjects.getValue().toString();
-          Integer numMarkers = Integer.parseInt(value);
+          Integer numMarkers = Integer.parseInt(numObjects.getValue().toString());          
           if (numMarkers < 0) {
             numMarkers = 0;
           } else if (numMarkers > 20) {
             numMarkers = 20;
-          }
-          numObjects.setValue(numMarkers.toString());
+          }          
           currentSim.setMovingMarkerCount(numMarkers);
         }
       };
@@ -282,7 +321,6 @@ public class ViewerController extends JFrame {
       sliderPanel.add(geoSlider);
       geoSlider.setMaximum(30);
       geoSlider.setValue(5);
-      currentSim.setGeodesicLength(5);
       geoSlider.setBorder(geoBorder);
       geoBorder.setTitle("Geodesic length (" + geoSlider.getValue() + ")");
 
@@ -328,9 +366,9 @@ public class ViewerController extends JFrame {
 
       ActionListener stopStartButtonListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          boolean markersMobile = stopStartButton.getText().equals("Stop");
-          currentSim.setMarkerMobility(markersMobile);
-          if (markersMobile) {
+          boolean bb = stopStartButton.getText().equals("Stop");
+          currentSim.setMarkerMobility(!bb);
+          if (bb) {
             stopStartButton.setText("Start");
           } else {
             stopStartButton.setText("Stop");
@@ -357,7 +395,6 @@ public class ViewerController extends JFrame {
       viewerPanel.add(showView2DBox);
       showView2DBox.setText("Show Exponential View");
       showView2DBox.setSelected(true);
-
       ActionListener view2DListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean checkBox = showView2DBox.isSelected();
@@ -468,13 +505,5 @@ public class ViewerController extends JFrame {
       };
       drawAvatarBox.addActionListener(drawAvatar);
     }
-  }
-
-  private void reset(String pathToSurfaceData) {
-    // First, lock the interface, so the user can't give data to
-    // a non-operational DevelopmentUI.
-    this.setEnabled(false);    
-    // Next, signal the current simulation to terminate.
-    currentSim.terminate();    
   }
 }

@@ -39,10 +39,58 @@ import development.EmbeddedTriangulation;
 import development.ManifoldPosition;
 import development.Vector;
 
+/*********************************************************************************
+ * DevelopmentUI
+ * 
+ * This object is responsible for bringing together three views of a particular
+ * triangulated surface and its development. It provides a means to receive
+ * input from the user, and to control all three views in a consistent way.
+ * 
+ * Originally, much of the code responsible for adjusting the views appeared in
+ * ViewerController. This was problematic, because it meant that whenever we
+ * wanted to set up a new simulation (display a different surface) on the fly,
+ * both the DevelopmentUI and ViewerController had to update many state
+ * variables. Inevitably, we got the updates wrong, and null pointer exceptions
+ * resulted.
+ * 
+ * In our current system, ViewerController is ONLY responsible for setting up
+ * the buttons/sliders/etc. and converting their events into method calls to the
+ * current DevelopmentUI object. This means that a ViewerController object NEVER
+ * queries the DevelopmentUI object for information --- it ONLY tells the
+ * DevelopmentUI object what it wants, and sets its display based on that
+ * information.
+ * 
+ * To repeat this important point: Information flows only one way, from
+ * ViewerController to DevelopmentUI!
+ * 
+ * When we want to display a different surface, we simply destroy the current
+ * DevelopmentUI object and make a new one. Unfortunately, because our
+ * application is multithreaded and we have a global "Triangulation" object,
+ * this is a little tricky. The thread that wants to end the simulation should
+ * begin by calling the "terminate" method. This signals the thread running
+ * within the run method's render loop that it is time to stop the simulation.
+ * This "rendering thread" will break out of the render loop at it's first
+ * opportunity.
+ * 
+ * We adopted this structure because trying to get the AWT-Event thread to
+ * synchronize with the render thread created deadlock. The "rendering thread"
+ * should usually be the thread created by the program's main method. If a new
+ * simulation is terminated, the rendering thread is the thread that should
+ * create a new DevelopmentUI instance and start running it. Because we have a
+ * single Triangulation object, two DevelopmentUI instances (for distinct
+ * surfaces) cannot exist without problems.
+ * 
+ * To repeat an important idiom: The ViewerController (and its event based code)
+ * only passes signals and information to the main thread! If there's heavy
+ * lifting to be done (e.g. creating a new simulation for a different surface),
+ * ViewerController should give the main thread the signal to do this work. To
+ * ensure correctness, an AWT-Event thread may want to lock the current
+ * ViewerController instance, so that no new button/slider/etc. events can be
+ * created. This is done with ViewerController's setEnabled method.
+ *********************************************************************************/
+
 public class DevelopmentUI implements Runnable {
-  private boolean simulationInitialized = false;
   private boolean simulationRunning = false;
-  private boolean simulationTerminated = false;
 
   /*********************************************************************************
    * Model Data
@@ -57,7 +105,7 @@ public class DevelopmentUI implements Runnable {
   private ForwardGeodesic geo;
   private double movingMarkerSpeed;
   private double movingMarkerScale;
-  
+
   /*********************************************************************************
    * View Data
    * 
@@ -80,15 +128,23 @@ public class DevelopmentUI implements Runnable {
    * keeping track of user input to the program that effects the model.
    *********************************************************************************/
   private UserController userControl;
-  
+
   public DevelopmentUI(String pathToSurfaceData) {
     initSurface(pathToSurfaceData);
     initMarkers();
     initViews();
     initModelControls();
-    simulationInitialized = true;    
   }
 
+  /*********************************************************************************
+   * run
+   * 
+   * This method is where the "rendering" thread spends most of its time. Within
+   * this method's while loop, we receive input from the user, update the state
+   * of the simulation, and then render to all of the active views managed by
+   * this object. We break out of the while loop only when we receive a message
+   * from another thread.
+   *********************************************************************************/
   public void run() {
     simulationRunning = true;
     final long dt = 10; // Timestep size, in microseconds
@@ -138,8 +194,6 @@ public class DevelopmentUI implements Runnable {
       }
     }
     control.interrupt();
-
-    simulationTerminated = true;
   }
 
   /*********************************************************************************
@@ -166,15 +220,18 @@ public class DevelopmentUI implements Runnable {
     }
   }
 
+  /*********************************************************************************
+   * terminate
+   * 
+   * This method allows other threads (like the AWT Event thread) to signal the
+   * thread running in the "run" loop that it should stop the simulation at it's
+   * earliest convenience.
+   *********************************************************************************/
   public void terminate() {
     simulationRunning = false;
     setExponentialView(false);
     setEmbeddedView(false);
     setFirstPersonView(false);
-  }
-  
-  public boolean isTerminated(){
-    return simulationTerminated;
   }
 
   /*********************************************************************************
@@ -236,23 +293,23 @@ public class DevelopmentUI implements Runnable {
         .addSourceMarker(new Marker(pos, app, Marker.MarkerType.SOURCE));
     source = markerHandler.getSourceMarker();
 
-    Random rand = new Random();
-    // Introduce three other markers to move around on the manifold.
-    for (int ii = 0; ii < 3; ii++) {
-      pos = new ManifoldPosition(development.getSource());
-      app = new MarkerAppearance(ModelType.ANT, .75);
-      double a = rand.nextDouble() * Math.PI * 2;
-      Vector vel = new Vector(Math.cos(a), Math.sin(a));
-      vel.scale(0.0005);
-
-      Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
-      m.setSpeed(0.0);
-      markerHandler.addMarker(m);
-    }
-
-    // Move the markers along their trajectories for 300ms, so that they don't
-    // sit on top of each other.
-    markerHandler.updateMarkers(300);
+//    Random rand = new Random();
+//    // Introduce three other markers to move around on the manifold.
+//    for (int ii = 0; ii < 3; ii++) {
+//      pos = new ManifoldPosition(development.getSource());
+//      app = new MarkerAppearance(ModelType.ANT, .75);
+//      double a = rand.nextDouble() * Math.PI * 2;
+//      Vector vel = new Vector(Math.cos(a), Math.sin(a));
+//      vel.scale(0.0005);
+//
+//      Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
+//      m.setSpeed(0.0);
+//      markerHandler.addMarker(m);
+//    }
+//
+//    // Move the markers along their trajectories for 300ms, so that they don't
+//    // sit on top of each other.
+//    markerHandler.updateMarkers(300);
   }
 
   /*********************************************************************************
@@ -281,33 +338,32 @@ public class DevelopmentUI implements Runnable {
     // userControl = new SNESController(development);
     userControl = new KeyboardController(development, crumbs, geo);
   }
-
   
   /*********************************************************************************
-   * Simulation Controls
+   * Simulation and Marker Control Methods
+   * 
+   * These methods are used by outside code (like ViewerController instances) to
+   * set certain common parameters of the simulation pertinent to markers, like
+   * the number of markers, their speed and size, etc.
    *********************************************************************************/
-  public void setRecursionDepth(int depth){
+  public void setRecursionDepth(int depth) {
     development.setDepth(depth);
   }
   
-  
-  /*********************************************************************************
-   * Marker Control Methods
-   *********************************************************************************/
   public void setMarkerMobility(boolean canMove) {
-    if(canMove){
+    if (canMove) {
       markerHandler.unpauseSimulation();
     } else {
       markerHandler.pauseSimulation();
     }
   }
 
-  public void setMovingMarkerCount(int numMarkers){           
+  public void setMovingMarkerCount(int numMarkers) {
     Set<Marker> markers = markerHandler.getAllMarkers();
     // Get the current number of moving markers.
     int currentMarkers = 0;
-    for( Marker m : markers) {
-      if(m.getMarkerType() == Marker.MarkerType.MOVING){
+    for (Marker m : markers) {
+      if (m.getMarkerType() == Marker.MarkerType.MOVING) {
         currentMarkers++;
       }
     }
@@ -319,67 +375,70 @@ public class DevelopmentUI implements Runnable {
       MarkerAppearance app;
 
       for (int ii = 0; ii < numMarkers - currentMarkers; ii++) {
-        pos = new ManifoldPosition(development.getSource());        
-        app = new MarkerAppearance(source.getAppearance().getModelType(), movingMarkerScale);
+        pos = new ManifoldPosition(development.getSource());
+        app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, movingMarkerScale);
         double a = rand.nextDouble() * Math.PI * 2;
         Vector vel = new Vector(Math.cos(a), Math.sin(a));
         // Move the new marker away from the source point.
         vel.scale(0.25);
         pos.move(vel);
-        
-        Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);        
-        m.setSpeed(movingMarkerSpeed);
 
+        Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
+        m.setSpeed(movingMarkerSpeed);
+        m.setVisible(true);
         markerHandler.addMarker(m);
       }
+      markerHandler.updateMarkers(100);
     }
 
     // If necessary, remove moving markers.
     if (currentMarkers > numMarkers) {
-      int counter = 0;            
+      int counter = 0;
       for (Marker m : markers) {
-        if (m.getMarkerType() == Marker.MarkerType.MOVING){
+        if (m.getMarkerType() == Marker.MarkerType.MOVING) {
           m.flagForRemoval();
           counter++;
         }
-        if (counter == currentMarkers - numMarkers) break;
+        if (counter == currentMarkers - numMarkers)
+          break;
       }
     }
   }
-  
-  
-  public void setMovingMarkerSpeed(double speed){
-    for(Marker m : markerHandler.getAllMarkers()){
-      if(m.getMarkerType() == Marker.MarkerType.MOVING){
+
+  public void setMovingMarkerSpeed(double speed) {
+    movingMarkerSpeed = speed;
+    for (Marker m : markerHandler.getAllMarkers()) {
+      if (m.getMarkerType() == Marker.MarkerType.MOVING) {
         m.setSpeed(speed);
       }
     }
   }
-  
-  public void setMovingMarkerScale(double scale){
-    for(Marker m : markerHandler.getAllMarkers()){
-      if(m.getMarkerType() == Marker.MarkerType.MOVING){
+
+  public void setMovingMarkerScale(double scale) {
+    movingMarkerScale = scale;
+    for (Marker m : markerHandler.getAllMarkers()) {
+      if (m.getMarkerType() == Marker.MarkerType.MOVING) {
         m.getAppearance().setScale(scale);
       }
     }
   }
 
-  public void setSourceVisible(boolean b){
+  public void setSourceVisible(boolean b) {
     markerHandler.getSourceMarker().setVisible(b);
   }
-  
-  public void setGeodesicLength(int length){
-    if( length < 0 ) return;
-    clearGeodesic();    
-    geo.setLength(length);    
+
+  public void setGeodesicLength(int length) {
+    if (length < 0)
+      return;
+    clearGeodesic();
+    geo.setLength(length);
   }
-  
-  public void clearGeodesic(){
-    for(Marker m : geo.getMarkers()){
+
+  public void clearGeodesic() {
+    for (Marker m : geo.getMarkers()) {
       m.flagForRemoval();
     }
   }
-  
 
   /*********************************************************************************
    * View Control Methods
@@ -515,14 +574,18 @@ public class DevelopmentUI implements Runnable {
     }
   }
 
-  
-  public void setDrawEdges(boolean showEdges){      
+  public void setDrawEdges(boolean showEdges) {
+    for(View v : views){
+      v.setDrawEdges(showEdges);
+    }
   }
-  
-  public void setDrawFaces(boolean showFaces){
-    
+
+  public void setDrawFaces(boolean showFaces) {
+    for(View v : views){
+      v.setDrawFaces(showFaces);
+    }
   }
-  
+
   public void setTexturing(boolean texturingOn) {
     texturingEnabled = texturingOn;
     for (View v : views) {
