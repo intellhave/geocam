@@ -88,6 +88,9 @@ public class ViewerController extends JFrame {
     currentSim.setExponentialView(showView2DBox.isSelected());
     currentSim.setEmbeddedView(showEmbeddedBox.isSelected());
     currentSim.setFirstPersonView(showView3DBox.isSelected());
+    
+    currentSim.setEmbeddedZoom(embeddedZoomSlider.getValue()/100.0);
+    currentSim.setExponentialZoom(Math.pow(10,(exponentialZoomSlider.getValue()-100)/100.0));
 
     currentSim.setDrawEdges(drawEdgesBox.isSelected());
     currentSim.setDrawFaces(drawFacesBox.isSelected());
@@ -112,6 +115,8 @@ public class ViewerController extends JFrame {
   private JSlider speedSlider;
   private JSlider scalingSlider;
   private JSlider geoSlider;
+  private JSlider exponentialZoomSlider;
+  private JSlider embeddedZoomSlider;
   private JPanel buttonPanel;
   private JButton stopStartButton;
   private JButton clearGeosButton;
@@ -133,6 +138,8 @@ public class ViewerController extends JFrame {
   TitledBorder speedBorder = BorderFactory.createTitledBorder("");
   TitledBorder objectsBorder = BorderFactory.createTitledBorder("");
   TitledBorder geoBorder = BorderFactory.createTitledBorder("");
+  TitledBorder zoomBorder = BorderFactory.createTitledBorder("");
+  TitledBorder zoom2Border = BorderFactory.createTitledBorder("");
 
   private class SurfaceLoader implements ActionListener {
     private ViewerController vc;
@@ -164,7 +171,7 @@ public class ViewerController extends JFrame {
 
   private void layoutGUI() {
 
-    this.setSize(220, 520);
+    this.setSize(220, 600);
     this.setResizable(false);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setTitle("Development View");
@@ -265,11 +272,15 @@ public class ViewerController extends JFrame {
     /*********************************************************************************
      * Slider Panel
      * 
-     * Contains: - Speed slider. - Scale slider. - Geodesic length slider.
+     * Contains: - Speed slider. - Scale slider. - Geodesic length slider - Zoom Slider
      * 
      * Note: Speed slider is using the exponential function y = 0.05*e^x to
      * convert input from the slider to a speed. This gives you more control
      * over low speeds on the slider.
+     * 
+     * Note: The Exponential Zoom Slider uses the simple exponential function 
+     * y = 10^x to allow the user to have greater control over their ability to zoom
+     * in on the surface.
      *********************************************************************************/
     sliderPanel = new JPanel();
     getContentPane().add(sliderPanel);
@@ -283,7 +294,7 @@ public class ViewerController extends JFrame {
 
       final DecimalFormat speedFormat = new DecimalFormat("0.00");
       speedSlider.setBorder(speedBorder);
-      speedBorder.setTitle("Speed (" + speedFormat.format(0) + ")");
+      speedBorder.setTitle("Speed (" + speedFormat.format(.05) + ")");
 
       ChangeListener speedSliderListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -334,6 +345,49 @@ public class ViewerController extends JFrame {
 
       };
       geoSlider.addChangeListener(geoSliderListener);
+    }
+    {
+    exponentialZoomSlider = new JSlider();
+    sliderPanel.add(exponentialZoomSlider);
+    exponentialZoomSlider.setMaximum(200);
+    exponentialZoomSlider.setValue(100);
+    exponentialZoomSlider.setBorder(zoomBorder);
+    DecimalFormat percentFormat = new DecimalFormat("0%");
+    double sliderValue = ((exponentialZoomSlider.getValue()/100.0));
+    double percentZoom = (1/sliderValue);
+    zoomBorder.setTitle("Exponential Zoom (" +percentFormat.format(percentZoom)+")");
+    
+    ChangeListener exponentialZoomListener = new ChangeListener(){
+      public void stateChanged(ChangeEvent e) {
+        DecimalFormat percentFormat = new DecimalFormat("0%");
+        double zoom = (exponentialZoomSlider.getValue()-100.0)/100.0;
+        currentSim.setExponentialZoom(Math.pow(10,zoom)); 
+       double zoomToSet = (1.0/(exponentialZoomSlider.getValue()/100.0));
+       zoomBorder.setTitle("Exponential Zoom (" +percentFormat.format(zoomToSet)+")");
+      }  
+    };
+    exponentialZoomSlider.addChangeListener(exponentialZoomListener);
+    }
+    {
+    embeddedZoomSlider = new JSlider();
+    sliderPanel.add(embeddedZoomSlider);
+    embeddedZoomSlider.setMaximum(1000);
+    embeddedZoomSlider.setValue(300);
+    embeddedZoomSlider.setBorder(zoom2Border);
+    DecimalFormat percentFormat = new DecimalFormat("0%");
+    double zoomToSet = (1.0/(embeddedZoomSlider.getValue()/300.0));
+    zoom2Border.setTitle("Embedded Zoom (" +percentFormat.format(zoomToSet)+")");
+  
+    ChangeListener embeddedZoomListener = new ChangeListener(){
+      public void stateChanged(ChangeEvent e) {
+        DecimalFormat percentFormat = new DecimalFormat("0%");
+        double zoomToSet = (1.0/(embeddedZoomSlider.getValue()/300.0));
+        zoom2Border.setTitle("Embedded Zoom (" +percentFormat.format(zoomToSet)+")");
+        double zoom = embeddedZoomSlider.getValue()/100.0;
+        currentSim.setEmbeddedZoom(zoom);
+      }  
+    };
+    embeddedZoomSlider.addChangeListener(embeddedZoomListener);
     }
 
     /********************************************************************************
@@ -464,7 +518,7 @@ public class ViewerController extends JFrame {
       drawEdgesBox = new JCheckBox();
       drawOptionsPanel.add(drawEdgesBox);
       drawEdgesBox.setText("Draw edges");
-      drawEdgesBox.setSelected(true);
+      drawEdgesBox.setSelected(false);
 
       ActionListener drawEdgesListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {

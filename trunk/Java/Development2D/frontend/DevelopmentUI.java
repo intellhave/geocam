@@ -593,4 +593,10 @@ public class DevelopmentUI implements Runnable {
       v.update();
     }
   }
+  public void setEmbeddedZoom(double zoomValue){
+    embeddedView.setZoom(zoomValue);
+  }
+  public void setExponentialZoom(double zoomValue){
+    exponentialView.setZoom(zoomValue);
+  }
 }

@@ -509,4 +509,9 @@ public class UnfoldingView extends View {
     }
   }
 
+  public void setZoom(double zoomValue) {
+
+    
+  }
+
 }

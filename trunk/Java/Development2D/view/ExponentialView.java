@@ -1,5 +1,9 @@
 package view;
 
+import geoquant.Length;
+
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +15,7 @@ import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
+import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
 import view.TextureLibrary.TextureDescriptor;
@@ -55,6 +60,7 @@ public class ExponentialView extends View {
       FaceAppearanceScheme fas) {
     super(d, mh, fas);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
+    zoom = 1.0;
 
     // create light
     sgcLight = new SceneGraphComponent();
@@ -65,6 +71,7 @@ public class ExponentialView extends View {
     // MatrixBuilder.euclidean().translate(0,0,5).assignTo(sgcLight);
     sgcCamera.addChild(sgcLight);
     Camera cam = sgcCamera.getCamera();
+    
     cam.setPerspective(false);
 
     faceDevelopments = new HashMap<Face, DevelopmentGeometry>();
@@ -89,8 +96,27 @@ public class ExponentialView extends View {
    * rotation ensures that the source point's "forward direction" points north.
    *********************************************************************************/
   protected void updateCamera() {
+    Camera cam = sgcCamera.getCamera();
+    // setting the "On Axis" feature to false allows us to zoom in and out on the surface
+    cam.setOnAxis(false);
+    Edge e = markers.getSourceMarker().getPosition().getFace().getLocalEdges()
+        .get(0);
+    double edgeLength = Length.valueAt(e);
+    double size = 4 * edgeLength * zoom;
+
     MatrixBuilder.euclidean().translate(0, 0, 3).rotateZ(-Math.PI / 2)
         .assignTo(sgcCamera);
+
+    /*
+     * This Rectangle object describes the field of view of the camera. By
+     * changing the value of size, we can create the illusion of zooming in and
+     * out.
+     */
+
+    Rectangle2D.Double view = new Rectangle2D.Double(-size / 2.0, -size / 2.0,
+        size, size);
+    cam.setViewPort(view);
+
   }
 
   /*********************************************************************************
@@ -321,5 +347,8 @@ public class ExponentialView extends View {
     for (SceneGraphComponent sgc : objectImages) {
       sgcMarkers.removeChild(sgc);
     }
+  }
+  public void setZoom(double newZoom){
+    zoom = newZoom;
   }
 }

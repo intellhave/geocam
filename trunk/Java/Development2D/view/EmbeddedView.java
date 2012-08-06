@@ -126,8 +126,12 @@ public class EmbeddedView extends View {
     matrix[3 * 4 + 1] = 0.0;
     matrix[3 * 4 + 2] = 0.0;
     matrix[3 * 4 + 3] = 1.0;
+    
+    /*Scaling the adjustedNormal vector by the amount "zoom" has the effect of translating the camera
+     * in space. This feature is used to create the illusion that one is zooming in or out on the surface.
+     */
 
-    adjustedNormal.scale(3.0);
+    adjustedNormal.scale(zoom);
 
     MatrixBuilder.euclidean().translate(adjustedNormal.getVectorAsArray())
         .translate(embPsn.getVectorAsArray()).times(matrix)
@@ -329,5 +333,9 @@ public class EmbeddedView extends View {
     }    
     
     update();
+  }
+  
+  public void setZoom(double newZoom){
+    zoom = newZoom;
   }
 }
