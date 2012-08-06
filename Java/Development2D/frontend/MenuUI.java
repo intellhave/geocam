@@ -35,6 +35,8 @@ public class MenuUI extends JFrame {
   // the simulation UI
   private UserController controller;
   private Boolean exit;
+  private DevelopmentUI dui;
+  private String path = "Data/surfaces/tetra2.off";
 
   /*********************************************************************************
    * Image data
@@ -82,6 +84,7 @@ public class MenuUI extends JFrame {
    *********************************************************************************/
 
   public MenuUI() {
+    dui = new DevelopmentUI(path);
     // controller = new SNESMenuController();
     controller = new KeyboardMenuController();
     try {
@@ -412,7 +415,10 @@ public class MenuUI extends JFrame {
           this.setVisible(false);
           // Menu windows are now hidden, we can pass control to the Explorer
           // simulation.
-          DevelopmentUI.runExplorer();
+          dui.setEmbeddedView(true);
+          dui.setExponentialView(true);
+          dui.setFirstPersonView(true);
+          dui.run();
           // Now we have returned from the runExplorer method call.
           // This means that the Explorer simulation is currently paused.
           // Consequently, we need to bring the menu windows back and restore
@@ -460,7 +466,7 @@ public class MenuUI extends JFrame {
       case A_Button:
         if (state == 0) {
           this.setVisible(false);
-          DevelopmentUI.runSimulation();
+          dui.run();
           controller.clear();
           this.setVisible(true);
           break;
@@ -471,7 +477,7 @@ public class MenuUI extends JFrame {
       }
 
       if (a == Action.A_Button && state == 2) {
-        DevelopmentUI.quitExplorer();
+        dui.terminate();
         this.setSize(700, 700);
         break;
       }

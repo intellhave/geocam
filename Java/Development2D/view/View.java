@@ -55,6 +55,7 @@ public abstract class View {
   protected MarkerHandler markers;
   protected FaceAppearanceScheme faceAppearanceScheme;
   protected boolean showTexture;
+  protected double zoom;
 
   /*********************************************************************************
    * Scene Graph Data
@@ -95,6 +96,7 @@ public abstract class View {
   
     this.faceAppearanceScheme = fas;
     showTexture = true;
+    zoom=3.0;
 
     initSceneGraph();
     initAppearances();
@@ -170,8 +172,11 @@ public abstract class View {
    * the development should be explicitly drawn.
    *********************************************************************************/
   public void setDrawEdges(boolean value) {
-    Appearance app = sgcDevelopment.getAppearance();
-    app.setAttribute(CommonAttributes.EDGE_DRAW, value);
+    for(SceneGraphComponent child: sgcDevelopment.getChildComponents()){
+      Appearance app = child.getAppearance();
+      if(app!=null)
+        app.setAttribute(CommonAttributes.EDGE_DRAW, value);
+    }
   }
 
   /*********************************************************************************
@@ -306,6 +311,8 @@ public abstract class View {
   public void setTexture(boolean texture){
     showTexture = texture;
   }
+  
+  public abstract void setZoom(double zoomValue);
 
   /*********************************************************************************
    * lookAt
