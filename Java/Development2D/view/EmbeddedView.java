@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
-import marker.BreadCrumbs;
-import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
@@ -302,7 +300,7 @@ public class EmbeddedView extends View {
    * This method is overridden from View, because in the case of an EmbeddedView
    * we cannot simply "redevelop" the manifold to force an appearance change.
    *********************************************************************************/
-  public void setTexture(boolean texture) {
+  public void setDrawTextures(boolean texture) {
     showTexture = texture;
     
     int[][] ifsf_faces = new int[][] { { 0, 1, 2 } };

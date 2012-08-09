@@ -24,7 +24,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.MaskFormatter;
 
 public class ViewerController extends JFrame {
 
@@ -230,7 +229,7 @@ public class ViewerController extends JFrame {
 
       numObjects = new JFormattedTextField(NumberFormat.getIntegerInstance());      
       numObjects.setColumns(3);
-      numObjects.setValue(3);
+      numObjects.setValue(0);
 
       numObjectsLabel = new JLabel("Number of objects");
       numObjectsPanel = new JPanel();
@@ -494,7 +493,7 @@ public class ViewerController extends JFrame {
       ActionListener TextureEnabledListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
           boolean textureEnabled = TextureEnabledBox.isSelected();
-          currentSim.setTexturing(textureEnabled);
+          currentSim.setDrawTextures(textureEnabled);
         }
       };
       TextureEnabledBox.addActionListener(TextureEnabledListener);
