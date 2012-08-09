@@ -9,6 +9,7 @@ import java.util.EnumMap;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Appearance;
 import de.jreality.shader.DefaultGeometryShader;
+import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ImageData;
 import de.jreality.shader.ShaderUtility;
@@ -54,6 +55,41 @@ public class TextureLibrary {
   }
 
   /*********************************************************************************
+   * initializeShaders
+   * 
+   * This helper method is used in the "initializeAppearance" methods below to
+   * set up the shaders the appearance will use. Basically, this ensures the
+   * shaders are set up in a consistent way (not doing this has created odd bugs
+   * in the past).
+   * 
+   * We set whether edges and vertices are drawn elsewhere (in View.java). In
+   * the past, we've found that trying to use the
+   * "Appearance.setAttribute(CommonAttributes.*)" method of setting attributes
+   * and setting this properties on a shader (Ex. dgs.setDrawLines(false);)
+   * leads to problems. Thus, we don't specify whether edges/vertices should be
+   * drawn in the properties below.
+   *********************************************************************************/
+  private static void initializeShaders(Appearance app, Color faceColor) {
+    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
+        .createDefaultGeometryShader(app, true);
+    DefaultPolygonShader dps = (DefaultPolygonShader) dgs
+        .createPolygonShader("default");
+
+    dps.setAmbientColor(faceColor); // dps.setAmbientColor(c);
+    dps.setDiffuseColor(faceColor); // dps.setDiffuseColor(c);
+    dps.setAmbientCoefficient(0.3); // These coefficients seem to help the
+                                    // texture look "bright"
+    dps.setDiffuseCoefficient(0.8); // when it gets mapped to the surface.
+    dps.setSpecularCoefficient(0.0); // We don't need faces to look shiny by
+                                     // default.
+
+    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+    dls.setDiffuseColor(Color.orange);
+    dls.setTubeDraw(true);
+    dls.setTubeRadius(0.05);
+  }
+
+  /*********************************************************************************
    * initializeAppearance
    * 
    * This method is used to load each texture from disk the first time it is
@@ -62,18 +98,7 @@ public class TextureLibrary {
    *********************************************************************************/
   private static Appearance initializeAppearance(TextureDescriptor td) {
     Appearance app = new Appearance();
-    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
-        .createDefaultGeometryShader(app, true);
-    dgs.setShowLines(false);
-    dgs.setShowPoints(false);
-    DefaultPolygonShader dps = (DefaultPolygonShader) dgs
-        .createPolygonShader("default");
-
-    dps.setAmbientColor(Color.white); // dps.setAmbientColor(c);
-    dps.setDiffuseColor(Color.white); // dps.setDiffuseColor(c);
-    dps.setAmbientCoefficient(0.3); // These coefficients seem to help the
-                                    // texture look "bright"
-    dps.setDiffuseCoefficient(0.8); // when it gets mapped to the surface.
+    initializeShaders(app, Color.white);
 
     ImageData id = null;
 
@@ -121,7 +146,7 @@ public class TextureLibrary {
       ee.printStackTrace();
     }
 
-   Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);
+    Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);
     tex.setTextureMatrix(MatrixBuilder.euclidean().scale(0.5).getMatrix());
 
     return app;
@@ -139,23 +164,11 @@ public class TextureLibrary {
   public static Appearance getAppearance(TextureDescriptor td) {
     return library.get(td);
   }
-  public static Appearance getAppearance(Color color){
-    Appearance app = new Appearance();
-    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
-        .createDefaultGeometryShader(app, true);
-    dgs.setShowLines(false);
-    dgs.setShowPoints(false);
-    DefaultPolygonShader dps = (DefaultPolygonShader) dgs
-        .createPolygonShader("default");
-    dps.setAmbientColor(color); // dps.setAmbientColor(c);
-    dps.setDiffuseColor(color); // dps.setDiffuseColor(c);
-    dps.setAmbientCoefficient(0.25); // These coefficients seem to help the
-                                    // texture look "bright
-   dps.setSpecularCoefficient(0.0);//this makes the "shiny" look of the surface go away
-   
-    dps.setDiffuseCoefficient(0.25); // when it gets mapped to the surface.
 
+  public static Appearance getAppearance(Color color) {
+    Appearance app = new Appearance();
+    initializeShaders(app, color);
     return app;
   }
-  
+
 }

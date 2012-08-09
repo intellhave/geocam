@@ -16,15 +16,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JFrame;
 
-import controller.KeyboardController;
-import controller.UserController;
-
 import marker.BreadCrumbs;
 import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
-import marker.MarkerAppearance.ModelType;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -33,6 +29,9 @@ import view.ExponentialView;
 import view.FaceAppearanceScheme;
 import view.FirstPersonView;
 import view.View;
+import controller.KeyboardController;
+import controller.UserController;
+import de.jreality.jogl.Viewer;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
@@ -119,7 +118,12 @@ public class DevelopmentUI implements Runnable {
   private View embeddedView;
   private boolean isEmbedded;
   private static FaceAppearanceScheme faceAppearanceScheme;
-  private boolean texturingEnabled = true;
+
+  private boolean texturesEnabled = true;
+  private boolean edgesEnabled = false;
+  private boolean facesEnabled = true;
+  private double embeddedZoom;
+  private double exponentialZoom;
 
   /*********************************************************************************
    * Model Control Data
@@ -292,24 +296,6 @@ public class DevelopmentUI implements Runnable {
     markerHandler
         .addSourceMarker(new Marker(pos, app, Marker.MarkerType.SOURCE));
     source = markerHandler.getSourceMarker();
-
-//    Random rand = new Random();
-//    // Introduce three other markers to move around on the manifold.
-//    for (int ii = 0; ii < 3; ii++) {
-//      pos = new ManifoldPosition(development.getSource());
-//      app = new MarkerAppearance(ModelType.ANT, .75);
-//      double a = rand.nextDouble() * Math.PI * 2;
-//      Vector vel = new Vector(Math.cos(a), Math.sin(a));
-//      vel.scale(0.0005);
-//
-//      Marker m = new Marker(pos, app, Marker.MarkerType.MOVING, vel);
-//      m.setSpeed(0.0);
-//      markerHandler.addMarker(m);
-//    }
-//
-//    // Move the markers along their trajectories for 300ms, so that they don't
-//    // sit on top of each other.
-//    markerHandler.updateMarkers(300);
   }
 
   /*********************************************************************************
@@ -338,7 +324,7 @@ public class DevelopmentUI implements Runnable {
     // userControl = new SNESController(development);
     userControl = new KeyboardController(development, crumbs, geo);
   }
-  
+
   /*********************************************************************************
    * Simulation and Marker Control Methods
    * 
@@ -349,7 +335,7 @@ public class DevelopmentUI implements Runnable {
   public void setRecursionDepth(int depth) {
     development.setDepth(depth);
   }
-  
+
   public void setMarkerMobility(boolean canMove) {
     if (canMove) {
       markerHandler.unpauseSimulation();
@@ -376,7 +362,8 @@ public class DevelopmentUI implements Runnable {
 
       for (int ii = 0; ii < numMarkers - currentMarkers; ii++) {
         pos = new ManifoldPosition(development.getSource());
-        app = new MarkerAppearance(MarkerAppearance.ModelType.ANT, movingMarkerScale);
+        app = new MarkerAppearance(MarkerAppearance.ModelType.ANT,
+            movingMarkerScale);
         double a = rand.nextDouble() * Math.PI * 2;
         Vector vel = new Vector(Math.cos(a), Math.sin(a));
         // Move the new marker away from the source point.
@@ -460,36 +447,48 @@ public class DevelopmentUI implements Runnable {
     }
   }
 
+  /*********************************************************************************
+   * makeJFrame
+   * 
+   * This method builds a JFrame to contain the input viewer, and places it at
+   * the input screen coordinates.
+   *********************************************************************************/
+  private JFrame makeJFrame(Viewer v, int locationX, int locationY) {
+    JFrame frame = new JFrame();
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setVisible(true);
+    frame.setLocation(locationX, locationY);
+    frame.setResizable(true);
+
+    Dimension size = new Dimension(400, 400);
+    Container contentPane = frame.getContentPane();
+    contentPane.add((Component) v.getViewingComponent());
+    contentPane.setMinimumSize(size);
+    contentPane.setPreferredSize(size);
+    contentPane.setMaximumSize(size);
+    frame.pack();
+    frame.validate();
+    frame.setVisible(true);
+    return frame;
+  }
+  
   public void setExponentialView(boolean viewEnabled) {
     if (viewEnabled) {
       exponentialView = new ExponentialView(development, markerHandler,
           faceAppearanceScheme);
-      exponentialView.setTexture(texturingEnabled);
+      
+      exponentialView.setDrawEdges(edgesEnabled);
+      exponentialView.setDrawFaces(facesEnabled);      
+      exponentialView.setDrawTextures(texturesEnabled);
+      exponentialView.setZoom(exponentialZoom);
+      
       exponentialView.initializeNewManifold();
       exponentialView.update();
 
-      JFrame frame = new JFrame();
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setVisible(true);
-      frame.setLocation(400, 40);
-      frame.setResizable(true);
-
-      Dimension size = new Dimension(400, 400);
-      Container contentPane = frame.getContentPane();
-      contentPane.add((Component) exponentialView.getViewer()
-          .getViewingComponent());
-      contentPane.setMinimumSize(size);
-      contentPane.setPreferredSize(size);
-      contentPane.setMaximumSize(size);
-      frame.pack();
-      frame.validate();
-      frame.setVisible(true);
-
+      JFrame frame = makeJFrame(exponentialView.getViewer(), 400, 40);
       views.add(exponentialView);
       frames.put(exponentialView, frame);
-    } else {
-      if (exponentialView == null)
-        return;
+    } else if (exponentialView != null) {        
       JFrame frame = frames.remove(exponentialView);
       frame.setVisible(false);
       frame.dispose();
@@ -502,32 +501,19 @@ public class DevelopmentUI implements Runnable {
     if (viewEnabled && isEmbedded) {
       embeddedView = new EmbeddedView(development, markerHandler,
           faceAppearanceScheme);
-      embeddedView.setTexture(texturingEnabled);
+      
+      embeddedView.setDrawEdges(edgesEnabled);
+      embeddedView.setDrawFaces(facesEnabled);      
+      embeddedView.setDrawTextures(texturesEnabled);
+      embeddedView.setZoom(embeddedZoom);
+      
       embeddedView.initializeNewManifold();
       embeddedView.update();
 
-      JFrame frame = new JFrame();
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setVisible(true);
-      frame.setLocation(805, 40);
-      frame.setResizable(true);
-
-      Dimension size = new Dimension(400, 400);
-      Container contentPane = frame.getContentPane();
-      contentPane.add((Component) embeddedView.getViewer()
-          .getViewingComponent());
-      contentPane.setMinimumSize(size);
-      contentPane.setPreferredSize(size);
-      contentPane.setMaximumSize(size);
-      frame.pack();
-      frame.validate();
-      frame.setVisible(true);
-
+      JFrame frame = makeJFrame(embeddedView.getViewer(), 805, 50);      
       views.add(embeddedView);
       frames.put(embeddedView, frame);
-    } else {
-      if (embeddedView == null)
-        return;
+    } else if (embeddedView != null) {        
       JFrame frame = frames.remove(embeddedView);
       frame.setVisible(false);
       frame.dispose();
@@ -540,32 +526,20 @@ public class DevelopmentUI implements Runnable {
     if (viewEnabled) {
       firstPersonView = new FirstPersonView(development, markerHandler,
           faceAppearanceScheme);
-      firstPersonView.setTexture(texturingEnabled);
+
+      firstPersonView.setDrawEdges(edgesEnabled);
+      firstPersonView.setDrawFaces(facesEnabled);      
+      firstPersonView.setDrawTextures(texturesEnabled);
+      firstPersonView.setZoom(exponentialZoom);
+      
       firstPersonView.initializeNewManifold();
       firstPersonView.update();
 
-      JFrame frame = new JFrame();
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setVisible(true);
-      frame.setLocation(1210, 40);
-      frame.setResizable(true);
-
-      Dimension size = new Dimension(400, 400);
-      Container contentPane = frame.getContentPane();
-      contentPane.add((Component) firstPersonView.getViewer()
-          .getViewingComponent());
-      contentPane.setMinimumSize(size);
-      contentPane.setPreferredSize(size);
-      contentPane.setMaximumSize(size);
-      frame.pack();
-      frame.validate();
-      frame.setVisible(true);
-
+      JFrame frame = makeJFrame(firstPersonView.getViewer(), 1210, 40);
+      
       views.add(firstPersonView);
       frames.put(firstPersonView, frame);
-    } else {
-      if (firstPersonView == null)
-        return;
+    } else if (firstPersonView != null){        
       JFrame frame = frames.remove(firstPersonView);
       frame.setVisible(false);
       frame.dispose();
@@ -575,28 +549,36 @@ public class DevelopmentUI implements Runnable {
   }
 
   public void setDrawEdges(boolean showEdges) {
-    for(View v : views){
+    edgesEnabled = showEdges;
+    for (View v : views) {
       v.setDrawEdges(showEdges);
     }
   }
 
   public void setDrawFaces(boolean showFaces) {
-    for(View v : views){
+    facesEnabled = showFaces;
+    for (View v : views) {
       v.setDrawFaces(showFaces);
     }
   }
 
-  public void setTexturing(boolean texturingOn) {
-    texturingEnabled = texturingOn;
+  public void setDrawTextures(boolean texturingOn) {
+    texturesEnabled = texturingOn;
     for (View v : views) {
-      v.setTexture(texturingOn);
+      v.setDrawTextures(texturingOn);
       v.update();
     }
   }
-  public void setEmbeddedZoom(double zoomValue){
-    embeddedView.setZoom(zoomValue);
+
+  public void setEmbeddedZoom(double zoomValue) {
+    embeddedZoom = zoomValue;
+    if (embeddedView != null)
+      embeddedView.setZoom(zoomValue);
   }
-  public void setExponentialZoom(double zoomValue){
-    exponentialView.setZoom(zoomValue);
+
+  public void setExponentialZoom(double zoomValue) {
+    exponentialZoom = zoomValue;
+    if (exponentialView != null)
+      exponentialView.setZoom(zoomValue);
   }
 }

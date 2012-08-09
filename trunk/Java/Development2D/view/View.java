@@ -90,13 +90,14 @@ public abstract class View {
    * This constructor is responsible for setting up the scene graph and
    * appearance settings that will be used by any instance of this class.
    *********************************************************************************/
-  public View(Development development, MarkerHandler markers, FaceAppearanceScheme fas ) {
+  public View(Development development, MarkerHandler markers,
+      FaceAppearanceScheme fas) {
     this.development = development;
     this.markers = markers;
-  
+
     this.faceAppearanceScheme = fas;
     showTexture = true;
-    zoom=3.0;
+    zoom = 3.0;
 
     initSceneGraph();
     initAppearances();
@@ -114,7 +115,7 @@ public abstract class View {
     sgcRoot = new SceneGraphComponent("Root");
     sgcDevelopment = new SceneGraphComponent("Development");
     sgcMarkers = new SceneGraphComponent("Objects");
-    sgcDevelopment.addChild(sgcMarkers);
+    sgcRoot.addChild(sgcMarkers);
     sgcDevelopment.setAppearance(defaultAppearance);
     sgcRoot.addChild(sgcDevelopment);
 
@@ -172,11 +173,16 @@ public abstract class View {
    * the development should be explicitly drawn.
    *********************************************************************************/
   public void setDrawEdges(boolean value) {
-    for(SceneGraphComponent child: sgcDevelopment.getChildComponents()){
-      Appearance app = child.getAppearance();
-      if(app!=null)
-        app.setAttribute(CommonAttributes.EDGE_DRAW, value);
+    setDrawEdgesHelper(sgcDevelopment, value);
+  }
+  
+  private void setDrawEdgesHelper(SceneGraphComponent sgc, boolean value){
+    Appearance app = sgc.getAppearance();
+    if(app != null){
+      app.setAttribute(CommonAttributes.EDGE_DRAW, value);      
     }
+    for(SceneGraphComponent child  : sgc.getChildComponents())
+          setDrawEdgesHelper(child, value);    
   }
 
   /*********************************************************************************
@@ -206,13 +212,13 @@ public abstract class View {
     defaultAppearance = new Appearance();
     defaultAppearance.setAttribute(VERTEX_DRAW, false);
     defaultAppearance.setAttribute(EDGE_DRAW, false);
-    defaultAppearance.setAttribute(FACE_DRAW, true);    
+    defaultAppearance.setAttribute(FACE_DRAW, true);
     defaultAppearance.setAttribute(LIGHTING_ENABLED, true);
     defaultAppearance.setAttribute(TRANSPARENCY_ENABLED, false);
     defaultAppearance.setAttribute(BACKGROUND_COLOR, Color.gray);
     defaultAppearance.setAttribute(DIFFUSE_COLOR, Color.white);
     defaultAppearance.setAttribute(LINE_SHADER + "." + POLYGON_SHADER + "." + SMOOTH_SHADING, true);
-    
+
     DefaultGeometryShader dgs;
     dgs = (DefaultGeometryShader) ShaderUtility.createDefaultGeometryShader(
         defaultAppearance, true);
@@ -303,15 +309,15 @@ public abstract class View {
    * is specific to the view in question.
    *********************************************************************************/
   public abstract void removeMarker(Marker m);
-  
-  public boolean isTextured(){
+
+  public boolean isTextured() {
     return showTexture;
   }
-  
-  public void setTexture(boolean texture){
+
+  public void setDrawTextures(boolean texture) {
     showTexture = texture;
   }
-  
+
   public abstract void setZoom(double zoomValue);
 
   /*********************************************************************************
@@ -330,7 +336,7 @@ public abstract class View {
    *********************************************************************************/
   protected static MatrixBuilder lookAt(Vector psn, Vector target) {
     Vector forward = Vector.subtract(target, psn);
-    Vector up = new Vector( forward.getComponent(1), -forward.getComponent(0), 0 );
+    Vector up = new Vector(forward.getComponent(1), -forward.getComponent(0), 0);
     return lookAt(psn, target, up);
   }
 
@@ -342,31 +348,32 @@ public abstract class View {
     Vector upUnit = new Vector(up);
     upUnit.subtract(forwardScaled);
     upUnit.normalize();
-    
+
     Vector v = Vector.cross(forward, up);
     v.normalize();
-    
+
     double[] matrix = new double[16];
     matrix[0 * 4 + 0] = v.getComponent(0);
     matrix[0 * 4 + 1] = upUnit.getComponent(0);
     matrix[0 * 4 + 2] = -forward.getComponent(0);
     matrix[0 * 4 + 3] = 0.0;
-    
+
     matrix[1 * 4 + 0] = v.getComponent(1);
     matrix[1 * 4 + 1] = upUnit.getComponent(1);
     matrix[1 * 4 + 2] = -forward.getComponent(1);
     matrix[1 * 4 + 3] = 0.0;
-   
+
     matrix[2 * 4 + 0] = v.getComponent(2);
     matrix[2 * 4 + 1] = upUnit.getComponent(2);
     matrix[2 * 4 + 2] = -forward.getComponent(2);
     matrix[2 * 4 + 3] = 0.0;
-        
+
     matrix[3 * 4 + 0] = 0.0;
     matrix[3 * 4 + 1] = 0.0;
     matrix[3 * 4 + 2] = 0.0;
     matrix[3 * 4 + 3] = 1.0;
-    
-    return MatrixBuilder.euclidean().translate(psn.getVectorAsArray()).times(matrix);
+
+    return MatrixBuilder.euclidean().translate(psn.getVectorAsArray())
+        .times(matrix);
   }
 }
