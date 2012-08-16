@@ -469,6 +469,7 @@ public class DevelopmentUI implements Runnable {
     frame.pack();
     frame.validate();
     frame.setVisible(true);
+    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     return frame;
   }
   

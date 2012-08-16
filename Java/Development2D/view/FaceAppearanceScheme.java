@@ -40,9 +40,7 @@ private void initColorLibrary(){
   colorMap.put(Colors.KHAKI,TextureDescriptor.COBBLESTONE);
   colorMap.put(Colors.SIENNA, TextureDescriptor.DOTS);
   colorMap.put(Colors.DARK_GRAY,TextureDescriptor.LIGHTHOUSE);
-  colorMap.put(Colors.DEFAULT,TextureDescriptor.ZIGZAG);
-  
-  
+  colorMap.put(Colors.DEFAULT,TextureDescriptor.ZIGZAG);    
 }
 
 

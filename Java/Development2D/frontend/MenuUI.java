@@ -21,22 +21,21 @@ import controller.UserController.Action;
  * similar programs), and then launch the simulation.
  * 
  * Each menu is built from a collection of images. First, we have a background
- * image which is composited with a foreground image to create the illusion of
- * an interactive menu. Generally, we have one foreground image for each button
+ * image which is combined with a foreground image to create the illusion of an
+ * interactive menu. Generally, we have one foreground image for each button
  * that can be active. For each menu we have a static method which explains how
  * the images should be changed according to user input.
- * 
  *********************************************************************************/
 
 public class MenuUI extends JFrame {
   private static final long serialVersionUID = 1L;
 
+  private DevelopmentUI dui = null;
+
   // TODO: Build all menus the user will actually see, and integrate this with
   // the simulation UI
   private UserController controller;
   private Boolean exit;
-  private DevelopmentUI dui;
-  private String path = "Data/surfaces/tetra2.off";
 
   /*********************************************************************************
    * Image data
@@ -45,7 +44,6 @@ public class MenuUI extends JFrame {
    * To improve the speed of the program (i.e. to avoid repeatedly reading from
    * the disk) these images are read in from image files only once as the
    * program initializes.
-   * 
    *********************************************************************************/
 
   private static BufferedImage start_games;
@@ -84,8 +82,6 @@ public class MenuUI extends JFrame {
    *********************************************************************************/
 
   public MenuUI() {
-    dui = new DevelopmentUI(path);
-    // controller = new SNESMenuController();
     controller = new KeyboardMenuController();
     try {
       initFiles();
@@ -110,16 +106,18 @@ public class MenuUI extends JFrame {
     File gameMenuBackground = new File(bg_path + "barbellBackground2.png");
     File explorerMenuBackground = new File(bg_path + "dodecFirstPerson.png");
     File pausedMenuBackground = new File(bg_path + "paused_background_temp.png");
-    
+
     File startMenu_games = new File(menu_path + "StartMenu_games.png");
     File startMenu_explorer = new File(menu_path + "StartMenu_explorer.png");
     File startMenu_about = new File(menu_path + "StartMenu_about.png");
     File gameMenu_tag = new File(menu_path + "GameSelection_tag.png");
     File gameMenu_cookie = new File(menu_path + "GameSelection_cookie.png");
     File explorerMenu_start = new File(menu_path + "SurfaceExplorer_start.png");
-    File explorerMenu_options = new File(menu_path + "SurfaceExplorer_options.png");
+    File explorerMenu_options = new File(menu_path
+        + "SurfaceExplorer_options.png");
     File explorerPausedResume = new File(menu_path + "ExplorerPause_resume.png");
-    File explorerPausedOptions = new File(menu_path + "ExplorerPause_options.png");
+    File explorerPausedOptions = new File(menu_path
+        + "ExplorerPause_options.png");
     File explorerPausedExit = new File(menu_path + "ExplorerPause_exit.png");
     File cookiePauseResume = new File(menu_path + "cookiepause_resume.png");
     File cookiePauseOptions = new File(menu_path + "cookiepause_options.png");
@@ -196,16 +194,7 @@ public class MenuUI extends JFrame {
    * viewing the explorerMenu. If they then wish to go back to the previous
    * menu, explorerMenu breaks from its while loop and the previous menu's while
    * loop resumes where it left off.
-   * 
    *********************************************************************************/
-
-  // TODO: Is this enum necessary for anything?
-
-  // private static enum MenuState {
-  // START_GAMES, START_EXPLORER, START_ABOUT, GAME_TAG, GAME_COOKIE,
-  // EXPLORER_START, EXPLORER_OPTIONS
-  // };
-
   private void startMenu() {
     BufferedImage[] menuImages = { start_games, start_explorer, start_about };
     currentMenu = start_games;
@@ -392,116 +381,116 @@ public class MenuUI extends JFrame {
   }
 
   private void explorerMenu() {
-    BufferedImage[] menuImages = { explorer_start, explorer_options };
     currentMenu = explorer_start;
-    int state = 0;
-
     this.repaint();
 
-    Action act = null;
-
+    Action act;
     while (true) {
       act = controller.getNextAction();
+
       if (act == null)
         continue;
 
-      switch (act) {
-      case Back:
-      case Forward:
-        state = (state + 1) % 2;
-        break;
-      case A_Button:
-        if (state == 0) {
-          this.setVisible(false);
-          // Menu windows are now hidden, we can pass control to the Explorer
-          // simulation.
-          dui.setEmbeddedView(true);
-          dui.setExponentialView(true);
-          dui.setFirstPersonView(true);
-          dui.run();
-          // Now we have returned from the runExplorer method call.
-          // This means that the Explorer simulation is currently paused.
-          // Consequently, we need to bring the menu windows back and restore
-          // the menu controller.
+      if (act == Action.A_Button) {
+        this.setVisible(false);
+        String defaultPath = "Data/surfaces/tetra2.off";
 
-          controller.clear();
-          pauseExplorerMenu();
-        } else
-          explorerOptions();
+        DevelopmentUI dui = new DevelopmentUI(defaultPath);
+        ViewerController vc = new ViewerController(dui);
+
+        while (true) {
+          dui.run(); // We only return from this call once ViewerController has
+                     // signaled that we should quit the simulation.
+          
+          if( vc.sessionEnded() ) break;
+          
+          // Now we know that we need to display a new surface.
+          dui = new DevelopmentUI(vc.getPath());
+          // Now we have a fresh, initialized DevelopmentUI instance. We're
+          // ready to
+          // allow user input from vc again.
+          vc.setSimulation(dui);
+          vc.setEnabled(true);
+        }
+        this.setVisible(true);
+        controller.clear();
       }
+
       if (act == Action.B_Button)
         break;
 
-      currentMenu = menuImages[state];
       this.repaint();
     }
   }
 
-  private void pauseExplorerMenu() {
-    BufferedImage[] menuImages = { explorerPause_resume, explorerPause_options,
-        explorerPause_exit };
-    int state = 0;
-    currentMenu = explorerPause_resume;
-
-    // Dimensions should be 800 by 400, but this appears too short
-    // Need to size up height by approx. 20?
-    this.setSize(800, 423);
-    this.repaint();
-    this.setVisible(true);
-
-    Action a = null;
-
-    while (true) {
-      a = controller.getNextAction();
-      if (a == null)
-        continue;
-
-      switch (a) {
-      case Back:
-        state = (state + 1) % 3;
-        break;
-      case Forward:
-        state = (state + 2) % 3;
-        break;
-      case A_Button:
-        if (state == 0) {
-          this.setVisible(false);
-          dui.run();
-          controller.clear();
-          this.setVisible(true);
-          break;
-        }
-        if (state == 1) {
-          // TODO: implement options menu
-        }
-      }
-
-      if (a == Action.A_Button && state == 2) {
-        dui.terminate();
-        this.setSize(700, 700);
-        break;
-      }
-
-      currentMenu = menuImages[state];
-      this.repaint();
-    }
-  }
-
-  // TODO: implement options menu
-  private void explorerOptions() {
-    currentMenu = options;
-    this.repaint();
-
-    Action a = null;
-
-    while (true) {
-      a = controller.getNextAction();
-      if (a == null)
-        continue;
-      if (a == Action.B_Button)
-        break;
-    }
-  }
+// These methods have been removed for now. Pausing of Development Explorer will
+// be handled by the DevelopmentUI/ViewerController code.
+//
+//  private void pauseExplorerMenu() {
+//    BufferedImage[] menuImages = { explorerPause_resume, explorerPause_options,
+//        explorerPause_exit };
+//    int state = 0;
+//    currentMenu = explorerPause_resume;
+//
+//    // Dimensions should be 800 by 400, but this appears too short
+//    // Need to size up height by approx. 20?
+//    this.setSize(800, 423);
+//    this.repaint();
+//    this.setVisible(true);
+//
+//    Action a = null;
+//
+//    while (true) {
+//      a = controller.getNextAction();
+//      if (a == null)
+//        continue;
+//
+//      switch (a) {
+//      case Back:
+//        state = (state + 1) % 3;
+//        break;
+//      case Forward:
+//        state = (state + 2) % 3;
+//        break;
+//      case A_Button:
+//        if (state == 0) {
+//          this.setVisible(false);
+//          dui.run();
+//          controller.clear();
+//          this.setVisible(true);
+//          break;
+//        }
+//        if (state == 1) {
+//          // TODO: implement options menu
+//        }
+//      }
+//
+//      if (a == Action.A_Button && state == 2) {
+//        dui.terminate();
+//        this.setSize(700, 700);
+//        break;
+//      }
+//
+//      currentMenu = menuImages[state];
+//      this.repaint();
+//    }
+//  }
+//
+//  // TODO: implement options menu
+//  private void explorerOptions() {
+//    currentMenu = options;
+//    this.repaint();
+//
+//    Action a = null;
+//
+//    while (true) {
+//      a = controller.getNextAction();
+//      if (a == null)
+//        continue;
+//      if (a == Action.B_Button)
+//        break;
+//    }
+//  }
 
   // TODO: Implement Tag game
   private void tagGame() {
