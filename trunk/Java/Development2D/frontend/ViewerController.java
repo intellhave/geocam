@@ -19,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JSlider;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -38,12 +39,15 @@ public class ViewerController extends JFrame {
    ********************************************************************************/
   private DevelopmentUI currentSim;
   private String currentSurfacePath;
+  private boolean sessionEnded = false;
 
   public ViewerController(DevelopmentUI dui) {
     currentSim = dui;
     layoutGUI();
     synchronizeSettings();
     this.setVisible(true);
+    //this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
   }
 
   public String getPath() {
@@ -53,6 +57,16 @@ public class ViewerController extends JFrame {
   public void setSimulation(DevelopmentUI dui) {
     currentSim = dui;
     synchronizeSettings();
+  }
+
+  public boolean sessionEnded() {
+    return sessionEnded;
+  }
+
+  public void endSession() {
+    sessionEnded = true;
+    currentSim.terminate();
+    this.setVisible(false);
   }
 
   /********************************************************************************
@@ -68,7 +82,8 @@ public class ViewerController extends JFrame {
   private void synchronizeSettings() {
     currentSim.setRecursionDepth(Integer.parseInt(recDepth.getValue()
         .toString()));
-    currentSim.setMovingMarkerCount(Integer.parseInt(numObjects.getValue().toString()));
+    currentSim.setMovingMarkerCount(Integer.parseInt(numObjects.getValue()
+        .toString()));
 
     double sliderValue = speedSlider.getValue() / 1000.0;
     double newSpeed = 0.05 * Math.pow(Math.E, sliderValue);
@@ -87,9 +102,10 @@ public class ViewerController extends JFrame {
     currentSim.setExponentialView(showView2DBox.isSelected());
     currentSim.setEmbeddedView(showEmbeddedBox.isSelected());
     currentSim.setFirstPersonView(showView3DBox.isSelected());
-    
-    currentSim.setEmbeddedZoom(embeddedZoomSlider.getValue()/100.0);
-    currentSim.setExponentialZoom(Math.pow(10,(exponentialZoomSlider.getValue()-100)/100.0));
+
+    currentSim.setEmbeddedZoom(embeddedZoomSlider.getValue() / 100.0);
+    currentSim.setExponentialZoom(Math.pow(10,
+        (exponentialZoomSlider.getValue() - 100) / 100.0));
 
     currentSim.setDrawEdges(drawEdgesBox.isSelected());
     currentSim.setDrawFaces(drawFacesBox.isSelected());
@@ -202,6 +218,17 @@ public class ViewerController extends JFrame {
           jmi.addActionListener(sl);
         }
       }
+
+      JMenuItem jmi = new JMenuItem();
+      jmi.setText("Quit Explorer");
+      jmi.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent arg0) {
+          endSession();
+        }
+      });
+
+      file.add(jmi);
+
     }
 
     /*********************************************************************************
@@ -227,7 +254,7 @@ public class ViewerController extends JFrame {
       recDepthPanel.add(recDepth);
       textBoxPanel.add(recDepthPanel);
 
-      numObjects = new JFormattedTextField(NumberFormat.getIntegerInstance());      
+      numObjects = new JFormattedTextField(NumberFormat.getIntegerInstance());
       numObjects.setColumns(3);
       numObjects.setValue(0);
 
@@ -256,12 +283,13 @@ public class ViewerController extends JFrame {
       // Number of objects action listener
       ActionListener numObjectsListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-          Integer numMarkers = Integer.parseInt(numObjects.getValue().toString());          
+          Integer numMarkers = Integer.parseInt(numObjects.getValue()
+              .toString());
           if (numMarkers < 0) {
             numMarkers = 0;
           } else if (numMarkers > 20) {
             numMarkers = 20;
-          }          
+          }
           currentSim.setMovingMarkerCount(numMarkers);
         }
       };
@@ -271,15 +299,16 @@ public class ViewerController extends JFrame {
     /*********************************************************************************
      * Slider Panel
      * 
-     * Contains: - Speed slider. - Scale slider. - Geodesic length slider - Zoom Slider
+     * Contains: - Speed slider. - Scale slider. - Geodesic length slider - Zoom
+     * Slider
      * 
      * Note: Speed slider is using the exponential function y = 0.05*e^x to
      * convert input from the slider to a speed. This gives you more control
      * over low speeds on the slider.
      * 
-     * Note: The Exponential Zoom Slider uses the simple exponential function 
-     * y = 10^x to allow the user to have greater control over their ability to zoom
-     * in on the surface.
+     * Note: The Exponential Zoom Slider uses the simple exponential function y
+     * = 10^x to allow the user to have greater control over their ability to
+     * zoom in on the surface.
      *********************************************************************************/
     sliderPanel = new JPanel();
     getContentPane().add(sliderPanel);
@@ -301,6 +330,10 @@ public class ViewerController extends JFrame {
           double newSpeed = 0.05 * Math.pow(Math.E, sliderValue);
           currentSim.setMovingMarkerSpeed(newSpeed);
           speedBorder.setTitle("Speed (" + speedFormat.format(newSpeed) + ")");
+
+          // Prevent keyboard arrow input from varying this slider
+          // by moving the focus to a button.
+          stopStartButton.requestFocus();
         }
       };
       speedSlider.addChangeListener(speedSliderListener);
@@ -321,6 +354,10 @@ public class ViewerController extends JFrame {
           double newScale = scalingSlider.getValue() / 10.0;
           currentSim.setMovingMarkerScale(newScale);
           pointBorder.setTitle("Object scaling (" + newScale + ")");
+
+          // Prevent keyboard arrow input from varying this slider
+          // by moving the focus to a button.
+          stopStartButton.requestFocus();
         }
       };
       scalingSlider.addChangeListener(scalingSliderListener);
@@ -340,53 +377,69 @@ public class ViewerController extends JFrame {
           int newLength = geoSlider.getValue();
           currentSim.setGeodesicLength(newLength);
           geoBorder.setTitle("Geodesic length (" + newLength + ")");
+
+          // Prevent keyboard arrow input from varying this slider
+          // by moving the focus to a button.
+          stopStartButton.requestFocus();
         }
 
       };
       geoSlider.addChangeListener(geoSliderListener);
     }
     {
-    exponentialZoomSlider = new JSlider();
-    sliderPanel.add(exponentialZoomSlider);
-    exponentialZoomSlider.setMaximum(200);
-    exponentialZoomSlider.setValue(100);
-    exponentialZoomSlider.setBorder(zoomBorder);
-    DecimalFormat percentFormat = new DecimalFormat("0%");
-    double sliderValue = ((exponentialZoomSlider.getValue()/100.0));
-    double percentZoom = (1/sliderValue);
-    zoomBorder.setTitle("Exponential Zoom (" +percentFormat.format(percentZoom)+")");
-    
-    ChangeListener exponentialZoomListener = new ChangeListener(){
-      public void stateChanged(ChangeEvent e) {
-        DecimalFormat percentFormat = new DecimalFormat("0%");
-        double zoom = (exponentialZoomSlider.getValue()-100.0)/100.0;
-        currentSim.setExponentialZoom(Math.pow(10,zoom)); 
-       double zoomToSet = (1.0/(exponentialZoomSlider.getValue()/100.0));
-       zoomBorder.setTitle("Exponential Zoom (" +percentFormat.format(zoomToSet)+")");
-      }  
-    };
-    exponentialZoomSlider.addChangeListener(exponentialZoomListener);
+      exponentialZoomSlider = new JSlider();
+      sliderPanel.add(exponentialZoomSlider);
+      exponentialZoomSlider.setMaximum(200);
+      exponentialZoomSlider.setValue(100);
+      exponentialZoomSlider.setBorder(zoomBorder);
+      DecimalFormat percentFormat = new DecimalFormat("0%");
+      double sliderValue = ((exponentialZoomSlider.getValue() / 100.0));
+      double percentZoom = (1 / sliderValue);
+      zoomBorder.setTitle("Exponential Zoom ("
+          + percentFormat.format(percentZoom) + ")");
+
+      ChangeListener exponentialZoomListener = new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          DecimalFormat percentFormat = new DecimalFormat("0%");
+          double zoom = (exponentialZoomSlider.getValue() - 100.0) / 100.0;
+          currentSim.setExponentialZoom(Math.pow(10, zoom));
+          double zoomToSet = (1.0 / (exponentialZoomSlider.getValue() / 100.0));
+          zoomBorder.setTitle("Exponential Zoom ("
+              + percentFormat.format(zoomToSet) + ")");
+
+          // Prevent keyboard arrow input from varying this slider
+          // by moving the focus to a button.
+          stopStartButton.requestFocus();
+        }
+      };
+      exponentialZoomSlider.addChangeListener(exponentialZoomListener);
     }
     {
-    embeddedZoomSlider = new JSlider();
-    sliderPanel.add(embeddedZoomSlider);
-    embeddedZoomSlider.setMaximum(1000);
-    embeddedZoomSlider.setValue(300);
-    embeddedZoomSlider.setBorder(zoom2Border);
-    DecimalFormat percentFormat = new DecimalFormat("0%");
-    double zoomToSet = (1.0/(embeddedZoomSlider.getValue()/300.0));
-    zoom2Border.setTitle("Embedded Zoom (" +percentFormat.format(zoomToSet)+")");
-  
-    ChangeListener embeddedZoomListener = new ChangeListener(){
-      public void stateChanged(ChangeEvent e) {
-        DecimalFormat percentFormat = new DecimalFormat("0%");
-        double zoomToSet = (1.0/(embeddedZoomSlider.getValue()/300.0));
-        zoom2Border.setTitle("Embedded Zoom (" +percentFormat.format(zoomToSet)+")");
-        double zoom = embeddedZoomSlider.getValue()/100.0;
-        currentSim.setEmbeddedZoom(zoom);
-      }  
-    };
-    embeddedZoomSlider.addChangeListener(embeddedZoomListener);
+      embeddedZoomSlider = new JSlider();
+      sliderPanel.add(embeddedZoomSlider);
+      embeddedZoomSlider.setMaximum(1000);
+      embeddedZoomSlider.setValue(300);
+      embeddedZoomSlider.setBorder(zoom2Border);
+      DecimalFormat percentFormat = new DecimalFormat("0%");
+      double zoomToSet = (1.0 / (embeddedZoomSlider.getValue() / 300.0));
+      zoom2Border.setTitle("Embedded Zoom (" + percentFormat.format(zoomToSet)
+          + ")");
+
+      ChangeListener embeddedZoomListener = new ChangeListener() {
+        public void stateChanged(ChangeEvent e) {
+          DecimalFormat percentFormat = new DecimalFormat("0%");
+          double zoomToSet = (1.0 / (embeddedZoomSlider.getValue() / 300.0));
+          zoom2Border.setTitle("Embedded Zoom ("
+              + percentFormat.format(zoomToSet) + ")");
+          double zoom = embeddedZoomSlider.getValue() / 100.0;
+          currentSim.setEmbeddedZoom(zoom);
+
+          // Prevent keyboard arrow input from varying this slider
+          // by moving the focus to a button.
+          stopStartButton.requestFocus();
+        }
+      };
+      embeddedZoomSlider.addChangeListener(embeddedZoomListener);
     }
 
     /********************************************************************************
