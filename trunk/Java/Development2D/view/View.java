@@ -139,7 +139,7 @@ public abstract class View {
    * TODO : Documentation
    *********************************************************************************/
   public void initViewer() {
-    viewer = new Viewer(camPath, sgcRoot);
+    viewer = new Viewer(camPath, sgcRoot);    
     // ToolSystem toolSystem = ToolSystem.toolSystemForViewer(viewer);
     // toolSystem.initializeSceneTools();
     // viewer.getViewingComponent();

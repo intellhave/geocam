@@ -5,6 +5,9 @@ import inputOutput.TriangulationIO;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.HashMap;
@@ -470,26 +473,47 @@ public class DevelopmentUI implements Runnable {
     frame.validate();
     frame.setVisible(true);
     frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+    // Add a component listener so that the viewer can be resized while
+    // preserving the aspect ratio.
+    frame.addComponentListener(new ComponentListener() {
+      public void componentShown(ComponentEvent arg0) {
+      }
+
+      public void componentHidden(ComponentEvent arg0) {
+      }
+
+      public void componentMoved(ComponentEvent arg0) {
+      }
+
+      public void componentResized(ComponentEvent arg0) {                
+        Component c = arg0.getComponent();
+        Rectangle r = c.getBounds();
+        int m = Math.max( Math.max(r.height, r.width), 50);
+        c.setBounds(r.x,r.y,m,m);        
+      }
+    });
+
     return frame;
   }
-  
+
   public void setExponentialView(boolean viewEnabled) {
     if (viewEnabled) {
       exponentialView = new ExponentialView(development, markerHandler,
           faceAppearanceScheme);
-      
+
       exponentialView.setDrawEdges(edgesEnabled);
-      exponentialView.setDrawFaces(facesEnabled);      
+      exponentialView.setDrawFaces(facesEnabled);
       exponentialView.setDrawTextures(texturesEnabled);
       exponentialView.setZoom(exponentialZoom);
-      
+
       exponentialView.initializeNewManifold();
       exponentialView.update();
 
       JFrame frame = makeJFrame(exponentialView.getViewer(), 400, 40);
       views.add(exponentialView);
       frames.put(exponentialView, frame);
-    } else if (exponentialView != null) {        
+    } else if (exponentialView != null) {
       JFrame frame = frames.remove(exponentialView);
       frame.setVisible(false);
       frame.dispose();
@@ -502,19 +526,19 @@ public class DevelopmentUI implements Runnable {
     if (viewEnabled && isEmbedded) {
       embeddedView = new EmbeddedView(development, markerHandler,
           faceAppearanceScheme);
-      
+
       embeddedView.setDrawEdges(edgesEnabled);
-      embeddedView.setDrawFaces(facesEnabled);      
+      embeddedView.setDrawFaces(facesEnabled);
       embeddedView.setDrawTextures(texturesEnabled);
       embeddedView.setZoom(embeddedZoom);
-      
+
       embeddedView.initializeNewManifold();
       embeddedView.update();
 
-      JFrame frame = makeJFrame(embeddedView.getViewer(), 805, 50);      
+      JFrame frame = makeJFrame(embeddedView.getViewer(), 805, 50);
       views.add(embeddedView);
       frames.put(embeddedView, frame);
-    } else if (embeddedView != null) {        
+    } else if (embeddedView != null) {
       JFrame frame = frames.remove(embeddedView);
       frame.setVisible(false);
       frame.dispose();
@@ -529,18 +553,18 @@ public class DevelopmentUI implements Runnable {
           faceAppearanceScheme);
 
       firstPersonView.setDrawEdges(edgesEnabled);
-      firstPersonView.setDrawFaces(facesEnabled);      
+      firstPersonView.setDrawFaces(facesEnabled);
       firstPersonView.setDrawTextures(texturesEnabled);
       firstPersonView.setZoom(exponentialZoom);
-      
+
       firstPersonView.initializeNewManifold();
       firstPersonView.update();
 
       JFrame frame = makeJFrame(firstPersonView.getViewer(), 1210, 40);
-      
+
       views.add(firstPersonView);
       frames.put(firstPersonView, frame);
-    } else if (firstPersonView != null){        
+    } else if (firstPersonView != null) {
       JFrame frame = frames.remove(firstPersonView);
       frame.setVisible(false);
       frame.dispose();
