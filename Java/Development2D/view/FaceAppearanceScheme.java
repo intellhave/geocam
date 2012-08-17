@@ -64,7 +64,7 @@ private void initColorLibrary(){
     initColorLibrary();
     Color faceColor = getColor(f);
     switch(faceColor.getRGB()){
-    case-16734503 :
+    case -16734503 :
       return colorMap.get(Colors.SKY_BLUE);
     case -12525359 :
       return colorMap.get(Colors.TURQUOISE);

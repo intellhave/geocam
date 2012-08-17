@@ -29,9 +29,7 @@ import controller.UserController.Action;
 
 public class MenuUI extends JFrame {
   private static final long serialVersionUID = 1L;
-
-  private DevelopmentUI dui = null;
-
+  
   // TODO: Build all menus the user will actually see, and integrate this with
   // the simulation UI
   private UserController controller;
@@ -52,10 +50,10 @@ public class MenuUI extends JFrame {
   private static BufferedImage game_tag;
   private static BufferedImage game_cookie;
   private static BufferedImage explorer_start;
-  private static BufferedImage explorer_options;
-  private static BufferedImage explorerPause_resume;
-  private static BufferedImage explorerPause_options;
-  private static BufferedImage explorerPause_exit;
+//  private static BufferedImage explorer_options;
+//  private static BufferedImage explorerPause_resume;
+//  private static BufferedImage explorerPause_options;
+//  private static BufferedImage explorerPause_exit;
   private static BufferedImage cookiePause_resume;
   private static BufferedImage cookiePause_options;
   private static BufferedImage cookiePause_exit;
@@ -64,7 +62,7 @@ public class MenuUI extends JFrame {
 
   private static BufferedImage about;
   private static BufferedImage tag;
-  private static BufferedImage options;
+//  private static BufferedImage options;
 
   private static BufferedImage currentMenu;
 
@@ -113,12 +111,12 @@ public class MenuUI extends JFrame {
     File gameMenu_tag = new File(menu_path + "GameSelection_tag.png");
     File gameMenu_cookie = new File(menu_path + "GameSelection_cookie.png");
     File explorerMenu_start = new File(menu_path + "SurfaceExplorer_start.png");
-    File explorerMenu_options = new File(menu_path
-        + "SurfaceExplorer_options.png");
-    File explorerPausedResume = new File(menu_path + "ExplorerPause_resume.png");
-    File explorerPausedOptions = new File(menu_path
-        + "ExplorerPause_options.png");
-    File explorerPausedExit = new File(menu_path + "ExplorerPause_exit.png");
+//    File explorerMenu_options = new File(menu_path
+//        + "SurfaceExplorer_options.png");
+//    File explorerPausedResume = new File(menu_path + "ExplorerPause_resume.png");
+//    File explorerPausedOptions = new File(menu_path
+//        + "ExplorerPause_options.png");
+//    File explorerPausedExit = new File(menu_path + "ExplorerPause_exit.png");
     File cookiePauseResume = new File(menu_path + "cookiepause_resume.png");
     File cookiePauseOptions = new File(menu_path + "cookiepause_options.png");
     File cookiePauseExit = new File(menu_path + "cookiepause_exit.png");
@@ -127,7 +125,7 @@ public class MenuUI extends JFrame {
 
     File aboutPage = new File(menu_path + "AboutPage.png");
     File tagGame = new File(menu_path + "TagGame.png");
-    File explorerOptions = new File(menu_path + "Options.png");
+//    File explorerOptions = new File(menu_path + "Options.png");
 
     start_games = compose(startMenuBackground, startMenu_games);
     start_explorer = compose(startMenuBackground, startMenu_explorer);
@@ -135,10 +133,10 @@ public class MenuUI extends JFrame {
     game_tag = compose(gameMenuBackground, gameMenu_tag);
     game_cookie = compose(gameMenuBackground, gameMenu_cookie);
     explorer_start = compose(explorerMenuBackground, explorerMenu_start);
-    explorer_options = compose(explorerMenuBackground, explorerMenu_options);
-    explorerPause_resume = compose(pausedMenuBackground, explorerPausedResume);
-    explorerPause_options = compose(pausedMenuBackground, explorerPausedOptions);
-    explorerPause_exit = compose(pausedMenuBackground, explorerPausedExit);
+//    explorer_options = compose(explorerMenuBackground, explorerMenu_options);
+//    explorerPause_resume = compose(pausedMenuBackground, explorerPausedResume);
+//    explorerPause_options = compose(pausedMenuBackground, explorerPausedOptions);
+//    explorerPause_exit = compose(pausedMenuBackground, explorerPausedExit);
     cookiePause_resume = compose(pausedMenuBackground, cookiePauseResume);
     cookiePause_options = compose(pausedMenuBackground, cookiePauseOptions);
     cookiePause_exit = compose(pausedMenuBackground, cookiePauseExit);
@@ -147,7 +145,7 @@ public class MenuUI extends JFrame {
 
     about = compose(aboutPage, aboutPage);
     tag = compose(tagGame, tagGame);
-    options = compose(explorerOptions, explorerOptions);
+//    options = compose(explorerOptions, explorerOptions);
   }
 
   /*********************************************************************************
