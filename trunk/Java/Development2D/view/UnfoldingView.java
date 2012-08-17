@@ -31,21 +31,26 @@ public class UnfoldingView extends View {
 
   private Marker source;
   private SceneGraphComponent sourceSGC;
+  private SceneGraphComponent sourceFaceSGC;
+  private Face sourceFace;
   private HashMap<FaceGrouping, SceneGraphComponent> faceGroups;
   private List<FaceGrouping> checked;
-  private List<SceneGraphComponent> unfolded;
+  private List<SceneGraphComponent> inTree;
   private int recursionDepth = 3;
   private TreeNode root;
 
   public UnfoldingView(Marker source, FaceAppearanceScheme fas) {
     super(null, null, fas);
+    
     this.source = source;
     sourceSGC = source.getAppearance().makeSceneGraphComponent();
     sgcMarkers.addChild(sourceSGC);
+    
+    sourceFace = source.getPosition().getFace();
 
     faceGroups = new HashMap<FaceGrouping, SceneGraphComponent>();
     checked = new ArrayList<FaceGrouping>();
-    unfolded = new ArrayList<SceneGraphComponent>();
+    inTree = new ArrayList<SceneGraphComponent>();
 
     double[][] light_psns = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 },
         { -1, 0, 0 }, { 0, -1, 0 }, { 0, 0, -1 } };
@@ -64,8 +69,26 @@ public class UnfoldingView extends View {
     }
   }
 
+  /*********************************************************************************
+   * initializeNewManifold
+   * 
+   * This method constructs SceneGraphComponents for every face in the manifold,
+   * grouping them into FaceGroupings. It adds the SGCs that represents these
+   * groupings to the geometry node of the scene graph tree. It builds the tree
+   * in such a way that entire face groupings are represented by a single SGC,
+   * allowing them to be "unfolded" as a single face. It also marks the SGC that
+   * contains the source face for future reference.
+   *********************************************************************************/
   public void initializeNewManifold() {
+    // Go through the list of FaceGroupings, creating a parent SGC for
+    // each then preparing other SGCs for the Faces in that grouping, adding 
+    // them as children to first SGC
+    // This allows for the rotation transformation to be applied to the
+    // SGC representing the entire FaceGrouping, so that a whole
+    // "face" appears to unfold
     for (FaceGrouping fg : Triangulation.groupTable.values()) {
+      
+      //make sure that duplicate FaceGroupings aren't made into SGCs
       if (checked.contains(fg))
         continue;
 
@@ -79,13 +102,19 @@ public class UnfoldingView extends View {
       }
       faceGroups.put(fg, group);
     }
-    Face sourceFace = source.getPosition().getFace();
-    SceneGraphComponent startFace = faceGroups.get(sourceFace);
+    
+    FaceGrouping sourceGroup = Triangulation.groupTable.get(sourceFace);
+    sourceFaceSGC = faceGroups.get(sourceFace);
     Matrix identity = MatrixBuilder.euclidean().getMatrix();
-    root = new TreeNode(startFace, Triangulation.groupTable.get(sourceFace),
-        identity, identity);
+    root = new TreeNode(sourceFaceSGC, sourceGroup, identity, identity);
   }
 
+  /*********************************************************************************
+   * makeSGC
+   * 
+   * This helper method takes a Face from the triangulation and constructs a SGC 
+   * to represent it in the scene.
+   *********************************************************************************/
   protected SceneGraphComponent makeSGC(Face f) {
     double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
     double[][] texCoords = TextureCoords.getCoordsAsArray(f);
@@ -112,16 +141,21 @@ public class UnfoldingView extends View {
     return sgc;
   }
 
+  /*********************************************************************************
+   * generateMarkerGeometry
+   * 
+   * Currently the source marker is the only one in the simulation, so this
+   * method merely has to calculate its position on the manifold.
+   *********************************************************************************/
   protected void generateMarkerGeometry() {
-    Face f = source.getPosition().getFace();
     ManifoldPosition sourcePos = source.getPosition();
     Vector[] tuple = new Vector[4];
-    tuple[0] = EmbeddedTriangulation.getCoord3D(f, sourcePos.getPosition());
-    tuple[1] = EmbeddedTriangulation.embedVector(f,
+    tuple[0] = EmbeddedTriangulation.getCoord3D(sourceFace, sourcePos.getPosition());
+    tuple[1] = EmbeddedTriangulation.embedVector(sourceFace,
         sourcePos.getDirectionForward());
-    tuple[2] = EmbeddedTriangulation.embedVector(f,
+    tuple[2] = EmbeddedTriangulation.embedVector(sourceFace,
         sourcePos.getDirectionLeft());
-    tuple[3] = EmbeddedTriangulation.getEmbeddedNormal(f);
+    tuple[3] = EmbeddedTriangulation.getEmbeddedNormal(sourceFace);
     Vector pos = tuple[0];
     Vector forward = Vector.normalize(tuple[1]);
     Vector left = Vector.normalize(tuple[2]);
@@ -159,26 +193,27 @@ public class UnfoldingView extends View {
   }
 
   protected void generateManifoldGeometry() {
-
   }
 
+  /*********************************************************************************
+   * updateCamera
+   * 
+   * Updates the camera position to follow the source marker around the
+   * manifold. 
+   * TODO: In the future the user will not be allowed to move around the
+   * manifold, so this method should be different or may not be necessary at
+   * all.
+   *********************************************************************************/
   protected void updateCamera() {
     ManifoldPosition pos = source.getPosition();
     Vector embedPos = EmbeddedTriangulation.getCoord3D(pos.getFace(),
         pos.getPosition());
-    Vector forward, left, normal;
-    forward = EmbeddedTriangulation.embedVector(pos.getFace(),
-        pos.getDirectionForward());
-    left = EmbeddedTriangulation.embedVector(pos.getFace(),
-        pos.getDirectionLeft());
+    Vector forward, normal;
+    forward = EmbeddedTriangulation.embedVector(pos.getFace(), pos.getDirectionForward());
     normal = EmbeddedTriangulation.getEmbeddedNormal(pos.getFace());
 
     forward.normalize();
-    left.normalize();
     normal.normalize();
-
-//    Matrix rot = MatrixBuilder.euclidean()
-//        .rotate(-Math.PI / 8, left.getVectorAsArray()).getMatrix();
 
     Vector adjustedForward = new Vector(forward);
     adjustedForward.scale(-.5);
@@ -187,37 +222,8 @@ public class UnfoldingView extends View {
     
     Vector position = Vector.add(offset,embedPos);
     
-    Vector adjustedLeft = left;
-//    double matrix[] = new double[16];
-//
-//    matrix[0 * 4 + 0] = adjustedForward.getComponent(0);
-//    matrix[0 * 4 + 1] = adjustedLeft.getComponent(0);
-//    matrix[0 * 4 + 2] = adjustedNormal.getComponent(0);
-//    matrix[0 * 4 + 3] = 0.0;
-//
-//    matrix[1 * 4 + 0] = adjustedForward.getComponent(1);
-//    matrix[1 * 4 + 1] = adjustedLeft.getComponent(1);
-//    matrix[1 * 4 + 2] = adjustedNormal.getComponent(1);
-//    matrix[1 * 4 + 3] = 0.0;
-//
-//    matrix[2 * 4 + 0] = adjustedForward.getComponent(2);
-//    matrix[2 * 4 + 1] = adjustedLeft.getComponent(2);
-//    matrix[2 * 4 + 2] = adjustedNormal.getComponent(2);
-//    matrix[2 * 4 + 3] = 0.0;
-//
-//    matrix[3 * 4 + 0] = 0.0;
-//    matrix[3 * 4 + 1] = 0.0;
-//    matrix[3 * 4 + 2] = 0.0;
-//    matrix[3 * 4 + 3] = 1.0;
-//
-//    // adjustedForward.scale(3.0);
-//    adjustedNormal.scale(5.0);
-//
-//    MatrixBuilder.euclidean().translate(adjustedNormal.getVectorAsArray())
-//        .translate(embedPos.getVectorAsArray()).times(matrix)
-//        .rotateZ(-Math.PI / 2).assignTo(sgcCamera);
-     MatrixBuilder mb = lookAt(position, embedPos, normal);
-     mb.assignTo(sgcCamera);
+    MatrixBuilder mb = lookAt(position, embedPos, normal);
+    mb.assignTo(sgcCamera);
   }
 
   public void removeMarker(Marker m) {
@@ -229,8 +235,6 @@ public class UnfoldingView extends View {
    * This public method allows AnimationUI to start the unfolding process.
    *********************************************************************************/
   public void displayUnfolding() {
-    // Face sourceFace = source.getPosition().getFace();
-    // unfolded.add(faceGroups.get(sourceFace));
     buildTree();
     unfoldTree();
   }
@@ -238,19 +242,26 @@ public class UnfoldingView extends View {
   /*********************************************************************************
    * buildTree
    * 
-   * This recursive method unfolds all faces in the embedding in a systematic
-   * way.
+   * This method builds the tree that will be used to display the unfolding of
+   * the manifold. It first calls a recursive helper method which builds the
+   * tree in a depth-first manner, computing and storing the angles and
+   * rotations for each face. It then traverses the tree breadth-first, giving
+   * each node of the tree a unique scene graph component to unfold. It looks at
+   * the FaceGrouping that each node contains, and if the SGC associated with
+   * that grouping already belongs to another node, it makes a copy of the SGC
+   * for the current node. Note that it also makes the copied SGCs invisible, so
+   * that they appear only when it is time to unfold them.
    * 
-   * TODO: add more description here
-   * 
-   * TODO: Make the traversal of the surface "breadth first" TODO: allow for
-   * multiple SceneGraphComponents for each group of faces so that they may
-   * appear in multiple places TODO: determine how to clip faces
+   * TODO: determine how to clip faces
    *********************************************************************************/
   private void buildTree() {
+    //trigger the depth-first traversal of the tree that determines the transformations
+    //for the faces in each node
     Matrix identity = MatrixBuilder.euclidean().getMatrix();
     buildTree(identity, 0, root);
 
+    //traverse the tree breadth-first to make scene graph components for the tree nodes,
+    //copying the scene graph component for a given face as necessary
     Queue<TreeNode> q = new LinkedList<TreeNode>();
     q.add(root);
     while (q.size() > 0) {
@@ -258,20 +269,36 @@ public class UnfoldingView extends View {
       for (TreeNode child : n.children)
         q.add(child);
 
-      SceneGraphComponent rotatingFace = faceGroups.get(n.faceList);
-      if (unfolded.contains(rotatingFace)) {
+      SceneGraphComponent rotatingFace = faceGroups.get(n.faceList);      
+      //if a node already has this scene graph component in its data,
+      //make a copy of the component for this node
+      if (inTree.contains(rotatingFace)) {
         SceneGraphComponent copy = copySceneGraph(rotatingFace);
         copy.setVisible(false);
         sgcDevelopment.addChild(copy);
         rotatingFace = copy;
       } else {
-        unfolded.add(rotatingFace);
+        inTree.add(rotatingFace);
       }
       n.sgc = rotatingFace;
     }
   }
   
-  @SuppressWarnings("static-access")
+  /*********************************************************************************
+   * buildTree
+   * 
+   * This recursive helper method computes the angles and transformations for
+   * each face as it builds the tree. It takes as arguments the parent node and
+   * the transformation that will move the current face into position next to
+   * the parent face. Note that this transformation is composition of the
+   * translation and rotation of the parent node.
+   * 
+   * The method iterates over all faces adjacent to the parent node's face, and
+   * finds the angle between the faces and the axis of rotation. It also
+   * computes the rotation matrix for the face. All information necessary to the
+   * animation is stored in a node which is added as a child of the parent node,
+   * and the method is called again until recursion depth is reached.
+   *********************************************************************************/
   private void buildTree(Matrix t, int depth, TreeNode parent) {
     if (depth < recursionDepth) {
       FaceGrouping fg = parent.faceList;
@@ -289,7 +316,7 @@ public class UnfoldingView extends View {
         SceneGraphComponent rotatingFace = faceGroups.get(fg2);
 
         // Don't unfold the face if it is the source face
-        if (rotatingFace.equals(faceGroups.get(Triangulation.groupTable.get(source.getPosition().getFace()))))
+        if (rotatingFace.equals(sourceFaceSGC))
           continue;
 
         double angle = computeAngle(f1, f2);
@@ -298,6 +325,8 @@ public class UnfoldingView extends View {
         Vertex first = null;
         Vertex second = null;
 
+        // find the orientation of the axis of rotation with relation to the
+        // stationary face
         int orientation = getOrientation(v1, v2, f1);
         if (orientation == 1) {
           first = v1;
@@ -308,25 +337,13 @@ public class UnfoldingView extends View {
         }
 
         Vector vec1 = EmbeddedTriangulation.getCoord3D(first);
-        double[] coord1 = new double[3];
-        for (int i = 0; i < 3; i++) {
-          coord1[i] = vec1.getComponent(i);
-        }
+        double[] coord1 = vec1.getVectorAsArray();
+        
         Vector vec2 = EmbeddedTriangulation.getCoord3D(second);
-        double[] coord2 = new double[3];
-        for (int i = 0; i < 3; i++) {
-          coord2[i] = vec2.getComponent(i);
-        }
+        double[] coord2 = vec2.getVectorAsArray();
 
-        // perform the transformation on the rotating face
-        // Note that in each step of the animation loop, you must compose the
-        // previous
-        // transformation (i.e. the transformation to move the face into
-        // position) with
-        // the current step of the rotation
-        Matrix rot;
-        rot = MatrixBuilder.euclidean().rotate(coord1, coord2, -angle)
-            .getMatrix();
+        //compute the rotation matrix and create the new tree node
+        Matrix rot = MatrixBuilder.euclidean().rotate(coord1, coord2, -angle).getMatrix();
         TreeNode node = new TreeNode(fg2, t, rot, angle, coord1, coord2);
         parent.children.add(node);
 
@@ -337,6 +354,12 @@ public class UnfoldingView extends View {
     }
   }
 
+  /*********************************************************************************
+   * copySceneGraph
+   * 
+   * A recursive method for making a "deep" copy of the SGC containing a
+   * FaceGrouping.
+   *********************************************************************************/
   private SceneGraphComponent copySceneGraph(SceneGraphComponent root) {
     SceneGraphComponent sgc = new SceneGraphComponent();
 
@@ -352,6 +375,16 @@ public class UnfoldingView extends View {
     return sgc;
   }
 
+  /*********************************************************************************
+   * unfoldTree
+   * 
+   * This method traverses the tree breadth-first and displays the unfolding
+   * animation. For the animation loop the angle of rotation is broken into n
+   * steps and in each iteration of the loop one step is displayed and the
+   * thread is slept to slow the animation down. Note that each time through the
+   * loop the nth step of the rotation must be composed with the translation
+   * that takes the moving face up to the stationary one.
+   *********************************************************************************/
   private void unfoldTree() {
 
     Queue<TreeNode> q = new LinkedList<TreeNode>();
@@ -364,16 +397,21 @@ public class UnfoldingView extends View {
       }
 
       if(node == root) continue;
-      Matrix rot = node.rotation;
+      
       Matrix t = node.transformation;
       double[] coord1 = node.coord1;
       double[] coord2 = node.coord2;
       double angle = node.angle;
       SceneGraphComponent rotatingFace = node.sgc;
       rotatingFace.setVisible(true);
+      
+      // perform the transformation on the rotating face
+      // Note that in each step of the animation loop, you must compose the
+      // previous transformation (i.e. the transformation to move the face
+      // into position) with the current step of the rotation
       int step = 0;
       while (step <= 50) {
-        rot = MatrixBuilder.euclidean()
+        Matrix rot = MatrixBuilder.euclidean()
             .rotate(coord1, coord2, -(step / 50.0) * angle).getMatrix();
         Matrix.times(t, rot).assignTo(rotatingFace);
         step++;
@@ -397,32 +435,11 @@ public class UnfoldingView extends View {
    * angle between these normal vectors.
    *********************************************************************************/
   private double computeAngle(Face f1, Face f2) {
-    // get normal vector of face1
-    List<Vertex> vertices1 = f1.getLocalVertices();
-    Vertex f1vert1 = vertices1.get(0);
-    Vertex f1vert2 = vertices1.get(1);
-    Vertex f1vert3 = vertices1.get(2);
-    Vector f1coord1 = EmbeddedTriangulation.getCoord3D(f1vert1);
-    Vector f1coord2 = EmbeddedTriangulation.getCoord3D(f1vert2);
-    Vector f1coord3 = EmbeddedTriangulation.getCoord3D(f1vert3);
-    Vector f1vec1 = Vector.subtract(f1coord2, f1coord1);
-    Vector f1vec2 = Vector.subtract(f1coord3, f1coord1);
-    Vector f1normal = Vector.cross(f1vec1, f1vec2);
+    Vector f1normal = EmbeddedTriangulation.getEmbeddedNormal(f1);
+    Vector f2normal = EmbeddedTriangulation.getEmbeddedNormal(f2);
 
-    // get normal vector of face2
-    List<Vertex> vertices2 = f2.getLocalVertices();
-    Vertex f2vert1 = vertices2.get(0);
-    Vertex f2vert2 = vertices2.get(1);
-    Vertex f2vert3 = vertices2.get(2);
-    Vector f2coord1 = EmbeddedTriangulation.getCoord3D(f2vert1);
-    Vector f2coord2 = EmbeddedTriangulation.getCoord3D(f2vert2);
-    Vector f2coord3 = EmbeddedTriangulation.getCoord3D(f2vert3);
-    Vector f2vec1 = Vector.subtract(f2coord2, f2coord1);
-    Vector f2vec2 = Vector.subtract(f2coord3, f2coord1);
-    Vector f2normal = Vector.cross(f2vec1, f2vec2);
-
-    double angle = Math.acos(Vector.dot(f1normal, f2normal)
-        / (f1normal.length() * f2normal.length()));
+    //f1normal and f2normal are already normalized, so do not need to divide by the norms
+    double angle = Math.acos(Vector.dot(f1normal, f2normal));
 
     return angle;
   }
@@ -463,6 +480,13 @@ public class UnfoldingView extends View {
       return -1;
   }
 
+  /*********************************************************************************
+   * TreeNode
+   * 
+   * This is the private inner class for making tree node objects. Each node
+   * contains the information necessary to display the unfolding animation of a
+   * single face in the tree.
+   *********************************************************************************/
   private class TreeNode {
     private SceneGraphComponent sgc;
     private FaceGrouping faceList;
@@ -473,21 +497,9 @@ public class UnfoldingView extends View {
     private double[] coord1;
     private double[] coord2;
 
-    public TreeNode(SceneGraphComponent sgc, FaceGrouping fg, Matrix trans,
-        Matrix rotate, double angle, double[] coord1, double[] coord2) {
-      this.sgc = sgc;
-      faceList = fg;
-      transformation = trans;
-      children = new LinkedList<TreeNode>();
-      rotation = rotate;
-      this.angle = angle;
-      this.coord1 = coord1;
-      this.coord2 = coord2;
-    }
-    
-    public TreeNode(FaceGrouping fg, Matrix trans,
-        Matrix rotate, double angle, double[] coord1, double[] coord2) {
-      //this.sgc = sgc;
+    public TreeNode(FaceGrouping fg, Matrix trans, Matrix rotate, double angle, 
+        double[] coord1, double[] coord2) {
+      this.sgc = new SceneGraphComponent();
       faceList = fg;
       transformation = trans;
       children = new LinkedList<TreeNode>();
@@ -498,19 +510,24 @@ public class UnfoldingView extends View {
     }
 
     // this is a constructor for the root
-    public TreeNode(SceneGraphComponent sgc, FaceGrouping fg, Matrix trans,
-        Matrix rotate) {
+    public TreeNode(SceneGraphComponent sgc, FaceGrouping fg, Matrix trans, Matrix rotate) {
       this.sgc = sgc;
       faceList = fg;
       transformation = trans;
       children = new LinkedList<TreeNode>();
       rotation = rotate;
+      angle = 0.0;
+      coord1 = null;
+      coord2 = null;
     }
   }
-
+  
+  /*********************************************************************************
+   * setZoom
+   * 
+   * Currently the unfolding view does not need a zoom method, so this is empty.
+   *********************************************************************************/
   public void setZoom(double zoomValue) {
-
-    
   }
 
 }

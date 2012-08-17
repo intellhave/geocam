@@ -38,8 +38,7 @@ public class AnimationUI {
   }
 
   private static void initControls() {
-  control = new KeyboardController(source);
-
+    control = new KeyboardController(source);
   }
 
   private static void runSimulation() {
