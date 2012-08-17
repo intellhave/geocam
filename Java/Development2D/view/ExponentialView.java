@@ -45,6 +45,8 @@ public class ExponentialView extends View {
 
   protected HashMap<Face, DevelopmentGeometry> faceDevelopments;
   protected HashMap<Face, SceneGraphComponent> faceSGCs;
+  
+  protected double edgeLength;
 
   /*********************************************************************************
    * ExponentialView
@@ -58,6 +60,8 @@ public class ExponentialView extends View {
     super(d, mh, fas);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
     zoom = 1.0;
+    Edge e = markers.getSourceMarker().getPosition().getFace().getLocalEdges().get(0);
+    edgeLength = Length.valueAt(e);
 
     // create light
     sgcLight = new SceneGraphComponent();
@@ -96,9 +100,6 @@ public class ExponentialView extends View {
     Camera cam = sgcCamera.getCamera();
     // setting the "On Axis" feature to false allows us to zoom in and out on the surface
     cam.setOnAxis(false);
-    Edge e = markers.getSourceMarker().getPosition().getFace().getLocalEdges()
-        .get(0);
-    double edgeLength = Length.valueAt(e);
     double size = 4 * edgeLength * zoom;
 
     MatrixBuilder.euclidean().translate(0, 0, 3).rotateZ(-Math.PI / 2)
