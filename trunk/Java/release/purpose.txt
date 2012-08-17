@@ -3,3 +3,27 @@ use to make our release files. That is to say, this folder won't be
 released; instead, the person in charge of creating the releases will
 pick and choose scripts from this file when he/she is putting together
 the data that will be released.
+
+Steps for exporting the application:
+
+0) Make a directory for your release. It should read something like:
+
+[ App Name ][ OS Name ][ 32 or 64 ]
+
+1) Set up an icon or shell script for running the application. This
+depends on the operating system, and should be saved in the release
+directory.
+
+2) Copy the Data and lib directories of the project directly to your
+release directory.
+
+3) Go to File->Export->Runnable Jar. Save the jar into the release
+directory.
+
+4) Test your script/icon.
+
+5) Add a "README" that explains how to run the program (ie, click the
+icon or the shell commands to run the shell script).
+
+6) Zip the release folder and email it to
+glickenstein@math.arizona.edu to be posted to the web.
