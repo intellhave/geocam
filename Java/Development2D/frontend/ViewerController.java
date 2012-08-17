@@ -185,7 +185,7 @@ public class ViewerController extends JFrame {
 
   private void layoutGUI() {
 
-    this.setSize(220, 600);
+    this.setSize(220, 680);
     this.setResizable(false);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     this.setTitle("Development View");
@@ -204,7 +204,7 @@ public class ViewerController extends JFrame {
             { "Dodecahedron", "Data/surfaces/dodec2.off" },
             { "Icosahedron", "Data/off/icosa.off" },
             { "Cone", "Data/surfaces/scaledCone.off" },
-            { "Neckpinch", "Data/surfaces/neckpinch.off" },
+            { "Neckpinch", "Data/surfaces/large_neckpinch.off" },
             { "Saddle", "Data/off/saddle.off" } };
 
         for (String[] pair : namesAndPaths) {
