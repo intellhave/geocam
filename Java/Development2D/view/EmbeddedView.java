@@ -95,14 +95,30 @@ public class EmbeddedView extends View {
     forward.normalize();
     left.normalize();
     normal.normalize();
-
+ 
+    //la
     Matrix rot = MatrixBuilder.euclidean()
-        .rotate(-Math.PI / 8, left.getVectorAsArray()).getMatrix();
+//        .rotate(-Math.PI / 4, forward.getVectorAsArray())
+        .rotate(-Math.PI / 8, left.getVectorAsArray())
+        .getMatrix();
+
     Vector adjustedNormal = new Vector(rot.multiplyVector(normal
         .getVectorAsArray()));
     Vector adjustedForward = new Vector(rot.multiplyVector(forward
         .getVectorAsArray()));
-    Vector adjustedLeft = left;
+    Vector adjustedLeft = new Vector(rot.multiplyVector(left
+        .getVectorAsArray()));
+//    Vector adjustedNormal = new Vector(normal
+//        .getVectorAsArray());
+//    Vector adjustedForward = new Vector(forward
+//        .getVectorAsArray());
+//    Vector adjustedLeft = new Vector(left
+//        .getVectorAsArray());
+
+//    System.out.println(adjustedLeft);
+//    System.out.println(adjustedForward);
+//    System.out.println(adjustedNormal);
+    
     double matrix[] = new double[16];
 
     matrix[0 * 4 + 0] = adjustedForward.getComponent(0);
@@ -131,9 +147,12 @@ public class EmbeddedView extends View {
 
     adjustedNormal.scale(zoom);
 
-    MatrixBuilder.euclidean().translate(adjustedNormal.getVectorAsArray())
-        .translate(embPsn.getVectorAsArray()).times(matrix)
-        .rotateZ(-Math.PI / 2).assignTo(sgcCamera);
+    MatrixBuilder.euclidean()
+        .translate(adjustedNormal.getVectorAsArray())
+        .translate(embPsn.getVectorAsArray())
+        .times(matrix)
+        .rotateZ(-Math.PI / 2)
+        .assignTo(sgcCamera);
   }
 
   /*********************************************************************************

@@ -33,6 +33,7 @@ import view.FaceAppearanceScheme;
 import view.FirstPersonView;
 import view.View;
 import controller.KeyboardController;
+import controller.SNESController;
 import controller.UserController;
 import de.jreality.jogl.Viewer;
 import development.Coord2D;
@@ -324,7 +325,7 @@ public class DevelopmentUI implements Runnable {
    * "initViewControls" method.
    *********************************************************************************/
   private void initModelControls() {
-    // userControl = new SNESController(development);
+//    userControl = new SNESController(development, crumbs, geo);
     userControl = new KeyboardController(development, crumbs, geo);
   }
 
@@ -506,13 +507,14 @@ public class DevelopmentUI implements Runnable {
       exponentialView.setDrawFaces(facesEnabled);
       exponentialView.setDrawTextures(texturesEnabled);
       exponentialView.setZoom(exponentialZoom);
-
+      
       exponentialView.initializeNewManifold();
       exponentialView.update();
 
       JFrame frame = makeJFrame(exponentialView.getViewer(), 400, 40);
       views.add(exponentialView);
       frames.put(exponentialView, frame);
+      frame.setTitle("Exponential (Map) View");
     } else if (exponentialView != null) {
       JFrame frame = frames.remove(exponentialView);
       frame.setVisible(false);
@@ -538,6 +540,7 @@ public class DevelopmentUI implements Runnable {
       JFrame frame = makeJFrame(embeddedView.getViewer(), 805, 50);
       views.add(embeddedView);
       frames.put(embeddedView, frame);
+      frame.setTitle("3D Embedded View");
     } else if (embeddedView != null) {
       JFrame frame = frames.remove(embeddedView);
       frame.setVisible(false);
@@ -564,6 +567,7 @@ public class DevelopmentUI implements Runnable {
 
       views.add(firstPersonView);
       frames.put(firstPersonView, frame);
+      frame.setTitle("First Person View");
     } else if (firstPersonView != null) {
       JFrame frame = frames.remove(firstPersonView);
       frame.setVisible(false);
