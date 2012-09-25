@@ -23,6 +23,7 @@ import de.jreality.scene.Camera;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
+import static de.jreality.shader.CommonAttributes.*;
 import development.AffineTransformation;
 import development.Development;
 import development.DevelopmentNode;
@@ -156,7 +157,7 @@ public class ExponentialView extends View {
       ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, tex_verts);
       ifsf.setFaceCount(ifsf_faces.length);
       ifsf.setFaceIndices(ifsf_faces);
-      ifsf.setGenerateEdgesFromFaces(true);
+//      ifsf.setGenerateEdgesFromFaces(true);
       ifsf.setGenerateFaceNormals(true);
       ifsf.setGenerateVertexNormals(true);      
       ifsf.update();
@@ -167,7 +168,8 @@ public class ExponentialView extends View {
       } else {
         app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
       }
-      sgc.setGeometry(ifsf.getGeometry());
+//      app.setAttribute(VERTEX_DRAW, true);
+      sgc.setGeometry(ifsf.getIndexedFaceSet());
       sgc.setAppearance(app);
     }
   }
