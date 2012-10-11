@@ -37,6 +37,7 @@ public class SNESController extends UserController {
    *********************************************************************************/
   private Controllers allControllers;
   private Controller userController;
+  private boolean calibratedQ;
 
   /*********************************************************************************
    * SNESController
@@ -76,6 +77,7 @@ public class SNESController extends UserController {
     }
 
     userController = allControllers.getController(0);
+    calibratedQ = false;
   }
 
   /*********************************************************************************
@@ -117,46 +119,65 @@ public class SNESController extends UserController {
       controllerState.put(SNESController.Button.R, getButtonState(c, 5));
       controllerState.put(SNESController.Button.Select, getButtonState(c, 6));
       controllerState.put(SNESController.Button.Start, getButtonState(c, 7));
-
+      controllerState.put(SNESController.Button.Left,
+          SNESController.ButtonState.Up);
+      controllerState.put(SNESController.Button.Right,
+          SNESController.ButtonState.Up);
+      controllerState.put(SNESController.Button.Up,
+          SNESController.ButtonState.Up);
+      controllerState.put(SNESController.Button.Down,
+          SNESController.ButtonState.Up);
+      
+      
       // Note: the controller's x and y values are not calibrated until the controller 
       // is used, so initially getXAxisValue() and getYAxisValue() may not return 0
       // when the arrow keys are released, but instead some very small decimal.
-      if (Math.abs(c.getXAxisValue()) < 0.05) {
+ //     System.out.println(c.getXAxisValue());
+ //     System.out.println(c.getYAxisValue());
+      
+      if (!calibratedQ && Math.abs(c.getXAxisValue()) < 0.1
+          && Math.abs(c.getYAxisValue()) < 0.1){
+        calibratedQ = true;
+      }
+      
+      if (!calibratedQ) return;
+      
+      if (Math.abs(c.getXAxisValue()) < 0.1) {
         controllerState.put(SNESController.Button.Left,
             SNESController.ButtonState.Up);
         controllerState.put(SNESController.Button.Right,
             SNESController.ButtonState.Up);
       }
 
-      if (c.getXAxisValue() == 1.0) {
+      if (c.getXAxisValue() > 0.9) {
         controllerState.put(SNESController.Button.Left,
             SNESController.ButtonState.Up);
         controllerState.put(SNESController.Button.Right,
             SNESController.ButtonState.Down);
       }
 
-      if (c.getXAxisValue() == -1.0) {
+      if (c.getXAxisValue() < -0.9) {
         controllerState.put(SNESController.Button.Left,
             SNESController.ButtonState.Down);
         controllerState.put(SNESController.Button.Right,
             SNESController.ButtonState.Up);
       }
-
-      if (Math.abs(c.getYAxisValue()) < 0.05) {
+//System.out.println(c.getYAxisValue());
+      if (Math.abs(c.getYAxisValue()) < 0.1) {
         controllerState.put(SNESController.Button.Up,
             SNESController.ButtonState.Up);
         controllerState.put(SNESController.Button.Down,
             SNESController.ButtonState.Up);
       }
 
-      if (c.getYAxisValue() == 1.0) {
+      if (c.getYAxisValue() > 0.9) {
         controllerState.put(SNESController.Button.Up,
             SNESController.ButtonState.Up);
         controllerState.put(SNESController.Button.Down,
             SNESController.ButtonState.Down);
       }
 
-      if (c.getYAxisValue() == -1.0) {
+      if (c.getYAxisValue() < -0.9) {
         controllerState.put(SNESController.Button.Up,
             SNESController.ButtonState.Down);
         controllerState.put(SNESController.Button.Down,
