@@ -200,7 +200,9 @@ public class ViewerController extends JFrame {
       file.setText("File");
       {
         String[][] namesAndPaths = new String[][] {
-            { "Tetrahedron", "Data/surfaces/tetra2.off" },
+            { "Regular Tetrahedron", "Data/surfaces/tetra3.off" },
+            { "Regular Tetrahedron - One Color", "Data/surfaces/tetra.off" },            
+            { "Irregular Tetrahedron", "Data/surfaces/tetra2.off" },
             { "Cube", "Data/surfaces/cube_surf.off" },
             { "Dodecahedron", "Data/surfaces/dodec2.off" },
             { "Icosahedron", "Data/off/icosa.off" },
@@ -246,7 +248,7 @@ public class ViewerController extends JFrame {
     {
       recDepth = new JFormattedTextField(NumberFormat.getIntegerInstance());
       recDepth.setColumns(3);
-      recDepth.setValue(3);
+      recDepth.setValue(5);
 
       recDepthLabel = new JLabel("Recursion Depth");
       recDepthPanel = new JPanel();

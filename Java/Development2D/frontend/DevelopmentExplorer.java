@@ -2,7 +2,7 @@ package frontend;
 
 public class DevelopmentExplorer {
   public static void main(String[] args) {
-    String defaultPath = "Data/surfaces/tetra2.off";
+    String defaultPath = "Data/surfaces/tetra3.off";
 
     DevelopmentUI dui = new DevelopmentUI(defaultPath);
     ViewerController vc = new ViewerController(dui);

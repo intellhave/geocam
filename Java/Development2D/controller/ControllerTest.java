@@ -38,7 +38,9 @@ public class ControllerTest {
       for(int i=0;i<numButtons;i++){
         if(ourController.isButtonPressed(i))
           System.out.println(ourController.getButtonName(i)+" is pressed");
-       if(ourController.getXAxisValue() !=0.0 || ourController.getYAxisValue()!=0.0){
+       if(
+//           ourController.getXAxisValue() !=0.0 || ourController.getYAxisValue()!=0.0
+           true){
          System.out.println("X Axis Value is: "+ourController.getXAxisValue());
          System.out.println("Y Axis Value is: "+ourController.getYAxisValue());
       }

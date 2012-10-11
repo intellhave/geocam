@@ -275,7 +275,7 @@ public class DevelopmentUI implements Runnable {
 
     if (development == null) {
       development = new Development(new ManifoldPosition(sourceFace,
-          sourcePoint), 3, 1.0);
+          sourcePoint), 5, 1.0);
     } else {
       development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), 3);
     }
@@ -325,8 +325,8 @@ public class DevelopmentUI implements Runnable {
    * "initViewControls" method.
    *********************************************************************************/
   private void initModelControls() {
-//    userControl = new SNESController(development, crumbs, geo);
-    userControl = new KeyboardController(development, crumbs, geo);
+    userControl = new SNESController(development, crumbs, geo);
+//    userControl = new KeyboardController(development, crumbs, geo);
   }
 
   /*********************************************************************************
