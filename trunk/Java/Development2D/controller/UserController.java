@@ -26,7 +26,7 @@ public abstract class UserController implements Runnable {
    *********************************************************************************/
   protected static final long KEY_REPEAT_DELAY = 1;//1;
   protected static final long KEY_REPEAT_RATE = 90;//90
-  protected static long SLEEP_TIME = 0;
+  protected static long SLEEP_TIME = 10;
   protected final int MAX_REPEAT_RATE = 100; // Hz
 
   public boolean isPaused = false;

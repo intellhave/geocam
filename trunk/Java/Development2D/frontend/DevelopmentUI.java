@@ -325,8 +325,10 @@ public class DevelopmentUI implements Runnable {
    * "initViewControls" method.
    *********************************************************************************/
   private void initModelControls() {
-    userControl = new SNESController(development, crumbs, geo);
-//    userControl = new KeyboardController(development, crumbs, geo);
+
+    //FIXME
+//    userControl = new SNESController(development, crumbs, geo);
+    userControl = new KeyboardController(development, crumbs, geo);
   }
 
   /*********************************************************************************
