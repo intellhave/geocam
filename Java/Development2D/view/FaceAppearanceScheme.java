@@ -35,11 +35,11 @@ private void initColorLibrary(){
   colorMap.put(Colors.MOCCASSIN,TextureDescriptor.STUCCO);
   colorMap.put(Colors.ORCHID_PURPLE,TextureDescriptor.SWIRLS);
   colorMap.put(Colors.PLAIN_PURPLE,TextureDescriptor.BATHROOMTILE);
-  colorMap.put(Colors.PASTEL_PINK, TextureDescriptor.CHECKER);
+  colorMap.put(Colors.PASTEL_PINK, TextureDescriptor.MARBLE);
   colorMap.put(Colors.HOT_PINK, TextureDescriptor.CLAY);
   colorMap.put(Colors.KHAKI,TextureDescriptor.COBBLESTONE);
   colorMap.put(Colors.SIENNA, TextureDescriptor.DOTS);
-  colorMap.put(Colors.DARK_GRAY,TextureDescriptor.LIGHTHOUSE);
+  colorMap.put(Colors.DARK_GRAY,TextureDescriptor.ZIGZAG);
   colorMap.put(Colors.DEFAULT,TextureDescriptor.ZIGZAG);    
 }
 
