@@ -35,7 +35,8 @@ public class TextureLibrary {
    * appearances.
    *********************************************************************************/
   public enum TextureDescriptor {
-    BATHROOMTILE, CHECKER, CLAY, COBBLESTONE, DOTS, GRID, LIGHTHOUSE, PLAID, STUCCO, SWIRLS, ZIGZAG
+    BATHROOMTILE, CHECKER, CLAY, COBBLESTONE, DOTS, GRID, 
+    LIGHTHOUSE, MARBLE, PLAID, STUCCO, SWIRLS, ZIGZAG
   }
 
   private static EnumMap<TextureDescriptor, Appearance> library;
@@ -124,7 +125,10 @@ public class TextureLibrary {
         ff = new File("Data/textures/grid.jpg");
         break;
       case LIGHTHOUSE:
-        ff = new File("Data/textures/lighthouse.jpg");
+        ff = new File("Data/textures/graycube.jpg");
+        break;
+      case MARBLE:
+        ff = new File("Data/textures/marble.jpg");
         break;
       case PLAID:
         ff = new File("Data/textures/plaid.jpg");
