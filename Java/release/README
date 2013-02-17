@@ -1,0 +1,24 @@
+Installing Explorer
+
+  To install the development explorer, simply unzip the archive to a
+  convenient location, such as the desktop.
+
+Running Explorer
+
+   Under Windows: Simply click on the desktop icon.
+
+   Under Linux/Mac: 
+   1) Open a terminal and move to the directory where
+   you unzipped the archive. There, you will find a shell script
+   named: explorer[Your OS Name][32 or 64 Bits]. 
+
+   2) Make sure this script is executable by typing "chmod u+x
+   explorer[Your OS Name][32 or 64 Bits]". 
+
+   3) Then, execute the script by typing "./explorer..."
+
+   Example Terminal Dialog (Mac OS X Machine):
+   johnsmith@smithlaptop> cd ~/Desktop/explorermac
+   johnsmith@smithlaptop> chmod u+x explorermac
+   johnsmith@smithlaptop> ./explorermac
+   
