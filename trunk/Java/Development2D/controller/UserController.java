@@ -233,8 +233,6 @@ public abstract class UserController implements Runnable {
       break;
     }
     
-      
-
     return true;
   }
   
