@@ -8,20 +8,21 @@ This is our to Do list for Summer 2013
 
 ==High Priority=
 
-  *Optimize code for run time
-  *Find limits
-  *Allow for fixed shape outline (instead of depth)
-  *Wave propagation
+  * Optimize code for run time
+  * Package jar
+  * Find limits of smooth running/video
+  * Allow for fixed shape outline (instead of depth)
+  * Wave propagation
 
 ==Lower Priority==
 
-  *Implement stars
-  *3D unfolding (with stars?)
+  * Implement stars
+  * 3D unfolding (with stars?)
 
 =Geoquant Viewer=
 
 ==High Priority==
 
-  *Evaluate current version
-  *Implement view with development
-  *Conformal mapping domain
+  * Evaluate current version
+  * Implement view with development
+  * Conformal mapping domain
