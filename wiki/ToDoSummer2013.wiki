@@ -12,7 +12,7 @@ This is our to Do list for Summer 2013
   * Package jar
   * Find limits of smooth running/video
   * Allow for fixed shape outline (instead of depth)
-  * Wave propagation
+  * Wave propagation See [ftp.cis.upenn.edu/pub/cis610/public_html/geodflow-polthier.pdf]
 
 ==Lower Priority==
 
