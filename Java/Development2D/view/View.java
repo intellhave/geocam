@@ -13,22 +13,28 @@ import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
 
 import java.awt.Color;
 
-import javax.media.opengl.GLCanvas;
+import com.jogamp.opengl.swt.GLCanvas;
+
 
 import marker.Marker;
 import marker.MarkerHandler;
+
 import de.jreality.jogl.JOGLRenderer;
-import de.jreality.jogl.Viewer;
+import de.jreality.jogl.JOGLViewer;
+
 import de.jreality.math.MatrixBuilder;
+
 import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.proxy.scene.Camera;
+
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
+
 import development.Development;
 import development.Vector;
 
@@ -81,7 +87,7 @@ public abstract class View {
    *********************************************************************************/
   protected JOGLRenderer renderer;
   protected GLCanvas canvas;
-  protected Viewer viewer;
+  protected JOGLViewer viewer;
   protected Appearance defaultAppearance;
 
   /*********************************************************************************
@@ -139,7 +145,10 @@ public abstract class View {
    * TODO : Documentation
    *********************************************************************************/
   public void initViewer() {
-    viewer = new Viewer(camPath, sgcRoot);    
+    viewer = new JOGLViewer();
+    viewer.setCameraPath(camPath);
+    viewer.setSceneRoot(sgcRoot);
+    
     // ToolSystem toolSystem = ToolSystem.toolSystemForViewer(viewer);
     // toolSystem.initializeSceneTools();
     // viewer.getViewingComponent();
@@ -150,7 +159,7 @@ public abstract class View {
    * 
    * TODO : Documentation
    *********************************************************************************/
-  public Viewer getViewer() {
+  public JOGLViewer getViewer() {
     return viewer;
   }
 

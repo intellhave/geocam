@@ -35,7 +35,7 @@ import view.View;
 import controller.KeyboardController;
 import controller.SNESController;
 import controller.UserController;
-import de.jreality.jogl.Viewer;
+import de.jreality.jogl.JOGLViewer;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
@@ -459,7 +459,7 @@ public class DevelopmentUI implements Runnable {
    * This method builds a JFrame to contain the input viewer, and places it at
    * the input screen coordinates.
    *********************************************************************************/
-  private JFrame makeJFrame(Viewer v, int locationX, int locationY) {
+  private JFrame makeJFrame(JOGLViewer v, int locationX, int locationY) {
     JFrame frame = new JFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setVisible(true);

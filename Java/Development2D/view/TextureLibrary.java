@@ -125,7 +125,7 @@ public class TextureLibrary {
         ff = new File("Data/textures/grid.jpg");
         break;
       case LIGHTHOUSE:
-        ff = new File("Data/textures/graycube.jpg");
+        ff = new File("Data/textures/lighthouse.jpg");
         break;
       case MARBLE:
         ff = new File("Data/textures/marble.jpg");
