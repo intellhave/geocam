@@ -143,6 +143,7 @@ public class ViewerController extends JFrame {
   private JCheckBox drawFacesBox;
   private JCheckBox drawAvatarBox;
   private JCheckBox TextureEnabledBox;
+  public static JCheckBox allowMarkerBox;
 
   private static int MAX_SPEED = 4000;
   private static int MAX_SIZE = 10;
@@ -554,6 +555,11 @@ public class ViewerController extends JFrame {
       };
       TextureEnabledBox.addActionListener(TextureEnabledListener);
     }
+    
+    allowMarkerBox = new JCheckBox();
+    viewerPanel.add(allowMarkerBox);
+    allowMarkerBox.setText("Allow Markers");
+    TextureEnabledBox.setEnabled(true);
 
     /*********************************************************************************
      * DrawOptionsPanel

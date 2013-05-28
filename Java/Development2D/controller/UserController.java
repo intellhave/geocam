@@ -14,6 +14,7 @@ import marker.Marker;
 
 import development.Development;
 import development.Vector;
+import frontend.ViewerController;
 
 public abstract class UserController implements Runnable {
   /*********************************************************************************
@@ -224,11 +225,11 @@ public abstract class UserController implements Runnable {
       isPaused = true;
       break;
     case A_Button:
-      if(crumbs != null)
+      if(crumbs != null && ViewerController.allowMarkerBox.isSelected())
         crumbs.addMarker( development.getSource() );
       break;
     case B_Button:
-      if( geodesic != null )
+      if( geodesic != null && ViewerController.allowMarkerBox.isSelected())
         geodesic.generateGeodesic( development.getSource() );
       break;
     }
