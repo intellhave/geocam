@@ -12,11 +12,13 @@ import geoquant.*;
  * 
  * @author Joesph Thomas
  * @author Jeremy Mirchandani
+ * 
  ***************************************************************************/
 public class TestGeoquant {
 
 	private static final double EPSILON = 0.0001; // range for assertions involving floats
-	private static final String TETRAPATH = "Data/Triangulations/2DManifolds/tetrahedron.xml"; // 
+	private static final String TETRAPATH = "Data/Triangulations/2DManifolds/tetrahedron.xml"; // File path for a tetraheddron
+	private static final String TRIPRISMPATH = "Data/Triangulations/2DManifolds/triangularPrism.xml"; // File path for a triangular prism
 	
 	/*
 	 * Feature Tested: The 2D topology of a tetrahedron is correctly loaded from an xml file.
@@ -287,7 +289,7 @@ public class TestGeoquant {
 	 *  Formulas: Glickenstein 2009 Page 27
 	 */
 	@Test
-	public void testTetrahedronPartialEdges(){
+	public void testTetrahedronPartialEdges00(){
 		TriangulationIO.readTriangulation(TETRAPATH);
 		
 		for(Vertex vv : Triangulation.vertexTable.values()){
@@ -307,5 +309,168 @@ public class TestGeoquant {
 			}
 		}
 	}
+	
+	/*
+	 * Feature Tested: The geoquants correctly compute partialEdges
+	 * Parameters: 
+	 * 	- Manifold: Tetrahedron.
+	 *  - Radii: 1.0 at every vertex except for one vertex vv, which has radius 2.0.
+	 *  - Etas: 1.0 for all edges adjacent to vv, 1.0/3.0 for all others
+	 *  Formulas: Glickenstein 2009 Page 27
+	 */
+	@Test
+	public void testTetrahedronPartialEdges01(){
+		TriangulationIO.readTriangulation(TETRAPATH);
 		
+		for(Vertex vv : Triangulation.vertexTable.values()){
+			Radius.at(vv).setValue(1.0);
+		}
+		Vertex vv = Triangulation.vertexTable.get(1);
+		Radius.at(vv).setValue(2.0);
+		
+		for(Edge ee : Triangulation.edgeTable.values()){
+			if(vv.isAdjEdge(ee))
+				Eta.at(ee).setValue(1.0);
+			else
+				Eta.at(ee).setValue(1.0/3.0);
+		}
+		
+		for(Vertex v : Triangulation.vertexTable.values()){
+			for(Edge ee : Triangulation.edgeTable.values()){
+				if(v.isAdjEdge(ee))
+					if(ee.isAdjVertex(vv))
+						assertEquals(Radius.at(v).getValue(), PartialEdge.at(v, ee).getValue(), EPSILON);
+					else
+						assertEquals((4.0/3.0)/(Math.sqrt(8.0/3.0)), PartialEdge.at(v, ee).getValue(), EPSILON);
+			}
+		}
+	}
+	
+	/*
+	 * Feature Tested: The 2D topology of a triangular prism is correctly loaded from an xml file.
+	 * 	- Manifold: Triangular Prism.
+	 */
+	@Test
+	public void testTriangularPrismTopology00(){
+		TriangulationIO.readTriangulation(TRIPRISMPATH);
+		
+		assertEquals(5, Triangulation.vertexTable.size());
+		assertEquals(9, Triangulation.edgeTable.size());
+		assertEquals(6, Triangulation.faceTable.size());
+		
+		
+		// Tests that each edge has two adjacent faces
+		// Tests that if a face is adjacent to an edge the edge is adjacent to the face
+		for(Edge ee : Triangulation.edgeTable.values()){
+			int i = 0;
+			for(Face f : Triangulation.faceTable.values()){
+				if(ee.isAdjFace(f))
+					i++;
+				
+				assertEquals(f.isAdjEdge(ee), ee.isAdjFace(f));
+			}
+			assertEquals(2, i);
+		}
+	}
+	
+	/*
+	 * Feature Tested: The geoquants correctly computes lengths from radii and inversive distances when all radii are not the same.
+	 * Parameters: 
+	 * 	- Manifold: Triangular Prism
+	 *  - Radii: 
+	 *  		Vertex1 = 1.0 
+	 *  		Vertex2 = 5.0
+	 *  		Vertex3 = 102.0
+	 *  		Vertex4 = 3.0
+	 *  		Vertex5 = 4.0
+	 *  - Etas: 1.0 for all edges
+	 *  Formulas: Glickenstein 2009 Page 27
+	 */
+	@Test
+	public void testTriangularPrismLengths00(){
+		TriangulationIO.readTriangulation(TRIPRISMPATH);
+
+		Vertex [] vertices = new Vertex[6];
+				
+		vertices[1] = Triangulation.vertexTable.get(1);
+		vertices[2] = Triangulation.vertexTable.get(2);
+		vertices[3] = Triangulation.vertexTable.get(3);
+		vertices[4] = Triangulation.vertexTable.get(4);
+		vertices[5] = Triangulation.vertexTable.get(5);
+		
+		Edge edge12 = vertices[1].getEdge(vertices[2]);
+		Edge edge14 = vertices[1].getEdge(vertices[4]);
+		Edge edge15 = vertices[1].getEdge(vertices[5]);
+		Edge edge24 = vertices[2].getEdge(vertices[4]);
+		Edge edge25 = vertices[2].getEdge(vertices[5]);
+		Edge edge23 = vertices[2].getEdge(vertices[3]);
+		Edge edge34 = vertices[3].getEdge(vertices[4]);
+		Edge edge35 = vertices[3].getEdge(vertices[5]);
+		Edge edge45 = vertices[4].getEdge(vertices[5]);
+		
+		Radius.at(vertices[1]).setValue(1.0);
+		Radius.at(vertices[2]).setValue(5.0);
+		Radius.at(vertices[3]).setValue(102.0);
+		Radius.at(vertices[4]).setValue(3.0);
+		Radius.at(vertices[5]).setValue(4.0);
+		
+		for(Edge ee : Triangulation.edgeTable.values())
+				Eta.at(ee).setValue(1.0);
+			
+		assertEquals(6.0, Length.at(edge12).getValue(), EPSILON);
+		assertEquals(4.0, Length.at(edge14).getValue(), EPSILON);
+		assertEquals(5.0, Length.at(edge15).getValue(), EPSILON);
+		assertEquals(8.0, Length.at(edge24).getValue(), EPSILON);
+		assertEquals(9.0, Length.at(edge25).getValue(), EPSILON);
+		assertEquals(107.0, Length.at(edge23).getValue(), EPSILON);
+		assertEquals(105.0, Length.at(edge34).getValue(), EPSILON);
+		assertEquals(106.0, Length.at(edge35).getValue(), EPSILON);
+		assertEquals(7.0, Length.at(edge45).getValue(), EPSILON);
+
+	}
+	
+	/*
+	 * Feature Tested: The geoquants correctly compute Edge Heights
+	 * Parameters: 
+	 * 	- Manifold: Tetrahedron
+	 *  - Radii: 1.0 at every vertex except for one vertex v1, which has radius 2.0.
+	 *  - Etas: 1.0 for all edges except for edges adjacent to v1, which has a eta of 2.0
+	 *  Formulas: Glickenstein 2009 Page 27
+	 */
+	@Test
+	public void testTetrahedronEdgeHeights00(){
+		TriangulationIO.readTriangulation(TETRAPATH);
+		
+		for(Vertex vv : Triangulation.vertexTable.values()){
+			Radius.at(vv).setValue(1.0);
+		}
+		
+		Vertex v1 = Triangulation.vertexTable.get(1);
+		
+		double base_EH = 1.0 / Math.sqrt(3);
+		double bottom_EH = 4.0 / Math.sqrt(12);
+		double top_EH = 4.0 / Math.sqrt(39);
+		
+		Radius.at(v1).setValue(2.0);
+		
+		for(Edge ee : Triangulation.edgeTable.values()){
+			if( ee.isAdjVertex(v1))
+				Eta.at(ee).setValue(2.0);
+			else
+				Eta.at(ee).setValue(1.0);
+		}
+		
+		for(Face ff : Triangulation.faceTable.values()){
+			for(Edge ee : ff.getLocalEdges()){
+				if(ff.isAdjVertex(v1)){
+					if(ee.isAdjVertex(v1))
+						assertEquals(EdgeHeight.at(ee, ff).getValue(), top_EH, EPSILON);
+					else
+						assertEquals(EdgeHeight.at(ee, ff).getValue(), bottom_EH, EPSILON);
+				}
+				else
+					assertEquals(EdgeHeight.at(ee, ff).getValue(), base_EH, EPSILON);
+			}
+		}
+	}
 }
