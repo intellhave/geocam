@@ -10,8 +10,25 @@ In the interest of producing a reasonable-sized final executable, we should only
   * Xerces / XML-APIs : These read our XML formatted data files.
   * jReality : Our main graphics library.
   * lwjgl : The "lightweight java game library" is used to read input from a game pad.
-  * jinput.jar : See lwjgl. (?)
   * gluegen : I have the impression that this lets library allows java code to call into C/C++ code, which is necessary for a graphics library like JReality/JOGL.
   * JOGL : The graphics library that jreality uses for lower-level rendering work.
 
-= Setting up your Eclipse Environment =
+= Configuring your Eclipse Build Path =
+
+The first thing you'll need to do is make sure the "Package Explorer" window is visible. Then, right click on the GEOCAM project, which will open a large menu, and select "Build Path". Within a sub-menu, you should see "Configure Build Path."
+
+Selecting "Configure Build Path" should bring up a window with several tabs in it. Select the tab labeled "Libraries". Ultimately, you want the following list of libraries in this tab's window.
+  * gluegen-rt.jar
+  * jogl-all.jar
+  * jReality.jar
+  * lwjgl.jar
+  * xercesImpl.jar
+  * xercesSamples.jar
+  * xml-apis.jar
+  * JRE Systems Library
+  * JUnit 4
+The procedure for adding each JAR is very simple, just press the "Add JAR" button, then browse to GEOCAM/lib and select the appropriately labeled .jar file. You may have to browse subfolders of of the lib directory to find the .jar's for lwjgl and jogl.
+
+Now that you have all the .jar files, you need to set up the appropriate native libraries. The good news is *you only need to set up native libraries for lwjgl and jReality* (in the past, more native libraries were needed). Start by clicking the arrow next to "jReality.jar." You should see a sub-menu with four items, one of them reading "Native Library Location". Select this item and press the "Edit" button.
+
+You should now see a new window that reads "Native Library Folder Configuration". Press "Workspace" and browse to the folder /Geocam/lib/jni/jReality. Select the sub-folder that describes your processer and operating system, and click OK. For example, my machine is a 32 bit computer with a Linux operating system so I selected linux32. Repeat these same steps with lwjgl.java and /Geocam/lib/jni/lwjgl.
