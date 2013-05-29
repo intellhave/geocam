@@ -27,8 +27,16 @@ Selecting "Configure Build Path" should bring up a window with several tabs in i
   * xml-apis.jar
   * JRE Systems Library
   * JUnit 4
+
 The procedure for adding each JAR is very simple, just press the "Add JAR" button, then browse to GEOCAM/lib and select the appropriately labeled .jar file. You may have to browse subfolders of of the lib directory to find the .jar's for lwjgl and jogl.
 
 Now that you have all the .jar files, you need to set up the appropriate native libraries. The good news is *you only need to set up native libraries for lwjgl and jReality* (in the past, more native libraries were needed). Start by clicking the arrow next to "jReality.jar." You should see a sub-menu with four items, one of them reading "Native Library Location". Select this item and press the "Edit" button.
 
-You should now see a new window that reads "Native Library Folder Configuration". Press "Workspace" and browse to the folder /Geocam/lib/jni/jReality. Select the sub-folder that describes your processer and operating system, and click OK. For example, my machine is a 32 bit computer with a Linux operating system so I selected linux32. Repeat these same steps with lwjgl.java and /Geocam/lib/jni/lwjgl.
+You should now see a new window that reads "Native Library Folder Configuration". Press "Workspace" and browse to the folder /Geocam/lib/jni/jReality. Select the sub-folder that describes your processer and operating system, and click OK. For example, my machine is a 32 bit computer with a Linux operating system so I selected linux32. Repeat these same steps with lwjgl.java and /Geocam/lib/jni/lwjgl. Now you should be able to compile and run our code. Try selecting "Geocam->Development2D->frontend->DevelopmentExplorer.java" and see if you can get it to run.
+
+=I just did an SVN update and now the project won't compile!=
+
+Occasionally, someone makes a mistake and commits to SVN the files describing how their own personal eclipse setup is supposed to compile the project. I'm working to try to get all of those files out of our version control system. In the meantime, try the following:
+  * Follow the steps above to open the "Configure Build Path" window.
+  * Inspect the .jar's to see that you have exactly the necessary libraries.
+  * Open each of the .jar's submenus. Do .jReality and .lwjgl have the right native library locations for your machine? Are they the only ones with native libraries? Usually it's this information that is no longer correct.
