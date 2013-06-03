@@ -21,6 +21,24 @@ The purpose of this page is to describe:
 
 == Here be Dragons ==
 
-Last summer we made at least two attempts at packaging the project and failed both times. Below are some problems we ran into:
+Last summer we made at least two attempts at packaging the project. Although some progress was made, we ran into a number of problems:
   # Applications are organized differently on each OS.
      * Ex: On windows, most users are reasonably comfortable with .exe files (which can bundle together some of the items listed above). On Mac OSX, .app files are the norm, etc.)
+  # Path organization problems. Basically, any time you reference a particular file (like a texture) in the code, you need to make sure that reference still makes sense in the final application. With java, using Linux/Mac style relative paths will still work on Windows (Java just converts them to Windows format), but obviously if you use a hard path ("C:\jethro\jethros_special_texture.jpg") then we have problems.
+  # The right native libraries need to be included in the distribution. Fortunately, there are only two things we need to get right --- the jReality native library and the lwjgl native library.
+  # We never figured out how to automate the process of packaging. This ended up causing a lot of problems, because it meant people were disinclined to produce a new copy of the application when they fixed a bug.
+
+== Packaging Tools ==
+
+A quick search of stack exchange turned up the following tools for packaging our application on different operating systems. All of the tools listed below are free.
+
+=== Windows ===
+  * [http://launch4j.sourceforge.net/ Launch4j]:
+  * [http://jsmooth.sourceforge.net/ JSmooth]:
+  * [http://nsis.sourceforge.net/Main_Page NSIS]: This tool appears to create an _installer_ rather than an application _launcher_. I've read one needs to use it with one of the tools above.
+
+=== Mac ===
+  * Package Maker: I think we tried this in the past and didn't like it --- getting the native libraries we needed into the package was a pain. The tool was written by Apple, but I've read that even Apple no longer uses it and that now it has been removed from the latest versions of their OS.
+
+=== Windows/Mac/Linux === 
+  * [http://izpack.org/ lzpack]: This tool appears to be in commerical use, and works for all three operatings systems. I will probably try using this first.
