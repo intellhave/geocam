@@ -1,0 +1,26 @@
+#summary This page describes how we plan to distribute our program.
+
+= Introduction =
+
+One of our goals this summer is to produce some executables that non-programmers can download and run. In particular, we want to be able to distribute the  "Development 2D" portion of the project, which has some graphical dependencies. 
+
+At the risk of stating the obvious, a user-friendly application is more than just an executable or .jar file. It contains at least the following data:
+  # A file telling the OS how to launch the application.
+  # An icon (My impression is that the great majority of users only know how to launch applications by clicking on icons.)
+  # The executable itself (a .jar file, for instance).
+  # Any system-specific libraries the program needs.
+  # A collection of data files, including:
+      * Textures and 3D models (for the insects, markers, etc.)
+      * Manifolds
+  # A plan for storing all of this material somewhere on the user's machine.
+
+The purpose of this page is to describe:
+  # Where the data above resides within our project
+  # How to package our project for distribution
+  # What tools help with the previous item, and how to use them
+
+== Here be Dragons ==
+
+Last summer we made at least two attempts at packaging the project and failed both times. Below are some problems we ran into:
+  # Applications are organized differently on each OS.
+     * Ex: On windows, most users are reasonably comfortable with .exe files (which can bundle together some of the items listed above). On Mac OSX, .app files are the norm, etc.)
