@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.EtchedBorder;
@@ -211,7 +212,7 @@ public class ViewerController extends JFrame {
             { "Icosahedron", "Data/off/icosa.off" },
             { "Cone", "Data/surfaces/scaledCone.off" },
             { "Neckpinch", "Data/surfaces/large_neckpinch.off" },
-            { "Irregular Tetrahedron 2", "Data/Triangulations/2DManifolds/tetrahedron4.xml"},
+            { "Irregular Tetrahedron 2 (xml)", "Data/Triangulations/2DManifolds/tetrahedron4.xml"},
             { "Triangular Prism (xml)", "Data/Triangulations/2DManifolds/triangularPrism.xml"},
 //            { "Saddle", "Data/off/saddle.off" } 
             };
@@ -469,10 +470,14 @@ public class ViewerController extends JFrame {
       buttonPanel.add(flowButton);
       
       ActionListener FlowButtonListener = new ActionListener() {
-          public void actionPerformed(ActionEvent arg0) {
-            currentSim.runFlow();
+          public void actionPerformed(ActionEvent arg0) {       	  
+        	  // As of now, the yamabe flow only works with xml files and only xml files with length data
+        	  if(currentSurfacePath.substring(currentSurfacePath.length()-3, currentSurfacePath.length()).equals("off"))
+      				JOptionPane.showMessageDialog(null, "Only works with xml type manifolds");
+        	  else
+        		  currentSim.runFlow();
           }
-        };
+      };
       flowButton.addActionListener(FlowButtonListener);
 
       ActionListener geosButtonListener = new ActionListener() {
