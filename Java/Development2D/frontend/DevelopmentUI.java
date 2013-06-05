@@ -619,28 +619,30 @@ public class DevelopmentUI implements Runnable {
   }
   
   public void runFlow(){
-      double[] radii = new double[Triangulation.vertexTable.size()];
+      double[] radiiLengths = new double[Triangulation.vertexTable.size()];
+      Radius [] radii = new Radius[Triangulation.vertexTable.size()];
+      
       int i = 0;
+     
       for(Radius r : Geometry.getRadii()) {
-        radii[i] = r.getValue();
+        radiiLengths[i] = r.getValue();
+        radii[i] = r;
         i++;
       }
 	  
 	  Solver solver = new Yamabe2DFlow();
       solver.setStoppingCondition(0.001);
 	  solver.setStepsize(0.1);
-	  radii = solver.run(radii, 100);
+	  radiiLengths = solver.run(radiiLengths, 100);
 	  
-      i = 0;
-      for(Radius r : Geometry.getRadii()) {
-    	r.setValue(radii[i]);
-        i++;
+      for(i = 0; i < Triangulation.vertexTable.size(); i++) {
+    	  radii[i].setValue(radiiLengths[i]);
       }
 
       
       for (View v : views) {
     	  v.update();
-        }
+      }
       development.rebuild();
 	  System.out.println("runFlow()");
   }
