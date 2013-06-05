@@ -144,6 +144,8 @@ public class ViewerController extends JFrame {
   private JCheckBox drawAvatarBox;
   private JCheckBox TextureEnabledBox;
   public static JCheckBox allowMarkerBox;
+  
+  private JButton flowButton;
 
   private static int MAX_SPEED = 4000;
   private static int MAX_SIZE = 10;
@@ -209,6 +211,8 @@ public class ViewerController extends JFrame {
             { "Icosahedron", "Data/off/icosa.off" },
             { "Cone", "Data/surfaces/scaledCone.off" },
             { "Neckpinch", "Data/surfaces/large_neckpinch.off" },
+            { "Irregular Tetrahedron 2", "Data/Triangulations/2DManifolds/tetrahedron4.xml"},
+            { "Triangular Prism (xml)", "Data/Triangulations/2DManifolds/triangularPrism.xml"},
 //            { "Saddle", "Data/off/saddle.off" } 
             };
 
@@ -459,6 +463,17 @@ public class ViewerController extends JFrame {
       clearGeosButton = new JButton();
       clearGeosButton.setText("Clear geodesics");
       buttonPanel.add(clearGeosButton);
+      
+      flowButton = new JButton();
+      flowButton.setText("2D Yamabe Flow");
+      buttonPanel.add(flowButton);
+      
+      ActionListener FlowButtonListener = new ActionListener() {
+          public void actionPerformed(ActionEvent arg0) {
+            currentSim.runFlow();
+          }
+        };
+      flowButton.addActionListener(FlowButtonListener);
 
       ActionListener geosButtonListener = new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {

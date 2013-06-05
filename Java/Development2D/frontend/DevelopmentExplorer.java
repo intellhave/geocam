@@ -2,7 +2,7 @@ package frontend;
 
 public class DevelopmentExplorer {
   public static void main(String[] args) {
-    String defaultPath = "Data/surfaces/dodec2.off";
+    String defaultPath = "Data/Triangulations/2DManifolds/tetrahedron4.xml";
 
     DevelopmentUI dui = new DevelopmentUI(defaultPath);
     ViewerController vc = new ViewerController(dui);

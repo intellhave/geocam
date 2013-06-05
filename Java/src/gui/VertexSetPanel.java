@@ -243,6 +243,10 @@ public class VertexSetPanel extends JPanel {
 
   protected void updateList() {
     getVertexList().setModel(new DefaultComboBoxModel(Triangulation.vertexTable.values().toArray()));
+//    setAlphaTextField.setText(vertexList.getSelectedValue().toString().trim().);
+//    setRadiusTextField.setText();
+//    alphaSlider.setValue();
+//    radSlider.setValue()
   }
   
   private JSlider getAlphaSlider() {

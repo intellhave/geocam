@@ -1,5 +1,7 @@
 package frontend;
 
+import geoquant.Geometry;
+import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
 import java.awt.Component;
@@ -24,6 +26,8 @@ import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
+import solvers.Solver;
+import solvers.implemented.Yamabe2DFlow;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -36,6 +40,7 @@ import controller.KeyboardController;
 import controller.SNESController;
 import controller.UserController;
 import de.jreality.jogl.JOGLViewer;
+import de.jreality.ui.viewerapp.actions.edit.CurrentSelection;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
@@ -611,5 +616,32 @@ public class DevelopmentUI implements Runnable {
     exponentialZoom = zoomValue;
     if (exponentialView != null)
       exponentialView.setZoom(zoomValue);
+  }
+  
+  public void runFlow(){
+      double[] radii = new double[Triangulation.vertexTable.size()];
+      int i = 0;
+      for(Radius r : Geometry.getRadii()) {
+        radii[i] = r.getValue();
+        i++;
+      }
+	  
+	  Solver solver = new Yamabe2DFlow();
+      solver.setStoppingCondition(0.001);
+	  solver.setStepsize(0.1);
+	  radii = solver.run(radii, 100);
+	  
+      i = 0;
+      for(Radius r : Geometry.getRadii()) {
+    	r.setValue(radii[i]);
+        i++;
+      }
+
+      
+      for (View v : views) {
+    	  v.update();
+        }
+      development.rebuild();
+	  System.out.println("runFlow()");
   }
 }
