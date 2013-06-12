@@ -316,6 +316,17 @@ public class TriangulationIO {
       if (multiplicity.length() != 0) {
         f.setMultiplicity(Integer.parseInt(multiplicity));
       }
+      
+      String metaFace = simplexNode.getAttribute("metaface");
+      if(metaFace.length() != 0){
+    	  int val;
+    	  try{val = Integer.parseInt(metaFace);}
+    	  catch (NumberFormatException nfe){
+    		  System.out.println("Meta Face attribute must be set to an integer value");
+    		  val = 0;
+    	  }
+    	  f.setMetaFace(val);
+      }
     }
 
     Tetra t;
@@ -409,6 +420,7 @@ public class TriangulationIO {
       if (multiplicity.length() != 0) {
         t.setMultiplicity(Integer.parseInt(multiplicity));
       }
+      
     }
 
     for (Vertex v2 : Triangulation.vertexTable.values()) {
@@ -465,7 +477,30 @@ public class TriangulationIO {
     
     //Check if the xml file had color info
     Face testFace = Triangulation.faceTable.get(1);
-    if(testFace.getColor() != null){
+    if(testFace.hasMetaFace()){
+    	for(Face face : Triangulation.faceTable.values()){
+    		if(Triangulation.groupTable.values().isEmpty()){
+    			FaceGrouping fg = new FaceGrouping(face);
+    			Triangulation.putFaceGrouping(face, fg);
+    		}
+    		else{
+    			boolean added = false;
+    			for(FaceGrouping fg : Triangulation.groupTable.values()){
+    				if(fg.getFaces().get(0).getMetaFace() == face.getMetaFace()){
+    					fg.add(face);
+    	    			Triangulation.putFaceGrouping(face, fg);
+    					added = true;
+    					break;
+    				}	
+    			}
+    			if(added)continue;
+    			FaceGrouping fg = new FaceGrouping(face);
+    			Triangulation.putFaceGrouping(face, fg);
+    		}
+    	}
+    }
+    
+    else if(testFace.getColor() != null){
       createGroupings();
     }
     else{
