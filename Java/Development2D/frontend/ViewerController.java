@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -20,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -472,9 +475,6 @@ public class ViewerController extends JFrame {
       ActionListener FlowButtonListener = new ActionListener() {
           public void actionPerformed(ActionEvent arg0) {       	  
         	  // As of now, the yamabe flow only works with xml files and only xml files with length data
-        	  if(currentSurfacePath.substring(currentSurfacePath.length()-3, currentSurfacePath.length()).equals("off"))
-      				JOptionPane.showMessageDialog(null, "Only works with xml type manifolds");
-        	  else
         		  currentSim.runFlow();
           }
       };
@@ -641,4 +641,26 @@ public class ViewerController extends JFrame {
       drawAvatarBox.addActionListener(drawAvatar);
     }
   }
+  
+  
+  public void setUpForGeoquantViewer(){
+	  currentSim.setEmbeddedView(false);
+	  currentSim.setFirstPersonView(false);
+	  this.embeddedZoomSlider.setEnabled(false);
+	  this.showEmbeddedBox.setEnabled(false);
+	  this.showView3DBox.setEnabled(false);
+	  this.file.setEnabled(false);
+	  this.addWindowListener(new WindowClosingListener());
+	  this.setSize(220, 720);
+	  
+  }
+  
+	private class WindowClosingListener extends WindowAdapter {
+
+		public void windowClosing(WindowEvent we) {
+			ViewerController.this.endSession();
+			currentSim.terminate();
+			ViewerController.this.dispose();
+		}
+	}
 }
