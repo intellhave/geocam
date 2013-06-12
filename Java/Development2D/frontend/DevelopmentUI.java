@@ -148,6 +148,33 @@ public class DevelopmentUI implements Runnable {
     initViews();
     initModelControls();
   }
+  
+  /***
+   * Used for Geoquant Viewer
+   */
+  public DevelopmentUI(){
+	    Iterator<Integer> i = null;
+	    // pick some arbitrary face and source point
+	    i = Triangulation.faceTable.keySet().iterator();
+	    Face sourceFace = Triangulation.faceTable.get(i.next());
+	    Vector sourcePoint = new Vector(0, 0);
+	    Iterator<Vertex> iv = sourceFace.getLocalVertices().iterator();
+	    while (iv.hasNext()) {
+	      sourcePoint.add(Coord2D.coordAt(iv.next(), sourceFace));
+	    }
+	    sourcePoint.scale(1.0f / 3.0f);
+
+	    if (development == null) {
+	      development = new Development(new ManifoldPosition(sourceFace,
+	          sourcePoint), 5, 1.0);
+	    } else {
+	      development.rebuild(new ManifoldPosition(sourceFace, sourcePoint), 3);
+	    }
+	    
+	    initMarkers();
+	    initViews();
+	    initModelControls();
+  }
 
   /*********************************************************************************
    * run
@@ -632,18 +659,19 @@ public class DevelopmentUI implements Runnable {
 	  
 	  Solver solver = new Yamabe2DFlow();
       solver.setStoppingCondition(0.001);
-	  solver.setStepsize(0.1);
-	  radiiLengths = solver.run(radiiLengths, 100);
-	  
-      for(i = 0; i < Triangulation.vertexTable.size(); i++) {
-    	  radii[i].setValue(radiiLengths[i]);
-      }
+	  solver.setStepsize(0.002);
+	  for(int j = 0; j < 100; j ++){
+		  radiiLengths = solver.run(radiiLengths, j);
+	      for(i = 0; i < Triangulation.vertexTable.size(); i++) {
+	    	  radii[i].setValue(radiiLengths[i]);
+	      }
 
-      
-      for (View v : views) {
-    	  v.update();
-      }
-      development.rebuild();
+	      development.rebuild();
+	      for (View v : views) {
+	    	  v.update();
+	      }
+	  }
+	  
 	  System.out.println("runFlow()");
   }
 }
