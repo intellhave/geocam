@@ -76,29 +76,30 @@
     <Faces>2 3 4</Faces>
   </Face>
   <Face index="2">
-    <Vertices>1 2 4 </Vertices>
-    <Edges>1 2 4</Edges>
-    <Faces>1 3 6</Faces>
+  	<Vertices>1 2 4</Vertices>
+  	<Edges>1 2 4</Edges>
+  	<Faces>1 3 6</Faces>
   </Face>
   <Face index="3">
-    <Vertices>1 4 5</Vertices>
-    <Edges>2 3 5</Edges>
-    <Faces>1 2 5</Faces>
+  	<Vertices>1 4 5</Vertices>
+  	<Edges>2 3 5</Edges>
+  	<Faces>1 2 5</Faces>
   </Face>
-  
+
   <Face index="4">
-    <Vertices>2 3 5</Vertices>
-    <Edges>6 7 9</Edges>
-    <Faces>6 5 1</Faces>
-  </Face><Face index="5">
-    <Vertices>3 4 5</Vertices>
-    <Edges>5 8 9</Edges>
-    <Faces>3 4 6</Faces>
+  	<Vertices>2 3 5</Vertices>
+  	<Edges>6 7 9</Edges>
+  	<Faces>6 5 1</Faces>
+  </Face>
+  <Face index="5">
+  	<Vertices>3 4 5</Vertices>
+  	<Edges>5 8 9</Edges>
+  	<Faces>3 4 6</Faces>
   </Face>
   <Face index="6">
-    <Vertices>2 3 4</Vertices>
-    <Edges>4 7 8</Edges>
-    <Faces>2 4 5</Faces>
+  	<Vertices>2 3 4</Vertices>
+  	<Edges>4 7 8</Edges>
+  	<Faces>2 4 5</Faces>
   </Face>
-  
+
 </Triangulation>

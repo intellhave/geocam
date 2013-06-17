@@ -34,10 +34,11 @@
     <xs:element name="Vertex">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="Vertices" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="Edges" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="Faces" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="Tetras" minOccurs="0" maxOccurs="1"/>
+            	<xs:element ref="Vertices" minOccurs="0" maxOccurs="1" />
+            	<xs:element ref="Edges" minOccurs="0" maxOccurs="1" />
+            	<xs:element ref="Faces" minOccurs="0" maxOccurs="1" />
+            	<xs:element ref="Tetras" minOccurs="0" maxOccurs="1" />
+            	<xs:element name="metafaces" type="xs:string" maxOccurs="unbounded" minOccurs="0"></xs:element>
             </xs:sequence>
             <xs:attribute name="index" use="required" type="xs:integer" />
             <xs:attribute name="alpha" use="optional" type="xs:decimal"/>			<xs:attribute name="multiplicity" use="optional" type="xs:integer"/>
@@ -51,8 +52,9 @@
         		<xs:element ref="Edges" minOccurs="0" maxOccurs="1" />
         		<xs:element ref="Faces" minOccurs="0" maxOccurs="1" />
         		<xs:element ref="Tetras" minOccurs="0" maxOccurs="1" />
+        		<xs:element name="metafaces" type="xs:string" maxOccurs="unbounded" minOccurs="0"></xs:element>
         	</xs:sequence>
-            <xs:attribute name="index" use="required" type="xs:integer" />
+        	<xs:attribute name="index" use="required" type="xs:integer" />
             <xs:attribute name="eta" use="optional" type="xs:decimal" />
    			<xs:attribute name="multiplicity" use="optional" type="xs:integer" />
             
@@ -67,12 +69,12 @@
         		<xs:element ref="Faces" minOccurs="0" maxOccurs="1" />
         		<xs:element ref="Tetras" minOccurs="0" maxOccurs="1" />
         		<xs:element ref="Color" minOccurs="0" maxOccurs="1" />
+        		<xs:element name="metaface" type="xs:string" maxOccurs="1" minOccurs="0"></xs:element>
         	</xs:sequence>
         	<xs:attribute name="index" use="required" type="xs:integer" />
         	<xs:attribute name="multiplicity" use="optional"
         		type="xs:integer" />
 
-        	<xs:attribute name="metaface" type="xs:int"></xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="Tetra">

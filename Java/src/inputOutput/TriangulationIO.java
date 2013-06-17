@@ -145,6 +145,15 @@ public class TriangulationIO {
           // t2.addUniqueVertex(v);
         }
       }
+      
+      localList = simplexNode.getElementsByTagName("metafaces");
+      if(localList.getLength() == 1){
+    	  localSimplices = (Element) localList.item(0);
+    	  localScanner = new Scanner(localSimplices.getTextContent());
+    	  while(localScanner.hasNextInt()){
+    		  v.addMetaFace(localScanner.nextInt());
+    	  }
+      }
       String radius = simplexNode.getAttribute("radius");
       if (radius.length() != 0) {
         Radius.at(v).setValue(Double.parseDouble(radius));
@@ -211,6 +220,17 @@ public class TriangulationIO {
           // t2.addUniqueEdge(e);
         }
       }
+      
+      localList = simplexNode.getElementsByTagName("metafaces");
+      if(localList.getLength() == 1){
+    	  localSimplices = (Element) localList.item(0);
+    	  localScanner = new Scanner(localSimplices.getTextContent());
+    	  while(localScanner.hasNextInt()){
+    		  e.addMetaFace(localScanner.nextInt());
+    	  }
+      }
+      
+      
       String eta = simplexNode.getAttribute("eta");
       if (eta.length() != 0) {
         Eta.at(e).setValue(Double.parseDouble(eta));
@@ -299,6 +319,27 @@ public class TriangulationIO {
         }
       }
       
+      localList = simplexNode.getElementsByTagName("Tetras");
+      if (localList.getLength() == 1) {
+        localSimplices = (Element) localList.item(0);
+        localScanner = new Scanner(localSimplices.getTextContent());
+        Tetra t2;
+        while (localScanner.hasNextInt()) {
+          t2 = getTetra(localScanner.nextInt());
+          f.addUniqueTetra(t2);
+          // t2.addUniqueFace(f);
+        }
+      }
+      
+      localList = simplexNode.getElementsByTagName("metaface");
+      if(localList.getLength() == 1){
+    	  localSimplices = (Element) localList.item(0);
+    	  localScanner = new Scanner(localSimplices.getTextContent());
+    	  while(localScanner.hasNextInt()){
+    		  f.addMetaFace(localScanner.nextInt());
+    	  }
+      }
+      
       NodeList rgbComponents = simplexNode.getElementsByTagName("Color");
       if (rgbComponents.getLength() > 0) {
         Element rgbs = (Element) rgbComponents.item(0);
@@ -317,16 +358,6 @@ public class TriangulationIO {
         f.setMultiplicity(Integer.parseInt(multiplicity));
       }
       
-      String metaFace = simplexNode.getAttribute("metaface");
-      if(metaFace.length() != 0){
-    	  int val;
-    	  try{val = Integer.parseInt(metaFace);}
-    	  catch (NumberFormatException nfe){
-    		  System.out.println("Meta Face attribute must be set to an integer value");
-    		  val = 0;
-    	  }
-    	  f.setMetaFace(val);
-      }
     }
 
     Tetra t;

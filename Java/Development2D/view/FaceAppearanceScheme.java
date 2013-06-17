@@ -61,7 +61,46 @@ private void initColorLibrary(){
    * the future, we will allow the mapping to be customizable.
    *********************************************************************************/
   public TextureDescriptor getTextureDescriptor(Face f) {
-    initColorLibrary();
+	  initColorLibrary();
+	  
+	  if(f.hasMetaFace()){
+    	int textureCount = 16;
+    	int mf = f.getMetaFace().get(0);
+    	switch(mf%textureCount){
+	      case 0 :
+	        return colorMap.get(Colors.SKY_BLUE);
+	      case 1 :
+	        return colorMap.get(Colors.TURQUOISE);
+	      case 2 :
+	        return colorMap.get(Colors.STRAWBERRY_RED);
+	      case 3:
+	        return colorMap.get(Colors.BRICK_RED);
+	      case 4 :
+	        return colorMap.get(Colors.GRASS_GREEN);
+	      case 5 :
+	        return colorMap.get(Colors.FOREST_GREEN);
+	      case 6 :
+	        return colorMap.get(Colors.BRIGHT_ORANGE);
+	      case 7:
+	        return colorMap.get(Colors.PASTEL_YELLOW);
+	      case 8:
+	        return colorMap.get(Colors.MOCCASSIN);
+	      case 9:
+	        return colorMap.get(Colors.ORCHID_PURPLE);
+	      case 10:
+	        return colorMap.get(Colors.PLAIN_PURPLE);
+	      case  11:
+	        return colorMap.get(Colors.PASTEL_PINK);
+	      case 12:
+	        return colorMap.get(Colors.HOT_PINK);
+	      case 13:
+	        return colorMap.get(Colors.KHAKI);
+	      case 14:
+	        return colorMap.get(Colors.SIENNA);
+	      case 15:
+	        return colorMap.get(Colors.DARK_GRAY);
+    	}
+    }
     Color faceColor = getColor(f);
     switch(faceColor.getRGB()){
     case -16734503 :
