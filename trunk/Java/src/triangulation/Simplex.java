@@ -13,6 +13,8 @@ public abstract class Simplex {
   protected LinkedList<Face> localFaces;
   protected LinkedList<Tetra> localTetras;
   protected int multiplicity;
+  protected ArrayList<Integer> metaFace;
+  protected boolean hasMetaFace;
   
   public Simplex(int index) {
     this.index = index;
@@ -23,6 +25,8 @@ public abstract class Simplex {
     localFaces = new LinkedList<Face>();
     localTetras = new LinkedList<Tetra>();
     multiplicity = 1;
+    hasMetaFace = false;
+    metaFace = new ArrayList<Integer>();
   }
   
   public int getIndex() {
@@ -145,5 +149,18 @@ public abstract class Simplex {
       type = type.substring(type.lastIndexOf(".") + 1);
     }
     return type + " " + index;
+  }
+  
+  public void addMetaFace(Integer mf){
+	  this.metaFace.add(mf);
+	  hasMetaFace = true;
+  }
+  
+  public boolean hasMetaFace(){
+	  return hasMetaFace;
+  }
+  
+  public ArrayList<Integer> getMetaFace(){
+	  return metaFace;
   }
 }

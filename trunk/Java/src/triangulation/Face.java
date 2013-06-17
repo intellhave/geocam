@@ -5,29 +5,15 @@ import java.awt.Color;
 public class Face extends Simplex {
   private boolean negative;
   private Color color = null;
-  private int metaFace;
-  private boolean hasMetaFace;
+
   
   public Face(int index) {
     super(index);
-    hasMetaFace = false;
   }
 
   public Face(int index, Color c) {
     super(index);
     color = c;
-  }
-  public void setMetaFace(int mf){
-	  this.metaFace = mf;
-	  hasMetaFace = true;
-  }
-  
-  public boolean hasMetaFace(){
-	  return hasMetaFace;
-  }
-  
-  public int getMetaFace(){
-	  return metaFace;
   }
   
   public Color getColor() {
