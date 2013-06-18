@@ -30,14 +30,14 @@ public class conformaldiskflow extends Solver{
         break;
       }
     }
-    
+//    
     for(Vertex v: Triangulation.vertexTable.values()){
       LKCurvature K = LKCurvature.at(v);
-//        slopes[i] = x[i] *(-renorm - K.getValue());
+//        slopes[i] = x[i] *(renorm - K.getValue());
       slopes[i] = x[i] *(- K.getValue());
       if (v.getMultiplicity()==-1){
-//        slopes[i]= - slopes[i];
-        slopes[i]=0;
+        slopes[i]= -slopes[i];
+//        slopes[i]=0;
       }
       i++;
     }

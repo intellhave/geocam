@@ -55,10 +55,10 @@ public class ConformalDiskflowTest {
     
     System.out.println("numfaces2 = "+Triangulation.faceTable.size());
     for(Vertex v: Triangulation.vertexTable.values())
-      if (v.getMultiplicity() == -1){
-        v.remove();
-        break;
-      }
+//     if (v.getMultiplicity() == -1){
+//        v.remove();
+ //       break;
+ //     }
  
     System.out.println("numfaces3 = "+Triangulation.faceTable.size());
     int i=1;
@@ -135,7 +135,7 @@ public class ConformalDiskflowTest {
   
   private static void initializeQuantities() {
  //   TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/owl.xml");
-    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/domain.xml");
+    TriangulationIO.readTriangulation("Data/Triangulations/2DManifolds/trydomainbefore.xml");
     
     //   EmbeddedTriangulation.readEmbeddedSurface("Data/off/square2.off");
   //  EmbeddedTriangulation.readEmbeddedSurface("Data/off/square.off");
@@ -199,7 +199,7 @@ public class ConformalDiskflowTest {
         e.addEdge(newE);
         newE.addEdge(e);
       }
-      
+      System.out.println(newE);
       Triangulation.putEdge(newE);
       
       newV.addEdge(newE);
@@ -298,12 +298,12 @@ public class ConformalDiskflowTest {
     }
     System.err.println(out);
     
- /*   out.println("RADII:");
+    out.println("RADII:");
     for(List<Double> values : rec.getValueHistory(Radius.class)) {
-      out.println(values);
+//      System.out.println(values);
     }
     
-*/    
+    
   System.out.println("CURVATURES:");
     for(List<Double> values : rec.getValueHistory(LKCurvature.class)) {
       System.out.println(values);
