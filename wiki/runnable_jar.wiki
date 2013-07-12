@@ -23,7 +23,7 @@ First Steps:
   # Within the "export destination" text box, select the path to the folder you created and provide a name for the final jar file. In my case, I used "/home/jthomas/Desktop/export/app.jar"
   # Click "Finish".
 
-At this point, you're nearly finished. The directory you've created ("Desktop/GEOCAM", in my example) should contain three things: a jar file, a folder called "Data" full of GEOCAM data, and a folder of libraries.
+At this point, you're nearly finished. The directory you've created ("Desktop/export", in my example) should contain three things: a jar file, a folder called "Data" full of GEOCAM data, and a folder of libraries.
 
 The remaining task is to add the right native libraries to get everything to run correctly. Open your file-browser of choice, browse to your GEOCAM eclipse project, and open the "lib/jogl" folder. You should see many jars, of the form "jogl-all-natives-[OS and architecture here]". Copy only the jar applicable to your target OS/architecture pair, and paste it into your app_lib directory ("/home/jthomas/Desktop/export/app_lib" in my example).
 
