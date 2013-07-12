@@ -20,8 +20,8 @@ First Steps:
   # Within Geocam Project, you should locate the "Data" folder, which contains texture images, triangulations, etc. Copy this folder *exactly* into the folder you created. (If there isn't now a folder called "Data" within "export", we won't be able to run the application from within the "export" folder.)
   # Returning to Eclipse, locate the "Launch Configuration" pulldown menu, and select the name of the class containing the "main" method you want to launch when the application is run.
   # Next, select the radio button that begins with "Copy required libraries into a subfolder..."
-# Within the "export destination" text box, select the path to the folder you created and provide a name for the final jar file. In my case, I used "/home/jthomas/Desktop/export/app.jar"
-# Click "Finish".
+  # Within the "export destination" text box, select the path to the folder you created and provide a name for the final jar file. In my case, I used "/home/jthomas/Desktop/export/app.jar"
+  # Click "Finish".
 
 At this point, you're nearly finished. The directory you've created ("Desktop/GEOCAM", in my example) should contain three things: a jar file, a folder called "Data" full of GEOCAM data, and a folder of libraries.
 
