@@ -1,0 +1,23 @@
+#summary This page describes our current procedure for exporting our application from eclipse.
+
+= Introduction =
+
+For some months we have been trying to find a simple way to export our application from eclipse, such that the application
+
+  # runs properly (all data and native libraries available)
+
+  # can be reasonably installed and run by non-programmers.
+
+This page describes our current procedure for exporting the application. It is definitely a work in progress, so problems should be noted and reported!
+
+= Exporting the Application =
+
+We wish to export versions of our application for each of the three major operating systems (Linux, Macintosh, and Windows) and different processors (32 and 64 bit). Probably the easiest way to use the instructions below is to do the export on the target OS and processor.
+
+Steps:
+# 
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
