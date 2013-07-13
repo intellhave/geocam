@@ -11,7 +11,7 @@ This page describes our current procedure for exporting the application. It is d
 
 = Exporting the Application =
 
-We wish to export versions of our application for each of the three major operating systems (Linux, Macintosh, and Windows) and different processors (32 and 64 bit). Probably the easiest way to use the instructions below is to do the export on the target OS and processor.
+We wish to export versions of our application for each of the three major operating systems (Linux, Macintosh, and Windows) and different processors (32 and 64 bit). Probably the easiest way to use the instructions below is to do the export on a machine that has the OS/processor combination you wish to target. This way, you can immediately test the application you created.
 
 First Steps:
   # Make sure the application you want to export runs under eclipse! In particular, you need to make sure the build path is set up correctly because this tells eclipse what libraries to export. See [http://code.google.com/p/geocam/wiki/eclipse_setup] for more information about the build path.
