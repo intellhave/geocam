@@ -1,8 +1,18 @@
 package frontend;
 
+import java.net.URI;
+
 public class DevelopmentExplorer {
   public static void main(String[] args) {
-    String defaultPath = "Data/Triangulations/2DManifolds/tetrahedron4.xml";
+	
+	URI root = null;
+	try{
+		root = DevelopmentExplorer.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+	} catch (Exception ee) {
+		 System.err.println("Error determining location of executable. Aborting.\n");
+		 System.exit(1);
+	}	
+    String defaultPath = root.resolve("../Data/surfaces/dodec2.off").getPath();
 
     DevelopmentUI dui = new DevelopmentUI(defaultPath);
     ViewerController vc = new ViewerController(dui);

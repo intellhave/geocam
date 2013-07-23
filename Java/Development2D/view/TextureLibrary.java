@@ -4,6 +4,7 @@ import static de.jreality.shader.CommonAttributes.POLYGON_SHADER;
 
 import java.awt.Color;
 import java.io.File;
+import java.net.URI;
 import java.util.EnumMap;
 
 import de.jreality.math.MatrixBuilder;
@@ -29,6 +30,15 @@ import de.jreality.util.Input;
  *********************************************************************************/
 public class TextureLibrary {
 
+  private static URI PATH;
+  static{
+	  try{
+		  PATH = TextureLibrary.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+	  } catch (Exception ee){
+		  System.err.println("Error determining location of executable. Aborting.\n");
+		  System.exit(1);
+	  }
+  }
   /*********************************************************************************
    * This enumeration class records the various textures the library can
    * provide. The EnumMap below maintains a mapping of these constants to cached
@@ -107,40 +117,40 @@ public class TextureLibrary {
       File ff = null;
       switch (td) {
       case BATHROOMTILE:
-        ff = new File("Data/textures/bathroomtile.jpg");
+        ff = new File(PATH.resolve("../Data/textures/bathroomtile.jpg"));
         break;
       case CHECKER:
-        ff = new File("Data/textures/checker.jpg");
+        ff = new File(PATH.resolve("../Data/textures/checker.jpg"));
         break;
       case CLAY:
-        ff = new File("Data/textures/clay.jpg");
+        ff = new File(PATH.resolve("../Data/textures/clay.jpg"));
         break;
       case COBBLESTONE:
-        ff = new File("Data/textures/cobblestone.jpg");
+        ff = new File(PATH.resolve("../Data/textures/cobblestone.jpg"));
         break;
       case DOTS:
-        ff = new File("Data/textures/dots.jpg");
+        ff = new File(PATH.resolve("../Data/textures/dots.jpg"));
         break;
       case GRID:
-        ff = new File("Data/textures/grid.jpg");
+        ff = new File(PATH.resolve("../Data/textures/grid.jpg"));
         break;
       case LIGHTHOUSE:
-        ff = new File("Data/textures/lighthouse.jpg");
+        ff = new File(PATH.resolve("../Data/textures/lighthouse.jpg"));
         break;
       case MARBLE:
-        ff = new File("Data/textures/marble.jpg");
+        ff = new File(PATH.resolve("../Data/textures/marble.jpg"));
         break;
       case PLAID:
-        ff = new File("Data/textures/plaid.jpg");
+        ff = new File(PATH.resolve("../Data/textures/plaid.jpg"));
         break;
       case STUCCO:
-        ff = new File("Data/textures/stucco.jpg");
+        ff = new File(PATH.resolve("../Data/textures/stucco.jpg"));
         break;
       case SWIRLS:
-        ff = new File("Data/textures/swirls.jpg");
+        ff = new File(PATH.resolve("../Data/textures/swirls.jpg"));
         break;
       case ZIGZAG:
-        ff = new File("Data/textures/zigzag.jpg");
+        ff = new File(PATH.resolve("../Data/textures/zigzag.jpg"));
         break;
       }
 
