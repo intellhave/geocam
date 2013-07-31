@@ -1,5 +1,6 @@
 package inputOutput;
 
+import frontend.AssetManager;
 import geoquant.Alpha;
 import geoquant.Eta;
 import geoquant.Length;
@@ -38,39 +39,28 @@ import triangulation.Vertex;
 public class TriangulationIO {
   private static Schema triangulationSchema = null;
   private static String namespace = "http://code.google.com/p/geocam";
-  private static String schemaLoc = "/Data/Triangulations/TriangulationSchema.xsd";
-
-  private TriangulationIO() {
-
-  }
+  private static String schemaPath = AssetManager.getAssetPath("Triangulations/TriangulationSchema.xsd");
 
   public static void readTriangulation(String fileName) {
-    if (fileName.endsWith(".txt"))
-    // Lutz
-    {
+    if (fileName.endsWith(".txt")){
       readLutzFile(fileName);
-    }
-    // XML
-    else {
+    } else {
       Document triangulationDoc = XMLParser.parseDocument(fileName);
       if (triangulationDoc == null) {
         return;
       }
 
       try {
-        if (triangulationSchema == null) {
-          String schemaDir = System.getProperty("user.dir");
-          schemaDir = schemaDir.replaceAll("\\\\", "/") + schemaLoc;
+        if (triangulationSchema == null) {       
           SchemaFactory sf = SchemaFactory
               .newInstance("http://www.w3.org/2001/XMLSchema");
-          triangulationSchema = sf.newSchema(new File(schemaDir));
+          triangulationSchema = sf.newSchema(new File(schemaPath));
         }
         triangulationSchema.newValidator().validate(
             new DOMSource(triangulationDoc));
       } catch (SAXException e) {
-        System.err
-            .println("Document did not validate against TriangulationSchema.");
-        return;
+        System.err.println("Error: Document " + fileName + " did not validate against TriangulationSchema.");
+        System.exit(1);        
       } catch (IOException e) {
         e.printStackTrace();
         return;

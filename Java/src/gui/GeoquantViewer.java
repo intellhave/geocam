@@ -1,5 +1,5 @@
 package gui;
-import frontend.DevelopmentUI;
+import frontend.SimulationManager;
 import frontend.ViewerController;
 import geoquant.Alpha;
 import geoquant.Angle;
@@ -2039,10 +2039,10 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   
   
   public class Development extends Thread{
-	  DevelopmentUI dui;
+	  SimulationManager dui;
 	  ViewerController vc;
 	  public Development(){
-		  dui = new DevelopmentUI();
+		  dui = new SimulationManager();
 		  vc = new ViewerController(dui);
 		  vc.setUpForGeoquantViewer();
 		  start();
@@ -2058,7 +2058,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 		    	  vc.dispose(); 
 		    	  break;
 		      }
-		      dui = new DevelopmentUI();
+		      dui = new SimulationManager();
 		      // Now we have a fresh, initialized DevelopmentUI instance. We're ready to
 		      // allow user input from vc again.
 		      vc.setSimulation(dui);

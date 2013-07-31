@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -20,9 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -40,24 +37,22 @@ public class ViewerController extends JFrame {
    * DevelopmentUI. currentSurfacePath keeps track of the filename for the
    * surface we currently display to the user.
    ********************************************************************************/
-  private DevelopmentUI currentSim;
+  private SimulationManager currentSim;
   private String currentSurfacePath;
   private boolean sessionEnded = false;
 
-  public ViewerController(DevelopmentUI dui) {
+  public ViewerController(SimulationManager dui) {
     currentSim = dui;
     layoutGUI();
     synchronizeSettings();
     this.setVisible(true);
-    //this.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
-    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
   }
 
   public String getPath() {
     return currentSurfacePath;
   }
 
-  public void setSimulation(DevelopmentUI dui) {
+  public void setSimulation(SimulationManager dui) {
     currentSim = dui;
     synchronizeSettings();
   }
@@ -102,10 +97,6 @@ public class ViewerController extends JFrame {
     boolean bb = stopStartButton.getText().equals("Stop");
     currentSim.setMarkerMobility(bb);
 
-    currentSim.setExponentialView(showView2DBox.isSelected());
-    currentSim.setEmbeddedView(showEmbeddedBox.isSelected());
-    currentSim.setFirstPersonView(showView3DBox.isSelected());
-
     currentSim.setEmbeddedZoom(embeddedZoomSlider.getValue() / 100.0);
     currentSim.setExponentialZoom(Math.pow(10,
         (exponentialZoomSlider.getValue() - 100) / 100.0));
@@ -121,7 +112,11 @@ public class ViewerController extends JFrame {
    * This data is required for laying out the window.
    ********************************************************************************/
   private JMenuBar menuBar;
-  private JMenu file;
+  private JMenu fileMenu;
+  
+  private JMenu viewMenu;
+  private JMenuItem embeddedViewLauncher;
+  
   private JPanel textBoxPanel;
   private JPanel recDepthPanel;
   private JFormattedTextField recDepth;
@@ -129,19 +124,19 @@ public class ViewerController extends JFrame {
   private JPanel numObjectsPanel;
   private JFormattedTextField numObjects;
   private JLabel numObjectsLabel;
+  
   private JPanel sliderPanel;
   private JSlider speedSlider;
   private JSlider scalingSlider;
   private JSlider geoSlider;
   private JSlider exponentialZoomSlider;
   private JSlider embeddedZoomSlider;
+  
   private JPanel buttonPanel;
   private JButton stopStartButton;
   private JButton clearGeosButton;
   private JPanel viewerPanel;
-  private JCheckBox showView2DBox;
-  private JCheckBox showView3DBox;
-  private JCheckBox showEmbeddedBox;
+  
   private JPanel drawOptionsPanel;
   private JCheckBox drawEdgesBox;
   private JCheckBox drawFacesBox;
@@ -172,18 +167,9 @@ public class ViewerController extends JFrame {
     }
 
     public void actionPerformed(ActionEvent arg0) {
-      currentSurfacePath = path;
-      File file = null;
-      try {
-        file = new File(path);
-      } catch (Exception ex) {
-        System.err.println("Error: Could not locate file " + path + ".");
-        System.exit(1);
-      }
-
       // First, lock the interface, so the user can't give data to
       // a non-operational DevelopmentUI.
-      vc.currentSurfacePath = file.getAbsolutePath();
+      vc.currentSurfacePath = this.path;
       vc.setEnabled(false);
       // Next, signal the current simulation to terminate.
       currentSim.terminate();
@@ -192,41 +178,38 @@ public class ViewerController extends JFrame {
 
   private void layoutGUI() {
 
-    this.setSize(220, 680);
+    this.setSize(220, 530);
     this.setResizable(false);
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//    this.setTitle("Development View");
     this.setTitle("Controls");
     this.setLayout(new FlowLayout());
 
     menuBar = new JMenuBar();
     this.setJMenuBar(menuBar);
     {
-      file = new JMenu();
-      menuBar.add(file);
-      file.setText("File");
+      fileMenu = new JMenu();
+      menuBar.add(fileMenu);
+      fileMenu.setText("File");
       {
         String[][] namesAndPaths = new String[][] {
-            { "Regular Tetrahedron", "Data/surfaces/tetra3.off" },
-            { "Regular Tetrahedron - One Color", "Data/surfaces/tetra.off" },            
-            { "Irregular Tetrahedron", "Data/surfaces/tetra2.off" },
-            { "Cube", "Data/surfaces/cube_surf.off" },
-            { "Dodecahedron", "Data/surfaces/dodec2.off" },
-            { "Icosahedron", "Data/off/icosa.off" },
-            { "Cone", "Data/surfaces/scaledCone.off" },
-            { "Neckpinch", "Data/surfaces/large_neckpinch.off" },
-            { "Irregular Tetrahedron 2 (xml)", "Data/Triangulations/2DManifolds/tetrahedron4.xml"},
-            { "Triangular Prism (xml)", "Data/Triangulations/2DManifolds/triangularPrism.xml"},
-//            { "Saddle", "Data/off/saddle.off" } 
-            };
+            { "Regular Tetrahedron", "surfaces/tetra3.off" },
+            //{ "Regular Tetrahedron - One Color", "surfaces/tetra.off" },            
+            { "Irregular Tetrahedron", "surfaces/tetra2.off" },
+            { "Cube", "surfaces/cube_surf.off" },
+            { "Dodecahedron", "surfaces/dodec2.off" },
+            { "Icosahedron", "off/icosa.off" },
+            { "Cone", "surfaces/scaledCone.off" },
+            { "Neckpinch", "surfaces/large_neckpinch.off" },
+            { "Nonembedded Tetrahedron with Negative Curvature", "Triangulations/2DManifolds/tetrahedronnonembed2.xml"},
+            { "Suspension of a Triangle (nonembedded)", "Triangulations/2DManifolds/triangularPrism.xml"}};
 
         for (String[] pair : namesAndPaths) {
           String name = pair[0];
           String path = pair[1];
           JMenuItem jmi = new JMenuItem();
-          file.add(jmi);
+          fileMenu.add(jmi);
           jmi.setText(name);
-          SurfaceLoader sl = new SurfaceLoader(this, path);
+          SurfaceLoader sl = new SurfaceLoader(this, AssetManager.getAssetPath(path));
           jmi.addActionListener(sl);
         }
       }
@@ -235,13 +218,48 @@ public class ViewerController extends JFrame {
       jmi.setText("Quit Explorer");
       jmi.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
-          endSession();
+        	System.exit(0);
+        	//endSession();
         }
       });
 
-      file.add(jmi);
+      fileMenu.add(jmi);
 
     }
+    
+    viewMenu = new JMenu();
+    menuBar.add(viewMenu);
+    viewMenu.setText("Views");
+    
+    JMenuItem jmi = new JMenuItem();
+    jmi.setText("Launch Exponential Map View");
+    viewMenu.add(jmi);
+    jmi.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent arg0){
+    		currentSim.launchExponentialView();
+    	}
+    });
+  
+    jmi = new JMenuItem();
+    jmi.setText("Launch First Person View");
+    viewMenu.add(jmi);
+    jmi.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent arg0){
+    		currentSim.launchFirstPersonView();
+    	}
+    });
+    
+    embeddedViewLauncher = new JMenuItem();
+    embeddedViewLauncher.setText("Launch Embedded View");
+    viewMenu.add( embeddedViewLauncher );
+    embeddedViewLauncher.setEnabled( currentSim.isCurrentManifoldEmbedded() );
+    embeddedViewLauncher.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent arg0){		
+    		currentSim.launchEmbeddedView();
+    	}
+    });
+    
+    
 
     /*********************************************************************************
      * Text Box Panel
@@ -334,7 +352,7 @@ public class ViewerController extends JFrame {
 
       final DecimalFormat speedFormat = new DecimalFormat("0.00");
       speedSlider.setBorder(speedBorder);
-      speedBorder.setTitle("Speed (" + speedFormat.format(.05) + ")");
+      speedBorder.setTitle("Object Speed (" + speedFormat.format(.05) + ")");
 
       ChangeListener speedSliderListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -468,9 +486,10 @@ public class ViewerController extends JFrame {
       clearGeosButton.setText("Clear geodesics");
       buttonPanel.add(clearGeosButton);
       
+      // Flow button removed for release.
       flowButton = new JButton();
       flowButton.setText("2D Yamabe Flow");
-      buttonPanel.add(flowButton);
+      //buttonPanel.add(flowButton);
       
       ActionListener FlowButtonListener = new ActionListener() {
           public void actionPerformed(ActionEvent arg0) {       	  
@@ -519,48 +538,6 @@ public class ViewerController extends JFrame {
     viewerPanel.setBorder(BorderFactory
         .createEtchedBorder(EtchedBorder.LOWERED));
     viewerPanel.setLayout(new BoxLayout(viewerPanel, BoxLayout.Y_AXIS));
-
-    {
-      showView2DBox = new JCheckBox();
-      viewerPanel.add(showView2DBox);
-      showView2DBox.setText("Show Exponential View");
-      showView2DBox.setSelected(true);
-      ActionListener view2DListener = new ActionListener() {
-        public void actionPerformed(ActionEvent arg0) {
-          boolean checkBox = showView2DBox.isSelected();
-          currentSim.setExponentialView(checkBox);
-        }
-      };
-      showView2DBox.addActionListener(view2DListener);
-    }
-
-    {
-      showView3DBox = new JCheckBox();
-      viewerPanel.add(showView3DBox);
-      showView3DBox.setText("Show First Person View");
-      showView3DBox.setSelected(true);
-      ActionListener view3DListener = new ActionListener() {
-        public void actionPerformed(ActionEvent arg0) {
-          boolean checkBox = showView3DBox.isSelected();
-          currentSim.setFirstPersonView(checkBox);
-        }
-      };
-      showView3DBox.addActionListener(view3DListener);
-    }
-
-    {
-      showEmbeddedBox = new JCheckBox();
-      viewerPanel.add(showEmbeddedBox);
-      showEmbeddedBox.setText("Show Embedded View");
-      showEmbeddedBox.setSelected(true);
-      ActionListener viewEmbeddedListener = new ActionListener() {
-        public void actionPerformed(ActionEvent arg0) {
-          boolean checkBox = showEmbeddedBox.isSelected();
-          currentSim.setEmbeddedView(checkBox);
-        }
-      };
-      showEmbeddedBox.addActionListener(viewEmbeddedListener);
-    }
 
     {
       TextureEnabledBox = new JCheckBox();
@@ -644,15 +621,12 @@ public class ViewerController extends JFrame {
   
   
   public void setUpForGeoquantViewer(){
-	  currentSim.setEmbeddedView(false);
-	  currentSim.setFirstPersonView(false);
+	  currentSim.closeEmbeddedView();
+	  currentSim.closeFirstPersonView();
 	  this.embeddedZoomSlider.setEnabled(false);
-	  this.showEmbeddedBox.setEnabled(false);
-	  this.showView3DBox.setEnabled(false);
-	  this.file.setEnabled(false);
+	  this.fileMenu.setEnabled(false);
 	  this.addWindowListener(new WindowClosingListener());
-	  this.setSize(220, 720);
-	  
+	  this.setSize(220, 720);	  
   }
   
 	private class WindowClosingListener extends WindowAdapter {
