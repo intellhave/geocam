@@ -393,7 +393,7 @@ public class MenuUI extends JFrame {
         this.setVisible(false);
         String defaultPath = "Data/surfaces/tetra2.off";
 
-        DevelopmentUI dui = new DevelopmentUI(defaultPath);
+        SimulationManager dui = new SimulationManager(defaultPath);
         ViewerController vc = new ViewerController(dui);
 
         while (true) {
@@ -403,7 +403,7 @@ public class MenuUI extends JFrame {
           if( vc.sessionEnded() ) break;
           
           // Now we know that we need to display a new surface.
-          dui = new DevelopmentUI(vc.getPath());
+          dui = new SimulationManager(vc.getPath());
           // Now we have a fresh, initialized DevelopmentUI instance. We're
           // ready to
           // allow user input from vc again.

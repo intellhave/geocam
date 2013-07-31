@@ -12,18 +12,18 @@ import de.jreality.scene.IndexedLineSet;
 import de.jreality.scene.SceneGraphComponent;
 
 public class ReaderTest {
-	public static void main(String args[])throws IOException{
+	public static void main(String args[]) throws IOException {
 
-	Appearance app = new Appearance();
-	SceneGraphComponent sgc = new SceneGraphComponent();
-	IndexedLineSet ils = Primitives.arrow(0, 0, 1, 1, .25);
-  sgc.setGeometry(ils);
-  app.setAttribute(LINE_SHADER+"."+ DIFFUSE_COLOR, Color.red);
-  app.setAttribute(POINT_SHADER + "." +DIFFUSE_COLOR, Color.red);
-  
-  sgc.setAppearance(app);
- 
-	JRViewer.display(sgc);
-	
+		Appearance app = new Appearance();
+		SceneGraphComponent sgc = new SceneGraphComponent();
+		IndexedLineSet ils = Primitives.arrow(0, 0, 1, 1, .25);
+		sgc.setGeometry(ils);
+		app.setAttribute(LINE_SHADER + "." + DIFFUSE_COLOR, Color.red);
+		app.setAttribute(POINT_SHADER + "." + DIFFUSE_COLOR, Color.red);
+
+		sgc.setAppearance(app);
+
+		JRViewer.display(sgc);
+
 	}
 }

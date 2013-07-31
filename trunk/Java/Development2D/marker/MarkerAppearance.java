@@ -17,10 +17,7 @@ import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
 import java.awt.Color;
 import java.awt.Transparency;
 import java.io.File;
-import java.net.URI;
 import java.util.EnumMap;
-
-import view.TextureLibrary;
 
 import de.jreality.geometry.GeometryMergeFactory;
 import de.jreality.geometry.Primitives;
@@ -31,6 +28,7 @@ import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
 import de.jreality.util.SceneGraphUtility;
+import frontend.AssetManager;
 
 /*********************************************************************************
  * MarkerAppearance
@@ -50,19 +48,7 @@ import de.jreality.util.SceneGraphUtility;
  *********************************************************************************/
 
 public class MarkerAppearance {
-
-	private static URI ROOT;
-	static {
-		try {
-			ROOT = TextureLibrary.class.getProtectionDomain().getCodeSource()
-					.getLocation().toURI();
-		} catch (Exception ee) {
-			System.err
-					.println("Error determining location of executable. Aborting.\n");
-			System.exit(1);
-		}
-	}
-	
+		
   /*********************************************************************************
    * This enumeration provides a succinct description of which marker model this
    * appearance represents.
@@ -78,26 +64,26 @@ public class MarkerAppearance {
    *********************************************************************************/
   private static EnumMap<ModelType, SceneGraphComponent> templateSGCs;
 
-  private static SceneGraphComponent fetchSGCFromDisk(String filename){
-	  File ff = new File(ROOT.resolve("../Data/marker/" + filename).getPath());
+  private static SceneGraphComponent loadSGC(String filename){
+	  File ff = AssetManager.getAssetFile("marker/" + filename);
 	  return loadTemplateSGC(ff);
   }
   
   static {
     templateSGCs = new EnumMap<ModelType, SceneGraphComponent>(ModelType.class);
-    templateSGCs.put(ModelType.ANT, fetchSGCFromDisk("ant.3ds"));
-    templateSGCs.put(ModelType.APPLE, fetchSGCFromDisk("apple.3ds"));
-    templateSGCs.put(ModelType.COOKIE, fetchSGCFromDisk("cookie.3ds"));
-    templateSGCs.put(ModelType.ROCKET, fetchSGCFromDisk("rocket.3ds"));    
-    templateSGCs.put(ModelType.SATTELITE, fetchSGCFromDisk("sattelite.3ds"));
-    templateSGCs.put(ModelType.CUBE,  fetchSGCFromDisk("cube.3ds"));
-    templateSGCs.put(ModelType.LADYBUG, fetchSGCFromDisk("ladybug.3ds"));
+    templateSGCs.put(ModelType.ANT, loadSGC("ant.3ds"));
+    templateSGCs.put(ModelType.APPLE, loadSGC("apple.3ds"));
+    templateSGCs.put(ModelType.COOKIE, loadSGC("cookie.3ds"));
+    templateSGCs.put(ModelType.ROCKET, loadSGC("rocket.3ds"));    
+    templateSGCs.put(ModelType.SATTELITE, loadSGC("sattelite.3ds"));
+    templateSGCs.put(ModelType.CUBE,  loadSGC("cube.3ds"));
+    templateSGCs.put(ModelType.LADYBUG, loadSGC("ladybug.3ds"));
 
     SceneGraphComponent sgc;
     sgc = Primitives.sphere(1.0, new double[] { 0.0, 0.0, 0.0 });
     templateSGCs.put(ModelType.SPHERE, sgc);
     
-    templateSGCs.put(ModelType.FLAG, fetchSGCFromDisk("x.3ds"));
+    templateSGCs.put(ModelType.FLAG, loadSGC("x.3ds"));
     
     sgc = new SceneGraphComponent();
     sgc.setGeometry(Primitives.arrow(0.0, 0.0, 1.0, 0.0, 0.25));

@@ -29,21 +29,21 @@ Useful website for developing new colors from RGB channels: http://www.tayloredm
 
 Good colors for palette:
 Sky blue:
-0.000 .65 .85
+0.000 0.650 0.850
 Turquoise:
 .25 .88 .82
 Strawberry Red:
 1.0 0.15 0.15
 Brick Red:
-.7 .13 .13
+0.700 0.130 0.130
 Grass green:
-0.00 .85 0.1
+0.000 0.850 0.100
 Forest green:
-.13 .55 .13
+0.130 0.550 0.130
 Pastel Yellow:
 1.0 1.0 .34
 Bright orange:
-1.0 1.0 0.15
+1.000 1.000 0.150
 Moccassin: (light pastel)
 1.0 .89 .71
 Orchid purple:
