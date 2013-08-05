@@ -277,14 +277,10 @@ public class MarkerHandler {
     }
   }
   
-  public void pauseSimulation(){
-    simulationPaused = true;
+  public void pauseSimulation( boolean isPaused ){
+	  simulationPaused = isPaused;
   }
-  
-  public void unpauseSimulation(){
-    simulationPaused = false;
-  }
-  
+    
   public boolean isPaused(){
     return simulationPaused;
   }

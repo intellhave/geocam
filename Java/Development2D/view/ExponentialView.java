@@ -23,7 +23,6 @@ import de.jreality.scene.Camera;
 import de.jreality.scene.DirectionalLight;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
-import static de.jreality.shader.CommonAttributes.*;
 import development.AffineTransformation;
 import development.Development;
 import development.DevelopmentNode;
@@ -56,9 +55,8 @@ public class ExponentialView extends View {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public ExponentialView(Development d, MarkerHandler mh,
-      FaceAppearanceScheme fas) {
-    super(d, mh, fas);
+  public ExponentialView(Development d, MarkerHandler mh) {
+    super(d, mh);
     this.sgcpools = new HashMap<Marker, LinkedList<SceneGraphComponent>>();
     zoom = 1.0;
     Edge e = markers.getSourceMarker().getPosition().getFace().getLocalEdges().get(0);
@@ -83,7 +81,7 @@ public class ExponentialView extends View {
       SceneGraphComponent sgc = new SceneGraphComponent();
       faceSGCs.put(f, sgc);
       this.sgcDevelopment.addChild(sgc);
-      // TODO: Can sgc carry the appearance for all the pieces of the
+      // FIXME: Can sgc carry the appearance for all the pieces of the
       // development beneath it???
     }
   }

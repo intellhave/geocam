@@ -178,7 +178,7 @@ public class MarkerAppearance {
    *********************************************************************************/
   public MarkerAppearance(ModelType mt, double scale) {
     this.setModelType(mt);
-    this.setScale(scale);
+    this.setSize(scale);
 
     this.model = mt;
     switch (mt) {
@@ -235,7 +235,7 @@ public class MarkerAppearance {
     return default_scale;
   }
 
-  public void setScale(double scale) {
+  public void setSize(double scale) {
     this.scale = scale;
   }
 

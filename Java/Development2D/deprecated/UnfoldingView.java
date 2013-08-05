@@ -1,4 +1,4 @@
-package view;
+package deprecated;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,9 @@ import triangulation.FaceGrouping;
 import triangulation.StdFace;
 import triangulation.Triangulation;
 import triangulation.Vertex;
+import view.FaceAppearanceScheme;
+import view.TextureLibrary;
+import view.View;
 import view.TextureLibrary.TextureDescriptor;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.Matrix;

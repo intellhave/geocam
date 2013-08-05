@@ -1,4 +1,4 @@
-package frontend;
+package deprecated;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -13,7 +13,6 @@ import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import view.FaceAppearanceScheme;
-import view.UnfoldingView;
 import controller.KeyboardController;
 import controller.UserController;
 import development.Coord2D;

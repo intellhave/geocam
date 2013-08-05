@@ -46,9 +46,8 @@ public class EmbeddedView extends View {
    * Given a development object and a color scheme, this constructor initializes
    * an EmbeddedView object to display the specified surface.
    *********************************************************************************/
-  public EmbeddedView(Development d, MarkerHandler mh,
-      FaceAppearanceScheme fas) {
-    super(d, mh, fas);
+  public EmbeddedView(Development d, MarkerHandler mh) {
+    super(d, mh);
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
 
@@ -347,9 +346,8 @@ public class EmbeddedView extends View {
       sgc.setGeometry(ifsf.getGeometry());
       sgc.setAppearance(app);
       sgcDevelopment.addChild(sgc);
-    }    
-    
-    update();
+    }
+    super.update(null,null);
   }
   
   public void setZoom(double newZoom){

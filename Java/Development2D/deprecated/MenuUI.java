@@ -1,4 +1,4 @@
-package frontend;
+package deprecated;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import controller.KeyboardMenuController;
 import controller.UserController;
 import controller.UserController.Action;
+import frontend.SimulationManager;
 
 /*********************************************************************************
  * MenuUI
@@ -394,7 +395,7 @@ public class MenuUI extends JFrame {
         String defaultPath = "Data/surfaces/tetra2.off";
 
         SimulationManager dui = new SimulationManager(defaultPath);
-        ViewerController vc = new ViewerController(dui);
+        SimulationSettingsFrame vc = new SimulationSettingsFrame(dui);
 
         while (true) {
           dui.run(); // We only return from this call once ViewerController has

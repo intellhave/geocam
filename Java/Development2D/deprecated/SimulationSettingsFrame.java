@@ -1,4 +1,4 @@
-package frontend;
+package deprecated;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -26,7 +26,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class ViewerController extends JFrame {
+import frontend.AssetManager;
+import frontend.SimulationManager;
+
+public class SimulationSettingsFrame extends JFrame {
 
   private static final long serialVersionUID = 1L;
 
@@ -41,7 +44,7 @@ public class ViewerController extends JFrame {
   private String currentSurfacePath;
   private boolean sessionEnded = false;
 
-  public ViewerController(SimulationManager dui) {
+  public SimulationSettingsFrame(SimulationManager dui) {
     currentSim = dui;
     layoutGUI();
     synchronizeSettings();
@@ -158,10 +161,10 @@ public class ViewerController extends JFrame {
   TitledBorder zoom2Border = BorderFactory.createTitledBorder("");
 
   private class SurfaceLoader implements ActionListener {
-    private ViewerController vc;
+    private SimulationSettingsFrame vc;
     private String path;
 
-    public SurfaceLoader(ViewerController vc, String surfaceFilePath) {
+    public SurfaceLoader(SimulationSettingsFrame vc, String surfaceFilePath) {
       this.vc = vc;
       this.path = surfaceFilePath;
     }
@@ -632,9 +635,9 @@ public class ViewerController extends JFrame {
 	private class WindowClosingListener extends WindowAdapter {
 
 		public void windowClosing(WindowEvent we) {
-			ViewerController.this.endSession();
+			SimulationSettingsFrame.this.endSession();
 			currentSim.terminate();
-			ViewerController.this.dispose();
+			SimulationSettingsFrame.this.dispose();
 		}
 	}
 }

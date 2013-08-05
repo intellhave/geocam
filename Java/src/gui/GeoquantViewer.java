@@ -1,6 +1,5 @@
 package gui;
 import frontend.SimulationManager;
-import frontend.ViewerController;
 import geoquant.Alpha;
 import geoquant.Angle;
 import geoquant.Area;
@@ -92,6 +91,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import deprecated.SimulationSettingsFrame;
 import development.Coord2D;
 import development.Development;
 import development.ManifoldPosition;
@@ -2040,10 +2040,10 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   
   public class Development extends Thread{
 	  SimulationManager dui;
-	  ViewerController vc;
+	  SimulationSettingsFrame vc;
 	  public Development(){
 		  dui = new SimulationManager();
-		  vc = new ViewerController(dui);
+		  vc = new SimulationSettingsFrame(dui);
 		  vc.setUpForGeoquantViewer();
 		  start();
 

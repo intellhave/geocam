@@ -33,9 +33,8 @@ public class FirstPersonView extends ExponentialView {
    * development (for calculating the visualization) and color scheme (for
    * coloring the polygons that make up the visualization).
    *********************************************************************************/
-  public FirstPersonView(Development dev, MarkerHandler mh,
-      FaceAppearanceScheme fas) {
-    super(dev, mh, fas); // This call initializes the sgcpools data structure.
+  public FirstPersonView(Development dev, MarkerHandler mh) {
+    super(dev, mh); // This call initializes the sgcpools data structure.
     Camera cam = sgcCamera.getCamera();
     cam.setPerspective(true);
 

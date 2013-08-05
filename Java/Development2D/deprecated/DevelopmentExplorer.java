@@ -1,4 +1,7 @@
-package frontend;
+package deprecated;
+
+import frontend.AssetManager;
+import frontend.SimulationManager;
 
 public class DevelopmentExplorer {
   public static void main(String[] args) {
@@ -6,7 +9,7 @@ public class DevelopmentExplorer {
 	String defaultPath = AssetManager.getAssetPath("surfaces/dodec2.off");	
     SimulationManager dui = new SimulationManager(defaultPath);
     dui.launchExponentialView();
-    ViewerController vc = new ViewerController(dui);
+    SimulationSettingsFrame vc = new SimulationSettingsFrame(dui);
         
     while (true) {
       dui.run(); // We only return from this call once ViewerController has
