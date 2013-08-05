@@ -1,51 +1,52 @@
 package frontend;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import sun.awt.WindowClosingListener;
-import view.View;
+import de.jreality.jogl.JOGLViewer;
 
-public class ViewFrame extends JFrame 
-						 implements WindowClosingListener,
-						 			 ComponentListener {
-	private SimulationManager simulation;
-	private View view;
+public class ViewFrame extends JFrame {
+	private static final long serialVersionUID = 1L;	
+	private JOGLViewer jv;
 
-	public ViewFrame(SimulationManager dui, View view) {
-		simulation = dui;
-		this.view = view;
+	public ViewFrame(JOGLViewer view) {		
+		this.jv = view;
+		
+		super.setVisible(true);
+		super.setResizable(true);
+
+		Dimension size = new Dimension(400, 400);
+		Container contentPane = super.getContentPane();		
+		contentPane.add((Component) jv.getViewingComponent());
+		contentPane.setMinimumSize(size);
+		contentPane.setPreferredSize(size);
+		contentPane.setMaximumSize(size);
+		super.pack();
+		super.validate();
+		super.setVisible(true);
+		super.addComponentListener( new ViewResizedListener() );
+	}
+	
+	public void shutdown() {
+		super.setVisible(false);
+		super.dispose();
 	}
 
-	@Override
-	public RuntimeException windowClosingDelivered(WindowEvent arg0) {
-		simulation.removeView(this.view);
-		return null;
-	}
-
-	@Override
-	public RuntimeException windowClosingNotify(WindowEvent arg0) {
-		return null;
-	}
-
-	public void componentShown(ComponentEvent arg0) {
-	}
-
-	public void componentHidden(ComponentEvent arg0) {
-	}
-
-	public void componentMoved(ComponentEvent arg0) {
-	}
-
-	public void componentResized(ComponentEvent arg0) {
-		Component c = arg0.getComponent();
-		Rectangle r = c.getBounds();
-		int m = Math.max(Math.max(r.height, r.width), 50);
-		c.setBounds(r.x, r.y, m, m);
+	private class ViewResizedListener extends ComponentAdapter {
+		public void componentResized(ComponentEvent arg0) {
+			// We insist that if the component is resized, it should be square.
+			Component c = arg0.getComponent();
+			Rectangle r = c.getBounds();
+			int m = Math.max(Math.max(r.height, r.width), 50);
+			//c.setBounds(r.x, r.y, m, m);
+			setSize(m, m);
+			validate();
+		}
 	}
 }

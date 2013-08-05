@@ -16,13 +16,16 @@ import view.TextureLibrary.TextureDescriptor;
  *********************************************************************************/
 public class FaceAppearanceScheme {
 
-	public enum Colors {
-		SKY_BLUE, TURQUOISE, STRAWBERRY_RED, BRICK_RED, GRASS_GREEN, FOREST_GREEN, PASTEL_YELLOW, BRIGHT_ORANGE, MOCCASSIN, ORCHID_PURPLE, PLAIN_PURPLE, PASTEL_PINK, HOT_PINK, KHAKI, SIENNA, DARK_GRAY, DEFAULT
+	public static enum Colors {
+		SKY_BLUE, TURQUOISE, STRAWBERRY_RED, BRICK_RED,
+		GRASS_GREEN, FOREST_GREEN, PASTEL_YELLOW, BRIGHT_ORANGE, 
+		MOCCASSIN, ORCHID_PURPLE, PLAIN_PURPLE, PASTEL_PINK,
+		HOT_PINK, KHAKI, SIENNA, DARK_GRAY, DEFAULT
 	}
 
 	private static EnumMap<Colors, TextureDescriptor> colorMap;
-	
-	static { 
+
+	static {
 		colorMap = new EnumMap<Colors, TextureDescriptor>(Colors.class);
 		colorMap.put(Colors.SKY_BLUE, TextureDescriptor.BATHROOMTILE);
 		colorMap.put(Colors.TURQUOISE, TextureDescriptor.CHECKER);
@@ -46,11 +49,11 @@ public class FaceAppearanceScheme {
 	/*********************************************************************************
 	 * getColor
 	 *********************************************************************************/
-	public Color getColor(Face f) {
+	public static Color getColor(Face f) {
 		if (f.hasColor())
 			return f.getColor();
-		return Color.getHSBColor((float) f.getIndex()
-				/ (float) Triangulation.faceTable.size(), 0.5f, 0.9f);
+		return Color.getHSBColor((float) f.getIndex() / (float) Triangulation.faceTable.size(),
+				0.5f, 0.9f);
 	}
 
 	/*********************************************************************************
@@ -59,7 +62,7 @@ public class FaceAppearanceScheme {
 	 * For now, this code provides a consistent mapping from faces to textures.
 	 * In the future, we will allow the mapping to be customizable.
 	 *********************************************************************************/
-	public TextureDescriptor getTextureDescriptor(Face f) {
+	public static TextureDescriptor getTextureDescriptor(Face f) {
 		if (f.hasColor()) {
 			Color faceColor = getColor(f);
 			switch (faceColor.getRGB()) {
