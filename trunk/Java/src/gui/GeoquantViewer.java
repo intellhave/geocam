@@ -40,6 +40,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -244,6 +246,13 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener {
 	public GeoquantViewer() {
 		super();
 		initGUI();
+		
+		super.addWindowListener( new WindowAdapter(){ 
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+				// Make sure that closing the window really terminates the program.
+			}
+		});		
 	}
 
 	private void initGUI() {
