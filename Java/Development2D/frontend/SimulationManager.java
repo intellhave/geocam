@@ -1,7 +1,5 @@
 package frontend;
 
-import geoquant.Geometry;
-import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
 import java.util.Iterator;
@@ -12,8 +10,6 @@ import marker.ForwardGeodesic;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
-import solvers.Solver;
-import solvers.implemented.Yamabe2DFlow;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
@@ -225,33 +221,7 @@ public class SimulationManager extends Observable implements Runnable {
 		}
 	}
 
-	public void runFlow() {
-		double[] radiiLengths = new double[Triangulation.vertexTable.size()];
-		Radius[] radii = new Radius[Triangulation.vertexTable.size()];
 
-		int i = 0;
-
-		for (Radius r : Geometry.getRadii()) {
-			radiiLengths[i] = r.getValue();
-			radii[i] = r;
-			i++;
-		}
-
-		Solver solver = new Yamabe2DFlow();
-		solver.setStoppingCondition(0.001);
-		solver.setStepsize(0.002);
-		for (int j = 0; j < 100; j++) {
-			radiiLengths = solver.run(radiiLengths, j);
-			for (i = 0; i < Triangulation.vertexTable.size(); i++) {
-				radii[i].setValue(radiiLengths[i]);
-			}
-
-			development.rebuild();
-			super.notifyObservers();
-		}
-
-		System.out.println("runFlow()");
-	}
 
 	public boolean isCurrentManifoldEmbedded() {
 		return this.isEmbedded;
