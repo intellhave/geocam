@@ -9,8 +9,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import view.ExponentialView;
-
 import development.Development;
 
 public class GeoquantViewerExplorer extends Thread {
@@ -23,6 +21,7 @@ public class GeoquantViewerExplorer extends Thread {
 	private DevelopmentSettingsPanel dsp;
 	private ManifoldDisplaySettingsPanel mdsp;
 	private ZoomSlider expZoom;
+	private FlowButtonPanel fbp;
 
 	public GeoquantViewerExplorer( Development dev ) {
 		simMan = new SimulationManager( dev );
@@ -35,8 +34,11 @@ public class GeoquantViewerExplorer extends Thread {
 		viewMenu = new ViewMenu(simMan);
 		expZoom = new ZoomSlider("Exponential Map View");
 		
+		fbp = new FlowButtonPanel( dev );
+		
 		viewMenu.addAllViewsController(mdsp);
 		viewMenu.addExponentialViewController(expZoom);
+		viewMenu.addAllViewsController(fbp);
 		
 		assembleSwingComponents();
 	}
@@ -63,6 +65,8 @@ public class GeoquantViewerExplorer extends Thread {
 		camPanel.add(expZoom);
 
 		frame.add(camPanel);
+		frame.add(fbp);
+		
 		frame.pack();
 		
 	}
