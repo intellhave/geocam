@@ -14,7 +14,9 @@ import development.Development;
 public class GeoquantViewerExplorer extends Thread {
 
 	private SimulationManager simMan;
+	
 	private JFrame frame;
+	
 	private ViewMenu viewMenu;
 	private DevelopmentSettingsPanel dsp;
 	private ManifoldDisplaySettingsPanel mdsp;
@@ -76,5 +78,7 @@ public class GeoquantViewerExplorer extends Thread {
 	
 	public void terminate(){
 		simMan.terminate();
+		frame.setVisible(false);
+		viewMenu.closeViews();
 	}
 }
