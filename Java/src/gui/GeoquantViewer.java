@@ -294,6 +294,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
         	  			ManifoldPosition mp = new ManifoldPosition(sourceFace, sourcePoint);        	  			
         	  			Development dev = new Development(mp,1,1.0);        	  			
         	  			gve = new GeoquantViewerExplorer(dev);
+        	  			gve.start();
         	  		}
               }
           };
@@ -336,7 +337,8 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
             //getSaveMenu().setEnabled(true);
             importedTriangulation = true;
             if(gve != null){
-            	gve.terminate();            	
+            	gve.terminate();
+            	gve = null;
             }    
             
           }
