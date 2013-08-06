@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import triangulation.Face;
+import util.Vector;
 
 /* Represents a path on the manifold
  * 

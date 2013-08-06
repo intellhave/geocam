@@ -1,7 +1,6 @@
 package solvers.implemented;
 
 import geoquant.Alpha;
-import geoquant.Curvature2D;
 import geoquant.Curvature3D;
 import geoquant.Eta;
 import geoquant.Geometry;

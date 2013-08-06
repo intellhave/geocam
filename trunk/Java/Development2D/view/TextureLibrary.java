@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.EnumMap;
 
+import util.AssetManager;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Appearance;
 import de.jreality.shader.DefaultGeometryShader;
@@ -16,7 +17,6 @@ import de.jreality.shader.ShaderUtility;
 import de.jreality.shader.Texture2D;
 import de.jreality.shader.TextureUtility;
 import de.jreality.util.Input;
-import frontend.AssetManager;
 
 /*********************************************************************************
  * TextureLibrary

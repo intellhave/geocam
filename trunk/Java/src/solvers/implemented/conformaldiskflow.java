@@ -1,11 +1,10 @@
 package solvers.implemented;
 
+import geoquant.LKCurvature;
+import geoquant.Radius;
 import solvers.Solver;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import geoquant.LKCurvature;
-import geoquant.Geometry;
-import geoquant.Radius;
 
 public class conformaldiskflow extends Solver{
 

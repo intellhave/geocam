@@ -1,6 +1,8 @@
 package solvers.implemented;
 
-import geoquant.*;
+import geoquant.Eta;
+import geoquant.Radius;
+import geoquant.VEHR;
 import solvers.NewtonsMethod;
 import triangulation.Edge;
 import triangulation.Triangulation;

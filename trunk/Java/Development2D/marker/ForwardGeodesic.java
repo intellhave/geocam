@@ -3,8 +3,8 @@ package marker;
 import java.util.HashSet;
 import java.util.Set;
 
+import util.Vector;
 import development.ManifoldPosition;
-import development.Vector;
 
 /*********************************************************************************
  * ForwardGeodesics

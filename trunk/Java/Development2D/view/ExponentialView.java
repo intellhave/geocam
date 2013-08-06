@@ -15,6 +15,7 @@ import marker.MarkerHandler;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
+import util.Vector;
 import view.TextureLibrary.TextureDescriptor;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.MatrixBuilder;
@@ -28,7 +29,6 @@ import development.Development;
 import development.DevelopmentNode;
 import development.Frustum2D;
 import development.ManifoldPosition;
-import development.Vector;
 
 /*********************************************************************************
  * Exponential View (Previously DevelopmentView2D)

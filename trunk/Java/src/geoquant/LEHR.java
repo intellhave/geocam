@@ -2,9 +2,6 @@ package geoquant;
 
 import java.util.HashMap;
 
-import triangulation.Face;
-import triangulation.StdTetra;
-import triangulation.Tetra;
 import triangulation.Triangulation;
 
 

@@ -2,25 +2,19 @@ package gui;
 
 import geoquant.GeoRecorder;
 import geoquant.Geometry;
-import geoquant.Geoquant;
-import geoquant.Radius;
 import geoquant.Geometry.Dimension;
+import geoquant.Radius;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Polygon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-
-import javax.swing.AbstractAction;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,12 +22,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
-import javax.swing.Timer;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import solvers.*;
+import solvers.Solver;
 import solvers.implemented.Yamabe2DFlow;
 import solvers.implemented.Yamabe3DFlow;
 import triangulation.Triangulation;

@@ -1,12 +1,10 @@
 package geoquant;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.LinkedList;
 
-import triangulation.*;
+import triangulation.Edge;
+import triangulation.Vertex;
 
 
 public class LCSC extends Geoquant {

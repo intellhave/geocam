@@ -15,29 +15,25 @@ import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.jogamp.opengl.swt.GLCanvas;
-
 import marker.Marker;
 import marker.MarkerHandler;
+import util.Vector;
+
+import com.jogamp.opengl.swt.GLCanvas;
 
 import de.jreality.jogl.JOGLRenderer;
 import de.jreality.jogl.JOGLViewer;
-
 import de.jreality.math.MatrixBuilder;
-
 import de.jreality.scene.Appearance;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.SceneGraphPath;
 import de.jreality.scene.proxy.scene.Camera;
-
 import de.jreality.shader.CommonAttributes;
 import de.jreality.shader.DefaultGeometryShader;
 import de.jreality.shader.DefaultLineShader;
 import de.jreality.shader.DefaultPolygonShader;
 import de.jreality.shader.ShaderUtility;
-
 import development.Development;
-import development.Vector;
 
 /*********************************************************************************
  * View

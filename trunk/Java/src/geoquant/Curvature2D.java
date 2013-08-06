@@ -1,7 +1,5 @@
 package geoquant;
 
-import geoquant.Curvature3D.Sum;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 

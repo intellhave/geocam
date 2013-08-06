@@ -1,9 +1,6 @@
 package triangulation;
 
 import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Boundary {
   public static HashMap<Integer, Vertex> boundaryVertexTable = new HashMap<Integer, Vertex>();

@@ -7,6 +7,7 @@ import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
 import util.Matrix;
+import util.Vector;
 
 /*********************************************************************************
  * Development

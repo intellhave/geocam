@@ -1,7 +1,7 @@
 package marker;
 
+import util.Vector;
 import development.ManifoldPosition;
-import development.Vector;
 
 /*********************************************************************************
  * Marker

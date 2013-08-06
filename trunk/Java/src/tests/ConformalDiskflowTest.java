@@ -1,27 +1,21 @@
 package tests;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.awt.Color;
-
-import javax.swing.JFrame;
-
-
-
 import geoquant.Alpha;
-import geoquant.LKCurvature;
 import geoquant.Eta;
 import geoquant.GeoRecorder;
 import geoquant.Geometry;
 import geoquant.Geoquant;
+import geoquant.LKCurvature;
 import geoquant.Length;
 import geoquant.Radius;
 import inputOutput.TriangulationIO;
+
+import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.List;
 
 import solvers.Solver;
 import solvers.implemented.conformaldiskflow;
@@ -30,12 +24,8 @@ import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import development.*;
-import visualization.*;
-import de.jreality.geometry.Primitives;
-import de.jreality.math.MatrixBuilder;
-import de.jreality.scene.DirectionalLight;
-import de.jreality.scene.SceneGraphComponent;
+import util.Vector;
+import visualization.TriangulationDisplay;
 
 public class ConformalDiskflowTest {
  // private static final long serialVersionUID = 1L;

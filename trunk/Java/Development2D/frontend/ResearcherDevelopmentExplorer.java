@@ -4,9 +4,13 @@ import java.awt.Container;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+
+import util.AssetManager;
 
 public class ResearcherDevelopmentExplorer {
 
@@ -42,8 +46,10 @@ public class ResearcherDevelopmentExplorer {
 		msp = new MarkerSettingsPanel(simMan.getMarkerHandler());
 
 		mdsp = new ManifoldDisplaySettingsPanel();
-		expZoom = new ZoomSlider("Exp. Map View Zoom");
-		embZoom = new ZoomSlider("Emb. View Zoom");
+		
+		expZoom = new ZoomSlider("Exponential Map View");
+		embZoom = new ZoomSlider("Embedded View");
+		embZoom.setMaximum(800); // Allow the embedded camera to move a little further away.
 
 		viewMenu.addAllViewsController(mdsp);
 		viewMenu.addExponentialViewController(expZoom);
@@ -95,9 +101,14 @@ public class ResearcherDevelopmentExplorer {
 		frame.add(dsp);
 		frame.add(msp);
 		frame.add(mdsp);
-		frame.add(expZoom);
-		frame.add(embZoom);
-
+		
+		JPanel camPanel = new JPanel();
+		camPanel.setLayout(new BoxLayout(camPanel, BoxLayout.Y_AXIS));
+		camPanel.setBorder(BorderFactory.createTitledBorder("Camera Distances"));
+		camPanel.add(expZoom);
+		camPanel.add(embZoom);
+		frame.add(camPanel);
+		
 		frame.pack();
 		frame.setVisible(true);
 	}

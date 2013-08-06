@@ -2,8 +2,8 @@ package gui;
 
 import geoquant.Alpha;
 import geoquant.Radius;
-import java.awt.Component;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;

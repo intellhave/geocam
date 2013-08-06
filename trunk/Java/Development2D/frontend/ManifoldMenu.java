@@ -9,6 +9,8 @@ import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import util.AssetManager;
+
 public class ManifoldMenu extends JMenu {
 	private static final long serialVersionUID = 1L;
 

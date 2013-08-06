@@ -9,8 +9,6 @@ import geoquant.Length;
 import geoquant.Radius;
 import inputOutput.TriangulationIO;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 import triangulation.Edge;

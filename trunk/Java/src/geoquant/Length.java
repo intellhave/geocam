@@ -1,14 +1,13 @@
 package geoquant;
 
-import geoquant.Volume.Sum;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Set;
 
-import triangulation.*;
+import triangulation.Edge;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 
 
 public class Length extends Geoquant {

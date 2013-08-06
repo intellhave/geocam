@@ -1,11 +1,8 @@
 package geoquant;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Set;
 
-import triangulation.*;
+import triangulation.Vertex;
 
 
 public class VCSC extends Geoquant {

@@ -9,6 +9,7 @@ import marker.MarkerAppearance;
 import marker.MarkerHandler;
 import triangulation.Face;
 import triangulation.Triangulation;
+import util.Vector;
 import view.TextureLibrary.TextureDescriptor;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.math.Matrix;
@@ -22,7 +23,6 @@ import development.Development;
 import development.EmbeddedTriangulation;
 import development.ManifoldPosition;
 import development.TextureCoords;
-import development.Vector;
 
 /*********************************************************************************
  * EmbeddedView

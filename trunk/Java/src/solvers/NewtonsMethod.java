@@ -1,7 +1,5 @@
 package solvers;
 
-import java.util.Observable;
-
 import util.GeoMath;
 import util.Matrix;
 

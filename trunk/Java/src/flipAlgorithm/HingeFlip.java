@@ -1,11 +1,11 @@
 package flipAlgorithm;
 
-import flipAlgorithm.HingeInfo.HingeType;
-import geoquant.Angle;
-import geoquant.Length;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
+import flipAlgorithm.HingeInfo.HingeType;
+import geoquant.Angle;
+import geoquant.Length;
 
 public class HingeFlip {
 

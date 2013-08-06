@@ -1,15 +1,11 @@
 package solvers.implemented;
 
+import geoquant.LCSC;
+import geoquant.Length;
+import geoquant.Radius;
 import solvers.Solver;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import util.Matrix;
-import geoquant.Curvature3D;
-import geoquant.Geometry;
-import geoquant.LCSC;
-import geoquant.LEHR;
-import geoquant.Length;
-import geoquant.Radius;
 
 public class RadiusLEHRGradient extends Solver{
   private Radius[] radii;

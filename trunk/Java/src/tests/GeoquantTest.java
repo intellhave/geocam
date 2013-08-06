@@ -28,13 +28,12 @@ import inputOutput.TriangulationIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
-import solvers.implemented.RadiusVEHRNewton;
-import triangulation.*;
-import util.GeoMath;
-import util.Matrix;
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Tetra;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 
 
 public class GeoquantTest {

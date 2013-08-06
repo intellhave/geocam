@@ -10,20 +10,20 @@ import java.util.Observable;
 import marker.BreadCrumbs;
 import marker.ForwardGeodesic;
 import marker.Marker;
-import marker.MarkerHandler;
 import marker.MarkerAppearance;
+import marker.MarkerHandler;
 import solvers.Solver;
 import solvers.implemented.Yamabe2DFlow;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
+import util.Vector;
 import controller.KeyboardController;
 import controller.UserController;
 import development.Coord2D;
 import development.Development;
 import development.EmbeddedTriangulation;
 import development.ManifoldPosition;
-import development.Vector;
 
 public class SimulationManager extends Observable implements Runnable {
 	private boolean simulationRunning = false;
@@ -56,6 +56,12 @@ public class SimulationManager extends Observable implements Runnable {
 	 *********************************************************************************/
 	private UserController userControl;
 
+	public SimulationManager(Development dev){
+		this.development = dev;
+		initModelControls();
+		initMarkers();
+	}
+	
 	public SimulationManager(String pathToSurfaceData) {
 		initSurface(pathToSurfaceData);
 		initModelControls();

@@ -1,5 +1,7 @@
 package development;
 
+import util.Vector;
+
 /* LineSegment is a pair of vectors representing a line segment
  * 
  * Some useful geometric routines are included here (for 2D segments):

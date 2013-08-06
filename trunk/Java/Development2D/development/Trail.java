@@ -3,6 +3,7 @@ package development;
 import java.awt.Color;
 
 import triangulation.Face;
+import util.Vector;
 
 public class Trail {
   protected Vector start;

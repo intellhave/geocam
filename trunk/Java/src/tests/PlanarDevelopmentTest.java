@@ -1,10 +1,6 @@
 package tests;
 
 import inputOutput.TriangulationIO;
-
-import java.util.HashSet;
-
-import triangulation.Face;
 import visualization.PlanarDevelopment;
 
 

@@ -1,15 +1,13 @@
 package tests;
 
+import inputOutput.TriangulationIO;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import geoquant.Curvature2D;
-import geoquant.LKCurvature;
-import inputOutput.TriangulationIO;
-import triangulation.Triangulation;
-import triangulation.Vertex;
 import triangulation.Boundary;
+import triangulation.Triangulation;
 
 public class boundarytest {
   

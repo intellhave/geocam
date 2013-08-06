@@ -1,8 +1,5 @@
 package util;
 
-import development.Vector;
-
-
 public class Matrix implements Cloneable{
   public double[][] m;
   protected int rows;

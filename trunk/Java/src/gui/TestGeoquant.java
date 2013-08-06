@@ -1,9 +1,20 @@
 package gui;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import geoquant.Angle;
+import geoquant.Area;
+import geoquant.EdgeHeight;
+import geoquant.Eta;
+import geoquant.Length;
+import geoquant.PartialEdge;
+import geoquant.Radius;
 import inputOutput.TriangulationIO;
+
 import org.junit.Test;
-import triangulation.*;
-import geoquant.*;
+
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 
 /***************************************************************************
  * 
