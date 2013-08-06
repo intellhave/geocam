@@ -155,6 +155,10 @@ public class TriangulationIO {
       if (multiplicity.length() != 0) {
         v.setMultiplicity(Integer.parseInt(multiplicity));
       }
+      String boundary = simplexNode.getAttribute("boundary");
+      if(boundary.length() !=0){
+    	  v.setBoundary(Boolean.parseBoolean(boundary));
+      }
     }
 
     Edge e;
@@ -231,6 +235,10 @@ public class TriangulationIO {
       String emultiplicity = simplexNode.getAttribute("multiplicity");
       if (emultiplicity.length() != 0) {
         e.setMultiplicity(Integer.parseInt(emultiplicity));
+      }
+      String boundary = simplexNode.getAttribute("boundary");
+      if(boundary.length() !=0){
+    	  e.setBoundary(Boolean.parseBoolean(boundary));
       }
     }
 
@@ -346,6 +354,10 @@ public class TriangulationIO {
       if (multiplicity.length() != 0) {
         f.setMultiplicity(Integer.parseInt(multiplicity));
       }
+      String boundary = simplexNode.getAttribute("boundary");
+      if(boundary.length() !=0){
+    	  f.setBoundary(Boolean.parseBoolean(boundary));
+      }
       
     }
 
@@ -439,6 +451,10 @@ public class TriangulationIO {
       String multiplicity = simplexNode.getAttribute("multiplicity");
       if (multiplicity.length() != 0) {
         t.setMultiplicity(Integer.parseInt(multiplicity));
+      }
+      String boundary = simplexNode.getAttribute("boundary");
+      if(boundary.length() !=0){
+    	  t.setBoundary(Boolean.parseBoolean(boundary));
       }
       
     }
@@ -597,6 +613,7 @@ public class TriangulationIO {
       simplex.setAttribute("radius", "" + Radius.valueAt(v));
       simplex.setAttribute("alpha", "" + Alpha.valueAt(v));
       simplex.setAttribute("multiplicity", "" + v.getMultiplicity());
+      simplex.setAttribute("boundary", "" + v.getBoundary());
 
       // Local Vertices
       localSimplex = triangulationDoc.createElement("Vertices");
@@ -652,6 +669,8 @@ public class TriangulationIO {
       simplex.setAttribute("eta", "" + Eta.valueAt(e));
       simplex.setAttribute("length", "" + Length.valueAt(e));
       simplex.setAttribute("multiplicity", "" + e.getMultiplicity());
+      simplex.setAttribute("boundary", "" + e.getBoundary());
+
 
       // Local Vertices
       localSimplex = triangulationDoc.createElement("Vertices");
@@ -705,6 +724,8 @@ public class TriangulationIO {
       simplex = triangulationDoc.createElement("Face");
       simplex.setAttribute("index", "" + f.getIndex());
       simplex.setAttribute("multiplicity", "" + f.getMultiplicity());
+      simplex.setAttribute("boundary", "" + f.getBoundary());
+
 
       // Local Vertices
       localSimplex = triangulationDoc.createElement("Vertices");
@@ -758,6 +779,8 @@ public class TriangulationIO {
       simplex = triangulationDoc.createElement("Tetra");
       simplex.setAttribute("index", "" + t.getIndex());
       simplex.setAttribute("multiplicity", "" + t.getMultiplicity());
+      simplex.setAttribute("boundary", "" + t.getBoundary());
+
 
       // Local Vertices
       localSimplex = triangulationDoc.createElement("Vertices");

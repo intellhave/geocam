@@ -15,6 +15,7 @@ public abstract class Simplex {
   protected int multiplicity;
   protected ArrayList<Integer> metaFace;
   protected boolean hasMetaFace;
+  protected boolean boundary;
   
   public Simplex(int index) {
     this.index = index;
@@ -41,12 +42,20 @@ public abstract class Simplex {
     return multiplicity;
   }
   
+  public boolean getBoundary(){
+	  return boundary;
+  }
+  
   public void setIndex(int index) {
     this.index = index;
   }
   
   public void setMultiplicity(int multiplicity){
     this.multiplicity = multiplicity;
+  }
+  
+  public void setBoundary(boolean newBoundary){
+	  this.boundary = newBoundary;
   }
   
   // Local simplices retrieval methods
