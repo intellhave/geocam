@@ -1,5 +1,14 @@
 package experiments;
 
+import geoquant.Curvature3D;
+import geoquant.LEHR;
+import geoquant.Length;
+import geoquant.SectionalCurvature;
+import geoquant.VEHR;
+import inputOutput.TriangulationIO;
+import inputOutput.XMLParser;
+
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Random;
@@ -8,24 +17,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import triangulation.Edge;
-import triangulation.Face;
-import triangulation.Tetra;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-
-import geoquant.Length;
-import geoquant.Curvature3D;
-import geoquant.LEHR;
-import geoquant.Length;
-import geoquant.SectionalCurvature;
-import geoquant.VEHR;
-
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.util.Random;
-
-import inputOutput.TriangulationIO;
-import inputOutput.XMLParser;
 
 public class RandomCyclicPolytope {
 

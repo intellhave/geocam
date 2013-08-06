@@ -2,11 +2,11 @@ package development;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import triangulation.Face;
 import triangulation.Vertex;
 import util.Matrix;
+import util.Vector;
 
 //Creates Matrix representing affine transformation
 public class AffineTransformation extends Matrix {

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.Vector;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.scene.Geometry;
 

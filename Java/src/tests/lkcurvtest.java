@@ -1,17 +1,17 @@
 package tests;
 
-import inputOutput.TriangulationIO;
 import geoquant.Curvature2D;
-import geoquant.LKCurvature; 
-import geoquant.CurvatureTube;
+import geoquant.LKCurvature;
 import inputOutput.TriangulationIO;
-import triangulation.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+
+import triangulation.Edge;
+import triangulation.Face;
+import triangulation.Triangulation;
+import triangulation.Vertex;
 
 
 public class lkcurvtest {

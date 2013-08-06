@@ -10,6 +10,7 @@ import triangulation.Face;
 import triangulation.FaceGrouping;
 import triangulation.Triangulation;
 import triangulation.Vertex;
+import util.Vector;
 
 /*********************************************************************************
  * TextureCoords

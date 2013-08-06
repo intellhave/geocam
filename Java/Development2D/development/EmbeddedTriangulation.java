@@ -13,6 +13,7 @@ import triangulation.FaceGrouping;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.Matrix;
+import util.Vector;
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.reader.Readers;
 import de.jreality.scene.Geometry;

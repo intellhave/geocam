@@ -24,8 +24,8 @@ import javax.swing.event.ChangeListener;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
+import util.Vector;
 import development.ManifoldPosition;
-import development.Vector;
 
 public class MarkerSettingsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

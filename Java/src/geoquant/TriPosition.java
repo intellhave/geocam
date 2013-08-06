@@ -1,7 +1,7 @@
 package geoquant;
 import java.io.PrintStream;
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TriPosition implements Comparable<TriPosition>{
   private ArrayList<Integer> pointIDs;

@@ -11,6 +11,7 @@ import java.util.List;
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Vertex;
+import util.Vector;
 
 //value is det(affineTrans)
 

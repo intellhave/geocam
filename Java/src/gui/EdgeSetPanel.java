@@ -2,8 +2,8 @@ package gui;
 
 import geoquant.Eta;
 import geoquant.Length;
-import java.awt.Component;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
@@ -29,7 +29,6 @@ import javax.swing.event.ListSelectionListener;
 
 import triangulation.Edge;
 import triangulation.Triangulation;
-import triangulation.Vertex;
 
 
 /**

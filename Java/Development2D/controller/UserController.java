@@ -11,10 +11,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import marker.BreadCrumbs;
 import marker.ForwardGeodesic;
 import marker.Marker;
-
-import deprecated.SimulationSettingsFrame;
+import util.Vector;
 import development.Development;
-import development.Vector;
 
 public abstract class UserController implements Runnable {
   /*********************************************************************************
@@ -225,11 +223,11 @@ public abstract class UserController implements Runnable {
       isPaused = true;
       break;
     case A_Button:
-      if(crumbs != null && SimulationSettingsFrame.allowMarkerBox.isSelected())
+      if(crumbs != null )
         crumbs.addMarker( development.getSource() );
       break;
     case B_Button:
-      if( geodesic != null && SimulationSettingsFrame.allowMarkerBox.isSelected())
+      if( geodesic != null )
         geodesic.generateGeodesic( development.getSource() );
       break;
     }

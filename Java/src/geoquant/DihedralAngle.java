@@ -1,9 +1,10 @@
 package geoquant;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
-import triangulation.*;
+import triangulation.Edge;
+import triangulation.StdTetra;
+import triangulation.Tetra;
 
 
 public class DihedralAngle extends Geoquant {

@@ -8,11 +8,11 @@ import java.util.Set;
 import marker.Marker;
 import marker.MarkerAppearance;
 import marker.MarkerHandler;
+import util.Vector;
 import de.jreality.math.MatrixBuilder;
 import de.jreality.scene.Camera;
 import de.jreality.scene.SceneGraphComponent;
 import development.Development;
-import development.Vector;
 
 /*********************************************************************************
  * FirstPersonView (Previously DevelopmentViewSim3D)

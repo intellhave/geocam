@@ -1,12 +1,10 @@
 package visualization;
 
 import geoquant.Angle;
-import geoquant.Curvature2D;
 import geoquant.Length;
 
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import triangulation.Edge;

@@ -1,11 +1,9 @@
 package tests;
 
 import geoquant.Angle;
-import geoquant.Geoquant;
 import geoquant.Length;
 import inputOutput.TriangulationIO;
 
-import java.lang.Thread;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -13,13 +11,11 @@ import java.util.List;
 
 import triangulation.Edge;
 import triangulation.Face;
-import triangulation.Simplex;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-
 import de.jreality.geometry.IndexedFaceSetFactory;
 import de.jreality.plugin.JRViewer;
-import de.jreality.scene.*;
+import de.jreality.scene.Viewer;
 
 public class FlowerTest2 {
 

@@ -19,6 +19,7 @@ import java.awt.Transparency;
 import java.io.File;
 import java.util.EnumMap;
 
+import util.AssetManager;
 import de.jreality.geometry.GeometryMergeFactory;
 import de.jreality.geometry.Primitives;
 import de.jreality.math.MatrixBuilder;
@@ -28,7 +29,6 @@ import de.jreality.scene.IndexedFaceSet;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Transformation;
 import de.jreality.util.SceneGraphUtility;
-import frontend.AssetManager;
 
 /*********************************************************************************
  * MarkerAppearance

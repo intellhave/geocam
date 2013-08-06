@@ -1,5 +1,5 @@
 package gui;
-import frontend.SimulationManager;
+import frontend.GeoquantViewerExplorer;
 import geoquant.Alpha;
 import geoquant.Angle;
 import geoquant.Area;
@@ -41,13 +41,11 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -61,7 +59,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenu;
@@ -91,23 +88,14 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import deprecated.SimulationSettingsFrame;
-import development.Coord2D;
-import development.Development;
-import development.ManifoldPosition;
-import development.Vector;
-
-import marker.MarkerHandler;
-
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import view.ExponentialView;
-import view.FaceAppearanceScheme;
-import view.View;
-
-
+import util.Vector;
+import development.Coord2D;
+import development.Development;
+import development.ManifoldPosition;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo
@@ -233,7 +221,7 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
   private List<Class<? extends Geoquant>> selectedList;
   private Timer timer;
   private boolean importedTriangulation;
-  private Development dev;
+  private GeoquantViewerExplorer gve;
   
   /**
   * Auto-generated main method to display this JFrame
@@ -293,8 +281,19 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
               public void actionPerformed(ActionEvent arg0) {       	  
         	  		if(!importedTriangulation)	
     					JOptionPane.showMessageDialog(null, "Must import triangulation first");
-        	  		else{
-        	  			dev = new Development();
+        	  		else{ 
+        	  			
+        	  			Iterator<Integer> i = Triangulation.faceTable.keySet().iterator();
+        	  			Face sourceFace = Triangulation.faceTable.get(i.next());
+        	  			Vector sourcePoint = new Vector(0,0);
+        	  			Iterator<Vertex> iv = sourceFace.getLocalVertices().iterator();
+        	  			while (iv.hasNext()) {
+        	  				sourcePoint.add(Coord2D.coordAt(iv.next(), sourceFace));
+        	  			}
+        	  			sourcePoint.scale(1.0f / 3.0f);        	  			
+        	  			ManifoldPosition mp = new ManifoldPosition(sourceFace, sourcePoint);        	  			
+        	  			Development dev = new Development(mp,1,1.0);        	  			
+        	  			gve = new GeoquantViewerExplorer(dev);
         	  		}
               }
           };
@@ -334,13 +333,10 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
             File file = getTriangulationFileChooser().getSelectedFile();
             TriangulationIO.readTriangulation(file.getAbsolutePath());
             newTriangulation();
-//            getSaveMenu().setEnabled(true);
+            //getSaveMenu().setEnabled(true);
             importedTriangulation = true;
-            if(dev !=null){
-            	dev.vc.endSession();
-            	dev.dui.terminate();
-            	dev.vc.dispose();
-            	dev = new Development();
+            if(gve != null){
+            	gve.terminate();            	
             }    
             
           }
@@ -2036,36 +2032,5 @@ public class GeoquantViewer extends javax.swing.JFrame implements ItemListener{
 	  }
 	  return edgePanel;
   }
-  
-  
-  public class Development extends Thread{
-	  SimulationManager dui;
-	  SimulationSettingsFrame vc;
-	  public Development(){
-		  dui = new SimulationManager();
-		  vc = new SimulationSettingsFrame(dui);
-		  vc.setUpForGeoquantViewer();
-		  start();
-
-	  }
-	  @Override
-	  public void run(){
-	    while (true) {
-		      dui.run(); // We only return from this call once ViewerController has
-		                 // signaled that we should quit the simulation.
-		      if(vc.sessionEnded()){ 
-		    	  dui.terminate(); 
-		    	  vc.dispose(); 
-		    	  break;
-		      }
-		      dui = new SimulationManager();
-		      // Now we have a fresh, initialized DevelopmentUI instance. We're ready to
-		      // allow user input from vc again.
-		      vc.setSimulation(dui);
-		      vc.setEnabled(true);
-		    }
-	  }
-  }
-
 }
 

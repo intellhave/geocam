@@ -1,15 +1,10 @@
 package solvers.implemented;
 
-import geoquant.Geometry;
-import geoquant.LCSC;
-import geoquant.Length;
 import geoquant.Radius;
 import geoquant.VCSC;
 import geoquant.Volume;
-import inputOutput.TriangulationIO;
 import triangulation.Triangulation;
 import triangulation.Vertex;
-import util.Matrix;
 
 public class RadiusVEHRGradient extends RadiusVEHRNewton {
   private Radius[] radii;

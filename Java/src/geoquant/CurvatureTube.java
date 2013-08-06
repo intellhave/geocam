@@ -5,14 +5,11 @@ package geoquant;
 import geoquant.Curvature3D.Sum;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
-import triangulation.Triangulation;
-import triangulation.Simplex;
-import triangulation.Vertex;
 import triangulation.Edge;
 import triangulation.Face;
-import geoquant.Angle;
+import triangulation.Simplex;
+import triangulation.Vertex;
 
 
 public class CurvatureTube extends Geoquant {

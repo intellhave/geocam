@@ -7,6 +7,7 @@ import triangulation.Face;
 import triangulation.Tetra;
 import triangulation.Vertex;
 import util.Matrix;
+import util.Vector;
 
 
 /* 

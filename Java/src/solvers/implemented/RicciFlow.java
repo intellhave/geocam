@@ -1,9 +1,9 @@
 package solvers.implemented;
 
-import solvers.Solver;
 import geoquant.Curvature2D;
 import geoquant.Geometry;
 import geoquant.Radius;
+import solvers.Solver;
 
 public class RicciFlow extends Solver{
   public double[] calcSlopes(double[] x)

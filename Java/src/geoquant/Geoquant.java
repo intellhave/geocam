@@ -1,7 +1,7 @@
 package geoquant;
 import java.util.LinkedList;
-import java.util.Observer;
 import java.util.Observable;
+import java.util.Observer;
 
 import triangulation.Simplex;
 

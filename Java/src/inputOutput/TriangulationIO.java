@@ -1,6 +1,5 @@
 package inputOutput;
 
-import frontend.AssetManager;
 import geoquant.Alpha;
 import geoquant.Eta;
 import geoquant.Length;
@@ -25,9 +24,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import development.DevelopmentComputations;
-import development.TextureCoords;
-
 import triangulation.Edge;
 import triangulation.Face;
 import triangulation.FaceGrouping;
@@ -35,6 +31,9 @@ import triangulation.Simplex;
 import triangulation.Tetra;
 import triangulation.Triangulation;
 import triangulation.Vertex;
+import util.AssetManager;
+import development.DevelopmentComputations;
+import development.TextureCoords;
 
 public class TriangulationIO {
   private static Schema triangulationSchema = null;

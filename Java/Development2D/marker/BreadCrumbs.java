@@ -3,8 +3,8 @@ package marker;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import util.Vector;
 import development.ManifoldPosition;
-import development.Vector;
 
 /*********************************************************************************
  * BreadCrumbs

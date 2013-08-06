@@ -10,6 +10,7 @@ import java.util.HashMap;
 import triangulation.Face;
 import triangulation.StdFace;
 import triangulation.Vertex;
+import util.Vector;
 
 //note that the coordinates this geoquant gives do not take orientation into account
 

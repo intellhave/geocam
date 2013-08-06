@@ -1,16 +1,11 @@
 package geoquant;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
-import triangulation.Face;
-import triangulation.Simplex;
-import triangulation.Triangulation;
-import triangulation.Vertex;
 import triangulation.Edge;
-import triangulation.Tetra;
-import geoquant.CurvatureTube;
+import triangulation.Face;
+import triangulation.Vertex;
 
 public class LKCurvature extends Geoquant {
   //Index map

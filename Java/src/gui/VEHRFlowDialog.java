@@ -2,26 +2,10 @@ package gui;
 
 import geoquant.GeoRecorder;
 
-import java.awt.Component;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.LayoutStyle;
-import javax.swing.SwingConstants;
 
 import solvers.implemented.EtaVEHRGradient;
 import solvers.implemented.EtaVEHRNewton;
-import solvers.implemented.RadiusLEHRGradient;
 import solvers.implemented.RadiusVEHRGradient;
 import solvers.implemented.RadiusVEHRNewton;
 

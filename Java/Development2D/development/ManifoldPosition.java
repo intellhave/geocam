@@ -4,6 +4,7 @@ import java.util.List;
 
 import triangulation.Edge;
 import triangulation.Face;
+import util.Vector;
 
 /* Represents a position on the Triangulation
  * 

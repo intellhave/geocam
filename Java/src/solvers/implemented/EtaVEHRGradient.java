@@ -5,7 +5,6 @@ import geoquant.VEHR;
 import solvers.Solver;
 import triangulation.Edge;
 import triangulation.Triangulation;
-import util.Matrix;
 
 public class EtaVEHRGradient extends Solver {
   private Eta[] etas;

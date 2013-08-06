@@ -4,11 +4,7 @@ import geoquant.GeoRecorder;
 
 import java.awt.event.ActionEvent;
 
-import solvers.implemented.EtaVEHRGradient;
-import solvers.implemented.EtaVEHRNewton;
 import solvers.implemented.RadiusLEHRGradient;
-import solvers.implemented.RadiusVEHRGradient;
-import solvers.implemented.RadiusVEHRNewton;
 
 public class LEHRFlowDialog extends EHRFlowDialog {
   public LEHRFlowDialog(GeoquantViewer owner) {

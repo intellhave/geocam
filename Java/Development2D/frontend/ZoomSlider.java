@@ -27,6 +27,11 @@ public class ZoomSlider extends JSlider implements ViewController{
 	}
 	
 	public ZoomSlider(){
+		super.setFocusable(false); // Mouse input only.
+		super.setMinimum(0);
+		super.setMaximum(400);		
+		super.setValue(100);
+		
 		views = new LinkedList<View>();
 		ChangeListener cl = new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -41,14 +46,12 @@ public class ZoomSlider extends JSlider implements ViewController{
 	}
 	
 	private void update(){
-		DecimalFormat percentFormat = new DecimalFormat("0%");
-		double z1 = Math.pow(10, (super.getValue() - 100.0) / 100.0);
-		double z2 = (1.0 / (super.getValue() / 100.0));
-		String str =  percentFormat.format(z2); 
+		DecimalFormat df = new DecimalFormat("##.##");
+		String str =  df.format( super.getValue() / 200.0 ); 
 		border.setTitle( this.title + " (" + str + ")");
 		
 		for(View v : views){
-			v.setZoom(z1);
+			v.setZoom(super.getValue() / 200.0);
 		}
 	}
 	
