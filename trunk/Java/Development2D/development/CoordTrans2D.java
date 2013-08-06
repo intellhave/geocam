@@ -15,7 +15,7 @@ import util.Vector;
 
 //value is det(affineTrans)
 
-public class CoordTrans2D extends Geoquant {
+class CoordTrans2D extends Geoquant {
   // Index map
   private static HashMap<TriPosition, CoordTrans2D> Index = new HashMap<TriPosition, CoordTrans2D>();
 

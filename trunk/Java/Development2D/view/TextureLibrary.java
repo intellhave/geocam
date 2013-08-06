@@ -28,14 +28,14 @@ import de.jreality.util.Input;
  * those textures, so that the same appearance can be shared by several items in
  * a scene.
  *********************************************************************************/
-public class TextureLibrary {
+class TextureLibrary {
 
   /*********************************************************************************
    * This enumeration class records the various textures the library can
    * provide. The EnumMap below maintains a mapping of these constants to cached
    * appearances.
    *********************************************************************************/
-  public enum TextureDescriptor {
+  enum TextureDescriptor {
     BATHROOMTILE, CHECKER, CLAY, COBBLESTONE, DOTS, GRID, 
     LIGHTHOUSE, MARBLE, PLAID, STUCCO, SWIRLS, ZIGZAG
   }
@@ -166,11 +166,11 @@ public class TextureLibrary {
    * returned will not be modified (since it is shared among possibly many scene
    * graph components).
    *********************************************************************************/
-  public static Appearance getAppearance(TextureDescriptor td) {
+  static Appearance getAppearance(TextureDescriptor td) {
     return library.get(td);
   }
 
-  public static Appearance getAppearance(Color color) {
+  static Appearance getAppearance(Color color) {
     Appearance app = new Appearance();
     initializeShaders(app, color);
     return app;

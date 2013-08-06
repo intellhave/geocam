@@ -112,6 +112,7 @@ import development.ManifoldPosition;
  * ANY CORPORATE OR COMMERCIAL PURPOSE.
  */
 public class GeoquantViewer extends javax.swing.JFrame implements ItemListener {
+	private static final long serialVersionUID = 1L;
 
 	{
 		// Set Look & Feel

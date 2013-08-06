@@ -2,13 +2,13 @@ package view;
 
 import java.util.ArrayList;
 
-public class DevelopmentGeometry {
+class DevelopmentGeometry {
 
   private ArrayList<double[]> geometry_verts = new ArrayList<double[]>();
   private ArrayList<double[]> geometry_texCoords = new ArrayList<double[]>();
   private ArrayList<int[]> geometry_faces = new ArrayList<int[]>();
 
-  public void addFace(double[][] faceverts, double[][] texCoords, double zvalue) {
+  void addFace(double[][] faceverts, double[][] texCoords, double zvalue) {
 
     int nverts = faceverts.length;
     int vi = geometry_verts.size();
@@ -32,15 +32,15 @@ public class DevelopmentGeometry {
     geometry_faces.add(newface);
   }
 
-  public double[][] getVerts() {
+  double[][] getVerts() {
     return (double[][]) geometry_verts.toArray(new double[0][0]);
   }
   
-  public double[][] getTexCoords(){
+  double[][] getTexCoords(){
     return (double[][]) geometry_texCoords.toArray(new double[0][0]);
   }
 
-  public int[][] getFaces() {
+  int[][] getFaces() {
     return (int[][]) geometry_faces.toArray(new int[0][0]);
   }
 }
