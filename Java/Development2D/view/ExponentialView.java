@@ -161,8 +161,12 @@ public class ExponentialView extends View {
       ifsf.update();
       Appearance app;
       if (showTexture) {
-        TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
-        app = TextureLibrary.getAppearance(td);
+    	  if(f.hasAppearance()){
+      		app = f.getAppearance();
+      	} else {    	  
+      		TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+      		app = TextureLibrary.getAppearance(td);
+      	}
       } else {
         app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
       }

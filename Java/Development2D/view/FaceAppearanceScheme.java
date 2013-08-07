@@ -27,8 +27,8 @@ public class FaceAppearanceScheme {
 
 	static {
 		colorMap = new EnumMap<Colors, TextureDescriptor>(Colors.class);
-		colorMap.put(Colors.SKY_BLUE, TextureDescriptor.BATHROOMTILE);
-		colorMap.put(Colors.TURQUOISE, TextureDescriptor.CHECKER);
+		colorMap.put(Colors.SKY_BLUE, TextureDescriptor.GRASS);
+		colorMap.put(Colors.TURQUOISE, TextureDescriptor.WATER);
 		colorMap.put(Colors.STRAWBERRY_RED, TextureDescriptor.CLAY);
 		colorMap.put(Colors.BRICK_RED, TextureDescriptor.COBBLESTONE);
 		colorMap.put(Colors.GRASS_GREEN, TextureDescriptor.DOTS);
