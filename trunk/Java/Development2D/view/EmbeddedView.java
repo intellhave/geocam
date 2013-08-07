@@ -181,9 +181,14 @@ public class EmbeddedView extends View {
       ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, texCoords);
       ifsf.update();
       Appearance app;
+      
       if (showTexture) {
-        TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
-        app = TextureLibrary.getAppearance(td);
+    	if(f.hasAppearance()){
+    		app = f.getAppearance();
+    	} else {    	  
+    		TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+    		app = TextureLibrary.getAppearance(td);
+    	}
       } else
         app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
 

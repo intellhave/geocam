@@ -2,6 +2,8 @@ package triangulation;
 
 import java.awt.Color;
 
+import de.jreality.scene.Appearance;
+
 public class Face extends Simplex {
   private boolean negative;
   private Color color = null;
@@ -16,10 +18,6 @@ public class Face extends Simplex {
     color = c;
   }
   
-  public Color getColor() {
-    return color;
-  }
-
   public boolean isNegative() {
     return negative;
   }
@@ -30,12 +28,27 @@ public class Face extends Simplex {
     negative = !negative;
   }
 
+  public Color getColor() {
+    return color;
+  }
+
   public boolean hasColor() {
     return color != null;
   }
   
   public void setColor(Color c) {
     color = c;
+  }
+  
+  private Appearance app = null;
+  public Appearance getAppearance(){
+	  return app;
+  }
+  public boolean hasAppearance(){
+	  return (app != null);
+  }
+  public void setAppearance(Appearance app){
+	  this.app = app;
   }
   
   public boolean sameOrientation(Edge e) {

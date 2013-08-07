@@ -28,16 +28,16 @@ import de.jreality.util.Input;
  * those textures, so that the same appearance can be shared by several items in
  * a scene.
  *********************************************************************************/
-class TextureLibrary {
+public class TextureLibrary {
 
   /*********************************************************************************
    * This enumeration class records the various textures the library can
    * provide. The EnumMap below maintains a mapping of these constants to cached
    * appearances.
    *********************************************************************************/
-  enum TextureDescriptor {
-    BATHROOMTILE, CHECKER, CLAY, COBBLESTONE, DOTS, GRID, 
-    LIGHTHOUSE, MARBLE, PLAID, STUCCO, SWIRLS, ZIGZAG
+  public enum TextureDescriptor {
+	  WATER, GRASS, BATHROOMTILE, CHECKER, CLAY, COBBLESTONE, DOTS, GRID, 
+	  LIGHTHOUSE, MARBLE, PLAID, STUCCO, SWIRLS, ZIGZAG, 
   }
 
   private static EnumMap<TextureDescriptor, Appearance> library;
@@ -107,6 +107,12 @@ class TextureLibrary {
     try {
       File ff = null;
       switch (td) {
+      case WATER:
+          ff = AssetManager.getAssetFile("textures/water.jpg");
+          break;
+      case GRASS:
+          ff = AssetManager.getAssetFile("textures/grass.jpg");
+          break;
       case BATHROOMTILE:
         ff = AssetManager.getAssetFile("textures/bathroomtile.jpg");
         break;
@@ -151,7 +157,7 @@ class TextureLibrary {
       ee.printStackTrace();
     }
 
-    Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);
+    Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);    
     tex.setTextureMatrix(MatrixBuilder.euclidean().scale(0.5).getMatrix());
 
     return app;
@@ -166,7 +172,7 @@ class TextureLibrary {
    * returned will not be modified (since it is shared among possibly many scene
    * graph components).
    *********************************************************************************/
-  static Appearance getAppearance(TextureDescriptor td) {
+  public static Appearance getAppearance(TextureDescriptor td) {
     return library.get(td);
   }
 
