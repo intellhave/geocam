@@ -1,13 +1,20 @@
 package frontend;
 
+import gui.TXTFilter;
+import inputOutput.TriangulationIO;
+
 import java.awt.Component;
+import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.filechooser.FileFilter;
 
 import util.AssetManager;
 
@@ -45,7 +52,18 @@ public class ManifoldMenu extends JMenu {
 			SurfaceLoader sl = new SurfaceLoader(AssetManager.getAssetPath(path));
 			jmi.addActionListener(sl);
 		}
+		
+		JMenuItem other = new JMenuItem();
+		
+		other.setText("Select a file from disk...");
+		super.add(other);
+		other.addActionListener( new SurfaceLoaderDialogListener( this ) );
+		
 		this.uis = new LinkedList<Component>();
+	}
+
+	public void setSimulationManager(SimulationManager other) {
+		this.sim = other;		
 	}
 	
 	public ManifoldMenu(SimulationManager sim, Component userInterface){
@@ -85,7 +103,45 @@ public class ManifoldMenu extends JMenu {
 		}
 	}
 	
-	public void setSimulationManager(SimulationManager other) {
-		this.sim = other;		
+	private class SurfaceLoaderDialogListener implements ActionListener {
+		private Component parent;
+		
+		public SurfaceLoaderDialogListener(Component parent){
+			this.parent = parent;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			JFileChooser jfc = new JFileChooser(AssetManager.getAssetPath("."));
+			jfc.setFileFilter( new ManifoldFileFilter() );			
+			int retVal = jfc.showOpenDialog(parent);
+			
+			if (retVal == JFileChooser.APPROVE_OPTION) {
+				File file = jfc.getSelectedFile();
+				currentManifoldPath = file.getAbsolutePath();
+				setInterfacesEnabled(false);
+				sim.terminate();
+			}
+		}
+	}
+	
+	private class ManifoldFileFilter extends FileFilter {
+		  		  
+		  public boolean accept(File f) {
+		    if (f.isDirectory()) {
+		      return true;
+		    }
+		    
+		    String extension = f.getName();
+		    int index = extension.lastIndexOf('.');
+		    if(index < 0) {
+		      return false;
+		    }
+		    extension = extension.substring(index).toLowerCase();
+		    return extension.equals(".txt") || extension.equals(".off") || extension.equals(".xml");
+		  }
+		  public String getDescription() {
+		    return "Text Files (.txt), OFF files, and XML files";
+		  }
 	}
 }
