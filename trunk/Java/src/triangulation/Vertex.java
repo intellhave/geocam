@@ -2,8 +2,21 @@ package triangulation;
 
 public class Vertex extends Simplex {
 
+	protected double [] coordinates;
+	
   public Vertex(int index) {
     super(index);
+    coordinates = new double[3];
+  }
+  
+  public double [] getCoordinates(){
+	  return coordinates;
+  }
+  
+  public void setCoordinates(double [] array){
+	  for(int i = 0; i < coordinates.length ; i++){
+		  coordinates[i] = array[i];
+	  }
   }
 
   public int getDegree() {

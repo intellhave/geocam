@@ -159,6 +159,20 @@ public class TriangulationIO {
       if(boundary.length() !=0){
     	  v.setBoundary(Boolean.parseBoolean(boundary));
       }
+      String xcoord = simplexNode.getAttribute("x-coordinate");
+      double [] coords = {Double.MIN_NORMAL, Double.MIN_NORMAL, Double.MIN_NORMAL};
+      if(xcoord.length() != 0){
+    	  coords[0] = Double.parseDouble(xcoord);
+      }
+      String ycoord = simplexNode.getAttribute("y-coordinate");
+      if(ycoord.length() != 0){
+    	  coords[1] = Double.parseDouble(ycoord);
+      }
+      String zcoord = simplexNode.getAttribute("z-coordinate");
+      if(zcoord.length() != 0){
+    	 coords[2] = Double.parseDouble(zcoord);
+      }
+      v.setCoordinates(coords);
     }
 
     Edge e;
@@ -614,6 +628,13 @@ public class TriangulationIO {
       simplex.setAttribute("alpha", "" + Alpha.valueAt(v));
       simplex.setAttribute("multiplicity", "" + v.getMultiplicity());
       simplex.setAttribute("boundary", "" + v.getBoundary());
+      double [] array = v.getCoordinates();
+      if(array[0] != Double.MIN_NORMAL)
+      	simplex.setAttribute("x-coordinate", ""+array[0]);
+      if(array[1] != Double.MIN_NORMAL)
+        simplex.setAttribute("y-coordinate", ""+array[1]);
+      if(array[2] != Double.MIN_NORMAL)
+    	  simplex.setAttribute("z-coordinate", ""+array[2]);
 
       // Local Vertices
       localSimplex = triangulationDoc.createElement("Vertices");
