@@ -34,7 +34,7 @@ public class TextureManifoldEditor {
 	}
 	
 	public TextureManifoldEditor(){
-		String defaultPath = AssetManager.getAssetPath("surfaces/tetra2.off");
+		String defaultPath = AssetManager.getAssetPath("off/tetra2.off");
 
 		simMan = new SimulationManager(defaultPath);
 

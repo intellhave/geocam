@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import marker.Marker;
-import marker.MarkerAppearance;
 import marker.MarkerHandler;
 import util.Vector;
 import de.jreality.math.MatrixBuilder;
