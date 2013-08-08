@@ -13,6 +13,7 @@ import static de.jreality.shader.CommonAttributes.SMOOTH_SHADING;
 import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
 import static de.jreality.shader.CommonAttributes.TUBE_RADIUS;
 import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
+import static de.jreality.shader.CommonAttributes.SPECULAR_COEFFICIENT;
 
 import java.awt.Color;
 import java.awt.Transparency;
@@ -278,7 +279,9 @@ public class MarkerAppearance {
     app.setAttribute(PICKABLE, false);
     app.setAttribute(LIGHTING_ENABLED, true);
     app.setAttribute(POLYGON_SHADER + "." + SMOOTH_SHADING, true);
-    
+
+    app.setAttribute(POLYGON_SHADER + "." + SPECULAR_COEFFICIENT, 0.15);
+        
     if( this.model == ModelType.ARROWHEAD || this.model == ModelType.ARROWBODY){
       app.setAttribute(LINE_SHADER + "."+ TUBE_RADIUS, .05);
       app.setAttribute(POINT_SHADER + "." +POINT_RADIUS, .05);
