@@ -41,6 +41,7 @@
         		<xs:element name="metafaces" type="xs:string"
         			maxOccurs="unbounded" minOccurs="0">
         		</xs:element>
+
         	</xs:sequence>
         	<xs:attribute name="index" use="required" type="xs:integer" />
         	<xs:attribute name="alpha" use="optional" type="xs:decimal" />
@@ -49,6 +50,9 @@
         	<xs:attribute name="radius" use="optional"
         		type="xs:decimal" />
         	<xs:attribute name="boundary" type="xs:boolean"></xs:attribute>
+        	<xs:attribute name="x-coordinate" type="xs:double"></xs:attribute>
+        	<xs:attribute name="y-coordinate" type="xs:double"></xs:attribute>
+        	<xs:attribute name="z-coordinate" type="xs:double"></xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="Edge">
@@ -70,7 +74,7 @@
         	<xs:attribute name="length" type="xs:decimal"
         		use="optional" />
 
-        	<xs:attribute name="boundary" type="xs:boolean"></xs:attribute>
+        	<xs:attribute name="boundary" type="xs:boolean"></xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="Face">
