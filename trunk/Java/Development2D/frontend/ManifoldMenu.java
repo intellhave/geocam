@@ -1,10 +1,6 @@
 package frontend;
 
-import gui.TXTFilter;
-import inputOutput.TriangulationIO;
-
 import java.awt.Component;
-import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -30,14 +26,14 @@ public class ManifoldMenu extends JMenu {
 		super.setText("File");
 		
 		String[][] namesAndPaths = new String[][] {
-				{ "Regular Tetrahedron", "surfaces/tetra3.off" },
+				{ "Regular Tetrahedron", "off/tetra3.off" },
 				// { "Regular Tetrahedron - One Color", "surfaces/tetra.off" },
-				{ "Irregular Tetrahedron", "surfaces/tetra2.off" },
-				{ "Cube", "surfaces/cube_surf.off" },
-				{ "Dodecahedron", "surfaces/dodec2.off" },
+				{ "Irregular Tetrahedron", "off/tetra2.off" },
+				{ "Cube", "off/cube_surf.off" },
+				{ "Dodecahedron", "off/dodec2.off" },
 				{ "Icosahedron", "off/icosa.off" },
-				{ "Cone", "surfaces/scaledCone.off" },
-				{ "Neckpinch", "surfaces/large_neckpinch.off" },
+				{ "Cone", "off/scaledCone.off" },
+				{ "Neckpinch", "off/large_neckpinch.off" },
 				{ "Nonembedded Tetrahedron with Negative Curvature",
 						"Triangulations/2DManifolds/tetrahedronnonembed2.xml" },
 				{ "Suspension of a Triangle (nonembedded)",

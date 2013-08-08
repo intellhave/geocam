@@ -1,16 +1,16 @@
 package gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import geoquant.Alpha;
 import geoquant.Eta;
 import geoquant.GeoRecorder;
 import geoquant.Geometry;
 import geoquant.Radius;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;

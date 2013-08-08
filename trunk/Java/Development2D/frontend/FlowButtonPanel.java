@@ -1,24 +1,23 @@
 package frontend;
 
+import geoquant.Geometry;
+import geoquant.Radius;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import geoquant.Geometry;
-import geoquant.Radius;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import development.Development;
 
 import solvers.Solver;
 import solvers.implemented.Yamabe2DFlow;
 import triangulation.Triangulation;
 import view.View;
+import development.Development;
 
 public class FlowButtonPanel extends JPanel implements ViewController {
 

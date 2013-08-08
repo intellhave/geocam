@@ -10,12 +10,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import triangulation.Face;
-
-import de.jreality.scene.Appearance;
-import development.ManifoldPosition;
-
 import view.TextureLibrary;
 import view.TextureLibrary.TextureDescriptor;
+import de.jreality.scene.Appearance;
+import development.ManifoldPosition;
 
 public class TexturePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
