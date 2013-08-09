@@ -43,7 +43,6 @@ public class BreadCrumbs {
     pos.move(vec);
     Marker m = new Marker(pos, crumb, Marker.MarkerType.FIXED);
     trail.add(m);
-
     markers.addMarker(m);
     
     int numMarkers = trail.size() - 1;

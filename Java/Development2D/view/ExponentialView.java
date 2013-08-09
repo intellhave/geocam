@@ -314,9 +314,10 @@ public class ExponentialView extends View {
 	 * recursive calls to developMarkers.
 	 *********************************************************************************/
 	protected void developMarkers(DevelopmentNode devNode,
-			HashMap<Marker, ArrayList<Vector[]>> markerImages) {
+		HashMap<Marker, ArrayList<Vector[]>> markerImages) {
+		
 		Collection<Marker> localMarkers = markers.getMarkers(devNode.getFace());
-
+		
 		if (localMarkers != null) {
 
 			Frustum2D frustum = devNode.getFrustum();
