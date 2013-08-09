@@ -47,7 +47,7 @@ public class ForwardGeodesic {
    * orientation with a designated "forward" vector). If a geodesic has been
    * created already, this old geodesic is marked for removal from the manifold.
    *********************************************************************************/
-  public void generateGeodesic(ManifoldPosition mp) {
+  public void generateGeodesic(ManifoldPosition mp) {	
     for (Marker m : geodesicMarkers) {
       m.flagForRemoval();
     }

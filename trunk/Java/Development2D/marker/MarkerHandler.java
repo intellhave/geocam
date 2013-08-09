@@ -96,8 +96,12 @@ public class MarkerHandler {
    *********************************************************************************/
   public synchronized void addMarker(Marker m) {
     Collection<Marker> markers = getMarkers(m.getPosition().getFace());
-    markers.add(m);
-    allMarkers.add(m);
+    synchronized(markers){
+    	markers.add(m);
+    }
+    synchronized(allMarkers){
+    	allMarkers.add(m);
+    }        
   }
 
   /*********************************************************************************
