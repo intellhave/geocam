@@ -26,6 +26,7 @@ public class ResearcherDevelopmentExplorer {
 	private DevelopmentSettingsPanel dsp;
 	private MarkerSettingsPanel msp;
 	private ManifoldDisplaySettingsPanel mdsp;
+	private DecorationsPanel dp;
 	private ZoomSlider expZoom;
 	private ZoomSlider embZoom;
 
@@ -44,8 +45,8 @@ public class ResearcherDevelopmentExplorer {
 
 		dsp = new DevelopmentSettingsPanel(simMan.getDevelopment());
 		msp = new MarkerSettingsPanel(simMan.getMarkerHandler());
-
 		mdsp = new ManifoldDisplaySettingsPanel();
+		dp = new DecorationsPanel( simMan.getMarkerHandler() );
 		
 		expZoom = new ZoomSlider("Exponential Map View");
 		embZoom = new ZoomSlider("Embedded View");
@@ -99,8 +100,9 @@ public class ResearcherDevelopmentExplorer {
 		jmb.add(viewMenu);
 
 		frame.add(dsp);
-		frame.add(msp);
+		frame.add(msp);		
 		frame.add(mdsp);
+		frame.add(dp);
 		
 		JPanel camPanel = new JPanel();
 		camPanel.setLayout(new BoxLayout(camPanel, BoxLayout.Y_AXIS));

@@ -53,4 +53,11 @@ public class BreadCrumbs {
     }    
   }
 
+  public void clear(){
+	  for( Marker m : trail ){
+		  m.setVisible(false);
+		  m.flagForRemoval();
+	  }
+	  trail.clear();
+  }
 }

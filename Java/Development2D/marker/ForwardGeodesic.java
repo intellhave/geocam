@@ -94,4 +94,12 @@ public class ForwardGeodesic {
   public void setLength(double newLength){
     segments = newLength;
   }
+  
+  public void clear() {
+	  for( Marker m : geodesicMarkers ){
+		  m.setVisible(false);
+		  m.flagForRemoval();
+	  }	  
+	  geodesicMarkers.clear();
+  }
 }
