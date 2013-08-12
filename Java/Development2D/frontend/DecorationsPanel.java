@@ -69,6 +69,13 @@ public class DecorationsPanel extends JPanel {
 		addListeners();		
 	}
 	
+	public void setMarkerHandler(MarkerHandler other){
+		this.markers = other;
+		this.geodesic = new ForwardGeodesic(other);
+		this.geodesic.setLength( geoLength.getValue() );
+		this.crumbs = new BreadCrumbs(other);						
+	}
+	
 	private void addListeners(){		
 		makeGeo.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {

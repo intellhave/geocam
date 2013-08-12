@@ -77,6 +77,7 @@ public class ResearcherDevelopmentExplorer {
 			// Note: mdsp, expZoom, and embZoom don't need to be updated,
 			// because they are ViewControllers and work through the ViewMenu
 			// object (which gets updated).
+			dp.setMarkerHandler(simMan.getMarkerHandler());
 			dsp.setDevelopment(simMan.getDevelopment());
 			msp.setMarkerHandler(simMan.getMarkerHandler());
 
