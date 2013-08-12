@@ -179,6 +179,10 @@ public class EmbeddedView extends View {
       ifsf.setGenerateEdgesFromFaces(true);
       ifsf.setGenerateFaceNormals(true);
       ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, texCoords);
+      if (showFaceLabels) {
+			String[] faceLabels = { f.getIndex() + "" };
+			ifsf.setFaceLabels(faceLabels);
+	  }
       ifsf.update();
       Appearance app;
       
@@ -339,6 +343,10 @@ public class EmbeddedView extends View {
       ifsf.setGenerateEdgesFromFaces(true);
       ifsf.setGenerateFaceNormals(true);
       ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, texCoords);
+      if (showFaceLabels) {
+			String[] faceLabels = { f.getIndex() + "" };
+			ifsf.setFaceLabels(faceLabels);
+	  }
       ifsf.update();
       Appearance app;
       if (showTexture) {
@@ -354,6 +362,43 @@ public class EmbeddedView extends View {
     }
     super.update(null,null);
   }
+  
+public void setLabelFaces(boolean drawFaceLabels) {
+	// showTexture = texture;
+
+	int[][] ifsf_faces = new int[][] { { 0, 1, 2 } };
+	for (Face f : Triangulation.faceTable.values()) {
+		double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
+		double[][] texCoords = TextureCoords.getCoordsAsArray(f);
+
+		IndexedFaceSetFactory ifsf = new IndexedFaceSetFactory();
+		ifsf.setVertexCount(verts.length);
+		ifsf.setVertexCoordinates(verts);
+		ifsf.setFaceCount(ifsf_faces.length);
+		ifsf.setFaceIndices(ifsf_faces);
+		ifsf.setGenerateEdgesFromFaces(true);
+		ifsf.setGenerateFaceNormals(true);
+		ifsf.setVertexAttribute(Attribute.TEXTURE_COORDINATES, texCoords);
+		if (drawFaceLabels) {
+			String[] faceLabels = { f.getIndex() + "" };
+			ifsf.setFaceLabels(faceLabels);
+		}
+		ifsf.update();
+		
+		Appearance app;
+		if (showTexture) {
+			TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+			app = TextureLibrary.getAppearance(td);
+		} else
+			app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
+
+		SceneGraphComponent sgc = new SceneGraphComponent();
+		sgc.setGeometry(ifsf.getGeometry());
+		sgc.setAppearance(app);
+		sgcDevelopment.addChild(sgc);
+	}
+	super.update(null, null);
+}
   
   public void setZoom(double newZoom){
     zoom = newZoom;

@@ -159,7 +159,17 @@ public class ExponentialView extends View {
 			// ifsf.setGenerateEdgesFromFaces(true);
 			ifsf.setGenerateFaceNormals(true);
 			ifsf.setGenerateVertexNormals(true);
+			
+			if (showFaceLabels) {
+				String[] faceLabels = new String[ifsf_faces.length];
+				for (int i = 0; i < ifsf_faces.length; i++) {
+					faceLabels[i] = "" + f.getIndex();
+				}
+				ifsf.setFaceLabels(faceLabels);
+			}
+			
 			ifsf.update();
+			
 			Appearance app;
 			if (showTexture) {
 				if (f.hasAppearance()) {

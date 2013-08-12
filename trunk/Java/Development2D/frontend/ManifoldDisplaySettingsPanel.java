@@ -21,6 +21,7 @@ public class ManifoldDisplaySettingsPanel extends JPanel implements ViewControll
 	private JCheckBox showEdges;
 	private JCheckBox showFaces;
 	private JCheckBox showTextures;
+	private JCheckBox showFaceLabels;
 
 	private List<View> views;
 	
@@ -53,6 +54,11 @@ public class ManifoldDisplaySettingsPanel extends JPanel implements ViewControll
 		showTextures.setSelected(true);
 		jp.add(showTextures);
 		
+		showFaceLabels = new JCheckBox();
+		showFaceLabels.setText("Show Face Labels");
+		showFaceLabels.setSelected(false);
+		jp.add(showFaceLabels);
+		
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
 				update();
@@ -61,6 +67,7 @@ public class ManifoldDisplaySettingsPanel extends JPanel implements ViewControll
 		showEdges.addActionListener(al);
 		showFaces.addActionListener(al);
 		showTextures.addActionListener(al);
+		showFaceLabels.addActionListener(al);
 		
 		update();
 	}
@@ -70,7 +77,9 @@ public class ManifoldDisplaySettingsPanel extends JPanel implements ViewControll
 			v.setDrawEdges(showEdges.isSelected());
 			v.setDrawFaces(showFaces.isSelected());
 			v.setDrawTextures(showTextures.isSelected());
+			v.setLabelFaces(showFaceLabels.isSelected());
 		}
+		
 	}
 	
 	public void addView( View v ){
