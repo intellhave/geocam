@@ -58,6 +58,7 @@ public abstract class View implements Observer {
 	protected MarkerHandler markers;
 	protected FaceAppearanceScheme faceAppearanceScheme;
 	protected boolean showTexture;
+	protected boolean showFaceLabels;
 	protected double zoom;
 
 	/*********************************************************************************
@@ -330,6 +331,10 @@ public abstract class View implements Observer {
 
 	public void setDrawTextures(boolean texture) {
 		showTexture = texture;
+	}
+	
+	public void setLabelFaces(boolean faceLabels) {
+		showFaceLabels = faceLabels;
 	}
 
 	public abstract void setZoom(double zoomValue);
