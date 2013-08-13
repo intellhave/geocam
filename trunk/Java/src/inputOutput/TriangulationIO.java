@@ -32,6 +32,7 @@ import triangulation.Tetra;
 import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.AssetManager;
+import view.TextureLibrary;
 import development.DevelopmentComputations;
 import development.TextureCoords;
 
@@ -371,6 +372,10 @@ public class TriangulationIO {
       String boundary = simplexNode.getAttribute("boundary");
       if(boundary.length() !=0){
     	  f.setBoundary(Boolean.parseBoolean(boundary));
+      }
+      String texture = simplexNode.getAttribute("texture");
+      if(texture.length()!=0){
+    	  f.setAppearance(TextureLibrary.getAppearance(texture));
       }
       
     }
@@ -746,7 +751,7 @@ public class TriangulationIO {
       simplex.setAttribute("index", "" + f.getIndex());
       simplex.setAttribute("multiplicity", "" + f.getMultiplicity());
       simplex.setAttribute("boundary", "" + f.getBoundary());
-
+      simplex.setAttribute("texture", ""+ TextureLibrary.getTextureDescriptor(f.getAppearance()).toString());
 
       // Local Vertices
       localSimplex = triangulationDoc.createElement("Vertices");

@@ -94,6 +94,26 @@
         		type="xs:integer" />
 
         	<xs:attribute name="boundary" type="xs:boolean"></xs:attribute>
+        	<xs:attribute name="texture">
+        		<xs:simpleType>
+        			<xs:restriction base="xs:string">
+        				<xs:enumeration value="GRASS"></xs:enumeration>
+        				<xs:enumeration value="WATER"></xs:enumeration>
+        				<xs:enumeration value="CHECKER"></xs:enumeration>
+        				<xs:enumeration value="CLAY"></xs:enumeration>
+        				<xs:enumeration value="COBBLESTONE"></xs:enumeration>
+        				<xs:enumeration value="DOTS"></xs:enumeration>
+        				<xs:enumeration value="GRID"></xs:enumeration>
+        				<xs:enumeration value="BATHROOMTILE"></xs:enumeration>
+        				<xs:enumeration value="LIGHTHOUSE"></xs:enumeration>
+        				<xs:enumeration value="MARBLE"></xs:enumeration>
+        				<xs:enumeration value="PLAID"></xs:enumeration>
+        				<xs:enumeration value="STUCCO"></xs:enumeration>
+        				<xs:enumeration value="SWIRLS"></xs:enumeration>
+        				<xs:enumeration value="ZIGZAG"></xs:enumeration>
+        			</xs:restriction>
+        		</xs:simpleType>
+        	</xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="Tetra">
