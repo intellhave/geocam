@@ -5,6 +5,8 @@ import static de.jreality.shader.CommonAttributes.POLYGON_SHADER;
 import java.awt.Color;
 import java.io.File;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import util.AssetManager;
 import de.jreality.math.MatrixBuilder;
@@ -41,6 +43,7 @@ public class TextureLibrary {
   }
 
   private static EnumMap<TextureDescriptor, Appearance> library;
+  private static Map<Appearance, TextureDescriptor> appLibrary;
 
   /*********************************************************************************
    * This block of code initializes our library of textures, so we aren't always
@@ -52,8 +55,15 @@ public class TextureLibrary {
 
     for (TextureDescriptor td : TextureDescriptor.values()) {
       Appearance tdApp = initializeAppearance(td);
-      library.put(td, tdApp);
+      library.put(td, tdApp); 
     }
+  }
+  
+  static{
+	 appLibrary = new HashMap<Appearance, TextureDescriptor>();
+	  for (TextureDescriptor td : TextureDescriptor.values()) {
+		  appLibrary.put(library.get(td), td);
+	  }
   }
 
   /*********************************************************************************
@@ -175,11 +185,22 @@ public class TextureLibrary {
   public static Appearance getAppearance(TextureDescriptor td) {
     return library.get(td);
   }
+  public static Appearance getAppearance(String td){
+	  for(TextureDescriptor texture : TextureDescriptor.values()){
+		  if(texture.toString().equals(td))
+			  return library.get(texture);
+	  }
+	  return null;
+  }
 
   static Appearance getAppearance(Color color) {
     Appearance app = new Appearance();
     initializeShaders(app, color);
     return app;
+  }
+  
+  public static TextureDescriptor getTextureDescriptor(Appearance app){
+	  return appLibrary.get(app);
   }
 
 }
