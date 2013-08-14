@@ -21,9 +21,11 @@ public class Face extends Simplex {
   public boolean isNegative() {
     return negative;
   }
+  
   public void setNegativity(boolean negativity) {
     negative = negativity;
   }
+  
   public void switchPolarity() {
     negative = !negative;
   }
