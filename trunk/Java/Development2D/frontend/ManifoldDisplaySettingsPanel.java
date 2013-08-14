@@ -27,8 +27,6 @@ public class ManifoldDisplaySettingsPanel extends JPanel implements ViewControll
 	
 	public ManifoldDisplaySettingsPanel() {
 		views = new LinkedList<View>();
-		
-		//super.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));		
 		super.setLayout(new FlowLayout());
 		
 		TitledBorder tb = BorderFactory.createTitledBorder("Manifold Display Controls");		

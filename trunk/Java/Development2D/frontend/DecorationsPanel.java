@@ -13,7 +13,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 import marker.BreadCrumbs;
 import marker.ForwardGeodesic;
 import marker.MarkerHandler;
