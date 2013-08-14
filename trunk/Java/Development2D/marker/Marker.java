@@ -15,7 +15,7 @@ import development.ManifoldPosition;
  *********************************************************************************/
 public class Marker {
   
-  public static enum MarkerType { SOURCE, MOVING, FIXED, REMOVED };
+  public static enum MarkerType { SOURCE, MOVING, FIXED, REMOVED, TEXT };
   
   /*********************************************************************************
    * Internally, each Marker is assigned a unique id, based on the value of this

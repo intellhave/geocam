@@ -81,7 +81,7 @@ public class FirstPersonView extends ExponentialView {
 
 			int counter = 0;
 			for (SceneGraphComponent sgc : pool) {
-				if (counter >= images.size()) {
+				if ( images == null || counter >= images.size()) {
 					sgc.setVisible(false);
 				} else {
 					Vector[] triple = images.get(counter);

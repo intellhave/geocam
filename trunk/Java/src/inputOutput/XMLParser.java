@@ -72,6 +72,7 @@ public class XMLParser {
       return null;
     }catch (LSException e){
       System.err.println("Error Unable to parse document: " + documentPath);
+      e.printStackTrace();
       return null;
     }catch (Exception e){
       e.printStackTrace();

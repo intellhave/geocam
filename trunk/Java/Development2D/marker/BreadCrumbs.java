@@ -3,6 +3,7 @@ package marker;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import marker.MarkerAppearance.ModelType;
 import util.Vector;
 import development.ManifoldPosition;
 
@@ -23,6 +24,8 @@ public class BreadCrumbs {
   private MarkerAppearance crumb = new MarkerAppearance(
       MarkerAppearance.ModelType.FLAG, .045);
 
+  private static int counter = 0;
+  
   public BreadCrumbs(MarkerHandler mh) {    
     markers = mh;
     trail = new ConcurrentLinkedQueue<Marker>();
@@ -41,7 +44,11 @@ public class BreadCrumbs {
     Vector vec = new Vector(pos.getDirectionForward());
     vec.scale(-.25);
     pos.move(vec);
-    Marker m = new Marker(pos, crumb, Marker.MarkerType.FIXED);
+    
+    String tag = "Flag " + counter; counter++;
+    new TextualMarkerAppearance(tag, 1.0);    
+    MarkerAppearance ma = new MarkerAppearance(ModelType.FLAG,1.0);
+    Marker m = new Marker(pos, ma, Marker.MarkerType.FIXED);
     trail.add(m);
     markers.addMarker(m);
     
