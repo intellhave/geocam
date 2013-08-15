@@ -50,7 +50,6 @@ import de.jreality.util.SceneGraphUtility;
  *********************************************************************************/
 
 public class MarkerAppearance {
-
 	/*********************************************************************************
 	 * This enumeration provides a succinct description of which marker model
 	 * this appearance represents.
@@ -272,7 +271,7 @@ public class MarkerAppearance {
 			app.setAttribute(POLYGON_SHADER + "." + DIFFUSE_COLOR, Color.red);
 		}
 		sgc.setAppearance(app);
-		sgc.setTransformation( getScalngTransformation() );
+		sgc.setTransformation( getScalingTransformation() );
 		sgc.setVisible(true);
 
 		return sgc;
@@ -295,7 +294,7 @@ public class MarkerAppearance {
 		return app;
 	}
 	
-	protected Transformation getScalngTransformation(){
+	protected Transformation getScalingTransformation(){
 		double[] mat = MatrixBuilder.euclidean().scale(this.scale).getMatrix().getArray();
 		return new Transformation(mat);
 	}
