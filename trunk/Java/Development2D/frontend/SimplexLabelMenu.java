@@ -41,17 +41,10 @@ public class SimplexLabelMenu extends JMenu {
 	faceTags = new LinkedList<Marker>();
 
 	super.setText("Simplex Labels");
-	//super.setBorder(BorderFactory
-	//	.createTitledBorder("Simplex Label Controls"));
-	//super.setAlignmentX(Component.CENTER_ALIGNMENT);
-	//super.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	
 	showVTags = new JCheckBoxMenuItem("Show Vertex Labels");	
 	showETags = new JCheckBoxMenuItem("Show Edge Labels");
 	showFTags = new JCheckBoxMenuItem("Show Face Labels");
-	//showVTags.setAlignmentX(Component.CENTER_ALIGNMENT);
-	//showETags.setAlignmentX(Component.CENTER_ALIGNMENT);
-	//showFTags.setAlignmentX(Component.CENTER_ALIGNMENT);
 	
 	super.add(showVTags);
 	super.add(showETags);
@@ -157,5 +150,8 @@ public class SimplexLabelMenu extends JMenu {
     public void setMarkerHandler(MarkerHandler other) {
 	markers = other;
 	vertexTags.clear();
+	showVTags.setSelected(false);
+	showETags.setSelected(false);
+	showFTags.setSelected(false);
     }
 }

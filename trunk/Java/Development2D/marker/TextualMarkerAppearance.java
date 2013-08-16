@@ -1,14 +1,28 @@
 package marker;
 
+import java.awt.Font;
+
+import javax.swing.SwingConstants;
+
 import de.jreality.geometry.Primitives;
 import de.jreality.scene.PointSet;
 import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
+import de.jreality.scene.Appearance;
 
 public class TextualMarkerAppearance extends MarkerAppearance {
 	private String text;
 
+	private static final Appearance COMMON_APPEARANCE; 
+	
+	static{
+	    Font markerFont = new Font("Helvetica", Font.BOLD, 30);
+	    COMMON_APPEARANCE = new Appearance();
+	    COMMON_APPEARANCE.setAttribute("pointShader.textShader.font", markerFont);
+	    COMMON_APPEARANCE.setAttribute("pointShader.textShader.alignment", SwingConstants.CENTER);	    
+	}
+	
 	public TextualMarkerAppearance(String text, double scale) {
 		this.text = text;
 		super.model = ModelType.TEXT;
@@ -22,11 +36,7 @@ public class TextualMarkerAppearance extends MarkerAppearance {
 
 		SceneGraphComponent sgc = new SceneGraphComponent();
 		sgc.setGeometry(ps);
-		
-//		Appearance app = super.getBasicAppearance();
-//		app.setAttribute(CommonAttributes.VERTEX_DRAW, true);
-//		sgc.setAppearance(super.getBasicAppearance());
-//		sgc.setTransformation(super.getScalngTransformation());
+		sgc.setAppearance(COMMON_APPEARANCE);
 
 		String[] labels = { this.text };		
 		ps.setVertexAttributes(Attribute.LABELS, StorageModel.STRING_ARRAY.createReadOnly(labels));
