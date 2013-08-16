@@ -50,25 +50,31 @@ public class EmbeddedView extends View {
     super(d, mh);
     sgcpools = new HashMap<Marker, SceneGraphComponent>();
     updateCamera();
+//
+//    double[][] light_psns = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 },
+//        { -1, 0, 0 }, { 0, -1, 0 }, { 0, 0, -1 } };
+//
+//    Vector origin = new Vector(0, 0, 0);
+//    for (double[] psn : light_psns) {
+//      SceneGraphComponent sgcLight = new SceneGraphComponent();
+//      DirectionalLight light = new DirectionalLight();
+//      light.setIntensity(1.0);
+//      sgcLight.setLight(light);
+//
+//      MatrixBuilder m = View.lookAt(new Vector(psn), origin);
+//      m.assignTo(sgcLight);
+//
+//      sgcDevelopment.addChild(sgcLight);
+//    }
 
-    double[][] light_psns = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 },
-        { -1, 0, 0 }, { 0, -1, 0 }, { 0, 0, -1 } };
-
-    Vector origin = new Vector(0, 0, 0);
-    for (double[] psn : light_psns) {
-      SceneGraphComponent sgcLight = new SceneGraphComponent();
-      DirectionalLight light = new DirectionalLight();
-      light.setIntensity(1.0);
-      sgcLight.setLight(light);
-
-      MatrixBuilder m = View.lookAt(new Vector(psn), origin);
-      m.assignTo(sgcLight);
-
-      sgcDevelopment.addChild(sgcLight);
-    }
-
-    Camera cam = sgcCamera.getCamera();
-
+    
+    SceneGraphComponent sgcLight = new SceneGraphComponent();
+    DirectionalLight light = new DirectionalLight();
+    light.setIntensity(1.5);
+    sgcLight.setLight(light);
+    sgcCamera.addChild(sgcLight);
+    
+    Camera cam = sgcCamera.getCamera();    
     System.out.println("Focal Length:" + cam.getFocalLength());
     System.out.println("Field of View:" + cam.getFieldOfView());
   }

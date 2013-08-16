@@ -23,10 +23,10 @@ public class ResearcherDevelopmentExplorer {
 	private ManifoldMenu manMenu;
 	private ViewMenu viewMenu;
 
-	private DevelopmentSettingsPanel dsp;
-	private MarkerSettingsPanel msp;
-	private ManifoldDisplaySettingsPanel mdsp;
-	private DecorationsPanel dp;
+	private DevelopmentSettingsPanel devSettings;
+	private MarkerSettingsPanel markerSettings;
+	private ManifoldDisplaySettingsPanel manDisplaySettings;
+	private DecorationsPanel decorationsPanel;
 	private SimplexLabelMenu simplexLabels;
 	private ZoomSlider expZoom;
 	private ZoomSlider embZoom;
@@ -44,17 +44,17 @@ public class ResearcherDevelopmentExplorer {
 		manMenu = new ManifoldMenu(simMan, frame);
 		viewMenu = new ViewMenu(simMan);
 
-		dsp = new DevelopmentSettingsPanel(simMan.getDevelopment());
-		msp = new MarkerSettingsPanel(simMan.getMarkerHandler());
-		mdsp = new ManifoldDisplaySettingsPanel();
-		dp = new DecorationsPanel( simMan.getMarkerHandler() );
+		devSettings = new DevelopmentSettingsPanel(simMan.getDevelopment());
+		markerSettings = new MarkerSettingsPanel(simMan.getMarkerHandler());
+		manDisplaySettings = new ManifoldDisplaySettingsPanel();
+		decorationsPanel = new DecorationsPanel( simMan.getMarkerHandler() );
 		simplexLabels = new SimplexLabelMenu( simMan.getMarkerHandler() );
 		
 		expZoom = new ZoomSlider("Exponential Map View");
 		embZoom = new ZoomSlider("Embedded View");
 		embZoom.setMaximum(800); // Allow the embedded camera to move a little further away.
 
-		viewMenu.addAllViewsController(mdsp);
+		viewMenu.addAllViewsController(manDisplaySettings);
 		viewMenu.addExponentialViewController(expZoom);
 		viewMenu.addEmbeddedViewController(embZoom);
 
@@ -79,9 +79,9 @@ public class ResearcherDevelopmentExplorer {
 			// Note: mdsp, expZoom, and embZoom don't need to be updated,
 			// because they are ViewControllers and work through the ViewMenu
 			// object (which gets updated).
-			dp.setMarkerHandler(simMan.getMarkerHandler());
-			dsp.setDevelopment(simMan.getDevelopment());
-			msp.setMarkerHandler(simMan.getMarkerHandler());
+			decorationsPanel.setMarkerHandler(simMan.getMarkerHandler());
+			devSettings.setDevelopment(simMan.getDevelopment());
+			markerSettings.setMarkerHandler(simMan.getMarkerHandler());
 			simplexLabels.setMarkerHandler(simMan.getMarkerHandler());
 
 			viewMenu.createExponentialView();
@@ -104,12 +104,11 @@ public class ResearcherDevelopmentExplorer {
 		jmb.add(viewMenu);
 		jmb.add(simplexLabels);
 		
-		frame.add(dsp);
-		frame.add(msp);		
-		frame.add(mdsp);
-		frame.add(dp);
-		
-		
+		frame.add(devSettings);
+		frame.add(markerSettings);		
+		frame.add(manDisplaySettings);
+		frame.add(decorationsPanel);
+				
 		JPanel camPanel = new JPanel();
 		camPanel.setLayout(new BoxLayout(camPanel, BoxLayout.Y_AXIS));
 		camPanel.setBorder(BorderFactory.createTitledBorder("Camera Distances"));
