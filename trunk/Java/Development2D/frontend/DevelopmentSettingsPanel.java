@@ -17,6 +17,8 @@ public class DevelopmentSettingsPanel extends JPanel {
 	private JFormattedTextField recDepthTextbox;
 	private Development development;
 
+	private static final int MAX_DEPTH = 10;
+	
 	public DevelopmentSettingsPanel(Development development) {
 		this.development = development;
 		super.setLayout(new FlowLayout());
@@ -48,8 +50,8 @@ public class DevelopmentSettingsPanel extends JPanel {
 			int newDepth = getDepthSetting();
 			if (newDepth < 1) {
 				newDepth = 1;
-			} else if (newDepth > 20) {
-				newDepth = 20;
+			} else if (newDepth > MAX_DEPTH) {
+				newDepth = MAX_DEPTH;
 			}
 			development.setDepth(newDepth);
 			recDepthTextbox.setValue(newDepth);
