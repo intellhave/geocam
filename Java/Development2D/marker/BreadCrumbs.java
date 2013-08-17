@@ -44,11 +44,7 @@ public class BreadCrumbs {
     Vector vec = new Vector(pos.getDirectionForward());
     vec.scale(-.25);
     pos.move(vec);
-    
-    String tag = "Flag " + counter; counter++;
-    new TextualMarkerAppearance(tag, 1.0);    
-    MarkerAppearance ma = new MarkerAppearance(ModelType.FLAG,1.0);
-    Marker m = new Marker(pos, ma, Marker.MarkerType.FIXED);
+    Marker m = new Marker(pos, crumb, Marker.MarkerType.FIXED);
     trail.add(m);
     markers.addMarker(m);
     
