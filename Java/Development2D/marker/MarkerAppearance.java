@@ -55,7 +55,7 @@ public class MarkerAppearance {
 	 * this appearance represents.
 	 *********************************************************************************/
 	public static enum ModelType {
-		ANT, APPLE, COOKIE, ROCKET, SATTELITE, CUBE, SPHERE, ARROWHEAD, ARROWBODY, LADYBUG, FLAG, TEXT
+		ANT, APPLE, COOKIE, ROCKET, SATTELITE, CUBE, SPHERE, ARROWHEAD, ARROWBODY, LADYBUG, FLAG, CAR, TEXT
 	};
 
 	/*********************************************************************************
@@ -78,6 +78,7 @@ public class MarkerAppearance {
 		templateSGCs.put(ModelType.SATTELITE, loadSGC("sattelite.3ds"));
 		templateSGCs.put(ModelType.CUBE, loadSGC("cube.3ds"));
 		templateSGCs.put(ModelType.LADYBUG, loadSGC("ladybug.3ds"));
+		templateSGCs.put(ModelType.CAR, loadSGC("car.3ds"));
 
 		SceneGraphComponent sgc;
 		sgc = Primitives.sphere(1.0, new double[] { 0.0, 0.0, 0.0 });
@@ -178,15 +179,17 @@ public class MarkerAppearance {
 			this.setDefaultScale(0.2);
 			break;
 		case APPLE:
-			this.setDefaultScale(0.1);
+		case CAR:
+			this.setDefaultScale(0.2);
 			break;
 
-		case SATTELITE:
+		// extraneous code
+		/* case SATTELITE:
 		case ROCKET:
 			this.setDefaultScale(1.0);
 			break;
 		case ANT:
-		case COOKIE:
+		case COOKIE: */
 		default:
 			this.setDefaultScale(1.0);
 			break;
