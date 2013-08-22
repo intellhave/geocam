@@ -176,20 +176,10 @@ public class MarkerAppearance {
 		this.model = mt;
 		switch (mt) {
 		case CUBE:
-			this.setDefaultScale(0.2);
-			break;
 		case APPLE:
 		case CAR:
 			this.setDefaultScale(0.2);
 			break;
-
-		// extraneous code
-		/* case SATTELITE:
-		case ROCKET:
-			this.setDefaultScale(1.0);
-			break;
-		case ANT:
-		case COOKIE: */
 		default:
 			this.setDefaultScale(1.0);
 			break;

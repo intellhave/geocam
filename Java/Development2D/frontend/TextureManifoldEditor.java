@@ -1,13 +1,21 @@
 package frontend;
 
+import inputOutput.TriangulationIO;
+
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import util.AssetManager;
@@ -42,6 +50,11 @@ public class TextureManifoldEditor {
 		textureFrame = new JFrame();
 		
 		manMenu = new ManifoldMenu(simMan, settingsFrame);
+		
+		JMenuItem saveItem = new JMenuItem("Save current manifold");
+		manMenu.add(saveItem);
+		saveItem.addActionListener(new SaveManifoldListener());
+		
 		viewMenu = new ViewMenu(simMan);		
 		
 		dsp = new DevelopmentSettingsPanel(simMan.getDevelopment());
@@ -111,6 +124,18 @@ public class TextureManifoldEditor {
 		public void windowClosing(WindowEvent e) {
 			sessionEnded = true;
 			simMan.terminate();
+		}
+	}
+	
+	private class SaveManifoldListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser jfc = new JFileChooser(AssetManager.getAssetPath("."));
+			
+			int ret = jfc.showSaveDialog(manMenu);
+			if(ret == JFileChooser.APPROVE_OPTION) {
+				File file = jfc.getSelectedFile();
+				TriangulationIO.writeTriangulation(file.getAbsolutePath());
+			}
 		}
 	}
 }
