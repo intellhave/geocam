@@ -53,6 +53,7 @@ public class ResearcherDevelopmentExplorer {
 		expZoom = new ZoomSlider("Exponential Map View");
 		embZoom = new ZoomSlider("Embedded View");
 		embZoom.setMaximum(800); // Allow the embedded camera to move a little further away.
+		embZoom.setValue(400);
 
 		viewMenu.addAllViewsController(manDisplaySettings);
 		viewMenu.addExponentialViewController(expZoom);
