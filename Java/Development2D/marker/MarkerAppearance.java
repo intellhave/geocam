@@ -173,7 +173,6 @@ public class MarkerAppearance {
 		this.setModelType(mt);
 		this.setSize(scale);
 
-		this.model = mt;
 		switch (mt) {
 		case CUBE:
 		case APPLE:
@@ -187,7 +186,20 @@ public class MarkerAppearance {
 	}
 
 	public MarkerAppearance(ModelType mt) {
-		this(mt, 1.0);
+		this.setModelType(mt);
+		
+		switch (mt) {
+		case CUBE:
+		case APPLE:
+		case CAR:
+			this.setSize(0.2);
+			this.setDefaultScale(0.2);
+			break;
+		default:
+			this.setSize(1.0);
+			this.setDefaultScale(1.0);
+			break;
+		}
 	}
 
 	public MarkerAppearance() {
