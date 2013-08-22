@@ -81,7 +81,7 @@ public class TextureLibrary {
    * leads to problems. Thus, we don't specify whether edges/vertices should be
    * drawn in the properties below.
    *********************************************************************************/
-  private static void initializeShaders(Appearance app, Color faceColor) {
+  public static void initializeShaders(Appearance app, Color faceColor) {
     DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
         .createDefaultGeometryShader(app, true);
     DefaultPolygonShader dps = (DefaultPolygonShader) dgs
