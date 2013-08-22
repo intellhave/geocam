@@ -35,6 +35,8 @@ import triangulation.Triangulation;
 import triangulation.Vertex;
 import util.AssetManager;
 import view.TextureLibrary;
+import view.TextureLibrary.TextureDescriptor;
+import de.jreality.scene.Appearance;
 import development.DevelopmentComputations;
 import development.TextureCoords;
 
@@ -633,7 +635,7 @@ public class TriangulationIO {
 	}
     }
 
-    public static void writeTriangulation(String filename) {
+    public static void writeTriangulation(String path) {
 	Document triangulationDoc = XMLParser.createDocument(namespace,
 		"Triangulation");
 	Element triangulation = triangulationDoc.getDocumentElement();
@@ -766,7 +768,22 @@ public class TriangulationIO {
 	    simplex.setAttribute("index", "" + f.getIndex());
 	    simplex.setAttribute("multiplicity", "" + f.getMultiplicity());
 	    simplex.setAttribute("boundary", "" + f.getBoundary());
-	    simplex.setAttribute("texture","" +TextureLibrary.getTextureDescriptor(f.getAppearance()).toString());
+	    
+	    /* Debug code, waiting for rewrite on FaceAppearanceScheme
+	    Appearance app = f.getAppearance();
+	    if(app == null) {
+	    	System.out.println("Null appearance on face: " + f.toString());
+	    }
+	    TextureDescriptor td = TextureLibrary.getTextureDescriptor(app);
+	    try { 
+	    	String test = td.toString();
+	    } catch (Exception e) {
+	    	System.out.println(app.toString());
+	    	e.printStackTrace();
+	    } */
+	    
+	    // Throws a NullPointerException
+	    simplex.setAttribute("texture", "" + TextureLibrary.getTextureDescriptor(f.getAppearance()).toString());
 	    
 	    // Local Vertices
 	    localSimplex = triangulationDoc.createElement("Vertices");
@@ -869,7 +886,7 @@ public class TriangulationIO {
 	    triangulation.appendChild(simplex);
 	}
 
-	XMLParser.writeDocument(triangulationDoc, filename);
+	XMLParser.writeDocument(triangulationDoc, path);
     }
 
     private static Vertex getVertex(int index) {
