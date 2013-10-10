@@ -164,18 +164,6 @@ public abstract class View implements Observer {
 	}
 
 	/*********************************************************************************
-	 * setFaceAppearanceScheme
-	 * 
-	 * This method takes as input a ColorScheme object, and uses it to color the
-	 * faces/edges/vertices that make up the Development. As a side effect, this
-	 * method forces an update to the development's geometry.
-	 *********************************************************************************/
-	public void setFaceAppearanceScheme(FaceAppearanceScheme scheme) {
-		faceAppearanceScheme = scheme;
-		updateGeometry(true, false);
-	}
-
-	/*********************************************************************************
 	 * setDrawEdges
 	 * 
 	 * This method uses the input boolean value to determine whether the edges

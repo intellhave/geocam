@@ -174,11 +174,11 @@ public class ExponentialView extends View {
 				if (f.hasAppearance()) {
 					app = f.getAppearance();
 				} else {
-					TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+					TextureDescriptor td = FaceAppearanceScheme.getTextureDescriptor(f);
 					app = TextureLibrary.getAppearance(td);
 				}
 			} else {
-				app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
+				app = TextureLibrary.getAppearance(FaceAppearanceScheme.getColor(f));
 			}
 			// app.setAttribute(VERTEX_DRAW, true);
 			sgc.setGeometry(ifsf.getIndexedFaceSet());
