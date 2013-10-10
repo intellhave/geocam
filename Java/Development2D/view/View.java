@@ -12,11 +12,13 @@ import static de.jreality.shader.CommonAttributes.TRANSPARENCY_ENABLED;
 import static de.jreality.shader.CommonAttributes.VERTEX_DRAW;
 
 import java.awt.Color;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
 import marker.Marker;
 import marker.MarkerHandler;
+import triangulation.Face;
 import util.Vector;
 
 import com.jogamp.opengl.swt.GLCanvas;
@@ -59,6 +61,7 @@ public abstract class View implements Observer {
 	protected FaceAppearanceScheme faceAppearanceScheme;
 	protected boolean showTexture;
 	protected boolean showFaceLabels;
+	protected boolean animated = false;
 	protected double zoom;
 
 	/*********************************************************************************
@@ -75,6 +78,7 @@ public abstract class View implements Observer {
 	protected SceneGraphComponent sgcMarkers;
 	protected SceneGraphComponent sgcCamera;
 	protected SceneGraphPath camPath;
+	protected HashMap<Face, SceneGraphComponent> faceSGCs;
 
 	/*********************************************************************************
 	 * JOGL Data
@@ -331,6 +335,10 @@ public abstract class View implements Observer {
 
 	public void setDrawTextures(boolean texture) {
 		showTexture = texture;
+	}
+
+	public void setAnimated(boolean animated) {
+		this.animated = animated;
 	}
 	
 	public void setLabelFaces(boolean faceLabels) {
