@@ -13,6 +13,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import beta.AnimatedTexture;
+
 import view.View;
 
 public class ManifoldDisplaySettingsPanel extends JPanel implements ViewController {
@@ -83,5 +85,33 @@ public class ManifoldDisplaySettingsPanel extends JPanel implements ViewControll
 	
 	public void removeAllViews(){
 		views.clear();
+	}
+	
+	private AnimatedTexture atex;
+	public void setAnimateTextures(AnimatedTexture at) {
+		if (atex != null) {
+			atex.deleteObservers();
+			atex.pause();
+		}
+
+		atex = at;
+		for (View v : views) {
+			atex.addObserver(v);
+			v.setAnimated(true);
+			v.update(null, null);
+		}
+	}
+
+	public void stopAnimateTextures() {
+		if (atex != null) {
+			atex.pause();
+			atex.deleteObservers();
+			atex = null;
+		}
+
+		for (View v : views) {
+			v.setAnimated(false);
+			v.update(null, null);
+		}
 	}
 }

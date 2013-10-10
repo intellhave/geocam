@@ -44,7 +44,6 @@ public class ExponentialView extends View {
 	protected SceneGraphComponent sgcLight;
 
 	protected HashMap<Face, DevelopmentGeometry> faceDevelopments;
-	protected HashMap<Face, SceneGraphComponent> faceSGCs;
 
 	protected double edgeLength;
 

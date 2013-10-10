@@ -2,7 +2,10 @@ package view;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.Set;
+
+import beta.AnimatedTexture;
 
 import marker.Marker;
 import marker.MarkerAppearance;
@@ -172,6 +175,8 @@ public class EmbeddedView extends View {
     sgcpools.clear();
 
     int[][] ifsf_faces = new int[][] { { 0, 1, 2 } };
+    
+    faceSGCs = new HashMap<Face, SceneGraphComponent>();
 
     for (Face f : Triangulation.faceTable.values()) {
       double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
@@ -206,6 +211,7 @@ public class EmbeddedView extends View {
       sgc.setGeometry(ifsf.getGeometry());
       sgc.setAppearance(app);
       sgcDevelopment.addChild(sgc);
+      faceSGCs.put(f, sgc);
     }
     updateCamera();
   }
@@ -337,6 +343,8 @@ public class EmbeddedView extends View {
     showTexture = texture;
     
     int[][] ifsf_faces = new int[][] { { 0, 1, 2 } };
+    faceSGCs = new HashMap<Face, SceneGraphComponent>();
+    
     for (Face f : Triangulation.faceTable.values()) {
       double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
       double[][] texCoords = TextureCoords.getCoordsAsArray(f);
@@ -365,6 +373,7 @@ public class EmbeddedView extends View {
       sgc.setGeometry(ifsf.getGeometry());
       sgc.setAppearance(app);
       sgcDevelopment.addChild(sgc);
+      faceSGCs.put(f, sgc);
     }
     super.update(null,null);
   }
@@ -373,6 +382,7 @@ public void setLabelFaces(boolean drawFaceLabels) {
 	// showTexture = texture;
 
 	int[][] ifsf_faces = new int[][] { { 0, 1, 2 } };
+	faceSGCs = new HashMap<Face, SceneGraphComponent>();
 	for (Face f : Triangulation.faceTable.values()) {
 		double[][] verts = EmbeddedTriangulation.getFaceGeometry(f);
 		double[][] texCoords = TextureCoords.getCoordsAsArray(f);
@@ -402,10 +412,24 @@ public void setLabelFaces(boolean drawFaceLabels) {
 		sgc.setGeometry(ifsf.getGeometry());
 		sgc.setAppearance(app);
 		sgcDevelopment.addChild(sgc);
+		faceSGCs.put(f, sgc);
 	}
 	super.update(null, null);
 }
-  
+
+public void update(Observable o, Object arg) {
+	// When observing an AnimatedTexture, update each face on the manifold with
+    // the current appearance from the AnimatedTexture
+    if (o instanceof AnimatedTexture) {
+      AnimatedTexture tex = (AnimatedTexture) o;
+      for(Face f : faceSGCs.keySet()) {
+        faceSGCs.get(f).setAppearance(tex.getCurrentAppearance(f));
+      }
+    }
+	
+    // Ensure View.update() is called
+	super.update(o, arg);
+}
   public void setZoom(double newZoom){
     zoom = newZoom;
   }
