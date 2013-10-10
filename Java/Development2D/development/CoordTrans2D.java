@@ -210,7 +210,7 @@ class CoordTrans2D extends Geoquant {
   
   //like getValue(), but returns affine transformation
   public AffineTransformation getAffineTrans() {
-    double d = getValue(); //used to invoke recalculate if invalid
+    getValue(); //used to invoke recalculate if invalid
     return affineTrans; 
   }
   

@@ -116,7 +116,7 @@ public class Coord2D extends Geoquant {
 
     // like getValue(), but returns coordinate point
     public Vector getCoord() {
-	double d = getValue(); // used to invoke recalculate if invalid
+	getValue(); // used to invoke recalculate if invalid
 	return coord;
     }
 

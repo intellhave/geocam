@@ -360,8 +360,8 @@ public class EmbeddedTriangulation {
     // get the geometry data
     DataList dl_faceindices = geom.getAttributes(Geometry.CATEGORY_FACE,
         Attribute.INDICES);
-    DataList dl_facenormals = geom.getAttributes(Geometry.CATEGORY_FACE,
-        Attribute.NORMALS);
+    //DataList dl_facenormals = geom.getAttributes(Geometry.CATEGORY_FACE,
+    //    Attribute.NORMALS);
     DataList dl_edgeindices = geom.getAttributes(Geometry.CATEGORY_EDGE,
         Attribute.INDICES);
     DataList dl_vertcoords = geom.getAttributes(Geometry.CATEGORY_VERTEX,
