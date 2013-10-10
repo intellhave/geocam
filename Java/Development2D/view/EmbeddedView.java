@@ -201,11 +201,11 @@ public class EmbeddedView extends View {
     	if(f.hasAppearance()){
     		app = f.getAppearance();
     	} else {    	  
-    		TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+    		TextureDescriptor td = FaceAppearanceScheme.getTextureDescriptor(f);
     		app = TextureLibrary.getAppearance(td);
     	}
       } else
-        app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
+        app = TextureLibrary.getAppearance(FaceAppearanceScheme.getColor(f));
 
       SceneGraphComponent sgc = new SceneGraphComponent();
       sgc.setGeometry(ifsf.getGeometry());
@@ -364,10 +364,10 @@ public class EmbeddedView extends View {
       ifsf.update();
       Appearance app;
       if (showTexture) {
-        TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+        TextureDescriptor td = FaceAppearanceScheme.getTextureDescriptor(f);
         app = TextureLibrary.getAppearance(td);
       } else
-        app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
+        app = TextureLibrary.getAppearance(FaceAppearanceScheme.getColor(f));
 
       SceneGraphComponent sgc = new SceneGraphComponent();
       sgc.setGeometry(ifsf.getGeometry());
@@ -403,10 +403,10 @@ public void setLabelFaces(boolean drawFaceLabels) {
 		
 		Appearance app;
 		if (showTexture) {
-			TextureDescriptor td = faceAppearanceScheme.getTextureDescriptor(f);
+			TextureDescriptor td = FaceAppearanceScheme.getTextureDescriptor(f);
 			app = TextureLibrary.getAppearance(td);
 		} else
-			app = TextureLibrary.getAppearance(faceAppearanceScheme.getColor(f));
+			app = TextureLibrary.getAppearance(FaceAppearanceScheme.getColor(f));
 
 		SceneGraphComponent sgc = new SceneGraphComponent();
 		sgc.setGeometry(ifsf.getGeometry());
