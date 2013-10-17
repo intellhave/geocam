@@ -63,14 +63,14 @@ public class TextureGenerator {
 
 	/**
 	 * Create a BufferedImage based on Conway's Game-of-Life on the torus, with
-	 * each cell drawn as a 5x5 block of pixels.
+	 * each cell drawn as a CELL_WIDTHxCELL_HEIGHT block of pixels.
 	 * 
 	 * @param width
 	 *            The width of the resulting image, which will be rounded up to
-	 *            the nearest number divisible by 5
+	 *            the nearest number divisible by CELL_WIDTH
 	 * @param height
 	 *            The height of the resulting image, which will be rounded up to
-	 *            the nearest number divisible by 5
+	 *            the nearest number divisible by CELL_HEIGHT
 	 * @param liveColor
 	 *            The color drawn for each live cell
 	 * @param deadColor
@@ -78,7 +78,7 @@ public class TextureGenerator {
 	 * @param cells
 	 *            The number of cells to initialize randomly -- keep in mind
 	 *            that the total number of grid spots is approximately
-	 *            <b>width</b>*<b>height</b>/25
+	 *            <b>width</b>*<b>height</b>/(CELL_WIDTH*CELL_HEIGHT)
 	 * @param generations
 	 *            The number of generations to run the Game-Of-Life simulation.
 	 *            Zero generations means a random grid of <b>cells</b> cells.
