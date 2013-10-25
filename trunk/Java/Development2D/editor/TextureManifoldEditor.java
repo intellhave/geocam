@@ -1,5 +1,11 @@
-package frontend;
+package editor;
 
+import frontend.DevelopmentSettingsPanel;
+import frontend.ManifoldMenu;
+import frontend.SimulationManager;
+import frontend.TexturePanel;
+import frontend.ViewMenu;
+import frontend.ZoomSlider;
 import inputOutput.TriangulationIO;
 
 import java.awt.Container;
