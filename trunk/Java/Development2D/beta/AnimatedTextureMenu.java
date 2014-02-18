@@ -9,7 +9,7 @@ import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import frontend.SimulationManager;
+import menus.SimulationManager;
 
 /**
  * This JMenu would enable the selected AnimatedTexture.  
