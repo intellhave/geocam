@@ -32,175 +32,213 @@ import de.jreality.util.Input;
  *********************************************************************************/
 public class TextureLibrary {
 
-  /*********************************************************************************
-   * This enumeration class records the various textures the library can
-   * provide. The EnumMap below maintains a mapping of these constants to cached
-   * appearances.
-   *********************************************************************************/
-  public enum TextureDescriptor {
-	  WATER, GRASS, BATHROOMTILE, CHECKER, CLAY, COBBLESTONE, DOTS, GRID, 
-	  LIGHTHOUSE, MARBLE, PLAID, STUCCO, SWIRLS, ZIGZAG, 
-  }
+	/*********************************************************************************
+	 * This enumeration class records the various textures the library can
+	 * provide. The EnumMap below maintains a mapping of these constants to
+	 * cached appearances.
+	 *********************************************************************************/
+	public enum TextureDescriptor {
+		WATER, GRASS, BATHROOMTILE, CHECKER, CLAY, COBBLESTONE, DOTS, GRID,
+		LIGHTHOUSE, MARBLE, PLAID, STUCCO, SWIRLS, ZIGZAG,
+		WORLDCUBE0, WORLDCUBE1, WORLDCUBE2, WORLDCUBE3, WORLDCUBE4, WORLDCUBE5,
+		WORLDCUBE6, WORLDCUBE7, WORLDCUBE8, WORLDCUBE9, WORLDCUBE10, WORLDCUBE11
+	}
 
-  private static EnumMap<TextureDescriptor, Appearance> library;
-  private static Map<Appearance, TextureDescriptor> appLibrary;
+	private static EnumMap<TextureDescriptor, Appearance> library;
+	private static Map<Appearance, TextureDescriptor> appLibrary;
 
-  /*********************************************************************************
-   * This block of code initializes our library of textures, so we aren't always
-   * fetching copies from the disk.
-   *********************************************************************************/
-  static {
-    library = new EnumMap<TextureDescriptor, Appearance>(
-        TextureDescriptor.class);
+	/*********************************************************************************
+	 * This block of code initializes our library of textures, so we aren't
+	 * always fetching copies from the disk.
+	 *********************************************************************************/
+	static {
+		library = new EnumMap<TextureDescriptor, Appearance>(
+				TextureDescriptor.class);
 
-    for (TextureDescriptor td : TextureDescriptor.values()) {
-      Appearance tdApp = initializeAppearance(td);
-      library.put(td, tdApp); 
-    }
-  }
-  
-  static{
-	 appLibrary = new HashMap<Appearance, TextureDescriptor>();
-	  for (TextureDescriptor td : TextureDescriptor.values()) {
-		  appLibrary.put(library.get(td), td);
-	  }
-  }
+		for (TextureDescriptor td : TextureDescriptor.values()) {
+			Appearance tdApp = initializeAppearance(td);
+			library.put(td, tdApp);
+		}
+	}
 
-  /*********************************************************************************
-   * initializeShaders
-   * 
-   * This helper method is used in the "initializeAppearance" methods below to
-   * set up the shaders the appearance will use. Basically, this ensures the
-   * shaders are set up in a consistent way (not doing this has created odd bugs
-   * in the past).
-   * 
-   * We set whether edges and vertices are drawn elsewhere (in View.java). In
-   * the past, we've found that trying to use the
-   * "Appearance.setAttribute(CommonAttributes.*)" method of setting attributes
-   * and setting this properties on a shader (Ex. dgs.setDrawLines(false);)
-   * leads to problems. Thus, we don't specify whether edges/vertices should be
-   * drawn in the properties below.
-   *********************************************************************************/
-  public static void initializeShaders(Appearance app, Color faceColor) {
-    DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
-        .createDefaultGeometryShader(app, true);
-    DefaultPolygonShader dps = (DefaultPolygonShader) dgs
-        .createPolygonShader("default");
+	static {
+		appLibrary = new HashMap<Appearance, TextureDescriptor>();
+		for (TextureDescriptor td : TextureDescriptor.values()) {
+			appLibrary.put(library.get(td), td);
+		}
+	}
 
-    dps.setAmbientColor(faceColor); // dps.setAmbientColor(c);
-    dps.setDiffuseColor(faceColor); // dps.setDiffuseColor(c);
-    dps.setAmbientCoefficient(0.3); // These coefficients seem to help the
-                                    // texture look "bright"
-    dps.setDiffuseCoefficient(0.8); // when it gets mapped to the surface.
-    dps.setSpecularCoefficient(0.0); // We don't need faces to look shiny by
-                                     // default.
+	/*********************************************************************************
+	 * initializeShaders
+	 * 
+	 * This helper method is used in the "initializeAppearance" methods below to
+	 * set up the shaders the appearance will use. Basically, this ensures the
+	 * shaders are set up in a consistent way (not doing this has created odd
+	 * bugs in the past).
+	 * 
+	 * We set whether edges and vertices are drawn elsewhere (in View.java). In
+	 * the past, we've found that trying to use the
+	 * "Appearance.setAttribute(CommonAttributes.*)" method of setting
+	 * attributes and setting this properties on a shader (Ex.
+	 * dgs.setDrawLines(false);) leads to problems. Thus, we don't specify
+	 * whether edges/vertices should be drawn in the properties below.
+	 *********************************************************************************/
+	public static void initializeShaders(Appearance app, Color faceColor) {
+		DefaultGeometryShader dgs = (DefaultGeometryShader) ShaderUtility
+				.createDefaultGeometryShader(app, true);
+		DefaultPolygonShader dps = (DefaultPolygonShader) dgs
+				.createPolygonShader("default");
 
-    DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
-    dls.setDiffuseColor(Color.orange);
-    dls.setTubeDraw(true);
-    dls.setTubeRadius(0.05);
-  }
+		dps.setAmbientColor(faceColor); // dps.setAmbientColor(c);
+		dps.setDiffuseColor(faceColor); // dps.setDiffuseColor(c);
+		dps.setAmbientCoefficient(0.3); // These coefficients seem to help the
+										// texture look "bright"
+		dps.setDiffuseCoefficient(0.8); // when it gets mapped to the surface.
+		dps.setSpecularCoefficient(0.0); // We don't need faces to look shiny by
+											// default.
 
-  /*********************************************************************************
-   * initializeAppearance
-   * 
-   * This method is used to load each texture from disk the first time it is
-   * needed. It should only be called once (and the results stored) which is why
-   * this method is private.
-   *********************************************************************************/
-  private static Appearance initializeAppearance(TextureDescriptor td) {
-    Appearance app = new Appearance();
-    initializeShaders(app, Color.white);
+		DefaultLineShader dls = (DefaultLineShader) dgs.getLineShader();
+		dls.setDiffuseColor(Color.orange);
+		dls.setTubeDraw(true);
+		dls.setTubeRadius(0.05);
+	}
 
-    ImageData id = null;
+	/*********************************************************************************
+	 * initializeAppearance
+	 * 
+	 * This method is used to load each texture from disk the first time it is
+	 * needed. It should only be called once (and the results stored) which is
+	 * why this method is private.
+	 *********************************************************************************/
+	private static Appearance initializeAppearance(TextureDescriptor td) {
+		Appearance app = new Appearance();
+		initializeShaders(app, Color.white);
 
-    try {
-      File ff = null;
-      switch (td) {
-      case WATER:
-          ff = AssetManager.getAssetFile("textures/water.jpg");
-          break;
-      case GRASS:
-          ff = AssetManager.getAssetFile("textures/grass.jpg");
-          break;
-      case BATHROOMTILE:
-        ff = AssetManager.getAssetFile("textures/bathroomtile.jpg");
-        break;
-      case CHECKER:
-        ff = AssetManager.getAssetFile("textures/checker.jpg");
-        break;
-      case CLAY:
-        ff = AssetManager.getAssetFile("textures/clay.jpg");
-        break;
-      case COBBLESTONE:
-        ff = AssetManager.getAssetFile("textures/cobblestone.jpg");
-        break;
-      case DOTS:
-        ff = AssetManager.getAssetFile("textures/dots.jpg");
-        break;
-      case GRID:
-        ff = AssetManager.getAssetFile("textures/grid.jpg");
-        break;
-      case LIGHTHOUSE:
-        ff = AssetManager.getAssetFile("textures/lighthouse.jpg");
-        break;
-      case MARBLE:
-        ff = AssetManager.getAssetFile("textures/marble.jpg");
-        break;
-      case PLAID:
-        ff = AssetManager.getAssetFile("textures/plaid.jpg");
-        break;
-      case STUCCO:
-        ff = AssetManager.getAssetFile("textures/stucco.jpg");
-        break;
-      case SWIRLS:
-        ff = AssetManager.getAssetFile("textures/swirls.jpg");
-        break;
-      case ZIGZAG:
-        ff = AssetManager.getAssetFile("textures/zigzag.jpg");
-        break;
-      }
+		ImageData id = null;
 
-      id = ImageData.load(Input.getInput(ff));
-    } catch (Exception ee) {
-      System.err.println("Error: Unable to load texture " + td);
-      ee.printStackTrace();
-    }
+		try {
+			File ff = null;
+			switch (td) {
+			case WATER:
+				ff = AssetManager.getAssetFile("textures/water.jpg");
+				break;
+			case GRASS:
+				ff = AssetManager.getAssetFile("textures/grass.jpg");
+				break;
+			case BATHROOMTILE:
+				ff = AssetManager.getAssetFile("textures/bathroomtile.jpg");
+				break;
+			case CHECKER:
+				ff = AssetManager.getAssetFile("textures/checker.jpg");
+				break;
+			case CLAY:
+				ff = AssetManager.getAssetFile("textures/clay.jpg");
+				break;
+			case COBBLESTONE:
+				ff = AssetManager.getAssetFile("textures/cobblestone.jpg");
+				break;
+			case DOTS:
+				ff = AssetManager.getAssetFile("textures/dots.jpg");
+				break;
+			case GRID:
+				ff = AssetManager.getAssetFile("textures/grid.jpg");
+				break;
+			case LIGHTHOUSE:
+				ff = AssetManager.getAssetFile("textures/lighthouse.jpg");
+				break;
+			case MARBLE:
+				ff = AssetManager.getAssetFile("textures/marble.jpg");
+				break;
+			case PLAID:
+				ff = AssetManager.getAssetFile("textures/plaid.jpg");
+				break;
+			case STUCCO:
+				ff = AssetManager.getAssetFile("textures/stucco.jpg");
+				break;
+			case SWIRLS:
+				ff = AssetManager.getAssetFile("textures/swirls.jpg");
+				break;
+			case ZIGZAG:
+				ff = AssetManager.getAssetFile("textures/zigzag.jpg");
+				break;
+			case WORLDCUBE0:
+				ff = AssetManager.getAssetFile("textures/worldcube0.png");
+				break;
+			case WORLDCUBE1:
+				ff = AssetManager.getAssetFile("textures/worldcube1.png");
+				break;
+			case WORLDCUBE2:
+				ff = AssetManager.getAssetFile("textures/worldcube2.png");
+				break;
+			case WORLDCUBE3:
+				ff = AssetManager.getAssetFile("textures/worldcube3.png");
+				break;
+			case WORLDCUBE4:
+				ff = AssetManager.getAssetFile("textures/worldcube4.png");
+				break;
+			case WORLDCUBE5:
+				ff = AssetManager.getAssetFile("textures/worldcube5.png");
+				break;
+			case WORLDCUBE6:
+				ff = AssetManager.getAssetFile("textures/worldcube6.png");
+				break;
+			case WORLDCUBE7:
+				ff = AssetManager.getAssetFile("textures/worldcube7.png");
+				break;
+			case WORLDCUBE8:
+				ff = AssetManager.getAssetFile("textures/worldcube8.png");
+				break;
+			case WORLDCUBE9:
+				ff = AssetManager.getAssetFile("textures/worldcube9.png");
+				break;
+			case WORLDCUBE10:
+				ff = AssetManager.getAssetFile("textures/worldcube10.png");
+				break;
+			case WORLDCUBE11:
+				ff = AssetManager.getAssetFile("textures/worldcube11.png");
+				break;
+			}			
+			id = ImageData.load(Input.getInput(ff));
+		} catch (Exception ee) {
+			System.err.println("Error: Unable to load texture " + td);
+			ee.printStackTrace();
+		}
 
-    Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);    
-    tex.setTextureMatrix(MatrixBuilder.euclidean().scale(0.5).getMatrix());
+		Texture2D tex = TextureUtility.createTexture(app, POLYGON_SHADER, id);
+		tex.setTextureMatrix(MatrixBuilder.euclidean().scale(0.5).getMatrix());
 
-    return app;
-  }
+		return app;
+	}
 
-  /*********************************************************************************
-   * getAppearance
-   * 
-   * This method is the primary method in this class used by outside code. Given
-   * an input TextureDescriptor, this method returns the corresponding cached
-   * appearance object. Implicitly, we assume that the Appearance object that is
-   * returned will not be modified (since it is shared among possibly many scene
-   * graph components).
-   *********************************************************************************/
-  public static Appearance getAppearance(TextureDescriptor td) {
-    return library.get(td);
-  }
-  public static Appearance getAppearance(String td){
-	  for(TextureDescriptor texture : TextureDescriptor.values()){
-		  if(texture.toString().equals(td))
-			  return library.get(texture);
-	  }
-	  return null;
-  }
+	/*********************************************************************************
+	 * getAppearance
+	 * 
+	 * This method is the primary method in this class used by outside code.
+	 * Given an input TextureDescriptor, this method returns the corresponding
+	 * cached appearance object. Implicitly, we assume that the Appearance
+	 * object that is returned will not be modified (since it is shared among
+	 * possibly many scene graph components).
+	 *********************************************************************************/
+	public static Appearance getAppearance(TextureDescriptor td) {
+		return library.get(td);
+	}
 
-  static Appearance getAppearance(Color color) {
-    Appearance app = new Appearance();
-    initializeShaders(app, color);
-    return app;
-  }
-  
-  public static TextureDescriptor getTextureDescriptor(Appearance app){
-	  return appLibrary.get(app);
-  }
+	public static Appearance getAppearance(String td) {
+		for (TextureDescriptor texture : TextureDescriptor.values()) {
+			if (texture.toString().equals(td))
+				return library.get(texture);
+		}
+		return null;
+	}
+
+	static Appearance getAppearance(Color color) {
+		Appearance app = new Appearance();
+		initializeShaders(app, color);
+		return app;
+	}
+
+	public static TextureDescriptor getTextureDescriptor(Appearance app) {
+		return appLibrary.get(app);
+	}
 
 }

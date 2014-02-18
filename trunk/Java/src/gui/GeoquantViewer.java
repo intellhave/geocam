@@ -1,6 +1,6 @@
 package gui;
 
-import frontend.GeoquantViewerExplorer;
+import explorer.GeoquantViewerExplorer;
 import geoquant.Alpha;
 import geoquant.Angle;
 import geoquant.Area;
