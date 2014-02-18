@@ -65,7 +65,36 @@ public class FaceAppearanceScheme {
 	public static TextureDescriptor getTextureDescriptor(Face f) {
 		if (f.hasColor()) {
 			Color faceColor = getColor(f);
-			switch (faceColor.getRGB()) {
+
+			if (faceColor.getRed() == 0 && faceColor.getGreen() == 0) {
+				switch (faceColor.getBlue()) {
+				case 10:
+					return TextureDescriptor.WORLDCUBE0;
+				case 20:
+					return TextureDescriptor.WORLDCUBE1;
+				case 30:
+					return TextureDescriptor.WORLDCUBE2;
+				case 40:
+					return TextureDescriptor.WORLDCUBE3;
+				case 50:
+					return TextureDescriptor.WORLDCUBE4;
+				case 60:
+					return TextureDescriptor.WORLDCUBE5;
+				case 70:
+					return TextureDescriptor.WORLDCUBE6;
+				case 80:
+					return TextureDescriptor.WORLDCUBE7;
+				case 90:
+					return TextureDescriptor.WORLDCUBE8;
+				case 100:
+					return TextureDescriptor.WORLDCUBE9;
+				case 110:
+					return TextureDescriptor.WORLDCUBE10;
+				case 120:
+					return TextureDescriptor.WORLDCUBE11;
+				}
+			}
+			switch (faceColor.getRGB()) {			
 			case -16734503:
 				return colorMap.get(Colors.SKY_BLUE);
 			case -12525359:
