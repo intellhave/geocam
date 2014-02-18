@@ -1,11 +1,5 @@
 package editor;
 
-import frontend.DevelopmentSettingsPanel;
-import frontend.ManifoldMenu;
-import frontend.SimulationManager;
-import frontend.TexturePanel;
-import frontend.ViewMenu;
-import frontend.ZoomSlider;
 import inputOutput.TriangulationIO;
 
 import java.awt.Container;
@@ -23,6 +17,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import menus.DevelopmentSettingsPanel;
+import menus.ManifoldMenu;
+import menus.SimplexLabelMenu;
+import menus.SimulationManager;
+import menus.TexturePanel;
+import menus.ViewMenu;
+import menus.ZoomSlider;
 import util.AssetManager;
 
 public class TextureManifoldEditor {
@@ -40,14 +41,14 @@ public class TextureManifoldEditor {
 	private TexturePanel texPanel;
 	private DevelopmentSettingsPanel dsp;		
 	private ZoomSlider expZoom;
+	private SimplexLabelMenu simplexLabels;
 	
-
 	public static void main(String[] args){
 		new TextureManifoldEditor();
 	}
 	
 	public TextureManifoldEditor(){
-		String defaultPath = AssetManager.getAssetPath("off/tetra2.off");
+		String defaultPath = AssetManager.getAssetPath("off/cube_surf.off");
 
 		simMan = new SimulationManager(defaultPath);
 
@@ -66,7 +67,8 @@ public class TextureManifoldEditor {
 		expZoom = new ZoomSlider("Exponential Map View");
 		viewMenu.addExponentialViewController(expZoom);
 		
-		texPanel = new TexturePanel(simMan.getDevelopment().getSource());
+		texPanel = new TexturePanel(simMan.getDevelopment().getSource());	
+		simplexLabels = new SimplexLabelMenu( simMan.getMarkerHandler() );
 		
 		assembleSwingComponents();
 		viewMenu.createExponentialView();
@@ -91,6 +93,8 @@ public class TextureManifoldEditor {
 			dsp.setDevelopment(simMan.getDevelopment());
 			viewMenu.createExponentialView();
 			manMenu.setInterfacesEnabled(true);
+			
+			simplexLabels.setMarkerHandler(simMan.getMarkerHandler());
 		}
 		
 		System.exit(0);
@@ -106,7 +110,7 @@ public class TextureManifoldEditor {
 
 		jmb.add(manMenu);
 		jmb.add(viewMenu);
-
+		jmb.add(simplexLabels);
 		settingsFrame.add(dsp);
 		
 		JPanel camPanel = new JPanel();

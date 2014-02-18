@@ -111,6 +111,13 @@
         				<xs:enumeration value="STUCCO"></xs:enumeration>
         				<xs:enumeration value="SWIRLS"></xs:enumeration>
         				<xs:enumeration value="ZIGZAG"></xs:enumeration>
+        				<xs:enumeration value="ZIGZAG"></xs:enumeration>
+        				<xs:enumeration value="WORLDCUBE0"></xs:enumeration>
+        				<xs:enumeration value="WORLDCUBE1"></xs:enumeration>
+        				<xs:enumeration value="WORLDCUBE2"></xs:enumeration>
+        				<xs:enumeration value="WORLDCUBE3"></xs:enumeration>
+        				<xs:enumeration value="WORLDCUBE4"></xs:enumeration>        				
+        				<xs:enumeration value="WORLDCUBE5"></xs:enumeration>        				
         			</xs:restriction>
         		</xs:simpleType>
         	</xs:attribute>
